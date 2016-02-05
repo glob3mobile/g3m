@@ -47,8 +47,10 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
     super.dispose();
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS, Frustum frustumInModelCoordinates)
+  public final boolean isVisible(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
+  
+    final long nowInMS = prc._nowInMS;
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Calculate ID;
@@ -59,7 +61,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
   
     if (data == null)
     {
-      result = _tileVisibilityTester.isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
+      result = _tileVisibilityTester.isVisible(rc, prc, tile);
       if (result)
       {
         data = new PvtData(nowInMS + _timeoutInMS);
@@ -74,7 +76,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
       }
       else
       {
-        result = _tileVisibilityTester.isVisible(tile, rc, nowInMS, frustumInModelCoordinates);
+        result = _tileVisibilityTester.isVisible(rc, prc, tile);
         if (result)
         {
           data._timeoutTimeInMS = nowInMS + _timeoutInMS;

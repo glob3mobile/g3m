@@ -36,7 +36,7 @@ public class MaxLevelTileLODTester extends TileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  public final boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
   
     if (_maxLevel < 0)

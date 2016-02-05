@@ -40,12 +40,8 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  public final boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-  
     final boolean hasSubtiles = tile.areSubtilesCreated();
   
     if (!hasSubtiles)
@@ -60,7 +56,7 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
       }
     }
   
-    final boolean result = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+    final boolean result = _tileLODTester.meetsRenderCriteria(rc, prc, tile);
   
     if (!result && !hasSubtiles)
     {

@@ -9,18 +9,18 @@ public class DTT_TileImageListener extends TileImageListener
 {
   private DTT_TileTextureBuilder _builder;
   private final Sector _tileSector ;
-  private final IImage _backGroundTileImage;
-  private final String _backGroundTileImageName;
+  private final IImage _backgroundTileImage;
+  private final String _backgroundTileImageName;
 
   private final Vector2I  _tileTextureResolution;
 
-  public DTT_TileImageListener(DTT_TileTextureBuilder builder, Tile tile, Vector2I tileTextureResolution, IImage backGroundTileImage, String backGroundTileImageName)
+  public DTT_TileImageListener(DTT_TileTextureBuilder builder, Tile tile, Vector2I tileTextureResolution, IImage backgroundTileImage, String backgroundTileImageName)
   {
      _builder = builder;
      _tileSector = new Sector(tile._sector);
      _tileTextureResolution = tileTextureResolution;
-     _backGroundTileImage = backGroundTileImage;
-     _backGroundTileImageName = backGroundTileImageName;
+     _backgroundTileImage = backgroundTileImage;
+     _backgroundTileImageName = backgroundTileImageName;
     _builder._retain();
   }
 
@@ -52,11 +52,11 @@ public class DTT_TileImageListener extends TileImageListener
   
       canvas.initialize(width, height);
   
-      if (_backGroundTileImage != null)
+      if (_backgroundTileImage != null)
       {
-        auxImageId.addString(_backGroundTileImageName);
+        auxImageId.addString(_backgroundTileImageName);
         auxImageId.addString("|");
-        canvas.drawImage(_backGroundTileImage, 0, 0, width, height);
+        canvas.drawImage(_backgroundTileImage, 0, 0, width, height);
       }
   
       auxImageId.addString(imageId);

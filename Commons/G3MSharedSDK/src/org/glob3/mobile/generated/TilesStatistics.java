@@ -16,21 +16,19 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Tile;
-//class TileTessellator;
-//class LayerSet;
-//class VisibleSectorListenerEntry;
-//class VisibleSectorListener;
-//class ElevationDataProvider;
-//class LayerTilesRenderParameters;
-//class TerrainTouchListener;
-//class ChangedInfoListener;
 
+//class ITileVisitor;
+//class LayerSet;
+//class TilesRenderParameters;
 //class TileLODTester;
 //class TileVisibilityTester;
-
-
-//class EllipsoidShape;
+//class ITimer;
+//class VisibleSectorListener;
+//class VisibleSectorListenerEntry;
+//class Layer;
+//class LayerTilesRenderParameters;
+//class Layer;
+//class TerrainTouchListener;
 
 
 public class TilesStatistics

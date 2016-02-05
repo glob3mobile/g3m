@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class BoundingVolume;
+
 //class Planet;
 //class Camera;
 
@@ -100,10 +100,6 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
   }
 
 
-
-  ///#include "BoundingVolume.hpp"
-  
-  
   public ProjectedCornersDistanceTileLODTester()
   {
   }
@@ -113,9 +109,9 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  public final boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-    return getData(tile, rc).evaluate(rc.getCurrentCamera(), texHeightSquared, texWidthSquared);
+    return getData(tile, rc).evaluate(rc.getCurrentCamera(), prc._texHeightSquared, prc._texWidthSquared);
   }
 
   public final void onTileHasChangedMesh(Tile tile)

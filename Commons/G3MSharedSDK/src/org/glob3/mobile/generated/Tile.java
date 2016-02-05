@@ -16,28 +16,16 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "TileLODTester.hpp"
 
 //class TileTexturizer;
-//class Mesh;
 //class TileElevationDataRequest;
-//class Vector3D;
-//class TilesRenderParameters;
-//class LayerTilesRenderParameters;
-//class Frustum;
-//class TilesStatistics;
-//class ElevationDataProvider;
-//class ITimer;
 //class GLState;
-//class LayerSet;
 //class ITexturizerData;
 //class PlanetTileTessellatorData;
+//class ElevationDataProvider;
 //class PlanetRenderer;
-//class TileKey;
-//class Geodetic3D;
-//class TileLODTester;
 //class TileData;
-//class TileVisibilityTester;
+//class TilesStatistics;
 
 
 public class Tile
@@ -66,108 +54,57 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void prepareTestLODData(Planet planet);
 
-  private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
-  {
-  
-  
-    if ((_elevationData == null) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
-    {
-      initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug);
-    }
-  
-    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
-    {
-      _mustActualizeMeshDueToNewElevationData = false;
-  
-      _planetRenderer.onTileHasChangedMesh(this);
-  
-      if (_debugMesh != null)
-      {
-        if (_debugMesh != null)
-           _debugMesh.dispose();
-        _debugMesh = null;
-      }
-  
-      if (elevationDataProvider == null)
-      {
-        // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
-        _tessellatorMeshIsMeshHolder = false;
-      }
-      else
-      {
-        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
-  
-        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-        if (meshHolder == null)
-        {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
-          _tessellatorMeshIsMeshHolder = true;
-        }
-        else
-        {
-          meshHolder.setMesh(tessellatorMesh);
-        }
-  
-        //      computeTileCorners(rc->getPlanet());
-      }
-  
-      //Notifying when the tile is first created and every time the elevation data changes
-      _planetRenderer.sectorElevationChanged(_elevationData);
-    }
-  
-    return _tessellatorMesh;
-  }
-
-  private Mesh getDebugMesh(G3MRenderContext rc, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters)
+  private Mesh getDebugMesh(G3MRenderContext rc, PlanetRenderContext prc)
   {
     if (_debugMesh == null)
     {
-      final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
-  
-      _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
+      _debugMesh = prc._tessellator.createTileDebugMesh(rc, prc, this);
     }
     return _debugMesh;
   }
 
-  private boolean isVisible(G3MRenderContext rc, Sector renderedSector, TileVisibilityTester tileVisibilityTester, long nowInMS, Frustum frustumInModelCoordinates)
+  private boolean isVisible(G3MRenderContext rc, PlanetRenderContext prc)
   {
-    if ((renderedSector != null) && !renderedSector.touchesWith(_sector)) //Incomplete world
-    {
-      return false;
-    }
-  
-    return tileVisibilityTester.isVisible(this, rc, nowInMS, frustumInModelCoordinates);
+  //  if ((prc->_renderedSector != NULL) &&
+  //      !(prc->_renderedSector->touchesWith(_sector))) { //Incomplete world
+  ///#warning TODO: test if this condition happens
+  //    ILogger::instance()->logError("Ooops!");
+  //    return false;
+  //  }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: remove this method
+    return prc._tileVisibilityTester.isVisible(rc, prc, this);
   }
 
-  private boolean meetsRenderCriteria(G3MRenderContext rc, TileLODTester tileLODTester, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  private boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: move to an implementation of TileLODTester && remove this method when the code is moved from here
-  //  if (tilesRenderParameters->_useTilesSplitBudget) {
-  //    if (_subtiles == NULL) { // the tile needs to create the subtiles
-  ////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
-  //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
-  //        // there are not more time-budget to spend
-  //        return true;
-  //      }
-  //    }
-  //  }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: remove lastSplitTimer
+    //  if (tilesRenderParameters->_useTilesSplitBudget) {
+    //    if (_subtiles == NULL) { // the tile needs to create the subtiles
+    ////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
+    //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
+    //        // there are not more time-budget to spend
+    //        return true;
+    //      }
+    //    }
+    //  }
   
-    return tileLODTester.meetsRenderCriteria(this, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+    return prc._tileLODTester.meetsRenderCriteria(rc, prc, this);
   }
 
-  private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
+  private void rawRender(G3MRenderContext rc, PlanetRenderContext prc, GLState glState)
   {
   
-    Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+    Mesh tessellatorMesh = getTessellatorMesh(rc, prc);
     if (tessellatorMesh == null)
     {
       return;
     }
   
-    if (texturizer == null)
+    if (prc._texturizer == null)
     {
       tessellatorMesh.render(rc, glState);
     }
@@ -177,7 +114,7 @@ public class Tile
   
       if (needsToCallTexturizer)
       {
-        _texturizedMesh = texturizer.texturize(rc, tessellator, layerTilesRenderParameters, layerSet, forceFullRender, tileDownloadPriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
+        _texturizedMesh = prc._texturizer.texturize(rc, prc, this, tessellatorMesh, _texturizedMesh);
       }
   
       if (_texturizedMesh != null)
@@ -189,16 +126,16 @@ public class Tile
         //Adding flat color if no texture set on the mesh
         if (_flatColorMesh == null)
         {
-          _flatColorMesh = new FlatColorMesh(tessellatorMesh, false, Color.newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
+          _flatColorMesh = new FlatColorMesh(tessellatorMesh, false, Color.newFromRGBA(1.0f, 1.0f, 1.0f, 1.0f), true);
         }
         _flatColorMesh.render(rc, glState);
       }
     }
   }
 
-  private void debugRender(G3MRenderContext rc, GLState glState, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters)
+  private void debugRender(G3MRenderContext rc, PlanetRenderContext prc, GLState glState)
   {
-    Mesh debugMesh = getDebugMesh(rc, tessellator, layerTilesRenderParameters);
+    Mesh debugMesh = getDebugMesh(rc, prc);
     if (debugMesh != null)
     {
       debugMesh.render(rc, glState);
@@ -288,8 +225,6 @@ public class Tile
 
   private final PlanetRenderer _planetRenderer;
 
-  private boolean _rendered;
-
   private static String createTileId(int level, int row, int column)
   {
     return level + "/" + row + "/" + column;
@@ -333,7 +268,6 @@ public class Tile
      _lastTileMeshResolutionY = -1;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
-     _rendered = false;
      _id = createTileId(level, row, column);
      _tessellatorMeshIsMeshHolder = false;
      _data = null;
@@ -395,7 +329,6 @@ public class Tile
     {
       _subtiles = createSubTiles(true);
     }
-  
     return _subtiles;
   }
 
@@ -409,80 +342,66 @@ public class Tile
     return _parent;
   }
 
-  public final void prepareForFullRendering(G3MRenderContext rc, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, float verticalExaggeration, boolean logTilesPetitions)
+  public final void prepareForFullRendering(G3MRenderContext rc, PlanetRenderContext prc)
   {
   
     //You have to set _verticalExaggertion
-    if (verticalExaggeration != _verticalExaggeration)
+    if (prc._verticalExaggeration != _verticalExaggeration)
     {
       // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-      _verticalExaggeration = verticalExaggeration;
+      _verticalExaggeration = prc._verticalExaggeration;
     }
   
   
-    Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+    Mesh tessellatorMesh = getTessellatorMesh(rc, prc);
     if (tessellatorMesh == null)
     {
       return;
     }
   
-    if (texturizer != null)
+    if (prc._texturizer != null)
     {
       final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
   
       if (needsToCallTexturizer)
       {
-        _texturizedMesh = texturizer.texturize(rc, tessellator, layerTilesRenderParameters, layerSet, forceFullRender, tileDownloadPriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
+        _texturizedMesh = prc._texturizer.texturize(rc, prc, this, tessellatorMesh, _texturizedMesh);
       }
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester, Frustum frustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, long nowInMS, boolean renderTileMeshes, boolean logTilesPetitions)
+  public final void render(G3MRenderContext rc, PlanetRenderContext prc, GLState parentState, TilesStatistics tilesStatistics, java.util.ArrayList<Tile> toVisitInNextIteration)
   {
-  ///#warning REMOVE
-  //  if (!_sector.contains(Angle::fromDegrees(28), Angle::fromDegrees(-15))) {
-  //    return;
-  //  }
-  
-  
     tilesStatistics.computeTileProcessed(this);
   
-    if (verticalExaggeration != _verticalExaggeration)
+    if (prc._verticalExaggeration != _verticalExaggeration)
     {
       // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-      _verticalExaggeration = verticalExaggeration;
+      _verticalExaggeration = prc._verticalExaggeration;
     }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO Remove: Forcing tessellator mesh generation before visibility test
-    getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
-  
-    boolean rendered = false;
-    if (isVisible(rc, renderedSector, tileVisibilityTester, nowInMS, frustumInModelCoordinates))
+    if (isVisible(rc, prc))
     {
-      setIsVisible(true, texturizer);
+      setIsVisible(true, prc._texturizer);
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, tileLODTester, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, prc) || (prc._tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
-        final long tileTexturePriority = (tilesRenderParameters._incrementalTileQuality ? tileDownloadPriority + layerTilesRenderParameters._maxLevel - _level : tileDownloadPriority + _level);
-  
-        rendered = true;
-        if (renderTileMeshes)
+        if (prc._renderTileMeshes)
         {
-          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, layerTilesRenderParameters, layerSet, tilesRenderParameters, forceFullRender, tileTexturePriority, logTilesPetitions);
+          rawRender(rc, prc, parentState);
         }
-        if (tilesRenderParameters._renderDebug)
+        if (prc._tilesRenderParameters._renderDebug)
         {
-          debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
+          debugRender(rc, prc, parentState);
         }
   
         tilesStatistics.computeTileRenderered(this);
   
-        prune(texturizer, elevationDataProvider);
+        prune(prc._texturizer, prc._elevationDataProvider);
         //TODO: AVISAR CAMBIO DE TERRENO
       }
       else
@@ -490,7 +409,7 @@ public class Tile
         java.util.ArrayList<Tile> subTiles = getSubTiles();
         if (_justCreatedSubtiles)
         {
-          lastSplitTimer.start();
+          prc._lastSplitTimer.start();
           _justCreatedSubtiles = false;
         }
   
@@ -504,17 +423,10 @@ public class Tile
     }
     else
     {
-      setIsVisible(false, texturizer);
+      setIsVisible(false, prc._texturizer);
   
-      prune(texturizer, elevationDataProvider);
+      prune(prc._texturizer, prc._elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
-    }
-  
-    if (_rendered != rendered)
-    {
-      _rendered = rendered;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: Is it needed?
     }
   
   }
@@ -603,7 +515,8 @@ public class Tile
         return this;
       }
   
-      for (int i = 0; i < _subtiles.size(); i++)
+      final int subtilesSize = _subtiles.size();
+      for (int i = 0; i < subtilesSize; i++)
       {
         final Tile subtile = _subtiles.get(i);
         final Tile subtileResult = subtile.getDeepestTileContaining(position);
@@ -798,17 +711,20 @@ public class Tile
     }
   }
 
-  public final void initializeElevationData(ElevationDataProvider elevationDataProvider, TileTessellator tessellator, Vector2I tileMeshResolution, Planet planet, boolean renderDebug)
+  public final void initializeElevationData(G3MRenderContext rc, PlanetRenderContext prc)
   {
+  
+    final Vector2I tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
+  
     //Storing for subviewing
-    _lastElevationDataProvider = elevationDataProvider;
+    _lastElevationDataProvider = prc._elevationDataProvider;
     _lastTileMeshResolutionX = tileMeshResolution._x;
     _lastTileMeshResolutionY = tileMeshResolution._y;
     if (_elevationDataRequest == null)
     {
   
-      final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
-      _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+      final Vector2I res = prc._tessellator.getTileMeshResolution(rc, prc, this);
+      _elevationDataRequest = new TileElevationDataRequest(this, res, prc._elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }
   
@@ -869,23 +785,11 @@ public class Tile
   
   }
 
-  public final Vector2I getNormalizedPixelsFromPosition(Geodetic2D position2D, Vector2I tileDimension)
+  public final Vector2I getNormalizedPixelFromPosition(Geodetic2D position, Vector2I tileDimension)
   {
     final IMathUtils math = IMathUtils.instance();
-    final Vector2D uv = _sector.getUVCoordinates(position2D);
+    final Vector2D uv = _sector.getUVCoordinates(position);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
-  }
-
-  public final Mesh getTessellatorMesh()
-  {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: remove this method && _tessellatorMeshIsMeshHolder variable
-    if (_tessellatorMeshIsMeshHolder)
-    {
-      return ((MeshHolder) _tessellatorMesh).getMesh();
-    }
-  
-    return _tessellatorMesh;
   }
 
   public final TileData getData(int id)
@@ -928,10 +832,58 @@ public class Tile
     return _tileTessellatorMeshData;
   }
 
-  public final Mesh getCurrentTessellatorMesh()
+  public final Mesh getTessellatorMesh(G3MRenderContext rc, PlanetRenderContext prc)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: remove this method
+  
+    ElevationDataProvider elevationDataProvider = prc._elevationDataProvider;
+  
+    if ((_elevationData == null) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
+    {
+      initializeElevationData(rc, prc);
+    }
+  
+    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
+    {
+      _mustActualizeMeshDueToNewElevationData = false;
+  
+      _planetRenderer.onTileHasChangedMesh(this);
+  
+      if (_debugMesh != null)
+      {
+        if (_debugMesh != null)
+           _debugMesh.dispose();
+        _debugMesh = null;
+      }
+  
+      if (elevationDataProvider == null)
+      {
+        // no elevation data provider, just create a simple mesh without elevation
+        _tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, null, _tileTessellatorMeshData);
+        _tessellatorMeshIsMeshHolder = false;
+      }
+      else
+      {
+        Mesh tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, _elevationData, _tileTessellatorMeshData);
+  
+        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+        if (meshHolder == null)
+        {
+          meshHolder = new MeshHolder(tessellatorMesh);
+          _tessellatorMesh = meshHolder;
+          _tessellatorMeshIsMeshHolder = true;
+        }
+        else
+        {
+          meshHolder.setMesh(tessellatorMesh);
+        }
+  
+        //      computeTileCorners(rc->getPlanet());
+      }
+  
+      //Notifying when the tile is first created and every time the elevation data changes
+      _planetRenderer.sectorElevationChanged(_elevationData);
+    }
+  
     return _tessellatorMesh;
   }
 

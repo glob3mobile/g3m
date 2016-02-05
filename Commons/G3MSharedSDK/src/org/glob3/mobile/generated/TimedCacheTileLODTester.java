@@ -48,20 +48,22 @@ public class TimedCacheTileLODTester extends DecoratorTileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  public final boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
+  
+    final long nowInMS = prc._nowInMS;
   
     PvtData data = (PvtData) tile.getData(_id);
     if (data == null)
     {
       data = new PvtData(nowInMS);
       tile.setData(_id, data);
-      data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+      data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(rc, prc, tile);
     }
     else if ((nowInMS - data._lastMeetsRenderCriteriaTimeInMS) > _timeoutInMS)
     {
       data._lastMeetsRenderCriteriaTimeInMS = nowInMS;
-      data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+      data._lastMeetsRenderCriteriaResult = _tileLODTester.meetsRenderCriteria(rc, prc, tile);
     }
   
     return data._lastMeetsRenderCriteriaResult;

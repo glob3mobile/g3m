@@ -16,10 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Tile;
 //class G3MRenderContext;
+//class PlanetRenderContext;
+//class Tile;
 //class LayerTilesRenderParameters;
-//class Frustum;
 
 public abstract class TileVisibilityTester
 {
@@ -32,7 +32,7 @@ public abstract class TileVisibilityTester
   {
   }
 
-  public abstract boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS, Frustum frustumInModelCoordinates);
+  public abstract boolean isVisible(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);
 
   public abstract void onTileHasChangedMesh(Tile tile);
 

@@ -16,11 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Tile;
 //class G3MRenderContext;
+//class PlanetRenderContext;
+//class Tile;
 //class LayerTilesRenderParameters;
-//class TilesRenderParameters;
-//class ITimer;
+
 
 public abstract class TileLODTester
 {
@@ -38,7 +38,7 @@ public abstract class TileLODTester
   {
   }
 
-  public abstract boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS);
+  public abstract boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);
 
   public abstract void onTileHasChangedMesh(Tile tile);
 

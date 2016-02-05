@@ -11,8 +11,8 @@ public class DTT_TileTextureBuilder extends RCObject
   private final long _tileDownloadPriority;
   private boolean _canceled;
   private FrameTasksExecutor _frameTasksExecutor;
-  private final IImage _backGroundTileImage;
-  private final String _backGroundTileImageName;
+  private final IImage _backgroundTileImage;
+  private final String _backgroundTileImageName;
   private final boolean _ownedTexCoords;
   private final boolean _transparent;
   private final boolean _generateMipmap;
@@ -25,7 +25,7 @@ public class DTT_TileTextureBuilder extends RCObject
     return (mesh == null) ? null : mesh.getTopLevelTextureId();
   }
 
-  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2I tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backGroundTileImage, String backGroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
+  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2I tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backgroundTileImage, String backgroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
   {
     java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 
@@ -53,10 +53,10 @@ public class DTT_TileTextureBuilder extends RCObject
       ancestor = ancestor.getParent();
     }
 
-    if (!fallbackSolved && backGroundTileImage != null)
+    if (!fallbackSolved && backgroundTileImage != null)
     {
       LazyTextureMapping mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution, tile, tile, tessellator), true, false);
-      final TextureIDReference glTextureId = texturesHandler.getTextureIDReference(backGroundTileImage, GLFormat.rgba(), backGroundTileImageName, generateMipmap);
+      final TextureIDReference glTextureId = texturesHandler.getTextureIDReference(backgroundTileImage, GLFormat.rgba(), backgroundTileImageName, generateMipmap);
       mapping.setGLTextureId(glTextureId); //Mandatory to active mapping
 
       mappings.add(mapping);
@@ -67,7 +67,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backGroundTileImage, String backGroundTileImageName)
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName)
 
   {
      _tileImageProvider = tileImageProvider;
@@ -80,14 +80,14 @@ public class DTT_TileTextureBuilder extends RCObject
      _tileDownloadPriority = tileDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
      _frameTasksExecutor = frameTasksExecutor;
-     _backGroundTileImage = backGroundTileImage;
-     _backGroundTileImageName = backGroundTileImageName;
+     _backgroundTileImage = backgroundTileImage;
+     _backgroundTileImageName = backgroundTileImageName;
      _ownedTexCoords = true;
      _transparent = false;
      _generateMipmap = true;
     _tileImageProvider._retain();
 
-    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backGroundTileImage, backGroundTileImageName, _ownedTexCoords, _transparent, _generateMipmap);
+    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, _ownedTexCoords, _transparent, _generateMipmap);
   }
 
   public final LeveledTexturedMesh getTexturedMesh()
@@ -104,13 +104,13 @@ public class DTT_TileTextureBuilder extends RCObject
       {
         if (_tile != null)
         {
-          imageCreated(_backGroundTileImage.shallowCopy(), _backGroundTileImageName, TileImageContribution.fullCoverageOpaque());
+          imageCreated(_backgroundTileImage.shallowCopy(), _backgroundTileImageName, TileImageContribution.fullCoverageOpaque());
           //_tile->setTextureSolved(true);
         }
       }
       else
       {
-        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backGroundTileImage, _backGroundTileImageName), true, _frameTasksExecutor);
+        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backgroundTileImage, _backgroundTileImageName), true, _frameTasksExecutor);
       }
     }
   }

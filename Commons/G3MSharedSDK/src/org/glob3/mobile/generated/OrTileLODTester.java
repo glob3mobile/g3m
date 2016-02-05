@@ -39,15 +39,15 @@ public class OrTileLODTester extends TileLODTester
     super.dispose();
   }
 
-  public final boolean meetsRenderCriteria(Tile tile, G3MRenderContext rc, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, long nowInMS)
+  public final boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
   
-    if (_left.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS))
+    if (_left.meetsRenderCriteria(rc, prc, tile))
     {
       return true;
     }
   
-    return _right.meetsRenderCriteria(tile, rc, tilesRenderParameters, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+    return _right.meetsRenderCriteria(rc, prc, tile);
   }
 
   public final void onTileHasChangedMesh(Tile tile)

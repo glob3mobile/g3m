@@ -26,15 +26,15 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
     super.dispose();
   }
 
-  public final boolean isVisible(Tile tile, G3MRenderContext rc, long nowInMS, Frustum frustumInModelCoordinates)
+  public final boolean isVisible(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-    final Mesh mesh = tile.getCurrentTessellatorMesh();
+    final Mesh mesh = tile.getTessellatorMesh(rc, prc);
     if (mesh == null)
     {
       return false;
     }
   
-    return mesh.getBoundingVolume().touchesFrustum(frustumInModelCoordinates);
+    return mesh.getBoundingVolume().touchesFrustum(prc._frustumInModelCoordinates);
   }
 
   public final void onTileHasChangedMesh(Tile tile)

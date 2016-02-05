@@ -80,7 +80,7 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackGroundImageBuilder());
+      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackgroundImageBuilder());
     }
   
     return _texturizer;
@@ -263,15 +263,15 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
-  private IImageBuilder _defaultTileBackGroundImage = null;
+  private IImageBuilder _defaultTileBackgroundImage = null;
 
-  private IImageBuilder getDefaultTileBackGroundImageBuilder()
+  private IImageBuilder getDefaultTileBackgroundImageBuilder()
   {
-    if (_defaultTileBackGroundImage == null)
+    if (_defaultTileBackgroundImage == null)
     {
       return new DefaultChessCanvasImageBuilder(256, 256, Color.black(), Color.white(), 4);
     }
-    return _defaultTileBackGroundImage;
+    return _defaultTileBackgroundImage;
   }
 
   private TileLODTester createDefaultTileLODTester()
@@ -544,9 +544,9 @@ public class PlanetRendererBuilder
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
   }
 
-  public final void setDefaultTileBackGroundImage(IImageBuilder defaultTileBackGroundImage)
+  public final void setDefaultTileBackgroundImage(IImageBuilder defaultTileBackgroundImage)
   {
-    _defaultTileBackGroundImage = defaultTileBackGroundImage;
+    _defaultTileBackgroundImage = defaultTileBackgroundImage;
   }
 
   public final void setTileLODTester(TileLODTester tlt)
