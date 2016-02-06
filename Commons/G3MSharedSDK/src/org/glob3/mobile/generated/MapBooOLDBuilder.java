@@ -53,12 +53,11 @@ public abstract class MapBooOLDBuilder
     TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
   
     final boolean renderDebug = false;
-    final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
     final Quality quality = Quality.QUALITY_LOW;
   
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
   
     final boolean showStatistics = false;

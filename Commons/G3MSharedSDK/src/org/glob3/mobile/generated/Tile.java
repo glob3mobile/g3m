@@ -48,7 +48,6 @@ public class Tile
 
   private boolean _texturizerDirty;
 
-  private float _verticalExaggeration;
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -61,38 +60,6 @@ public class Tile
       _debugMesh = prc._tessellator.createTileDebugMesh(rc, prc, this);
     }
     return _debugMesh;
-  }
-
-  private boolean isVisible(G3MRenderContext rc, PlanetRenderContext prc)
-  {
-  //  if ((prc->_renderedSector != NULL) &&
-  //      !(prc->_renderedSector->touchesWith(_sector))) { //Incomplete world
-  ///#warning TODO: test if this condition happens
-  //    ILogger::instance()->logError("Ooops!");
-  //    return false;
-  //  }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: remove this method
-    return prc._tileVisibilityTester.isVisible(rc, prc, this);
-  }
-
-  private boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc)
-  {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: move to an implementation of TileLODTester && remove this method when the code is moved from here
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: remove lastSplitTimer
-    //  if (tilesRenderParameters->_useTilesSplitBudget) {
-    //    if (_subtiles == NULL) { // the tile needs to create the subtiles
-    ////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
-    //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
-    //        // there are not more time-budget to spend
-    //        return true;
-    //      }
-    //    }
-    //  }
-  
-    return prc._tileLODTester.meetsRenderCriteria(rc, prc, this);
   }
 
   private void rawRender(G3MRenderContext rc, PlanetRenderContext prc, GLState glState)
@@ -262,7 +229,6 @@ public class Tile
      _elevationData = null;
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
-     _verticalExaggeration = 0F;
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
@@ -345,14 +311,6 @@ public class Tile
   public final void prepareForFullRendering(G3MRenderContext rc, PlanetRenderContext prc)
   {
   
-    //You have to set _verticalExaggertion
-    if (prc._verticalExaggeration != _verticalExaggeration)
-    {
-      // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-      _verticalExaggeration = prc._verticalExaggeration;
-    }
-  
-  
     Mesh tessellatorMesh = getTessellatorMesh(rc, prc);
     if (tessellatorMesh == null)
     {
@@ -374,19 +332,14 @@ public class Tile
   {
     tilesStatistics.computeTileProcessed(this);
   
-    if (prc._verticalExaggeration != _verticalExaggeration)
-    {
-      // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-      _verticalExaggeration = prc._verticalExaggeration;
-    }
-  
-    if (isVisible(rc, prc))
+    final boolean amIVisible = prc._tileVisibilityTester.isVisible(rc, prc, this);
+    if (amIVisible)
     {
       setIsVisible(true, prc._texturizer);
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, prc) || (prc._tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || prc._tileLODTester.meetsRenderCriteria(rc, prc, this) || (prc._tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {

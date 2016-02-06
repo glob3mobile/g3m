@@ -40,11 +40,16 @@ public class PlanetRenderContext
   public ElevationDataProvider _elevationDataProvider;
   public final TileTessellator _tessellator;
   public final LayerSet _layerSet;
-  public boolean _forceFullRender;
   public long _tileDownloadPriority;
   public double _texWidthSquared;
   public double _texHeightSquared;
   public long _nowInMS;
   public boolean _renderTileMeshes;
   public boolean _logTilesPetitions;
+
+
+  public void dispose()
+  {
+  }
+
 }

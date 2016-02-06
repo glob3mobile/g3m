@@ -288,7 +288,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private boolean _renderTileMeshes;
 
   private Sector _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+
   private boolean _layerTilesRenderParametersDirty;
   private LayerTilesRenderParameters _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
@@ -478,7 +478,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _prc._elevationDataProvider = _elevationDataProvider;
     _prc._tessellator = _tessellator;
     _prc._layerSet = _layerSet;
-    _prc._forceFullRender = _firstRender; // if first render, forceFullRender
     _prc._tileDownloadPriority = _tileDownloadPriority;
     _prc._texWidthSquared = texWidthSquared;
     _prc._texHeightSquared = texHeightSquared;
@@ -690,7 +689,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         _prc._elevationDataProvider = _elevationDataProvider;
         _prc._tessellator = _tessellator;
         _prc._layerSet = _layerSet;
-        _prc._forceFullRender = true;
         _prc._tileDownloadPriority = _tileDownloadPriority;
         _prc._texWidthSquared = -1;
         _prc._texHeightSquared = -1;

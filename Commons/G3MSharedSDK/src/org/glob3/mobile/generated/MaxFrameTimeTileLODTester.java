@@ -23,15 +23,15 @@ package org.glob3.mobile.generated;
 
 public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
 {
-  private long _maxFrameTimeInMs;
+  private final long _maxFrameTimeInMs;
 
   private int _splitsInFrameCounter;
 
 
-  public MaxFrameTimeTileLODTester(TimeInterval maxFrameTimeInMs, TileLODTester tileLODTester)
+  public MaxFrameTimeTileLODTester(TimeInterval maxFrameTime, TileLODTester tileLODTester)
   {
      super(tileLODTester);
-     _maxFrameTimeInMs = maxFrameTimeInMs.milliseconds();
+     _maxFrameTimeInMs = maxFrameTime.milliseconds();
      _splitsInFrameCounter = 0;
   }
 

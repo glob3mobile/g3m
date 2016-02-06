@@ -162,12 +162,11 @@ public class DTT_TileTextureBuilder extends RCObject
   {
     if (!contribution.isFullCoverageAndOpaque())
     {
-      ILogger.instance().logWarning("Contribution isn't full covearge and opaque before to upload tuxtuer");
+      ILogger.instance().logWarning("Contribution isn't full covearge and opaque before to upload texture");
     }
 
     if (!_canceled && (_tile != null) && (_texturedMesh != null))
     {
-
       if (uploadTexture(image, imageId))
       {
         _tile.setTextureSolved(true);

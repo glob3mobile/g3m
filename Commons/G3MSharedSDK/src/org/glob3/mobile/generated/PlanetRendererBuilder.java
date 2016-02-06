@@ -44,7 +44,6 @@ public class PlanetRendererBuilder
   private TilesRenderParameters _parameters;
   private boolean _showStatistics;
   private boolean _renderDebug;
-  private boolean _useTilesSplitBudget;
   private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
   private Quality _quality;
@@ -138,16 +137,6 @@ public class PlanetRendererBuilder
   }
 
   /**
-   * Returns the useTilesSplitBudget flag.
-   *
-   * @return _useTilesSplitBudget: bool
-   */
-  private boolean getUseTilesSplitBudget()
-  {
-    return _useTilesSplitBudget;
-  }
-
-  /**
    * Returns the forceFirstLevelTilesRenderOnStart flag.
    *
    * @return _forceFirstLevelTilesRenderOnStart: bool
@@ -211,7 +200,7 @@ public class PlanetRendererBuilder
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
+    return new TilesRenderParameters(getRenderDebug(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
   }
   private TileTessellator createTileTessellator()
   {
@@ -276,32 +265,20 @@ public class PlanetRendererBuilder
 
   private TileLODTester createDefaultTileLODTester()
   {
-  //  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
-  //                                                                  NULL);
-  //
-  //  TileLODTester* maxLevel = new MaxLevelTileLODTester(NULL,
-  //                                                      proj);
-  //
-  //  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
-  //                                                           maxLevel);
-  //
-  //  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
-  //                                                     frameTime);
-  //
-  //  return timed;
-  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   
     TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
   
-    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(250), proj);
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);
   
     TileLODTester maxLevel = new MaxLevelTileLODTester();
   
-    TileLODTester composite = new OrTileLODTester(maxLevel, timed);
+    TileLODTester gradual = new GradualSplitsTileLODTester(TimeInterval.fromMilliseconds(10), timed);
   
-    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(20), composite);
+    TileLODTester composite = new OrTileLODTester(maxLevel, gradual);
+  
+    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(25), composite);
   }
 
   private TileVisibilityTester createDefaultTileVisibilityTester()
@@ -314,7 +291,6 @@ public class PlanetRendererBuilder
   {
      _showStatistics = false;
      _renderDebug = false;
-     _useTilesSplitBudget = true;
      _forceFirstLevelTilesRenderOnStart = true;
      _incrementalTileQuality = false;
      _quality = Quality.QUALITY_LOW;
@@ -440,10 +416,6 @@ public class PlanetRendererBuilder
   public final void setRenderDebug(boolean renderDebug)
   {
     _renderDebug = renderDebug;
-  }
-  public final void setUseTilesSplitBudget(boolean useTilesSplitBudget)
-  {
-    _useTilesSplitBudget = useTilesSplitBudget;
   }
   public final void setForceFirstLevelTilesRenderOnStart(boolean forceFirstLevelTilesRenderOnStart)
   {
