@@ -105,12 +105,10 @@ public:
   }
 
   void computeRenderedSector(Tile* tile) {
-    const Sector sector = tile->_sector;
-
-    const double lowerLatitudeDegrees  = sector._lower._latitude._degrees;
-    const double lowerLongitudeDegrees = sector._lower._longitude._degrees;
-    const double upperLatitudeDegrees  = sector._upper._latitude._degrees;
-    const double upperLongitudeDegrees = sector._upper._longitude._degrees;
+    const double lowerLatitudeDegrees  = tile->_sector._lower._latitude._degrees;
+    const double lowerLongitudeDegrees = tile->_sector._lower._longitude._degrees;
+    const double upperLatitudeDegrees  = tile->_sector._upper._latitude._degrees;
+    const double upperLongitudeDegrees = tile->_sector._upper._longitude._degrees;
 
     if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees) {
       _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
@@ -275,7 +273,7 @@ private:
   bool _renderTileMeshes;
 
   Sector* _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+
   bool _layerTilesRenderParametersDirty;
 #ifdef C_CODE
   const LayerTilesRenderParameters* _layerTilesRenderParameters;

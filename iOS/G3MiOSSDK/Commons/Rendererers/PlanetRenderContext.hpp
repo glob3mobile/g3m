@@ -33,13 +33,17 @@ public:
   ElevationDataProvider*            _elevationDataProvider;
   const TileTessellator*            _tessellator;
   const LayerSet*                   _layerSet;
-  bool                              _forceFullRender;
   long long                         _tileDownloadPriority;
   double                            _texWidthSquared;
   double                            _texHeightSquared;
   long long                         _nowInMS;
   bool                              _renderTileMeshes;
   bool                              _logTilesPetitions;
+
+
+  ~PlanetRenderContext() {
+  }
+
 };
 
 #endif

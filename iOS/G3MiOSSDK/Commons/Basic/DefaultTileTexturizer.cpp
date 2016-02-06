@@ -351,11 +351,10 @@ public:
                     const std::string&           imageId,
                     const TileImageContribution* contribution) {
     if (!contribution->isFullCoverageAndOpaque()) {
-      ILogger::instance()->logWarning("Contribution isn't full covearge and opaque before to upload tuxtuer");
+      ILogger::instance()->logWarning("Contribution isn't full covearge and opaque before to upload texture");
     }
 
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
-
       if (uploadTexture(image, imageId)) {
         _tile->setTextureSolved(true);
       }
@@ -692,12 +691,12 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
   // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
   Mesh* texturizedMesh = builder->getTexturedMesh();
 
-  if (prc->_forceFullRender) {
-    builder->start();
-  }
-  else {
+//  if (prc->_forceFullRender) {
+//    builder->start();
+//  }
+//  else {
     rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
-  }
+//  }
 
   tile->setTexturizerDirty(false);
 

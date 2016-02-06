@@ -44,19 +44,12 @@ private:
 
   bool _texturizerDirty;
 
-  float _verticalExaggeration;
   TileTessellatorMeshData _tileTessellatorMeshData;
 
   void prepareTestLODData(const Planet* planet);
 
   Mesh* getDebugMesh(const G3MRenderContext* rc,
                      const PlanetRenderContext* prc);
-
-  inline bool isVisible(const G3MRenderContext* rc,
-                        const PlanetRenderContext* prc);
-
-  inline bool meetsRenderCriteria(const G3MRenderContext* rc,
-                                  const PlanetRenderContext* prc);
 
   inline void rawRender(const G3MRenderContext*    rc,
                         const PlanetRenderContext* prc,

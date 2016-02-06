@@ -17,13 +17,13 @@ class TimeInterval;
 
 class MaxFrameTimeTileLODTester : public DecoratorTileLODTester {
 private:
-  long long _maxFrameTimeInMs;
+  const long long _maxFrameTimeInMs;
 
   mutable int _splitsInFrameCounter;
 
 public:
 
-  MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,
+  MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTime,
                             TileLODTester* tileLODTester);
 
   ~MaxFrameTimeTileLODTester();

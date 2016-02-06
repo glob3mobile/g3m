@@ -74,7 +74,6 @@ _texturizerData(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
-_verticalExaggeration(0),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
@@ -232,44 +231,8 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   return _debugMesh;
 }
 
-bool Tile::isVisible(const G3MRenderContext* rc,
-                     const PlanetRenderContext* prc) {
-//  if ((prc->_renderedSector != NULL) &&
-//      !(prc->_renderedSector->touchesWith(_sector))) { //Incomplete world
-//#warning TODO: test if this condition happens
-//    ILogger::instance()->logError("Ooops!");
-//    return false;
-//  }
-#warning TODO: remove this method
-  return prc->_tileVisibilityTester->isVisible(rc, prc, this);
-}
-
-bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
-                               const PlanetRenderContext* prc) {
-#warning TODO: move to an implementation of TileLODTester and remove this method when the code is moved from here
-#warning TODO: remove lastSplitTimer
-  //  if (tilesRenderParameters->_useTilesSplitBudget) {
-  //    if (_subtiles == NULL) { // the tile needs to create the subtiles
-  ////      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
-  //      if (lastSplitTimer->elapsedTimeInMilliseconds() < 5) {
-  //        // there are not more time-budget to spend
-  //        return true;
-  //      }
-  //    }
-  //  }
-
-  return prc->_tileLODTester->meetsRenderCriteria(rc, prc, this);
-}
-
 void Tile::prepareForFullRendering(const G3MRenderContext*    rc,
                                    const PlanetRenderContext* prc) {
-
-  //You have to set _verticalExaggertion
-  if (prc->_verticalExaggeration != _verticalExaggeration) {
-    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-    _verticalExaggeration = prc->_verticalExaggeration;
-  }
-
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc, prc);
   if (tessellatorMesh == NULL) {
@@ -423,19 +386,15 @@ void Tile::render(const G3MRenderContext*    rc,
                   std::vector<Tile*>*        toVisitInNextIteration) {
   tilesStatistics->computeTileProcessed(this);
 
-  if (prc->_verticalExaggeration != _verticalExaggeration) {
-    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
-    _verticalExaggeration = prc->_verticalExaggeration;
-  }
-
-  if (isVisible(rc, prc)) {
+  const bool amIVisible = prc->_tileVisibilityTester->isVisible(rc, prc, this);
+  if (amIVisible) {
     setIsVisible(true, prc->_texturizer);
 
     tilesStatistics->computeVisibleTile(this);
 
     const bool isRawRender = (
-                              (toVisitInNextIteration == NULL) ||
-                              meetsRenderCriteria(rc, prc)     ||
+                              (toVisitInNextIteration == NULL)                           ||
+                              prc->_tileLODTester->meetsRenderCriteria(rc, prc, this)    ||
                               (prc->_tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );
 
@@ -472,7 +431,7 @@ void Tile::render(const G3MRenderContext*    rc,
     prune(prc->_texturizer, prc->_elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
   }
-  
+
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -658,7 +617,7 @@ void Tile::initializeElevationData(const G3MRenderContext* rc,
   if (_elevationData == NULL) {
     getElevationDataFromAncestor(tileMeshResolution);
   }
-  
+
 }
 
 void Tile::ancestorChangedElevationData(Tile* ancestor) {
@@ -751,7 +710,7 @@ void Tile::setData(int id, TileData* data) const {
 #endif
     }
   }
-
+  
   TileData* current = _data[id];
   if (current != data) {
     delete current;

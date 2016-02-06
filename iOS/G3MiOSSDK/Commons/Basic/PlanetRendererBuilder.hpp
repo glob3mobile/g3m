@@ -41,7 +41,6 @@ private:
   TilesRenderParameters* _parameters;
   bool _showStatistics;
   bool _renderDebug;
-  bool _useTilesSplitBudget;
   bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
   Quality _quality;
@@ -59,7 +58,6 @@ private:
   TilesRenderParameters* getParameters();
   bool getShowStatistics();
   bool getRenderDebug();
-  bool getUseTilesSplitBudget();
   bool getForceFirstLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
@@ -108,7 +106,6 @@ public:
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
-  void setUseTilesSplitBudget(const bool useTilesSplitBudget);
   void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,

@@ -488,7 +488,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
       _prc->_elevationDataProvider      = _elevationDataProvider;
       _prc->_tessellator                = _tessellator;
       _prc->_layerSet                   = _layerSet;
-      _prc->_forceFullRender            = true;
       _prc->_tileDownloadPriority       = _tileDownloadPriority;
       _prc->_texWidthSquared            = -1;
       _prc->_texHeightSquared           = -1;
@@ -655,7 +654,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   _prc->_elevationDataProvider      = _elevationDataProvider;
   _prc->_tessellator                = _tessellator;
   _prc->_layerSet                   = _layerSet;
-  _prc->_forceFullRender            = _firstRender; // if first render, forceFullRender
   _prc->_tileDownloadPriority       = _tileDownloadPriority;
   _prc->_texWidthSquared            = texWidthSquared;
   _prc->_texHeightSquared           = texHeightSquared;

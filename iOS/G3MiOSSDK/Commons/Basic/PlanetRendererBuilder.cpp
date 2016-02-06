@@ -26,12 +26,12 @@
 #include "MeshBoundingVolumeTileVisibilityTester.hpp"
 #include "TimedCacheTileVisibilityTester.hpp"
 #include "OrTileLODTester.hpp"
+#include "GradualSplitsTileLODTester.hpp"
 
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
 _renderDebug(false),
-_useTilesSplitBudget(true),
 _forceFirstLevelTilesRenderOnStart(true),
 _incrementalTileQuality(false),
 _quality(QUALITY_LOW),
@@ -151,15 +151,6 @@ bool PlanetRendererBuilder::getRenderDebug() {
 }
 
 /**
- * Returns the useTilesSplitBudget flag.
- *
- * @return _useTilesSplitBudget: bool
- */
-bool PlanetRendererBuilder::getUseTilesSplitBudget() {
-  return _useTilesSplitBudget;
-}
-
-/**
  * Returns the forceFirstLevelTilesRenderOnStart flag.
  *
  * @return _forceFirstLevelTilesRenderOnStart: bool
@@ -254,10 +245,6 @@ void PlanetRendererBuilder::setShowStatistics(const bool showStatistics) {
 
 void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
-}
-
-void PlanetRendererBuilder::setUseTilesSplitBudget(const bool useTilesSplitBudget) {
-  _useTilesSplitBudget = useTilesSplitBudget;
 }
 
 void PlanetRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
@@ -389,7 +376,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
 TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
-                                   getUseTilesSplitBudget(),
                                    getForceFirstLevelTilesRenderOnStart(),
                                    getIncrementalTileQuality(),
                                    getQuality());
@@ -440,32 +426,21 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 }
 
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
-//  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
-//                                                                  NULL);
-//
-//  TileLODTester* maxLevel = new MaxLevelTileLODTester(NULL,
-//                                                      proj);
-//
-//  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
-//                                                           maxLevel);
-//
-//  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
-//                                                     frameTime);
-//
-//  return timed;
-
 #warning Diego at work!
 
   TileLODTester* proj = new ProjectedCornersDistanceTileLODTester();
 
-  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
+  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(500),
                                                      proj);
 
   TileLODTester* maxLevel = new MaxLevelTileLODTester();
 
-  TileLODTester* composite = new OrTileLODTester(maxLevel, timed);
+  TileLODTester* gradual = new GradualSplitsTileLODTester(TimeInterval::fromMilliseconds(10),
+                                                          timed);
 
-  return new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
+  TileLODTester* composite = new OrTileLODTester(maxLevel, gradual);
+
+  return new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(25),
                                        composite);
 }
 

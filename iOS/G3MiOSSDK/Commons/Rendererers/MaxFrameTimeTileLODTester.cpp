@@ -13,10 +13,10 @@
 #include "ITimer.hpp"
 
 
-MaxFrameTimeTileLODTester::MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTimeInMs,
+MaxFrameTimeTileLODTester::MaxFrameTimeTileLODTester(const TimeInterval& maxFrameTime,
                                                      TileLODTester* tileLODTester) :
 DecoratorTileLODTester(tileLODTester),
-_maxFrameTimeInMs(maxFrameTimeInMs.milliseconds()),
+_maxFrameTimeInMs(maxFrameTime.milliseconds()),
 _splitsInFrameCounter(0)
 {
 }

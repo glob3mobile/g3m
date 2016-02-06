@@ -437,6 +437,9 @@
 		CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */; };
 		CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */; };
 		CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBAA164AFDB000910037 /* JSONString.cpp */; };
+		CFE50D241C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE50D221C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp */; };
+		CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE50D231C66650C0002EFD5 /* GradualSplitsTileLODTester.hpp */; };
+		CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF516E921C63EF5D002F19E3 /* PlanetRenderContext.hpp */; };
 		CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */; };
 		CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046419043E3200E6C78B /* IImageBuilder.cpp */; };
 		CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE604661904411900E6C78B /* ChangedListener.cpp */; };
@@ -759,6 +762,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
+				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
 				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
 				CF2E59441C5BC5CD001F6AA0 /* G3MRenderContext.hpp in CopyFiles */,
 				CF2E59451C5BC5CD001F6AA0 /* G3MEventContext.hpp in CopyFiles */,
@@ -1713,6 +1718,8 @@
 		CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSShapesParser.hpp; path = Commons/Rendererers/SceneJSShapesParser.hpp; sourceTree = "<group>"; };
 		CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONBoolean.cpp; sourceTree = "<group>"; };
 		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
+		CFE50D221C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GradualSplitsTileLODTester.cpp; path = Commons/Rendererers/GradualSplitsTileLODTester.cpp; sourceTree = "<group>"; };
+		CFE50D231C66650C0002EFD5 /* GradualSplitsTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GradualSplitsTileLODTester.hpp; path = Commons/Rendererers/GradualSplitsTileLODTester.hpp; sourceTree = "<group>"; };
 		CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorRenderer.cpp; path = Commons/Rendererers/ErrorRenderer.cpp; sourceTree = "<group>"; };
 		CFE6046419043E3200E6C78B /* IImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageBuilder.cpp; path = Commons/Basic/IImageBuilder.cpp; sourceTree = "<group>"; };
 		CFE604661904411900E6C78B /* ChangedListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedListener.cpp; path = Commons/Basic/ChangedListener.cpp; sourceTree = "<group>"; };
@@ -2517,6 +2524,8 @@
 				E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */,
 				D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */,
 				D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */,
+				CFE50D221C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp */,
+				CFE50D231C66650C0002EFD5 /* GradualSplitsTileLODTester.hpp */,
 				D8B78E221C1208CB00DDE2B9 /* MaxLevelTileLODTester.cpp */,
 				D8B78E231C1208CB00DDE2B9 /* MaxLevelTileLODTester.hpp */,
 				CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */,
@@ -3222,6 +3231,7 @@
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
 				CF67D9CB1C5AB44500873661 /* TimedCacheTileVisibilityTester.cpp in Sources */,
 				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
+				CFE50D241C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp in Sources */,
 				CFD15C4416E78C7D004DC360 /* OSMLayer.cpp in Sources */,
 				CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */,
 				E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */,
