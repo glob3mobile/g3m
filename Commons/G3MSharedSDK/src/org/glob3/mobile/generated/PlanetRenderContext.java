@@ -38,8 +38,8 @@ public class PlanetRenderContext
   public final TilesRenderParameters _tilesRenderParameters;
   public ITimer _lastSplitTimer;
   public ElevationDataProvider _elevationDataProvider;
-  public final TileTessellator _tessellator;
-  public final LayerSet _layerSet;
+  public TileTessellator _tessellator;
+  public LayerSet _layerSet;
   public long _tileDownloadPriority;
   public double _texWidthSquared;
   public double _texHeightSquared;
