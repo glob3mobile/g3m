@@ -24,11 +24,8 @@ class PlanetRenderContext {
 public:
   TileLODTester*                    _tileLODTester;
   TileVisibilityTester*             _tileVisibilityTester;
-  const Frustum*                    _frustumInModelCoordinates;
   float                             _verticalExaggeration;
-  const LayerTilesRenderParameters* _layerTilesRenderParameters;
   TileTexturizer*                   _texturizer;
-  const TilesRenderParameters*      _tilesRenderParameters;
   ITimer*                           _lastSplitTimer;
   ElevationDataProvider*            _elevationDataProvider;
   TileTessellator*                  _tessellator;
@@ -40,6 +37,15 @@ public:
   bool                              _renderTileMeshes;
   bool                              _logTilesPetitions;
 
+#ifdef C_CODE
+  const Frustum*                    _frustumInModelCoordinates;
+  const LayerTilesRenderParameters* _layerTilesRenderParameters;
+  const TilesRenderParameters*      _tilesRenderParameters;
+#else
+  Frustum*                    _frustumInModelCoordinates;
+  LayerTilesRenderParameters* _layerTilesRenderParameters;
+  TilesRenderParameters*      _tilesRenderParameters;
+#endif
 
   ~PlanetRenderContext() {
   }
