@@ -31,11 +31,8 @@ public class PlanetRenderContext
 {
   public TileLODTester _tileLODTester;
   public TileVisibilityTester _tileVisibilityTester;
-  public final Frustum _frustumInModelCoordinates;
   public float _verticalExaggeration;
-  public final LayerTilesRenderParameters _layerTilesRenderParameters;
   public TileTexturizer _texturizer;
-  public final TilesRenderParameters _tilesRenderParameters;
   public ITimer _lastSplitTimer;
   public ElevationDataProvider _elevationDataProvider;
   public TileTessellator _tessellator;
@@ -47,6 +44,9 @@ public class PlanetRenderContext
   public boolean _renderTileMeshes;
   public boolean _logTilesPetitions;
 
+  public Frustum _frustumInModelCoordinates;
+  public LayerTilesRenderParameters _layerTilesRenderParameters;
+  public TilesRenderParameters _tilesRenderParameters;
 
   public void dispose()
   {
