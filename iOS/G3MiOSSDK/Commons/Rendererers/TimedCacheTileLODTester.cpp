@@ -32,10 +32,10 @@ bool TimedCacheTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
 
   const long long nowInMS = prc->_nowInMS;
 
-  PvtData* data = (PvtData*) tile->getData(_id);
+  PvtData* data = (PvtData*) tile->getData(TimedCacheTLTDataID);
   if (data == NULL) {
     data = new PvtData(nowInMS);
-    tile->setData(_id, data);
+    tile->setData(data);
     data->_lastMeetsRenderCriteriaResult = _tileLODTester->meetsRenderCriteria(rc, prc, tile);
   }
   else if ((nowInMS - data->_lastMeetsRenderCriteriaTimeInMS) > _timeoutInMS) {

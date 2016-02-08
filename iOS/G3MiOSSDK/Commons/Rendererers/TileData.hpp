@@ -11,6 +11,13 @@
 
 class TileData {
 public:
+  
+  //This id MUST be unique for every kind of TileData
+  //It also MUST be an integer positive value, as it is used as index within the tile
+  const int _id;
+  
+  TileData(int id):_id(id){}
+  
 #ifdef C_CODE
   virtual ~TileData() {
   }

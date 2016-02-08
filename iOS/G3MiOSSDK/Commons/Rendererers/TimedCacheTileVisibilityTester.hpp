@@ -20,11 +20,13 @@ class TimedCacheTileVisibilityTester : public DecoratorTileVisibilityTester {
 private:
   long long _timeoutInMS;
 
+#define TimedCacheTVTDataID 0
   class PvtData: public TileData {
   public:
     long long _timeoutTimeInMS;
 
     PvtData(long long timeoutTimeInMS) :
+    TileData(TimedCacheTVTDataID),
     _timeoutTimeInMS(timeoutTimeInMS)
     {
     }

@@ -27,11 +27,11 @@ ProjectedCornersDistanceTileLODTester::~ProjectedCornersDistanceTileLODTester() 
 
 ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODTester::getData(const Tile* tile,
                                                                                                const G3MRenderContext* rc) const {
-  PvtData* data = (PvtData*) tile->getData(_id);
+  PvtData* data = (PvtData*) tile->getData(ProjectedCornersDistanceTLTDataID);
   if (data == NULL) {
     const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
     data = new PvtData(tile, mediumHeight, rc->getPlanet());
-    tile->setData(_id, data);
+    tile->setData(data);
   }
   return data;
 }
@@ -59,7 +59,7 @@ double ProjectedCornersDistanceTileLODTester::PvtData::getSquaredArcSegmentRatio
 ProjectedCornersDistanceTileLODTester::PvtData::PvtData(const Tile* tile,
                                                         double mediumHeight,
                                                         const Planet* planet):
-TileData(),
+TileData(ProjectedCornersDistanceTLTDataID),
 _northWestPoint( planet->toCartesian( tile->_sector.getNW(), mediumHeight ) ),
 _northEastPoint( planet->toCartesian( tile->_sector.getNE(), mediumHeight ) ),
 _southWestPoint( planet->toCartesian( tile->_sector.getSW(), mediumHeight ) ),

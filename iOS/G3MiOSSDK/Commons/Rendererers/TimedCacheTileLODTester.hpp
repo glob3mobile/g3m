@@ -18,13 +18,16 @@ class TimeInterval;
 class TimedCacheTileLODTester : public DecoratorTileLODTester {
 private:
   long long _timeoutInMS;
+  
+#define TimedCacheTLTDataID 1
 
   class PvtData: public TileData {
   public:
     bool _lastMeetsRenderCriteriaResult;
     long long _lastMeetsRenderCriteriaTimeInMS;
 
-    PvtData(long long now) {
+    PvtData(long long now):
+    TileData(TimedCacheTLTDataID){
       _lastMeetsRenderCriteriaTimeInMS = now;
       _lastMeetsRenderCriteriaResult = false;
     }

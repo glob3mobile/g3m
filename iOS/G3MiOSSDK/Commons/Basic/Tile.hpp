@@ -205,7 +205,10 @@ public:
                                           const Vector2I& size) const;
 
   TileData* getData(int id) const;
-  void setData(int id, TileData* data) const;
+  
+  void setData(TileData* data) const;
+  
+  void clearDataWithID(int id) const;
 
   const TileTessellatorMeshData* getTessellatorMeshData() const {
 #warning ask JM

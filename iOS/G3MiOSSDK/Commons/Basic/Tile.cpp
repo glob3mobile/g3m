@@ -679,7 +679,8 @@ Vector2I Tile::getNormalizedPixelFromPosition(const Geodetic2D& position,
                   math->toInt(tileDimension._y * uv._y));
 }
 
-void Tile::setData(int id, TileData* data) const {
+void Tile::setData(TileData* data) const {
+  const int id = data->_id;
   const size_t requiredSize = id+1;
   if (_dataSize < requiredSize) {
     if (_dataSize == 0) {
@@ -715,6 +716,14 @@ void Tile::setData(int id, TileData* data) const {
   if (current != data) {
     delete current;
     _data[id] = data;
+  }
+}
+
+void Tile::clearDataWithID(int id) const {
+  if (_dataSize > id){
+    //Assuming we won't reduce _data capacity by erasing items
+    delete _data[id];
+    _data[id] = NULL;
   }
 }
 

@@ -36,18 +36,15 @@ bool TimedCacheTileVisibilityTester::isVisible(const G3MRenderContext* rc,
                                                Tile* tile) const {
 
   const long long nowInMS = prc->_nowInMS;
-  
-#warning Calculate ID;
-  const int id = 32;
 
   bool result;
-  PvtData* data = (PvtData*) tile->getData(id);
+  PvtData* data = (PvtData*) tile->getData(TimedCacheTVTDataID);
 
   if (data == NULL) {
     result = _tileVisibilityTester->isVisible(rc, prc, tile);
     if (result) {
       data = new PvtData(nowInMS + _timeoutInMS);
-      tile->setData(id, data);
+      tile->setData(data);
     }
   }
   else {
@@ -60,7 +57,7 @@ bool TimedCacheTileVisibilityTester::isVisible(const G3MRenderContext* rc,
         data->_timeoutTimeInMS = nowInMS + _timeoutInMS;
       }
       else {
-        tile->setData(id, NULL);
+        tile->setData(data);
       }
     }
   }
