@@ -31,8 +31,8 @@ public:
   const TilesRenderParameters*      _tilesRenderParameters;
   ITimer*                           _lastSplitTimer;
   ElevationDataProvider*            _elevationDataProvider;
-  const TileTessellator*            _tessellator;
-  const LayerSet*                   _layerSet;
+  TileTessellator*                  _tessellator;
+  LayerSet*                         _layerSet;
   long long                         _tileDownloadPriority;
   double                            _texWidthSquared;
   double                            _texHeightSquared;
