@@ -16,18 +16,7 @@ class LayerTilesRenderParameters;
 
 
 class TileLODTester {
-private:
-  static int ID_COUNTER;
-
-protected:
-  const int _id;
-
 public:
-
-  TileLODTester() :
-  _id(ID_COUNTER++)
-  {
-  }
 
   virtual ~TileLODTester() { }
 
