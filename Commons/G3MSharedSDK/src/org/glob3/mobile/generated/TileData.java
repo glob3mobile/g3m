@@ -18,6 +18,16 @@ package org.glob3.mobile.generated;
 
 public class TileData
 {
+
+  //This id MUST be unique for every kind of TileData
+  //It also MUST be an integer positive value, as it is used as index within the tile
+  public final int _id;
+
+  public TileData(int id)
+  {
+     _id = id;
+  }
+
   void dispose() {
   }
 }

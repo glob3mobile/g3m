@@ -24,15 +24,6 @@ package org.glob3.mobile.generated;
 
 public abstract class TileLODTester
 {
-  private static int ID_COUNTER = 0;
-
-  protected final int _id;
-
-
-  public TileLODTester()
-  {
-     _id = ID_COUNTER++;
-  }
 
   public void dispose()
   {

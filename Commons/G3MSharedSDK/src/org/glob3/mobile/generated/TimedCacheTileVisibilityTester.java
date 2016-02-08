@@ -25,12 +25,14 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
 {
   private long _timeoutInMS;
 
+   private static final int TimedCacheTVTDataID = 0;
   private static class PvtData extends TileData
   {
     public long _timeoutTimeInMS;
 
     public PvtData(long timeoutTimeInMS)
     {
+       super(TimedCacheTVTDataID);
        _timeoutTimeInMS = timeoutTimeInMS;
     }
   }
@@ -52,12 +54,8 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
   
     final long nowInMS = prc._nowInMS;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Calculate ID;
-    final int id = 32;
-  
     boolean result;
-    PvtData data = (PvtData) tile.getData(id);
+    PvtData data = (PvtData) tile.getData(TimedCacheTVTDataID);
   
     if (data == null)
     {
@@ -65,7 +63,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
       if (result)
       {
         data = new PvtData(nowInMS + _timeoutInMS);
-        tile.setData(id, data);
+        tile.setData(data);
       }
     }
     else
@@ -83,7 +81,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
         }
         else
         {
-          tile.setData(id, null);
+          tile.setData(data);
         }
       }
     }

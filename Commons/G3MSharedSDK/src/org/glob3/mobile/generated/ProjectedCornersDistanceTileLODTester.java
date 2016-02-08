@@ -26,6 +26,8 @@ package org.glob3.mobile.generated;
 public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 {
 
+   private static final int ProjectedCornersDistanceTLTDataID = 2;
+
   private static class PvtData extends TileData
   {
     private static double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
@@ -53,7 +55,7 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 
     public PvtData(Tile tile, double mediumHeight, Planet planet)
     {
-       super();
+       super(ProjectedCornersDistanceTLTDataID);
        _northWestPoint = new Vector3D(planet.toCartesian(tile._sector.getNW(), mediumHeight));
        _northEastPoint = new Vector3D(planet.toCartesian(tile._sector.getNE(), mediumHeight));
        _southWestPoint = new Vector3D(planet.toCartesian(tile._sector.getSW(), mediumHeight));
@@ -89,12 +91,12 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 
   private ProjectedCornersDistanceTileLODTester.PvtData getData(Tile tile, G3MRenderContext rc)
   {
-    PvtData data = (PvtData) tile.getData(_id);
+    PvtData data = (PvtData) tile.getData(ProjectedCornersDistanceTLTDataID);
     if (data == null)
     {
       final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
       data = new PvtData(tile, mediumHeight, rc.getPlanet());
-      tile.setData(_id, data);
+      tile.setData(data);
     }
     return data;
   }

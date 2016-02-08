@@ -749,8 +749,10 @@ public class Tile
   {
     return (id >= _dataSize) ? null : _data[id];
   }
-  public final void setData(int id, TileData data)
+
+  public final void setData(TileData data)
   {
+    final int id = data._id;
     final int requiredSize = id+1;
     if (_dataSize < requiredSize)
     {
@@ -775,6 +777,17 @@ public class Tile
       if (current != null)
          current.dispose();
       _data[id] = data;
+    }
+  }
+
+  public final void clearDataWithID(int id)
+  {
+    if (_dataSize > id)
+    {
+      //Assuming we won't reduce _data capacity by erasing items
+      if (_data[id] != null)
+         _data[id].dispose();
+      _data[id] = null;
     }
   }
 
