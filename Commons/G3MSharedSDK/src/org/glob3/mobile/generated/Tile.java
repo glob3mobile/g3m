@@ -853,9 +853,9 @@ public class Tile
     return _tessellatorMesh;
   }
 
-  public final boolean areSubtilesCreated()
+  public final boolean hasSubtiles()
   {
-    return _subtiles != null;
+    return (_subtiles != null);
   }
 
 }

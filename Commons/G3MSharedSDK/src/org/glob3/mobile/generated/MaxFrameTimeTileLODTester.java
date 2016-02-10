@@ -42,7 +42,7 @@ public class MaxFrameTimeTileLODTester extends DecoratorTileLODTester
 
   public final boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-    final boolean hasSubtiles = tile.areSubtilesCreated();
+    final boolean hasSubtiles = tile.hasSubtiles();
   
     if (!hasSubtiles)
     {

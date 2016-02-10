@@ -99,8 +99,6 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       final long tileTexturePriority = (prc._tilesRenderParameters._incrementalTileQuality ? prc._tileDownloadPriority + prc._layerTilesRenderParameters._maxLevel - tile._level : prc._tileDownloadPriority + tile._level);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Clean DTT_TileTextureBuilder constructor
       builder = new DTT_TileTextureBuilder(rc, prc._layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, prc._tessellator, tileTexturePriority, prc._logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackgroundImage, _defaultBackgroundImageName);
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
