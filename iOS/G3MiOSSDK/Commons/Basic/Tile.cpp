@@ -730,3 +730,8 @@ void Tile::clearDataWithID(int id) const {
 TileData* Tile::getData(int id) const {
   return (id >= _dataSize) ? NULL : _data[id];
 }
+
+const TileTessellatorMeshData* Tile::getTessellatorMeshData() const {
+#warning ask JM
+  return &_tileTessellatorMeshData;
+}
