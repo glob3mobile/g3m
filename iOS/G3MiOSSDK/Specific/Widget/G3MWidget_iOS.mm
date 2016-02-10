@@ -427,7 +427,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   IMathUtils*         mathUtils       = new MathUtils_iOS();
   IJSONParser*        jsonParser      = new JSONParser_iOS();
   ITextUtils*         textUtils       = new TextUtils_iOS();
-  IDeviceAttitude*    devAttitude     = new DeviceAttitude_iOS();
+  IDeviceAttitude*    devAttitude     = new DeviceAttitude_iOS(false);
   IDeviceLocation*    devLocation     = new DeviceLocation_iOS();
   
 

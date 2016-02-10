@@ -16,11 +16,13 @@ private:
   CMMotionManager* _mm;
   
   mutable MutableMatrix44D _reorientationMatrix;
+  
+  bool _showsDeviceMovementDisplay;
 
   
 public:
   
-  DeviceAttitude_iOS();
+  DeviceAttitude_iOS(bool showsDeviceMovementDisplay);
   
   ~DeviceAttitude_iOS(){}
   

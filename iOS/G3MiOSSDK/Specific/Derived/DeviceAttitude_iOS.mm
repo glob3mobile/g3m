@@ -10,7 +10,8 @@
 #import <UIKit/UIKit.h>
 
 
-DeviceAttitude_iOS::DeviceAttitude_iOS()
+DeviceAttitude_iOS::DeviceAttitude_iOS(bool showsDeviceMovementDisplay):
+_showsDeviceMovementDisplay(showsDeviceMovementDisplay)
 {
   _mm = [[CMMotionManager alloc] init];
 }
@@ -18,7 +19,7 @@ DeviceAttitude_iOS::DeviceAttitude_iOS()
 void DeviceAttitude_iOS::startTrackingDeviceOrientation() const{
   // Tell CoreMotion to show the compass calibration HUD when required
   // to provide true north-referenced attitude
-  _mm.showsDeviceMovementDisplay = YES;
+  _mm.showsDeviceMovementDisplay = _showsDeviceMovementDisplay;
   _mm.deviceMotionUpdateInterval = 1.0 / 60.0;
   
   // Attitude that is referenced to true north
