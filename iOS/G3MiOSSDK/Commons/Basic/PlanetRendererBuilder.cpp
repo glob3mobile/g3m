@@ -426,8 +426,6 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 }
 
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
-#warning Diego at work!
-
   TileLODTester* proj = new ProjectedCornersDistanceTileLODTester();
 
   TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(500),

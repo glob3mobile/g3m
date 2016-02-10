@@ -34,7 +34,7 @@ bool GradualSplitsTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
   const bool result = _tileLODTester->meetsRenderCriteria(rc, prc, tile);
 
   if (!result) {
-    const bool hasSubtiles = tile->areSubtilesCreated();
+    const bool hasSubtiles = tile->hasSubtiles();
 
     if (!hasSubtiles) { // the tile needs to create the subtiles
       if (prc->_lastSplitTimer->elapsedTimeInMilliseconds() <= _delayInMs) {

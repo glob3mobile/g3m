@@ -668,7 +668,6 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
                                            ? prc->_tileDownloadPriority + prc->_layerTilesRenderParameters->_maxLevel - tile->_level
                                            : prc->_tileDownloadPriority + tile->_level);
 
-#warning Clean DTT_TileTextureBuilder constructor
     builder = new DTT_TileTextureBuilder(rc,
                                          prc->_layerTilesRenderParameters,
                                          tileImageProvider,

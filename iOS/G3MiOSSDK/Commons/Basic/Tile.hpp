@@ -218,8 +218,8 @@ public:
   Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                            const PlanetRenderContext* prc);
 
-  bool areSubtilesCreated() const {
-    return _subtiles != NULL;
+  bool hasSubtiles() const {
+    return (_subtiles != NULL);
   }
   
 };
