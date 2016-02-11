@@ -25,14 +25,13 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
 {
   private long _timeoutInMS;
 
-   private static final int TimedCacheTVTDataID = 0;
   private static class PvtData extends TileData
   {
     public long _timeoutTimeInMS;
 
     public PvtData(long timeoutTimeInMS)
     {
-       super(TimedCacheTVTDataID);
+       super(DefineConstants.TimedCacheTVTDataID);
        _timeoutTimeInMS = timeoutTimeInMS;
     }
   }
@@ -55,7 +54,7 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
     final long nowInMS = prc._nowInMS;
   
     boolean result;
-    PvtData data = (PvtData) tile.getData(TimedCacheTVTDataID);
+    PvtData data = (PvtData) tile.getData(DefineConstants.TimedCacheTVTDataID);
   
     if (data == null)
     {

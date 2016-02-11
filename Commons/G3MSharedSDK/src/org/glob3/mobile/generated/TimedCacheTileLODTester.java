@@ -24,8 +24,6 @@ public class TimedCacheTileLODTester extends DecoratorTileLODTester
 {
   private long _timeoutInMS;
 
-   private static final int TimedCacheTLTDataID = 1;
-
   private static class PvtData extends TileData
   {
     public boolean _lastMeetsRenderCriteriaResult;
@@ -33,7 +31,7 @@ public class TimedCacheTileLODTester extends DecoratorTileLODTester
 
     public PvtData(long now)
     {
-       super(TimedCacheTLTDataID);
+       super(DefineConstants.TimedCacheTLTDataID);
       _lastMeetsRenderCriteriaTimeInMS = now;
       _lastMeetsRenderCriteriaResult = false;
     }
@@ -56,7 +54,7 @@ public class TimedCacheTileLODTester extends DecoratorTileLODTester
   
     final long nowInMS = prc._nowInMS;
   
-    PvtData data = (PvtData) tile.getData(TimedCacheTLTDataID);
+    PvtData data = (PvtData) tile.getData(DefineConstants.TimedCacheTLTDataID);
     if (data == null)
     {
       data = new PvtData(nowInMS);

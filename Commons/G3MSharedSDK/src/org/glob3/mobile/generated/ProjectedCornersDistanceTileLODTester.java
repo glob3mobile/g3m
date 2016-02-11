@@ -26,8 +26,6 @@ package org.glob3.mobile.generated;
 public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 {
 
-   private static final int ProjectedCornersDistanceTLTDataID = 2;
-
   private static class PvtData extends TileData
   {
     private static double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
@@ -55,7 +53,7 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 
     public PvtData(Tile tile, double mediumHeight, Planet planet)
     {
-       super(ProjectedCornersDistanceTLTDataID);
+       super(DefineConstants.ProjectedCornersDistanceTLTDataID);
        _northWestPoint = new Vector3D(planet.toCartesian(tile._sector.getNW(), mediumHeight));
        _northEastPoint = new Vector3D(planet.toCartesian(tile._sector.getNE(), mediumHeight));
        _southWestPoint = new Vector3D(planet.toCartesian(tile._sector.getSW(), mediumHeight));
@@ -75,23 +73,41 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
     {
     
       final double distanceInPixelsNorth = camera.getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
-      final double distanceInPixelsSouth = camera.getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
-      final double distanceInPixelsWest = camera.getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
-      final double distanceInPixelsEast = camera.getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
-    
       final double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
-      final double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
-      final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
-      final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
+      if (distanceInPixelsSquaredArcNorth > texWidthSquared)
+      {
+        return false;
+      }
     
-      return ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
+      final double distanceInPixelsSouth = camera.getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
+      final double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
+      if (distanceInPixelsSquaredArcSouth > texWidthSquared)
+      {
+        return false;
+      }
+    
+      final double distanceInPixelsWest = camera.getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
+      final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
+      if (distanceInPixelsSquaredArcWest > texHeightSquared)
+      {
+        return false;
+      }
+    
+      final double distanceInPixelsEast = camera.getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
+      final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
+      if (distanceInPixelsSquaredArcEast > texHeightSquared)
+      {
+        return false;
+      }
+    
+      return true;
     }
   }
 
 
   private ProjectedCornersDistanceTileLODTester.PvtData getData(Tile tile, G3MRenderContext rc)
   {
-    PvtData data = (PvtData) tile.getData(ProjectedCornersDistanceTLTDataID);
+    PvtData data = (PvtData) tile.getData(DefineConstants.ProjectedCornersDistanceTLTDataID);
     if (data == null)
     {
       final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
