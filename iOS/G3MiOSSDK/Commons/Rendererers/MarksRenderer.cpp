@@ -19,6 +19,8 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
+#include "G3MEventContext.hpp"
+
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {

@@ -144,11 +144,6 @@ public class DefaultTileTexturizer extends TileTexturizer
     }
   }
 
-  public final boolean tileMeetsRenderCriteria(Tile tile)
-  {
-    return false;
-  }
-
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
     // do nothing

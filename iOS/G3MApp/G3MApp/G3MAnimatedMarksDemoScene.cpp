@@ -33,7 +33,7 @@ class RescaleMarkTask: public PeriodicalTask{
     float _delta;
   public:
     
-    ~RescaleMarkTaskGTask(){}
+    ~RescaleMarkTaskGTask() {}
     
     RescaleMarkTaskGTask(Mark* mark):
     _mark(mark), _size(40), _delta(1)
@@ -41,8 +41,8 @@ class RescaleMarkTask: public PeriodicalTask{
     }
     
     
-    virtual void run(const G3MContext* context){
-      if (_size < 30 || _size > 75){
+    virtual void run(const G3MContext* context) {
+      if (_size < 30 || _size > 75) {
         _delta = -_delta;
       }
       

@@ -433,8 +433,7 @@ public class PlanetTileTessellator extends TileTessellator
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
   {
   
-    final Sector tileSector = tile._sector;
-    final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+    final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
     final short rx = (short)meshResolution._x;
     final short ry = (short)meshResolution._y;

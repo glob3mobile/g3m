@@ -8,7 +8,7 @@
 
 #include "CircleImageBuilder.hpp"
 #include "ICanvas.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IStringUtils.hpp"
 
 CircleImageBuilder::CircleImageBuilder(const Color& color,

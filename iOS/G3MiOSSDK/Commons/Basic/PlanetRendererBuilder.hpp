@@ -9,15 +9,23 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-class LayerSet;
-class GEOVectorLayer;
-class IImageBuilder;
-
+#include <vector>
 #include "TilesRenderParameters.hpp"
-#include "PlanetRenderer.hpp"
-#include "DefaultChessCanvasImageBuilder.hpp"
-#include "DownloaderImageBuilder.hpp"
+#include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
 
+class TileTessellator;
+class TileTexturizer;
+class GEOVectorLayer;
+class TileLODTester;
+class TileVisibilityTester;
+class LayerSet;
+class VisibleSectorListener;
+class ElevationDataProvider;
+class Sector;
+class ChangedRendererInfoListener;
+class IImageBuilder;
+class PlanetRenderer;
 
 
 class PlanetRendererBuilder {
@@ -26,6 +34,8 @@ private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
+  TileLODTester* _tileLODTester;
+  TileVisibilityTester* _tileVisibilityTester;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
@@ -73,8 +83,6 @@ private:
 
   bool getLogTilesPetitions();
 
-  TileRenderingListener* _tileRenderingListener;
-  
   ChangedRendererInfoListener* _changedInfoListener;
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
@@ -84,6 +92,11 @@ private:
   IImageBuilder* _defaultTileBackGroundImage = NULL;
   
   IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
+  
+  TileLODTester* createDefaultTileLODTester() const;
+
+  TileVisibilityTester* createDefaultTileVisibilityTester() const;
+
 
 public:
   PlanetRendererBuilder();
@@ -119,10 +132,6 @@ public:
   void setRenderTileMeshes(bool renderTileMeshes);
 
   void setLogTilesPetitions(bool logTilesPetitions);
-
-  void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
-
-  TileRenderingListener* getTileRenderingListener();
   
   ChangedRendererInfoListener* getChangedRendererInfoListener();
   
@@ -131,6 +140,13 @@ public:
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
   
   void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
+  
+  void setTileLODTester(TileLODTester* tlt);
+  
+  TileLODTester* getTileLODTester();
+
+  TileVisibilityTester* getTileVisibilityTester();
+
 };
 
 #endif

@@ -16,11 +16,19 @@ package org.glob3.mobile.generated;
 //
 
 
-//class LayerSet;
+
+//class TileTessellator;
+//class TileTexturizer;
 //class GEOVectorLayer;
+//class TileLODTester;
+//class TileVisibilityTester;
+//class LayerSet;
+//class VisibleSectorListener;
+//class ElevationDataProvider;
+//class Sector;
+//class ChangedRendererInfoListener;
 //class IImageBuilder;
-
-
+//class PlanetRenderer;
 
 
 public class PlanetRendererBuilder
@@ -29,6 +37,8 @@ public class PlanetRendererBuilder
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
+  private TileLODTester _tileLODTester;
+  private TileVisibilityTester _tileVisibilityTester;
 
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
@@ -205,7 +215,7 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-  ///#warning Testing Terrain Normals
+    ///#warning Testing Terrain Normals
     final boolean skirted = true;
     return new PlanetTileTessellator(skirted, getRenderedSector());
   }
@@ -244,8 +254,6 @@ public class PlanetRendererBuilder
     return _logTilesPetitions;
   }
 
-  private TileRenderingListener _tileRenderingListener;
-
   private ChangedRendererInfoListener _changedInfoListener;
 
   private TouchEventType _touchEventTypeOfTerrainTouchListener;
@@ -265,6 +273,42 @@ public class PlanetRendererBuilder
     }
     return _defaultTileBackGroundImage;
   }
+
+  private TileLODTester createDefaultTileLODTester()
+  {
+  //  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester(NULL,
+  //                                                                  NULL);
+  //
+  //  TileLODTester* maxLevel = new MaxLevelTileLODTester(NULL,
+  //                                                      proj);
+  //
+  //  TileLODTester* frameTime = new MaxFrameTimeTileLODTester(TimeInterval::fromMilliseconds(20),
+  //                                                           maxLevel);
+  //
+  //  TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(250),
+  //                                                     frameTime);
+  //
+  //  return timed;
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+  
+    TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
+  
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(250), proj);
+  
+    TileLODTester maxLevel = new MaxLevelTileLODTester();
+  
+    TileLODTester composite = new OrTileLODTester(maxLevel, timed);
+  
+    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(20), composite);
+  }
+
+  private TileVisibilityTester createDefaultTileVisibilityTester()
+  {
+    return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(1000), new MeshBoundingVolumeTileVisibilityTester());
+  }
+
 
   public PlanetRendererBuilder()
   {
@@ -286,9 +330,10 @@ public class PlanetRendererBuilder
      _renderedSector = null;
      _renderTileMeshes = true;
      _logTilesPetitions = false;
-     _tileRenderingListener = null;
      _changedInfoListener = null;
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
+     _tileLODTester = null;
+     _tileVisibilityTester = null;
   }
   public void dispose()
   {
@@ -314,9 +359,6 @@ public class PlanetRendererBuilder
   
     if (_renderedSector != null)
        _renderedSector.dispose();
-  
-    if (_tileRenderingListener != null)
-       _tileRenderingListener.dispose();
   }
   public final PlanetRenderer create()
   {
@@ -329,7 +371,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -350,8 +392,6 @@ public class PlanetRendererBuilder
     if (_renderedSector != null)
        _renderedSector.dispose();
     _renderedSector = null;
-  
-    _tileRenderingListener = null;
   
     _geoVectorLayers.clear();
   
@@ -483,22 +523,6 @@ public class PlanetRendererBuilder
     _logTilesPetitions = logTilesPetitions;
   }
 
-  public final void setTileRenderingListener(TileRenderingListener tileRenderingListener)
-  {
-    if (_tileRenderingListener != null)
-    {
-      ILogger.instance().logError("LOGIC ERROR: TileRenderingListener already set");
-      return;
-    }
-  
-    _tileRenderingListener = tileRenderingListener;
-  }
-
-  public final TileRenderingListener getTileRenderingListener()
-  {
-    return _tileRenderingListener;
-  }
-
   public final ChangedRendererInfoListener getChangedRendererInfoListener()
   {
     return _changedInfoListener;
@@ -524,4 +548,28 @@ public class PlanetRendererBuilder
   {
     _defaultTileBackGroundImage = defaultTileBackGroundImage;
   }
+
+  public final void setTileLODTester(TileLODTester tlt)
+  {
+    _tileLODTester = tlt;
+  }
+
+  public final TileLODTester getTileLODTester()
+  {
+    if (_tileLODTester == null)
+    {
+      _tileLODTester = createDefaultTileLODTester();
+    }
+    return _tileLODTester;
+  }
+
+  public final TileVisibilityTester getTileVisibilityTester()
+  {
+    if (_tileVisibilityTester == null)
+    {
+      _tileVisibilityTester = createDefaultTileVisibilityTester();
+    }
+    return _tileVisibilityTester;
+  }
+
 }

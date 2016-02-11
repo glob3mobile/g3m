@@ -10,6 +10,7 @@
 #include "CameraRotationHandler.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 
 

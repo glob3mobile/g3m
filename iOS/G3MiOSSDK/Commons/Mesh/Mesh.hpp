@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Mesh
 #define G3MiOSSDK_Mesh
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "BoundingVolume.hpp"
 
 #include "GLState.hpp"

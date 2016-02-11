@@ -8,7 +8,7 @@
 
 #include "IThreadUtils.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 
 void IThreadUtils::initialize(const G3MContext* context) {
   _context = context;

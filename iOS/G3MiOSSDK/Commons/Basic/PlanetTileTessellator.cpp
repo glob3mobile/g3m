@@ -9,7 +9,7 @@
 #include "PlanetTileTessellator.hpp"
 
 #include "Tile.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IndexedMesh.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
@@ -96,7 +96,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
   //  return Vector2I(resolutionX, resolutionY);
 }
 
-double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector){
+double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector) {
   
   const Vector3D se = planet->toCartesian(sector.getSE());
   const Vector3D nw = planet->toCartesian(sector.getNW());
@@ -239,8 +239,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
                                                  const Tile* tile) const {
   
-  const Sector tileSector = tile->_sector;
-  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+  const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
   const short rx = (short)meshResolution._x;
   const short ry = (short)meshResolution._y;

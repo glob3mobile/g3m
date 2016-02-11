@@ -432,7 +432,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
 
-  if (!contribution->isFullCoverageAndOpaque()){
+  if (!contribution->isFullCoverageAndOpaque()) {
 
     IStringBuilder* auxImageId = IStringBuilder::newStringBuilder();
 
@@ -719,10 +719,6 @@ void DefaultTileTexturizer::tileMeshToBeDeleted(Tile* tile,
     DTT_TileTextureBuilder* builder = builderHolder->get();
     builder->cancel(false /* cleanTile */);
   }
-}
-
-bool DefaultTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
-  return false;
 }
 
 void DefaultTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,

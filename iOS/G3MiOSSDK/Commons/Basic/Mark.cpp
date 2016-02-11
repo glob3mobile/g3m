@@ -535,11 +535,11 @@ void Mark::onTextureDownload(const IImage* image) {
 
   _textureImage = image;
 
-  if (!_textureSizeSetExternally){
+  if (!_textureSizeSetExternally) {
     _textureWidth = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
 
-    if (_textureProportionSetExternally){
+    if (_textureProportionSetExternally) {
       _textureWidth *= _textureWidthProportion;
       _textureHeight *= _textureHeightProportion;
     }
@@ -788,7 +788,7 @@ void Mark::elevationChanged(const Geodetic2D& position,
   clearGLState();
 }
 
-void Mark::clearGLState(){
+void Mark::clearGLState() {
   if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
@@ -814,29 +814,29 @@ void Mark::setPosition(const Geodetic3D& position) {
   clearGLState();
 }
 
-void Mark::setOnScreenSizeOnPixels(int width, int height){
+void Mark::setOnScreenSizeOnPixels(int width, int height) {
 
   _textureWidth = width;
   _textureHeight = height;
   _textureSizeSetExternally = true;
 
-  if (_glState != NULL){
+  if (_glState != NULL) {
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
-    if (b != NULL){
+    if (b != NULL) {
       b->changeSize(IMathUtils::instance()->round(_textureWidth),
                     IMathUtils::instance()->round(_textureHeight));
     }
   }
 }
 
-void Mark::setOnScreenSizeOnProportionToImage(float width, float height){
+void Mark::setOnScreenSizeOnProportionToImage(float width, float height) {
   _textureWidthProportion = width;
   _textureHeightProportion = height;
   _textureProportionSetExternally = true;
 
-  if (_glState != NULL){
+  if (_glState != NULL) {
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
-    if (b != NULL){
+    if (b != NULL) {
       b->changeSize(IMathUtils::instance()->round(_textureWidth  * _textureWidthProportion),
                     IMathUtils::instance()->round(_textureHeight * _textureHeightProportion));
     }
@@ -844,7 +844,7 @@ void Mark::setOnScreenSizeOnProportionToImage(float width, float height){
 }
 
 void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
-                                               const Vector2F& scaling){
+                                               const Vector2F& scaling) {
 
   _translationTCX = translation._x;
   _translationTCY = translation._y;
@@ -852,26 +852,23 @@ void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
   _scalingTCX = scaling._x;
   _scalingTCY = scaling._y;
 
-  if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1){
+  if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1) {
     _hasTCTransformations = true;
   }
 
-  if (_textureGLF != NULL){
+  if (_textureGLF != NULL) {
 
-    if (!_textureGLF->hasTranslateAndScale()){
+    if (!_textureGLF->hasTranslateAndScale()) {
       clearGLState();
     }
 
     _textureGLF->setTranslation(_translationTCX, _translationTCY);
     _textureGLF->setScale(_scalingTCX, _scalingTCY);
-  } else{
-
   }
-
 }
 
-void Mark::setMarkAnchor(float anchorU, float anchorV){
-  if (_billboardGLF != NULL){
+void Mark::setMarkAnchor(float anchorU, float anchorV) {
+  if (_billboardGLF != NULL) {
     _billboardGLF->changeAnchor(anchorU, anchorV);
   }
   _anchorU = anchorU;
@@ -906,11 +903,11 @@ void Mark::onImageCreated(const IImage* image,
 
   _textureImage = image;
 
-  if (!_textureSizeSetExternally){
+  if (!_textureSizeSetExternally) {
     _textureWidth  = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
 
-    if (_textureProportionSetExternally){
+    if (_textureProportionSetExternally) {
       _textureWidth  *= _textureWidthProportion;
       _textureHeight *= _textureHeightProportion;
     }

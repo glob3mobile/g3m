@@ -36,7 +36,7 @@
 #include "HUDErrorRenderer.hpp"
 #include "DefaultInfoDisplay.hpp"
 #include "EllipsoidalPlanet.hpp"
-
+#include "PlanetRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),

@@ -76,7 +76,7 @@ public:
   GLGlobalState() :
   _depthTest(false),
   _blend(false),
-  _cullFace(true),
+  _cullFace(false),
   _culledFace(GLCullFace::back()),
   _lineWidth(1),
   _polygonOffsetFactor(0),

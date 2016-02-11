@@ -16,12 +16,11 @@
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
 #include "IGLTextureId.hpp"
-
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
-
 #include "GLState.hpp"
+
 
 void GL::clearScreen(const Color& color) {
   //  if (_verbose) {

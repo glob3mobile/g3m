@@ -10,7 +10,7 @@
 #define __G3MiOSSDK__Shape__
 
 #include "Geodetic3D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Vector3D.hpp"
 
 class MutableMatrix44D;

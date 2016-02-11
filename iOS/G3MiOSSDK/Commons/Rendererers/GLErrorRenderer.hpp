@@ -23,7 +23,7 @@ public:
 #endif
   }
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height){
+                             int width, int height) {
 
   }
 
