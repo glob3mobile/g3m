@@ -11,8 +11,8 @@ import org.glob3.mobile.generated.MutableMatrix44D;
 
 
 public class DeviceAttitude_WebGL
-         extends
-            IDeviceAttitude {
+extends
+IDeviceAttitude {
 
    InterfaceOrientation _currentIO = null;
 
@@ -23,6 +23,8 @@ public class DeviceAttitude_WebGL
    boolean              _isTracking;
 
 
+   //Implementation of DeviceAttitude_WebGL may be inconsistent with device natural screen orientation
+   //Further development needed
    public DeviceAttitude_WebGL() {
       trackInterfaceOrientation(this);
       initInterfaceOrientation(this);
