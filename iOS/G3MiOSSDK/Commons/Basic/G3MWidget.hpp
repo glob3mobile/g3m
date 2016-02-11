@@ -335,6 +335,11 @@ private:
   float _touchDownPositionY;
   
   ViewMode _viewMode;
+  
+  //For stereo vision
+  Camera* _auxCam;
+  Camera* _leftEyeCam;
+  Camera* _rightEyeCam;
 
 
   G3MWidget(GL*                              gl,
@@ -371,9 +376,6 @@ private:
   void rawRender(const RenderState_Type renderStateType);
   
   void rawRenderMono(const RenderState_Type renderStateType);
-  
-  
-//  void rawRenderStereoToedIn(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
 

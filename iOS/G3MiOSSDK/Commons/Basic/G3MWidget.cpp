@@ -145,7 +145,10 @@ _nFramesBeetweenProgramsCleanUp(500),
 _infoDisplay(infoDisplay),
 _touchDownPositionX(0),
 _touchDownPositionY(0),
-_viewMode(viewMode)
+_viewMode(viewMode),
+_leftEyeCam(NULL),
+_rightEyeCam(NULL),
+_auxCam(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -534,89 +537,58 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
 
 }
-/*
-void G3MWidget::rawRenderStereoToedIn(const RenderState_Type renderStateType){
-  Vector3D camPos = _currentCamera->getCartesianPosition();
-  Vector3D camCenter = _currentCamera->getCenter();
-  Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-  const double eyesSeparation = 200;// 0.03;
-  
-  _gl->clearScreen(*_backgroundColor);
-  
-  Camera centralCamera(1000);
-  centralCamera.copyFrom(*_currentCamera);
-  
-  _currentCamera->setFOV(_currentCamera->getVerticalFOV(), _currentCamera->getHorizontalFOV().times(0.5));
-  
-  Vector3D center = centralCamera.pixel2PlanetPoint(Vector2I(_width/2, _height/2));
-  
-  Vector3D up = _currentCamera->getUp();
-  
-  //Left
-  glViewport(0, 0, _width / 2, _height);
-  Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
-  Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
-  
-  //_currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(-eyesSeparation)));
-  _currentCamera->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-  
-  rawRender(renderStateType);
 
-  
-  //Right
-  
-  glViewport(_width / 2, 0, _width / 2, _height);
-  Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
-  Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
-  
-  //_currentCamera->setCartesianPosition(camPos.add(eyesDirection.times(eyesSeparation)));
-  _currentCamera->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-  
-  
-  rawRender(renderStateType);
-  
-//  _currentCamera->setCartesianPosition(camPos);
-  
-  _currentCamera->copyFrom(centralCamera);
-}
-*/
 void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType){
   
-  Vector3D camPos = _currentCamera->getCartesianPosition();
-  Vector3D camCenter = _currentCamera->getCenter();
-  Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-  const double eyesSeparation = renderStateType == RENDER_READY? 200 : 0;// 0.03;
+  if (_auxCam == NULL){
+    _auxCam = new Camera(-1);
+  }
   
-  _gl->clearScreen(*_backgroundColor);
-  
-  Camera centralCamera(-1);
-  centralCamera.copyFrom(*_currentCamera);
-  
-  Vector3D center = centralCamera.pixel2PlanetPoint(Vector2I(_width/2, _height/2));
-  
-  Vector3D up = _currentCamera->getUp();
+  if (_auxCam->getTimestamp() != _currentCamera->getTimestamp()){
+    
+    Vector3D camPos = _currentCamera->getCartesianPosition();
+    Vector3D camCenter = _currentCamera->getCenter();
+    Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+    const double eyesSeparation = renderStateType == RENDER_READY? 200 : 0;// 0.03;
+    Vector3D up = _currentCamera->getUp();
+    
+    _auxCam->copyFrom(*_currentCamera);
+    
+
+    if (_leftEyeCam == NULL){
+      _leftEyeCam = new Camera(-1);
+    }
+    _leftEyeCam->copyFrom(*_auxCam);
+    
+    Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
+    Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
+    _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+    
+    if (_rightEyeCam == NULL){
+      _rightEyeCam = new Camera(-1);
+    }
+    _rightEyeCam->copyFrom(*_auxCam);
+    Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
+    Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
+    
+    _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+    
+  }
   
   const int halfWidth = _width / 2;
+  
+  _gl->clearScreen(*_backgroundColor);
   //Left
   glViewport(0, 0, halfWidth, _height);
-  Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
-  Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
-  
-  _currentCamera->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-  
+  _currentCamera->copyFrom(*_leftEyeCam);
   rawRender(renderStateType);
-  
   
   //Right
   glViewport(halfWidth, 0, halfWidth, _height);
-  Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
-  Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
-  
-  _currentCamera->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-  
+  _currentCamera->copyFrom(*_rightEyeCam);
   rawRender(renderStateType);
   
-  _currentCamera->copyFrom(centralCamera);
+  _currentCamera->copyFrom(*_auxCam);
 }
 
 void G3MWidget::rawRenderMono(const RenderState_Type renderStateType){
