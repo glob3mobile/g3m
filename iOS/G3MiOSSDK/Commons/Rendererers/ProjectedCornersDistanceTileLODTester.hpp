@@ -21,8 +21,6 @@ class Camera;
 
 class ProjectedCornersDistanceTileLODTester : public TileLODTester {
 private:
-  
-#define ProjectedCornersDistanceTLTDataID 2
 
   class PvtData: public TileData {
   private:

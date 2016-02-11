@@ -9,6 +9,11 @@
 #ifndef TileData_hpp
 #define TileData_hpp
 
+
+#define TimedCacheTVTDataID 0
+#define TimedCacheTLTDataID 1
+#define ProjectedCornersDistanceTLTDataID 2
+
 class TileData {
 public:
   

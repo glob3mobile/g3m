@@ -18,8 +18,6 @@ class TimeInterval;
 class TimedCacheTileLODTester : public DecoratorTileLODTester {
 private:
   long long _timeoutInMS;
-  
-#define TimedCacheTLTDataID 1
 
   class PvtData: public TileData {
   public:
