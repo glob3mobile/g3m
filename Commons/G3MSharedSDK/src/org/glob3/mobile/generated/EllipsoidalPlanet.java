@@ -40,6 +40,10 @@ public class EllipsoidalPlanet extends Planet
   private boolean _validSingleDrag;
 
 
+  public static Planet createEarth()
+  {
+    return new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(6378137.0, 6378137.0, 6356752.314245)));
+  }
 
   public EllipsoidalPlanet(Ellipsoid ellipsoid)
   {
@@ -248,7 +252,6 @@ public class EllipsoidalPlanet extends Planet
     final Vector3D normal = start.cross(stop).normalized();
     final double theta = start.angleInRadiansBetween(stop);
   
-    //int n = max((int)(theta / granularity) - 1, 0);
     int n = ((int)(theta / granularity) - 1) > 0 ? (int)(theta / granularity) - 1 : 0;
   
     java.util.LinkedList<Vector3D> positions = new java.util.LinkedList<Vector3D>();
@@ -319,7 +322,6 @@ public class EllipsoidalPlanet extends Planet
     final double medLon = g1._longitude._degrees;
   
     // this way is faster, and works properly further away from the poles
-    //double diflat = fabs(g._latitude-medLat);
     double diflat = mu.abs(g2._latitude._degrees - medLat);
     if (diflat > 180)
     {
@@ -398,9 +400,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
   {
-  //  _origin = origin.asMutableVector3D();
     _origin.copyFrom(origin);
-  //  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
     _initialPoint.copyFrom(closestIntersection(origin, initialRay));
     _validSingleDrag = false;
   }
@@ -417,7 +417,6 @@ public class EllipsoidalPlanet extends Planet
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
-  //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
       finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
       if (finalPoint.isNan())
       {
@@ -436,7 +435,6 @@ public class EllipsoidalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     // save params for possible inertial animations
-  //  _lastDragAxis = rotationAxis.asMutableVector3D();
     _lastDragAxis.copyFrom(rotationAxis);
     double radians = rotationDelta._radians;
     _lastDragRadiansStep = radians - _lastDragRadians;
@@ -569,7 +567,7 @@ public class EllipsoidalPlanet extends Planet
     {
       MutableMatrix44D translation2 = MutableMatrix44D.createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
       positionCamera = positionCamera.transformedBy(translation2, 1.0);
-  //    matrix.copyValue(translation2.multiply(matrix));
+      //    matrix.copyValue(translation2.multiply(matrix));
       matrix.copyValueOfMultiplication(translation2, matrix);
     }
   
@@ -593,7 +591,6 @@ public class EllipsoidalPlanet extends Planet
       viewDirection = viewDirection.transformedBy(rotation, 0.0);
       ray0 = ray0.transformedBy(rotation, 0.0);
       ray1 = ray1.transformedBy(rotation, 0.0);
-  //    matrix.copyValue(rotation.multiply(matrix));
       matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
@@ -608,7 +605,6 @@ public class EllipsoidalPlanet extends Planet
       if (sign<0)
          angle = -angle;
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
-  //    matrix.copyValue(rotation.multiply(matrix));
       matrix.copyValueOfMultiplication(rotation, matrix);
     }
   

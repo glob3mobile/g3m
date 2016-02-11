@@ -1240,15 +1240,15 @@ void VectorStreamingRenderer::updateGLState(const Camera* camera) {
 
 void VectorStreamingRenderer::render(const G3MRenderContext* rc,
                                      GLState* glState) {
+  const Camera* camera = rc->getCurrentCamera();
+  const Frustum* frustumInModelCoordinates = camera->getFrustumInModelCoordinates();
+
+  const long long cameraTS = camera->getTimestamp();
+
+  updateGLState(camera);
+  _glState->setParent(glState);
+
   for (size_t i = 0; i < _vectorSetsSize; i++) {
-    const Camera* camera = rc->getCurrentCamera();
-    const Frustum* frustumInModelCoordinates = camera->getFrustumInModelCoordinates();
-
-    const long long cameraTS = camera->getTimestamp();
-
-    updateGLState(camera);
-    _glState->setParent(glState);
-    
     VectorSet* vectorSector = _vectorSets[i];
     vectorSector->render(rc,
                          frustumInModelCoordinates,

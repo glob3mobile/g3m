@@ -998,7 +998,7 @@ public abstract class IG3MBuilder
   {
     if (_planet == null)
     {
-      _planet = Planet.createEarth();
+      _planet = EllipsoidalPlanet.createEarth();
     }
     return _planet;
   }
