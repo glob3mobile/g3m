@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 02/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 ///#include "ILogger.hpp"
@@ -13,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 17/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
