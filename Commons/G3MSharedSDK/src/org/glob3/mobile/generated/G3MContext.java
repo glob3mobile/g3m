@@ -1,38 +1,31 @@
 package org.glob3.mobile.generated; 
 //
-//  Context.cpp
+//  G3MContext.cpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 1/29/16.
+//
 //
 
 //
-//  Context.hpp
+//  G3MContext.hpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 1/29/16.
 //
-
+//
 
 
 //class IFactory;
-//class Camera;
-//class Planet;
-//class TexturesHandler;
-//class IDownloader;
-//class ILogger;
-//class GL;
-//class EffectsScheduler;
-//class ITimer;
 //class IStringUtils;
 //class IThreadUtils;
+//class ILogger;
 //class IMathUtils;
 //class IJSONParser;
+//class Planet;
+//class IDownloader;
+//class EffectsScheduler;
 //class IStorage;
-//class OrderedRenderable;
-//class GPUProgramManager;
 //class SurfaceElevationProvider;
 
 
@@ -48,7 +41,6 @@ public class G3MContext
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;
-
   protected SurfaceElevationProvider _surfaceElevationProvider;
 
   public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
@@ -68,7 +60,6 @@ public class G3MContext
 
   public void dispose()
   {
-
   }
 
   public final IFactory getFactory()

@@ -5,11 +5,11 @@ public abstract class TileTessellator
   {
   }
 
-  public abstract Mesh createTileMesh(Planet planet, Vector2I resolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug, TileTessellatorMeshData data);
+  public abstract Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, TileTessellatorMeshData data);
 
-  public abstract Vector2I getTileMeshResolution(Planet planet, Vector2I resolution, Tile tile, boolean debug);
+  public abstract Vector2I getTileMeshResolution(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);
 
-  public abstract Mesh createTileDebugMesh(Planet planet, Vector2I resolution, Tile tile);
+  public abstract Mesh createTileDebugMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);
 
   public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile);
 

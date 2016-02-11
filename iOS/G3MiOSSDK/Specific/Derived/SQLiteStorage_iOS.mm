@@ -13,7 +13,7 @@
 #include "Image_iOS.hpp"
 #include "ILogger.hpp"
 #include "IThreadUtils.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
 #import "NSString_CppAdditions.h"

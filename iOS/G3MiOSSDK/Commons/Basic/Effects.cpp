@@ -11,7 +11,7 @@
 
 #include "Effects.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
 
 void EffectsScheduler::initialize(const G3MContext* context) {

@@ -8,7 +8,7 @@
 
 #include "CanvasImageBuilder.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "Color.hpp"

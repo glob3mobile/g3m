@@ -16,6 +16,8 @@
 #include "IThreadUtils.hpp"
 #include "SceneJSShapesParser.hpp"
 #include "SGShape.hpp"
+#include "G3MEventContext.hpp"
+
 
 class TransparentShapeWrapper : public OrderedRenderable {
 private:

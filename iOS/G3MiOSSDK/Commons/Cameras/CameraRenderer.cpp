@@ -10,6 +10,7 @@
 #include "Camera.hpp"
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;

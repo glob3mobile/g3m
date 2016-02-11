@@ -1,16 +1,17 @@
 //
-//  Context.cpp
+//  G3MRenderContext.cpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 1/29/16.
+//
 //
 
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 
 #include "ITimer.hpp"
 #include "OrderedRenderable.hpp"
 #include <algorithm>
+
 
 G3MRenderContext::~G3MRenderContext() {
   delete _frameStartTimer;
@@ -19,7 +20,6 @@ G3MRenderContext::~G3MRenderContext() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 void G3MRenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) const {
@@ -58,4 +58,11 @@ std::vector<OrderedRenderable*>* G3MRenderContext::getSortedOrderedRenderables()
   }
 
   return _orderedRenderables;
+}
+
+void G3MRenderContext::clear() {
+  _frameStartTimer->start();
+
+  delete _orderedRenderables;
+  _orderedRenderables = NULL;
 }

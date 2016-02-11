@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class ElevationData;
 //class Geodetic2D;
 //class Sector;
+//class PlanetRenderContext;
 
 
 public class TileTessellatorMeshData

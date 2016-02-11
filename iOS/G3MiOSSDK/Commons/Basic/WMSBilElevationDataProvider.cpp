@@ -8,7 +8,7 @@
 
 #include "WMSBilElevationDataProvider.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IStringBuilder.hpp"
 #include "Sector.hpp"
