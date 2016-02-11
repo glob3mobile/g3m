@@ -79,19 +79,30 @@ _southEastPoint( planet->toCartesian( tile->_sector.getSE(), mediumHeight ) )
 bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* camera,
                                                               double texHeightSquared,
                                                               double texWidthSquared) {
-
+  
   const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
-  const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
-  const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
-  const double distanceInPixelsEast  = camera->getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
-
   const double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
+  if (distanceInPixelsSquaredArcNorth > texWidthSquared){
+    return false;
+  }
+  
+  const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
   const double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
+  if (distanceInPixelsSquaredArcSouth > texWidthSquared){
+    return false;
+  }
+  
+  const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
   const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
+  if (distanceInPixelsSquaredArcWest > texHeightSquared){
+    return false;
+  }
+  
+  const double distanceInPixelsEast  = camera->getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
   const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
-
-  return ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
-          (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
-          (distanceInPixelsSquaredArcWest  <= texWidthSquared ) &&
-          (distanceInPixelsSquaredArcEast  <= texWidthSquared ));
+  if (distanceInPixelsSquaredArcEast > texHeightSquared){
+    return false;
+  }
+  
+  return true;
 }
