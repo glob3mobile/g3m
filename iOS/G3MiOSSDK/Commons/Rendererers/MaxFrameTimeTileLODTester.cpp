@@ -30,7 +30,7 @@ MaxFrameTimeTileLODTester::~MaxFrameTimeTileLODTester() {
 bool MaxFrameTimeTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
                                                     const PlanetRenderContext* prc,
                                                     const Tile* tile) const {
-  const bool hasSubtiles = tile->areSubtilesCreated();
+  const bool hasSubtiles = tile->hasSubtiles();
 
   if (!hasSubtiles) {
     if (_splitsInFrameCounter > 0) {

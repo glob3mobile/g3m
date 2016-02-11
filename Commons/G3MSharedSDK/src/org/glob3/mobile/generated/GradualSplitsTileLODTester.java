@@ -43,7 +43,7 @@ public class GradualSplitsTileLODTester extends DecoratorTileLODTester
   
     if (!result)
     {
-      final boolean hasSubtiles = tile.areSubtilesCreated();
+      final boolean hasSubtiles = tile.hasSubtiles();
   
       if (!hasSubtiles) // the tile needs to create the subtiles
       {

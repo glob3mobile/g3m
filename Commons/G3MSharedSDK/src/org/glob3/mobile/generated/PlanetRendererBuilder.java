@@ -265,9 +265,6 @@ public class PlanetRendererBuilder
 
   private TileLODTester createDefaultTileLODTester()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-  
     TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
   
     TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);

@@ -99,8 +99,6 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       final long tileTexturePriority = (prc._tilesRenderParameters._incrementalTileQuality ? prc._tileDownloadPriority + prc._layerTilesRenderParameters._maxLevel - tile._level : prc._tileDownloadPriority + tile._level);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Clean DTT_TileTextureBuilder constructor
       builder = new DTT_TileTextureBuilder(rc, prc._layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, prc._tessellator, tileTexturePriority, prc._logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackgroundImage, _defaultBackgroundImageName);
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
@@ -114,12 +112,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
     Mesh texturizedMesh = builder.getTexturedMesh();
   
-  //  if (prc->_forceFullRender) {
-  //    builder->start();
-  //  }
-  //  else {
-      rc.getFrameTasksExecutor().addPreRenderTask(new DTT_TileTextureBuilderStartTask(builder));
-  //  }
+    rc.getFrameTasksExecutor().addPreRenderTask(new DTT_TileTextureBuilderStartTask(builder));
   
     tile.setTexturizerDirty(false);
   

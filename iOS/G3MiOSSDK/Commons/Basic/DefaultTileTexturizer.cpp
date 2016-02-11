@@ -668,7 +668,6 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
                                            ? prc->_tileDownloadPriority + prc->_layerTilesRenderParameters->_maxLevel - tile->_level
                                            : prc->_tileDownloadPriority + tile->_level);
 
-#warning Clean DTT_TileTextureBuilder constructor
     builder = new DTT_TileTextureBuilder(rc,
                                          prc->_layerTilesRenderParameters,
                                          tileImageProvider,
@@ -691,12 +690,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
   // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
   Mesh* texturizedMesh = builder->getTexturedMesh();
 
-//  if (prc->_forceFullRender) {
-//    builder->start();
-//  }
-//  else {
-    rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
-//  }
+  rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
 
   tile->setTexturizerDirty(false);
 

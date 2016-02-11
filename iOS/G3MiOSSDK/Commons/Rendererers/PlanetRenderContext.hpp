@@ -22,20 +22,20 @@ class LayerSet;
 
 class PlanetRenderContext {
 public:
-  TileLODTester*                    _tileLODTester;
-  TileVisibilityTester*             _tileVisibilityTester;
-  float                             _verticalExaggeration;
-  TileTexturizer*                   _texturizer;
-  ITimer*                           _lastSplitTimer;
-  ElevationDataProvider*            _elevationDataProvider;
-  TileTessellator*                  _tessellator;
-  LayerSet*                         _layerSet;
-  long long                         _tileDownloadPriority;
-  double                            _texWidthSquared;
-  double                            _texHeightSquared;
-  long long                         _nowInMS;
-  bool                              _renderTileMeshes;
-  bool                              _logTilesPetitions;
+  TileLODTester*         _tileLODTester;
+  TileVisibilityTester*  _tileVisibilityTester;
+  float                  _verticalExaggeration;
+  TileTexturizer*        _texturizer;
+  ITimer*                _lastSplitTimer;
+  ElevationDataProvider* _elevationDataProvider;
+  TileTessellator*       _tessellator;
+  LayerSet*              _layerSet;
+  long long              _tileDownloadPriority;
+  double                 _texWidthSquared;
+  double                 _texHeightSquared;
+  long long              _nowInMS;
+  bool                   _renderTileMeshes;
+  bool                   _logTilesPetitions;
 
 #ifdef C_CODE
   const Frustum*                    _frustumInModelCoordinates;

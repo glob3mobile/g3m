@@ -210,16 +210,13 @@ public:
   
   void clearDataWithID(int id) const;
 
-  const TileTessellatorMeshData* getTessellatorMeshData() const {
-#warning ask JM
-    return &_tileTessellatorMeshData;
-  }
+  const TileTessellatorMeshData* getTessellatorMeshData() const;
 
   Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                            const PlanetRenderContext* prc);
 
-  bool areSubtilesCreated() const {
-    return _subtiles != NULL;
+  bool hasSubtiles() const {
+    return (_subtiles != NULL);
   }
   
 };
