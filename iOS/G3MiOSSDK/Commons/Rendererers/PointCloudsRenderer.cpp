@@ -8,7 +8,7 @@
 
 #include "PointCloudsRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "Planet.hpp"
 #include "DownloadPriority.hpp"

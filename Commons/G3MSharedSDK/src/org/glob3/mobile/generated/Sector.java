@@ -66,7 +66,7 @@ public class Sector
        _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
        _deltaRadiusInRadians = -1.0;
        _normalizedCartesianCenter = null;
-    //    if (_deltaLatitude._degrees == 0){
+    //    if (_deltaLatitude._degrees == 0) {
     //        printf("NO AREA");
     //    }
     }
@@ -89,7 +89,7 @@ public class Sector
             _normalizedCartesianCenter = new Vector3D(normalizedCartesianCenter);
         }
     
-    //    if (_deltaLatitude._degrees == 0){
+    //    if (_deltaLatitude._degrees == 0) {
     //        printf("NO AREA");
     //    }
     }

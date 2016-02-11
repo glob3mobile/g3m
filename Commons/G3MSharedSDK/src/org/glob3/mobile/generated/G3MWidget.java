@@ -677,7 +677,7 @@ public class G3MWidget implements ChangedRendererInfoListener
 
 
   //void G3MWidget::notifyChangedInfo() const {
-  //  if(_hudRenderer != NULL){
+  //  if(_hudRenderer != NULL) {
   //    const RenderState_Type renderStateType = _rendererState->_type;
   //    switch (renderStateType) {
   //      case RENDER_READY:

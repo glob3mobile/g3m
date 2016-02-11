@@ -8,11 +8,12 @@
 
 #include "GLErrorRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "GL.hpp"
 
 
-void GLErrorRenderer::render(const G3MRenderContext* rc, GLState* glState) {
+void GLErrorRenderer::render(const G3MRenderContext* rc,
+                             GLState* glState) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   

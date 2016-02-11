@@ -13,7 +13,7 @@
 
 #include "ProtoRenderer.hpp"
 #include "RenderState.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Effects.hpp"
 
 

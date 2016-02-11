@@ -189,7 +189,7 @@ public:
   }
 
   double nextRandomDouble() const {
-    return (double)rand() / RAND_MAX;;
+    return (double)rand() / RAND_MAX;
   }
 
 };

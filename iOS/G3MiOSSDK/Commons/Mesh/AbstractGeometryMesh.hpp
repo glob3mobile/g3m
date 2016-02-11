@@ -82,11 +82,11 @@ public:
     _showNormals = v;
   }
   
-  const IFloatBuffer* getVertices() const{
+  const IFloatBuffer* getVertices() const {
     return _vertices;
   }
   
-  Vector3D getCenter() const{
+  Vector3D getCenter() const {
     return _center;
   }
   

@@ -8,7 +8,7 @@
 
 #include "SGGeometryNode.hpp"
 
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "GL.hpp"
 
 #include "IFloatBuffer.hpp"

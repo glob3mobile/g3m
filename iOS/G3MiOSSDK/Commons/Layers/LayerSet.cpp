@@ -13,7 +13,7 @@
 #include "RenderState.hpp"
 #include "ChangedListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
 #include "Color.hpp"

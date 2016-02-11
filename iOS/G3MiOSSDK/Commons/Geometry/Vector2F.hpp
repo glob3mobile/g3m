@@ -58,7 +58,7 @@ public:
                     _y + v._y);
   }
   
-  bool isNan() const{
+  bool isNan() const {
     return ISNAN(_x) || ISNAN(_y);
   }
   

@@ -344,21 +344,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public final void start(TiledVectorLayer layer, Tile tile, long tileDownloadPriority, boolean logDownloadActivity)
     {
-    //  _downloadListener = new GEOJSONBufferDownloadListener(this);
-    //
-    //  _symbolizer = layer->symbolizerCopy();
-    
-    //  _downloadRequestId = layer->requestGEOJSONBuffer(tile,
-    //                                                   _downloader,
-    //                                                   tileDownloadPriority,
-    //                                                   logDownloadActivity,
-    //                                                   _downloadListener,
-    //                                                   true /* deleteListener */);
-    
     
       TiledVectorLayer.RequestGEOJSONBufferData requestData = layer.getRequestGEOJSONBufferData(tile);
     
-    //  GEOObject* geoObject = _tileImageProvider->getGEOObjectFor(requestData->_url);
       final GEOObjectHolder geoObjectHolder = _tileImageProvider.getGEOObjectFor(requestData._url);
       if (geoObjectHolder == null)
       {
@@ -373,10 +361,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-    //    geoObjectDownloaded(geoObject,
-    //                        _symbolizer);
-    //    aa
-    
         final GEORasterSymbolizer symbolizer = layer.symbolizerCopy();
     
         _rasterizer = new GEOJSONBufferRasterizer(this, requestData._url, null, geoObjectHolder, _imageWidth, _imageHeight, symbolizer, _tileId, _tileSector, _tileIsMercator, _tileLevel); // buffer,
