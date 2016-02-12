@@ -37,6 +37,7 @@ import org.glob3.mobile.generated.ProtoRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -48,8 +49,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class G3MWidget_WebGL
-   extends
-      Composite {
+         extends
+            Composite {
 
    private Canvas               _canvas;
    private JavaScriptObject     _webGLContext;
@@ -397,7 +398,7 @@ public class G3MWidget_WebGL
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay, ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
 

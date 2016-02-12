@@ -866,4 +866,14 @@ INativeGL {
    }-*/;
 
 
+   @Override
+   public native void viewport(int x,
+                               int y,
+                               int width,
+                               int height) /*- {
+                                           var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+                                           gl.viewport(x, y, width, height);
+                                           }-*/;
+
+
 }
