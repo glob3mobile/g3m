@@ -85,8 +85,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
-  MutableVector3D cameraPosition;
-  rc->getCurrentCamera()->getCartesianPositionMutable(cameraPosition);
+  _lastCamera->getCartesianPositionMutable(_currentCameraPosition);
 
   //Setting camera matrixes
   updateGLState(rc);
@@ -102,7 +101,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       if (shape->isTransparent(rc)) {
         const Planet* planet = rc->getPlanet();
         const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
-        const double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+        const double squaredDistanceFromEye = shapePosition.sub(_currentCameraPosition).squaredLength();
 
         rc->addOrderedRenderable(new TransparentShapeWrapper(shape,
                                                              squaredDistanceFromEye,

@@ -14,6 +14,8 @@
 #include <vector>
 #include "DownloadPriority.hpp"
 #include "URL.hpp"
+#include "MutableVector3D.hpp"
+
 
 struct ShapeDistance {
   double _distance;
@@ -116,6 +118,7 @@ private:
   
   void cleanLoadQueue();
 
+  MutableVector3D _currentCameraPosition;
 
   void requestBuffer(const URL&          url,
                      long long           priority,
