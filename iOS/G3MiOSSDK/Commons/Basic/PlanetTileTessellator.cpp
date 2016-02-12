@@ -240,14 +240,28 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                                  const PlanetRenderContext* prc,
                                                  const Tile* tile) const {
   
+  
+  
+  
+  
+  
 #warning TODO for JM!
   const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
   const short rx = (short)meshResolution._x;
   const short ry = (short)meshResolution._y;
   
-  AbstractGeometryMesh* mesh = NULL;// ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-  const IFloatBuffer* vertices = mesh->getVertices();
+//  AbstractGeometryMesh* mesh = NULL;// ((AbstractGeometryMesh*)tile->getTessellatorMesh());
+//  const IFloatBuffer* vertices = mesh->getVertices();
+  
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(rc->getPlanet());
+  TileTessellatorMeshData data;
+  createSurfaceVertices((int)rx, (int)ry,
+                        meshSector,
+                        tile->getElevationData(),
+                        prc->_verticalExaggeration,
+                        vertices,
+                        data);
   
   //INDEX OF BORDER///////////////////////////////////////////////////////////////
   ShortBufferBuilder indicesBorder;
@@ -287,9 +301,9 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
   
   
   IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
-                                        mesh->getCenter(),
-                                        (IFloatBuffer*)vertices,
-                                        false,
+                                        vertices->getCenter(),
+                                        vertices->create(),
+                                        true,
                                         indicesBorder.create(),
                                         true,
                                         2.0f,
@@ -302,9 +316,9 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                         true, 1.0f, 1.0f);
   
   IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
-                                      mesh->getCenter(),
-                                      (IFloatBuffer*)vertices,
-                                      false,
+                                      vertices->getCenter(),
+                                      vertices->create(),
+                                      true,
                                       indicesGrid.create(),
                                       true,
                                       gridLineWidth,
@@ -315,6 +329,8 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                       false,
                                       NULL,
                                       true, 1.0f, 1.0f);
+  
+  delete vertices;
   
   CompositeMesh* c = new CompositeMesh();
   c->addMesh(grid);
@@ -341,7 +357,7 @@ double PlanetTileTessellator::createSurfaceVertices(int rx, int ry, //Mesh resol
                                                     float verticalExaggeration,
                                                     FloatBufferBuilderFromGeodetic* vertices,
                                                     TileTessellatorMeshData& data) const{
-
+  
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();
   double maxElevation = mu->minDouble();
