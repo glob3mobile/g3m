@@ -102,6 +102,7 @@ public class ShapesRenderer extends DefaultRenderer
     _loadQueue.clear();
   }
 
+  private MutableVector3D _currentCameraPosition = new MutableVector3D();
 
   private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
   {
@@ -302,8 +303,7 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    MutableVector3D cameraPosition = new MutableVector3D();
-    rc.getCurrentCamera().getCartesianPositionMutable(cameraPosition);
+    _lastCamera.getCartesianPositionMutable(_currentCameraPosition);
   
     //Setting camera matrixes
     updateGLState(rc);
@@ -322,7 +322,7 @@ public class ShapesRenderer extends DefaultRenderer
         {
           final Planet planet = rc.getPlanet();
           final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
-          final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+          final double squaredDistanceFromEye = shapePosition.sub(_currentCameraPosition).squaredLength();
   
           rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glStateTransparent, _renderNotReadyShapes));
         }
