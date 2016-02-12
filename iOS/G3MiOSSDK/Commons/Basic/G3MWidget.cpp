@@ -547,32 +547,34 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
   if (eyesUpdated){
     
-    Vector3D camPos = _currentCamera->getCartesianPosition();
-    Vector3D camCenter = _currentCamera->getCenter();
-    Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-    const double eyesSeparation = renderStateType == RENDER_READY? 200 : 0;// 0.03;
-    Vector3D up = _currentCamera->getUp();
-    
-    _auxCam->copyFrom(*_currentCamera);
-    
-
-    if (_leftEyeCam == NULL){
-      _leftEyeCam = new Camera(-1);
-    }
-    _leftEyeCam->copyFrom(*_auxCam);
-    
-    Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
-    Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
-    _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-    
+    //Saving central camera
     if (_rightEyeCam == NULL){
       _rightEyeCam = new Camera(-1);
     }
+    if (_leftEyeCam == NULL){
+      _leftEyeCam = new Camera(-1);
+    }
+    _auxCam->copyFrom(*_currentCamera);
+    _leftEyeCam->copyFrom(*_auxCam);
     _rightEyeCam->copyFrom(*_auxCam);
-    Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
-    Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
     
-    _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+    //For 3D scenes we create the "eyes" cameras
+    if (renderStateType == RENDER_READY){
+      Vector3D camPos = _currentCamera->getCartesianPosition();
+      Vector3D camCenter = _currentCamera->getCenter();
+      Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+      const double eyesSeparation = 200;// 0.03;
+      Vector3D up = _currentCamera->getUp();
+      
+      Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
+      Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
+      _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+      
+      Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
+      Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
+      
+      _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+    }
     
   }
   
@@ -589,6 +591,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   _currentCamera->copyFrom(*_rightEyeCam);
   rawRender(renderStateType);
 
+  //Restoring central camera
   _currentCamera->copyFrom(*_auxCam);
 }
 
@@ -682,7 +685,6 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
   
-#warning AT WORK JM
   switch (_viewMode) {
     case MONO:
       rawRenderMono(renderStateType);
@@ -692,7 +694,6 @@ void G3MWidget::render(int width, int height) {
       break;
     default:
       THROW_EXCEPTION("WRONG VIEW MODE.");
-      break;
   }
   
   //Removing unused programs

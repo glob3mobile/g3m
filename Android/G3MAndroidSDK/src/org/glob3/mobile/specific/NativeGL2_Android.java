@@ -761,10 +761,14 @@ INativeGL {
       }
    }
 
-   
-   public void glViewport(int x, int y, int width, int height){
-	   GLES20.glViewport(x, y, width, height);
+
+   public void glViewport(final int x,
+                          final int y,
+                          final int width,
+                          final int height) {
+      GLES20.glViewport(x, y, width, height);
    }
+
 
    @Override
    public GPUAttribute getActiveAttribute(final GPUProgram program,
@@ -870,6 +874,15 @@ INativeGL {
    @Override
    public void setActiveTexture(final int i) {
       GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
+   }
+
+
+   @Override
+   public void viewport(final int x,
+                        final int y,
+                        final int width,
+                        final int height) {
+      GLES20.glViewport(x, y, width, height);
    }
 
 
