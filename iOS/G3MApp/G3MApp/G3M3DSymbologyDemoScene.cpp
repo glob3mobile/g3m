@@ -86,6 +86,7 @@ void G3M3DSymbologyDemoScene::rawSelectOption(const std::string& option,
 void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+  g3mWidget->setViewMode(MONO);
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(16);

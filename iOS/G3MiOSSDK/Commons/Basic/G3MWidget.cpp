@@ -39,9 +39,6 @@
 #include "ErrorRenderer.hpp"
 #include "IDeviceInfo.hpp"
 
-#warning TO BE REMOVED
-#include <OpenGLES/ES2/gl.h>
-
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -544,7 +541,8 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     _auxCam = new Camera(-1);
   }
   
-  if (_auxCam->getTimestamp() != _currentCamera->getTimestamp()){
+  const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
+  if (eyesUpdated){
     
     Vector3D camPos = _currentCamera->getCartesianPosition();
     Vector3D camCenter = _currentCamera->getCenter();
@@ -579,24 +577,22 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   
   _gl->clearScreen(*_backgroundColor);
   //Left
-  glViewport(0, 0, halfWidth, _height);
+  _gl->viewport(0, 0, halfWidth, _height);
   _currentCamera->copyFrom(*_leftEyeCam);
   rawRender(renderStateType);
   
   //Right
-  glViewport(halfWidth, 0, halfWidth, _height);
+  _gl->viewport(halfWidth, 0, halfWidth, _height);
   _currentCamera->copyFrom(*_rightEyeCam);
   rawRender(renderStateType);
-  
+
   _currentCamera->copyFrom(*_auxCam);
 }
 
 void G3MWidget::rawRenderMono(const RenderState_Type renderStateType){
   
   _gl->clearScreen(*_backgroundColor);
-
-  glViewport(0, 0, _width, _height);
-
+  _gl->viewport(0, 0, _width, _height);
   rawRender(renderStateType);
 }
 
@@ -966,6 +962,19 @@ void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
   //  else {
   //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
   //  }
+}
+
+void G3MWidget::setViewMode(ViewMode vm){
+  _viewMode = vm;
+  
+  if (_viewMode != STEREO){
+    delete _auxCam;
+    _auxCam = NULL;
+    delete _leftEyeCam;
+    _leftEyeCam = NULL;
+    delete _rightEyeCam;
+    _rightEyeCam = NULL;
+  }
 }
 
 

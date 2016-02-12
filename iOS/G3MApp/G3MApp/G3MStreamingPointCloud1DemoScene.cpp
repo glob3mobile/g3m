@@ -43,6 +43,7 @@ public:
 void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+  g3mWidget->setViewMode(MONO);
 
   const float pointSize = 2;
   const float verticalExaggeration = 1;

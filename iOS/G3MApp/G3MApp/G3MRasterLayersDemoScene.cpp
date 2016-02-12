@@ -186,6 +186,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
 
 
 void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
+  getModel()->getG3MWidget()->setViewMode(MONO);
   createLayerSet( getModel()->getLayerSet() );
 }
 

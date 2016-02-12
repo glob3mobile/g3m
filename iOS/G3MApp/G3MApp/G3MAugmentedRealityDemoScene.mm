@@ -104,7 +104,7 @@ public:
 void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-
+  g3mWidget->setViewMode(MONO);
 
 //  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
 //                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",

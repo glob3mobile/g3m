@@ -265,6 +265,10 @@ public:
     return _currentGLGlobalState;
   }
   
+  void viewport(int x, int y, int width, int height) const{
+    _nativeGL->viewport(x, y, width, height);
+  }
+  
   
 };
 

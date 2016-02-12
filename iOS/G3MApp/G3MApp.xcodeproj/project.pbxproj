@@ -232,6 +232,7 @@
 		D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MStereoDemoScene.mm; sourceTree = "<group>"; };
 		D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStereoDemoScene.hpp; sourceTree = "<group>"; };
 		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; };
+		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D871790F1AE501B100A9A14F /* pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin.png; sourceTree = "<group>"; };

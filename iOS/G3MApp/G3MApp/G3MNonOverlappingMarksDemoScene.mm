@@ -133,6 +133,7 @@ public:
 void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+  g3mWidget->setViewMode(MONO);
 
 //#warning Testing infos
   std::vector<const Info*>* layerInfo = new std::vector<const Info*>();

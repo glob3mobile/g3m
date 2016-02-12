@@ -115,6 +115,7 @@ void G3MMarksDemoScene::addMark(Mark* mark) {
 void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+  g3mWidget->setViewMode(MONO);
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.9f, 0.21f, 0.21f, 1.0f));
 
