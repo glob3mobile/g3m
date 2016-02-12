@@ -82,15 +82,11 @@ private:
   Sector getRenderedSectorForTile(const Tile* tile) const;
   
   
-  double createSurfaceVertices(const Sector& tileSector,
+  double createSurfaceVertices(int rx, int ry, //Mesh resolution
                                const Sector& meshSector,
-                               const Vector2I& meshResolution,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
-                               bool mercator,
                                FloatBufferBuilderFromGeodetic* vertices,
-                               ShortBufferBuilder& indices,
-                               FloatBufferBuilderFromCartesian2D& textCoords,
                                TileTessellatorMeshData& data) const;
   
   double createSurface(const Sector& tileSector,

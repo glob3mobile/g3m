@@ -335,40 +335,18 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
 #endif
 }
 
-double PlanetTileTessellator::createSurfaceVertices(const Sector& tileSector,
+double PlanetTileTessellator::createSurfaceVertices(int rx, int ry, //Mesh resolution
                                                     const Sector& meshSector,
-                                                    const Vector2I& meshResolution,
                                                     const ElevationData* elevationData,
                                                     float verticalExaggeration,
-                                                    bool mercator,
                                                     FloatBufferBuilderFromGeodetic* vertices,
-                                                    ShortBufferBuilder& indices,
-                                                    FloatBufferBuilderFromCartesian2D& textCoords,
                                                     TileTessellatorMeshData& data) const{
-  
-}
 
-double PlanetTileTessellator::createSurface(const Sector& tileSector,
-                                            const Sector& meshSector,
-                                            const Vector2I& meshResolution,
-                                            const ElevationData* elevationData,
-                                            float verticalExaggeration,
-                                            bool mercator,
-                                            FloatBufferBuilderFromGeodetic* vertices,
-                                            ShortBufferBuilder& indices,
-                                            FloatBufferBuilderFromCartesian2D& textCoords,
-                                            TileTessellatorMeshData& data) const {
-  
-  const int rx = meshResolution._x;
-  const int ry = meshResolution._y;
-  
-
-  
-  //VERTICES///////////////////////////////////////////////////////////////
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();
   double maxElevation = mu->minDouble();
   double averageElevation = 0;
+  
   for (int j = 0; j < ry; j++) {
     const double v = (double) j / (ry - 1);
     
@@ -410,6 +388,31 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._minHeight = minElevation;
   data._maxHeight = maxElevation;
   data._averageHeight = averageElevation / (rx * ry);
+  
+  return minElevation;
+}
+
+double PlanetTileTessellator::createSurface(const Sector& tileSector,
+                                            const Sector& meshSector,
+                                            const Vector2I& meshResolution,
+                                            const ElevationData* elevationData,
+                                            float verticalExaggeration,
+                                            bool mercator,
+                                            FloatBufferBuilderFromGeodetic* vertices,
+                                            ShortBufferBuilder& indices,
+                                            FloatBufferBuilderFromCartesian2D& textCoords,
+                                            TileTessellatorMeshData& data) const {
+  
+  const int rx = meshResolution._x;
+  const int ry = meshResolution._y;
+  
+  //VERTICES///////////////////////////////////////////////////////////////
+  const double minElevation = createSurfaceVertices(rx, ry,
+                                                    meshSector,
+                                                    elevationData,
+                                                    verticalExaggeration,
+                                                    vertices,
+                                                    data);
   
   
   //TEX COORDINATES////////////////////////////////////////////////////////////////
