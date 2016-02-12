@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 7/30/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #include "G3MVectorStreaming1DemoScene.hpp"
