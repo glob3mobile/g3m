@@ -65,6 +65,7 @@ bool Frustum::touchesWithBox(const Box* that) const {
     return false;
   }
 
+#warning This implementation could gives false positives
 #ifdef C_CODE
   // create an array with the 8 corners of the box
   const Vector3D min = that->getLower();

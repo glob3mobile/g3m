@@ -8,7 +8,7 @@
 
 #include "SingleBilElevationDataProvider.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "TimeInterval.hpp"

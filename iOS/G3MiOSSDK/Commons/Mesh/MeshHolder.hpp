@@ -64,7 +64,7 @@ public:
     _mesh->showNormals(v);
   }
   
-  Mesh* getMesh() const{
+  Mesh* getMesh() const {
     return _mesh;
   }
 

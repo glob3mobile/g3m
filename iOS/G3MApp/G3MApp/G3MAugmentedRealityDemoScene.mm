@@ -112,7 +112,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
 
 //  MapQuestLayer* layer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
 
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.jpg70?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q",
+  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.jpg70?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpamVuY3cxbzAwMG12ZGx4cGljbGtqMGUifQ.vpDqms08MBqoRgp667Yz5Q",
                                                           Sector::FULL_SPHERE,
                                                           false, // isTransparent
                                                           2,     // firstLevel

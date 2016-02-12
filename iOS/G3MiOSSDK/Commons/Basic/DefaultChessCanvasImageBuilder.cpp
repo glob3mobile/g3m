@@ -7,7 +7,7 @@
 //
 
 #include "DefaultChessCanvasImageBuilder.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "ICanvas.hpp"
 #include "IStringUtils.hpp"
 

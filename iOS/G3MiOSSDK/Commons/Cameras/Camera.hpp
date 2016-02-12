@@ -16,7 +16,7 @@
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableVector2F.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"

@@ -8,7 +8,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "IMathUtils.hpp"
 
 //class Vector2D;
 //class Vector3D;

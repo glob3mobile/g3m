@@ -158,7 +158,7 @@ public:
   
   void bindAsVBOToGPU() const;
   
-  static void onGPUProgramHasChanged(){
+  static void onGPUProgramHasChanged() {
     //APPARENTLY CHANGING PROGRAM FORCES TO REBIND THE BUFFERS
     _boundVertexBuffer = -1;
   }

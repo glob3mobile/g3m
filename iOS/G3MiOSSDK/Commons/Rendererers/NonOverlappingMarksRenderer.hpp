@@ -118,7 +118,7 @@ public:
 
   void onResizeViewportEvent(int width, int height);
 
-  bool isReady() const{
+  bool isReady() const {
     return _image != NULL;
   }
 

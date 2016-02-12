@@ -632,7 +632,7 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   }
   else {
     const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-    if (contributionSector.hasNoArea()){
+    if (contributionSector.hasNoArea()) {
       return NULL;
     }
 

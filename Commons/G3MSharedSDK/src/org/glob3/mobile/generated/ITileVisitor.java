@@ -8,6 +8,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Layer;
+//class Tile;
 
 public interface ITileVisitor
 {

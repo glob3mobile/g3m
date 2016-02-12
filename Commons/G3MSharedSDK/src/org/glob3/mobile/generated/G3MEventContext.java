@@ -1,5 +1,20 @@
 package org.glob3.mobile.generated; 
-//************************************************************
+//
+//  G3MEventContext.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/29/16.
+//
+//
+
+//
+//  G3MEventContext.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/29/16.
+//
+//
+
 
 
 

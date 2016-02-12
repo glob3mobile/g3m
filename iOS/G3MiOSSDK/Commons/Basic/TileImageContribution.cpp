@@ -36,7 +36,7 @@ const TileImageContribution* TileImageContribution::fullCoverageTransparent(floa
   _lastFullCoverageTransparent->_retain();
   return _lastFullCoverageTransparent;
 
-//  return new TileImageContribution(true, alpha);;
+//  return new TileImageContribution(true, alpha);
 }
 
 const TileImageContribution* TileImageContribution::partialCoverageOpaque(const Sector& sector) {

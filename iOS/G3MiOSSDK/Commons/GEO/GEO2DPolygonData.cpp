@@ -59,7 +59,7 @@ bool GEO2DPolygonData::contains(const std::vector<Geodetic2D*>* coordinates, con
     Geodetic2D* secondCoordinate = coordinates->at(index);
     
     if (!firstCoordinate->isEquals(*secondCoordinate)) {
-      if (firstCoordinate->isEquals(point)){
+      if (firstCoordinate->isEquals(point)) {
         return true;
       }
       

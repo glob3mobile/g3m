@@ -11,6 +11,7 @@
 #include "MutableVector2D.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,

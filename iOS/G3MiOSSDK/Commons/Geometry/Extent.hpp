@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Extent
 #define G3MiOSSDK_Extent
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IMathUtils.hpp"
 #include "Vector2I.hpp"
 

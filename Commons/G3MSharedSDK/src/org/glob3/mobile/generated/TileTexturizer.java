@@ -27,6 +27,8 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class LayerTilesRenderParameters;
 //class G3MEventContext;
+//class PlanetRenderContext;
+
 
 public abstract class TileTexturizer
 {
@@ -38,13 +40,11 @@ public abstract class TileTexturizer
 
   public abstract void initialize(G3MContext context, TilesRenderParameters parameters);
 
-  public abstract Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions);
+  public abstract Mesh texturize(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh);
 
   public abstract void tileToBeDeleted(Tile tile, Mesh mesh);
 
   public abstract void tileMeshToBeDeleted(Tile tile, Mesh mesh);
-
-  public abstract boolean tileMeetsRenderCriteria(Tile tile);
 
   public abstract void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet);
 

@@ -36,6 +36,9 @@ public abstract class MapBooOLDBuilder
 
   private boolean _isApplicationTubeOpen;
 
+  private TileLODTester _tileLODTester;
+  private TileVisibilityTester _tileVisibilityTester;
+
   private MapBooOLD_ErrorRenderer _mbErrorRenderer;
 
   private LayerSet _layerSet;
@@ -50,12 +53,11 @@ public abstract class MapBooOLDBuilder
     TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
   
     final boolean renderDebug = false;
-    final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
     final Quality quality = Quality.QUALITY_LOW;
   
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
+    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
   
     final boolean showStatistics = false;
@@ -66,13 +68,11 @@ public abstract class MapBooOLDBuilder
   
     final boolean logTilesPetitions = false;
   
-    TileRenderingListener tileRenderingListener = null;
-  
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
   
     if (_enableNotifications)
     {
@@ -1045,6 +1045,8 @@ public abstract class MapBooOLDBuilder
      _webSocket = null;
      _marksRenderer = null;
      _hasParsedApplication = false;
+     _tileLODTester = null;
+     _tileVisibilityTester = null;
     _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
   }
 
@@ -1124,7 +1126,6 @@ public abstract class MapBooOLDBuilder
 
   protected final Planet createPlanet()
   {
-    //return Planet::createEarth();
     return SphericalPlanet.createEarth();
   }
 
@@ -1188,6 +1189,15 @@ public abstract class MapBooOLDBuilder
     final double upperLon = sector.getAsNumber("upperLon", 180.0);
   
     return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
+  }
+
+  protected final TileLODTester createDefaultTileLODTester()
+  {
+    return null;
+  }
+  protected final TileVisibilityTester createDefaultTileVisibilityTester()
+  {
+    return null;
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1852,4 +1862,28 @@ public abstract class MapBooOLDBuilder
   {
     return _applicationId;
   }
+
+  public final void setTileLODTester(TileLODTester tlt)
+  {
+    _tileLODTester = tlt;
+  }
+
+  public final TileLODTester getTileLODTester()
+  {
+    if (_tileLODTester == null)
+    {
+      _tileLODTester = createDefaultTileLODTester();
+    }
+    return _tileLODTester;
+  }
+
+  public final TileVisibilityTester getTileVisibilityTester()
+  {
+    if (_tileVisibilityTester == null)
+    {
+      _tileVisibilityTester = createDefaultTileVisibilityTester();
+    }
+    return _tileVisibilityTester;
+  }
+
 }

@@ -225,7 +225,7 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   }
   _changedInfoListener = changedInfoListener;
 
-  if(_changedInfoListener != NULL){
+  if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(-1, getInfo());
   }
 }
