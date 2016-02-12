@@ -304,6 +304,10 @@ G3MWidget::~G3MWidget() {
   if(_infoDisplay != NULL) {
     delete _infoDisplay;
   }
+  
+  delete _rightEyeCam;
+  delete _leftEyeCam;
+  delete _auxCam;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
