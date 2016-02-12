@@ -44,6 +44,12 @@ void G3MStereoDemoScene::rawActivate(const G3MContext* context) {
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                            TimeInterval::fromDays(30));
+  
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(30),
+                                       Geodetic3D::fromDegrees(0, 0, 5e7),
+                                       Geodetic3D::fromDegrees(27.974652332849732517,-15.583470715075184998,175649.0264215345378),
+                                       Angle::zero(), Angle::fromDegrees(360),
+                                       Angle::fromDegrees(-45), Angle::fromDegrees(-90));
 
 //  MapQuestLayer* layer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
 
