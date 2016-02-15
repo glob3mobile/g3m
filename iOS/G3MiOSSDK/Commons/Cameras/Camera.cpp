@@ -498,3 +498,19 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return distanceInMeters * _viewPortHeight / frustumData._top;
 }
+
+
+double Camera::getDistanceOfViewPlaneContainingPoint(const Vector3D& v) const{
+  return v.transformedBy(getModelMatrix(), 1.0)._z;
+}
+
+double Camera::maxScreenSizeOf(const double itemSize, const Vector3D& position) const{
+  //As seen in Luebke's Level of Detail Chapter 3 (page 54)
+  const double d = getDistanceOfViewPlaneContainingPoint(position);
+  
+  const double pW = (itemSize * _viewPortWidth) / (2 * d * _tanHalfHorizontalFieldOfView);
+  const double pH = (itemSize * _viewPortHeight) / (2 * d * _tanHalfVerticalFieldOfView);
+  
+  return pW > pH? pW : pH;
+  
+}

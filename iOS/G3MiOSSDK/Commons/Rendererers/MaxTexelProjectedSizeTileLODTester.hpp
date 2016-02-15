@@ -23,19 +23,19 @@ class MaxTexelProjectedSizeTileLODTester : public TileLODTester {
   
   class PvtData: public TileData {
   private:
-    Box* _boundingBox;
-  public:
-    PvtData(const Tile* tile);
     
-    bool evaluate(const Camera* camera,
-                  double texHeightSquared,
-                  double texWidthSquared);
+  public:
+    const Box* const _boundingBox;
+    PvtData(const Box* boundingBox):
+    TileData(MaxTexelProjectedSizeTLTDataID), _boundingBox(boundingBox){}
   };
   
+  const double _maxAllowedPixelsForTexel;
   
 public:
   
-  MaxTexelProjectedSizeTileLODTester();
+  MaxTexelProjectedSizeTileLODTester(double maxAllowedPixelsForTexel):
+  _maxAllowedPixelsForTexel(maxAllowedPixelsForTexel){}
   
   ~MaxTexelProjectedSizeTileLODTester();
   

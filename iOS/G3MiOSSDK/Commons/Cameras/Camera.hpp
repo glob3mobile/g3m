@@ -343,6 +343,11 @@ public:
                                   const Vector2F& pixel,
                                   const MutableVector2I& viewport,
                                   const MutableMatrix44D& modelViewMatrix);
+  
+  
+  double getDistanceOfViewPlaneContainingPoint(const Vector3D& v) const;
+  
+  double maxScreenSizeOf(const double itemSize, const Vector3D& position) const;
 
 
 private:
@@ -511,6 +516,7 @@ private:
   }
   
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
+  
   
 };
 
