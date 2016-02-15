@@ -119,9 +119,18 @@ public:
   double squaredDistanceBeetweenVector3D(int i, int j) const {
     const int posi = i * 3;
     const int posj = j * 3;
+    
+#ifdef C_CODE
     const double dx = _values[posi] - _values[posj];
     const double dy = _values[posi+1] - _values[posj+1];
     const double dz = _values[posi+2] - _values[posj+2];
+#endif
+    
+#ifdef JAVA_CODE
+    final double dx = _values.get(posi) - _values.get(posj);
+    final double dy = _values.get(posi+1) - _values.get(posj+1);
+    final double dz = _values.get(posi+2) - _values.get(posj+2);
+#endif
     
     return dx*dx + dy*dy + dz * dz;
   }

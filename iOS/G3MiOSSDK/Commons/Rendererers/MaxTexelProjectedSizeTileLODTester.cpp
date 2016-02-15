@@ -46,7 +46,10 @@ bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderCont
     const double texelLatSize = meshData->_maxTriangleLatitudeLenght / texelsPerTriangleLat;
     const double texelLonSize = meshData->_maxTriangleLongitudeLenght / texelsPerTriangleLon;
     
-    const double texelSize = texelLatSize > texelLonSize? texelLatSize : texelLonSize;
+    double texelSize = texelLatSize;
+    if (texelLonSize > texelLatSize){
+      texelSize = texelLonSize;
+    }
     
     //Position of closest possible texel
     const Vector3D texelPos = box->closestPoint(cam->getCartesianPosition());

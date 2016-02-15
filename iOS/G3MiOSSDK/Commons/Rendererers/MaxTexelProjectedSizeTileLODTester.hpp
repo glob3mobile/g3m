@@ -25,7 +25,12 @@ class MaxTexelProjectedSizeTileLODTester : public TileLODTester {
   private:
     
   public:
+#ifdef C_CODE
     const Box* const _boundingBox;
+#endif
+#ifdef JAVA_CODE
+    public final Box _boundingBox;
+#endif
     PvtData(const Box* boundingBox):
     TileData(MaxTexelProjectedSizeTLTDataID), _boundingBox(boundingBox){}
   };

@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  FloatBufferBuilder.cpp
 //  G3MiOSSDK
@@ -16,125 +19,128 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class IFloatBuffer;
 
-public class FloatBufferBuilder
-{
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  FloatBufferBuilder(FloatBufferBuilder that);
+public class FloatBufferBuilder {
+   //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+   //  FloatBufferBuilder(FloatBufferBuilder that);
 
-  protected enum CenterStrategy
-  {
-    NO_CENTER,
-    FIRST_VERTEX,
-    GIVEN_CENTER;
+   protected enum CenterStrategy {
+      NO_CENTER,
+      FIRST_VERTEX,
+      GIVEN_CENTER;
 
-     public int getValue()
-     {
-        return this.ordinal();
-     }
-
-     public static CenterStrategy forValue(int value)
-     {
-        return values()[value];
-     }
-  }
-
-
-
-  public final class FloatArrayList {
-    private float[] _array;
-    private int     _size;
-
-    public FloatArrayList() {
-      this(1024);
-//      _array = IFactory.instance().getThreadLocalFloatArray();
-//      _size = 0;
-    }
-
-    public FloatArrayList(final int initialCapacity) {
-      if (initialCapacity < 0) {
-        throw new IllegalArgumentException("Capacity can't be negative: " + initialCapacity);
+      public int getValue() {
+         return this.ordinal();
       }
-      _array = new float[initialCapacity];
-      _size = 0;
-    }
 
-    public int size() {
-      return _size;
-    }
 
-    public float get(final int index) {
-      return _array[index];
-    }
-
-    public void push_back(final float element) {
-      ensureCapacity(_size + 1);
-      _array[_size++] = element;
-    }
-
-    private void ensureCapacity(final int mincap) {
-      if (mincap > _array.length) {
-        final int newcap = ((_array.length * 3) >> 1) + 1;
-        final float[] olddata = _array;
-        _array = new float[newcap < mincap ? mincap : newcap];
-        //IFactory.instance().setThreadLocalFloatArray(_array);
-        System.arraycopy(olddata, 0, _array, 0, _size);
+      public static CenterStrategy forValue(final int value) {
+         return values()[value];
       }
-    }
+   }
 
-    public float[] toArray() {
-      final float[] result = new float[_size];
-      System.arraycopy(_array, 0, result, 0, _size);
-      return result;
-    }
 
-  }
+   public final class FloatArrayList {
+      private float[] _array;
+      private int     _size;
 
-  protected final FloatArrayList _values = new FloatArrayList();
 
-  protected FloatBufferBuilder()
-  {
+      public FloatArrayList() {
+         this(1024);
+         //      _array = IFactory.instance().getThreadLocalFloatArray();
+         //      _size = 0;
+      }
 
-  }
 
-  public final IFloatBuffer create()
-  {
-    //return IFactory.instance().createFloatBuffer( _values.toArray() );
-    return IFactory.instance().createFloatBuffer( _values._array, _values._size );
-  }
+      public FloatArrayList(final int initialCapacity) {
+         if (initialCapacity < 0) {
+            throw new IllegalArgumentException("Capacity can't be negative: " + initialCapacity);
+         }
+         _array = new float[initialCapacity];
+         _size = 0;
+      }
 
-  public void dispose()
-  {
-  }
 
-  public final int size()
-  {
-    return _values.size();
-  }
+      public int size() {
+         return _size;
+      }
 
-  public final Vector2D getVector2D(int i)
-  {
-    int pos = i * 2;
-    return new Vector2D(_values.get(pos), _values.get(pos + 1));
-  }
 
-  public final Vector3D getVector3D(int i)
-  {
-    int pos = i * 3;
-    return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
-  }
+      public float get(final int index) {
+         return _array[index];
+      }
 
-  public final double squaredDistanceBeetweenVector3D(int i, int j)
-  {
-    final int posi = i * 3;
-    final int posj = j * 3;
-    final double dx = _values[posi] - _values[posj];
-    final double dy = _values[posi+1] - _values[posj+1];
-    final double dz = _values[posi+2] - _values[posj+2];
 
-    return dx *dx + dy *dy + dz * dz;
-  }
+      public void push_back(final float element) {
+         ensureCapacity(_size + 1);
+         _array[_size++] = element;
+      }
+
+
+      private void ensureCapacity(final int mincap) {
+         if (mincap > _array.length) {
+            final int newcap = ((_array.length * 3) >> 1) + 1;
+            final float[] olddata = _array;
+            _array = new float[newcap < mincap ? mincap : newcap];
+            //IFactory.instance().setThreadLocalFloatArray(_array);
+            System.arraycopy(olddata, 0, _array, 0, _size);
+         }
+      }
+
+
+      public float[] toArray() {
+         final float[] result = new float[_size];
+         System.arraycopy(_array, 0, result, 0, _size);
+         return result;
+      }
+
+   }
+
+   protected final FloatArrayList _values = new FloatArrayList();
+
+
+   protected FloatBufferBuilder() {
+
+   }
+
+
+   public final IFloatBuffer create() {
+      //return IFactory.instance().createFloatBuffer( _values.toArray() );
+      return IFactory.instance().createFloatBuffer(_values._array, _values._size);
+   }
+
+
+   public void dispose() {
+   }
+
+
+   public final int size() {
+      return _values.size();
+   }
+
+
+   public final Vector2D getVector2D(final int i) {
+      final int pos = i * 2;
+      return new Vector2D(_values.get(pos), _values.get(pos + 1));
+   }
+
+
+   public final Vector3D getVector3D(final int i) {
+      final int pos = i * 3;
+      return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
+   }
+
+
+   public final double squaredDistanceBeetweenVector3D(final int i,
+                                                       final int j) {
+      final int posi = i * 3;
+      final int posj = j * 3;
+      final double dx = _values.get(posi) - _values.get(posj);
+      final double dy = _values.get(posi + 1) - _values.get(posj + 1);
+      final double dz = _values.get(posi + 2) - _values.get(posj + 2);
+
+      return (dx * dx) + (dy * dy) + (dz * dz);
+   }
 
 }
