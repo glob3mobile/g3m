@@ -444,7 +444,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     }
   }
   data._maxTriangleLatitudeLenght = IMathUtils::instance()->sqrt(maxDisC);
-  data._maxTriangleLongitudeLenght = IMathUtils::instance()->sqrt(maxDisC);
+  data._maxTriangleLongitudeLenght = IMathUtils::instance()->sqrt(maxDisR);
   
   //TEX COORDINATES////////////////////////////////////////////////////////////////
   
