@@ -183,12 +183,15 @@ public class PlanetTileTessellator extends TileTessellator
         for (int i = 0; i < rx; i++)
         {
           final double u = (double) i / (rx - 1);
-          final Geodetic2D position = meshSector.getInnerPoint(u, v);
+  
+          Angle lat = Angle.linearInterpolation(meshSector._lower._latitude, meshSector._upper._latitude, 1.0 - v);
+          Angle lon = Angle.linearInterpolation(meshSector._lower._longitude, meshSector._upper._longitude, u);
+  
           //U
-          final double m_u = tileSector.getUCoordinate(position._longitude);
+          final double m_u = tileSector.getUCoordinate(lon);
   
           //V
-          final double mercatorGlobalV = MercatorUtils.getMercatorV(position._latitude);
+          final double mercatorGlobalV = MercatorUtils.getMercatorV(lat);
           final double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
   
           textCoords.add((float)m_u, (float)m_v);
@@ -419,7 +422,7 @@ public class PlanetTileTessellator extends TileTessellator
   {
   
     final Sector tileSector = tile._sector;
-    final Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+    final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
   
     final Planet planet = rc.getPlanet();
@@ -468,21 +471,10 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final Mesh createTileDebugMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-  
-  
-  
-  
-  
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO for JM!
     final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
     final short rx = (short)meshResolution._x;
     final short ry = (short)meshResolution._y;
-  
-  //  AbstractGeometryMesh* mesh = NULL;// ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-  //  const IFloatBuffer* vertices = mesh->getVertices();
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(rc.getPlanet());
     TileTessellatorMeshData data = new TileTessellatorMeshData();
