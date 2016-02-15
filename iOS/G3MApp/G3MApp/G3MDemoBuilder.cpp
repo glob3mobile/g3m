@@ -21,6 +21,7 @@
 #include <G3MiOSSDK/HUDRenderer.hpp>
 #include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 #include <G3MiOSSDK/VectorStreamingRenderer.hpp>
+#include <G3MiOSSDK/FlatPlanet.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -61,6 +62,8 @@ void G3MDemoBuilder::build() {
   }
   
   IG3MBuilder* builder = getG3MBuilder();
+  
+  builder->setPlanet(FlatPlanet::createEarth());
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);

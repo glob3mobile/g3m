@@ -501,12 +501,19 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
 
 
 double Camera::getDistanceOfViewPlaneContainingPoint(const Vector3D& v) const{
-  return v.transformedBy(getModelMatrix(), 1.0)._z;
+  return -v.transformedBy(getModelMatrix(), 1.0)._z;
 }
 
 double Camera::maxScreenSizeOf(const double itemSize, const Vector3D& position) const{
   //As seen in Luebke's Level of Detail Chapter 3 (page 54)
   const double d = getDistanceOfViewPlaneContainingPoint(position);
+  
+  if (ISNAN(_tanHalfVerticalFieldOfView)){
+    _tanHalfHorizontalFieldOfView = _frustumData._right / _frustumData._znear;
+  }
+  if (ISNAN(_tanHalfVerticalFieldOfView)){
+    _tanHalfVerticalFieldOfView = _frustumData._top / _frustumData._znear;
+  }
   
   const double pW = (itemSize * _viewPortWidth) / (2 * d * _tanHalfHorizontalFieldOfView);
   const double pH = (itemSize * _viewPortHeight) / (2 * d * _tanHalfVerticalFieldOfView);

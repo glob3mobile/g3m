@@ -32,12 +32,14 @@ class MaxTexelProjectedSizeTileLODTester : public TileLODTester {
   
   const double _maxAllowedPixelsForTexel;
   
+  PvtData* createData(const Tile* tile) const;
+  
 public:
   
   MaxTexelProjectedSizeTileLODTester(double maxAllowedPixelsForTexel):
   _maxAllowedPixelsForTexel(maxAllowedPixelsForTexel){}
   
-  ~MaxTexelProjectedSizeTileLODTester();
+  ~MaxTexelProjectedSizeTileLODTester(){}
   
   bool meetsRenderCriteria(const G3MRenderContext* rc,
                            const PlanetRenderContext* prc,
@@ -45,13 +47,9 @@ public:
   
   void onTileHasChangedMesh(const Tile* tile) const;
   
-  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-    
-  }
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp){}
   
-  void renderStarted() const {
-    
-  }
+  void renderStarted() const{}
   
 
 };
