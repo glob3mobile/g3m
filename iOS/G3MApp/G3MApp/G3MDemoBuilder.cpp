@@ -63,7 +63,7 @@ void G3MDemoBuilder::build() {
   
   IG3MBuilder* builder = getG3MBuilder();
   
-  builder->setPlanet(FlatPlanet::createEarth());
+//  builder->setPlanet(FlatPlanet::createEarth());
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
