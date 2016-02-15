@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //#define TimedCacheTVTDataID 0
 //#define TimedCacheTLTDataID 1
 //#define ProjectedCornersDistanceTLTDataID 2
+//#define MaxTexelProjectedSizeTLTDataID 3
 
 public class TileData
 {

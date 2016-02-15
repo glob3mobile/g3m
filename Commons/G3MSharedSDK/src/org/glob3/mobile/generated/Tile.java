@@ -856,6 +856,15 @@ public class Tile
     return (_subtiles != null);
   }
 
+  public final Box createBoundingBox()
+  {
+    if (_tessellatorMesh != null)
+    {
+      return (Box)_tessellatorMesh.getBoundingVolume();
+    }
+    return null;
+  }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods

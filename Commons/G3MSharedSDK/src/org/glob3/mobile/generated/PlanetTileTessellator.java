@@ -163,9 +163,43 @@ public class PlanetTileTessellator extends TileTessellator
     final int rx = meshResolution._x;
     final int ry = meshResolution._y;
   
+    //Storing surface resolution
+    data._meshResLat = ry;
+    data._meshResLon = rx;
+  
     //VERTICES///////////////////////////////////////////////////////////////
     final double minElevation = createSurfaceVertices(rx, ry, meshSector, elevationData, verticalExaggeration, vertices, data);
   
+    //Computing max. triangle orthogonal side length
+    double maxDisR = 0;
+    double maxDisC = 0;
+    for (int j = 0; j < ry; j++)
+    {
+      for (int i = 0; i < rx; i++)
+      {
+        final int index = i + (j * rx);
+  
+        if (i < rx-1) //Not the end of row
+        {
+          double dr = vertices.squaredDistanceBeetweenVector3D(index, index+1);
+          if (dr > maxDisR)
+          {
+            maxDisR = dr;
+          }
+        }
+  
+        if (j < ry-1) //Not the end of column
+        {
+          double dc = vertices.squaredDistanceBeetweenVector3D(index, index+rx);
+          if (dc > maxDisC)
+          {
+            maxDisC = dc;
+          }
+        }
+      }
+    }
+    data._maxTriangleLatitudeLenght = IMathUtils.instance().sqrt(maxDisC);
+    data._maxTriangleLongitudeLenght = IMathUtils.instance().sqrt(maxDisR);
   
     //TEX COORDINATES////////////////////////////////////////////////////////////////
   
@@ -462,6 +496,7 @@ public class PlanetTileTessellator extends TileTessellator
     //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
   
     Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
+  
   
     if (vertices != null)
        vertices.dispose();

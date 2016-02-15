@@ -31,4 +31,9 @@ public class TileTessellatorMeshData
   public double _minHeight;
   public double _maxHeight;
   public double _averageHeight;
+  public double _maxTriangleLatitudeLenght;
+  public double _maxTriangleLongitudeLenght;
+
+  public int _meshResLat;
+  public int _meshResLon;
 }

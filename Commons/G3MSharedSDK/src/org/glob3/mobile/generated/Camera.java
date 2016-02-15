@@ -609,35 +609,36 @@ public class Camera
   }
 
 
+  public final double getDistanceOfViewPlaneContainingPoint(Vector3D v)
+  {
+    return -v.transformedBy(getModelMatrix(), 1.0)._z;
+  }
+
+  public final double maxScreenSizeOf(double itemSize, Vector3D position)
+  {
+    //As seen in Luebke's Level of Detail Chapter 3 (page 54)
+    final double d = getDistanceOfViewPlaneContainingPoint(position);
+  
+    if ((_tanHalfVerticalFieldOfView != _tanHalfVerticalFieldOfView))
+    {
+      _tanHalfHorizontalFieldOfView = _frustumData._right / _frustumData._znear;
+    }
+    if ((_tanHalfVerticalFieldOfView != _tanHalfVerticalFieldOfView))
+    {
+      _tanHalfVerticalFieldOfView = _frustumData._top / _frustumData._znear;
+    }
+  
+    final double pW = (itemSize * _viewPortWidth) / (2 * d * _tanHalfHorizontalFieldOfView);
+    final double pH = (itemSize * _viewPortHeight) / (2 * d * _tanHalfVerticalFieldOfView);
+  
+    return pW > pH != 0? pW : pH;
+  
+  }
+
+
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Camera(Camera that);
-
-  //  Camera(const Camera &that):
-  //  _viewPortWidth(that._viewPortWidth),
-  //  _viewPortHeight(that._viewPortHeight),
-  //  _planet(that._planet),
-  //  _position(that._position),
-  //  _center(that._center),
-  //  _up(that._up),
-  //  _dirtyFlags(that._dirtyFlags),
-  //  _frustumData(that._frustumData),
-  //  _projectionMatrix(that._projectionMatrix),
-  //  _modelMatrix(that._modelMatrix),
-  //  _modelViewMatrix(that._modelViewMatrix),
-  //  _cartesianCenterOfView(that._cartesianCenterOfView),
-  //  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
-  //  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-  //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  //  _camEffectTarget(new CameraEffectTarget()),
-  //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  //  _angle2Horizon(that._angle2Horizon),
-  //  _normalizedPosition(that._normalizedPosition),
-  //  _tanHalfVerticalFieldOfView(NAND),
-  //  _tanHalfHorizontalFieldOfView(NAND),
-  //  _timestamp(that._timestamp)
-  //  {
-  //  }
 
   private long _timestamp;
 
@@ -853,5 +854,6 @@ public class Camera
     _up.copyFrom(rs._z);
     _dirtyFlags.setAllDirty();
   }
+
 
 }
