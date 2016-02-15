@@ -422,12 +422,29 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                                     data);
   
   //Computing max. triangle orthogonal side length
+  double maxDisR = 0;
+  double maxDisC = 0;
   for (int j = 0; j < ry; j++) {
     for (int i = 0; i < rx; i++) {
+      const int index = i + (j * rx);
       
+      if (i < rx-1){ //Not the end of row
+        double dr = vertices->squaredDistanceBeetweenVector3D(index, index+1);
+        if (dr > maxDisR){
+          maxDisR = dr;
+        }
+      }
+      
+      if (j < ry-1){ //Not the end of column
+        double dc = vertices->squaredDistanceBeetweenVector3D(index, index+rx);
+        if (dc > maxDisC){
+          maxDisC = dc;
+        }
+      }
     }
   }
-  
+  data._maxTriangleLatitudeLenght = IMathUtils::instance()->sqrt(maxDisC);
+  data._maxTriangleLongitudeLenght = IMathUtils::instance()->sqrt(maxDisC);
   
   //TEX COORDINATES////////////////////////////////////////////////////////////////
   

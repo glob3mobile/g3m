@@ -27,6 +27,8 @@ public:
   double _minHeight;
   double _maxHeight;
   double _averageHeight;
+  double _maxTriangleLatitudeLenght;
+  double _maxTriangleLongitudeLenght;
 };
 
 
