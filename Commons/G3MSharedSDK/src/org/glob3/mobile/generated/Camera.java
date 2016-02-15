@@ -631,8 +631,11 @@ public class Camera
     final double pW = (itemSize * _viewPortWidth) / (2 * d * _tanHalfHorizontalFieldOfView);
     final double pH = (itemSize * _viewPortHeight) / (2 * d * _tanHalfVerticalFieldOfView);
   
-    return pW > pH != 0? pW : pH;
-  
+    if (pW > pH)
+    {
+      return pW;
+    }
+    return pH;
   }
 
 
