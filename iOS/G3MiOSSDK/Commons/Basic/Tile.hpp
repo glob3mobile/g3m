@@ -11,6 +11,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
+#include "Sphere.hpp"
 
 class TileTexturizer;
 class TileElevationDataRequest;
@@ -217,6 +218,8 @@ public:
   bool hasSubtiles() const {
     return (_subtiles != NULL);
   }
+  
+  Box* createBoundingBox() const;
   
 };
 

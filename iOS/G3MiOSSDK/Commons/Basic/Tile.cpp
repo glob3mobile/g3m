@@ -734,3 +734,10 @@ const TileTessellatorMeshData* Tile::getTessellatorMeshData() const {
 #warning ask JM
   return &_tileTessellatorMeshData;
 }
+
+Box* Tile::createBoundingBox() const{
+  if (_tessellatorMesh != NULL){
+    return (Box*)_tessellatorMesh->getBoundingVolume();
+  }
+  return NULL;
+}

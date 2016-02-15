@@ -29,6 +29,9 @@ public:
   double _averageHeight;
   double _maxTriangleLatitudeLenght;
   double _maxTriangleLongitudeLenght;
+  
+  int _meshResLat;
+  int _meshResLon;
 };
 
 

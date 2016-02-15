@@ -413,6 +413,10 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const int rx = meshResolution._x;
   const int ry = meshResolution._y;
   
+  //Storing surface resolution
+  data._meshResLat = ry;
+  data._meshResLon = rx;
+  
   //VERTICES///////////////////////////////////////////////////////////////
   const double minElevation = createSurfaceVertices(rx, ry,
                                                     meshSector,
