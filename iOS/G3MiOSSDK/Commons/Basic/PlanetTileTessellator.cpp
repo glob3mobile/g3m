@@ -200,6 +200,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                          normals,   true,
                                          indicesB,  true);
   
+  
   delete vertices;
   
   return result;
@@ -419,6 +420,13 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                                     verticalExaggeration,
                                                     vertices,
                                                     data);
+  
+  //Computing max. triangle orthogonal side length
+  for (int j = 0; j < ry; j++) {
+    for (int i = 0; i < rx; i++) {
+      
+    }
+  }
   
   
   //TEX COORDINATES////////////////////////////////////////////////////////////////

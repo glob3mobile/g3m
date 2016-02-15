@@ -115,6 +115,17 @@ public:
     return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
 #endif
   }
+  
+  double squaredDistanceBeetweenVector3D(int i, int j) const {
+    const int posi = i * 3;
+    const int posj = i * 3;
+    const double dx = _values[posi] - _values[posj];
+    const double dy = _values[posi+1] - _values[posj+1];
+    const double dz = _values[posi+2] - _values[posj+2];
+    
+    return dx*dx + dy*dy + dz * dz;
+  }
+  
 };
 
 #endif
