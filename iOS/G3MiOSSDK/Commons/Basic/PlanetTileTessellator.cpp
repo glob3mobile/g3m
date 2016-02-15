@@ -115,7 +115,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             TileTessellatorMeshData& data) const {
   
   const Sector tileSector = tile->_sector;
-  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
+  const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
   
   const Planet* planet = rc->getPlanet();
@@ -239,20 +239,10 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                                  const PlanetRenderContext* prc,
                                                  const Tile* tile) const {
-  
-  
-  
-  
-  
-  
-#warning TODO for JM!
   const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
   const short rx = (short)meshResolution._x;
   const short ry = (short)meshResolution._y;
-  
-//  AbstractGeometryMesh* mesh = NULL;// ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-//  const IFloatBuffer* vertices = mesh->getVertices();
   
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(rc->getPlanet());
   TileTessellatorMeshData data;
@@ -444,12 +434,15 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       
       for (int i = 0; i < rx; i++) {
         const double u = (double) i / (rx - 1);
-        const Geodetic2D position = meshSector.getInnerPoint(u, v);
+        
+        Angle lat = Angle::linearInterpolation( meshSector._lower._latitude,  meshSector._upper._latitude,  1.0 - v );
+        Angle lon = Angle::linearInterpolation( meshSector._lower._longitude, meshSector._upper._longitude,       u );
+
         //U
-        const double m_u = tileSector.getUCoordinate(position._longitude);
+        const double m_u = tileSector.getUCoordinate(lon);
         
         //V
-        const double mercatorGlobalV = MercatorUtils::getMercatorV(position._latitude);
+        const double mercatorGlobalV = MercatorUtils::getMercatorV(lat);
         const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
         
         textCoords.add((float)m_u, (float)m_v);
