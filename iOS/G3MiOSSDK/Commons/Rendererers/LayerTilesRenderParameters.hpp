@@ -31,7 +31,7 @@ public:
   const Vector2S _tileMeshResolution;
 #endif
 #ifdef JAVA_CODE
-  public final Vector2S _tileTextureResolution;
+  public final Vector2I _tileTextureResolution;
   public final Vector2S _tileMeshResolution;
 #endif
   const bool _mercator;
@@ -58,7 +58,7 @@ public:
   }
 
   static const Vector2S defaultTileMeshResolution() {
-    return Vector2S(16, 16);
+    return Vector2S((short)16, (short)16);
   }
 
   static const Vector2I defaultTileTextureResolution () {
