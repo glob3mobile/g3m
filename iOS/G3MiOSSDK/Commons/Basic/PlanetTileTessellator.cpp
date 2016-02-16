@@ -48,18 +48,18 @@ PlanetTileTessellator::~PlanetTileTessellator() {
   
 }
 
-Vector2I PlanetTileTessellator::getTileMeshResolution(const G3MRenderContext* rc,
+Vector2S PlanetTileTessellator::getTileMeshResolution(const G3MRenderContext* rc,
                                                       const PlanetRenderContext* prc,
                                                       const Tile* tile) const {
   Sector sector = getRenderedSectorForTile(tile);
   return calculateResolution(prc, tile, sector);
 }
 
-Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* prc,
+Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* prc,
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-  const Vector2I resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+  const Vector2S resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
   
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
@@ -76,7 +76,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
     resY = 2;
   }
   
-  const Vector2I meshRes = Vector2I(resX, resY);
+  const Vector2S meshRes = Vector2S((short)resX, (short)resY);
   return meshRes;
   
   
@@ -117,7 +117,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
   
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);
-  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
+  const Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
   
   const Planet* planet = rc->getPlanet();
   
@@ -226,7 +226,7 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
   return Vector2F(linearUV._x, (float) localV);
 }
 
-IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,
+IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2S& rawResolution,
                                                       const Tile* tile) const {
   
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
@@ -241,7 +241,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                                  const PlanetRenderContext* prc,
                                                  const Tile* tile) const {
   const Sector meshSector = getRenderedSectorForTile(tile);
-  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
+  const Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
   const short rx = (short)meshResolution._x;
   const short ry = (short)meshResolution._y;
   
@@ -401,7 +401,7 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
 
 double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             const Sector& meshSector,
-                                            const Vector2I& meshResolution,
+                                            const Vector2S& meshResolution,
                                             const ElevationData* elevationData,
                                             float verticalExaggeration,
                                             bool mercator,
@@ -481,7 +481,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 void PlanetTileTessellator::createEastSkirt(const Planet* planet,
                                             const Sector& tileSector,
                                             const Sector& meshSector,
-                                            const Vector2I& meshResolution,
+                                            const Vector2S& meshResolution,
                                             double skirtHeight,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
@@ -524,7 +524,7 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
 void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
                                              const Sector& tileSector,
                                              const Sector& meshSector,
-                                             const Vector2I& meshResolution,
+                                             const Vector2S& meshResolution,
                                              double skirtHeight,
                                              FloatBufferBuilderFromGeodetic* vertices,
                                              ShortBufferBuilder& indices,
@@ -568,7 +568,7 @@ void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
 void PlanetTileTessellator::createWestSkirt(const Planet* planet,
                                             const Sector& tileSector,
                                             const Sector& meshSector,
-                                            const Vector2I& meshResolution,
+                                            const Vector2S& meshResolution,
                                             double skirtHeight,
                                             FloatBufferBuilderFromGeodetic* vertices,
                                             ShortBufferBuilder& indices,
@@ -612,7 +612,7 @@ void PlanetTileTessellator::createWestSkirt(const Planet* planet,
 void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
                                              const Sector& tileSector,
                                              const Sector& meshSector,
-                                             const Vector2I& meshResolution,
+                                             const Vector2S& meshResolution,
                                              double skirtHeight,
                                              FloatBufferBuilderFromGeodetic* vertices,
                                              ShortBufferBuilder& indices,

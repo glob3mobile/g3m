@@ -13,6 +13,7 @@
 
 #include "Sector.hpp"
 #include "Vector2I.hpp"
+#include "Vector2S.hpp"
 
 class LayerTilesRenderParameters {
 private:
@@ -25,12 +26,13 @@ public:
   const int    _maxLevel;
   const int    _maxLevelForPoles;
 #ifdef C_CODE
+#warning should _tileTextureResolution also be short?
   const Vector2I _tileTextureResolution;
-  const Vector2I _tileMeshResolution;
+  const Vector2S _tileMeshResolution;
 #endif
 #ifdef JAVA_CODE
-  public final Vector2I _tileTextureResolution;
-  public final Vector2I _tileMeshResolution;
+  public final Vector2S _tileTextureResolution;
+  public final Vector2S _tileMeshResolution;
 #endif
   const bool _mercator;
 
@@ -40,7 +42,7 @@ public:
                              const int       firstLevel,
                              const int       maxLevel,
                              const Vector2I& tileTextureResolution,
-                             const Vector2I& tileMeshResolution,
+                             const Vector2S& tileMeshResolution,
                              const bool      mercator) :
   _topSector(topSector),
   _topSectorSplitsByLatitude(topSectorSplitsByLatitude),
@@ -55,8 +57,8 @@ public:
 
   }
 
-  static const Vector2I defaultTileMeshResolution() {
-    return Vector2I(16, 16);
+  static const Vector2S defaultTileMeshResolution() {
+    return Vector2S(16, 16);
   }
 
   static const Vector2I defaultTileTextureResolution () {
