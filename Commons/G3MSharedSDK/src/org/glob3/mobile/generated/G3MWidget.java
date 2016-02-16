@@ -1094,11 +1094,13 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
         Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
         _leftEyeCam.setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+        _leftEyeCam.setFOV(_currentCamera.getVerticalFOV(), _currentCamera.getHorizontalFOV().times(0.5));
   
         Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
         Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
   
         _rightEyeCam.setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+        _rightEyeCam.setFOV(_currentCamera.getVerticalFOV(), _currentCamera.getHorizontalFOV().times(0.5));
       }
   
     }
