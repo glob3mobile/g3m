@@ -259,16 +259,16 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
   }
   
   for (short i = 2; i < meshResolution._y+1; i++) {
-    indicesBorder.add((i * meshResolution._x)-1);
+    indicesBorder.add((short)((i * meshResolution._x)-1));
   }
   
-  for (short j = (meshResolution._x*meshResolution._y-2);
+  for (short j = (short)(meshResolution._x*meshResolution._y-2);
        j >= (meshResolution._x*(meshResolution._y-1));
        j--) {
     indicesBorder.add(j);
   }
   
-  for (short j = (meshResolution._x*(meshResolution._y-1)-meshResolution._x);
+  for (short j = (short)(meshResolution._x*(meshResolution._y-1)-meshResolution._x);
        j >= 0;
        j-=meshResolution._x) {
     indicesBorder.add(j);
@@ -277,14 +277,14 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
   //INDEX OF GRID
   ShortBufferBuilder indicesGrid;
   for (short i = 0; i < meshResolution._y-1; i++) {
-    short rowOffset = (i * meshResolution._x);
+    short rowOffset = (short)(i * meshResolution._x);
     
     for (short j = 0; j < meshResolution._x; j++) {
-      indicesGrid.add(rowOffset + j);
-      indicesGrid.add(rowOffset + j+meshResolution._x);
+      indicesGrid.add((short)(rowOffset + j));
+      indicesGrid.add((short)(rowOffset + j+meshResolution._x));
     }
-    for (short j = (2*meshResolution._x)-1; j >= meshResolution._x; j--) {
-      indicesGrid.add(rowOffset + j);
+    for (short j = (short)((2*meshResolution._x)-1); j >= meshResolution._x; j--) {
+      indicesGrid.add((short)(rowOffset + j));
     }
     
   }
@@ -515,7 +515,7 @@ void PlanetTileTessellator::createEastSkirt(const Planet* planet,
   //Short casts are needed due to widening primitive conversions in java
   //http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
   indices.add((short)(surfaceIndex + meshResolution._x));
-  indices.add((short)surfaceIndex + meshResolution._x);
+  indices.add((short)(surfaceIndex + meshResolution._x));
 }
 
 void PlanetTileTessellator::createNorthSkirt(const Planet* planet,
