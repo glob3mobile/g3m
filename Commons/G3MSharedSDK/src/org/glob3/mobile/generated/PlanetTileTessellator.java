@@ -214,17 +214,17 @@ public class PlanetTileTessellator extends TileTessellator
     //INDEX///////////////////////////////////////////////////////////////
     for (short j = 0; j < (meshResolution._y-1); j++)
     {
-      final short jTimesResolution = (j *meshResolution._x);
+      final short jTimesResolution = (short)(j *meshResolution._x);
       if (j > 0)
       {
         indices.add(jTimesResolution);
       }
       for (short i = 0; i < meshResolution._x; i++)
       {
-        indices.add(jTimesResolution + i);
-        indices.add(jTimesResolution + i + meshResolution._x);
+        indices.add((short)(jTimesResolution + i));
+        indices.add((short)(jTimesResolution + i + meshResolution._x));
       }
-      indices.add(jTimesResolution + 2 *meshResolution._x - 1);
+      indices.add((short)(jTimesResolution + 2 *meshResolution._x - 1));
     }
   
     return minElevation;
@@ -236,13 +236,13 @@ public class PlanetTileTessellator extends TileTessellator
     //VERTICES///////////////////////////////////////////////////////////////
     final short firstSkirtVertex = (short)(vertices.size() / 3);
   
-    final short southEastCorner = ((meshResolution._x * meshResolution._y) - 1);
+    final short southEastCorner = (short)((meshResolution._x * meshResolution._y) - 1);
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = southEastCorner;
   
     // east side
-    for (short j = meshResolution._y-1; j >= 0; j--)
+    for (short j = (short)(meshResolution._y-1); j >= 0; j--)
     {
       final double x = 1;
       final double y = (double)j/(meshResolution._y-1);
@@ -260,9 +260,10 @@ public class PlanetTileTessellator extends TileTessellator
       skirtIndex++;
       surfaceIndex -= meshResolution._x;
     }
-  
-    indices.add(surfaceIndex + meshResolution._x);
-    indices.add(surfaceIndex + meshResolution._x);
+    //Short casts are needed due to widening primitive conversions in java
+    //http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
+    indices.add((short)(surfaceIndex + meshResolution._x));
+    indices.add((short)surfaceIndex + meshResolution._x);
   }
 
   private void createNorthSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -270,14 +271,14 @@ public class PlanetTileTessellator extends TileTessellator
   
     //VERTICES///////////////////////////////////////////////////////////////
     final short firstSkirtVertex = (short)(vertices.size() / 3);
-    final short northEastCorner = meshResolution._x - 1;
+    final short northEastCorner = (short)(meshResolution._x - 1);
   
     short skirtIndex = firstSkirtVertex;
     short surfaceIndex = northEastCorner;
   
     indices.add(surfaceIndex);
   
-    for (short i = meshResolution._x-1; i >= 0; i--)
+    for (short i = (short)(meshResolution._x-1); i >= 0; i--)
     {
       final double x = (double)i/(meshResolution._x-1);
       final double y = 0;
@@ -296,8 +297,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex -= 1;
     }
   
-    indices.add(surfaceIndex + 1);
-    indices.add(surfaceIndex + 1);
+    indices.add((short)(surfaceIndex + 1));
+    indices.add((short)(surfaceIndex + 1));
   }
 
   private void createWestSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -332,8 +333,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex += meshResolution._x;
     }
   
-    indices.add(surfaceIndex - meshResolution._x);
-    indices.add(surfaceIndex - meshResolution._x);
+    indices.add((short)(surfaceIndex - meshResolution._x));
+    indices.add((short)(surfaceIndex - meshResolution._x));
   }
 
   private void createSouthSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
@@ -366,8 +367,8 @@ public class PlanetTileTessellator extends TileTessellator
       surfaceIndex += 1;
     }
   
-    indices.add(surfaceIndex - 1);
-    indices.add(surfaceIndex - 1);
+    indices.add((short)(surfaceIndex - 1));
+    indices.add((short)(surfaceIndex - 1));
   }
 
   private static double skirtDepthForSector(Planet planet, Sector sector)
