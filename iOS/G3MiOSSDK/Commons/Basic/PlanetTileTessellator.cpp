@@ -31,6 +31,7 @@
 #include "NormalsUtils.hpp"
 
 #include "Sphere.hpp"
+#include "Vector2S.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
@@ -246,7 +247,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
   
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(rc->getPlanet());
   TileTessellatorMeshData data;
-  createSurfaceVertices((int)rx, (int)ry,
+  createSurfaceVertices(Vector2S(rx,ry),
                         meshSector,
                         tile->getElevationData(),
                         prc->_verticalExaggeration,
@@ -341,7 +342,7 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
 #endif
 }
 
-double PlanetTileTessellator::createSurfaceVertices(int rx, int ry, //Mesh resolution
+double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResolution, //Mesh resolution
                                                     const Sector& meshSector,
                                                     const ElevationData* elevationData,
                                                     float verticalExaggeration,
@@ -353,11 +354,11 @@ double PlanetTileTessellator::createSurfaceVertices(int rx, int ry, //Mesh resol
   double maxElevation = mu->minDouble();
   double averageElevation = 0;
   
-  for (int j = 0; j < ry; j++) {
-    const double v = (double) j / (ry - 1);
+  for (int j = 0; j < meshResolution._y; j++) {
+    const double v = (double) j / (meshResolution._y - 1);
     
-    for (int i = 0; i < rx; i++) {
-      const double u = (double) i / (rx - 1);
+    for (int i = 0; i < meshResolution._x; i++) {
+      const double u = (double) i / (meshResolution._x - 1);
       const Geodetic2D position = meshSector.getInnerPoint(u, v);
       double elevation = 0;
       
@@ -393,7 +394,7 @@ double PlanetTileTessellator::createSurfaceVertices(int rx, int ry, //Mesh resol
   
   data._minHeight = minElevation;
   data._maxHeight = maxElevation;
-  data._averageHeight = averageElevation / (rx * ry);
+  data._averageHeight = averageElevation / (meshResolution._x * meshResolution._y);
   
   return minElevation;
 }
@@ -413,7 +414,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const int ry = meshResolution._y;
   
   //VERTICES///////////////////////////////////////////////////////////////
-  const double minElevation = createSurfaceVertices(rx, ry,
+  const double minElevation = createSurfaceVertices(Vector2S(meshResolution._x, meshResolution._y),
                                                     meshSector,
                                                     elevationData,
                                                     verticalExaggeration,

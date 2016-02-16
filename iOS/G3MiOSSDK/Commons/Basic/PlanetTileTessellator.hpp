@@ -11,12 +11,14 @@
 #include "TileTessellator.hpp"
 #include <map>
 #include "Sector.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+
 
 class IShortBuffer;
 class Sector;
 class FloatBufferBuilderFromGeodetic;
 class ShortBufferBuilder;
-#include "FloatBufferBuilderFromCartesian2D.hpp"
+class Vector2S;
 
 
 class PlanetTileTessellatorData {
@@ -82,7 +84,7 @@ private:
   Sector getRenderedSectorForTile(const Tile* tile) const;
   
   
-  double createSurfaceVertices(int rx, int ry, //Mesh resolution
+  double createSurfaceVertices(const Vector2S& meshResolution, //Mesh resolution
                                const Sector& meshSector,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
