@@ -8,8 +8,8 @@ public class MutableLayerTilesRenderParameters
   private int _maxLevel;
   private int _tileTextureWidth;
   private int _tileTextureHeight;
-  private int _tileMeshWidth;
-  private int _tileMeshHeight;
+  private short _tileMeshWidth;
+  private short _tileMeshHeight;
   private boolean _mercator;
 
   public MutableLayerTilesRenderParameters()
@@ -139,6 +139,6 @@ public class MutableLayerTilesRenderParameters
       return null;
     }
 
-    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, new Vector2I(_tileTextureWidth, _tileTextureHeight), new Vector2I(_tileMeshWidth, _tileMeshHeight), _mercator);
+    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, new Vector2I(_tileTextureWidth, _tileTextureHeight), new Vector2S(_tileMeshWidth, _tileMeshHeight), _mercator);
   }
 }

@@ -57,11 +57,11 @@ public class LayerTilesRenderParameters
   public final int _firstLevel;
   public final int _maxLevel;
   public final int _maxLevelForPoles;
-  public final Vector2I _tileTextureResolution;
-  public final Vector2I _tileMeshResolution;
+  public final Vector2S _tileTextureResolution;
+  public final Vector2S _tileMeshResolution;
   public final boolean _mercator;
 
-  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2I tileTextureResolution, Vector2I tileMeshResolution, boolean mercator)
+  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2I tileTextureResolution, Vector2S tileMeshResolution, boolean mercator)
   {
      _topSector = new Sector(topSector);
      _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
@@ -75,9 +75,9 @@ public class LayerTilesRenderParameters
 
   }
 
-  public static Vector2I defaultTileMeshResolution()
+  public static Vector2S defaultTileMeshResolution()
   {
-    return new Vector2I(16, 16);
+    return new Vector2S(16, 16);
   }
 
   public static Vector2I defaultTileTextureResolution ()
