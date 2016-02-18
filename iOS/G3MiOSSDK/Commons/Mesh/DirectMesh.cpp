@@ -12,7 +12,7 @@
 DirectMesh::DirectMesh(const int primitive,
                        bool owner,
                        const Vector3D& center,
-                       const IFloatBuffer* vertices,
+                       IFloatBuffer* vertices,
                        float lineWidth,
                        float pointSize,
                        const Color* flatColor,

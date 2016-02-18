@@ -147,6 +147,8 @@
 #import <G3MiOSSDK/Info.hpp>
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
+#import <G3MiOSSDK/PyramidElevationDataProvider.hpp>
+#import <G3MiOSSDK/LayerSet.hpp>
 
 #include <typeinfo>
 
@@ -163,7 +165,7 @@
 //};
 
 
-Mesh* createSectorMesh(const Planet* planet,
+/*Mesh* createSectorMesh(const Planet* planet,
                        const int resolution,
                        const Sector& sector,
                        const Color& color,
@@ -235,7 +237,7 @@ Mesh* createSectorMesh(const Planet* planet,
   delete vertices;
   
   return result;
-}
+}*/
 
 
 @implementation ViewController
@@ -284,7 +286,8 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
   
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+    [self initWithPyramidElevations];
   
   //[self initTestingTileImageProvider];
   
@@ -322,13 +325,108 @@ Mesh* createSectorMesh(const Planet* planet,
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
-  
+    
+  [[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-45));
+  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 10000));
 }
 
+-(void) initWithPyramidElevations
+{
+    G3MBuilder_iOS builder([self G3MWidget]);
+    
+    const Planet *planet = EllipsoidalPlanet::createEarth();
+    LayerSet* layerSet = new LayerSet();
+    layerSet->addLayer(new BingMapsLayer(BingMapType::Aerial(),
+                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                         TimeInterval::fromDays(30)));
+    MeshRenderer *_meshRenderer = new MeshRenderer();
+    builder.addRenderer(_meshRenderer);
+    builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+    builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+    builder.getPlanetRendererBuilder()->setRenderDebug(true);
+    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/result/";
+    PyramidElevationDataProvider *edp = new PyramidElevationDataProvider(server,Sector::fullSphere(),true,false);
+    builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
+	   
+	   bool showPrimarySectors = false;
+	   if (showPrimarySectors){
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(50, -180, 90, -90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(50, -90, 90, 0), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(50, 0, 90, 90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(50, 90, 90, 180), planet);
+           
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(0, -180, 50, -90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(0, -90, 50, 0), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(0, 0, 50, 90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(0, 90, 50, 180), planet);
+           
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-50, -180, 0, -90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-50, -90, 0, 0), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-50, 0, 0, 90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-50, 90, 0, 180), planet);
+           
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-90, -180, -50, -90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-90, -90, -50, 0), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-90, 0, -50, 90), planet);
+           addSectorMesh(_meshRenderer, Sector::fromDegrees(-90, 90, -50, 180), planet);
+       }
+	   
+    builder.initializeWidget();
+	   //return _widget;
+}
+
+void addSectorMesh(MeshRenderer *renderer, const Sector& sector, const Planet *planet){
+    /* const double POINT_DIV = 100;
+     
+     FloatBufferBuilderFromGeodetic *fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+     fbb->add(sector._upper, 5);
+     //Delta instruction here
+     if (sector._upper._latitude._degrees != 90){
+     double delta = (sector._upper._longitude._radians - sector._lower._longitude._radians) / POINT_DIV;
+     double lonRads = sector._upper._longitude._radians;
+     for (int i=0; i<POINT_DIV; i++){
+     lonRads -= delta;
+     fbb->add(sector._upper._latitude,Geodetic2D::fromRadians(sector._upper._latitude._radians,lonRads)._longitude, 5);
+     }
+     }
+     else fbb->add(sector._upper._latitude, sector._lower._longitude, 5);
+     
+     double delta = (sector._upper._latitude._radians - sector._lower._latitude._radians) / POINT_DIV;
+     double latRads = sector._upper._latitude._radians;
+     for (int i=0; i<POINT_DIV; i++){
+     latRads -= delta;
+     fbb->add(Geodetic2D::fromRadians(latRads,sector._lower._longitude._radians)._latitude,sector._lower._longitude, 5);
+     }
+     
+     //Delta instruction here
+     if (sector._lower._latitude._degrees != -90){
+     delta = (sector._upper._longitude._radians - sector._lower._longitude._radians) / POINT_DIV;
+     double lonRads = sector._lower._longitude._radians;
+     for (int i=0; i<POINT_DIV; i++){
+     lonRads += delta;
+     fbb->add(sector._lower._latitude,Geodetic2D::fromRadians(sector._lower._latitude._radians,lonRads)._longitude, 5);
+     }
+     }
+     else fbb->add(sector._lower._latitude,sector._upper._longitude, 5);
+     
+     delta = (sector._upper._latitude._radians - sector._lower._latitude._radians) / POINT_DIV;
+     latRads = sector._lower._latitude._radians;
+     for (int i=0; i<POINT_DIV; i++){
+     latRads += delta;
+     fbb->add(Geodetic2D::fromRadians(latRads,sector._upper._longitude._radians)._latitude,sector._upper._longitude, 5);
+     }
+     
+     renderer->addMesh(new DirectMesh(GLPrimitive::lineStrip(), true, fbb->getCenter(), fbb->create(), 6.0f, 1.0f,
+     Color::yellow(), NULL, 0.0f, false));*/
+}
+
+
+
+/*
 - (void) initWithNonOverlappingMarks
 {
   G3MBuilder_iOS builder([self G3MWidget]);
-  
+ 
   Vector2D::intersectionOfTwoLines(Vector2D(0,0), Vector2D(10,10),
                                    Vector2D(10,0), Vector2D(-10, 10));
   
@@ -433,7 +531,7 @@ Mesh* createSectorMesh(const Planet* planet,
   
   builder.initializeWidget();
 }
-
+*/
 
 class MoveCameraInitializationTask : public GInitializationTask {
 private:
@@ -506,6 +604,7 @@ public:
 //
 //};
 
+/*
 #pragma testing tile image provider
 #warning working now
 - (void) initTestingTileImageProvider
@@ -841,7 +940,7 @@ public:
   }
   
 }
-
+*/
 - (void) testContainsGEO2DPolygonData
 {
   std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
@@ -911,7 +1010,7 @@ public:
   
   
 }
-
+/*
 - (ShapesRenderer*) createShapesRendererForTestImageDrawingOfCanvas : (const Planet*) planet
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
@@ -1070,7 +1169,7 @@ public:
   
   builder.initializeWidget();
 }
-
+*/
 
 - (void) initWithDefaultBuilder
 {
@@ -1167,7 +1266,7 @@ public:
 //  }
 //};
 
-
+/*
 - (void) initCustomizedWithBuilder
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -1739,7 +1838,7 @@ public:
   //  [self testGenericQuadTree:geoVectorLayer];
   
 }
-
+*/
 - (void) testGenericQuadTree: (GEOVectorLayer*) geoVectorLayer {
   
   
@@ -1851,7 +1950,7 @@ public:
    }
    */
 }
-
+/*
 - (void)createInterpolationTest: (MeshRenderer*) meshRenderer
 {
   
@@ -1941,7 +2040,7 @@ public:
   
   delete planet;
 }
-
+*/
 
 - (Mesh*) createPointsMesh: (const Planet*)planet
 {
@@ -2273,7 +2372,7 @@ public:
   }
   
 };
-
+/*
 
 - (LayerSet*) createLayerSet
 {
@@ -2901,7 +3000,7 @@ public:
   
   return planetRenderer;
 }
-
+*/
 - (MarksRenderer*) createMarksRenderer
 {
   
@@ -2984,7 +3083,7 @@ public:
   return marksRenderer;
   
 }
-
+/*
 - (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
@@ -3232,7 +3331,7 @@ public:
   return shapesRenderer;
 }
 
-
+*/
 class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
@@ -3562,7 +3661,7 @@ public:
 //  }
 //};
 
-
+/*
 class Bil16Parser_IBufferDownloadListener : public IBufferDownloadListener {
 private:
   ShapesRenderer* _shapesRenderer;
@@ -3669,7 +3768,7 @@ public:
   }
   
 };
-
+*/
 
 class RadarParser_BufferDownloadListener : public IBufferDownloadListener {
 private:

@@ -956,7 +956,7 @@ void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
 }
 
 const URL VectorStreamingRenderer::VectorSet::getMetadataURL() const {
-  if (_format == VectorStreamingRenderer::Format::SERVER) {
+  if (_format == VectorStreamingRenderer::SERVER) {
     return URL(_serverURL, _name);
   }
   return URL(_serverURL, _name + "/metadata.json");
@@ -978,7 +978,7 @@ const std::string VectorStreamingRenderer::VectorSet::toNodesDirectories(const s
 }
 
 const URL VectorStreamingRenderer::VectorSet::getNodeFeaturesURL(const std::string& nodeID) const {
-  if (_format == VectorStreamingRenderer::Format::SERVER) {
+  if (_format == VectorStreamingRenderer::SERVER) {
     return URL(_serverURL,
                _name + "/features" +
                "?node=" + nodeID +
@@ -991,7 +991,7 @@ const URL VectorStreamingRenderer::VectorSet::getNodeFeaturesURL(const std::stri
 
 const URL VectorStreamingRenderer::VectorSet::getNodeChildrenURL(const std::string& nodeID,
                                                                  const std::vector<std::string>& childrenIDs) const {
-  if (_format == VectorStreamingRenderer::Format::SERVER) {
+  if (_format == VectorStreamingRenderer::SERVER) {
     std::string nodes = "";
     const size_t childrenIDsSize = childrenIDs.size();
 

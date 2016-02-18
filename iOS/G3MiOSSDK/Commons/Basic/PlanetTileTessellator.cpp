@@ -58,7 +58,18 @@ Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-  const Vector2I resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile. Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
+    
+  MutableVector2I mutableResolution = prc->_layerTilesRenderParameters->_tileMeshResolution.asMutableVector2I();
+    
+    if (tile->getElevationData() != NULL) {
+      mutableResolution = tile->getElevationData()->getExtent().asMutableVector2I();
+        ILogger::instance()->logInfo(tile->description()+": From elev");
+    }
+    else ILogger::instance()->logInfo(tile->description()+": No elev");
+    
+  const Vector2I resolution = mutableResolution.asVector2I();
+    ILogger::instance()->logInfo(resolution.description());
 
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
@@ -76,6 +87,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
   }
   
   const Vector2I meshRes = Vector2I(resX, resY);
+    ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
   return meshRes;
   
   
@@ -239,90 +251,89 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                                  const PlanetRenderContext* prc,
                                                  const Tile* tile) const {
-
 #warning TODO for JM!
   return NULL;
 
-//  const Sector meshSector = getRenderedSectorForTile(tile);
-//  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
-//  const short rx = (short)meshResolution._x;
-//  const short ry = (short)meshResolution._y;
-//  
-//  AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-//  const IFloatBuffer* vertices = mesh->getVertices();
-//
-//  //INDEX OF BORDER///////////////////////////////////////////////////////////////
-//  ShortBufferBuilder indicesBorder;
-//  for (short j = 0; j < rx; j++) {
-//    indicesBorder.add(j);
-//  }
-//  
-//  for (short i = 2; i < ry+1; i++) {
-//    indicesBorder.add((short)((i * rx)-1));
-//  }
-//  
-//  for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
-//    indicesBorder.add(j);
-//  }
-//  
-//  for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
-//    indicesBorder.add(j);
-//  }
-//  
-//  //INDEX OF GRID
-//  ShortBufferBuilder indicesGrid;
-//  for (short i = 0; i < ry-1; i++) {
-//    short rowOffset = (short)(i * rx);
-//    
-//    for (short j = 0; j < rx; j++) {
-//      indicesGrid.add((short)(rowOffset + j));
-//      indicesGrid.add((short)(rowOffset + j+rx));
-//    }
-//    for (short j = (short)((2*rx)-1); j >= rx; j--) {
-//      indicesGrid.add((short)(rowOffset + j));
-//    }
-//    
-//  }
-//  
-//  const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
-//  const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 1.0f : 3.0f;
-//  
-//  
-//  IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
-//                                        mesh->getCenter(),
-//                                        (IFloatBuffer*)vertices,
-//                                        false,
-//                                        indicesBorder.create(),
-//                                        true,
-//                                        2.0f,
-//                                        1.0f,
-//                                        Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f),
-//                                        NULL,
-//                                        1.0f,
-//                                        false,
-//                                        NULL,
-//                                        true, 1.0f, 1.0f);
-//  
-//  IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
-//                                      mesh->getCenter(),
-//                                      (IFloatBuffer*)vertices,
-//                                      false,
-//                                      indicesGrid.create(),
-//                                      true,
-//                                      gridLineWidth,
-//                                      1.0f,
-//                                      new Color(levelColor),
-//                                      NULL,
-//                                      1.0f,
-//                                      false,
-//                                      NULL,
-//                                      true, 1.0f, 1.0f);
-//  
-//  CompositeMesh* c = new CompositeMesh();
-//  c->addMesh(grid);
-//  c->addMesh(border);
-//  
-//  return c;
+  /*const Sector meshSector = getRenderedSectorForTile(tile);
+  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
+  const short rx = (short)meshResolution._x;
+  const short ry = (short)meshResolution._y;
+  
+  AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
+  const IFloatBuffer* vertices = mesh->getVertices();
+
+  //INDEX OF BORDER///////////////////////////////////////////////////////////////
+  ShortBufferBuilder indicesBorder;
+  for (short j = 0; j < rx; j++) {
+    indicesBorder.add(j);
+  }
+  
+  for (short i = 2; i < ry+1; i++) {
+    indicesBorder.add((short)((i * rx)-1));
+  }
+  
+  for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
+    indicesBorder.add(j);
+  }
+  
+  for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
+    indicesBorder.add(j);
+  }
+  
+  //INDEX OF GRID
+  ShortBufferBuilder indicesGrid;
+  for (short i = 0; i < ry-1; i++) {
+    short rowOffset = (short)(i * rx);
+    
+    for (short j = 0; j < rx; j++) {
+      indicesGrid.add((short)(rowOffset + j));
+      indicesGrid.add((short)(rowOffset + j+rx));
+    }
+    for (short j = (short)((2*rx)-1); j >= rx; j--) {
+      indicesGrid.add((short)(rowOffset + j));
+    }
+    
+  }
+  
+  const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
+  const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 1.0f : 3.0f;
+  
+  
+  IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
+                                        mesh->getCenter(),
+                                        (IFloatBuffer*)vertices,
+                                        false,
+                                        indicesBorder.create(),
+                                        true,
+                                        2.0f,
+                                        1.0f,
+                                        Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f),
+                                        NULL,
+                                        1.0f,
+                                        false,
+                                        NULL,
+                                        true, 1.0f, 1.0f);
+  
+  IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
+                                      mesh->getCenter(),
+                                      (IFloatBuffer*)vertices,
+                                      false,
+                                      indicesGrid.create(),
+                                      true,
+                                      gridLineWidth,
+                                      1.0f,
+                                      new Color(levelColor),
+                                      NULL,
+                                      1.0f,
+                                      false,
+                                      NULL,
+                                      true, 1.0f, 1.0f);
+  
+  CompositeMesh* c = new CompositeMesh();
+  c->addMesh(grid);
+  c->addMesh(border);
+  
+  return c;*/
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
