@@ -45,7 +45,7 @@ public class Geometry2DGLFeature extends GLFeature
 
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
-    state.enableCullFace(GLCullFace.front());
+    state.enableCullFace(GLCullFace.back());
     state.setLineWidth(_lineWidth);
   }
 

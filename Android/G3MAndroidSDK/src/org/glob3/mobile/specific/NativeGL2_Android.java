@@ -36,8 +36,8 @@ import android.util.Log;
 
 
 public final class NativeGL2_Android
-         extends
-            INativeGL {
+extends
+INativeGL {
 
    private Thread _openGLThread = null;
 
@@ -52,7 +52,7 @@ public final class NativeGL2_Android
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
             throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                                       + ", CurrentThread=" + currentThread + ")");
+                     + ", CurrentThread=" + currentThread + ")");
          }
       }
    }
@@ -93,7 +93,7 @@ public final class NativeGL2_Android
    //   public void uniformMatrix4fv(final IGLUniformID location,
    //                                final boolean transpose,
    //                                final IFloatBuffer buffer) {
-   // checkOpenGLThread(); 
+   // checkOpenGLThread();
    //      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
    //               ((FloatBuffer_Android) buffer).getBuffer());
    //   }
@@ -110,7 +110,7 @@ public final class NativeGL2_Android
                transpose, //
                matrix.getColumnMajorFloatArray(), //
                0 //
-      );
+               );
 
       //      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
    }
@@ -658,6 +658,9 @@ public final class NativeGL2_Android
    @Override
    public void useProgram(final GPUProgram program) {
       checkOpenGLThread();
+
+      FloatBuffer_Android.onGPUProgramHasChanged();
+
       GLES20.glUseProgram(program.getProgramID());
    }
 

@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 22/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -66,7 +64,7 @@ public class Sector
        _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
        _deltaRadiusInRadians = -1.0;
        _normalizedCartesianCenter = null;
-    //    if (_deltaLatitude._degrees == 0){
+    //    if (_deltaLatitude._degrees == 0) {
     //        printf("NO AREA");
     //    }
     }
@@ -89,7 +87,7 @@ public class Sector
             _normalizedCartesianCenter = new Vector3D(normalizedCartesianCenter);
         }
     
-    //    if (_deltaLatitude._degrees == 0){
+    //    if (_deltaLatitude._degrees == 0) {
     //        printf("NO AREA");
     //    }
     }

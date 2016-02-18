@@ -9,7 +9,7 @@
 #include "GEOLine2DMeshSymbol.hpp"
 
 #include "GEOLine2DStyle.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "Planet.hpp"
 
 GEOLine2DMeshSymbol::GEOLine2DMeshSymbol(const std::vector<Geodetic2D*>* coordinates,

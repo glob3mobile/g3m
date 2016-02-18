@@ -6,8 +6,8 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_Android
-         extends
-            IStringBuilder {
+   extends
+      IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
 
@@ -77,5 +77,6 @@ public final class StringBuilder_Android
    public boolean contentEqualsTo(final String that) {
       return (_builder.length() == that.length()) && (_builder.indexOf(that) == 0);
    }
+
 
 }

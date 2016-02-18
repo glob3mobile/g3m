@@ -32,16 +32,19 @@ private:
   mutable MutableVector3D _initialPoint1;
   mutable double          _distanceBetweenInitialPoints;
   mutable MutableVector3D _centerPoint;
-  //  mutable double          _angleBetweenInitialRays;
 
 
 
 public:
+  
+  static const Planet* createEarth();
 
   FlatPlanet(const Vector2D& size);
 
   ~FlatPlanet() {
-
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   Vector3D getRadii() const {

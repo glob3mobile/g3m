@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -13,7 +12,6 @@ package org.glob3.mobile.generated;
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 14/06/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -22,8 +20,6 @@ package org.glob3.mobile.generated;
 
 //class IGLProgramId;
 //class IGLUniformID;
-
-
 //class GPUProgramManager;
 //class GPUProgramState;
 //class GLState;
@@ -159,7 +155,7 @@ public class GL
   
     state.applyOnGPU(this, progManager);
   
-    _nativeGL.drawElements(mode, indices.size(), indices);
+    _nativeGL.drawElements(mode, (int)indices.size(), indices);
   }
 
 //  void drawArrays(int mode,

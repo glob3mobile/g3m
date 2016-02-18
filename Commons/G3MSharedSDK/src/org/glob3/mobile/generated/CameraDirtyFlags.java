@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
  *  Prueba Opengl iPad
  *
  *  Created by Agustin Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
 
@@ -14,7 +13,6 @@ package org.glob3.mobile.generated;
  *  Prueba Opengl iPad
  *
  *  Created by Agustin Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
 

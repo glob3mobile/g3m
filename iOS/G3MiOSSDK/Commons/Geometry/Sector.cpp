@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 22/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Sector.hpp"
@@ -28,7 +27,7 @@ _center(Angle::midAngle(lower._latitude, upper._latitude),
 _deltaRadiusInRadians(-1.0),
 _normalizedCartesianCenter(NULL)
 {
-//    if (_deltaLatitude._degrees == 0){
+//    if (_deltaLatitude._degrees == 0) {
 //        printf("NO AREA");
 //    }
 }
@@ -49,7 +48,7 @@ _deltaRadiusInRadians(sector._deltaRadiusInRadians)
         _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
     }
     
-//    if (_deltaLatitude._degrees == 0){
+//    if (_deltaLatitude._degrees == 0) {
 //        printf("NO AREA");
 //    }
 }

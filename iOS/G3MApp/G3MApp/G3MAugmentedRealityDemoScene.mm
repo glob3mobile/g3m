@@ -3,13 +3,12 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 3/4/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #include "G3MAugmentedRealityDemoScene.hpp"
 
 #include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
+#include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/Camera.hpp>
 #include <G3MiOSSDK/GTask.hpp>
@@ -106,10 +105,18 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+//  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
+//                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+//                                           TimeInterval::fromDays(30));
+
 //  MapQuestLayer* layer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
+
+  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.jpg70?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpamVuY3cxbzAwMG12ZGx4cGljbGtqMGUifQ.vpDqms08MBqoRgp667Yz5Q",
+                                                          Sector::FULL_SPHERE,
+                                                          false, // isTransparent
+                                                          2,     // firstLevel
+                                                          22,    // maxLevel
+                                                          TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 

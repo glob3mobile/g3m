@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/14/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MDemoBuilder.hpp"
@@ -62,11 +61,7 @@ void G3MDemoBuilder::build() {
   }
   
   IG3MBuilder* builder = getG3MBuilder();
-  
-  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
-  
-  
-  
+
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
   
@@ -78,10 +73,9 @@ void G3MDemoBuilder::build() {
   
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
-  
+
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
-  //  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
   
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,
@@ -98,6 +92,9 @@ void G3MDemoBuilder::build() {
   
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
+  
+  //Uncomment to see render debug mesh on top of tiles
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
   
   _initialized = true;
   _model = new G3MDemoModel(_listener,

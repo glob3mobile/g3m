@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Layer;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SphericalPlanet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -24,8 +24,8 @@ import android.widget.TextView;
 
 
 public class SimplestRasterActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -40,7 +40,7 @@ public class SimplestRasterActivity
       final LayerSet layerset = SimpleRasterLayerBuilder.createLayerset();
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-      builder.setPlanet(Planet.createSphericalEarth());
+      builder.setPlanet(SphericalPlanet.createEarth());
 
       builder.getPlanetRendererBuilder().setLayerSet(layerset);
 

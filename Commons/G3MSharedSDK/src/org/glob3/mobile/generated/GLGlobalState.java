@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -73,7 +72,7 @@ public class GLGlobalState
   {
      _depthTest = false;
      _blend = false;
-     _cullFace = true;
+     _cullFace = false;
      _culledFace = GLCullFace.back();
      _lineWidth = 1F;
      _polygonOffsetFactor = 0F;
@@ -285,26 +284,25 @@ public class GLGlobalState
     }
   
     //Polygon Offset
-    if (_polygonOffsetFill != currentState._polygonOffsetFill)
-    {
-      currentState._polygonOffsetFill = _polygonOffsetFill;
+   // if (_polygonOffsetFill != currentState._polygonOffsetFill) {
+  //    currentState._polygonOffsetFill = _polygonOffsetFill;
       if (_polygonOffsetFill)
       {
         nativeGL.enable(GLStage.polygonOffsetFill());
   
-        if (_polygonOffsetFactor != currentState._polygonOffsetFactor || _polygonOffsetUnits != currentState._polygonOffsetUnits)
-        {
+       /* if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
+            _polygonOffsetUnits != currentState._polygonOffsetUnits) {*/
           nativeGL.polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
   
           currentState._polygonOffsetUnits = _polygonOffsetUnits;
           currentState._polygonOffsetFactor = _polygonOffsetFactor;
-        }
+     //   }
       }
       else
       {
         nativeGL.disable(GLStage.polygonOffsetFill());
       }
-    }
+  //  }
   
     //Blending Factors
     if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor)

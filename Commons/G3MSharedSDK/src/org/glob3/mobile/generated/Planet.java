@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -25,20 +24,6 @@ package org.glob3.mobile.generated;
 
 public abstract class Planet
 {
-
-  public static Planet createEarth()
-  {
-    return new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(6378137.0, 6378137.0, 6356752.314245)));
-  }
-  public static Planet createSphericalEarth()
-  {
-    return new SphericalPlanet(new Sphere(Vector3D.zero, 6378137.0));
-  }
-  public static Planet createFlatEarth()
-  {
-    return new FlatPlanet(new Vector2D(4 *6378137.0, 2 *6378137.0));
-  }
-
 
   public void dispose()
   {
@@ -87,18 +72,12 @@ public abstract class Planet
 
   public abstract Vector3D scaleToGeocentricSurface(Vector3D position);
 
-  /*virtual std::list<Vector3D> computeCurve(const Vector3D& start,
-                                           const Vector3D& stop,
-                                           double granularity) const = 0;*/
-
   public abstract Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1);
 
 
   public abstract double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2);
 
   public abstract double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2);
-
-  //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {

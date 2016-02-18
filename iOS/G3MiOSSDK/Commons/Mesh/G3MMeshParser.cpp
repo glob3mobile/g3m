@@ -244,10 +244,11 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
   }
   else {
     mesh = new IndexedMesh(toGLPrimitive(primitive),
-                           true, // owner
                            Vector3D(centerX, centerY, centerZ),
                            vertices,
+                           true,
                            indices,
+                           true,
                            lineWidth,
                            pointSize,
                            material->_color, // flatColor

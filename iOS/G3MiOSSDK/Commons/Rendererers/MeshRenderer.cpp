@@ -48,9 +48,7 @@ MeshRenderer::~MeshRenderer() {
 #endif
 }
 
-void MeshRenderer::updateGLState(const G3MRenderContext* rc) {
-  const Camera* camera = rc->getCurrentCamera();
-
+void MeshRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(camera), true);
@@ -61,17 +59,22 @@ void MeshRenderer::updateGLState(const G3MRenderContext* rc) {
 }
 
 void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
-  updateGLState(rc);
-
-  _glState->setParent(glState);
-
   const size_t meshesCount = _meshes.size();
-  for (size_t i = 0; i < meshesCount; i++) {
-    Mesh* mesh = _meshes[i];
-    const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
-    if ( boundingVolume != NULL && boundingVolume->touchesFrustum(frustum) ) {
-      mesh->render(rc, _glState);
+  if (meshesCount > 0) {
+    const Camera* camera =  rc->getCurrentCamera();
+
+    updateGLState(camera);
+
+    const Frustum* frustum = camera->getFrustumInModelCoordinates();
+
+    _glState->setParent(glState);
+
+    for (size_t i = 0; i < meshesCount; i++) {
+      Mesh* mesh = _meshes[i];
+      const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
+      if ( (boundingVolume != NULL) && boundingVolume->touchesFrustum(frustum) ) {
+        mesh->render(rc, _glState);
+      }
     }
   }
 }
@@ -468,10 +471,11 @@ private:
         }
         
         _mesh = new IndexedMesh(GLPrimitive::triangles(),
-                                true,
                                 vertices->getCenter(),
                                 vertices->create(),
+                                true,
                                 indices,
+                                true,
                                 1, // lineWidth
                                 1, // pointSize
                                 _color, // flatColor

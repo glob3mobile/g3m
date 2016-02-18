@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GLGlobalState
@@ -76,7 +75,7 @@ public:
   GLGlobalState() :
   _depthTest(false),
   _blend(false),
-  _cullFace(true),
+  _cullFace(false),
   _culledFace(GLCullFace::back()),
   _lineWidth(1),
   _polygonOffsetFactor(0),

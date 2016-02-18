@@ -131,10 +131,11 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
   }
 
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               true,
                                vertices->getCenter(),
                                vertices->create(),
+                               true,
                                indices.create(),
+                               true,
                                1,
                                1,
                                new Color(color));
@@ -156,6 +157,7 @@ void Sphere::render(const G3MRenderContext* rc,
 
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
+#warning This implementation could gives false positives
   // this implementation is not right exact, but it's faster.
   if (frustum->getNearPlane().signedDistance(_center)   > _radius) return false;
   if (frustum->getFarPlane().signedDistance(_center)    > _radius) return false;

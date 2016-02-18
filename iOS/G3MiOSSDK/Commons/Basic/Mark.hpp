@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 06/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Mark
@@ -11,7 +10,7 @@
 
 #include <string>
 #include "Geodetic3D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 
 #include "Vector3D.hpp"
 #include "URL.hpp"
@@ -410,7 +409,7 @@ class TextureAtlasMarkAnimationTask: public PeriodicalTask{
     float _scaleY;
   public:
     
-    ~TextureAtlasMarkAnimationGTask(){}
+    ~TextureAtlasMarkAnimationGTask() {}
     
     TextureAtlasMarkAnimationGTask(Mark* mark, int nColumn, int nRows, int nFrames):
     _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
@@ -422,7 +421,7 @@ class TextureAtlasMarkAnimationTask: public PeriodicalTask{
     }
     
     
-    virtual void run(const G3MContext* context){
+    virtual void run(const G3MContext* context) {
       int row = _currentFrame / _cols;
       int col = _currentFrame % _cols;
       

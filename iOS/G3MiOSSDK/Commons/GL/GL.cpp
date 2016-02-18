@@ -3,7 +3,6 @@
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #include <list>
@@ -16,12 +15,11 @@
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
 #include "IGLTextureId.hpp"
-
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
-
 #include "GLState.hpp"
+
 
 void GL::clearScreen(const Color& color) {
   //  if (_verbose) {
@@ -39,7 +37,7 @@ void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
   state->applyOnGPU(this, progManager);
 
   _nativeGL->drawElements(mode,
-                          indices->size(),
+                          (int)indices->size(),
                           indices);
 }
 

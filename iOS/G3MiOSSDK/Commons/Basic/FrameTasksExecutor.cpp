@@ -8,7 +8,7 @@
 
 #include "FrameTasksExecutor.hpp"
 
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "ITimer.hpp"
 #include "ILogger.hpp"
 #include "FrameTask.hpp"

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 17/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #include "Box.hpp"
@@ -253,10 +252,11 @@ Mesh* Box::createMesh(const Color& color) const {
   }
 
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               true,
                                vertices->getCenter(),
                                vertices->create(),
+                               true,
                                indices.create(),
+                               true,
                                2,
                                1,
                                new Color(color));

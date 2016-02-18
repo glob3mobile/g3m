@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 18/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "WMSLayer.hpp"
@@ -630,7 +629,7 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   }
   else {
     const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-    if (contributionSector.hasNoArea()){
+    if (contributionSector.hasNoArea()) {
       return NULL;
     }
 

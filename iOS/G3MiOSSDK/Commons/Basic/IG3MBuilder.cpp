@@ -35,6 +35,8 @@
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
 #include "DefaultInfoDisplay.hpp"
+#include "EllipsoidalPlanet.hpp"
+#include "PlanetRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -168,7 +170,7 @@ ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
  */
 const Planet* IG3MBuilder::getPlanet() {
   if (!_planet) {
-    _planet = Planet::createEarth();
+    _planet = EllipsoidalPlanet::createEarth();
   }
   return _planet;
 }

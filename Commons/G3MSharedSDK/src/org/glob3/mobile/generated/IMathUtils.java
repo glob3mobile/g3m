@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 29/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -29,6 +27,9 @@ package org.glob3.mobile.generated;
 //#define HALF_PI 1.57079632679489661923132169163975144
 
 //#define ISNAN(x) (x != x)
+
+//class Geodetic2D;
+//class Angle;
 
 public abstract class IMathUtils
 {
@@ -263,5 +264,29 @@ public abstract class IMathUtils
 
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
   public abstract double nextRandomDouble();
+
+  public final Geodetic2D greatCircleIntermediatePoint(Angle fromLat, Angle fromLon, Angle toLat, Angle toLon, double alpha)
+  {
+  
+    final double fromLatRad = fromLat._radians;
+    final double toLatRad = toLat._radians;
+    final double fromLonRad = fromLon._radians;
+    final double toLonRad = toLon._radians;
+  
+    final double cosFromLat = Math.cos(fromLatRad);
+    final double cosToLat = Math.cos(toLatRad);
+  
+    final double d = 2 * Math.asin(Math.sqrt(Math.pow((Math.sin((fromLatRad - toLatRad) / 2)), 2) + (cosFromLat * cosToLat * Math.pow(Math.sin((fromLonRad - toLonRad) / 2), 2))));
+  
+    final double A = Math.sin((1 - alpha) * d) / Math.sin(d);
+    final double B = Math.sin(alpha * d) / Math.sin(d);
+    final double x = (A * cosFromLat * Math.cos(fromLonRad)) + (B * cosToLat * Math.cos(toLonRad));
+    final double y = (A * cosFromLat * Math.sin(fromLonRad)) + (B * cosToLat * Math.sin(toLonRad));
+    final double z = (A * Math.sin(fromLatRad)) + (B * Math.sin(toLatRad));
+    final double latRad = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+    final double lngRad = Math.atan2(y, x);
+  
+    return new Geodetic2D(Angle.fromRadians(latRad), Angle.fromRadians(lngRad));
+  }
 
 }

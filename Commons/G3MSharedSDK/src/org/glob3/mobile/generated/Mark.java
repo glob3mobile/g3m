@@ -106,7 +106,7 @@ public class Mark implements SurfaceElevationListener
   {
     _glState = new GLState();
   
-    _billboardGLF = new BillboardGLFeature(getCartesianPosition(planet), IMathUtils.instance().round(_textureWidth), IMathUtils.instance().round(_textureHeight), _anchorU, _anchorV);
+    _billboardGLF = new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight, _anchorU, _anchorV);
   
     _glState.addGLFeature(_billboardGLF, false);
   
@@ -1025,11 +1025,6 @@ public class Mark implements SurfaceElevationListener
       _textureGLF.setTranslation(_translationTCX, _translationTCY);
       _textureGLF.setScale(_scalingTCX, _scalingTCY);
     }
-    else
-    {
-  
-    }
-  
   }
 
   public final void setMarkAnchor(float anchorU, float anchorV)

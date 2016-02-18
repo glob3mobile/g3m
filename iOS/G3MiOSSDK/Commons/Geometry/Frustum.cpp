@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #include "Frustum.hpp"
@@ -65,6 +64,7 @@ bool Frustum::touchesWithBox(const Box* that) const {
     return false;
   }
 
+#warning This implementation could gives false positives
 #ifdef C_CODE
   // create an array with the 8 corners of the box
   const Vector3D min = that->getLower();

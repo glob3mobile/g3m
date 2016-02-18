@@ -189,7 +189,7 @@ void Layer::setInfo(const std::vector<const Info*>& info) const {
 
 }
 
-void Layer::addInfo(const std::vector<const Info*>& info){
+void Layer::addInfo(const std::vector<const Info*>& info) {
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
                info.begin(),
@@ -200,7 +200,7 @@ void Layer::addInfo(const std::vector<const Info*>& info){
 #endif
 }
 
-void Layer::addInfo(const Info* info){
+void Layer::addInfo(const Info* info) {
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(), info);
 #endif

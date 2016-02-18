@@ -35,14 +35,15 @@ public class MapBoo
   {
     private final String _type;
     private final String _url;
-    private final String _attribution;
+    //const std::string _attribution;
     private final boolean _verbose;
 
-    private MBLayer(String type, String url, String attribution, boolean verbose)
+    private MBLayer(String type, String url, boolean verbose)
+//            const std::string& attribution,
+//    _attribution(attribution),
     {
        _type = type;
        _url = url;
-       _attribution = attribution;
        _verbose = verbose;
     }
 
@@ -65,9 +66,9 @@ public class MapBoo
     
       final String type = jsonObject.get("type").asString().value();
       final String url = jsonObject.getAsString("url", "");
-      final String attribution = jsonObject.getAsString("attribution", "");
+      // const std::string attribution  = jsonObject->getAsString("attribution", "");
     
-      return new MapBoo.MBLayer(type, url, attribution, verbose);
+      return new MapBoo.MBLayer(type, url, verbose); // attribution,
     }
 
     public void dispose()
@@ -362,10 +363,10 @@ public class MapBoo
         deleteSym = deleteSymbolizer;
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false); // haltOnError -  verbose -  readExpired
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER); // haltOnError -  verbose -  readExpired
     }
 
-    public final Mark createFeatureMark(GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
@@ -374,7 +375,7 @@ public class MapBoo
       return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     }
 
-    public final Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    public final Mark createClusterMark(VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
     {
       final Geodetic3D position = new Geodetic3D(cluster.getPosition()._latitude, cluster.getPosition()._longitude, 0);
     
@@ -393,16 +394,18 @@ public class MapBoo
 
   public static class MBSymbolizedDataset
   {
-    private final String _datasetID;
-    private final String _datasetName;
-    private final String _datasetAttribution;
+//    const std::string  _datasetID;
+//    const std::string  _datasetName;
+//    const std::string  _datasetAttribution;
     private final MBSymbology _symbology;
 
-    private MBSymbolizedDataset(String datasetID, String datasetName, String datasetAttribution, MBSymbology symbology)
+    private MBSymbolizedDataset(MBSymbology symbology) // const std::string& datasetID,
+                        // const std::string& datasetName,
+                        // const std::string& datasetAttribution,
+//    _datasetID(datasetID),
+//    _datasetName(datasetName),
+//    _datasetAttribution(datasetAttribution),
     {
-       _datasetID = datasetID;
-       _datasetName = datasetName;
-       _datasetAttribution = datasetAttribution;
        _symbology = symbology;
 
     }
@@ -431,10 +434,12 @@ public class MapBoo
     
       final String datasetID = jsonObject.get("datasetID").asString().value();
       final String datasetName = jsonObject.getAsString("datasetName", "");
-      final String datasetAttribution = jsonObject.getAsString("datasetAttribution", "");
+    //  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
       final MBSymbology symbology = MBSymbology.fromJSON(handler, datasetID, datasetName, jsonObject.get("symbology"));
     
-      return new MBSymbolizedDataset(datasetID, datasetName, datasetAttribution, symbology);
+      return new MBSymbolizedDataset(symbology); // datasetID,
+                                     // datasetName,
+                                     // datasetAttribution,
     }
 
     public final void apply(URL serverURL, VectorStreamingRenderer vectorStreamingRenderer, VectorStreamingRenderer.VectorSetSymbolizer symbolizer, boolean deleteSymbolizer)
@@ -461,14 +466,14 @@ public class MapBoo
       super.dispose();
     }
 
-    public final Mark createFeatureMark(GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
-      return _symbology.createFeatureMark(geometry);
+      return _symbology.createFeatureMark(node, geometry);
     }
 
-    public final Mark createClusterMark(VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    public final Mark createClusterMark(VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
     {
-      return _symbology.createClusterMark(cluster, featuresCount);
+      return _symbology.createClusterMark(node, cluster, featuresCount);
     }
 
   }
@@ -480,19 +485,20 @@ public class MapBoo
     private final String _name;
     private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
     private java.util.ArrayList<MapBoo.MBSymbolizedDataset> _symbolizedDatasets = new java.util.ArrayList<MapBoo.MBSymbolizedDataset>();
-    private final int _timestamp;
+//    const int                                 _timestamp;
     private final boolean _verbose;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    MBMap(MBMap that);
 
-    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBSymbolizedDataset> symbolizedDatasets, int timestamp, boolean verbose)
+    private MBMap(String id, String name, java.util.ArrayList<MapBoo.MBLayer> layers, java.util.ArrayList<MapBoo.MBSymbolizedDataset> symbolizedDatasets, boolean verbose)
+          // int                                        timestamp,
+    // _timestamp(timestamp),
     {
        _id = id;
        _name = name;
        _layers = layers;
        _symbolizedDatasets = symbolizedDatasets;
-       _timestamp = timestamp;
        _verbose = verbose;
     }
 
@@ -554,9 +560,9 @@ public class MapBoo
       final String name = jsonObject.get("name").asString().value();
       java.util.ArrayList<MapBoo.MBLayer> layers = parseLayers(jsonObject.get("layerSet").asArray(), verbose);
       java.util.ArrayList<MapBoo.MBSymbolizedDataset> symDatasets = parseSymbolizedDatasets(handler, jsonObject.get("symbolizedDatasets").asArray(), verbose);
-      final int timestamp = (int) jsonObject.get("timestamp").asNumber().value();
+      // const int                                 timestamp   = (int) jsonObject->get("timestamp")->asNumber()->value();
     
-      return new MBMap(id, name, layers, symDatasets, timestamp, verbose);
+      return new MBMap(id, name, layers, symDatasets, verbose); // timestamp,
     }
 
     public void dispose()

@@ -25,6 +25,7 @@ class IThreadUtils;
 class IByteBuffer;
 class Sector;
 class Geodetic2D;
+class JSONBaseObject;
 class JSONArray;
 class JSONObject;
 class Mark;
@@ -38,6 +39,11 @@ class GEOObject;
 
 class VectorStreamingRenderer : public DefaultRenderer {
 public:
+
+  enum Format {
+    SERVER,
+    PLAIN_FILES
+  };
 
   class VectorSet;
   class Node;
@@ -91,19 +97,16 @@ public:
     Node*               _node;
     bool                _verbose;
     IByteBuffer*        _buffer;
-    const IThreadUtils* _threadUtils;
 
     std::vector<Node*>* _children;
 
   public:
-    ChildrenParserAsyncTask(Node*               node,
-                            bool                verbose,
-                            IByteBuffer*        buffer,
-                            const IThreadUtils* threadUtils) :
+    ChildrenParserAsyncTask(Node*        node,
+                            bool         verbose,
+                            IByteBuffer* buffer) :
     _node(node),
     _verbose(verbose),
     _buffer(buffer),
-    _threadUtils(threadUtils),
     _children(NULL)
     {
       _node->_retain();
@@ -164,25 +167,25 @@ public:
     Node*               _node;
     bool                _verbose;
     IByteBuffer*        _buffer;
-    const IThreadUtils* _threadUtils;
 
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
+    std::vector<Node*>*    _children;
 
   private:
     std::vector<Cluster*>* parseClusters(const JSONArray* clustersJson);
+    std::vector<Node*>*    parseChildren(const JSONBaseObject* jsonBaseObject);
 
   public:
-    FeaturesParserAsyncTask(Node*               node,
-                            bool                verbose,
-                            IByteBuffer*        buffer,
-                            const IThreadUtils* threadUtils) :
+    FeaturesParserAsyncTask(Node*        node,
+                            bool         verbose,
+                            IByteBuffer* buffer) :
     _node(node),
     _verbose(verbose),
     _buffer(buffer),
-    _threadUtils(threadUtils),
     _clusters(NULL),
-    _features(NULL)
+    _features(NULL),
+    _children(NULL)
     {
       _node->_retain();
     }
@@ -322,6 +325,8 @@ public:
 
     void createClusterMarks();
 
+    void setParent(Node* parent);
+
   protected:
     ~Node();
 
@@ -334,36 +339,8 @@ public:
          const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,
-         const bool                      verbose) :
-    _vectorSet(vectorSet),
-    _parent(parent),
-    _id(id),
-    _nodeSector(nodeSector),
-    _minimumSector(minimumSector),
-    _clustersCount(clustersCount),
-    _featuresCount(featuresCount),
-    _childrenIDs(childrenIDs),
-    _verbose(verbose),
-    _wasVisible(false),
-    _loadedFeatures(false),
-    _loadingFeatures(false),
-    _children(NULL),
-    _childrenSize(0),
-    _loadingChildren(false),
-    _wasBigEnough(false),
-    _boundingVolume(NULL),
-    _featuresRequestID(-1),
-    _childrenRequestID(-1),
-    _downloader(NULL),
-    _clusters(NULL),
-    _features(NULL),
-    _clusterMarksCount(0),
-    _featureMarksCount(0)
-    {
-      if (_parent != NULL) {
-        _parent->_retain();
-      }
-    }
+         std::vector<Node*>*             children,
+         const bool                      verbose);
 
     const VectorSet* getVectorSet() const {
       return _vectorSet;
@@ -392,14 +369,13 @@ public:
 
     void parsedFeatures(std::vector<Cluster*>* clusters,
                         GEOObject*             features,
-                        const IThreadUtils*    threadUtils);
+                        std::vector<Node*>*    children);
 
     void errorDownloadingChildren() {
       // do nothing by now
     }
 
-    void parsedChildren(std::vector<Node*>* children,
-                        const IThreadUtils* threadUtils);
+    void parsedChildren(std::vector<Node*>* children);
 
   };
 
@@ -482,9 +458,11 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createFeatureMark(const GEO2DPointGeometry* geometry) const = 0;
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+                                    const GEO2DPointGeometry* geometry) const = 0;
 
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::Cluster* cluster,
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+                                    const VectorStreamingRenderer::Cluster* cluster,
                                     long long featuresCount) const = 0;
 
   };
@@ -512,6 +490,7 @@ public:
     const bool                 _readExpired;
     const bool                 _verbose;
     const bool                 _haltOnError;
+    const Format               _format;
 
     const std::string _properties;
 
@@ -530,6 +509,10 @@ public:
 
     long long _lastRenderedCount;
 
+    const URL getMetadataURL() const;
+
+    const std::string toNodesDirectories(const std::string& nodeID) const;
+
   public:
 
     VectorSet(VectorStreamingRenderer*   renderer,
@@ -542,7 +525,8 @@ public:
               const TimeInterval&        timeToCache,
               bool                       readExpired,
               bool                       verbose,
-              bool                       haltOnError) :
+              bool                       haltOnError,
+              const Format               format) :
     _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
@@ -554,6 +538,7 @@ public:
     _readExpired(readExpired),
     _verbose(verbose),
     _haltOnError(haltOnError),
+    _format(format),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
@@ -567,9 +552,10 @@ public:
 
     ~VectorSet();
 
-    const URL getServerURL() const {
-      return _serverURL;
-    }
+    const URL getNodeFeaturesURL(const std::string& nodeID) const;
+
+    const URL getNodeChildrenURL(const std::string& nodeID,
+                                 const std::vector<std::string>& childrenIDs) const;
 
     const std::string getName() const {
       return _name;
@@ -585,10 +571,6 @@ public:
 
     bool getReadExpired() const {
       return _readExpired;
-    }
-
-    const std::string getProperties() const {
-      return _properties;
     }
 
     void initialize(const G3MContext* context);
@@ -621,6 +603,8 @@ public:
     }
 
   };
+
+
 
 
 private:
@@ -663,7 +647,8 @@ public:
                     const TimeInterval&        timeToCache,
                     bool                       readExpired,
                     bool                       verbose,
-                    bool                       haltOnError);
+                    bool                       haltOnError,
+                    const Format               format);
   
   void removeAllVectorSets();
   

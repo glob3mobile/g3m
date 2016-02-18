@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IMathUtils
@@ -36,6 +35,9 @@
 #define HALF_PI  1.57079632679489661923132169163975144
 
 #define ISNAN(x) (x != x)
+
+class Geodetic2D;
+class Angle;
 
 class IMathUtils {
 private:
@@ -262,6 +264,12 @@ public:
 
   /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
   virtual double nextRandomDouble() const = 0;
+
+  Geodetic2D greatCircleIntermediatePoint(const Angle& fromLat,
+                                          const Angle& fromLon,
+                                          const Angle& toLat,
+                                          const Angle& toLon,
+                                          const double alpha) const;
 
 };
 
