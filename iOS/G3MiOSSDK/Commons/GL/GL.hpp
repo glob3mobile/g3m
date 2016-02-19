@@ -3,7 +3,6 @@
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 14/06/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GL
@@ -18,19 +17,17 @@
 #include "IFloatBuffer.hpp"
 #include "GLConstants.hpp"
 #include "GLGlobalState.hpp"
+#include "IGLTextureId.hpp"
+#include "GPUProgram.hpp"
 
 #include <list>
 
 class IGLProgramId;
 class IGLUniformID;
-
-#include "IGLTextureId.hpp"
-
 class GPUProgramManager;
 class GPUProgramState;
 class GLState;
 
-#include "GPUProgram.hpp"
 
 class GL {
 private:

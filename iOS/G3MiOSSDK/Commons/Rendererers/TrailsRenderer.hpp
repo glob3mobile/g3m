@@ -164,7 +164,7 @@ private:
 
   GLState* _glState;
 
-  void updateGLState(const G3MRenderContext* rc);
+  void updateGLState(const Camera* camera);
   ProjectionGLFeature* _projection;
   ModelGLFeature*      _model;
 

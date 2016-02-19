@@ -3,14 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 20/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
 
 #include "BusyMeshRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "IMathUtils.hpp"

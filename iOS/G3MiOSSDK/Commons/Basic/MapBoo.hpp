@@ -33,16 +33,16 @@ public:
   private:
     const std::string _type;
     const std::string _url;
-    const std::string _attribution;
+    //const std::string _attribution;
     const bool        _verbose;
 
     MBLayer(const std::string& type,
             const std::string& url,
-            const std::string& attribution,
+//            const std::string& attribution,
             const bool         verbose) :
     _type(type),
     _url(url),
-    _attribution(attribution),
+//    _attribution(attribution),
     _verbose(verbose)
     {
     }
@@ -203,18 +203,18 @@ public:
 
   class MBSymbolizedDataset {
   private:
-    const std::string  _datasetID;
-    const std::string  _datasetName;
-    const std::string  _datasetAttribution;
+//    const std::string  _datasetID;
+//    const std::string  _datasetName;
+//    const std::string  _datasetAttribution;
     const MBSymbology* _symbology;
 
-    MBSymbolizedDataset(const std::string& datasetID,
-                        const std::string& datasetName,
-                        const std::string& datasetAttribution,
+    MBSymbolizedDataset(// const std::string& datasetID,
+                        // const std::string& datasetName,
+                        // const std::string& datasetAttribution,
                         const MBSymbology* symbology) :
-    _datasetID(datasetID),
-    _datasetName(datasetName),
-    _datasetAttribution(datasetAttribution),
+//    _datasetID(datasetID),
+//    _datasetName(datasetName),
+//    _datasetAttribution(datasetAttribution),
     _symbology(symbology)
     {
 
@@ -265,7 +265,7 @@ public:
     const std::string                         _name;
     std::vector<MapBoo::MBLayer*>             _layers;
     std::vector<MapBoo::MBSymbolizedDataset*> _symbolizedDatasets;
-    const int                                 _timestamp;
+//    const int                                 _timestamp;
     const bool                                _verbose;
 
     MBMap(const MBMap& that);
@@ -274,13 +274,13 @@ public:
           const std::string&                         name,
           std::vector<MapBoo::MBLayer*>&             layers,
           std::vector<MapBoo::MBSymbolizedDataset*>& symbolizedDatasets,
-          int                                        timestamp,
+          // int                                        timestamp,
           bool                                       verbose) :
     _id(id),
     _name(name),
     _layers(layers),
     _symbolizedDatasets(symbolizedDatasets),
-    _timestamp(timestamp),
+    // _timestamp(timestamp),
     _verbose(verbose)
     {
     }

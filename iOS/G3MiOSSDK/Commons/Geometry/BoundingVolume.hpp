@@ -3,14 +3,12 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 16/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_BoundingVolume
 #define G3MiOSSDK_BoundingVolume
 
-#include "Context.hpp"
-//#include "IMathUtils.hpp"
+#include "G3MRenderContext.hpp"
 #include "Vector2I.hpp"
 
 class Vector2D;

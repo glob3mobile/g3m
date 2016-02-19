@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_PlanetTileTessellator
@@ -42,7 +41,7 @@ private:
   private Sector _renderedSector;
 #endif
 
-  Vector2I calculateResolution(const Vector2I& resolution,
+  Vector2I calculateResolution(const PlanetRenderContext* prc,
                                const Tile* tile,
                                const Sector& renderedSector) const;
 
@@ -137,22 +136,19 @@ public:
 
   ~PlanetTileTessellator();
 
-  Vector2I getTileMeshResolution(const Planet* planet,
-                                 const Vector2I& resolution,
-                                 const Tile* tile,
-                                 bool debug) const;
+  Vector2I getTileMeshResolution(const G3MRenderContext* rc,
+                                 const PlanetRenderContext* prc,
+                                 const Tile* tile) const;
 
 
-  Mesh* createTileMesh(const Planet* planet,
-                       const Vector2I& resolution,
+  Mesh* createTileMesh(const G3MRenderContext* rc,
+                       const PlanetRenderContext* prc,
                        Tile* tile,
                        const ElevationData* elevationData,
-                       float verticalExaggeration,
-                       bool debug,
                        TileTessellatorMeshData& data) const;
 
-  Mesh* createTileDebugMesh(const Planet* planet,
-                            const Vector2I& resolution,
+  Mesh* createTileDebugMesh(const G3MRenderContext* rc,
+                            const PlanetRenderContext* prc,
                             const Tile* tile) const;
 
   IFloatBuffer* createTextCoords(const Vector2I& resolution,

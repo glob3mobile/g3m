@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Jose Miguel SN on 20/4/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #ifndef __G3MApp__G3MAnimatedMarksDemoScene__

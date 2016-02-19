@@ -14,7 +14,7 @@
 class BasicShadersGL2: public GPUProgramFactory{
 
 public:
-  BasicShadersGL2(){
+  BasicShadersGL2() {
 #ifdef C_CODE
     std::string emptyString = "";
 #endif

@@ -3,13 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "CameraRenderer.hpp"
 #include "Camera.hpp"
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;

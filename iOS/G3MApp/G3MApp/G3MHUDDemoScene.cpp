@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 12/2/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MHUDDemoScene.hpp"
@@ -16,7 +15,7 @@
 #include <G3MiOSSDK/Color.hpp>
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/GFont.hpp>
-#include <G3MiOSSDK/Context.hpp>
+#include <G3MiOSSDK/G3MContext.hpp>
 #include <G3MiOSSDK/HUDQuadWidget.hpp>
 #include <G3MiOSSDK/HUDRenderer.hpp>
 #include <G3MiOSSDK/HUDRelativePosition.hpp>

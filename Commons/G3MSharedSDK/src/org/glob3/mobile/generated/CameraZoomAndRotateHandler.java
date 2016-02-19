@@ -51,16 +51,16 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     Vector3D w = _centralGlobePoint.asVector3D().sub(_cameraPosition);
     double dist = w.length();
   
-     // don't allow much closer
-     if (dist *factor<MIN_CAMERA_HEIGHT && factor<0.999)
+    // don't allow much closer
+    if (dist *factor<MIN_CAMERA_HEIGHT && factor<0.999)
       return;
   
-     // don't allow much further away
+    // don't allow much further away
     double R = _centralGlobePoint.length();
-     if (dist *factor>11 *R && factor>1.001)
+    if (dist *factor>11 *R && factor>1.001)
       return;
   
-     // make zoom and rotation
+    // make zoom and rotation
     camera.setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
   
     // make rotation
@@ -160,7 +160,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     // double dragging
     _initialPixel0 = new MutableVector2F(touchEvent.getTouch(0).getPos());
     _initialPixel1 = new MutableVector2F(touchEvent.getTouch(1).getPos());
-    }
+  }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
@@ -188,9 +188,9 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         Vector3D intersection = planet.closestIntersection(_cameraPosition.asVector3D(), _cameraCenter.sub(_cameraPosition).asVector3D());
         if (!intersection.isNan())
         {
-  //        _centralGlobePoint = intersection.asMutableVector3D();
+          //        _centralGlobePoint = intersection.asMutableVector3D();
           _centralGlobePoint.copyFrom(intersection);
-  //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+          //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
           _centralGlobeNormal.copyFrom(planet.geodeticSurfaceNormal(_centralGlobePoint));
           _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
           _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);

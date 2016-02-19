@@ -21,7 +21,7 @@
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
 #include "LayerCondition.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "RenderState.hpp"
 #include "Info.hpp"
 

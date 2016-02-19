@@ -220,7 +220,7 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
     prov->_release();
   }
 
-  if (modelViewHolderBuilder.size() > 0){
+  if (modelViewHolderBuilder.size() > 0) {
     Matrix44DProvider* modelViewProvider = modelViewHolderBuilder.create();
 
     vs.addUniformValue(MODELVIEW,

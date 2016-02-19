@@ -9,7 +9,7 @@
 #include "SimpleTextureMapping.hpp"
 
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"

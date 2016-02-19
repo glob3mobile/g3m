@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 22/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IndexedMesh
@@ -42,7 +41,7 @@ public:
 
   ~IndexedMesh();
   
-  const IShortBuffer* getIndices() const{
+  const IShortBuffer* getIndices() const {
     return _indices;
   }
 };

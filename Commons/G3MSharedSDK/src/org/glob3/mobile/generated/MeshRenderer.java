@@ -43,10 +43,8 @@ public class MeshRenderer extends DefaultRenderer
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
   private GLState _glState;
-  private void updateGLState(G3MRenderContext rc)
+  private void updateGLState(Camera camera)
   {
-    final Camera camera = rc.getCurrentCamera();
-  
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
@@ -177,19 +175,25 @@ public class MeshRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
-    updateGLState(rc);
-  
-    _glState.setParent(glState);
-  
     final int meshesCount = _meshes.size();
-    for (int i = 0; i < meshesCount; i++)
+    if (meshesCount > 0)
     {
-      Mesh mesh = _meshes.get(i);
-      final BoundingVolume boundingVolume = mesh.getBoundingVolume();
-      if (boundingVolume != null && boundingVolume.touchesFrustum(frustum))
+      final Camera camera = rc.getCurrentCamera();
+  
+      updateGLState(camera);
+  
+      final Frustum frustum = camera.getFrustumInModelCoordinates();
+  
+      _glState.setParent(glState);
+  
+      for (int i = 0; i < meshesCount; i++)
       {
-        mesh.render(rc, _glState);
+        Mesh mesh = _meshes.get(i);
+        final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+        if ((boundingVolume != null) && boundingVolume.touchesFrustum(frustum))
+        {
+          mesh.render(rc, _glState);
+        }
       }
     }
   }
