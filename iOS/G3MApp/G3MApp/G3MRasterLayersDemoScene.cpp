@@ -28,6 +28,7 @@
 #include <G3MiOSSDK/Frustum.hpp>
 #include <G3MiOSSDK/Sphere.hpp>
 #include <G3MiOSSDK/OrientedBox.hpp>
+#include <G3MiOSSDK/Box.hpp>
 
 
 
@@ -209,6 +210,8 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   // creating oriented boxes
   Vector3D lower(6383750+1000, -5000-1000, 680000-1000);
   OrientedBox obb(lower, Vector3D(1000,0,0), Vector3D(0,1000,0), Vector3D(0,0,1000));
+  Box box(lower,lower.add(Vector3D(1000,2000,3000)));
+  meshRenderer->addMesh(box.createMesh(Color::fromRGBA(1, 0, 0, 1)));
   
   /*
   // creating spheres

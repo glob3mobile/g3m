@@ -15,6 +15,15 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
 
+Sphere::~Sphere() {
+  delete _mesh;
+  
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+};
+
+
 Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
   if (points.size() < 2) {
     return NULL;

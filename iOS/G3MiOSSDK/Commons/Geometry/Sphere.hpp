@@ -30,6 +30,7 @@ public:
   const double   _radius;
   const double   _radiusSquared;
 
+  ~Sphere();
 
   Sphere(const Vector3D& center,
          double radius):
