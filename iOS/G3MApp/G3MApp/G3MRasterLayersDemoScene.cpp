@@ -27,6 +27,7 @@
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/Frustum.hpp>
 #include <G3MiOSSDK/Sphere.hpp>
+#include <G3MiOSSDK/OrientedBox.hpp>
 
 
 
@@ -205,6 +206,11 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   MeshRenderer* meshRenderer = getModel()->getMeshRenderer();
   meshRenderer->addMesh(frustum->createWireFrameMesh());
   
+  // creating oriented boxes
+  Vector3D lower(6383750+1000, -5000-1000, 680000-1000);
+  OrientedBox obb(lower, Vector3D(1000,0,0), Vector3D(0,1000,0), Vector3D(0,0,1000));
+  
+  /*
   // creating spheres
   {
     // outside, close to a frustum corner
@@ -230,6 +236,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }*/
+  /*
   {
     // inside the frustum center
     Sphere sphere(Vector3D(6380000, 0, 686000), 800);
@@ -241,7 +248,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     Sphere sphere(Vector3D(6375000, 0, 700000), 8500);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
-  }
+  }*/
 
   
   // locating camera

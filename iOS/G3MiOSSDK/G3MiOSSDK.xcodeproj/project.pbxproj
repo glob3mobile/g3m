@@ -753,6 +753,8 @@
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 		FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */; };
+		FBB7C63D1C77A8C900AC1DE1 /* OrientedBox.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C63C1C77A2BB00AC1DE1 /* OrientedBox.hpp */; };
+		FBB7C63F1C77AC8100AC1DE1 /* OrientedBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBB7C63E1C77AC8100AC1DE1 /* OrientedBox.cpp */; };
 		FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */; };
 		FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC23099179730FF009343FC /* CameraEffects.cpp */; };
 /* End PBXBuildFile section */
@@ -764,6 +766,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FBB7C63D1C77A8C900AC1DE1 /* OrientedBox.hpp in CopyFiles */,
 				FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
@@ -1949,6 +1952,8 @@
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StraightLine.hpp; path = Commons/Geometry/StraightLine.hpp; sourceTree = "<group>"; };
+		FBB7C63C1C77A2BB00AC1DE1 /* OrientedBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrientedBox.hpp; path = Commons/Geometry/OrientedBox.hpp; sourceTree = "<group>"; };
+		FBB7C63E1C77AC8100AC1DE1 /* OrientedBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrientedBox.cpp; path = Commons/Geometry/OrientedBox.cpp; sourceTree = "<group>"; };
 		FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = FlatPlanet.hpp; path = Commons/Geometry/FlatPlanet.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
@@ -2284,6 +2289,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				FBB7C63E1C77AC8100AC1DE1 /* OrientedBox.cpp */,
+				FBB7C63C1C77A2BB00AC1DE1 /* OrientedBox.hpp */,
 				FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */,
 				D805EC081C64CF4C000F8409 /* StraightLine.cpp */,
 				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
@@ -3165,6 +3172,7 @@
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,
 				CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */,
 				CF2412AB191FD87C00B796FB /* GEO2DCoordinatesData.cpp in Sources */,
+				FBB7C63F1C77AC8100AC1DE1 /* OrientedBox.cpp in Sources */,
 				CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */,
 				D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */,
 				CFF9643D19082C570044F06D /* ChessboardTileImageProvider.cpp in Sources */,
