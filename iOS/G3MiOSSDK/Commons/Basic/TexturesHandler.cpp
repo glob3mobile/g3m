@@ -3,14 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 19/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "TexturesHandler.hpp"
 
 
 #include "IImage.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IStringBuilder.hpp"
 #include "GL.hpp"
 #include "TextureIDReference.hpp"

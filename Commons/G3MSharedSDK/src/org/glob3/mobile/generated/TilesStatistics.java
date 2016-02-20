@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,25 +11,22 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
-//class Tile;
-//class TileTessellator;
+
+//class ITileVisitor;
 //class LayerSet;
-//class VisibleSectorListenerEntry;
+//class TilesRenderParameters;
+//class TileLODTester;
+//class TileVisibilityTester;
+//class ITimer;
 //class VisibleSectorListener;
-//class ElevationDataProvider;
+//class VisibleSectorListenerEntry;
+//class Layer;
 //class LayerTilesRenderParameters;
+//class Layer;
 //class TerrainTouchListener;
-//class ChangedInfoListener;
-//class TileRenderingListener;
-
-
-
-
-//class EllipsoidShape;
 
 
 public class TilesStatistics
@@ -111,12 +107,10 @@ public class TilesStatistics
 
   public final void computeRenderedSector(Tile tile)
   {
-    final Sector sector = tile._sector;
-
-    final double lowerLatitudeDegrees = sector._lower._latitude._degrees;
-    final double lowerLongitudeDegrees = sector._lower._longitude._degrees;
-    final double upperLatitudeDegrees = sector._upper._latitude._degrees;
-    final double upperLongitudeDegrees = sector._upper._longitude._degrees;
+    final double lowerLatitudeDegrees = tile._sector._lower._latitude._degrees;
+    final double lowerLongitudeDegrees = tile._sector._lower._longitude._degrees;
+    final double upperLatitudeDegrees = tile._sector._upper._latitude._degrees;
+    final double upperLongitudeDegrees = tile._sector._upper._longitude._degrees;
 
     if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees)
     {

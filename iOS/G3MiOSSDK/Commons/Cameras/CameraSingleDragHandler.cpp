@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -14,6 +13,8 @@
 #include "GL.hpp"
 #include "IDeviceInfo.hpp"
 #include "IFactory.hpp"
+#include "G3MEventContext.hpp"
+
 
 bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 

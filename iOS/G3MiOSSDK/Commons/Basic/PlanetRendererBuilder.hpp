@@ -9,15 +9,23 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-class LayerSet;
-class GEOVectorLayer;
-class IImageBuilder;
-
+#include <vector>
 #include "TilesRenderParameters.hpp"
-#include "PlanetRenderer.hpp"
-#include "DefaultChessCanvasImageBuilder.hpp"
-#include "DownloaderImageBuilder.hpp"
+#include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
 
+class TileTessellator;
+class TileTexturizer;
+class GEOVectorLayer;
+class TileLODTester;
+class TileVisibilityTester;
+class LayerSet;
+class VisibleSectorListener;
+class ElevationDataProvider;
+class Sector;
+class ChangedRendererInfoListener;
+class IImageBuilder;
+class PlanetRenderer;
 
 
 class PlanetRendererBuilder {
@@ -26,12 +34,13 @@ private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
+  TileLODTester* _tileLODTester;
+  TileVisibilityTester* _tileVisibilityTester;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
   bool _showStatistics;
   bool _renderDebug;
-  bool _useTilesSplitBudget;
   bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
   Quality _quality;
@@ -49,7 +58,6 @@ private:
   TilesRenderParameters* getParameters();
   bool getShowStatistics();
   bool getRenderDebug();
-  bool getUseTilesSplitBudget();
   bool getForceFirstLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
@@ -73,17 +81,20 @@ private:
 
   bool getLogTilesPetitions();
 
-  TileRenderingListener* _tileRenderingListener;
-  
   ChangedRendererInfoListener* _changedInfoListener;
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
   
-  IImageBuilder* _defaultTileBackGroundImage = NULL;
+  IImageBuilder* _defaultTileBackgroundImage = NULL;
   
-  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
+  IImageBuilder* getDefaultTileBackgroundImageBuilder() const;
+  
+  TileLODTester* createDefaultTileLODTester() const;
+
+  TileVisibilityTester* createDefaultTileVisibilityTester() const;
+
 
 public:
   PlanetRendererBuilder();
@@ -95,7 +106,6 @@ public:
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
-  void setUseTilesSplitBudget(const bool useTilesSplitBudget);
   void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
@@ -119,10 +129,6 @@ public:
   void setRenderTileMeshes(bool renderTileMeshes);
 
   void setLogTilesPetitions(bool logTilesPetitions);
-
-  void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
-
-  TileRenderingListener* getTileRenderingListener();
   
   ChangedRendererInfoListener* getChangedRendererInfoListener();
   
@@ -130,7 +136,14 @@ public:
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
   
-  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
+  void setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage);
+  
+  void setTileLODTester(TileLODTester* tlt);
+  
+  TileLODTester* getTileLODTester();
+
+  TileVisibilityTester* getTileVisibilityTester();
+
 };
 
 #endif

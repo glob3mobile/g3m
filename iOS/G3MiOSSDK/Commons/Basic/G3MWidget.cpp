@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "G3MWidget.hpp"
@@ -14,7 +13,7 @@
 #include "TexturesHandler.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
-#include "Context.hpp"
+#include "G3MEventContext.hpp"
 #include "ICameraConstrainer.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
@@ -851,7 +850,7 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 }
 
 //void G3MWidget::notifyChangedInfo() const {
-//  if(_hudRenderer != NULL){
+//  if(_hudRenderer != NULL) {
 //    const RenderState_Type renderStateType = _rendererState->_type;
 //    switch (renderStateType) {
 //      case RENDER_READY:
@@ -870,7 +869,7 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 
 void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
                                     const std::vector<const Info*>& info) {
-  if(_infoDisplay != NULL){
+  if(_infoDisplay != NULL) {
     _infoDisplay->changedInfo(info);
   }
   //  else {

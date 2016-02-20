@@ -24,7 +24,7 @@ public class GEONamesFilter {
       System.out.println("-------------------------\n");
 
 
-      final GEONamesParser parser = (GEONamesParser) GEONamesParser.INSTANCE;
+      final GEONamesParser parser = GEONamesParser.INSTANCE;
       final String sourceFileName = "test-files/geonames/allCountries.txt";
       final String targetFileName = "test-files/GEONames-PopulatedPlaces.txt";
 

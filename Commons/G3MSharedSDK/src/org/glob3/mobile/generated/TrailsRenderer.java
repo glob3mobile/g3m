@@ -6,10 +6,8 @@ public class TrailsRenderer extends DefaultRenderer
 
   private GLState _glState;
 
-  private void updateGLState(G3MRenderContext rc)
+  private void updateGLState(Camera camera)
   {
-  
-    final Camera camera = rc.getCurrentCamera();
     if (_projection == null)
     {
       _projection = new ProjectionGLFeature(camera.getProjectionMatrix44D());
@@ -117,14 +115,20 @@ public class TrailsRenderer extends DefaultRenderer
   public final void render(G3MRenderContext rc, GLState glState)
   {
     final int trailsCount = _trails.size();
-    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
-    updateGLState(rc);
-    for (int i = 0; i < trailsCount; i++)
+    if (trailsCount > 0)
     {
-      Trail trail = _trails.get(i);
-      if (trail != null)
+      final Camera camera = rc.getCurrentCamera();
+  
+      updateGLState(camera);
+  
+      final Frustum frustum = camera.getFrustumInModelCoordinates();
+      for (int i = 0; i < trailsCount; i++)
       {
-        trail.render(rc, frustum, _glState);
+        Trail trail = _trails.get(i);
+        if (trail != null)
+        {
+          trail.render(rc, frustum, _glState);
+        }
       }
     }
   }

@@ -8,7 +8,7 @@
 
 #include "HUDQuadWidget.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"

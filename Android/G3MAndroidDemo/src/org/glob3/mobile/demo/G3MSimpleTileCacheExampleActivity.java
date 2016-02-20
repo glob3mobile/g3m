@@ -9,6 +9,7 @@ import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SphericalPlanet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
@@ -24,10 +25,10 @@ import android.widget.LinearLayout;
 
 
 public class G3MSimpleTileCacheExampleActivity
-         extends
-            Activity
-         implements
-            TileVisitorListener {
+   extends
+      Activity
+   implements
+      TileVisitorListener {
 
    private G3MWidget_Android _widgetAndroid = null;
 
@@ -40,7 +41,7 @@ public class G3MSimpleTileCacheExampleActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
       builder.setLogFPS(true);
 
-      final Planet planet = Planet.createSphericalEarth();
+      final Planet planet = SphericalPlanet.createEarth();
       builder.setPlanet(planet);
 
       final PlanetRendererBuilder planetRendererBuilder = builder.getPlanetRendererBuilder();
@@ -79,10 +80,10 @@ public class G3MSimpleTileCacheExampleActivity
       _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
       // Sector specified cached at the indicated levels
 
-      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc,
-               new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)),
-                        new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))),
-               2, 14);
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(
+               tvc,
+               new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)), new Geodetic2D(
+                        Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
 
 
       _widgetAndroid.getG3MContext().getLogger().logInfo("Precaching has been completed");

@@ -82,3 +82,11 @@ tools/point-cloud-octree/bin/
 .settings
 
 tools/externals/poly2tri-java/bin/
+
+# Android-Studio
+*.iml
+*.idea
+
+# Gradle
+build
+*/build

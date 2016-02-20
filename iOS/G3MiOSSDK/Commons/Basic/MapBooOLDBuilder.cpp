@@ -52,9 +52,11 @@
 #include "ICanvas.hpp"
 #include "ICanvasUtils.hpp"
 #include "DownloaderImageBuilder.hpp"
-
+#include "SphericalPlanet.hpp"
+#include "LayerSet.hpp"
 #include "LevelTileCondition.hpp"
 #include "Info.hpp"
+
 
 const std::string MapBooOLD_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -222,7 +224,9 @@ _lastApplicationCurrentSceneId("-1"),
 _context(NULL),
 _webSocket(NULL),
 _marksRenderer(NULL),
-_hasParsedApplication(false)
+_hasParsedApplication(false),
+_tileLODTester(NULL),
+_tileVisibilityTester(NULL)
 {
   _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
 }
@@ -502,13 +506,11 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
 
   const bool renderDebug = false;
-  const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
   const Quality quality = QUALITY_LOW;
 
   const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
-                                                                      useTilesSplitBudget,
                                                                       forceFirstLevelTilesRenderOnStart,
                                                                       incrementalTileQuality,
                                                                       quality);
@@ -521,8 +523,6 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   const bool renderTileMeshes = true;
 
   const bool logTilesPetitions = false;
-
-  TileRenderingListener* tileRenderingListener = NULL;
   
   ChangedRendererInfoListener* changedRendererInfoListener = NULL;
 
@@ -540,9 +540,10 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,
-                                              tileRenderingListener,
                                               changedRendererInfoListener,
-                                              touchEventTypeOfTerrainTouchListener);
+                                              touchEventTypeOfTerrainTouchListener,
+                                              getTileLODTester(),
+                                              getTileVisibilityTester());
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooOLDBuilder_TerrainTouchListener(this));
@@ -552,8 +553,7 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
 }
 
 const Planet* MapBooOLDBuilder::createPlanet() {
-  //return Planet::createEarth();
-  return Planet::createSphericalEarth();
+  return SphericalPlanet::createEarth();
 }
 
 std::vector<ICameraConstrainer*>* MapBooOLDBuilder::createCameraConstraints(const Planet* planet,
@@ -2279,4 +2279,30 @@ RenderState MapBooOLD_ErrorRenderer::getRenderState(const G3MRenderContext* rc) 
     return RenderState::error(_errors);
   }
   return RenderState::ready();
+}
+
+void MapBooOLDBuilder::setTileLODTester(TileLODTester* tlt) {
+  _tileLODTester = tlt;
+}
+
+TileLODTester* MapBooOLDBuilder::createDefaultTileLODTester() const {
+  return NULL;
+}
+
+TileLODTester* MapBooOLDBuilder::getTileLODTester() {
+  if (_tileLODTester == NULL) {
+    _tileLODTester = createDefaultTileLODTester();
+  }
+  return _tileLODTester;
+}
+
+TileVisibilityTester* MapBooOLDBuilder::createDefaultTileVisibilityTester() const {
+  return NULL;
+}
+
+TileVisibilityTester* MapBooOLDBuilder::getTileVisibilityTester() {
+  if (_tileVisibilityTester == NULL) {
+    _tileVisibilityTester = createDefaultTileVisibilityTester();
+  }
+  return _tileVisibilityTester;
 }

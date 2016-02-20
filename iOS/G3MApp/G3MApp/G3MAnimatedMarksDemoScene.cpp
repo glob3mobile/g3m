@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Jose Miguel SN on 20/4/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #include <G3MiOSSDK/G3MWidget.hpp>
@@ -33,7 +32,7 @@ class RescaleMarkTask: public PeriodicalTask{
     float _delta;
   public:
     
-    ~RescaleMarkTaskGTask(){}
+    ~RescaleMarkTaskGTask() {}
     
     RescaleMarkTaskGTask(Mark* mark):
     _mark(mark), _size(40), _delta(1)
@@ -41,8 +40,8 @@ class RescaleMarkTask: public PeriodicalTask{
     }
     
     
-    virtual void run(const G3MContext* context){
-      if (_size < 30 || _size > 75){
+    virtual void run(const G3MContext* context) {
+      if (_size < 30 || _size > 75) {
         _delta = -_delta;
       }
       

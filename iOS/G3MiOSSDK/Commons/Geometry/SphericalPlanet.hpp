@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_SphericalPlanet
@@ -41,6 +40,7 @@ private:
   
 
 public:
+  static const Planet* createEarth();
 
   SphericalPlanet(const Sphere& sphere);
 
@@ -48,7 +48,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   Vector3D getRadii() const {

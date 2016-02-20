@@ -17,9 +17,9 @@ public class DTT_IImageBuilderListener implements IImageBuilderListener
 
   public final void imageCreated(IImage image, String imageName)
   {
-    _defaultTileTesturizer.setDefaultBackGroundImage(image);
-    _defaultTileTesturizer.setDefaultBackGroundImageName(imageName);
-    _defaultTileTesturizer.setDefaultBackGroundImageLoaded(true);
+    _defaultTileTesturizer.setDefaultBackgroundImage(image);
+    _defaultTileTesturizer.setDefaultBackgroundImageName(imageName);
+    _defaultTileTesturizer.setDefaultBackgroundImageLoaded(true);
     ILogger.instance().logInfo("Default Background Image loaded...");
 
   }

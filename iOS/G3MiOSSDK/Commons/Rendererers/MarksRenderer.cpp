@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "MarksRenderer.hpp"
@@ -19,6 +18,8 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
+#include "G3MEventContext.hpp"
+
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {

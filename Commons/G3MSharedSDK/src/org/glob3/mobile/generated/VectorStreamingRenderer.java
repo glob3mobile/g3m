@@ -1539,7 +1539,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    for (int i = 0; i < _vectorSetsSize; i++)
+    if (_vectorSetsSize > 0)
     {
       final Camera camera = rc.getCurrentCamera();
       final Frustum frustumInModelCoordinates = camera.getFrustumInModelCoordinates();
@@ -1549,8 +1549,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
       updateGLState(camera);
       _glState.setParent(glState);
   
-      VectorSet vectorSector = _vectorSets.get(i);
-      vectorSector.render(rc, frustumInModelCoordinates, cameraTS, _glState);
+      for (int i = 0; i < _vectorSetsSize; i++)
+      {
+        VectorSet vectorSector = _vectorSets.get(i);
+        vectorSector.render(rc, frustumInModelCoordinates, cameraTS, _glState);
+      }
     }
   }
 

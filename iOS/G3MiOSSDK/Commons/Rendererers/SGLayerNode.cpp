@@ -10,7 +10,7 @@
 
 #include "IGLTextureId.hpp"
 #include "GL.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
 #include "SGShape.hpp"
 #include "IImageDownloadListener.hpp"
