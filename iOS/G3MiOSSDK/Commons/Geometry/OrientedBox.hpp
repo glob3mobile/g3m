@@ -10,6 +10,7 @@
 
 #include "BoundingVolume.hpp"
 #include "Vector3D.hpp"
+#include "Plane.hpp"
 
 class Mesh;
 
@@ -17,12 +18,32 @@ class OrientedBox: public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-
-public:
   
   // the eight vertices (N:north, S:south, W:west, E:east, T:top, B:bottom
   const Vector3D _SWB, _SEB, _NWB, _NEB, _SWT, _SET, _NWT, _NET;
 
+  
+#ifdef C_CODE
+  const Plane _westPlane;
+  const Plane _eastPlane;
+  const Plane _southPlane;
+  const Plane _northPlane;
+  const Plane _bottomPlane;
+  const Plane _topPlane;
+#endif
+
+#ifdef JAVA_CODE
+  private final Plane _westPlane;
+  private final Plane _eastPlane;
+  private final Plane _southPlane;
+  private final Plane _northPlane;
+  private final Plane _bottomPlane;
+  private final Plane _topPlane;
+#endif
+
+
+public:
+  
   OrientedBox(const Vector3D& lower,
               const Vector3D& lonAxis,
               const Vector3D& latAxis,
@@ -35,12 +56,14 @@ public:
   _SET(_SEB.add(heightAxis)),
   _NWT(_NWB.add(heightAxis)),
   _NET(_NEB.add(heightAxis)),
+  _westPlane(Plane::fromPoints(_SWB, _SWT, _NWT)),
+  _eastPlane(Plane::fromPoints(_SEB, _NEB, _NET)),
+  _southPlane(Plane::fromPoints(_SEB, _SET, _SWT)),
+  _northPlane(Plane::fromPoints(_NWT, _NET, _NEB)),
+  _bottomPlane(Plane::fromPoints(_NEB, _SEB, _SWB)),
+  _topPlane(Plane::fromPoints(_NET, _NWT, _SWT)),
   _mesh(NULL)
   {
-    printf("SEB=%f %f %f\n",_SEB._x, _SEB._y, _SEB._z);
-    printf("NWB=%f %f %f\n",_NWB._x, _NWB._y, _NWB._z);
-    Vector3D caca =_SWB.add(latAxis);
-    printf("caca=%f %f %f\n",caca._x, caca._y, caca._z);
   }
 
   ~OrientedBox();
