@@ -122,7 +122,7 @@ public class HUDImageRenderer extends DefaultRenderer
     final IStringUtils su = IStringUtils.instance();
     final String textureName = "HUDImageRenderer" + su.toString(_instanceID) + "/" + su.toString(_changeCounter++);
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false, GLTextureParameterValue.clampToEdge());
   
     _image = null;
     _image = null;

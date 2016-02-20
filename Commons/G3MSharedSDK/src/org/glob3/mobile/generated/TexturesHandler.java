@@ -59,12 +59,6 @@ public class TexturesHandler
     }
   }
 
-  public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap)
-  {
-    final int clampToEdge = GLTextureParameterValue.clampToEdge();
-    return getTextureIDReference(image, format, name, generateMipmap, clampToEdge);
-  }
-
   public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap, int wrapMode)
   {
   

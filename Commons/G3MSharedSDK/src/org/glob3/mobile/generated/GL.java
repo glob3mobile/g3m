@@ -191,12 +191,6 @@ public class GL
     return _nativeGL.getError();
   }
 
-  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
-  {
-      final int clampToEdge = GLTextureParameterValue.clampToEdge();
-      return uploadTexture(image, format, generateMipmap, clampToEdge);
-  }
-
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap, int wrapMode)
   {
   
