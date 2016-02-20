@@ -17,14 +17,11 @@ class OrientedBox: public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-  Mesh* createMesh(const Color& color) const;
 
 public:
   
   // the eight vertices (N:north, S:south, W:west, E:east, T:top, B:bottom
-  const Vector3D _NWT, _NET, _SWT, _SET;
-  const Vector3D _NWB, _NEB, _SWB, _SEB;
-  const Vector3D _centralAxis;
+  const Vector3D _SWB, _SEB, _NWB, _NEB, _SWT, _SET, _NWT, _NET;
 
   OrientedBox(const Vector3D& lower,
               const Vector3D& lonAxis,
@@ -38,12 +35,18 @@ public:
   _SET(_SEB.add(heightAxis)),
   _NWT(_NWB.add(heightAxis)),
   _NET(_NEB.add(heightAxis)),
-  _centralAxis(heightAxis.normalized()),
   _mesh(NULL)
   {
+    printf("SEB=%f %f %f\n",_SEB._x, _SEB._y, _SEB._z);
+    printf("NWB=%f %f %f\n",_NWB._x, _NWB._y, _NWB._z);
+    Vector3D caca =_SWB.add(latAxis);
+    printf("caca=%f %f %f\n",caca._x, caca._y, caca._z);
+
   }
 
   ~OrientedBox();
+
+  Mesh* createMesh(const Color& color) const;
 
   
   // TODO for Agustin!
