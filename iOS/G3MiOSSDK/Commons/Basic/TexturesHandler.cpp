@@ -115,16 +115,6 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
   return NULL;
 }
 
-
-const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
-                                                                 int format,
-                                                                 const std::string& name,
-                                                                 bool generateMipmap) {
-  const int clampToEdge = GLTextureParameterValue::clampToEdge();
-  return getTextureIDReference(image, format, name, generateMipmap, clampToEdge);
-}
-
-
 const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
                                                                  int format,
                                                                  const std::string& name,

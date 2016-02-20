@@ -30,7 +30,8 @@ const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                                     GLFormat::rgba(),
                                                                                     _textureURL._path,
-                                                                                    false);
+                                                                                    false,
+                                                                                    GLTextureParameterValue::clampToEdge());
 
   delete _textureImage;
   _textureImage = NULL;

@@ -111,13 +111,6 @@ bool GL::isPowerOfTwo(int x) {
 
 const IGLTextureId* GL::uploadTexture(const IImage* image,
                                       int format,
-                                      bool generateMipmap) {
-    const int clampToEdge = GLTextureParameterValue::clampToEdge();
-    return uploadTexture(image, format, generateMipmap, clampToEdge);
-}
-
-const IGLTextureId* GL::uploadTexture(const IImage* image,
-                                      int format,
                                       bool generateMipmap,
                                       int wrapMode) {
 

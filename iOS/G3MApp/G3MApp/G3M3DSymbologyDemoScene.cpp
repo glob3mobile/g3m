@@ -24,6 +24,14 @@
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
+#include <G3MiOSSDK/ShapesRenderer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
+#include <G3MiOSSDK/DownloaderImageBuilder.hpp>
+#include <G3MiOSSDK/IImageBuilderListener.hpp>
+#include <G3MiOSSDK/TexturedBoxShape.hpp>
+#include <G3MiOSSDK/TexturesHandler.hpp>
+
+
 
 #include "G3MDemoModel.hpp"
 
@@ -83,6 +91,38 @@ void G3M3DSymbologyDemoScene::rawSelectOption(const std::string& option,
                                               int optionIndex) {
 }
 
+class MyIImageBuilderListener: public IImageBuilderListener{
+  
+  ShapesRenderer*  _sr;
+  
+public:
+  
+  MyIImageBuilderListener(ShapesRenderer* sr):_sr(sr){}
+  
+  virtual void imageCreated(const IImage*      image,
+                            const std::string& imageName){
+    
+    const double boxExtent = 50000;
+    const double baseArea = boxExtent * boxExtent;
+    const double volume = 1e7 * boxExtent * 3500;
+    const double height = volume / baseArea;
+    
+    TexturedBoxShape* bs = new TexturedBoxShape(new Geodetic3D(Geodetic3D::fromDegrees(28.124823,-15.430006, 0)),
+                                RELATIVE_TO_GROUND,
+                                Vector3D(boxExtent / 4, boxExtent / 4, height / 2),
+                                2,
+                                image,
+                                imageName,
+                                Vector2F(1,5),
+                                Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f));
+    _sr->addShape(bs);
+  }
+  
+  virtual void onError(const std::string& error){
+    
+  }
+};
+
 void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -96,11 +136,16 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
-                                             TimeInterval::fromDays(30),
-                                             true,
-                                             3);
-  model->getLayerSet()->addLayer(rasterLayer);
+//  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
+//                                             TimeInterval::fromDays(30),
+//                                             true,
+//                                             3);
+//  model->getLayerSet()->addLayer(rasterLayer);
+//  
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
+  model->getLayerSet()->addLayer(layer);
 
   GEOVectorLayer* vectorLayer = new GEOVectorLayer();
   model->getLayerSet()->addLayer(vectorLayer);
@@ -111,6 +156,13 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   geoRenderer->setGEOVectorLayer(vectorLayer, false);
 
   geoRenderer->loadJSON(URL("file:///uscitieslite.geojson"), new USCitiesSymbolizer());
+  
+  
+  //Texture Wrapping demo
+  DownloaderImageBuilder* dib = new DownloaderImageBuilder(URL("http://www.bricksntiles.com/textures/brickwork-texture.jpg"));
+  dib->build(g3mWidget->getG3MContext(), new MyIImageBuilderListener(getModel()->getShapesRenderer()), true);
+  ///
+  
 
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(25.5, -74.52, 1595850),

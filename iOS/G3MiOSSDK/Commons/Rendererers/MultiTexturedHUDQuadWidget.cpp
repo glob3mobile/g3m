@@ -72,7 +72,8 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image1,
                                                                                     GLFormat::rgba(),
                                                                                     _imageURL1._path,
-                                                                                    false);
+                                                                                    false,
+                                                                                    GLTextureParameterValue::clampToEdge());
 
   if (texId == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
@@ -82,7 +83,8 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* texId2 = rc->getTexturesHandler()->getTextureIDReference(_image2,
                                                                                      GLFormat::rgba(),
                                                                                      _imageURL2._path,
-                                                                                     false);
+                                                                                     false,
+                                                                                     GLTextureParameterValue::clampToEdge());
 
   if (texId2 == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");

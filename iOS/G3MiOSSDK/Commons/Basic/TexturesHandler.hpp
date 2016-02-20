@@ -187,11 +187,6 @@ public:
   }
 
   ~TexturesHandler();
-    
-  const TextureIDReference* getTextureIDReference(const IImage* image,
-                                                    int format,
-                                                    const std::string& name,
-                                                    bool generateMipmap);
 
   const TextureIDReference* getTextureIDReference(const IImage* image,
                                                   int format,

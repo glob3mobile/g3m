@@ -737,7 +737,8 @@ void Mark::render(const G3MRenderContext* rc,
         _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                      GLFormat::rgba(),
                                                                      _imageID,
-                                                                     false);
+                                                                     false,
+                                                                     GLTextureParameterValue::clampToEdge());
 
         delete _textureImage;
         _textureImage = NULL;
