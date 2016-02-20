@@ -10,6 +10,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
+#include "Sphere.hpp"
 
 
 OrientedBox::~OrientedBox() {
@@ -89,3 +90,14 @@ bool OrientedBox::contains(const Vector3D& point) const {
   if (_southPlane.signedDistance(point)  > 0) return false;
   return true;
 }
+
+bool OrientedBox::fullContainsSphere(const Sphere* that) const {
+  if (_westPlane.signedDistance(that->_center)   > -that->_radius) return false;
+  if (_eastPlane.signedDistance(that->_center)   > -that->_radius) return false;
+  if (_southPlane.signedDistance(that->_center)  > -that->_radius) return false;
+  if (_northPlane.signedDistance(that->_center)  > -that->_radius) return false;
+  if (_bottomPlane.signedDistance(that->_center) > -that->_radius) return false;
+  if (_topPlane.signedDistance(that->_center)    > -that->_radius) return false;
+  return true;
+}
+

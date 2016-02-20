@@ -75,6 +75,7 @@ public:
               const Color& color) const;
 
   bool contains(const Vector3D& point) const;
+  bool fullContainsSphere(const Sphere* that) const;
 
   
   // TODO for Agustin!
@@ -86,6 +87,7 @@ public:
   bool fullContains(const BoundingVolume* that) const {}
   bool fullContainedInBox(const Box* that) const {}
   bool fullContainedInSphere(const Sphere* that) const {}
+  bool fullContainedInOrientedBox(const OrientedBox* that) const {}
   BoundingVolume* mergedWith(const BoundingVolume* that) const {}
   BoundingVolume* mergedWithBox(const Box* that) const {}
   BoundingVolume* mergedWithSphere(const Sphere* that) const {}

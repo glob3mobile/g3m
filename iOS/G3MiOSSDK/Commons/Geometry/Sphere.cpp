@@ -8,6 +8,7 @@
 
 #include "Sphere.hpp"
 #include "Box.hpp"
+#include "OrientedBox.hpp"
 #include "Camera.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
@@ -272,6 +273,11 @@ bool Sphere::fullContainedInBox(const Box* that) const {
 bool Sphere::fullContainedInSphere(const Sphere* that) const {
   const double d = _center.distanceTo(that->_center);
   return (d + _radius <= that->_radius);
+}
+
+
+bool Sphere::fullContainedInOrientedBox(const OrientedBox *that) const {
+  return that->fullContainsSphere(this);
 }
 
 Sphere* Sphere::createSphere() const {

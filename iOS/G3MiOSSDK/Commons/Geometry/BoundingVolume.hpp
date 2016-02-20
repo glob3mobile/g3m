@@ -17,6 +17,7 @@ class Vector3D;
 class Frustum;
 class Box;
 class Sphere;
+class OrientedBox;
 class GLState;
 class Color;
 
@@ -47,6 +48,7 @@ public:
   virtual bool fullContains(const BoundingVolume* that) const = 0;
   virtual bool fullContainedInBox(const Box* that) const = 0;
   virtual bool fullContainedInSphere(const Sphere* that) const = 0;
+  virtual bool fullContainedInOrientedBox(const OrientedBox* that) const = 0;
 
   virtual BoundingVolume* mergedWith(const BoundingVolume* that) const = 0;
   virtual BoundingVolume* mergedWithBox(const Box* that) const = 0;
