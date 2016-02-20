@@ -209,10 +209,10 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   
   // creating oriented boxes
   Vector3D lower(6383750+1000, -5000-1000, 680000-1000);
-  //OrientedBox obb(lower, Vector3D(2000,1000,0), Vector3D(-1000,2000,0), Vector3D(0,0,3000));
-  OrientedBox obb(lower, Vector3D(2000,0,0), Vector3D(0,2000,0), Vector3D(0,0,3000));
+  OrientedBox obb(lower, Vector3D(2000,1000,0), Vector3D(-1000,2000,0), Vector3D(0,0,3000));
+  //OrientedBox obb(lower, Vector3D(2000,0,0), Vector3D(0,2000,0), Vector3D(0,0,3000));
   meshRenderer->addMesh(obb.createMesh(Color::fromRGBA(1, 0, 0, 1)));
-  
+
   /*
   // creating spheres
   {

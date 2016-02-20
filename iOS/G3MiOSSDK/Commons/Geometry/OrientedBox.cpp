@@ -79,3 +79,13 @@ void OrientedBox::render(const G3MRenderContext* rc,
   _mesh->render(rc, parentState);
 }
 
+
+bool OrientedBox::contains(const Vector3D& point) const {
+  if (_westPlane.signedDistance(point)   > 0) return false;
+  if (_eastPlane.signedDistance(point)   > 0) return false;
+  if (_bottomPlane.signedDistance(point) > 0) return false;
+  if (_topPlane.signedDistance(point)    > 0) return false;
+  if (_northPlane.signedDistance(point)  > 0) return false;
+  if (_southPlane.signedDistance(point)  > 0) return false;
+  return true;
+}

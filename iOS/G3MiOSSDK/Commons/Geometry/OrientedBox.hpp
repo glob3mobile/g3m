@@ -74,6 +74,7 @@ public:
               const GLState* parentState,
               const Color& color) const;
 
+  bool contains(const Vector3D& point) const;
 
   
   // TODO for Agustin!
@@ -82,7 +83,6 @@ public:
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
   bool touchesFrustum(const Frustum* frustum) const {}
-  bool contains(const Vector3D& p) const {}
   bool fullContains(const BoundingVolume* that) const {}
   bool fullContainedInBox(const Box* that) const {}
   bool fullContainedInSphere(const Sphere* that) const {}
