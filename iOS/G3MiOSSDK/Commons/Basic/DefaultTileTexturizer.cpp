@@ -20,13 +20,14 @@
 #include "TexturesHandler.hpp"
 #include "ITexturizerData.hpp"
 #include "TileImageContribution.hpp"
-
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "RectangleF.hpp"
 #include "IImageListener.hpp"
 #include "IImageBuilder.hpp"
 #include "IImageBuilderListener.hpp"
+#include "PlanetRenderContext.hpp"
+#include "TilesRenderParameters.hpp"
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
@@ -113,8 +114,8 @@ class DTT_TileImageListener : public TileImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
   const Sector            _tileSector;
-  const IImage*           _backGroundTileImage;
-  const std::string       _backGroundTileImageName;
+  const IImage*           _backgroundTileImage;
+  const std::string       _backgroundTileImageName;
 
 #ifdef C_CODE
   const Vector2I          _tileTextureResolution;
@@ -127,8 +128,8 @@ public:
   DTT_TileImageListener(DTT_TileTextureBuilder* builder,
                         const Tile*             tile,
                         const Vector2I&         tileTextureResolution,
-                        const IImage*           backGroundTileImage,
-                        const std::string&      backGroundTileImageName);
+                        const IImage*           backgroundTileImage,
+                        const std::string&      backgroundTileImageName);
 
   virtual ~DTT_TileImageListener();
 
@@ -163,8 +164,8 @@ private:
   const long long     _tileDownloadPriority;
   bool                _canceled;
   FrameTasksExecutor* _frameTasksExecutor;
-  const IImage* _backGroundTileImage;
-  const std::string _backGroundTileImageName;
+  const IImage* _backgroundTileImage;
+  const std::string _backgroundTileImageName;
   const bool _ownedTexCoords;
   const bool _transparent;
   const bool _generateMipmap;
@@ -181,8 +182,8 @@ private:
                                          const Vector2I tileMeshResolution,
                                          const TileTessellator* tessellator,
                                          TexturesHandler*     texturesHandler,
-                                         const IImage*  backGroundTileImage,
-                                         const std::string& backGroundTileImageName,
+                                         const IImage*  backgroundTileImage,
+                                         const std::string& backgroundTileImageName,
                                          const bool ownedTexCoords,
                                          const bool transparent,
                                          const bool generateMipmap) {
@@ -214,14 +215,14 @@ private:
       ancestor = ancestor->getParent();
     }
 
-    if (!fallbackSolved && backGroundTileImage != NULL) {
+    if (!fallbackSolved && backgroundTileImage != NULL) {
       LazyTextureMapping* mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution,
                                                                                   tile,
                                                                                   tile,
                                                                                   tessellator),
                                                            true,
                                                            false);
-      const TextureIDReference* glTextureId = texturesHandler->getTextureIDReference(backGroundTileImage,
+      const TextureIDReference* glTextureId = texturesHandler->getTextureIDReference(backgroundTileImage,
                                                                                      GLFormat::rgba(),
                                                                                      backGroundTileImageName,
                                                                                      generateMipmap,
@@ -248,8 +249,8 @@ public:
                          long long                         tileDownloadPriority,
                          bool                              logTilesPetitions,
                          FrameTasksExecutor*               frameTasksExecutor,
-                         const IImage*                     backGroundTileImage,
-                         const std::string&                backGroundTileImageName) :
+                         const IImage*                     backgroundTileImage,
+                         const std::string&                backgroundTileImageName) :
   _tileImageProvider(tileImageProvider),
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
@@ -260,8 +261,8 @@ public:
   _tileDownloadPriority(tileDownloadPriority),
   _logTilesPetitions(logTilesPetitions),
   _frameTasksExecutor(frameTasksExecutor),
-  _backGroundTileImage(backGroundTileImage),
-  _backGroundTileImageName(backGroundTileImageName),
+  _backgroundTileImage(backgroundTileImage),
+  _backgroundTileImageName(backgroundTileImageName),
   _ownedTexCoords(true),
   _transparent(false),
   _generateMipmap(true)
@@ -274,8 +275,8 @@ public:
                                layerTilesRenderParameters->_tileMeshResolution,
                                tessellator,
                                _texturesHandler,
-                               backGroundTileImage,
-                               backGroundTileImageName,
+                               backgroundTileImage,
+                               backgroundTileImageName,
                                _ownedTexCoords,
                                _transparent,
                                _generateMipmap);
@@ -290,7 +291,7 @@ public:
       const TileImageContribution* contribution = _tileImageProvider->contribution(_tile);
       if (contribution == NULL) {
         if (_tile != NULL) {
-          imageCreated(_backGroundTileImage->shallowCopy(), _backGroundTileImageName, TileImageContribution::fullCoverageOpaque());
+          imageCreated(_backgroundTileImage->shallowCopy(), _backgroundTileImageName, TileImageContribution::fullCoverageOpaque());
           //_tile->setTextureSolved(true);
         }
       }
@@ -300,7 +301,7 @@ public:
                                    _tileTextureResolution,
                                    _tileDownloadPriority,
                                    _logTilesPetitions,
-                                   new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backGroundTileImage, _backGroundTileImageName),
+                                   new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backgroundTileImage, _backgroundTileImageName),
                                    true,
                                    _frameTasksExecutor);
       }
@@ -352,11 +353,10 @@ public:
                     const std::string&           imageId,
                     const TileImageContribution* contribution) {
     if (!contribution->isFullCoverageAndOpaque()) {
-      ILogger::instance()->logWarning("Contribution isn't full covearge and opaque before to upload tuxtuer");
+      ILogger::instance()->logWarning("Contribution isn't full covearge and opaque before to upload texture");
     }
 
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
-
       if (uploadTexture(image, imageId)) {
         _tile->setTextureSolved(true);
       }
@@ -409,13 +409,13 @@ public:
 DTT_TileImageListener::DTT_TileImageListener(DTT_TileTextureBuilder* builder,
                                              const Tile*             tile,
                                              const Vector2I&         tileTextureResolution,
-                                             const IImage*           backGroundTileImage,
-                                             const std::string&      backGroundTileImageName) :
+                                             const IImage*           backgroundTileImage,
+                                             const std::string&      backgroundTileImageName) :
 _builder(builder),
 _tileSector(tile->_sector),
 _tileTextureResolution(tileTextureResolution),
-_backGroundTileImage(backGroundTileImage),
-_backGroundTileImageName(backGroundTileImageName)
+_backgroundTileImage(backgroundTileImage),
+_backgroundTileImageName(backgroundTileImageName)
 {
   _builder->_retain();
 }
@@ -434,7 +434,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
 
-  if (!contribution->isFullCoverageAndOpaque()){
+  if (!contribution->isFullCoverageAndOpaque()) {
 
     IStringBuilder* auxImageId = IStringBuilder::newStringBuilder();
 
@@ -449,10 +449,10 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
 
     canvas->initialize(width, height);
 
-    if (_backGroundTileImage != NULL) {
-      auxImageId->addString(_backGroundTileImageName);
+    if (_backgroundTileImage != NULL) {
+      auxImageId->addString(_backgroundTileImageName);
       auxImageId->addString("|");
-      canvas->drawImage(_backGroundTileImage, 0, 0, width, height);
+      canvas->drawImage(_backgroundTileImage, 0, 0, width, height);
     }
 
     auxImageId->addString(imageId);
@@ -577,9 +577,9 @@ public:
   }
 };
 
-DefaultTileTexturizer::DefaultTileTexturizer(IImageBuilder* defaultBackGroundImageBuilder) :
-_defaultBackGroundImageBuilder(defaultBackGroundImageBuilder),
-_defaultBackGroundImageLoaded(false)
+DefaultTileTexturizer::DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder) :
+_defaultBackgroundImageBuilder(defaultBackgroundImageBuilder),
+_defaultBackgroundImageLoaded(false)
 {
   ILogger::instance()->logInfo("Create texturizer...");
 
@@ -597,7 +597,7 @@ RenderState DefaultTileTexturizer::getRenderState(LayerSet* layerSet) {
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }
-  if (!_defaultBackGroundImageLoaded) {
+  if (!_defaultBackgroundImageLoaded) {
     return RenderState::busy();
   }
   if (layerSet != NULL) {
@@ -624,9 +624,9 @@ public:
 
   void imageCreated(const IImage* image,
                     const std::string& imageName) {
-    _defaultTileTesturizer->setDefaultBackGroundImage(image);
-    _defaultTileTesturizer->setDefaultBackGroundImageName(imageName);
-    _defaultTileTesturizer->setDefaultBackGroundImageLoaded(true);
+    _defaultTileTesturizer->setDefaultBackgroundImage(image);
+    _defaultTileTesturizer->setDefaultBackgroundImageName(imageName);
+    _defaultTileTesturizer->setDefaultBackgroundImageLoaded(true);
     ILogger::instance()->logInfo("Default Background Image loaded...");
 
   }
@@ -643,25 +643,20 @@ void DefaultTileTexturizer::initialize(const G3MContext* context,
                                        const TilesRenderParameters* parameters) {
   ILogger::instance()->logInfo("Initializing texturizer...");
 
-  _defaultBackGroundImageBuilder->build(context, new DTT_IImageBuilderListener(this), true);
+  _defaultBackgroundImageBuilder->build(context, new DTT_IImageBuilderListener(this), true);
 
   // do nothing
 }
 
-Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
-                                       const TileTessellator* tessellator,
-                                       const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                       const LayerSet* layerSet,
-                                       bool forceFullRender,
-                                       long long tileDownloadPriority,
+Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
+                                       const PlanetRenderContext* prc,
                                        Tile* tile,
                                        Mesh* tessellatorMesh,
-                                       Mesh* previousMesh,
-                                       bool logTilesPetitions) {
+                                       Mesh* previousMesh) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
-  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
-                                                                        layerTilesRenderParameters);
+  TileImageProvider* tileImageProvider = prc->_layerSet->getTileImageProvider(rc,
+                                                                              prc->_layerTilesRenderParameters);
 
   if (tileImageProvider == NULL) {
     tile->setTextureSolved(true);
@@ -671,17 +666,21 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
+    const long long tileTexturePriority = (prc->_tilesRenderParameters->_incrementalTileQuality
+                                           ? prc->_tileDownloadPriority + prc->_layerTilesRenderParameters->_maxLevel - tile->_level
+                                           : prc->_tileDownloadPriority + tile->_level);
+
     builder = new DTT_TileTextureBuilder(rc,
-                                         layerTilesRenderParameters,
+                                         prc->_layerTilesRenderParameters,
                                          tileImageProvider,
                                          tile,
                                          tessellatorMesh,
-                                         tessellator,
-                                         tileDownloadPriority,
-                                         logTilesPetitions,
+                                         prc->_tessellator,
+                                         tileTexturePriority,
+                                         prc->_logTilesPetitions,
                                          rc->getFrameTasksExecutor(),
-                                         _defaultBackGroundImage,
-                                         _defaultBackGroundImageName);
+                                         _defaultBackgroundImage,
+                                         _defaultBackgroundImageName);
     builderHolder = new DTT_TileTextureBuilderHolder(builder);
     tile->setTexturizerData(builderHolder);
   }
@@ -693,12 +692,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
   Mesh* texturizedMesh = builder->getTexturedMesh();
 
-  if (forceFullRender) {
-    builder->start();
-  }
-  else {
-    rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
-  }
+  rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
 
   tile->setTexturizerDirty(false);
 
@@ -721,10 +715,6 @@ void DefaultTileTexturizer::tileMeshToBeDeleted(Tile* tile,
     DTT_TileTextureBuilder* builder = builderHolder->get();
     builder->cancel(false /* cleanTile */);
   }
-}
-
-bool DefaultTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
-  return false;
 }
 
 void DefaultTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
@@ -774,15 +764,15 @@ bool DefaultTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,
   return (layerSet == NULL) ? false : layerSet->onTerrainTouchEvent(ec, position, tile);
 }
 
-void DefaultTileTexturizer::setDefaultBackGroundImage(const IImage* defaultBackGroundImage) {
-  _defaultBackGroundImage = defaultBackGroundImage;
+void DefaultTileTexturizer::setDefaultBackgroundImage(const IImage* defaultBackgroundImage) {
+  _defaultBackgroundImage = defaultBackgroundImage;
 }
 
-void DefaultTileTexturizer::setDefaultBackGroundImageName(const std::string& defaultBackGroundImageName) {
-  _defaultBackGroundImageName = defaultBackGroundImageName;
+void DefaultTileTexturizer::setDefaultBackgroundImageName(const std::string& defaultBackgroundImageName) {
+  _defaultBackgroundImageName = defaultBackgroundImageName;
 }
 
-void DefaultTileTexturizer::setDefaultBackGroundImageLoaded(const bool defaultBackGroundImageLoaded) {
-  _defaultBackGroundImageLoaded = defaultBackGroundImageLoaded;
+void DefaultTileTexturizer::setDefaultBackgroundImageLoaded(const bool defaultBackgroundImageLoaded) {
+  _defaultBackgroundImageLoaded = defaultBackgroundImageLoaded;
 }
 

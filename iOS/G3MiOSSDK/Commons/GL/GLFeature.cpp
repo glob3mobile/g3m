@@ -34,7 +34,7 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 }
 
 void ViewportExtentGLFeature::changeExtent(int viewportWidth,
-                                           int viewportHeight){
+                                           int viewportHeight) {
   _extent->changeValue(viewportWidth, viewportHeight);
 }
 
@@ -157,7 +157,7 @@ _lineWidth(lineWidth)
 }
 
 void Geometry2DGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
-  state->enableCullFace(GLCullFace::front());
+  state->enableCullFace(GLCullFace::back());
   state->setLineWidth(_lineWidth);
 }
 
@@ -292,7 +292,7 @@ void TextureGLFeature::setScale(float u, float v) {
     if (u == 1.0 && v == 1.0) {
       _values->removeUniformValue(SCALE_TEXTURE_COORDS);
     }
-    else{
+    else {
       _scale->changeValue(u, v);
     }
   }

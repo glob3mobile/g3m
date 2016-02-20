@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 5/17/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #ifndef __G3MApp__G3MTiledVectorDemoScene__

@@ -7,14 +7,15 @@
 //
 
 #include "HUDRenderer.hpp"
+
 #include "RenderState.hpp"
 #include "HUDWidget.hpp"
-
 #include "MutableMatrix44D.hpp"
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 #include "GL.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
+
 
 HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
 _glState(new GLState()),

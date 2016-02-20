@@ -11,7 +11,7 @@
 #include "GEOObject.hpp"
 #include "GEOSymbolizer.hpp"
 #include "ILogger.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Camera.hpp"
 #include "IDownloader.hpp"
 #include "IBufferDownloadListener.hpp"

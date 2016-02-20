@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -11,7 +10,7 @@
 
 #include "Effects.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
 
 void EffectsScheduler::initialize(const G3MContext* context) {

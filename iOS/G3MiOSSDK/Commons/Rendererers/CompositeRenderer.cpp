@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "CompositeRenderer.hpp"
@@ -225,7 +224,7 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   }
   _changedInfoListener = changedInfoListener;
 
-  if(_changedInfoListener != NULL){
+  if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(-1, getInfo());
   }
 }

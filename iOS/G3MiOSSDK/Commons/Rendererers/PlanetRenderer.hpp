@@ -3,37 +3,34 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_PlanetRenderer
 #define G3MiOSSDK_PlanetRenderer
 
-class Tile;
-class TileTessellator;
-class LayerSet;
-class VisibleSectorListenerEntry;
-class VisibleSectorListener;
-class ElevationDataProvider;
-class LayerTilesRenderParameters;
-class TerrainTouchListener;
-class ChangedInfoListener;
-class TileRenderingListener;
-
-#include "IStringBuilder.hpp"
-#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
-#include "Camera.hpp"
-#include "LayerSet.hpp"
-#include "ITileVisitor.hpp"
-#include "SurfaceElevationProvider.hpp"
+#include "DefaultRenderer.hpp"
 #include "ChangedListener.hpp"
+#include "ChangedInfoListener.hpp"
+#include "SurfaceElevationProvider.hpp"
 #include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
+#include "Camera.hpp"
+#include "ITileVisitor.hpp"
 
-
-
-class EllipsoidShape;
+class ITileVisitor;
+class LayerSet;
+class TilesRenderParameters;
+class TileLODTester;
+class TileVisibilityTester;
+class ITimer;
+class VisibleSectorListener;
+class VisibleSectorListenerEntry;
+class Layer;
+class LayerTilesRenderParameters;
+class Layer;
+class TerrainTouchListener;
 
 
 class TilesStatistics {
@@ -107,12 +104,10 @@ public:
   }
 
   void computeRenderedSector(Tile* tile) {
-    const Sector sector = tile->_sector;
-
-    const double lowerLatitudeDegrees  = sector._lower._latitude._degrees;
-    const double lowerLongitudeDegrees = sector._lower._longitude._degrees;
-    const double upperLatitudeDegrees  = sector._upper._latitude._degrees;
-    const double upperLongitudeDegrees = sector._upper._longitude._degrees;
+    const double lowerLatitudeDegrees  = tile->_sector._lower._latitude._degrees;
+    const double lowerLongitudeDegrees = tile->_sector._lower._longitude._degrees;
+    const double upperLatitudeDegrees  = tile->_sector._upper._latitude._degrees;
+    const double upperLongitudeDegrees = tile->_sector._upper._longitude._degrees;
 
     if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees) {
       _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
@@ -217,10 +212,10 @@ private:
   const bool                   _showStatistics;
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
+  TileLODTester*               _tileLODTester;
+  TileVisibilityTester*        _tileVisibilityTester;
 
-  TileRenderingListener*       _tileRenderingListener;
-  std::vector<const Tile*>*    _tilesStartedRendering;
-  std::vector<std::string>*    _tilesStoppedRendering;
+  PlanetRenderContext*         _prc;
 
   TilesStatistics _statistics;
 
@@ -277,7 +272,7 @@ private:
   bool _renderTileMeshes;
 
   Sector* _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+
   bool _layerTilesRenderParametersDirty;
 #ifdef C_CODE
   const LayerTilesRenderParameters* _layerTilesRenderParameters;
@@ -310,9 +305,10 @@ public:
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
-                 TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
-                 TouchEventType               touchEventTypeOfTerrainTouchListener);
+                 TouchEventType               touchEventTypeOfTerrainTouchListener,
+                 TileLODTester*               tileLODTester,
+                 TileVisibilityTester*        tileVisibilityTester);
 
   ~PlanetRenderer();
 
@@ -471,8 +467,9 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererIdentifier);
-  
-};
 
+  void onTileHasChangedMesh(const Tile* tile) const;
+
+};
 
 #endif

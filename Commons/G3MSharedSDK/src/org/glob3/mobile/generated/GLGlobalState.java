@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -73,7 +72,7 @@ public class GLGlobalState
   {
      _depthTest = false;
      _blend = false;
-     _cullFace = true;
+     _cullFace = false;
      _culledFace = GLCullFace.back();
      _lineWidth = 1F;
      _polygonOffsetFactor = 0F;

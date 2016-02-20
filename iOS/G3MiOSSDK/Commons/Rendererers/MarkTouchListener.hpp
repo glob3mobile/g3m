@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Eduardo de la Montaña on 05/12/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_MarkTouchListener

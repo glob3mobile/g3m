@@ -7,7 +7,7 @@
 //
 
 #include "VectorStreamingRenderer.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IJSONParser.hpp"
 #include "Sector.hpp"
@@ -1237,10 +1237,9 @@ void VectorStreamingRenderer::updateGLState(const Camera* camera) {
   }
 }
 
-
 void VectorStreamingRenderer::render(const G3MRenderContext* rc,
                                      GLState* glState) {
-  for (size_t i = 0; i < _vectorSetsSize; i++) {
+  if (_vectorSetsSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
     const Frustum* frustumInModelCoordinates = camera->getFrustumInModelCoordinates();
 
@@ -1248,11 +1247,13 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
 
     updateGLState(camera);
     _glState->setParent(glState);
-    
-    VectorSet* vectorSector = _vectorSets[i];
-    vectorSector->render(rc,
-                         frustumInModelCoordinates,
-                         cameraTS,
-                         _glState);
+
+    for (size_t i = 0; i < _vectorSetsSize; i++) {
+      VectorSet* vectorSector = _vectorSets[i];
+      vectorSector->render(rc,
+                           frustumInModelCoordinates,
+                           cameraTS,
+                           _glState);
+    }
   }
 }

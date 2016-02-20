@@ -3,7 +3,6 @@
  *  Prueba Opengl iPad
  *
  *  Created by Agustin Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
 
@@ -16,7 +15,7 @@
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableVector2F.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"

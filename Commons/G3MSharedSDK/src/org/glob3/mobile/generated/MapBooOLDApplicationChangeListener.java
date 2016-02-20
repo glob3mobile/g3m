@@ -59,6 +59,8 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //class IBufferDownloadListener;
 
+//class TileVisibilityTester;
+//class TileLODTester;
 
 
 

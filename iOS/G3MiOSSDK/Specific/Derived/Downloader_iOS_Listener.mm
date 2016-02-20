@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 28/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import "Downloader_iOS_Listener.h"

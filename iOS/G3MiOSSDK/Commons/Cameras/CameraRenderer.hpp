@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_CameraRenderer
@@ -13,7 +12,7 @@
 
 #include "ProtoRenderer.hpp"
 #include "RenderState.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Effects.hpp"
 
 

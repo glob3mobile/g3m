@@ -143,7 +143,7 @@ public:
       return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
     }
     
-    if (wholeSector.isEquals(innerSector)){
+    if (wholeSector.isEquals(innerSector)) {
       return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
     }
     

@@ -8,8 +8,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class FloatBuffer_WebGL
-extends
-IFloatBuffer {
+         extends
+            IFloatBuffer {
 
    private final JavaScriptObject _buffer;
    private int                    _timestamp       = 0;
