@@ -69,3 +69,13 @@ Mesh* OrientedBox::createMesh(const Color& color) const {
   return mesh;
 }
 
+
+void OrientedBox::render(const G3MRenderContext* rc,
+                         const GLState* parentState,
+                         const Color& color) const {
+  if (_mesh == NULL) {
+    _mesh = createMesh(color);
+  }
+  _mesh->render(rc, parentState);
+}
+

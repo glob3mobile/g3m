@@ -41,19 +41,20 @@ public:
     printf("NWB=%f %f %f\n",_NWB._x, _NWB._y, _NWB._z);
     Vector3D caca =_SWB.add(latAxis);
     printf("caca=%f %f %f\n",caca._x, caca._y, caca._z);
-
   }
 
   ~OrientedBox();
 
   Mesh* createMesh(const Color& color) const;
+  
+  void render(const G3MRenderContext* rc,
+              const GLState* parentState,
+              const Color& color) const;
+
 
   
   // TODO for Agustin!
   double projectedArea(const G3MRenderContext* rc) const {}
-  void render(const G3MRenderContext* rc,
-              const GLState* parentState,
-              const Color& color) const {}
   bool touches(const BoundingVolume* that) const {}
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
