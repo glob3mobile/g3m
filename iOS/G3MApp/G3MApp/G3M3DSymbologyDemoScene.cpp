@@ -102,7 +102,7 @@ public:
   virtual void imageCreated(const IImage*      image,
                             const std::string& imageName){
     
-    const double boxExtent = 50000;
+    const double boxExtent = 20000;
     const double baseArea = boxExtent * boxExtent;
     const double volume = 1e7 * boxExtent * 3500;
     const double height = volume / baseArea;
@@ -113,8 +113,8 @@ public:
                                 2,
                                 image,
                                 imageName,
-                                Vector2F(1,5),
-                                Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f));
+                                Vector3F(1,15,1),
+                                NULL);
     _sr->addShape(bs);
   }
   
