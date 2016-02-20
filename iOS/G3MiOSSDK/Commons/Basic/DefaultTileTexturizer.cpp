@@ -224,7 +224,7 @@ private:
                                                            false);
       const TextureIDReference* glTextureId = texturesHandler->getTextureIDReference(backgroundTileImage,
                                                                                      GLFormat::rgba(),
-                                                                                     backGroundTileImageName,
+                                                                                     backgroundTileImageName,
                                                                                      generateMipmap,
                                                                                      GLTextureParameterValue::clampToEdge());
       mapping->setGLTextureId(glTextureId); //Mandatory to active mapping

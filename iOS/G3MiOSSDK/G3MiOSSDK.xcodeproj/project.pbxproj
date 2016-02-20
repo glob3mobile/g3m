@@ -486,6 +486,8 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D826764D1C774099008FD98E /* TexturedBoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D826764B1C774099008FD98E /* TexturedBoxShape.cpp */; };
 		D826764E1C774128008FD98E /* TexturedBoxShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D826764C1C774099008FD98E /* TexturedBoxShape.hpp */; };
+		D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */; };
+		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
@@ -763,6 +765,23 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D826764E1C774128008FD98E /* TexturedBoxShape.hpp in CopyFiles */,
+				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
+				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
+				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
+				CF2E59441C5BC5CD001F6AA0 /* G3MRenderContext.hpp in CopyFiles */,
+				CF2E59451C5BC5CD001F6AA0 /* G3MEventContext.hpp in CopyFiles */,
+				CF2E59461C5BC5CD001F6AA0 /* G3MContext.hpp in CopyFiles */,
+				CF2E59471C5BC5CD001F6AA0 /* DecoratorTileVisibilityTester.hpp in CopyFiles */,
+				CF2E59481C5BC5CD001F6AA0 /* TimedCacheTileVisibilityTester.hpp in CopyFiles */,
+				CF67D9C71C5AB11A00873661 /* TileVisibilityTester.hpp in CopyFiles */,
+				CF67D9C81C5AB11A00873661 /* MeshBoundingVolumeTileVisibilityTester.hpp in CopyFiles */,
+				CFB94E571C57EAA900DAB4E6 /* DecoratorTileLODTester.hpp in CopyFiles */,
+				CFB94E581C57EAA900DAB4E6 /* TileData.hpp in CopyFiles */,
+				CFB94E5A1C57EAA900DAB4E6 /* TimedCacheTileLODTester.hpp in CopyFiles */,
+				CFB94E5B1C57EAA900DAB4E6 /* MaxFrameTimeTileLODTester.hpp in CopyFiles */,
+				D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLODTester.hpp in CopyFiles */,
+				D8B78E291C120D4F00DDE2B9 /* MaxLevelTileLODTester.hpp in CopyFiles */,
+				D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
@@ -1773,6 +1792,10 @@
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D826764B1C774099008FD98E /* TexturedBoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TexturedBoxShape.cpp; path = Commons/Rendererers/TexturedBoxShape.cpp; sourceTree = "<group>"; };
 		D826764C1C774099008FD98E /* TexturedBoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TexturedBoxShape.hpp; path = Commons/Rendererers/TexturedBoxShape.hpp; sourceTree = "<group>"; };
+		D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimedCacheTileLODTester.cpp; path = Commons/Rendererers/TimedCacheTileLODTester.cpp; sourceTree = "<group>"; };
+		D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimedCacheTileLODTester.hpp; path = Commons/Rendererers/TimedCacheTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxFrameTimeTileLODTester.cpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.cpp; sourceTree = "<group>"; };
+		D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MaxFrameTimeTileLODTester.hpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = NonOverlappingMarksRenderer.cpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
