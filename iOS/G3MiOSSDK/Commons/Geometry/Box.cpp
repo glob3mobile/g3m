@@ -15,6 +15,7 @@
 #include "Color.hpp"
 #include "Sphere.hpp"
 #include "Vector2F.hpp"
+#include "OrientedBox.hpp"
 
 Box::~Box() {
   delete _mesh;
@@ -315,6 +316,10 @@ bool Box::fullContainedInBox(const Box* box) const {
 
 bool Box::fullContainedInSphere(const Sphere* that) const {
   return that->contains(_lower) && that->contains(_upper);
+}
+
+bool Box::fullContainedInOrientedBox(const OrientedBox *that) const {
+  return that->fullContainsBox(this);
 }
 
 Vector3D Box::closestPoint(const Vector3D& point) const {

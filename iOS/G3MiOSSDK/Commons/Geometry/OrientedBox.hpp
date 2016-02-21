@@ -13,6 +13,8 @@
 #include "Plane.hpp"
 
 class Mesh;
+class Sphere;
+class Box;
 
 class OrientedBox: public BoundingVolume {
 private:
@@ -76,6 +78,7 @@ public:
 
   bool contains(const Vector3D& point) const;
   bool fullContainsSphere(const Sphere* that) const;
+  bool fullContainsBox(const Box* that) const;
 
   
   // TODO for Agustin!

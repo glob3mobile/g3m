@@ -11,6 +11,7 @@
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "Sphere.hpp"
+#include "Box.hpp"
 
 
 OrientedBox::~OrientedBox() {
@@ -98,6 +99,25 @@ bool OrientedBox::fullContainsSphere(const Sphere* that) const {
   if (_northPlane.signedDistance(that->_center)  > -that->_radius) return false;
   if (_bottomPlane.signedDistance(that->_center) > -that->_radius) return false;
   if (_topPlane.signedDistance(that->_center)    > -that->_radius) return false;
+  return true;
+}
+
+bool OrientedBox::fullContainsBox(const Box* that) const {
+  double minx = that->_lower._x;
+  double miny = that->_lower._y;
+  double minz = that->_lower._z;
+  double maxx = that->_upper._x;
+  double maxy = that->_upper._y;
+  double maxz = that->_upper._z;
+  
+  if (!contains(Vector3D(minx,miny,minz))) return false;
+  if (!contains(Vector3D(minx,miny,maxz))) return false;
+  if (!contains(Vector3D(minx,maxy,minz))) return false;
+  if (!contains(Vector3D(minx,maxy,maxz))) return false;
+  if (!contains(Vector3D(maxx,miny,minz))) return false;
+  if (!contains(Vector3D(maxx,miny,maxz))) return false;
+  if (!contains(Vector3D(maxx,maxy,minz))) return false;
+  if (!contains(Vector3D(maxx,maxy,maxz))) return false;
   return true;
 }
 

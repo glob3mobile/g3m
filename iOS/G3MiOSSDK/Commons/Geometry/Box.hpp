@@ -97,7 +97,7 @@ public:
   bool fullContainedInSphere(const Sphere* that) const;
   
   // TODO for Agustin!
-  bool fullContainedInOrientedBox(const OrientedBox* that) const {}
+  bool fullContainedInOrientedBox(const OrientedBox* that) const;
 
   Sphere* createSphere() const;
 
