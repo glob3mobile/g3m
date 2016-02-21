@@ -211,15 +211,15 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   Vector3D lower(6383750+1000, -5000-1000, 680000-1000);
   OrientedBox obb(lower, Vector3D(2000,1000,0), Vector3D(-1000,2000,0), Vector3D(0,0,3000));
   //OrientedBox obb(lower, Vector3D(2000,0,0), Vector3D(0,2000,0), Vector3D(0,0,3000));
-  meshRenderer->addMesh(obb.createMesh(Color::fromRGBA(1, 0, 0, 1)));
 
   // small box
-  Vector3D point = lower.add(Vector3D(800,800,800));
-  Box box(point,point.add(Vector3D(1800,500,500)));
-  Color color =  (box.fullContainedInOrientedBox(&obb))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-  meshRenderer->addMesh(box.createMesh(color));
+  Vector3D point = lower.add(Vector3D(-2800,-2800,-2800));
+  Box box(point,point.add(Vector3D(6000,6000,6000)));
+  Color color =  (obb.fullContainedInBox(&box))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+  meshRenderer->addMesh(box.createMesh(Color::fromRGBA(0, 0, 0, 1)));
 
-  
+  meshRenderer->addMesh(obb.createMesh(color));
+
   
   /*
   // creating spheres

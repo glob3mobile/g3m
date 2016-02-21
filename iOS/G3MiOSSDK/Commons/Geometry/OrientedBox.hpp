@@ -79,6 +79,11 @@ public:
   bool contains(const Vector3D& point) const;
   bool fullContainsSphere(const Sphere* that) const;
   bool fullContainsBox(const Box* that) const;
+  bool fullContains(const BoundingVolume* that) const {
+    return that->fullContainedInOrientedBox(this);
+  }
+  bool fullContainedInBox(const Box* that) const;
+
 
   
   // TODO for Agustin!
@@ -87,8 +92,6 @@ public:
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
   bool touchesFrustum(const Frustum* frustum) const {}
-  bool fullContains(const BoundingVolume* that) const {}
-  bool fullContainedInBox(const Box* that) const {}
   bool fullContainedInSphere(const Sphere* that) const {}
   bool fullContainedInOrientedBox(const OrientedBox* that) const {}
   BoundingVolume* mergedWith(const BoundingVolume* that) const {}

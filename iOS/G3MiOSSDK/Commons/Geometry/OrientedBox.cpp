@@ -121,3 +121,16 @@ bool OrientedBox::fullContainsBox(const Box* that) const {
   return true;
 }
 
+bool OrientedBox::fullContainedInBox(const Box* that) const {
+  if (!that->contains(_SWB)) return false;
+  if (!that->contains(_SWT)) return false;
+  if (!that->contains(_SEB)) return false;
+  if (!that->contains(_SET)) return false;
+  if (!that->contains(_NWB)) return false;
+  if (!that->contains(_NWT)) return false;
+  if (!that->contains(_NEB)) return false;
+  if (!that->contains(_NET)) return false;
+  return true;
+}
+
+
