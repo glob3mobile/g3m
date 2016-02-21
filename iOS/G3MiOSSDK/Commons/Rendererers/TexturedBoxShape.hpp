@@ -44,7 +44,13 @@ private:
   const IImage* _image;
   const std::string _imageName;
   Color* _borderColor;
+  
+#ifdef C_CODE
   const Vector3F _textureRepetitions;
+#endif
+#ifdef JAVA_CODE
+  private final Vector3F _textureRepetitions;
+#endif
 
   Mesh* createBorderMesh(const G3MRenderContext* rc);
 //  Mesh* createSurfaceMesh(const G3MRenderContext* rc);
