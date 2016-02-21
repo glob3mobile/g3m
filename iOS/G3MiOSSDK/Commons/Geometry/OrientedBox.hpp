@@ -83,6 +83,7 @@ public:
     return that->fullContainedInOrientedBox(this);
   }
   bool fullContainedInBox(const Box* that) const;
+  bool fullContainedInSphere(const Sphere* that) const;
 
 
   
@@ -92,7 +93,6 @@ public:
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
   bool touchesFrustum(const Frustum* frustum) const {}
-  bool fullContainedInSphere(const Sphere* that) const {}
   bool fullContainedInOrientedBox(const OrientedBox* that) const {}
   BoundingVolume* mergedWith(const BoundingVolume* that) const {}
   BoundingVolume* mergedWithBox(const Box* that) const {}

@@ -133,4 +133,17 @@ bool OrientedBox::fullContainedInBox(const Box* that) const {
   return true;
 }
 
+bool OrientedBox::fullContainedInSphere(const Sphere* that) const {
+  if (_SWB.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_SWT.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_SEB.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_SET.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_NWB.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_NWT.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_NEB.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  if (_NET.squaredDistanceTo(that->_center) > that->_radiusSquared) return false;
+  return true;
+}
+
+
 
