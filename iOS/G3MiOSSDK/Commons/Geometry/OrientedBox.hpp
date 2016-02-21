@@ -86,6 +86,7 @@ public:
   bool fullContainedInSphere(const Sphere* that) const;
   bool fullContainedInOrientedBox(const OrientedBox* that) const;
 
+  Sphere* createSphere() const;
 
 
   
@@ -98,7 +99,6 @@ public:
   BoundingVolume* mergedWith(const BoundingVolume* that) const {}
   BoundingVolume* mergedWithBox(const Box* that) const {}
   BoundingVolume* mergedWithSphere(const Sphere* that) const {}
-  Sphere* createSphere() const {}
 
 };
 

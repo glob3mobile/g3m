@@ -209,16 +209,15 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   
   // creating oriented boxes
   Vector3D lower(6383750+1000, -5000-1000, 680000-1000);
-  OrientedBox obb(lower, Vector3D(2000,1000,0), Vector3D(-1000,2000,0), Vector3D(0,0,3000));
+  OrientedBox obb(lower, Vector3D(5000,1000,0), Vector3D(-1000,5000,0), Vector3D(0,0,3000));
   //OrientedBox obb(lower, Vector3D(2000,0,0), Vector3D(0,2000,0), Vector3D(0,0,3000));
+  meshRenderer->addMesh(obb.createMesh(Color::fromRGBA(0, 0, 0, 1)));
 
-  // big oriented box
-  Vector3D point = lower.add(Vector3D(-2800,-2800,-2800));
-  OrientedBox bigOBB(point, Vector3D(6000,0,0), Vector3D(0,6000,0), Vector3D(0,0,6000));
-  Color color =  (obb.fullContainedInOrientedBox(&bigOBB))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-  meshRenderer->addMesh(bigOBB.createMesh(Color::fromRGBA(0, 0, 0, 1)));
-
-  meshRenderer->addMesh(obb.createMesh(color));
+  // sphere
+  //Vector3D point = lower.add(Vector3D(-2800,-2800,-2800));
+  Sphere* sphere = obb.createSphere();
+  //Color color =  (obb.fullContainedInOrientedBox(&bigOBB))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+  meshRenderer->addMesh(sphere->createWireframeMesh(Color::fromRGBA(0, 0, 1, 1),10));
 
   
   /*

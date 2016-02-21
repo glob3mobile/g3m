@@ -157,5 +157,10 @@ bool OrientedBox::fullContainedInOrientedBox(const OrientedBox* that) const {
   return true;
 }
 
+Sphere* OrientedBox::createSphere() const {
+  const Vector3D center = _SWB.add(_NET).div(2);
+  const double radius = center.distanceTo(_SWB);
+  return new Sphere(center, radius);
+}
 
 
