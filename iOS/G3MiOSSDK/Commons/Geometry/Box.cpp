@@ -123,38 +123,10 @@ Vector2F Box::projectedExtent(const G3MRenderContext* rc) const {
 }
 
 double Box::projectedArea(const G3MRenderContext* rc) const {
-//  const Vector2I extent = projectedExtent(rc);
-//  return extent._x * extent._y;
-
-  const std::vector<Vector3F> corners = getCornersF();
-
-  const Camera* currentCamera = rc->getCurrentCamera();
-
-  const Vector2F pixel0 = currentCamera->point2Pixel(corners[0]);
-
-  float lowerX = pixel0._x;
-  float upperX = pixel0._x;
-  float lowerY = pixel0._y;
-  float upperY = pixel0._y;
-
-  const size_t cornersSize = corners.size();
-  for (size_t i = 1; i < cornersSize; i++) {
-    const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
-
-    const float x = pixel._x;
-    const float y = pixel._y;
-
-    if (x < lowerX) { lowerX = x; }
-    if (y < lowerY) { lowerY = y; }
-
-    if (x > upperX) { upperX = x; }
-    if (y > upperY) { upperY = y; }
-  }
-
-  const float width = upperX - lowerX;
-  const float height = upperY - lowerY;
-
-  return width * height;
+  // this is not exact.
+  // now is returning the area of the 2D bounding box of the box projection
+  const Vector2F extent = projectedExtent(rc);
+  return (double) (extent._x * extent._y);
 }
 
 bool Box::contains(const Vector3D& p) const {

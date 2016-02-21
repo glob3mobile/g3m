@@ -43,6 +43,8 @@ private:
   private final Plane _topPlane;
 #endif
 
+  Vector2F projectedExtent(const G3MRenderContext* rc) const;
+
 
 public:
   
@@ -88,10 +90,10 @@ public:
 
   Sphere* createSphere() const;
 
+  double projectedArea(const G3MRenderContext* rc) const;
 
   
   // TODO for Agustin!
-  double projectedArea(const G3MRenderContext* rc) const {}
   bool touches(const BoundingVolume* that) const {}
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}

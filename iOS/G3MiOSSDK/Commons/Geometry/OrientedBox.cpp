@@ -12,6 +12,7 @@
 #include "IndexedMesh.hpp"
 #include "Sphere.hpp"
 #include "Box.hpp"
+#include "Camera.hpp"
 
 
 OrientedBox::~OrientedBox() {
@@ -161,6 +162,75 @@ Sphere* OrientedBox::createSphere() const {
   const Vector3D center = _SWB.add(_NET).div(2);
   const double radius = center.distanceTo(_SWB);
   return new Sphere(center, radius);
+}
+
+Vector2F OrientedBox::projectedExtent(const G3MRenderContext* rc) const {
+  const Camera* currentCamera = rc->getCurrentCamera();
+  
+  const Vector2F pixel0 = currentCamera->point2Pixel(_SWB);
+  float lowerX = pixel0._x;
+  float upperX = pixel0._x;
+  float lowerY = pixel0._y;
+  float upperY = pixel0._y;
+  
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_SWT);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_SEB);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_SET);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_NWB);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_NWT);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_NEB);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+  {
+    const Vector2F pixel = currentCamera->point2Pixel(_NET);
+    if (pixel._x < lowerX) lowerX = pixel._x;
+    if (pixel._y < lowerY) lowerY = pixel._y;
+    if (pixel._x > upperX) upperX = pixel._x;
+    if (pixel._y > upperY) upperY = pixel._y;
+  }
+
+  return Vector2F(upperX - lowerX, upperY - lowerY);
+}
+
+double OrientedBox::projectedArea(const G3MRenderContext* rc) const {
+  // this is not exact.
+  // now is returning the area of the bounding rectangle of the box projection
+  const Vector2F extent = projectedExtent(rc);
+  return (double) (extent._x * extent._y);
 }
 
 
