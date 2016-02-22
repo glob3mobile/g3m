@@ -282,8 +282,8 @@ BoundingVolume* Box::mergedWithSphere(const Sphere* that) const {
   return that->mergedWithBox(this);
 }
 
-BoundingVolume* Box::mergedWithOrientedBox(const OrientedBox* that) const {
-  that->mergedWithBox(this);
+Box* Box::mergedWithOrientedBox(const OrientedBox* that) const {
+  return that->mergedWithBox(this);
 }
 
 bool Box::fullContainedInBox(const Box* box) const {

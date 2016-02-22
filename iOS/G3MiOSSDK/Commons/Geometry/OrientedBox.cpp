@@ -256,7 +256,18 @@ Box* OrientedBox::mergedWithOrientedBox(const OrientedBox* that) const {
 }
 
 Box* OrientedBox::mergedWithBox(const Box* that) const {
+  const IMathUtils* mu = IMathUtils::instance();
   
+  const double lowerX = mu->min(_minX, that->_lower._x);
+  const double lowerY = mu->min(_minY, that->_lower._y);
+  const double lowerZ = mu->min(_minZ, that->_lower._z);
+  
+  const double upperX = mu->max(_maxX, that->_upper._x);
+  const double upperY = mu->max(_maxY, that->_upper._y);
+  const double upperZ = mu->max(_maxZ, that->_upper._z);
+  
+  return new Box(Vector3D(lowerX, lowerY, lowerZ),
+                 Vector3D(upperX, upperY, upperZ));
 }
 
 
