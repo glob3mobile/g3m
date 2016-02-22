@@ -242,119 +242,21 @@ BoundingVolume* OrientedBox::mergedWith(const BoundingVolume* that) const {
 
 Box* OrientedBox::mergedWithOrientedBox(const OrientedBox* that) const {
   const IMathUtils* mu = IMathUtils::instance();
-  double minX = _SWB._x;
-  double maxX = _SWB._x;
-  double minY = _SWB._y;
-  double maxY = _SWB._y;
-  double minZ = _SWB._z;
-  double maxZ = _SWB._z;
   
-  if (_SWT._x < minX) minX = _SWT._x;
-  if (_SWT._x > maxX) maxX = _SWT._x;
-  if (_SWT._y < minY) minY = _SWT._y;
-  if (_SWT._y > maxY) maxY = _SWT._y;
-  if (_SWT._z < minZ) minZ = _SWT._z;
-  if (_SWT._z > maxZ) maxZ = _SWT._z;
-
-  if (_SEB._x < minX) minX = _SEB._x;
-  if (_SEB._x > maxX) maxX = _SEB._x;
-  if (_SEB._y < minY) minY = _SEB._y;
-  if (_SEB._y > maxY) maxY = _SEB._y;
-  if (_SEB._z < minZ) minZ = _SEB._z;
-  if (_SEB._z > maxZ) maxZ = _SEB._z;
+  const double lowerX = mu->min(_minX, that->_minX);
+  const double lowerY = mu->min(_minY, that->_minY);
+  const double lowerZ = mu->min(_minZ, that->_minZ);
   
-  if (_SET._x < minX) minX = _SET._x;
-  if (_SET._x > maxX) maxX = _SET._x;
-  if (_SET._y < minY) minY = _SET._y;
-  if (_SET._y > maxY) maxY = _SET._y;
-  if (_SET._z < minZ) minZ = _SET._z;
-  if (_SET._z > maxZ) maxZ = _SET._z;
+  const double upperX = mu->max(_maxX, that->_maxX);
+  const double upperY = mu->max(_maxY, that->_maxY);
+  const double upperZ = mu->max(_maxZ, that->_maxZ);
   
-  if (_NWB._x < minX) minX = _NWB._x;
-  if (_NWB._x > maxX) maxX = _NWB._x;
-  if (_NWB._y < minY) minY = _NWB._y;
-  if (_NWB._y > maxY) maxY = _NWB._y;
-  if (_NWB._z < minZ) minZ = _NWB._z;
-  if (_NWB._z > maxZ) maxZ = _NWB._z;
-  
-  if (_NWT._x < minX) minX = _NWT._x;
-  if (_NWT._x > maxX) maxX = _NWT._x;
-  if (_NWT._y < minY) minY = _NWT._y;
-  if (_NWT._y > maxY) maxY = _NWT._y;
-  if (_NWT._z < minZ) minZ = _NWT._z;
-  if (_NWT._z > maxZ) maxZ = _NWT._z;
-  
-  if (_NEB._x < minX) minX = _NEB._x;
-  if (_NEB._x > maxX) maxX = _NEB._x;
-  if (_NEB._y < minY) minY = _NEB._y;
-  if (_NEB._y > maxY) maxY = _NEB._y;
-  if (_NEB._z < minZ) minZ = _NEB._z;
-  if (_NEB._z > maxZ) maxZ = _NEB._z;
-  
-  if (_NET._x < minX) minX = _NET._x;
-  if (_NET._x > maxX) maxX = _NET._x;
-  if (_NET._y < minY) minY = _NET._y;
-  if (_NET._y > maxY) maxY = _NET._y;
-  if (_NET._z < minZ) minZ = _NET._z;
-  if (_NET._z > maxZ) maxZ = _NET._z;
-  
-  if (that->_SWB._x < minX) minX = that->_SWB._x;
-  if (that->_SWB._x > maxX) maxX = that->_SWB._x;
-  if (that->_SWB._y < minY) minY = that->_SWB._y;
-  if (that->_SWB._y > maxY) maxY = that->_SWB._y;
-  if (that->_SWB._z < minZ) minZ = that->_SWB._z;
-  if (that->_SWB._z > maxZ) maxZ = that->_SWB._z;
-  
-  if (that->_SWT._x < minX) minX = that->_SWT._x;
-  if (that->_SWT._x > maxX) maxX = that->_SWT._x;
-  if (that->_SWT._y < minY) minY = that->_SWT._y;
-  if (that->_SWT._y > maxY) maxY = that->_SWT._y;
-  if (that->_SWT._z < minZ) minZ = that->_SWT._z;
-  if (that->_SWT._z > maxZ) maxZ = that->_SWT._z;
-  
-  if (that->_SEB._x < minX) minX = that->_SEB._x;
-  if (that->_SEB._x > maxX) maxX = that->_SEB._x;
-  if (that->_SEB._y < minY) minY = that->_SEB._y;
-  if (that->_SEB._y > maxY) maxY = that->_SEB._y;
-  if (that->_SEB._z < minZ) minZ = that->_SEB._z;
-  if (that->_SEB._z > maxZ) maxZ = that->_SEB._z;
-  
-  if (that->_NET._x < minX) minX = that->_NET._x;
-  if (that->_NET._x > maxX) maxX = that->_NET._x;
-  if (that->_NET._y < minY) minY = that->_NET._y;
-  if (that->_NET._y > maxY) maxY = that->_NET._y;
-  if (that->_NET._z < minZ) minZ = that->_NET._z;
-  if (that->_NET._z > maxZ) maxZ = that->_NET._z;
-  
-  if (that->_NWB._x < minX) minX = that->_NWB._x;
-  if (that->_NWB._x > maxX) maxX = that->_NWB._x;
-  if (that->_NWB._y < minY) minY = that->_NWB._y;
-  if (that->_NWB._y > maxY) maxY = that->_NWB._y;
-  if (that->_NWB._z < minZ) minZ = that->_NWB._z;
-  if (that->_NWB._z > maxZ) maxZ = that->_NWB._z;
-  
-  if (that->_NWT._x < minX) minX = that->_NWT._x;
-  if (that->_NWT._x > maxX) maxX = that->_NWT._x;
-  if (that->_NWT._y < minY) minY = that->_NWT._y;
-  if (that->_NWT._y > maxY) maxY = that->_NWT._y;
-  if (that->_NWT._z < minZ) minZ = that->_NWT._z;
-  if (that->_NWT._z > maxZ) maxZ = that->_NWT._z;
-  
-  if (that->_NEB._x < minX) minX = that->_NEB._x;
-  if (that->_NEB._x > maxX) maxX = that->_NEB._x;
-  if (that->_NEB._y < minY) minY = that->_NEB._y;
-  if (that->_NEB._y > maxY) maxY = that->_NEB._y;
-  if (that->_NEB._z < minZ) minZ = that->_NEB._z;
-  if (that->_NEB._z > maxZ) maxZ = that->_NEB._z;
-  
-  if (that->_NET._x < minX) minX = that->_NET._x;
-  if (that->_NET._x > maxX) maxX = that->_NET._x;
-  if (that->_NET._y < minY) minY = that->_NET._y;
-  if (that->_NET._y > maxY) maxY = that->_NET._y;
-  if (that->_NET._z < minZ) minZ = that->_NET._z;
-  if (that->_NET._z > maxZ) maxZ = that->_NET._z;
-  
-  return new Box(Vector3D(minX, minY, minZ),
-                 Vector3D(maxX, maxY, maxZ));
+  return new Box(Vector3D(lowerX, lowerY, lowerZ),
+                 Vector3D(upperX, upperY, upperZ));
 }
+
+Box* OrientedBox::mergedWithBox(const Box* that) const {
+  
+}
+
 

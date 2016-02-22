@@ -24,7 +24,7 @@ private:
   
   // the eight vertices (N:north, S:south, W:west, E:east, T:top, B:bottom
   const Vector3D _SWB, _SEB, _NWB, _NEB, _SWT, _SET, _NWT, _NET;
-
+  
   
 #ifdef C_CODE
   const Plane _westPlane;
@@ -49,6 +49,9 @@ private:
 
 public:
   
+  // the axis limits
+  mutable double _minX, _maxX, _minY, _maxY, _minZ, _maxZ;
+  
   OrientedBox(const Vector3D& lower,
               const Vector3D& lonAxis,
               const Vector3D& latAxis,
@@ -69,6 +72,61 @@ public:
   _topPlane(Plane::fromPoints(_NET, _NWT, _SWT)),
   _mesh(NULL)
   {
+    _minX = _SWB._x;
+    _maxX = _SWB._x;
+    _minY = _SWB._y;
+    _maxY = _SWB._y;
+    _minZ = _SWB._z;
+    _maxZ = _SWB._z;
+
+    if (_SWT._x < _minX) _minX = _SWT._x;
+    if (_SWT._x > _maxX) _maxX = _SWT._x;
+    if (_SWT._y < _minY) _minY = _SWT._y;
+    if (_SWT._y > _maxY) _maxY = _SWT._y;
+    if (_SWT._z < _minZ) _minZ = _SWT._z;
+    if (_SWT._z > _maxZ) _maxZ = _SWT._z;
+    
+    if (_SEB._x < _minX) _minX = _SEB._x;
+    if (_SEB._x > _maxX) _maxX = _SEB._x;
+    if (_SEB._y < _minY) _minY = _SEB._y;
+    if (_SEB._y > _maxY) _maxY = _SEB._y;
+    if (_SEB._z < _minZ) _minZ = _SEB._z;
+    if (_SEB._z > _maxZ) _maxZ = _SEB._z;
+    
+    if (_SET._x < _minX) _minX = _SET._x;
+    if (_SET._x > _maxX) _maxX = _SET._x;
+    if (_SET._y < _minY) _minY = _SET._y;
+    if (_SET._y > _maxY) _maxY = _SET._y;
+    if (_SET._z < _minZ) _minZ = _SET._z;
+    if (_SET._z > _maxZ) _maxZ = _SET._z;
+    
+    if (_NWB._x < _minX) _minX = _NWB._x;
+    if (_NWB._x > _maxX) _maxX = _NWB._x;
+    if (_NWB._y < _minY) _minY = _NWB._y;
+    if (_NWB._y > _maxY) _maxY = _NWB._y;
+    if (_NWB._z < _minZ) _minZ = _NWB._z;
+    if (_NWB._z > _maxZ) _maxZ = _NWB._z;
+    
+    if (_NWT._x < _minX) _minX = _NWT._x;
+    if (_NWT._x > _maxX) _maxX = _NWT._x;
+    if (_NWT._y < _minY) _minY = _NWT._y;
+    if (_NWT._y > _maxY) _maxY = _NWT._y;
+    if (_NWT._z < _minZ) _minZ = _NWT._z;
+    if (_NWT._z > _maxZ) _maxZ = _NWT._z;
+    
+    if (_NEB._x < _minX) _minX = _NEB._x;
+    if (_NEB._x > _maxX) _maxX = _NEB._x;
+    if (_NEB._y < _minY) _minY = _NEB._y;
+    if (_NEB._y > _maxY) _maxY = _NEB._y;
+    if (_NEB._z < _minZ) _minZ = _NEB._z;
+    if (_NEB._z > _maxZ) _maxZ = _NEB._z;
+    
+    if (_NET._x < _minX) _minX = _NET._x;
+    if (_NET._x > _maxX) _maxX = _NET._x;
+    if (_NET._y < _minY) _minY = _NET._y;
+    if (_NET._y > _maxY) _maxY = _NET._y;
+    if (_NET._z < _minZ) _minZ = _NET._z;
+    if (_NET._z > _maxZ) _maxZ = _NET._z;
   }
 
   ~OrientedBox();
@@ -95,6 +153,8 @@ public:
   
   BoundingVolume* mergedWith(const BoundingVolume* that) const;
   Box* mergedWithOrientedBox(const OrientedBox* that) const;
+  Box* mergedWithBox(const Box* that) const;
+
 
 
   
@@ -103,7 +163,6 @@ public:
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
   bool touchesFrustum(const Frustum* frustum) const {}
-  BoundingVolume* mergedWithBox(const Box* that) const {}
   BoundingVolume* mergedWithSphere(const Sphere* that) const {}
 
 };
