@@ -11,10 +11,11 @@
 #include "BoundingVolume.hpp"
 #include "Vector3D.hpp"
 #include "Plane.hpp"
+#include "Box.hpp"
 
 class Mesh;
 class Sphere;
-class Box;
+
 
 class OrientedBox: public BoundingVolume {
 private:
@@ -91,6 +92,10 @@ public:
   Sphere* createSphere() const;
 
   double projectedArea(const G3MRenderContext* rc) const;
+  
+  BoundingVolume* mergedWith(const BoundingVolume* that) const;
+  Box* mergedWithOrientedBox(const OrientedBox* that) const;
+
 
   
   // TODO for Agustin!
@@ -98,7 +103,6 @@ public:
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
   bool touchesFrustum(const Frustum* frustum) const {}
-  BoundingVolume* mergedWith(const BoundingVolume* that) const {}
   BoundingVolume* mergedWithBox(const Box* that) const {}
   BoundingVolume* mergedWithSphere(const Sphere* that) const {}
 

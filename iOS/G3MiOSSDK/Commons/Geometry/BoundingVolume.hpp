@@ -53,6 +53,7 @@ public:
   virtual BoundingVolume* mergedWith(const BoundingVolume* that) const = 0;
   virtual BoundingVolume* mergedWithBox(const Box* that) const = 0;
   virtual BoundingVolume* mergedWithSphere(const Sphere* that) const = 0;
+  virtual BoundingVolume* mergedWithOrientedBox(const OrientedBox* that) const = 0;
 
   virtual Sphere* createSphere() const = 0;
   

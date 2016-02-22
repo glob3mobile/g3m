@@ -84,6 +84,9 @@ public:
 
   Box* mergedWithBox(const Box* that) const;
   BoundingVolume* mergedWithSphere(const Sphere* that) const;
+  
+  // TODO for Agustin
+  BoundingVolume* mergedWithOrientedBox(const OrientedBox* that) const {}
 
   Vector3D closestPoint(const Vector3D& point) const;
 
