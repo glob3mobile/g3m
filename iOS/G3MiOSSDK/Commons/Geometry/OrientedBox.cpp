@@ -270,4 +270,22 @@ Box* OrientedBox::mergedWithBox(const Box* that) const {
                  Vector3D(upperX, upperY, upperZ));
 }
 
+Box* OrientedBox::mergedWithSphere(const Sphere *that) const {
+  double minX = that->_center._x - that->_radius;
+  double maxX = that->_center._x + that->_radius;
+  double minY = that->_center._y - that->_radius;
+  double maxY = that->_center._y + that->_radius;
+  double minZ = that->_center._z - that->_radius;
+  double maxZ = that->_center._z + that->_radius;
+
+  if (_minX < minX) minX = _minX;
+  if (_maxX > maxX) maxX = _maxX;
+  if (_minY < minY) minY = _minY;
+  if (_maxY > maxY) maxY = _maxY;
+  if (_minZ < minZ) minZ = _minZ;
+  if (_maxZ > maxZ) maxZ = _maxZ;
+  
+  return new Box(Vector3D(minX, minY, minZ),
+                 Vector3D(maxX, maxY, maxZ));
+}
 

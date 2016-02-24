@@ -213,12 +213,12 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   //OrientedBox obb(lower, Vector3D(2000,0,0), Vector3D(0,2000,0), Vector3D(0,0,3000));
   meshRenderer->addMesh(obb.createMesh(Color::fromRGBA(0, 0, 0, 1)));
 
-  // creating second box
-  Vector3D point = lower.add(Vector3D(5000,5000,5000));
-  Box box2(point, point.add(Vector3D(2000,2000,3000)));
-  meshRenderer->addMesh(box2.createMesh(Color::fromRGBA(0, 0, 0, 1)));
+  // creating sphere
+  Vector3D point = lower.add(Vector3D(1000,1000,1000));
+  Sphere sphere(point, 3000);
+  meshRenderer->addMesh(sphere.createWireframeMesh(Color::fromRGBA(0, 0, 0, 1),20));
   
-  Box* box = obb.mergedWithBox(&box2);
+  Box* box = sphere.mergedWithOrientedBox(&obb);
   meshRenderer->addMesh(box->createMesh(Color::fromRGBA(0, 0, 1, 1)));
   
   /*

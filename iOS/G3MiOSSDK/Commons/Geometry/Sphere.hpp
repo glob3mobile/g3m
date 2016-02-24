@@ -14,6 +14,7 @@
 #include "Mesh.hpp"
 #include "Color.hpp"
 #include "Frustum.hpp"
+#include "Box.hpp"
 
 
 class Sphere : public BoundingVolume {
@@ -94,9 +95,7 @@ public:
 
   BoundingVolume* mergedWithBox(const Box* that) const;
   BoundingVolume* mergedWithSphere(const Sphere* that) const;
-  // TODO for Agustin
-  BoundingVolume* mergedWithOrientedBox(const OrientedBox* that) const {}
-
+  Box* mergedWithOrientedBox(const OrientedBox* that) const;
 
   bool contains(const Vector3D& point) const;
 

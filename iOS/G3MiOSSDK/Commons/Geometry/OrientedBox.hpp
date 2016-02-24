@@ -154,6 +154,8 @@ public:
   BoundingVolume* mergedWith(const BoundingVolume* that) const;
   Box* mergedWithOrientedBox(const OrientedBox* that) const;
   Box* mergedWithBox(const Box* that) const;
+  Box* mergedWithSphere(const Sphere* that) const;
+
 
 
 
@@ -163,7 +165,6 @@ public:
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
   bool touchesFrustum(const Frustum* frustum) const {}
-  BoundingVolume* mergedWithSphere(const Sphere* that) const {}
 
 };
 

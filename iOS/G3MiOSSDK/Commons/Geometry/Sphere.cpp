@@ -233,6 +233,10 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
 
 }
 
+Box* Sphere::mergedWithOrientedBox(const OrientedBox* that) const {
+  return that->mergedWithSphere(this);
+}
+
 
 BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
   const double d = _center.distanceTo(that->_center);
