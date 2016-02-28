@@ -18,7 +18,7 @@ private:
   const Vector3D _v1, _v2, _v3, _v4;
   
   // temp vector to use in internal computation, avoiding creating many new objects in java
-  mutable MutableVector3D _bb, _p;
+  //mutable MutableVector3D _bb, _p;
   
 
 public:
