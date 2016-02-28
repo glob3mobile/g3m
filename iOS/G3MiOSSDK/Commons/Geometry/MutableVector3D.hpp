@@ -64,6 +64,12 @@ public:
     _y = y;
     _z = z;
   }
+  
+  void set(const Vector3D& that) {
+    _x = that._x;
+    _y = that._y;
+    _z = that._z;
+  }
 
   void copyFrom(const MutableVector3D& that) {
     _x = that._x;

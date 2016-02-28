@@ -63,6 +63,7 @@
 		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
 		CCB2566415B5F58500079B96 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2566315B5F58500079B96 /* Box.cpp */; };
+		CCB2B4891C82F5CC00DDE101 /* Polygon3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCB2B4881C82F10100DDE101 /* Polygon3D.hpp */; };
 		CCC2A02E15CA6C7D00923850 /* BusyMeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */; };
 		CCC2A03015CA6C7D00923850 /* CompositeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01D15CA6C7D00923850 /* CompositeRenderer.cpp */; };
 		CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */; };
@@ -766,6 +767,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CCB2B4891C82F5CC00DDE101 /* Polygon3D.hpp in CopyFiles */,
 				FBB7C63D1C77A8C900AC1DE1 /* OrientedBox.hpp in CopyFiles */,
 				FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
@@ -1260,6 +1262,7 @@
 		CCB2564D15B5A30900079B96 /* TextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
 		CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TexturedMesh.cpp; path = Commons/Mesh/TexturedMesh.cpp; sourceTree = "<group>"; };
 		CCB2566315B5F58500079B96 /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Box.cpp; path = Commons/Geometry/Box.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CCB2B4881C82F10100DDE101 /* Polygon3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Polygon3D.hpp; path = Commons/Geometry/Polygon3D.hpp; sourceTree = "<group>"; };
 		CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BusyMeshRenderer.cpp; path = Commons/Rendererers/BusyMeshRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A01C15CA6C7D00923850 /* BusyMeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BusyMeshRenderer.hpp; path = Commons/Rendererers/BusyMeshRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A01D15CA6C7D00923850 /* CompositeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeRenderer.cpp; path = Commons/Rendererers/CompositeRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2289,6 +2292,7 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				CCB2B4881C82F10100DDE101 /* Polygon3D.hpp */,
 				FBB7C63E1C77AC8100AC1DE1 /* OrientedBox.cpp */,
 				FBB7C63C1C77A2BB00AC1DE1 /* OrientedBox.hpp */,
 				FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */,

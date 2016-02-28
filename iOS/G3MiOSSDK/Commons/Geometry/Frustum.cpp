@@ -318,3 +318,8 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
 }
 
 
+bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
+  
+}
+
+

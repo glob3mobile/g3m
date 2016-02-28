@@ -84,22 +84,22 @@ void OrientedBox::render(const G3MRenderContext* rc,
 
 
 bool OrientedBox::contains(const Vector3D& point) const {
-  if (_westPlane.signedDistance(point)   > 0) return false;
-  if (_eastPlane.signedDistance(point)   > 0) return false;
-  if (_bottomPlane.signedDistance(point) > 0) return false;
-  if (_topPlane.signedDistance(point)    > 0) return false;
-  if (_northPlane.signedDistance(point)  > 0) return false;
-  if (_southPlane.signedDistance(point)  > 0) return false;
+  if (_westFace._plane.signedDistance(point)   > 0) return false;
+  if (_eastFace._plane.signedDistance(point)   > 0) return false;
+  if (_bottomFace._plane.signedDistance(point) > 0) return false;
+  if (_topFace._plane.signedDistance(point)    > 0) return false;
+  if (_northFace._plane.signedDistance(point)  > 0) return false;
+  if (_southFace._plane.signedDistance(point)  > 0) return false;
   return true;
 }
 
 bool OrientedBox::fullContainsSphere(const Sphere* that) const {
-  if (_westPlane.signedDistance(that->_center)   > -that->_radius) return false;
-  if (_eastPlane.signedDistance(that->_center)   > -that->_radius) return false;
-  if (_southPlane.signedDistance(that->_center)  > -that->_radius) return false;
-  if (_northPlane.signedDistance(that->_center)  > -that->_radius) return false;
-  if (_bottomPlane.signedDistance(that->_center) > -that->_radius) return false;
-  if (_topPlane.signedDistance(that->_center)    > -that->_radius) return false;
+  if (_westFace._plane.signedDistance(that->_center)   > -that->_radius) return false;
+  if (_eastFace._plane.signedDistance(that->_center)   > -that->_radius) return false;
+  if (_southFace._plane.signedDistance(that->_center)  > -that->_radius) return false;
+  if (_northFace._plane.signedDistance(that->_center)  > -that->_radius) return false;
+  if (_bottomFace._plane.signedDistance(that->_center) > -that->_radius) return false;
+  if (_topFace._plane.signedDistance(that->_center)    > -that->_radius) return false;
   return true;
 }
 
@@ -288,4 +288,69 @@ Box* OrientedBox::mergedWithSphere(const Sphere *that) const {
   return new Box(Vector3D(minX, minY, minZ),
                  Vector3D(maxX, maxY, maxZ));
 }
+
+
+verticesLocation OrientedBox::getVerticesLocationRespectToPlane(const Plane* plane,
+                                                                MutableVector3D& inner) const {
+  double maxDistance = -1e10;
+  double minDistance = 1e10;
+  double distance;
+  
+  distance = plane->signedDistance(_SWB);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_SWB);
+  }
+  distance = plane->signedDistance(_SWT);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_SWT);
+  }
+  distance = plane->signedDistance(_SEB);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_SEB);
+  }
+  distance = plane->signedDistance(_SET);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_SET);
+  }
+  distance = plane->signedDistance(_NWB);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_NWB);
+  }
+  distance = plane->signedDistance(_NWT);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_NWT);
+  }
+  distance = plane->signedDistance(_NEB);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_NEB);
+  }
+  distance = plane->signedDistance(_NET);
+  if (distance > maxDistance) maxDistance = distance;
+  if (distance < minDistance) {
+    minDistance = distance;
+    inner.set(_NET);
+  }
+  
+  if (minDistance > 0)
+    return COMPLETELY_OUTSIDE;
+  else if (maxDistance < 0)
+    return COMPLETELY_INSIDE;
+  else
+    return BOTH_SIDES_OF_THE_PLANE;
+}
+
 

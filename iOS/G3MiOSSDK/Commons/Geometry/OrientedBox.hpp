@@ -12,9 +12,17 @@
 #include "Vector3D.hpp"
 #include "Plane.hpp"
 #include "Box.hpp"
+#include "Polygon3D.hpp"
 
 class Mesh;
 class Sphere;
+
+enum verticesLocation {
+  COMPLETELY_OUTSIDE,
+  COMPLETELY_INSIDE,
+  BOTH_SIDES_OF_THE_PLANE
+};
+
 
 
 class OrientedBox: public BoundingVolume {
@@ -25,24 +33,8 @@ private:
   // the eight vertices (N:north, S:south, W:west, E:east, T:top, B:bottom
   const Vector3D _SWB, _SEB, _NWB, _NEB, _SWT, _SET, _NWT, _NET;
   
-  
-#ifdef C_CODE
-  const Plane _westPlane;
-  const Plane _eastPlane;
-  const Plane _southPlane;
-  const Plane _northPlane;
-  const Plane _bottomPlane;
-  const Plane _topPlane;
-#endif
-
-#ifdef JAVA_CODE
-  private final Plane _westPlane;
-  private final Plane _eastPlane;
-  private final Plane _southPlane;
-  private final Plane _northPlane;
-  private final Plane _bottomPlane;
-  private final Plane _topPlane;
-#endif
+  // the six faces
+  const Polygon3D _westFace, _eastFace, _southFace, _northFace, _bottomFace, _topFace;
 
   Vector2F projectedExtent(const G3MRenderContext* rc) const;
 
@@ -64,12 +56,12 @@ public:
   _SET(_SEB.add(heightAxis)),
   _NWT(_NWB.add(heightAxis)),
   _NET(_NEB.add(heightAxis)),
-  _westPlane(Plane::fromPoints(_SWB, _SWT, _NWT)),
-  _eastPlane(Plane::fromPoints(_SEB, _NEB, _NET)),
-  _southPlane(Plane::fromPoints(_SEB, _SET, _SWT)),
-  _northPlane(Plane::fromPoints(_NWT, _NET, _NEB)),
-  _bottomPlane(Plane::fromPoints(_NEB, _SEB, _SWB)),
-  _topPlane(Plane::fromPoints(_NET, _NWT, _SWT)),
+  _westFace(Polygon3D(_SWB, _SWT, _NWT, _NWB)),
+  _eastFace(Polygon3D(_SEB, _NEB, _NET, _SET)),
+  _southFace(Polygon3D(_SEB, _SET, _SWT, _SWB)),
+  _northFace(Polygon3D(_NWT, _NET, _NEB, _NWB)),
+  _bottomFace(Polygon3D(_NEB, _SEB, _SWB, _NWB)),
+  _topFace(Polygon3D(_NET, _NWT, _SWT, _SET)),
   _mesh(NULL)
   {
     _minX = _SWB._x;
@@ -157,6 +149,8 @@ public:
   Box* mergedWithSphere(const Sphere* that) const;
 
 
+  verticesLocation getVerticesLocationRespectToPlane(const Plane* plane,
+                                                     MutableVector3D& inner) const;
 
 
   
