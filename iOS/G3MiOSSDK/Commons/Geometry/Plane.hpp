@@ -13,8 +13,6 @@
 
 class Plane {
 private:
-  const Vector3D _normal;
-  const double   _d;
 
 #ifdef C_CODE
   const Vector3F _normalF;
@@ -25,6 +23,10 @@ private:
   const float    _dF;
 
 public:
+  
+  const Vector3D _normal;
+  const double   _d;
+
 
   static Plane fromPoints(const Vector3D& point0,
                           const Vector3D& point1,

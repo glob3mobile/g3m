@@ -50,6 +50,8 @@ public:
                                     double& smin,
                                     double& smax) const;
   
+  bool touchesPolygon3D(const Polygon3D& that) const;
+  
 };
 
 

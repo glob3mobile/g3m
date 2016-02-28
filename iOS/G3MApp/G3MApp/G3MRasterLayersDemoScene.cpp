@@ -222,15 +222,15 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   meshRenderer->addMesh(box->createMesh(Color::fromRGBA(0, 0, 1, 1)));
   
   
-  Polygon3D pol(Vector3D(-1.989148, -3.066144, -0.420044),
-                Vector3D(-4.684566, -4.215345, 5.330090),
-                Vector3D(-9.678810, -6.903100, 2.451835),
-                Vector3D(-6.983392, -5.753898, -3.298299));
-  double smin, smax;
-  bool valid = pol.intersectionWithCoplanarLine(Vector3D(-10.105556, -7.223791, 0.000000),
-                                   Vector3D(512.091061, 322.966978, 1443.141522),
-                                   smin, smax);
-  printf ("valid=%d, s=%f %f\n",valid,smin,smax);
+  Polygon3D polA(Vector3D(-1.634844, -2.612539, -1.881418),
+                 Vector3D(-2.800236, -2.940148, 4.924435),
+                 Vector3D(-6.618011, -7.054529, 4.072652),
+                 Vector3D(-5.452620, -6.726920, -2.733201));
+  Polygon3D polB(Vector3D(-4.460555, -4.088862, -4.504524),
+                 Vector3D(-8.965107, -8.868035, 54.606972),
+                 Vector3D(-11.516288, -12.901808, 54.086430),
+                 Vector3D(-7.011736, -8.122636, -5.025066));
+  printf("resultados=%d\n", polA.touchesPolygon3D(polB));
   
   /*
   // creating spheres

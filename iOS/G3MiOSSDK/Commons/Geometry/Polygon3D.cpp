@@ -85,3 +85,55 @@ bool Polygon3D::intersectionWithCoplanarLine(const Vector3D& point,
   
   return valid;
 }
+
+
+bool Polygon3D::touchesPolygon3D(const Polygon3D& that) const {
+  // compute vector of intersection straigh line betweeen both planes
+  Vector3D v = _plane.getNormal().cross(that._plane.getNormal());
+  
+  // need a point P belonging to the straight line
+  // http://geomalgorithms.com/a05-_intersect-1.html
+  double absVx = fabs(v._x);
+  double absVy = fabs(v._y);
+  double absVz = fabs(v._z);
+  double x0=0, y0=0, z0=0, den;
+  double pa1 = _plane._normal._x;
+  double pa2 = _plane._normal._y;
+  double pa3 = _plane._normal._z;
+  double pa4 = _plane._d;
+  double pb1 = that._plane._normal._x;
+  double pb2 = that._plane._normal._y;
+  double pb3 = that._plane._normal._z;
+  double pb4 = that._plane._d;
+  if (absVz > absVx && absVz > absVy) {
+    den = pa1*pb2 - pb1*pa2;
+    x0 = (pa2*pb4 - pb2*pa4) / den;
+    y0 = (pb1*pa4 - pa1*pb4) / den;
+  } else if (absVx > absVy) {
+    den = pa2*pb3 - pb2*pa3;
+    y0 = (pa3*pb4 - pb3*pa4) / den;
+    z0 = (pb2*pa4 - pa2*pb4) / den;
+  } else {
+    den = pa3*pb1 - pb3*pa1;
+    x0 = (pb3*pa4 - pa3*pb4) / den;
+    z0 = (pa1*pb4 - pb1*pa4) / den;
+  }
+  
+  // project vertices of first polygon to the straight line
+  double sminA, smaxA, sminB, smaxB;
+  Vector3D P(x0,y0,z0);
+  if (!intersectionWithCoplanarLine(P, v, sminA, smaxA)) return false;
+  if (!that.intersectionWithCoplanarLine(P, v, sminB, smaxB)) return false;
+  
+  // both polygons touches the straight line
+  // must see if exist common segment
+  double s0 = (sminA > sminB)? sminA : sminB;
+  double s1 = (smaxA < smaxB)? smaxA : smaxB;
+  
+  printf("s0=%f  s1=%f\n", s0, s1);
+  
+  return (s0 < s1);
+}
+
+
+
