@@ -6,15 +6,19 @@
 //
 
 #ifndef G3MiOSSDK_Polygon3D
-#define G3MiOSSDK_Plane
+#define G3MiOSSDK_Polygon3D
 
 #include "Plane.hpp"
+#include "MutableVector3D.hpp"
 
 
 class Polygon3D {
 
 private:
   const Vector3D _v1, _v2, _v3, _v4;
+  
+  // temp vector to use in internal computation, avoiding creating many new objects in java
+  mutable MutableVector3D _bb, _p;
   
 
 public:
@@ -40,6 +44,12 @@ public:
   {
   }
 
+  
+  bool intersectionWithCoplanarLine(const Vector3D& point,
+                                    const Vector3D& vector,
+                                    double& smin,
+                                    double& smax) const;
+  
 };
 
 

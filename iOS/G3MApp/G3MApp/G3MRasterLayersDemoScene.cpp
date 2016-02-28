@@ -221,6 +221,17 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   Box* box = sphere.mergedWithOrientedBox(&obb);
   meshRenderer->addMesh(box->createMesh(Color::fromRGBA(0, 0, 1, 1)));
   
+  
+  Polygon3D pol(Vector3D(-1.989148, -3.066144, -0.420044),
+                Vector3D(-4.684566, -4.215345, 5.330090),
+                Vector3D(-9.678810, -6.903100, 2.451835),
+                Vector3D(-6.983392, -5.753898, -3.298299));
+  double smin, smax;
+  bool valid = pol.intersectionWithCoplanarLine(Vector3D(-10.105556, -7.223791, 0.000000),
+                                   Vector3D(512.091061, 322.966978, 1443.141522),
+                                   smin, smax);
+  printf ("valid=%d, s=%f %f\n",valid,smin,smax);
+  
   /*
   // creating spheres
   {
