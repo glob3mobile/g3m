@@ -15,7 +15,7 @@
 #include "ShortBufferElevationData.hpp"
 #include "Sector.hpp"
 #include "BilParser.hpp"
-
+#include "JSONObject.hpp"
 
 class PyramidElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
@@ -26,6 +26,12 @@ private:
     bool _autodeleteListener;
     double _deltaHeight;
     bool _variableSized;
+    
+    const Vector2I* getResolution(const JSONObject *data);
+    ShortBufferElevationData* getElevationData(Sector sector,
+                                               Vector2I extent,
+                                               const JSONObject *data,
+                                               double deltaHeight);
     
 public:
     PyramidElevationDataProvider_BufferDownloadListener(const Sector& sector,

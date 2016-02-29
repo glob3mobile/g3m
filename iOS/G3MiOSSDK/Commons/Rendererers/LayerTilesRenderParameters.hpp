@@ -56,7 +56,9 @@ public:
   }
 
   static const Vector2I defaultTileMeshResolution() {
-    return Vector2I(16, 16);
+#warning ChanoAtWork - Hay que cambiar esto!
+      return Vector2I(8,8);
+    //return Vector2I(16, 16);
   }
 
   static const Vector2I defaultTileTextureResolution () {

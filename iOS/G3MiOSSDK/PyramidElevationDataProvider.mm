@@ -16,7 +16,8 @@
 #include "JSONInteger.hpp"
 #include "JSONDouble.hpp"
 #include "JSONArray.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
+#include "TimeInterval.hpp"
 #include <sstream>
 
 class PyramidElevationDataProvider::MetadataListener : public IBufferDownloadListener {
@@ -117,9 +118,9 @@ std::string PyramidElevationDataProvider::requestStringPath(const Sector &sector
 
 std::string PyramidElevationDataProvider::requestStringPath(const std::string & layer, int level, int row, int column){
     std::ostringstream strs;
-    strs << _layer << level << "/" << column << "/" << row << ".bil";
+    strs << _layer << level << "/" << column << "/" << row << ".json"; //".bil";
     std::string res = strs.str();
-    ILogger::instance()->logInfo(res);
+    //ILogger::instance()->logInfo(res);
     return res;
 }
 

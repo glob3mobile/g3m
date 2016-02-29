@@ -93,7 +93,7 @@
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
-#import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
+//#import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
@@ -111,7 +111,7 @@
 #import <G3MiOSSDK/Angle.hpp>
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
-#import <G3MiOSSDK/CartoCSSParser.hpp>
+//#import <G3MiOSSDK/CartoCSSParser.hpp>
 #import <G3MiOSSDK/ColumnCanvasElement.hpp>
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
@@ -133,7 +133,7 @@
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
-#import <G3MiOSSDK/TileRenderingListener.hpp>
+//#import <G3MiOSSDK/TileRenderingListener.hpp>
 #import <G3MiOSSDK/LayerTouchEventListener.hpp>
 #import <G3MiOSSDK/TiledVectorLayer.hpp>
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
@@ -326,8 +326,8 @@
    new CameraRollChangerTask([[self G3MWidget] widget]));
    */
     
-  [[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-45));
-  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 10000));
+  //[[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-45));
+  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 500000));
 }
 
 -(void) initWithPyramidElevations
@@ -342,9 +342,10 @@
     MeshRenderer *_meshRenderer = new MeshRenderer();
     builder.addRenderer(_meshRenderer);
     builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-    builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+    //builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
     builder.getPlanetRendererBuilder()->setRenderDebug(true);
-    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/result/";
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
+    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fusion/";
     PyramidElevationDataProvider *edp = new PyramidElevationDataProvider(server,Sector::fullSphere(),true,false);
     builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
 	   
@@ -532,7 +533,7 @@ void addSectorMesh(MeshRenderer *renderer, const Sector& sector, const Planet *p
   builder.initializeWidget();
 }
 */
-
+/*
 class MoveCameraInitializationTask : public GInitializationTask {
 private:
   G3MWidget_iOS* _iosWidget;
@@ -547,13 +548,13 @@ public:
   {
   }
   
-  void run(const G3MContext* context) {
+  void run(const G3MContext* context) {*/
     //    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } ";
     
     //    const std::string cartoCSS = "@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n";
     
     //    const std::string cartoCSS = "/* coment */ // comment\n @water: #C0E0F8; [zoom > 1] { line-color:@waterline; line-width:1.6; ::newSymbolizer { line-width:2; } } #world .class [level == 5] { background-color: black; } \n@water: #ddeeff;\n#lakes[ScaleRank<3][zoom=3],\n#lakes[ScaleRank<4][zoom=4],\n#lakes[ScaleRank<5][zoom=5],\n#lakes[ScaleRank<6][zoom>=6] {\n    polygon-fill:@water;\n    line-color:darken(@water, 20%);\n    line-width:0.3;\n  }\n.class1.class2{} ::anotherSymbolizer {background-color: black;} * {line-color:white;} ";
-    const std::string cartoCSS = "@water: #C0E0F8; #id { a:1; b:2; .class {a:2;} [level > 2] {b:3; [COUNTRY=US][COUNTRY=AR] { d:33;} } }";
+   /* const std::string cartoCSS = "@water: #C0E0F8; #id { a:1; b:2; .class {a:2;} [level > 2] {b:3; [COUNTRY=US][COUNTRY=AR] { d:33;} } }";
     
     CartoCSSResult* result = CartoCSSParser::parse(cartoCSS);
     
@@ -585,7 +586,7 @@ public:
     return true;
   }
 };
-
+*/
 
 //class ToggleGEORendererTask: public GTask {
 //private:

@@ -64,12 +64,9 @@ Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
     
     if (tile->getElevationData() != NULL) {
       mutableResolution = tile->getElevationData()->getExtent().asMutableVector2I();
-        ILogger::instance()->logInfo(tile->description()+": From elev");
     }
-    else ILogger::instance()->logInfo(tile->description()+": No elev");
     
   const Vector2I resolution = mutableResolution.asVector2I();
-    ILogger::instance()->logInfo(resolution.description());
 
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
@@ -87,7 +84,7 @@ Vector2I PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
   }
   
   const Vector2I meshRes = Vector2I(resX, resY);
-    ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
+    //ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
   return meshRes;
   
   

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PyramidElevationDataProvider_BufferDownloadListener.hpp"
+#include "JSONParser_iOS.hpp"
+#include "JSONArray.hpp"
 
 PyramidElevationDataProvider_BufferDownloadListener::PyramidElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                                                const Vector2I& extent,
@@ -26,17 +28,20 @@ PyramidElevationDataProvider_BufferDownloadListener::PyramidElevationDataProvide
 
 void PyramidElevationDataProvider_BufferDownloadListener::onDownload(const URL& url,IByteBuffer* buffer,bool expired){
     
-    Vector2I *resolution = NULL;
+    //Vector2I *resolution = NULL;
     ShortBufferElevationData *elevationData;
-    if (!_variableSized) {
-#warning Chano_at_work: Si bien la resolución está fijada a 8 porque la pirámide que sirvo la tiene, debo encontrar una forma de no fijarla por hardcoding.
+    /*if (!_variableSized) {
         resolution = new Vector2I(8, 8);
         elevationData = BilParser::parseBil16MaxMin(_sector, *resolution, buffer, _deltaHeight);
     }
     else {
         elevationData = BilParser::parseBil16Redim(_sector, buffer, _deltaHeight);
         resolution = new Vector2I(elevationData->getExtent());
-    }
+    }*/
+    std::string contents = buffer->getAsString();
+    const JSONObject *jsonContent = JSONParser_iOS::instance()->parse(contents)->asObject();
+    const Vector2I *resolution = getResolution(jsonContent);
+    elevationData = getElevationData(_sector, *resolution, jsonContent, _deltaHeight);
     
     if (buffer != NULL) delete buffer;
     
@@ -88,4 +93,41 @@ void PyramidElevationDataProvider_BufferDownloadListener::onCanceledDownload(con
         if (_listener != NULL) delete _listener;
         _listener = NULL;
     }
+}
+
+const Vector2I* PyramidElevationDataProvider_BufferDownloadListener::getResolution(const JSONObject *data){
+    return new Vector2I((int) data->getAsNumber("width",0),(int) data->getAsNumber("height",0));
+}
+
+ShortBufferElevationData* PyramidElevationDataProvider_BufferDownloadListener::getElevationData(Sector sector,
+                                                                                                Vector2I extent,
+                                                                                                const JSONObject *data,
+                                                                                                double deltaHeight){
+    const short minValue = IMathUtils::instance()->minInt16();
+    const int size = extent._x * extent._y;
+    const JSONArray *dataArray = data->getAsArray("data");
+    short *shortBuffer = new short[size];
+    for (int i = 0; i < size; i++)
+    {
+        short height = (short) dataArray->getAsNumber(i, minValue);
+        
+        if (height == 15000) //Our own NODATA, since -9999 is a valid height.
+        {
+            height = ShortBufferElevationData::NO_DATA_VALUE;
+        }
+        else if (height == minValue)
+        {
+            height = ShortBufferElevationData::NO_DATA_VALUE;
+        }
+        
+        shortBuffer[i] = height;
+    }
+    
+    short max = (short) data->getAsNumber("max",IMathUtils::instance()->minInt16());
+    short min = (short) data->getAsNumber("min",IMathUtils::instance()->maxInt16());
+    short children = (short) data->getAsNumber("withChildren",0);
+    short similarity = (short) data->getAsNumber("similarity",0);
+    
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer,
+                                        size, deltaHeight,max,min,children,similarity);
 }
