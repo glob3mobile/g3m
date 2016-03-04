@@ -149,10 +149,13 @@ bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
     int maxLevel = 0;
     for (unsigned int i=0; i< _pyrComposition->size(); i++)
         if (sector.touchesWith(_pyrComposition->at(i).getSector()))
-            maxLevel = fmax(maxLevel,_pyrComposition->at(i)._pyramidLevel);
+            maxLevel = IMathUtils::instance()->max(maxLevel,_pyrComposition->at(i)._pyramidLevel);
     
     if (level > maxLevel) return true;
-    else return false;
+    else {
+        if (!sector.touchesWith(_sector)) return true;
+        return false;
+    }
 }
 
 
