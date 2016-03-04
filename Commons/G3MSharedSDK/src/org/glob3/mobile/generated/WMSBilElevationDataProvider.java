@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class IDownloader;
 
-public class WMSBilElevationDataProvider extends ElevationDataProvider
+public abstract class WMSBilElevationDataProvider extends ElevationDataProvider
 {
   private IDownloader _downloader;
   private URL _url = new URL();

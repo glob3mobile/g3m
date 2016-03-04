@@ -23,6 +23,9 @@ public class ShortBufferElevationData extends BufferElevationData
   private short[] _buffer;
   private boolean _hasNoData;
 
+  private short _max;
+  private short _min;
+
   protected final double getValueInBufferAt(int index)
   {
     final short value = _buffer[index];
@@ -55,11 +58,43 @@ public class ShortBufferElevationData extends BufferElevationData
         break;
       }
     }
+  
+  
+    _max = IMathUtils.instance().minInt16();
+    _min = IMathUtils.instance().maxInt16();
+    _children = IMathUtils.instance().minInt16();
+    _similarity = IMathUtils.instance().minInt16();
+  }
+
+  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight, short max, short min, short children, short similarity)
+  {
+     super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
+     _buffer = buffer;
+      if (_bufferSize != (_width * _height))
+      {
+          ILogger.instance().logError("Invalid buffer size");
+      }
+  
+      final int size = _bufferSize;
+      _hasNoData = false;
+      for (int i = 0; i < size; i++)
+      {
+          if (buffer[i] == NO_DATA_VALUE)
+          {
+              _hasNoData = true;
+              break;
+          }
+      }
+  
+      _max = max;
+      _min = min;
+      _children = children;
+      _similarity = similarity;
   }
 
   public void dispose()
   {
-    _buffer = null;
+      _buffer = null;
   
     super.dispose();
   }
@@ -128,12 +163,29 @@ public class ShortBufferElevationData extends BufferElevationData
       maxHeight = 0;
     }
   
+    if (_max > mu.minInt16() && _min < mu.maxInt16())
+    {
+      minHeight = _min;
+      maxHeight = _max;
+    }
+  
     return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
   }
 
   public final boolean hasNoData()
   {
      return _hasNoData;
+  }
+
+  public final boolean hasChildren()
+  {
+     if (_children > 0)
+        return true;
+        return false;
+  }
+  public final int getSimilarity()
+  {
+     return _similarity;
   }
 
 }

@@ -87,7 +87,6 @@ _dataSize(0)
 
 Tile::~Tile() {
   //  prune(NULL, NULL);
-    ILogger::instance()->logInfo("Destroying:"+_id);
   delete _debugMesh;
   _debugMesh = NULL;
 

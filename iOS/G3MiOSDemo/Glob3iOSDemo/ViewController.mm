@@ -327,7 +327,7 @@
    */
     
   //[[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-45));
-  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 500000));
+  //[[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 500000));
 }
 
 -(void) initWithPyramidElevations
@@ -343,10 +343,22 @@
     builder.addRenderer(_meshRenderer);
     builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
     //builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
-    builder.getPlanetRendererBuilder()->setRenderDebug(true);
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
-    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fusion/";
-    PyramidElevationDataProvider *edp = new PyramidElevationDataProvider(server,Sector::fullSphere(),true,false);
+    //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+    builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
+  
+    //Tamaño fijo, 16x16
+    //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fix-16/";
+    //Tamaño variable, 2 a 16
+    //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/var-16/";
+    //Europa, fijo, 16
+    //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fix-euro-16/";
+    //Europa, variable, 2 a 16
+    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
+    //Tierra
+    //Sector sector = Sector::fullSphere();
+    //Solo Europa continental
+    Sector sector = Sector::fromDegrees(34,-10,72,50);
+    PyramidElevationDataProvider *edp = new PyramidElevationDataProvider(server,sector,true);
     builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
   
   builder.getPlanetRendererBuilder()->setRenderDebug(true);

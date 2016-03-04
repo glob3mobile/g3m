@@ -28,7 +28,7 @@ public abstract class AbstractMesh extends Mesh
   protected final boolean _owner;
   protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected final IFloatBuffer _vertices;
+  protected IFloatBuffer _vertices;
   protected final Color _flatColor;
   protected final IFloatBuffer _colors;
   protected final float _colorsIntensity;
