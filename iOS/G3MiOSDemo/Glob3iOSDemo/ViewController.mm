@@ -345,7 +345,7 @@
     //builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
     builder.getPlanetRendererBuilder()->setRenderDebug(true);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
-    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fix-16/";
+    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fusion";
     PyramidElevationDataProvider *edp = new PyramidElevationDataProvider(server,Sector::fullSphere(),true,false);
     builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
 	   
