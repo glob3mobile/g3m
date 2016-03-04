@@ -241,7 +241,6 @@ public class Tile
   public void dispose()
   {
     //  prune(NULL, NULL);
-  
     if (_debugMesh != null)
        _debugMesh.dispose();
     _debugMesh = null;
@@ -728,7 +727,9 @@ public class Tile
   
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-      return new DecimatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
+  
+        //return ed;
+      return new InterpolatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   
     ILogger.instance().logError("Can't create subview of elevation data from ancestor");
@@ -809,7 +810,6 @@ public class Tile
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
       _mustActualizeMeshDueToNewElevationData = false;
-  
       _planetRenderer.onTileHasChangedMesh(this);
   
       if (_debugMesh != null)

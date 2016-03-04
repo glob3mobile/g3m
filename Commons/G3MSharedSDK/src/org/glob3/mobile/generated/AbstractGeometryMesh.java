@@ -28,7 +28,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   protected final int _primitive;
   protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected final IFloatBuffer _vertices;
+  protected IFloatBuffer _vertices;
   protected final boolean _ownsVertices;
   protected final IFloatBuffer _normals;
   protected final boolean _ownsNormals;
