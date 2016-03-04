@@ -2,7 +2,7 @@
 //  PyramidElevationDataProvider_BufferDownloadListener.hpp
 //  G3MiOSSDK
 //
-//  Created by Sebastian Ortega Trujillo on 18/2/16.
+//  Created by Sebastian Ortega Trujillo on 4/3/16.
 //
 //
 
@@ -25,7 +25,7 @@ private:
     IElevationDataListener *_listener;
     bool _autodeleteListener;
     double _deltaHeight;
-    bool _variableSized;
+    G3MContext *_context;
     
     const Vector2I* getResolution(const JSONObject *data);
     ShortBufferElevationData* getElevationData(Sector sector,
@@ -35,11 +35,10 @@ private:
     
 public:
     PyramidElevationDataProvider_BufferDownloadListener(const Sector& sector,
-                                           const Vector2I& extent,
-                                           bool variableSized,
-                                           IElevationDataListener *listener,
-                                           bool autodeleteListener,
-                                           double deltaHeight);
+                                                        const Vector2I& extent,
+                                                        IElevationDataListener *listener,
+                                                        bool autodeleteListener,
+                                                        double deltaHeight);
     
     void onDownload(const URL& url,
                     IByteBuffer* buffer,

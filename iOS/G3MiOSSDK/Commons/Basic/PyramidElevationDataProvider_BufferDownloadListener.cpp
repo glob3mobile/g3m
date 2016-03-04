@@ -1,45 +1,34 @@
 //
-//  PyramidElevationDataProvider_BufferDownloadListener.m
+//  PyramidElevationDataProvider_BufferDownloadListener.cpp
 //  G3MiOSSDK
 //
-//  Created by Sebastian Ortega Trujillo on 18/2/16.
+//  Created by Sebastian Ortega Trujillo on 4/3/16.
 //
 //
 
-#import <Foundation/Foundation.h>
 #import "PyramidElevationDataProvider_BufferDownloadListener.hpp"
-#include "JSONParser_iOS.hpp"
+#include "G3MContext.hpp"
+#include "IJSONParser.hpp"
 #include "JSONArray.hpp"
 
 PyramidElevationDataProvider_BufferDownloadListener::PyramidElevationDataProvider_BufferDownloadListener(const Sector& sector,
-                                                                               const Vector2I& extent,
-                                                                               bool variableSized,
-                                                                               IElevationDataListener *listener,
-                                                                               bool autodeleteListener,
-                                                                               double deltaHeight) : _sector(sector){
-    //_sector = Sector(sector);
+                                                                                                         const Vector2I& extent,
+                                                                                                         IElevationDataListener *listener,
+                                                                                                         bool autodeleteListener,
+                                                                                                         double deltaHeight) : _sector(sector){
     _width = extent._x;
     _height = extent._y;
     _listener = listener;
     _autodeleteListener = autodeleteListener;
     _deltaHeight = deltaHeight;
-    _variableSized = variableSized;
 }
 
 void PyramidElevationDataProvider_BufferDownloadListener::onDownload(const URL& url,IByteBuffer* buffer,bool expired){
     
-    //Vector2I *resolution = NULL;
     ShortBufferElevationData *elevationData;
-    /*if (!_variableSized) {
-        resolution = new Vector2I(8, 8);
-        elevationData = BilParser::parseBil16MaxMin(_sector, *resolution, buffer, _deltaHeight);
-    }
-    else {
-        elevationData = BilParser::parseBil16Redim(_sector, buffer, _deltaHeight);
-        resolution = new Vector2I(elevationData->getExtent());
-    }*/
+
     std::string contents = buffer->getAsString();
-    const JSONObject *jsonContent = JSONParser_iOS::instance()->parse(contents)->asObject();
+    const JSONObject *jsonContent = IJSONParser::instance()->parse(contents)->asObject();
     const Vector2I *resolution = getResolution(jsonContent);
     elevationData = getElevationData(_sector, *resolution, jsonContent, _deltaHeight);
     
@@ -86,8 +75,8 @@ void PyramidElevationDataProvider_BufferDownloadListener::onCancel(const URL& ur
 }
 
 void PyramidElevationDataProvider_BufferDownloadListener::onCanceledDownload(const URL& url,
-                                                                IByteBuffer* data,
-                                                                bool expired){
+                                                                             IByteBuffer* data,
+                                                                             bool expired){
     if (_autodeleteListener)
     {
         if (_listener != NULL) delete _listener;
