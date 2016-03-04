@@ -348,7 +348,9 @@
     std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fusion/";
     PyramidElevationDataProvider *edp = new PyramidElevationDataProvider(server,Sector::fullSphere(),true,false);
     builder.getPlanetRendererBuilder()->setElevationDataProvider(edp);
-	   
+  
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  
 	   bool showPrimarySectors = false;
 	   if (showPrimarySectors){
            addSectorMesh(_meshRenderer, Sector::fromDegrees(50, -180, 90, -90), planet);
