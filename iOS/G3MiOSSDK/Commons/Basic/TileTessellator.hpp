@@ -18,9 +18,9 @@ class ElevationData;
 class Geodetic2D;
 class Sector;
 class PlanetRenderContext;
-
-#include "Vector2I.hpp"
-#include "Vector2F.hpp"
+class Vector2S;
+class Vector2F;
+class Angle;
 
 class TileTessellatorMeshData{
 public:
@@ -41,7 +41,7 @@ public:
                                const ElevationData* elevationData,
                                TileTessellatorMeshData& data) const = 0;
 
-  virtual Vector2I getTileMeshResolution(const G3MRenderContext* rc,
+  virtual Vector2S getTileMeshResolution(const G3MRenderContext* rc,
                                          const PlanetRenderContext* prc,
                                          const Tile* tile) const = 0;
 
@@ -49,7 +49,7 @@ public:
                                     const PlanetRenderContext* prc,
                                     const Tile* tile) const = 0;
 
-  virtual IFloatBuffer* createTextCoords(const Vector2I& resolution,
+  virtual IFloatBuffer* createTextCoords(const Vector2S& resolution,
                                          const Tile* tile) const = 0;
 
   virtual const Vector2F getTextCoord(const Tile* tile,

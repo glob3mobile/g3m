@@ -42,14 +42,14 @@ private:
 
   const TileTessellator* _tessellator;
 #ifdef C_CODE
-  const Vector2I _resolution;
+  const Vector2S _resolution;
 #endif
 #ifdef JAVA_CODE
-  private final Vector2I _resolution;
+  private final Vector2S _resolution;
 #endif
 
 public:
-  DTT_LTMInitializer(const Vector2I& resolution,
+  DTT_LTMInitializer(const Vector2S& resolution,
                      const Tile* tile,
                      const Tile* ancestor,
                      const TileTessellator* tessellator) :
@@ -100,7 +100,7 @@ public:
   }
 
   IFloatBuffer* createTextCoords() const {
-    return _tessellator->createTextCoords(_resolution, _tile);
+    return _tessellator->createTextCoords(Vector2S(_resolution._x, _resolution._y), _tile);
   }
 
 };
@@ -180,7 +180,7 @@ private:
 
   static LeveledTexturedMesh* createMesh(Tile* tile,
                                          const Mesh* tessellatorMesh,
-                                         const Vector2I tileMeshResolution,
+                                         const Vector2S tileMeshResolution,
                                          const TileTessellator* tessellator,
                                          TexturesHandler*     texturesHandler,
                                          const IImage*  backgroundTileImage,
