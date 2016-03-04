@@ -327,7 +327,7 @@
    */
     
   //[[self G3MWidget] widget]->setCameraPitch(Angle::fromDegrees(-45));
-  [[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 500000));
+  //[[self G3MWidget] widget]->setCameraPosition(Geodetic3D::fromDegrees(28, -15.6, 500000));
 }
 
 -(void) initWithPyramidElevations
@@ -343,8 +343,8 @@
     builder.addRenderer(_meshRenderer);
     builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
     //builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
-    builder.getPlanetRendererBuilder()->setRenderDebug(true);
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
+    //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+    builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
   
     //Tamaño fijo, 16x16
     //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fix-16/";
