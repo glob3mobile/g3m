@@ -492,6 +492,7 @@
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
+		D84824A61C89B3E9007F41D1 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
@@ -767,6 +768,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D84824A61C89B3E9007F41D1 /* Vector2S.hpp in CopyFiles */,
 				D0E1E2391C75D04600C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */,
 				D0E1E23A1C75D04600C37DA0 /* PyramidElevationDataProvider.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
