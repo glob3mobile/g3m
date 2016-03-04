@@ -467,10 +467,10 @@
 		CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
-		D0E1E2341C75CECA00C37DA0 /* PyramidElevationDataProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0E1E22C1C75C16300C37DA0 /* PyramidElevationDataProvider.mm */; };
-		D0E1E2351C75CECA00C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0E1E22F1C75C7C100C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.mm */; };
-		D0E1E2391C75D04600C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D0E1E2311C75C80F00C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */; };
-		D0E1E23A1C75D04600C37DA0 /* PyramidElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D0E1E2321C75CD6F00C37DA0 /* PyramidElevationDataProvider.hpp */; };
+		D0D4E56C1C89BFC800B87B11 /* PyramidElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0D4E56A1C89BFC800B87B11 /* PyramidElevationDataProvider.cpp */; };
+		D0D4E56F1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0D4E56D1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.cpp */; };
+		D0D4E5701C89C9CE00B87B11 /* PyramidElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D0D4E56B1C89BFC800B87B11 /* PyramidElevationDataProvider.hpp */; };
+		D0D4E5711C89C9DD00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D0D4E56E1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */; };
 		D8019FF01C11D91800784287 /* TileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLODTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLODTester.hpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
@@ -766,8 +766,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D0E1E2391C75D04600C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */,
-				D0E1E23A1C75D04600C37DA0 /* PyramidElevationDataProvider.hpp in CopyFiles */,
+				D0D4E5711C89C9DD00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */,
+				D0D4E5701C89C9CE00B87B11 /* PyramidElevationDataProvider.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
 				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
@@ -1759,10 +1759,10 @@
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D0E1E22C1C75C16300C37DA0 /* PyramidElevationDataProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PyramidElevationDataProvider.mm; sourceTree = "<group>"; };
-		D0E1E22F1C75C7C100C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PyramidElevationDataProvider_BufferDownloadListener.mm; sourceTree = "<group>"; };
-		D0E1E2311C75C80F00C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PyramidElevationDataProvider_BufferDownloadListener.hpp; sourceTree = "<group>"; };
-		D0E1E2321C75CD6F00C37DA0 /* PyramidElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PyramidElevationDataProvider.hpp; sourceTree = "<group>"; };
+		D0D4E56A1C89BFC800B87B11 /* PyramidElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PyramidElevationDataProvider.cpp; sourceTree = "<group>"; };
+		D0D4E56B1C89BFC800B87B11 /* PyramidElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PyramidElevationDataProvider.hpp; sourceTree = "<group>"; };
+		D0D4E56D1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PyramidElevationDataProvider_BufferDownloadListener.cpp; sourceTree = "<group>"; };
+		D0D4E56E1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PyramidElevationDataProvider_BufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8019FEE1C11D91800784287 /* TileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TileLODTester.cpp; path = Commons/Rendererers/TileLODTester.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEF1C11D91800784287 /* TileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TileLODTester.hpp; path = Commons/Rendererers/TileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
@@ -2049,10 +2049,6 @@
 				CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */,
 				CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */,
 				CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */,
-				D0E1E22C1C75C16300C37DA0 /* PyramidElevationDataProvider.mm */,
-				D0E1E22F1C75C7C100C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.mm */,
-				D0E1E2311C75C80F00C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */,
-				D0E1E2321C75CD6F00C37DA0 /* PyramidElevationDataProvider.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -2286,6 +2282,10 @@
 				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
 				CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */,
 				CF36233F1B97AFA400824932 /* CircleImageBuilder.hpp */,
+				D0D4E56A1C89BFC800B87B11 /* PyramidElevationDataProvider.cpp */,
+				D0D4E56B1C89BFC800B87B11 /* PyramidElevationDataProvider.hpp */,
+				D0D4E56D1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.cpp */,
+				D0D4E56E1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3027,8 +3027,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0E1E2341C75CECA00C37DA0 /* PyramidElevationDataProvider.mm in Sources */,
-				D0E1E2351C75CECA00C37DA0 /* PyramidElevationDataProvider_BufferDownloadListener.mm in Sources */,
 				CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */,
 				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
@@ -3326,6 +3324,7 @@
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
+				D0D4E56F1C89C1BC00B87B11 /* PyramidElevationDataProvider_BufferDownloadListener.cpp in Sources */,
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
@@ -3343,6 +3342,7 @@
 				4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */,
 				349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */,
 				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
+				D0D4E56C1C89BFC800B87B11 /* PyramidElevationDataProvider.cpp in Sources */,
 				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
 				CFCBA3BE1906F3C200FD2A2F /* RasterLayer.cpp in Sources */,
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,

@@ -1,17 +1,15 @@
 //
-//  PyramidElevationDataProvider.m
+//  PyramidElevationDataProvider.cpp
 //  G3MiOSSDK
 //
-//  Created by Sebastian Ortega Trujillo on 18/2/16.
+//  Created by Sebastian Ortega Trujillo on 4/3/16.
 //
 //
-
-#import <Foundation/Foundation.h>
 
 #import "PyramidElevationDataProvider.hpp"
 #include "PyramidElevationDataProvider_BufferDownloadListener.hpp"
+#include "IJSONParser.hpp"
 #include "DownloadPriority.hpp"
-#include "JSONParser_iOS.hpp"
 #include "JSONObject.hpp"
 #include "JSONInteger.hpp"
 #include "JSONDouble.hpp"
@@ -28,9 +26,10 @@ public:
                     IByteBuffer* buffer,
                     bool expired) {
         
-        JSONParser_iOS *parser = new JSONParser_iOS();
-        const JSONArray *array = parser->parse(buffer->getAsString(), true)->asArray();
-        delete parser;
+        const std::string str = buffer->getAsString();
+        
+        IJSONParser* parser = IJSONParser::instance();
+        const JSONArray* array = parser->parse(str)->asObject()->getAsArray("sectors");
         
         for (unsigned int i=0; i<array->size(); i++){
             _itself->push_back(PyramidComposition(getLowerLat(array,i),getLowerLon(array,i),getUpperLat(array,i),getUpperLon(array,i),getLevel(array,i)));
@@ -45,6 +44,7 @@ public:
     
 private:
     std::vector<PyramidComposition>* _itself;
+    const G3MContext *_context;
     
     double getUpperLat(const JSONArray *array, int index){
         JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat");
@@ -72,20 +72,22 @@ private:
     }
 };
 
-PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &layer, const Sector& sector, bool isMercator, bool variableSized, double deltaHeight): _sector(sector), _layer(layer){
+PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &layer, const Sector& sector,
+                                                           bool isMercator,double deltaHeight): _sector(sector), _layer(layer){
     _pyrComposition = new std::vector<PyramidComposition>();
     _deltaHeight = deltaHeight;
     _isMercator = isMercator;
-    _variableSized = variableSized;
 }
 
 PyramidElevationDataProvider::~PyramidElevationDataProvider(){
     _pyrComposition->clear();
     delete _pyrComposition;
     _pyrComposition = NULL;
+    
 }
 
 void PyramidElevationDataProvider::getMetadata() const{
+    
     _downloader->requestBuffer(URL(requestMetadataPath(),false), DownloadPriority::HIGHER, TimeInterval::fromDays(30), true, new MetadataListener(_pyrComposition), true);
 }
 
@@ -107,7 +109,7 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector 
     
     std::string path = requestStringPath(_layer,level,row,column);
     
-    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent,_variableSized, listener, autodeleteListener, _deltaHeight), true );
+    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true );
 }
 
 std::string PyramidElevationDataProvider::requestStringPath(const Sector &sector, const Vector2I &extent){
@@ -125,7 +127,7 @@ std::string PyramidElevationDataProvider::requestStringPath(const std::string & 
 }
 
 std::string PyramidElevationDataProvider::requestMetadataPath() const{
-    return _layer + "/meta.json";
+    return _layer + "meta.json";
 }
 
 void PyramidElevationDataProvider::cancelRequest(const long long requestId){
@@ -152,5 +154,6 @@ bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
     if (level > maxLevel) return true;
     else return false;
 }
+
 
 

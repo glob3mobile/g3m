@@ -1,8 +1,8 @@
 //
-//  PyramidElevationDataProvider.h
+//  PyramidElevationDataProvider.hpp
 //  G3MiOSSDK
 //
-//  Created by Sebastian Ortega Trujillo on 18/2/16.
+//  Created by Sebastian Ortega Trujillo on 4/3/16.
 //
 //
 
@@ -20,7 +20,7 @@ private:
     IDownloader * _downloader;
     const Sector _sector;
     double _deltaHeight;
-    bool _isMercator, _variableSized;
+    bool _isMercator;
     const std::string _layer;
     
     class MetadataListener;
@@ -54,7 +54,7 @@ private:
     bool aboveLevel(const Sector &sector, int level);
 public:
     
-    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, bool isMercator, bool variableSized, double deltaHeight = 0);
+    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, bool isMercator, double deltaHeight = 0);
     
     ~PyramidElevationDataProvider();
     
