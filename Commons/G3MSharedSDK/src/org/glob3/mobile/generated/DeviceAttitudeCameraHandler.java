@@ -48,6 +48,39 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     IDeviceAttitude devAtt = IDeviceAttitude.instance();
     Camera nextCamera = rc.getNextCamera();
   
+    //Updating location
+    if (_updateLocation)
+    {
+  
+      IDeviceLocation loc = IDeviceLocation.instance();
+  
+      boolean isTracking = loc.isTrackingLocation();
+      if (!isTracking)
+      {
+        isTracking = loc.startTrackingLocation();
+      }
+  
+      if (isTracking)
+      {
+        Geodetic3D g = loc.getLocation();
+        if (!g.isNan())
+        {
+  
+          //Changing current location
+          if (_locationModifier == null)
+          {
+            setPositionOnNextCamera(nextCamera, g);
+          }
+          else
+          {
+            Geodetic3D g2 = _locationModifier.modify(g);
+            setPositionOnNextCamera(nextCamera, g2);
+          }
+        }
+      }
+  
+    }
+  
     if (devAtt == null)
     {
       throw new RuntimeException("IDeviceAttitude not initilized");
@@ -81,39 +114,6 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     //Applying to Camera CS
     CoordinateSystem finalCS = camCS.applyRotation(_camRM);
     nextCamera.setCameraCoordinateSystem(finalCS);
-  
-    //Updating location
-    if (_updateLocation)
-    {
-  
-      IDeviceLocation loc = IDeviceLocation.instance();
-  
-      boolean isTracking = loc.isTrackingLocation();
-      if (!isTracking)
-      {
-        isTracking = loc.startTrackingLocation();
-      }
-  
-      if (isTracking)
-      {
-        Geodetic3D g = loc.getLocation();
-        if (!g.isNan())
-        {
-  
-          //Changing current location
-          if (_locationModifier == null)
-          {
-            setPositionOnNextCamera(nextCamera, g);
-          }
-          else
-          {
-            Geodetic3D g2 = _locationModifier.modify(g);
-            setPositionOnNextCamera(nextCamera, g2);
-          }
-        }
-      }
-  
-    }
   
   }
 
