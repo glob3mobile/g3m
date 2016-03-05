@@ -46,6 +46,8 @@ class GLState;
 class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
+class IDeviceAttitude;
+class IDeviceLocation;
 //class InfoDisplay;
 
 #include <vector>
@@ -98,7 +100,9 @@ public:
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
-                             ITextUtils*         textUtils);
+                             ITextUtils*         textUtils,
+                             IDeviceAttitude*    devAttitude,
+                             IDeviceLocation*    devLocation);
 
   static G3MWidget* create(GL*                                  gl,
                            IStorage*                            storage,

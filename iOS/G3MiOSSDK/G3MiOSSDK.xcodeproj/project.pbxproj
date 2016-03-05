@@ -486,6 +486,17 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */; };
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
+		D8378F9E1BFB32B900E6557E /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */; };
+		D8378F9F1BFB32B900E6557E /* IDeviceLocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F9B1BFB32B900E6557E /* IDeviceLocation.cpp */; };
+		D8378FA21BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */; };
+		D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA41BFB337200E6557E /* DeviceAttitude_iOS.mm */; };
+		D8378FA81BFB337200E6557E /* DeviceLocation_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA61BFB337200E6557E /* DeviceLocation_iOS.mm */; };
+		D84251EC1C29715900273D3A /* DeviceAttitudeCameraHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA11BFB331300E6557E /* DeviceAttitudeCameraHandler.hpp */; };
+		D84251ED1C29716E00273D3A /* IDeviceAttitude.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378F9A1BFB32B900E6557E /* IDeviceAttitude.hpp */; };
+		D84251EE1C29716E00273D3A /* IDeviceLocation.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378F9C1BFB32B900E6557E /* IDeviceLocation.hpp */; };
+		D84251EF1C29716E00273D3A /* ILocationModifier.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378F9D1BFB32B900E6557E /* ILocationModifier.hpp */; };
+		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
+		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
@@ -780,6 +791,12 @@
 				D8B78E281C120D4F00DDE2B9 /* ProjectedCornersDistanceTileLODTester.hpp in CopyFiles */,
 				D8B78E291C120D4F00DDE2B9 /* MaxLevelTileLODTester.hpp in CopyFiles */,
 				D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */,
+				D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */,
+				D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */,
+				D84251ED1C29716E00273D3A /* IDeviceAttitude.hpp in CopyFiles */,
+				D84251EE1C29716E00273D3A /* IDeviceLocation.hpp in CopyFiles */,
+				D84251EF1C29716E00273D3A /* ILocationModifier.hpp in CopyFiles */,
+				D84251EC1C29715900273D3A /* DeviceAttitudeCameraHandler.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
@@ -1794,6 +1811,17 @@
 		D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MaxFrameTimeTileLODTester.hpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
+		D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceAttitude.cpp; path = Commons/Interfaces/IDeviceAttitude.cpp; sourceTree = "<group>"; };
+		D8378F9A1BFB32B900E6557E /* IDeviceAttitude.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDeviceAttitude.hpp; path = Commons/Interfaces/IDeviceAttitude.hpp; sourceTree = "<group>"; };
+		D8378F9B1BFB32B900E6557E /* IDeviceLocation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceLocation.cpp; path = Commons/Interfaces/IDeviceLocation.cpp; sourceTree = "<group>"; };
+		D8378F9C1BFB32B900E6557E /* IDeviceLocation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDeviceLocation.hpp; path = Commons/Interfaces/IDeviceLocation.hpp; sourceTree = "<group>"; };
+		D8378F9D1BFB32B900E6557E /* ILocationModifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ILocationModifier.hpp; path = Commons/Interfaces/ILocationModifier.hpp; sourceTree = "<group>"; };
+		D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DeviceAttitudeCameraHandler.cpp; path = Commons/Cameras/DeviceAttitudeCameraHandler.cpp; sourceTree = "<group>"; };
+		D8378FA11BFB331300E6557E /* DeviceAttitudeCameraHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceAttitudeCameraHandler.hpp; path = Commons/Cameras/DeviceAttitudeCameraHandler.hpp; sourceTree = "<group>"; };
+		D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceAttitude_iOS.hpp; path = Specific/Derived/DeviceAttitude_iOS.hpp; sourceTree = "<group>"; };
+		D8378FA41BFB337200E6557E /* DeviceAttitude_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceAttitude_iOS.mm; path = Specific/Derived/DeviceAttitude_iOS.mm; sourceTree = "<group>"; };
+		D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceLocation_iOS.hpp; path = Specific/Derived/DeviceLocation_iOS.hpp; sourceTree = "<group>"; };
+		D8378FA61BFB337200E6557E /* DeviceLocation_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceLocation_iOS.mm; path = Specific/Derived/DeviceLocation_iOS.mm; sourceTree = "<group>"; };
 		D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = NonOverlappingMarksRenderer.cpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = NonOverlappingMarksRenderer.hpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
@@ -1976,6 +2004,10 @@
 		383BD3771577EDA20012AC53 /* Specific */ = {
 			isa = PBXGroup;
 			children = (
+				D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */,
+				D8378FA41BFB337200E6557E /* DeviceAttitude_iOS.mm */,
+				D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */,
+				D8378FA61BFB337200E6557E /* DeviceLocation_iOS.mm */,
 				CF4027D61770E7B900D5A80C /* base64.c */,
 				CF4027D71770E7B900D5A80C /* base64.h */,
 				383BD3781577EDAC0012AC53 /* Derived */,
@@ -2361,6 +2393,11 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */,
+				D8378F9A1BFB32B900E6557E /* IDeviceAttitude.hpp */,
+				D8378F9B1BFB32B900E6557E /* IDeviceLocation.cpp */,
+				D8378F9C1BFB32B900E6557E /* IDeviceLocation.hpp */,
+				D8378F9D1BFB32B900E6557E /* ILocationModifier.hpp */,
 				CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */,
 				CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */,
 				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */,
@@ -2448,6 +2485,8 @@
 		CC596F1B15C46CD7008FC230 /* Cameras */ = {
 			isa = PBXGroup;
 			children = (
+				D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */,
+				D8378FA11BFB331300E6557E /* DeviceAttitudeCameraHandler.hpp */,
 				D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */,
 				D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */,
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
@@ -3086,6 +3125,7 @@
 				CF02302519119B0100FD85E0 /* TiledVectorLayer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CF2B32691911A5A500B4AC52 /* VectorLayer.cpp in Sources */,
+				D8378F9E1BFB32B900E6557E /* IDeviceAttitude.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,
 				CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */,
@@ -3114,6 +3154,7 @@
 				CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */,
 				CFBA88EB186CCA89003A4473 /* HUDRelativeSize.cpp in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
+				D8378FA81BFB337200E6557E /* DeviceLocation_iOS.mm in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
 				CFB94E561C57E9F400DAB4E6 /* DecoratorTileLODTester.cpp in Sources */,
@@ -3143,6 +3184,7 @@
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
+				D8378F9F1BFB32B900E6557E /* IDeviceLocation.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
@@ -3265,6 +3307,7 @@
 				CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */,
 				CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
+				D8378FA21BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp in Sources */,
 				CFCE391219129D0D00E3EBE1 /* GEORasterSymbolizer.cpp in Sources */,
 				CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */,
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
@@ -3346,6 +3389,7 @@
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
+				D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */,
 				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,

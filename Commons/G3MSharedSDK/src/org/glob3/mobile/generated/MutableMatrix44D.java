@@ -565,46 +565,46 @@ public class MutableMatrix44D
   }
 
   /*
-  //Returns values from 0..15 in column mayor order
-  double get(int i) const {
-    switch (i) {
-      case 0:
-        return _m00;
-      case 1:
-        return _m10;
-      case 2:
-        return _m20;
-      case 3:
-        return _m30;
-      case 4:
-        return _m01;
-      case 5:
-        return _m11;
-      case 6:
-        return _m21;
-      case 7:
-        return _m31;
-      case 8:
-        return _m02;
-      case 9:
-        return _m12;
-      case 10:
-        return _m22;
-      case 11:
-        return _m32;
-      case 12:
-        return _m03;
-      case 13:
-        return _m13;
-      case 14:
-        return _m23;
-      case 15:
-        return _m33;
-      default:
-        ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
-        return 0;
-    }
-  }*/
+   //Returns values from 0..15 in column mayor order
+   double get(int i) const {
+   switch (i) {
+   case 0:
+   return _m00;
+   case 1:
+   return _m10;
+   case 2:
+   return _m20;
+   case 3:
+   return _m30;
+   case 4:
+   return _m01;
+   case 5:
+   return _m11;
+   case 6:
+   return _m21;
+   case 7:
+   return _m31;
+   case 8:
+   return _m02;
+   case 9:
+   return _m12;
+   case 10:
+   return _m22;
+   case 11:
+   return _m32;
+   case 12:
+   return _m03;
+   case 13:
+   return _m13;
+   case 14:
+   return _m23;
+   case 15:
+   return _m33;
+   default:
+   ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
+   return 0;
+   }
+   }*/
 
   public final void print(String name, ILogger log)
   {
@@ -809,6 +809,32 @@ public class MutableMatrix44D
     final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
   
     return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+  }
+
+  public final void setValue(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
+  {
+    _m00 = m00;
+    _m01 = m01;
+    _m02 = m02;
+    _m03 = m03;
+    _m10 = m10;
+    _m11 = m11;
+    _m12 = m12;
+    _m13 = m13;
+    _m20 = m20;
+    _m21 = m21;
+    _m22 = m22;
+    _m23 = m23;
+    _m30 = m30;
+    _m31 = m31;
+    _m32 = m32;
+    _m33 = m33;
+    _isValid = true;
+  }
+
+  public final void setValid(boolean v)
+  {
+    _isValid = v;
   }
 
 }
