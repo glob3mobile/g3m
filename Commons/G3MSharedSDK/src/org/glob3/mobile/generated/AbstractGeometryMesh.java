@@ -259,14 +259,4 @@ public abstract class AbstractGeometryMesh extends Mesh
     _showNormals = v;
   }
 
-  public final IFloatBuffer getVertices()
-  {
-    return _vertices;
-  }
-
-  public final Vector3D getCenter()
-  {
-    return _center;
-  }
-
 }
