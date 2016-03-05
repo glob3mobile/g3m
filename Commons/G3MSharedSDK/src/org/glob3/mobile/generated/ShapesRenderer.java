@@ -46,10 +46,8 @@ public class ShapesRenderer extends DefaultRenderer
   private GLState _glState;
   private GLState _glStateTransparent;
 
-  private void updateGLState(G3MRenderContext rc)
+  private void updateGLState(Camera camera)
   {
-  
-    final Camera camera = rc.getCurrentCamera();
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
@@ -69,7 +67,6 @@ public class ShapesRenderer extends DefaultRenderer
     {
       f.setMatrix(camera.getModelViewMatrix44D());
     }
-  
   }
 
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
@@ -102,6 +99,7 @@ public class ShapesRenderer extends DefaultRenderer
     _loadQueue.clear();
   }
 
+  private MutableVector3D _currentCameraPosition = new MutableVector3D();
 
   private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
   {
@@ -302,33 +300,35 @@ public class ShapesRenderer extends DefaultRenderer
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
-    MutableVector3D cameraPosition = new MutableVector3D();
-    rc.getCurrentCamera().getCartesianPositionMutable(cameraPosition);
-  
-    //Setting camera matrixes
-    updateGLState(rc);
-  
-    _glState.setParent(glState);
-    _glStateTransparent.setParent(glState);
-  
-  
     final int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++)
+    if (shapesCount > 0)
     {
-      Shape shape = _shapes.get(i);
-      if (shape.isEnable())
-      {
-        if (shape.isTransparent(rc))
-        {
-          final Planet planet = rc.getPlanet();
-          final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
-          final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+      _lastCamera.getCartesianPositionMutable(_currentCameraPosition);
   
-          rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glStateTransparent, _renderNotReadyShapes));
-        }
-        else
+      //Setting camera matrixes
+      updateGLState(_lastCamera);
+  
+      _glState.setParent(glState);
+      _glStateTransparent.setParent(glState);
+  
+  
+      for (int i = 0; i < shapesCount; i++)
+      {
+        Shape shape = _shapes.get(i);
+        if (shape.isEnable())
         {
-          shape.render(rc, _glState, _renderNotReadyShapes);
+          if (shape.isTransparent(rc))
+          {
+            final Planet planet = rc.getPlanet();
+            final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
+            final double squaredDistanceFromEye = shapePosition.sub(_currentCameraPosition).squaredLength();
+  
+            rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye, _glStateTransparent, _renderNotReadyShapes));
+          }
+          else
+          {
+            shape.render(rc, _glState, _renderNotReadyShapes);
+          }
         }
       }
     }

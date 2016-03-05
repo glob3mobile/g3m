@@ -3,7 +3,6 @@
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 14/06/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GL

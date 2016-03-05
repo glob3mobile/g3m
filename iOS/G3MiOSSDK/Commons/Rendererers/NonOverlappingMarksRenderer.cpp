@@ -582,14 +582,16 @@ void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camer
 }
 
 void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const Camera* camera = rc->getCurrentCamera();
-  const Planet* planet = rc->getPlanet();
+  if (!_marks.empty()) {
+    const Camera* camera = rc->getCurrentCamera();
+    const Planet* planet = rc->getPlanet();
 
-  computeMarksToBeRendered(camera, planet);
-  computeForces(camera, planet);
-  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
+    computeMarksToBeRendered(camera, planet);
+    computeForces(camera, planet);
+    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
 
-  renderMarks(rc, glState);
+    renderMarks(rc, glState);
+  }
 }
 
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,

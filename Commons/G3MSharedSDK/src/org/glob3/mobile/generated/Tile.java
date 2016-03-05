@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -667,7 +665,7 @@ public class Tile
   public final void initializeElevationData(G3MRenderContext rc, PlanetRenderContext prc)
   {
   
-    final Vector2I tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
+    final Vector2S tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
   
     //Storing for subviewing
     _lastElevationDataProvider = prc._elevationDataProvider;
@@ -676,15 +674,17 @@ public class Tile
     if (_elevationDataRequest == null)
     {
   
-      final Vector2I res = prc._tessellator.getTileMeshResolution(rc, prc, this);
-      _elevationDataRequest = new TileElevationDataRequest(this, res, prc._elevationDataProvider);
+      final Vector2S res = prc._tessellator.getTileMeshResolution(rc, prc, this);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning should ElevationData res should be short?
+      _elevationDataRequest = new TileElevationDataRequest(this, res.asVector2I(), prc._elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }
   
     //If after petition we still have no data we request from ancestor (provider asynchronous)
     if (_elevationData == null)
     {
-      getElevationDataFromAncestor(tileMeshResolution);
+      getElevationDataFromAncestor(tileMeshResolution.asVector2I());
     }
   
   }

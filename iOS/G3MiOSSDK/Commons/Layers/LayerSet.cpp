@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "LayerSet.hpp"
@@ -287,8 +286,8 @@ private:
   int     _maxLevel;
   int     _tileTextureWidth;
   int     _tileTextureHeight;
-  int     _tileMeshWidth;
-  int     _tileMeshHeight;
+  short     _tileMeshWidth;
+  short     _tileMeshHeight;
   bool    _mercator;
 
 public:
@@ -414,7 +413,7 @@ public:
                                           _firstLevel,
                                           _maxLevel,
                                           Vector2I(_tileTextureWidth, _tileTextureHeight),
-                                          Vector2I(_tileMeshWidth,    _tileMeshHeight),
+                                          Vector2S(_tileMeshWidth,    _tileMeshHeight),
                                           _mercator);
   }
 };
