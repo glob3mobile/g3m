@@ -14,23 +14,24 @@
 
 -(BOOL) startTrackingLocation{
   
-  if (_requestingPermission){
-    return FALSE;
-  }
-
   CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
   if (status == kCLAuthorizationStatusRestricted ||
       status == kCLAuthorizationStatusDenied ||
+      status == kCLAuthorizationStatusAuthorizedWhenInUse ||
       ![CLLocationManager locationServicesEnabled]){
     _requestingPermission = FALSE;
-    return false;
   }
   
+  if (_requestingPermission){
+    return FALSE;
+  }
   
-  _locationManager = [[CLLocationManager alloc] init];
-  _locationManager.delegate = self;
-  _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-  _locationManager.distanceFilter = kCLDistanceFilterNone;
+  if (_locationManager == nil){
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    _locationManager.distanceFilter = kCLDistanceFilterNone;
+  }
   
   if (status == kCLAuthorizationStatusNotDetermined &&
       [_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
