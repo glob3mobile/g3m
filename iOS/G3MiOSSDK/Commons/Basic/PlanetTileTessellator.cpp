@@ -59,8 +59,17 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-  const Vector2S resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
-  
+#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile. Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
+    
+  MutableVector2I mutableResolution((int)prc->_layerTilesRenderParameters->_tileMeshResolution._x,
+                                    (int)prc->_layerTilesRenderParameters->_tileMeshResolution._y);
+    
+    if (tile->getElevationData() != NULL) {
+      mutableResolution = tile->getElevationData()->getExtent().asMutableVector2I();
+    }
+    
+  const Vector2I resolution = mutableResolution.asVector2I();
+
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
   
@@ -76,7 +85,8 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
     resY = 2;
   }
   
-  const Vector2S meshRes = Vector2S(resX, resY);
+  const Vector2S meshRes(resX, resY);
+    //ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
   return meshRes;
   
   
@@ -419,6 +429,12 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   //Storing surface resolution
   data._meshResLat = ry;
   data._meshResLon = rx;
+  
+  if (elevationData != NULL){
+    data._demDistanceToNextLoD = elevationData->getSimilarity();
+  } else{
+    data._demDistanceToNextLoD = 0;
+  }
   
   //VERTICES///////////////////////////////////////////////////////////////
   const double minElevation = createSurfaceVertices(Vector2S(meshResolution._x, meshResolution._y),

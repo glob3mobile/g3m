@@ -7,7 +7,17 @@ public class PlanetTileTessellator extends TileTessellator
   private Vector2S calculateResolution(PlanetRenderContext prc, Tile tile, Sector renderedSector)
   {
     Sector sector = tile._sector;
-    final Vector2S resolution = prc._layerTilesRenderParameters._tileMeshResolution;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile.Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
+  
+    MutableVector2I mutableResolution = prc._layerTilesRenderParameters._tileMeshResolution.asMutableVector2I();
+  
+      if (tile.getElevationData() != null)
+      {
+        mutableResolution = tile.getElevationData().getExtent().asMutableVector2I();
+      }
+  
+    final Vector2I resolution = mutableResolution.asVector2I();
   
     final double latRatio = sector._deltaLatitude._degrees / renderedSector._deltaLatitude._degrees;
     final double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
@@ -501,6 +511,14 @@ public class PlanetTileTessellator extends TileTessellator
     TileTessellatorMeshData data = new TileTessellatorMeshData();
     createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, data);
   
+    /*const Sector meshSector = getRenderedSectorForTile(tile);
+    const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
+    const short rx = (short)meshResolution._x;
+    const short ry = (short)meshResolution._y;
+    
+    AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
+    const IFloatBuffer* vertices = mesh->getVertices();
+  
     //INDEX OF BORDER///////////////////////////////////////////////////////////////
     ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
     for (short j = 0; j < meshResolution._x; j++)
@@ -559,7 +577,7 @@ public class PlanetTileTessellator extends TileTessellator
     return c;
   }
 
-  public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
+  public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile)
   {
   
     PlanetTileTessellatorData data = (PlanetTileTessellatorData) tile.getTessellatorData();

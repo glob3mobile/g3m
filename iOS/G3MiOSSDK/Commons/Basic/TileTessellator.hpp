@@ -32,6 +32,8 @@ public:
   
   int _meshResLat;
   int _meshResLon;
+  
+  short _demDistanceToNextLoD;
 };
 
 

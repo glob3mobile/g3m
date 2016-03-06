@@ -64,6 +64,8 @@
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
 		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
+		D8353E7F1C8C42DE00369B18 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8353E7E1C8C42DE00369B18 /* CoreLocation.framework */; };
+		D8353E811C8C42F400369B18 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8353E801C8C42F400369B18 /* CoreMotion.framework */; };
 		D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D84D3C97194753A900D16D69 /* radar-sprite.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
@@ -171,6 +173,8 @@
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
 		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
+		D8353E7E1C8C42DE00369B18 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D8353E801C8C42F400369B18 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		D84D3C97194753A900D16D69 /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
@@ -212,6 +216,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8353E811C8C42F400369B18 /* CoreMotion.framework in Frameworks */,
+				D8353E7F1C8C42DE00369B18 /* CoreLocation.framework in Frameworks */,
 				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
 				CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */,
@@ -250,6 +256,8 @@
 		D8EEF3891577920B003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D8353E801C8C42F400369B18 /* CoreMotion.framework */,
+				D8353E7E1C8C42DE00369B18 /* CoreLocation.framework */,
 				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
 				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
 				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,

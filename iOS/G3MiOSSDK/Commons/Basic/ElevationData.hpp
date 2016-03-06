@@ -49,6 +49,10 @@ public:
   virtual int getExtentHeight() const {
     return _height;
   }
+  
+  virtual short getSimilarity() const {
+    return _similarity;
+  }
 
   const Geodetic2D getResolution() const {
     return _resolution;

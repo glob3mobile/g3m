@@ -29,8 +29,9 @@ bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderCont
     
     const Box* box = data->_boundingBox;
     const Camera* cam = rc->getCurrentCamera();
+    const Vector3D pos = cam->getCartesianPosition();
     
-    if (box->contains(cam->getCartesianPosition())){
+    if (box->contains(pos)){
       return false;
     }
     
@@ -52,12 +53,26 @@ bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderCont
     }
     
     //Position of closest possible texel
-    const Vector3D texelPos = box->closestPoint(cam->getCartesianPosition());
+    const Vector3D closestPossiblePointOnTile = box->closestPoint(cam->getCartesianPosition());
     
     //Distance of the view plane containing texelPos
-    const double size = cam->maxScreenSizeOf(texelSize, texelPos);
+    const double sizeTexel = cam->maxScreenSizeOf(texelSize, closestPossiblePointOnTile);
     
-    return size < _maxAllowedPixelsForTexel;
+    if (sizeTexel >= _maxAllowedPixelsForTexel){
+      return false;
+    } else{
+      
+      if (meshData->_demDistanceToNextLoD <= 0){
+        return true;
+      }
+      
+      //Checking DEM
+      const double demErrorScreenSize = cam->maxScreenSizeOf(meshData->_demDistanceToNextLoD, closestPossiblePointOnTile);
+
+      return demErrorScreenSize < 1;
+      
+      
+    }
   }
   
   return true;
@@ -76,5 +91,6 @@ MaxTexelProjectedSizeTileLODTester::PvtData* MaxTexelProjectedSizeTileLODTester:
 }
 
 void MaxTexelProjectedSizeTileLODTester::onTileHasChangedMesh(const Tile* tile) const {
-  createData(tile);
+//  createData(tile);
+  tile->clearDataWithID(MaxTexelProjectedSizeTLTDataID);
 }
