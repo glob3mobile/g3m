@@ -25,7 +25,7 @@ public class DTT_TileTextureBuilder extends RCObject
     return (mesh == null) ? null : mesh.getTopLevelTextureId();
   }
 
-  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2I tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backgroundTileImage, String backgroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
+  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2S tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backgroundTileImage, String backgroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
   {
     java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 

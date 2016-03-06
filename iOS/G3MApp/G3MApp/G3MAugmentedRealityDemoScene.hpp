@@ -11,13 +11,11 @@
 
 #include "G3MDemoScene.hpp"
 
-@class CLLocationManager;
-@class CMMotionManager;
+class DeviceAttitudeCameraHandler;
 
 class G3MAugmentedRealityDemoScene : public G3MDemoScene {
 private:
-  CLLocationManager* _locationManager;
-  CMMotionManager*   _motionManager;
+  DeviceAttitudeCameraHandler* _dac;
 
 protected:
   void rawActivate(const G3MContext* context);
@@ -30,8 +28,7 @@ protected:
 public:
   G3MAugmentedRealityDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Augmented Reality", "", -1),
-  _locationManager(nil),
-  _motionManager(nil)
+  _dac(NULL)
   {
   }
 

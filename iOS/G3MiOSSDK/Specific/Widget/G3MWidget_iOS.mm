@@ -23,7 +23,8 @@
 #include "Sector.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "InfoDisplay.hpp"
-
+#include "DeviceAttitude_iOS.hpp"
+#include "DeviceLocation_iOS.hpp"
 
 @interface G3MWidget_iOS () {
   CGFloat _scale;
@@ -425,6 +426,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   IMathUtils*         mathUtils       = new MathUtils_iOS();
   IJSONParser*        jsonParser      = new JSONParser_iOS();
   ITextUtils*         textUtils       = new TextUtils_iOS();
+  IDeviceAttitude*    devAttitude     = new DeviceAttitude_iOS(false);
+  IDeviceLocation*    devLocation     = new DeviceLocation_iOS();
+  
 
   G3MWidget::initSingletons(logger,
                             factory,
@@ -432,7 +436,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                             stringBuilder,
                             mathUtils,
                             jsonParser,
-                            textUtils);
+                            textUtils,
+                            devAttitude,
+                            devLocation);
 }
 
 - (CameraRenderer*)getCameraRenderer {
