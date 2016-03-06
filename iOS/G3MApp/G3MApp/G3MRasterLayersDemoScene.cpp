@@ -232,7 +232,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
                  Vector3D(-7.011736, -8.122636, -5.025066));
   printf("resultados=%d\n", polA.touchesPolygon3D(polB));
   
-  /*
+  
   // creating spheres
   {
     // outside, close to a frustum corner
@@ -258,7 +258,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }*/
-  /*
+  
   {
     // inside the frustum center
     Sphere sphere(Vector3D(6380000, 0, 686000), 800);
@@ -270,7 +270,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     Sphere sphere(Vector3D(6375000, 0, 700000), 8500);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
-  }*/
+  }
 
   
   // locating camera

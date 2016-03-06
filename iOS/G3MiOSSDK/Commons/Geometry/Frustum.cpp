@@ -36,32 +36,25 @@ _rf(StraightLine(_rtf, _rtf.sub(_rbf))),
 _tf(StraightLine(_ltf, _ltf.sub(_rtf))),
 _bf(StraightLine(_lbf, _lbf.sub(_rbf))),
 _znear(data._znear),
-_leftPlane(Plane::fromPoints(Vector3D::zero,
-                             Vector3D(data._left, data._top, -data._znear),
-                             Vector3D(data._left, data._bottom, -data._znear))),
-_bottomPlane(Plane::fromPoints(Vector3D::zero,
-                               Vector3D(data._left, data._bottom, -data._znear),
-                               Vector3D(data._right, data._bottom, -data._znear))),
-_rightPlane(Plane::fromPoints(Vector3D::zero,
-                              Vector3D(data._right, data._bottom, -data._znear),
-                              Vector3D(data._right, data._top, -data._znear))),
-_topPlane(Plane::fromPoints(Vector3D::zero,
-                            Vector3D(data._right, data._top, -data._znear),
-                            Vector3D(data._left, data._top, -data._znear))),
-_nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
-_farPlane(Plane(Vector3D(0, 0, -1), -data._zfar)),
+_leftFace(Polygon3D(_lbn, _ltn, _ltf, _lbf)),
+_rightFace(Polygon3D(_rbf, _rtf, _rtn, _rbn)),
+_bottomFace(Polygon3D(_rbf, _rbn, _lbn, _lbf)),
+_topFace(Polygon3D(_rtn, _rtf, _ltf, _ltn)),
+_nearFace(Polygon3D(_lbn, _rbn, _rtn, _ltn)),
+_farFace(Polygon3D(_lbf, _ltf, _rtf, _rbf)),
+
 _boundingVolume(NULL)
 {
 }
 
 
 bool Frustum::contains(const Vector3D& point) const {
-  if (_leftPlane.signedDistance(point)   > 0) return false;
-  if (_rightPlane.signedDistance(point)  > 0) return false;
-  if (_bottomPlane.signedDistance(point) > 0) return false;
-  if (_topPlane.signedDistance(point)    > 0) return false;
-  if (_nearPlane.signedDistance(point)   > 0) return false;
-  if (_farPlane.signedDistance(point)    > 0) return false;
+  if (_leftFace._plane.signedDistance(point)   > 0) return false;
+  if (_rightFace._plane.signedDistance(point)  > 0) return false;
+  if (_bottomFace._plane.signedDistance(point) > 0) return false;
+  if (_topFace._plane.signedDistance(point)    > 0) return false;
+  if (_nearFace._plane.signedDistance(point)   > 0) return false;
+  if (_farFace._plane.signedDistance(point)    > 0) return false;
   return true;
 }
 
@@ -99,12 +92,12 @@ bool Frustum::touchesWithBox(const Box* that) const {
     Vector3F((float) max._x, (float) max._y, (float) max._z)
   };
 
-  return (!testAllCornersInside(_leftPlane,   corners) &&
-          !testAllCornersInside(_bottomPlane, corners) &&
-          !testAllCornersInside(_rightPlane,  corners) &&
-          !testAllCornersInside(_topPlane,    corners) &&
-          !testAllCornersInside(_nearPlane,   corners) &&
-          !testAllCornersInside(_farPlane,    corners));
+  return (!testAllCornersInside(_leftFace._plane,   corners) &&
+          !testAllCornersInside(_bottomFace._plane, corners) &&
+          !testAllCornersInside(_rightFace._plane,  corners) &&
+          !testAllCornersInside(_topFace._plane,    corners) &&
+          !testAllCornersInside(_nearFace._plane,   corners) &&
+          !testAllCornersInside(_farFace._plane,    corners));
 #endif
 #ifdef JAVA_CODE
   final Vector3F[] corners = that.getCornersArray();
@@ -218,29 +211,30 @@ Mesh* Frustum::createWireFrameMesh() const {
 
 bool Frustum::touchesWithSphere(const Sphere* sphere) const {
   // this implementation is right exact, but slower than touchesFrustumApprox()
+  // based on http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Intersecci%f3n%20esfera%20frustum.pdf
   int numOutsiders = 0;
 
   // compute distances to near and far planes
-  double nearDistance = _nearPlane.signedDistance(sphere->_center);
+  double nearDistance = _nearFace._plane.signedDistance(sphere->_center);
   if (nearDistance > sphere->_radius) return false;
   if (nearDistance > 0) numOutsiders++;
-  double farDistance = _farPlane.signedDistance(sphere->_center);
+  double farDistance = _farFace._plane.signedDistance(sphere->_center);
   if (farDistance > sphere->_radius) return false;
   if (farDistance > 0) numOutsiders++;
   
   // test if sphere center is behind center of projection, to invert sign of lateral sides
   double invSign = 1;
   if (nearDistance > _znear) invSign = -1;
-  double leftDistance = _leftPlane.signedDistance(sphere->_center) * invSign;
+  double leftDistance = _leftFace._plane.signedDistance(sphere->_center) * invSign;
   if (leftDistance > sphere->_radius) return false;
   if (leftDistance > 0) numOutsiders++;
-  double rightDistance = _rightPlane.signedDistance(sphere->_center) * invSign;
+  double rightDistance = _rightFace._plane.signedDistance(sphere->_center) * invSign;
   if (rightDistance > sphere->_radius) return false;
   if (rightDistance > 0) numOutsiders++;
-  double topDistance = _topPlane.signedDistance(sphere->_center) * invSign;
+  double topDistance = _topFace._plane.signedDistance(sphere->_center) * invSign;
   if (topDistance > sphere->_radius) return false;
   if (topDistance > 0) numOutsiders++;
-  double bottomDistance = _bottomPlane.signedDistance(sphere->_center) * invSign;
+  double bottomDistance = _bottomFace._plane.signedDistance(sphere->_center) * invSign;
   if (bottomDistance > sphere->_radius) return false;
   if (bottomDistance > 0) numOutsiders++;
   

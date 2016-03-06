@@ -13,6 +13,7 @@
 #include "Plane.hpp"
 #include "BoundingVolume.hpp"
 #include "StraightLine.hpp"
+#include "Polygon3D.hpp"
 
 class Box;
 class Mesh;
@@ -71,17 +72,22 @@ private:
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
+  // the six faces
+  const Polygon3D _leftFace, _rightFace, _bottomFace, _topFace, _nearFace, _farFace;
+  
   // the center of projection for the frustum
   const double _znear;
   
 
-#ifdef C_CODE
-  const Plane _leftPlane;
+
+ #ifdef C_CODE
+/*  const Plane _leftPlane;
   const Plane _rightPlane;
   const Plane _bottomPlane;
   const Plane _topPlane;
   const Plane _nearPlane;
   const Plane _farPlane;
+  */
   
   // the four lateral edges of the frustum
   const StraightLine _lt, _rt, _lb, _rb;
@@ -94,12 +100,13 @@ private:
 
 #endif
 #ifdef JAVA_CODE
-  private final Plane _leftPlane;
+/*  private final Plane _leftPlane;
   private final Plane _rightPlane;
   private final Plane _bottomPlane;
   private final Plane _topPlane;
   private final Plane _nearPlane;
   private final Plane _farPlane;
+  */
   
   // the four lateral edges of the frustum
   private final StraightLine _lt, _rt, _lb, _rb;
@@ -139,12 +146,12 @@ private:
   _tf(StraightLine(_ltf, _ltf.sub(_rtf))),
   _bf(StraightLine(_lbf, _lbf.sub(_rbf))),
   _znear(that->_znear),
-  _leftPlane(that->_leftPlane.transformedByTranspose(matrix)),
-  _rightPlane(that->_rightPlane.transformedByTranspose(matrix)),
-  _bottomPlane(that->_bottomPlane.transformedByTranspose(matrix)),
-  _topPlane(that->_topPlane.transformedByTranspose(matrix)),
-  _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
-  _farPlane(that->_farPlane.transformedByTranspose(matrix)),
+  _leftFace(Polygon3D(_lbn, _ltn, _ltf, _lbf)),
+  _rightFace(Polygon3D(_rbf, _rtf, _rtn, _rbn)),
+  _bottomFace(Polygon3D(_rbf, _rbn, _lbn, _lbf)),
+  _topFace(Polygon3D(_rtn, _rtf, _ltf, _ltn)),
+  _nearFace(Polygon3D(_lbn, _rbn, _rtn, _ltn)),
+  _farFace(Polygon3D(_lbf, _ltf, _rtf, _rbf)),
   _boundingVolume(NULL)
   {
     //_boundingVolume = computeBoundingVolume();
@@ -155,12 +162,12 @@ private:
   
 public:
   Frustum(const Frustum& that) :
-  _leftPlane(that._leftPlane),
-  _rightPlane(that._rightPlane),
-  _bottomPlane(that._bottomPlane),
-  _topPlane(that._topPlane),
-  _nearPlane(that._nearPlane),
-  _farPlane(that._farPlane),
+  _leftFace(that._leftFace),
+  _rightFace(that._rightFace),
+  _bottomFace(that._bottomFace),
+  _topFace(that._topFace),
+  _nearFace(that._nearFace),
+  _farFace(that._farFace),
   _ltn(that._ltn),
   _rtn(that._rtn),
   _lbn(that._lbn),
@@ -211,20 +218,12 @@ public:
   _tf(StraightLine(_ltf, _ltf.sub(_rtf))),
   _bf(StraightLine(_lbf, _lbf.sub(_rbf))),
   _znear(znear),
-  _leftPlane(Plane::fromPoints(Vector3D::zero,
-                               Vector3D(left, top, -znear),
-                               Vector3D(left, bottom, -znear))),
-  _bottomPlane(Plane::fromPoints(Vector3D::zero,
-                                 Vector3D(left, bottom, -znear),
-                                 Vector3D(right, bottom, -znear))),
-  _rightPlane(Plane::fromPoints(Vector3D::zero,
-                                Vector3D(right, bottom, -znear),
-                                Vector3D(right, top, -znear))),
-  _topPlane(Plane::fromPoints(Vector3D::zero,
-                              Vector3D(right, top, -znear),
-                              Vector3D(left, top, -znear))),
-  _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
-  _farPlane(Plane(Vector3D(0, 0, -1), -zfar)),
+  _leftFace(Polygon3D(_lbn, _ltn, _ltf, _lbf)),
+  _rightFace(Polygon3D(_rbf, _rtf, _rtn, _rbn)),
+  _bottomFace(Polygon3D(_rbf, _rbn, _lbn, _lbf)),
+  _topFace(Polygon3D(_rtn, _rtf, _ltf, _ltn)),
+  _nearFace(Polygon3D(_lbn, _rbn, _rtn, _ltn)),
+  _farFace(Polygon3D(_lbf, _ltf, _rtf, _rbf)),
   _boundingVolume(NULL)
   {
   }
@@ -251,12 +250,20 @@ public:
     return _boundingVolume;
   }
   
-  Plane getTopPlane() const    { return _topPlane; }
-  Plane getBottomPlane() const { return _bottomPlane; }
-  Plane getLeftPlane() const   { return _leftPlane; }
-  Plane getRightPlane() const  { return _rightPlane; }
-  Plane getNearPlane() const   { return _nearPlane; }
-  Plane getFarPlane() const    { return _farPlane; }
+  Polygon3D getTopFace() const    { return _topFace; }
+  Polygon3D getBottomFace() const { return _bottomFace; }
+  Polygon3D getLeftFace() const   { return _leftFace; }
+  Polygon3D getRightFace() const  { return _rightFace; }
+  Polygon3D getNearFace() const   { return _nearFace; }
+  Polygon3D getFarFace() const    { return _farFace; }
+  
+  Plane getTopPlane() const    { return _topFace._plane; }
+  Plane getBottomPlane() const { return _bottomFace._plane; }
+  Plane getLeftPlane() const   { return _leftFace._plane; }
+  Plane getRightPlane() const  { return _rightFace._plane; }
+  Plane getNearPlane() const   { return _nearFace._plane; }
+  Plane getFarPlane() const    { return _farFace._plane; }
+
   
   Mesh* createWireFrameMesh() const;
   

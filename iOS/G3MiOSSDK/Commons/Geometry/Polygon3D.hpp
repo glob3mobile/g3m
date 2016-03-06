@@ -43,6 +43,15 @@ public:
   _plane(Plane::fromPoints(v1, v2, v3))
   {
   }
+  
+  Polygon3D(const Polygon3D& that):
+  _v1(that._v1),
+  _v2(that._v2),
+  _v3(that._v3),
+  _v4(that._v4),
+  _plane(that._plane)
+  {
+  }
 
   
   bool intersectionWithCoplanarLine(const Vector3D& point,
