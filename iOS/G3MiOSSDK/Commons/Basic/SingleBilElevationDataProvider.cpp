@@ -228,3 +228,12 @@ void SingleBilElevationDataProvider::removeQueueRequest(const long long requestI
   _requestsQueue.remove(requestId);
 #endif
 }
+
+const long long SingleBilElevationDataProvider::requestElevationData(const Sector& sector,
+                                     int level, int row, int column,
+                                     const Vector2I& extent,
+                                     IElevationDataListener* listener,
+                                                                     bool autodeleteListener){
+    return requestElevationData(sector, extent, listener, autodeleteListener);
+}
+

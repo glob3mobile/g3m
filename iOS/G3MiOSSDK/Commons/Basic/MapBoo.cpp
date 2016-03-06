@@ -585,7 +585,7 @@ void MapBoo::MBVectorSymbology::apply(const URL&                                
                                         true,  // readExpired
                                         true,  // verbose
                                         false,  // haltOnError
-                                        VectorStreamingRenderer::Format::SERVER);
+                                        VectorStreamingRenderer::SERVER);
 }
 
 void MapBoo::MBSymbolizedDataset::apply(const URL&                                          serverURL,

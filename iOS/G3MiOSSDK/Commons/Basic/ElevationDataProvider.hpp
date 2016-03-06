@@ -68,7 +68,13 @@ public:
                                                const Vector2I& extent,
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
-
+    
+  virtual const long long requestElevationData(const Sector& sector,
+                                               int level, int row, int column,
+                                                 const Vector2I& extent,
+                                                 IElevationDataListener* listener,
+                                                 bool autodeleteListener) = 0;
+    
   virtual void cancelRequest(const long long requestId) = 0;
 
   virtual std::vector<const Sector*> getSectors() const = 0;

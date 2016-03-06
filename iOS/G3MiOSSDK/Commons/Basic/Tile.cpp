@@ -23,7 +23,7 @@
 #include "TilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
 #include "LayerTilesRenderParameters.hpp"
-#include "DecimatedSubviewElevationData.hpp"
+#include "InterpolatedSubviewElevationData.hpp"
 
 
 std::string Tile::createTileId(int level,
@@ -87,7 +87,6 @@ _dataSize(0)
 
 Tile::~Tile() {
   //  prune(NULL, NULL);
-
   delete _debugMesh;
   _debugMesh = NULL;
 
@@ -178,7 +177,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
-
     _planetRenderer->onTileHasChangedMesh(this);
 
     if (_debugMesh != NULL) {
@@ -654,7 +652,9 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   if ((_lastElevationDataProvider != NULL) &&
       (_lastTileMeshResolutionX > 0) &&
       (_lastTileMeshResolutionY > 0)) {
-    return new DecimatedSubviewElevationData(ed,
+      
+      //return ed;
+    return new InterpolatedSubviewElevationData(ed,
                                              _sector,
                                              Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
   }

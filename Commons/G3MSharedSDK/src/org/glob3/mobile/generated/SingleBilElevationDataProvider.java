@@ -131,6 +131,11 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     return -1;
   }
 
+  public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  {
+      return requestElevationData(sector, extent, listener, autodeleteListener);
+  }
+
   public final void cancelRequest(long requestId)
   {
     if (requestId >= 0)

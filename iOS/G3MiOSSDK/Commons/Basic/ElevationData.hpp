@@ -31,6 +31,8 @@ protected:
   const int _height;
 
   const Geodetic2D _resolution;
+    
+  short _children, _similarity;
 
 public:
   ElevationData(const Sector& sector,

@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 //class CompositeElevationData;
 
-public class CompositeElevationDataProvider extends ElevationDataProvider
+public abstract class CompositeElevationDataProvider extends ElevationDataProvider
 {
   private G3MContext _context;
 
