@@ -10,7 +10,7 @@ public class PlanetTileTessellator extends TileTessellator
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile.Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
   
-    MutableVector2I mutableResolution = prc._layerTilesRenderParameters._tileMeshResolution.asMutableVector2I();
+    MutableVector2I mutableResolution = new MutableVector2I((int)prc._layerTilesRenderParameters._tileMeshResolution._x, (int)prc._layerTilesRenderParameters._tileMeshResolution._y);
   
       if (tile.getElevationData() != null)
       {
@@ -37,6 +37,7 @@ public class PlanetTileTessellator extends TileTessellator
     }
   
     final Vector2S meshRes = new Vector2S(resX, resY);
+      //ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
     return meshRes;
   
   
@@ -176,6 +177,15 @@ public class PlanetTileTessellator extends TileTessellator
     //Storing surface resolution
     data._meshResLat = ry;
     data._meshResLon = rx;
+  
+    if (elevationData != null)
+    {
+      data._demDistanceToNextLoD = elevationData.getSimilarity() * verticalExaggeration;
+    }
+    else
+    {
+      data._demDistanceToNextLoD = 0;
+    }
   
     //VERTICES///////////////////////////////////////////////////////////////
     final double minElevation = createSurfaceVertices(new Vector2S(meshResolution._x, meshResolution._y), meshSector, elevationData, verticalExaggeration, vertices, data);
@@ -511,14 +521,6 @@ public class PlanetTileTessellator extends TileTessellator
     TileTessellatorMeshData data = new TileTessellatorMeshData();
     createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, data);
   
-    /*const Sector meshSector = getRenderedSectorForTile(tile);
-    const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
-    const short rx = (short)meshResolution._x;
-    const short ry = (short)meshResolution._y;
-    
-    AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-    const IFloatBuffer* vertices = mesh->getVertices();
-  
     //INDEX OF BORDER///////////////////////////////////////////////////////////////
     ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
     for (short j = 0; j < meshResolution._x; j++)
@@ -577,7 +579,7 @@ public class PlanetTileTessellator extends TileTessellator
     return c;
   }
 
-  public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile)
+  public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
   {
   
     PlanetTileTessellatorData data = (PlanetTileTessellatorData) tile.getTessellatorData();

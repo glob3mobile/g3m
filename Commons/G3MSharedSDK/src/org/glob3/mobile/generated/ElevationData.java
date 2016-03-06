@@ -76,6 +76,11 @@ public abstract class ElevationData
     return _height;
   }
 
+  public short getSimilarity()
+  {
+    return _similarity;
+  }
+
   public final Geodetic2D getResolution()
   {
     return _resolution;

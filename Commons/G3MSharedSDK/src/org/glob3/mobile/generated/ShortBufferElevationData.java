@@ -183,7 +183,7 @@ public class ShortBufferElevationData extends BufferElevationData
         return true;
         return false;
   }
-  public final int getSimilarity()
+  public final short getSimilarity()
   {
      return _similarity;
   }

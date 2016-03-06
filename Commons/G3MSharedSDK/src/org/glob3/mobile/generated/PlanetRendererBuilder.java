@@ -267,7 +267,7 @@ public class PlanetRendererBuilder
   {
   //  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester();
   
-    TileLODTester proj = new MaxTexelProjectedSizeTileLODTester(1.0);
+    TileLODTester proj = new MaxTexelAndDEMErrorProjectedSizeTileLODTester(1.0, 1.0);
   
     TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);
   

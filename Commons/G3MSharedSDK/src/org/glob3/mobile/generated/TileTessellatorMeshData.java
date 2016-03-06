@@ -38,4 +38,6 @@ public class TileTessellatorMeshData
 
   public int _meshResLat;
   public int _meshResLon;
+
+  public short _demDistanceToNextLoD;
 }

@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  MaxTexelProjectedSizeTileLODTester.cpp
+//  MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 15/2/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MaxTexelProjectedSizeTileLODTester.hpp
+//  MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 15/2/16.
@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 
 
-public class MaxTexelProjectedSizeTileLODTester extends TileLODTester
+public class MaxTexelAndDEMErrorProjectedSizeTileLODTester extends TileLODTester
 {
 
   private static class PvtData extends TileData
@@ -37,8 +37,9 @@ public class MaxTexelProjectedSizeTileLODTester extends TileLODTester
   }
 
   private final double _maxAllowedPixelsForTexel;
+  private final double _maxAllowedPixelsForDEMError;
 
-  private MaxTexelProjectedSizeTileLODTester.PvtData createData(Tile tile)
+  private MaxTexelAndDEMErrorProjectedSizeTileLODTester.PvtData createData(Tile tile)
   {
     Box box = tile.createBoundingBox();
     if (box != null)
@@ -55,9 +56,10 @@ public class MaxTexelProjectedSizeTileLODTester extends TileLODTester
   }
 
 
-  public MaxTexelProjectedSizeTileLODTester(double maxAllowedPixelsForTexel)
+  public MaxTexelAndDEMErrorProjectedSizeTileLODTester(double maxAllowedPixelsForTexel, double maxAllowedPixelsForDEMError)
   {
      _maxAllowedPixelsForTexel = maxAllowedPixelsForTexel;
+     _maxAllowedPixelsForDEMError = maxAllowedPixelsForDEMError;
   }
 
   public void dispose()
@@ -79,8 +81,9 @@ public class MaxTexelProjectedSizeTileLODTester extends TileLODTester
   
       final Box box = data._boundingBox;
       final Camera cam = rc.getCurrentCamera();
+      final Vector3D pos = cam.getCartesianPosition();
   
-      if (box.contains(cam.getCartesianPosition()))
+      if (box.contains(pos))
       {
         return false;
       }
@@ -105,12 +108,36 @@ public class MaxTexelProjectedSizeTileLODTester extends TileLODTester
       }
   
       //Position of closest possible texel
-      final Vector3D texelPos = box.closestPoint(cam.getCartesianPosition());
+      final Vector3D closestPossiblePointOnTile = box.closestPoint(cam.getCartesianPosition());
   
       //Distance of the view plane containing texelPos
-      final double size = cam.maxScreenSizeOf(texelSize, texelPos);
+      final double sizeTexel = cam.maxScreenSizeOf(texelSize, closestPossiblePointOnTile);
   
-      return size < _maxAllowedPixelsForTexel;
+      if (sizeTexel >= _maxAllowedPixelsForTexel)
+      {
+  //      ILogger::instance()->logInfo("Insufficient Texture %s", tile->_id.c_str());
+        return false;
+      }
+      else
+      {
+  
+        if (meshData._demDistanceToNextLoD <= 0)
+        {
+          return true;
+        }
+  
+        //Checking DEM
+        final double demErrorScreenSize = cam.maxScreenSizeOf(meshData._demDistanceToNextLoD, closestPossiblePointOnTile);
+  
+        boolean demOK = demErrorScreenSize < _maxAllowedPixelsForDEMError;
+  
+  //      if (!demOK){
+  //        ILogger::instance()->logInfo("Insufficient DEM %s", tile->_id.c_str());
+  //      }
+  
+        return demOK;
+  
+      }
     }
   
     return true;
@@ -118,7 +145,8 @@ public class MaxTexelProjectedSizeTileLODTester extends TileLODTester
 
   public final void onTileHasChangedMesh(Tile tile)
   {
-    createData(tile);
+  //  createData(tile);
+    tile.clearDataWithID(DefineConstants.MaxTexelProjectedSizeTLTDataID);
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)

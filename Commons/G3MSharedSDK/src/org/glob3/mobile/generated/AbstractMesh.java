@@ -283,4 +283,7 @@ public abstract class AbstractMesh extends Mesh
     _showNormals = v;
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Chano_at_work: Como quiero poder actualizar el tile mesh, conviene que vértices sea no const.Al ser una ñapa, recuerda que JM y Agustín la vean antes de subirla.
+
 }

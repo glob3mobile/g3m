@@ -614,15 +614,6 @@ public class Camera
     return obj.sub(position.asVector3D());
   }
 
-  public final void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
-  }
-
 
   public final double getDistanceOfViewPlaneContainingPoint(Vector3D v)
   {
@@ -651,6 +642,15 @@ public class Camera
       return pW;
     }
     return pH;
+  }
+
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
   }
 
 
@@ -863,15 +863,5 @@ public class Camera
     }
     return _modelViewMatrix;
   }
-
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
-  }
-
 
 }
