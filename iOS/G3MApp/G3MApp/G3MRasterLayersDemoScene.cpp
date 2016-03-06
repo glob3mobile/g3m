@@ -207,7 +207,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   MeshRenderer* meshRenderer = getModel()->getMeshRenderer();
   meshRenderer->addMesh(frustum->createWireFrameMesh());
   
-  // creating oriented boxes
+ /* // creating oriented boxes
   Vector3D lower(6383750+1000, -5000-1000, 680000-1000);
   OrientedBox obb(lower, Vector3D(5000,1000,0), Vector3D(-1000,5000,0), Vector3D(0,0,3000));
   //OrientedBox obb(lower, Vector3D(2000,0,0), Vector3D(0,2000,0), Vector3D(0,0,3000));
@@ -217,6 +217,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   Vector3D point = lower.add(Vector3D(1000,1000,1000));
   Sphere sphere(point, 3000);
   meshRenderer->addMesh(sphere.createWireframeMesh(Color::fromRGBA(0, 0, 0, 1),20));
+  
   
   Box* box = sphere.mergedWithOrientedBox(&obb);
   meshRenderer->addMesh(box->createMesh(Color::fromRGBA(0, 0, 1, 1)));
@@ -231,14 +232,16 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
                  Vector3D(-11.516288, -12.901808, 54.086430),
                  Vector3D(-7.011736, -8.122636, -5.025066));
   printf("resultados=%d\n", polA.touchesPolygon3D(polB));
+  */
   
-  
-  // creating spheres
+  // creating oriented boxes
   {
     // outside, close to a frustum corner
-    Sphere sphere(Vector3D(6383750+1000, -5000-1000, 680000-1000), 1000);
-    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+    //Sphere sphere(Vector3D(6383750+1000, -5000-1000, 680000-1000), 1000);
+    Vector3D lower(6383750+1000, -5000-3000, 680000-1000);
+    OrientedBox obb(lower, Vector3D(1000,2000,0), Vector3D(-2000,1000,0), Vector3D(0,0,3000));
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
   }
   {
     // outside, close to a frustum edge

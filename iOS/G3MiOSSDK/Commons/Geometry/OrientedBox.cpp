@@ -290,59 +290,59 @@ Box* OrientedBox::mergedWithSphere(const Sphere *that) const {
 }
 
 
-verticesLocation OrientedBox::getVerticesLocationRespectToPlane(const Plane* plane,
-                                                                MutableVector3D& inner) const {
+verticesLocation OrientedBox::getVerticesLocationRespectToPlane(const Plane& plane,
+                                                                verticesName& innerVertex) const {
   double maxDistance = -1e10;
   double minDistance = 1e10;
   double distance;
   
-  distance = plane->signedDistance(_SWB);
+  distance = plane.signedDistance(_SWB);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_SWB);
+    innerVertex = SOUTH_WEST_BOTTOM;
   }
-  distance = plane->signedDistance(_SWT);
+  distance = plane.signedDistance(_SWT);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_SWT);
+    innerVertex = SOUTH_WEST_TOP;
   }
-  distance = plane->signedDistance(_SEB);
+  distance = plane.signedDistance(_SEB);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_SEB);
+    innerVertex = SOUTH_EAST_BOTTOM;
   }
-  distance = plane->signedDistance(_SET);
+  distance = plane.signedDistance(_SET);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_SET);
+    innerVertex = SOUTH_EAST_TOP;
   }
-  distance = plane->signedDistance(_NWB);
+  distance = plane.signedDistance(_NWB);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_NWB);
+    innerVertex = NORTH_WEST_BOTTOM;
   }
-  distance = plane->signedDistance(_NWT);
+  distance = plane.signedDistance(_NWT);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_NWT);
+    innerVertex = NORTH_WEST_TOP;
   }
-  distance = plane->signedDistance(_NEB);
+  distance = plane.signedDistance(_NEB);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_NEB);
+    innerVertex = NORTH_EAST_BOTTOM;
   }
-  distance = plane->signedDistance(_NET);
+  distance = plane.signedDistance(_NET);
   if (distance > maxDistance) maxDistance = distance;
   if (distance < minDistance) {
     minDistance = distance;
-    inner.set(_NET);
+    innerVertex = NORTH_EAST_TOP;
   }
   
   if (minDistance > 0)
@@ -352,5 +352,68 @@ verticesLocation OrientedBox::getVerticesLocationRespectToPlane(const Plane* pla
   else
     return BOTH_SIDES_OF_THE_PLANE;
 }
+
+
+verticesLocation OrientedBox::touchesPolygon3D(const Polygon3D& polygon) const {
+  verticesName innerVertex;
+  verticesLocation vertLoc = getVerticesLocationRespectToPlane(polygon._plane, innerVertex);
+  if (vertLoc != BOTH_SIDES_OF_THE_PLANE)
+    return vertLoc;
+  
+  // vertices are located at both sides of the plane
+  switch (innerVertex) {
+
+    case SOUTH_WEST_BOTTOM:
+      if (polygon.touchesPolygon3D(_southFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_westFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_bottomFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case SOUTH_WEST_TOP:
+      if (polygon.touchesPolygon3D(_southFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_westFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_topFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case SOUTH_EAST_BOTTOM:
+      if (polygon.touchesPolygon3D(_southFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_eastFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_bottomFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case SOUTH_EAST_TOP:
+      if (polygon.touchesPolygon3D(_southFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_eastFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_topFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case NORTH_WEST_BOTTOM:
+      if (polygon.touchesPolygon3D(_northFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_westFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_bottomFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case NORTH_WEST_TOP:
+      if (polygon.touchesPolygon3D(_northFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_westFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_topFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case NORTH_EAST_BOTTOM:
+      if (polygon.touchesPolygon3D(_northFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_eastFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_bottomFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+      
+    case NORTH_EAST_TOP:
+      if (polygon.touchesPolygon3D(_northFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_eastFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      if (polygon.touchesPolygon3D(_topFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+      break;
+  }
+  
+  return BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE;
+}
+
 
 

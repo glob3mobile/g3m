@@ -20,9 +20,21 @@ class Sphere;
 enum verticesLocation {
   COMPLETELY_OUTSIDE,
   COMPLETELY_INSIDE,
-  BOTH_SIDES_OF_THE_PLANE
+  BOTH_SIDES_OF_THE_PLANE,
+  BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE,
+  BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE
 };
 
+enum verticesName {
+  SOUTH_WEST_BOTTOM,
+  SOUTH_EAST_BOTTOM,
+  NORTH_WEST_BOTTOM,
+  NORTH_EAST_BOTTOM,
+  SOUTH_WEST_TOP,
+  SOUTH_EAST_TOP,
+  NORTH_WEST_TOP,
+  NORTH_EAST_TOP
+};
 
 
 class OrientedBox: public BoundingVolume {
@@ -38,6 +50,8 @@ private:
 
   Vector2F projectedExtent(const G3MRenderContext* rc) const;
 
+  verticesLocation getVerticesLocationRespectToPlane(const Plane& plane,
+                                                     verticesName& innerVertex) const;
 
 public:
   
@@ -147,10 +161,12 @@ public:
   Box* mergedWithOrientedBox(const OrientedBox* that) const;
   Box* mergedWithBox(const Box* that) const;
   Box* mergedWithSphere(const Sphere* that) const;
+  
+  verticesLocation touchesPolygon3D(const Polygon3D& polygon) const;
 
-
-  verticesLocation getVerticesLocationRespectToPlane(const Plane* plane,
-                                                     MutableVector3D& inner) const;
+  bool touchesFrustum(const Frustum* frustum) const {
+    return frustum->touchesWithOrientedBox(this);
+  }
 
 
   
@@ -158,7 +174,6 @@ public:
   bool touches(const BoundingVolume* that) const {}
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
-  bool touchesFrustum(const Frustum* frustum) const {}
 
 };
 
