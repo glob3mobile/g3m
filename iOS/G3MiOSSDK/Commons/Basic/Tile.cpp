@@ -599,7 +599,7 @@ void Tile::getElevationDataFromAncestor(const Vector2I& extent) {
 void Tile::initializeElevationData(const G3MRenderContext* rc,
                                    const PlanetRenderContext* prc) {
 
-  const Vector2I tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+  const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
 
   //Storing for subviewing
   _lastElevationDataProvider = prc->_elevationDataProvider;
@@ -607,14 +607,15 @@ void Tile::initializeElevationData(const G3MRenderContext* rc,
   _lastTileMeshResolutionY = tileMeshResolution._y;
   if (_elevationDataRequest == NULL) {
 
-    const Vector2I res = prc->_tessellator->getTileMeshResolution(rc, prc, this);
-    _elevationDataRequest = new TileElevationDataRequest(this, res, prc->_elevationDataProvider);
+    const Vector2S res = prc->_tessellator->getTileMeshResolution(rc, prc, this);
+#warning should ElevationData res should be short?
+    _elevationDataRequest = new TileElevationDataRequest(this, res.asVector2I(), prc->_elevationDataProvider);
     _elevationDataRequest->sendRequest();
   }
 
   //If after petition we still have no data we request from ancestor (provider asynchronous)
   if (_elevationData == NULL) {
-    getElevationDataFromAncestor(tileMeshResolution);
+    getElevationDataFromAncestor(tileMeshResolution.asVector2I());
   }
 
 }

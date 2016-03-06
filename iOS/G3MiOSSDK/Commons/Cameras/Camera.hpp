@@ -159,6 +159,11 @@ public:
                     _center.y() - _position.y(),
                     _center.z() - _position.z());
   }
+  
+  bool hasValidViewDirection() const{
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !ISNAN(d);
+  }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
     result.set(_center.x() - _position.x(),
@@ -348,6 +353,8 @@ public:
   double getDistanceOfViewPlaneContainingPoint(const Vector3D& v) const;
   
   double maxScreenSizeOf(const double itemSize, const Vector3D& position) const;
+
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
 
 private:

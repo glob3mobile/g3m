@@ -11,12 +11,14 @@
 #include "TileTessellator.hpp"
 #include <map>
 #include "Sector.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+
 
 class IShortBuffer;
 class Sector;
 class FloatBufferBuilderFromGeodetic;
 class ShortBufferBuilder;
-#include "FloatBufferBuilderFromCartesian2D.hpp"
+class Vector2S;
 
 
 class PlanetTileTessellatorData {
@@ -41,7 +43,7 @@ private:
   private Sector _renderedSector;
 #endif
   
-  Vector2I calculateResolution(const PlanetRenderContext* prc,
+  Vector2S calculateResolution(const PlanetRenderContext* prc,
                                const Tile* tile,
                                const Sector& renderedSector) const;
   
@@ -82,7 +84,7 @@ private:
   Sector getRenderedSectorForTile(const Tile* tile) const;
   
   
-  double createSurfaceVertices(int rx, int ry, //Mesh resolution
+  double createSurfaceVertices(const Vector2S& meshResolution, //Mesh resolution
                                const Sector& meshSector,
                                const ElevationData* elevationData,
                                float verticalExaggeration,
@@ -91,7 +93,7 @@ private:
   
   double createSurface(const Sector& tileSector,
                        const Sector& meshSector,
-                       const Vector2I& meshResolution,
+                       const Vector2S& meshResolution,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool mercator,
@@ -103,7 +105,7 @@ private:
   void createEastSkirt(const Planet* planet,
                        const Sector& tileSector,
                        const Sector& meshSector,
-                       const Vector2I& meshResolution,
+                       const Vector2S& meshResolution,
                        double skirtHeight,
                        FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
@@ -112,7 +114,7 @@ private:
   void createNorthSkirt(const Planet* planet,
                         const Sector& tileSector,
                         const Sector& meshSector,
-                        const Vector2I& meshResolution,
+                        const Vector2S& meshResolution,
                         double skirtHeight,
                         FloatBufferBuilderFromGeodetic* vertices,
                         ShortBufferBuilder& indices,
@@ -121,7 +123,7 @@ private:
   void createWestSkirt(const Planet* planet,
                        const Sector& tileSector,
                        const Sector& meshSector,
-                       const Vector2I& meshResolution,
+                       const Vector2S& meshResolution,
                        double skirtHeight,
                        FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
@@ -130,7 +132,7 @@ private:
   void createSouthSkirt(const Planet* planet,
                         const Sector& tileSector,
                         const Sector& meshSector,
-                        const Vector2I& meshResolution,
+                        const Vector2S& meshResolution,
                         double skirtHeight,
                         FloatBufferBuilderFromGeodetic* vertices,
                         ShortBufferBuilder& indices,
@@ -144,7 +146,7 @@ public:
   
   ~PlanetTileTessellator();
   
-  Vector2I getTileMeshResolution(const G3MRenderContext* rc,
+  Vector2S getTileMeshResolution(const G3MRenderContext* rc,
                                  const PlanetRenderContext* prc,
                                  const Tile* tile) const;
   
@@ -159,7 +161,7 @@ public:
                             const PlanetRenderContext* prc,
                             const Tile* tile) const;
   
-  IFloatBuffer* createTextCoords(const Vector2I& resolution,
+  IFloatBuffer* createTextCoords(const Vector2S& resolution,
                                  const Tile* tile) const;
   
   const Vector2F getTextCoord(const Tile* tile,
