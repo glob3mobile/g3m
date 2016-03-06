@@ -237,43 +237,38 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   // creating oriented boxes
   {
     // outside, close to a frustum corner
-    //Sphere sphere(Vector3D(6383750+1000, -5000-1000, 680000-1000), 1000);
-    Vector3D lower(6383750+1000, -5000-3000, 680000-1000);
+    Vector3D lower(6383750+1000, -5000-3100, 680000-1000);
     OrientedBox obb(lower, Vector3D(1000,2000,0), Vector3D(-2000,1000,0), Vector3D(0,0,3000));
     Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(obb.createMesh(color));
   }
   {
     // outside, close to a frustum edge
-    Sphere sphere(Vector3D(6380000, -5000-800, 680000-800), 800);
-    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+    Vector3D lower(6380000, -5000-2700, 680000-2700);
+    OrientedBox obb(lower, Vector3D(1000,0,0), Vector3D(0,3000,-2000), Vector3D(0,2000,3000));
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
   }
   {
     // outside, close to a frustum face
-    Sphere sphere(Vector3D(6384000, 0, 686000), 800);
-    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
+    Vector3D lower(6384000-1000, 0, 686000);
+    OrientedBox obb(lower, Vector3D(1000,0,3000), Vector3D(0,2000,0), Vector3D(3000,0,-1000));
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
   }
-  /*{
-    // outside, in the center of proyection of the frustum
-    Sphere sphere(Vector3D(6380000, 0, 700000), 1000);
+  {
+    // inside the frustum center
+    Vector3D lower(6380000, 0, 686000);
+    OrientedBox obb(lower, Vector3D(500,0,1000), Vector3D(1000,0,-500), Vector3D(0,1000,0));
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
+  }
+ /* {
+    // behind the center of proyection, with big radius
+    Sphere sphere(Vector3D(6380000-5000, 0, 700000), 8500);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }*/
-  
-  {
-    // inside the frustum center
-    Sphere sphere(Vector3D(6380000, 0, 686000), 800);
-    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
-  }
-  {
-    // behind the center of proyection, with big radius
-    Sphere sphere(Vector3D(6375000, 0, 700000), 8500);
-    Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
-    meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
-  }
 
   
   // locating camera

@@ -314,6 +314,8 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
 
 
 bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
+  // based on http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Intersecci%f3n%20OrientedBox%20con%20frustum.pdf
+  
   bool fullInside = true;
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_leftFace);

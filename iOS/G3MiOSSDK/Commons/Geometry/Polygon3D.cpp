@@ -129,9 +129,6 @@ bool Polygon3D::touchesPolygon3D(const Polygon3D& that) const {
   // must see if exist common segment
   double s0 = (sminA > sminB)? sminA : sminB;
   double s1 = (smaxA < smaxB)? smaxA : smaxB;
-  
-  printf("s0=%f  s1=%f\n", s0, s1);
-  
   return (s0 < s1);
 }
 
