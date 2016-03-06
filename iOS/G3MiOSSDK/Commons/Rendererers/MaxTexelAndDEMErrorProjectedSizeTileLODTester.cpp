@@ -1,12 +1,12 @@
 //
-//  MaxTexelProjectedSizeTileLODTester.cpp
+//  MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 15/2/16.
 //
 //
 
-#include "MaxTexelProjectedSizeTileLODTester.hpp"
+#include "MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp"
 
 #include "Tile.hpp"
 #include "TileTessellator.hpp"
@@ -14,8 +14,9 @@
 #include "IMathUtils.hpp"
 #include "Camera.hpp"
 #include "Box.hpp"
+#include "ILogger.hpp"
 
-bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
+bool MaxTexelAndDEMErrorProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
                                                              const PlanetRenderContext* prc,
                                                              const Tile* tile) const{
   
@@ -59,6 +60,7 @@ bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderCont
     const double sizeTexel = cam->maxScreenSizeOf(texelSize, closestPossiblePointOnTile);
     
     if (sizeTexel >= _maxAllowedPixelsForTexel){
+//      ILogger::instance()->logInfo("Insufficient Texture %s", tile->_id.c_str());
       return false;
     } else{
       
@@ -69,8 +71,13 @@ bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderCont
       //Checking DEM
       const double demErrorScreenSize = cam->maxScreenSizeOf(meshData->_demDistanceToNextLoD, closestPossiblePointOnTile);
 
-      return demErrorScreenSize < 1;
+      bool demOK = demErrorScreenSize < _maxAllowedPixelsForDEMError;
       
+//      if (!demOK){
+//        ILogger::instance()->logInfo("Insufficient DEM %s", tile->_id.c_str());
+//      }
+      
+      return demOK;
       
     }
   }
@@ -78,7 +85,7 @@ bool MaxTexelProjectedSizeTileLODTester::meetsRenderCriteria(const G3MRenderCont
   return true;
 }
 
-MaxTexelProjectedSizeTileLODTester::PvtData* MaxTexelProjectedSizeTileLODTester::createData(const Tile* tile) const{
+MaxTexelAndDEMErrorProjectedSizeTileLODTester::PvtData* MaxTexelAndDEMErrorProjectedSizeTileLODTester::createData(const Tile* tile) const{
   Box* box = tile->createBoundingBox();
   if (box != NULL){
     PvtData* data = new PvtData(box);
@@ -90,7 +97,7 @@ MaxTexelProjectedSizeTileLODTester::PvtData* MaxTexelProjectedSizeTileLODTester:
   return NULL;
 }
 
-void MaxTexelProjectedSizeTileLODTester::onTileHasChangedMesh(const Tile* tile) const {
+void MaxTexelAndDEMErrorProjectedSizeTileLODTester::onTileHasChangedMesh(const Tile* tile) const {
 //  createData(tile);
   tile->clearDataWithID(MaxTexelProjectedSizeTLTDataID);
 }

@@ -27,7 +27,7 @@
 #include "TimedCacheTileVisibilityTester.hpp"
 #include "OrTileLODTester.hpp"
 #include "GradualSplitsTileLODTester.hpp"
-#include "MaxTexelProjectedSizeTileLODTester.hpp"
+#include "MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp"
 
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
@@ -429,7 +429,7 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
 //  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester();
   
-  TileLODTester* proj = new MaxTexelProjectedSizeTileLODTester(1.0);
+  TileLODTester* proj = new MaxTexelAndDEMErrorProjectedSizeTileLODTester(1.0, 1.0);
 
   TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(500),
                                                      proj);

@@ -431,7 +431,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._meshResLon = rx;
   
   if (elevationData != NULL){
-    data._demDistanceToNextLoD = elevationData->getSimilarity();
+    data._demDistanceToNextLoD = elevationData->getSimilarity() * verticalExaggeration;
   } else{
     data._demDistanceToNextLoD = 0;
   }

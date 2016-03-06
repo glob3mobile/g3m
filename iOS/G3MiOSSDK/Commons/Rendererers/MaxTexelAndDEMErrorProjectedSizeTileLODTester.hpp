@@ -1,13 +1,13 @@
 //
-//  MaxTexelProjectedSizeTileLODTester.hpp
+//  MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 15/2/16.
 //
 //
 
-#ifndef MaxTexelProjectedSizeTileLODTester_hpp
-#define MaxTexelProjectedSizeTileLODTester_hpp
+#ifndef MaxTexelAndDEMErrorProjectedSizeTileLODTester_hpp
+#define MaxTexelAndDEMErrorProjectedSizeTileLODTester_hpp
 
 #include "TileLODTester.hpp"
 
@@ -19,7 +19,7 @@ class Planet;
 class Camera;
 
 
-class MaxTexelProjectedSizeTileLODTester : public TileLODTester {
+class MaxTexelAndDEMErrorProjectedSizeTileLODTester : public TileLODTester {
   
   class PvtData: public TileData {
   private:
@@ -36,15 +36,17 @@ class MaxTexelProjectedSizeTileLODTester : public TileLODTester {
   };
   
   const double _maxAllowedPixelsForTexel;
+  const double _maxAllowedPixelsForDEMError;
   
   PvtData* createData(const Tile* tile) const;
   
 public:
   
-  MaxTexelProjectedSizeTileLODTester(double maxAllowedPixelsForTexel):
-  _maxAllowedPixelsForTexel(maxAllowedPixelsForTexel){}
+  MaxTexelAndDEMErrorProjectedSizeTileLODTester(double maxAllowedPixelsForTexel, double maxAllowedPixelsForDEMError):
+  _maxAllowedPixelsForTexel(maxAllowedPixelsForTexel),
+  _maxAllowedPixelsForDEMError(maxAllowedPixelsForDEMError){}
   
-  ~MaxTexelProjectedSizeTileLODTester(){}
+  ~MaxTexelAndDEMErrorProjectedSizeTileLODTester(){}
   
   bool meetsRenderCriteria(const G3MRenderContext* rc,
                            const PlanetRenderContext* prc,
@@ -59,4 +61,4 @@ public:
 
 };
 
-#endif /* MaxTexelProjectedSizeTileLODTester_hpp */
+#endif /* MaxTexelAndDEMErrorProjectedSizeTileLODTester_hpp */

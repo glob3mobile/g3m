@@ -507,7 +507,7 @@
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
-		D87468171C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87468151C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.cpp */; };
+		D87468171C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87468151C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
 		D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */; };
 		D874D09118900B4500610F85 /* BasicShadersGL2.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */; };
@@ -1846,8 +1846,8 @@
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D87468151C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxTexelProjectedSizeTileLODTester.cpp; path = Commons/Rendererers/MaxTexelProjectedSizeTileLODTester.cpp; sourceTree = "<group>"; };
-		D87468161C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MaxTexelProjectedSizeTileLODTester.hpp; path = Commons/Rendererers/MaxTexelProjectedSizeTileLODTester.hpp; sourceTree = "<group>"; };
+		D87468151C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp; path = Commons/Rendererers/MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp; sourceTree = "<group>"; };
+		D87468161C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp; path = Commons/Rendererers/MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp; sourceTree = "<group>"; };
 		D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = SingleBilElevationDataProvider.cpp; path = Commons/Basic/SingleBilElevationDataProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBilElevationDataProvider.hpp; path = Commons/Basic/SingleBilElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractGeometryMesh.cpp; path = Commons/Mesh/AbstractGeometryMesh.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2607,8 +2607,8 @@
 				CFBD815519A3E0E100F1A8C4 /* PointCloudsRenderer.hpp */,
 				D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.cpp */,
 				D8B78E261C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.hpp */,
-				D87468151C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.cpp */,
-				D87468161C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.hpp */,
+				D87468151C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp */,
+				D87468161C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.hpp */,
 				4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */,
 				44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */,
 				4435E3D719072EDA0064A7D7 /* Renderer.cpp */,
@@ -3343,7 +3343,7 @@
 				CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
 				CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */,
-				D87468171C71FEDE0065A61A /* MaxTexelProjectedSizeTileLODTester.cpp in Sources */,
+				D87468171C71FEDE0065A61A /* MaxTexelAndDEMErrorProjectedSizeTileLODTester.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
