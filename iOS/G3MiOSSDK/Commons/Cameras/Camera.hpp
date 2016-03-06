@@ -496,9 +496,6 @@ private:
     return _modelViewMatrix;
   }
   
-  void setCameraCoordinateSystem(const CoordinateSystem& rs);
-  
-  
 };
 
 #endif
