@@ -6,7 +6,7 @@
 //
 //
 
-#import "PyramidElevationDataProvider.hpp"
+#include "PyramidElevationDataProvider.hpp"
 #include "ShortBufferElevationData.hpp"
 
 #include "DownloadPriority.hpp"
