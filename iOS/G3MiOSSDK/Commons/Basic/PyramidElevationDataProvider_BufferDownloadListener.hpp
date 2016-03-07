@@ -40,13 +40,13 @@ public:
                                                         bool autodeleteListener,
                                                         double deltaHeight);
     
-    void onDownload(const URL& url,
+    virtual void onDownload(const URL& url,
                     IByteBuffer* buffer,
                     bool expired);
-    void onError(const URL& url);
-    void onCancel(const URL& url);
+    virtual void onError(const URL& url);
+    virtual void onCancel(const URL& url);
     
-    void onCanceledDownload(const URL& url,
+    virtual void onCanceledDownload(const URL& url,
                             IByteBuffer* data,
                             bool expired);
     
