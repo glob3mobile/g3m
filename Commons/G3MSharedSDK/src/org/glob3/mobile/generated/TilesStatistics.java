@@ -41,8 +41,6 @@ public class TilesStatistics
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
   private int[] _tilesRenderedByLevel = new int[_maxLOD];
 
-  private int _buildersStartsInFrame;
-
   private double _visibleLowerLatitudeDegrees;
   private double _visibleLowerLongitudeDegrees;
   private double _visibleUpperLatitudeDegrees;
@@ -63,7 +61,6 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _buildersStartsInFrame = 0;
 
     final IMathUtils mu = IMathUtils.instance();
     _visibleLowerLatitudeDegrees = mu.maxDouble();
@@ -77,16 +74,6 @@ public class TilesStatistics
       _tilesVisibleByLevel[i] = 0;
       _tilesRenderedByLevel[i] = 0;
     }
-  }
-
-  public final int getBuildersStartsInFrame()
-  {
-    return _buildersStartsInFrame;
-  }
-
-  public final void computeBuilderStartInFrame()
-  {
-    _buildersStartsInFrame++;
   }
 
   public final void computeTileProcessed(Tile tile)
