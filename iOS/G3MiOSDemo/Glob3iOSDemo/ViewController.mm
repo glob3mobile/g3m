@@ -343,7 +343,7 @@
     builder.addRenderer(_meshRenderer);
     builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
     //builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
-    //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+    builder.getPlanetRendererBuilder()->setRenderDebug(true);
     builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
   
     //Tamaño fijo, 16x16
@@ -353,7 +353,8 @@
     //Europa, fijo, 16
     //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fix-euro-16/";
     //Europa, variable, 2 a 16
-    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
+    //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
+    std::string server = "http://www.elnublo.net/temporal/var-euro-16/";
     //Tierra
     //Sector sector = Sector::fullSphere();
     //Solo Europa continental

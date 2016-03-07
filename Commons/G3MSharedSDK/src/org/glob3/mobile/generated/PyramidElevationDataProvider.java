@@ -7,22 +7,11 @@ package org.glob3.mobile.generated;
 //
 //
 
-//
-//  PyramidElevationDataProvider.hpp
-//  G3MiOSSDK
-//
-//  Created by Sebastian Ortega Trujillo on 4/3/16.
-//
-//
-
-
-
 public class PyramidElevationDataProvider extends ElevationDataProvider
 {
     private IDownloader _downloader;
     private final Sector _sector ;
     private double _deltaHeight;
-    private boolean _isMercator;
     private final String _layer;
 
     private static class PyramidComposition
@@ -40,13 +29,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
             _upperLat = upperLat;
             _upperLon = upperLon;
             _pyramidLevel = pyramidLevel;
-        }
-
-        public final String description()
-        {
-            //TODO: implement this better.
-            return "";
-            //return _sector.description() + ", pyramidLevel: "+_pyramidLevel;
         }
 
         public final Sector getSector()
@@ -94,25 +76,25 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
         private double getUpperLat(JSONArray array, int index)
         {
-            JSONDouble doble = (JSONDouble) array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lat");
+            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lat");
             return doble.value();
         }
 
         private double getLowerLat(JSONArray array, int index)
         {
-            JSONDouble doble = (JSONDouble) array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lat");
+            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lat");
             return doble.value();
         }
 
         private double getUpperLon(JSONArray array, int index)
         {
-            JSONDouble doble = (JSONDouble) array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lon");
+            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lon");
             return doble.value();
         }
 
         private double getLowerLon(JSONArray array, int index)
         {
-            JSONDouble doble = (JSONDouble)array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon");
+            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon");
             return doble.value();
         }
 
@@ -135,25 +117,21 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
       if (level > maxLevel)
          return true;
-      else
-      {
-        if (!sector.touchesWith(_sector))
+      if (!sector.touchesWith(_sector))
            return true;
         return false;
-      }
     }
 
-    public PyramidElevationDataProvider(String layer, Sector sector, boolean isMercator)
+    public PyramidElevationDataProvider(String layer, Sector sector)
     {
-       this(layer, sector, isMercator, 0);
+       this(layer, sector, 0);
     }
-    public PyramidElevationDataProvider(String layer, Sector sector, boolean isMercator, double deltaHeight)
+    public PyramidElevationDataProvider(String layer, Sector sector, double deltaHeight)
     {
        _sector = new Sector(sector);
        _layer = layer;
       _pyrComposition = new java.util.ArrayList<PyramidComposition>();
       _deltaHeight = deltaHeight;
-      _isMercator = isMercator;
     }
 
     public void dispose()
@@ -182,6 +160,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
     {
       //This requester is not necessary, but we are forced to implement it, so -1.
+      System.out.println("Are we here?");
       return -1;
     }
     public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
@@ -189,7 +168,8 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
       if ((_downloader == null) || (aboveLevel(sector, level)))
       {
-        return -1;
+    	  System.out.println("Are we out of our range?");
+    	  return -1;
       }
     
       String path = requestStringPath(_layer, level, row, column);
@@ -217,6 +197,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         String res = istr.getString();
         if (istr != null)
            istr.dispose();
+        System.out.println(res);
         return res;
     }
     public final String requestMetadataPath()

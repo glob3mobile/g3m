@@ -17,7 +17,7 @@
 #include "JSONArray.hpp"
 #include "JSONObject.hpp"
 #include "JSONInteger.hpp"
-#include "JSONDouble.hpp"
+#include "JSONFloat.hpp"
 #include "URL.hpp"
 #include "ErrorHandling.hpp"
 #include "IBufferDownloadListener.hpp"
@@ -27,7 +27,6 @@ private:
     IDownloader * _downloader;
     const Sector _sector;
     double _deltaHeight;
-    bool _isMercator;
     const std::string _layer;
 
     class PyramidComposition {
@@ -42,13 +41,7 @@ private:
             _upperLon = upperLon;
             _pyramidLevel = pyramidLevel;
         }
-        
-        std::string description(){
-            //TODO: implement this better.
-            return "";
-            //return _sector.description() + ", pyramidLevel: "+_pyramidLevel;
-        }
-        
+
         Sector getSector() {
             return Sector::fromDegrees(_lowerLat, _lowerLon, _upperLat, _upperLon);
         }
@@ -85,22 +78,22 @@ private:
         std::vector<PyramidComposition>* _itself;
         
         double getUpperLat(const JSONArray *array, int index){
-            JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat");
+            JSONFloat *doble = (JSONFloat*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat");
             return doble->value();
         }
         
         double getLowerLat(const JSONArray *array, int index){
-            JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat");
+            JSONFloat *doble = (JSONFloat*) array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat");
             return doble->value();
         }
         
         double getUpperLon(const JSONArray *array, int index){
-            JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon");
+            JSONFloat *doble = (JSONFloat*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon");
             return doble->value();
         }
         
         double getLowerLon(const JSONArray *array, int index){
-            JSONDouble *doble = (JSONDouble*)array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon");
+            JSONFloat *doble = (JSONFloat*)array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon");
             return doble->value();
         }
         
@@ -116,7 +109,7 @@ private:
     bool aboveLevel(const Sector &sector, int level);
 public:
     
-    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, bool isMercator, double deltaHeight = 0);
+    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, double deltaHeight = 0);
     
     ~PyramidElevationDataProvider();
     
@@ -127,7 +120,6 @@ public:
     const long long requestElevationData(const Sector &sector, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener);
     const long long requestElevationData(const Sector &sector, int level, int row, int column, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener);
     
-    std::string requestStringPath(const Sector &sector, const Vector2I &extent);
     std::string requestStringPath(const std::string & layer, int level, int row, int column);
     std::string requestMetadataPath() const;
     

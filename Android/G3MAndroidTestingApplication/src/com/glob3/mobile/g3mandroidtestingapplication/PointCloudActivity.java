@@ -232,7 +232,7 @@ public class PointCloudActivity
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
-      _builder.setPlanet(Planet.createEarth());
+      //_builder.setPlanet(Planet.createEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 

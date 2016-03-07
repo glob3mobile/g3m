@@ -156,10 +156,9 @@ public:
 
 
 PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &layer, const Sector& sector,
-                                                           bool isMercator,double deltaHeight): _sector(sector), _layer(layer){
+                                                           double deltaHeight): _sector(sector), _layer(layer){
   _pyrComposition = new std::vector<PyramidComposition>();
   _deltaHeight = deltaHeight;
-  _isMercator = isMercator;
 }
 
 PyramidElevationDataProvider::~PyramidElevationDataProvider(){
@@ -193,12 +192,6 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector 
   std::string path = requestStringPath(_layer,level,row,column);
   
   return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true );
-}
-
-std::string PyramidElevationDataProvider::requestStringPath(const Sector &sector, const Vector2I &extent){
-  // TODO: Esta en principio no debería usarse, pero ...
-  ILogger::instance()->logError("BAD STRING PATH REQUESTED!");
-  return "";
 }
 
 std::string PyramidElevationDataProvider::requestStringPath(const std::string & layer, int level, int row, int column){
