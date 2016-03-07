@@ -7,6 +7,16 @@ package org.glob3.mobile.generated;
 //
 //
 
+//
+//  PyramidElevationDataProvider.hpp
+//  G3MiOSSDK
+//
+//  Created by Sebastian Ortega Trujillo on 4/3/16.
+//
+//
+
+
+
 public class PyramidElevationDataProvider extends ElevationDataProvider
 {
     private IDownloader _downloader;
@@ -94,7 +104,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
         private double getLowerLon(JSONArray array, int index)
         {
-            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon");
+            JSONFloat doble = (JSONFloat)array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon");
             return doble.value();
         }
 
@@ -117,9 +127,12 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
       if (level > maxLevel)
          return true;
-      if (!sector.touchesWith(_sector))
+      else
+      {
+        if (!sector.touchesWith(_sector))
            return true;
         return false;
+      }
     }
 
     public PyramidElevationDataProvider(String layer, Sector sector)
@@ -160,7 +173,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
     {
       //This requester is not necessary, but we are forced to implement it, so -1.
-      System.out.println("Are we here?");
       return -1;
     }
     public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
@@ -168,8 +180,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
       if ((_downloader == null) || (aboveLevel(sector, level)))
       {
-    	  System.out.println("Are we out of our range?");
-    	  return -1;
+        return -1;
       }
     
       String path = requestStringPath(_layer, level, row, column);
@@ -177,12 +188,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
       return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
     }
 
-    public final String requestStringPath(Sector sector, Vector2I extent)
-    {
-      // TODO: Esta en principio no debería usarse, pero ...
-      ILogger.instance().logError("BAD STRING PATH REQUESTED!");
-      return "";
-    }
     public final String requestStringPath(String layer, int level, int row, int column)
     {
     
@@ -197,7 +202,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         String res = istr.getString();
         if (istr != null)
            istr.dispose();
-        System.out.println(res);
         return res;
     }
     public final String requestMetadataPath()
