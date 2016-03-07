@@ -83,7 +83,6 @@ private:
         
     private:
         std::vector<PyramidComposition>* _itself;
-        const G3MContext *_context;
         
         double getUpperLat(const JSONArray *array, int index){
             JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat");

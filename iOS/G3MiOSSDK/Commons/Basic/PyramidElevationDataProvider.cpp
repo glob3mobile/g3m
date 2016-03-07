@@ -23,7 +23,6 @@ private:
     IElevationDataListener *_listener;
     bool _autodeleteListener;
     double _deltaHeight;
-    G3MContext *_context;
     
 #ifdef C_CODE
     const Vector2I* getResolution(const JSONObject *data){
@@ -31,13 +30,13 @@ private:
     }
 #endif
 #ifdef JAVA_CODE
-    private Vector2I getResolution(const JSONObject data){
+    private Vector2I getResolution(JSONObject data){
         return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
     }
 #endif
     
-    ShortBufferElevationData* getElevationData(Sector sector,
-                                               Vector2I extent,
+    ShortBufferElevationData* getElevationData(const Sector& sector,
+                                               const Vector2I& extent,
                                                const JSONObject *data,
                                                double deltaHeight){
         const short minValue = IMathUtils::instance()->minInt16();
