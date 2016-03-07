@@ -15,12 +15,14 @@ PyramidElevationDataProvider_BufferDownloadListener::PyramidElevationDataProvide
                                                                                                          const Vector2I& extent,
                                                                                                          IElevationDataListener *listener,
                                                                                                          bool autodeleteListener,
-                                                                                                         double deltaHeight) : _sector(sector){
-    _width = extent._x;
-    _height = extent._y;
-    _listener = listener;
-    _autodeleteListener = autodeleteListener;
-    _deltaHeight = deltaHeight;
+                                                                                                         double deltaHeight) :
+_sector(sector),
+_width(extent._x),
+_height(extent._y),
+_listener(listener),
+_autodeleteListener(autodeleteListener),
+_deltaHeight(deltaHeight){
+   
 }
 
 void PyramidElevationDataProvider_BufferDownloadListener::onDownload(const URL& url,IByteBuffer* buffer,bool expired){
