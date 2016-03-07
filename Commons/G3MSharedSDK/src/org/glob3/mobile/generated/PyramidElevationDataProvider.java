@@ -86,26 +86,26 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
         private double getUpperLat(JSONArray array, int index)
         {
-            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lat");
-            return doble.value();
+            double res = array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lat").value();
+            return res;
         }
 
         private double getLowerLat(JSONArray array, int index)
         {
-            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lat");
-            return doble.value();
+            double res = array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lat").value();
+            return res;
         }
 
         private double getUpperLon(JSONArray array, int index)
         {
-            JSONFloat doble = (JSONFloat) array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lon");
-            return doble.value();
+            double res = array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lon").value();
+            return res;
         }
 
         private double getLowerLon(JSONArray array, int index)
         {
-            JSONFloat doble = (JSONFloat)array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon");
-            return doble.value();
+            double res = array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon").value();
+            return res;
         }
 
         private int getLevel(JSONArray array, int index)

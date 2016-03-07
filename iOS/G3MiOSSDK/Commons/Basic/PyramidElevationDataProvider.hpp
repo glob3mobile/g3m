@@ -78,23 +78,19 @@ private:
         std::vector<PyramidComposition>* _itself;
         
         double getUpperLat(const JSONArray *array, int index){
-            JSONFloat *doble = (JSONFloat*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat");
-            return doble->value();
+            return array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat")->value();
         }
         
         double getLowerLat(const JSONArray *array, int index){
-            JSONFloat *doble = (JSONFloat*) array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat");
-            return doble->value();
+            return array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat")->value();
         }
         
         double getUpperLon(const JSONArray *array, int index){
-            JSONFloat *doble = (JSONFloat*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon");
-            return doble->value();
+            return array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon")->value();
         }
         
         double getLowerLon(const JSONArray *array, int index){
-            JSONFloat *doble = (JSONFloat*)array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon");
-            return doble->value();
+            return array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon")->value();
         }
         
         int getLevel(const JSONArray *array,int index){
