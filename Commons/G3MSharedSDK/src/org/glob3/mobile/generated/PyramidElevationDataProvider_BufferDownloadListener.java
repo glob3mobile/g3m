@@ -1,17 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  PyramidElevationDataProvider.cpp
-//  G3MiOSSDK
-//
-//  Created by Sebastian Ortega Trujillo on 4/3/16.
-//
-//
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#import "PyramidElevationDataProvider.hpp"
-
-
-
 public class PyramidElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
 {
 

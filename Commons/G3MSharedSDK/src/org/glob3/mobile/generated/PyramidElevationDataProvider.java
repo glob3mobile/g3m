@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  PyramidElevationDataProvider.cpp
+//  G3MiOSSDK
+//
+//  Created by Sebastian Ortega Trujillo on 4/3/16.
+//
+//
+
+//
 //  PyramidElevationDataProvider.hpp
 //  G3MiOSSDK
 //
@@ -119,41 +127,110 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
     private java.util.ArrayList<PyramidComposition> _pyrComposition;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    boolean aboveLevel(Sector sector, int level);
+    private boolean aboveLevel(Sector sector, int level)
+    {
+      int maxLevel = 0;
+      for (int i = 0; i< _pyrComposition.size(); i++)
+        if (sector.touchesWith(_pyrComposition.get(i).getSector()))
+          maxLevel = IMathUtils.instance().max(maxLevel, _pyrComposition.get(i)._pyramidLevel);
+    
+      if (level > maxLevel)
+         return true;
+      else
+      {
+        if (!sector.touchesWith(_sector))
+           return true;
+        return false;
+      }
+    }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    PyramidElevationDataProvider(String layer, Sector sector, boolean isMercator, double deltaHeight);
+    public PyramidElevationDataProvider(String layer, Sector sector, boolean isMercator)
+    {
+       this(layer, sector, isMercator, 0);
+    }
+    public PyramidElevationDataProvider(String layer, Sector sector, boolean isMercator, double deltaHeight)
+    {
+       _sector = new Sector(sector);
+       _layer = layer;
+      _pyrComposition = new java.util.ArrayList<PyramidComposition>();
+      _deltaHeight = deltaHeight;
+      _isMercator = isMercator;
+    }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    public void dispose()
+    public void dispose()
+    {
+      _pyrComposition.clear();
+      _pyrComposition = null;
+      _pyrComposition = null;
+    
+    }
 
     public final boolean isReadyToRender (G3MRenderContext rc)
     {
        return true;
     }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    void getMetadata();
+    public final void getMetadata()
+    {
+    
+      _downloader.requestBuffer(new URL(requestMetadataPath(),false), DownloadPriority.HIGHER, TimeInterval.fromDays(30), true, new MetadataListener(_pyrComposition), true);
+    }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    void initialize(G3MContext context);
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener);
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener);
+    public final void initialize(G3MContext context)
+    {
+      _downloader = context.getDownloader();
+      getMetadata();
+    }
+    public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+    {
+      //This requester is not necessary, but we are forced to implement it, so -1.
+      return -1;
+    }
+    public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+    {
+    
+      if ((_downloader == null) || (aboveLevel(sector, level)))
+      {
+        return -1;
+      }
+    
+      String path = requestStringPath(_layer, level, row, column);
+    
+      return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+    }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    String requestStringPath(Sector sector, Vector2I extent);
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    String requestStringPath(String layer, int level, int row, int column);
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    String requestMetadataPath();
+    public final String requestStringPath(Sector sector, Vector2I extent)
+    {
+      // TODO: Esta en principio no debería usarse, pero ...
+      ILogger.instance().logError("BAD STRING PATH REQUESTED!");
+      return "";
+    }
+    public final String requestStringPath(String layer, int level, int row, int column)
+    {
+      std.ostringstream strs = new std.ostringstream();
+      strs << _layer.compareTo() < 0< < level << "/" << column << "/" << row << ".json"; //".bil";
+      String res = strs.str();
+      //ILogger::instance()->logInfo(res);
+      return res;
+    }
+    public final String requestMetadataPath()
+    {
+      return _layer + "meta.json";
+    }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    void cancelRequest(long requestId);
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    java.util.ArrayList<Sector> getSectors();
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    Vector2I getMinResolution();
+    public final void cancelRequest(long requestId)
+    {
+      _downloader.cancelRequest(requestId);
+    }
+    public final java.util.ArrayList<Sector> getSectors()
+    {
+      final java.util.ArrayList<Sector> sectors = new java.util.ArrayList<Sector>();
+      sectors.add(_sector);
+      return sectors;
+    }
+    public final Vector2I getMinResolution()
+    {
+      //    int WORKING_JM;
+      return Vector2I.zero();
+    }
 
 }
