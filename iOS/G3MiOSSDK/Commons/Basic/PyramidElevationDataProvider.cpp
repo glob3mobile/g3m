@@ -8,7 +8,7 @@
 
 #include "PyramidElevationDataProvider.hpp"
 #include "ShortBufferElevationData.hpp"
-
+#include "IStringBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "G3MContext.hpp"
 #include "TimeInterval.hpp"
@@ -203,11 +203,18 @@ std::string PyramidElevationDataProvider::requestStringPath(const Sector &sector
 }
 
 std::string PyramidElevationDataProvider::requestStringPath(const std::string & layer, int level, int row, int column){
-  std::ostringstream strs;
-  strs << _layer << level << "/" << column << "/" << row << ".json"; //".bil";
-  std::string res = strs.str();
-  //ILogger::instance()->logInfo(res);
-  return res;
+  
+    IStringBuilder *istr = IStringBuilder::newStringBuilder();
+    istr->addString(_layer);
+    istr->addInt(level);
+    istr->addString("/");
+    istr->addInt(column);
+    istr->addString("/");
+    istr->addInt(row);
+    istr->addString(".json");
+    std::string res = istr->getString();
+    delete istr;
+    return res;
 }
 
 std::string PyramidElevationDataProvider::requestMetadataPath() const{
