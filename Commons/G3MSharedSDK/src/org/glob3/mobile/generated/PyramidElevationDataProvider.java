@@ -17,8 +17,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     private boolean _isMercator;
     private final String _layer;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
-//    class MetadataListener;
+    
 
     private static class PyramidComposition
     {

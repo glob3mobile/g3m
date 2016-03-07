@@ -488,9 +488,7 @@
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
-		D84824AD1C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84824A91C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.cpp */; };
 		D84824AE1C89E155007F41D1 /* PyramidElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84824AB1C89E155007F41D1 /* PyramidElevationDataProvider.cpp */; };
-		D84824AF1C89E345007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84824AA1C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */; };
 		D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84824AC1C89E155007F41D1 /* PyramidElevationDataProvider.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
@@ -766,7 +764,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D84824AF1C89E345007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.hpp in CopyFiles */,
 				D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
@@ -1805,8 +1802,6 @@
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
-		D84824A91C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PyramidElevationDataProvider_BufferDownloadListener.cpp; path = Commons/Basic/PyramidElevationDataProvider_BufferDownloadListener.cpp; sourceTree = "<group>"; };
-		D84824AA1C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PyramidElevationDataProvider_BufferDownloadListener.hpp; path = Commons/Basic/PyramidElevationDataProvider_BufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D84824AB1C89E155007F41D1 /* PyramidElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PyramidElevationDataProvider.cpp; path = Commons/Basic/PyramidElevationDataProvider.cpp; sourceTree = "<group>"; };
 		D84824AC1C89E155007F41D1 /* PyramidElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PyramidElevationDataProvider.hpp; path = Commons/Basic/PyramidElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -2086,8 +2081,6 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D84824A91C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.cpp */,
-				D84824AA1C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.hpp */,
 				D84824AB1C89E155007F41D1 /* PyramidElevationDataProvider.cpp */,
 				D84824AC1C89E155007F41D1 /* PyramidElevationDataProvider.hpp */,
 				CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */,
@@ -3195,7 +3188,6 @@
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
 				CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */,
 				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
-				D84824AD1C89E155007F41D1 /* PyramidElevationDataProvider_BufferDownloadListener.cpp in Sources */,
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 				CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */,

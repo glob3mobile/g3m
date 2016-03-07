@@ -7,74 +7,154 @@
 //
 
 #import "PyramidElevationDataProvider.hpp"
-#include "PyramidElevationDataProvider_BufferDownloadListener.hpp"
-#include "IJSONParser.hpp"
+#include "ShortBufferElevationData.hpp"
+
 #include "DownloadPriority.hpp"
-#include "JSONObject.hpp"
-#include "JSONInteger.hpp"
-#include "JSONDouble.hpp"
-#include "JSONArray.hpp"
 #include "G3MContext.hpp"
 #include "TimeInterval.hpp"
 #include <sstream>
-#include "ErrorHandling.hpp"
 
-class PyramidElevationDataProvider::MetadataListener : public IBufferDownloadListener {
-public:
-  MetadataListener(std::vector<PyramidComposition>* itself): _itself(itself) {}
-  
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-    
-    const std::string str = buffer->getAsString();
-    
-    IJSONParser* parser = IJSONParser::instance();
-    const JSONArray* array = parser->parse(str)->asObject()->getAsArray("sectors");
-    if (array == NULL){
-      THROW_EXCEPTION("Problem parsing at PyramidElevationDataProvider::MetadataListener::onDownload().");
-    }
-    
-    for (unsigned int i=0; i<array->size(); i++){
-      _itself->push_back(PyramidComposition(getLowerLat(array,i),getLowerLon(array,i),getUpperLat(array,i),getUpperLon(array,i),getLevel(array,i)));
-    }
-  }
-  void onError(const URL& url) {}
-  void onCancel(const URL& url) {}
-  
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* data,
-                          bool expired) {}
-  
+
+class PyramidElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
-  std::vector<PyramidComposition>* _itself;
-  const G3MContext *_context;
-  
-  double getUpperLat(const JSONArray *array, int index){
-    JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat");
-    return doble->value();
-  }
-  
-  double getLowerLat(const JSONArray *array, int index){
-    JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat");
-    return doble->value();
-  }
-  
-  double getUpperLon(const JSONArray *array, int index){
-    JSONDouble *doble = (JSONDouble*) array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon");
-    return doble->value();
-  }
-  
-  double getLowerLon(const JSONArray *array, int index){
-    JSONDouble *doble = (JSONDouble*)array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon");
-    return doble->value();
-  }
-  
-  int getLevel(const JSONArray *array,int index){
-    JSONInteger *integer = (JSONInteger *) array->getAsObject(index)->getAsNumber("pyrLevel");
-    return integer->intValue();
-  }
+    
+    const Sector &_sector;
+    int _width, _height;
+    IElevationDataListener *_listener;
+    bool _autodeleteListener;
+    double _deltaHeight;
+    G3MContext *_context;
+    
+#ifdef C_CODE
+    const Vector2I* getResolution(const JSONObject *data){
+        return new Vector2I((int) data->getAsNumber("width",0),(int) data->getAsNumber("height",0));
+    }
+#endif
+#ifdef JAVA_CODE
+    private Vector2I getResolution(const JSONObject data){
+        return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
+    }
+#endif
+    
+    ShortBufferElevationData* getElevationData(Sector sector,
+                                               Vector2I extent,
+                                               const JSONObject *data,
+                                               double deltaHeight){
+        const short minValue = IMathUtils::instance()->minInt16();
+        const int size = extent._x * extent._y;
+        const JSONArray *dataArray = data->getAsArray("data");
+        short *shortBuffer = new short[size];
+        for (int i = 0; i < size; i++)
+        {
+            short height = (short) dataArray->getAsNumber(i, minValue);
+            
+            if (height == 15000) //Our own NODATA, since -9999 is a valid height.
+            {
+                height = ShortBufferElevationData::NO_DATA_VALUE;
+            }
+            else if (height == minValue)
+            {
+                height = ShortBufferElevationData::NO_DATA_VALUE;
+            }
+            
+            shortBuffer[i] = height;
+        }
+        
+        short max = (short) data->getAsNumber("max",IMathUtils::instance()->minInt16());
+        short min = (short) data->getAsNumber("min",IMathUtils::instance()->maxInt16());
+        short children = (short) data->getAsNumber("withChildren",0);
+        short similarity = (short) data->getAsNumber("similarity",0);
+        
+        return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer,
+                                            size, deltaHeight,max,min,children,similarity);
+    }
+    
+public:
+    PyramidElevationDataProvider_BufferDownloadListener(const Sector& sector,
+                                                        const Vector2I& extent,
+                                                        IElevationDataListener *listener,
+                                                        bool autodeleteListener,
+                                                        double deltaHeight):
+    _sector(sector),
+    _width(extent._x),
+    _height(extent._y),
+    _listener(listener),
+    _autodeleteListener(autodeleteListener),
+    _deltaHeight(deltaHeight){
+        
+    }
+    
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired){
+        
+        ShortBufferElevationData *elevationData;
+        
+        std::string contents = buffer->getAsString();
+        const JSONObject *jsonContent = IJSONParser::instance()->parse(contents)->asObject();
+        const Vector2I *resolution = getResolution(jsonContent);
+        elevationData = getElevationData(_sector, *resolution, jsonContent, _deltaHeight);
+        
+        if (buffer != NULL) delete buffer;
+        
+        if (elevationData == NULL)
+        {
+            _listener->onError(_sector, *resolution);
+        }
+        else
+        {
+            _listener->onData(_sector, *resolution, elevationData);
+            //elevationData->_release();
+        }
+        
+        
+        if (_autodeleteListener)
+        {
+            if (_listener != NULL) delete _listener;
+            _listener = NULL;
+        }
+    }
+    
+    void onError(const URL& url){
+        const Vector2I resolution = Vector2I(_width, _height);
+        
+        _listener->onError(_sector, resolution);
+        if (_autodeleteListener)
+        {
+            if (_listener != NULL) delete _listener;
+            _listener = NULL;
+        }
+    }
+
+    void onCancel(const URL& url){
+        if (_listener != NULL)
+        {
+            const Vector2I resolution = Vector2I(_width, _height);
+            _listener->onCancel(_sector, resolution);
+            if (_autodeleteListener)
+            {
+                if (_listener != NULL) delete _listener;
+                _listener = NULL;
+            }
+        }
+    }
+
+    
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* data,
+                            bool expired){
+        if (_autodeleteListener)
+        {
+            if (_listener != NULL) delete _listener;
+            _listener = NULL;
+        }
+    }
+
+    
 };
+
+
+
 
 PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &layer, const Sector& sector,
                                                            bool isMercator,double deltaHeight): _sector(sector), _layer(layer){
