@@ -27,7 +27,12 @@ private:
     double _deltaHeight;
     G3MContext *_context;
     
+#ifdef C_CODE
     const Vector2I* getResolution(const JSONObject *data);
+#endif
+#ifdef JAVA_CODE
+    private Vector2I getResolution(const JSONObject data);
+#endif
     ShortBufferElevationData* getElevationData(Sector sector,
                                                Vector2I extent,
                                                const JSONObject *data,
@@ -40,13 +45,13 @@ public:
                                                         bool autodeleteListener,
                                                         double deltaHeight);
     
-    virtual void onDownload(const URL& url,
+    void onDownload(const URL& url,
                     IByteBuffer* buffer,
                     bool expired);
-    virtual void onError(const URL& url);
-    virtual void onCancel(const URL& url);
+    void onError(const URL& url);
+    void onCancel(const URL& url);
     
-    virtual void onCanceledDownload(const URL& url,
+    void onCanceledDownload(const URL& url,
                             IByteBuffer* data,
                             bool expired);
     
