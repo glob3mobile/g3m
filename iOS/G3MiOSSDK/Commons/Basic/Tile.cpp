@@ -79,7 +79,6 @@ _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 _id( createTileId(level, row, column) ),
-_tessellatorMeshIsMeshHolder(false),
 _data(NULL),
 _dataSize(0)
 {
@@ -193,7 +192,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                            this,
                                                            NULL,
                                                            _tileTessellatorMeshData);
-      _tessellatorMeshIsMeshHolder = false;
     }
     else {
       Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
@@ -206,7 +204,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       if (meshHolder == NULL) {
         meshHolder = new MeshHolder(tessellatorMesh);
         _tessellatorMesh = meshHolder;
-        _tessellatorMeshIsMeshHolder = true;
       }
       else {
         meshHolder->setMesh(tessellatorMesh);
