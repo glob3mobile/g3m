@@ -8,9 +8,8 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     private IElevationDataListener _listener;
     private boolean _autodeleteListener;
     private double _deltaHeight;
-    private G3MContext _context;
 
-    private Vector2I getResolution(const JSONObject data){
+    private Vector2I getResolution(JSONObject data){
         return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
     }
 

@@ -91,7 +91,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         }
 
         private java.util.ArrayList<PyramidComposition> _itself;
-        private final G3MContext _context;
 
         private double getUpperLat(JSONArray array, int index)
         {
