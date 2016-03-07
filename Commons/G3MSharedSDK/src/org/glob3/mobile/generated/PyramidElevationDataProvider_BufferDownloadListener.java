@@ -20,8 +20,7 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     private double _deltaHeight;
     private G3MContext _context;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    Vector2I getResolution(JSONObject data);
+    private Vector2I getResolution(const JSONObject data);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    ShortBufferElevationData getElevationData(Sector sector, Vector2I extent, JSONObject data, double deltaHeight);
 
@@ -29,13 +28,13 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
 //    PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, double deltaHeight);
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    virtual void onDownload(URL url, IByteBuffer buffer, boolean expired);
+//    void onDownload(URL url, IByteBuffer buffer, boolean expired);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    virtual void onError(URL url);
+//    void onError(URL url);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    virtual void onCancel(URL url);
+//    void onCancel(URL url);
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    virtual void onCanceledDownload(URL url, IByteBuffer data, boolean expired);
+//    void onCanceledDownload(URL url, IByteBuffer data, boolean expired);
 
 }
