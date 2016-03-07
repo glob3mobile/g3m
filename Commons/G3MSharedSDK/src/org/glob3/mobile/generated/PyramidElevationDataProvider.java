@@ -206,11 +206,19 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     }
     public final String requestStringPath(String layer, int level, int row, int column)
     {
-      std.ostringstream strs = new std.ostringstream();
-      strs << _layer.compareTo() < 0< < level << "/" << column << "/" << row << ".json"; //".bil";
-      String res = strs.str();
-      //ILogger::instance()->logInfo(res);
-      return res;
+    
+        IStringBuilder istr = IStringBuilder.newStringBuilder();
+        istr.addString(_layer);
+        istr.addInt(level);
+        istr.addString("/");
+        istr.addInt(column);
+        istr.addString("/");
+        istr.addInt(row);
+        istr.addString(".json");
+        String res = istr.getString();
+        if (istr != null)
+           istr.dispose();
+        return res;
     }
     public final String requestMetadataPath()
     {
