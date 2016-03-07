@@ -32,7 +32,6 @@ public class Tile
   private Tile _parent;
 
   private Mesh _tessellatorMesh;
-  private boolean _tessellatorMeshIsMeshHolder;
 
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
@@ -233,7 +232,6 @@ public class Tile
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
      _id = createTileId(level, row, column);
-     _tessellatorMeshIsMeshHolder = false;
      _data = null;
      _dataSize = 0;
   }
@@ -825,7 +823,6 @@ public class Tile
       {
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, null, _tileTessellatorMeshData);
-        _tessellatorMeshIsMeshHolder = false;
       }
       else
       {
@@ -836,7 +833,6 @@ public class Tile
         {
           meshHolder = new MeshHolder(tessellatorMesh);
           _tessellatorMesh = meshHolder;
-          _tessellatorMeshIsMeshHolder = true;
         }
         else
         {
