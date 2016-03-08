@@ -353,8 +353,8 @@
     //Europa, fijo, 16
     //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/fix-euro-16/";
     //Europa, variable, 2 a 16
-    //std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
-    std::string server = "http://www.elnublo.net/temporal/var-euro-16/";
+    std::string server = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
+    //std::string server = "http://www.elnublo.net/temporal/var-euro-16/";
     //Tierra
     //Sector sector = Sector::fullSphere();
     //Solo Europa continental

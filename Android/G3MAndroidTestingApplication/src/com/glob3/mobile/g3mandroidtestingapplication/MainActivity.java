@@ -254,8 +254,8 @@ public class MainActivity
 	   			layerSector = Sector.fromDegrees(34,-10,70,52);
 	   			break;
 	   		case 3:
-	   			//layerServer = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
-	   			layerServer = "http://www.elnublo.net/temporal/var-euro-16/";
+	   			layerServer = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
+	   			//layerServer = "http://www.elnublo.net/temporal/var-euro-16/";
 	   			layerSector = Sector.fromDegrees(34,-10,70,52);
 	   			break;
 	   		default:
