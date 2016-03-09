@@ -28,7 +28,7 @@ public abstract class AbstractMesh extends Mesh
   protected final boolean _owner;
   protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected IFloatBuffer _vertices;
+  protected final IFloatBuffer _vertices;
   protected final Color _flatColor;
   protected final IFloatBuffer _colors;
   protected final float _colorsIntensity;
@@ -282,20 +282,5 @@ public abstract class AbstractMesh extends Mesh
   {
     _showNormals = v;
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Chano_at_work: Como quiero poder actualizar el tile mesh, conviene que vértices sea no const.Al ser una ñapa, recuerda que JM y Agustín la vean antes de subirla.
-
-  public final IFloatBuffer getVertices()
-  {
-    return _vertices;
-  }
-
-  public final Vector3D getCenter()
-  {
-    return _center;
-  }
-
-
 
 }

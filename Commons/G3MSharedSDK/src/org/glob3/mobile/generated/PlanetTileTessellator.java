@@ -10,7 +10,7 @@ public class PlanetTileTessellator extends TileTessellator
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile.Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
   
-    MutableVector2I mutableResolution = prc._layerTilesRenderParameters._tileMeshResolution.asMutableVector2I();
+      MutableVector2I mutableResolution = prc._layerTilesRenderParameters._tileMeshResolution.asVector2I().asMutableVector2I();
   
       if (tile.getElevationData() != null)
       {
@@ -469,32 +469,33 @@ public class PlanetTileTessellator extends TileTessellator
     final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
   
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(rc.getPlanet());
+    TileTessellatorMeshData data = new TileTessellatorMeshData();
+    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, data);
+  
+    //INDEX OF BORDER///////////////////////////////////////////////////////////////
     ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
     for (short j = 0; j < meshResolution._x; j++)
     {
-    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, data);
-  
-    /*const Sector meshSector = getRenderedSectorForTile(tile);
+      indicesBorder.add(j);
+    }
   
     for (short i = 2; i < meshResolution._y+1; i++)
     {
       indicesBorder.add((short)((i * meshResolution._x)-1));
     }
-    
   
     for (short j = (short)(meshResolution._x *meshResolution._y-2); j >= (meshResolution._x*(meshResolution._y-1)); j--)
     {
+      indicesBorder.add(j);
     }
-    
-    for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
   
     for (short j = (short)(meshResolution._x*(meshResolution._y-1)-meshResolution._x); j >= 0; j-=meshResolution._x)
     {
-    
-    for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
       indicesBorder.add(j);
+    }
   
-    
+    //INDEX OF GRID
     ShortBufferBuilder indicesGrid = new ShortBufferBuilder();
     for (short i = 0; i < meshResolution._y-1; i++)
     {
@@ -502,18 +503,15 @@ public class PlanetTileTessellator extends TileTessellator
   
       for (short j = 0; j < meshResolution._x; j++)
       {
-      for (short j = 0; j < rx; j++) {
+        indicesGrid.add((short)(rowOffset + j));
         indicesGrid.add((short)(rowOffset + j+meshResolution._x));
-        indicesGrid.add((short)(rowOffset + j+rx));
+      }
       for (short j = (short)((2 *meshResolution._x)-1); j >= meshResolution._x; j--)
       {
-      for (short j = (short)((2*rx)-1); j >= rx; j--) {
         indicesGrid.add((short)(rowOffset + j));
+      }
   
-    
     }
-    
-    const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
   
     final Color levelColor = Color.blue().wheelStep(5, tile._level % 5);
     final float gridLineWidth = tile.isElevationDataSolved() || (tile.getElevationData() == null) ? 1.0f : 3.0f;
@@ -531,6 +529,8 @@ public class PlanetTileTessellator extends TileTessellator
     c.addMesh(border);
   
     return c;
+  }
+
   public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
   {
   
