@@ -91,6 +91,10 @@ public:
     return Angle::fromDegrees(180);
   }
   
+  static Angle halfPi() {
+    return Angle::fromDegrees(90);
+  }
+  
   static Angle nan() {
     return Angle::fromDegrees(NAND);
   }

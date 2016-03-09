@@ -19,126 +19,45 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 
+#include <G3MiOSSDK/CameraRenderer.hpp>
+#include <G3MiOSSDK/DeviceAttitudeCameraHandler.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 
 void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
-  [_locationManager stopUpdatingLocation];
-  [_locationManager stopUpdatingHeading];
-  _locationManager = nil;
-
-  [_motionManager stopDeviceMotionUpdates];
-  _motionManager = nil;
-
+  if (_dac != NULL){
+    getModel()->getG3MWidget()->getCameraRenderer()->removeHandler(_dac);
+    delete _dac;
+    _dac = NULL;
+  }
+  
+  Camera* camera = getModel()->getG3MWidget()->getNextCamera();
+  camera->setHeadingPitchRoll(Angle::zero(), Angle::fromDegrees(-90), Angle::zero());
+  
   G3MDemoScene::deactivate(context);
 }
-
-
-class UpdateCameraTask : public GTask {
-private:
-  G3MWidget*         _g3mWidget;
-  CLLocationManager* _locationManager;
-  CMMotionManager*   _motionManager;
-
-public:
-  UpdateCameraTask(G3MWidget*         g3mWidget,
-                   CLLocationManager* locationManager,
-                   CMMotionManager*   motionManager) :
-  _g3mWidget(g3mWidget),
-  _locationManager(locationManager),
-  _motionManager(motionManager)
-  {
-  }
-
-  void run(const G3MContext* context) {
-    CLHeading*      heading  = [_locationManager heading];
-    CLLocation*     location = [_locationManager location];
-    CMDeviceMotion* motion   = [_motionManager deviceMotion];
-
-    CLLocationDirection trueHeading = [heading trueHeading];
-
-    CMAttitude* attitude = [motion attitude];
-    double roll  = [attitude roll];
-    double pitch = [attitude pitch];
-//    double yaw   = [attitude yaw];
-
-
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    double headingInDegrees;
-    double pitchRadians;
-    if (orientation == UIInterfaceOrientationLandscapeLeft) {
-      headingInDegrees = -trueHeading + 90;
-      pitchRadians = (2*PI - roll) - PI/2;
-    }
-    else if (orientation == UIInterfaceOrientationLandscapeRight) {
-      headingInDegrees = -trueHeading - 90;
-      pitchRadians = roll - PI/2;
-    }
-    else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-      headingInDegrees = -trueHeading - 180;
-      pitchRadians = (2*PI -pitch) - PI/2;
-    }
-    else {
-      headingInDegrees = -trueHeading;
-      pitchRadians = pitch - PI/2;
-    }
-
-    CLLocationCoordinate2D coordinate = [location coordinate];
-    CLLocationDistance altitude = [location altitude];
-
-
-    Camera* camera = _g3mWidget->getNextCamera();
-
-//    //    camera->setRoll( Angle::fromRadians(rollRadians) );
-
-    camera->setHeading( Angle::fromDegrees( headingInDegrees ) );
-
-    camera->setPitch( Angle::fromRadians( pitchRadians ) );
-
-    camera->setGeodeticPosition( Geodetic3D::fromDegrees(coordinate.latitude,
-                                                         coordinate.longitude,
-                                                         altitude + 500) );
-  }
-};
-
 
 void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+  
+  _dac = new DeviceAttitudeCameraHandler(true);
+  g3mWidget->getCameraRenderer()->addHandler(_dac);
 
 
-//  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
-//                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-//                                           TimeInterval::fromDays(30));
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
 
 //  MapQuestLayer* layer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
 
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.jpg70?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpamVuY3cxbzAwMG12ZGx4cGljbGtqMGUifQ.vpDqms08MBqoRgp667Yz5Q",
-                                                          Sector::FULL_SPHERE,
-                                                          false, // isTransparent
-                                                          2,     // firstLevel
-                                                          22,    // maxLevel
-                                                          TimeInterval::fromDays(30));
+//  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.jpg70?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q",
+//                                                          Sector::FULL_SPHERE,
+//                                                          false, // isTransparent
+//                                                          2,     // firstLevel
+//                                                          22,    // maxLevel
+//                                                          TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
-
-
-  _locationManager = [[CLLocationManager alloc] init];
-  _locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-  _locationManager.distanceFilter = kCLDistanceFilterNone;
-  _locationManager.headingFilter = 0.001;
-  [_locationManager requestAlwaysAuthorization];
-
-  [_locationManager startUpdatingHeading];
-  [_locationManager startUpdatingLocation];
-
-
-  _motionManager = [[CMMotionManager alloc] init];
-  _motionManager.showsDeviceMovementDisplay = YES;
-  _motionManager.deviceMotionUpdateInterval = 10.0 / 1000.0; // 10ms
-  [_motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
-
-
-  g3mWidget->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(10),
-                                                  new UpdateCameraTask(g3mWidget,
-                                                                       _locationManager,
-                                                                       _motionManager)));
   
+  Camera* camera = g3mWidget->getNextCamera();
+  camera->setGeodeticPosition( Geodetic3D::fromDegrees(28.1001809,-15.4147574, 500) );
 }

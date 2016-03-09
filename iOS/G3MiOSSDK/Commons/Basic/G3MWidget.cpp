@@ -36,6 +36,8 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "IDeviceAttitude.hpp"
+#include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
 
 
@@ -45,7 +47,9 @@ void G3MWidget::initSingletons(ILogger*            logger,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
                                IJSONParser*        jsonParser,
-                               ITextUtils*         textUtils) {
+                               ITextUtils*         textUtils,
+                               IDeviceAttitude*    devAttitude,
+                               IDeviceLocation*    devLocation) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -54,6 +58,8 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
     ITextUtils::setInstance(textUtils);
+    IDeviceAttitude::setInstance(devAttitude);
+    IDeviceLocation::setInstance(devLocation);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");

@@ -45,8 +45,6 @@ private:
   int _tilesVisibleByLevel[_maxLOD];
   int _tilesRenderedByLevel[_maxLOD];
 
-  int _buildersStartsInFrame;
-
   double _visibleLowerLatitudeDegrees;
   double _visibleLowerLongitudeDegrees;
   double _visibleUpperLatitudeDegrees;
@@ -66,7 +64,6 @@ public:
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _buildersStartsInFrame = 0;
 
     const IMathUtils* mu = IMathUtils::instance();
     _visibleLowerLatitudeDegrees  = mu->maxDouble();
@@ -79,14 +76,6 @@ public:
       _tilesVisibleByLevel[i]   = 0;
       _tilesRenderedByLevel[i]  = 0;
     }
-  }
-
-  int getBuildersStartsInFrame() const {
-    return _buildersStartsInFrame;
-  }
-
-  void computeBuilderStartInFrame() {
-    _buildersStartsInFrame++;
   }
 
   void computeTileProcessed(Tile* tile) {
