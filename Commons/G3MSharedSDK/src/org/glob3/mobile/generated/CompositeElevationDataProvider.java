@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 //class CompositeElevationData;
 
-public abstract class CompositeElevationDataProvider extends ElevationDataProvider
+public class CompositeElevationDataProvider extends ElevationDataProvider
 {
   private G3MContext _context;
 
@@ -111,6 +111,10 @@ public abstract class CompositeElevationDataProvider extends ElevationDataProvid
     private final boolean _autodelete;
     private final Vector2I _resolution;
     private final Sector _sector ;
+      private final boolean _leveled;
+      private final int _level;
+      private final int _row;
+      private final int _column;
 
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
@@ -152,7 +156,7 @@ public abstract class CompositeElevationDataProvider extends ElevationDataProvid
       return provider;
     }
 
-    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodelete)
+    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, boolean leveled, int level, int row, int column, IElevationDataListener listener, boolean autodelete)
     {
        _providers = provider.getProviders(sector);
        _sector = new Sector(sector);
@@ -162,6 +166,10 @@ public abstract class CompositeElevationDataProvider extends ElevationDataProvid
        _compProvider = provider;
        _compData = null;
        _currentStep = null;
+       _leveled = leveled;
+       _level = level;
+       _row = row;
+       _column = column;
     }
 
     public void dispose()
@@ -176,7 +184,10 @@ public abstract class CompositeElevationDataProvider extends ElevationDataProvid
       {
         _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
     
-        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _currentStep, true);
+        if (!_leveled)
+            _currentID = _currentProvider.requestElevationData(_sector, _resolution, _currentStep, true);
+        else
+            _currentID = _currentProvider.requestElevationData(_sector, _level, _row, _column, _resolution, _currentStep, true);
     
         return true;
       }
@@ -348,13 +359,25 @@ public abstract class CompositeElevationDataProvider extends ElevationDataProvid
   public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
   
-    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, listener, autodeleteListener);
+    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, false, 0,0,0, listener, autodeleteListener);
     _currentID++;
     _requests.put(_currentID, req);
   
     req.launchNewStep();
   
     return _currentID;
+  }
+
+  public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  {
+  
+      CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, true, level, row, column, listener, autodeleteListener);
+      _currentID++;
+      _requests.put(_currentID, req);
+  
+      req.launchNewStep();
+  
+      return _currentID;
   }
 
   public final void cancelRequest(long requestId)

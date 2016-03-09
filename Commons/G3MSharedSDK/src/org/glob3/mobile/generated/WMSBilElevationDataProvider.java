@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class IDownloader;
 
-public abstract class WMSBilElevationDataProvider extends ElevationDataProvider
+public class WMSBilElevationDataProvider extends ElevationDataProvider
 {
   private IDownloader _downloader;
   private URL _url = new URL();
@@ -105,6 +105,11 @@ public abstract class WMSBilElevationDataProvider extends ElevationDataProvider
   
   
     return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+  }
+
+  public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  {
+      return requestElevationData(sector, extent, listener, autodeleteListener);
   }
 
   public final void cancelRequest(long requestId)

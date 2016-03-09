@@ -100,7 +100,6 @@ public class DefaultTileTexturizer extends TileTexturizer
       final long tileTexturePriority = (prc._tilesRenderParameters._incrementalTileQuality ? prc._tileDownloadPriority + prc._layerTilesRenderParameters._maxLevel - tile._level : prc._tileDownloadPriority + tile._level);
   
       builder = new DTT_TileTextureBuilder(rc, prc._layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, prc._tessellator, tileTexturePriority, prc._logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackgroundImage, _defaultBackgroundImageName);
-                                           //Vector2I(8,8),
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }
