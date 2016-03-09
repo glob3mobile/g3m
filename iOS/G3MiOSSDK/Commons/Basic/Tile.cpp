@@ -380,29 +380,25 @@ void Tile::render(const G3MRenderContext*    rc,
                   const GLState*             parentState,
                   TilesStatistics*           tilesStatistics,
                   std::vector<Tile*>*        toVisitInNextIteration) {
-  tilesStatistics->computeTileProcessed(this);
 
-  const bool amIVisible = prc->_tileVisibilityTester->isVisible(rc, prc, this);
-  if (amIVisible) {
+  const bool visible = prc->_tileVisibilityTester->isVisible(rc, prc, this);
+  bool rendered = false;
+  if (visible) {
     setIsVisible(true, prc->_texturizer);
 
-    tilesStatistics->computeVisibleTile(this);
+    rendered = (
+                (toVisitInNextIteration == NULL)                           ||
+                prc->_tileLODTester->meetsRenderCriteria(rc, prc, this)    ||
+                (prc->_tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+                );
 
-    const bool isRawRender = (
-                              (toVisitInNextIteration == NULL)                           ||
-                              prc->_tileLODTester->meetsRenderCriteria(rc, prc, this)    ||
-                              (prc->_tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
-                              );
-
-    if (isRawRender) {
+    if (rendered) {
       if (prc->_renderTileMeshes) {
         rawRender(rc, prc, parentState);
       }
       if (prc->_tilesRenderParameters->_renderDebug) {
         debugRender(rc, prc, parentState);
       }
-
-      tilesStatistics->computeTileRenderered(this);
 
       prune(prc->_texturizer, prc->_elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
@@ -428,6 +424,7 @@ void Tile::render(const G3MRenderContext*    rc,
     //TODO: AVISAR CAMBIO DE TERRENO
   }
 
+  tilesStatistics->computeTileProcessed(this, visible, rendered);
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
