@@ -78,6 +78,8 @@ private:
     private final Vector2I _resolution;
 #endif
     const Sector _sector;
+      const bool _leveled;
+      const int _level, _row, _column;
     
   public:
     
@@ -89,6 +91,8 @@ private:
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,
                                            const Vector2I &resolution,
+                                           bool leveled,
+                                           int level, int row, int column,
                                            IElevationDataListener *listener,
                                            bool autodelete);
 
@@ -144,6 +148,12 @@ public:
                                        const Vector2I& extent,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
+    
+  const long long requestElevationData(const Sector& sector,
+                                       int level, int row, int column,
+                                         const Vector2I& extent,
+                                         IElevationDataListener* listener,
+                                         bool autodeleteListener);
 
   void cancelRequest(const long long requestId);
 
