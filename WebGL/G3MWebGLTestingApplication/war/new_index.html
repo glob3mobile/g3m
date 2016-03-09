@@ -41,6 +41,8 @@
                 <option value="1">Use wireframe</option>
             </select>
             
+            <input placeholder="Vertical Exaggeration" type="input" id="vertex"> </input>
+            
             <button type="button" id="startButton" onclick="loadGlobe()"> Select </button>
             <button type="button" id="clearButton" onclick="clearGlobe()"> Clear screen </button>
         </div>
@@ -75,26 +77,46 @@
         try {
             if (!window.hasOwnProperty("G3M")) {
                 alert("There is not such a globe to remove!");
-                return;
+                return [];
             }
+            var lat = G3M.getLatitude();
+            var lon = G3M.getLongitude();
+            var hgt = G3M.getHeight();
+            var head = G3M.getHeading();
+            var pitch = G3M.getPitch();
+            
             G3M.clearGlobe();
             var parent = document.getElementById("g3mWidgetHolder");
             var globe = document.getElementById("_g3m_canvas");
             parent.removeChild(globe);
+            
+            return [lat, lon, hgt, head, pitch];
+            
         }
-        catch (err) {}
+        catch (err) { return []}
     }
     
     function loadGlobe(){
-        clearGlobe();
+        var array = clearGlobe();
         var wireframeValue = Number(document.getElementById("wireFrameOption").value);
         var sizeValue = Number(document.getElementById("sizeOption").value);
+        var vertExValue = Number(document.getElementById("vertex").value);
         if (!window.hasOwnProperty("G3M")) {
             alert("G3M isn't ready to use");
             return;
         }
-        if (wireframeValue == 1) G3M.loadGlobe(sizeValue,true);
-        else G3M.loadGlobe(sizeValue,false);
+        if(typeof vertExValue === "undefined") {
+            alert("Vertical Exaggeration value is needed!");
+            return;
+        }
+        if (wireframeValue == 1) G3M.loadGlobe(sizeValue,true,vertExValue);
+        else G3M.loadGlobe(sizeValue,false,vertExValue);
+        
+        if (array.length > 0){
+        	G3M.setPitch(array[4]);
+        	G3M.setHeading(array[3])
+        	G3M.goTo(array[0],array[1],array[2]);
+        }
     }
     
     function goTo(){

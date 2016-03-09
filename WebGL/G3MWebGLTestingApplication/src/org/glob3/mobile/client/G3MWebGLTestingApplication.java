@@ -288,10 +288,27 @@ public class G3MWebGLTestingApplication
    
    public static native void jsCalls()/*-{
 		$wnd.G3M = {}
-		$wnd.G3M.loadGlobe = @org.glob3.mobile.client.G3MWebGLTestingApplication::loadGlobe(IZ);
+		$wnd.G3M.loadGlobe = @org.glob3.mobile.client.G3MWebGLTestingApplication::loadGlobe(IZF);
 		$wnd.G3M.clearGlobe = @org.glob3.mobile.client.G3MWebGLTestingApplication::clearGlobe();
 		$wnd.G3M.setPitch = @org.glob3.mobile.client.G3MWebGLTestingApplication::setPitch(D);
+		$wnd.G3M.setHeading = @org.glob3.mobile.client.G3MWebGLTestingApplication::setHeading(D);
 		$wnd.G3M.goTo = @org.glob3.mobile.client.G3MWebGLTestingApplication::goTo(DDD);
+		$wnd.G3M.getLatitude = $entry(function(){
+			return @org.glob3.mobile.client.G3MWebGLTestingApplication::getLatitude()();
+		});
+		$wnd.G3M.getLongitude = $entry(function(){
+			return @org.glob3.mobile.client.G3MWebGLTestingApplication::getLongitude()();
+		});
+		$wnd.G3M.getHeight = $entry(function(){
+			return @org.glob3.mobile.client.G3MWebGLTestingApplication::getHeight()();
+		});
+		$wnd.G3M.getHeading = $entry(function(){
+			return @org.glob3.mobile.client.G3MWebGLTestingApplication::getHeading()();
+		});
+		$wnd.G3M.getPitch = $entry(function(){
+			return @org.glob3.mobile.client.G3MWebGLTestingApplication::getPitch()();
+		});
+		
 }-*/;
 
 public static void clearGlobe(){
@@ -313,13 +330,39 @@ public static void setPitch (double pitch){
   }
 }
 
+public static void setHeading (double heading){
+	  if (_widget != null){
+		   _widget.setCameraHeading(Angle.fromDegrees(heading));
+	  }
+	}
+
 public static void goTo (double lat, double lon, double hgt){
   if (_widget != null){
 	   _widget.setCameraPosition(Geodetic3D.fromDegrees(lat,lon,hgt));
   }
 }
 
-public static void loadGlobe(int layer, boolean wireframe){
+public static double getPitch(){
+	return  _widget.getNextCamera().getPitch()._degrees;
+}
+
+public static double getHeading(){
+	return _widget.getNextCamera().getPitch()._degrees;
+}
+
+public static double getLatitude(){
+	return _widget.getNextCamera().getGeodeticPosition()._latitude._degrees;
+}
+
+public static double getLongitude(){
+	return _widget.getNextCamera().getGeodeticPosition()._longitude._degrees;
+}
+
+public static double getHeight(){
+	return _widget.getNextCamera().getGeodeticPosition()._height;
+}
+
+public static void loadGlobe(int layer, boolean wireframe, float vertEx){
   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
      
      LayerSet ls = new LayerSet();
@@ -360,7 +403,7 @@ public static void loadGlobe(int layer, boolean wireframe){
 	    	  break;
      };
      builder.getPlanetRendererBuilder().setElevationDataProvider(new PyramidElevationDataProvider(layerServer,layerSector));
-     builder.getPlanetRendererBuilder().setVerticalExaggeration(2);
+     builder.getPlanetRendererBuilder().setVerticalExaggeration(vertEx);
      //builder.getPlanetRendererBuilder().setElevationDataProvider(new BilPyramidElevationDataProvider("elevs/fusion/",Sector.fullSphere(),true,false));
     
      boolean showPrimarySectors = wireframe;

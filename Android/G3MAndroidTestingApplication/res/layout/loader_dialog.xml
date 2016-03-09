@@ -16,6 +16,12 @@
         android:layout_height="wrap_content"
         android:entries="@array/wireframe_array"
         />
+    <EditText
+        android:id="@+id/vertex_edittext"
+        android:hint="Vertical Exaggeration"  
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -65,7 +65,8 @@ extends
 Activity {
 
    private G3MWidget_Android _g3mWidget;
-
+   private Geodetic3D position = null;
+   private Angle pitch = null, heading = null;
 
    @Override
    protected void onCreate(final Bundle savedInstanceState) {
@@ -97,15 +98,23 @@ Activity {
 	   super.onDestroy();
    }
    
-   private void generateGlobe(int layer, boolean wireframe){
+   private void generateGlobe(int layer, boolean wireframe, float vertEx){
 	   clearGlobe();
-	   _g3mWidget = createWidgetPyramidElevations(layer, wireframe);
+	   _g3mWidget = createWidgetPyramidElevations(layer, wireframe, vertEx);
+	   if (position != null) {
+		   _g3mWidget.setCameraPosition(position);
+		   _g3mWidget.setCameraPitch(pitch);
+		   _g3mWidget.setCameraHeading(heading);
+	   }
        final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
        placeHolder.addView(_g3mWidget);
    }
    
    private void clearGlobe(){
 	   if (_g3mWidget != null){
+		   position = _g3mWidget.getNextCamera().getGeodeticPosition();
+		   pitch = _g3mWidget.getNextCamera().getPitch();
+		   heading = _g3mWidget.getNextCamera().getHeading();
 		   final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 		   placeHolder.removeView(_g3mWidget);
 		   _g3mWidget.onDestroy();
@@ -136,16 +145,20 @@ Activity {
 			public void onClick(View v) {
 				Spinner size = (Spinner) vi.findViewById(R.id.size_spinner);
 				Spinner wireframe = (Spinner) vi.findViewById(R.id.wireframe_spinner);
-				
+				EditText vertExEditText = (EditText) vi.findViewById(R.id.vertex_edittext);
 				int sizePosition = size.getSelectedItemPosition();
 				int wireFramePosition = wireframe.getSelectedItemPosition();
-				if (sizePosition == 0 || wireFramePosition == 0) {
+				float vertEx = -1;
+				try {
+					vertEx = Float.parseFloat(vertExEditText.getText().toString());
+				} catch (Exception e) {}
+				if (sizePosition == 0 || wireFramePosition == 0 || vertEx < 0) {
 					Toast.makeText(getApplicationContext(), "Error: you should select all options", Toast.LENGTH_LONG).show();;
 					return;
 				}
 				dialog.dismiss();
-				if (wireFramePosition == 1) generateGlobe(sizePosition-1,false);
-				else generateGlobe(sizePosition-1,true);
+				if (wireFramePosition == 1) generateGlobe(sizePosition-1,false,vertEx);
+				else generateGlobe(sizePosition-1,true,vertEx);
 			}
 			
 		});
@@ -228,7 +241,7 @@ Activity {
 	   return true;
   }
   
-  private G3MWidget_Android createWidgetPyramidElevations(int layer, boolean wireframe){
+  private G3MWidget_Android createWidgetPyramidElevations(int layer, boolean wireframe, float vertEx){
 	   final G3MBuilder_Android builder = new G3MBuilder_Android(this);	  
 	   final Planet planet = SphericalPlanet.createEarth();
 	   builder.setPlanet(planet);
@@ -241,7 +254,7 @@ Activity {
 	   builder.getPlanetRendererBuilder().setLayerSet(ls);
 	   //builder.getPlanetRendererBuilder().setIncrementalTileQuality(true);
 	   builder.getPlanetRendererBuilder().setRenderDebug(wireframe);
-	   builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+	   builder.getPlanetRendererBuilder().setVerticalExaggeration(vertEx);
 	   String layerServer;
 	   Sector layerSector = Sector.fullSphere();
 	   switch (layer) {
@@ -374,7 +387,7 @@ Activity {
    }
 
 
-   private G3MWidget_Android createWidgetVR() {
+   /*private G3MWidget_Android createWidgetVR() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
       final LayerSet layerSet = new LayerSet();
@@ -386,7 +399,7 @@ Activity {
       builder.setCameraRenderer(cr);
 
       return builder.createWidget();
-   }
+   }*/
 
 
    private G3MWidget_Android createWidget() {
