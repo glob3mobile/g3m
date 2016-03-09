@@ -76,20 +76,25 @@ public class TilesStatistics
     }
   }
 
-  public final void computeTileProcessed(Tile tile)
+  public final void computeTileProcessed(Tile tile, boolean visible, boolean rendered)
   {
+    final int level = tile._level;
+
     _tilesProcessed++;
-
-    final int level = tile._level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
-  }
 
-  public final void computeVisibleTile(Tile tile)
-  {
-    _tilesVisible++;
+    if (visible)
+    {
+      _tilesVisible++;
+      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    }
 
-    final int level = tile._level;
-    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    if (rendered)
+    {
+      _tilesRendered++;
+      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+      computeRenderedSector(tile);
+    }
   }
 
   public final void computeRenderedSector(Tile tile)
@@ -132,16 +137,6 @@ public class TilesStatistics
     {
       _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
-  }
-
-  public final void computeTileRenderered(Tile tile)
-  {
-    _tilesRendered++;
-
-    final int level = tile._level;
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-    computeRenderedSector(tile);
   }
 
   public final Sector updateVisibleSector(Sector visibleSector)
