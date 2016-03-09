@@ -26,7 +26,7 @@ public:
   DirectMesh(const int primitive,
              bool owner,
              const Vector3D& center,
-             IFloatBuffer* vertices,
+             const IFloatBuffer* vertices,
              float lineWidth,
              float pointSize,
              const Color* flatColor = NULL,

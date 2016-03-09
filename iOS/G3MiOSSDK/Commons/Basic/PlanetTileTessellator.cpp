@@ -61,7 +61,7 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
   Sector sector = tile->_sector;
 #warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile. Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
     
-  MutableVector2I mutableResolution = prc->_layerTilesRenderParameters->_tileMeshResolution.asMutableVector2I();
+    MutableVector2I mutableResolution = prc->_layerTilesRenderParameters->_tileMeshResolution.asVector2I().asMutableVector2I();
     
     if (tile->getElevationData() != NULL) {
       mutableResolution = tile->getElevationData()->getExtent().asMutableVector2I();
@@ -84,8 +84,7 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
     resY = 2;
   }
   
-  const Vector2I meshRes = Vector2I(resX, resY);
-    //ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
+  const Vector2S meshRes = Vector2S(resX, resY);
   return meshRes;
   
   
@@ -249,45 +248,50 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2S& rawResolut
 Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                                  const PlanetRenderContext* prc,
                                                  const Tile* tile) const {
-#warning TODO for JM!
-  return NULL;
-
-  /*const Sector meshSector = getRenderedSectorForTile(tile);
-  const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
-  const short rx = (short)meshResolution._x;
-  const short ry = (short)meshResolution._y;
+  const Sector meshSector = getRenderedSectorForTile(tile);
+  const Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
   
-  AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-  const IFloatBuffer* vertices = mesh->getVertices();
-
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(rc->getPlanet());
+  TileTessellatorMeshData data;
+  createSurfaceVertices(meshResolution,
+                        meshSector,
+                        tile->getElevationData(),
+                        prc->_verticalExaggeration,
+                        vertices,
+                        data);
+  
   //INDEX OF BORDER///////////////////////////////////////////////////////////////
   ShortBufferBuilder indicesBorder;
-  for (short j = 0; j < rx; j++) {
+  for (short j = 0; j < meshResolution._x; j++) {
     indicesBorder.add(j);
   }
   
-  for (short i = 2; i < ry+1; i++) {
-    indicesBorder.add((short)((i * rx)-1));
+  for (short i = 2; i < meshResolution._y+1; i++) {
+    indicesBorder.add((short)((i * meshResolution._x)-1));
   }
   
-  for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
+  for (short j = (short)(meshResolution._x*meshResolution._y-2);
+       j >= (meshResolution._x*(meshResolution._y-1));
+       j--) {
     indicesBorder.add(j);
   }
   
-  for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
+  for (short j = (short)(meshResolution._x*(meshResolution._y-1)-meshResolution._x);
+       j >= 0;
+       j-=meshResolution._x) {
     indicesBorder.add(j);
   }
   
   //INDEX OF GRID
   ShortBufferBuilder indicesGrid;
-  for (short i = 0; i < ry-1; i++) {
-    short rowOffset = (short)(i * rx);
+  for (short i = 0; i < meshResolution._y-1; i++) {
+    short rowOffset = (short)(i * meshResolution._x);
     
-    for (short j = 0; j < rx; j++) {
+    for (short j = 0; j < meshResolution._x; j++) {
       indicesGrid.add((short)(rowOffset + j));
-      indicesGrid.add((short)(rowOffset + j+rx));
+      indicesGrid.add((short)(rowOffset + j+meshResolution._x));
     }
-    for (short j = (short)((2*rx)-1); j >= rx; j--) {
+    for (short j = (short)((2*meshResolution._x)-1); j >= meshResolution._x; j--) {
       indicesGrid.add((short)(rowOffset + j));
     }
     
@@ -298,9 +302,9 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
   
   
   IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
-                                        mesh->getCenter(),
-                                        (IFloatBuffer*)vertices,
-                                        false,
+                                        vertices->getCenter(),
+                                        vertices->create(),
+                                        true,
                                         indicesBorder.create(),
                                         true,
                                         2.0f,
@@ -313,9 +317,9 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                         true, 1.0f, 1.0f);
   
   IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
-                                      mesh->getCenter(),
-                                      (IFloatBuffer*)vertices,
-                                      false,
+                                      vertices->getCenter(),
+                                      vertices->create(),
+                                      true,
                                       indicesGrid.create(),
                                       true,
                                       gridLineWidth,
@@ -327,11 +331,13 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
                                       NULL,
                                       true, 1.0f, 1.0f);
   
+  delete vertices;
+  
   CompositeMesh* c = new CompositeMesh();
   c->addMesh(grid);
   c->addMesh(border);
   
-  return c;*/
+  return c;
 }
 
 Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {

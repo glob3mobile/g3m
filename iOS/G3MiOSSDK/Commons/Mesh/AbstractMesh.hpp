@@ -24,7 +24,7 @@ protected:
   const bool              _owner;
   const Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
-  IFloatBuffer*           _vertices;
+  const IFloatBuffer*           _vertices;
   const Color*            _flatColor;
   const IFloatBuffer*           _colors;
   const float             _colorsIntensity;
@@ -43,7 +43,7 @@ protected:
   AbstractMesh(const int primitive,
                bool owner,
                const Vector3D& center,
-               IFloatBuffer* vertices,
+               const IFloatBuffer* vertices,
                float lineWidth,
                float pointSize,
                const Color* flatColor,
@@ -83,18 +83,6 @@ public:
   void showNormals(bool v) const {
     _showNormals = v;
   }
-
-#warning Chano_at_work: Como quiero poder actualizar el tile mesh, conviene que vértices sea no const. Al ser una ñapa, recuerda que JM y Agustín la vean antes de subirla.
-  
-  IFloatBuffer* getVertices() const {
-    return _vertices;
-  }
-  
-  Vector3D getCenter() const {
-    return _center;
-  }
-  
-
   
 };
 

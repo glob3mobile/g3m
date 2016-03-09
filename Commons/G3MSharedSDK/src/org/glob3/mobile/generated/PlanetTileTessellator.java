@@ -36,8 +36,7 @@ public class PlanetTileTessellator extends TileTessellator
       resY = 2;
     }
   
-    final Vector2I meshRes = new Vector2I(resX, resY);
-      //ILogger::instance()->logInfo("Calculated meshRes:"+meshRes.description());
+    final Vector2S meshRes = new Vector2S(resX, resY);
     return meshRes;
   
   
@@ -467,92 +466,71 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final Mesh createTileDebugMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO for JM!
-    return null;
+    final Sector meshSector = getRenderedSectorForTile(tile);
+    final Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
+  
+    ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
+    for (short j = 0; j < meshResolution._x; j++)
+    {
+    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, data);
   
     /*const Sector meshSector = getRenderedSectorForTile(tile);
-    const Vector2I meshResolution = calculateResolution(prc, tile, meshSector);
-    const short rx = (short)meshResolution._x;
-    const short ry = (short)meshResolution._y;
-    
-    AbstractGeometryMesh* mesh = ((AbstractGeometryMesh*)tile->getTessellatorMesh());
-    const IFloatBuffer* vertices = mesh->getVertices();
   
-    //INDEX OF BORDER///////////////////////////////////////////////////////////////
-    ShortBufferBuilder indicesBorder;
-    for (short j = 0; j < rx; j++) {
-      indicesBorder.add(j);
+    for (short i = 2; i < meshResolution._y+1; i++)
+    {
+      indicesBorder.add((short)((i * meshResolution._x)-1));
     }
     
-    for (short i = 2; i < ry+1; i++) {
-      indicesBorder.add((short)((i * rx)-1));
+  
+    for (short j = (short)(meshResolution._x *meshResolution._y-2); j >= (meshResolution._x*(meshResolution._y-1)); j--)
+    {
     }
     
     for (short j = (short)(rx*ry-2); j >= (short)(rx*(ry-1)); j--) {
-      indicesBorder.add(j);
-    }
+  
+    for (short j = (short)(meshResolution._x*(meshResolution._y-1)-meshResolution._x); j >= 0; j-=meshResolution._x)
+    {
     
     for (short j = (short)(rx*(ry-1)-rx); j >= 0; j-=rx) {
       indicesBorder.add(j);
-    }
+  
     
-    //INDEX OF GRID
-    ShortBufferBuilder indicesGrid;
-    for (short i = 0; i < ry-1; i++) {
-      short rowOffset = (short)(i * rx);
-    
+    ShortBufferBuilder indicesGrid = new ShortBufferBuilder();
+    for (short i = 0; i < meshResolution._y-1; i++)
+    {
+      short rowOffset = (short)(i * meshResolution._x);
+  
+      for (short j = 0; j < meshResolution._x; j++)
+      {
       for (short j = 0; j < rx; j++) {
-        indicesGrid.add((short)(rowOffset + j));
+        indicesGrid.add((short)(rowOffset + j+meshResolution._x));
         indicesGrid.add((short)(rowOffset + j+rx));
-      }
+      for (short j = (short)((2 *meshResolution._x)-1); j >= meshResolution._x; j--)
+      {
       for (short j = (short)((2*rx)-1); j >= rx; j--) {
         indicesGrid.add((short)(rowOffset + j));
-      }
+  
     
     }
     
     const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
-    const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 1.0f : 3.0f;
-    
-    
-    IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
-                                          mesh->getCenter(),
-                                          (IFloatBuffer*)vertices,
-                                          false,
-                                          indicesBorder.create(),
-                                          true,
-                                          2.0f,
-                                          1.0f,
-                                          Color::newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f),
-                                          NULL,
-                                          1.0f,
-                                          false,
-                                          NULL,
-                                          true, 1.0f, 1.0f);
-    
-    IndexedMesh* grid = new IndexedMesh(GLPrimitive::lineStrip(),
-                                        mesh->getCenter(),
-                                        (IFloatBuffer*)vertices,
-                                        false,
-                                        indicesGrid.create(),
-                                        true,
-                                        gridLineWidth,
-                                        1.0f,
-                                        new Color(levelColor),
-                                        NULL,
-                                        1.0f,
-                                        false,
-                                        NULL,
-                                        true, 1.0f, 1.0f);
-    
-    CompositeMesh* c = new CompositeMesh();
-    c->addMesh(grid);
-    c->addMesh(border);
-    
-    return c;*/
-  }
-
+  
+    final Color levelColor = Color.blue().wheelStep(5, tile._level % 5);
+    final float gridLineWidth = tile.isElevationDataSolved() || (tile.getElevationData() == null) ? 1.0f : 3.0f;
+  
+  
+    IndexedMesh border = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesBorder.create(), true, 2.0f, 1.0f, Color.newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f), null, 1.0f, false, null, true, 1.0f, 1.0f);
+  
+    IndexedMesh grid = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesGrid.create(), true, gridLineWidth, 1.0f, new Color(levelColor), null, 1.0f, false, null, true, 1.0f, 1.0f);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    CompositeMesh c = new CompositeMesh();
+    c.addMesh(grid);
+    c.addMesh(border);
+  
+    return c;
   public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
   {
   

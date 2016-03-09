@@ -467,6 +467,8 @@
 		CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
+		D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
+		D092E3101C902CE6005ABF62 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D092E30F1C902CE6005ABF62 /* CoreMotion.framework */; };
 		D8019FF01C11D91800784287 /* TileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLODTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLODTester.hpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
@@ -776,6 +778,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */,
 				D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
@@ -1774,6 +1777,7 @@
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D092E30F1C902CE6005ABF62 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		D8019FEE1C11D91800784287 /* TileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TileLODTester.cpp; path = Commons/Rendererers/TileLODTester.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEF1C11D91800784287 /* TileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TileLODTester.hpp; path = Commons/Rendererers/TileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
@@ -1992,6 +1996,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D092E3101C902CE6005ABF62 /* CoreMotion.framework in Frameworks */,
 				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
 				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
 				44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */,
@@ -2931,6 +2936,7 @@
 		D8EEF3B71577924D003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D092E30F1C902CE6005ABF62 /* CoreMotion.framework */,
 				44AFBB2819D4286C00EB78E9 /* CoreData.framework */,
 				44AFBB2619D4276000EB78E9 /* QuartzCore.framework */,
 				44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */,

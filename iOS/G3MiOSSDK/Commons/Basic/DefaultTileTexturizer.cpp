@@ -28,7 +28,7 @@
 #include "IImageBuilderListener.hpp"
 #include "PlanetRenderContext.hpp"
 #include "TilesRenderParameters.hpp"
-#include "ElevationData.hpp"
+#include "Vector2S.hpp"
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
@@ -189,7 +189,7 @@ private:
                                          const bool transparent,
                                          const bool generateMipmap) {
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
-    
+
     Tile* ancestor = tile;
     bool fallbackSolved = false;
     while (ancestor != NULL && !fallbackSolved) {
