@@ -123,12 +123,9 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
       if (level > maxLevel)
          return true;
-      else
-      {
-        if (!sector.touchesWith(_sector))
-           return true;
-        return false;
-      }
+      if (!sector.touchesWith(_sector))
+         return true;
+      return false;
     }
 
     public PyramidElevationDataProvider(String layer, Sector sector)
@@ -168,7 +165,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     }
     public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
     {
-      //This requester is not necessary, but we are forced to implement it, so -1.
       return -1;
     }
     public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
@@ -217,7 +213,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     }
     public final Vector2I getMinResolution()
     {
-      //    int WORKING_JM;
       return Vector2I.zero();
     }
 

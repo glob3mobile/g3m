@@ -499,7 +499,6 @@ public class Tile
         if (elevationDataProvider != null)
             if (_elevationDataRequest != null)
             {
-                ILogger.instance().logInfo("Prune cancelling requests: %d / %d / %d", subtile._level, subtile._column, subtile._row);
                 _elevationDataRequest.cancelRequest();
             }
   
@@ -525,7 +524,6 @@ public class Tile
     {
       if (_elevationDataRequest != null)
       {
-        ILogger.instance().logInfo("toBeDeleted cancelling requests: %d / %d / %d",_level,_column,_row);
         _elevationDataRequest.cancelRequest();
       }
     }

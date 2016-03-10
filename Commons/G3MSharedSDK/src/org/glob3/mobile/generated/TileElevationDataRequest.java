@@ -45,8 +45,6 @@ public class TileElevationDataRequest
   public final void sendRequest()
   {
     _listener = new TileElevationDataRequestListener(this);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning chano_changed_behaviour: Ahora se llama siempre a la nueva versión de request.En la versión piramidal cargará tiles por lrc.En el resto se llamará indirectamente a la antigua versión de request.
     _requestID = _provider.requestElevationData(_tile._sector, _tile._level, _tile._row, _tile._column, _resolution, _listener, true);
   }
 

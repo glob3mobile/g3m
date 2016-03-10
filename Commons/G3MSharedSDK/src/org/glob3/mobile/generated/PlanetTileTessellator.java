@@ -7,8 +7,6 @@ public class PlanetTileTessellator extends TileTessellator
   private Vector2S calculateResolution(PlanetRenderContext prc, Tile tile, Sector renderedSector)
   {
     Sector sector = tile._sector;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile.Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
   
       MutableVector2I mutableResolution = prc._layerTilesRenderParameters._tileMeshResolution.asVector2I().asMutableVector2I();
   
