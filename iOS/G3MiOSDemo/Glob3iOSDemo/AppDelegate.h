@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>{
+  BOOL _starsActive[5];
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
+
+@property (nonatomic) BOOL showingGalaxies;
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application;
+
+-(BOOL) areStarsActive: (int) i;
+-(void) setStarsActive: (int) i value: (BOOL) v;
+
+
 
 @end

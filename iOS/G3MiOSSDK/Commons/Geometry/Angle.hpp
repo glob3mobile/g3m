@@ -194,7 +194,24 @@ public:
   Angle nearestAngleInInterval(const Angle& min, const Angle& max) const;
 
   Angle distanceTo(const Angle& other) const;
-
+  
+  static double distanceBetweenAnglesInRadians(double r1, double r2);
+  
+  static Angle fromClockHoursMinutesSeconds(double hours,
+                                            double minutes,
+                                            double seconds) {
+    const double clockMinToDeg = 15.0 / 60.0;
+    const double clockSecToDeg = clockMinToDeg / 60.0;
+    
+    double hd = hours * 15.0;
+    double md = minutes * clockMinToDeg;
+    double sd = seconds * clockSecToDeg;
+    
+    //printf("%f + %f + %f\n", hd, md, sd);
+    
+    return Angle::fromDegrees(hd+md+sd);
+  }
+  
   Angle normalized() const {
     double degrees = _degrees;
     while (degrees < 0) {
@@ -205,7 +222,18 @@ public:
     }
     return Angle(degrees, TO_RADIANS(degrees));
   }
-
+  
+  double getNormalizedDegrees360() const {
+    double degrees = _degrees;
+    while (degrees < 0) {
+      degrees += 360;
+    }
+    while (degrees >= 360) {
+      degrees -= 360;
+    }
+    return degrees;
+  }
+  
   bool isZero() const {
     return (_degrees == 0);
   }
