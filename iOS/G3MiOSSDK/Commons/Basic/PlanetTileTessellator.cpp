@@ -59,7 +59,6 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-#warning Chano_changed_behaviour: Cambio clave: resolución general sólo si no tenemos elevaciones en el tile. Si las tenemos, entonces la malla será acorde a esas elevaciones dadas, tengan el extent que tengan.
     
     MutableVector2I mutableResolution = prc->_layerTilesRenderParameters->_tileMeshResolution.asVector2I().asMutableVector2I();
     

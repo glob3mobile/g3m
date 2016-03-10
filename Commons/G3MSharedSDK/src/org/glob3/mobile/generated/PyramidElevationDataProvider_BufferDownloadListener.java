@@ -75,7 +75,6 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
         else
         {
             _listener.onData(_sector, resolution, elevationData);
-            //elevationData->_release();
         }
 
 

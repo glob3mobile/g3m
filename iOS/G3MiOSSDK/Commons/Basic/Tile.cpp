@@ -311,7 +311,6 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
 
   if (elevationDataProvider != NULL) {
     if (_elevationDataRequest != NULL) {
-      ILogger::instance()->logInfo("toBeDeleted cancelling requests: %d / %d / %d",_level,_column,_row);
       _elevationDataRequest->cancelRequest();
     }
   }
@@ -337,10 +336,6 @@ void Tile::prune(TileTexturizer*        texturizer,
         
       if (elevationDataProvider != NULL)
           if (_elevationDataRequest != NULL) {
-              ILogger::instance()->logInfo("Prune cancelling requests: %d / %d / %d",
-                                           subtile->_level,
-                                           subtile->_column,
-                                           subtile->_row);
               _elevationDataRequest->cancelRequest();
           }
 

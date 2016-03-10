@@ -50,7 +50,6 @@ void TileElevationDataRequest::cancelRequest() {
 
 void TileElevationDataRequest::sendRequest() {
   _listener = new TileElevationDataRequestListener(this);
-#warning chano_changed_behaviour: Ahora se llama siempre a la nueva versión de request. En la versión piramidal cargará tiles por lrc. En el resto se llamará indirectamente a la antigua versión de request.
   _requestID = _provider->requestElevationData(_tile->_sector,
                                                _tile->_level,
                                                _tile->_row,

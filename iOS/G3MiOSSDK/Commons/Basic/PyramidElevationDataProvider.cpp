@@ -103,7 +103,6 @@ public:
         else
         {
             _listener->onData(_sector, *resolution, elevationData);
-            //elevationData->_release();
         }
         
         
@@ -179,7 +178,6 @@ void PyramidElevationDataProvider::initialize(const G3MContext* context ){
 }
 
 const long long PyramidElevationDataProvider::requestElevationData(const Sector &sector, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener){
-  //This requester is not necessary, but we are forced to implement it, so -1.
   return -1;
 }
 
@@ -224,7 +222,6 @@ std::vector<const Sector*> PyramidElevationDataProvider::getSectors() const{
 }
 
 const Vector2I PyramidElevationDataProvider::getMinResolution() const{
-  //    int WORKING_JM;
   return Vector2I::zero();
 }
 
@@ -235,10 +232,8 @@ bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
       maxLevel = IMathUtils::instance()->max(maxLevel,_pyrComposition->at(i)._pyramidLevel);
   
   if (level > maxLevel) return true;
-  else {
-    if (!sector.touchesWith(_sector)) return true;
-    return false;
-  }
+  if (!sector.touchesWith(_sector)) return true;
+  return false;
 }
 
 
