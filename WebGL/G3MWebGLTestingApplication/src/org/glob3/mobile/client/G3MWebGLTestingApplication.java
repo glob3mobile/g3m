@@ -42,8 +42,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+implements
+EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -58,8 +58,9 @@ public class G3MWebGLTestingApplication
    public void onModuleLoad() {
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
 
-      //_g3mWidget = createWidget();
-      _g3mWidget = createWidgetVR();
+      //      _g3mWidget = createWidget();
+      _g3mWidget = createWidgetBuildings();
+      //_g3mWidget = createWidgetVR();
       //_g3mWidget = createWidgetPlanetDebug();
       g3mWidgetHolder.add(_g3mWidget);
 
@@ -91,7 +92,7 @@ public class G3MWebGLTestingApplication
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -100,8 +101,8 @@ public class G3MWebGLTestingApplication
    }
 
    private class AnimateHUDWidgetsTask
-   extends
-   GTask {
+            extends
+               GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -118,7 +119,7 @@ public class G3MWebGLTestingApplication
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                  + "R: " + _widget.getCurrentCamera().getRoll());
+                               + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -149,7 +150,7 @@ public class G3MWebGLTestingApplication
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-      );
+               );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -163,6 +164,24 @@ public class G3MWebGLTestingApplication
 
 
       return widget;
+   }
+
+
+   private static G3MWidget_WebGL createWidgetBuildings() {
+      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
+      builder.setDownloader(new Downloader_WebGL( //
+               8, // maxConcurrentOperationCount
+               10, // delayMillis
+               proxy));
+
+      return builder.createWidget();
    }
 
 

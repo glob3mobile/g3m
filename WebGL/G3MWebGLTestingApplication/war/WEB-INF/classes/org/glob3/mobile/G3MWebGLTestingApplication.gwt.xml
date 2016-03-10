@@ -10,6 +10,4 @@
 	<source path="client" />
 	<entry-point class="org.glob3.mobile.client.G3MWebGLTestingApplication" />
 	
-	<collapse-all-properties />
-   	<add-linker name="sso" />
 </module>
