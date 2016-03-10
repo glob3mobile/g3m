@@ -53,7 +53,8 @@ public class TileElevationDataRequest
     if (_listener != null)
     {
       _listener._request = null;
-      _provider.cancelRequest(_requestID);
+      if (_requestID > -1)
+         _provider.cancelRequest(_requestID);
     }
   }
 

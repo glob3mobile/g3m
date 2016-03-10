@@ -497,9 +497,12 @@ public class Tile
         }
   
         if (elevationDataProvider != null)
-            if (_elevationDataRequest != null)
+            if (subtile._elevationDataRequest != null)
             {
-                _elevationDataRequest.cancelRequest();
+                subtile._elevationDataRequest.cancelRequest();
+                if (_elevationDataRequest != null)
+                   _elevationDataRequest.dispose();
+                _elevationDataRequest = null;
             }
   
         if (subtile != null)
