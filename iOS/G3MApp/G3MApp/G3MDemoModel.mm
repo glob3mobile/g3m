@@ -43,6 +43,7 @@
 #include "G3MAnimatedMarksDemoScene.hpp"
 #include "G3MVectorStreaming1DemoScene.hpp"
 #include "G3MVectorStreaming2DemoScene.hpp"
+#include "G3MElevationsDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -87,6 +88,7 @@ _context(NULL)
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
+  _scenes.push_back( new G3MElevationsDemoScene(this));
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

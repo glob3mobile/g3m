@@ -71,6 +71,7 @@
 		CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D2091A7C5014005429A6 /* anchorWidget.png */; };
 		CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-mark.png */; };
 		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
+		D00002FC1C919B040016AB0F /* G3MElevationsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D00002FA1C919B040016AB0F /* G3MElevationsDemoScene.cpp */; };
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
@@ -228,6 +229,8 @@
 		CFF9D2091A7C5014005429A6 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
 		CFF9D20B1A7C5048005429A6 /* g3m-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-mark.png"; sourceTree = "<group>"; };
 		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
+		D00002FA1C919B040016AB0F /* G3MElevationsDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MElevationsDemoScene.cpp; sourceTree = "<group>"; };
+		D00002FB1C919B040016AB0F /* G3MElevationsDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MElevationsDemoScene.hpp; sourceTree = "<group>"; };
 		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
@@ -379,6 +382,8 @@
 				CFECA7761B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.hpp */,
 				CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */,
 				CFC664C91BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.hpp */,
+				D00002FA1C919B040016AB0F /* G3MElevationsDemoScene.cpp */,
+				D00002FB1C919B040016AB0F /* G3MElevationsDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -584,7 +589,7 @@
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
-						DevelopmentTeam = N847RXR927;
+						DevelopmentTeam = CTLLY45L74;
 					};
 				};
 			};
@@ -718,6 +723,7 @@
 				CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */,
 				CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */,
 				CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */,
+				D00002FC1C919B040016AB0F /* G3MElevationsDemoScene.cpp in Sources */,
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
 				CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */,
 				CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */,
