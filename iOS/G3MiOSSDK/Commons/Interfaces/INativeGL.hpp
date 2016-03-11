@@ -216,7 +216,7 @@ public:
   virtual int DepthFuncParameterValue_GEqual() const = 0;
   virtual int DepthFuncParameterValue_Always() const = 0;
 
-  virtual void colorMask(bool rv, bool gv, bool bv, bool av);
+  virtual void colorMask(bool rv, bool gv, bool bv, bool av) const = 0;
 
   virtual void setActiveTexture(int i) const = 0;
   
