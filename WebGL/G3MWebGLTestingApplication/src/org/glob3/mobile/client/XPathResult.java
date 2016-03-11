@@ -23,7 +23,7 @@ public class XPathResult {
    }-*/;
 
 
-   public native String getAsText() /*-{
+   public native String getTextContentAsText() /*-{
 		var r = this.@org.glob3.mobile.client.XPathResult::_result;
 		var thisNode = r.iterateNext();
 		return thisNode.textContent;
@@ -35,8 +35,8 @@ public class XPathResult {
    }-*/;
 
 
-   public ArrayList<Double> getAsNumberArray(final String separator) {
-      final JsArrayNumber a = jsGetAsNumberArray(separator);
+   public ArrayList<Double> getTextContentAsNumberArray(final String separator) {
+      final JsArrayNumber a = jsGetTextContentAsNumberArray(separator);
       final ArrayList<Double> res = new ArrayList<Double>();
       for (int i = 0; i < a.length(); i++) {
          res.add(a.get(i));
@@ -45,7 +45,7 @@ public class XPathResult {
    }
 
 
-   public native JsArrayNumber jsGetAsNumberArray(String separator) /*-{
+   public native JsArrayNumber jsGetTextContentAsNumberArray(String separator) /*-{
 		var r = this.@org.glob3.mobile.client.XPathResult::_result
 				.iterateNext();
 

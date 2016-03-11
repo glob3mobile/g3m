@@ -65,6 +65,7 @@ public class XMLDocument {
 			debugger;
 			console.log(e);
 		}
+		debugger;
 
 		//console.log(xpathResult);
 
