@@ -39,6 +39,7 @@ public class XMLDocument {
 
 		var xml = this.@org.glob3.mobile.client.XMLDocument::_xml;
 
+		//Resolver for CityGML
 		function nsResolver(prefix) {
 			switch (prefix) {
 			case 'xhtml':
@@ -50,14 +51,11 @@ public class XMLDocument {
 			case 'bldg':
 				return 'http://www.opengis.net/citygml/building/1.0';
 			default:
-				return 'http://www.w3.org/1998/Math/MathML';
+				return 'http://www.opengis.net/citygml/1.0';
 			}
 		}
 
 		//REMEMBER TO ERASE XMLNS= ATTRIBUTE!!!!!!!!!!!!
-
-		//alert(xml);
-		//debugger;
 		try {
 			var xpathResult = xml.evaluate(xpath, xml, nsResolver,
 					XPathResult.ANY_TYPE, null);
@@ -65,9 +63,6 @@ public class XMLDocument {
 			debugger;
 			console.log(e);
 		}
-		debugger;
-
-		//console.log(xpathResult);
 
 		return xpathResult;
    }-*/;
