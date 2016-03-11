@@ -36,7 +36,7 @@ public class CityGMLBuilding {
          s += "\n Wall: Coordinates: ";
          for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {
             s += "(" + _walls.get(i)._coordinates.get(j) + ", " + _walls.get(i)._coordinates.get(j + 1) + ", "
-                     + _walls.get(i)._coordinates.get(j + 1) + ") ";
+                 + _walls.get(i)._coordinates.get(j + 2) + ") ";
          }
       }
       return s;
