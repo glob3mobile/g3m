@@ -18,6 +18,8 @@ import org.glob3.mobile.generated.HUDAbsolutePosition;
 import org.glob3.mobile.generated.HUDQuadWidget;
 import org.glob3.mobile.generated.HUDRelativeSize;
 import org.glob3.mobile.generated.HUDRenderer;
+import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
@@ -101,8 +103,8 @@ EntryPoint {
    }
 
    private class AnimateHUDWidgetsTask
-            extends
-               GTask {
+   extends
+   GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -119,7 +121,7 @@ EntryPoint {
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                               + "R: " + _widget.getCurrentCamera().getRoll());
+                  + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -180,6 +182,61 @@ EntryPoint {
                8, // maxConcurrentOperationCount
                10, // delayMillis
                proxy));
+
+
+      builder.setInitializationTask(new GInitializationTask() {
+         @Override
+         public void run(final G3MContext context) {
+
+            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+
+               @Override
+               public void onError(final URL url) {
+                  // TODO Auto-generated method stub
+                  //                  final XMLDocument doc = new XMLDocument("ok");
+                  //                  doc.xpath("error");
+               }
+
+
+               @Override
+               public void onDownload(final URL url,
+                                      final IByteBuffer buffer,
+                                      final boolean expired) {
+                  final String s = buffer.getAsString();
+
+                  final CityGMLDocument doc = new CityGMLDocument(s);
+                  doc.parseBuildings();
+               }
+
+
+               @Override
+               public void onCanceledDownload(final URL url,
+                                              final IByteBuffer buffer,
+                                              final boolean expired) {
+                  final XMLDocument doc = new XMLDocument("ok");
+                  doc.xpath("cancel");
+               }
+
+
+               @Override
+               public void onCancel(final URL url) {
+                  // TODO Auto-generated method stub
+                  //                  final XMLDocument doc = new XMLDocument("ok");
+                  //                  doc.xpath("cancel");
+               }
+            };
+
+            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1.gml"), 0, TimeInterval.forever(), false,
+                     listener, true);
+         }
+
+
+         @Override
+         public boolean isDone(final G3MContext context) {
+            return true;
+         }
+      });
+
 
       return builder.createWidget();
    }
