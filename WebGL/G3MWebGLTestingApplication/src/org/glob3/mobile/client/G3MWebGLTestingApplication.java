@@ -2,6 +2,8 @@
 
 package org.glob3.mobile.client;
 
+import java.util.ArrayList;
+
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
@@ -24,6 +26,7 @@ import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
@@ -44,8 +47,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -94,7 +97,7 @@ EntryPoint {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -103,8 +106,8 @@ EntryPoint {
    }
 
    private class AnimateHUDWidgetsTask
-   extends
-   GTask {
+            extends
+               GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -121,7 +124,7 @@ EntryPoint {
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                  + "R: " + _widget.getCurrentCamera().getRoll());
+                               + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -152,7 +155,7 @@ EntryPoint {
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-               );
+      );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -205,7 +208,10 @@ EntryPoint {
                   final String s = buffer.getAsString();
 
                   final CityGMLDocument doc = new CityGMLDocument(s);
-                  doc.parseBuildings();
+                  final ArrayList<CityGMLBuilding> bs = doc.parseBuildings();
+                  for (final CityGMLBuilding b : bs) {
+                     ILogger.instance().logInfo(b.description());
+                  }
                }
 
 

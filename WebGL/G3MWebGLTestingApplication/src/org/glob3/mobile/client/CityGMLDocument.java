@@ -47,9 +47,11 @@ public class CityGMLDocument
    }
 
 
-   public void parseBuildings() {
+   public ArrayList<CityGMLBuilding> parseBuildings() {
+
+      final ArrayList<CityGMLBuilding> buildings = new ArrayList<CityGMLBuilding>();
+
       final int nBuildings = (int) getNumberOfBuildings();
-      ILogger.instance().logInfo("FOUND %d BUILDINGS", getNumberOfBuildings());
 
       for (int i = 1; i <= nBuildings; i++) { //Check number of buildings TEST
          final String bPath = "/CityModel/cityObjectMember[" + i + "]/bldg:Building";
@@ -57,22 +59,21 @@ public class CityGMLDocument
          final XPathResult bs = xpath(bPath + "/gml:name/text()");
          final String name = bs.getAsText();
 
-         ILogger.instance().logInfo("Parsing building number %d", i);
          final CityGMLBuilding building = new CityGMLBuilding(name);
 
          //Walls
          final int nwalls = xpath(bPath + "/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface").getAsXMLDocuments().size();
-         ILogger.instance().logInfo("N Walls " + nwalls);
 
          for (int j = 1; j <= nwalls; j++) {
             final String xpathcoord = bPath + "/bldg:boundedBy[" + j
                      + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
             final XPathResult wc = xpath(xpathcoord);
             building.addWallWithPosLis(wc.getAsNumberArray(" "));
-
          }
 
+         buildings.add(building);
       }
 
+      return buildings;
    }
 }

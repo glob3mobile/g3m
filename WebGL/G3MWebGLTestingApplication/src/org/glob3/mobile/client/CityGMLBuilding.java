@@ -4,13 +4,11 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.ILogger;
-
 
 public class CityGMLBuilding {
 
    private class Wall {
-      final ArrayList<Double> _coordinates;
+      public final ArrayList<Double> _coordinates;
 
 
       public Wall(final ArrayList<Double> coordinates) {
@@ -24,14 +22,24 @@ public class CityGMLBuilding {
 
    public CityGMLBuilding(final String name) {
       _name = name;
-      ILogger.instance().logInfo("Creating buidling with name " + name);
    }
 
 
    public void addWallWithPosLis(final ArrayList<Double> coordinates) {
-      ILogger.instance().logInfo("Creating wall with coordinates -> FC:" + coordinates.get(0));
       _walls.add(new Wall(coordinates));
    }
 
+
+   public String description() {
+      String s = "Building Name: " + _name;
+      for (int i = 0; i < _walls.size(); i++) {
+         s += "\n Wall: Coordinates: ";
+         for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {
+            s += "(" + _walls.get(i)._coordinates.get(j) + ", " + _walls.get(i)._coordinates.get(j + 1) + ", "
+                     + _walls.get(i)._coordinates.get(j + 1) + ") ";
+         }
+      }
+      return s;
+   }
 
 }

@@ -23,14 +23,11 @@ public class XPathResult {
    }-*/;
 
 
-   //   public native String getAsText() /*-{
-   //		return this.@org.glob3.mobile.client.XPathResult::_result.stringValue;
-   //   }-*/;
-
-
-   public String getAsText() { //Check why this works
-      return getAsXMLDocuments().get(0).getTextContent();
-   }
+   public native String getAsText() /*-{
+		var r = this.@org.glob3.mobile.client.XPathResult::_result;
+		var thisNode = r.iterateNext();
+		return thisNode.textContent;
+   }-*/;
 
 
    public native boolean getAsBoolean() /*-{
