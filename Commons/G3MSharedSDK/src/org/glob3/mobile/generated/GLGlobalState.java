@@ -73,7 +73,7 @@ public class GLGlobalState
   {
      _depthTest = false;
      _blend = false;
-     _cullFace = false;
+     _cullFace = true;
      _culledFace = GLCullFace.back();
      _lineWidth = 1F;
      _polygonOffsetFactor = 0F;

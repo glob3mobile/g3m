@@ -26,7 +26,7 @@ public class IndexedMesh extends AbstractMesh
   protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _indices.size(), _glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

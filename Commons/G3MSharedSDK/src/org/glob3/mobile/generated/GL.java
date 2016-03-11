@@ -154,12 +154,12 @@ public class GL
 //                    GPUProgramManager& progManager,
 //                    const GPUProgramState* gpuState);
 
-  public final void drawElements(int mode, IShortBuffer indices, int indexCount, GLState state, GPUProgramManager progManager)
+  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
   
     state.applyOnGPU(this, progManager);
   
-    _nativeGL.drawElements(mode, indexCount, indices);
+    _nativeGL.drawElements(mode, indices.size(), indices);
   }
 
 //  void drawArrays(int mode,
