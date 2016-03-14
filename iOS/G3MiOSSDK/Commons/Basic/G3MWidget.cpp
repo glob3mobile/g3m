@@ -544,20 +544,20 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
 }
 
-void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType){
+void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
   
-  if (_auxCam == NULL){
+  if (_auxCam == NULL) {
     _auxCam = new Camera(-1);
   }
   
   const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
-  if (eyesUpdated){
+  if (eyesUpdated) {
     
     //Saving central camera
-    if (_rightEyeCam == NULL){
+    if (_rightEyeCam == NULL) {
       _rightEyeCam = new Camera(-1);
     }
-    if (_leftEyeCam == NULL){
+    if (_leftEyeCam == NULL) {
       _leftEyeCam = new Camera(-1);
     }
     _auxCam->copyFrom(*_currentCamera);
@@ -565,7 +565,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     _rightEyeCam->copyFrom(*_auxCam);
     
     //For 3D scenes we create the "eyes" cameras
-    if (renderStateType == RENDER_READY){
+    if (renderStateType == RENDER_READY) {
       Vector3D camPos = _currentCamera->getCartesianPosition();
       Vector3D camCenter = _currentCamera->getCenter();
       Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
@@ -603,7 +603,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   _currentCamera->copyFrom(*_auxCam);
 }
 
-void G3MWidget::rawRenderMono(const RenderState_Type renderStateType){
+void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
   
   _gl->clearScreen(*_backgroundColor);
   _gl->viewport(0, 0, _width, _height);
@@ -976,10 +976,10 @@ void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
   //  }
 }
 
-void G3MWidget::setViewMode(ViewMode vm){
+void G3MWidget::setViewMode(ViewMode vm) {
   _viewMode = vm;
   
-  if (_viewMode != STEREO){
+  if (_viewMode != STEREO) {
     delete _auxCam;
     _auxCam = NULL;
     delete _leftEyeCam;

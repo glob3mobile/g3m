@@ -40,7 +40,6 @@ void G3MStereoDemoScene::rawActivate(const G3MContext* context) {
   
   g3mWidget->setViewMode(STEREO);
 
-
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                            TimeInterval::fromDays(30));

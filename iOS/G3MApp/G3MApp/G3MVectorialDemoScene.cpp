@@ -162,7 +162,6 @@ public:
 void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-  g3mWidget->setViewMode(MONO);
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
 

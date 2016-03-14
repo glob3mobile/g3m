@@ -18,15 +18,15 @@
   if (status == kCLAuthorizationStatusRestricted ||
       status == kCLAuthorizationStatusDenied ||
       status == kCLAuthorizationStatusAuthorizedWhenInUse ||
-      ![CLLocationManager locationServicesEnabled]){
+      ![CLLocationManager locationServicesEnabled]) {
     _requestingPermission = FALSE;
   }
   
-  if (_requestingPermission){
+  if (_requestingPermission) {
     return FALSE;
   }
   
-  if (_locationManager == nil){
+  if (_locationManager == nil) {
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -43,7 +43,7 @@
   status = [CLLocationManager authorizationStatus];
   if (status == kCLAuthorizationStatusAuthorized ||
       status == kCLAuthorizationStatusAuthorizedAlways ||
-      status == kCLAuthorizationStatusAuthorizedWhenInUse){
+      status == kCLAuthorizationStatusAuthorizedWhenInUse) {
     
     [_locationManager startUpdatingLocation];
     _requestingPermission = FALSE;
@@ -63,7 +63,7 @@
 }
 
 - (Geodetic3D) getLocation{
-  if (_lastLocation != NULL){
+  if (_lastLocation != NULL) {
     return Geodetic3D::fromDegrees(_lastLocation.coordinate.latitude, _lastLocation.coordinate.longitude, _lastLocation.altitude);
   }
   return Geodetic3D::nan();
@@ -77,24 +77,24 @@
 
 
 DeviceLocation_iOS::DeviceLocation_iOS():
-_isTracking(false){
+_isTracking(false) {
   _delegate = [[LocationDelegate alloc] init];
 }
 
-bool DeviceLocation_iOS::startTrackingLocation(){
+bool DeviceLocation_iOS::startTrackingLocation() {
   _isTracking = [_delegate startTrackingLocation];
   return _isTracking;
 }
 
-void DeviceLocation_iOS::stopTrackingLocation(){
+void DeviceLocation_iOS::stopTrackingLocation() {
   [_delegate stopTrackingLocation];
   _isTracking = false;
 }
 
-bool DeviceLocation_iOS::isTrackingLocation(){
+bool DeviceLocation_iOS::isTrackingLocation() {
   return _isTracking;
 }
 
-Geodetic3D  DeviceLocation_iOS::getLocation(){
+Geodetic3D  DeviceLocation_iOS::getLocation() {
   return [_delegate getLocation];
 }

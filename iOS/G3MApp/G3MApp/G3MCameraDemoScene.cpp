@@ -80,7 +80,6 @@ public:
 void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel*   model          = getModel();
   ShapesRenderer* shapesRenderer = model->getShapesRenderer();
-  getModel()->getG3MWidget()->setViewMode(MONO);
 
   //  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   //  planetRenderer->setVerticalExaggeration(0);

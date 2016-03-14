@@ -15,7 +15,7 @@ IDeviceAttitude::IDeviceAttitude():
 _camCSPortrait(NULL),
 _camCSPortraitUD(NULL),
 _camCSLL(NULL),
-_camCSLR(NULL){
+_camCSLR(NULL) {
   
 }
 
@@ -27,11 +27,11 @@ void IDeviceAttitude::setInstance(IDeviceAttitude* deviceAttitude) {
   _instance = deviceAttitude;
 }
 
-IDeviceAttitude* IDeviceAttitude::instance(){
+IDeviceAttitude* IDeviceAttitude::instance() {
   return _instance;
 }
 
-IDeviceAttitude::~IDeviceAttitude(){
+IDeviceAttitude::~IDeviceAttitude() {
 #ifdef C_CODE
   delete _camCSLL;
   delete _camCSLR;
@@ -43,7 +43,7 @@ IDeviceAttitude::~IDeviceAttitude(){
 
 CoordinateSystem IDeviceAttitude::getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const{
   
-  if (_camCSLL == NULL){
+  if (_camCSLL == NULL) {
     _camCSPortrait = new CoordinateSystem(Vector3D(1,0,0), //X
                                           Vector3D(0,0,-1), //Y -> View Direction
                                           Vector3D(0,1,0), //Z -> Up

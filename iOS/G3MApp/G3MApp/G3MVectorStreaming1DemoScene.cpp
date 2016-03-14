@@ -102,9 +102,6 @@ public:
 
 void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
-//  G3MWidget*    g3mWidget = model->getG3MWidget();
-  getModel()->getG3MWidget()->setViewMode(MONO);
-
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",

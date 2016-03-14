@@ -170,7 +170,6 @@ public:
 void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-  g3mWidget->setViewMode(MONO);
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
                                        TimeInterval::fromDays(30),

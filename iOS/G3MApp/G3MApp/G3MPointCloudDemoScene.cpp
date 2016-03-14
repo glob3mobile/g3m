@@ -195,7 +195,6 @@ void G3MPointCloudDemoScene::rawSelectOption(const std::string& option,
 void G3MPointCloudDemoScene::setPointsCloudMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-  g3mWidget->setViewMode(MONO);
 
   model->getMeshRenderer()->addMesh(mesh);
 
