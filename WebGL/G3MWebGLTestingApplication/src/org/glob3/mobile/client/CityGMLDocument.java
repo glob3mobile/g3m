@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-         extends
-            XMLDocument {
+extends
+XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -47,7 +47,7 @@ public class CityGMLDocument
    }
 
 
-   public ArrayList<CityGMLBuilding> parseBuildings() {
+   public ArrayList<CityGMLBuilding> parseLOD2Buildings() {
 
       final ArrayList<CityGMLBuilding> buildings = new ArrayList<CityGMLBuilding>();
 
@@ -64,7 +64,7 @@ public class CityGMLDocument
          final int nwalls = xpath(bPath + "/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface").getAsXMLDocuments().size();
          for (int j = 1; j <= nwalls; j++) {
             final String xpathcoord = bPath + "/bldg:boundedBy[" + j
-                     + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
+                                      + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
             final XPathResult wc = xpath(xpathcoord);
             building.addWallWithPosLis(wc.getTextContentAsNumberArray(" "));
          }
