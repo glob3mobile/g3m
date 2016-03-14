@@ -484,6 +484,8 @@
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
+		D826764D1C774099008FD98E /* TexturedBoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D826764B1C774099008FD98E /* TexturedBoxShape.cpp */; };
+		D826764E1C774128008FD98E /* TexturedBoxShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D826764C1C774099008FD98E /* TexturedBoxShape.hpp */; };
 		D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */; };
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
 		D8378F9E1BFB32B900E6557E /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */; };
@@ -774,6 +776,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D826764E1C774128008FD98E /* TexturedBoxShape.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
 				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
@@ -1805,6 +1808,8 @@
 		D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D826764B1C774099008FD98E /* TexturedBoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TexturedBoxShape.cpp; path = Commons/Rendererers/TexturedBoxShape.cpp; sourceTree = "<group>"; };
+		D826764C1C774099008FD98E /* TexturedBoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TexturedBoxShape.hpp; path = Commons/Rendererers/TexturedBoxShape.hpp; sourceTree = "<group>"; };
 		D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimedCacheTileLODTester.cpp; path = Commons/Rendererers/TimedCacheTileLODTester.cpp; sourceTree = "<group>"; };
 		D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimedCacheTileLODTester.hpp; path = Commons/Rendererers/TimedCacheTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxFrameTimeTileLODTester.cpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.cpp; sourceTree = "<group>"; };
@@ -2707,6 +2712,8 @@
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
+				D826764B1C774099008FD98E /* TexturedBoxShape.cpp */,
+				D826764C1C774099008FD98E /* TexturedBoxShape.hpp */,
 				D89FBD7B1725444800FFA541 /* MeshShape.cpp */,
 				D89FBD7C1725444800FFA541 /* MeshShape.hpp */,
 				CF45E023164851C5004746BB /* AbstractMeshShape.cpp */,
@@ -3261,6 +3268,7 @@
 				CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */,
 				E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */,
 				CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */,
+				D826764D1C774099008FD98E /* TexturedBoxShape.cpp in Sources */,
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,
 				FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */,
 				CFD3D8A116CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp in Sources */,

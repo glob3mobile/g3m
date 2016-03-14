@@ -75,7 +75,7 @@ public class MarkWidget
     texCoords.add(0.0f, 0.0f); // vertex 3
     texCoords.add(1.0f, 0.0f); // vertex 4
   
-    final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
+    final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false, GLTextureParameterValue.clampToEdge());
   
   // #warning TODO: share unit texCoords
     if (_textureMapping != null)

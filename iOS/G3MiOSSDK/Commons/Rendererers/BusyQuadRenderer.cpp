@@ -53,7 +53,8 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                           GLFormat::rgba(),
                                                           "BusyQuadRenderer-Texture",
-                                                          false);
+                                                          false,
+                                                          GLTextureParameterValue::clampToEdge());
 
   if (texId == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");

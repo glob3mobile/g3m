@@ -109,7 +109,8 @@ bool GL::isPowerOfTwo(int x) {
 
 const IGLTextureId* GL::uploadTexture(const IImage* image,
                                       int format,
-                                      bool generateMipmap) {
+                                      bool generateMipmap,
+                                      int wrapMode) {
 
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::uploadTexture()");
@@ -142,13 +143,12 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
                              GLTextureParameter::magFilter(),
                              linear);
 
-    const int clampToEdge = GLTextureParameterValue::clampToEdge();
     _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::wrapS(),
-                             clampToEdge);
+                             wrapMode);
     _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::wrapT(),
-                             clampToEdge);
+                             wrapMode);
 
     _nativeGL->texImage2D(image, format);
 

@@ -187,7 +187,7 @@ public class GL
     return _nativeGL.getError();
   }
 
-  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
+  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap, int wrapMode)
   {
   
     //  if (_verbose) {
@@ -218,9 +218,8 @@ public class GL
   
       _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
   
-      final int clampToEdge = GLTextureParameterValue.clampToEdge();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), wrapMode);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), wrapMode);
   
       _nativeGL.texImage2D(image, format);
   

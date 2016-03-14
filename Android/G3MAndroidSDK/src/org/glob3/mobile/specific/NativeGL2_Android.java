@@ -521,6 +521,11 @@ INativeGL {
       return GLES20.GL_CLAMP_TO_EDGE;
    }
 
+   @Override
+   public int TextureParameterValue_Repeat() {
+      return GLES20.GL_REPEAT;
+   }
+
 
    @Override
    public int Alignment_Pack() {

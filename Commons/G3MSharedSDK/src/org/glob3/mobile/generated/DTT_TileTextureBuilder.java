@@ -56,7 +56,7 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!fallbackSolved && backgroundTileImage != null)
     {
       LazyTextureMapping mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution, tile, tile, tessellator), true, false);
-      final TextureIDReference glTextureId = texturesHandler.getTextureIDReference(backgroundTileImage, GLFormat.rgba(), backgroundTileImageName, generateMipmap);
+      final TextureIDReference glTextureId = texturesHandler.getTextureIDReference(backgroundTileImage, GLFormat.rgba(), backgroundTileImageName, generateMipmap, GLTextureParameterValue.clampToEdge());
       mapping.setGLTextureId(glTextureId); //Mandatory to active mapping
 
       mappings.add(mapping);
@@ -143,7 +143,7 @@ public class DTT_TileTextureBuilder extends RCObject
   public final boolean uploadTexture(IImage image, String imageId)
   {
 
-    final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageId, _generateMipmap);
+    final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageId, _generateMipmap, GLTextureParameterValue.clampToEdge());
     if (glTextureId == null)
     {
       return false;

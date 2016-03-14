@@ -84,7 +84,8 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* textureID = texturesHandler->getTextureIDReference(_image,
                                                                                GLFormat::rgba(),
                                                                                _imageName,
-                                                                               false);
+                                                                               false,
+                                                                               GLTextureParameterValue::clampToEdge());
   if (textureID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
@@ -100,7 +101,8 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     backgroundTextureID = texturesHandler->getTextureIDReference(_backgroundImage,
                                                                  GLFormat::rgba(),
                                                                  _backgroundImageName,
-                                                                 false);
+                                                                 false,
+                                                                 GLTextureParameterValue::clampToEdge());
 
     if (backgroundTextureID == NULL) {
       delete textureID;

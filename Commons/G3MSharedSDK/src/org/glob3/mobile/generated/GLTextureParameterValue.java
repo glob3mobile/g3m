@@ -9,6 +9,7 @@ public class GLTextureParameterValue
   private static int _linearMipmapLinear = 0;
 
   private static int _clampToEdge = 0;
+  private static int _repeat = 0;
 
 
   public static int nearest()
@@ -40,6 +41,10 @@ public class GLTextureParameterValue
   {
      return _clampToEdge;
   }
+  public static int repeat()
+  {
+     return _repeat;
+  }
 
   public static void init(INativeGL ngl)
   {
@@ -51,5 +56,6 @@ public class GLTextureParameterValue
     _linearMipmapLinear = ngl.TextureParameterValue_LinearMipmapLinear();
 
     _clampToEdge = ngl.TextureParameterValue_ClampToEdge();
+    _repeat = ngl.TextureParameterValue_Repeat();
   }
 }

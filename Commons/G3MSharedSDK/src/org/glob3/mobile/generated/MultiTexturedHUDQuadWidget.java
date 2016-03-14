@@ -55,7 +55,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false, GLTextureParameterValue.clampToEdge());
   
     if (texId == null)
     {
@@ -63,7 +63,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false);
+    final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false, GLTextureParameterValue.clampToEdge());
   
     if (texId2 == null)
     {
