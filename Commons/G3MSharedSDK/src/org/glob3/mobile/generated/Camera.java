@@ -614,7 +614,6 @@ public class Camera
     return obj.sub(position.asVector3D());
   }
 
-<<<<<<< HEAD
   public final Angle getHorizontalFOV()
   {
     return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFieldOfView)).times(2);
@@ -623,7 +622,8 @@ public class Camera
   public final Angle getVerticalFOV()
   {
     return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFieldOfView)).times(2);
-=======
+  }
+
   public final void setCameraCoordinateSystem(CoordinateSystem rs)
   {
     _timestamp++;
@@ -631,7 +631,6 @@ public class Camera
     _center.addInPlace(rs._y);
     _up.copyFrom(rs._z);
     _dirtyFlags.setAllDirty();
->>>>>>> purgatory
   }
 
 
