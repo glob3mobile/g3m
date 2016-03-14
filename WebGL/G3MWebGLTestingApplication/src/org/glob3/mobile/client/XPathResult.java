@@ -30,6 +30,13 @@ public class XPathResult {
    }-*/;
 
 
+   public native int getTextContentAsInteger() /*-{
+		var r = this.@org.glob3.mobile.client.XPathResult::_result;
+		var thisNode = r.iterateNext();
+		return thisNode.textContent;
+   }-*/;
+
+
    public native boolean getAsBoolean() /*-{
 		return this.@org.glob3.mobile.client.XPathResult::_result.booleanValue;
    }-*/;

@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-extends
-XMLDocument {
+         extends
+            XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -23,11 +23,11 @@ XMLDocument {
    }
 
 
-   public double getNumberOfBuildings() {
-      final XPathResult res = xpath("count(/CityModel/cityObjectMember/bldg:Building)");
-      final double i = res.getAsNumber();
-      return i;
-   }
+   //   public double getNumberOfBuildings() {
+   //      final XPathResult res = xpath("count(/CityModel/cityObjectMember/bldg:Building)");
+   //      final double i = res.getAsNumber();
+   //      return i;
+   //   }
 
 
    public void logAllBuildingNames() {
@@ -51,20 +51,23 @@ XMLDocument {
 
       final ArrayList<CityGMLBuilding> buildings = new ArrayList<CityGMLBuilding>();
 
-      final int nBuildings = (int) getNumberOfBuildings();
+      final int nBuildings = (int) evaluateXPathAndGetNumberValueAsDouble("count(/CityModel/cityObjectMember/bldg:Building)");
+
       for (int i = 1; i <= nBuildings; i++) { //Check number of buildings TEST
          final String bPath = "/CityModel/cityObjectMember[" + i + "]/bldg:Building";
 
-         final XPathResult bs = xpath(bPath + "/gml:name/text()");
-         final String name = bs.getTextContentAsText();
+         final String name = evaluateXPathAndGetTextContentAsText(bPath + "/gml:name/text()");
 
          final CityGMLBuilding building = new CityGMLBuilding(name);
+
+         final int roofType = evaluateXPathAndGetTextContentAsInteger(bPath + "/bldg:roofType/text()");
+         building.setRoofTypeCode(roofType);
 
          //Walls
          final int nwalls = xpath(bPath + "/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface").getAsXMLDocuments().size();
          for (int j = 1; j <= nwalls; j++) {
             final String xpathcoord = bPath + "/bldg:boundedBy[" + j
-                                      + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
+                     + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
             final XPathResult wc = xpath(xpathcoord);
             building.addWallWithPosLis(wc.getTextContentAsNumberArray(" "));
          }

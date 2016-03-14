@@ -17,6 +17,7 @@ public class CityGMLBuilding {
    }
 
    public String          _name;
+   public int             _roofTypeCode;
    public ArrayList<Wall> _walls = new ArrayList<CityGMLBuilding.Wall>();
 
 
@@ -30,8 +31,14 @@ public class CityGMLBuilding {
    }
 
 
+   public void setRoofTypeCode(final int i) {
+      _roofTypeCode = i;
+   }
+
+
    public String description() {
       String s = "Building Name: " + _name;
+      s += "\nRoof Type: " + _roofTypeCode;
       for (int i = 0; i < _walls.size(); i++) {
          s += "\n Wall: Coordinates: ";
          for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {

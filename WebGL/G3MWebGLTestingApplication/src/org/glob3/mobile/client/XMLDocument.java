@@ -35,6 +35,41 @@ public class XMLDocument {
    }-*/;
 
 
+   private native String jsGetTextContentAsText(JavaScriptObject xpathResult) /*-{
+		var thisNode = xpathResult.iterateNext();
+		return thisNode.textContent;
+   }-*/;
+
+
+   public String evaluateXPathAndGetTextContentAsText(final String xpath) {
+      final JavaScriptObject res = xpathToJSO(xpath);
+      return jsGetTextContentAsText(res);
+   }
+
+
+   public int evaluateXPathAndGetTextContentAsInteger(final String xpath) {
+      final JavaScriptObject res = xpathToJSO(xpath);
+      return getTextContentAsInteger(res);
+   }
+
+
+   public double evaluateXPathAndGetNumberValueAsDouble(final String xpath) {
+      final JavaScriptObject res = xpathToJSO(xpath);
+      return getNumberValueAsDouble(res);
+   }
+
+
+   public native double getNumberValueAsDouble(JavaScriptObject xpathResult) /*-{
+		return xpathResult.numberValue;
+   }-*/;
+
+
+   public native int getTextContentAsInteger(JavaScriptObject xpathResult) /*-{
+		var thisNode = xpathResult.iterateNext();
+		return thisNode.textContent;
+   }-*/;
+
+
    public native JavaScriptObject xpathToJSO(final String xpath) /*-{
 
 		var xml = this.@org.glob3.mobile.client.XMLDocument::_xml;
