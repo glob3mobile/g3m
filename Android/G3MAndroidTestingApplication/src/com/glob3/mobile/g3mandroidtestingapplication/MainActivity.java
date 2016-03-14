@@ -3,8 +3,10 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
+import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GFont;
@@ -36,8 +38,8 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-         extends
-            Activity {
+extends
+Activity {
 
    private G3MWidget_Android _g3mWidget;
 
@@ -51,7 +53,9 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
-      _g3mWidget = createWidget();
+      // _g3mWidget = createWidget();
+      _g3mWidget = createWidgetVR();
+
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 
@@ -83,12 +87,27 @@ public class MainActivity
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
                new DownloaderImageBuilder(anchorBitmapURL), //
                position);
+   }
+
+
+   private G3MWidget_Android createWidgetVR() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+      final CameraRenderer cr = new CameraRenderer();
+      cr.addHandler(new DeviceAttitudeCameraHandler(true));
+      builder.setCameraRenderer(cr);
+
+      return builder.createWidget();
    }
 
 

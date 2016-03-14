@@ -18,9 +18,9 @@ class Color;
 class CoordinateSystem {
 private:
   
-  bool checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+  static bool checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z);
   
-  bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
 public:
 
@@ -48,6 +48,14 @@ public:
   TaitBryanAngles getTaitBryanAngles(const CoordinateSystem& global) const;
 
   bool isEqualsTo(const CoordinateSystem& that) const;
+  
+  CoordinateSystem applyRotation(const MutableMatrix44D& m) const;
+  
+  MutableMatrix44D getRotationMatrix() const;
+  
+  void copyValueOfRotationMatrix(MutableMatrix44D& m) const;
+  
+  bool isConsistent() const;
 
 };
 

@@ -79,7 +79,6 @@ _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 _id( createTileId(level, row, column) ),
-_tessellatorMeshIsMeshHolder(false),
 _data(NULL),
 _dataSize(0)
 {
@@ -193,7 +192,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                            this,
                                                            NULL,
                                                            _tileTessellatorMeshData);
-      _tessellatorMeshIsMeshHolder = false;
     }
     else {
       Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
@@ -206,7 +204,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       if (meshHolder == NULL) {
         meshHolder = new MeshHolder(tessellatorMesh);
         _tessellatorMesh = meshHolder;
-        _tessellatorMeshIsMeshHolder = true;
       }
       else {
         meshHolder->setMesh(tessellatorMesh);
@@ -383,29 +380,25 @@ void Tile::render(const G3MRenderContext*    rc,
                   const GLState*             parentState,
                   TilesStatistics*           tilesStatistics,
                   std::vector<Tile*>*        toVisitInNextIteration) {
-  tilesStatistics->computeTileProcessed(this);
 
-  const bool amIVisible = prc->_tileVisibilityTester->isVisible(rc, prc, this);
-  if (amIVisible) {
+  const bool visible = prc->_tileVisibilityTester->isVisible(rc, prc, this);
+  bool rendered = false;
+  if (visible) {
     setIsVisible(true, prc->_texturizer);
 
-    tilesStatistics->computeVisibleTile(this);
+    rendered = (
+                (toVisitInNextIteration == NULL)                           ||
+                prc->_tileLODTester->meetsRenderCriteria(rc, prc, this)    ||
+                (prc->_tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+                );
 
-    const bool isRawRender = (
-                              (toVisitInNextIteration == NULL)                           ||
-                              prc->_tileLODTester->meetsRenderCriteria(rc, prc, this)    ||
-                              (prc->_tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
-                              );
-
-    if (isRawRender) {
+    if (rendered) {
       if (prc->_renderTileMeshes) {
         rawRender(rc, prc, parentState);
       }
       if (prc->_tilesRenderParameters->_renderDebug) {
         debugRender(rc, prc, parentState);
       }
-
-      tilesStatistics->computeTileRenderered(this);
 
       prune(prc->_texturizer, prc->_elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
@@ -431,6 +424,7 @@ void Tile::render(const G3MRenderContext*    rc,
     //TODO: AVISAR CAMBIO DE TERRENO
   }
 
+  tilesStatistics->computeTileProcessed(this, visible, rendered);
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -599,7 +593,7 @@ void Tile::getElevationDataFromAncestor(const Vector2I& extent) {
 void Tile::initializeElevationData(const G3MRenderContext* rc,
                                    const PlanetRenderContext* prc) {
 
-  const Vector2I tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+  const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
 
   //Storing for subviewing
   _lastElevationDataProvider = prc->_elevationDataProvider;
@@ -607,14 +601,15 @@ void Tile::initializeElevationData(const G3MRenderContext* rc,
   _lastTileMeshResolutionY = tileMeshResolution._y;
   if (_elevationDataRequest == NULL) {
 
-    const Vector2I res = prc->_tessellator->getTileMeshResolution(rc, prc, this);
-    _elevationDataRequest = new TileElevationDataRequest(this, res, prc->_elevationDataProvider);
+    const Vector2S res = prc->_tessellator->getTileMeshResolution(rc, prc, this);
+#warning should ElevationData res should be short?
+    _elevationDataRequest = new TileElevationDataRequest(this, res.asVector2I(), prc->_elevationDataProvider);
     _elevationDataRequest->sendRequest();
   }
 
   //If after petition we still have no data we request from ancestor (provider asynchronous)
   if (_elevationData == NULL) {
-    getElevationDataFromAncestor(tileMeshResolution);
+    getElevationDataFromAncestor(tileMeshResolution.asVector2I());
   }
 
 }

@@ -206,6 +206,12 @@ public class Camera
     return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
+  public final boolean hasValidViewDirection()
+  {
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !(d != d);
+  }
+
   public final void getViewDirectionInto(MutableVector3D result)
   {
     result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
@@ -608,6 +614,7 @@ public class Camera
     return obj.sub(position.asVector3D());
   }
 
+<<<<<<< HEAD
   public final Angle getHorizontalFOV()
   {
     return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFieldOfView)).times(2);
@@ -616,6 +623,15 @@ public class Camera
   public final Angle getVerticalFOV()
   {
     return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFieldOfView)).times(2);
+=======
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
+>>>>>>> purgatory
   }
 
 
@@ -853,15 +869,6 @@ public class Camera
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
-  }
-
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
   }
 
 }

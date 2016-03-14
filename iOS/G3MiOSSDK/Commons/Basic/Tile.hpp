@@ -29,7 +29,6 @@ private:
   Tile*           _parent;
 
   Mesh* _tessellatorMesh;
-  bool _tessellatorMeshIsMeshHolder;
 
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
