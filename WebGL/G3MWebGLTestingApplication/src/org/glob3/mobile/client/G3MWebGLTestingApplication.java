@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
 import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
+import org.glob3.mobile.generated.EllipsoidalPlanet;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GFont;
@@ -30,9 +31,11 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.NonOverlappingMark;
 import org.glob3.mobile.generated.NonOverlappingMarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -47,8 +50,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+implements
+EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -74,7 +77,7 @@ public class G3MWebGLTestingApplication
       // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
 
       // Canarias
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(48.9997986756911, 8.33550024760099, 1000));
    }
 
 
@@ -97,7 +100,7 @@ public class G3MWebGLTestingApplication
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -106,8 +109,8 @@ public class G3MWebGLTestingApplication
    }
 
    private class AnimateHUDWidgetsTask
-            extends
-               GTask {
+   extends
+   GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -124,7 +127,7 @@ public class G3MWebGLTestingApplication
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                               + "R: " + _widget.getCurrentCamera().getRoll());
+                  + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -155,7 +158,7 @@ public class G3MWebGLTestingApplication
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-      );
+               );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -186,6 +189,10 @@ public class G3MWebGLTestingApplication
                10, // delayMillis
                proxy));
 
+      final Planet planet = EllipsoidalPlanet.createEarth();
+
+      final MeshRenderer mr = new MeshRenderer();
+      builder.addRenderer(mr);
 
       builder.setInitializationTask(new GInitializationTask() {
          @Override
@@ -211,6 +218,9 @@ public class G3MWebGLTestingApplication
                   final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
                   for (final CityGMLBuilding b : bs) {
                      ILogger.instance().logInfo(b.description());
+
+                     mr.addMesh(b.createMesh(planet, true));
+
                   }
                }
 
@@ -232,8 +242,8 @@ public class G3MWebGLTestingApplication
                }
             };
 
-            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1.gml"), 0, TimeInterval.forever(), false,
-                     listener, true);
+            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),
+                     false, listener, true);
          }
 
 

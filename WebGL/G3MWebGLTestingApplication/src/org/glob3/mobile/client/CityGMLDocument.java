@@ -69,8 +69,28 @@ public class CityGMLDocument
             final String xpathcoord = bPath + "/bldg:boundedBy[" + j
                      + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
             final XPathResult wc = xpath(xpathcoord);
-            building.addWallWithPosLis(wc.getTextContentAsNumberArray(" "));
+            final ArrayList<Double> coor = wc.getTextContentAsNumberArray(" ");
+            if ((coor.size() % 3) != 0) {
+               ILogger.instance().logError("Coordinates incorrect (%d) in building " + name, coor.size());
+            }
+            building.addSurfaceWithPosLis(coor);
          }
+
+         //Rooftops
+         final int nroof = (int) evaluateXPathAndGetNumberValueAsDouble("count("
+                  + bPath
+                  + "/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface)");
+         ILogger.instance().logInfo("Building with %d roof surfaces", nroof);
+         //         for (int j = 1; j <= nwalls; j++) {
+         //            final String xpathcoord = bPath + "/bldg:boundedBy[" + j
+         //                     + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
+         //            final XPathResult wc = xpath(xpathcoord);
+         //            final ArrayList<Double> coor = wc.getTextContentAsNumberArray(" ");
+         //            if ((coor.size() % 3) != 0) {
+         //               ILogger.instance().logError("Coordinates incorrect (%d) in building " + name, coor.size());
+         //            }
+         //            building.addWallWithPosLis(coor);
+         //         }
 
          buildings.add(building);
       }
