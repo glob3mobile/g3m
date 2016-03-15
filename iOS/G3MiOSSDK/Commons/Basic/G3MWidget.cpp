@@ -572,16 +572,19 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       const double eyesSeparation = 200;// 0.03;
       Vector3D up = _currentCamera->getUp();
       
+      const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
+      const Angle vFOV = _currentCamera->getVerticalFOV();
+      
       Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
       Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
       _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-      _leftEyeCam->setFOV(_currentCamera->getVerticalFOV(), _currentCamera->getHorizontalFOV().times(0.5));
+      _leftEyeCam->setFOV(vFOV, hFOV_2);
       
       Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
       Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
       
       _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
-      _rightEyeCam->setFOV(_currentCamera->getVerticalFOV(), _currentCamera->getHorizontalFOV().times(0.5));
+      _rightEyeCam->setFOV(vFOV, hFOV_2);
     }
     
   }
