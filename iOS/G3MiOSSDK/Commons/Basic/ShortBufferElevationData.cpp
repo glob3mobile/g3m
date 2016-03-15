@@ -41,8 +41,8 @@ _buffer(buffer)
 
   _max = IMathUtils::instance()->minInt16();
   _min = IMathUtils::instance()->maxInt16();
-  _children = IMathUtils::instance()->minInt16();
-  _similarity = IMathUtils::instance()->minInt16();
+  _hasChildren = false;
+  _meshGeometricalErrorWithChildren = IMathUtils::instance()->minDouble();
 }
 
 ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
@@ -54,8 +54,8 @@ ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    double deltaHeight,
                                                    short max,
                                                    short min,
-                                                   short children,
-                                                   short similarity) :
+                                                   short hasChildren,
+                                                   double geomError) :
 BufferElevationData(sector, extent, realSector, realExtent, bufferSize, deltaHeight),
 _buffer(buffer)
 {
@@ -74,8 +74,8 @@ _buffer(buffer)
     
     _max = max;
     _min = min;
-    _children = children;
-    _similarity = similarity;
+    _hasChildren = (hasChildren > 0) ? true: false;
+    _meshGeometricalErrorWithChildren = geomError;
 }
 
 ShortBufferElevationData::~ShortBufferElevationData() {

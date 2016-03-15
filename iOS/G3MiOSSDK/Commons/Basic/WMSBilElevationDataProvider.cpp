@@ -33,6 +33,8 @@ private:
 
 public:
 
+#warning Ask JM: Funcionamiento y uso de esta clase.
+
   WMSBilElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                       const Vector2I& extent,
                                                       IElevationDataListener* listener,
@@ -99,17 +101,9 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
   _downloader = context->getDownloader();
 }
 
-
 const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                  int level, int row, int column,
                                                                   const Vector2I& extent,
-                                                                  IElevationDataListener* listener,
-                                                                  bool autodeleteListener){
-    return requestElevationData(sector,extent,listener, autodeleteListener);
-}
-
-const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                   const Vector2I& extent,
+                                                                  const Tile * tile,
                                                                    IElevationDataListener* listener,
                                                                    bool autodeleteListener) {
   if (_downloader == NULL) {

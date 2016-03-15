@@ -43,8 +43,8 @@ public:
                            double deltaHeight,
                            short max,
                            short min,
-                           short children,
-                           short similarity);
+                           short hasChildren,
+                           double geomError);
 
   virtual ~ShortBufferElevationData();
 
@@ -54,8 +54,8 @@ public:
   
   bool hasNoData() const { return _hasNoData;}
 
-  bool hasChildren() const { if (_children > 0) return true; return false; }
-  int getSimilarity() const {return _similarity; }
+  bool hasChildren() const { return _hasChildren; }
+  double getMeshGeometricalError() const {return _meshGeometricalErrorWithChildren; }
 
 };
 

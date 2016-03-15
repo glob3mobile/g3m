@@ -12,12 +12,8 @@
 #include <stdio.h>
 #include "ElevationDataProvider.hpp"
 #include "IDownloader.hpp"
-#include "IJSONParser.hpp"
 #include "Sector.hpp"
-#include "JSONArray.hpp"
-#include "JSONObject.hpp"
-#include "JSONInteger.hpp"
-#include "JSONFloat.hpp"
+#include "JSONDemParser.hpp"
 #include "URL.hpp"
 #include "ErrorHandling.hpp"
 #include "IBufferDownloadListener.hpp"
@@ -55,17 +51,18 @@ private:
                         IByteBuffer* buffer,
                         bool expired) {
             
-            const std::string str = buffer->getAsString();
+            double * array = JSONDemParser::parseDemMetadata(buffer);
             
-            IJSONParser* parser = IJSONParser::instance();
-            const JSONArray* array = parser->parse(str)->asObject()->getAsArray("sectors");
+            
             if (array == NULL){
                 THROW_EXCEPTION("Problem parsing at PyramidElevationDataProvider::MetadataListener::onDownload().");
             }
             
-            for (unsigned int i=0; i<array->size(); i++){
-                _itself->push_back(PyramidComposition(getLowerLat(array,i),getLowerLon(array,i),getUpperLat(array,i),getUpperLon(array,i),getLevel(array,i)));
+            for (size_t i=1; i<array[0]; i+=5){
+                _itself->push_back(PyramidComposition(array[i],array[i+1],array[i+2],array[i+3],(int)array[i+4]));
             }
+            
+            delete array;
         }
         void onError(const URL& url) {}
         void onCancel(const URL& url) {}
@@ -76,36 +73,15 @@ private:
         
     private:
         std::vector<PyramidComposition>* _itself;
-        
-        double getUpperLat(const JSONArray *array, int index){
-            return array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat")->value();
-        }
-        
-        double getLowerLat(const JSONArray *array, int index){
-            return array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat")->value();
-        }
-        
-        double getUpperLon(const JSONArray *array, int index){
-            return array->getAsObject(index)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon")->value();
-        }
-        
-        double getLowerLon(const JSONArray *array, int index){
-            return array->getAsObject(index)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon")->value();
-        }
-        
-        int getLevel(const JSONArray *array,int index){
-            JSONInteger *integer = (JSONInteger *) array->getAsObject(index)->getAsNumber("pyrLevel");
-            return integer->intValue();
-        }
-        
     };
     
     std::vector<PyramidComposition> *_pyrComposition;
+    short _noDataValue;
     
     bool aboveLevel(const Sector &sector, int level);
 public:
     
-    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, double deltaHeight = 0);
+    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, short noDataValue = 15000, double deltaHeight = 0);
     
     ~PyramidElevationDataProvider();
     
@@ -113,14 +89,19 @@ public:
     void getMetadata() const;
     
     void initialize(const G3MContext* context);
-    const long long requestElevationData(const Sector &sector, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener);
-    const long long requestElevationData(const Sector &sector, int level, int row, int column, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener);
+    
+    const long long requestElevationData(const Sector& sector,
+                                         const Vector2I& extent,
+                                         const Tile * tile,
+                                         IElevationDataListener* listener,
+                                         bool autodeleteListener);
     
     std::string requestStringPath(const std::string & layer, int level, int row, int column);
     std::string requestMetadataPath() const;
     
     void cancelRequest(const long long requestId);
     std::vector<const Sector*> getSectors() const;
+    
     const Vector2I getMinResolution() const;
     
 };

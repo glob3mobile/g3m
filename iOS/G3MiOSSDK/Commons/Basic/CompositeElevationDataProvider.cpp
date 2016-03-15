@@ -62,14 +62,14 @@ std::vector<ElevationDataProvider*> CompositeElevationDataProvider::getProviders
 
 const long long CompositeElevationDataProvider::requestElevationData(const Sector& sector,
                                                                      const Vector2I& extent,
+                                                                     const Tile *tile,
                                                                      IElevationDataListener* listener,
                                                                      bool autodeleteListener) {
 
   CompositeElevationDataProvider_Request* req = new CompositeElevationDataProvider_Request(this,
                                                                                            sector,
                                                                                            extent,
-                                                                                           false,
-                                                                                           0,0,0,
+                                                                                           tile,
                                                                                            listener,
                                                                                            autodeleteListener);
   _currentID++;
@@ -78,29 +78,6 @@ const long long CompositeElevationDataProvider::requestElevationData(const Secto
   req->launchNewStep();
 
   return _currentID;
-}
-
-const long long CompositeElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                     int level, int row, int column,
-                                                                     const Vector2I& extent,
-                                                                     IElevationDataListener* listener,
-                                                                     bool autodeleteListener) {
-    
-    CompositeElevationDataProvider_Request* req = new CompositeElevationDataProvider_Request(this,
-                                                                                             sector,
-                                                                                             extent,
-                                                                                             true,
-                                                                                             level,
-                                                                                             row,
-                                                                                             column,
-                                                                                             listener,
-                                                                                             autodeleteListener);
-    _currentID++;
-    _requests[_currentID] =  req;
-    
-    req->launchNewStep();
-    
-    return _currentID;
 }
 
 std::vector<const Sector*> CompositeElevationDataProvider::getSectors() const {
@@ -198,8 +175,7 @@ CompositeElevationDataProvider::CompositeElevationDataProvider_Request::
 CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                        const Sector& sector,
                                        const Vector2I &resolution,
-                                       bool leveled,
-                                       int level, int row, int column,
+                                       const Tile *tile,
                                        IElevationDataListener *listener,
                                        bool autodelete):
 _providers(provider->getProviders(sector)),
@@ -210,10 +186,7 @@ _autodelete(autodelete),
 _compProvider(provider),
 _compData(NULL),
 _currentStep(NULL),
-_leveled(leveled),
-_level(level),
-_row(row),
-_column(column){
+_tile(tile){
 }
 
 ElevationDataProvider* CompositeElevationDataProvider::
@@ -228,9 +201,9 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
 
   ElevationDataProvider* provider = NULL;
   
-  const int psSize = ps.size();
-  int selectedIndex = -1;
-  for (int i = 0; i < psSize; i++) {
+  size_t psSize = ps.size();
+  size_t selectedIndex = -1;
+  for (size_t i = 0; i < psSize; i++) {
     ElevationDataProvider* each = ps[i];
 
     const double res = each->getMinResolution().squaredLength();
@@ -261,11 +234,7 @@ bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::lau
   _currentProvider = popBestProvider(_providers, _resolution);
   if (_currentProvider != NULL) {
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
-
-    if (!_leveled)
-        _currentID = _currentProvider->requestElevationData(_sector, _resolution, _currentStep, true);
-    else
-        _currentID = _currentProvider->requestElevationData(_sector, _level, _row, _column, _resolution, _currentStep, true);
+    _currentID = _currentProvider->requestElevationData(_sector, _resolution, _tile, _currentStep, true);
 
     return true;
   }

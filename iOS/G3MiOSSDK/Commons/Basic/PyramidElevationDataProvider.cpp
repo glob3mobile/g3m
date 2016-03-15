@@ -12,74 +12,34 @@
 #include "DownloadPriority.hpp"
 #include "G3MContext.hpp"
 #include "TimeInterval.hpp"
+
 #include <sstream>
 
 
 class PyramidElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
     
-    const Sector &_sector;
+    const Sector *_sector;
     int _width, _height;
     IElevationDataListener *_listener;
     bool _autodeleteListener;
     double _deltaHeight;
-    
-#ifdef C_CODE
-    const Vector2I* getResolution(const JSONObject *data){
-        return new Vector2I((int) data->getAsNumber("width",0),(int) data->getAsNumber("height",0));
-    }
-#endif
-#ifdef JAVA_CODE
-    private Vector2I getResolution(JSONObject data){
-        return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
-    }
-#endif
-    
-    ShortBufferElevationData* getElevationData(const Sector& sector,
-                                               const Vector2I& extent,
-                                               const JSONObject *data,
-                                               double deltaHeight){
-        const short minValue = IMathUtils::instance()->minInt16();
-        const int size = extent._x * extent._y;
-        const JSONArray *dataArray = data->getAsArray("data");
-        short *shortBuffer = new short[size];
-        for (int i = 0; i < size; i++)
-        {
-            short height = (short) dataArray->getAsNumber(i, minValue);
-            
-            if (height == 15000) //Our own NODATA, since -9999 is a valid height.
-            {
-                height = ShortBufferElevationData::NO_DATA_VALUE;
-            }
-            else if (height == minValue)
-            {
-                height = ShortBufferElevationData::NO_DATA_VALUE;
-            }
-            
-            shortBuffer[i] = height;
-        }
-        
-        short max = (short) data->getAsNumber("max",IMathUtils::instance()->minInt16());
-        short min = (short) data->getAsNumber("min",IMathUtils::instance()->maxInt16());
-        short children = (short) data->getAsNumber("withChildren",0);
-        short similarity = (short) data->getAsNumber("similarity",0);
-        
-        return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer,
-                                            size, deltaHeight,max,min,children,similarity);
-    }
+    short _noDataValue;
     
 public:
-    PyramidElevationDataProvider_BufferDownloadListener(const Sector& sector,
+    PyramidElevationDataProvider_BufferDownloadListener(const Sector* sector,
                                                         const Vector2I& extent,
                                                         IElevationDataListener *listener,
                                                         bool autodeleteListener,
+                                                        short noDataValue,
                                                         double deltaHeight):
     _sector(sector),
     _width(extent._x),
     _height(extent._y),
     _listener(listener),
     _autodeleteListener(autodeleteListener),
-    _deltaHeight(deltaHeight){
+    _deltaHeight(deltaHeight),
+    _noDataValue(noDataValue){
         
     }
     
@@ -88,38 +48,45 @@ public:
                     bool expired){
         
         ShortBufferElevationData *elevationData;
-        
         std::string contents = buffer->getAsString();
-        const JSONObject *jsonContent = IJSONParser::instance()->parse(contents)->asObject();
-        const Vector2I *resolution = getResolution(jsonContent);
-        elevationData = getElevationData(_sector, *resolution, jsonContent, _deltaHeight);
+        const Vector2I *resolution = JSONDemParser::getResolution(buffer);
         
-        if (buffer != NULL) delete buffer;
+#warning refactor 15000
+        elevationData = JSONDemParser::parseJSONDemElevationData(*_sector, *resolution, buffer,_noDataValue, _deltaHeight);
+        
+        if (buffer != NULL){
+            delete buffer;
+        }
         
         if (elevationData == NULL)
         {
-            _listener->onError(_sector, *resolution);
+            _listener->onError(*_sector, *resolution);
         }
         else
         {
-            _listener->onData(_sector, *resolution, elevationData);
+            _listener->onData(*_sector, *resolution, elevationData);
         }
         
         
         if (_autodeleteListener)
         {
-            if (_listener != NULL) delete _listener;
+            if (_listener != NULL){
+               delete _listener;
+            }
             _listener = NULL;
         }
+        delete resolution;
     }
     
     void onError(const URL& url){
         const Vector2I resolution = Vector2I(_width, _height);
         
-        _listener->onError(_sector, resolution);
+        _listener->onError(*_sector, resolution);
         if (_autodeleteListener)
         {
-            if (_listener != NULL) delete _listener;
+            if (_listener != NULL){
+              delete _listener;
+            }
             _listener = NULL;
         }
     }
@@ -128,10 +95,12 @@ public:
         if (_listener != NULL)
         {
             const Vector2I resolution = Vector2I(_width, _height);
-            _listener->onCancel(_sector, resolution);
+            _listener->onCancel(*_sector, resolution);
             if (_autodeleteListener)
             {
-                if (_listener != NULL) delete _listener;
+                if (_listener != NULL) {
+                  delete _listener;
+                }
                 _listener = NULL;
             }
         }
@@ -143,11 +112,16 @@ public:
                             bool expired){
         if (_autodeleteListener)
         {
-            if (_listener != NULL) delete _listener;
+            if (_listener != NULL){
+              delete _listener;
+            }
             _listener = NULL;
         }
     }
 
+    ~PyramidElevationDataProvider_BufferDownloadListener(){
+        delete _sector;
+    }
     
 };
 
@@ -155,7 +129,8 @@ public:
 
 
 PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &layer, const Sector& sector,
-                                                           double deltaHeight): _sector(sector), _layer(layer){
+                                                           short noDataValue,
+                                                           double deltaHeight): _sector(sector), _layer(layer), _noDataValue(noDataValue){
   _pyrComposition = new std::vector<PyramidComposition>();
   _deltaHeight = deltaHeight;
 }
@@ -177,19 +152,24 @@ void PyramidElevationDataProvider::initialize(const G3MContext* context ){
   getMetadata();
 }
 
-const long long PyramidElevationDataProvider::requestElevationData(const Sector &sector, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener){
-  return -1;
-}
-
-const long long PyramidElevationDataProvider::requestElevationData(const Sector &sector, int level, int row, int column, const Vector2I &extent, IElevationDataListener *listener, bool autodeleteListener){
-  
-  if ((_downloader == NULL) || (aboveLevel(sector, level))){
-    return -1;
-  }
-  
-  std::string path = requestStringPath(_layer,level,row,column);
-  
-  return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true );
+const long long PyramidElevationDataProvider::requestElevationData(const Sector& sector,
+                                             const Vector2I& extent,
+                                             const Tile * tile,
+                                             IElevationDataListener* listener,
+                                             bool autodeleteListener){
+    const int level = tile->_level;
+    const int row = tile->_row;
+    const int column = tile->_column;
+    const Sector * sectorCopy = new Sector(sector);
+    
+    if ((_downloader == NULL) || (aboveLevel(sector, level))){
+        return -1;
+    }
+    
+    std::string path = requestStringPath(_layer,level,row,column);
+    
+    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight), true );
+    
 }
 
 std::string PyramidElevationDataProvider::requestStringPath(const std::string & layer, int level, int row, int column){
@@ -221,19 +201,20 @@ std::vector<const Sector*> PyramidElevationDataProvider::getSectors() const{
   return sectors;
 }
 
-const Vector2I PyramidElevationDataProvider::getMinResolution() const{
-  return Vector2I::zero();
-}
-
 bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
   int maxLevel = 0;
-  for (unsigned int i=0; i< _pyrComposition->size(); i++)
-    if (sector.touchesWith(_pyrComposition->at(i).getSector()))
+  for (size_t i=0; i< _pyrComposition->size(); i++) {
+    if (sector.touchesWith(_pyrComposition->at(i).getSector())) {
       maxLevel = IMathUtils::instance()->max(maxLevel,_pyrComposition->at(i)._pyramidLevel);
-  
-  if (level > maxLevel) return true;
-  if (!sector.touchesWith(_sector)) return true;
-  return false;
+    }
+  }
+
+  return ((level > maxLevel) || (!sector.touchesWith(_sector)));
+}
+
+const Vector2I PyramidElevationDataProvider::getMinResolution() const {
+#warning En apariencia, es forzoso implementar esta función. Sólo la necesita realmente el popBestProvider de Composite.
+    return Vector2I::zero();
 }
 
 

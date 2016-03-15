@@ -99,14 +99,9 @@ public:
 
   const long long requestElevationData(const Sector& sector,
                                        const Vector2I& extent,
+                                       const Tile *tile,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
-    
-  const long long requestElevationData(const Sector& sector,
-                                       int level, int row, int column,
-                                         const Vector2I& extent,
-                                         IElevationDataListener* listener,
-                                         bool autodeleteListener);
 
   void cancelRequest(const long long requestId);
 

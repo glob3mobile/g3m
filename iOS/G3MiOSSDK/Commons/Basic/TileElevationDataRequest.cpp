@@ -51,11 +51,10 @@ void TileElevationDataRequest::cancelRequest() {
 void TileElevationDataRequest::sendRequest() {
   _listener = new TileElevationDataRequestListener(this);
   _requestID = _provider->requestElevationData(_tile->_sector,
-                                               _tile->_level,
-                                               _tile->_row,
-                                               _tile->_column,
                                                _resolution,
-                                               _listener, true);
+                                               _tile,
+                                               _listener,
+                                               true);
 }
 
 #pragma mark TileElevationDataRequestListener

@@ -17,6 +17,7 @@ class G3MRenderContext;
 
 #include <vector>
 #include "Vector2I.hpp"
+#include "Tile.hpp"
 
 #include "ChangedListener.hpp"
 
@@ -66,14 +67,9 @@ public:
 
   virtual const long long requestElevationData(const Sector& sector,
                                                const Vector2I& extent,
+                                               const Tile * tile,
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
-    
-  virtual const long long requestElevationData(const Sector& sector,
-                                               int level, int row, int column,
-                                                 const Vector2I& extent,
-                                                 IElevationDataListener* listener,
-                                                 bool autodeleteListener) = 0;
     
   virtual void cancelRequest(const long long requestId) = 0;
 

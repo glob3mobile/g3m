@@ -653,8 +653,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   if ((_lastElevationDataProvider != NULL) &&
       (_lastTileMeshResolutionX > 0) &&
       (_lastTileMeshResolutionY > 0)) {
-      
-      //return ed;
+#warning Analizar si aquí debiera ir Interpolated o Decimated.
     return new InterpolatedSubviewElevationData(ed,
                                              _sector,
                                              Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
