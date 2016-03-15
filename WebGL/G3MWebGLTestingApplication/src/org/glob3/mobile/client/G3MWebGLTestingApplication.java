@@ -50,8 +50,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -100,7 +100,7 @@ EntryPoint {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -109,8 +109,8 @@ EntryPoint {
    }
 
    private class AnimateHUDWidgetsTask
-   extends
-   GTask {
+            extends
+               GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -127,7 +127,7 @@ EntryPoint {
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                  + "R: " + _widget.getCurrentCamera().getRoll());
+                               + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -158,7 +158,7 @@ EntryPoint {
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-               );
+      );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -216,7 +216,7 @@ EntryPoint {
 
                   final CityGMLDocument doc = new CityGMLDocument(s);
 
-                  final ArrayList<CityGMLBuilding> bs = doc._parseLOD2Buildings();
+                  final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
                   for (final CityGMLBuilding b : bs) {
                      ILogger.instance().logInfo(b.description());
 
