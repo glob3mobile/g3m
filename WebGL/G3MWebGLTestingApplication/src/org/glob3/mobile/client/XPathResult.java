@@ -10,6 +10,7 @@ import com.google.gwt.core.client.JsArrayNumber;
 
 
 public class XPathResult {
+
    private final JavaScriptObject _result;
 
 

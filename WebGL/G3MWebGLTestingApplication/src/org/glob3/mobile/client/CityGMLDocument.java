@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-         extends
-            XMLDocument {
+extends
+XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -47,6 +47,46 @@ public class CityGMLDocument
    }
 
 
+   public ArrayList<CityGMLBuilding> _parseLOD2Buildings() {
+
+
+      final ArrayList<CityGMLBuilding> buildings = new ArrayList<CityGMLBuilding>();
+
+      final ArrayList<XMLDocument> buildingsXML = evaluateXPathAsXMLDocuments("/CityModel/cityObjectMember/bldg:Building");
+      ILogger.instance().logInfo("N Buildings %d", buildingsXML.size());
+      for (final XMLDocument b : buildingsXML) {
+
+         //Name
+         final String name = b.evaluateXPathAndGetTextContentAsText("/bldg:Building/gml:name/text()");
+         final CityGMLBuilding building = new CityGMLBuilding(name);
+
+         //RoofType
+         final int roofType = b.evaluateXPathAndGetTextContentAsInteger("/bldg:Building/bldg:roofType/text()");
+         building.setRoofTypeCode(roofType);
+
+         //Walls
+         final ArrayList<XMLDocument> wallsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList");
+         ILogger.instance().logInfo("N Walls %d", wallsXML.size());
+         for (final XMLDocument s : wallsXML) {
+            final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
+            building.addSurfaceWithPosLis(coor);
+         }
+
+         //Rooftops
+         final ArrayList<XMLDocument> roofsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
+         ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
+         for (final XMLDocument s : roofsXML) {
+            final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
+            building.addSurfaceWithPosLis(coor);
+         }
+
+         buildings.add(building);
+      }
+
+      return buildings;
+   }
+
+
    public ArrayList<CityGMLBuilding> parseLOD2Buildings() {
 
       final ArrayList<CityGMLBuilding> buildings = new ArrayList<CityGMLBuilding>();
@@ -64,10 +104,12 @@ public class CityGMLDocument
          building.setRoofTypeCode(roofType);
 
          //Walls
-         final int nwalls = xpath(bPath + "/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface").getAsXMLDocuments().size();
+         final int nwalls = (int) evaluateXPathAndGetNumberValueAsDouble("count("
+                                                                         + bPath
+                                                                         + "/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface)");
          for (int j = 1; j <= nwalls; j++) {
             final String xpathcoord = bPath + "/bldg:boundedBy[" + j
-                     + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
+                                      + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
             final XPathResult wc = xpath(xpathcoord);
             final ArrayList<Double> coor = wc.getTextContentAsNumberArray(" ");
             if ((coor.size() % 3) != 0) {
@@ -78,19 +120,19 @@ public class CityGMLDocument
 
          //Rooftops
          final int nroof = (int) evaluateXPathAndGetNumberValueAsDouble("count("
-                  + bPath
-                  + "/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface)");
+                                                                        + bPath
+                                                                        + "/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface)");
          ILogger.instance().logInfo("Building with %d roof surfaces", nroof);
-         //         for (int j = 1; j <= nwalls; j++) {
-         //            final String xpathcoord = bPath + "/bldg:boundedBy[" + j
-         //                     + "]/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList/text()";
-         //            final XPathResult wc = xpath(xpathcoord);
-         //            final ArrayList<Double> coor = wc.getTextContentAsNumberArray(" ");
-         //            if ((coor.size() % 3) != 0) {
-         //               ILogger.instance().logError("Coordinates incorrect (%d) in building " + name, coor.size());
-         //            }
-         //            building.addWallWithPosLis(coor);
-         //         }
+         for (int j = 1; j <= nroof; j++) {
+            final String xpathcoord = bPath + "/bldg:boundedBy[" + j
+                     + "]/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList/text()";
+            final XPathResult wc = xpath(xpathcoord);
+            final ArrayList<Double> coor = wc.getTextContentAsNumberArray(" ");
+            if ((coor.size() % 3) != 0) {
+               ILogger.instance().logError("Coordinates incorrect (%d) in building " + name, coor.size());
+            }
+            building.addSurfaceWithPosLis(coor);
+         }
 
          buildings.add(building);
       }

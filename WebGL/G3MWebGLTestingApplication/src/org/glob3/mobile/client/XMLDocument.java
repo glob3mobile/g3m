@@ -2,7 +2,11 @@
 
 package org.glob3.mobile.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayNumber;
 
 
 public class XMLDocument {
@@ -32,6 +36,42 @@ public class XMLDocument {
 
    public native String getTextContent() /*-{
 		return this.@org.glob3.mobile.client.XMLDocument::_xml.textContent;
+   }-*/;
+
+
+   public ArrayList<Double> evaluateXPathAndGetTextContentAsNumberArray(final String xpath,
+                                                                        final String separator) {
+      final JavaScriptObject res = xpathToJSO(xpath);
+      final JsArrayNumber a = jsGetTextContentAsNumberArray(separator, res);
+      final ArrayList<Double> ns = new ArrayList<Double>();
+      for (int i = 0; i < a.length(); i++) {
+         ns.add(a.get(i));
+      }
+      return ns;
+   }
+
+
+   public ArrayList<Double> getTextContentAsNumberArray(final String separator) {
+      final JsArrayNumber a = jsGetTextContentAsNumberArray(separator, _xml);
+      final ArrayList<Double> ns = new ArrayList<Double>();
+      for (int i = 0; i < a.length(); i++) {
+         ns.add(a.get(i));
+      }
+      return ns;
+   }
+
+
+   public native JsArrayNumber jsGetTextContentAsNumberArray(String separator,
+                                                             JavaScriptObject r) /*-{
+		var ts = r.firstChild.textContent.split(separator);
+
+		var n = [];
+		for (i = 0; i < ts.length; i++) {
+			n.push(parseFloat(ts[i]));
+		}
+
+		return n;
+
    }-*/;
 
 
@@ -68,6 +108,36 @@ public class XMLDocument {
 		var thisNode = xpathResult.iterateNext();
 		return thisNode.textContent;
    }-*/;
+
+
+   public native JsArray<JavaScriptObject> jsGetAsDocs(JavaScriptObject xpathResult) /*-{
+		var thisNode = xpathResult.iterateNext();
+		var array = [];
+		while (thisNode != null) {
+			array.push(thisNode);
+			thisNode = xpathResult.iterateNext();
+		}
+
+		for (i = 0; i < array.length; i++) {
+			var doc = document.implementation.createDocument('', '');
+			doc.appendChild(array[i]);
+			array[i] = doc;
+		}
+
+		return array;
+   }-*/;
+
+
+   public ArrayList<XMLDocument> evaluateXPathAsXMLDocuments(final String xpath) {
+      final JavaScriptObject res = xpathToJSO(xpath);
+      final JsArray<JavaScriptObject> a = jsGetAsDocs(res);
+
+      final ArrayList<XMLDocument> out = new ArrayList<XMLDocument>();
+      for (int i = 0; i < a.length(); i++) {
+         out.add(new XMLDocument(a.get(i)));
+      }
+      return out;
+   }
 
 
    public native JavaScriptObject xpathToJSO(final String xpath) /*-{

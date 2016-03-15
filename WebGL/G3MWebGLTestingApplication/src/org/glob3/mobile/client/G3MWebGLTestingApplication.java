@@ -215,7 +215,8 @@ EntryPoint {
                   final String s = buffer.getAsString();
 
                   final CityGMLDocument doc = new CityGMLDocument(s);
-                  final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
+
+                  final ArrayList<CityGMLBuilding> bs = doc._parseLOD2Buildings();
                   for (final CityGMLBuilding b : bs) {
                      ILogger.instance().logInfo(b.description());
 
