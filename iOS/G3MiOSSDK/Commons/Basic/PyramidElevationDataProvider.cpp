@@ -143,6 +143,10 @@ PyramidElevationDataProvider::~PyramidElevationDataProvider(){
   _pyrComposition->clear();
   delete _pyrComposition;
   _pyrComposition = NULL;
+    
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   
 }
 
@@ -169,7 +173,7 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector&
         return -1;
     }
     
-    const Sector * sectorCopy = new Sector(sector);
+    Sector * sectorCopy = new Sector(sector);
     std::string path = requestStringPath(_layer,level,row,column);
     
     return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight), true );
@@ -217,7 +221,7 @@ bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
 }
 
 const Vector2I PyramidElevationDataProvider::getMinResolution() const {
-#warning En apariencia, es forzoso implementar esta función. Sólo la necesita realmente el popBestProvider de Composite.
+#warning En apariencia, es forzoso implementar esta función. Solo la necesita realmente el popBestProvider de Composite.
     return Vector2I::zero();
 }
 
