@@ -337,8 +337,8 @@ void Tile::prune(TileTexturizer*        texturizer,
       if (elevationDataProvider != NULL)
           if (subtile->_elevationDataRequest != NULL) {
               subtile->_elevationDataRequest->cancelRequest();
-              delete _elevationDataRequest;
-              _elevationDataRequest = NULL;
+              delete subtile->_elevationDataRequest;
+              subtile->_elevationDataRequest = NULL;
           }
 
       delete subtile;

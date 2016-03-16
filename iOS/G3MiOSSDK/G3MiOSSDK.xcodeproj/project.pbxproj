@@ -469,8 +469,7 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
 		D092E3101C902CE6005ABF62 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D092E30F1C902CE6005ABF62 /* CoreMotion.framework */; };
-		D0C221311C970F9A00DB792D /* JSONDemParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0C2212F1C970F9A00DB792D /* JSONDemParser.cpp */; };
-		D0C221331C980BBC00DB792D /* JSONDemParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D0C221301C970F9A00DB792D /* JSONDemParser.hpp */; };
+		D0F3062B1C9981770072286A /* JSONDemParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0F306291C9981770072286A /* JSONDemParser.cpp */; };
 		D8019FF01C11D91800784287 /* TileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLODTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLODTester.hpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
@@ -780,7 +779,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D0C221331C980BBC00DB792D /* JSONDemParser.hpp in CopyFiles */,
 				D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */,
 				D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
@@ -1781,8 +1779,8 @@
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D092E30F1C902CE6005ABF62 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		D0C2212F1C970F9A00DB792D /* JSONDemParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONDemParser.cpp; sourceTree = "<group>"; };
-		D0C221301C970F9A00DB792D /* JSONDemParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONDemParser.hpp; sourceTree = "<group>"; };
+		D0F306291C9981770072286A /* JSONDemParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JSONDemParser.cpp; path = Commons/Basic/JSONDemParser.cpp; sourceTree = "<group>"; };
+		D0F3062A1C9981770072286A /* JSONDemParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JSONDemParser.hpp; path = Commons/Basic/JSONDemParser.hpp; sourceTree = "<group>"; };
 		D8019FEE1C11D91800784287 /* TileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TileLODTester.cpp; path = Commons/Rendererers/TileLODTester.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEF1C11D91800784287 /* TileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TileLODTester.hpp; path = Commons/Rendererers/TileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
@@ -2126,6 +2124,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D0F306291C9981770072286A /* JSONDemParser.cpp */,
+				D0F3062A1C9981770072286A /* JSONDemParser.hpp */,
 				D84824AB1C89E155007F41D1 /* PyramidElevationDataProvider.cpp */,
 				D84824AC1C89E155007F41D1 /* PyramidElevationDataProvider.hpp */,
 				CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */,
@@ -2324,8 +2324,6 @@
 				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
 				CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */,
 				CF36233F1B97AFA400824932 /* CircleImageBuilder.hpp */,
-				D0C2212F1C970F9A00DB792D /* JSONDemParser.cpp */,
-				D0C221301C970F9A00DB792D /* JSONDemParser.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3248,7 +3246,7 @@
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
 				CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */,
 				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
-				D0C221311C970F9A00DB792D /* JSONDemParser.cpp in Sources */,
+				D0F3062B1C9981770072286A /* JSONDemParser.cpp in Sources */,
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 				CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */,

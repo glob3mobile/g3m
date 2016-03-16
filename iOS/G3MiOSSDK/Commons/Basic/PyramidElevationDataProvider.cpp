@@ -165,15 +165,17 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector&
                                              const Tile * tile,
                                              IElevationDataListener* listener,
                                              bool autodeleteListener){
+    Sector * sectorCopy = new Sector(sector);
     const int level = tile->_level;
     const int row = tile->_row;
     const int column = tile->_column;
 
-    if ((_downloader == NULL) || (aboveLevel(sector, level))){
+    if ((_downloader == NULL) || (aboveLevel(*sectorCopy, level))){
+        delete sectorCopy;
         return -1;
     }
     
-    Sector * sectorCopy = new Sector(sector);
+    
     std::string path = requestStringPath(_layer,level,row,column);
     
     return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight), true );
