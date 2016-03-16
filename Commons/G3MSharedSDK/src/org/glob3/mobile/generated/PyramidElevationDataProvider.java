@@ -32,13 +32,13 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         public double _lowerLon;
         public int _pyramidLevel;
 
-        public PyramidComposition(double lowerLat, double lowerLon, double upperLat, double upperLon, int pyramidLevel)
+        public PyramidComposition(double lowerLat, double lowerLon, double upperLat, double upperLon, double pyramidLevel)
         {
             _lowerLat = lowerLat;
             _lowerLon = lowerLon;
             _upperLat = upperLat;
             _upperLon = upperLon;
-            _pyramidLevel = pyramidLevel;
+            _pyramidLevel = (int) pyramidLevel;
         }
 
         public final Sector getSector()
@@ -67,7 +67,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
             for (int i = 1; i<array.get(0); i+=5)
             {
-                _itself.add(new PyramidComposition(array.get(i),array.get(i+1),array.get(i+2),array.get(i+3),(int)array.get(i+4)));
+                _itself.add(new PyramidComposition(array.get(i),array.get(i+1),array.get(i+2),array.get(i+3),array.get(i+4)));
             }
         }
         public final void onError(URL url)
@@ -85,7 +85,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     }
 
     private java.util.ArrayList<PyramidComposition> _pyrComposition;
-    private short _noDataValue;
+    private int _noDataValue;
 
     private boolean aboveLevel(Sector sector, int level)
     {
@@ -101,7 +101,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
       return ((level > maxLevel) || (!sector.touchesWith(_sector)));
     }
 
-    public PyramidElevationDataProvider(String layer, Sector sector, short noDataValue)
+    public PyramidElevationDataProvider(String layer, Sector sector, int noDataValue)
     {
        this(layer, sector, noDataValue, 0);
     }
@@ -109,7 +109,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     {
        this(layer, sector, 15000, 0);
     }
-    public PyramidElevationDataProvider(String layer, Sector sector, short noDataValue, double deltaHeight)
+    public PyramidElevationDataProvider(String layer, Sector sector, int noDataValue, double deltaHeight)
     {
        _sector = new Sector(sector);
        _layer = layer;

@@ -43,7 +43,8 @@ public abstract class BufferElevationData extends ElevationData
   public final double getElevationAt(int x, int y)
   {
     final int index = ((_height-1-y) * _width) + x;
-  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning To Diego: This is the place in which ElevationData _deltaHeight is been used.Appears to be an offset.
     return getValueInBufferAt(index) + _deltaHeight;
   }
 

@@ -734,7 +734,7 @@ public class Tile
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Analizar si aquí debiera ir Interpolated o Decimated.
+//#warning Para Diego: este cambio se hizo para evitar la aparición de trincheras en los límites de los tiles.
       return new InterpolatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   
