@@ -30,12 +30,12 @@ private:
         double _upperLat, _upperLon, _lowerLat, _lowerLon;
         int _pyramidLevel;
         
-        PyramidComposition(double lowerLat, double lowerLon, double upperLat, double upperLon, const int pyramidLevel){
+        PyramidComposition(double lowerLat, double lowerLon, double upperLat, double upperLon, double pyramidLevel){
             _lowerLat = lowerLat;
             _lowerLon = lowerLon;
             _upperLat = upperLat;
             _upperLon = upperLon;
-            _pyramidLevel = pyramidLevel;
+            _pyramidLevel = (int) pyramidLevel;
         }
 
         Sector getSector() {
@@ -59,7 +59,7 @@ private:
             }
             
             for (size_t i=1; i<array[0]; i+=5){
-                _itself->push_back(PyramidComposition(array[i],array[i+1],array[i+2],array[i+3],(int)array[i+4]));
+                _itself->push_back(PyramidComposition(array[i],array[i+1],array[i+2],array[i+3],array[i+4]));
             }
         }
         void onError(const URL& url) {}
@@ -74,12 +74,12 @@ private:
     };
     
     std::vector<PyramidComposition> *_pyrComposition;
-    short _noDataValue;
+    int _noDataValue;
     
     bool aboveLevel(const Sector &sector, int level);
 public:
     
-    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, short noDataValue = 15000, double deltaHeight = 0);
+    PyramidElevationDataProvider(const std::string &layer, const Sector& sector, int noDataValue = 15000, double deltaHeight = 0);
     
     ~PyramidElevationDataProvider();
     

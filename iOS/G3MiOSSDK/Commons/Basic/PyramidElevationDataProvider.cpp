@@ -132,7 +132,7 @@ public:
 
 
 PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &layer, const Sector& sector,
-                                                           short noDataValue,
+                                                           int noDataValue,
                                                            double deltaHeight): _sector(sector), _layer(layer), _noDataValue(noDataValue){
   _pyrComposition = new std::vector<PyramidComposition>();
   _deltaHeight = deltaHeight;

@@ -26,6 +26,6 @@ _deltaHeight(deltaHeight)
 double BufferElevationData::getElevationAt(int x,
                                            int y) const {
   const int index = ((_height-1-y) * _width) + x;
-
+#warning To Diego: This is the place in which ElevationData _deltaHeight is been used. Appears to be an offset.
   return getValueInBufferAt( index ) + _deltaHeight;
 }
