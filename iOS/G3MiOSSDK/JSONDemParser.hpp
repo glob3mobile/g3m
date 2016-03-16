@@ -34,8 +34,8 @@ public:
     }
 #endif
 #ifdef JAVA_CODE
-    public static Vector2I getResolution(final IByteBuffer buffer){
-        JSONObject data = IJSONParser.instance().parse(buffer.getAsString())->asObject();
+    public static Vector2I getResolution(IByteBuffer buffer){
+        JSONObject data = IJSONParser.instance().parse(buffer.getAsString()).asObject();
         return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
     }
 #endif
