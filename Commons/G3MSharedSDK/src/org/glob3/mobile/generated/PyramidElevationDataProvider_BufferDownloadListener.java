@@ -8,9 +8,9 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     private IElevationDataListener _listener;
     private boolean _autodeleteListener;
     private double _deltaHeight;
-    private short _noDataValue;
+    private int _noDataValue;
 
-    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, short noDataValue, double deltaHeight)
+    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight)
     {
        _sector = sector;
        _width = extent._x;
@@ -25,13 +25,9 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
 
-        ShortBufferElevationData elevationData;
-        String contents = buffer.getAsString();
-        final Vector2I resolution = JSONDemParser.getResolution(buffer);
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning refactor 15000
-        elevationData = JSONDemParser.parseJSONDemElevationData(_sector, resolution, buffer, _noDataValue, _deltaHeight);
+        final Vector2I resolution = JSONDemParser.getResolution(buffer);
+        ShortBufferElevationData elevationData = JSONDemParser.parseJSONDemElevationData(_sector, resolution, buffer, (short) _noDataValue, _deltaHeight);
 
         if (buffer != null)
         {
@@ -58,8 +54,6 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
             }
             _listener = null;
         }
-        if (resolution != null)
-           resolution.dispose();
     }
 
     public final void onError(URL url)

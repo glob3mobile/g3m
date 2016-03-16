@@ -200,7 +200,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     public final Vector2I getMinResolution()
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning En apariencia, es forzoso implementar esta función.Solo la necesita realmente el popBestProvider de Composite.
+//#warning Para Diego: Es forzoso implementar esta función, viene dada por ElevationDataProvider.Solo la necesita realmente el popBestProvider de Composite.
         return Vector2I.zero();
     }
 

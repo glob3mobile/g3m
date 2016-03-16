@@ -87,7 +87,7 @@ public class JSONDemParser
             return res;
         }
     
-        res.add(5 *array.size() +1);
+        res.add(5 *array.size() +1.0);
         for (int i = 0; i < array.size(); i++)
         {
             res.add(array.getAsObject(i).getAsObject("sector").getAsObject("lower").getAsNumber("lat").value());
