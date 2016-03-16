@@ -63,7 +63,7 @@ std::vector<double> JSONDemParser::parseDemMetadata (const IByteBuffer *buffer){
         return res;
     }
 
-    res.push_back(5*array->size() +1);
+    res.push_back(5*array->size() +1.0);
     for (size_t i=0; i < array->size(); i++){
         res.push_back(array->getAsObject(i)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat")->value());
         res.push_back(array->getAsObject(i)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon")->value());

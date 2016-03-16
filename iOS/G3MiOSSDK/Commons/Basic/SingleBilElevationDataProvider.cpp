@@ -199,7 +199,7 @@ void SingleBilElevationDataProvider::drainQueue() {
 #ifdef JAVA_CODE
   for (final Long key : _requestsQueue.keySet()) {
     final SingleBilElevationDataProvider_Request r = _requestsQueue.get(key);
-    requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
+    requestElevationData(r._sector, r._extent,null, r._listener, r._autodeleteListener);
     if (r != null) {
       r.dispose();
     }

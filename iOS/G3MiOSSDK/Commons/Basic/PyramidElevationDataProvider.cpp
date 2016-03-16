@@ -24,14 +24,14 @@ private:
     IElevationDataListener *_listener;
     bool _autodeleteListener;
     double _deltaHeight;
-    short _noDataValue;
+    int _noDataValue;
     
 public:
     PyramidElevationDataProvider_BufferDownloadListener(const Sector* sector,
                                                         const Vector2I& extent,
                                                         IElevationDataListener *listener,
                                                         bool autodeleteListener,
-                                                        short noDataValue,
+                                                        int noDataValue,
                                                         double deltaHeight):
     _sector(sector),
     _width(extent._x),
@@ -47,12 +47,9 @@ public:
                     IByteBuffer* buffer,
                     bool expired){
         
-        ShortBufferElevationData *elevationData;
-        std::string contents = buffer->getAsString();
-        const Vector2I *resolution = JSONDemParser::getResolution(buffer);
         
-#warning refactor 15000
-        elevationData = JSONDemParser::parseJSONDemElevationData(*_sector, *resolution, buffer,_noDataValue, _deltaHeight);
+        const Vector2I *resolution = JSONDemParser::getResolution(buffer);
+        ShortBufferElevationData *elevationData = JSONDemParser::parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);
         
         if (buffer != NULL){
             delete buffer;
@@ -75,7 +72,9 @@ public:
             }
             _listener = NULL;
         }
+#ifdef C_CODE
         delete resolution;
+#endif
     }
     
     void onError(const URL& url){
@@ -223,7 +222,7 @@ bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
 }
 
 const Vector2I PyramidElevationDataProvider::getMinResolution() const {
-#warning En apariencia, es forzoso implementar esta función. Solo la necesita realmente el popBestProvider de Composite.
+#warning Para Diego: Es forzoso implementar esta función, viene dada por ElevationDataProvider. Solo la necesita realmente el popBestProvider de Composite.
     return Vector2I::zero();
 }
 
