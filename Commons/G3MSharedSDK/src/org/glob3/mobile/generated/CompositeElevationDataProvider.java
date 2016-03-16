@@ -111,11 +111,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     private final boolean _autodelete;
     private final Vector2I _resolution;
     private final Sector _sector ;
-      private final boolean _leveled;
-      private final int _level;
-      private final int _row;
-      private final int _column;
-
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Para Diego: creo que es necesario guardar un puntero a Tile aquí dado que launchNewStep tiene que utilizarlo al hacer requests.
+    private final Tile _tile;
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
@@ -130,7 +128,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     
       ElevationDataProvider provider = null;
     
-      final int psSize = ps.size();
+      int psSize = ps.size();
       int selectedIndex = -1;
       for (int i = 0; i < psSize; i++)
       {
@@ -156,7 +154,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       return provider;
     }
 
-    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, boolean leveled, int level, int row, int column, IElevationDataListener listener, boolean autodelete)
+    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, Tile tile, IElevationDataListener listener, boolean autodelete)
     {
        _providers = provider.getProviders(sector);
        _sector = new Sector(sector);
@@ -166,10 +164,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
        _compProvider = provider;
        _compData = null;
        _currentStep = null;
-       _leveled = leveled;
-       _level = level;
-       _row = row;
-       _column = column;
+       _tile = tile;
     }
 
     public void dispose()
@@ -183,11 +178,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       if (_currentProvider != null)
       {
         _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
-    
-        if (!_leveled)
-            _currentID = _currentProvider.requestElevationData(_sector, _resolution, _currentStep, true);
-        else
-            _currentID = _currentProvider.requestElevationData(_sector, _level, _row, _column, _resolution, _currentStep, true);
+        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _tile, _currentStep, true);
     
         return true;
       }
@@ -356,10 +347,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, Tile tile, IElevationDataListener listener, boolean autodeleteListener)
   {
   
-    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, false, 0,0,0, listener, autodeleteListener);
+    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, tile, listener, autodeleteListener);
     _currentID++;
     _requests.put(_currentID, req);
   
@@ -368,17 +359,6 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     return _currentID;
   }
 
-  public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
-  {
-  
-      CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, true, level, row, column, listener, autodeleteListener);
-      _currentID++;
-      _requests.put(_currentID, req);
-  
-      req.launchNewStep();
-  
-      return _currentID;
-  }
 
   public final void cancelRequest(long requestId)
   {

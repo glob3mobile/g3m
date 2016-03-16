@@ -57,18 +57,17 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
         {
 
-            final String str = buffer.getAsString();
+            java.util.ArrayList<Double> array = JSONDemParser.parseDemMetadata(buffer);
 
-            IJSONParser parser = IJSONParser.instance();
-            final JSONArray array = parser.parse(str).asObject().getAsArray("sectors");
-            if (array == null)
+
+            if (array.size() == 0)
             {
                 throw new RuntimeException("Problem parsing at PyramidElevationDataProvider::MetadataListener::onDownload().");
             }
 
-            for (int i = 0; i<array.size(); i++)
+            for (int i = 1; i<array.get(0); i+=5)
             {
-                _itself.add(new PyramidComposition(getLowerLat(array, i),getLowerLon(array, i),getUpperLat(array, i),getUpperLon(array, i),getLevel(array, i)));
+                _itself.add(new PyramidComposition(array.get(i),array.get(i+1),array.get(i+2),array.get(i+3),(int)array.get(i+4)));
             }
         }
         public final void onError(URL url)
@@ -83,59 +82,38 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         }
 
         private java.util.ArrayList<PyramidComposition> _itself;
-
-        private double getUpperLat(JSONArray array, int index)
-        {
-            return array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lat").value();
-        }
-
-        private double getLowerLat(JSONArray array, int index)
-        {
-            return array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lat").value();
-        }
-
-        private double getUpperLon(JSONArray array, int index)
-        {
-            return array.getAsObject(index).getAsObject("sector").getAsObject("upper").getAsNumber("lon").value();
-        }
-
-        private double getLowerLon(JSONArray array, int index)
-        {
-            return array.getAsObject(index).getAsObject("sector").getAsObject("lower").getAsNumber("lon").value();
-        }
-
-        private int getLevel(JSONArray array, int index)
-        {
-            JSONInteger integer = (JSONInteger) array.getAsObject(index).getAsNumber("pyrLevel");
-            return integer.intValue();
-        }
-
     }
 
     private java.util.ArrayList<PyramidComposition> _pyrComposition;
+    private short _noDataValue;
 
     private boolean aboveLevel(Sector sector, int level)
     {
       int maxLevel = 0;
       for (int i = 0; i< _pyrComposition.size(); i++)
+      {
         if (sector.touchesWith(_pyrComposition.get(i).getSector()))
+        {
           maxLevel = IMathUtils.instance().max(maxLevel, _pyrComposition.get(i)._pyramidLevel);
+        }
+      }
     
-      if (level > maxLevel)
-         return true;
-      if (!sector.touchesWith(_sector))
-         return true;
-      return false;
+      return ((level > maxLevel) || (!sector.touchesWith(_sector)));
     }
 
+    public PyramidElevationDataProvider(String layer, Sector sector, short noDataValue)
+    {
+       this(layer, sector, noDataValue, 0);
+    }
     public PyramidElevationDataProvider(String layer, Sector sector)
     {
-       this(layer, sector, 0);
+       this(layer, sector, 15000, 0);
     }
-    public PyramidElevationDataProvider(String layer, Sector sector, double deltaHeight)
+    public PyramidElevationDataProvider(String layer, Sector sector, short noDataValue, double deltaHeight)
     {
        _sector = new Sector(sector);
        _layer = layer;
+       _noDataValue = noDataValue;
       _pyrComposition = new java.util.ArrayList<PyramidComposition>();
       _deltaHeight = deltaHeight;
     }
@@ -145,6 +123,8 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
       _pyrComposition.clear();
       _pyrComposition = null;
       _pyrComposition = null;
+    
+        super.dispose();
     
     }
 
@@ -163,21 +143,26 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
       _downloader = context.getDownloader();
       getMetadata();
     }
-    public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+
+    public final long requestElevationData(Sector sector, Vector2I extent, Tile tile, IElevationDataListener listener, boolean autodeleteListener)
     {
-      return -1;
-    }
-    public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
-    {
+        Sector sectorCopy = new Sector(sector);
+        final int level = tile._level;
+        final int row = tile._row;
+        final int column = tile._column;
     
-      if ((_downloader == null) || (aboveLevel(sector, level)))
-      {
-        return -1;
-      }
+        if ((_downloader == null) || (aboveLevel(sectorCopy, level)))
+        {
+            if (sectorCopy != null)
+               sectorCopy.dispose();
+            return -1;
+        }
     
-      String path = requestStringPath(_layer, level, row, column);
     
-      return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+        String path = requestStringPath(_layer, level, row, column);
+    
+        return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight), true);
+    
     }
 
     public final String requestStringPath(String layer, int level, int row, int column)
@@ -211,9 +196,12 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
       sectors.add(_sector);
       return sectors;
     }
+
     public final Vector2I getMinResolution()
     {
-      return Vector2I.zero();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning En apariencia, es forzoso implementar esta función.Solo la necesita realmente el popBestProvider de Composite.
+        return Vector2I.zero();
     }
 
 }

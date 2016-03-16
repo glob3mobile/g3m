@@ -1305,8 +1305,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final URL getNodeChildrenURL(String nodeID, java.util.ArrayList<String> childrenIDs)
     {
-      if (_format == VectorStreamingRenderer.Format.SERVER)
-      {
+        if (_format == VectorStreamingRenderer.Format.SERVER)
+        {
         String nodes = "";
         final int childrenIDsSize = childrenIDs.size();
     

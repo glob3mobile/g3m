@@ -104,7 +104,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, Tile tile, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (!_elevationDataResolved)
     {
@@ -129,11 +129,6 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
   
     return -1;
-  }
-
-  public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
-  {
-      return requestElevationData(sector, extent, listener, autodeleteListener);
   }
 
   public final void cancelRequest(long requestId)

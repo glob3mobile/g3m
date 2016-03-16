@@ -11,6 +11,9 @@ public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferD
   private final double _deltaHeight;
 
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Ask JM: Funcionamiento y uso de esta clase.
+
   public WMSBilElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, double deltaHeight)
   {
      _sector = new Sector(sector);

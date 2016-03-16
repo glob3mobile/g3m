@@ -500,9 +500,9 @@ public class Tile
             if (subtile._elevationDataRequest != null)
             {
                 subtile._elevationDataRequest.cancelRequest();
-                if (_elevationDataRequest != null)
-                   _elevationDataRequest.dispose();
-                _elevationDataRequest = null;
+                if (subtile._elevationDataRequest != null)
+                   subtile._elevationDataRequest.dispose();
+                subtile._elevationDataRequest = null;
             }
   
         if (subtile != null)
@@ -733,8 +733,8 @@ public class Tile
   
     if ((_lastElevationDataProvider != null) && (_lastTileMeshResolutionX > 0) && (_lastTileMeshResolutionY > 0))
     {
-  
-        //return ed;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Analizar si aquí debiera ir Interpolated o Decimated.
       return new InterpolatedSubviewElevationData(ed, _sector, new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));
     }
   

@@ -62,11 +62,11 @@ public class ShortBufferElevationData extends BufferElevationData
   
     _max = IMathUtils.instance().minInt16();
     _min = IMathUtils.instance().maxInt16();
-    _children = IMathUtils.instance().minInt16();
-    _similarity = IMathUtils.instance().minInt16();
+    _hasChildren = false;
+    _meshGeometricalErrorWithChildren = IMathUtils.instance().minDouble();
   }
 
-  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight, short max, short min, short children, short similarity)
+  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight, short max, short min, short hasChildren, double geomError)
   {
      super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
      _buffer = buffer;
@@ -88,8 +88,8 @@ public class ShortBufferElevationData extends BufferElevationData
   
       _max = max;
       _min = min;
-      _children = children;
-      _similarity = similarity;
+      _hasChildren = (hasChildren > 0) ? true: false;
+      _meshGeometricalErrorWithChildren = geomError;
   }
 
   public void dispose()
@@ -179,13 +179,11 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public final boolean hasChildren()
   {
-     if (_children > 0)
-        return true;
-        return false;
+     return _hasChildren;
   }
-  public final int getSimilarity()
+  public final double getMeshGeometricalError()
   {
-     return _similarity;
+     return _meshGeometricalErrorWithChildren;
   }
 
 }

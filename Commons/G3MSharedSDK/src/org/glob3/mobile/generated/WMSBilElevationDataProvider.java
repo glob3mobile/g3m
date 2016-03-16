@@ -48,7 +48,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     _downloader = context.getDownloader();
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, Tile tile, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (_downloader == null)
     {
@@ -105,11 +105,6 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
   
   
     return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
-  }
-
-  public final long requestElevationData(Sector sector, int level, int row, int column, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
-  {
-      return requestElevationData(sector, extent, listener, autodeleteListener);
   }
 
   public final void cancelRequest(long requestId)
