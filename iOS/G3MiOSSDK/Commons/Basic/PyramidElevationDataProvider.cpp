@@ -121,6 +121,10 @@ public:
 
     ~PyramidElevationDataProvider_BufferDownloadListener(){
         delete _sector;
+        
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
     }
     
 };
