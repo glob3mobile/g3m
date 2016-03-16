@@ -46,7 +46,7 @@ public:
                                                 const short noData,
                                                 double deltaHeight = 0);
     
-    static double* parseDemMetadata( const IByteBuffer *buffer);
+    static std::vector<double> parseDemMetadata( const IByteBuffer *buffer);
 };
 
 

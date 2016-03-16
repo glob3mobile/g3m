@@ -51,23 +51,25 @@ ShortBufferElevationData* JSONDemParser::parseJSONDemElevationData(const Sector&
                                         size, deltaHeight,max,min,hasChildren,geomError);
 }
 
-double * JSONDemParser::parseDemMetadata (const IByteBuffer *buffer){
+std::vector<double> JSONDemParser::parseDemMetadata (const IByteBuffer *buffer){
+    
+    std::vector<double> res;
     
     const JSONBaseObject* parser = IJSONParser::instance()->parse(buffer->getAsString());
-    if (parser == NULL) return NULL;
+    if (parser == NULL) return res;
     const JSONArray* array = parser->asObject()->getAsArray("sectors");
     if (array == NULL || array->size() == 0) {
         delete parser;
-        return NULL;
+        return res;
     }
-    double * res = new double[5*array->size() +1];
-    res[0] = 5*array->size() +1;
+
+    res.push_back(5*array->size() +1);
     for (size_t i=0; i < array->size(); i++){
-        res[i*5 + 1] = array->getAsObject(i)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat")->value();
-        res[i*5 + 2] = array->getAsObject(i)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon")->value();
-        res[i*5 + 3] = array->getAsObject(i)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat")->value();
-        res[i*5 + 4] = array->getAsObject(i)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon")->value();
-        res[i*5 + 5] = array->getAsObject(i)->getAsNumber("pyrLevel")->value();
+        res.push_back(array->getAsObject(i)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lat")->value());
+        res.push_back(array->getAsObject(i)->getAsObject("sector")->getAsObject("lower")->getAsNumber("lon")->value());
+        res.push_back(array->getAsObject(i)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lat")->value());
+        res.push_back(array->getAsObject(i)->getAsObject("sector")->getAsObject("upper")->getAsNumber("lon")->value());
+        res.push_back(array->getAsObject(i)->getAsNumber("pyrLevel")->value());
     }
     delete parser;
     return res;

@@ -51,18 +51,16 @@ private:
                         IByteBuffer* buffer,
                         bool expired) {
             
-            double * array = JSONDemParser::parseDemMetadata(buffer);
+            std::vector<double> array = JSONDemParser::parseDemMetadata(buffer);
             
             
-            if (array == NULL){
+            if (array.size() == 0){
                 THROW_EXCEPTION("Problem parsing at PyramidElevationDataProvider::MetadataListener::onDownload().");
             }
             
             for (size_t i=1; i<array[0]; i+=5){
                 _itself->push_back(PyramidComposition(array[i],array[i+1],array[i+2],array[i+3],(int)array[i+4]));
             }
-            
-            delete array;
         }
         void onError(const URL& url) {}
         void onCancel(const URL& url) {}
