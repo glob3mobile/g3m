@@ -78,7 +78,7 @@ public class G3MWebGLTestingApplication
       // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
 
       // Canarias
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(48.9997986756911, 8.33550024760099, 1000));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(48.9997986756911, 8.33550024760099, 100));
    }
 
 
@@ -220,7 +220,9 @@ public class G3MWebGLTestingApplication
             int i = 0;
             for (final CityGMLBuilding b : bs) {
                //ILogger.instance().logInfo(b.description());
-               meshRenderer.addMesh(b.createMesh(planet, true, Color.red().wheelStep(bs.size(), i++)));
+               //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
+               meshRenderer.addMesh(b.createSingleTrianglesMesh(planet, true, Color.red().wheelStep(bs.size(), i++)));
+
                marksRenderer.addMark(b.createMark(true));
             }
          }
@@ -264,9 +266,7 @@ public class G3MWebGLTestingApplication
          }
       });
 
-      builder.getPlanetRendererBuilder().setRenderDebug(true);
-
-
+      //builder.getPlanetRendererBuilder().setRenderDebug(true);
       return builder.createWidget();
    }
 

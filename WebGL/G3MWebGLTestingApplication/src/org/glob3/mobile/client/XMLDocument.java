@@ -68,14 +68,13 @@ public class XMLDocument {
 
 
    public native String getAttributeAsText(String att) /*-{
-		debugger;
 		return this.@org.glob3.mobile.client.XMLDocument::_xml.documentElement
 				.getAttribute(att);
    }-*/;
 
 
    public ArrayList<Double> evaluateXPathAndGetTextContentAsNumberArray(final String xpath,
-                                                                        final String separator) {
+            final String separator) {
       final JavaScriptObject res = xpathToJSO(xpath);
       final JsArrayNumber a = jsGetTextContentAsNumberArray(separator, res);
       final ArrayList<Double> ns = new ArrayList<Double>();

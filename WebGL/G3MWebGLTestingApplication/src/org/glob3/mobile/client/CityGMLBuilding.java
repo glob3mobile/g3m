@@ -23,7 +23,8 @@ public class CityGMLBuilding {
 
    private class BuildingSurface {
       public final ArrayList<Double> _coordinates;
-      ArrayList<Geodetic3D>          _geodeticCoordinates = null;
+      ArrayList<Geodetic3D>          _geodeticCoordinates  = null;
+      double                         _baseHeightOfGeoCoors = 0;
 
 
       public double getBaseHeight() {
@@ -108,10 +109,11 @@ public class CityGMLBuilding {
 
 
       public final ArrayList<Geodetic3D> getGeodetic3DCoordinates(final double substractHeight) {
-         if (_geodeticCoordinates != null) {
+         if ((_geodeticCoordinates != null) && (substractHeight == _baseHeightOfGeoCoors)) {
             return _geodeticCoordinates;
          }
 
+         _baseHeightOfGeoCoors = substractHeight;
          _geodeticCoordinates = new ArrayList<Geodetic3D>();
 
          for (int i = 0; i < _coordinates.size(); i += 3) {
@@ -198,6 +200,137 @@ public class CityGMLBuilding {
       }
 
 
+      public void addTriangles(final FloatBufferBuilderFromGeodetic fbb,
+                               final FloatBufferBuilderFromCartesian3D normals,
+                               final double baseHeight,
+                               final Planet planet) {
+
+         final Vector3D normal = getNormal(planet);
+
+         final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
+
+         for (int i = 0; i < (c.size() - 2); i++) {
+            fbb.add(c.get(0));
+            fbb.add(c.get(i + 1));
+            fbb.add(c.get(i + 2));
+
+            normals.add(normal);
+            normals.add(normal);
+            normals.add(normal);
+         }
+
+      }
+
+
+      public void addTrianglesCuttingEars(final FloatBufferBuilderFromGeodetic fbb,
+                                          final FloatBufferBuilderFromCartesian3D normals,
+                                          final double baseHeight,
+                                          final Planet planet) {
+
+         final Vector3D normal = getNormal(planet);
+         final Vector3D antinormal = normal.times(-1);
+
+         final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
+         final ArrayList<Geodetic3D> c2 = (ArrayList<Geodetic3D>) c.clone();
+
+         final ArrayList<Vector3D> cartesianC = new ArrayList<Vector3D>();
+         for (int i = 0; i < c.size(); i++) {
+            cartesianC.add(planet.toCartesian(c.get(i)));
+         }
+
+         while (c2.size() > 3) {
+
+            int i1 = 0, i2 = 0, i3 = 0;
+            double angleInDegrees = 0;
+
+            for (int i = 0; i < (c2.size() - 1); i++) {
+               i1 = i;
+               i2 = (i + 1) % (c2.size());
+               i3 = (i + 2) % (c2.size());
+
+               final Vector3D v1 = cartesianC.get(i1);
+               final Vector3D v2 = cartesianC.get(i2);
+               final Vector3D v3 = cartesianC.get(i3);
+
+               final Vector3D v21 = v1.sub(v2);
+               final Vector3D v23 = v3.sub(v2);
+               angleInDegrees = v21.signedAngleBetween(v23, antinormal)._degrees;
+
+               if ((angleInDegrees < 170) && (angleInDegrees > 0)) { //Valid triangle (ear)
+                  break;
+               }
+               else {
+                  ILogger.instance().logInfo("!!!! Angle %d", i1, i2, i3, angleInDegrees);
+               }
+
+            }
+
+            ILogger.instance().logInfo("%d, %d, %d -> Angle %d", i1, i2, i3, angleInDegrees);
+
+            if ((angleInDegrees < 179) && (angleInDegrees > -179)) { //Valid triangle (ear)
+               fbb.add(c2.get(i1));
+               fbb.add(c2.get(i2));
+               fbb.add(c2.get(i3));
+               normals.add(normal);
+               normals.add(normal);
+               normals.add(normal);
+
+               c2.remove(i2); //Removing ear
+               cartesianC.remove(i2);
+            }
+            else {
+               ILogger.instance().logInfo("NO EAR!!!!");
+               break;
+            }
+
+
+         }
+
+
+         ILogger.instance().logInfo("POLYGON OF %d", c2.size());
+         //
+         //         for (int i = 0; i < (c2.size() - 1); i += 2) {
+         //            final int i1 = i;
+         //            final int i2 = (i + 1) % (c2.size());
+         //            final int i3 = (i + 2) % (c2.size());
+         //
+         //            final Vector3D v1 = planet.toCartesian(c2.get(i1));
+         //            final Vector3D v2 = planet.toCartesian(c2.get(i2));
+         //            final Vector3D v3 = planet.toCartesian(c2.get(i3));
+         //
+         //            final Vector3D v21 = v1.sub(v2);
+         //            final Vector3D v23 = v3.sub(v2);
+         //            //final Angle a = Vector3D.angleBetween(v21, v23);
+         //
+         //            final Vector3D cross = v21.cross(v23);
+         //            final double dot = v21.dot(v23);
+         //
+         //
+         //            final double angleInRad = IMathUtils.instance().atan2(cross.length(), dot);
+         //
+         //            if ((angleInRad < 1.4) || (angleInRad > 1.6)) {
+         //               ILogger.instance().logInfo("%d, %d, %d -> Angle %d", i1, i2, i3, angleInRad);
+         //            }
+         //
+         //            if (angleInRad > 0) {
+         //               fbb.add(c2.get(i1));
+         //               fbb.add(c2.get(i2));
+         //               fbb.add(c2.get(i3));
+         //
+         //
+         //               normals.add(normal);
+         //               normals.add(normal);
+         //               normals.add(normal);
+         //            }
+         //            else {
+         //            }
+         //
+         //
+         //         }
+
+      }
+
+
       public Mesh createMesh(final Planet planet,
                              final Color color,
                              final double baseHeight) {
@@ -260,16 +393,16 @@ public class CityGMLBuilding {
          s += "\n Wall: Coordinates: ";
          for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {
             s += "(" + _walls.get(i)._coordinates.get(j) + ", " + _walls.get(i)._coordinates.get(j + 1) + ", "
-                 + _walls.get(i)._coordinates.get(j + 2) + ") ";
+                     + _walls.get(i)._coordinates.get(j + 2) + ") ";
          }
       }
       return s;
    }
 
 
-   public Mesh createMesh(final Planet planet,
-                          final boolean fixOnGround,
-                          final Color color) {
+   public Mesh createMeshesForSurfaces(final Planet planet,
+                                       final boolean fixOnGround,
+                                       final Color color) {
 
       final double baseHeight = fixOnGround ? getBaseHeight() : 0;
 
@@ -282,6 +415,27 @@ public class CityGMLBuilding {
 
 
       return cm;
+
+   }
+
+
+   public Mesh createSingleTrianglesMesh(final Planet planet,
+                                         final boolean fixOnGround,
+                                         final Color color) {
+
+      final double baseHeight = fixOnGround ? getBaseHeight() : 0;
+
+      final FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+      final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+
+      for (int w = 0; w < _walls.size(); w++) {
+         _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
+      }
+
+      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
+               (float) 2.0, color, null, (float) 1.0, true, normals.create());
+
+      return trianglesMesh;
 
    }
 
@@ -342,7 +496,7 @@ public class CityGMLBuilding {
 
       final Geodetic3D center = getCenter();
       final Geodetic3D pos = Geodetic3D.fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-                                                                                                           - deltaH);
+               - deltaH);
 
       final Mark m = new Mark(_name, pos, AltitudeMode.ABSOLUTE, 100.0);
       return m;
