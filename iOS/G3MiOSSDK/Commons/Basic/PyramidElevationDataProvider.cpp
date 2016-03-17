@@ -21,6 +21,7 @@ private:
     
     const Sector *_sector;
     int _width, _height;
+    MutableVector2I &_minRes;
     IElevationDataListener *_listener;
     bool _autodeleteListener;
     double _deltaHeight;
@@ -32,11 +33,13 @@ public:
                                                         IElevationDataListener *listener,
                                                         bool autodeleteListener,
                                                         int noDataValue,
-                                                        double deltaHeight):
+                                                        double deltaHeight,
+                                                        MutableVector2I &minRes):
     _sector(sector),
     _width(extent._x),
     _height(extent._y),
     _listener(listener),
+    _minRes(minRes),
     _autodeleteListener(autodeleteListener),
     _deltaHeight(deltaHeight),
     _noDataValue(noDataValue){
@@ -62,6 +65,9 @@ public:
         else
         {
             _listener->onData(*_sector, *resolution, elevationData);
+            if ((_minRes.x() * _minRes.y()) > (resolution->_x * resolution->_y)){
+                _minRes = resolution->asMutableVector2I();
+            }
         }
         
         
@@ -136,6 +142,7 @@ PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &la
                                                            double deltaHeight): _sector(sector), _layer(layer), _noDataValue(noDataValue){
   _pyrComposition = new std::vector<PyramidComposition>();
   _deltaHeight = deltaHeight;
+  _minRes = MutableVector2I(256, 256);
 }
 
 PyramidElevationDataProvider::~PyramidElevationDataProvider(){
@@ -177,7 +184,7 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector&
     
     std::string path = requestStringPath(_layer,level,row,column);
     
-    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight), true );
+    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes), true );
     
 }
 
@@ -222,8 +229,7 @@ bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
 }
 
 const Vector2I PyramidElevationDataProvider::getMinResolution() const {
-#warning Para Diego: Es forzoso implementar esta función, viene dada por ElevationDataProvider. Solo la necesita realmente el popBestProvider de Composite.
-    return Vector2I::zero();
+    return _minRes.asVector2I();
 }
 
 

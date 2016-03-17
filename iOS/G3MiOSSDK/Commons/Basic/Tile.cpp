@@ -653,7 +653,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
   if ((_lastElevationDataProvider != NULL) &&
       (_lastTileMeshResolutionX > 0) &&
       (_lastTileMeshResolutionY > 0)) {
-#warning Para Diego: este cambio se hizo para evitar la aparición de trincheras en los límites de los tiles.
+#warning To Diego: this change was done to avoid uncomplete meshes.
     return new InterpolatedSubviewElevationData(ed,
                                              _sector,
                                              Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY));

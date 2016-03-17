@@ -470,6 +470,7 @@
 		D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
 		D092E3101C902CE6005ABF62 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D092E30F1C902CE6005ABF62 /* CoreMotion.framework */; };
 		D0F3062B1C9981770072286A /* JSONDemParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0F306291C9981770072286A /* JSONDemParser.cpp */; };
+		D0FD48D61C9AAD1C00819B2D /* JSONDemParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D0F3062A1C9981770072286A /* JSONDemParser.hpp */; };
 		D8019FF01C11D91800784287 /* TileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLODTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLODTester.hpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
@@ -779,6 +780,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D0FD48D61C9AAD1C00819B2D /* JSONDemParser.hpp in CopyFiles */,
 				D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */,
 				D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,

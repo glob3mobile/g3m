@@ -33,7 +33,7 @@ private:
 
 public:
 
-#warning Ask JM: Funcionamiento y uso de esta clase.
+#warning Ask JM: Proper working and uses of this class
 
   WMSBilElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                       const Vector2I& extent,

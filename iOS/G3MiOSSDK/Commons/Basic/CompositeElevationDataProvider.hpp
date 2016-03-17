@@ -78,7 +78,7 @@ private:
     private final Vector2I _resolution;
 #endif
     const Sector _sector;
-#warning Para Diego: creo que es necesario guardar un puntero a Tile aquí dado que launchNewStep tiene que utilizarlo al hacer requests.
+#warning To Diego: I think it is necessary to save here a Tile pointer since launchNewStep needs it to make requests.
     const Tile * _tile;
   public:
     
