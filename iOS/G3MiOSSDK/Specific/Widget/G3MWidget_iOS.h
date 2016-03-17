@@ -10,7 +10,7 @@
 
 #import "TouchEvent.hpp"
 #import "GL.hpp"
-#import "Context.hpp"
+#import "G3MContext.hpp"
 
 //class G3MWidget;
 

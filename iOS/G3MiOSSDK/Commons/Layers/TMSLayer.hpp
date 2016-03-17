@@ -68,6 +68,9 @@ public:
     return _dataSector;
   }
   
+  const bool isTransparent() const {
+    return _isTransparent;
+  }
 };
 
 #endif
