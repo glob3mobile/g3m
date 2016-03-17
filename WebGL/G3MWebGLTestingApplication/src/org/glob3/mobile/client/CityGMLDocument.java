@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-extends
-XMLDocument {
+         extends
+            XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -20,30 +20,6 @@ XMLDocument {
 
    public CityGMLDocument(final JavaScriptObject jso) {
       super(jso, null);
-   }
-
-
-   //   public double getNumberOfBuildings() {
-   //      final XPathResult res = xpath("count(/CityModel/cityObjectMember/bldg:Building)");
-   //      final double i = res.getAsNumber();
-   //      return i;
-   //   }
-
-
-   public void logAllBuildingNames() {
-      final XPathResult res2 = xpath("/CityModel/cityObjectMember/bldg:Building/gml:name");
-      final ArrayList<XMLDocument> docs = res2.getAsXMLDocuments();
-      ILogger.instance().logInfo("We have %d buildings", docs.size());
-
-      for (int j = 0; j < docs.size(); j++) {
-         ILogger.instance().logInfo(docs.get(j).getTextContent());
-      }
-   }
-
-
-   public int getBuildingNumberOfWalls(final int n) {
-      final XPathResult res = xpath("count(/CityModel/cityObjectMember/bldg:Building[" + n + "]/bldg:boundedBy)");
-      return (int) res.getAsNumber();
    }
 
 
@@ -56,6 +32,7 @@ XMLDocument {
       ILogger.instance().logInfo("N Buildings %d", buildingsXML.size());
       for (final XMLDocument b : buildingsXML) {
          CityGMLBuilding building = null;
+
          //Name
          try {
             final String name = b.evaluateXPathAndGetTextContentAsText("/bldg:Building/gml:name/text()");
@@ -64,7 +41,18 @@ XMLDocument {
          catch (final Exception e) {
             ILogger.instance().logError("No name for building");
             building = new CityGMLBuilding("NO NAME");
+
+            //ID
+            try {
+               final String id = b.getAttributeAsText("gml:id");
+               building = new CityGMLBuilding(id);
+            }
+            catch (final Exception e2) {
+               ILogger.instance().logError("No ID for building");
+               building = new CityGMLBuilding("NO NAME");
+            }
          }
+
 
          //RoofType
          try {

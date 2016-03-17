@@ -40,6 +40,8 @@ public class XMLDocument {
 			var docNSResolver = xml.createNSResolver(xml.documentElement);
 			var defaultNS = xml.documentElement.getAttribute('xmlns');
 
+			console.log('DNS: ' + defaultNS);
+
 			this.@org.glob3.mobile.client.XMLDocument::_resolver =
 
 			function nsResolver(prefix) {
@@ -60,13 +62,15 @@ public class XMLDocument {
    }-*/;
 
 
-   public XPathResult xpath(final String xpath) {
-      return new XPathResult(xpathToJSO(xpath));
-   }
-
-
    public native String getTextContent() /*-{
 		return this.@org.glob3.mobile.client.XMLDocument::_xml.textContent;
+   }-*/;
+
+
+   public native String getAttributeAsText(String att) /*-{
+		debugger;
+		return this.@org.glob3.mobile.client.XMLDocument::_xml.documentElement
+				.getAttribute(att);
    }-*/;
 
 

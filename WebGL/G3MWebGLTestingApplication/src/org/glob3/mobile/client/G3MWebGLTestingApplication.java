@@ -51,8 +51,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -101,7 +101,7 @@ EntryPoint {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -110,8 +110,8 @@ EntryPoint {
    }
 
    private class AnimateHUDWidgetsTask
-   extends
-   GTask {
+            extends
+               GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -128,7 +128,7 @@ EntryPoint {
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                  + "R: " + _widget.getCurrentCamera().getRoll());
+                               + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -159,7 +159,7 @@ EntryPoint {
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-               );
+      );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -198,8 +198,8 @@ EntryPoint {
       builder.setPlanet(planet);
 
       class CityGMLDownloadListener
-               extends
-                  IBufferDownloadListener {
+      extends
+      IBufferDownloadListener {
 
          @Override
          public void onError(final URL url) {
@@ -230,8 +230,7 @@ EntryPoint {
          public void onCanceledDownload(final URL url,
                                         final IByteBuffer buffer,
                                         final boolean expired) {
-            final XMLDocument doc = new XMLDocument("ok");
-            doc.xpath("cancel");
+
          }
 
 
@@ -253,9 +252,9 @@ EntryPoint {
             context.getDownloader().requestBuffer(new URL("test_sample_4326_lod2.gml"), 0, TimeInterval.forever(), false,
                      listener, true);
 
-            //            final IBufferDownloadListener listener2 = new CityGMLDownloadListener();
-            //            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),
-            //                     false, listener2, true);
+            final IBufferDownloadListener listener2 = new CityGMLDownloadListener();
+            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),
+                     false, listener2, true);
          }
 
 
@@ -264,6 +263,8 @@ EntryPoint {
             return true;
          }
       });
+
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
 
 
       return builder.createWidget();
