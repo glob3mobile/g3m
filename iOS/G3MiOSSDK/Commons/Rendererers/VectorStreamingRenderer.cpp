@@ -991,7 +991,7 @@ const URL VectorStreamingRenderer::VectorSet::getNodeFeaturesURL(const std::stri
 
 const URL VectorStreamingRenderer::VectorSet::getNodeChildrenURL(const std::string& nodeID,
                                                                  const std::vector<std::string>& childrenIDs) const {
-    if (_format == VectorStreamingRenderer::Format::SERVER) {
+  if (_format == VectorStreamingRenderer::Format::SERVER) {
     std::string nodes = "";
     const size_t childrenIDsSize = childrenIDs.size();
 

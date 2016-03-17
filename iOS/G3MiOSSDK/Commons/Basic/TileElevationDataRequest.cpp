@@ -44,7 +44,9 @@ void TileElevationDataRequest::onCancel(const Sector& sector,
 void TileElevationDataRequest::cancelRequest() {
   if (_listener != NULL) {
     _listener->_request = NULL;
-    if (_requestID > -1) _provider->cancelRequest(_requestID);
+    if (_requestID > -1){
+      _provider->cancelRequest(_requestID);
+    }
   }
 }
 
