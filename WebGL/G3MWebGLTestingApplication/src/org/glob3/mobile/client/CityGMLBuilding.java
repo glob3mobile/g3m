@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.Planet;
@@ -222,12 +223,22 @@ public class CityGMLBuilding {
       }
 
 
-      public void addTrianglesCuttingEars(final FloatBufferBuilderFromGeodetic fbb,
-                                          final FloatBufferBuilderFromCartesian3D normals,
-                                          final double baseHeight,
-                                          final Planet planet) {
+      public BuildingSurface reversePolygon() {
+         final ArrayList<Double> rcs = new ArrayList<Double>();
+         for (int i = _coordinates.size() - 1; i > -1; i++) {
+            rcs.add(_coordinates.get(i));
+         }
 
-         final Vector3D normal = getNormal(planet);
+         return new BuildingSurface(rcs);
+      }
+
+
+      public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromGeodetic fbb,
+                                             final FloatBufferBuilderFromCartesian3D normals,
+                                             final double baseHeight,
+                                             final Planet planet,
+                                             final Vector3D normal) {
+
          final Vector3D antinormal = normal.times(-1);
 
          final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
@@ -242,7 +253,8 @@ public class CityGMLBuilding {
 
             int i1 = 0, i2 = 0, i3 = 0;
             double angleInDegrees = 0;
-
+            boolean acceptableAngle = false;
+            ILogger.instance().logInfo("Looking for ears");
             for (int i = 0; i < (c2.size() - 1); i++) {
                i1 = i;
                i2 = (i + 1) % (c2.size());
@@ -252,22 +264,24 @@ public class CityGMLBuilding {
                final Vector3D v2 = cartesianC.get(i2);
                final Vector3D v3 = cartesianC.get(i3);
 
+
                final Vector3D v21 = v1.sub(v2);
                final Vector3D v23 = v3.sub(v2);
-               angleInDegrees = v21.signedAngleBetween(v23, antinormal)._degrees;
 
-               if ((angleInDegrees < 170) && (angleInDegrees > 0)) { //Valid triangle (ear)
+               angleInDegrees = v21.signedAngleBetween(v23, antinormal)._degrees;
+               acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
+                                 || Double.isNaN(angleInDegrees);
+
+               if (acceptableAngle) { //Valid triangle (ear)
                   break;
                }
-               else {
-                  ILogger.instance().logInfo("!!!! Angle %d", i1, i2, i3, angleInDegrees);
-               }
+               ILogger.instance().logInfo("!!!! Angle %f", angleInDegrees);
 
             }
 
-            ILogger.instance().logInfo("%d, %d, %d -> Angle %d", i1, i2, i3, angleInDegrees);
+            //            ILogger.instance().logInfo("%d, %d, %d -> Angle %d", i1, i2, i3, angleInDegrees);
 
-            if ((angleInDegrees < 179) && (angleInDegrees > -179)) { //Valid triangle (ear)
+            if (acceptableAngle) { //Valid triangle (ear)
                fbb.add(c2.get(i1));
                fbb.add(c2.get(i2));
                fbb.add(c2.get(i3));
@@ -280,54 +294,12 @@ public class CityGMLBuilding {
             }
             else {
                ILogger.instance().logInfo("NO EAR!!!!");
-               break;
+               return false;
             }
 
 
          }
-
-
-         ILogger.instance().logInfo("POLYGON OF %d", c2.size());
-         //
-         //         for (int i = 0; i < (c2.size() - 1); i += 2) {
-         //            final int i1 = i;
-         //            final int i2 = (i + 1) % (c2.size());
-         //            final int i3 = (i + 2) % (c2.size());
-         //
-         //            final Vector3D v1 = planet.toCartesian(c2.get(i1));
-         //            final Vector3D v2 = planet.toCartesian(c2.get(i2));
-         //            final Vector3D v3 = planet.toCartesian(c2.get(i3));
-         //
-         //            final Vector3D v21 = v1.sub(v2);
-         //            final Vector3D v23 = v3.sub(v2);
-         //            //final Angle a = Vector3D.angleBetween(v21, v23);
-         //
-         //            final Vector3D cross = v21.cross(v23);
-         //            final double dot = v21.dot(v23);
-         //
-         //
-         //            final double angleInRad = IMathUtils.instance().atan2(cross.length(), dot);
-         //
-         //            if ((angleInRad < 1.4) || (angleInRad > 1.6)) {
-         //               ILogger.instance().logInfo("%d, %d, %d -> Angle %d", i1, i2, i3, angleInRad);
-         //            }
-         //
-         //            if (angleInRad > 0) {
-         //               fbb.add(c2.get(i1));
-         //               fbb.add(c2.get(i2));
-         //               fbb.add(c2.get(i3));
-         //
-         //
-         //               normals.add(normal);
-         //               normals.add(normal);
-         //               normals.add(normal);
-         //            }
-         //            else {
-         //            }
-         //
-         //
-         //         }
-
+         return true;
       }
 
 
@@ -429,7 +401,14 @@ public class CityGMLBuilding {
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
 
       for (int w = 0; w < _walls.size(); w++) {
-         _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
+         final Vector3D normal = _walls.get(w).getNormal(planet);
+         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet, normal);
+         //         if (!x) {
+         //            x = _walls.get(w).reversePolygon().addTrianglesCuttingEars(fbb, normals, baseHeight, planet, normal);
+         //            if (!x) {
+         //               ILogger.instance().logError("NO EARS FOUND");
+         //            }
+         //         }
       }
 
       final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
