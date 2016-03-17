@@ -190,67 +190,72 @@ EntryPoint {
                10, // delayMillis
                proxy));
 
+      final MeshRenderer meshRenderer = new MeshRenderer();
+      builder.addRenderer(meshRenderer);
+      final MarksRenderer marksRenderer = new MarksRenderer(false);
+      builder.addRenderer(marksRenderer);
       final Planet planet = EllipsoidalPlanet.createEarth();
       builder.setPlanet(planet);
 
-      final MeshRenderer mr = new MeshRenderer();
-      builder.addRenderer(mr);
+      class CityGMLDownloadListener
+               extends
+                  IBufferDownloadListener {
 
-      final MarksRenderer marksr = new MarksRenderer(false);
-      builder.addRenderer(marksr);
+         @Override
+         public void onError(final URL url) {
+            // TODO Auto-generated method stub
+            //                  final XMLDocument doc = new XMLDocument("ok");
+            //                  doc.xpath("error");
+         }
+
+
+         @Override
+         public void onDownload(final URL url,
+                                final IByteBuffer buffer,
+                                final boolean expired) {
+            final String s = buffer.getAsString();
+            final CityGMLDocument doc = new CityGMLDocument(s);
+
+            final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
+            int i = 0;
+            for (final CityGMLBuilding b : bs) {
+               //ILogger.instance().logInfo(b.description());
+               meshRenderer.addMesh(b.createMesh(planet, true, Color.red().wheelStep(bs.size(), i++)));
+               marksRenderer.addMark(b.createMark(true));
+            }
+         }
+
+
+         @Override
+         public void onCanceledDownload(final URL url,
+                                        final IByteBuffer buffer,
+                                        final boolean expired) {
+            final XMLDocument doc = new XMLDocument("ok");
+            doc.xpath("cancel");
+         }
+
+
+         @Override
+         public void onCancel(final URL url) {
+            // TODO Auto-generated method stub
+            //                  final XMLDocument doc = new XMLDocument("ok");
+            //                  doc.xpath("cancel");
+         }
+
+      }
+
 
       builder.setInitializationTask(new GInitializationTask() {
          @Override
          public void run(final G3MContext context) {
 
-            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+            final IBufferDownloadListener listener = new CityGMLDownloadListener();
+            context.getDownloader().requestBuffer(new URL("test_sample_4326_lod2.gml"), 0, TimeInterval.forever(), false,
+                     listener, true);
 
-               @Override
-               public void onError(final URL url) {
-                  // TODO Auto-generated method stub
-                  //                  final XMLDocument doc = new XMLDocument("ok");
-                  //                  doc.xpath("error");
-               }
-
-
-               @Override
-               public void onDownload(final URL url,
-                                      final IByteBuffer buffer,
-                                      final boolean expired) {
-                  final String s = buffer.getAsString();
-
-                  final CityGMLDocument doc = new CityGMLDocument(s);
-
-
-                  final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
-                  int i = 0;
-                  for (final CityGMLBuilding b : bs) {
-                     ILogger.instance().logInfo(b.description());
-                     mr.addMesh(b.createMesh(planet, true, Color.red().wheelStep(bs.size(), i++)));
-                     marksr.addMark(b.createMark(true));
-                  }
-               }
-
-
-               @Override
-               public void onCanceledDownload(final URL url,
-                                              final IByteBuffer buffer,
-                                              final boolean expired) {
-                  final XMLDocument doc = new XMLDocument("ok");
-                  doc.xpath("cancel");
-               }
-
-
-               @Override
-               public void onCancel(final URL url) {
-                  // TODO Auto-generated method stub
-                  //                  final XMLDocument doc = new XMLDocument("ok");
-                  //                  doc.xpath("cancel");
-               }
-            };
-
-            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),
-                     false, listener, true);
+            //            final IBufferDownloadListener listener2 = new CityGMLDownloadListener();
+            //            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),
+            //                     false, listener2, true);
          }
 
 

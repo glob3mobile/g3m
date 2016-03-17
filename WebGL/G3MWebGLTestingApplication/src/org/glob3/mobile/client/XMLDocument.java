@@ -11,21 +11,52 @@ import com.google.gwt.core.client.JsArrayNumber;
 
 public class XMLDocument {
    private final JavaScriptObject _xml;
+   private final JavaScriptObject _resolver;
 
 
    public XMLDocument(final String doc) {
       _xml = jsParse(doc);
+      _resolver = null;
    }
 
 
-   public XMLDocument(final JavaScriptObject xml) {
+   public XMLDocument(final JavaScriptObject xml,
+                      final JavaScriptObject resolver) {
       _xml = xml;
+      _resolver = resolver;
    }
 
 
    private native JavaScriptObject jsParse(final String doc) /*-{
 		var xml = (new window.DOMParser()).parseFromString(doc, "text/xml");
 		return xml;
+   }-*/;
+
+
+   private native JavaScriptObject jsGetResolver() /*-{
+		if (this.@org.glob3.mobile.client.XMLDocument::_resolver == null) {
+
+			var xml = this.@org.glob3.mobile.client.XMLDocument::_xml;
+			var docNSResolver = xml.createNSResolver(xml.documentElement);
+			var defaultNS = xml.documentElement.getAttribute('xmlns');
+
+			this.@org.glob3.mobile.client.XMLDocument::_resolver =
+
+			function nsResolver(prefix) {
+				var uri = docNSResolver.lookupNamespaceURI(prefix);
+				if (uri != null) {
+					return uri;
+				}
+
+				console.log('Unrecognized NS ' + prefix + '-> '
+						+ docNSResolver.lookupNamespaceURI(prefix));
+
+				return defaultNS;
+			};
+
+		}
+
+		return this.@org.glob3.mobile.client.XMLDocument::_resolver;
    }-*/;
 
 
@@ -134,7 +165,7 @@ public class XMLDocument {
 
       final ArrayList<XMLDocument> out = new ArrayList<XMLDocument>();
       for (int i = 0; i < a.length(); i++) {
-         out.add(new XMLDocument(a.get(i)));
+         out.add(new XMLDocument(a.get(i), jsGetResolver()));
       }
       return out;
    }
@@ -143,22 +174,7 @@ public class XMLDocument {
    public native JavaScriptObject xpathToJSO(final String xpath) /*-{
 
 		var xml = this.@org.glob3.mobile.client.XMLDocument::_xml;
-
-		//Resolver for CityGML
-		function nsResolver(prefix) {
-			switch (prefix) {
-			case 'xhtml':
-				return 'http://www.w3.org/1999/xhtml';
-			case 'mathml':
-				return 'http://www.w3.org/1998/Math/MathML';
-			case 'gml':
-				return 'http://www.opengis.net/gml';
-			case 'bldg':
-				return 'http://www.opengis.net/citygml/building/1.0';
-			default:
-				return 'http://www.opengis.net/citygml/1.0';
-			}
-		}
+		var nsResolver = this.@org.glob3.mobile.client.XMLDocument::jsGetResolver()();
 
 		//REMEMBER TO ERASE XMLNS= ATTRIBUTE!!!!!!!!!!!!
 		try {

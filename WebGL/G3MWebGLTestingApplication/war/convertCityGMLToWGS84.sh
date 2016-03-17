@@ -1,75 +1,71 @@
 clear
-export PATH=/Library/Frameworks/GDAL.framework/Programs:$PATH
-
-fileName="lindenallee_kranichweg_v1.gml"
-
-fileText=$(cat $fileName)
-
-#echo "$fileText"
-
-#all lines with postlist
-lcoor="$(grep "gml:posList" $fileName) \n"
-
-
 
 convertingToWGS84(){
 
+	export PATH=/Library/Frameworks/GDAL.framework/Programs:$PATH
+	fileName=$1
+	srsName=$2
+	fileText=$(cat $fileName)
 
-i=$(printf "$lcoor" |
- wc -l
- )
+	#echo "$fileText"
+	#all lines with postlist
+	lcoor="$(grep "gml:posList" $fileName) \n"
 
-printf "$lcoor" |
-while read l; do
+	i=$(printf "$lcoor" |
+	 wc -l
+	 )
 
-	i=$(($i-1))
+	printf "$lcoor" |
+	while read l; do
 
-	#just the numbers
-	initialLine=$(
-		printf "$l" |
-		sed 's/<gml:posList>//g' |
-		sed 's/<\/gml:posList>//g'
-	)
+		i=$(($i-1))
 
-	#1 line per number
-  	coor1Col=$(
-		printf "$initialLine" |
-		sed 's/ /\'$'\n/g'
-	)
+		#just the numbers
+		initialLine=$(
+			printf "$l" |
+			sed 's/<gml:posList>//g' |
+			sed 's/<\/gml:posList>//g'
+		)
 
-	#3 numbers per line
-	coor3Col=$(
-		printf "$coor1Col" |
-		while read a; read b; read c; do
-		  echo $a $b $c
-		done 
-	)
+		#1 line per number
+	  	coor1Col=$(
+			printf "$initialLine" |
+			sed 's/ /\'$'\n/g'
+		)
 
-	#WGS84 Transformation
-	coorWGS84=$(
-		printf "$coor3Col" | 
-		gdaltransform -s_srs EPSG:31463 -t_srs EPSG:4326
-	)
+		#3 numbers per line
+		coor3Col=$(
+			printf "$coor1Col" |
+			while read a; read b; read c; do
+			  echo $a $b $c
+			done 
+		)
 
-	#printf "\n...... $coorWGS84\n"
+		#WGS84 Transformation
+		coorWGS84=$(
+			printf "$coor3Col" | 
+			gdaltransform -s_srs $srsName -t_srs EPSG:4326
+		)
 
-	#all in the same line again
-	finalLine=$(
-		echo "$coorWGS84" |
-		tr "\n" " "
-	)
+		#printf "\n...... $coorWGS84\n"
 
-	#printf "$initialLine -> $finalLine \n\n\n\n"
+		#all in the same line again
+		finalLine=$(
+			echo "$coorWGS84" |
+			tr "\n" " "
+		)
 
-	fileText=$(printf "$fileText" |
-	 sed "s/$initialLine/$finalLine/g"
-	)
-	
-	#Return
-	if [ "$i" -eq 0 ]; then
-		printf "$fileText"
-	fi
-done  
+		printf "$initialLine -> $finalLine \n\n\n\n"
+
+		fileText=$(printf "$fileText" |
+		 sed "s/$initialLine/$finalLine/g"
+		)
+		
+		#Return
+		if [ "$i" -eq 0 ]; then
+			printf "$fileText"
+		fi
+	done  
 
 }
 

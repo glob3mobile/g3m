@@ -76,7 +76,7 @@ public class XPathResult {
       final ArrayList<XMLDocument> result = new ArrayList<XMLDocument>();
 
       for (int i = 0; i < array.length(); i++) {
-         final XMLDocument xml = new XMLDocument(array.get(i));
+         final XMLDocument xml = new XMLDocument(array.get(i), null);
          result.add(xml);
       }
       return result;

@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-         extends
-            XMLDocument {
+extends
+XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -19,7 +19,7 @@ public class CityGMLDocument
 
 
    public CityGMLDocument(final JavaScriptObject jso) {
-      super(jso);
+      super(jso, null);
    }
 
 
@@ -55,14 +55,25 @@ public class CityGMLDocument
       final ArrayList<XMLDocument> buildingsXML = evaluateXPathAsXMLDocuments("/CityModel/cityObjectMember/bldg:Building");
       ILogger.instance().logInfo("N Buildings %d", buildingsXML.size());
       for (final XMLDocument b : buildingsXML) {
-
+         CityGMLBuilding building = null;
          //Name
-         final String name = b.evaluateXPathAndGetTextContentAsText("/bldg:Building/gml:name/text()");
-         final CityGMLBuilding building = new CityGMLBuilding(name);
+         try {
+            final String name = b.evaluateXPathAndGetTextContentAsText("/bldg:Building/gml:name/text()");
+            building = new CityGMLBuilding(name);
+         }
+         catch (final Exception e) {
+            ILogger.instance().logError("No name for building");
+            building = new CityGMLBuilding("NO NAME");
+         }
 
          //RoofType
-         final int roofType = b.evaluateXPathAndGetTextContentAsInteger("/bldg:Building/bldg:roofType/text()");
-         building.setRoofTypeCode(roofType);
+         try {
+            final int roofType = b.evaluateXPathAndGetTextContentAsInteger("/bldg:Building/bldg:roofType/text()");
+            building.setRoofTypeCode(roofType);
+         }
+         catch (final Exception e) {
+            ILogger.instance().logError("No roof type for building");
+         }
 
          //Walls
          final ArrayList<XMLDocument> wallsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList");
