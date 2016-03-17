@@ -23,6 +23,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     private final Sector _sector ;
     private double _deltaHeight;
     private final String _layer;
+    private MutableVector2I _minRes = new MutableVector2I();
 
     private static class PyramidComposition
     {
@@ -116,6 +117,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
        _noDataValue = noDataValue;
       _pyrComposition = new java.util.ArrayList<PyramidComposition>();
       _deltaHeight = deltaHeight;
+      _minRes = new MutableVector2I(256, 256);
     }
 
     public void dispose()
@@ -161,7 +163,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
         String path = requestStringPath(_layer, level, row, column);
     
-        return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight), true);
+        return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes), true);
     
     }
 
@@ -199,9 +201,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
     public final Vector2I getMinResolution()
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Para Diego: Es forzoso implementar esta función, viene dada por ElevationDataProvider.Solo la necesita realmente el popBestProvider de Composite.
-        return Vector2I.zero();
+        return _minRes.asVector2I();
     }
 
 }

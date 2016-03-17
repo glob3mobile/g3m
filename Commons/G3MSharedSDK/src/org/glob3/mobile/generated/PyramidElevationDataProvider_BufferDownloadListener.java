@@ -5,17 +5,19 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     private final Sector _sector;
     private int _width;
     private int _height;
+    private MutableVector2I _minRes;
     private IElevationDataListener _listener;
     private boolean _autodeleteListener;
     private double _deltaHeight;
     private int _noDataValue;
 
-    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight)
+    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight, MutableVector2I minRes)
     {
        _sector = sector;
        _width = extent._x;
        _height = extent._y;
        _listener = listener;
+       _minRes = new MutableVector2I(minRes);
        _autodeleteListener = autodeleteListener;
        _deltaHeight = deltaHeight;
        _noDataValue = noDataValue;
@@ -42,6 +44,10 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
         else
         {
             _listener.onData(_sector, resolution, elevationData);
+            if ((_minRes.x() * _minRes.y()) > (resolution._x * resolution._y))
+            {
+                _minRes = resolution.asMutableVector2I();
+            }
         }
 
 

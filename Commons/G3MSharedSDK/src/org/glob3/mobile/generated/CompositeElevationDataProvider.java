@@ -112,7 +112,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     private final Vector2I _resolution;
     private final Sector _sector ;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Para Diego: creo que es necesario guardar un puntero a Tile aquí dado que launchNewStep tiene que utilizarlo al hacer requests.
+//#warning To Diego: I think it is necessary to save here a Tile pointer since launchNewStep needs it to make requests.
     private final Tile _tile;
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
