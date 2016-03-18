@@ -79,6 +79,14 @@ public class CityGMLDocument
             building.addSurfaceWithPosLis(coor);
          }
 
+         //Ground
+         final ArrayList<XMLDocument> groundXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:GroundSurface/bldg:lod2MultiSurface//gml:posList");
+         ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
+         for (final XMLDocument s : groundXML) {
+            final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
+            building.addSurfaceWithPosLis(coor);
+         }
+
          buildings.add(building);
       }
 
