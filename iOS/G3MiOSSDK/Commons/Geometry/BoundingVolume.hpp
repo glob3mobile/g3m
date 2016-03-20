@@ -21,6 +21,8 @@ class OrientedBox;
 class GLState;
 class Color;
 
+class Mesh;
+
 class BoundingVolume {
 public:
   virtual ~BoundingVolume() {
@@ -56,6 +58,8 @@ public:
   virtual BoundingVolume* mergedWithOrientedBox(const OrientedBox* that) const = 0;
 
   virtual Sphere* createSphere() const = 0;
+  
+  virtual Mesh* getMesh() const = 0;
   
 };
 

@@ -112,6 +112,10 @@ public:
   Mesh* createWireframeMesh(const Color& color,
                             short resolution) const;
 
+  int TODO_Agustin;
+  Mesh* getMesh() const {
+    return NULL;
+  }
 
 };
 

@@ -32,6 +32,9 @@ public:
   
   double squaredDistanceToPoint(const Vector3D& point) const;
   
+  Vector3D projectPoint(const Vector3D& point) const;
+  double signedDistanceToProjectedPoint(const Vector3D& point) const;
+  Vector3D projectPointToNormalPlane(const Vector3D& point) const;
 };
 
 

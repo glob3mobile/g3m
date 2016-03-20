@@ -11,6 +11,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
+#include "MutableVector3D.hpp"
 
 class TileTexturizer;
 class TileElevationDataRequest;
@@ -21,6 +22,8 @@ class ElevationDataProvider;
 class PlanetRenderer;
 class TileData;
 class TilesStatistics;
+
+class OrientedBox;
 
 
 class Tile {
@@ -216,6 +219,19 @@ public:
   bool hasSubtiles() const {
     return (_subtiles != NULL);
   }
+  
+  
+#warning temp_Agustin;
+  mutable double _minOrientedElevation;
+  mutable double _maxOrientedElevation;
+  mutable double _maxEastValue;
+  mutable double _minEastValue;
+  mutable double _maxNorthValue;
+  mutable double _minNorthValue;
+  mutable MutableVector3D _northVector;
+  mutable MutableVector3D _eastVector;
+  mutable MutableVector3D _normalVector;
+  OrientedBox* _obb;
   
 };
 

@@ -123,8 +123,13 @@ public:
 
   const std::string description() const;
   
-  Mesh* createMesh(const Color& color) const;
-
+  Mesh* createMesh(const Color& color,
+                   float lineWidth=2) const;
+  Mesh* getMesh() const {
+    if (_mesh == NULL)
+      _mesh = createMesh(Color::fromRGBA(1, 1, 0, 1), 4);
+    return _mesh;
+  }
 
 };
 

@@ -65,6 +65,14 @@ void G3MDemoBuilder::build() {
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
   
+  
+  
+  
+#warning temp_Agustin;
+  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  
+  
+  
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder->addRenderer(meshRenderer);
   

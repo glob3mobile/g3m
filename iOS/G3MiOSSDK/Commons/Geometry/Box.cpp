@@ -191,7 +191,8 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
 }
 
 
-Mesh* Box::createMesh(const Color& color) const {
+Mesh* Box::createMesh(const Color& color,
+                      float lineWidth) const {
   double v[] = {
     _lower._x, _lower._y, _lower._z,
     _lower._x, _upper._y, _lower._z,
@@ -230,7 +231,7 @@ Mesh* Box::createMesh(const Color& color) const {
                                true,
                                indices.create(),
                                true,
-                               2,
+                               lineWidth,
                                1,
                                new Color(color));
   

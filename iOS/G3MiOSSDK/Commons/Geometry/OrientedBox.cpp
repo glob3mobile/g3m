@@ -24,7 +24,8 @@ OrientedBox::~OrientedBox() {
 };
 
 
-Mesh* OrientedBox::createMesh(const Color& color) const {
+Mesh* OrientedBox::createMesh(const Color& color,
+                              float lineWidth) const {
   double v[] = {
     _SWB._x, _SWB._y, _SWB._z,
     _NWB._x, _NWB._y, _NWB._z,
@@ -63,7 +64,7 @@ Mesh* OrientedBox::createMesh(const Color& color) const {
                                true,
                                indices.create(),
                                true,
-                               2,
+                               lineWidth,
                                1,
                                new Color(color));
   

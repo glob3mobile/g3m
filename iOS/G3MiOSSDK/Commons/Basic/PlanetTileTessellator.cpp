@@ -33,6 +33,8 @@
 #include "Sphere.hpp"
 #include "Vector2S.hpp"
 
+#include "StraightLine.hpp"
+
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
@@ -135,6 +137,42 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             indices,
                                             *textCoords,
                                             data);
+  
+  
+  ///////////////////////////////////
+#warning temp_Agustin
+  // compute limits for future bounding OrientedBox
+  Geodetic2D sectorCenter = tileSector.getCenter();
+  Vector3D tileCenter = planet->toCartesian(sectorCenter);
+  tile->_normalVector = planet->geodeticSurfaceNormal(sectorCenter).asMutableVector3D();
+  StraightLine normalAxe(tileCenter, tile->_normalVector.asVector3D());
+  Vector3D middleNorthPoint = planet->toCartesian(tileSector.getInnerPoint(0.5, 0));
+  tile->_northVector = normalAxe.projectPointToNormalPlane(middleNorthPoint).sub(tileCenter).normalized().asMutableVector3D();
+  StraightLine northAxe(tileCenter, tile->_northVector.asVector3D());
+  tile->_eastVector = tile->_northVector.cross(tile->_normalVector);
+  StraightLine eastAxe(tileCenter, tile->_eastVector.asVector3D());
+  
+  tile->_maxOrientedElevation = -1e10;
+  tile->_minOrientedElevation = 1e10;
+  tile->_maxEastValue = -1e10;
+  tile->_minEastValue = 1e10;
+  tile->_maxNorthValue = -1e10;
+  tile->_minNorthValue = 1e10;
+  for (int n=0; n<meshResolution._x*meshResolution._y; n++) {
+    Vector3D vertex = vertices->getVector3D(n).add(tileCenter);
+    double elevation = normalAxe.signedDistanceToProjectedPoint(vertex);
+    if (elevation < tile->_minOrientedElevation) tile->_minOrientedElevation = elevation;
+    if (elevation > tile->_maxOrientedElevation) tile->_maxOrientedElevation = elevation;
+    double northDiff = northAxe.signedDistanceToProjectedPoint(vertex);
+    if (northDiff < tile->_minNorthValue) tile->_minNorthValue = northDiff;
+    if (northDiff > tile->_maxNorthValue) tile->_maxNorthValue = northDiff;
+    double eastDiff = eastAxe.signedDistanceToProjectedPoint(vertex);
+    if (eastDiff < tile->_minEastValue) tile->_minEastValue = eastDiff;
+    if (eastDiff > tile->_maxEastValue) tile->_maxEastValue = eastDiff;
+  }
+  ///////////////////////////////////
+  ///////////////////////////////////
+
   
   if (_skirted) {
     const double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);

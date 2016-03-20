@@ -137,7 +137,8 @@ public:
 
   ~OrientedBox();
 
-  Mesh* createMesh(const Color& color) const;
+  Mesh* createMesh(const Color& color,
+                   float lineWidth=2) const;
   
   void render(const G3MRenderContext* rc,
               const GLState* parentState,
@@ -170,10 +171,16 @@ public:
 
 
   
-  // TODO for Agustin!
+  #warning TODO for Agustin!
   bool touches(const BoundingVolume* that) const {}
   bool touchesBox(const Box* that) const {}
   bool touchesSphere(const Sphere* that) const {}
+  
+  Mesh* getMesh() const {
+    if (_mesh == NULL)
+      _mesh = createMesh(Color::fromRGBA(0, 0, 0, 1), 4);
+    return _mesh;
+  }
 
 };
 
