@@ -303,8 +303,9 @@ void Tile::debugRender(const G3MRenderContext*    rc,
   
   /////////////////////////
   #warning temp_Agustin;
-   _tessellatorMesh->getBoundingVolume()->getMesh()->render(rc, glState);
-  /*
+  // use box
+  //_tessellatorMesh->getBoundingVolume()->getMesh()->render(rc, glState);
+  // use obb
    if (_obb == NULL) {
     Vector3D center = rc->getPlanet()->toCartesian(_sector.getCenter());
     Vector3D lower = center.add(_northVector.asVector3D().times(_minNorthValue).add(_eastVector.asVector3D().times(_minEastValue).add(_normalVector.asVector3D().times(_minOrientedElevation))));
@@ -313,7 +314,7 @@ void Tile::debugRender(const G3MRenderContext*    rc,
                            _eastVector.asVector3D().times(_maxEastValue-_minEastValue),
                            _normalVector.asVector3D().times(_maxOrientedElevation-_minOrientedElevation));
   }
-  _obb->getMesh()->render(rc, glState);*/
+  _obb->getMesh()->render(rc, glState);
   //////////////////////////
 }
 
