@@ -45,8 +45,6 @@ private:
   int _tilesVisibleByLevel[_maxLOD];
   int _tilesRenderedByLevel[_maxLOD];
 
-  int _buildersStartsInFrame;
-
   double _visibleLowerLatitudeDegrees;
   double _visibleLowerLongitudeDegrees;
   double _visibleUpperLatitudeDegrees;
@@ -66,7 +64,6 @@ public:
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _buildersStartsInFrame = 0;
 
     const IMathUtils* mu = IMathUtils::instance();
     _visibleLowerLatitudeDegrees  = mu->maxDouble();
@@ -81,26 +78,24 @@ public:
     }
   }
 
-  int getBuildersStartsInFrame() const {
-    return _buildersStartsInFrame;
-  }
+  void computeTileProcessed(Tile* tile,
+                            bool visible,
+                            bool rendered) {
+    const int level = tile->_level;
 
-  void computeBuilderStartInFrame() {
-    _buildersStartsInFrame++;
-  }
-
-  void computeTileProcessed(Tile* tile) {
     _tilesProcessed++;
-
-    const int level = tile->_level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
-  }
 
-  void computeVisibleTile(Tile* tile) {
-    _tilesVisible++;
+    if (visible) {
+      _tilesVisible++;
+      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    }
 
-    const int level = tile->_level;
-    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    if (rendered) {
+      _tilesRendered++;
+      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+      computeRenderedSector(tile);
+    }
   }
 
   void computeRenderedSector(Tile* tile) {
@@ -134,15 +129,6 @@ public:
     if (upperLongitudeDegrees > _visibleUpperLongitudeDegrees) {
       _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
-  }
-
-  void computeTileRenderered(Tile* tile) {
-    _tilesRendered++;
-
-    const int level = tile->_level;
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-    computeRenderedSector(tile);
   }
 
   Sector* updateVisibleSector(Sector* visibleSector) const {
