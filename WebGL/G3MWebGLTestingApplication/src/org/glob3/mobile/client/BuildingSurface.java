@@ -5,6 +5,7 @@ package org.glob3.mobile.client;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
@@ -17,6 +18,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.Vector2D;
 import org.glob3.mobile.generated.Vector3D;
 
 
@@ -43,7 +45,7 @@ class BuildingSurface {
    }
 
 
-   public Vector3D getNormal(final Planet planet) {
+   public Vector3D getCounterClockWiseNormal(final Planet planet) {
 
       final ArrayList<Geodetic3D> co = getGeodetic3DCoordinates(0);
       final Vector3D a = planet.toCartesian(co.get(0));
@@ -51,8 +53,14 @@ class BuildingSurface {
       final Vector3D c = planet.toCartesian(co.get(2));
 
       final Vector3D ab = a.sub(b);
-      final Vector3D ac = a.sub(c);
-      return ab.cross(ac);
+      final Vector3D cb = c.sub(b);
+      final Vector3D normal = ab.cross(cb);
+
+      final ArrayList<Vector2D> c2D = createCoordinates2D(createCartesianCoordinates(planet, 0), normal);
+      if (isClockwise(c2D)) {
+         return normal.times(-1);
+      }
+      return normal;
    }
 
 
@@ -134,7 +142,7 @@ class BuildingSurface {
                                       final Color color) {
       final FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      final Vector3D normal = getNormal(planet);
+      final Vector3D normal = getCounterClockWiseNormal(planet);
       fbb.add(c.get(1));
       fbb.add(c.get(0));
       fbb.add(c.get(2));
@@ -155,7 +163,7 @@ class BuildingSurface {
                                       final Color color) {
       final FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      final Vector3D normal = getNormal(planet);
+      final Vector3D normal = getCounterClockWiseNormal(planet);
       fbb.add(c.get(1));
       fbb.add(c.get(0));
       fbb.add(c.get(2));
@@ -178,7 +186,7 @@ class BuildingSurface {
                                        final Color color) {
       final FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      final Vector3D normal = getNormal(planet);
+      final Vector3D normal = getCounterClockWiseNormal(planet);
       for (int i = 0; i < c.size(); i++) {
          fbb.add(c.get(i));
          normals.add(normal);
@@ -208,7 +216,7 @@ class BuildingSurface {
                             final double baseHeight,
                             final Planet planet) {
 
-      final Vector3D normal = getNormal(planet);
+      final Vector3D normal = getCounterClockWiseNormal(planet);
 
       final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
 
@@ -235,17 +243,104 @@ class BuildingSurface {
    }
 
 
+   public ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
+                                                  final Vector3D normal) {
+      final Vector3D z = Vector3D.upZ();
+      final Vector3D rotationAxis = z.cross(normal);
+
+      Angle a = null;
+      if (rotationAxis.isZero()) {
+         a = Angle.fromDegrees(180);
+      }
+      else {
+         a = normal.signedAngleBetween(rotationAxis, z);
+      }
+
+      final ArrayList<Vector2D> c2D = new ArrayList<Vector2D>();
+      for (int i = 0; i < c3D.size(); i++) {
+         Vector3D v3D = null;
+         if (a.isNan() || a.isZero()) {
+            v3D = c3D.get(i);
+         }
+         else {
+            if ((a._degrees == 180) || (a._degrees == -180)) {
+               v3D = c3D.get(i).rotateAroundAxis(Vector3D.upX(), a);
+            }
+            else {
+               v3D = c3D.get(i).rotateAroundAxis(rotationAxis, a);
+            }
+         }
+         c2D.add(new Vector2D(v3D._x, v3D._y));
+      }
+      return c2D;
+   }
+
+
+   static private Vector2D to2D(final Vector3D c3D,
+                                final Vector3D normal) {
+
+
+      final Vector3D z = Vector3D.upZ();
+      final Vector3D rotationAxis = z.cross(normal);
+
+      final Angle a = normal.signedAngleBetween(rotationAxis, z);
+
+      final Vector3D v3D = c3D.rotateAroundAxis(rotationAxis, a);
+      return new Vector2D(v3D._x, v3D._y);
+   }
+
+
+   static private boolean isInsideTriangle(final Vector2D p,
+                                           final Vector2D cornerA,
+                                           final Vector2D cornerB,
+                                           final Vector2D cornerC) {
+
+      final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
+                           / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+      final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
+                          / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+      final double gamma = 1.0 - alpha - beta;
+
+      if ((alpha > 0) && (beta > 0) && (gamma > 0)) {
+         return true;
+      }
+      return false;
+   }
+
+
+   private static boolean isClockwise(final ArrayList<Vector2D> c2D) {
+      double sum = 0;
+      for (int j = 0; j < (c2D.size() - 1); j++) {
+         final double slopeEdge = (c2D.get(j + 1)._x - c2D.get(j)._x) * (c2D.get(j + 1)._y - c2D.get(j)._y);
+         sum += slopeEdge;
+      }
+      return sum > 0;
+   }
+
+
    private ArrayList<Vector3D> extractEarAndAddTriangle(final ArrayList<Vector3D> cartesianC,
                                                         final FloatBufferBuilderFromCartesian3D fbb,
                                                         final FloatBufferBuilderFromCartesian3D normals,
                                                         final Vector3D normal,
-                                                        final Vector3D antinormal) {
+            final Vector3D antinormal,
+            final boolean isClockwise) {
+
+      //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 
       int i1 = 0, i2 = 0, i3 = 0;
       double angleInDegrees = 0;
       boolean acceptableAngle = false;
       ILogger.instance().logInfo("Looking for ears");
-      for (int i = 0; i < (cartesianC.size() - 1); i++) {
+
+      final ArrayList<Vector2D> c2D = createCoordinates2D(cartesianC, normal);
+
+      final Vector3D axisForAngles = antinormal;
+      //               if (isClockwise) {
+      //                  axisForAngles = axisForAngles.times(-1);
+      //               }
+
+      double angleSum = 0;
+      for (int i = 0; i < cartesianC.size(); i++) {
          i1 = i;
          i2 = (i + 1) % (cartesianC.size());
          i3 = (i + 2) % (cartesianC.size());
@@ -257,42 +352,147 @@ class BuildingSurface {
          final Vector3D v21 = v1.sub(v2);
          final Vector3D v23 = v3.sub(v2);
 
-         angleInDegrees = v21.signedAngleBetween(v23, antinormal)._degrees;
-         acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
-                  || Double.isNaN(angleInDegrees);
+         final double angle = v21.signedAngleBetween(v23, axisForAngles)._degrees;
+         if (!Double.isNaN(angle)) {
+            angleSum += angle;
+         }
 
-         if (acceptableAngle) { //Valid triangle (ear)
-            break;
+      }
+
+
+      final boolean[] removed = new boolean[cartesianC.size()];
+      for (int i = 0; i < (cartesianC.size() - 1); i++) {
+         removed[i] = false;
+      }
+
+      while (true) {
+
+
+         for (int i = 0; i < (cartesianC.size() - 1); i++) {
+
+            int q = i;
+            while (removed[q]) {
+               q = (q + 1) % (cartesianC.size());
+            }
+            i1 = q;
+            q = (q + 1) % (cartesianC.size());
+
+            while (removed[q]) {
+               q = (q + 1) % (cartesianC.size());
+            }
+            i2 = q;
+            q = (q + 1) % (cartesianC.size());
+
+            while (removed[q]) {
+               q = (q + 1) % (cartesianC.size());
+            }
+            i3 = q;
+            q = (q + 1) % (cartesianC.size());
+
+            //         i1 = i;
+            //         i2 = (i + 1) % (cartesianC.size());
+            //         i3 = (i + 2) % (cartesianC.size());
+
+            final Vector3D v1 = cartesianC.get(i1);
+            final Vector3D v2 = cartesianC.get(i2);
+            final Vector3D v3 = cartesianC.get(i3);
+
+            final Vector3D v21 = v1.sub(v2);
+            final Vector3D v23 = v3.sub(v2);
+
+            angleInDegrees = v21.signedAngleBetween(v23, axisForAngles)._degrees;
+
+            if (angleSum < 0) {
+               angleInDegrees *= -1;
+            }
+
+            if (angleInDegrees < 0) {
+               angleInDegrees += 360;
+            }
+
+            acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
+                     || Double.isNaN(angleInDegrees);
+
+            if (acceptableAngle) {
+               //Internal angle is concave
+               //Checking inclusion of other vertices
+
+               final Vector2D cornerA = c2D.get(i1);
+               final Vector2D cornerB = c2D.get(i2);
+               final Vector2D cornerC = c2D.get(i3);
+
+               for (int j = 0; j < cartesianC.size(); j++) {
+                  if ((j != i1) && (j != i2) && (j != i3)) {
+                     final Vector2D p = c2D.get(j);
+                     if (isInsideTriangle(p, cornerA, cornerB, cornerC)) {
+                        acceptableAngle = false;
+                        break;
+                     }
+                  }
+               }
+
+               if (acceptableAngle) {
+                  break;
+               }
+
+            }
          }
          //ILogger.instance().logInfo("!!!! Angle %f", angleInDegrees);
 
-      }
 
+         if (acceptableAngle) { //Valid triangle (ear)
+            fbb.add(cartesianC.get(i1));
+            fbb.add(cartesianC.get(i2));
+            fbb.add(cartesianC.get(i3));
+            normals.add(normal);
+            normals.add(normal);
+            normals.add(normal);
 
-      if (acceptableAngle) { //Valid triangle (ear)
-         fbb.add(cartesianC.get(i1));
-         fbb.add(cartesianC.get(i2));
-         fbb.add(cartesianC.get(i3));
-         normals.add(normal);
-         normals.add(normal);
-         normals.add(normal);
-      }
-      else {
-         ILogger.instance().logInfo("NO EAR!!!!");
-      }
-
-
-      //Removing ear
-      final ArrayList<Vector3D> newCartesianC = new ArrayList<Vector3D>();
-      for (int i = 0; i < cartesianC.size(); i++) {
-         if (i != i2) {
-            newCartesianC.add(cartesianC.get(i));
+            ILogger.instance().logInfo("T: %d, %d, %d -> Angle %f", i1, i2, i3, angleInDegrees);
          }
+         else {
+            ILogger.instance().logInfo("NO EAR!!!!");
+         }
+
+
+         //Removing ear
+         removed[i2] = true;
+
+         int notRemoved = 0;
+         for (int i = 0; i < (cartesianC.size() - 1); i++) {
+            if (!removed[i]) {
+               notRemoved++;
+            }
+         }
+
+         if (notRemoved < 3) {
+            break;
+         }
+
+         //      final ArrayList<Vector3D> newCartesianC = new ArrayList<Vector3D>();
+         //      for (int i = 0; i < cartesianC.size(); i++) {
+         //         if (i != i2) {
+         //            newCartesianC.add(cartesianC.get(i));
+         //         }
+         //      }
+
       }
 
 
-      return newCartesianC;
+      return null;
 
+   }
+
+
+   public ArrayList<Vector3D> createCartesianCoordinates(final Planet planet,
+                                                         final double baseHeight) {
+      final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
+      final ArrayList<Vector3D> cartesianC = new ArrayList<Vector3D>();
+
+      for (int i = 0; i < c.size(); i++) {
+         cartesianC.add(planet.toCartesian(c.get(i)));
+      }
+      return cartesianC;
    }
 
 
@@ -304,19 +504,16 @@ class BuildingSurface {
 
       final Vector3D antinormal = normal.times(-1);
 
-      final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
-
-      ArrayList<Vector3D> cartesianC = new ArrayList<Vector3D>();
-      for (int i = 0; i < c.size(); i++) {
-         cartesianC.add(planet.toCartesian(c.get(i)));
-      }
+      ArrayList<Vector3D> cartesianC = createCartesianCoordinates(planet, baseHeight);
+      final ArrayList<Vector2D> c2D = createCoordinates2D(cartesianC, normal);
+      final boolean isClockwise = isClockwise(c2D);
 
       int nTriangles = 0;
 
-      while (cartesianC.size() > 3) {
-         cartesianC = extractEarAndAddTriangle(cartesianC, fbb, normals, normal, antinormal);
-         nTriangles++;
-      }
+      //      while (cartesianC.size() > 3) {
+      cartesianC = extractEarAndAddTriangle(cartesianC, fbb, normals, normal, antinormal, isClockwise);
+      nTriangles++;
+      //      }
       return true;
    }
 
