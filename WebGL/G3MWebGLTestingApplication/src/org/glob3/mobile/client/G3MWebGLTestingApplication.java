@@ -51,8 +51,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+implements
+EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -101,7 +101,7 @@ public class G3MWebGLTestingApplication
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -110,8 +110,8 @@ public class G3MWebGLTestingApplication
    }
 
    private class AnimateHUDWidgetsTask
-            extends
-               GTask {
+   extends
+   GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -128,7 +128,7 @@ public class G3MWebGLTestingApplication
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                               + "R: " + _widget.getCurrentCamera().getRoll());
+                  + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -159,7 +159,7 @@ public class G3MWebGLTestingApplication
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-      );
+               );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -198,8 +198,8 @@ public class G3MWebGLTestingApplication
       builder.setPlanet(planet);
 
       class CityGMLDownloadListener
-               extends
-                  IBufferDownloadListener {
+      extends
+      IBufferDownloadListener {
 
          @Override
          public void onError(final URL url) {
@@ -220,9 +220,9 @@ public class G3MWebGLTestingApplication
             int i = 0;
             for (final CityGMLBuilding b : bs) {
 
-               if ((b._name != "109739929") && (b._name != "109739935")) { //SCHLOSS
-                  continue;
-               }
+               //               if ((b._name != "109739929") && (b._name != "109739935")) { //SCHLOSS
+               //                  continue;
+               //               }
 
                //ILogger.instance().logInfo(b.description());
                //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
@@ -230,7 +230,7 @@ public class G3MWebGLTestingApplication
 
                marksRenderer.addMark(b.createMark(false));
 
-               b.addMarkersToCorners(marksRenderer, false);
+               //               b.addMarkersToCorners(marksRenderer, false);
             }
          }
 

@@ -26,6 +26,8 @@ public class Polygon3D {
       _coor3D = coor3D;
       _normal = normal;
 
+      createCoordinates2D(_coor3D, _normal);
+
       //Clockwise
       final double angleSum = getAngleSumInDegrees();
       _isClockwise = (angleSum < 0);
@@ -50,41 +52,37 @@ public class Polygon3D {
    }
 
 
-   public ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
-            final Vector3D normal) {
+   public void createCoordinates2D(final ArrayList<Vector3D> c3D,
+                                   final Vector3D normal) {
 
-      if (_coor2D == null) {
+      final Vector3D z = Vector3D.upZ();
+      final Vector3D rotationAxis = z.cross(normal);
 
-         final Vector3D z = Vector3D.upZ();
-         final Vector3D rotationAxis = z.cross(normal);
+      Angle a = null;
+      if (rotationAxis.isZero()) {
+         a = Angle.fromDegrees(180);
+      }
+      else {
+         a = normal.signedAngleBetween(rotationAxis, z);
+      }
 
-         Angle a = null;
-         if (rotationAxis.isZero()) {
-            a = Angle.fromDegrees(180);
+      _coor2D = new ArrayList<Vector2D>();
+      for (int i = 0; i < c3D.size(); i++) {
+         Vector3D v3D = null;
+         if (a.isNan() || a.isZero()) {
+            v3D = c3D.get(i);
          }
          else {
-            a = normal.signedAngleBetween(rotationAxis, z);
-         }
-
-         _coor2D = new ArrayList<Vector2D>();
-         for (int i = 0; i < c3D.size(); i++) {
-            Vector3D v3D = null;
-            if (a.isNan() || a.isZero()) {
-               v3D = c3D.get(i);
+            if ((a._degrees == 180) || (a._degrees == -180)) {
+               v3D = c3D.get(i).rotateAroundAxis(Vector3D.upX(), a);
             }
             else {
-               if ((a._degrees == 180) || (a._degrees == -180)) {
-                  v3D = c3D.get(i).rotateAroundAxis(Vector3D.upX(), a);
-               }
-               else {
-                  v3D = c3D.get(i).rotateAroundAxis(rotationAxis, a);
-               }
+               v3D = c3D.get(i).rotateAroundAxis(rotationAxis, a);
             }
-            _coor2D.add(new Vector2D(v3D._x, v3D._y));
          }
-
+         _coor2D.add(new Vector2D(v3D._x, v3D._y));
       }
-      return _coor2D;
+
    }
 
 
@@ -142,6 +140,28 @@ public class Polygon3D {
    }
 
 
+   private boolean isAnyVertexInsideTriangle(final int i1,
+                                             final int i2,
+                                             final int i3) {
+
+      final Vector2D cornerA = _coor2D.get(i1);
+      final Vector2D cornerB = _coor2D.get(i2);
+      final Vector2D cornerC = _coor2D.get(i3);
+
+      for (int j = 0; j < _coor3D.size(); j++) {
+         if ((j != i1) && (j != i2) && (j != i3)) {
+            final Vector2D p = _coor2D.get(j);
+            if (isInsideTriangle(p, cornerA, cornerB, cornerC)) {
+               return true;
+            }
+         }
+      }
+
+      return false;
+
+   }
+
+
    public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
                                           final FloatBufferBuilderFromCartesian3D normals) {
 
@@ -152,8 +172,6 @@ public class Polygon3D {
       double angleInDegrees = 0;
       boolean acceptableAngle = false;
       //   ILogger.instance().logInfo("Looking for ears");
-
-      final ArrayList<Vector2D> c2D = createCoordinates2D(_coor3D, _normal);
 
       final boolean[] removed = new boolean[_coor3D.size()];
       int cornersLeft = _coor3D.size();
@@ -194,19 +212,7 @@ public class Polygon3D {
                //Internal angle is concave
                //Checking inclusion of other vertices
 
-               final Vector2D cornerA = c2D.get(i1);
-               final Vector2D cornerB = c2D.get(i2);
-               final Vector2D cornerC = c2D.get(i3);
-
-               for (int j = 0; j < _coor3D.size(); j++) {
-                  if ((j != i1) && (j != i2) && (j != i3)) {
-                     final Vector2D p = c2D.get(j);
-                     if (isInsideTriangle(p, cornerA, cornerB, cornerC)) {
-                        acceptableAngle = false;
-                        break;
-                     }
-                  }
-               }
+               acceptableAngle = !isAnyVertexInsideTriangle(i1, i2, i3);
 
                if (acceptableAngle) {
                   break;
