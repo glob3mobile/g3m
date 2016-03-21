@@ -219,9 +219,9 @@ EntryPoint {
             final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
             int i = 0;
             for (final CityGMLBuilding b : bs) {
-               if (b._name != "91214493") { //SCHLOSS
-                  continue;
-               }
+               //               if (b._name != "91214493") { //SCHLOSS
+               //                  continue;
+               //               }
 
                //ILogger.instance().logInfo(b.description());
                //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
@@ -229,7 +229,7 @@ EntryPoint {
 
                marksRenderer.addMark(b.createMark(false));
 
-               b.addMarkersToCorners(marksRenderer, false);
+               //               b.addMarkersToCorners(marksRenderer, false);
             }
          }
 

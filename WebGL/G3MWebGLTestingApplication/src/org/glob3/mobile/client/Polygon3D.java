@@ -18,12 +18,39 @@ public class Polygon3D {
    ArrayList<Vector3D> _coor3D;
    ArrayList<Vector2D> _coor2D;
    Vector3D            _normal;
+   boolean             _isClockwise;
 
 
    public Polygon3D(final ArrayList<Vector3D> coor3D,
                     final Vector3D normal) {
       _coor3D = coor3D;
       _normal = normal;
+
+      //Clockwise
+      _isClockwise = (getAngleSumInDegrees() < 0);
+   }
+
+
+   private double getAngleSumInDegrees() {
+      double angleSum = 0;
+      for (int i = 0; i < _coor3D.size(); i++) {
+         final int i1 = i;
+         final int i2 = (i + 1) % (_coor3D.size());
+         final int i3 = (i + 2) % (_coor3D.size());
+
+         final Vector3D v1 = _coor3D.get(i1);
+         final Vector3D v2 = _coor3D.get(i2);
+         final Vector3D v3 = _coor3D.get(i3);
+
+         final Vector3D v21 = v1.sub(v2);
+         final Vector3D v23 = v3.sub(v2);
+
+         final double angle = v21.signedAngleBetween(v23, _normal)._degrees;
+         if (!Double.isNaN(angle)) {
+            angleSum += angle;
+         }
+      }
+      return angleSum;
    }
 
 
@@ -83,6 +110,32 @@ public class Polygon3D {
    }
 
 
+   private double angleInDegreesOfCorner(final int i1,
+                                         final int i2,
+                                         final int i3) {
+
+      final Vector3D v1 = _coor3D.get(i1);
+      final Vector3D v2 = _coor3D.get(i2);
+      final Vector3D v3 = _coor3D.get(i3);
+
+      final Vector3D v21 = v1.sub(v2);
+      final Vector3D v23 = v3.sub(v2);
+
+      double angleInDegrees = v21.signedAngleBetween(v23, _normal)._degrees;
+
+      if (_isClockwise) {
+         angleInDegrees *= -1;
+      }
+
+      if (angleInDegrees < 0) {
+         angleInDegrees += 360;
+      }
+
+      return angleInDegrees;
+
+   }
+
+
    public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
                                           final FloatBufferBuilderFromCartesian3D normals) {
 
@@ -96,35 +149,13 @@ public class Polygon3D {
 
       final ArrayList<Vector2D> c2D = createCoordinates2D(_coor3D, _normal);
 
-      final Vector3D axisForAngles = _normal;
-
-      double angleSum = 0;
-      for (int i = 0; i < _coor3D.size(); i++) {
-         i1 = i;
-         i2 = (i + 1) % (_coor3D.size());
-         i3 = (i + 2) % (_coor3D.size());
-
-         final Vector3D v1 = _coor3D.get(i1);
-         final Vector3D v2 = _coor3D.get(i2);
-         final Vector3D v3 = _coor3D.get(i3);
-
-         final Vector3D v21 = v1.sub(v2);
-         final Vector3D v23 = v3.sub(v2);
-
-         final double angle = v21.signedAngleBetween(v23, axisForAngles)._degrees;
-         if (!Double.isNaN(angle)) {
-            angleSum += angle;
-         }
-
-      }
-
-
       final boolean[] removed = new boolean[_coor3D.size()];
+      int cornersLeft = _coor3D.size();
       for (int i = 0; i < (_coor3D.size() - 1); i++) {
          removed[i] = false;
       }
 
-      while (true) {
+      while (cornersLeft >= 4) {
 
 
          for (int i = 0; i < (_coor3D.size() - 1); i++) {
@@ -148,22 +179,7 @@ public class Polygon3D {
             i3 = q;
             q = (q + 1) % (_coor3D.size());
 
-            final Vector3D v1 = _coor3D.get(i1);
-            final Vector3D v2 = _coor3D.get(i2);
-            final Vector3D v3 = _coor3D.get(i3);
-
-            final Vector3D v21 = v1.sub(v2);
-            final Vector3D v23 = v3.sub(v2);
-
-            angleInDegrees = v21.signedAngleBetween(v23, axisForAngles)._degrees;
-
-            if (angleSum < 0) {
-               angleInDegrees *= -1;
-            }
-
-            if (angleInDegrees < 0) {
-               angleInDegrees += 360;
-            }
+            angleInDegrees = angleInDegreesOfCorner(i1, i2, i3);
 
             acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
                      || Double.isNaN(angleInDegrees);
@@ -203,33 +219,19 @@ public class Polygon3D {
             normals.add(_normal);
             normals.add(_normal);
 
+            removed[i2] = true;
+            cornersLeft--;
+
             //            ILogger.instance().logInfo("T: %d, %d, %d -> Angle %f", i1, i2, i3, angleInDegrees);
          }
          else {
-            ILogger.instance().logInfo("NO EAR!!!!");
+            ILogger.instance().logError("NO EAR!!!!");
+            return false;
          }
 
 
          //Removing ear
-         removed[i2] = true;
 
-         int notRemoved = 0;
-         for (int i = 0; i < (_coor3D.size() - 1); i++) {
-            if (!removed[i]) {
-               notRemoved++;
-            }
-         }
-
-         if (notRemoved < 3) {
-            break;
-         }
-
-         //      final ArrayList<Vector3D> newCartesianC = new ArrayList<Vector3D>();
-         //      for (int i = 0; i < cartesianC.size(); i++) {
-         //         if (i != i2) {
-         //            newCartesianC.add(cartesianC.get(i));
-         //         }
-         //      }
       }
       return true;
    }
