@@ -208,16 +208,13 @@ public class Polygon3D {
             acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
                      || Double.isNaN(angleInDegrees);
 
-            if (acceptableAngle) {
-               //Internal angle is concave
+            if (acceptableAngle) { //Internal angle is concave
                //Checking inclusion of other vertices
-
                acceptableAngle = !isAnyVertexInsideTriangle(i1, i2, i3);
 
                if (acceptableAngle) {
                   break;
                }
-
             }
          }
          //ILogger.instance().logInfo("!!!! Angle %f", angleInDegrees);
@@ -231,6 +228,7 @@ public class Polygon3D {
             normals.add(_normal);
             normals.add(_normal);
 
+            //Removing ear
             removed[i2] = true;
             cornersLeft--;
 
@@ -240,9 +238,6 @@ public class Polygon3D {
             ILogger.instance().logError("NO EAR!!!!");
             return false;
          }
-
-
-         //Removing ear
 
       }
       return true;
