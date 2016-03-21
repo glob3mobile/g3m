@@ -220,9 +220,12 @@ public class G3MWebGLTestingApplication
             int i = 0;
             for (final CityGMLBuilding b : bs) {
 
-               if ((b._name != "109739929") && (b._name != "109739935")) { //SCHLOSS
+               if (
+               //(b._name != "109739929") && (b._name != "109739935") &&
+               (b._name != "28245343")) { //SCHLOSS
                   continue;
                }
+               b.addMarkersToCorners(marksRenderer, false);
 
                //ILogger.instance().logInfo(b.description());
                //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
@@ -230,7 +233,6 @@ public class G3MWebGLTestingApplication
 
                marksRenderer.addMark(b.createMark(false));
 
-               b.addMarkersToCorners(marksRenderer, false);
             }
          }
 

@@ -29,9 +29,9 @@ public class Polygon3D {
       createCoordinates2D(_coor3D, _normal);
 
       //Clockwise
-      final double angleSum = getAngleSumInDegrees();
-      _isClockwise = (angleSum < 0);
-      ILogger.instance().logInfo("Polygon with %d vert. -> Interior angle = %f", _coor3D.size(), angleSum);
+      //      final double angleSum = getAngleSumInDegrees();
+      _isClockwise = isClockwise();
+      //      ILogger.instance().logInfo("Polygon with %d vert. -> Interior angle = %f", _coor3D.size(), angleSum);
    }
 
 
@@ -39,10 +39,10 @@ public class Polygon3D {
       double angleSum = 0;
       for (int i = 0; i < _coor3D.size(); i++) {
          final int i1 = i;
-         final int i2 = (i + 1) % (_coor3D.size());
-         final int i3 = (i + 2) % (_coor3D.size());
+         final int i2 = (i + 1) % (_coor3D.size() - 1); //Last one is repeated
+         final int i3 = (i + 2) % (_coor3D.size() - 1);
 
-         final double angleInDegrees = angleInDegreesOfCorner(i1, i2, i3);
+         final double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
 
          if (!Double.isNaN(angleInDegrees)) {
             angleSum += angleInDegrees;
@@ -52,15 +52,20 @@ public class Polygon3D {
    }
 
 
-   public void createCoordinates2D(final ArrayList<Vector3D> c3D,
-                                   final Vector3D normal) {
+   private void createCoordinates2D(final ArrayList<Vector3D> c3D,
+                                    final Vector3D normal) {
 
       final Vector3D z = Vector3D.upZ();
       final Vector3D rotationAxis = z.cross(normal);
 
       Angle a = null;
       if (rotationAxis.isZero()) {
-         a = Angle.fromDegrees(180);
+         if (normal._z > 0) {
+            a = Angle.zero();
+         }
+         else {
+            a = Angle.fromDegrees(180);
+         }
       }
       else {
          a = normal.signedAngleBetween(rotationAxis, z);
@@ -104,18 +109,48 @@ public class Polygon3D {
    }
 
 
-   private double angleInDegreesOfCorner(final int i1,
-                                         final int i2,
-                                         final int i3) {
+   private boolean isClockwise() {
+      double slope = 0;
+      for (int i = 0; i < _coor3D.size(); i++) {
+         final int i1 = i;
+         final int i2 = (i + 1) % (_coor3D.size() - 1); //Last one is repeated
 
-      final Vector3D v1 = _coor3D.get(i1);
-      final Vector3D v2 = _coor3D.get(i2);
-      final Vector3D v3 = _coor3D.get(i3);
+         final Vector2D v1 = _coor2D.get(i1);
+         final Vector2D v2 = _coor2D.get(i2);
 
-      final Vector3D v21 = v1.sub(v2);
-      final Vector3D v23 = v3.sub(v2);
+         final double s = (v2._x - v1._x) * (v2._y + v1._y);
 
-      final double angleInDegrees = v21.signedAngleBetween(v23, _normal)._degrees;
+         slope += s;
+      }
+      return slope > 0;
+
+   }
+
+
+   private double counterClockwiseAngleInDegreesOfCorner(final int i1,
+                                                         final int i2,
+                                                         final int i3) {
+
+      //      final Vector3D v1 = _coor3D.get(i1);
+      //      final Vector3D v2 = _coor3D.get(i2);
+      //      final Vector3D v3 = _coor3D.get(i3);
+      //
+      //      final Vector3D v21 = v1.sub(v2);
+      //      final Vector3D v23 = v3.sub(v2);
+      //
+      //      final double angleInDegrees = v21.signedAngleBetween(v23, _normal)._degrees;
+
+      final Vector2D v1 = _coor2D.get(i1);
+      final Vector2D v2 = _coor2D.get(i2);
+      final Vector2D v3 = _coor2D.get(i3);
+
+      final Vector2D v21 = v1.sub(v2);
+      final Vector2D v23 = v3.sub(v2);
+
+      final double av23 = v23.angle()._degrees;
+      final double av21 = v21.angle()._degrees;
+
+      final double angleInDegrees = -(av23 - av21);
 
       return angleInDegrees;
    }
@@ -125,7 +160,7 @@ public class Polygon3D {
                                                                  final int i2,
                                                                  final int i3) {
 
-      double angleInDegrees = angleInDegreesOfCorner(i1, i2, i3);
+      double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
 
       if (_isClockwise) {
          angleInDegrees *= -1;
