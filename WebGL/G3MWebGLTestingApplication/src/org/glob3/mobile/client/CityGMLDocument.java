@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-         extends
-            XMLDocument {
+extends
+XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -24,7 +24,6 @@ public class CityGMLDocument
 
 
    public ArrayList<CityGMLBuilding> parseLOD2Buildings() {
-
 
       final ArrayList<CityGMLBuilding> buildings = new ArrayList<CityGMLBuilding>();
 
@@ -39,8 +38,8 @@ public class CityGMLDocument
             building = new CityGMLBuilding(name);
          }
          catch (final Exception e) {
-            ILogger.instance().logError("No name for building");
-            building = new CityGMLBuilding("NO NAME");
+            //            ILogger.instance().logError("No name for building");
+            //            building = new CityGMLBuilding("NO NAME");
 
             //ID
             try {
@@ -52,7 +51,6 @@ public class CityGMLDocument
                building = new CityGMLBuilding("NO NAME");
             }
          }
-
 
          //RoofType
          try {
@@ -71,6 +69,7 @@ public class CityGMLDocument
             building.addSurfaceWithPosLis(coor);
          }
 
+
          //Rooftops
          final ArrayList<XMLDocument> roofsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
          ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
@@ -86,6 +85,7 @@ public class CityGMLDocument
             final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
             building.addSurfaceWithPosLis(coor);
          }
+
 
          buildings.add(building);
       }

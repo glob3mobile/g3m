@@ -15,7 +15,6 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.Vector3D;
 
 
 public class CityGMLBuilding {
@@ -59,7 +58,7 @@ public class CityGMLBuilding {
          s += "\n Wall: Coordinates: ";
          for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {
             s += "(" + _walls.get(i)._coordinates.get(j) + ", " + _walls.get(i)._coordinates.get(j + 1) + ", "
-                     + _walls.get(i)._coordinates.get(j + 2) + ") ";
+                 + _walls.get(i)._coordinates.get(j + 2) + ") ";
          }
       }
       return s;
@@ -89,20 +88,14 @@ public class CityGMLBuilding {
                                          final boolean fixOnGround,
                                          final Color color) {
 
+
       final double baseHeight = fixOnGround ? getBaseHeight() : 0;
 
       final FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
 
       for (int w = 0; w < _walls.size(); w++) {
-         final Vector3D normal = _walls.get(w).getCounterClockWiseNormal(planet);
-         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet, normal);
-         //         if (!x) {
-         //            x = _walls.get(w).reversePolygon().addTrianglesCuttingEars(fbb, normals, baseHeight, planet, normal);
-         //            if (!x) {
-         //               ILogger.instance().logError("NO EARS FOUND");
-         //            }
-         //         }
+         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
       }
 
       final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
@@ -169,7 +162,7 @@ public class CityGMLBuilding {
 
       final Geodetic3D center = getCenter();
       final Geodetic3D pos = Geodetic3D.fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-               - deltaH);
+                                                                                                           - deltaH);
 
       final Mark m = new Mark(_name, pos, AltitudeMode.ABSOLUTE, 100.0);
       return m;
