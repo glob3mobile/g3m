@@ -27,7 +27,9 @@ public class Polygon3D {
       _normal = normal;
 
       //Clockwise
-      _isClockwise = (getAngleSumInDegrees() < 0);
+      final double angleSum = getAngleSumInDegrees();
+      _isClockwise = (angleSum < 0);
+      ILogger.instance().logInfo("Polygon with %d vert. -> Interior angle = %f", _coor3D.size(), angleSum);
    }
 
 
@@ -38,16 +40,10 @@ public class Polygon3D {
          final int i2 = (i + 1) % (_coor3D.size());
          final int i3 = (i + 2) % (_coor3D.size());
 
-         final Vector3D v1 = _coor3D.get(i1);
-         final Vector3D v2 = _coor3D.get(i2);
-         final Vector3D v3 = _coor3D.get(i3);
+         final double angleInDegrees = angleInDegreesOfCorner(i1, i2, i3);
 
-         final Vector3D v21 = v1.sub(v2);
-         final Vector3D v23 = v3.sub(v2);
-
-         final double angle = v21.signedAngleBetween(v23, _normal)._degrees;
-         if (!Double.isNaN(angle)) {
-            angleSum += angle;
+         if (!Double.isNaN(angleInDegrees)) {
+            angleSum += angleInDegrees;
          }
       }
       return angleSum;
@@ -121,7 +117,17 @@ public class Polygon3D {
       final Vector3D v21 = v1.sub(v2);
       final Vector3D v23 = v3.sub(v2);
 
-      double angleInDegrees = v21.signedAngleBetween(v23, _normal)._degrees;
+      final double angleInDegrees = v21.signedAngleBetween(v23, _normal)._degrees;
+
+      return angleInDegrees;
+   }
+
+
+   private double positiveCounterClockWiseAngleInDegreesOfCorner(final int i1,
+                                                                 final int i2,
+                                                                 final int i3) {
+
+      double angleInDegrees = angleInDegreesOfCorner(i1, i2, i3);
 
       if (_isClockwise) {
          angleInDegrees *= -1;
@@ -179,7 +185,7 @@ public class Polygon3D {
             i3 = q;
             q = (q + 1) % (_coor3D.size());
 
-            angleInDegrees = angleInDegreesOfCorner(i1, i2, i3);
+            angleInDegrees = positiveCounterClockWiseAngleInDegreesOfCorner(i1, i2, i3);
 
             acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
                      || Double.isNaN(angleInDegrees);

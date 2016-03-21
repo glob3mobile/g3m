@@ -51,8 +51,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-implements
-EntryPoint {
+         implements
+            EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -78,7 +78,7 @@ EntryPoint {
       // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
 
       // Canarias
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(49.016964870598265, 8.391383201954001, 169.1385));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(49.0118921537024, 8.38883950301979, 69.1385));
    }
 
 
@@ -101,7 +101,7 @@ EntryPoint {
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-               );
+      );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -110,8 +110,8 @@ EntryPoint {
    }
 
    private class AnimateHUDWidgetsTask
-   extends
-   GTask {
+            extends
+               GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -128,7 +128,7 @@ EntryPoint {
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                  + "R: " + _widget.getCurrentCamera().getRoll());
+                               + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -159,7 +159,7 @@ EntryPoint {
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-               );
+      );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -219,9 +219,10 @@ EntryPoint {
             final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
             int i = 0;
             for (final CityGMLBuilding b : bs) {
-               //               if (b._name != "91214493") { //SCHLOSS
-               //                  continue;
-               //               }
+
+               if ((b._name != "109739929") && (b._name != "109739935")) { //SCHLOSS
+                  continue;
+               }
 
                //ILogger.instance().logInfo(b.description());
                //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
@@ -229,7 +230,7 @@ EntryPoint {
 
                marksRenderer.addMark(b.createMark(false));
 
-               //               b.addMarkersToCorners(marksRenderer, false);
+               b.addMarkersToCorners(marksRenderer, false);
             }
          }
 
