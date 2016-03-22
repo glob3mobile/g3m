@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.Vector2D;
 import org.glob3.mobile.generated.Vector3D;
 
@@ -15,79 +14,79 @@ import org.glob3.mobile.generated.Vector3D;
 public class Polygon3D {
 
 
-   ArrayList<Vector3D> _coor3D;
-   ArrayList<Vector2D> _coor2D;
-   Vector3D            _normal;
-   boolean             _isClockwise;
+   final ArrayList<Vector3D> _coor3D;
+   ArrayList<Vector2D>       _coor2D;
+   Vector3D                  _normal = null;
 
 
-   public Polygon3D(final ArrayList<Vector3D> coor3D,
-                    final Vector3D normal) {
+   //   final boolean             _isClockwise = false;
+
+
+   public Polygon3D(final ArrayList<Vector3D> coor3D) {
       _coor3D = coor3D;
-      _normal = normal;
 
-      createCoordinates2D(_coor3D, _normal);
+      final Vector3D e1 = _coor3D.get(0).sub(_coor3D.get(1));
+      final Vector3D e2 = _coor3D.get(2).sub(_coor3D.get(1));
 
-      //Clockwise
-      //      final double angleSum = getAngleSumInDegrees();
-      _isClockwise = isClockwise();
-      //      ILogger.instance().logInfo("Polygon with %d vert. -> Interior angle = %f", _coor3D.size(), angleSum);
-   }
-
-
-   private double getAngleSumInDegrees() {
-      double angleSum = 0;
-      for (int i = 0; i < _coor3D.size(); i++) {
-         final int i1 = i;
-         final int i2 = (i + 1) % (_coor3D.size() - 1); //Last one is repeated
-         final int i3 = (i + 2) % (_coor3D.size() - 1);
-
-         final double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
-
-         if (!Double.isNaN(angleInDegrees)) {
-            angleSum += angleInDegrees;
-         }
+      _normal = e1.cross(e2);
+      _coor2D = createCoordinates2D(_coor3D, _normal);
+      if (isClockwise(_coor2D)) {
+         _normal = _normal.times(-1);
+         //         _coor2D = createCoordinates2D(_coor3D, _normal);
       }
-      return angleSum;
    }
 
 
-   private void createCoordinates2D(final ArrayList<Vector3D> c3D,
-                                    final Vector3D normal) {
+   //   private double getAngleSumInDegrees() {
+   //      double angleSum = 0;
+   //      for (int i = 0; i < _coor3D.size(); i++) {
+   //         final int i1 = i;
+   //         final int i2 = (i + 1) % (_coor3D.size() - 1); //Last one is repeated
+   //         final int i3 = (i + 2) % (_coor3D.size() - 1);
+   //
+   //         final double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
+   //
+   //         if (!Double.isNaN(angleInDegrees)) {
+   //            angleSum += angleInDegrees;
+   //         }
+   //      }
+   //      return angleSum;
+   //   }
+
+
+   private ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
+                                                   final Vector3D normal) {
 
       final Vector3D z = Vector3D.upZ();
       final Vector3D rotationAxis = z.cross(normal);
+      final ArrayList<Vector2D> coor2D = new ArrayList<Vector2D>();
 
-      Angle a = null;
       if (rotationAxis.isZero()) {
+
          if (normal._z > 0) {
-            a = Angle.zero();
+            for (int i = 0; i < c3D.size(); i++) {
+               final Vector3D v3D = c3D.get(i);
+               coor2D.add(new Vector2D(v3D._x, v3D._y));
+            }
          }
          else {
-            a = Angle.fromDegrees(180);
+            for (int i = 0; i < c3D.size(); i++) {
+               final Vector3D v3D = c3D.get(i);
+               coor2D.add(new Vector2D(v3D._x, -v3D._y));
+            }
          }
-      }
-      else {
-         a = normal.signedAngleBetween(rotationAxis, z);
+
+         return coor2D;
       }
 
-      _coor2D = new ArrayList<Vector2D>();
+      final Angle a = normal.signedAngleBetween(rotationAxis, z);
+
       for (int i = 0; i < c3D.size(); i++) {
-         Vector3D v3D = null;
-         if (a.isNan() || a.isZero()) {
-            v3D = c3D.get(i);
-         }
-         else {
-            if ((a._degrees == 180) || (a._degrees == -180)) {
-               v3D = c3D.get(i).rotateAroundAxis(Vector3D.upX(), a);
-            }
-            else {
-               v3D = c3D.get(i).rotateAroundAxis(rotationAxis, a);
-            }
-         }
-         _coor2D.add(new Vector2D(v3D._x, v3D._y));
+         final Vector3D v3D = c3D.get(i).rotateAroundAxis(rotationAxis, a);
+         coor2D.add(new Vector2D(v3D._x, v3D._y));
       }
 
+      return coor2D;
    }
 
 
@@ -97,9 +96,9 @@ public class Polygon3D {
                                            final Vector2D cornerC) {
 
       final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
-               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+                           / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
-               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+                          / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double gamma = 1.0 - alpha - beta;
 
       if ((alpha > 0) && (beta > 0) && (gamma > 0)) {
@@ -109,14 +108,14 @@ public class Polygon3D {
    }
 
 
-   private boolean isClockwise() {
+   private boolean isClockwise(final ArrayList<Vector2D> c2D) {
       double slope = 0;
-      for (int i = 0; i < _coor3D.size(); i++) {
+      for (int i = 0; i < c2D.size(); i++) {
          final int i1 = i;
-         final int i2 = (i + 1) % (_coor3D.size() - 1); //Last one is repeated
+         final int i2 = (i + 1) % (c2D.size() - 1); //Last one is repeated
 
-         final Vector2D v1 = _coor2D.get(i1);
-         final Vector2D v2 = _coor2D.get(i2);
+         final Vector2D v1 = c2D.get(i1);
+         final Vector2D v2 = c2D.get(i2);
 
          final double s = (v2._x - v1._x) * (v2._y + v1._y);
 
@@ -124,6 +123,122 @@ public class Polygon3D {
       }
       return slope > 0;
 
+   }
+
+
+   private boolean isEdgeInside(final int i,
+                                final int j) {
+
+      final int nVertices = _coor2D.size() - 1;
+
+      int iadd1 = i + 1;
+      int isub1 = i - 1;
+
+      if (iadd1 == (nVertices + 1)) {
+         iadd1 = 0;
+      }
+      if (isub1 == -1) {
+         isub1 = nVertices - 1;
+      }
+
+      final Vector2D v1 = _coor2D.get(iadd1).sub(_coor2D.get(i));
+      final Vector2D v2 = _coor2D.get(isub1).sub(_coor2D.get(i));
+      final Vector2D v3 = _coor2D.get(j).sub(_coor2D.get(i));
+
+      double av1 = v1.angle()._degrees;
+      final double av2 = v2.angle()._degrees;
+      final double av3 = v3.angle()._degrees;
+
+      if (av1 < av2) {
+         av1 += 360;
+      }
+
+      if ((av1 >= av3) && (av3 >= av2)) {
+         return true;
+      }
+
+      return false;
+
+
+   }
+
+
+   //   MIRA ESTO MAÑANA!!!
+   // http://stackoverflow.com/questions/693837/how-to-determine-a-diagonal-is-in-or-out-of-a-concave-polygon
+
+
+   boolean segmentsIntersect(final Vector2D a,
+                             final Vector2D b,
+                             final Vector2D c,
+                             final Vector2D d) {
+      //http://www.smipple.net/snippet/sparkon/%5BC%2B%2B%5D%202D%20lines%20segment%20intersection%20
+      final double den = (((d._y - c._y) * (b._x - a._x)) - ((d._x - c._x) * (b._y - a._y)));
+      final double num1 = (((d._x - c._x) * (a._y - c._y)) - ((d._y - c._y) * (a._x - c._x)));
+      final double num2 = (((b._x - a._x) * (a._y - c._y)) - ((b._y - a._y) * (a._x - c._x)));
+      final double u1 = num1 / den;
+      final double u2 = num2 / den;
+      //          std::cout << u1 << ":" << u2 << std::endl;
+      if ((den == 0) && (num1 == 0) && (num2 == 0)) {
+         /* The two lines are coincidents */
+         return false;
+      }
+      if (den == 0) {
+         /* The two lines are parallel */
+         return false;
+      }
+      if ((u1 < 0) || (u1 > 1) || (u2 < 0) || (u2 > 1)) {
+         /* Lines do not collide */
+         return false;
+      }
+      /* Lines DO collide */
+      return true;
+   }
+
+
+   private boolean edgeIntersectsAnyOtherEdge(final int i,
+                                              final int j) {
+
+      final int iadd1 = (i + 1) % (_coor2D.size() - 2);
+      final int isub1 = (i - 1) % (_coor2D.size() - 2);
+
+      final int jadd1 = (j + 1) % (_coor2D.size() - 2);
+      final int jsub1 = (j - 1) % (_coor2D.size() - 2);
+
+      final Vector2D a = _coor2D.get(i);
+      final Vector2D b = _coor2D.get(j);
+
+      for (int k = 0; k < (_coor2D.size() - 2); k++) {
+
+         final int kadd1 = (k + 1) % (_coor2D.size() - 1);
+
+         //         if ((i == k) && (iadd1 == kadd1)) {
+         //            continue;
+         //         }
+         //         if ((isub1 == k) && (i == k)) {
+         //            continue;
+         //         }
+         //         if ((j == k) && (jadd1 == kadd1)) {
+         //            continue;
+         //         }
+         //         if ((jsub1 == k) && (kadd1 == j)) {
+         //            continue;
+         //         }
+
+         if ((i == k) || (i == kadd1) || (j == k) || (j == kadd1)) {
+            continue;
+         }
+
+         final Vector2D c = _coor2D.get(k);
+         final Vector2D d = _coor2D.get(kadd1);
+
+         if (segmentsIntersect(a, b, c, d)) {
+            return true;
+         }
+
+
+      }
+
+      return false;
    }
 
 
@@ -162,9 +277,9 @@ public class Polygon3D {
 
       double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
 
-      if (_isClockwise) {
-         angleInDegrees *= -1;
-      }
+      //      if (_isClockwise) {
+      //         angleInDegrees *= -1;
+      //      }
 
       if (angleInDegrees < 0) {
          angleInDegrees += 360;
@@ -204,8 +319,7 @@ public class Polygon3D {
       //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 
       int i1 = 0, i2 = 0, i3 = 0;
-      double angleInDegrees = 0;
-      boolean acceptableAngle = false;
+      final double angleInDegrees = 0;
       //   ILogger.instance().logInfo("Looking for ears");
 
       final boolean[] removed = new boolean[_coor3D.size()];
@@ -215,6 +329,9 @@ public class Polygon3D {
       }
 
       while (cornersLeft >= 4) {
+
+
+         boolean earFound = false;
 
 
          for (int i = 0; i < (_coor3D.size() - 1); i++) {
@@ -238,24 +355,37 @@ public class Polygon3D {
             i3 = q;
             q = (q + 1) % (_coor3D.size());
 
-            angleInDegrees = positiveCounterClockWiseAngleInDegreesOfCorner(i1, i2, i3);
+            //            angleInDegrees = positiveCounterClockWiseAngleInDegreesOfCorner(i1, i2, i3);
+            //
+            //            acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
+            //                              || Double.isNaN(angleInDegrees);
 
-            acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
-                     || Double.isNaN(angleInDegrees);
-
-            if (acceptableAngle) { //Internal angle is concave
-               //Checking inclusion of other vertices
-               acceptableAngle = !isAnyVertexInsideTriangle(i1, i2, i3);
-
-               if (acceptableAngle) {
-                  break;
-               }
+            final boolean edgeInside = isEdgeInside(i1, i3);
+            if (!edgeInside) {
+               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
+               continue;
             }
+
+            final boolean edgeIntersects = edgeIntersectsAnyOtherEdge(i1, i3);
+            if (edgeIntersects) {
+               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
+               continue;
+            }
+
+            final boolean triangleContainsVertex = isAnyVertexInsideTriangle(i1, i2, i3);
+            if (triangleContainsVertex) {
+               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
+               continue;
+            }
+
+            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
+            earFound = true;
+            break;
          }
          //ILogger.instance().logInfo("!!!! Angle %f", angleInDegrees);
 
 
-         if (acceptableAngle) { //Valid triangle (ear)
+         if (earFound) { //Valid triangle (ear)
             fbb.add(_coor3D.get(i1));
             fbb.add(_coor3D.get(i2));
             fbb.add(_coor3D.get(i3));
@@ -277,5 +407,4 @@ public class Polygon3D {
       }
       return true;
    }
-
 }

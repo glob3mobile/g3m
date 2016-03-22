@@ -4,14 +4,12 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.ILogger;
-
 import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-extends
-XMLDocument {
+         extends
+            XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);
@@ -71,20 +69,20 @@ XMLDocument {
 
 
          //Rooftops
-         //         final ArrayList<XMLDocument> roofsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
-         //         //         ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
-         //         for (final XMLDocument s : roofsXML) {
-         //            final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
-         //            building.addSurfaceWithPosLis(coor);
-         //         }
-
-         //Ground
-         final ArrayList<XMLDocument> groundXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:GroundSurface/bldg:lod2MultiSurface//gml:posList");
-         ILogger.instance().logInfo("N Roofs %d", groundXML.size());
-         for (final XMLDocument s : groundXML) {
+         final ArrayList<XMLDocument> roofsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
+         //         ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
+         for (final XMLDocument s : roofsXML) {
             final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
             building.addSurfaceWithPosLis(coor);
          }
+
+         //Ground
+         //         final ArrayList<XMLDocument> groundXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:GroundSurface/bldg:lod2MultiSurface//gml:posList");
+         //         ILogger.instance().logInfo("N Roofs %d", groundXML.size());
+         //         for (final XMLDocument s : groundXML) {
+         //            final ArrayList<Double> coor = s.getTextContentAsNumberArray(" ");
+         //            building.addSurfaceWithPosLis(coor);
+         //         }
 
 
          buildings.add(building);

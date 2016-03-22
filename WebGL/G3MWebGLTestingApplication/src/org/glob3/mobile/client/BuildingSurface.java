@@ -527,7 +527,7 @@ class BuildingSurface {
    //   }
 
    public ArrayList<Vector3D> getCartesianCoordinates(final Planet planet,
-                                                      final double baseHeight) {
+            final double baseHeight) {
 
       final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
       final ArrayList<Vector3D> _coor3D = new ArrayList<Vector3D>();
@@ -545,7 +545,7 @@ class BuildingSurface {
                                           final Planet planet) {
       final Vector3D normal = getNormal(planet);
       final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
-      final Polygon3D polygon = new Polygon3D(cartesianC, normal);
+      final Polygon3D polygon = new Polygon3D(cartesianC);
       polygon.addTrianglesCuttingEars(fbb, normals);
       return true;
    }
