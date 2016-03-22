@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.Vector2D;
 import org.glob3.mobile.generated.Vector3D;
 
@@ -28,12 +29,83 @@ public class Polygon3D {
       final Vector3D e1 = _coor3D.get(0).sub(_coor3D.get(1));
       final Vector3D e2 = _coor3D.get(2).sub(_coor3D.get(1));
 
+
       _normal = e1.cross(e2);
       _coor2D = createCoordinates2D(_coor3D, _normal);
-      if (isClockwise(_coor2D)) {
+
+
+      final boolean isCC = isPolygonCounterClockWise();
+
+      if (!isCC) {
          _normal = _normal.times(-1);
-         //         _coor2D = createCoordinates2D(_coor3D, _normal);
+         _coor2D = createCoordinates2D(_coor3D, _normal);
       }
+   }
+
+
+   private boolean isConvexPolygonCounterClockWise() {
+      final Vector2D v0 = _coor2D.get(0);
+      final Vector2D v1 = _coor2D.get(1);
+      final Vector2D v2 = _coor2D.get(2);
+
+      //double z =  (xi - xi-1) * (yi+1 - yi) - (yi - yi-1) * (xi+1 - xi)
+      final double z = ((v1._x - v0._x) * (v2._y - v1._y)) - ((v1._y - v0._y) * (v2._x - v1._x));
+      return z > 0;
+   }
+
+
+   private double concavePolygonArea() {
+      double sum = 0;
+      for (int i = 0; i < (_coor2D.size() - 2); i++) {
+         final Vector2D vi = _coor2D.get(i);
+         final Vector2D vi1 = _coor2D.get(i + 1);
+         sum += ((vi._x * vi1._y) + (vi1._x * vi._y));
+      }
+
+      return sum / 2;
+   }
+
+
+   private boolean isConcavePolygonCounterClockWise() {
+      final double area = concavePolygonArea();
+      return area > 0;
+   }
+
+
+   private boolean isPolygonCounterClockWise() {
+      if (isConcave()) {
+         return isConcavePolygonCounterClockWise();
+      }
+      return isConvexPolygonCounterClockWise();
+
+   }
+
+
+   private double angleInRadiansOfCorner(final int i) {
+
+      int isub1 = (i - 1) % (_coor2D.size() - 2);
+      if (isub1 == -1) {
+         isub1 = _coor2D.size() - 2;
+      }
+      final int iadd1 = (i + 1) % (_coor2D.size() - 2); //Last one is repeated
+
+
+      final Vector2D v1 = _coor2D.get(iadd1).sub(_coor2D.get(i));
+      final Vector2D v2 = _coor2D.get(isub1).sub(_coor2D.get(i));
+
+      return IMathUtils.instance().atan2(v2._y - v1._x, v2._x - v1._x);
+   }
+
+
+   private boolean isConcave() {
+      final double a0 = angleInRadiansOfCorner(0);
+      for (int i = 1; i < (_coor2D.size() - 1); i++) {
+         final double ai = angleInRadiansOfCorner(i);
+         if ((ai * a0) < 0) {
+            return true;
+         }
+      }
+      return false;
    }
 
 
@@ -108,7 +180,7 @@ public class Polygon3D {
    }
 
 
-   private boolean isClockwise(final ArrayList<Vector2D> c2D) {
+   private static boolean isClockwise(final ArrayList<Vector2D> c2D) {
       double slope = 0;
       for (int i = 0; i < c2D.size(); i++) {
          final int i1 = i;
@@ -120,6 +192,26 @@ public class Polygon3D {
          final double s = (v2._x - v1._x) * (v2._y + v1._y);
 
          slope += s;
+      }
+      return slope > 0;
+
+   }
+
+
+   private static boolean isClockwise2(final ArrayList<Vector2D> c2D) {
+      double slope = 0;
+      for (int i = 0; i < c2D.size(); i++) {
+         final int isub1 = (i - 1) % (c2D.size() - 2);
+         final int iadd1 = (i + 1) % (c2D.size() - 2); //Last one is repeated
+
+         final Vector2D v1 = c2D.get(iadd1).sub(c2D.get(i));
+         final Vector2D v2 = c2D.get(isub1).sub(c2D.get(i));
+
+         final double av1 = v1.angle()._degrees;
+         final double av2 = v2.angle()._degrees;
+
+         final double a = av2 - av1;
+         slope += a;
       }
       return slope > 0;
 
@@ -149,11 +241,11 @@ public class Polygon3D {
       final double av2 = v2.angle()._degrees;
       final double av3 = v3.angle()._degrees;
 
-      if (av1 < av2) {
-         av1 += 360;
+      if (av1 > av2) {
+         av1 -= 360;
       }
 
-      if ((av1 >= av3) && (av3 >= av2)) {
+      if ((av1 <= av3) && (av3 <= av2)) {
          return true;
       }
 
