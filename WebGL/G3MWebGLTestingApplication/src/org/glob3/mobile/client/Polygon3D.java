@@ -56,10 +56,10 @@ public class Polygon3D {
 
    private double concavePolygonArea() {
       double sum = 0;
-      for (int i = 0; i < (_coor2D.size() - 2); i++) {
+      for (int i = 0; i < (_coor2D.size() - 1); i++) {
          final Vector2D vi = _coor2D.get(i);
          final Vector2D vi1 = _coor2D.get(i + 1);
-         sum += ((vi._x * vi1._y) + (vi1._x * vi._y));
+         sum += ((vi._x * vi1._y) - (vi1._x * vi._y));
       }
 
       return sum / 2;
