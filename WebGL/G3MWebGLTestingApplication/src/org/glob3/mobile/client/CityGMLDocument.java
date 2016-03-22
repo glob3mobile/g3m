@@ -10,8 +10,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class CityGMLDocument
-         extends
-            XMLDocument {
+extends
+XMLDocument {
 
    public CityGMLDocument(final String doc) {
       super(doc);

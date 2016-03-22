@@ -78,7 +78,7 @@ EntryPoint {
       // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
 
       // Canarias
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(49.0118921537024, 8.38883950301979, 69.1385));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(49.0159538369538, 8.39245743376133, 69.1385));
    }
 
 
@@ -220,7 +220,7 @@ EntryPoint {
             int i = 0;
             for (final CityGMLBuilding b : bs) {
 
-               if ((b._name != "109739929") && (b._name != "109739935") && (b._name != "28245343")) { //SCHLOSS
+               if ((b._name != "110511393") && (b._name != "109739935") && (b._name != "28245343")) { //SCHLOSS
                   continue;
                }
                b.addMarkersToCorners(marksRenderer, false);
@@ -257,9 +257,9 @@ EntryPoint {
          @Override
          public void run(final G3MContext context) {
 
-            //            final IBufferDownloadListener listener = new CityGMLDownloadListener();
-            //            context.getDownloader().requestBuffer(new URL("test_sample_4326_lod2.gml"), 0, TimeInterval.forever(), false,
-            //                     listener, true);
+            final IBufferDownloadListener listener = new CityGMLDownloadListener();
+            context.getDownloader().requestBuffer(new URL("test_sample_4326_lod2.gml"), 0, TimeInterval.forever(), false,
+                     listener, true);
             //
             //            final IBufferDownloadListener listener2 = new CityGMLDownloadListener();
             //            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),

@@ -127,7 +127,7 @@ public class Polygon3D {
 
 
    private ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
-                                                   final Vector3D normal) {
+            final Vector3D normal) {
 
       final Vector3D z = Vector3D.upZ();
       final Vector3D rotationAxis = z.cross(normal);
@@ -168,9 +168,9 @@ public class Polygon3D {
                                            final Vector2D cornerC) {
 
       final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
-                           / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
-                          / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double gamma = 1.0 - alpha - beta;
 
       if ((alpha > 0) && (beta > 0) && (gamma > 0)) {
@@ -238,13 +238,29 @@ public class Polygon3D {
       final Vector2D v3 = _coor2D.get(j).sub(_coor2D.get(i));
 
       double av1 = v1.angle()._degrees;
-      final double av2 = v2.angle()._degrees;
-      final double av3 = v3.angle()._degrees;
+      double av2 = v2.angle()._degrees;
+      double av3 = v3.angle()._degrees;
 
-      if (av1 > av2) {
-         av1 -= 360;
+      while (av1 < 0) {
+         av1 += 360;
       }
 
+      while (av2 < 0) {
+         av2 += 360;
+      }
+
+      while (av3 < 0) {
+         av3 += 360;
+      }
+
+      while (av1 > av2) {
+         av2 += 360;
+      }
+
+      if ((av1 <= av3) && (av3 <= av2)) {
+         return true;
+      }
+      av3 += 360;
       if ((av1 <= av3) && (av3 <= av2)) {
          return true;
       }
@@ -411,7 +427,6 @@ public class Polygon3D {
       //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 
       int i1 = 0, i2 = 0, i3 = 0;
-      final double angleInDegrees = 0;
       //   ILogger.instance().logInfo("Looking for ears");
 
       final boolean[] removed = new boolean[_coor3D.size()];
@@ -433,6 +448,7 @@ public class Polygon3D {
                q = (q + 1) % (_coor3D.size());
             }
             i1 = q;
+            i = q;
             q = (q + 1) % (_coor3D.size());
 
             while (removed[q]) {
@@ -454,23 +470,23 @@ public class Polygon3D {
 
             final boolean edgeInside = isEdgeInside(i1, i3);
             if (!edgeInside) {
-               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
+               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
                continue;
             }
 
             final boolean edgeIntersects = edgeIntersectsAnyOtherEdge(i1, i3);
             if (edgeIntersects) {
-               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
+               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
                continue;
             }
 
             final boolean triangleContainsVertex = isAnyVertexInsideTriangle(i1, i2, i3);
             if (triangleContainsVertex) {
-               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
+               //               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
                continue;
             }
 
-            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
+            //            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
             earFound = true;
             break;
          }
