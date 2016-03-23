@@ -11,10 +11,12 @@ import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.IndexedMesh;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.ShortBufferBuilder;
 
 
 public class CityGMLBuilding {
@@ -80,6 +82,32 @@ public class CityGMLBuilding {
 
 
       return cm;
+
+   }
+
+
+   public Mesh createIndexedMesh(final Planet planet,
+                                 final boolean fixOnGround,
+                                 final Color color) {
+
+
+      final double baseHeight = fixOnGround ? getBaseHeight() : 0;
+
+      final FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+      final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      final ShortBufferBuilder indexes = new ShortBufferBuilder();
+
+      for (int w = 0; w < _walls.size(); w++) {
+         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
+      }
+
+      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
+               (float) 2.0, color, null, (float) 1.0, true, normals.create());
+
+      final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
+               true, 1.0f, 1.0f, color);
+
+      return trianglesMesh;
 
    }
 

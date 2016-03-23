@@ -4,10 +4,11 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.Vector2D;
+import org.glob3.mobile.generated.Vector3D;
 
 
 public class Polygon2D {
@@ -91,93 +92,64 @@ public class Polygon2D {
 
    ///////
 
-
-   public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
-                                          final FloatBufferBuilderFromCartesian3D normals) {
-
+   public boolean addTrianglesCuttingEars(final ShortBufferBuilder indexes) {
 
       //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 
       int i1 = 0, i2 = 0, i3 = 0;
-      final double angleInDegrees = 0;
       //   ILogger.instance().logInfo("Looking for ears");
 
-      final boolean[] removed = new boolean[_coor2D.size()];
-      int cornersLeft = _coor2D.size();
-      for (int i = 0; i < (_coor2D.size() - 1); i++) {
-         removed[i] = false;
+      final ArrayList<Vector2D> remainingCorners = new ArrayList<Vector2D>();
+      final ArrayList<Vector3D> remainingCorners3D = new ArrayList<Vector3D>();
+      final ArrayList<Short> remainingIndexes = new ArrayList<Short>();
+
+      for (int i = 0; i < _coor2D.size(); i++) {
+         remainingCorners.add(_coor2D.get(i));
+         remainingIndexes.add((short) i);
       }
 
-      while (cornersLeft >= 4) {
-
+      while (remainingCorners.size() > 2) {
 
          boolean earFound = false;
+         for (int i = 0; i < (remainingCorners.size() - 1); i++) {
 
+            i1 = i;
+            i2 = (i + 1) % (remainingCorners.size());
+            i3 = (i + 2) % (remainingCorners.size());
 
-         for (int i = 0; i < (_coor2D.size() - 1); i++) {
-
-            int q = i;
-            while (removed[q]) {
-               q = (q + 1) % (_coor2D.size());
-            }
-            i1 = q;
-            q = (q + 1) % (_coor2D.size());
-
-            while (removed[q]) {
-               q = (q + 1) % (_coor2D.size());
-            }
-            i2 = q;
-            q = (q + 1) % (_coor2D.size());
-
-            while (removed[q]) {
-               q = (q + 1) % (_coor2D.size());
-            }
-            i3 = q;
-            q = (q + 1) % (_coor2D.size());
-
-            //            angleInDegrees = positiveCounterClockWiseAngleInDegreesOfCorner(i1, i2, i3);
-            //
-            //            acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
-            //                              || Double.isNaN(angleInDegrees);
-
-            final boolean edgeInside = isEdgeInside(i1, i3);
+            final boolean edgeInside = isEdgeInside(i1, i3, remainingCorners);
             if (!edgeInside) {
-               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
+               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
                continue;
             }
 
-            final boolean edgeIntersects = edgeIntersectsAnyOtherEdge(i1, i3);
+            final boolean edgeIntersects = edgeIntersectsAnyOtherEdge(i1, i3, remainingCorners);
             if (edgeIntersects) {
-               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
+               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
                continue;
             }
 
-            final boolean triangleContainsVertex = isAnyVertexInsideTriangle(i1, i2, i3);
+            final boolean triangleContainsVertex = isAnyVertexInsideTriangle(i1, i2, i3, remainingCorners);
             if (triangleContainsVertex) {
-               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
+               //               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
                continue;
             }
 
-            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
+            //            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
             earFound = true;
             break;
          }
-         //ILogger.instance().logInfo("!!!! Angle %f", angleInDegrees);
 
 
          if (earFound) { //Valid triangle (ear)
-            fbb.add(_coor3D.get(i1));
-            fbb.add(_coor3D.get(i2));
-            fbb.add(_coor3D.get(i3));
-            normals.add(_normal);
-            normals.add(_normal);
-            normals.add(_normal);
+            indexes.add(remainingIndexes.get(i1));
+            indexes.add(remainingIndexes.get(i2));
+            indexes.add(remainingIndexes.get(i3));
 
             //Removing ear
-            removed[i2] = true;
-            cornersLeft--;
-
-            //            ILogger.instance().logInfo("T: %d, %d, %d -> Angle %f", i1, i2, i3, angleInDegrees);
+            remainingCorners.remove(i2);
+            remainingCorners3D.remove(i2);
+            remainingIndexes.remove(i2);
          }
          else {
             ILogger.instance().logError("NO EAR!!!!");
@@ -189,10 +161,30 @@ public class Polygon2D {
    }
 
 
-   private boolean isEdgeInside(final int i,
-                                final int j) {
+   static private boolean isInsideTriangle(final Vector2D p,
+                                           final Vector2D cornerA,
+                                           final Vector2D cornerB,
+                                           final Vector2D cornerC) {
 
-      final int nVertices = _coor2D.size() - 1;
+      final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
+               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+      final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
+               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+      final double gamma = 1.0 - alpha - beta;
+
+      if ((alpha > 0) && (beta > 0) && (gamma > 0)) {
+         return true;
+      }
+      return false;
+   }
+
+
+   private static boolean isEdgeInside(final int i,
+                                       final int j,
+                                       final ArrayList<Vector2D> remainingCorners) {
+      //http://stackoverflow.com/questions/693837/how-to-determine-a-diagonal-is-in-or-out-of-a-concave-polygon
+
+      final int nVertices = remainingCorners.size() - 1;
 
       int iadd1 = i + 1;
       int isub1 = i - 1;
@@ -204,24 +196,120 @@ public class Polygon2D {
          isub1 = nVertices - 1;
       }
 
-      final Vector2D v1 = _coor2D.get(iadd1).sub(_coor2D.get(i));
-      final Vector2D v2 = _coor2D.get(isub1).sub(_coor2D.get(i));
-      final Vector2D v3 = _coor2D.get(j).sub(_coor2D.get(i));
+      final Vector2D v1 = remainingCorners.get(iadd1).sub(remainingCorners.get(i));
+      final Vector2D v2 = remainingCorners.get(isub1).sub(remainingCorners.get(i));
+      final Vector2D v3 = remainingCorners.get(j).sub(remainingCorners.get(i));
 
       double av1 = v1.angle()._degrees;
-      final double av2 = v2.angle()._degrees;
-      final double av3 = v3.angle()._degrees;
+      double av2 = v2.angle()._degrees;
+      double av3 = v3.angle()._degrees;
 
-      if (av1 > av2) {
-         av1 -= 360;
+      while (av1 < 0) {
+         av1 += 360;
       }
 
+      while (av2 < 0) {
+         av2 += 360;
+      }
+
+      while (av3 < 0) {
+         av3 += 360;
+      }
+
+      while (av1 > av2) {
+         av2 += 360;
+      }
+
+      if ((av1 <= av3) && (av3 <= av2)) {
+         return true;
+      }
+      av3 += 360;
       if ((av1 <= av3) && (av3 <= av2)) {
          return true;
       }
 
       return false;
 
+
+   }
+
+
+   private static boolean segmentsIntersect(final Vector2D a,
+                                            final Vector2D b,
+                                            final Vector2D c,
+                                            final Vector2D d) {
+      //http://www.smipple.net/snippet/sparkon/%5BC%2B%2B%5D%202D%20lines%20segment%20intersection%20
+      final double den = (((d._y - c._y) * (b._x - a._x)) - ((d._x - c._x) * (b._y - a._y)));
+      final double num1 = (((d._x - c._x) * (a._y - c._y)) - ((d._y - c._y) * (a._x - c._x)));
+      final double num2 = (((b._x - a._x) * (a._y - c._y)) - ((b._y - a._y) * (a._x - c._x)));
+      final double u1 = num1 / den;
+      final double u2 = num2 / den;
+      //          std::cout << u1 << ":" << u2 << std::endl;
+      if ((den == 0) && (num1 == 0) && (num2 == 0)) {
+         /* The two lines are coincidents */
+         return false;
+      }
+      if (den == 0) {
+         /* The two lines are parallel */
+         return false;
+      }
+      if ((u1 < 0) || (u1 > 1) || (u2 < 0) || (u2 > 1)) {
+         /* Lines do not collide */
+         return false;
+      }
+      /* Lines DO collide */
+      return true;
+   }
+
+
+   private static boolean edgeIntersectsAnyOtherEdge(final int i,
+                                                     final int j,
+                                                     final ArrayList<Vector2D> remainingCorners) {
+
+      final Vector2D a = remainingCorners.get(i);
+      final Vector2D b = remainingCorners.get(j);
+
+      for (int k = 0; k < (remainingCorners.size() - 2); k++) {
+
+         final int kadd1 = (k + 1) % (remainingCorners.size() - 1);
+
+         if ((i == k) || (i == kadd1) || (j == k) || (j == kadd1)) {
+            continue;
+         }
+
+         final Vector2D c = remainingCorners.get(k);
+         final Vector2D d = remainingCorners.get(kadd1);
+
+         if (segmentsIntersect(a, b, c, d)) {
+            return true;
+         }
+
+
+      }
+
+      return false;
+   }
+
+
+   private static boolean isAnyVertexInsideTriangle(final int i1,
+                                                    final int i2,
+                                                    final int i3,
+                                                    final ArrayList<Vector2D> remainingCorners) {
+
+      final Vector2D cornerA = remainingCorners.get(i1);
+      final Vector2D cornerB = remainingCorners.get(i2);
+      final Vector2D cornerC = remainingCorners.get(i3);
+
+      for (int j = 0; j < remainingCorners.size(); j++) {
+         if ((j != i1) && (j != i2) && (j != i3)) {
+            final Vector2D p = remainingCorners.get(j);
+            if (isInsideTriangle(p, cornerA, cornerB, cornerC)) {
+               return true;
+            }
+         }
+      }
+
+      return false;
 
    }
 

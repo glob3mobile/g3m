@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.Vector3D;
 
 
@@ -527,7 +528,7 @@ class BuildingSurface {
    //   }
 
    public ArrayList<Vector3D> getCartesianCoordinates(final Planet planet,
-            final double baseHeight) {
+                                                      final double baseHeight) {
 
       final ArrayList<Geodetic3D> c = getGeodetic3DCoordinates(baseHeight);
       final ArrayList<Vector3D> _coor3D = new ArrayList<Vector3D>();
@@ -543,10 +544,21 @@ class BuildingSurface {
                                           final FloatBufferBuilderFromCartesian3D normals,
                                           final double baseHeight,
                                           final Planet planet) {
-      //      final Vector3D normal = getNormal(planet);
       final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
       final Polygon3D polygon = new Polygon3D(cartesianC);
       polygon.addTrianglesCuttingEars(fbb, normals);
+      return true;
+   }
+
+
+   public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
+                                          final FloatBufferBuilderFromCartesian3D normals,
+                                          final ShortBufferBuilder indexes,
+                                          final double baseHeight,
+                                          final Planet planet) {
+      final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
+      final Polygon3D polygon = new Polygon3D(cartesianC);
+      polygon.addTrianglesCuttingEars_2D(fbb, normals, indexes);
       return true;
    }
 

@@ -227,7 +227,10 @@ EntryPoint {
 
                //ILogger.instance().logInfo(b.description());
                //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
-               meshRenderer.addMesh(b.createSingleTrianglesMesh(planet, false, Color.red().wheelStep(bs.size(), i++)));
+               //               meshRenderer.addMesh(b.createSingleTrianglesMesh(planet, false, Color.red().wheelStep(bs.size(), i++)));
+
+               meshRenderer.addMesh(b.createIndexedMesh(planet, false, Color.red().wheelStep(bs.size(), i++)));
+
 
                marksRenderer.addMark(b.createMark(false));
 
