@@ -97,17 +97,18 @@ public class CityGMLBuilding {
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
       final ShortBufferBuilder indexes = new ShortBufferBuilder();
 
+      short firstIndex = 0;
       for (int w = 0; w < _walls.size(); w++) {
-         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, baseHeight, planet);
+         firstIndex = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, baseHeight, planet, firstIndex);
       }
 
-      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
-               (float) 2.0, color, null, (float) 1.0, true, normals.create());
+      //      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
+      //               (float) 2.0, color, null, (float) 1.0, true, normals.create());
 
       final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
-               true, 1.0f, 1.0f, color);
+               true, 1.0f, 1.0f, color, null, 1.0f, true, normals.create());
 
-      return trianglesMesh;
+      return im;
 
    }
 

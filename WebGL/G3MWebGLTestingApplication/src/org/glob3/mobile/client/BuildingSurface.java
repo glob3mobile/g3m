@@ -551,15 +551,16 @@ class BuildingSurface {
    }
 
 
-   public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
-                                          final FloatBufferBuilderFromCartesian3D normals,
-                                          final ShortBufferBuilder indexes,
-                                          final double baseHeight,
-                                          final Planet planet) {
+   public short addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
+                                        final FloatBufferBuilderFromCartesian3D normals,
+                                        final ShortBufferBuilder indexes,
+                                        final double baseHeight,
+                                        final Planet planet,
+                                        final short firstIndex) {
       final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
       final Polygon3D polygon = new Polygon3D(cartesianC);
-      polygon.addTrianglesCuttingEars(fbb, normals, indexes);
-      return true;
+      final short i = polygon.addTrianglesCuttingEars(fbb, normals, indexes, firstIndex);
+      return i;
    }
 
 
