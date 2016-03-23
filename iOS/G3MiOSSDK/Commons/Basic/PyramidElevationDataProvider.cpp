@@ -13,49 +13,40 @@
 #include "G3MContext.hpp"
 #include "TimeInterval.hpp"
 
+
 #include <sstream>
 
-
-class PyramidElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
+class PyramidParser : public GAsyncTask {
 private:
-    
+    IByteBuffer *_buffer;
     const Sector *_sector;
-    int _width, _height;
-    MutableVector2I &_minRes;
     IElevationDataListener *_listener;
     bool _autodeleteListener;
-    double _deltaHeight;
     int _noDataValue;
-    
+    double _deltaHeight;
+    MutableVector2I &_minRes;
 public:
-    PyramidElevationDataProvider_BufferDownloadListener(const Sector* sector,
-                                                        const Vector2I& extent,
-                                                        IElevationDataListener *listener,
-                                                        bool autodeleteListener,
-                                                        int noDataValue,
-                                                        double deltaHeight,
-                                                        MutableVector2I &minRes):
+    
+    PyramidParser (IByteBuffer *buffer, const Sector *sector,
+                   IElevationDataListener *listener, bool autodeleteListener,
+                   int noDataValue, double deltaHeight,
+                   MutableVector2I &minRes) :
+    _buffer(buffer),
     _sector(sector),
-    _width(extent._x),
-    _height(extent._y),
     _listener(listener),
-    _minRes(minRes),
     _autodeleteListener(autodeleteListener),
+    _noDataValue(noDataValue),
     _deltaHeight(deltaHeight),
-    _noDataValue(noDataValue){
+    _minRes(minRes){
         
     }
     
-    void onDownload(const URL& url,
-                    IByteBuffer* buffer,
-                    bool expired){
+    void runInBackground(const G3MContext* context) {
+        const Vector2I *resolution = JSONDemParser::getResolution(_buffer);
+        ShortBufferElevationData *elevationData = JSONDemParser::parseJSONDemElevationData(*_sector, *resolution, _buffer,(short) _noDataValue, _deltaHeight);
         
-        
-        const Vector2I *resolution = JSONDemParser::getResolution(buffer);
-        ShortBufferElevationData *elevationData = JSONDemParser::parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);
-        
-        if (buffer != NULL){
-            delete buffer;
+        if (_buffer != NULL){
+            delete _buffer;
         }
         
         if (elevationData == NULL)
@@ -74,13 +65,68 @@ public:
         if (_autodeleteListener)
         {
             if (_listener != NULL){
-               delete _listener;
+                delete _listener;
             }
             _listener = NULL;
         }
 #ifdef C_CODE
         delete resolution;
 #endif
+
+    }
+    
+    void onPostExecute(const G3MContext* context) {
+       
+    }
+    
+    ~PyramidParser(){
+        delete _sector;
+        
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+};
+
+
+class PyramidElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
+private:
+    
+    const Sector *_sector;
+    int _width, _height;
+    MutableVector2I &_minRes;
+    IElevationDataListener *_listener;
+    bool _autodeleteListener;
+    double _deltaHeight;
+    int _noDataValue;
+    const IThreadUtils *_threadUtils;
+    
+public:
+    PyramidElevationDataProvider_BufferDownloadListener(const Sector* sector,
+                                                        const Vector2I& extent,
+                                                        IElevationDataListener *listener,
+                                                        bool autodeleteListener,
+                                                        int noDataValue,
+                                                        double deltaHeight,
+                                                        MutableVector2I &minRes,
+                                                        const IThreadUtils *threadUtils):
+    _sector(sector),
+    _width(extent._x),
+    _height(extent._y),
+    _listener(listener),
+    _minRes(minRes),
+    _autodeleteListener(autodeleteListener),
+    _deltaHeight(deltaHeight),
+    _noDataValue(noDataValue),
+    _threadUtils(threadUtils){
+        
+    }
+    
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired){
+        
+        _threadUtils->invokeAsyncTask (new PyramidParser(buffer, _sector, _listener, _autodeleteListener,_noDataValue,_deltaHeight,_minRes),true);
     }
     
     void onError(const URL& url){
@@ -123,14 +169,6 @@ public:
             _listener = NULL;
         }
     }
-
-    ~PyramidElevationDataProvider_BufferDownloadListener(){
-        delete _sector;
-        
-#ifdef JAVA_CODE
-        super.dispose();
-#endif
-    }
     
 };
 
@@ -163,6 +201,7 @@ void PyramidElevationDataProvider::getMetadata() const{
 
 void PyramidElevationDataProvider::initialize(const G3MContext* context ){
   _downloader = context->getDownloader();
+  _threadUtils = context->getThreadUtils();
   getMetadata();
 }
 
@@ -184,7 +223,7 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector&
     
     std::string path = requestStringPath(_layer,level,row,column);
     
-    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes), true );
+    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes, _threadUtils), true );
     
 }
 

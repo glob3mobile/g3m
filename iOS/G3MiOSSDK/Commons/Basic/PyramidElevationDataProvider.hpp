@@ -17,10 +17,12 @@
 #include "URL.hpp"
 #include "ErrorHandling.hpp"
 #include "IBufferDownloadListener.hpp"
+#include "IThreadUtils.hpp"
 
 class PyramidElevationDataProvider : public ElevationDataProvider {
 private:
     IDownloader * _downloader;
+    const IThreadUtils * _threadUtils;
     const Sector _sector;
     double _deltaHeight;
     const std::string _layer;
