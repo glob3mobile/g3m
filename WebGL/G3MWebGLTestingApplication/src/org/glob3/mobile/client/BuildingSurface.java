@@ -543,10 +543,10 @@ class BuildingSurface {
                                           final FloatBufferBuilderFromCartesian3D normals,
                                           final double baseHeight,
                                           final Planet planet) {
-      final Vector3D normal = getNormal(planet);
+      //      final Vector3D normal = getNormal(planet);
       final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
       final Polygon3D polygon = new Polygon3D(cartesianC);
-      polygon.addTrianglesCuttingEars(fbb, normals);
+      polygon.addTrianglesCuttingEars2(fbb, normals);
       return true;
    }
 
