@@ -60,7 +60,7 @@ public class CityGMLBuilding {
          s += "\n Wall: Coordinates: ";
          for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {
             s += "(" + _walls.get(i)._coordinates.get(j) + ", " + _walls.get(i)._coordinates.get(j + 1) + ", "
-                 + _walls.get(i)._coordinates.get(j + 2) + ") ";
+                     + _walls.get(i)._coordinates.get(j + 2) + ") ";
          }
       }
       return s;
@@ -98,7 +98,7 @@ public class CityGMLBuilding {
       final ShortBufferBuilder indexes = new ShortBufferBuilder();
 
       for (int w = 0; w < _walls.size(); w++) {
-         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
+         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, baseHeight, planet);
       }
 
       final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
@@ -190,7 +190,7 @@ public class CityGMLBuilding {
 
       final Geodetic3D center = getCenter();
       final Geodetic3D pos = Geodetic3D.fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-                                                                                                           - deltaH);
+               - deltaH);
 
       final Mark m = new Mark(_name, pos, AltitudeMode.ABSOLUTE, 100.0);
       return m;

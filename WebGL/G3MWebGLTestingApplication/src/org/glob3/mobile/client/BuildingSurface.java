@@ -558,7 +558,7 @@ class BuildingSurface {
                                           final Planet planet) {
       final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
       final Polygon3D polygon = new Polygon3D(cartesianC);
-      polygon.addTrianglesCuttingEars_2D(fbb, normals, indexes);
+      polygon.addTrianglesCuttingEars(fbb, normals, indexes);
       return true;
    }
 
