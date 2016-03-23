@@ -20,9 +20,6 @@ public class Polygon3D {
    Vector3D                  _normal = null;
 
 
-   //   final boolean             _isClockwise = false;
-
-
    public Polygon3D(final ArrayList<Vector3D> coor3D) {
       _coor3D = coor3D;
 
@@ -109,23 +106,6 @@ public class Polygon3D {
    }
 
 
-   //   private double getAngleSumInDegrees() {
-   //      double angleSum = 0;
-   //      for (int i = 0; i < _coor3D.size(); i++) {
-   //         final int i1 = i;
-   //         final int i2 = (i + 1) % (_coor3D.size() - 1); //Last one is repeated
-   //         final int i3 = (i + 2) % (_coor3D.size() - 1);
-   //
-   //         final double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
-   //
-   //         if (!Double.isNaN(angleInDegrees)) {
-   //            angleSum += angleInDegrees;
-   //         }
-   //      }
-   //      return angleSum;
-   //   }
-
-
    private ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
             final Vector3D normal) {
 
@@ -177,44 +157,6 @@ public class Polygon3D {
          return true;
       }
       return false;
-   }
-
-
-   private static boolean isClockwise(final ArrayList<Vector2D> c2D) {
-      double slope = 0;
-      for (int i = 0; i < c2D.size(); i++) {
-         final int i1 = i;
-         final int i2 = (i + 1) % (c2D.size() - 1); //Last one is repeated
-
-         final Vector2D v1 = c2D.get(i1);
-         final Vector2D v2 = c2D.get(i2);
-
-         final double s = (v2._x - v1._x) * (v2._y + v1._y);
-
-         slope += s;
-      }
-      return slope > 0;
-
-   }
-
-
-   private static boolean isClockwise2(final ArrayList<Vector2D> c2D) {
-      double slope = 0;
-      for (int i = 0; i < c2D.size(); i++) {
-         final int isub1 = (i - 1) % (c2D.size() - 2);
-         final int iadd1 = (i + 1) % (c2D.size() - 2); //Last one is repeated
-
-         final Vector2D v1 = c2D.get(iadd1).sub(c2D.get(i));
-         final Vector2D v2 = c2D.get(isub1).sub(c2D.get(i));
-
-         final double av1 = v1.angle()._degrees;
-         final double av2 = v2.angle()._degrees;
-
-         final double a = av2 - av1;
-         slope += a;
-      }
-      return slope > 0;
-
    }
 
 
@@ -306,31 +248,12 @@ public class Polygon3D {
    private boolean edgeIntersectsAnyOtherEdge(final int i,
                                               final int j) {
 
-      final int iadd1 = (i + 1) % (_coor2D.size() - 2);
-      final int isub1 = (i - 1) % (_coor2D.size() - 2);
-
-      final int jadd1 = (j + 1) % (_coor2D.size() - 2);
-      final int jsub1 = (j - 1) % (_coor2D.size() - 2);
-
       final Vector2D a = _coor2D.get(i);
       final Vector2D b = _coor2D.get(j);
 
       for (int k = 0; k < (_coor2D.size() - 2); k++) {
 
          final int kadd1 = (k + 1) % (_coor2D.size() - 1);
-
-         //         if ((i == k) && (iadd1 == kadd1)) {
-         //            continue;
-         //         }
-         //         if ((isub1 == k) && (i == k)) {
-         //            continue;
-         //         }
-         //         if ((j == k) && (jadd1 == kadd1)) {
-         //            continue;
-         //         }
-         //         if ((jsub1 == k) && (kadd1 == j)) {
-         //            continue;
-         //         }
 
          if ((i == k) || (i == kadd1) || (j == k) || (j == kadd1)) {
             continue;
@@ -347,54 +270,6 @@ public class Polygon3D {
       }
 
       return false;
-   }
-
-
-   private double counterClockwiseAngleInDegreesOfCorner(final int i1,
-                                                         final int i2,
-                                                         final int i3) {
-
-      //      final Vector3D v1 = _coor3D.get(i1);
-      //      final Vector3D v2 = _coor3D.get(i2);
-      //      final Vector3D v3 = _coor3D.get(i3);
-      //
-      //      final Vector3D v21 = v1.sub(v2);
-      //      final Vector3D v23 = v3.sub(v2);
-      //
-      //      final double angleInDegrees = v21.signedAngleBetween(v23, _normal)._degrees;
-
-      final Vector2D v1 = _coor2D.get(i1);
-      final Vector2D v2 = _coor2D.get(i2);
-      final Vector2D v3 = _coor2D.get(i3);
-
-      final Vector2D v21 = v1.sub(v2);
-      final Vector2D v23 = v3.sub(v2);
-
-      final double av23 = v23.angle()._degrees;
-      final double av21 = v21.angle()._degrees;
-
-      final double angleInDegrees = -(av23 - av21);
-
-      return angleInDegrees;
-   }
-
-
-   private double positiveCounterClockWiseAngleInDegreesOfCorner(final int i1,
-                                                                 final int i2,
-                                                                 final int i3) {
-
-      double angleInDegrees = counterClockwiseAngleInDegreesOfCorner(i1, i2, i3);
-
-      //      if (_isClockwise) {
-      //         angleInDegrees *= -1;
-      //      }
-
-      if (angleInDegrees < 0) {
-         angleInDegrees += 360;
-      }
-
-      return angleInDegrees;
-
    }
 
 
@@ -462,11 +337,6 @@ public class Polygon3D {
             }
             i3 = q;
             q = (q + 1) % (_coor3D.size());
-
-            //            angleInDegrees = positiveCounterClockWiseAngleInDegreesOfCorner(i1, i2, i3);
-            //
-            //            acceptableAngle = IMathUtils.instance().isBetween((float) angleInDegrees, (float) 0.0, (float) 180.0)
-            //                              || Double.isNaN(angleInDegrees);
 
             final boolean edgeInside = isEdgeInside(i1, i3);
             if (!edgeInside) {
