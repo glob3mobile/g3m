@@ -14,7 +14,7 @@
 class BasicShadersGL2: public GPUProgramFactory{
 
 public:
-  BasicShadersGL2() {
+  BasicShadersGL2(){
 #ifdef C_CODE
     std::string emptyString = "";
 #endif
@@ -92,6 +92,32 @@ public:
 "gl_FragColor = VertexColor;\n" +
 "}\n");
     this->add(sourcesColorMesh);
+
+    GPUProgramSources sourcesColorMesh_DirectionLight("ColorMesh_DirectionLight",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec4 aColor;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"varying vec4 VertexColor;\n" +
+"void main() {\n" +
+"vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+"vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+"float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+"lightColor.x = min(lightColor.x, 1.0);\n" +
+"lightColor.y = min(lightColor.y, 1.0);\n" +
+"lightColor.z = min(lightColor.z, 1.0);\n" +
+"VertexColor = aColor;\n" +
+"}\n",
+ emptyString +  
+"varying mediump vec4 VertexColor;\n" +
+"void main() {\n" +
+"gl_FragColor = VertexColor;\n" +
+"}\n");
+    this->add(sourcesColorMesh_DirectionLight);
 
     GPUProgramSources sourcesDefault("Default",
  emptyString +  

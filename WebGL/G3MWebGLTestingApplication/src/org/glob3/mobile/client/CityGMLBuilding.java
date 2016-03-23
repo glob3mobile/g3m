@@ -9,6 +9,7 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeMesh;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
+import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IndexedMesh;
@@ -60,7 +61,7 @@ public class CityGMLBuilding {
          s += "\n Wall: Coordinates: ";
          for (int j = 0; j < _walls.get(i)._coordinates.size(); j += 3) {
             s += "(" + _walls.get(i)._coordinates.get(j) + ", " + _walls.get(i)._coordinates.get(j + 1) + ", "
-                     + _walls.get(i)._coordinates.get(j + 2) + ") ";
+                 + _walls.get(i)._coordinates.get(j + 2) + ") ";
          }
       }
       return s;
@@ -86,9 +87,33 @@ public class CityGMLBuilding {
    }
 
 
-   public Mesh createIndexedMesh(final Planet planet,
-                                 final boolean fixOnGround,
-                                 final Color color) {
+   //   public Mesh createIndexedMesh(final Planet planet,
+   //                                 final boolean fixOnGround,
+   //                                 final Color color) {
+   //
+   //
+   //      final double baseHeight = fixOnGround ? getBaseHeight() : 0;
+   //
+   //      final FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+   //      final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+   //      final ShortBufferBuilder indexes = new ShortBufferBuilder();
+   //
+   //      short firstIndex = 0;
+   //      for (int w = 0; w < _walls.size(); w++) {
+   //         firstIndex = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, baseHeight, planet, firstIndex);
+   //      }
+   //
+   //      final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
+   //               true, 1.0f, 1.0f, color, null, 1.0f, true, normals.create());
+   //
+   //      return im;
+   //
+   //   }
+
+
+   public Mesh createIndexedMeshWithColorPerVertex(final Planet planet,
+                                                   final boolean fixOnGround,
+                                                   final Color color) {
 
 
       final double baseHeight = fixOnGround ? getBaseHeight() : 0;
@@ -96,17 +121,15 @@ public class CityGMLBuilding {
       final FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
       final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
       final ShortBufferBuilder indexes = new ShortBufferBuilder();
+      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
       short firstIndex = 0;
       for (int w = 0; w < _walls.size(); w++) {
-         firstIndex = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, baseHeight, planet, firstIndex);
+         firstIndex = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, colors, baseHeight, planet, firstIndex, color);
       }
 
-      //      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
-      //               (float) 2.0, color, null, (float) 1.0, true, normals.create());
-
       final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
-               true, 1.0f, 1.0f, color, null, 1.0f, true, normals.create());
+               true, 1.0f, 1.0f, null, colors.create(), 1.0f, true, normals.create());
 
       return im;
 
@@ -191,7 +214,7 @@ public class CityGMLBuilding {
 
       final Geodetic3D center = getCenter();
       final Geodetic3D pos = Geodetic3D.fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-               - deltaH);
+                                                                                                           - deltaH);
 
       final Mark m = new Mark(_name, pos, AltitudeMode.ABSOLUTE, 100.0);
       return m;

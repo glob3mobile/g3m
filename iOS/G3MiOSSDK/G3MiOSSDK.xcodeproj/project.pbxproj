@@ -1940,6 +1940,8 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GenericQuadTree.hpp; path = Commons/Basic/GenericQuadTree.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
+		D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CoordinateSystem.cpp; path = Commons/Geometry/CoordinateSystem.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CoordinateSystem.hpp; path = Commons/Geometry/CoordinateSystem.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2967,6 +2969,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */,
+				D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */,
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */,
 				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,

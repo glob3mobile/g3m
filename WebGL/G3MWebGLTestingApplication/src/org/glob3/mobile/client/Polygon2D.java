@@ -8,7 +8,6 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.Vector2D;
-import org.glob3.mobile.generated.Vector3D;
 
 
 public class Polygon2D {
@@ -92,7 +91,8 @@ public class Polygon2D {
 
    ///////
 
-   public boolean addTrianglesCuttingEars(final ShortBufferBuilder indexes) {
+   public short addTrianglesCuttingEars(final ShortBufferBuilder indexes,
+                                        final short firstIndex) {
 
       //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 
@@ -100,12 +100,11 @@ public class Polygon2D {
       //   ILogger.instance().logInfo("Looking for ears");
 
       final ArrayList<Vector2D> remainingCorners = new ArrayList<Vector2D>();
-      final ArrayList<Vector3D> remainingCorners3D = new ArrayList<Vector3D>();
       final ArrayList<Short> remainingIndexes = new ArrayList<Short>();
 
       for (int i = 0; i < _coor2D.size(); i++) {
          remainingCorners.add(_coor2D.get(i));
-         remainingIndexes.add((short) i);
+         remainingIndexes.add((short) (i + firstIndex));
       }
 
       while (remainingCorners.size() > 2) {
@@ -148,16 +147,14 @@ public class Polygon2D {
 
             //Removing ear
             remainingCorners.remove(i2);
-            remainingCorners3D.remove(i2);
             remainingIndexes.remove(i2);
          }
          else {
             ILogger.instance().logError("NO EAR!!!!");
-            return false;
          }
 
       }
-      return true;
+      return (short) (firstIndex + _coor2D.size());
    }
 
 
@@ -167,9 +164,9 @@ public class Polygon2D {
                                            final Vector2D cornerC) {
 
       final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
-               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+                           / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
-               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+                          / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double gamma = 1.0 - alpha - beta;
 
       if ((alpha > 0) && (beta > 0) && (gamma > 0)) {

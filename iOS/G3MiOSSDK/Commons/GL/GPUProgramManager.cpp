@@ -118,6 +118,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   }
 
   if (!flatColor && !texture && color) {
+    if (hasLight){
+      return compileProgramWithName(gl, "ColorMesh_DirectionLight");
+    }
+    
     return compileProgramWithName(gl, "ColorMesh");
   }
 

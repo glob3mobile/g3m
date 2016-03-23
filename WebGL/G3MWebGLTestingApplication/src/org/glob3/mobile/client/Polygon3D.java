@@ -108,7 +108,7 @@ public class Polygon3D {
 
 
    private ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
-            final Vector3D normal) {
+                                                   final Vector3D normal) {
 
       final Vector3D z = Vector3D.upZ();
       final Vector3D rotationAxis = z.cross(normal);
@@ -149,9 +149,9 @@ public class Polygon3D {
                                            final Vector2D cornerC) {
 
       final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
-               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+                           / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
-               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+                          / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double gamma = 1.0 - alpha - beta;
 
       if ((alpha > 0) && (beta > 0) && (gamma > 0)) {
@@ -296,78 +296,94 @@ public class Polygon3D {
    }
 
 
+   //   public short addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
+   //                                        final FloatBufferBuilderFromCartesian3D normals,
+   //                                        final ShortBufferBuilder indexes,
+   //                                        final short firstIndex) {
+   //
+   //      //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
+   //
+   //      int i1 = 0, i2 = 0, i3 = 0;
+   //      //   ILogger.instance().logInfo("Looking for ears");
+   //
+   //      final ArrayList<Vector2D> remainingCorners = new ArrayList<Vector2D>();
+   //      final ArrayList<Vector3D> remainingCorners3D = new ArrayList<Vector3D>();
+   //      final ArrayList<Short> remainingIndexes = new ArrayList<Short>();
+   //
+   //      for (int i = 0; i < _coor3D.size(); i++) {
+   //         remainingCorners.add(_coor2D.get(i));
+   //         remainingCorners3D.add(_coor3D.get(i));
+   //         remainingIndexes.add((short) (i + firstIndex));
+   //
+   //         fbb.add(_coor3D.get(i));
+   //         normals.add(_normal.times(-1));
+   //      }
+   //
+   //      while (remainingCorners.size() > 2) {
+   //
+   //         boolean earFound = false;
+   //         for (int i = 0; i < (remainingCorners.size() - 1); i++) {
+   //
+   //            i1 = i;
+   //            i2 = (i + 1) % (remainingCorners.size());
+   //            i3 = (i + 2) % (remainingCorners.size());
+   //
+   //            final boolean edgeInside = isEdgeInside(i1, i3, remainingCorners);
+   //            if (!edgeInside) {
+   //               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
+   //               continue;
+   //            }
+   //
+   //            final boolean edgeIntersects = edgeIntersectsAnyOtherEdge(i1, i3, remainingCorners);
+   //            if (edgeIntersects) {
+   //               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
+   //               continue;
+   //            }
+   //
+   //            final boolean triangleContainsVertex = isAnyVertexInsideTriangle(i1, i2, i3, remainingCorners);
+   //            if (triangleContainsVertex) {
+   //               //               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
+   //               continue;
+   //            }
+   //
+   //            //            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
+   //            earFound = true;
+   //            break;
+   //         }
+   //
+   //
+   //         if (earFound) { //Valid triangle (ear)
+   //            indexes.add(remainingIndexes.get(i1));
+   //            indexes.add(remainingIndexes.get(i2));
+   //            indexes.add(remainingIndexes.get(i3));
+   //
+   //            //Removing ear
+   //            remainingCorners.remove(i2);
+   //            remainingCorners3D.remove(i2);
+   //            remainingIndexes.remove(i2);
+   //         }
+   //         else {
+   //            ILogger.instance().logError("NO EAR!!!!");
+   //         }
+   //
+   //      }
+   //      return (short) (firstIndex + _coor2D.size());
+   //   }
+
+
    public short addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
                                         final FloatBufferBuilderFromCartesian3D normals,
                                         final ShortBufferBuilder indexes,
                                         final short firstIndex) {
 
       //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
-
-      int i1 = 0, i2 = 0, i3 = 0;
-      //   ILogger.instance().logInfo("Looking for ears");
-
-      final ArrayList<Vector2D> remainingCorners = new ArrayList<Vector2D>();
-      final ArrayList<Vector3D> remainingCorners3D = new ArrayList<Vector3D>();
-      final ArrayList<Short> remainingIndexes = new ArrayList<Short>();
-
       for (int i = 0; i < _coor3D.size(); i++) {
-         remainingCorners.add(_coor2D.get(i));
-         remainingCorners3D.add(_coor3D.get(i));
-         remainingIndexes.add((short) (i + firstIndex));
-
          fbb.add(_coor3D.get(i));
          normals.add(_normal.times(-1));
       }
 
-      while (remainingCorners.size() > 2) {
-
-         boolean earFound = false;
-         for (int i = 0; i < (remainingCorners.size() - 1); i++) {
-
-            i1 = i;
-            i2 = (i + 1) % (remainingCorners.size());
-            i3 = (i + 2) % (remainingCorners.size());
-
-            final boolean edgeInside = isEdgeInside(i1, i3, remainingCorners);
-            if (!edgeInside) {
-               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
-               continue;
-            }
-
-            final boolean edgeIntersects = edgeIntersectsAnyOtherEdge(i1, i3, remainingCorners);
-            if (edgeIntersects) {
-               //               ILogger.instance().logInfo("T: %d, %d, %d -> Edge Intersects", i1, i2, i3);
-               continue;
-            }
-
-            final boolean triangleContainsVertex = isAnyVertexInsideTriangle(i1, i2, i3, remainingCorners);
-            if (triangleContainsVertex) {
-               //               ILogger.instance().logInfo("T: %d, %d, %d -> Triangle contains vertex", i1, i2, i3);
-               continue;
-            }
-
-            //            ILogger.instance().logInfo("T: %d, %d, %d -> IS EAR!", i1, i2, i3);
-            earFound = true;
-            break;
-         }
-
-
-         if (earFound) { //Valid triangle (ear)
-            indexes.add(remainingIndexes.get(i1));
-            indexes.add(remainingIndexes.get(i2));
-            indexes.add(remainingIndexes.get(i3));
-
-            //Removing ear
-            remainingCorners.remove(i2);
-            remainingCorners3D.remove(i2);
-            remainingIndexes.remove(i2);
-         }
-         else {
-            ILogger.instance().logError("NO EAR!!!!");
-         }
-
-      }
-      return (short) (firstIndex + _coor2D.size());
+      final Polygon2D p2D = new Polygon2D(_coor2D);
+      return p2D.addTrianglesCuttingEars(indexes, firstIndex);
    }
 
 
