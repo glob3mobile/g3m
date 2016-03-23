@@ -152,6 +152,11 @@ public class GPUProgramManager
   
     if (!flatColor && !texture && color)
     {
+      if (hasLight)
+      {
+        return compileProgramWithName(gl, "ColorMesh_DirectionLight");
+      }
+  
       return compileProgramWithName(gl, "ColorMesh");
     }
   
