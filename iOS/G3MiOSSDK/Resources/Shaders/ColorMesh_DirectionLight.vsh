@@ -5,11 +5,20 @@
 //
 
 attribute vec4 aPosition;
-attribute vec4 aColor;
+attribute vec3 aNormal;
 
 uniform mat4 uModelview;
+uniform mat4 uModel;
 
 uniform float uPointSize;
+
+uniform vec3 uAmbientLightColor;
+uniform vec3 uDiffuseLightColor;
+
+uniform vec3 uDiffuseLightDirection; //We must normalize
+varying vec3 lightColor;
+
+attribute vec4 aColor;
 
 varying vec4 VertexColor;
 

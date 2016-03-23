@@ -96,9 +96,15 @@ public:
     GPUProgramSources sourcesColorMesh_DirectionLight("ColorMesh_DirectionLight",
  emptyString +  
 "attribute vec4 aPosition;\n" +
-"attribute vec4 aColor;\n" +
+"attribute vec3 aNormal;\n" +
 "uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
 "uniform float uPointSize;\n" +
+"uniform vec3 uAmbientLightColor;\n" +
+"uniform vec3 uDiffuseLightColor;\n" +
+"uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
+"varying vec3 lightColor;\n" +
+"attribute vec4 aColor;\n" +
 "varying vec4 VertexColor;\n" +
 "void main() {\n" +
 "vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
@@ -113,9 +119,14 @@ public:
 "VertexColor = aColor;\n" +
 "}\n",
  emptyString +  
-"varying mediump vec4 VertexColor;\n" +
+"precision highp float;\n" +
+"varying vec4 VertexColor;\n" +
+"varying vec3 lightColor;\n" +
 "void main() {\n" +
-"gl_FragColor = VertexColor;\n" +
+"gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.r;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.r;\n" +
+"gl_FragColor.a = VertexColor.a;\n" +
 "}\n");
     this->add(sourcesColorMesh_DirectionLight);
 
