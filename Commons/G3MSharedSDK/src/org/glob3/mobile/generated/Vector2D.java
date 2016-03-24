@@ -170,4 +170,46 @@ public class Vector2D
     return _x * v._x + _y * v._y;
   }
 
+  public static boolean isPointInsideTriangle(Vector2D p, Vector2D cornerA, Vector2D cornerB, Vector2D cornerC)
+  {
+
+    final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y))) / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+    final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y))) / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+    final double gamma = 1.0 - alpha - beta;
+
+    if ((alpha > 0) && (beta > 0) && (gamma > 0))
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public static boolean segmentsIntersect(Vector2D a, Vector2D b, Vector2D c, Vector2D d)
+  {
+    //http://www.smipple.net/snippet/sparkon/%5BC%2B%2B%5D%202D%20lines%20segment%20intersection%20
+    final double den = (((d._y - c._y) * (b._x - a._x)) - ((d._x - c._x) * (b._y - a._y)));
+    final double num1 = (((d._x - c._x) * (a._y - c._y)) - ((d._y - c._y) * (a._x - c._x)));
+    final double num2 = (((b._x - a._x) * (a._y - c._y)) - ((b._y - a._y) * (a._x - c._x)));
+    final double u1 = num1 / den;
+    final double u2 = num2 / den;
+
+    if ((den == 0) && (num1 == 0) && (num2 == 0))
+    {
+      /* The two lines are coincidents */
+      return false;
+    }
+    if (den == 0)
+    {
+      /* The two lines are parallel */
+      return false;
+    }
+    if ((u1 < 0) || (u1 > 1) || (u2 < 0) || (u2 > 1))
+    {
+      /* Lines do not collide */
+      return false;
+    }
+    /* Lines DO collide */
+    return true;
+  }
+
 }
