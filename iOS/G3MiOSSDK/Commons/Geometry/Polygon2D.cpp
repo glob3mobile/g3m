@@ -11,7 +11,8 @@
 
 bool Polygon2D::isEdgeInside(const int i,
                          const int j,
-                         const std::vector<Vector2D*> remainingCorners) {
+                         const std::vector<Vector2D*> remainingCorners,
+                         bool counterClockWise) {
   //http://stackoverflow.com/questions/693837/how-to-determine-a-diagonal-is-in-or-out-of-a-concave-polygon
   
   const int nVertices = remainingCorners.size() - 1;
@@ -41,6 +42,7 @@ bool Polygon2D::isEdgeInside(const int i,
   double av2 = v2.angle()._degrees;
   double av3 = v3.angle()._degrees;
   
+  
   while (av1 < 0) {
     av1 += 360;
   }
@@ -53,17 +55,38 @@ bool Polygon2D::isEdgeInside(const int i,
     av3 += 360;
   }
   
-  while (av1 > av2) {
-    av2 += 360;
+  
+  if (counterClockWise) {
+    
+    while (av1 > av2) {
+      av2 += 360;
+    }
+    
+    if ((av1 <= av3) && (av3 <= av2)) {
+      return true;
+    }
+    av3 += 360;
+    if ((av1 <= av3) && (av3 <= av2)) {
+      return true;
+    }
+  }
+  else {
+    
+    while (av1 < av2) {
+      av1 += 360;
+    }
+    
+    if ((av1 >= av3) && (av3 >= av2)) {
+      return true;
+    }
+    av3 += 360;
+    if ((av1 >= av3) && (av3 >= av2)) {
+      return true;
+    }
   }
   
-  if ((av1 <= av3) && (av3 <= av2)) {
-    return true;
-  }
-  av3 += 360;
-  if ((av1 <= av3) && (av3 <= av2)) {
-    return true;
-  }
+  return false;
+
   
   return false;
   
@@ -94,7 +117,7 @@ short Polygon2D::addTrianglesCuttingEars(ShortBufferBuilder& indexes, const shor
       i2 = (i + 1) % (remainingCorners.size());
       i3 = (i + 2) % (remainingCorners.size());
       
-      const bool edgeInside = isEdgeInside(i1, i3, remainingCorners);
+      const bool edgeInside = isEdgeInside(i1, i3, remainingCorners, _verticesCCW);
       if (!edgeInside) {
         //               ILogger::instance()->logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
         continue;

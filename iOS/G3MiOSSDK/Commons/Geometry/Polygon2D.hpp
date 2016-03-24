@@ -18,6 +18,7 @@ class Polygon2D{
   
   std::vector<Vector2D*> _coor2D;
   const int _nVertices;
+  bool _verticesCCW;
   
   
   bool isConvexPolygonCounterClockWise() {
@@ -92,7 +93,8 @@ class Polygon2D{
   
   static bool isEdgeInside(const int i,
                            const int j,
-                           const std::vector<Vector2D*> remainingCorners);
+                           const std::vector<Vector2D*> remainingCorners,
+                           bool counterClockWise);
   
   
   
@@ -154,13 +156,11 @@ public:
   Polygon2D(const std::vector<Vector2D*> coor): _nVertices(coor.size())  {
     //POLYGON MUST BE DEFINED CCW AND LAST VERTEX == FIRST VERTEX
     _coor2D = coor;
-    if (!isPolygonCounterClockWise()) {
-      std::vector<Vector2D*> coorCCW;
-      for (int i = _coor2D.size()-1; i > -1; i--) {
-        coorCCW.push_back(coor[i]);
-      }
-      _coor2D = coorCCW;
-    }
+    _verticesCCW = isPolygonCounterClockWise();
+  }
+  
+  bool areVerticesCounterClockWise(){
+    return _verticesCCW;
   }
   
   ~Polygon2D() {
