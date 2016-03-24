@@ -147,7 +147,12 @@ public:
     for (int i = 0; i < _geodeticCoordinates.size(); i++) {
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       isb->addInt(i);
+#ifdef C_CODE
       Mark* m = new Mark(isb->getString(), *_geodeticCoordinates[i], ABSOLUTE, 10000.0);
+#endif
+#ifdef JAVA_CODE
+      Mark m = new Mark(isb.getString(), _geodeticCoordinates.get(i), AltitudeMode.ABSOLUTE, 10000.0);
+#endif
       delete isb;
       mr->addMark(m);
     }
