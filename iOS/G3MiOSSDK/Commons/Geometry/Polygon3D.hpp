@@ -37,7 +37,7 @@ class Polygon3D{
   
 public:
   
-  Polygon3D(std::vector<Vector3D*> coor3D):
+  Polygon3D(const std::vector<Vector3D*> coor3D):
   _coor3D(coor3D),
   _normal(getNormalOfFirstVertex(coor3D)){
     std::vector<Vector2D*> _coor2D = createCoordinates2D();
@@ -53,7 +53,7 @@ public:
 #endif
   }
   
-  Vector3D getCCWNormal(){
+  Vector3D getCCWNormal() const{
     if (_polygon2D->areVerticesCounterClockWise()){
       return _normal.times(-1);
     }
@@ -66,7 +66,7 @@ public:
   short addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D& fbb,
                                   FloatBufferBuilderFromCartesian3D& normals,
                                   ShortBufferBuilder& indexes,
-                                  const short firstIndex) {
+                                  const short firstIndex) const {
     
     //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
     
