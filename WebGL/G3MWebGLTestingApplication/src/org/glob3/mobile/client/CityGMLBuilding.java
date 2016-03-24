@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeMesh;
-import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian3D;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IndexedMesh;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -33,7 +33,7 @@ public class CityGMLBuilding {
 
 
    public void addSurfaceWithPosLis(final ArrayList<Double> coordinates) {
-      _walls.add(new BuildingSurface(this, coordinates));
+      _walls.add(new BuildingSurface(coordinates));
    }
 
 
@@ -110,6 +110,22 @@ public class CityGMLBuilding {
    //
    //   }
 
+   private short addTrianglesCuttingEarsForAllWalls(final FloatBufferBuilderFromCartesian3D fbb,
+                                                    final FloatBufferBuilderFromCartesian3D normals,
+                                                    final ShortBufferBuilder indexes,
+                                                    final FloatBufferBuilderFromColor colors,
+                                                    final double baseHeight,
+                                                    final Planet planet,
+                                                    final short firstIndex,
+                                                    final Color color) {
+      short buildingFirstIndex = firstIndex;
+      for (int w = 0; w < _walls.size(); w++) {
+         buildingFirstIndex = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, colors, baseHeight, planet,
+                  buildingFirstIndex, color);
+      }
+      return buildingFirstIndex;
+   }
+
 
    public Mesh createIndexedMeshWithColorPerVertex(final Planet planet,
                                                    final boolean fixOnGround,
@@ -123,39 +139,102 @@ public class CityGMLBuilding {
       final ShortBufferBuilder indexes = new ShortBufferBuilder();
       final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
-      short firstIndex = 0;
-      for (int w = 0; w < _walls.size(); w++) {
-         firstIndex = _walls.get(w).addTrianglesCuttingEars(fbb, normals, indexes, colors, baseHeight, planet, firstIndex, color);
-      }
+      final short firstIndex = 0;
+      addTrianglesCuttingEarsForAllWalls(fbb, normals, indexes, colors, baseHeight, planet, firstIndex, color);
 
       final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
                true, 1.0f, 1.0f, null, colors.create(), 1.0f, true, normals.create());
 
       return im;
-
    }
 
 
-   public Mesh createSingleTrianglesMesh(final Planet planet,
-                                         final boolean fixOnGround,
-                                         final Color color) {
+   public static Mesh createSingleIndexedMeshWithColorPerVertexForBuildings(final ArrayList<CityGMLBuilding> buildings,
+                                                                            final Planet planet,
+                                                                            final boolean fixOnGround) {
+
+      CompositeMesh cm = null;
+      int buildingCounter = 0;
+      int meshesCounter = 0;
 
 
-      final double baseHeight = fixOnGround ? getBaseHeight() : 0;
+      FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+      FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      ShortBufferBuilder indexes = new ShortBufferBuilder();
+      FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
-      final FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-      final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      final Color colorWheel = Color.red();
 
-      for (int w = 0; w < _walls.size(); w++) {
-         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
+      short firstIndex = 0;
+      for (int i = 0; i < buildings.size(); i++) {
+         final CityGMLBuilding b = buildings.get(i);
+
+         final double baseHeight = fixOnGround ? b.getBaseHeight() : 0;
+         firstIndex = b.addTrianglesCuttingEarsForAllWalls(fbb, normals, indexes, colors, baseHeight, planet, firstIndex,
+                  colorWheel.wheelStep(buildings.size(), buildingCounter));
+
+         buildingCounter++;
+
+         if (firstIndex > 30000) { //Max number of vertex per mesh (CHECK IT)
+            if (cm == null) {
+               cm = new CompositeMesh();
+            }
+
+            //Adding new mesh
+            final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true,
+                     indexes.create(), true, 1.0f, 1.0f, null, colors.create(), 1.0f, true, normals.create());
+            cm.addMesh(im);
+            meshesCounter++;
+
+            //Reset
+            fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+            normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+            indexes = new ShortBufferBuilder();
+            colors = new FloatBufferBuilderFromColor();
+            firstIndex = 0;
+         }
       }
 
-      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
-               (float) 2.0, color, null, (float) 1.0, true, normals.create());
+      if (cm == null) {
 
-      return trianglesMesh;
+         final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
+                  true, 1.0f, 1.0f, null, colors.create(), 1.0f, true, normals.create());
 
+         ILogger.instance().logInfo("One single mesh created for %d buildings", buildingCounter);
+         return im;
+      }
+
+      //Adding last mesh
+      final IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),
+               true, 1.0f, 1.0f, null, colors.create(), 1.0f, true, normals.create());
+      cm.addMesh(im);
+      meshesCounter++;
+
+      ILogger.instance().logInfo("%d meshes created for %d buildings", meshesCounter, buildingCounter);
+      return cm;
    }
+
+
+   //   public Mesh createSingleTrianglesMesh(final Planet planet,
+   //                                         final boolean fixOnGround,
+   //                                         final Color color) {
+   //
+   //
+   //      final double baseHeight = fixOnGround ? getBaseHeight() : 0;
+   //
+   //      final FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+   //      final FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+   //
+   //      for (int w = 0; w < _walls.size(); w++) {
+   //         final boolean x = _walls.get(w).addTrianglesCuttingEars(fbb, normals, baseHeight, planet);
+   //      }
+   //
+   //      final DirectMesh trianglesMesh = new DirectMesh(GLPrimitive.triangles(), false, fbb.getCenter(), fbb.create(), (float) 1.0,
+   //               (float) 2.0, color, null, (float) 1.0, true, normals.create());
+   //
+   //      return trianglesMesh;
+   //
+   //   }
 
 
    public Geodetic3D getMin() {

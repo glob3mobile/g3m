@@ -198,8 +198,8 @@ public class G3MWebGLTestingApplication
       builder.setPlanet(planet);
 
       class CityGMLDownloadListener
-               extends
-                  IBufferDownloadListener {
+      extends
+      IBufferDownloadListener {
 
          @Override
          public void onError(final URL url) {
@@ -217,24 +217,11 @@ public class G3MWebGLTestingApplication
             final CityGMLDocument doc = new CityGMLDocument(s);
 
             final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
-            int i = 0;
             for (final CityGMLBuilding b : bs) {
-
-               //               if ((b._name != "110511393") && (b._name != "109739935") && (b._name != "28245343")) { //SCHLOSS
-               //                  continue;
-               //               }
-               //               b.addMarkersToCorners(marksRenderer, false);
-
-               //ILogger.instance().logInfo(b.description());
-               //meshRenderer.addMesh(b.createMeshesForSurfaces(planet, true, Color.red().wheelStep(bs.size(), i++)));
-               //               meshRenderer.addMesh(b.createSingleTrianglesMesh(planet, false, Color.red().wheelStep(bs.size(), i++)));
-
-               meshRenderer.addMesh(b.createIndexedMeshWithColorPerVertex(planet, false, Color.red().wheelStep(bs.size(), i++)));
-
-
                marksRenderer.addMark(b.createMark(false));
-
             }
+
+            meshRenderer.addMesh(CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(bs, planet, false));
          }
 
 
@@ -260,25 +247,15 @@ public class G3MWebGLTestingApplication
          @Override
          public void run(final G3MContext context) {
 
-            //            final IBufferDownloadListener listener = new CityGMLDownloadListener();
-            //            context.getDownloader().requestBuffer(new URL("test_sample_4326_lod2.gml"), 0, TimeInterval.forever(), false,
-            //                     listener, true);
-            //
-            final IBufferDownloadListener listener2 = new CityGMLDownloadListener();
-            context.getDownloader().requestBuffer(new URL("lindenallee_kranichweg_v1_EPSG:4326.gml"), 0, TimeInterval.forever(),
-                     false, listener2, true);
+            final String[] cityGMLFiles = { //"test_sample_4326_lod2.gml",
+            "lindenallee_kranichweg_v1_EPSG:4326.gml",
+                     //"test_sample_4326_lod2_single_building.gml"
+                     "innenstadt_ost_4326_lod2.gml", "innenstadt_west_4326_lod2.gml" };
 
-            //            final IBufferDownloadListener listener3 = new CityGMLDownloadListener();
-            //            context.getDownloader().requestBuffer(new URL("test_sample_4326_lod2_single_building.gml"), 0,
-            //                     TimeInterval.forever(), false, listener3, true);
-
-            final IBufferDownloadListener listener4 = new CityGMLDownloadListener();
-            context.getDownloader().requestBuffer(new URL("innenstadt_ost_4326_lod2.gml"), 0, TimeInterval.forever(), false,
-                     listener4, true);
-
-            final IBufferDownloadListener listener5 = new CityGMLDownloadListener();
-            context.getDownloader().requestBuffer(new URL("innenstadt_west_4326_lod2.gml"), 0, TimeInterval.forever(), false,
-                     listener5, true);
+            for (final String s : cityGMLFiles) {
+               final IBufferDownloadListener listener = new CityGMLDownloadListener();
+               context.getDownloader().requestBuffer(new URL(s), 0, TimeInterval.forever(), false, listener, true);
+            }
          }
 
 

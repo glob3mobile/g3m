@@ -25,7 +25,7 @@ class BuildingSurface {
    /**
     *
     */
-   private final CityGMLBuilding  _cityGMLBuilding;
+   //   private final CityGMLBuilding  _cityGMLBuilding;
    public final ArrayList<Double> _coordinates;
    ArrayList<Geodetic3D>          _geodeticCoordinates  = null;
    double                         _baseHeightOfGeoCoors = 0;
@@ -218,15 +218,15 @@ class BuildingSurface {
    }
 
 
-   public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
-                                          final FloatBufferBuilderFromCartesian3D normals,
-                                          final double baseHeight,
-                                          final Planet planet) {
-      final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
-      final Polygon3D polygon = new Polygon3D(cartesianC);
-      polygon.addTrianglesCuttingEars(fbb, normals);
-      return true;
-   }
+   //   public boolean addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
+   //                                          final FloatBufferBuilderFromCartesian3D normals,
+   //                                          final double baseHeight,
+   //                                          final Planet planet) {
+   //      final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
+   //      final Polygon3D polygon = new Polygon3D(cartesianC);
+   //      polygon.addTrianglesCuttingEars(fbb, normals);
+   //      return true;
+   //   }
 
 
    public short addTrianglesCuttingEars(final FloatBufferBuilderFromCartesian3D fbb,
@@ -266,9 +266,8 @@ class BuildingSurface {
    }
 
 
-   public BuildingSurface(final CityGMLBuilding cityGMLBuilding,
-                          final ArrayList<Double> coordinates) {
-      _cityGMLBuilding = cityGMLBuilding;
+   public BuildingSurface(final ArrayList<Double> coordinates) {
+      //      _cityGMLBuilding = cityGMLBuilding;
       _coordinates = coordinates;
    }
 
