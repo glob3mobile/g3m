@@ -26,9 +26,16 @@ bool Polygon2D::isEdgeInside(const int i,
     isub1 = nVertices - 1;
   }
   
+#ifdef C_CODE
   const Vector2D v1 = remainingCorners[iadd1]->sub(*remainingCorners[i]);
   const Vector2D v2 = remainingCorners[isub1]->sub(*remainingCorners[i]);
   const Vector2D v3 = remainingCorners[j]->sub(*remainingCorners[i]);
+#endif
+#ifdef JAVA_CODE
+  final Vector2D v1 = remainingCorners.get(iadd1).sub(remainingCorners.get(i));
+  final Vector2D v2 = remainingCorners.get(isub1).sub(remainingCorners.get(i));
+  final Vector2D v3 = remainingCorners.get(j).sub(remainingCorners.get(i));
+#endif
   
   double av1 = v1.angle()._degrees;
   double av2 = v2.angle()._degrees;

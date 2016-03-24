@@ -381,7 +381,7 @@ public class Polygon3D {
          normals.add(_normal.times(-1));
       }
 
-      final Polygon2D p2D = new Polygon2D(_coor2D);
+      final org.glob3.mobile.generated.Polygon2D p2D = new org.glob3.mobile.generated.Polygon2D(_coor2D);
       return p2D.addTrianglesCuttingEars(indexes, firstIndex);
    }
 

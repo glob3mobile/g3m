@@ -80,7 +80,8 @@ public class Polygon2D {
    }
 
 
-   public Polygon2D(final ArrayList<Vector2D> coor) {
+   //TODO ERASE THIS CLASS
+   private Polygon2D(final ArrayList<Vector2D> coor) {
       _coor2D = coor;
 
       if (!isPolygonCounterClockWise()) {
@@ -164,9 +165,9 @@ public class Polygon2D {
                                            final Vector2D cornerC) {
 
       final double alpha = (((cornerB._y - cornerC._y) * (p._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (p._y - cornerC._y)))
-                           / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double beta = (((cornerC._y - cornerA._y) * (p._x - cornerC._x)) + ((cornerA._x - cornerC._x) * (p._y - cornerC._y)))
-                          / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
+               / (((cornerB._y - cornerC._y) * (cornerA._x - cornerC._x)) + ((cornerC._x - cornerB._x) * (cornerA._y - cornerC._y)));
       final double gamma = 1.0 - alpha - beta;
 
       if ((alpha > 0) && (beta > 0) && (gamma > 0)) {
@@ -309,6 +310,5 @@ public class Polygon2D {
       return false;
 
    }
-
 
 }
