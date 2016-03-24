@@ -18,10 +18,12 @@
 
 class CityGMLBuilding {
   
-  std::string                _name;
-  int                        _roofTypeCode;
-  std::vector<CityGMLBuildingSurface*> _walls;
   
+public:
+  
+  const std::string                _name;
+  const int                        _roofTypeCode;
+  const std::vector<CityGMLBuildingSurface*> _walls;
   
   CityGMLBuilding(const std::string name,
                   int roofType,
@@ -30,11 +32,6 @@ class CityGMLBuilding {
   _roofTypeCode(roofType),
   _walls(walls)
   {
-  }
-  
-  
-  void setRoofTypeCode(const int i) {
-    _roofTypeCode = i;
   }
   
   
@@ -84,8 +81,8 @@ class CityGMLBuilding {
   
   
   Mesh* createIndexedMeshWithColorPerVertex(const Planet planet,
-                                           const bool fixOnGround,
-                                           const Color color) {
+                                            const bool fixOnGround,
+                                            const Color color) {
     
     
     const double baseHeight = fixOnGround ? getBaseHeight() : 0;
@@ -98,11 +95,11 @@ class CityGMLBuilding {
     const short firstIndex = 0;
     addTrianglesCuttingEarsForAllWalls(*fbb, *normals, indexes, colors, baseHeight, planet, firstIndex, color);
     
-     IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
-                                            fbb->getCenter(), fbb->create(), true,
-                                            indexes.create(),true,
-                                            1.0f, 1.0f, NULL,
-                                            colors.create(), 1.0f, true, normals->create());
+    IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
+                                      fbb->getCenter(), fbb->create(), true,
+                                      indexes.create(),true,
+                                      1.0f, 1.0f, NULL,
+                                      colors.create(), 1.0f, true, normals->create());
     
     delete fbb;
     delete normals;
@@ -112,8 +109,8 @@ class CityGMLBuilding {
   
   
   static Mesh* createSingleIndexedMeshWithColorPerVertexForBuildings(const std::vector<CityGMLBuilding*> buildings,
-                                                                    const Planet planet,
-                                                                    const bool fixOnGround) {
+                                                                     const Planet planet,
+                                                                     const bool fixOnGround) {
     
     CompositeMesh* cm = NULL;
     int buildingCounter = 0;
@@ -133,7 +130,7 @@ class CityGMLBuilding {
       
       const double baseHeight = fixOnGround ? b->getBaseHeight() : 0;
       firstIndex = b->addTrianglesCuttingEarsForAllWalls(*fbb, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
-                                                        colorWheel.wheelStep(buildings.size(), buildingCounter));
+                                                         colorWheel.wheelStep(buildings.size(), buildingCounter));
       
       buildingCounter++;
       
@@ -144,15 +141,18 @@ class CityGMLBuilding {
         
         //Adding new mesh
         IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(), fbb->getCenter(), fbb->create(), true, indexes->create(),
-                                                true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
+                                          true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
         
         cm->addMesh(im);
         meshesCounter++;
         
         //Reset
+
         delete fbb;
         delete normals;
+#ifdef C_CODE
         delete indexes;
+#endif
         delete colors;
         fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
         normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
@@ -164,7 +164,7 @@ class CityGMLBuilding {
     
     //Adding last mesh
     IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(), fbb->getCenter(), fbb->create(), true, indexes->create(),
-                                           true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
+                                      true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
     if (cm == NULL){
       ILogger::instance()->logInfo("One single mesh created for %d buildings", buildingCounter);
       return im;
@@ -224,7 +224,7 @@ class CityGMLBuilding {
     const Geodetic3D max = getMax();
     
     return Geodetic3D::fromDegrees((min._latitude._degrees + max._latitude._degrees) / 2,
-                                  (min._longitude._degrees + max._longitude._degrees) / 2, (min._height + max._height) / 2);
+                                   (min._longitude._degrees + max._longitude._degrees) / 2, (min._height + max._height) / 2);
   }
   
   
@@ -233,7 +233,7 @@ class CityGMLBuilding {
     
     const Geodetic3D center = getCenter();
     const Geodetic3D pos = Geodetic3D::fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-                                                  - deltaH);
+                                                   - deltaH);
     
     Mark* m = new Mark(_name, pos, ABSOLUTE, 100.0);
     return m;
@@ -250,5 +250,5 @@ class CityGMLBuilding {
     }
   }
 };
-  
+
 #endif /* CityGMLBuilding_hpp */

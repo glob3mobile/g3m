@@ -198,8 +198,8 @@ public class G3MWebGLTestingApplication
       builder.setPlanet(planet);
 
       class CityGMLDownloadListener
-      extends
-      IBufferDownloadListener {
+               extends
+                  IBufferDownloadListener {
 
          @Override
          public void onError(final URL url) {
@@ -216,12 +216,19 @@ public class G3MWebGLTestingApplication
             final String s = buffer.getAsString();
             final CityGMLDocument doc = new CityGMLDocument(s);
 
-            final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
-            for (final CityGMLBuilding b : bs) {
+            //            final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
+            //            for (final CityGMLBuilding b : bs) {
+            //               marksRenderer.addMark(b.createMark(false));
+            //            }
+            //            meshRenderer.addMesh(CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(bs, planet, false));
+
+
+            final ArrayList<org.glob3.mobile.generated.CityGMLBuilding> bs = doc.parseLOD2Buildings2();
+            for (final org.glob3.mobile.generated.CityGMLBuilding b : bs) {
                marksRenderer.addMark(b.createMark(false));
             }
-
-            meshRenderer.addMesh(CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(bs, planet, false));
+            meshRenderer.addMesh(org.glob3.mobile.generated.CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(
+                     bs, planet, false));
          }
 
 

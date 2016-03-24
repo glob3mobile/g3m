@@ -149,7 +149,7 @@ public class CityGMLBuilding {
    }
 
 
-   public static Mesh createSingleIndexedMeshWithColorPerVertexForBuildings(final ArrayList<CityGMLBuilding> buildings,
+   public static Mesh createSingleIndexedMeshWithColorPerVertexForBuildings(final ArrayList<CityGMLBuilding> bs,
                                                                             final Planet planet,
                                                                             final boolean fixOnGround) {
 
@@ -166,12 +166,12 @@ public class CityGMLBuilding {
       final Color colorWheel = Color.red();
 
       short firstIndex = 0;
-      for (int i = 0; i < buildings.size(); i++) {
-         final CityGMLBuilding b = buildings.get(i);
+      for (int i = 0; i < bs.size(); i++) {
+         final CityGMLBuilding b = bs.get(i);
 
          final double baseHeight = fixOnGround ? b.getBaseHeight() : 0;
          firstIndex = b.addTrianglesCuttingEarsForAllWalls(fbb, normals, indexes, colors, baseHeight, planet, firstIndex,
-                  colorWheel.wheelStep(buildings.size(), buildingCounter));
+                  colorWheel.wheelStep(bs.size(), buildingCounter));
 
          buildingCounter++;
 
