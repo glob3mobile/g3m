@@ -23,6 +23,7 @@ public class Polygon2D
 
   private java.util.ArrayList<Vector2D> _coor2D = new java.util.ArrayList<Vector2D>();
   private final int _nVertices;
+  private boolean _verticesCCW;
 
 
   private boolean isConvexPolygonCounterClockWise()
@@ -100,7 +101,7 @@ public class Polygon2D
   }
 
 
-  private static boolean isEdgeInside(int i, int j, java.util.ArrayList<Vector2D> remainingCorners)
+  private static boolean isEdgeInside(int i, int j, java.util.ArrayList<Vector2D> remainingCorners, boolean counterClockWise)
   {
     //http://stackoverflow.com/questions/693837/how-to-determine-a-diagonal-is-in-or-out-of-a-concave-polygon
   
@@ -126,6 +127,7 @@ public class Polygon2D
     double av2 = v2.angle()._degrees;
     double av3 = v3.angle()._degrees;
   
+  
     while (av1 < 0)
     {
       av1 += 360;
@@ -141,20 +143,46 @@ public class Polygon2D
       av3 += 360;
     }
   
-    while (av1 > av2)
+  
+    if (counterClockWise)
     {
-      av2 += 360;
+  
+      while (av1 > av2)
+      {
+        av2 += 360;
+      }
+  
+      if ((av1 <= av3) && (av3 <= av2))
+      {
+        return true;
+      }
+      av3 += 360;
+      if ((av1 <= av3) && (av3 <= av2))
+      {
+        return true;
+      }
+    }
+    else
+    {
+  
+      while (av1 < av2)
+      {
+        av1 += 360;
+      }
+  
+      if ((av1 >= av3) && (av3 >= av2))
+      {
+        return true;
+      }
+      av3 += 360;
+      if ((av1 >= av3) && (av3 >= av2))
+      {
+        return true;
+      }
     }
   
-    if ((av1 <= av3) && (av3 <= av2))
-    {
-      return true;
-    }
-    av3 += 360;
-    if ((av1 <= av3) && (av3 <= av2))
-    {
-      return true;
-    }
+    return false;
+  
   
     return false;
   
@@ -225,15 +253,12 @@ public class Polygon2D
      _nVertices = coor.size();
     //POLYGON MUST BE DEFINED CCW AND LAST VERTEX == FIRST VERTEX
     _coor2D = coor;
-    if (!isPolygonCounterClockWise())
-    {
-      java.util.ArrayList<Vector2D> coorCCW = new java.util.ArrayList<Vector2D>();
-      for (int i = _coor2D.size()-1; i > -1; i--)
-      {
-        coorCCW.add(coor.get(i));
-      }
-      _coor2D = coorCCW;
-    }
+    _verticesCCW = isPolygonCounterClockWise();
+  }
+
+  public final boolean areVerticesCounterClockWise()
+  {
+    return _verticesCCW;
   }
 
   public void dispose()
@@ -270,7 +295,7 @@ public class Polygon2D
         i2 = (i + 1) % (remainingCorners.size());
         i3 = (i + 2) % (remainingCorners.size());
   
-        final boolean edgeInside = isEdgeInside(i1, i3, remainingCorners);
+        final boolean edgeInside = isEdgeInside(i1, i3, remainingCorners, _verticesCCW);
         if (!edgeInside)
         {
           //               ILogger::instance()->logInfo("T: %d, %d, %d -> Edge Not Inside", i1, i2, i3);
