@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public enum CityGLMBuildingSurfaceType
+public enum CityGMLBuildingSurfaceType
 {
   WALL,
   ROOF,
@@ -28,7 +28,7 @@ public enum CityGLMBuildingSurfaceType
       return this.ordinal();
    }
 
-   public static CityGLMBuildingSurfaceType forValue(int value)
+   public static CityGMLBuildingSurfaceType forValue(int value)
    {
       return values()[value];
    }

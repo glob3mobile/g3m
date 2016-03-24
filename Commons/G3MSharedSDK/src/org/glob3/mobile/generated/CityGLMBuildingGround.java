@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated; 
-public class CityGLMBuildingGround extends CityGLMBuildingSurface
+public class CityGLMBuildingGround extends CityGMLBuildingSurface
 {
   public CityGLMBuildingGround(java.util.ArrayList<Geodetic3D> geodeticCoordinates)
   {
-     super(geodeticCoordinates, CityGLMBuildingSurfaceType.GROUND);
+     super(geodeticCoordinates, CityGMLBuildingSurfaceType.GROUND);
   }
 }

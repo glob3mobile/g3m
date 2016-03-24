@@ -1,19 +1,19 @@
 package org.glob3.mobile.generated; 
-public class CityGLMBuildingSurface extends Surface
+public class CityGMLBuildingSurface extends Surface
 {
-  private CityGLMBuildingSurfaceType _type;
-  public CityGLMBuildingSurface(java.util.ArrayList<Geodetic3D> geodeticCoordinates, CityGLMBuildingSurfaceType type)
+  private CityGMLBuildingSurfaceType _type;
+  public CityGMLBuildingSurface(java.util.ArrayList<Geodetic3D> geodeticCoordinates, CityGMLBuildingSurfaceType type)
   {
      super(geodeticCoordinates);
      _type = type;
   }
 
-  public final CityGLMBuildingSurfaceType getType()
+  public final CityGMLBuildingSurfaceType getType()
   {
     return _type;
   }
 
-  public static CityGLMBuildingSurface createFromArrayOfCityGMLWGS84Coordinates(java.util.ArrayList<Double> coor, CityGLMBuildingSurfaceType type)
+  public static CityGMLBuildingSurface createFromArrayOfCityGMLWGS84Coordinates(java.util.ArrayList<Double> coor, CityGMLBuildingSurfaceType type)
   {
 
     java.util.ArrayList<Geodetic3D> geodeticCoordinates = new java.util.ArrayList<Geodetic3D>();
@@ -25,6 +25,6 @@ public class CityGLMBuildingSurface extends Surface
       final double h = coor.get(i + 2);
       geodeticCoordinates.add(new Geodetic3D(Geodetic3D.fromDegrees(lat, lon, h)));
     }
-    return new CityGLMBuildingSurface(geodeticCoordinates, type);
+    return new CityGMLBuildingSurface(geodeticCoordinates, type);
   }
 }
