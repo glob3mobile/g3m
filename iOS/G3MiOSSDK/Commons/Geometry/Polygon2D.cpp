@@ -88,7 +88,7 @@ bool Polygon2D::isEdgeInside(const int i,
   return false;
 }
 
-short Polygon2D::addTrianglesCuttingEars(ShortBufferBuilder& indexes, const short firstIndex) {
+short Polygon2D::addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, const short firstIndex) {
   
   //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
   

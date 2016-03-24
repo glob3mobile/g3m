@@ -171,7 +171,7 @@ public:
 #endif
   }
   
-  short addTrianglesCuttingEars(ShortBufferBuilder& indexes, const short firstIndex);
+  short addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, const short firstIndex);
   
 };
 

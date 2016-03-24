@@ -28,15 +28,14 @@ std::vector<Vector2D*> Polygon3D::createCoordinates2D() {
         coor2D.push_back(new Vector2D(v3D->_x, -v3D->_y));
       }
     }
+  } else{
     
-    return coor2D;
-  }
-  
-  const Angle a = _normal.signedAngleBetween(rotationAxis, z);
-  
-  for (int i = 0; i < _coor3D.size(); i++) {
-    const Vector3D v3D = _coor3D[i]->rotateAroundAxis(rotationAxis, a);
-    coor2D.push_back(new Vector2D(v3D._x, v3D._y));
+    const Angle a = _normal.signedAngleBetween(rotationAxis, z);
+    
+    for (int i = 0; i < _coor3D.size(); i++) {
+      const Vector3D v3D = _coor3D[i]->rotateAroundAxis(rotationAxis, a);
+      coor2D.push_back(new Vector2D(v3D._x, v3D._y));
+    }
   }
   
   return coor2D;

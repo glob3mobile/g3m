@@ -12,6 +12,8 @@
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
 #include "Polygon2D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "ShortBufferBuilder.hpp"
 #include <vector>
 
 class Polygon3D{
@@ -54,6 +56,22 @@ public:
   
   
   std::vector<Vector2D*> createCoordinates2D();
+  
+  short addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D& fbb,
+                                       FloatBufferBuilderFromCartesian3D& normals,
+                                       ShortBufferBuilder& indexes,
+                                       const short firstIndex) {
+    
+    //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
+    
+    Vector3D normal = getCCWNormal();
+    for (int i = 0; i < _coor3D.size(); i++) {
+      fbb.add(*_coor3D[i]);
+      normals.add(normal);
+    }
+    
+    return _polygon2D->addTrianglesIndexesByEarClipping(indexes, firstIndex);
+  }
 
   
 };
