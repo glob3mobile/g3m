@@ -23,15 +23,17 @@
 
 class Surface {
   
-  std::vector<Geodetic3D*>          _geodeticCoordinates;
-  double                         _baseHeightOfGeoCoors = 0;
-  
 public:
+  
+  
+  std::vector<Geodetic3D*>          _geodeticCoordinates;
   
   Surface(const std::vector<Geodetic3D*>& geodeticCoordinates):
   _geodeticCoordinates(geodeticCoordinates)
   {
   }
+  
+  
   
   ~Surface(){
 #ifdef C_CODE
@@ -41,7 +43,7 @@ public:
 #endif
   }
   
-  double getBaseHeight() {
+  double getBaseHeight() const {
     double minHeight = 0;
     minHeight = IMathUtils::instance()->maxDouble();
     for (int i = 0; i < _geodeticCoordinates.size(); i++) {

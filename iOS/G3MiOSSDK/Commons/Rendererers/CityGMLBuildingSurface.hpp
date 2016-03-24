@@ -11,25 +11,25 @@
 
 #include "Surface.hpp"
 
-enum CityGLMBuildingSurfaceType{
+enum CityGMLBuildingSurfaceType{
   WALL,
   ROOF,
   GROUND
 };
 
-class CityGLMBuildingSurface: public Surface{
-  CityGLMBuildingSurfaceType _type;
+class CityGMLBuildingSurface: public Surface{
+  CityGMLBuildingSurfaceType _type;
 public:
-  CityGLMBuildingSurface(const std::vector<Geodetic3D*>& geodeticCoordinates, CityGLMBuildingSurfaceType type):
+  CityGMLBuildingSurface(const std::vector<Geodetic3D*>& geodeticCoordinates, CityGMLBuildingSurfaceType type):
   Surface(geodeticCoordinates),
   _type(type){
   }
   
-  CityGLMBuildingSurfaceType getType(){
+  CityGMLBuildingSurfaceType getType(){
     return _type;
   }
   
-  static CityGLMBuildingSurface* createFromArrayOfCityGMLWGS84Coordinates(const std::vector<double> coor, CityGLMBuildingSurfaceType type){
+  static CityGMLBuildingSurface* createFromArrayOfCityGMLWGS84Coordinates(const std::vector<double> coor, CityGMLBuildingSurfaceType type){
     
     std::vector<Geodetic3D*> geodeticCoordinates;
     
@@ -39,26 +39,26 @@ public:
       const double h = coor[i + 2];
       geodeticCoordinates.push_back(new Geodetic3D(Geodetic3D::fromDegrees(lat, lon, h)));
     }
-    return new CityGLMBuildingSurface(geodeticCoordinates, type);
+    return new CityGMLBuildingSurface(geodeticCoordinates, type);
   }
 };
 
-class CityGLMBuildingWall: public CityGLMBuildingSurface{
+class CityGLMBuildingWall: public CityGMLBuildingSurface{
 public:
   CityGLMBuildingWall(const std::vector<Geodetic3D*>& geodeticCoordinates):
-  CityGLMBuildingSurface(geodeticCoordinates, WALL){}
+  CityGMLBuildingSurface(geodeticCoordinates, WALL){}
 };
 
-class CityGLMBuildingRoof: public CityGLMBuildingSurface{
+class CityGLMBuildingRoof: public CityGMLBuildingSurface{
 public:
   CityGLMBuildingRoof(const std::vector<Geodetic3D*>& geodeticCoordinates):
-  CityGLMBuildingSurface(geodeticCoordinates, ROOF){}
+  CityGMLBuildingSurface(geodeticCoordinates, ROOF){}
 };
 
-class CityGLMBuildingGround: public CityGLMBuildingSurface{
+class CityGLMBuildingGround: public CityGMLBuildingSurface{
 public:
   CityGLMBuildingGround(const std::vector<Geodetic3D*>& geodeticCoordinates):
-  CityGLMBuildingSurface(geodeticCoordinates, GROUND){}
+  CityGMLBuildingSurface(geodeticCoordinates, GROUND){}
 };
 
 
