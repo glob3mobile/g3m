@@ -17,6 +17,7 @@
 class Polygon2D{
   
   std::vector<Vector2D*> _coor2D;
+  const int _nVertices;
   
   
   bool isConvexPolygonCounterClockWise() {
@@ -31,11 +32,11 @@ class Polygon2D{
   
   double angleInRadiansOfCorner(const int i) {
     
-    int isub1 = (i - 1) % (_coor2D.size() - 2);
+    int isub1 = (i - 1) % (_nVertices - 2);
     if (isub1 == -1) {
-      isub1 = _coor2D.size() - 2;
+      isub1 = _nVertices - 2;
     }
-    const int iadd1 = (i + 1) % (_coor2D.size() - 2); //Last one is repeated
+    const int iadd1 = (i + 1) % (_nVertices - 2); //Last one is repeated
     
     
     const Vector2D v1 = _coor2D[iadd1]->sub(*_coor2D[i]);
@@ -47,7 +48,7 @@ class Polygon2D{
   
   bool isConcave() {
     const double a0 = angleInRadiansOfCorner(0);
-    for (int i = 1; i < (_coor2D.size() - 1); i++) {
+    for (int i = 1; i < (_nVertices - 1); i++) {
       const double ai = angleInRadiansOfCorner(i);
       if ((ai * a0) < 0) {
         return true;
@@ -59,7 +60,7 @@ class Polygon2D{
   
   double concavePolygonArea() {
     double sum = 0;
-    for (int i = 0; i < (_coor2D.size() - 1); i++) {
+    for (int i = 0; i < (_nVertices - 1); i++) {
       const Vector2D* vi = _coor2D[i];
       const Vector2D* vi1 = _coor2D[i + 1];
       sum += ((vi->_x * vi1->_y) - (vi1->_x * vi->_y));
@@ -145,11 +146,16 @@ class Polygon2D{
   
 public:
   
-  Polygon2D(const std::vector<Vector2D*> coor) {
+  Polygon2D(const std::vector<Vector2D*> coor): _nVertices(coor.size())  {
     _coor2D = coor;
-    
     if (!isPolygonCounterClockWise()) {
       ILogger::instance()->logError("NO CCW POLYGON");
+    }
+  }
+  
+  ~Polygon2D() {
+    for (int j = 0; j < _nVertices; j++) {
+      delete _coor2D[j];
     }
   }
   

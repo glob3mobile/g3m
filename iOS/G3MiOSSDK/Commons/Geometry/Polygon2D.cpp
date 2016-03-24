@@ -73,7 +73,7 @@ short Polygon2D::addTrianglesCuttingEars(ShortBufferBuilder& indexes, const shor
   std::vector<Vector2D*> remainingCorners;
   std::vector<short> remainingIndexes;
   
-  for (int i = 0; i < _coor2D.size(); i++) {
+  for (int i = 0; i < _nVertices; i++) {
     remainingCorners.push_back(_coor2D[i]);
     remainingIndexes.push_back((short) (i + firstIndex));
   }
@@ -131,5 +131,5 @@ short Polygon2D::addTrianglesCuttingEars(ShortBufferBuilder& indexes, const shor
     }
     
   }
-  return (short) (firstIndex + _coor2D.size());
+  return (short) (firstIndex + _nVertices);
 }
