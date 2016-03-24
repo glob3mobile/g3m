@@ -86,11 +86,6 @@ bool Polygon2D::isEdgeInside(const int i,
   }
   
   return false;
-
-  
-  return false;
-  
-  
 }
 
 short Polygon2D::addTrianglesCuttingEars(ShortBufferBuilder& indexes, const short firstIndex) {
