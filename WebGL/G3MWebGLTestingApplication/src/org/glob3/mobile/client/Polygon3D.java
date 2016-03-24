@@ -117,7 +117,7 @@ public class Polygon3D {
 
 
    private ArrayList<Vector2D> createCoordinates2D(final ArrayList<Vector3D> c3D,
-                                                   final Vector3D normal) {
+            final Vector3D normal) {
 
       final Vector3D z = Vector3D.upZ();
       final Vector3D rotationAxis = z.cross(normal);
@@ -392,7 +392,7 @@ public class Polygon3D {
       }
 
       final org.glob3.mobile.generated.Polygon2D p2D = new org.glob3.mobile.generated.Polygon2D(_coor2D);
-      return p2D.addTrianglesCuttingEars(indexes, firstIndex);
+      return p2D.addTrianglesIndexesByEarClipping(indexes, firstIndex);
    }
 
 

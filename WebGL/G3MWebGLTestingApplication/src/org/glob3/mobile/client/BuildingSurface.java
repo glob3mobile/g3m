@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.Polygon3D;
 import org.glob3.mobile.generated.ShortBufferBuilder;
 import org.glob3.mobile.generated.Vector3D;
 
@@ -239,7 +240,7 @@ class BuildingSurface {
                                         final Color color) {
       final ArrayList<Vector3D> cartesianC = getCartesianCoordinates(planet, baseHeight);
       final Polygon3D polygon = new Polygon3D(cartesianC);
-      final short lastVertex = polygon.addTrianglesCuttingEars(fbb, normals, indexes, firstIndex);
+      final short lastVertex = polygon.addTrianglesByEarClipping(fbb, normals, indexes, firstIndex);
 
       for (short j = firstIndex; j < lastVertex; j++) {
          colors.add(color);
