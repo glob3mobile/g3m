@@ -3,8 +3,11 @@ clear
 convertingToWGS84(){
 
 	export PATH=/Library/Frameworks/GDAL.framework/Programs:$PATH
-	fileName=$1
-	srsName=$2
+	#fileName=$1
+	#srsName=$2
+	fileName="hagsfeld_4326_lod2_first_270_buildings.gml"
+	srsName="EPSG:31467"
+
 	fileText=$(cat $fileName)
 
 	#echo "$fileText"
