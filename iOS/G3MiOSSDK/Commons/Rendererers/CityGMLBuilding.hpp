@@ -23,7 +23,13 @@ public:
   
   const std::string                _name;
   const int                        _roofTypeCode;
+  
+#ifdef C_CODE
   const std::vector<CityGMLBuildingSurface*> _walls;
+#endif
+#ifdef JAVA_CODE
+  public final java.util.ArrayList<CityGMLBuildingSurface> _walls;
+#endif
   
   CityGMLBuilding(const std::string name,
                   int roofType,

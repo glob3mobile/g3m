@@ -51,8 +51,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+implements
+EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
@@ -101,7 +101,7 @@ public class G3MWebGLTestingApplication
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //
                new LabelImageBuilder(label, GFont.monospaced()) //
-      );
+               );
 
       return new NonOverlappingMark( //
                imageBuilderWidget, //
@@ -110,8 +110,8 @@ public class G3MWebGLTestingApplication
    }
 
    private class AnimateHUDWidgetsTask
-            extends
-               GTask {
+   extends
+   GTask {
 
       LabelImageBuilder _labelBuilder;
       G3MWidget         _widget;
@@ -128,7 +128,7 @@ public class G3MWebGLTestingApplication
       public void run(final G3MContext context) {
          // TODO Auto-generated method stub
          _labelBuilder.setText("H: " + _widget.getCurrentCamera().getHeading() + "P: " + _widget.getCurrentCamera().getPitch()
-                               + "R: " + _widget.getCurrentCamera().getRoll());
+                  + "R: " + _widget.getCurrentCamera().getRoll());
       }
 
    }
@@ -159,7 +159,7 @@ public class G3MWebGLTestingApplication
                Color.red(), // backgroundColor
                4, // cornerRadius
                true // mutable
-      );
+               );
 
       final HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(10), new HUDAbsolutePosition(10),
                new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1,
@@ -198,8 +198,8 @@ public class G3MWebGLTestingApplication
       builder.setPlanet(planet);
 
       class CityGMLDownloadListener
-               extends
-                  IBufferDownloadListener {
+      extends
+      IBufferDownloadListener {
 
          @Override
          public void onError(final URL url) {
@@ -224,8 +224,13 @@ public class G3MWebGLTestingApplication
 
 
             final ArrayList<org.glob3.mobile.generated.CityGMLBuilding> bs = doc.parseLOD2Buildings2();
+            int bCount = 0;
             for (final org.glob3.mobile.generated.CityGMLBuilding b : bs) {
                marksRenderer.addMark(b.createMark(false));
+               bCount++;
+               if (bCount > 100) {
+                  break;
+               }
             }
             meshRenderer.addMesh(org.glob3.mobile.generated.CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(
                      bs, planet, false));
@@ -255,9 +260,14 @@ public class G3MWebGLTestingApplication
          public void run(final G3MContext context) {
 
             final String[] cityGMLFiles = { //"test_sample_4326_lod2.gml",
-            "lindenallee_kranichweg_v1_EPSG:4326.gml",
+                     //"lindenallee_kranichweg_v1_EPSG:4326.gml",
                      //"test_sample_4326_lod2_single_building.gml"
-                     "innenstadt_ost_4326_lod2.gml", "innenstadt_west_4326_lod2.gml" };
+            //        "innenstadt_ost_4326_lod2.gml", "innenstadt_west_4326_lod2.gml",
+                     //"hagsfeld_4326_lod2.gml"
+            "hagsfeld_4326_lod2_first_623_buildings.gml"
+                     //"daxlanden_4326_lod2.gml" //TOO BIG
+
+            };
 
             for (final String s : cityGMLFiles) {
                final IBufferDownloadListener listener = new CityGMLDownloadListener();

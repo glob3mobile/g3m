@@ -152,7 +152,8 @@ short Polygon2D::addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, c
 #endif
     }
     else {
-      ILogger::instance()->logError("NO EAR!!!!");
+      ILogger::instance()->logError("No ear found while triangulating Poylgon 2D of %d vertices.", _coor2D.size());
+      return (short) (firstIndex + _nVertices);
     }
     
   }
