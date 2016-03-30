@@ -29,35 +29,25 @@ public:
     return _type;
   }
   
-  static CityGMLBuildingSurface* createFromArrayOfCityGMLWGS84Coordinates(const std::vector<double> coor, CityGMLBuildingSurfaceType type){
-    
-    std::vector<Geodetic3D*> geodeticCoordinates;
-    
-    for (int i = 0; i < coor.size(); i += 3) {
-      const double lat = coor[i + 1];
-      const double lon = coor[i];
-      const double h = coor[i + 2];
-      geodeticCoordinates.push_back(new Geodetic3D(Geodetic3D::fromDegrees(lat, lon, h)));
-    }
-    return new CityGMLBuildingSurface(geodeticCoordinates, type);
-  }
+  static CityGMLBuildingSurface* createFromArrayOfCityGMLWGS84Coordinates(const std::vector<double> coor,
+                                                                          CityGMLBuildingSurfaceType type);
 };
 
-class CityGLMBuildingWall: public CityGMLBuildingSurface{
+class CityGMLBuildingWall: public CityGMLBuildingSurface{
 public:
-  CityGLMBuildingWall(const std::vector<Geodetic3D*>& geodeticCoordinates):
+  CityGMLBuildingWall(const std::vector<Geodetic3D*>& geodeticCoordinates):
   CityGMLBuildingSurface(geodeticCoordinates, WALL){}
 };
 
-class CityGLMBuildingRoof: public CityGMLBuildingSurface{
+class CityGMLBuildingRoof: public CityGMLBuildingSurface{
 public:
-  CityGLMBuildingRoof(const std::vector<Geodetic3D*>& geodeticCoordinates):
+  CityGMLBuildingRoof(const std::vector<Geodetic3D*>& geodeticCoordinates):
   CityGMLBuildingSurface(geodeticCoordinates, ROOF){}
 };
 
-class CityGLMBuildingGround: public CityGMLBuildingSurface{
+class CityGMLBuildingGround: public CityGMLBuildingSurface{
 public:
-  CityGLMBuildingGround(const std::vector<Geodetic3D*>& geodeticCoordinates):
+  CityGMLBuildingGround(const std::vector<Geodetic3D*>& geodeticCoordinates):
   CityGMLBuildingSurface(geodeticCoordinates, GROUND){}
 };
 

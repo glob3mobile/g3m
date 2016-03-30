@@ -115,7 +115,7 @@ public:
   
   
   static Mesh* createSingleIndexedMeshWithColorPerVertexForBuildings(const std::vector<CityGMLBuilding*> buildings,
-                                                                     const Planet planet,
+                                                                     const Planet& planet,
                                                                      const bool fixOnGround) {
     
     CompositeMesh* cm = NULL;

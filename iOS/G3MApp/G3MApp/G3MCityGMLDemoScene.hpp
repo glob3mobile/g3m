@@ -10,10 +10,12 @@
 #define G3MCityGMLDemoScene_hpp
 
 #include "G3MDemoScene.hpp"
+#include "G3MDemoModel.hpp"
 
 class G3MCityGMLDemoScene : public G3MDemoScene {
 private:
   long long _requestId;
+  
   
 protected:
   void rawActivate(const G3MContext* context);

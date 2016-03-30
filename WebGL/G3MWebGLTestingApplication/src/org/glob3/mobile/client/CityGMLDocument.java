@@ -100,7 +100,9 @@ XMLDocument {
 
       final ArrayList<org.glob3.mobile.generated.CityGMLBuilding> buildings = new ArrayList<org.glob3.mobile.generated.CityGMLBuilding>();
 
-      final ArrayList<XMLDocument> buildingsXML = evaluateXPathAsXMLDocuments("/CityModel/cityObjectMember/bldg:Building");
+      final ArrayList<XMLDocument> buildingsXML = evaluateXPathAsXMLDocuments("//*[local-name()='Building']");
+
+      final ArrayList<XMLDocument> docs = evaluateXPathAsXMLDocuments("/CityModel/cityObjectMember/bldg:Building");
       //      ILogger.instance().logInfo("N Buildings %d", buildingsXML.size());
       for (final XMLDocument b : buildingsXML) {
 

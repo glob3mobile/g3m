@@ -72,6 +72,8 @@ public:
   std::string replaceAll(const std::string& originalString,
                          const std::string& searchString,
                          const std::string& replaceString) const;
+  
+  std::vector<double> parseDoubles(const std::string& str, const std::string& separator) const;
 
 };
 

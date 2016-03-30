@@ -69,6 +69,7 @@ _vectorStreamingRenderer(vectorStreamingRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
+  _scenes.push_back( new G3MCityGMLDemoScene(this) );
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
@@ -88,7 +89,6 @@ _context(NULL)
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
-  _scenes.push_back( new G3MCityGMLDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

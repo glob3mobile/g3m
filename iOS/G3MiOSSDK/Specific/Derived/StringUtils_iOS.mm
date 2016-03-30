@@ -195,3 +195,18 @@ std::string StringUtils_iOS::replaceAll(const std::string& originalString,
   }
   return result;
 }
+
+std::vector<double> StringUtils_iOS::parseDoubles(const std::string& str, const std::string& separator) const{
+  NSString* nsString = [NSString stringWithCppString: str];
+  
+  NSArray* nsLines = [nsString componentsSeparatedByString:[NSString stringWithUTF8String:separator.c_str()]];
+  
+  
+  std::vector<double> lines;
+  
+  for (NSString* line in nsLines) {
+    lines.push_back( [line doubleValue] );
+  }
+  
+  return lines;
+}

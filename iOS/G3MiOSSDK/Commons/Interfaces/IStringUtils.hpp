@@ -115,6 +115,8 @@ public:
 
   virtual double parseDouble(const std::string& str) const = 0;
   
+  virtual std::vector<double> parseDoubles(const std::string& str, const std::string& separator) const = 0;
+  
 };
 
 #endif

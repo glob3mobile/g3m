@@ -16,18 +16,20 @@ class IXMLDocument{
 public:
   virtual ~IXMLDocument(){}
   
-  virtual std::vector<double> evaluateXPathAndGetTextContentAsNumberArray(const std::string& xpath,
+  virtual std::vector<double>* evaluateXPathAndGetTextContentAsNumberArray(const std::string& xpath,
                                                                           const std::string& separator) = 0;
   
-  virtual std::vector<double> getTextContentAsNumberArray(const std::string& separator) = 0;
+  virtual std::vector<double>* getTextContentAsNumberArray(const std::string& separator) = 0;
   
-  virtual std::string evaluateXPathAndGetTextContentAsText(const std::string& xpath) = 0;
+  virtual std::string* evaluateXPathAndGetTextContentAsText(const std::string& xpath) = 0;
   
   virtual int evaluateXPathAndGetTextContentAsInteger(const std::string& xpath) = 0;
   
   virtual double evaluateXPathAndGetNumberValueAsDouble(const std::string& xpath) = 0;
   
   virtual std::vector<IXMLDocument*> evaluateXPathAsXMLDocuments(const std::string& xpath) = 0;
+  
+  virtual std::string* getTextContent() = 0;
   
 };
 

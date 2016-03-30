@@ -23,22 +23,32 @@
 class XMLDocument_iOS: public IXMLDocument{
   
   xmlDocPtr _doc;
+  bool _docOwner;
   xmlXPathContextPtr _xpathCtx;
+  xmlNodePtr _node;
+  
+  xmlXPathObjectPtr executeXPath(const std::string& xpath);
   
 public:
   XMLDocument_iOS(const std::string& xmlTextForRootNode);
   
+  XMLDocument_iOS(const xmlDocPtr doc, const xmlNodePtr node, xmlXPathContextPtr xpathCtx);
+  
   ~XMLDocument_iOS(){
-    xmlFreeDoc(_doc);
-    xmlXPathFreeContext(_xpathCtx);
+    if (_docOwner){
+      xmlFreeDoc(_doc);
+      xmlXPathFreeContext(_xpathCtx);
+    }
   }
   
-  std::vector<double> evaluateXPathAndGetTextContentAsNumberArray(const std::string& xpath,
+  std::vector<double>* evaluateXPathAndGetTextContentAsNumberArray(const std::string& xpath,
                                                                   const std::string& separator);
   
-  std::vector<double> getTextContentAsNumberArray(const std::string& separator);
+  std::string* getTextContent();
   
-  std::string evaluateXPathAndGetTextContentAsText(const std::string& xpath);
+  std::vector<double>* getTextContentAsNumberArray(const std::string& separator);
+  
+  std::string* evaluateXPathAndGetTextContentAsText(const std::string& xpath);
   
   int evaluateXPathAndGetTextContentAsInteger(const std::string& xpath);
   

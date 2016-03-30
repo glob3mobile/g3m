@@ -542,6 +542,10 @@
 		D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
 		D8B3C6941CAABCCB00A21D04 /* IXMLDocument.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CBBAAA1CAAB1DA0089443B /* IXMLDocument.hpp */; };
+		D8B3C6991CAC0A3300A21D04 /* CityGMLParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B3C6971CAC0A3300A21D04 /* CityGMLParser.cpp */; };
+		D8B3C69A1CAC0DEE00A21D04 /* CityGMLParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3C6981CAC0A3300A21D04 /* CityGMLParser.hpp */; };
+		D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
+		D8B3C69C1CAC0DF500A21D04 /* CityGMLBuilding.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D781F81CA425690025E988 /* CityGMLBuilding.hpp */; };
 		D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749A9175E040800046B96 /* Ellipsoid.cpp */; };
 		D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749AC175E04FA00046B96 /* Sphere.cpp */; };
 		D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AA175E040800046B96 /* Ellipsoid.hpp */; };
@@ -787,6 +791,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */,
+				D8B3C69C1CAC0DF500A21D04 /* CityGMLBuilding.hpp in CopyFiles */,
+				D8B3C69A1CAC0DEE00A21D04 /* CityGMLParser.hpp in CopyFiles */,
 				D8B3C6941CAABCCB00A21D04 /* IXMLDocument.hpp in CopyFiles */,
 				D8CBBAA81CAAB1570089443B /* XMLDocument_iOS.hpp in CopyFiles */,
 				D8D781F51CA416190025E988 /* Surface.hpp in CopyFiles */,
@@ -1911,6 +1918,8 @@
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
 		D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
+		D8B3C6971CAC0A3300A21D04 /* CityGMLParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLParser.cpp; path = Commons/XML/CityGMLParser.cpp; sourceTree = "<group>"; };
+		D8B3C6981CAC0A3300A21D04 /* CityGMLParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CityGMLParser.hpp; path = Commons/XML/CityGMLParser.hpp; sourceTree = "<group>"; };
 		D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D8B749A9175E040800046B96 /* Ellipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ellipsoid.cpp; path = Commons/Geometry/Ellipsoid.cpp; sourceTree = "<group>"; };
@@ -2954,6 +2963,8 @@
 			children = (
 				D8CBBAAA1CAAB1DA0089443B /* IXMLDocument.hpp */,
 				D8CBBAAB1CAAB1DA0089443B /* IXMLDocument.cpp */,
+				D8B3C6971CAC0A3300A21D04 /* CityGMLParser.cpp */,
+				D8B3C6981CAC0A3300A21D04 /* CityGMLParser.hpp */,
 			);
 			name = XML;
 			sourceTree = "<group>";
@@ -3246,6 +3257,7 @@
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
+				D8B3C6991CAC0A3300A21D04 /* CityGMLParser.cpp in Sources */,
 				D8378F9F1BFB32B900E6557E /* IDeviceLocation.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
