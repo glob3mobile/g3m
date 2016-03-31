@@ -162,3 +162,19 @@ std::vector<short> Polygon2D::calculateTrianglesIndexesByEarClipping() {
   }
   return finalListOfIndexes;
 }
+
+double Polygon2D::concavePolygonArea() {
+  std::vector<short> indices = calculateTrianglesIndexesByEarClipping();
+  if (indices.size() % 3 != 0){
+    return NAND;
+  }
+  
+  double sum = 0;
+  for (int i = 0; i < indices.size(); i+=3) {
+    Vector2D* v1 = _coor2D[i];
+    Vector2D* v2 = _coor2D[i+1];
+    Vector2D* v3 = _coor2D[i+2];
+    
+    sum += Vector2D::triangleArea(*v1, *v2, *v3);
+  }
+}

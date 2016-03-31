@@ -92,8 +92,8 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   std::vector<std::string> cityGMLFiles;
   cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
   cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-//  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml"); //WRONG COORDINATES
-//  cityGMLFiles.push_back("file:///finalModel_WGS84.gml"); //WRONG COORDINATES
+  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  cityGMLFiles.push_back("file:///durlach_4326_lod2.gml");
   
   for (size_t i = 0; i < cityGMLFiles.size(); i++) {
     _requestId = downloader->requestBuffer(URL(cityGMLFiles[i]),
@@ -107,10 +107,9 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
 
   
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                       Geodetic3D::fromDegrees(49.0158653208903, 8.39695262907557, 1000),
-                                       Angle::zero(),
-                                       //Angle::fromDegrees(45)
-                                       Angle::fromDegrees(45 - 90)
+                                       Geodetic3D::fromDegrees(48.942691261740058906, 8.2653376994795930699, 14609.293920212707235),
+                                       Angle::fromDegrees(-60.998739),
+                                       Angle::fromDegrees(-45.024439)
                                        );
   
   

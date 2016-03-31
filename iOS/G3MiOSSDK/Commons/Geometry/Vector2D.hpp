@@ -140,6 +140,14 @@ public:
     return false;
   }
   
+  static double triangleArea(const Vector2D& a,
+                                    const Vector2D& b,
+                                    const Vector2D& c) {
+    //Seen here: http://www.mathopenref.com/coordtrianglearea.html
+    double x = (a._x * (b._y - c._y) + b._x * (c._y - a._y) + c._x * (a._y - b._y));
+    return IMathUtils::instance()->abs(x) / 2;
+  }
+  
   static bool segmentsIntersect(const Vector2D& a,
                                            const Vector2D& b,
                                            const Vector2D& c,

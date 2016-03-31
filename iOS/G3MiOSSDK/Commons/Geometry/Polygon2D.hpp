@@ -13,12 +13,14 @@
 #include "Vector2D.hpp"
 #include <vector>
 #include "ShortBufferBuilder.hpp"
+#include "IMathUtils.hpp"
 
 class Polygon2D{
   
   std::vector<Vector2D*> _coor2D;
   const size_t _nVertices;
   bool _verticesCCW;
+  double _area;
   
   
   bool isConvexPolygonCounterClockWise() {
@@ -64,7 +66,7 @@ class Polygon2D{
   }
   
   
-  double concavePolygonArea() {
+  double convexPolygonArea() {
     double sum = 0;
     for (int i = 0; i < (_nVertices - 1); i++) {
       const Vector2D* vi = _coor2D[i];
@@ -75,9 +77,11 @@ class Polygon2D{
     return sum / 2;
   }
   
+  double concavePolygonArea();
+  
   
   bool isConcavePolygonCounterClockWise() {
-    const double area = concavePolygonArea();
+    const double area = convexPolygonArea();
     return area > 0;
   }
   
@@ -157,6 +161,7 @@ public:
     //POLYGON SHOULD HAVE LAST VERTEX == FIRST VERTEX
     _coor2D = coor;
     _verticesCCW = isPolygonCounterClockWise();
+    _area = NAND;
   }
   
   bool areVerticesCounterClockWise(){
@@ -172,6 +177,17 @@ public:
   }
   
   std::vector<short> calculateTrianglesIndexesByEarClipping();
+  
+  double getArea(){
+    if (ISNAN(_area)){
+      if (isConcave()){
+        _area = convexPolygonArea();
+      } else{
+        _area = concavePolygonArea();
+      }
+    }
+    return _area;
+  }
   
 };
 
