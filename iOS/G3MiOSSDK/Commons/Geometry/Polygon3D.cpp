@@ -62,7 +62,7 @@ short Polygon3D::addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D& fb
     for (int i = 0; i < indexes2D.size(); i++) {
       indexes.add( (short) (indexes2D[i] + firstIndex));
     }
-    return (short) _coor3D.size() + firstIndex;
+    return (short) (_coor3D.size() + firstIndex);
   }
   
   return firstIndex;

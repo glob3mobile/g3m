@@ -43,7 +43,12 @@ public:
   ~CityGMLBuilding()
   {
     for (int i = 0; i < _surfaces.size(); i++) {
+#ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(i);
+#endif
       delete s;
     }
   }
@@ -52,7 +57,12 @@ public:
   double getBaseHeight() {
     double min = IMathUtils::instance()->maxDouble();
     for (int i = 0; i < _surfaces.size(); i++) {
+#ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(i);
+#endif
       const double h = s->getBaseHeight();
       if (min > h) {
         min = h;
@@ -69,7 +79,12 @@ public:
     isb->addInt(_roofTypeCode);
     for (int i = 0; i < _surfaces.size(); i++) {
       isb->addString("\n Wall: Coordinates: ");
+#ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(i);
+#endif
       for (int j = 0; j < s->_geodeticCoordinates.size(); j += 3) {
         isb->addString(s->_geodeticCoordinates.at(j)->description());
       }
@@ -89,7 +104,13 @@ public:
                                            const Color& color) const {
     short buildingFirstIndex = firstIndex;
     for (int w = 0; w < _surfaces.size(); w++) {
-      buildingFirstIndex = _surfaces.at(w)->addTrianglesByEarClipping(fbb, normals, indexes, colors,
+#ifdef C_CODE
+      CityGMLBuildingSurface* s = _surfaces[w];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(w);
+#endif
+      buildingFirstIndex = s->addTrianglesByEarClipping(fbb, normals, indexes, colors,
                                                                       baseHeight, planet,
                                                                       buildingFirstIndex, color);
     }
@@ -200,7 +221,13 @@ public:
     double minH =  IMathUtils::instance()->maxDouble();
     
     for (int i = 0; i < _surfaces.size(); i++) {
-      const Geodetic3D min = _surfaces.at(i)->getMin();
+#ifdef C_CODE
+      CityGMLBuildingSurface* s = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(i);
+#endif
+      const Geodetic3D min = s->getMin();
       if (min._longitude._degrees < minLon) {
         minLon = min._longitude._degrees;
       }
@@ -221,7 +248,13 @@ public:
     double maxH = IMathUtils::instance()->minDouble();
     
     for (int i = 0; i < _surfaces.size(); i++) {
-      const Geodetic3D min = _surfaces.at(i)->getMax();
+#ifdef C_CODE
+      CityGMLBuildingSurface* s = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(i);
+#endif
+      const Geodetic3D min = s->getMax();
       if (min._longitude._degrees > maxLon) {
         maxLon = min._longitude._degrees;
       }
@@ -263,7 +296,13 @@ public:
     const double deltaH = fixOnGround ? getBaseHeight() : 0;
     
     for (int i = 0; i < _surfaces.size(); i++) {
-      _surfaces.at(i)->addMarkersToCorners(mr, deltaH);
+#ifdef C_CODE
+      CityGMLBuildingSurface* s = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      CityGMLBuildingSurface s = _surfaces.get(i);
+#endif
+      s->addMarkersToCorners(mr, deltaH);
     }
   }
 };
