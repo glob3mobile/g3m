@@ -9,7 +9,7 @@
 #ifndef CityGMLParser_hpp
 #define CityGMLParser_hpp
 
-#include "IXMLDocument.hpp"
+#include "IXMLNode.hpp"
 #include "CityGMLBuilding.hpp"
 
 #include <vector>
@@ -18,7 +18,7 @@
 class CityGMLParser{
   
 public:
-  static std::vector<CityGMLBuilding*> parseLOD2Buildings2(IXMLDocument* cityGMLDoc);
+  static std::vector<CityGMLBuilding*> parseLOD2Buildings2(IXMLNode* cityGMLDoc);
   
 };
 

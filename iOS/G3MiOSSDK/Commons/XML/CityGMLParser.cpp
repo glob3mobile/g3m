@@ -11,15 +11,20 @@
 #include "ILogger.hpp"
 #include "IStringUtils.hpp"
 
-std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* cityGMLDoc) {
+std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityGMLDoc) {
   
   std::vector<CityGMLBuilding*> buildings;
   
-  const std::vector<IXMLDocument*> buildingsXML = cityGMLDoc->evaluateXPathAsXMLDocuments("//*[local-name()='Building']");
+  const std::vector<IXMLNode*> buildingsXML = cityGMLDoc->evaluateXPathAsXMLNodes("//*[local-name()='Building']");
   //      ILogger.instance().logInfo("N Buildings %d", buildingsXML.size());
   for (size_t i = 0; i < buildingsXML.size(); i++) {
     
-    IXMLDocument* b = buildingsXML[i];
+    IXMLNode* b = buildingsXML[i];
+    
+    std::string* name = b->getAttribute("id");
+    if (name == NULL){
+      name = new std::string("NO NAME");
+    }
     
     //Name
 //    std::string name = "NO NAME";
@@ -28,7 +33,7 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
     
     std::vector<CityGMLBuildingSurface*> surfaces;
     
-    const std::vector<IXMLDocument*> grounds = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='GroundSurface']//*[local-name()='posList']");
+    const std::vector<IXMLNode*> grounds = b->evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='GroundSurface']//*[local-name()='posList']");
     for (int i = 0; i < grounds.size(); i++) {
       std::string* str = grounds[i]->getTextContent();
       if (str != NULL){
@@ -40,10 +45,12 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
         }
         
         surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, GROUND));
+        
+        delete str;
       }
     }
     
-    const std::vector<IXMLDocument*> walls = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='WallSurface']//*[local-name()='posList']");
+    const std::vector<IXMLNode*> walls = b->evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='WallSurface']//*[local-name()='posList']");
     for (int i = 0; i < walls.size(); i++) {
       std::string* str = walls[i]->getTextContent();
       if (str != NULL){
@@ -55,10 +62,12 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
         }
         
         surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, WALL));
+        
+        delete str;
       }
     }
     
-    const std::vector<IXMLDocument*> roofs = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='RoofSurface']//*[local-name()='posList']");
+    const std::vector<IXMLNode*> roofs = b->evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='RoofSurface']//*[local-name()='posList']");
     for (int i = 0; i < roofs.size(); i++) {
       std::string* str = roofs[i]->getTextContent();
       if (str != NULL){
@@ -70,10 +79,13 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
         }
         
         surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, ROOF));
+        
+        delete str;
       }
     }
     
-    CityGMLBuilding* nb = new CityGMLBuilding("NO NAME", 1, surfaces);
+    CityGMLBuilding* nb = new CityGMLBuilding(*name, 1, surfaces);
+    delete name;
     buildings.push_back(nb);
 //    try {
 //      name = b.evaluateXPathAndGetTextContentAsText("/bldg:Building/gml:name/text()");
@@ -107,9 +119,9 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
 //    const std::vector<CityGMLBuildingSurface> surfaces = new std::vector<CityGMLBuildingSurface>();
 //    
 //    //Walls
-//    const std::vector<XMLDocument> wallsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList");
+//    const std::vector<XMLNode> wallsXML = b.evaluateXPathAsXMLNodes("/bldg:Building/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList");
 //    //         ILogger.instance().logInfo("N Walls %d", wallsXML.size());
-//    for (const XMLDocument s : wallsXML) {
+//    for (const XMLNode s : wallsXML) {
 //      const std::vector<Double> coor = s.getTextContentAsNumberArray(" ");
 //      const CityGMLBuildingSurface w = CityGLMBuildingWall.createFromArrayOfCityGMLWGS84Coordinates(coor,
 //                                                                                                    CityGMLBuildingSurfaceType.WALL);
@@ -118,9 +130,9 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
 //    
 //    
 //    //Rooftops
-//    const std::vector<XMLDocument> roofsXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
+//    const std::vector<XMLNode> roofsXML = b.evaluateXPathAsXMLNodes("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
 //    //         ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
-//    for (const XMLDocument s : roofsXML) {
+//    for (const XMLNode s : roofsXML) {
 //      const std::vector<Double> coor = s.getTextContentAsNumberArray(" ");
 //      const CityGMLBuildingSurface w = CityGLMBuildingWall.createFromArrayOfCityGMLWGS84Coordinates(coor,
 //                                                                                                    CityGMLBuildingSurfaceType.ROOF);
@@ -128,9 +140,9 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
 //    }
 //    
 //    //Ground
-//    const std::vector<XMLDocument> groundXML = b.evaluateXPathAsXMLDocuments("/bldg:Building/bldg:boundedBy/bldg:GroundSurface/bldg:lod2MultiSurface//gml:posList");
+//    const std::vector<XMLNode> groundXML = b.evaluateXPathAsXMLNodes("/bldg:Building/bldg:boundedBy/bldg:GroundSurface/bldg:lod2MultiSurface//gml:posList");
 //    //         ILogger.instance().logInfo("N Roofs %d", groundXMLs.size());
-//    for (const XMLDocument s : groundXML) {
+//    for (const XMLNode s : groundXML) {
 //      const std::vector<Double> coor = s.getTextContentAsNumberArray(" ");
 //      const CityGMLBuildingSurface w = CityGLMBuildingWall.createFromArrayOfCityGMLWGS84Coordinates(coor,
 //                                                                                                    CityGMLBuildingSurfaceType.GROUND);

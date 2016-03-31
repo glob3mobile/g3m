@@ -23,7 +23,7 @@ class IWebSocket;
 class IWebSocketListener;
 class URL;
 class IDeviceInfo;
-class IXMLDocument;
+class IXMLNode;
 
 class IFactory {
 private:
@@ -95,7 +95,7 @@ public:
 
   const IDeviceInfo* getDeviceInfo() const;
   
-  virtual IXMLDocument* createXMLDocumentFromXML(const std::string& xmlText) const = 0;
+  virtual IXMLNode* createXMLNodeFromXML(const std::string& xmlText) const = 0;
 
 
 #ifdef JAVA_CODE

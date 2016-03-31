@@ -541,7 +541,7 @@
 		D8B0125717E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
-		D8B3C6941CAABCCB00A21D04 /* IXMLDocument.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CBBAAA1CAAB1DA0089443B /* IXMLDocument.hpp */; };
+		D8B3C6941CAABCCB00A21D04 /* IXMLNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CBBAAA1CAAB1DA0089443B /* IXMLNode.hpp */; };
 		D8B3C6991CAC0A3300A21D04 /* CityGMLParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B3C6971CAC0A3300A21D04 /* CityGMLParser.cpp */; };
 		D8B3C69A1CAC0DEE00A21D04 /* CityGMLParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3C6981CAC0A3300A21D04 /* CityGMLParser.hpp */; };
 		D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
@@ -561,9 +561,9 @@
 		D8B8CE91178D6DCF00EE1B97 /* GPUVariableValueSet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */; };
 		D8C486D017E205E7000EAFC9 /* InitialCameraPositionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */; };
 		D8C486D117E20A2E000EAFC9 /* InitialCameraPositionProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */; };
-		D8CBBAA71CAAB12C0089443B /* XMLDocument_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8CBBAA51CAAB12C0089443B /* XMLDocument_iOS.mm */; };
-		D8CBBAA81CAAB1570089443B /* XMLDocument_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CBBAA61CAAB12C0089443B /* XMLDocument_iOS.hpp */; };
-		D8CBBAAC1CAAB1DA0089443B /* IXMLDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CBBAAB1CAAB1DA0089443B /* IXMLDocument.cpp */; };
+		D8CBBAA71CAAB12C0089443B /* XMLNode_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8CBBAA51CAAB12C0089443B /* XMLNode_iOS.mm */; };
+		D8CBBAA81CAAB1570089443B /* XMLNode_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8CBBAA61CAAB12C0089443B /* XMLNode_iOS.hpp */; };
+		D8CBBAAC1CAAB1DA0089443B /* IXMLNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CBBAAB1CAAB1DA0089443B /* IXMLNode.cpp */; };
 		D8D154211C7329AE00E54742 /* Vector2S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D1541F1C7329AE00E54742 /* Vector2S.cpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8D781E91CA3E5D40025E988 /* Polygon2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D781E71CA3E5D40025E988 /* Polygon2D.cpp */; };
@@ -794,8 +794,8 @@
 				D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */,
 				D8B3C69C1CAC0DF500A21D04 /* CityGMLBuilding.hpp in CopyFiles */,
 				D8B3C69A1CAC0DEE00A21D04 /* CityGMLParser.hpp in CopyFiles */,
-				D8B3C6941CAABCCB00A21D04 /* IXMLDocument.hpp in CopyFiles */,
-				D8CBBAA81CAAB1570089443B /* XMLDocument_iOS.hpp in CopyFiles */,
+				D8B3C6941CAABCCB00A21D04 /* IXMLNode.hpp in CopyFiles */,
+				D8CBBAA81CAAB1570089443B /* XMLNode_iOS.hpp in CopyFiles */,
 				D8D781F51CA416190025E988 /* Surface.hpp in CopyFiles */,
 				D8D781F61CA416190025E988 /* CityGMLBuildingSurface.hpp in CopyFiles */,
 				D8D781ED1CA402260025E988 /* Polygon2D.hpp in CopyFiles */,
@@ -1943,10 +1943,10 @@
 		D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromColor.hpp; path = Commons/Basic/FloatBufferBuilderFromColor.hpp; sourceTree = "<group>"; };
 		D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Textured2DMesh.fsh; sourceTree = "<group>"; };
 		D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Textured2DMesh.vsh; sourceTree = "<group>"; };
-		D8CBBAA51CAAB12C0089443B /* XMLDocument_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = XMLDocument_iOS.mm; path = Specific/Derived/XMLDocument_iOS.mm; sourceTree = "<group>"; };
-		D8CBBAA61CAAB12C0089443B /* XMLDocument_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = XMLDocument_iOS.hpp; path = Specific/Derived/XMLDocument_iOS.hpp; sourceTree = "<group>"; };
-		D8CBBAAA1CAAB1DA0089443B /* IXMLDocument.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IXMLDocument.hpp; path = Commons/XML/IXMLDocument.hpp; sourceTree = "<group>"; };
-		D8CBBAAB1CAAB1DA0089443B /* IXMLDocument.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IXMLDocument.cpp; path = Commons/XML/IXMLDocument.cpp; sourceTree = "<group>"; };
+		D8CBBAA51CAAB12C0089443B /* XMLNode_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = XMLNode_iOS.mm; path = Specific/Derived/XMLNode_iOS.mm; sourceTree = "<group>"; };
+		D8CBBAA61CAAB12C0089443B /* XMLNode_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = XMLNode_iOS.hpp; path = Specific/Derived/XMLNode_iOS.hpp; sourceTree = "<group>"; };
+		D8CBBAAA1CAAB1DA0089443B /* IXMLNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IXMLNode.hpp; path = Commons/XML/IXMLNode.hpp; sourceTree = "<group>"; };
+		D8CBBAAB1CAAB1DA0089443B /* IXMLNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IXMLNode.cpp; path = Commons/XML/IXMLNode.cpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian3D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian3D.hpp; sourceTree = "<group>"; };
@@ -2048,8 +2048,8 @@
 		383BD3771577EDA20012AC53 /* Specific */ = {
 			isa = PBXGroup;
 			children = (
-				D8CBBAA51CAAB12C0089443B /* XMLDocument_iOS.mm */,
-				D8CBBAA61CAAB12C0089443B /* XMLDocument_iOS.hpp */,
+				D8CBBAA51CAAB12C0089443B /* XMLNode_iOS.mm */,
+				D8CBBAA61CAAB12C0089443B /* XMLNode_iOS.hpp */,
 				D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */,
 				D8378FA41BFB337200E6557E /* DeviceAttitude_iOS.mm */,
 				D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */,
@@ -2961,8 +2961,8 @@
 		D8CBBAA91CAAB1CC0089443B /* XML */ = {
 			isa = PBXGroup;
 			children = (
-				D8CBBAAA1CAAB1DA0089443B /* IXMLDocument.hpp */,
-				D8CBBAAB1CAAB1DA0089443B /* IXMLDocument.cpp */,
+				D8CBBAAA1CAAB1DA0089443B /* IXMLNode.hpp */,
+				D8CBBAAB1CAAB1DA0089443B /* IXMLNode.cpp */,
 				D8B3C6971CAC0A3300A21D04 /* CityGMLParser.cpp */,
 				D8B3C6981CAC0A3300A21D04 /* CityGMLParser.hpp */,
 			);
@@ -3156,7 +3156,7 @@
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
 				CF2412AF191FE3D100B796FB /* GEO2DCoordinatesArrayData.cpp in Sources */,
 				CF9AEBC2159B3FEB004C3558 /* PlanetTileTessellator.cpp in Sources */,
-				D8CBBAAC1CAAB1DA0089443B /* IXMLDocument.cpp in Sources */,
+				D8CBBAAC1CAAB1DA0089443B /* IXMLNode.cpp in Sources */,
 				CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */,
 				CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */,
 				CF1575961864B5620059312A /* HUDPosition.cpp in Sources */,
@@ -3261,7 +3261,7 @@
 				D8378F9F1BFB32B900E6557E /* IDeviceLocation.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
-				D8CBBAA71CAAB12C0089443B /* XMLDocument_iOS.mm in Sources */,
+				D8CBBAA71CAAB12C0089443B /* XMLNode_iOS.mm in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 				D8D781F11CA4120D0025E988 /* Surface.cpp in Sources */,

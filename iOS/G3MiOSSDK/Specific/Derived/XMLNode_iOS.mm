@@ -1,17 +1,17 @@
 //
-//  XMLDocument_iOS.mm
+//  XMLNode_iOS.mm
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 29/3/16.
 //
 //
 
-#include "XMLDocument_iOS.hpp"
+#include "XMLNode_iOS.hpp"
 
 #include "ErrorHandling.hpp"
 #include "ILogger.hpp"
 
-XMLDocument_iOS::XMLDocument_iOS(const std::string& xmlTextForRootNode){
+XMLNode_iOS::XMLNode_iOS(const std::string& xmlTextForRootNode){
   
   _doc = xmlParseMemory(xmlTextForRootNode.c_str(), (int) xmlTextForRootNode.size());
   _docOwner = true;
@@ -30,41 +30,14 @@ XMLDocument_iOS::XMLDocument_iOS(const std::string& xmlTextForRootNode){
   
 }
 
-XMLDocument_iOS::XMLDocument_iOS(const xmlDocPtr doc, const xmlNodePtr node, xmlXPathContextPtr xpathCtx){
+XMLNode_iOS::XMLNode_iOS(const xmlDocPtr doc, const xmlNodePtr node, xmlXPathContextPtr xpathCtx){
   _doc = doc;
   _docOwner = false;
   _xpathCtx = xpathCtx;
   _node = node;
 }
 
-std::vector<double>* XMLDocument_iOS::evaluateXPathAndGetTextContentAsNumberArray(const std::string& xpath,
-                                                                                 const std::string& separator){
-  
-  
-}
-
-std::vector<double>* XMLDocument_iOS::getTextContentAsNumberArray(const std::string& separator){
-  
-}
-
-std::string* XMLDocument_iOS::evaluateXPathAndGetTextContentAsText(const std::string& xpath){
-  xmlXPathObjectPtr xpathObj = executeXPath(xpath);
-  if (xpathObj == NULL){
-    return NULL;
-  }
-  if (xpathObj->nodesetval->nodeNr != 1){
-    return NULL;
-  }
-  xmlNodePtr node = xpathObj->nodesetval->nodeTab[0];
-  if (node->type != XML_TEXT_NODE){
-    return NULL;
-  }
-    
-  xmlXPathFreeObject(xpathObj);
-  return NULL;
-}
-
-std::string* XMLDocument_iOS::getTextContent(){
+std::string* XMLNode_iOS::getTextContent(){
   
   xmlNodePtr node = _node->children;
   while (node != NULL) {
@@ -78,17 +51,21 @@ std::string* XMLDocument_iOS::getTextContent(){
   return NULL;
 }
 
-int XMLDocument_iOS::evaluateXPathAndGetTextContentAsInteger(const std::string& xpath){
+std::string* XMLNode_iOS::getAttribute(const std::string& attributeName){
   
-  
-  
+  xmlAttrPtr att = _node->properties;
+  while (att != NULL){
+    if (attributeName.compare((char*)att->name) == 0){
+      if (att->children[0].type == XML_TEXT_NODE){
+        return new std::string((char*) att->children[0].content);
+      }
+    }
+    att = att->next;
+  }
+  return NULL;
 }
 
-double XMLDocument_iOS::evaluateXPathAndGetNumberValueAsDouble(const std::string& xpath){
-  
-}
-
-xmlXPathObjectPtr XMLDocument_iOS::executeXPath(const std::string& xpath){
+xmlXPathObjectPtr XMLNode_iOS::executeXPath(const std::string& xpath){
   xmlChar xPathExpr[200];
   strcpy((char*) xPathExpr, xpath.c_str());
   
@@ -109,17 +86,17 @@ xmlXPathObjectPtr XMLDocument_iOS::executeXPath(const std::string& xpath){
   return xpathObj;
 }
 
-std::vector<IXMLDocument*> XMLDocument_iOS::evaluateXPathAsXMLDocuments(const std::string& xpath){
+std::vector<IXMLNode*> XMLNode_iOS::evaluateXPathAsXMLNodes(const std::string& xpath){
   
   xmlXPathObjectPtr xpathObj = executeXPath(xpath);
   
-  std::vector<IXMLDocument*> docs;
+  std::vector<IXMLNode*> docs;
   
 //  ILogger::instance()->logInfo("Found %d items", xpathObj->nodesetval->nodeNr);
   
   for (int i = 0; i < xpathObj->nodesetval->nodeNr; i++) {
     xmlNodePtr node = xpathObj->nodesetval->nodeTab[i];
-    XMLDocument_iOS* newDoc = new XMLDocument_iOS(_doc, node, _xpathCtx);
+    XMLNode_iOS* newDoc = new XMLNode_iOS(_doc, node, _xpathCtx);
     docs.push_back(newDoc);
   }
   

@@ -21,7 +21,7 @@
 #include "WebSocket_iOS.hpp"
 #import "NSString_CppAdditions.h"
 #include "DeviceInfo_iOS.hpp"
-#include "XMLDocument_iOS.hpp"
+#include "XMLNode_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 protected:
@@ -112,8 +112,8 @@ public:
                              autodeleteWebSocket);
   }
   
-  IXMLDocument* createXMLDocumentFromXML(const std::string& xmlText) const{
-    return new XMLDocument_iOS(xmlText);
+  IXMLNode* createXMLNodeFromXML(const std::string& xmlText) const{
+    return new XMLNode_iOS(xmlText);
   }
 
 };

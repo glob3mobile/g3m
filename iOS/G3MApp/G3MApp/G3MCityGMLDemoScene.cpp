@@ -9,7 +9,7 @@
 #include "G3MCityGMLDemoScene.hpp"
 
 #include <G3MiOSSDK/IFactory.hpp>
-#include <G3MiOSSDK/IXMLDocument.hpp>
+#include <G3MiOSSDK/IXMLNode.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
 #include <G3MiOSSDK/IBufferDownloadListener.hpp>
 #include <G3MiOSSDK/G3MContext.hpp>
@@ -42,12 +42,18 @@ public:
     
     std::string s = buffer->getAsString();
     
-    IXMLDocument* xml = IFactory::instance()->createXMLDocumentFromXML(s);
+    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
     
     std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
     
+    //Adding marks
+    for (size_t i = 0; i < buildings.size(); i++) {
+      _scene->getModel()->getMarksRenderer()->addMark( buildings[i]->createMark(false) );
+    }
+    
     const Planet* planet = EllipsoidalPlanet::createEarth();
     
+    //Creating mesh model
     Mesh* mesh = CityGMLBuilding::createSingleIndexedMeshWithColorPerVertexForBuildings(buildings, *planet, false);
     
     _scene->getModel()->getMeshRenderer()->addMesh(mesh);
