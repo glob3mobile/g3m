@@ -106,4 +106,6 @@ public abstract class IStringUtils
 
   public abstract double parseDouble(String str);
 
+  public abstract java.util.ArrayList<Double> parseDoubles(String str, String separator);
+
 }

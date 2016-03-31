@@ -184,6 +184,13 @@ public class Vector2D
     return false;
   }
 
+  public static double triangleArea(Vector2D a, Vector2D b, Vector2D c)
+  {
+    //Seen here: http://www.mathopenref.com/coordtrianglearea.html
+    double x = (a._x * (b._y - c._y) + b._x * (c._y - a._y) + c._x * (a._y - b._y));
+    return IMathUtils.instance().abs(x) / 2;
+  }
+
   public static boolean segmentsIntersect(Vector2D a, Vector2D b, Vector2D c, Vector2D d)
   {
     //http://www.smipple.net/snippet/sparkon/%5BC%2B%2B%5D%202D%20lines%20segment%20intersection%20

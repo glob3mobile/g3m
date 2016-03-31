@@ -15,9 +15,9 @@ public class CityGMLBuildingSurface extends Surface
 
   public static CityGMLBuildingSurface createFromArrayOfCityGMLWGS84Coordinates(java.util.ArrayList<Double> coor, CityGMLBuildingSurfaceType type)
   {
-
+  
     java.util.ArrayList<Geodetic3D> geodeticCoordinates = new java.util.ArrayList<Geodetic3D>();
-
+  
     for (int i = 0; i < coor.size(); i += 3)
     {
       final double lat = coor.get(i + 1);
@@ -25,6 +25,17 @@ public class CityGMLBuildingSurface extends Surface
       final double h = coor.get(i + 2);
       geodeticCoordinates.add(new Geodetic3D(Geodetic3D.fromDegrees(lat, lon, h)));
     }
-    return new CityGMLBuildingSurface(geodeticCoordinates, type);
+  
+    switch (type)
+    {
+      case WALL:
+        return new CityGMLBuildingWall(geodeticCoordinates);
+      case GROUND:
+        return new CityGMLBuildingGround(geodeticCoordinates);
+      case ROOF:
+        return new CityGMLBuildingRoof(geodeticCoordinates);
+    }
+  
+    return null;
   }
 }

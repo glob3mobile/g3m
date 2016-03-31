@@ -104,14 +104,29 @@ public class Polygon3D
 
     //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 
-    Vector3D normal = getCCWNormal();
-    for (int i = 0; i < _coor3D.size(); i++)
+    java.util.ArrayList<Short> indexes2D = _polygon2D.calculateTrianglesIndexesByEarClipping();
+    if (indexes2D.size() > 3)
     {
-      fbb.add(_coor3D.get(i));
-      normals.add(normal);
+
+      Vector3D normal = getCCWNormal();
+      for (int i = 0; i < _coor3D.size(); i++)
+      {
+        fbb.add(_coor3D.get(i));
+        normals.add(normal);
+      }
+
+      for (int i = 0; i < indexes2D.size(); i++)
+      {
+        indexes.add(indexes2D.get(i) + firstIndex);
+      }
+
+      return (short) _coor3D.size() + firstIndex;
     }
 
-    return _polygon2D.addTrianglesIndexesByEarClipping(indexes, firstIndex);
+    return firstIndex;
+
+
+//    return _polygon2D->addTrianglesIndexesByEarClipping(indexes, firstIndex);
   }
 
 

@@ -29,6 +29,7 @@ package org.glob3.mobile.generated;
 //class IWebSocketListener;
 //class URL;
 //class IDeviceInfo;
+//class IXMLNode;
 
 public abstract class IFactory
 {
@@ -91,6 +92,8 @@ public abstract class IFactory
     }
     return _deviceInfo;
   }
+
+  public abstract IXMLNode createXMLNodeFromXML(String xmlText);
 
 
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
