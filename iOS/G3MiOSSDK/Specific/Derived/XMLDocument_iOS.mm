@@ -115,7 +115,7 @@ std::vector<IXMLDocument*> XMLDocument_iOS::evaluateXPathAsXMLDocuments(const st
   
   std::vector<IXMLDocument*> docs;
   
-  ILogger::instance()->logInfo("Found %d items", xpathObj->nodesetval->nodeNr);
+//  ILogger::instance()->logInfo("Found %d items", xpathObj->nodesetval->nodeNr);
   
   for (int i = 0; i < xpathObj->nodesetval->nodeNr; i++) {
     xmlNodePtr node = xpathObj->nodesetval->nodeTab[i];

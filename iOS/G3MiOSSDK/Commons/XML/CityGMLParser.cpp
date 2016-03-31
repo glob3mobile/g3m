@@ -28,7 +28,22 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
     
     std::vector<CityGMLBuildingSurface*> surfaces;
     
-    const std::vector<IXMLDocument*> walls = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='posList']");
+    const std::vector<IXMLDocument*> grounds = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='GroundSurface']//*[local-name()='posList']");
+    for (int i = 0; i < grounds.size(); i++) {
+      std::string* str = grounds[i]->getTextContent();
+      if (str != NULL){
+        //ILogger::instance()->logInfo("%s", str->c_str() );
+        
+        std::vector<double> coors = IStringUtils::instance()->parseDoubles(*str, " ");
+        if (coors.size() % 3 != 0){
+          ILogger::instance()->logError("Problem parsing wall coordinates.");
+        }
+        
+        surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, GROUND));
+      }
+    }
+    
+    const std::vector<IXMLDocument*> walls = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='WallSurface']//*[local-name()='posList']");
     for (int i = 0; i < walls.size(); i++) {
       std::string* str = walls[i]->getTextContent();
       if (str != NULL){
@@ -40,6 +55,21 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLDocument* c
         }
         
         surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, WALL));
+      }
+    }
+    
+    const std::vector<IXMLDocument*> roofs = b->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='RoofSurface']//*[local-name()='posList']");
+    for (int i = 0; i < roofs.size(); i++) {
+      std::string* str = roofs[i]->getTextContent();
+      if (str != NULL){
+        //ILogger::instance()->logInfo("%s", str->c_str() );
+        
+        std::vector<double> coors = IStringUtils::instance()->parseDoubles(*str, " ");
+        if (coors.size() % 3 != 0){
+          ILogger::instance()->logError("Problem parsing wall coordinates.");
+        }
+        
+        surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, ROOF));
       }
     }
     

@@ -74,6 +74,10 @@
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
+		D88C67F21CAD115A000DF6FD /* innenstadt_ost_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D88C67F01CAD115A000DF6FD /* innenstadt_ost_4326_lod2.gml */; };
+		D88C67F31CAD115A000DF6FD /* innenstadt_west_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D88C67F11CAD115A000DF6FD /* innenstadt_west_4326_lod2.gml */; };
+		D88C67F71CAD138C000DF6FD /* daxlanden_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D88C67F51CAD138C000DF6FD /* daxlanden_4326_lod2.gml */; };
+		D88C67F81CAD138C000DF6FD /* hagsfeld_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D88C67F61CAD138C000DF6FD /* hagsfeld_4326_lod2.gml */; };
 		D8B3C6921CAAB9B900A21D04 /* G3MCityGMLDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B3C6901CAAB9B900A21D04 /* G3MCityGMLDemoScene.cpp */; };
 		D8B3C6961CAAC26000A21D04 /* test_sample_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8B3C6951CAAC26000A21D04 /* test_sample_4326_lod2.gml */; };
 		D8CBBAA21CAAA8FA0089443B /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8CBBAA11CAAA8FA0089443B /* libxml2.tbd */; };
@@ -236,6 +240,10 @@
 		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D871790F1AE501B100A9A14F /* pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin.png; sourceTree = "<group>"; };
+		D88C67F01CAD115A000DF6FD /* innenstadt_ost_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = innenstadt_ost_4326_lod2.gml; path = ../../../../WebGL/G3MWebGLTestingApplication/war/innenstadt_ost_4326_lod2.gml; sourceTree = "<group>"; };
+		D88C67F11CAD115A000DF6FD /* innenstadt_west_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = innenstadt_west_4326_lod2.gml; path = ../../../../WebGL/G3MWebGLTestingApplication/war/innenstadt_west_4326_lod2.gml; sourceTree = "<group>"; };
+		D88C67F51CAD138C000DF6FD /* daxlanden_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = daxlanden_4326_lod2.gml; path = ../../../../WebGL/G3MWebGLTestingApplication/war/daxlanden_4326_lod2.gml; sourceTree = "<group>"; };
+		D88C67F61CAD138C000DF6FD /* hagsfeld_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = hagsfeld_4326_lod2.gml; path = ../../../../WebGL/G3MWebGLTestingApplication/war/hagsfeld_4326_lod2.gml; sourceTree = "<group>"; };
 		D8B3C6901CAAB9B900A21D04 /* G3MCityGMLDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCityGMLDemoScene.cpp; sourceTree = "<group>"; };
 		D8B3C6911CAAB9B900A21D04 /* G3MCityGMLDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCityGMLDemoScene.hpp; sourceTree = "<group>"; };
 		D8B3C6951CAAC26000A21D04 /* test_sample_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = test_sample_4326_lod2.gml; path = ../../../../WebGL/G3MWebGLTestingApplication/war/test_sample_4326_lod2.gml; sourceTree = "<group>"; };
@@ -517,6 +525,10 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D88C67F51CAD138C000DF6FD /* daxlanden_4326_lod2.gml */,
+				D88C67F61CAD138C000DF6FD /* hagsfeld_4326_lod2.gml */,
+				D88C67F01CAD115A000DF6FD /* innenstadt_ost_4326_lod2.gml */,
+				D88C67F11CAD115A000DF6FD /* innenstadt_west_4326_lod2.gml */,
 				D8B3C6951CAAC26000A21D04 /* test_sample_4326_lod2.gml */,
 				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
 				D871790F1AE501B100A9A14F /* pin.png */,
@@ -656,6 +668,7 @@
 				D87179101AE501B100A9A14F /* pin.png in Resources */,
 				CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
+				D88C67F81CAD138C000DF6FD /* hagsfeld_4326_lod2.gml in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
 				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
@@ -695,9 +708,12 @@
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
 				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
+				D88C67F21CAD115A000DF6FD /* innenstadt_ost_4326_lod2.gml in Resources */,
+				D88C67F31CAD115A000DF6FD /* innenstadt_west_4326_lod2.gml in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
+				D88C67F71CAD138C000DF6FD /* daxlanden_4326_lod2.gml in Resources */,
 				D8B3C6961CAAC26000A21D04 /* test_sample_4326_lod2.gml in Resources */,
 				CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */,
 				E780A3DD16D29FAA000F0395 /* A321-House.png in Resources */,

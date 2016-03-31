@@ -29,9 +29,10 @@
 class G3MCityGMLDemoScene_BufferDownloadListener : public IBufferDownloadListener {
 private:
   G3MCityGMLDemoScene* _scene;
+  const Planet* _planet;
 public:
-  G3MCityGMLDemoScene_BufferDownloadListener(G3MCityGMLDemoScene* scene) :
-  _scene(scene)
+  G3MCityGMLDemoScene_BufferDownloadListener(G3MCityGMLDemoScene* scene, const Planet* planet) :
+  _scene(scene),_planet(planet)
   {
   }
   
@@ -51,12 +52,7 @@ public:
     
     _scene->getModel()->getMeshRenderer()->addMesh(mesh);
     
-//    std::vector<IXMLDocument*> buildings = xml->evaluateXPathAsXMLDocuments("//*[local-name()='Building']");
-//    
-//    for (int i = 0; i < buildings.size(); i++) {
-//      buildings[i]->evaluateXPathAsXMLDocuments("*[local-name()='boundedBy']//*[local-name()='posList']");
-//    }
-    
+    delete xml;
   }
   
   void onError(const URL& url) {
@@ -87,14 +83,21 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   
   IDownloader* downloader = context->getDownloader();
   
+  std::vector<std::string> cityGMLFiles;
+  cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
+  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+//  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml"); //WRONG COORDINATES
   
+  for (size_t i = 0; i < cityGMLFiles.size(); i++) {
+    _requestId = downloader->requestBuffer(URL(cityGMLFiles[i]),
+                                           DownloadPriority::HIGHEST,
+                                           TimeInterval::fromHours(1),
+                                           true,
+                                           new G3MCityGMLDemoScene_BufferDownloadListener(this, context->getPlanet()),
+                                           true);
+  }
   
-  _requestId = downloader->requestBuffer(URL("file:///test_sample_4326_lod2.gml"),
-                                         DownloadPriority::HIGHEST,
-                                         TimeInterval::fromHours(1),
-                                         true,
-                                         new G3MCityGMLDemoScene_BufferDownloadListener(this),
-                                         true);
+
   
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(49.0158653208903, 8.39695262907557, 1000),
