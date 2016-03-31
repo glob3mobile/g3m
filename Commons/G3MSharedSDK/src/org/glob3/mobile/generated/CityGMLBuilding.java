@@ -39,9 +39,8 @@ public class CityGMLBuilding
   {
     for (int i = 0; i < _surfaces.size(); i++)
     {
-      CityGMLBuildingSurface s = _surfaces[i];
-      if (s != null)
-         s.dispose();
+      CityGMLBuildingSurface s = _surfaces.get(i);
+      s = null;
     }
   }
 
@@ -51,7 +50,7 @@ public class CityGMLBuilding
     double min = IMathUtils.instance().maxDouble();
     for (int i = 0; i < _surfaces.size(); i++)
     {
-      CityGMLBuildingSurface s = _surfaces[i];
+      CityGMLBuildingSurface s = _surfaces.get(i);
       final double h = s.getBaseHeight();
       if (min > h)
       {
@@ -71,10 +70,10 @@ public class CityGMLBuilding
     for (int i = 0; i < _surfaces.size(); i++)
     {
       isb.addString("\n Wall: Coordinates: ");
-      CityGMLBuildingSurface s = _surfaces[i];
+      CityGMLBuildingSurface s = _surfaces.get(i);
       for (int j = 0; j < s._geodeticCoordinates.size(); j += 3)
       {
-        isb.addString(s._geodeticCoordinates.get(j).description());
+        isb.addString(s._geodeticCoordinates.at(j).description());
       }
     }
     String s = isb.getString();
@@ -88,7 +87,8 @@ public class CityGMLBuilding
     short buildingFirstIndex = firstIndex;
     for (int w = 0; w < _surfaces.size(); w++)
     {
-      buildingFirstIndex = _surfaces.at(w).addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet, buildingFirstIndex, color);
+      CityGMLBuildingSurface s = _surfaces.get(w);
+      buildingFirstIndex = s.addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet, buildingFirstIndex, color);
     }
     return buildingFirstIndex;
   }
@@ -195,7 +195,8 @@ public class CityGMLBuilding
 
     for (int i = 0; i < _surfaces.size(); i++)
     {
-      final Geodetic3D min = _surfaces.at(i).getMin();
+      CityGMLBuildingSurface s = _surfaces.get(i);
+      final Geodetic3D min = s.getMin();
       if (min._longitude._degrees < minLon)
       {
         minLon = min._longitude._degrees;
@@ -221,7 +222,8 @@ public class CityGMLBuilding
 
     for (int i = 0; i < _surfaces.size(); i++)
     {
-      final Geodetic3D min = _surfaces.at(i).getMax();
+      CityGMLBuildingSurface s = _surfaces.get(i);
+      final Geodetic3D min = s.getMax();
       if (min._longitude._degrees > maxLon)
       {
         maxLon = min._longitude._degrees;
@@ -267,7 +269,8 @@ public class CityGMLBuilding
 
     for (int i = 0; i < _surfaces.size(); i++)
     {
-      _surfaces.at(i).addMarkersToCorners(mr, deltaH);
+      CityGMLBuildingSurface s = _surfaces.get(i);
+      s.addMarkersToCorners(mr, deltaH);
     }
   }
 }

@@ -116,7 +116,7 @@ public class Polygon3D
       {
         indexes.add((short)(indexes2D.get(i) + firstIndex));
       }
-      return (short) _coor3D.size() + firstIndex;
+      return (short)(_coor3D.size() + firstIndex);
     }
   
     return firstIndex;
