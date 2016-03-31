@@ -177,4 +177,5 @@ double Polygon2D::concavePolygonArea() {
     
     sum += Vector2D::triangleArea(*v1, *v2, *v3);
   }
+  return sum;
 }

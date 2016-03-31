@@ -25,10 +25,10 @@ public:
   const int                        _roofTypeCode;
   
 #ifdef C_CODE
-  const std::vector<CityGMLBuildingSurface*> _walls;
+  const std::vector<CityGMLBuildingSurface*> _surfaces;
 #endif
 #ifdef JAVA_CODE
-  public final java.util.ArrayList<CityGMLBuildingSurface> _walls;
+  public final java.util.ArrayList<CityGMLBuildingSurface> _surfaces;
 #endif
   
   CityGMLBuilding(const std::string name,
@@ -36,15 +36,24 @@ public:
                   std::vector<CityGMLBuildingSurface*> walls):
   _name(name),
   _roofTypeCode(roofType),
-  _walls(walls)
+  _surfaces(walls)
   {
+  }
+  
+  ~CityGMLBuilding()
+  {
+    for (int i = 0; i < _surfaces.size(); i++) {
+      CityGMLBuildingSurface* s = _surfaces[i];
+      delete s;
+    }
   }
   
   
   double getBaseHeight() {
     double min = IMathUtils::instance()->maxDouble();
-    for (int i = 0; i < _walls.size(); i++) {
-      const double h = _walls[i]->getBaseHeight();
+    for (int i = 0; i < _surfaces.size(); i++) {
+      CityGMLBuildingSurface* s = _surfaces[i];
+      const double h = s->getBaseHeight();
       if (min > h) {
         min = h;
       }
@@ -58,10 +67,11 @@ public:
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Building Name: " + _name + "\nRoof Type: ");
     isb->addInt(_roofTypeCode);
-    for (int i = 0; i < _walls.size(); i++) {
+    for (int i = 0; i < _surfaces.size(); i++) {
       isb->addString("\n Wall: Coordinates: ");
-      for (int j = 0; j < _walls[i]->_geodeticCoordinates.size(); j += 3) {
-        isb->addString(_walls[i]->_geodeticCoordinates[j]->description());
+      CityGMLBuildingSurface* s = _surfaces[i];
+      for (int j = 0; j < s->_geodeticCoordinates.size(); j += 3) {
+        isb->addString(s->_geodeticCoordinates.at(j)->description());
       }
     }
     std::string s = isb->getString();
@@ -78,9 +88,10 @@ public:
                                            const short firstIndex,
                                            const Color& color) const {
     short buildingFirstIndex = firstIndex;
-    for (int w = 0; w < _walls.size(); w++) {
-      buildingFirstIndex = _walls[w]->addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet,
-                                                                buildingFirstIndex, color);
+    for (int w = 0; w < _surfaces.size(); w++) {
+      buildingFirstIndex = _surfaces.at(w)->addTrianglesByEarClipping(fbb, normals, indexes, colors,
+                                                                      baseHeight, planet,
+                                                                      buildingFirstIndex, color);
     }
     return buildingFirstIndex;
   }
@@ -153,7 +164,7 @@ public:
         meshesCounter++;
         
         //Reset
-
+        
         delete fbb;
         delete normals;
 #ifdef C_CODE
@@ -188,8 +199,8 @@ public:
     double minLon =  IMathUtils::instance()->maxDouble();
     double minH =  IMathUtils::instance()->maxDouble();
     
-    for (int i = 0; i < _walls.size(); i++) {
-      const Geodetic3D min = _walls[i]->getMin();
+    for (int i = 0; i < _surfaces.size(); i++) {
+      const Geodetic3D min = _surfaces.at(i)->getMin();
       if (min._longitude._degrees < minLon) {
         minLon = min._longitude._degrees;
       }
@@ -209,8 +220,8 @@ public:
     double maxLon = IMathUtils::instance()->minDouble();
     double maxH = IMathUtils::instance()->minDouble();
     
-    for (int i = 0; i < _walls.size(); i++) {
-      const Geodetic3D min = _walls[i]->getMax();
+    for (int i = 0; i < _surfaces.size(); i++) {
+      const Geodetic3D min = _surfaces.at(i)->getMax();
       if (min._longitude._degrees > maxLon) {
         maxLon = min._longitude._degrees;
       }
@@ -251,8 +262,8 @@ public:
     
     const double deltaH = fixOnGround ? getBaseHeight() : 0;
     
-    for (int i = 0; i < _walls.size(); i++) {
-      _walls[i]->addMarkersToCorners(mr, deltaH);
+    for (int i = 0; i < _surfaces.size(); i++) {
+      _surfaces.at(i)->addMarkersToCorners(mr, deltaH);
     }
   }
 };

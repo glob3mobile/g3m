@@ -40,3 +40,30 @@ std::vector<Vector2D*> Polygon3D::createCoordinates2D() {
   
   return coor2D;
 }
+
+short Polygon3D::addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D& fbb,
+                                FloatBufferBuilderFromCartesian3D& normals,
+                                ShortBufferBuilder& indexes,
+                                const short firstIndex) const {
+  std::vector<short> indexes2D = _polygon2D->calculateTrianglesIndexesByEarClipping();
+  if (indexes2D.size() > 3){
+    
+    Vector3D normal = getCCWNormal();
+    for (int i = 0; i < _coor3D.size(); i++) {
+#ifdef C_CODE
+      fbb.add(*_coor3D[i]);
+#endif
+#ifdef JAVA_CODE
+      fbb.add(_coor3D.get(i));
+#endif
+      normals.add(normal);
+    }
+    
+    for (int i = 0; i < indexes2D.size(); i++) {
+      indexes.add( (short) (indexes2D[i] + firstIndex));
+    }
+    return (short) _coor3D.size() + firstIndex;
+  }
+  
+  return firstIndex;
+}

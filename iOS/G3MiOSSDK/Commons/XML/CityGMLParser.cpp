@@ -34,8 +34,8 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityG
     std::vector<CityGMLBuildingSurface*> surfaces;
     
     const std::vector<IXMLNode*> grounds = b->evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='GroundSurface']//*[local-name()='posList']");
-    for (int i = 0; i < grounds.size(); i++) {
-      std::string* str = grounds[i]->getTextContent();
+    for (int j = 0; j < grounds.size(); j++) {
+      std::string* str = grounds[j]->getTextContent();
       if (str != NULL){
         //ILogger::instance()->logInfo("%s", str->c_str() );
         
@@ -51,8 +51,8 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityG
     }
     
     const std::vector<IXMLNode*> walls = b->evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='WallSurface']//*[local-name()='posList']");
-    for (int i = 0; i < walls.size(); i++) {
-      std::string* str = walls[i]->getTextContent();
+    for (int j = 0; j < walls.size(); j++) {
+      std::string* str = walls[j]->getTextContent();
       if (str != NULL){
         //ILogger::instance()->logInfo("%s", str->c_str() );
         
@@ -68,8 +68,8 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityG
     }
     
     const std::vector<IXMLNode*> roofs = b->evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='RoofSurface']//*[local-name()='posList']");
-    for (int i = 0; i < roofs.size(); i++) {
-      std::string* str = roofs[i]->getTextContent();
+    for (int j = 0; j < roofs.size(); j++) {
+      std::string* str = roofs[j]->getTextContent();
       if (str != NULL){
         //ILogger::instance()->logInfo("%s", str->c_str() );
         
