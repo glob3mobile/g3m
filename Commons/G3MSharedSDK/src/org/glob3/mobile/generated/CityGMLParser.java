@@ -47,9 +47,9 @@ public class CityGMLParser
       java.util.ArrayList<CityGMLBuildingSurface> surfaces = new java.util.ArrayList<CityGMLBuildingSurface>();
   
       final java.util.ArrayList<IXMLNode> grounds = b.evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='GroundSurface']//*[local-name()='posList']");
-      for (int i = 0; i < grounds.size(); i++)
+      for (int j = 0; j < grounds.size(); j++)
       {
-        String str = grounds.get(i).getTextContent();
+        String str = grounds.get(j).getTextContent();
         if (str != null)
         {
           //ILogger::instance()->logInfo("%s", str->c_str() );
@@ -67,9 +67,9 @@ public class CityGMLParser
       }
   
       final java.util.ArrayList<IXMLNode> walls = b.evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='WallSurface']//*[local-name()='posList']");
-      for (int i = 0; i < walls.size(); i++)
+      for (int j = 0; j < walls.size(); j++)
       {
-        String str = walls.get(i).getTextContent();
+        String str = walls.get(j).getTextContent();
         if (str != null)
         {
           //ILogger::instance()->logInfo("%s", str->c_str() );
@@ -87,9 +87,9 @@ public class CityGMLParser
       }
   
       final java.util.ArrayList<IXMLNode> roofs = b.evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='RoofSurface']//*[local-name()='posList']");
-      for (int i = 0; i < roofs.size(); i++)
+      for (int j = 0; j < roofs.size(); j++)
       {
-        String str = roofs.get(i).getTextContent();
+        String str = roofs.get(j).getTextContent();
         if (str != null)
         {
           //ILogger::instance()->logInfo("%s", str->c_str() );

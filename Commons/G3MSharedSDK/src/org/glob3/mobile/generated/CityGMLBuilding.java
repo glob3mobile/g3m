@@ -26,22 +26,33 @@ public class CityGMLBuilding
   public final String _name;
   public final int _roofTypeCode;
 
-  public final java.util.ArrayList<CityGMLBuildingSurface> _walls;
+  public final java.util.ArrayList<CityGMLBuildingSurface> _surfaces;
 
   public CityGMLBuilding(String name, int roofType, java.util.ArrayList<CityGMLBuildingSurface> walls)
   {
      _name = name;
      _roofTypeCode = roofType;
-     _walls = walls;
+     _surfaces = walls;
+  }
+
+  public void dispose()
+  {
+    for (int i = 0; i < _surfaces.size(); i++)
+    {
+      CityGMLBuildingSurface s = _surfaces[i];
+      if (s != null)
+         s.dispose();
+    }
   }
 
 
   public final double getBaseHeight()
   {
     double min = IMathUtils.instance().maxDouble();
-    for (int i = 0; i < _walls.size(); i++)
+    for (int i = 0; i < _surfaces.size(); i++)
     {
-      final double h = _walls[i].getBaseHeight();
+      CityGMLBuildingSurface s = _surfaces[i];
+      final double h = s.getBaseHeight();
       if (min > h)
       {
         min = h;
@@ -57,12 +68,13 @@ public class CityGMLBuilding
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("Building Name: " + _name + "\nRoof Type: ");
     isb.addInt(_roofTypeCode);
-    for (int i = 0; i < _walls.size(); i++)
+    for (int i = 0; i < _surfaces.size(); i++)
     {
       isb.addString("\n Wall: Coordinates: ");
-      for (int j = 0; j < _walls[i]._geodeticCoordinates.size(); j += 3)
+      CityGMLBuildingSurface s = _surfaces[i];
+      for (int j = 0; j < s._geodeticCoordinates.size(); j += 3)
       {
-        isb.addString(_walls[i]._geodeticCoordinates[j].description());
+        isb.addString(s._geodeticCoordinates.get(j).description());
       }
     }
     String s = isb.getString();
@@ -74,9 +86,9 @@ public class CityGMLBuilding
   public final short addTrianglesCuttingEarsForAllWalls(FloatBufferBuilderFromCartesian3D fbb, FloatBufferBuilderFromCartesian3D normals, ShortBufferBuilder indexes, FloatBufferBuilderFromColor colors, double baseHeight, Planet planet, short firstIndex, Color color)
   {
     short buildingFirstIndex = firstIndex;
-    for (int w = 0; w < _walls.size(); w++)
+    for (int w = 0; w < _surfaces.size(); w++)
     {
-      buildingFirstIndex = _walls[w].addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet, buildingFirstIndex, color);
+      buildingFirstIndex = _surfaces.at(w).addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet, buildingFirstIndex, color);
     }
     return buildingFirstIndex;
   }
@@ -181,9 +193,9 @@ public class CityGMLBuilding
     double minLon = IMathUtils.instance().maxDouble();
     double minH = IMathUtils.instance().maxDouble();
 
-    for (int i = 0; i < _walls.size(); i++)
+    for (int i = 0; i < _surfaces.size(); i++)
     {
-      final Geodetic3D min = _walls[i].getMin();
+      final Geodetic3D min = _surfaces.at(i).getMin();
       if (min._longitude._degrees < minLon)
       {
         minLon = min._longitude._degrees;
@@ -207,9 +219,9 @@ public class CityGMLBuilding
     double maxLon = IMathUtils.instance().minDouble();
     double maxH = IMathUtils.instance().minDouble();
 
-    for (int i = 0; i < _walls.size(); i++)
+    for (int i = 0; i < _surfaces.size(); i++)
     {
-      final Geodetic3D min = _walls[i].getMax();
+      final Geodetic3D min = _surfaces.at(i).getMax();
       if (min._longitude._degrees > maxLon)
       {
         maxLon = min._longitude._degrees;
@@ -253,9 +265,9 @@ public class CityGMLBuilding
 
     final double deltaH = fixOnGround ? getBaseHeight() : 0;
 
-    for (int i = 0; i < _walls.size(); i++)
+    for (int i = 0; i < _surfaces.size(); i++)
     {
-      _walls[i].addMarkersToCorners(mr, deltaH);
+      _surfaces.at(i).addMarkersToCorners(mr, deltaH);
     }
   }
 }
