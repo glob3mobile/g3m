@@ -17,7 +17,7 @@
 class Polygon2D{
   
   std::vector<Vector2D*> _coor2D;
-  const int _nVertices;
+  const size_t _nVertices;
   bool _verticesCCW;
   
   
@@ -35,7 +35,7 @@ class Polygon2D{
     
     int isub1 = (i - 1) % (_nVertices - 2);
     if (isub1 == -1) {
-      isub1 = _nVertices - 2;
+      isub1 = (int) (_nVertices - 2);
     }
     const int iadd1 = (i + 1) % (_nVertices - 2); //Last one is repeated
     
@@ -154,7 +154,7 @@ class Polygon2D{
 public:
   
   Polygon2D(const std::vector<Vector2D*> coor): _nVertices(coor.size())  {
-    //POLYGON MUST BE DEFINED CCW AND LAST VERTEX == FIRST VERTEX
+    //POLYGON SHOULD HAVE LAST VERTEX == FIRST VERTEX
     _coor2D = coor;
     _verticesCCW = isPolygonCounterClockWise();
   }
@@ -171,7 +171,7 @@ public:
 #endif
   }
   
-  short addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, const short firstIndex);
+  std::vector<short> calculateTrianglesIndexesByEarClipping();
   
 };
 

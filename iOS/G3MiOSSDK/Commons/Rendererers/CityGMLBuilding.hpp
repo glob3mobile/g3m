@@ -136,11 +136,11 @@ public:
       
       const double baseHeight = fixOnGround ? b->getBaseHeight() : 0;
       firstIndex = b->addTrianglesCuttingEarsForAllWalls(*fbb, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
-                                                         colorWheel.wheelStep(buildings.size(), buildingCounter));
+                                                         colorWheel.wheelStep((int)buildings.size(), buildingCounter));
       
       buildingCounter++;
       
-      if (firstIndex > 30000) { //Max number of vertex per mesh (CHECK IT)
+      if (firstIndex > 30000) { //Max number of vertex per mesh (CHECK SHORT RANGE)
         if (cm == NULL) {
           cm = new CompositeMesh();
         }

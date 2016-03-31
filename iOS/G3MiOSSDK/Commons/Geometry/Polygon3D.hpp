@@ -70,18 +70,31 @@ public:
     
     //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
     
-    Vector3D normal = getCCWNormal();
-    for (int i = 0; i < _coor3D.size(); i++) {
+    std::vector<short> indexes2D = _polygon2D->calculateTrianglesIndexesByEarClipping();
+    if (indexes2D.size() > 3){
+      
+      Vector3D normal = getCCWNormal();
+      for (int i = 0; i < _coor3D.size(); i++) {
 #ifdef C_CODE
-      fbb.add(*_coor3D[i]);
+        fbb.add(*_coor3D[i]);
 #endif
 #ifdef JAVA_CODE
-      fbb.add(_coor3D.get(i));
+        fbb.add(_coor3D.get(i));
 #endif
-      normals.add(normal);
+        normals.add(normal);
+      }
+      
+      for (int i = 0; i < indexes2D.size(); i++) {
+        indexes.add( indexes2D[i] + firstIndex);
+      }
+      
+      return (short) _coor3D.size() + firstIndex;
     }
     
-    return _polygon2D->addTrianglesIndexesByEarClipping(indexes, firstIndex);
+    return firstIndex;
+
+    
+//    return _polygon2D->addTrianglesIndexesByEarClipping(indexes, firstIndex);
   }
   
   

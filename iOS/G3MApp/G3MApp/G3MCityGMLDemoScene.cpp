@@ -93,6 +93,7 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
   cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
 //  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml"); //WRONG COORDINATES
+//  cityGMLFiles.push_back("file:///finalModel_WGS84.gml"); //WRONG COORDINATES
   
   for (size_t i = 0; i < cityGMLFiles.size(); i++) {
     _requestId = downloader->requestBuffer(URL(cityGMLFiles[i]),

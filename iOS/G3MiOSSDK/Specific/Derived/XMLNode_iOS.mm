@@ -14,13 +14,12 @@
 XMLNode_iOS::XMLNode_iOS(const std::string& xmlTextForRootNode){
   
   _doc = xmlParseMemory(xmlTextForRootNode.c_str(), (int) xmlTextForRootNode.size());
-  _docOwner = true;
-  _node = _doc->next;
-  
-  
   if (_doc == NULL) {
     THROW_EXCEPTION("Error processing XML.");
   }
+  
+  _docOwner = true;
+  _node = _doc->next;
   
   _xpathCtx = xmlXPathNewContext(_doc);
   if(_xpathCtx == NULL) {

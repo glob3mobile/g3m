@@ -15,7 +15,7 @@ bool Polygon2D::isEdgeInside(const int i,
                          bool counterClockWise) {
   //http://stackoverflow.com/questions/693837/how-to-determine-a-diagonal-is-in-or-out-of-a-concave-polygon
   
-  const int nVertices = remainingCorners.size() - 1;
+  const size_t nVertices = remainingCorners.size() - 1;
   
   int iadd1 = i + 1;
   int isub1 = i - 1;
@@ -24,7 +24,7 @@ bool Polygon2D::isEdgeInside(const int i,
     iadd1 = 0;
   }
   if (isub1 == -1) {
-    isub1 = nVertices - 1;
+    isub1 = (int)(nVertices - 1);
   }
   
 #ifdef C_CODE
@@ -88,19 +88,21 @@ bool Polygon2D::isEdgeInside(const int i,
   return false;
 }
 
-short Polygon2D::addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, const short firstIndex) {
+
+std::vector<short> Polygon2D::calculateTrianglesIndexesByEarClipping() {
   
   //As seen in http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
   
   int i1 = 0, i2 = 0, i3 = 0;
   //   ILogger::instance()->logInfo("Looking for ears");
   
+  std::vector<short> finalListOfIndexes;
   std::vector<Vector2D*> remainingCorners;
   std::vector<short> remainingIndexes;
   
   for (int i = 0; i < _nVertices; i++) {
     remainingCorners.push_back(_coor2D[i]);
-    remainingIndexes.push_back((short) (i + firstIndex));
+    remainingIndexes.push_back((short) i);
   }
   
   while (remainingCorners.size() > 2) {
@@ -137,9 +139,9 @@ short Polygon2D::addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, c
     
     
     if (earFound) { //Valid triangle (ear)
-      indexes.add(remainingIndexes[i1]);
-      indexes.add(remainingIndexes[i2]);
-      indexes.add(remainingIndexes[i3]);
+      finalListOfIndexes.push_back(remainingIndexes[i1]);
+      finalListOfIndexes.push_back(remainingIndexes[i2]);
+      finalListOfIndexes.push_back(remainingIndexes[i3]);
       
       //Removing ear
 #ifdef C_CODE
@@ -153,9 +155,10 @@ short Polygon2D::addTrianglesIndexesByEarClipping(ShortBufferBuilder& indexes, c
     }
     else {
       ILogger::instance()->logError("No ear found while triangulating Poylgon 2D of %d vertices.", _coor2D.size());
-      return (short) (firstIndex + _nVertices);
+      finalListOfIndexes.clear();
+      return finalListOfIndexes;
     }
     
   }
-  return (short) (firstIndex + _nVertices);
+  return finalListOfIndexes;
 }
