@@ -19,10 +19,26 @@ enum CityGMLBuildingSurfaceType{
 
 class CityGMLBuildingSurface: public Surface{
   CityGMLBuildingSurfaceType _type;
+  
+  bool _isVisible;
+  
 public:
+  
+  ~CityGMLBuildingSurface(){
+  }
+  
+  void setIsVisible(bool b){
+    _isVisible = b;
+  }
+  
+  bool isVisible(){
+    return _isVisible;
+  }
+  
   CityGMLBuildingSurface(const std::vector<Geodetic3D*>& geodeticCoordinates, CityGMLBuildingSurfaceType type):
   Surface(geodeticCoordinates),
-  _type(type){
+  _type(type),
+  _isVisible(true){
   }
   
   CityGMLBuildingSurfaceType getType(){

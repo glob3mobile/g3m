@@ -12,14 +12,15 @@ import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.IXMLNode;
 import org.glob3.mobile.generated.URL;
 
 import android.content.Context;
 
 
 public final class Factory_Android
-         extends
-            IFactory {
+extends
+IFactory {
 
 
    private final Context _context;
@@ -130,6 +131,12 @@ public final class Factory_Android
    @Override
    protected IDeviceInfo createDeviceInfo() {
       return new DeviceInfo_Android(_context);
+   }
+
+
+   @Override
+   public IXMLNode createXMLNodeFromXML(final String xmlText) {
+      return new XMLNode_Android(xmlText);
    }
 
 

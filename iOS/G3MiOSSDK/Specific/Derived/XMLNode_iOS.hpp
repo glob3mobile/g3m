@@ -39,6 +39,7 @@ public:
       xmlFreeDoc(_doc);
       xmlXPathFreeContext(_xpathCtx);
     }
+    //xmlFreeNode(_node);
   }
   
   std::string* getAttribute(const std::string& attributeName);

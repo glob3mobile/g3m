@@ -23,13 +23,16 @@
 
 class Surface {
   
+  mutable double _maxHeight;
+  
 public:
   
   
   std::vector<Geodetic3D*>          _geodeticCoordinates;
   
   Surface(const std::vector<Geodetic3D*>& geodeticCoordinates):
-  _geodeticCoordinates(geodeticCoordinates)
+  _geodeticCoordinates(geodeticCoordinates),
+  _maxHeight(NAND)
   {
   }
   
@@ -159,6 +162,49 @@ public:
       mr->addMark(m);
     }
     
+  }
+  
+  bool includesPoint(const Geodetic3D& g) const{
+    int nv = (int) _geodeticCoordinates.size();
+    for (int i = 0; i < nv; i++) {
+      if (_geodeticCoordinates[i]->isEquals(g)){
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  bool isEquivalentTo(const Surface& that){
+    if (that._geodeticCoordinates.size() != _geodeticCoordinates.size()){
+      return false;
+    }
+    
+    if (that.getMaxHeight() != getMaxHeight()){
+      return false;
+    }
+    
+    int nv = (int) _geodeticCoordinates.size();
+    
+    for (int i = 0; i < nv; i++) {
+      if (!that.includesPoint(*_geodeticCoordinates[i])){
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  double getMaxHeight() const{
+    if (ISNAN(_maxHeight)){
+      _maxHeight = -9999999;
+      int nv = (int) _geodeticCoordinates.size();
+      for (int i = 0; i < nv; i++) {
+        if (_maxHeight < _geodeticCoordinates[i]->_height){ //SIG = MAX LAT
+          _maxHeight = _geodeticCoordinates[i]->_height;
+        }
+      }
+    }
+    return _maxHeight;
   }
 };
 

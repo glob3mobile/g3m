@@ -18,7 +18,6 @@
 
 class CityGMLBuilding {
   
-  
 public:
   
   const std::string                _name;
@@ -86,7 +85,13 @@ public:
       CityGMLBuildingSurface s = _surfaces.get(i);
 #endif
       for (int j = 0; j < s->_geodeticCoordinates.size(); j += 3) {
-        isb->addString(s->_geodeticCoordinates.at(j)->description());
+#ifdef C_CODE
+        Geodetic3D* g = s->_geodeticCoordinates.at(j);
+#endif
+#ifdef JAVA_CODE
+        Geodetic3D g = s->_geodeticCoordinates.get(j);
+#endif
+        isb->addString(g->description());
       }
     }
     std::string s = isb->getString();
@@ -101,7 +106,8 @@ public:
                                            const double baseHeight,
                                            const Planet& planet,
                                            const short firstIndex,
-                                           const Color& color) const {
+                                           const Color& color,
+                                           const bool includeGround) const {
     short buildingFirstIndex = firstIndex;
     for (int w = 0; w < _surfaces.size(); w++) {
 #ifdef C_CODE
@@ -110,9 +116,16 @@ public:
 #ifdef JAVA_CODE
       CityGMLBuildingSurface s = _surfaces.get(w);
 #endif
+      
+      if ((!includeGround && s->getType() == GROUND) ||
+          !s->isVisible())
+      {
+        continue;
+      }
+      
       buildingFirstIndex = s->addTrianglesByEarClipping(fbb, normals, indexes, colors,
-                                                                      baseHeight, planet,
-                                                                      buildingFirstIndex, color);
+                                                        baseHeight, planet,
+                                                        buildingFirstIndex, color);
     }
     return buildingFirstIndex;
   }
@@ -120,7 +133,8 @@ public:
   
   Mesh* createIndexedMeshWithColorPerVertex(const Planet planet,
                                             const bool fixOnGround,
-                                            const Color color) {
+                                            const Color color,
+                                            const bool includeGround) {
     
     
     const double baseHeight = fixOnGround ? getBaseHeight() : 0;
@@ -131,7 +145,7 @@ public:
     FloatBufferBuilderFromColor colors;
     
     const short firstIndex = 0;
-    addTrianglesCuttingEarsForAllWalls(*fbb, *normals, indexes, colors, baseHeight, planet, firstIndex, color);
+    addTrianglesCuttingEarsForAllWalls(*fbb, *normals, indexes, colors, baseHeight, planet, firstIndex, color, includeGround);
     
     IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
                                       fbb->getCenter(), fbb->create(), true,
@@ -148,7 +162,8 @@ public:
   
   static Mesh* createSingleIndexedMeshWithColorPerVertexForBuildings(const std::vector<CityGMLBuilding*> buildings,
                                                                      const Planet& planet,
-                                                                     const bool fixOnGround) {
+                                                                     const bool fixOnGround,
+                                                                     const bool includeGround) {
     
     CompositeMesh* cm = NULL;
     int buildingCounter = 0;
@@ -168,7 +183,8 @@ public:
       
       const double baseHeight = fixOnGround ? b->getBaseHeight() : 0;
       firstIndex = b->addTrianglesCuttingEarsForAllWalls(*fbb, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
-                                                         colorWheel.wheelStep((int)buildings.size(), buildingCounter));
+                                                         colorWheel.wheelStep((int)buildings.size(), buildingCounter),
+                                                         includeGround);
       
       buildingCounter++;
       
@@ -203,6 +219,14 @@ public:
     //Adding last mesh
     IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(), fbb->getCenter(), fbb->create(), true, indexes->create(),
                                       true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
+    
+    delete fbb;
+    delete normals;
+#ifdef C_CODE
+    delete indexes;
+#endif
+    delete colors;
+    
     if (cm == NULL){
       ILogger::instance()->logInfo("One single mesh created for %d buildings", buildingCounter);
       return im;
@@ -304,6 +328,51 @@ public:
 #endif
       s->addMarkersToCorners(mr, deltaH);
     }
+  }
+  
+  static int checkWallsVisibility(CityGMLBuilding* b1, CityGMLBuilding* b2){
+    int nInvisibleWalls = 0;
+    for (int i = 0; i < b1->_surfaces.size(); i++) {
+      CityGMLBuildingSurface* s1 = b1->_surfaces[i];
+      if (s1->getType() == WALL){
+        for (int j = 0; j < b2->_surfaces.size(); j++) {
+          CityGMLBuildingSurface* s2 = b2->_surfaces[j];
+          if (s2->getType() == WALL){
+            if (s1->isEquivalentTo(*s2)){
+              s1->setIsVisible(false);
+              s2->setIsVisible(false);
+              nInvisibleWalls++;
+              //ILogger::instance()->logInfo("Two building surfaces are equivalent, so we mark them as invisible.");
+            }
+          }
+        }
+      }
+    }
+    return nInvisibleWalls;
+  }
+  
+//  static int checkWallsVisibilityBetweenConsecutiveBuildings(const std::vector<CityGMLBuilding*> buildings){
+//    int nInvisibleWalls = 0;
+//    for (int i = 0; i < buildings.size() - 1; i++){
+//      CityGMLBuilding* b1 = buildings[i];
+//      CityGMLBuilding* b2 = buildings[i+1];
+//      nInvisibleWalls += checkWallsVisibility(b1, b2);
+//    }
+//    return nInvisibleWalls;
+//  }
+  
+  static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings){
+    int nInvisibleWalls = 0;
+    for (int i = 0; i < buildings.size() - 1; i++){
+      CityGMLBuilding* b1 = buildings[i];
+      
+      for (int j = i+1; j < i+30 && j < buildings.size() - 1; j++){
+        CityGMLBuilding* b2 = buildings[j];
+        nInvisibleWalls += checkWallsVisibility(b1, b2);
+      }
+      
+    }
+    return nInvisibleWalls;
   }
 };
 

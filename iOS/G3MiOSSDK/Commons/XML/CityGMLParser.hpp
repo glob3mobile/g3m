@@ -15,10 +15,19 @@
 #include <vector>
 #include <string>
 
+class MarksRenderer;
+class MeshRenderer;
+
 class CityGMLParser{
   
 public:
   static std::vector<CityGMLBuilding*> parseLOD2Buildings2(IXMLNode* cityGMLDoc);
+  
+  static void addLOD2MeshAndMarksFromFile(const std::string& url,
+                                          IDownloader* downloader,
+                                          const Planet* planet,
+                                          MeshRenderer* meshRenderer,
+                                          MarksRenderer* marksRenderer);
   
 };
 
