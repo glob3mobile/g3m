@@ -2,10 +2,29 @@ package org.glob3.mobile.generated;
 public class CityGMLBuildingSurface extends Surface
 {
   private CityGMLBuildingSurfaceType _type;
+
+  private boolean _isVisible;
+
+
+  public void dispose()
+  {
+  }
+
+  public final void setIsVisible(boolean b)
+  {
+    _isVisible = b;
+  }
+
+  public final boolean isVisible()
+  {
+    return _isVisible;
+  }
+
   public CityGMLBuildingSurface(java.util.ArrayList<Geodetic3D> geodeticCoordinates, CityGMLBuildingSurfaceType type)
   {
      super(geodeticCoordinates);
      _type = type;
+     _isVisible = true;
   }
 
   public final CityGMLBuildingSurfaceType getType()

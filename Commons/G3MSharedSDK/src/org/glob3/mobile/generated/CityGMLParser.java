@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class MarksRenderer;
+//class MeshRenderer;
+
 public class CityGMLParser
 {
 
@@ -33,19 +36,16 @@ public class CityGMLParser
   
       IXMLNode b = buildingsXML.get(i);
   
+      //Name
       String name = b.getAttribute("id");
       if (name == null)
       {
         name = new String("NO NAME");
       }
   
-      //Name
-  //    std::string name = "NO NAME";
-  
-  //    std::string* name = b->evaluateXPathAndGetTextContentAsText("//*[local-name()='name']/text()");
-  
       java.util.ArrayList<CityGMLBuildingSurface> surfaces = new java.util.ArrayList<CityGMLBuildingSurface>();
   
+      //Grounds
       final java.util.ArrayList<IXMLNode> grounds = b.evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='GroundSurface']//*[local-name()='posList']");
       for (int j = 0; j < grounds.size(); j++)
       {
@@ -64,8 +64,12 @@ public class CityGMLParser
   
           str = null;
         }
+  
+        if (grounds.get(j) != null)
+           grounds.get(j).dispose();
       }
   
+      //Walls
       final java.util.ArrayList<IXMLNode> walls = b.evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='WallSurface']//*[local-name()='posList']");
       for (int j = 0; j < walls.size(); j++)
       {
@@ -84,8 +88,12 @@ public class CityGMLParser
   
           str = null;
         }
+  
+        if (walls.get(j) != null)
+           walls.get(j).dispose();
       }
   
+      //Roofs
       final java.util.ArrayList<IXMLNode> roofs = b.evaluateXPathAsXMLNodes("*[local-name()='boundedBy']//*[local-name()='RoofSurface']//*[local-name()='posList']");
       for (int j = 0; j < roofs.size(); j++)
       {
@@ -104,80 +112,27 @@ public class CityGMLParser
   
           str = null;
         }
+  
+        if (roofs.get(j) != null)
+           roofs.get(j).dispose();
       }
   
       CityGMLBuilding nb = new CityGMLBuilding(name, 1, surfaces);
-      name = null;
+  
       buildings.add(nb);
-  //    try {
-  //      name = b.evaluateXPathAndGetTextContentAsText("/bldg:Building/gml:name/text()");
-  //      //            building = new CityGMLBuilding(name);
-  //    }
-  //    catch (const Exception e) {
-  //      //            ILogger.instance().logError("No name for building");
-  //      //            building = new CityGMLBuilding("NO NAME");
-  //
-  //      //ID
-  //      try {
-  //        name = b.getAttributeAsText("gml:id");
-  //        //               building = new CityGMLBuilding(id);
-  //      }
-  //      catch (const Exception e2) {
-  //        ILogger.instance().logError("No ID for building");
-  //        //               building = new CityGMLBuilding("NO NAME");
-  //      }
-  //    }
-  //
-  //    //RoofType
-  //    int roofType = -1;
-  //    try {
-  //      roofType = b.evaluateXPathAndGetTextContentAsInteger("/bldg:Building/bldg:roofType/text()");
-  //      //            building.setRoofTypeCode(roofType);
-  //    }
-  //    catch (const Exception e) {
-  //      //            ILogger.instance().logError("No roof type for building");
-  //    }
-  //
-  //    const std::vector<CityGMLBuildingSurface> surfaces = new std::vector<CityGMLBuildingSurface>();
-  //
-  //    //Walls
-  //    const std::vector<XMLNode> wallsXML = b.evaluateXPathAsXMLNodes("/bldg:Building/bldg:boundedBy/bldg:WallSurface/bldg:lod2MultiSurface//gml:posList");
-  //    //         ILogger.instance().logInfo("N Walls %d", wallsXML.size());
-  //    for (const XMLNode s : wallsXML) {
-  //      const std::vector<Double> coor = s.getTextContentAsNumberArray(" ");
-  //      const CityGMLBuildingSurface w = CityGLMBuildingWall.createFromArrayOfCityGMLWGS84Coordinates(coor,
-  //                                                                                                    CityGMLBuildingSurfaceType.WALL);
-  //      surfaces.add(w);
-  //    }
-  //
-  //
-  //    //Rooftops
-  //    const std::vector<XMLNode> roofsXML = b.evaluateXPathAsXMLNodes("/bldg:Building/bldg:boundedBy/bldg:RoofSurface/bldg:lod2MultiSurface//gml:posList");
-  //    //         ILogger.instance().logInfo("N Roofs %d", roofsXML.size());
-  //    for (const XMLNode s : roofsXML) {
-  //      const std::vector<Double> coor = s.getTextContentAsNumberArray(" ");
-  //      const CityGMLBuildingSurface w = CityGLMBuildingWall.createFromArrayOfCityGMLWGS84Coordinates(coor,
-  //                                                                                                    CityGMLBuildingSurfaceType.ROOF);
-  //      surfaces.add(w);
-  //    }
-  //
-  //    //Ground
-  //    const std::vector<XMLNode> groundXML = b.evaluateXPathAsXMLNodes("/bldg:Building/bldg:boundedBy/bldg:GroundSurface/bldg:lod2MultiSurface//gml:posList");
-  //    //         ILogger.instance().logInfo("N Roofs %d", groundXMLs.size());
-  //    for (const XMLNode s : groundXML) {
-  //      const std::vector<Double> coor = s.getTextContentAsNumberArray(" ");
-  //      const CityGMLBuildingSurface w = CityGLMBuildingWall.createFromArrayOfCityGMLWGS84Coordinates(coor,
-  //                                                                                                    CityGMLBuildingSurfaceType.GROUND);
-  //      surfaces.add(w);
-  //    }
-  //
-  //    const CityGMLBuilding building = new CityGMLBuilding(name,
-  //                                                         roofType, surfaces);
-  //
-  //    buildings.add(building);
+  
+      name = null;
+      if (b != null)
+         b.dispose();
+  
     }
   
     return buildings;
+  }
+
+  public static void addLOD2MeshAndMarksFromFile(String url, IDownloader downloader, Planet planet, MeshRenderer meshRenderer, MarksRenderer marksRenderer)
+  {
+    downloader.requestBuffer(new URL(url), DownloadPriority.HIGHEST, TimeInterval.fromHours(1), true, new G3MCityGMLDemoScene_BufferDownloadListener(planet, meshRenderer, marksRenderer), true);
   }
 
 }

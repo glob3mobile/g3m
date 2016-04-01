@@ -21,6 +21,8 @@ package org.glob3.mobile.generated;
 public class Surface
 {
 
+  private double _maxHeight;
+
 
 
   public java.util.ArrayList<Geodetic3D> _geodeticCoordinates = new java.util.ArrayList<Geodetic3D>();
@@ -28,6 +30,7 @@ public class Surface
   public Surface(java.util.ArrayList<Geodetic3D> geodeticCoordinates)
   {
      _geodeticCoordinates = geodeticCoordinates;
+     _maxHeight = java.lang.Double.NaN;
   }
 
 
@@ -158,5 +161,60 @@ public class Surface
       mr.addMark(m);
     }
 
+  }
+
+  public final boolean includesPoint(Geodetic3D g)
+  {
+    int nv = (int) _geodeticCoordinates.size();
+    for (int i = 0; i < nv; i++)
+    {
+      if (_geodeticCoordinates.get(i).isEquals(g))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public final boolean isEquivalentTo(Surface that)
+  {
+    if (that._geodeticCoordinates.size() != _geodeticCoordinates.size())
+    {
+      return false;
+    }
+
+    if (that.getMaxHeight() != getMaxHeight())
+    {
+      return false;
+    }
+
+    int nv = (int) _geodeticCoordinates.size();
+
+    for (int i = 0; i < nv; i++)
+    {
+      if (!that.includesPoint(*_geodeticCoordinates.get(i)))
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public final double getMaxHeight()
+  {
+    if ((_maxHeight != _maxHeight))
+    {
+      _maxHeight = -9999999;
+      int nv = (int) _geodeticCoordinates.size();
+      for (int i = 0; i < nv; i++)
+      {
+        if (_maxHeight < _geodeticCoordinates.get(i)._height) //SIG = MAX LAT
+        {
+          _maxHeight = _geodeticCoordinates.get(i)._height;
+        }
+      }
+    }
+    return _maxHeight;
   }
 }
