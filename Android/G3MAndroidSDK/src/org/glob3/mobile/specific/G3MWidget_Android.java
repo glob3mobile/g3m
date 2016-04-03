@@ -52,10 +52,10 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-         extends
-            GLSurfaceView
-         implements
-            OnGestureListener {
+   extends
+      GLSurfaceView
+   implements
+      OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -347,7 +347,8 @@ public final class G3MWidget_Android
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay, ViewMode.MONO);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
    }

@@ -51,8 +51,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class G3MWidget_WebGL
-         extends
-            Composite {
+   extends
+      Composite {
 
    private Canvas               _canvas;
    private JavaScriptObject     _webGLContext;
@@ -402,7 +402,8 @@ public class G3MWidget_WebGL
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay, ViewMode.MONO);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
 
