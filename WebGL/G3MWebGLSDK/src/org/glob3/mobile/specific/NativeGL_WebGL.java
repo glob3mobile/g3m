@@ -21,8 +21,8 @@ import com.google.gwt.core.client.JsArrayInteger;
 
 
 public final class NativeGL_WebGL
-extends
-INativeGL {
+         extends
+            INativeGL {
    /*
    Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
    work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex
@@ -863,6 +863,16 @@ INativeGL {
    public native void setActiveTexture(final int i) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.activeTexture(gl.TEXTURE0 + i);
+   }-*/;
+
+
+   @Override
+   public native void viewport(int x,
+                               int y,
+                               int width,
+                               int height) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.viewport(x, y, width, height);
    }-*/;
 
 

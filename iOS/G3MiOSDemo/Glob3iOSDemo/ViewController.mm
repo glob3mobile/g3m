@@ -93,7 +93,7 @@
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
-#import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
+#import <G3MiOSSDK/MapBooOLDBuilder_iOS.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
@@ -280,6 +280,11 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   [super viewDidLoad];
   
+  
+  G3MWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin |
+  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
+  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+  
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
@@ -317,6 +322,17 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                                                                 1000076.892613024946));
   //
   [[self G3MWidget] startAnimation];
+  
+  
+//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(30), Geodetic3D::fromDegrees(28.0465484603694577, -16.679972746659540661, 3523.1227238618689626));
+//  
+//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(30),
+//                                                [G3MWidget widget]->getCurrentCamera()->getGeodeticPosition(),
+//                                                Geodetic3D::fromDegrees(28.0465484603694577, -16.679972746659540661, 3523.1227238618689626), Angle::zero(), Angle::zero(),
+//                                                Angle::zero(), Angle::fromDegrees(-20));
+  
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.034039522888807738, -15.391984897940172772, 19995.736280033790536));
+  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
   
   /*
    [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
@@ -948,7 +964,7 @@ public:
     }
   };
   
-  Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+  Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL, NULL);
   
   
   
@@ -1244,7 +1260,7 @@ public:
   //                                  NULL)
   //                     );
   
-  bool useElevations = false;
+  bool useElevations = true;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }
@@ -1324,7 +1340,7 @@ public:
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
   
-  bool testingAnimatedMarks = true;
+  bool testingAnimatedMarks = false;
   if (testingAnimatedMarks){
     
     Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
@@ -1380,7 +1396,7 @@ public:
     builder.setSceneLighting(light);
   }
   
-  if (true) { //HUD
+  if (false) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
     
@@ -1675,10 +1691,7 @@ public:
       builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
       
     }
-    
-    
-    
-    
+ 
   }
   
   
@@ -3173,9 +3186,9 @@ public:
   //    shapesRenderer->addShape(sphere);
   //  }
   
-  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL, NULL);
   
-  Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
+  Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL, NULL);
   
   std::vector<const IImage*> images;
   images.push_back(image2);

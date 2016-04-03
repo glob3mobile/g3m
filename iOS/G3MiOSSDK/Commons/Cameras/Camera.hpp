@@ -348,6 +348,10 @@ public:
                                   const Vector2F& pixel,
                                   const MutableVector2I& viewport,
                                   const MutableMatrix44D& modelViewMatrix);
+  
+  Angle getHorizontalFOV() const;
+  
+  Angle getVerticalFOV() const;
 
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
 

@@ -32,7 +32,7 @@ class DeviceLocation_iOS: public IDeviceLocation{
   
 public:
   DeviceLocation_iOS();
-  ~DeviceLocation_iOS(){}
+  ~DeviceLocation_iOS() {}
   
   bool startTrackingLocation();
   void stopTrackingLocation();

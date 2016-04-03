@@ -735,7 +735,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            infoDisplay);
+                                            infoDisplay,
+                                            MONO);
 
   g3mWidget->setUserData(getUserData());
 

@@ -447,6 +447,14 @@ void Camera::setFOV(const Angle& vertical,
   }
 }
 
+Angle Camera::getHorizontalFOV() const{
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFieldOfView)).times(2);
+}
+
+Angle Camera::getVerticalFOV() const{
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFieldOfView)).times(2);
+}
+
 void Camera::setRoll(const Angle& angle) {
   const TaitBryanAngles angles = getHeadingPitchRoll();
 

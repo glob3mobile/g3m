@@ -17,13 +17,13 @@ class IDeviceLocation{
   
 public:
   
-  static IDeviceLocation* instance(){
+  static IDeviceLocation* instance() {
     return _instance;
   }
   
   static void setInstance(IDeviceLocation* loc);
   
-  virtual ~IDeviceLocation(){}
+  virtual ~IDeviceLocation() {}
   
   virtual bool startTrackingLocation() = 0;
   virtual void stopTrackingLocation() = 0;

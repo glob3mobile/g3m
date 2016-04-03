@@ -20,7 +20,7 @@ _locationModifier(locationModifier)
   
 }
 
-DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler(){
+DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler() {
   IDeviceAttitude::instance()->stopTrackingDeviceOrientation();
   IDeviceLocation::instance()->stopTrackingLocation();
   
@@ -28,7 +28,7 @@ DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler(){
 }
 
 void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const{
-  if (nextCamera->hasValidViewDirection()){
+  if (nextCamera->hasValidViewDirection()) {
     nextCamera->setGeodeticPosition(pos);
   } else{
     ILogger::instance()->logWarning("Trying to set position of unvalid camera. ViewDirection: %s",
@@ -37,27 +37,27 @@ void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Ge
 }
 
 
-void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext){
+void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext) {
   
   IDeviceAttitude* devAtt = IDeviceAttitude::instance();
   Camera* nextCamera = rc->getNextCamera();
   
   //Updating location
-  if (_updateLocation){
+  if (_updateLocation) {
     
     IDeviceLocation* loc = IDeviceLocation::instance();
     
     bool isTracking = loc->isTrackingLocation();
-    if (!isTracking){
+    if (!isTracking) {
       isTracking = loc->startTrackingLocation();
     }
     
-    if (isTracking){
+    if (isTracking) {
       Geodetic3D g = loc->getLocation();
-      if (!g.isNan()){
+      if (!g.isNan()) {
         
         //Changing current location
-        if (_locationModifier == NULL){
+        if (_locationModifier == NULL) {
           setPositionOnNextCamera(nextCamera, g);
         } else{
           Geodetic3D g2 = _locationModifier->modify(g);
@@ -68,17 +68,17 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
     
   }
   
-  if (devAtt == NULL){
+  if (devAtt == NULL) {
     THROW_EXCEPTION("IDeviceAttitude not initilized");
   }
   
-  if (!devAtt->isTracking()){
+  if (!devAtt->isTracking()) {
     devAtt->startTrackingDeviceOrientation();
   }
   
   //Getting Global Rotation
   IDeviceAttitude::instance()->copyValueOfRotationMatrix(_attitudeMatrix);
-  if (!_attitudeMatrix.isValid()){
+  if (!_attitudeMatrix.isValid()) {
     return;
   }
   
