@@ -12,13 +12,7 @@
 
 #include "G3MDemoScene.hpp"
 
-@class CLLocationManager;
-@class CMMotionManager;
-
 class G3MStereoDemoScene : public G3MDemoScene {
-private:
-  CLLocationManager* _locationManager;
-  CMMotionManager*   _motionManager;
 
 protected:
   void rawActivate(const G3MContext* context);
@@ -30,9 +24,7 @@ protected:
 
 public:
   G3MStereoDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Stereo Vision", "", -1),
-  _locationManager(nil),
-  _motionManager(nil)
+  G3MDemoScene(model, "Stereo Vision", "", -1)
   {
   }
 

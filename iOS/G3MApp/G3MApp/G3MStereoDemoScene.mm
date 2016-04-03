@@ -9,55 +9,34 @@
 #include "G3MStereoDemoScene.hpp"
 
 #include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/Camera.hpp>
-#include <G3MiOSSDK/GTask.hpp>
-#include <G3MiOSSDK/PeriodicalTask.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 
-#import <CoreLocation/CoreLocation.h>
-#import <CoreMotion/CoreMotion.h>
-
 
 void G3MStereoDemoScene::deactivate(const G3MContext* context) {
-  [_locationManager stopUpdatingLocation];
-  [_locationManager stopUpdatingHeading];
-  _locationManager = nil;
-
-  [_motionManager stopDeviceMotionUpdates];
-  _motionManager = nil;
+  getModel()->getG3MWidget()->setViewMode(MONO);
 
   G3MDemoScene::deactivate(context);
 }
 
-
 void G3MStereoDemoScene::rawActivate(const G3MContext* context) {
-  G3MDemoModel* model     = getModel();
-  G3MWidget*    g3mWidget = model->getG3MWidget();
-  
-  g3mWidget->setViewMode(STEREO);
+  G3MDemoModel* model = getModel();
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                            TimeInterval::fromDays(30));
-  
+  model->getLayerSet()->addLayer(layer);
+
+  G3MWidget* g3mWidget = model->getG3MWidget();
+  g3mWidget->setViewMode(STEREO);
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(30),
                                        Geodetic3D::fromDegrees(0, 0, 5e7),
                                        Geodetic3D::fromDegrees(27.974652332849732517,-15.583470715075184998,175649.0264215345378),
-                                       Angle::zero(), Angle::fromDegrees(360),
-                                       Angle::fromDegrees(-45), Angle::fromDegrees(-90));
+                                       Angle::zero(),
+                                       Angle::fromDegrees(360),
+                                       Angle::fromDegrees(-45),
+                                       Angle::fromDegrees(-90));
 
-//  MapQuestLayer* layer = MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30));
-
-//  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.jpg70?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q",
-//                                                          Sector::FULL_SPHERE,
-//                                                          false, // isTransparent
-//                                                          2,     // firstLevel
-//                                                          22,    // maxLevel
-//                                                          TimeInterval::fromDays(30));
-  model->getLayerSet()->addLayer(layer);
-  
 }
