@@ -85,7 +85,7 @@ public class G3MWidget_WebGL
       onSizeChanged(1, 1);
 
       final INativeGL nativeGL = new NativeGL_WebGL(_webGLContext);
-      _gl = new GL(nativeGL, false);
+      _gl = new GL(nativeGL);
 
       jsDefineG3MBrowserObjects();
 
