@@ -36,8 +36,8 @@ import android.util.Log;
 
 
 public final class NativeGL2_Android
-extends
-INativeGL {
+   extends
+      INativeGL {
 
    private Thread _openGLThread = null;
 
@@ -52,7 +52,7 @@ INativeGL {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
             throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                     + ", CurrentThread=" + currentThread + ")");
+                                       + ", CurrentThread=" + currentThread + ")");
          }
       }
    }
@@ -110,7 +110,7 @@ INativeGL {
                transpose, //
                matrix.getColumnMajorFloatArray(), //
                0 //
-               );
+      );
 
       //      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
    }
@@ -759,14 +759,6 @@ INativeGL {
          default:
             return null;
       }
-   }
-
-
-   public void glViewport(final int x,
-                          final int y,
-                          final int width,
-                          final int height) {
-      GLES20.glViewport(x, y, width, height);
    }
 
 
