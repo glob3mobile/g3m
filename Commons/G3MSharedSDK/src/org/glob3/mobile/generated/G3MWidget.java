@@ -676,21 +676,24 @@ public class G3MWidget implements ChangedRendererInfoListener
     _periodicalTasks.clear();
   }
 
-  public final void setViewMode(ViewMode vm)
+  public final void setViewMode(ViewMode viewMode)
   {
-    _viewMode = vm;
-  
-    if (_viewMode != ViewMode.STEREO)
+    if (_viewMode != viewMode)
     {
-      if (_auxCam != null)
-         _auxCam.dispose();
-      _auxCam = null;
-      if (_leftEyeCam != null)
-         _leftEyeCam.dispose();
-      _leftEyeCam = null;
-      if (_rightEyeCam != null)
-         _rightEyeCam.dispose();
-      _rightEyeCam = null;
+      _viewMode = viewMode;
+  
+      if (_viewMode != ViewMode.STEREO)
+      {
+        if (_auxCam != null)
+           _auxCam.dispose();
+        _auxCam = null;
+        if (_leftEyeCam != null)
+           _leftEyeCam.dispose();
+        _leftEyeCam = null;
+        if (_rightEyeCam != null)
+           _rightEyeCam.dispose();
+        _rightEyeCam = null;
+      }
     }
   }
 

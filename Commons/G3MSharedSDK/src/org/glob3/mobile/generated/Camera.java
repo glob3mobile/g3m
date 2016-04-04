@@ -24,6 +24,8 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _timestamp = timestamp;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VR => Diego at work!
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -696,6 +698,8 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VR => Diego at work!
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
 
@@ -825,6 +829,11 @@ public class Camera
           }
         }
       }
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VR => Diego at work!
+      _tanHalfHorizontalFieldOfView = tanHalfHFOV;
+      _tanHalfVerticalFieldOfView = tanHalfVFOV;
     }
   
     final double right = tanHalfHFOV * zNear;
