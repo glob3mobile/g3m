@@ -89,7 +89,7 @@ public:
         Geodetic3D* g = s->_geodeticCoordinates.at(j);
 #endif
 #ifdef JAVA_CODE
-        Geodetic3D g = s->_geodeticCoordinates.get(j);
+        Geodetic3D g = s._geodeticCoordinates.get(j);
 #endif
         isb->addString(g->description());
       }
@@ -333,10 +333,20 @@ public:
   static int checkWallsVisibility(CityGMLBuilding* b1, CityGMLBuilding* b2){
     int nInvisibleWalls = 0;
     for (int i = 0; i < b1->_surfaces.size(); i++) {
+#ifdef C_CODE
       CityGMLBuildingSurface* s1 = b1->_surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      final CityGMLBuildingSurface s1 = b1._surfaces.get(i);
+#endif
       if (s1->getType() == WALL){
         for (int j = 0; j < b2->_surfaces.size(); j++) {
+#ifdef C_CODE
           CityGMLBuildingSurface* s2 = b2->_surfaces[j];
+#endif
+#ifdef JAVA_CODE
+          final CityGMLBuildingSurface s2 = b2._surfaces.get(j);
+#endif
           if (s2->getType() == WALL){
             if (s1->isEquivalentTo(*s2)){
               s1->setIsVisible(false);
