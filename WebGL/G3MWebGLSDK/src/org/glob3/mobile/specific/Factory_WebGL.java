@@ -15,14 +15,15 @@ import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
+import org.glob3.mobile.generated.IXMLNode;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class Factory_WebGL
-         extends
-            IFactory {
+extends
+IFactory {
 
    boolean first = true;
 
@@ -141,6 +142,12 @@ public final class Factory_WebGL
    @Override
    protected IDeviceInfo createDeviceInfo() {
       return new DeviceInfo_WebGL();
+   }
+
+
+   @Override
+   public IXMLNode createXMLNodeFromXML(final String xmlText) {
+      return new XMLNode_WebGL(xmlText);
    }
 
 }

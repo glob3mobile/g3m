@@ -186,7 +186,8 @@ public:
     int nv = (int) _geodeticCoordinates.size();
     
     for (int i = 0; i < nv; i++) {
-      if (!that.includesPoint(*_geodeticCoordinates[i])){
+      Geodetic3D* g = _geodeticCoordinates[i];
+      if (!that.includesPoint(*g)){
         return false;
       }
     }

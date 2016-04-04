@@ -23,68 +23,41 @@
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/DeviceAttitudeCameraHandler.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
 
+#include <G3MiOSSDK/TerrainTouchListener.hpp>
 
+class MyTerrainTL: public TerrainTouchListener {
+  
+  G3MWidget* _widget;
 
-//class G3MCityGMLDemoScene_BufferDownloadListener : public IBufferDownloadListener {
-//private:
-//  G3MCityGMLDemoScene* _scene;
-//  const Planet* _planet;
-//  const bool _deleteBuildings;
-//public:
-//  G3MCityGMLDemoScene_BufferDownloadListener(G3MCityGMLDemoScene* scene, const Planet* planet, bool deleteBuildings) :
-//  _scene(scene),_planet(planet), _deleteBuildings(deleteBuildings)
-//  {
-//  }
-//  
-//  void onDownload(const URL& url,
-//                  IByteBuffer* buffer,
-//                  bool expired) {
-//    
-//    std::string s = buffer->getAsString();
-//    
-//    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
-//    
-//    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
-//    
-//    //Adding marks
-//    for (size_t i = 0; i < buildings.size(); i++) {
-//      _scene->getModel()->getMarksRenderer()->addMark( buildings[i]->createMark(false) );
-//    }
-//    
-//    const Planet* planet = EllipsoidalPlanet::createEarth();
-//    
-//    //Creating mesh model
-//    Mesh* mesh = CityGMLBuilding::createSingleIndexedMeshWithColorPerVertexForBuildings(buildings, *planet, false);
-//    
-//    _scene->getModel()->getMeshRenderer()->addMesh(mesh);
-//    
-//    delete xml;
-//    
-//    delete buffer;
-//    
-//    if (_deleteBuildings){
-//      for (size_t i = 0; i < buildings.size(); i++) {
-//        delete buildings[i];
-//      }
-//    }
-//  }
-//  
-//  void onError(const URL& url) {
-//    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
-//  }
-//  
-//  void onCancel(const URL& url) {
-//    // do nothing
-//  }
-//  
-//  void onCanceledDownload(const URL& url,
-//                          IByteBuffer* buffer,
-//                          bool expired) {
-//    // do nothing
-//  }
-//  
-//};
+  
+public:
+  
+  
+  MyTerrainTL(G3MWidget* widget):_widget(widget){
+    
+  }
+  
+  bool onTerrainTouch(const G3MEventContext* ec,
+                              const Vector2F&        pixel,
+                              const Camera*          camera,
+                              const Geodetic3D&      position,
+                      const Tile*            tile){
+    class LM: public ILocationModifier{
+      Geodetic3D modify(const Geodetic3D& location){
+        return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 12);
+      }
+    };
+    
+    DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, new LM());
+    _widget->getCameraRenderer()->addHandler(dac);
+    
+    return true;
+  }
+  
+};
 
 void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
@@ -111,29 +84,20 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
   cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   
-  
+  getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget()));
   
   for (size_t i = 0; i < cityGMLFiles.size(); i++) {
     
     CityGMLParser::addLOD2MeshAndMarksFromFile(cityGMLFiles[i], downloader, context->getPlanet(), getModel()->getMeshRenderer(), getModel()->getMarksRenderer());
-    
-//    _requestId = downloader->requestBuffer(URL(cityGMLFiles[i]),
-//                                           DownloadPriority::HIGHEST,
-//                                           TimeInterval::fromHours(1),
-//                                           true,
-//                                           new G3MCityGMLDemoScene_BufferDownloadListener(this, context->getPlanet(), true),
-//                                           true);
   }
   
   
-  
+  //Whole city!
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
                                        Angle::fromDegrees(-109.452892),
                                        Angle::fromDegrees(-44.938813)
                                        );
-  
-  
 }
 
 void G3MCityGMLDemoScene::deactivate(const G3MContext* context) {

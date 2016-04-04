@@ -11,6 +11,7 @@ import com.google.gwt.core.client.JsArrayNumber;
 
 public class XMLDocument {
    private final JavaScriptObject _xml;
+   private final JavaScriptObject _node;
    private final JavaScriptObject _resolver;
 
 
@@ -74,7 +75,7 @@ public class XMLDocument {
 
 
    public ArrayList<Double> evaluateXPathAndGetTextContentAsNumberArray(final String xpath,
-            final String separator) {
+                                                                        final String separator) {
       final JavaScriptObject res = xpathToJSO(xpath);
       final JsArrayNumber a = jsGetTextContentAsNumberArray(separator, res);
       final ArrayList<Double> ns = new ArrayList<Double>();
@@ -154,7 +155,7 @@ public class XMLDocument {
 
 		for (i = 0; i < array.length; i++) {
 			var doc = document.implementation.createDocument('', '');
-			doc.appendChild(array[i]);
+			doc.appendChild(array[i].childNodes[0]);
 			array[i] = doc;
 		}
 

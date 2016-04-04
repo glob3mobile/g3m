@@ -10,8 +10,8 @@ import org.glob3.mobile.generated.IStringUtils;
 
 
 public final class StringUtils_Android
-   extends
-      IStringUtils {
+         extends
+            IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -179,6 +179,18 @@ public final class StringUtils_Android
                             final String searchString,
                             final String replaceString) {
       return originalString.replace(searchString, replaceString);
+   }
+
+
+   @Override
+   public ArrayList<Double> parseDoubles(final String str,
+            final String separator) {
+      final String lines[] = str.split(separator);
+      final ArrayList<Double> l = new ArrayList<Double>();
+      for (final java.lang.String line : lines) {
+         l.add(Double.parseDouble(line));
+      }
+      return l;
    }
 
 }

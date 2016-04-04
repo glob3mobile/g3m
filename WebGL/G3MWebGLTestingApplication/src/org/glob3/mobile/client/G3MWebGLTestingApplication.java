@@ -2,10 +2,9 @@
 
 package org.glob3.mobile.client;
 
-import java.util.ArrayList;
-
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CityGMLParser;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ColumnLayoutImageBuilder;
 import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
@@ -21,8 +20,6 @@ import org.glob3.mobile.generated.HUDAbsolutePosition;
 import org.glob3.mobile.generated.HUDQuadWidget;
 import org.glob3.mobile.generated.HUDRelativeSize;
 import org.glob3.mobile.generated.HUDRenderer;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
@@ -196,82 +193,79 @@ EntryPoint {
       builder.addRenderer(marksRenderer);
       final Planet planet = EllipsoidalPlanet.createEarth();
       builder.setPlanet(planet);
-
-      class CityGMLDownloadListener
-      extends
-      IBufferDownloadListener {
-
-         @Override
-         public void onError(final URL url) {
-            // TODO Auto-generated method stub
-            //                  final XMLDocument doc = new XMLDocument("ok");
-            //                  doc.xpath("error");
-         }
-
-
-         @Override
-         public void onDownload(final URL url,
-                                final IByteBuffer buffer,
-                                final boolean expired) {
-            final String s = buffer.getAsString();
-            final CityGMLDocument doc = new CityGMLDocument(s);
-
-            //            final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
-            //            for (final CityGMLBuilding b : bs) {
-            //               marksRenderer.addMark(b.createMark(false));
-            //            }
-            //            meshRenderer.addMesh(CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(bs, planet, false));
-
-
-            final ArrayList<org.glob3.mobile.generated.CityGMLBuilding> bs = doc.parseLOD2Buildings2();
-            int bCount = 0;
-            for (final org.glob3.mobile.generated.CityGMLBuilding b : bs) {
-               marksRenderer.addMark(b.createMark(false));
-               bCount++;
-               if (bCount > 100) {
-                  break;
-               }
-            }
-            meshRenderer.addMesh(org.glob3.mobile.generated.CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(
-                     bs, planet, false));
-         }
-
-
-         @Override
-         public void onCanceledDownload(final URL url,
-                                        final IByteBuffer buffer,
-                                        final boolean expired) {
-
-         }
-
-
-         @Override
-         public void onCancel(final URL url) {
-            // TODO Auto-generated method stub
-            //                  final XMLDocument doc = new XMLDocument("ok");
-            //                  doc.xpath("cancel");
-         }
-
-      }
-
+      //
+      //      class CityGMLDownloadListener
+      //      extends
+      //      IBufferDownloadListener {
+      //
+      //         @Override
+      //         public void onError(final URL url) {
+      //            // TODO Auto-generated method stub
+      //            //                  final XMLDocument doc = new XMLDocument("ok");
+      //            //                  doc.xpath("error");
+      //         }
+      //
+      //
+      //         @Override
+      //         public void onDownload(final URL url,
+      //                                final IByteBuffer buffer,
+      //                                final boolean expired) {
+      //            final String s = buffer.getAsString();
+      //            final CityGMLDocument doc = new CityGMLDocument(s);
+      //
+      //            //            final ArrayList<CityGMLBuilding> bs = doc.parseLOD2Buildings();
+      //            //            for (final CityGMLBuilding b : bs) {
+      //            //               marksRenderer.addMark(b.createMark(false));
+      //            //            }
+      //            //            meshRenderer.addMesh(CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(bs, planet, false));
+      //
+      //
+      //            final ArrayList<org.glob3.mobile.generated.CityGMLBuilding> bs = doc.parseLOD2Buildings2();
+      //            int bCount = 0;
+      //            for (final org.glob3.mobile.generated.CityGMLBuilding b : bs) {
+      //               marksRenderer.addMark(b.createMark(false));
+      //               bCount++;
+      //               if (bCount > 100) {
+      //                  break;
+      //               }
+      //            }
+      //            meshRenderer.addMesh(org.glob3.mobile.generated.CityGMLBuilding.createSingleIndexedMeshWithColorPerVertexForBuildings(
+      //                     bs, planet, false));
+      //         }
+      //
+      //
+      //         @Override
+      //         public void onCanceledDownload(final URL url,
+      //                                        final IByteBuffer buffer,
+      //                                        final boolean expired) {
+      //
+      //         }
+      //
+      //
+      //         @Override
+      //         public void onCancel(final URL url) {
+      //            // TODO Auto-generated method stub
+      //            //                  final XMLDocument doc = new XMLDocument("ok");
+      //            //                  doc.xpath("cancel");
+      //         }
+      //
+      //      }
+      //
 
       builder.setInitializationTask(new GInitializationTask() {
          @Override
          public void run(final G3MContext context) {
 
-            final String[] cityGMLFiles = { //"test_sample_4326_lod2.gml",
-                     //"lindenallee_kranichweg_v1_EPSG:4326.gml",
-                     //"test_sample_4326_lod2_single_building.gml"
-                     "innenstadt_ost_4326_lod2.gml", "innenstadt_west_4326_lod2.gml"
-                     //"hagsfeld_4326_lod2.gml"
-            //"hagsfeld_4326_lod2_first_623_buildings.gml"
-                     //"daxlanden_4326_lod2.gml" //TOO BIG
-
+            final String[] cityGMLFiles = { "innenstadt_ost_4326_lod2.gml", "innenstadt_west_4326_lod2.gml",
+                     "hagsfeld_4326_lod2.gml", "durlach_4326_lod2_PART_1.gml",
+            //"durlach_4326_lod2_PART_2.gml",
+            // "hohenwettersbach_4326_lod2.gml", "bulach_4326_lod2.gml", "daxlanden_4326_lod2.gml",
+            //"knielingen_4326_lod2_PART_1.gml", "knielingen_4326_lod2_PART_2.gml", "knielingen_4326_lod2_PART_3.gml"
             };
 
             for (final String s : cityGMLFiles) {
-               final IBufferDownloadListener listener = new CityGMLDownloadListener();
-               context.getDownloader().requestBuffer(new URL(s), 0, TimeInterval.forever(), false, listener, true);
+               CityGMLParser.addLOD2MeshAndMarksFromFile(s, context.getDownloader(), context.getPlanet(), meshRenderer,
+                        marksRenderer);
             }
          }
 
