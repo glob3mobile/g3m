@@ -257,7 +257,7 @@ public:
 
   void removeAllPeriodicalTasks();
   
-  void setViewMode(ViewMode vm);
+  void setViewMode(ViewMode viewMode);
 
 private:
   IStorage*                _storage;

@@ -576,14 +576,18 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       const Angle vFOV = _currentCamera->getVerticalFOV();
       
       Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
-      Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
-      _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+      Vector3D leftEyeCenter   = camCenter.add(eyesDirection.times(-eyesSeparation));
+      _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(),
+                                   leftEyeCenter.asMutableVector3D(),
+                                   up.asMutableVector3D());
       _leftEyeCam->setFOV(vFOV, hFOV_2);
-      
+
       Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
-      Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
+      Vector3D rightEyeCenter   = camCenter.add(eyesDirection.times(eyesSeparation));
       
-      _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+      _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(),
+                                    rightEyeCenter.asMutableVector3D(),
+                                    up.asMutableVector3D());
       _rightEyeCam->setFOV(vFOV, hFOV_2);
     }
     
@@ -979,17 +983,17 @@ void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
   //  }
 }
 
-void G3MWidget::setViewMode(ViewMode vm) {
-  _viewMode = vm;
-  
-  if (_viewMode != STEREO) {
-    delete _auxCam;
-    _auxCam = NULL;
-    delete _leftEyeCam;
-    _leftEyeCam = NULL;
-    delete _rightEyeCam;
-    _rightEyeCam = NULL;
+void G3MWidget::setViewMode(ViewMode viewMode) {
+  if (_viewMode != viewMode) {
+    _viewMode = viewMode;
+
+    if (_viewMode != STEREO) {
+      delete _auxCam;
+      _auxCam = NULL;
+      delete _leftEyeCam;
+      _leftEyeCam = NULL;
+      delete _rightEyeCam;
+      _rightEyeCam = NULL;
+    }
   }
 }
-
-

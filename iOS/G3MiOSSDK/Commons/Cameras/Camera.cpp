@@ -123,6 +123,7 @@ _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
 _timestamp(timestamp)
 {
+#warning VR => Diego at work!
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
 }
@@ -396,6 +397,10 @@ FrustumData Camera::calculateFrustumData() const {
         }
       }
     }
+
+#warning VR => Diego at work!
+    _tanHalfHorizontalFieldOfView = tanHalfHFOV;
+    _tanHalfVerticalFieldOfView = tanHalfVFOV;
   }
 
   const double right = tanHalfHFOV * zNear;
