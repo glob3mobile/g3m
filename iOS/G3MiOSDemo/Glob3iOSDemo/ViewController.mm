@@ -240,12 +240,21 @@ const Planet* planet;
   mr = new MeshRenderer();
   builder.addRenderer(mr);
   
+  NSArray* files = [NSArray arrayWithObjects:@"zodiaco",
+                    @"norte",
+                    @"heroes",
+                    @"cefeo",
+                    @"lactea",
+                    nil];
+  
   AppDelegate* delegate = [UIApplication sharedApplication].delegate;
   for (int i = 0; i < 5; i++) {
     if ([delegate areStarsActive:i]){
       
-      NSString* sfn = [NSString stringWithFormat:@"stars%d", i];
-      NSString* slfn = [NSString stringWithFormat:@"stars_links%d", i];
+      //      NSString* sfn = [NSString stringWithFormat:@"stars%d", i];
+      //      NSString* slfn = [NSString stringWithFormat:@"stars_links%d", i];
+      NSString* sfn = [files objectAtIndex:i];
+      NSString* slfn = [NSString stringWithFormat:@"%@_links", sfn];
       
       Renderer* stars1 = [self readStars: &builder
                        withStarsFileName: sfn
@@ -253,7 +262,7 @@ const Planet* planet;
       builder.addRenderer(stars1);
     }
   }
-
+  
   
   [self createHorizonLine:&builder];
   
@@ -268,8 +277,8 @@ const Planet* planet;
   [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   
   [G3MWidget widget]->setCameraPosition(*cameraPositionForStars);
-//  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
-//  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
+  //  [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(0));
+  //  [G3MWidget widget]->setCameraHeading(Angle::fromDegrees(30));
   
 }
 
@@ -440,9 +449,9 @@ std::vector<StarDomeRenderer*> _sdrs;
       builder->addRenderer(mr);
       
       StarDomeRenderer* sdr = new StarDomeRenderer(c._name, c._stars, c._lines, *cameraPositionForStars, clockTimeInDegrees, dayOfYear, *c._color, mr);
-//      builder->addRenderer(sdr);
+      //      builder->addRenderer(sdr);
       
-//      _sdrs.push_back(sdr);
+      //      _sdrs.push_back(sdr);
       
       cr->addRenderer(sdr);
     }

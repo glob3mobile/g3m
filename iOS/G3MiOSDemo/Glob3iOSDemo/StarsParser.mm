@@ -19,10 +19,10 @@
 }
 
 +(int) starIndex:(std::vector<Star>*) stars forName:(NSString*) name{
-  for (int k = 0; k < stars->size(); k++) {
+  for (size_t k = 0; k < stars->size(); k++) {
     NSString* n = [[NSString alloc] initWithUTF8String:stars->at(k).getName().c_str()];
     if ([n containsString:name] || [name containsString:n]){
-      return k;
+      return (int) k;
     }
   }
   return -1;
@@ -32,14 +32,16 @@
   
   std::vector<int> links;
   
-  NSArray* lines = [csv componentsSeparatedByString:@"\r"];
+  csv = [csv stringByReplacingOccurrencesOfString:@"\r" withString:@"\n"];
+  
+  NSArray* lines = [csv componentsSeparatedByString:@"\n"];
   
   for(unsigned int i = 0; i < [lines count]; i++){
     NSString* line = [lines objectAtIndex:i];
     
     if ([line rangeOfString:name options:NSCaseInsensitiveSearch].location != NSNotFound){
       
-      for(int j = i+1; j < [lines count]; j++){
+      for(size_t j = i+1; j < [lines count]; j++){
         line = [lines objectAtIndex:j];
         
         if ([line characterAtIndex:[line length] -1] == ';'){
@@ -75,7 +77,9 @@
   
   std::vector<Constellation> constellations;
   
-  NSArray* lines = [csv componentsSeparatedByString:@"\r"];
+  csv = [csv stringByReplacingOccurrencesOfString:@"\r" withString:@"\n"];
+  
+  NSArray* lines = [csv componentsSeparatedByString:@"\n"];
   
   NSString* constellationName = nil;
   std::vector<Star> stars;

@@ -48,6 +48,21 @@
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
+		D834A1BC1CB4022800783E22 /* zodiaco.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B21CB4022800783E22 /* zodiaco.csv */; };
+		D834A1BD1CB4022800783E22 /* zodiaco_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B31CB4022800783E22 /* zodiaco_links.csv */; };
+		D834A1BE1CB4022800783E22 /* norte_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B41CB4022800783E22 /* norte_links.csv */; };
+		D834A1BF1CB4022800783E22 /* norte.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B51CB4022800783E22 /* norte.csv */; };
+		D834A1C01CB4022800783E22 /* heroes.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B61CB4022800783E22 /* heroes.csv */; };
+		D834A1C11CB4022800783E22 /* heroes_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B71CB4022800783E22 /* heroes_links.csv */; };
+		D834A1C21CB4022800783E22 /* cefeo.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B81CB4022800783E22 /* cefeo.csv */; };
+		D834A1C31CB4022800783E22 /* cefeo_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1B91CB4022800783E22 /* cefeo_links.csv */; };
+		D834A1C41CB4022800783E22 /* lactea_links.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1BA1CB4022800783E22 /* lactea_links.csv */; };
+		D834A1C51CB4022800783E22 /* lactea.csv in Resources */ = {isa = PBXBuildFile; fileRef = D834A1BB1CB4022800783E22 /* lactea.csv */; };
+		D834A1C71CB40BB700783E22 /* zodiaco.txt in Resources */ = {isa = PBXBuildFile; fileRef = D834A1C61CB40BB700783E22 /* zodiaco.txt */; };
+		D834A1C91CB40D1300783E22 /* norte.txt in Resources */ = {isa = PBXBuildFile; fileRef = D834A1C81CB40D1300783E22 /* norte.txt */; };
+		D834A1CB1CB40DAA00783E22 /* heroes.txt in Resources */ = {isa = PBXBuildFile; fileRef = D834A1CA1CB40DAA00783E22 /* heroes.txt */; };
+		D834A1CD1CB40DEA00783E22 /* cefeo.txt in Resources */ = {isa = PBXBuildFile; fileRef = D834A1CC1CB40DEA00783E22 /* cefeo.txt */; };
+		D834A1CF1CB40E1800783E22 /* lactea.txt in Resources */ = {isa = PBXBuildFile; fileRef = D834A1CE1CB40E1800783E22 /* lactea.txt */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
 		D85B0C311BE8F8880073A034 /* galaxy.png in Resources */ = {isa = PBXBuildFile; fileRef = D85B0C301BE8F8880073A034 /* galaxy.png */; };
 		D86436931BE3951F00A37924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86436921BE3951F00A37924 /* Images.xcassets */; };
@@ -137,6 +152,21 @@
 		D82DFD971B44009200BF45F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
 		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
+		D834A1B21CB4022800783E22 /* zodiaco.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = zodiaco.csv; sourceTree = "<group>"; };
+		D834A1B31CB4022800783E22 /* zodiaco_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = zodiaco_links.csv; sourceTree = "<group>"; };
+		D834A1B41CB4022800783E22 /* norte_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = norte_links.csv; sourceTree = "<group>"; };
+		D834A1B51CB4022800783E22 /* norte.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = norte.csv; sourceTree = "<group>"; };
+		D834A1B61CB4022800783E22 /* heroes.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = heroes.csv; sourceTree = "<group>"; };
+		D834A1B71CB4022800783E22 /* heroes_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = heroes_links.csv; sourceTree = "<group>"; };
+		D834A1B81CB4022800783E22 /* cefeo.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cefeo.csv; sourceTree = "<group>"; };
+		D834A1B91CB4022800783E22 /* cefeo_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cefeo_links.csv; sourceTree = "<group>"; };
+		D834A1BA1CB4022800783E22 /* lactea_links.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lactea_links.csv; sourceTree = "<group>"; };
+		D834A1BB1CB4022800783E22 /* lactea.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lactea.csv; sourceTree = "<group>"; };
+		D834A1C61CB40BB700783E22 /* zodiaco.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = zodiaco.txt; sourceTree = "<group>"; };
+		D834A1C81CB40D1300783E22 /* norte.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = norte.txt; sourceTree = "<group>"; };
+		D834A1CA1CB40DAA00783E22 /* heroes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = heroes.txt; sourceTree = "<group>"; };
+		D834A1CC1CB40DEA00783E22 /* cefeo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cefeo.txt; sourceTree = "<group>"; };
+		D834A1CE1CB40E1800783E22 /* lactea.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lactea.txt; sourceTree = "<group>"; };
 		D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		D85B0C301BE8F8880073A034 /* galaxy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = galaxy.png; sourceTree = "<group>"; };
 		D86436921BE3951F00A37924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
@@ -278,6 +308,16 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D834A1B21CB4022800783E22 /* zodiaco.csv */,
+				D834A1B31CB4022800783E22 /* zodiaco_links.csv */,
+				D834A1B41CB4022800783E22 /* norte_links.csv */,
+				D834A1B51CB4022800783E22 /* norte.csv */,
+				D834A1B61CB4022800783E22 /* heroes.csv */,
+				D834A1B71CB4022800783E22 /* heroes_links.csv */,
+				D834A1B81CB4022800783E22 /* cefeo.csv */,
+				D834A1B91CB4022800783E22 /* cefeo_links.csv */,
+				D834A1BA1CB4022800783E22 /* lactea_links.csv */,
+				D834A1BB1CB4022800783E22 /* lactea.csv */,
 				D8FA5A8F1CB3E1910023DE68 /* stars_links1.csv */,
 				D8FA5A901CB3E1910023DE68 /* stars1.csv */,
 				D85B0C301BE8F8880073A034 /* galaxy.png */,
@@ -319,6 +359,11 @@
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
 				CF186B0916B85A5F00A39478 /* textures-citation */,
+				D834A1C61CB40BB700783E22 /* zodiaco.txt */,
+				D834A1C81CB40D1300783E22 /* norte.txt */,
+				D834A1CA1CB40DAA00783E22 /* heroes.txt */,
+				D834A1CC1CB40DEA00783E22 /* cefeo.txt */,
+				D834A1CE1CB40E1800783E22 /* lactea.txt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -400,13 +445,16 @@
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
+				D834A1BE1CB4022800783E22 /* norte_links.csv in Resources */,
 				D8C4723D1AE8F637005254B3 /* stars_links0.csv in Resources */,
 				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
 				D85B0C311BE8F8880073A034 /* galaxy.png in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
 				D876E6DC1AE65A4400F616DE /* stars0.csv in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
+				D834A1C21CB4022800783E22 /* cefeo.csv in Resources */,
 				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
+				D834A1C41CB4022800783E22 /* lactea_links.csv in Resources */,
 				D8FA5A921CB3E1910023DE68 /* stars1.csv in Resources */,
 				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
 				CC405A7B18B0BA280082F7D6 /* Tenerife-256x256.bil in Resources */,
@@ -414,31 +462,43 @@
 				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
 				CFEA76681666DCB000E89BC7 /* images in Resources */,
 				CF0223831668318600024B73 /* geojson in Resources */,
+				D834A1C51CB4022800783E22 /* lactea.csv in Resources */,
+				D834A1BC1CB4022800783E22 /* zodiaco.csv in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CFE26D6618A1547B00253709 /* 3d_1-3.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
+				D834A1CF1CB40E1800783E22 /* lactea.txt in Resources */,
+				D834A1CB1CB40DAA00783E22 /* heroes.txt in Resources */,
 				CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */,
+				D834A1BF1CB4022800783E22 /* norte.csv in Resources */,
 				CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */,
 				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
 				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
+				D834A1C11CB4022800783E22 /* heroes_links.csv in Resources */,
 				CFE26D6C18A154D700253709 /* 3d_2-2.json in Resources */,
+				D834A1C31CB4022800783E22 /* cefeo_links.csv in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 				D86436931BE3951F00A37924 /* Images.xcassets in Resources */,
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
 				4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */,
+				D834A1C01CB4022800783E22 /* heroes.csv in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
 				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
+				D834A1C71CB40BB700783E22 /* zodiaco.txt in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
+				D834A1CD1CB40DEA00783E22 /* cefeo.txt in Resources */,
 				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
 				CFA245431800708D00921325 /* washington-memorial.json in Resources */,
 				D8FA5A911CB3E1910023DE68 /* stars_links1.csv in Resources */,
+				D834A1BD1CB4022800783E22 /* zodiaco_links.csv in Resources */,
 				CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */,
+				D834A1C91CB40D1300783E22 /* norte.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

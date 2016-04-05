@@ -70,23 +70,36 @@
 }
 */
 
+-(NSString*) readFile: (NSString*) file{
+  
+  NSString* path = [[NSBundle mainBundle] pathForResource:file
+                                                   ofType:@"txt"];
+  
+  NSString* content = [NSString stringWithContentsOfFile:path
+                                                encoding:NSUTF8StringEncoding
+                                                   error:NULL];
+  
+  return content;
+  
+}
+
 -(IBAction)showText:(id)sender{
   
   switch ([sender tag]) {
     case 0:
-      textField.text = @"OK 1";
+      textField.text = [self readFile:@"zodiaco"];
       break;
     case 1:
-      textField.text = @"OK 2";
+      textField.text = [self readFile:@"norte"];
       break;
     case 2:
-      textField.text = @"OK 3";
+      textField.text = [self readFile:@"heroes"];
       break;
     case 3:
-      textField.text = @"OK 4";
+      textField.text = [self readFile:@"cefeo"];
       break;
     case 4:
-      textField.text = @"OK 5";
+      textField.text = [self readFile:@"lactea"];
       break;
     default:
       break;
