@@ -332,6 +332,8 @@
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */,
+				D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */,
 				CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */,
 				CFE3B3D4183AD04A0078C796 /* G3M3DModelDemoScene.hpp */,
 				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
@@ -726,6 +728,7 @@
 				D00002FC1C919B040016AB0F /* G3MElevationsDemoScene.cpp in Sources */,
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
 				CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */,
+				D82CA3F01C64D837008FAAD2 /* G3MStereoDemoScene.mm in Sources */,
 				CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */,
 				CFECA7771B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp in Sources */,
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */,

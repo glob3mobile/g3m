@@ -16,7 +16,7 @@ public:
   short _x;
   short _y;
   
-  Vector2S(short x, short y):_x(x),_y(y){}
+  Vector2S(short x, short y):_x(x),_y(y) {}
   
   Vector2I asVector2I() const;
   

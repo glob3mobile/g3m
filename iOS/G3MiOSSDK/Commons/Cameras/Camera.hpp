@@ -314,9 +314,9 @@ public:
     return _timestamp;
   }
 
-  void setLookAtParams(MutableVector3D position,
-                       MutableVector3D center,
-                       MutableVector3D up) {
+  void setLookAtParams(const MutableVector3D& position,
+                       const MutableVector3D& center,
+                       const MutableVector3D& up) {
     setCartesianPosition(position);
     setCenter(center);
     setUp(up);
@@ -348,6 +348,10 @@ public:
                                   const Vector2F& pixel,
                                   const MutableVector2I& viewport,
                                   const MutableMatrix44D& modelViewMatrix);
+  
+  Angle getHorizontalFOV() const;
+  
+  Angle getVerticalFOV() const;
 
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
@@ -418,8 +422,9 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
-  double                   _tanHalfVerticalFieldOfView;
-  double                   _tanHalfHorizontalFieldOfView;
+#warning VR => Diego at work!
+  mutable double           _tanHalfVerticalFieldOfView;
+  mutable double           _tanHalfHorizontalFieldOfView;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {

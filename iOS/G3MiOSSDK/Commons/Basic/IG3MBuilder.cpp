@@ -735,7 +735,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            infoDisplay);
+                                            infoDisplay,
+                                            MONO);
 
   g3mWidget->setUserData(getUserData());
 
@@ -834,9 +835,8 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
   if (_sceneLighting == NULL) {
-    //_sceneLighting = new DefaultSceneLighting();
-    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
-                                                  Color::yellow());
+    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0),
+                                                  Color::white());
   }
   return _sceneLighting;
 }

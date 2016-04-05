@@ -430,7 +430,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   
   //TEX COORDINATES////////////////////////////////////////////////////////////////
   
-  if (mercator){ //Mercator
+  if (mercator) { //Mercator
     
     const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
     const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);

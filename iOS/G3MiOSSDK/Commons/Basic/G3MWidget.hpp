@@ -90,6 +90,11 @@ public:
   }
 };
 
+enum ViewMode{
+  MONO,
+  STEREO
+};
+
 
 class G3MWidget : public ChangedRendererInfoListener {
 public:
@@ -125,7 +130,8 @@ public:
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
                            const InitialCameraPositionProvider* initialCameraPositionProvider,
-                           InfoDisplay* infoDisplay);
+                           InfoDisplay* infoDisplay,
+                           ViewMode viewMode);
 
   ~G3MWidget();
 
@@ -250,7 +256,8 @@ public:
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
-
+  
+  void setViewMode(ViewMode viewMode);
 
 private:
   IStorage*                _storage;
@@ -327,6 +334,13 @@ private:
 
   float _touchDownPositionX;
   float _touchDownPositionY;
+  
+  ViewMode _viewMode;
+  
+  //For stereo vision
+  Camera* _auxCam;
+  Camera* _leftEyeCam;
+  Camera* _rightEyeCam;
 
 
   G3MWidget(GL*                              gl,
@@ -350,7 +364,8 @@ private:
             GPUProgramManager*               gpuProgramManager,
             SceneLighting*                   sceneLighting,
             const InitialCameraPositionProvider* initialCameraPositionProvider,
-            InfoDisplay* infoDisplay);
+            InfoDisplay* infoDisplay,
+            ViewMode viewMode);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
@@ -358,6 +373,13 @@ private:
   RenderState calculateRendererState();
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
+  
+  void rawRender(const RenderState_Type renderStateType);
+  
+  void rawRenderMono(const RenderState_Type renderStateType);
+  
+  void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
+
   
 };
 
