@@ -42,8 +42,9 @@ public:
     }
     
     void runInBackground(const G3MContext* context) {
-        const Vector2I *resolution = JSONDemParser::getResolution(_buffer);
-        ShortBufferElevationData *elevationData = JSONDemParser::parseJSONDemElevationData(*_sector, *resolution, _buffer,(short) _noDataValue, _deltaHeight);
+        JSONDemParser *parser = new JSONDemParser(_buffer->getAsString());
+        const Vector2I *resolution = parser->getResolution();
+        ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, _buffer,(short) _noDataValue, _deltaHeight);
         
         if (_buffer != NULL){
             delete _buffer;
@@ -69,6 +70,7 @@ public:
             }
             _listener = NULL;
         }
+        delete parser;
 #ifdef C_CODE
         delete resolution;
 #endif
@@ -126,7 +128,41 @@ public:
                     IByteBuffer* buffer,
                     bool expired){
         
-        _threadUtils->invokeAsyncTask (new PyramidParser(buffer, _sector, _listener, _autodeleteListener,_noDataValue,_deltaHeight,_minRes),true);
+        /*_threadUtils->invokeAsyncTask (new PyramidParser(buffer, _sector, _listener, _autodeleteListener,_noDataValue,_deltaHeight,_minRes),true);*/
+        JSONDemParser *parser = new JSONDemParser(buffer->getAsString());
+        const Vector2I *resolution = parser->getResolution();
+        ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);
+        
+        if (buffer != NULL){
+            delete buffer;
+        }
+        
+        if (elevationData == NULL)
+        {
+            _listener->onError(*_sector, *resolution);
+        }
+        else
+        {
+            _listener->onData(*_sector, *resolution, elevationData);
+            if ((_minRes.x() * _minRes.y()) > (resolution->_x * resolution->_y)){
+                _minRes = resolution->asMutableVector2I();
+            }
+        }
+        
+        
+        if (_autodeleteListener)
+        {
+            if (_listener != NULL){
+                delete _listener;
+            }
+            _listener = NULL;
+        }
+        delete parser;
+        delete _sector;
+#ifdef C_CODE
+        delete resolution;
+#endif
+
     }
     
     void onError(const URL& url){

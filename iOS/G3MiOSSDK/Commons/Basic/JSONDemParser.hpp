@@ -24,23 +24,31 @@ class Vector2I;
 class JSONDemParser {
 private:
     JSONDemParser();
-    
+    const JSONBaseObject *_data;
 public:
     
+    JSONDemParser (std::string message){
+         _data = IJSONParser::instance()->parse(message);
+    }
+    
+    ~JSONDemParser (){
+        delete _data;
+    }
+    
 #ifdef C_CODE
-    static const Vector2I* getResolution(const IByteBuffer *buffer){
-        const JSONObject *data = IJSONParser::instance()->parse(buffer->getAsString())->asObject();
+    const Vector2I* getResolution(){
+        const JSONObject *data = _data->asObject();
         return new Vector2I((int) data->getAsNumber("width",0),(int) data->getAsNumber("height",0));
     }
 #endif
 #ifdef JAVA_CODE
-    public static Vector2I getResolution(IByteBuffer buffer){
-        JSONObject data = IJSONParser.instance().parse(buffer.getAsString()).asObject();
+    public Vector2I getResolution(){
+        JSONObject data = _data.asObject();
         return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
     }
 #endif
     
-    static ShortBufferElevationData* parseJSONDemElevationData(const Sector& sector,
+    ShortBufferElevationData* parseJSONDemElevationData(const Sector& sector,
                                                 const Vector2I& extent,
                                                 const IByteBuffer* buffer,
                                                 const short noData,

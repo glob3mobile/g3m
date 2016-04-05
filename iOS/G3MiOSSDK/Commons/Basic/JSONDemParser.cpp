@@ -20,10 +20,10 @@ ShortBufferElevationData* JSONDemParser::parseJSONDemElevationData(const Sector&
                                               const IByteBuffer* buffer,
                                               const short noData,
                                               double deltaHeight){
-    const JSONBaseObject *data = IJSONParser::instance()->parse(buffer->getAsString());
+
     const short minValue = IMathUtils::instance()->minInt16();
     const int size = extent._x * extent._y;
-    const JSONArray *dataArray = data->asObject()->getAsArray("data");
+    const JSONArray *dataArray = _data->asObject()->getAsArray("data");
     short *shortBuffer = new short[size];
     for (int i = 0; i < size; i++)
     {
@@ -40,12 +40,10 @@ ShortBufferElevationData* JSONDemParser::parseJSONDemElevationData(const Sector&
         shortBuffer[i] = height;
     }
     
-    short max = (short) data->asObject()->getAsNumber("max",IMathUtils::instance()->minInt16());
-    short min = (short) data->asObject()->getAsNumber("min",IMathUtils::instance()->maxInt16());
-    short hasChildren = (short) data->asObject()->getAsNumber("withChildren",0);
-    double geomError = data->asObject()->getAsNumber("similarity",0);
-    
-    delete data;
+    short max = (short) _data->asObject()->getAsNumber("max",IMathUtils::instance()->minInt16());
+    short min = (short) _data->asObject()->getAsNumber("min",IMathUtils::instance()->maxInt16());
+    short hasChildren = (short) _data->asObject()->getAsNumber("withChildren",0);
+    double geomError = _data->asObject()->getAsNumber("similarity",0);
     
     return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer,
                                         size, deltaHeight,max,min,hasChildren,geomError);
