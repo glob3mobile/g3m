@@ -287,7 +287,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
-      _marks.get(i).onResizeViewportEvent(width, height);
+      _marks.get(i).onResizeViewportEvent(ec, width, height);
     }
   }
 
