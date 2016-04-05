@@ -207,13 +207,12 @@ void PyramidElevationDataProvider::initialize(const G3MContext* context ){
 
 const long long PyramidElevationDataProvider::requestElevationData(const Sector& sector,
                                              const Vector2I& extent,
-                                             const Tile * tile,
+                                             int level,
+                                             int row,
+                                             int column,
                                              IElevationDataListener* listener,
                                              bool autodeleteListener){
     Sector * sectorCopy = new Sector(sector);
-    const int level = tile->_level;
-    const int row = tile->_row;
-    const int column = tile->_column;
 
     if ((_downloader == NULL) || (aboveLevel(*sectorCopy, level))){
         delete sectorCopy;

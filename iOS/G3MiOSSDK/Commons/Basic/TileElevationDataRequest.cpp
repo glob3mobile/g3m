@@ -54,7 +54,9 @@ void TileElevationDataRequest::sendRequest() {
   _listener = new TileElevationDataRequestListener(this);
   _requestID = _provider->requestElevationData(_tile->_sector,
                                                _resolution,
-                                               _tile,
+                                               _tile->_level,
+                                               _tile->_row,
+                                               _tile->_column,
                                                _listener,
                                                true);
 }

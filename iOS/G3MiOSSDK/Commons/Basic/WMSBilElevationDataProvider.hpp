@@ -47,10 +47,12 @@ public:
   void initialize(const G3MContext* context);
 
   const long long requestElevationData(const Sector& sector,
-                                       const Vector2I& extent,
-                                       const Tile * tile,
-                                       IElevationDataListener* listener,
-                                       bool autodeleteListener);
+                                                 const Vector2I& extent,
+                                                 int level,
+                                                 int row,
+                                                 int column,
+                                                 IElevationDataListener* listener,
+                                                 bool autodeleteListener);
 
   void cancelRequest(const long long requestId);
   

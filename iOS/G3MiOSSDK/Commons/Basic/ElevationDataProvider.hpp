@@ -65,9 +65,17 @@ public:
 
   virtual void initialize(const G3MContext* context) = 0;
 
-  virtual const long long requestElevationData(const Sector& sector,
+  /*virtual const long long requestElevationData(const Sector& sector,
                                                const Vector2I& extent,
                                                const Tile * tile,
+                                               IElevationDataListener* listener,
+                                               bool autodeleteListener) = 0;*/
+    
+  virtual const long long requestElevationData(const Sector& sector,
+                                               const Vector2I& extent,
+                                               int level,
+                                               int row,
+                                               int column,
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
     

@@ -102,10 +102,12 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                  const Vector2I& extent,
-                                                                  const Tile * tile,
-                                                                   IElevationDataListener* listener,
-                                                                   bool autodeleteListener) {
+                                             const Vector2I& extent,
+                                             int level,
+                                             int row,
+                                             int column,
+                                             IElevationDataListener* listener,
+                                             bool autodeleteListener) {
   if (_downloader == NULL) {
     ILogger::instance()->logError("WMSBilElevationDataProvider was not initialized.");
     return -1;
