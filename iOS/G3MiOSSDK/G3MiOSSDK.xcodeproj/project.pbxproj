@@ -505,6 +505,7 @@
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84824AE1C89E155007F41D1 /* PyramidElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84824AB1C89E155007F41D1 /* PyramidElevationDataProvider.cpp */; };
 		D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84824AC1C89E155007F41D1 /* PyramidElevationDataProvider.hpp */; };
+		D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
@@ -783,6 +784,7 @@
 				D0FD48D61C9AAD1C00819B2D /* JSONDemParser.hpp in CopyFiles */,
 				D092E30E1C902B75005ABF62 /* Vector2S.hpp in CopyFiles */,
 				D84824B01C89E345007F41D1 /* PyramidElevationDataProvider.hpp in CopyFiles */,
+				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
 				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
