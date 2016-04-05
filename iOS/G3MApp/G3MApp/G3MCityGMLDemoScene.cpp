@@ -72,17 +72,17 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   IDownloader* downloader = context->getDownloader();
   
   std::vector<std::string> cityGMLFiles;
-  cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+//  cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
+//  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
   cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
   cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
   cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-  cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-  cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+//  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+//  cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+//  cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+//  cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+//  cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+//  cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   
   getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget()));
   
