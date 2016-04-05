@@ -46,9 +46,6 @@
 		CFE26D6C18A154D700253709 /* 3d_2-2.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6918A154D700253709 /* 3d_2-2.json */; };
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
-		D80802481BF231C300E02ACD /* stars_links1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80802461BF231C300E02ACD /* stars_links1.csv */; };
-		D80802491BF231C300E02ACD /* stars1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80802471BF231C300E02ACD /* stars1.csv */; };
-		D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */ = {isa = PBXBuildFile; fileRef = D80DF37B1AC5642900A7D92A /* stars_old.csv */; };
 		D82DFD981B44009200BF45F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D82DFD971B44009200BF45F8 /* CoreLocation.framework */; };
 		D83165EE1ABAD435002A8451 /* StarDomeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */; };
 		D83D604A1AA89BC0002EA2B8 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83D60491AA89BC0002EA2B8 /* CoreMotion.framework */; };
@@ -74,6 +71,8 @@
 		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
 		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
+		D8FA5A911CB3E1910023DE68 /* stars_links1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8FA5A8F1CB3E1910023DE68 /* stars_links1.csv */; };
+		D8FA5A921CB3E1910023DE68 /* stars1.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8FA5A901CB3E1910023DE68 /* stars1.csv */; };
 		E70B224D1700DBA300172DF3 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E70B224C1700DBA300172DF3 /* A320.bson */; };
 /* End PBXBuildFile section */
 
@@ -135,9 +134,6 @@
 		CFE26D6918A154D700253709 /* 3d_2-2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_2-2.json"; sourceTree = "<group>"; };
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
-		D80802461BF231C300E02ACD /* stars_links1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links1.csv; sourceTree = "<group>"; };
-		D80802471BF231C300E02ACD /* stars1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars1.csv; sourceTree = "<group>"; };
-		D80DF37B1AC5642900A7D92A /* stars_old.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_old.csv; sourceTree = "<group>"; };
 		D82DFD971B44009200BF45F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D83165EC1ABAD435002A8451 /* StarDomeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StarDomeRenderer.cpp; sourceTree = "<group>"; };
 		D83165ED1ABAD435002A8451 /* StarDomeRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StarDomeRenderer.hpp; sourceTree = "<group>"; };
@@ -171,6 +167,8 @@
 		D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
+		D8FA5A8F1CB3E1910023DE68 /* stars_links1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars_links1.csv; sourceTree = "<group>"; };
+		D8FA5A901CB3E1910023DE68 /* stars1.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stars1.csv; sourceTree = "<group>"; };
 		E70B224C1700DBA300172DF3 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -280,11 +278,10 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D80802461BF231C300E02ACD /* stars_links1.csv */,
-				D80802471BF231C300E02ACD /* stars1.csv */,
+				D8FA5A8F1CB3E1910023DE68 /* stars_links1.csv */,
+				D8FA5A901CB3E1910023DE68 /* stars1.csv */,
 				D85B0C301BE8F8880073A034 /* galaxy.png */,
 				D8C4723C1AE8F636005254B3 /* stars_links0.csv */,
-				D80DF37B1AC5642900A7D92A /* stars_old.csv */,
 				D876E6DB1AE65A4400F616DE /* stars0.csv */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
@@ -410,6 +407,7 @@
 				D876E6DC1AE65A4400F616DE /* stars0.csv in Resources */,
 				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
 				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
+				D8FA5A921CB3E1910023DE68 /* stars1.csv in Resources */,
 				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
 				CC405A7B18B0BA280082F7D6 /* Tenerife-256x256.bil in Resources */,
 				CFE26D6A18A154D700253709 /* 3d_2-0.json in Resources */,
@@ -418,7 +416,6 @@
 				CF0223831668318600024B73 /* geojson in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
-				D80802481BF231C300E02ACD /* stars_links1.csv in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CFE26D6618A1547B00253709 /* 3d_1-3.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
@@ -435,13 +432,12 @@
 				4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
-				D80DF37C1AC5642900A7D92A /* stars_old.csv in Resources */,
 				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
-				D80802491BF231C300E02ACD /* stars1.csv in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
 				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
 				CFA245431800708D00921325 /* washington-memorial.json in Resources */,
+				D8FA5A911CB3E1910023DE68 /* stars_links1.csv in Resources */,
 				CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

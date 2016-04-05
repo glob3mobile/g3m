@@ -32,9 +32,14 @@
   showingGalaxies = false;
   
   _starsActive[0] = true;
-  for(int i = 1; i < 5; i++){
-    _starsActive[i] = false;
-  }
+  _starsActive[1] = false;
+  _starsActive[2] = false;
+  _starsActive[3] = false;
+  _starsActive[4] = false;
+  
+//  for(int i = 1; i < 5; i++){
+//    _starsActive[i] = false;
+//  }
   
     // Override point for customization after application launch.
     return YES;

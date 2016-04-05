@@ -42,7 +42,7 @@
       for(int j = i+1; j < [lines count]; j++){
         line = [lines objectAtIndex:j];
         
-        if ([line containsString:@";;"]){
+        if ([line characterAtIndex:[line length] -1] == ';'){
           return links;
         }
         
@@ -50,17 +50,17 @@
         NSString* s1 = [starNames objectAtIndex:0];
         NSString* s2 = [starNames objectAtIndex:1];
         
+        if ([s1 length] == 0 || [s2 length] == 0){
+          continue; //CONSTELLATION NAME
+        }
         
         int n1 = [self starIndex:stars forName:s1];
         int n2 = [self starIndex:stars forName:s2];
-        
         
         NSLog(@"%@ -> %@, %d -> %d", s1, s2, n1, n2);
         
         links.push_back(n1);
         links.push_back(n2);
-
-        
       }
       
     }
