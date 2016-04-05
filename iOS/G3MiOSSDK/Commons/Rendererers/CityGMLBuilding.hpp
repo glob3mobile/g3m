@@ -348,7 +348,12 @@ public:
           final CityGMLBuildingSurface s2 = b2._surfaces.get(j);
 #endif
           if (s2->getType() == WALL){
+#ifdef C_CODE
             if (s1->isEquivalentTo(*s2)){
+#endif
+#ifdef JAVA_CODE
+            if (s1.isEquivalentTo(s2)){
+#endif
               s1->setIsVisible(false);
               s2->setIsVisible(false);
               nInvisibleWalls++;
