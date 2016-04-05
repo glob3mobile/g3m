@@ -22,10 +22,17 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
                            false);
 }
 
-ViewportExtentGLFeature::ViewportExtentGLFeature(const Camera* camera) :
+ViewportExtentGLFeature::ViewportExtentGLFeature(const Camera* camera,
+                                                 ViewMode      viewMode) :
 GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
-  _extent = new GPUUniformValueVec2FloatMutable(camera->getViewPortWidth(),
+
+  int logicWidth = camera->getViewPortWidth();
+  if (viewMode == STEREO) {
+    logicWidth /= 2;
+  }
+
+  _extent = new GPUUniformValueVec2FloatMutable(logicWidth,
                                                 camera->getViewPortHeight());
   
   _values->addUniformValue(VIEWPORT_EXTENT,

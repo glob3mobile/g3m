@@ -87,8 +87,8 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      GPUProgramManager*                   gpuProgramManager,
                      SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider,
-                     InfoDisplay* infoDisplay,
-                     ViewMode viewMode):
+                     InfoDisplay*                         infoDisplay,
+                     ViewMode                             viewMode):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -131,7 +131,8 @@ _context(new G3MContext(IFactory::instance(),
                         downloader,
                         _effectsScheduler,
                         storage,
-                        mainRenderer->getSurfaceElevationProvider()
+                        mainRenderer->getSurfaceElevationProvider(),
+                        viewMode
                         )),
 _paused(false),
 _initializationTaskWasRun(false),
@@ -199,7 +200,8 @@ _auxCam(NULL)
                                         IFactory::instance()->createTimer(),
                                         _storage,
                                         _gpuProgramManager,
-                                        _surfaceElevationProvider);
+                                        _surfaceElevationProvider,
+                                        _viewMode);
 
 
   //#ifdef C_CODE
@@ -371,7 +373,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _downloader,
                      _effectsScheduler,
                      _storage,
-                     _surfaceElevationProvider);
+                     _surfaceElevationProvider,
+                     _viewMode);
 
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
@@ -427,7 +430,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                      _downloader,
                      _effectsScheduler,
                      _storage,
-                     _surfaceElevationProvider);
+                     _surfaceElevationProvider,
+                     _viewMode);
 
   _nextCamera->resizeViewport(width, height);
   _currentCamera->resizeViewport(width, height);
@@ -995,5 +999,10 @@ void G3MWidget::setViewMode(ViewMode viewMode) {
       delete _rightEyeCam;
       _rightEyeCam = NULL;
     }
+
+    _context->setViewMode(_viewMode);
+    _renderContext->setViewMode(_viewMode);
+
+    onResizeViewportEvent(_width, _height);
   }
 }
