@@ -94,7 +94,7 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public void dispose()
   {
-      _buffer = null;
+    _buffer = null;
   
     super.dispose();
   }

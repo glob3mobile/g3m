@@ -915,54 +915,6 @@ public class Tile
       }
   
       return _tessellatorMesh;
-  
-    /*ElevationDataProvider* elevationDataProvider = prc->_elevationDataProvider;
-  
-    if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
-      initializeElevationData(rc, prc);
-    }
-  
-    if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
-      _mustActualizeMeshDueToNewElevationData = false;
-      _planetRenderer->onTileHasChangedMesh(this);
-  
-      if (_debugMesh != NULL) {
-        delete _debugMesh;
-        _debugMesh = NULL;
-      }
-  
-      if (elevationDataProvider == NULL) {
-        // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
-                                                             prc,
-                                                             this,
-                                                             NULL,
-                                                             _tileTessellatorMeshData);
-      }
-      else {
-        Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
-                                                                  prc,
-                                                                  this,
-                                                                  _elevationData,
-                                                                  _tileTessellatorMeshData);
-  
-        MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
-        if (meshHolder == NULL) {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
-        }
-        else {
-          meshHolder->setMesh(tessellatorMesh);
-        }
-  
-        //      computeTileCorners(rc->getPlanet());
-      }
-  
-      //Notifying when the tile is first created and every time the elevation data changes
-      _planetRenderer->sectorElevationChanged(_elevationData);
-    }
-  
-    return _tessellatorMesh;*/
   }
 
   public final boolean hasSubtiles()
