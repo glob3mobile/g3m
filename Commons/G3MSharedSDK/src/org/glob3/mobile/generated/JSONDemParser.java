@@ -27,23 +27,34 @@ public class JSONDemParser
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //    JSONDemParser();
+    private final JSONBaseObject _data;
 
+    public JSONDemParser (String message)
+    {
+         _data = IJSONParser.instance().parse(message);
+    }
 
-    public static Vector2I getResolution(IByteBuffer buffer){
-        JSONObject data = IJSONParser.instance().parse(buffer.getAsString()).asObject();
+    public void dispose()
+    {
+        if (_data != null)
+           _data.dispose();
+    }
+
+    public Vector2I getResolution(){
+        JSONObject data = _data.asObject();
         return new Vector2I((int) data.getAsNumber("width",0),(int) data.getAsNumber("height",0));
     }
 
-    public static ShortBufferElevationData parseJSONDemElevationData(Sector sector, Vector2I extent, IByteBuffer buffer, short noData)
+    public final ShortBufferElevationData parseJSONDemElevationData(Sector sector, Vector2I extent, IByteBuffer buffer, short noData)
     {
        return parseJSONDemElevationData(sector, extent, buffer, noData, 0);
     }
-    public static ShortBufferElevationData parseJSONDemElevationData(Sector sector, Vector2I extent, IByteBuffer buffer, short noData, double deltaHeight)
+    public final ShortBufferElevationData parseJSONDemElevationData(Sector sector, Vector2I extent, IByteBuffer buffer, short noData, double deltaHeight)
     {
-        final JSONBaseObject data = IJSONParser.instance().parse(buffer.getAsString());
+    
         final short minValue = IMathUtils.instance().minInt16();
         final int size = extent._x * extent._y;
-        final JSONArray dataArray = data.asObject().getAsArray("data");
+        final JSONArray dataArray = _data.asObject().getAsArray("data");
         short[] shortBuffer = new short[size];
         for (int i = 0; i < size; i++)
         {
@@ -60,13 +71,10 @@ public class JSONDemParser
             shortBuffer[i] = height;
         }
     
-        short max = (short) data.asObject().getAsNumber("max", IMathUtils.instance().minInt16());
-        short min = (short) data.asObject().getAsNumber("min", IMathUtils.instance().maxInt16());
-        short hasChildren = (short) data.asObject().getAsNumber("withChildren", 0);
-        double geomError = data.asObject().getAsNumber("similarity", 0);
-    
-        if (data != null)
-           data.dispose();
+        short max = (short) _data.asObject().getAsNumber("max", IMathUtils.instance().minInt16());
+        short min = (short) _data.asObject().getAsNumber("min", IMathUtils.instance().maxInt16());
+        short hasChildren = (short) _data.asObject().getAsNumber("withChildren", 0);
+        double geomError = _data.asObject().getAsNumber("similarity", 0);
     
         return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size, deltaHeight,max,min,hasChildren,geomError);
     }

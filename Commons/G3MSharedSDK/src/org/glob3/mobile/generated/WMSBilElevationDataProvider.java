@@ -48,7 +48,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
     _downloader = context.getDownloader();
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, Tile tile, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, int level, int row, int column, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (_downloader == null)
     {

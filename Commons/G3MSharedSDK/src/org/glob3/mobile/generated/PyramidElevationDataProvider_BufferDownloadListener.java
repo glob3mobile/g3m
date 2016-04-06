@@ -10,8 +10,9 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     private boolean _autodeleteListener;
     private double _deltaHeight;
     private int _noDataValue;
+    private final IThreadUtils _threadUtils;
 
-    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight, MutableVector2I minRes)
+    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight, MutableVector2I minRes, IThreadUtils threadUtils)
     {
        _sector = sector;
        _width = extent._x;
@@ -21,15 +22,15 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
        _autodeleteListener = autodeleteListener;
        _deltaHeight = deltaHeight;
        _noDataValue = noDataValue;
+       _threadUtils = threadUtils;
 
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-
-
-        final Vector2I resolution = JSONDemParser.getResolution(buffer);
-        ShortBufferElevationData elevationData = JSONDemParser.parseJSONDemElevationData(_sector, resolution, buffer, (short) _noDataValue, _deltaHeight);
+        JSONDemParser parser = new JSONDemParser(buffer.getAsString());
+        final Vector2I resolution = parser.getResolution();
+        ShortBufferElevationData elevationData = parser.parseJSONDemElevationData(_sector, resolution, buffer, (short) _noDataValue, _deltaHeight);
 
         if (buffer != null)
         {
@@ -55,11 +56,16 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
         {
             if (_listener != null)
             {
-               if (_listener != null)
-                  _listener.dispose();
+                if (_listener != null)
+                   _listener.dispose();
             }
             _listener = null;
         }
+        if (parser != null)
+           parser.dispose();
+        if (_sector != null)
+           _sector.dispose();
+
     }
 
     public final void onError(URL url)
@@ -108,14 +114,6 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
             }
             _listener = null;
         }
-    }
-
-    public void dispose()
-    {
-        if (_sector != null)
-           _sector.dispose();
-
-        super.dispose();
     }
 
 }

@@ -104,7 +104,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, Tile tile, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, int level, int row, int column, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (!_elevationDataResolved)
     {

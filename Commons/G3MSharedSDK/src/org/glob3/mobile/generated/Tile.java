@@ -197,6 +197,83 @@ public class Tile
   private TileData[] _data;
   private int _dataSize;
 
+  private static class TessellatorTask extends FrameTask
+  {
+    private Tile _tile;
+    private final PlanetRenderContext _prc;
+
+    private boolean &_mustActualizeMeshDueToNewElevationData;
+    private final PlanetRenderer _planetRenderer;
+    private Mesh[] _tessellatorMesh;
+    private Mesh[] _debugMesh;
+    private TileTessellatorMeshData _data;
+    private boolean _shouldCancel;
+    public TessellatorTask(Tile tile, PlanetRenderContext prc, boolean mustActualize, PlanetRenderer planetRenderer, Mesh[] tessellatorMesh, Mesh[] debugMesh, TileTessellatorMeshData data)
+    {
+       _tile = tile;
+       _prc = prc;
+       _mustActualizeMeshDueToNewElevationData = mustActualize;
+       _planetRenderer = planetRenderer;
+       _tessellatorMesh = tessellatorMesh;
+       _debugMesh = debugMesh;
+       _data = new TileTessellatorMeshData(data);
+       _shouldCancel = false;
+
+      }
+
+      public void dispose()
+      {
+        if (_tile != null)
+        {
+          _tile._tessellatorTask = null;
+        }
+      }
+
+      public final void cancelTask ()
+      {
+        _shouldCancel = true;
+        _tile = null;
+      }
+
+      public final boolean isCanceled(G3MRenderContext rc)
+      {
+        return _shouldCancel;
+      }
+
+      public final void execute(G3MRenderContext rc)
+      {
+          ElevationDataProvider elevationDataProvider = _prc._elevationDataProvider;
+          if ((_tile._shouldInitElevData) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
+          {
+              _tile.initializeElevationData(rc, _prc);
+              _tile._shouldInitElevData = false;
+          }
+      
+          if (_mustActualizeMeshDueToNewElevationData)
+          {
+              _mustActualizeMeshDueToNewElevationData = false;
+              _planetRenderer.onTileHasChangedMesh(_tile);
+      
+              if (*_debugMesh != null)
+              {
+                  *_debugMesh = null;
+                  *_debugMesh = null;
+              }
+      
+              Mesh tessellatorMesh = _prc._tessellator.createTileMesh(rc, _prc, _tile, _tile.getElevationData(), _data);
+              MeshHolder meshHolder = (MeshHolder) *_tessellatorMesh;
+              meshHolder.setMesh(tessellatorMesh);
+              _planetRenderer.sectorElevationChanged(_tile.getElevationData());
+      
+              _tile.deleteTexturizedMesh(_prc._texturizer);
+          }
+          _tile._tessellatorTask = null;
+      }
+  }
+
+  protected TessellatorTask _tessellatorTask;
+  protected boolean _shouldInitElevData;
+
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -227,10 +304,12 @@ public class Tile
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
      _mustActualizeMeshDueToNewElevationData = false;
+     _shouldInitElevData = true;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
+     _tessellatorTask = null;
      _id = createTileId(level, row, column);
      _data = null;
      _dataSize = 0;
@@ -269,6 +348,11 @@ public class Tile
       if (_elevationDataRequest != null)
          _elevationDataRequest.dispose();
       _elevationDataRequest = null;
+    }
+  
+    if (_tessellatorTask != null)
+    {
+        _tessellatorTask.cancelTask();
     }
   
     if (_tessellatorData != null)
@@ -684,7 +768,6 @@ public class Tile
       _elevationDataRequest.sendRequest();
     }
   
-    //If after petition we still have no data we request from ancestor (provider asynchronous)
     if (_elevationData == null)
     {
       getElevationDataFromAncestor(tileMeshResolution.asVector2I());
@@ -806,53 +889,88 @@ public class Tile
   public final Mesh getTessellatorMesh(G3MRenderContext rc, PlanetRenderContext prc)
   {
   
-    ElevationDataProvider elevationDataProvider = prc._elevationDataProvider;
+      // Now, tasks related to elev initialization and change tessellator mesh should be disconnected from this function.
+      // We should ensure something is always sent to functions (i.e. Visibility Tests)
+      if (_tessellatorMesh == null)
+      {
+          if (_elevationData == null)
+          {
+              _lastElevationDataProvider = prc._elevationDataProvider;
+              final Vector2S tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
+              _lastTileMeshResolutionX = tileMeshResolution._x;
+              _lastTileMeshResolutionY = tileMeshResolution._y;
+              getElevationDataFromAncestor(tileMeshResolution.asVector2I());
+          }
+          _planetRenderer.onTileHasChangedMesh(this);
+          if (_debugMesh != null)
+          {
+              if (_debugMesh != null)
+                 _debugMesh.dispose();
+              _debugMesh = null;
+          }
   
-    if ((_elevationData == null) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
-    {
+          Mesh tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, _elevationData, _tileTessellatorMeshData);
+          MeshHolder meshHolder = new MeshHolder(tessellatorMesh);
+          _tessellatorMesh = meshHolder;
+  
+          _planetRenderer.sectorElevationChanged(_elevationData);
+      }
+  
+      if (_tessellatorTask == null)
+      {
+          _tessellatorTask = new TessellatorTask(this, prc, _mustActualizeMeshDueToNewElevationData, _planetRenderer, _tessellatorMesh, _debugMesh, _tileTessellatorMeshData);
+          rc.getFrameTasksExecutor().addPreRenderTask(_tessellatorTask);
+      }
+  
+      return _tessellatorMesh;
+  
+    /*ElevationDataProvider* elevationDataProvider = prc->_elevationDataProvider;
+  
+    if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
       initializeElevationData(rc, prc);
     }
   
-    if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
-    {
+    if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
       _mustActualizeMeshDueToNewElevationData = false;
-      _planetRenderer.onTileHasChangedMesh(this);
+      _planetRenderer->onTileHasChangedMesh(this);
   
-      if (_debugMesh != null)
-      {
-        if (_debugMesh != null)
-           _debugMesh.dispose();
-        _debugMesh = null;
+      if (_debugMesh != NULL) {
+        delete _debugMesh;
+        _debugMesh = NULL;
       }
   
-      if (elevationDataProvider == null)
-      {
+      if (elevationDataProvider == NULL) {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, null, _tileTessellatorMeshData);
+        _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+                                                             prc,
+                                                             this,
+                                                             NULL,
+                                                             _tileTessellatorMeshData);
       }
-      else
-      {
-        Mesh tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, _elevationData, _tileTessellatorMeshData);
+      else {
+        Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+                                                                  prc,
+                                                                  this,
+                                                                  _elevationData,
+                                                                  _tileTessellatorMeshData);
   
-        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-        if (meshHolder == null)
-        {
+        MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
+        if (meshHolder == NULL) {
           meshHolder = new MeshHolder(tessellatorMesh);
           _tessellatorMesh = meshHolder;
         }
-        else
-        {
-          meshHolder.setMesh(tessellatorMesh);
+        else {
+          meshHolder->setMesh(tessellatorMesh);
         }
   
         //      computeTileCorners(rc->getPlanet());
       }
   
       //Notifying when the tile is first created and every time the elevation data changes
-      _planetRenderer.sectorElevationChanged(_elevationData);
+      _planetRenderer->sectorElevationChanged(_elevationData);
     }
   
-    return _tessellatorMesh;
+    return _tessellatorMesh;*/
   }
 
   public final boolean hasSubtiles()
