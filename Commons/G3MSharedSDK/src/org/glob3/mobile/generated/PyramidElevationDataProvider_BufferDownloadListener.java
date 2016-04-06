@@ -10,9 +10,8 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
     private boolean _autodeleteListener;
     private double _deltaHeight;
     private int _noDataValue;
-    private final IThreadUtils _threadUtils;
 
-    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight, MutableVector2I minRes, IThreadUtils threadUtils)
+    public PyramidElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, int noDataValue, double deltaHeight, MutableVector2I minRes)
     {
        _sector = sector;
        _width = extent._x;
@@ -22,7 +21,6 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
        _autodeleteListener = autodeleteListener;
        _deltaHeight = deltaHeight;
        _noDataValue = noDataValue;
-       _threadUtils = threadUtils;
 
     }
 

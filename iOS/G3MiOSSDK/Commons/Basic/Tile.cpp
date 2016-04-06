@@ -178,21 +178,21 @@ void Tile::TessellatorTask::execute(const G3MRenderContext* rc){
         _tile->_shouldInitElevData = false;
     }
     
-    if (_mustActualizeMeshDueToNewElevationData){
-        _mustActualizeMeshDueToNewElevationData = false;
+    if (_tile->_mustActualizeMeshDueToNewElevationData){
+        _tile->_mustActualizeMeshDueToNewElevationData = false;
         _planetRenderer->onTileHasChangedMesh(_tile);
         
-        if (*_debugMesh != NULL){
-            delete *_debugMesh;
-            *_debugMesh = NULL;
+        if (_tile->_debugMesh != NULL){
+            delete _tile->_debugMesh;
+            _tile->_debugMesh = NULL;
         }
         
         Mesh* tessellatorMesh = _prc->_tessellator->createTileMesh(rc,
                                                                    _prc,
                                                                    _tile,
                                                                    _tile->getElevationData(),
-                                                                   _data);
-        MeshHolder* meshHolder = (MeshHolder*) *_tessellatorMesh;
+                                                                   _tile->_tileTessellatorMeshData);
+        MeshHolder* meshHolder = (MeshHolder*) _tile->_tessellatorMesh;
         meshHolder->setMesh(tessellatorMesh);
         _planetRenderer->sectorElevationChanged(_tile->getElevationData());
         
@@ -228,7 +228,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     }
     
     if (_tessellatorTask == NULL){
-        _tessellatorTask = new TessellatorTask(this, prc, _mustActualizeMeshDueToNewElevationData, _planetRenderer, &_tessellatorMesh, &_debugMesh, _tileTessellatorMeshData );
+        _tessellatorTask = new TessellatorTask(this, prc, _planetRenderer);
         rc->getFrameTasksExecutor()->addPreRenderTask(_tessellatorTask);
     }
     

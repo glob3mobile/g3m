@@ -29,9 +29,6 @@ private:
   TileTexturizer* _texturizer;
   Tile*           _parent;
 
-  Mesh* _tessellatorMesh;
-
-  Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
 
@@ -42,8 +39,6 @@ private:
   bool _justCreatedSubtiles;
 
   bool _texturizerDirty;
-
-  TileTessellatorMeshData _tileTessellatorMeshData;
 
   void prepareTestLODData(const Planet* planet);
 
@@ -80,7 +75,7 @@ private:
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
-  bool                   _mustActualizeMeshDueToNewElevationData;
+  
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
@@ -98,28 +93,16 @@ private:
   private:
     Tile *_tile;
     const PlanetRenderContext *_prc;
-        
-    bool &_mustActualizeMeshDueToNewElevationData;
+      
     const PlanetRenderer *_planetRenderer;
-    Mesh ** _tessellatorMesh;
-    Mesh ** _debugMesh;
-    TileTessellatorMeshData &_data;
     bool _shouldCancel;
   public:
     TessellatorTask(Tile * tile,
                     const PlanetRenderContext *prc,
-                    bool &mustActualize,
-                    const PlanetRenderer *planetRenderer,
-                    Mesh **tessellatorMesh,
-                    Mesh **debugMesh,
-                    TileTessellatorMeshData &data):
+                    const PlanetRenderer *planetRenderer):
       _tile(tile),
       _prc(prc),
-      _mustActualizeMeshDueToNewElevationData(mustActualize),
       _planetRenderer(planetRenderer),
-      _tessellatorMesh(tessellatorMesh),
-      _debugMesh(debugMesh),
-      _data(data),
       _shouldCancel(false) {
             
       }
@@ -145,6 +128,11 @@ private:
 protected:
   TessellatorTask *_tessellatorTask;
   bool _shouldInitElevData;
+  bool _mustActualizeMeshDueToNewElevationData;
+  Mesh* _tessellatorMesh;
+    
+  Mesh* _debugMesh;
+  TileTessellatorMeshData _tileTessellatorMeshData;
 
 public:
   const Sector      _sector;

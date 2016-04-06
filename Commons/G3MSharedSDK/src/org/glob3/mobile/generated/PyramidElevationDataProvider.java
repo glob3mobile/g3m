@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 public class PyramidElevationDataProvider extends ElevationDataProvider
 {
     private IDownloader _downloader;
-    private final IThreadUtils _threadUtils;
     private final Sector _sector ;
     private double _deltaHeight;
     private final String _layer;
@@ -144,7 +143,6 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     public final void initialize(G3MContext context)
     {
       _downloader = context.getDownloader();
-      _threadUtils = context.getThreadUtils();
       getMetadata();
     }
 
@@ -162,7 +160,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     
         String path = requestStringPath(_layer, level, row, column);
     
-        return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes, _threadUtils), true);
+        return _downloader.requestBuffer(new URL(path,false), DownloadPriority.HIGHEST - level, TimeInterval.fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes), true);
     
     }
 

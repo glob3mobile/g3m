@@ -26,7 +26,6 @@ private:
     bool _autodeleteListener;
     double _deltaHeight;
     int _noDataValue;
-    const IThreadUtils *_threadUtils;
     
 public:
     PyramidElevationDataProvider_BufferDownloadListener(const Sector* sector,
@@ -35,8 +34,7 @@ public:
                                                         bool autodeleteListener,
                                                         int noDataValue,
                                                         double deltaHeight,
-                                                        MutableVector2I &minRes,
-                                                        const IThreadUtils *threadUtils):
+                                                        MutableVector2I &minRes):
     _sector(sector),
     _width(extent._x),
     _height(extent._y),
@@ -44,8 +42,7 @@ public:
     _minRes(minRes),
     _autodeleteListener(autodeleteListener),
     _deltaHeight(deltaHeight),
-    _noDataValue(noDataValue),
-    _threadUtils(threadUtils){
+    _noDataValue(noDataValue){
         
     }
     
@@ -160,7 +157,6 @@ void PyramidElevationDataProvider::getMetadata() const{
 
 void PyramidElevationDataProvider::initialize(const G3MContext* context ){
   _downloader = context->getDownloader();
-  _threadUtils = context->getThreadUtils();
   getMetadata();
 }
 
@@ -181,7 +177,7 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector&
     
     std::string path = requestStringPath(_layer,level,row,column);
     
-    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes, _threadUtils), true );
+    return _downloader->requestBuffer(URL(path,false), DownloadPriority::HIGHEST - level, TimeInterval::fromDays(30), true, new PyramidElevationDataProvider_BufferDownloadListener(sectorCopy, extent, listener, autodeleteListener,_noDataValue, _deltaHeight, _minRes), true );
     
 }
 
