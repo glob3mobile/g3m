@@ -79,7 +79,7 @@ _buffer(buffer)
 }
 
 ShortBufferElevationData::~ShortBufferElevationData() {
-    delete [] _buffer;
+  delete [] _buffer;
 
 #ifdef JAVA_CODE
   super.dispose();
