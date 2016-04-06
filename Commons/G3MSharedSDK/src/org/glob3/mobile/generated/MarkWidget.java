@@ -125,7 +125,7 @@ public class MarkWidget
     if (_glState == null)
     {
       _glState = new GLState();
-      _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera());
+      _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
   
       _texHandler = rc.getTexturesHandler();
       _imageBuilder.build(rc, new WidgetImageListener(this), true);
@@ -184,11 +184,17 @@ public class MarkWidget
     _y = java.lang.Float.NaN;
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     if (_viewportExtentGLFeature != null)
     {
-      _viewportExtentGLFeature.changeExtent(width, height);
+      int logicWidth = width;
+      if (ec.getViewMode() == ViewMode.STEREO)
+      {
+        logicWidth /= 2;
+      }
+  
+      _viewportExtentGLFeature.changeExtent(logicWidth, height);
     }
   }
 

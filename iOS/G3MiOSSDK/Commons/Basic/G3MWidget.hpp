@@ -60,6 +60,8 @@ class IDeviceLocation;
 #include "InfoDisplay.hpp"
 #include "ChangedRendererInfoListener.hpp"
 
+#include "ViewMode.hpp"
+
 class G3MContext;
 class GLGlobalState;
 class SceneLighting;
@@ -88,11 +90,6 @@ public:
   G3MWidget* getWidget() const {
     return _widget;
   }
-};
-
-enum ViewMode{
-  MONO,
-  STEREO
 };
 
 
@@ -307,7 +304,8 @@ private:
   int _width;
   int _height;
 
-  const G3MContext* _context;
+  G3MContext*       _context;
+  G3MRenderContext* _renderContext;
 
   bool _paused;
   bool _initializationTaskWasRun;
@@ -325,7 +323,6 @@ private:
   const InitialCameraPositionProvider* _initialCameraPositionProvider;
   bool _initialCameraPositionHasBeenSet;
 
-  G3MRenderContext* _renderContext;
 
   bool _forceBusyRenderer;
   
@@ -343,29 +340,29 @@ private:
   Camera* _rightEyeCam;
 
 
-  G3MWidget(GL*                              gl,
-            IStorage*                        storage,
-            IDownloader*                     downloader,
-            IThreadUtils*                    threadUtils,
-            ICameraActivityListener*         cameraActivityListener,
-            const Planet*                    planet,
-            std::vector<ICameraConstrainer*> cameraConstrainers,
-            CameraRenderer*                  cameraRenderer,
-            Renderer*                        mainRenderer,
-            ProtoRenderer*                   busyRenderer,
-            ErrorRenderer*                   errorRenderer,
-            Renderer*                        hudRenderer,
-            const Color&                     backgroundColor,
-            const bool                       logFPS,
-            const bool                       logDownloaderStatistics,
-            GInitializationTask*             initializationTask,
-            bool                             autoDeleteInitializationTask,
-            std::vector<PeriodicalTask*>     periodicalTasks,
-            GPUProgramManager*               gpuProgramManager,
-            SceneLighting*                   sceneLighting,
+  G3MWidget(GL*                                  gl,
+            IStorage*                            storage,
+            IDownloader*                         downloader,
+            IThreadUtils*                        threadUtils,
+            ICameraActivityListener*             cameraActivityListener,
+            const Planet*                        planet,
+            std::vector<ICameraConstrainer*>     cameraConstrainers,
+            CameraRenderer*                      cameraRenderer,
+            Renderer*                            mainRenderer,
+            ProtoRenderer*                       busyRenderer,
+            ErrorRenderer*                       errorRenderer,
+            Renderer*                            hudRenderer,
+            const Color&                         backgroundColor,
+            const bool                           logFPS,
+            const bool                           logDownloaderStatistics,
+            GInitializationTask*                 initializationTask,
+            bool                                 autoDeleteInitializationTask,
+            std::vector<PeriodicalTask*>         periodicalTasks,
+            GPUProgramManager*                   gpuProgramManager,
+            SceneLighting*                       sceneLighting,
             const InitialCameraPositionProvider* initialCameraPositionProvider,
-            InfoDisplay* infoDisplay,
-            ViewMode viewMode);
+            InfoDisplay*                         infoDisplay,
+            ViewMode                             viewMode);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

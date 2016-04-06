@@ -21,9 +21,11 @@ class EffectsScheduler;
 class IStorage;
 class SurfaceElevationProvider;
 
+#include "ViewMode.hpp"
+
 
 class G3MContext {
-protected:
+private:
   const IFactory*           _factory;
   const IStringUtils*       _stringUtils;
   const IThreadUtils*       _threadUtils;
@@ -35,6 +37,7 @@ protected:
   EffectsScheduler*         _effectsScheduler;
   IStorage*                 _storage;
   SurfaceElevationProvider* _surfaceElevationProvider;
+  ViewMode                  _viewMode;
 
 public:
   G3MContext(const IFactory*           factory,
@@ -47,7 +50,8 @@ public:
              IDownloader*              downloader,
              EffectsScheduler*         effectsScheduler,
              IStorage*                 storage,
-             SurfaceElevationProvider* surfaceElevationProvider) :
+             SurfaceElevationProvider* surfaceElevationProvider,
+             ViewMode                  viewMode) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
@@ -58,7 +62,8 @@ public:
   _downloader(downloader),
   _effectsScheduler(effectsScheduler),
   _storage(storage),
-  _surfaceElevationProvider(surfaceElevationProvider)
+  _surfaceElevationProvider(surfaceElevationProvider),
+  _viewMode(viewMode)
   {
   }
 
@@ -108,7 +113,15 @@ public:
   SurfaceElevationProvider* getSurfaceElevationProvider() const {
     return _surfaceElevationProvider;
   }
-  
+
+  ViewMode getViewMode() const {
+    return _viewMode;
+  }
+
+  void setViewMode(ViewMode viewMode) {
+    _viewMode = viewMode;
+  }
+
 };
 
 #endif
