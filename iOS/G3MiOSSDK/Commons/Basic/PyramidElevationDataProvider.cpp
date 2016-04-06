@@ -16,81 +16,6 @@
 
 #include <sstream>
 
-class PyramidParser : public GAsyncTask {
-private:
-    IByteBuffer *_buffer;
-    const Sector *_sector;
-    IElevationDataListener *_listener;
-    bool _autodeleteListener;
-    int _noDataValue;
-    double _deltaHeight;
-    MutableVector2I &_minRes;
-public:
-    
-    PyramidParser (IByteBuffer *buffer, const Sector *sector,
-                   IElevationDataListener *listener, bool autodeleteListener,
-                   int noDataValue, double deltaHeight,
-                   MutableVector2I &minRes) :
-    _buffer(buffer),
-    _sector(sector),
-    _listener(listener),
-    _autodeleteListener(autodeleteListener),
-    _noDataValue(noDataValue),
-    _deltaHeight(deltaHeight),
-    _minRes(minRes){
-        
-    }
-    
-    void runInBackground(const G3MContext* context) {
-        JSONDemParser *parser = new JSONDemParser(_buffer->getAsString());
-        const Vector2I *resolution = parser->getResolution();
-        ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, _buffer,(short) _noDataValue, _deltaHeight);
-        
-        if (_buffer != NULL){
-            delete _buffer;
-        }
-        
-        if (elevationData == NULL)
-        {
-            _listener->onError(*_sector, *resolution);
-        }
-        else
-        {
-            _listener->onData(*_sector, *resolution, elevationData);
-            if ((_minRes.x() * _minRes.y()) > (resolution->_x * resolution->_y)){
-                _minRes = resolution->asMutableVector2I();
-            }
-        }
-        
-        
-        if (_autodeleteListener)
-        {
-            if (_listener != NULL){
-                delete _listener;
-            }
-            _listener = NULL;
-        }
-        delete parser;
-#ifdef C_CODE
-        delete resolution;
-#endif
-
-    }
-    
-    void onPostExecute(const G3MContext* context) {
-       
-    }
-    
-    ~PyramidParser(){
-        delete _sector;
-        
-#ifdef JAVA_CODE
-        super.dispose();
-#endif
-    }
-};
-
-
 class PyramidElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
     
@@ -127,7 +52,6 @@ public:
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
                     bool expired){
-    //_threadUtils->invokeAsyncTask (new PyramidParser(buffer, _sector, _listener, _autodeleteListener,_noDataValue,_deltaHeight,_minRes),true);
         JSONDemParser *parser = new JSONDemParser(buffer->getAsString());
         const Vector2I *resolution = parser->getResolution();
         ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);

@@ -74,6 +74,7 @@ _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
 _mustActualizeMeshDueToNewElevationData(false),
+_shouldInitElevData(true),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
@@ -172,8 +173,9 @@ void Tile::setTextureSolved(bool textureSolved) {
 
 void Tile::TessellatorTask::execute(const G3MRenderContext* rc){
     ElevationDataProvider* elevationDataProvider = _prc->_elevationDataProvider;
-    if ((_tile->getElevationData() == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled())){
+    if ((_tile->_shouldInitElevData) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled())){
         _tile->initializeElevationData(rc, _prc);
+        _tile->_shouldInitElevData = false;
     }
     
     if (_mustActualizeMeshDueToNewElevationData){
@@ -185,8 +187,6 @@ void Tile::TessellatorTask::execute(const G3MRenderContext* rc){
             *_debugMesh = NULL;
         }
         
-        //Me apostaría lo que fuera a que si no hay elevationDataProvider, esto no se da. Igualmente elevData podría ser NULL ...
-        
         Mesh* tessellatorMesh = _prc->_tessellator->createTileMesh(rc,
                                                                    _prc,
                                                                    _tile,
@@ -194,25 +194,38 @@ void Tile::TessellatorTask::execute(const G3MRenderContext* rc){
                                                                    _data);
         MeshHolder* meshHolder = (MeshHolder*) *_tessellatorMesh;
         meshHolder->setMesh(tessellatorMesh);
+        _planetRenderer->sectorElevationChanged(_tile->getElevationData());
+        
+        _tile->deleteTexturizedMesh(_prc->_texturizer);
     }
+    _tile->_tessellatorTask = NULL;
 };
 
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const PlanetRenderContext* prc) {
     
-    // Now, tasks related to initialized and change tessellator mesh should be disconnected from this function.
+    // Now, tasks related to elev initialization and change tessellator mesh should be disconnected from this function.
     // We should ensure something is always sent to functions (i.e. Visibility Tests)
     if (_tessellatorMesh == NULL){
-        Mesh *tessellatorMesh = prc->_tessellator->createTileMesh(rc,prc,this,NULL,_tileTessellatorMeshData);
+        if (_elevationData == NULL) {
+            _lastElevationDataProvider = prc->_elevationDataProvider;
+            const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+            _lastTileMeshResolutionX = tileMeshResolution._x;
+            _lastTileMeshResolutionY = tileMeshResolution._y;
+            getElevationDataFromAncestor(tileMeshResolution.asVector2I());
+        }
+        _planetRenderer->onTileHasChangedMesh(this);
+        if (_debugMesh != NULL) {
+            delete _debugMesh;
+            _debugMesh = NULL;
+        }
+        
+        Mesh *tessellatorMesh = prc->_tessellator->createTileMesh(rc,prc,this,_elevationData,_tileTessellatorMeshData);
         MeshHolder *meshHolder = new MeshHolder(tessellatorMesh);
         _tessellatorMesh = meshHolder;
         
         _planetRenderer->sectorElevationChanged(_elevationData);
     }
-    
-    //TessellatorTask(Tile * tile, const PlanetRenderContext *prc, bool &mustActualize,
-    //PlanetRenderer *planetRenderer, Mesh **tessellatorMesh,
-    //Mesh **debugMesh, TileTessellatorMeshData &data)
     
     if (_tessellatorTask == NULL){
         _tessellatorTask = new TessellatorTask(this, prc, _mustActualizeMeshDueToNewElevationData, _planetRenderer, &_tessellatorMesh, &_debugMesh, _tileTessellatorMeshData );
@@ -652,7 +665,7 @@ void Tile::initializeElevationData(const G3MRenderContext* rc,
                                    const PlanetRenderContext* prc) {
 
   const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
-
+    
   //Storing for subviewing
   _lastElevationDataProvider = prc->_elevationDataProvider;
   _lastTileMeshResolutionX = tileMeshResolution._x;
@@ -665,8 +678,7 @@ void Tile::initializeElevationData(const G3MRenderContext* rc,
     _elevationDataRequest->sendRequest();
   }
 
-  //If after petition we still have no data we request from ancestor (provider asynchronous)
-  if (_elevationData == NULL) {
+  if (_elevationData == NULL){
     getElevationDataFromAncestor(tileMeshResolution.asVector2I());
   }
 
