@@ -31,9 +31,6 @@ public class Tile
   private TileTexturizer _texturizer;
   private Tile _parent;
 
-  private Mesh _tessellatorMesh;
-
-  private Mesh _debugMesh;
   private Mesh _texturizedMesh;
   private TileElevationDataRequest _elevationDataRequest;
 
@@ -44,8 +41,6 @@ public class Tile
   private boolean _justCreatedSubtiles;
 
   private boolean _texturizerDirty;
-
-  private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void prepareTestLODData(Planet planet);
@@ -182,7 +177,7 @@ public class Tile
 
   private int _elevationDataLevel;
   private ElevationData _elevationData;
-  private boolean _mustActualizeMeshDueToNewElevationData;
+
   private ElevationDataProvider _lastElevationDataProvider;
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
@@ -202,21 +197,13 @@ public class Tile
     private Tile _tile;
     private final PlanetRenderContext _prc;
 
-    private boolean &_mustActualizeMeshDueToNewElevationData;
     private final PlanetRenderer _planetRenderer;
-    private Mesh[] _tessellatorMesh;
-    private Mesh[] _debugMesh;
-    private TileTessellatorMeshData _data;
     private boolean _shouldCancel;
-    public TessellatorTask(Tile tile, PlanetRenderContext prc, boolean mustActualize, PlanetRenderer planetRenderer, Mesh[] tessellatorMesh, Mesh[] debugMesh, TileTessellatorMeshData data)
+    public TessellatorTask(Tile tile, PlanetRenderContext prc, PlanetRenderer planetRenderer)
     {
        _tile = tile;
        _prc = prc;
-       _mustActualizeMeshDueToNewElevationData = mustActualize;
        _planetRenderer = planetRenderer;
-       _tessellatorMesh = tessellatorMesh;
-       _debugMesh = debugMesh;
-       _data = new TileTessellatorMeshData(data);
        _shouldCancel = false;
 
       }
@@ -249,19 +236,19 @@ public class Tile
               _tile._shouldInitElevData = false;
           }
       
-          if (_mustActualizeMeshDueToNewElevationData)
+          if (_tile._mustActualizeMeshDueToNewElevationData)
           {
-              _mustActualizeMeshDueToNewElevationData = false;
+              _tile._mustActualizeMeshDueToNewElevationData = false;
               _planetRenderer.onTileHasChangedMesh(_tile);
       
-              if (*_debugMesh != null)
+              if (_tile._debugMesh != null)
               {
-                  *_debugMesh = null;
-                  *_debugMesh = null;
+                  _tile._debugMesh = null;
+                  _tile._debugMesh = null;
               }
       
-              Mesh tessellatorMesh = _prc._tessellator.createTileMesh(rc, _prc, _tile, _tile.getElevationData(), _data);
-              MeshHolder meshHolder = (MeshHolder) *_tessellatorMesh;
+              Mesh tessellatorMesh = _prc._tessellator.createTileMesh(rc, _prc, _tile, _tile.getElevationData(), _tile._tileTessellatorMeshData);
+              MeshHolder meshHolder = (MeshHolder) _tile._tessellatorMesh;
               meshHolder.setMesh(tessellatorMesh);
               _planetRenderer.sectorElevationChanged(_tile.getElevationData());
       
@@ -273,6 +260,11 @@ public class Tile
 
   protected TessellatorTask _tessellatorTask;
   protected boolean _shouldInitElevData;
+  protected boolean _mustActualizeMeshDueToNewElevationData;
+  protected Mesh _tessellatorMesh;
+
+  protected Mesh _debugMesh;
+  protected TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -918,7 +910,7 @@ public class Tile
   
       if (_tessellatorTask == null)
       {
-          _tessellatorTask = new TessellatorTask(this, prc, _mustActualizeMeshDueToNewElevationData, _planetRenderer, _tessellatorMesh, _debugMesh, _tileTessellatorMeshData);
+          _tessellatorTask = new TessellatorTask(this, prc, _planetRenderer);
           rc.getFrameTasksExecutor().addPreRenderTask(_tessellatorTask);
       }
   
