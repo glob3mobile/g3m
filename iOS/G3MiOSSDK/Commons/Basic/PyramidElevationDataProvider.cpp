@@ -127,8 +127,7 @@ public:
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
                     bool expired){
-        
-        /*_threadUtils->invokeAsyncTask (new PyramidParser(buffer, _sector, _listener, _autodeleteListener,_noDataValue,_deltaHeight,_minRes),true);*/
+    //_threadUtils->invokeAsyncTask (new PyramidParser(buffer, _sector, _listener, _autodeleteListener,_noDataValue,_deltaHeight,_minRes),true);
         JSONDemParser *parser = new JSONDemParser(buffer->getAsString());
         const Vector2I *resolution = parser->getResolution();
         ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);

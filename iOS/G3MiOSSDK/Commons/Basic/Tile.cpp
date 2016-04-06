@@ -24,7 +24,7 @@
 #include "MercatorUtils.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "InterpolatedSubviewElevationData.hpp"
-
+#include "FrameTasksExecutor.hpp"
 
 std::string Tile::createTileId(int level,
                                int row,
@@ -78,6 +78,7 @@ _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
+_tessellatorTask(NULL),
 _id( createTileId(level, row, column) ),
 _data(NULL),
 _dataSize(0)
@@ -108,6 +109,10 @@ Tile::~Tile() {
     _elevationDataRequest->cancelRequest(); //The listener will auto delete
     delete _elevationDataRequest;
     _elevationDataRequest = NULL;
+  }
+    
+  if (_tessellatorTask != NULL) {
+      _tessellatorTask->cancelTask();
   }
 
   delete _tessellatorData;
@@ -165,10 +170,58 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
+void Tile::TessellatorTask::execute(const G3MRenderContext* rc){
+    ElevationDataProvider* elevationDataProvider = _prc->_elevationDataProvider;
+    if ((_tile->getElevationData() == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled())){
+        _tile->initializeElevationData(rc, _prc);
+    }
+    
+    if (_mustActualizeMeshDueToNewElevationData){
+        _mustActualizeMeshDueToNewElevationData = false;
+        _planetRenderer->onTileHasChangedMesh(_tile);
+        
+        if (*_debugMesh != NULL){
+            delete *_debugMesh;
+            *_debugMesh = NULL;
+        }
+        
+        //Me apostaría lo que fuera a que si no hay elevationDataProvider, esto no se da. Igualmente elevData podría ser NULL ...
+        
+        Mesh* tessellatorMesh = _prc->_tessellator->createTileMesh(rc,
+                                                                   _prc,
+                                                                   _tile,
+                                                                   _tile->getElevationData(),
+                                                                   _data);
+        MeshHolder* meshHolder = (MeshHolder*) *_tessellatorMesh;
+        meshHolder->setMesh(tessellatorMesh);
+    }
+};
+
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const PlanetRenderContext* prc) {
+    
+    // Now, tasks related to initialized and change tessellator mesh should be disconnected from this function.
+    // We should ensure something is always sent to functions (i.e. Visibility Tests)
+    if (_tessellatorMesh == NULL){
+        Mesh *tessellatorMesh = prc->_tessellator->createTileMesh(rc,prc,this,NULL,_tileTessellatorMeshData);
+        MeshHolder *meshHolder = new MeshHolder(tessellatorMesh);
+        _tessellatorMesh = meshHolder;
+        
+        _planetRenderer->sectorElevationChanged(_elevationData);
+    }
+    
+    //TessellatorTask(Tile * tile, const PlanetRenderContext *prc, bool &mustActualize,
+    //PlanetRenderer *planetRenderer, Mesh **tessellatorMesh,
+    //Mesh **debugMesh, TileTessellatorMeshData &data)
+    
+    if (_tessellatorTask == NULL){
+        _tessellatorTask = new TessellatorTask(this, prc, _mustActualizeMeshDueToNewElevationData, _planetRenderer, &_tessellatorMesh, &_debugMesh, _tileTessellatorMeshData );
+        rc->getFrameTasksExecutor()->addPreRenderTask(_tessellatorTask);
+    }
+    
+    return _tessellatorMesh;
 
-  ElevationDataProvider* elevationDataProvider = prc->_elevationDataProvider;
+  /*ElevationDataProvider* elevationDataProvider = prc->_elevationDataProvider;
 
   if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
     initializeElevationData(rc, prc);
@@ -214,7 +267,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     _planetRenderer->sectorElevationChanged(_elevationData);
   }
 
-  return _tessellatorMesh;
+  return _tessellatorMesh;*/
 }
 
 Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,

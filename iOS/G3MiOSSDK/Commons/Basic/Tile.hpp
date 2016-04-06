@@ -11,6 +11,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
+#include "FrameTask.hpp"
 
 class TileTexturizer;
 class TileElevationDataRequest;
@@ -92,6 +93,57 @@ private:
 
   mutable TileData** _data;
   mutable size_t     _dataSize;
+    
+#warning Task added by Chano.
+    class TessellatorTask : public FrameTask {
+    private:
+        Tile *_tile;
+        const PlanetRenderContext *_prc;
+        
+        bool &_mustActualizeMeshDueToNewElevationData;
+        const PlanetRenderer *_planetRenderer;
+        Mesh ** _tessellatorMesh;
+        Mesh ** _debugMesh;
+        TileTessellatorMeshData &_data;
+        bool _shouldCancel;
+    public:
+        TessellatorTask(Tile * tile, const PlanetRenderContext *prc, bool &mustActualize,
+                        const PlanetRenderer *planetRenderer, Mesh **tessellatorMesh,
+                        Mesh **debugMesh, TileTessellatorMeshData &data):
+        _tile(tile),
+        _prc(prc),
+        _mustActualizeMeshDueToNewElevationData(mustActualize),
+        _planetRenderer(planetRenderer),
+        _tessellatorMesh(tessellatorMesh),
+        _debugMesh(debugMesh),
+        _data(data),
+        _shouldCancel(false) {
+            
+        }
+        
+        ~TessellatorTask(){
+            //Liberar al tile de sí mismo, por si aca.
+            //De alguna forma creo que esta tarea debería llamarse una única vez, ya veremos cómo. Por ahora lo dejo así ...
+            if (_tile != NULL) {
+                _tile->_tessellatorTask = NULL;
+            }
+        }
+        
+        void cancelTask (){
+            //Llamar cuando el tile vaya a ser destruido. Si no funciona, alternativa FrameTasksExecutor.
+            _shouldCancel = true;
+            _tile = NULL;
+        }
+        
+        bool isCanceled(const G3MRenderContext* rc){
+            return _shouldCancel;
+        };
+        
+        void execute(const G3MRenderContext* rc);
+    };
+    
+protected:
+  TessellatorTask *_tessellatorTask;
 
 public:
   const Sector      _sector;
