@@ -216,7 +216,7 @@ public class NonOverlappingMark
   
       _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 1.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
   
-      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera());
+      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
       _springGLState.addGLFeature(_springViewportExtentGLFeature, false);
     }
     else
@@ -303,14 +303,19 @@ public class NonOverlappingMark
     _widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    _widget.onResizeViewportEvent(width, height);
-    _anchorWidget.onResizeViewportEvent(width, height);
+    _widget.onResizeViewportEvent(ec, width, height);
+    _anchorWidget.onResizeViewportEvent(ec, width, height);
   
     if (_springViewportExtentGLFeature != null)
     {
-      _springViewportExtentGLFeature.changeExtent(width, height);
+      int logicWidth = width;
+      if (ec.getViewMode() == ViewMode.STEREO)
+      {
+        logicWidth /= 2;
+      }
+      _springViewportExtentGLFeature.changeExtent(logicWidth, height);
     }
   }
 

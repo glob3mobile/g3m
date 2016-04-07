@@ -58,19 +58,19 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
   return false;
 }
 
-void CameraRenderer::removeHandler(CameraEventHandler* handler){
+void CameraRenderer::removeHandler(CameraEventHandler* handler) {
   
 #ifdef C_CODE
   size_t size = _handlers.size();
   for (size_t i = 0; i < size; i++) {
-    if (_handlers[i] == handler){
+    if (_handlers[i] == handler) {
       _handlers.erase(_handlers.begin() + i);
       return;
     }
   }
 #endif
 #ifdef JAVA_CODE
-  if ( _handlers.remove(handler) ){
+  if ( _handlers.remove(handler) ) {
     return;
   }
 #endif

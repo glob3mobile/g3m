@@ -25,7 +25,7 @@ private:
     long long _lastMeetsRenderCriteriaTimeInMS;
 
     PvtData(long long now):
-    TileData(TimedCacheTLTDataID){
+    TileData(TimedCacheTLTDataID) {
       _lastMeetsRenderCriteriaTimeInMS = now;
       _lastMeetsRenderCriteriaResult = false;
     }

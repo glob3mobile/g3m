@@ -714,7 +714,7 @@ void Tile::setData(TileData* data) const {
 }
 
 void Tile::clearDataWithID(int id) const {
-  if (_dataSize > id){
+  if (_dataSize > id) {
     //Assuming we won't reduce _data capacity by erasing items
     delete _data[id];
     _data[id] = NULL;

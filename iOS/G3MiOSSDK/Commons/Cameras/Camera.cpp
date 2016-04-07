@@ -123,6 +123,7 @@ _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
 _timestamp(timestamp)
 {
+#warning VR => Diego at work!
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
 }
@@ -396,6 +397,10 @@ FrustumData Camera::calculateFrustumData() const {
         }
       }
     }
+
+#warning VR => Diego at work!
+    _tanHalfHorizontalFieldOfView = tanHalfHFOV;
+    _tanHalfVerticalFieldOfView = tanHalfVFOV;
   }
 
   const double right = tanHalfHFOV * zNear;
@@ -445,6 +450,14 @@ void Camera::setFOV(const Angle& vertical,
     _dirtyFlags._frustumDirty          = true;
     _dirtyFlags._frustumMCDirty        = true;
   }
+}
+
+Angle Camera::getHorizontalFOV() const{
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFieldOfView)).times(2);
+}
+
+Angle Camera::getVerticalFOV() const{
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFieldOfView)).times(2);
 }
 
 void Camera::setRoll(const Angle& angle) {

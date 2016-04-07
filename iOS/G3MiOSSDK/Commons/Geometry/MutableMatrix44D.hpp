@@ -393,7 +393,7 @@ public:
     _isValid = true;
   }
   
-  void setValid(bool v){
+  void setValid(bool v) {
     _isValid = v;
   }
   

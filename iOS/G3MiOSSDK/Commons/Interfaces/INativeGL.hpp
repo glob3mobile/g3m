@@ -205,6 +205,8 @@ public:
 
   virtual void setActiveTexture(int i) const = 0;
   
+  virtual void viewport(int x, int y, int width, int height) const = 0;
+  
 };
 
 #endif

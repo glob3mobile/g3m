@@ -122,7 +122,7 @@ public class CameraRenderer implements ProtoRenderer
   public final void removeHandler(CameraEventHandler handler)
   {
   
-    if ( _handlers.remove(handler) ){
+    if ( _handlers.remove(handler) ) {
       return;
     }
   

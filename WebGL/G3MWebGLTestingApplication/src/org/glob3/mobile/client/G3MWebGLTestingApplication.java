@@ -63,6 +63,8 @@ public class G3MWebGLTestingApplication
       //_g3mWidget = createWidgetPlanetDebug();
       g3mWidgetHolder.add(_g3mWidget);
 
+      //_g3mWidget.getG3MWidget().setViewMode(ViewMode.STEREO);
+
 
       // // Buenos Aires, there we go!
       // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));

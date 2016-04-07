@@ -12,6 +12,7 @@
 #include "GLFeatureGroup.hpp"
 #include "GPUAttribute.hpp"
 #include "Vector2F.hpp"
+#include "ViewMode.hpp"
 
 #include "RCObject.hpp"
 
@@ -110,7 +111,8 @@ public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
 
-  ViewportExtentGLFeature(const Camera* camera);
+  ViewportExtentGLFeature(const Camera* camera,
+                          ViewMode      viewMode);
 
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
   
