@@ -33,6 +33,7 @@
 		4435E3DC19072F140064A7D7 /* ProtoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */; };
 		4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4436A81E18ED518100CB6792 /* ChangedInfoListener.cpp */; };
 		4436A82118ED7B8F00CB6792 /* ChangedInfoListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */; };
+		4465A13B1C9AB42E00555612 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4465A13A1C9AB42E00555612 /* CoreMotion.framework */; };
 		44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44A00492175500B900C6686D /* ICameraActivityListener.hpp */; };
 		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; };
 		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; };
@@ -1221,6 +1222,7 @@
 		4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProtoRenderer.cpp; path = Commons/Rendererers/ProtoRenderer.cpp; sourceTree = "<group>"; };
 		4436A81E18ED518100CB6792 /* ChangedInfoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedInfoListener.cpp; path = Commons/Basic/ChangedInfoListener.cpp; sourceTree = "<group>"; };
 		4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChangedInfoListener.hpp; path = Commons/Basic/ChangedInfoListener.hpp; sourceTree = "<group>"; };
+		4465A13A1C9AB42E00555612 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44A00492175500B900C6686D /* ICameraActivityListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraActivityListener.hpp; path = Commons/Interfaces/ICameraActivityListener.hpp; sourceTree = "<group>"; };
 		44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1987,6 +1989,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4465A13B1C9AB42E00555612 /* CoreMotion.framework in Frameworks */,
 				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
 				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
 				44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */,
@@ -2924,6 +2927,7 @@
 		D8EEF3B71577924D003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4465A13A1C9AB42E00555612 /* CoreMotion.framework */,
 				44AFBB2819D4286C00EB78E9 /* CoreData.framework */,
 				44AFBB2619D4276000EB78E9 /* QuartzCore.framework */,
 				44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */,
