@@ -145,6 +145,8 @@ protected:
   void _fillAndStrokeEllipse(float left, float top,
                              float width, float height);
 
+  void _scale(float scaleX, float scaleY,
+              float pivotX, float pivotY);
 
 public:
   Canvas_iOS() :

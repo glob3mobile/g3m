@@ -238,6 +238,11 @@ public final class Canvas_WebGL
       drawEllipse(left, top, width, height, true, true);
    }
 
+    @Override
+   protected void _scale(float scaleX, float scaleY, float pivotX, float pivotY) {
+       throw new RuntimeException("WebGL canvas scale is not implemented!");
+   }
+
 
    private native void drawEllipse(final float x,
                                    final float y,

@@ -186,8 +186,13 @@ public final class FloatBuffer_WebGL
 		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i];
    }-*/;
 
+    @Override
+    public void rewind() {
 
-   @Override
+    }
+
+
+    @Override
    public native void put(final int i,
                           final float value) /*-{
 		if (this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] != value) {
@@ -196,8 +201,13 @@ public final class FloatBuffer_WebGL
 		}
    }-*/;
 
+    @Override
+    public void put(float[] values) {
 
-   @Override
+    }
+
+
+    @Override
    public native void rawPut(final int i,
                              final float value) /*-{
 		this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] = value;
@@ -218,8 +228,13 @@ public final class FloatBuffer_WebGL
       }
    }
 
+    @Override
+    public int position() {
+        return 0;
+    }
 
-   @Override
+
+    @Override
    public native void rawAdd(final int i,
                              final float value) /*-{
 		var buffer = this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer;

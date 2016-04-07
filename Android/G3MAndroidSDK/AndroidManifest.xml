@@ -4,10 +4,9 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-feature android:glEsVersion="0x00020000"/>
-
+  <uses-sdk android:minSdkVersion="11" />
+  <uses-feature android:glEsVersion="0x00020000"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
-  <uses-sdk android:minSdkVersion="9"/>
 
 </manifest>

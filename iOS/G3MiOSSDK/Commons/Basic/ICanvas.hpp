@@ -148,6 +148,8 @@ protected:
   virtual void _fillAndStrokeEllipse(float left, float top,
                                      float width, float height) = 0;
 
+  virtual void _scale(float scalex, float scaley,
+                      float pivotx, float pivoty) = 0;
 
 public:
   ICanvas() :
@@ -301,6 +303,13 @@ public:
   
   void lineTo(const Vector2F& position) {
     lineTo(position._x, position._y);
+  }
+
+  void scale(float scaleX, float scaleY,
+             float pivotX, float pivotY);
+
+  void scale(const Vector2F& factor, const Vector2F& pivot) {
+    scale(factor._x, factor._y, pivot._x, pivot._y);
   }
   
 };

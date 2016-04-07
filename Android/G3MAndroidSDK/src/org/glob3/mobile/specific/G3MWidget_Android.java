@@ -64,7 +64,7 @@ public final class G3MWidget_Android
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
    private Thread                     _openGLThread         = null;
-
+   private final boolean             _noFPSReduction;
 
    public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
@@ -86,11 +86,22 @@ public final class G3MWidget_Android
       }
    }
 
+   public G3MWidget_Android(final android.content.Context context,
+                             final boolean noFPSReduction) {
+       this(context, null, noFPSReduction);
+   }
 
    // Needed to create widget from XML layout
    public G3MWidget_Android(final android.content.Context context,
-                            final AttributeSet attrs) {
+                             final AttributeSet attrs) {
+       this(context, attrs, false);
+   }
+
+   public G3MWidget_Android(final android.content.Context context,
+                            final AttributeSet attrs,
+                            final boolean noFPSReduction) {
       super(context, attrs);
+      _noFPSReduction = noFPSReduction;
 
       initSingletons();
 
@@ -460,5 +471,7 @@ public final class G3MWidget_Android
       return getG3MWidget().getG3MContext();
    }
 
-
+   public boolean getNoFPSReduction() {
+      return _noFPSReduction;
+   }
 }

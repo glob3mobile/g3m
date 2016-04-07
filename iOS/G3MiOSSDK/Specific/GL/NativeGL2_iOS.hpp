@@ -378,6 +378,10 @@ public:
   int TextureParameterValue_ClampToEdge() const {
     return GL_CLAMP_TO_EDGE;
   }
+    
+  int TextureParameterValue_Repeat() const {
+     return GL_REPEAT;
+  }
 
   int Alignment_Pack() const {
     return GL_PACK_ALIGNMENT;

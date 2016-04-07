@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "INativeGL.hpp"
+#include "GLConstants.hpp"
 
 class IImage;
 class G3MRenderContext;
@@ -28,6 +29,7 @@ private:
   const int         _width;
   const int         _height;
   const bool        _generateMipmap;
+  const int         _wrapMode;
 
   TextureSpec& operator=(const TextureSpec& that);
 
@@ -39,18 +41,34 @@ public:
   _id(id),
   _width(width),
   _height(height),
-  _generateMipmap(generateMipmap)
+  _generateMipmap(generateMipmap),
+  _wrapMode(GLTextureParameterValue::clampToEdge())
   {
 
   }
 
-  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false) {}
+  TextureSpec(const std::string& id,
+              const int          width,
+              const int          height,
+              const bool         generateMipmap,
+			  const int          wrapMode):
+  _id(id),
+  _width(width),
+  _height(height),
+  _generateMipmap(generateMipmap),
+  _wrapMode(wrapMode)
+  {
+
+  }
+
+  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false), _wrapMode(GLTextureParameterValue::clampToEdge()) {}
 
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
   _height(that._height),
-  _generateMipmap(that._generateMipmap)
+  _generateMipmap(that._generateMipmap),
+  _wrapMode(that._wrapMode)
   {
 
   }
@@ -67,10 +85,15 @@ public:
     return _height;
   }
 
+  int getWrapMode() const {
+    return _wrapMode;
+  }
+
   bool equalsTo(const TextureSpec& that) const {
     return ((_id.compare(that._id) == 0) &&
             (_width  == that._width) &&
-            (_height == that._height));
+            (_height == that._height) &&
+			(_wrapMode == that._wrapMode));
   }
 
   bool lowerThan(const TextureSpec& that) const {
@@ -113,6 +136,7 @@ public:
 		result = prime * result + _height;
 		result = prime * result + ((_id == null) ? 0 : _id.hashCode());
 		result = prime * result + _width;
+		result = prime * result + _wrapMode;
 		return result;
 	}
 
@@ -133,6 +157,8 @@ public:
 		} else if (!_id.equals(other._id))
 			return false;
 		if (_width != other._width)
+			return false;
+		if (_wrapMode != other._wrapMode)
 			return false;
 		return true;
 	}
@@ -160,11 +186,17 @@ public:
   }
 
   ~TexturesHandler();
+    
+  const TextureIDReference* getTextureIDReference(const IImage* image,
+                                                    int format,
+                                                    const std::string& name,
+                                                    bool generateMipmap);
 
   const TextureIDReference* getTextureIDReference(const IImage* image,
                                                   int format,
                                                   const std::string& name,
-                                                  bool generateMipmap);
+                                                  bool generateMipmap,
+                                                  int wrapMode);
 
 
   //This two methods are supposed to be accessed only by TextureIDReference class

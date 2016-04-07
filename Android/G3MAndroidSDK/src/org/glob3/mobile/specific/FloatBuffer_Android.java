@@ -104,12 +104,23 @@ public final class FloatBuffer_Android
 
 
    @Override
+   public void rewind() {
+      _buffer.rewind();
+   }
+
+   @Override
    public void put(final int i,
                    final float value) {
-      if (_buffer.get(i) != value) {
+      /*if (_buffer.get(i) != value)*/ {
          _buffer.put(i, value);
          _timestamp++;
       }
+   }
+
+   @Override
+   public void put(float[] values) {
+      _buffer.put(values);
+      _timestamp++;
    }
 
 
@@ -204,6 +215,11 @@ public final class FloatBuffer_Android
       for (int j = 0; j < count; j++) {
          _buffer.put(i + j, androidSrcBuffer._buffer.get(srcFromIndex + j));
       }
+   }
+
+   @Override
+   public int position() {
+      return _buffer.position();
    }
 
 
