@@ -30,7 +30,7 @@ public class MarksRenderer extends DefaultRenderer
     if (_glState.getGLFeature(GLFeatureID.GLF_VIEWPORT_EXTENT) == null)
     {
       _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-      _glState.addGLFeature(new ViewportExtentGLFeature(camera), false);
+      _glState.addGLFeature(new ViewportExtentGLFeature(camera, rc.getViewMode()), false);
     }
   }
   private IFloatBuffer _billboardTexCoords;
@@ -332,7 +332,14 @@ public class MarksRenderer extends DefaultRenderer
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-    _glState.addGLFeature(new ViewportExtentGLFeature(width, height), false);
+  
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+  
+    _glState.addGLFeature(new ViewportExtentGLFeature(logicWidth, height), false);
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)

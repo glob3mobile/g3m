@@ -13,6 +13,7 @@
 #include "GLState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "G3MContext.hpp"
+#include "G3MEventContext.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"
@@ -64,7 +65,8 @@ MarkWidget::~MarkWidget() {
 void MarkWidget::init(const G3MRenderContext* rc) {
   if (_glState == NULL) {
     _glState = new GLState();
-    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera());
+    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera(),
+                                                           rc->getViewMode());
 
     _texHandler = rc->getTexturesHandler();
     _imageBuilder->build(rc, new WidgetImageListener(this), true);
@@ -172,9 +174,15 @@ void MarkWidget::resetPosition() {
   _y = NANF;
 }
 
-void MarkWidget::onResizeViewportEvent(int width, int height) {
+void MarkWidget::onResizeViewportEvent(const G3MEventContext* ec,
+                                       int width, int height) {
   if (_viewportExtentGLFeature != NULL) {
-    _viewportExtentGLFeature->changeExtent(width, height);
+    int logicWidth = width;
+    if (ec->getViewMode() == STEREO) {
+      logicWidth /= 2;
+    }
+
+    _viewportExtentGLFeature->changeExtent(logicWidth, height);
   }
 }
 
@@ -367,7 +375,8 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                                          ),
                                  false);
 
-    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera());
+    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera(),
+                                                                 rc->getViewMode());
     _springGLState->addGLFeature(_springViewportExtentGLFeature, false);
   }
   else {
@@ -413,12 +422,17 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                 viewportMargin);
 }
 
-void NonOverlappingMark::onResizeViewportEvent(int width, int height) {
-  _widget->onResizeViewportEvent(width, height);
-  _anchorWidget->onResizeViewportEvent(width, height);
+void NonOverlappingMark::onResizeViewportEvent(const G3MEventContext* ec,
+                                               int width, int height) {
+  _widget->onResizeViewportEvent(ec, width, height);
+  _anchorWidget->onResizeViewportEvent(ec, width, height);
 
   if (_springViewportExtentGLFeature != NULL) {
-    _springViewportExtentGLFeature->changeExtent(width, height);
+    int logicWidth = width;
+    if (ec->getViewMode() == STEREO) {
+      logicWidth /= 2;
+    }
+    _springViewportExtentGLFeature->changeExtent(logicWidth, height);
   }
 }
 
@@ -599,7 +613,7 @@ void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* e
                                                         int height) {
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
-    _marks[i]->onResizeViewportEvent(width, height);
+    _marks[i]->onResizeViewportEvent(ec, width, height);
   }
 }
 

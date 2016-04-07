@@ -268,7 +268,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode);
   
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
@@ -325,7 +325,7 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode);
   
     _nextCamera.resizeViewport(width, height);
     _currentCamera.resizeViewport(width, height);
@@ -694,6 +694,11 @@ public class G3MWidget implements ChangedRendererInfoListener
            _rightEyeCam.dispose();
         _rightEyeCam = null;
       }
+  
+      _context.setViewMode(_viewMode);
+      _renderContext.setViewMode(_viewMode);
+  
+      onResizeViewportEvent(_width, _height);
     }
   }
 
@@ -744,7 +749,8 @@ public class G3MWidget implements ChangedRendererInfoListener
   private int _width;
   private int _height;
 
-  private final G3MContext _context;
+  private G3MContext _context;
+  private G3MRenderContext _renderContext;
 
   private boolean _paused;
   private boolean _initializationTaskWasRun;
@@ -762,7 +768,6 @@ public class G3MWidget implements ChangedRendererInfoListener
   private final InitialCameraPositionProvider _initialCameraPositionProvider;
   private boolean _initialCameraPositionHasBeenSet;
 
-  private G3MRenderContext _renderContext;
 
   private boolean _forceBusyRenderer;
 
@@ -814,7 +819,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initializationTask = initializationTask;
      _autoDeleteInitializationTask = autoDeleteInitializationTask;
      _surfaceElevationProvider = mainRenderer.getSurfaceElevationProvider();
-     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider());
+     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider(), viewMode);
      _paused = false;
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
@@ -868,7 +873,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, -1);
   
   
-    _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
+    _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider, _viewMode);
   
   
     ///#ifdef C_CODE
