@@ -84,6 +84,10 @@ public:
     _showNormals = v;
   }
   
+  IFloatBuffer* getColorsFloatBuffer() const{
+    return (IFloatBuffer*)_colors;
+  }
+  
 };
 
 #endif

@@ -10,6 +10,7 @@
 
 #include <string>
 #include "Angle.hpp"
+#include "IMathUtils.hpp"
 
 class Color {
 private:
@@ -79,6 +80,17 @@ public:
                                 const Color& middle,
                                 const Color& to,
                                 float d);
+  
+  static Color interpolateColor(const Color& from,
+                                const Color& to,
+                                float d){
+    const IMathUtils* mu = IMathUtils::instance();
+    return Color::fromRGBA(mu->linearInterpolation(from._red, to._red, d),
+                           mu->linearInterpolation(from._green, to._green, d),
+                           mu->linearInterpolation(from._blue, to._blue, d),
+                           mu->linearInterpolation(from._alpha, to._alpha, d));
+                           
+  }
 
   static Color transparent() {
     return Color::fromRGBA(0, 0, 0, 0);

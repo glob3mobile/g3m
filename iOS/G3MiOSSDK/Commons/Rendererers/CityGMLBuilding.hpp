@@ -15,8 +15,13 @@
 #include <string>
 #include <vector>
 
+#include "CityGMLBuildingColorProvider.hpp"
 
 class CityGMLBuilding {
+  
+  Mesh* _containerMesh;
+  short _firstVertexIndexWithinContainerMesh;
+  short _lastVertexIndexWithinContainerMesh;
   
 public:
   
@@ -160,84 +165,11 @@ public:
   }
   
   
-  static Mesh* createSingleIndexedMeshWithColorPerVertexForBuildings(const std::vector<CityGMLBuilding*> buildings,
-                                                                     const Planet& planet,
-                                                                     const bool fixOnGround,
-                                                                     const bool includeGround) {
-    
-    CompositeMesh* cm = NULL;
-    int buildingCounter = 0;
-    int meshesCounter = 0;
-    
-    
-    FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-    FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-    ShortBufferBuilder* indexes = new ShortBufferBuilder();
-    FloatBufferBuilderFromColor* colors = new FloatBufferBuilderFromColor();
-    
-    const Color colorWheel = Color::red();
-    
-    short firstIndex = 0;
-    for (int i = 0; i < buildings.size(); i++) {
-      CityGMLBuilding* b = buildings[i];
-      
-      const double baseHeight = fixOnGround ? b->getBaseHeight() : 0;
-      firstIndex = b->addTrianglesCuttingEarsForAllWalls(*fbb, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
-                                                         colorWheel.wheelStep((int)buildings.size(), buildingCounter),
-                                                         includeGround);
-      
-      buildingCounter++;
-      
-      if (firstIndex > 30000) { //Max number of vertex per mesh (CHECK SHORT RANGE)
-        if (cm == NULL) {
-          cm = new CompositeMesh();
-        }
-        
-        //Adding new mesh
-        IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(), fbb->getCenter(), fbb->create(), true, indexes->create(),
-                                          true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
-        
-        cm->addMesh(im);
-        meshesCounter++;
-        
-        //Reset
-        
-        delete fbb;
-        delete normals;
-#ifdef C_CODE
-        delete indexes;
-#endif
-        delete colors;
-        fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-        normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-        indexes = new ShortBufferBuilder();
-        colors = new FloatBufferBuilderFromColor();
-        firstIndex = 0;
-      }
-    }
-    
-    //Adding last mesh
-    IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(), fbb->getCenter(), fbb->create(), true, indexes->create(),
-                                      true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
-    
-    delete fbb;
-    delete normals;
-#ifdef C_CODE
-    delete indexes;
-#endif
-    delete colors;
-    
-    if (cm == NULL){
-      ILogger::instance()->logInfo("One single mesh created for %d buildings", buildingCounter);
-      return im;
-    }
-    
-    cm->addMesh(im);
-    meshesCounter++;
-    
-    ILogger::instance()->logInfo("%d meshes created for %d buildings", meshesCounter, buildingCounter);
-    return cm;
-  }
+  static Mesh* createMesh(const std::vector<CityGMLBuilding*> buildings,
+                          const Planet& planet,
+                          const bool fixOnGround,
+                          const bool includeGround,
+                          CityGMLBuildingColorProvider* colorProvider);
   
   Geodetic3D getMin() {
     double minLat = IMathUtils::instance()->maxDouble();
@@ -352,43 +284,71 @@ public:
             if (s1->isEquivalentTo(*s2)){
 #endif
 #ifdef JAVA_CODE
-            if (s1.isEquivalentTo(s2)){
+              if (s1.isEquivalentTo(s2)){
 #endif
-              s1->setIsVisible(false);
-              s2->setIsVisible(false);
-              nInvisibleWalls++;
-              //ILogger::instance()->logInfo("Two building surfaces are equivalent, so we mark them as invisible.");
+                s1->setIsVisible(false);
+                s2->setIsVisible(false);
+                nInvisibleWalls++;
+                //ILogger::instance()->logInfo("Two building surfaces are equivalent, so we mark them as invisible.");
+              }
             }
           }
         }
       }
+      return nInvisibleWalls;
     }
-    return nInvisibleWalls;
-  }
-  
-//  static int checkWallsVisibilityBetweenConsecutiveBuildings(const std::vector<CityGMLBuilding*> buildings){
-//    int nInvisibleWalls = 0;
-//    for (int i = 0; i < buildings.size() - 1; i++){
-//      CityGMLBuilding* b1 = buildings[i];
-//      CityGMLBuilding* b2 = buildings[i+1];
-//      nInvisibleWalls += checkWallsVisibility(b1, b2);
-//    }
-//    return nInvisibleWalls;
-//  }
-  
-  static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings){
-    int nInvisibleWalls = 0;
-    for (int i = 0; i < buildings.size() - 1; i++){
-      CityGMLBuilding* b1 = buildings[i];
-      
-      for (int j = i+1; j < i+30 && j < buildings.size() - 1; j++){
-        CityGMLBuilding* b2 = buildings[j];
-        nInvisibleWalls += checkWallsVisibility(b1, b2);
+    
+    static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings){
+      int nInvisibleWalls = 0;
+      for (int i = 0; i < buildings.size() - 1; i++){
+        CityGMLBuilding* b1 = buildings[i];
+        
+        for (int j = i+1; j < i+30 && j < buildings.size() - 1; j++){
+          CityGMLBuilding* b2 = buildings[j];
+          nInvisibleWalls += checkWallsVisibility(b1, b2);
+        }
+        
       }
-      
+      return nInvisibleWalls;
     }
-    return nInvisibleWalls;
-  }
-};
-
+    
+    void setContainerMesh(Mesh* containerMesh,
+                          short firstVertexIndexWithinContainerMesh,
+                          short lastVertexIndexWithinContainerMesh){
+      _containerMesh = containerMesh;
+      _firstVertexIndexWithinContainerMesh = firstVertexIndexWithinContainerMesh;
+      _lastVertexIndexWithinContainerMesh = lastVertexIndexWithinContainerMesh;
+    }
+    
+    int getNumberOfVertex(){
+      int n = 0;
+      for (size_t i = 0; i < _surfaces.size(); i++) {
+        n += (int)_surfaces[i]->_geodeticCoordinates.size();
+      }
+      return n;
+    }
+    
+    void changeColorOfBuildingInBoundedMesh(const CityGMLBuildingColorProvider& cp){
+      Color color = cp.getColor(this);
+      if (_containerMesh != NULL){
+        //TODO
+        IFloatBuffer* colors = ((AbstractMesh*)_containerMesh)->getColorsFloatBuffer();
+        
+        const int initPos = _firstVertexIndexWithinContainerMesh * 4;
+        const int finalPos = _lastVertexIndexWithinContainerMesh * 4;
+        
+        for (int i = initPos; i < finalPos;) {
+          colors->put(i++, color._red);
+          colors->put(i++, color._green);
+          colors->put(i++, color._blue);
+          colors->put(i++, color._alpha);
+        }
+        
+        
+      }
+    }
+  };
+  
+  
+  
 #endif /* CityGMLBuilding_hpp */

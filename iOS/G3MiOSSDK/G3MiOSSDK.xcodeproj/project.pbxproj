@@ -500,6 +500,10 @@
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D85024281CB6431500519C60 /* ColorLegend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85024261CB6431500519C60 /* ColorLegend.cpp */; };
+		D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85024271CB6431500519C60 /* ColorLegend.hpp */; };
+		D850242C1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */; };
+		D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
@@ -791,6 +795,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */,
+				D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */,
 				D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */,
 				D8B3C69C1CAC0DF500A21D04 /* CityGMLBuilding.hpp in CopyFiles */,
 				D8B3C69A1CAC0DEE00A21D04 /* CityGMLParser.hpp in CopyFiles */,
@@ -1856,6 +1862,10 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D85024261CB6431500519C60 /* ColorLegend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorLegend.cpp; path = Commons/Basic/ColorLegend.cpp; sourceTree = "<group>"; };
+		D85024271CB6431500519C60 /* ColorLegend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorLegend.hpp; path = Commons/Basic/ColorLegend.hpp; sourceTree = "<group>"; };
+		D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLBuildingColorProvider.cpp; path = Commons/Rendererers/CityGMLBuildingColorProvider.cpp; sourceTree = "<group>"; };
+		D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CityGMLBuildingColorProvider.hpp; path = Commons/Rendererers/CityGMLBuildingColorProvider.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2354,6 +2364,8 @@
 				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
 				CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */,
 				CF36233F1B97AFA400824932 /* CircleImageBuilder.hpp */,
+				D85024261CB6431500519C60 /* ColorLegend.cpp */,
+				D85024271CB6431500519C60 /* ColorLegend.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2671,6 +2683,8 @@
 				D8D781F31CA415EB0025E988 /* CityGMLBuildingSurface.hpp */,
 				D8D781F71CA425690025E988 /* CityGMLBuilding.cpp */,
 				D8D781F81CA425690025E988 /* CityGMLBuilding.hpp */,
+				D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */,
+				D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3145,6 +3159,7 @@
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
 				44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */,
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
+				D85024281CB6431500519C60 /* ColorLegend.cpp in Sources */,
 				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
 				CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */,
 				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
@@ -3190,6 +3205,7 @@
 				CCC2A02E15CA6C7D00923850 /* BusyMeshRenderer.cpp in Sources */,
 				CCC2A03015CA6C7D00923850 /* CompositeRenderer.cpp in Sources */,
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
+				D850242C1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
 				FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */,

@@ -27,7 +27,9 @@ public:
                                           IDownloader* downloader,
                                           const Planet* planet,
                                           MeshRenderer* meshRenderer,
-                                          MarksRenderer* marksRenderer);
+                                          MarksRenderer* marksRenderer,
+                                          CityGMLBuildingColorProvider* colorProvider,
+                                          std::vector<CityGMLBuilding*>* buildings);
   
 };
 
