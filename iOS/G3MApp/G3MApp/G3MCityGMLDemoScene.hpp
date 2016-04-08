@@ -44,11 +44,16 @@ public:
     _options.push_back("Random Colors");
     _options.push_back("Heat Demand");
     _options.push_back("Volume");
+    _options.push_back("QCL");
+    _options.push_back("SOM Cluster");
+    _options.push_back("Field 2");
   }
   
   void deactivate(const G3MContext* context);
   
-  
+  ~G3MCityGMLDemoScene(){
+    _colorProvider->_release();
+  }
   
   
 };

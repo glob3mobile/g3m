@@ -40,6 +40,9 @@ class GeoJSONDataBuildingColorPicker: public CityGMLBuildingColorProvider{
   public:
     double _heatDem;
     double _volume;
+    double _qcl;
+    double _som;
+    double _field2;
   };
   
   std::map<std::string, BuildingProperties> _heatDemand;
@@ -61,7 +64,10 @@ public:
   
   enum BUILDING_PROPERTY{
     HEAT_DEMAND,
-    VOLUME
+    VOLUME,
+    QCL,
+    SOM,
+    FIELD2
   };
   
   BUILDING_PROPERTY _activeProperty;

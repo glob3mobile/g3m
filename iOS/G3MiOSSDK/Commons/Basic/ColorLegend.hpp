@@ -39,6 +39,9 @@ public:
     
     for (int i = 0; i < _legend.size(); i++) {
       ColorAndValue* cv = _legend[i];
+      if (cv->_value == value){
+        return cv->_color;
+      }
       if (cv->_value <= value &&
           (inf == NULL || (cv->_value > inf->_value))){
         inf = cv;

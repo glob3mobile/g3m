@@ -43,8 +43,20 @@ _legend(colorLegend), _activeProperty(prop){
     bp._heatDem = IStringUtils::instance()->parseDouble(heatDem._string);
     
     StringAndPos vol = extractSubStringBetween(data, "\"Bui_Volu_1\": ", ",", pos);
-    pos = heatDem._endingPos+1;
+    pos = vol._endingPos+1;
     bp._volume = IStringUtils::instance()->parseDouble(vol._string);
+    
+    StringAndPos qcl = extractSubStringBetween(data, "\"QCL_1\": ", ",", pos);
+    pos = qcl._endingPos+1;
+    bp._qcl = IStringUtils::instance()->parseDouble(qcl._string);
+    
+    StringAndPos som = extractSubStringBetween(data, "\"SOMcluster\": ", ",", pos);
+    pos = som._endingPos+1;
+    bp._som = IStringUtils::instance()->parseDouble(som._string);
+    
+    StringAndPos field2 = extractSubStringBetween(data, "\"Field2_12\": ", ",", pos);
+    pos = field2._endingPos+1;
+    bp._field2 = IStringUtils::instance()->parseDouble(field2._string);
     
     _heatDemand.insert(std::pair<std::string, BuildingProperties>(name._string, bp));
   }
@@ -62,6 +74,16 @@ Color GeoJSONDataBuildingColorPicker::getColor(CityGMLBuilding* building) const{
         break;
       case VOLUME:
         value = _heatDemand.at(name)._volume;
+        break;
+      case SOM:
+        value = _heatDemand.at(name)._som;
+        break;
+      case QCL:
+        value = _heatDemand.at(name)._qcl;
+        break;
+      case FIELD2:
+        value = _heatDemand.at(name)._field2;
+        break;
       default:
         break;
     }

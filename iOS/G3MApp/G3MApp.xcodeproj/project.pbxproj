@@ -72,6 +72,7 @@
 		CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-mark.png */; };
 		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
 		D85024241CB50F7500519C60 /* Innenstadt_west_all_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */; };
+		D850242F1CB7AF9600519C60 /* karlsruhe_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D850242E1CB7AF9500519C60 /* karlsruhe_data.geojson */; };
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
@@ -246,6 +247,7 @@
 		CFF9D20B1A7C5048005429A6 /* g3m-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-mark.png"; sourceTree = "<group>"; };
 		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
 		D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Innenstadt_west_all_data.geojson; sourceTree = "<group>"; };
+		D850242E1CB7AF9500519C60 /* karlsruhe_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = karlsruhe_data.geojson; sourceTree = "<group>"; };
 		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
@@ -543,6 +545,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D850242E1CB7AF9500519C60 /* karlsruhe_data.geojson */,
 				D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */,
 				D8A6EA0D1CAE6E630085AA94 /* knielingen_4326_lod2_PART_3.gml */,
 				D8A6EA091CAE6CA80085AA94 /* knielingen_4326_lod2_PART_1.gml */,
@@ -715,6 +718,7 @@
 				CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */,
 				D85024241CB50F7500519C60 /* Innenstadt_west_all_data.geojson in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
+				D850242F1CB7AF9600519C60 /* karlsruhe_data.geojson in Resources */,
 				D8A6EA081CAE6B170085AA94 /* knielingen_4326_lod2.gml in Resources */,
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
 				D8A6EA0E1CAE6E630085AA94 /* knielingen_4326_lod2_PART_3.gml in Resources */,
