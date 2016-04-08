@@ -47,10 +47,10 @@ public class Camera
   public final void copyFrom(Camera that)
   {
   
-    if (_timestamp == that._timestamp)
+    /*if (_timestamp == that._timestamp)
     {
       return;
-    }
+    }*/  // aeroglass fix
   
     that.forceMatrixCreation();
   
@@ -78,7 +78,7 @@ public class Camera
   
     _geodeticCenterOfView = that._geodeticCenterOfView;
   
-    _frustum = that._frustum;
+    _frustum = new Frustum(that._frustum);
   
     _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
