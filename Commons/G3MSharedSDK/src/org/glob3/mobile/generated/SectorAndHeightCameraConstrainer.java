@@ -48,7 +48,7 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   
     if (invalidHeight || invalidPosition)
     {
-      nextCamera.copyFrom(previousCamera);
+      nextCamera.copyFrom(previousCamera, true);
     }
   
     return true;
