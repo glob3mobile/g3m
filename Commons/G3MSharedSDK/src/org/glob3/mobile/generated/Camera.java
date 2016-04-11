@@ -91,11 +91,14 @@ public class Camera
 
   public final void resizeViewport(int width, int height)
   {
+    if ((width != _viewPortWidth) || (height != _viewPortHeight))
+    {
     _timestamp++;
     _viewPortWidth = width;
     _viewPortHeight = height;
   
     _dirtyFlags.setAllDirty();
+    }
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
