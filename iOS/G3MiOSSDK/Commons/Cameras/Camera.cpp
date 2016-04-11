@@ -130,11 +130,14 @@ _timestamp(timestamp)
 }
 
 void Camera::resizeViewport(int width, int height) {
+  if ((width != _viewPortWidth) ||
+      (height != _viewPortHeight)) {
   _timestamp++;
   _viewPortWidth  = width;
   _viewPortHeight = height;
 
   _dirtyFlags.setAllDirty();
+  }
 }
 
 void Camera::print() {
