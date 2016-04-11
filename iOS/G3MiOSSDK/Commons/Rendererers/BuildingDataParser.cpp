@@ -8,6 +8,9 @@
 
 #include "BuildingDataParser.hpp"
 
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromGeodetic.hpp"
+
 void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
                                                   const std::vector<CityGMLBuilding*>& buildings){
   
@@ -58,5 +61,45 @@ void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
       
     }
   }
+}
+
+Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Planet* planet){
+  
+  //{ "type": "Feature", "properties": { "OBJECTID": 1, "SOURCE_ID": 1, "Value": 72, "GiZScore": -1.341899, "GiPValue": 0.179629, "Gi_Bin": 0 }, "geometry": { "type": "Point", "coordinates": [ 8.406533595313695, 49.025119962101599 ] } },
+  
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  int pointCounter = 0;
+  size_t pos = 0;
+  size_t dataL = data.length();
+  while (pos < dataL){
+    StringAndPos point = extractSubStringBetween(data, "\"coordinates\": [", " ] ", pos);
+    if (point._endingPos == std::string::npos){
+      break;
+    }
+    pos = point._endingPos +1 ;
+    
+    std::vector<double> vd = IStringUtils::instance()->parseDoubles(point._string, ", ");
+    
+    Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
+    
+    vertices->add(g);
+    
+    if (pointCounter++ % 100 == 0){
+      ILogger::instance()->logInfo("%d points parsed", pointCounter);
+    }
+  }
+  
+  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
+                                  true,
+                                  vertices->getCenter(),
+                                  vertices->create(),
+                                  1.0,
+                                  2.0,
+                                  new Color(Color::red()),
+                                  NULL);
+  
+  delete vertices;
+  
+  return dm;
 }
 

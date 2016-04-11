@@ -97,6 +97,47 @@ public:
   
 };
 
+
+class PointCloudBDL : public IBufferDownloadListener {
+private:
+  G3MCityGMLDemoScene* _demo;
+public:
+  PointCloudBDL(G3MCityGMLDemoScene* demo) :
+  _demo(demo)
+  {
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    
+    std::string s = buffer->getAsString();
+    delete buffer;
+    
+    
+    Mesh* m = BuildingDataParser::createPointCloudMesh(s, _demo->getModel()->getG3MWidget()->getG3MContext()->getPlanet());
+    
+    _demo->getModel()->getMeshRenderer()->addMesh(m);
+    
+  }
+  
+  void onError(const URL& url) {
+    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+  }
+  
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+  
+};
+
+
 void G3MCityGMLDemoScene::colorBuildings(CityGMLBuildingColorProvider* cp){
   
   for (size_t i = 0; i < _buildings.size(); i++) {
@@ -126,6 +167,11 @@ public:
     _demo->getModel()->getG3MWidget()->getG3MContext()
     ->getDownloader()->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
                                      new ColouringCityGMLDemoSceneBDL(_demo, _demo->_buildings),
+                                     true);
+    
+    _demo->getModel()->getG3MWidget()->getG3MContext()
+    ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
+                                     new PointCloudBDL(_demo),
                                      true);
     
   }
