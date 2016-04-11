@@ -29,30 +29,23 @@ private:
   MeshRenderer* _meshRenderer;
   MarksRenderer* _marksRenderer;
   
-  CityGMLBuildingColorProvider* _colorProvider;
-  
-  std::vector<CityGMLBuilding*>* _buildings;
+  CityGMLListener* _listener;
+  bool _deleteListener;
 public:
   G3MCityGMLDemoScene_BufferDownloadListener(const Planet* planet,
                                              MeshRenderer* meshRenderer,
                                              MarksRenderer* marksRenderer,
-                                             CityGMLBuildingColorProvider* colorProvider,
-                                             std::vector<CityGMLBuilding*>* buildings) :
+                                             CityGMLListener* listener,
+                                             bool deleteListener) :
   _planet(planet),
   _meshRenderer(meshRenderer),
   _marksRenderer(marksRenderer),
-  _colorProvider(colorProvider),
-  _buildings(buildings)
+  _listener(listener),
+  _deleteListener(deleteListener)
   {
-    if (_colorProvider != NULL){
-      _colorProvider->_retain();
-    }
   }
   
   ~G3MCityGMLDemoScene_BufferDownloadListener(){
-    if (_colorProvider != NULL){
-      _colorProvider->_release();
-    }
   }
   
   void onDownload(const URL& url,
@@ -76,20 +69,15 @@ public:
     ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
     
     //Creating mesh model
-    Mesh* mesh = CityGMLBuilding::createMesh(buildings, *_planet, false, false, _colorProvider);
+    Mesh* mesh = CityGMLBuilding::createMesh(buildings, *_planet, false, false, NULL);
     
     _meshRenderer->addMesh(mesh);
     
     delete xml;
     
-    if (_buildings == NULL){
-    for (size_t i = 0; i < buildings.size(); i++) {
-      delete buildings[i];
-    }
-    } else{
-      for (size_t i = 0; i < buildings.size(); i++) {
-        _buildings->push_back( buildings[i] );
-      }
+    _listener->onBuildingsCreated(buildings);
+    if (_deleteListener){
+      delete _listener;
     }
   }
   
@@ -114,13 +102,17 @@ void CityGMLParser::addLOD2MeshAndMarksFromFile(const std::string& url,
                                                 const Planet* planet,
                                                 MeshRenderer* meshRenderer,
                                                 MarksRenderer* marksRenderer,
-                                                CityGMLBuildingColorProvider* colorProvider,
-                                                std::vector<CityGMLBuilding*>* buildings){
+                                                CityGMLListener* listener,
+                                                bool deleteListener){
   downloader->requestBuffer(URL(url),
                             DownloadPriority::HIGHEST,
                             TimeInterval::fromHours(1),
                             true,
-                            new G3MCityGMLDemoScene_BufferDownloadListener(planet, meshRenderer, marksRenderer, colorProvider, buildings),
+                            new G3MCityGMLDemoScene_BufferDownloadListener(planet,
+                                                                           meshRenderer,
+                                                                           marksRenderer,
+                                                                           listener,
+                                                                           deleteListener),
                             true);
 }
 

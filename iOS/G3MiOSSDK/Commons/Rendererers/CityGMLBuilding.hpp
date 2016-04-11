@@ -17,11 +17,26 @@
 
 #include "CityGMLBuildingColorProvider.hpp"
 
+class CityGMLBuildingProperty{
+public:
+  const std::string _name;
+  CityGMLBuildingProperty(const std::string& name):_name(name){}
+};
+
+class CityGMLBuildingNumericProperty: public CityGMLBuildingProperty{
+public:
+  const double _value;
+  CityGMLBuildingNumericProperty(const std::string& name, double value):
+  CityGMLBuildingProperty(name), _value(value){}
+};
+
 class CityGMLBuilding {
   
   Mesh* _containerMesh;
   short _firstVertexIndexWithinContainerMesh;
   short _lastVertexIndexWithinContainerMesh;
+  
+  std::vector<CityGMLBuildingNumericProperty*> _numericProperties;
   
 public:
   
@@ -55,6 +70,24 @@ public:
 #endif
       delete s;
     }
+    
+    for (int i = 0; i < _numericProperties.size(); i++){
+      delete _numericProperties[i];
+    }
+  }
+  
+  void addNumericProperty(CityGMLBuildingNumericProperty* value){
+    _numericProperties.push_back(value);
+  }
+  
+  double getNumericProperty(std::string name){
+    
+    for (int i = 0; i < _numericProperties.size(); i++){
+      if (_numericProperties[i]->_name == name){
+        return _numericProperties[i]->_value;
+      }
+    }
+    return NAND;
   }
   
   
@@ -328,8 +361,7 @@ public:
       return n;
     }
     
-    void changeColorOfBuildingInBoundedMesh(const CityGMLBuildingColorProvider& cp){
-      Color color = cp.getColor(this);
+    void changeColorOfBuildingInBoundedMesh(const Color& color){
       if (_containerMesh != NULL){
         //TODO
         IFloatBuffer* colors = ((AbstractMesh*)_containerMesh)->getColorsFloatBuffer();
@@ -343,8 +375,6 @@ public:
           colors->put(i++, color._blue);
           colors->put(i++, color._alpha);
         }
-        
-        
       }
     }
   };

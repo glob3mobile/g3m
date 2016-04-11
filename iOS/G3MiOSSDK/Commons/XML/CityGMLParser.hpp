@@ -18,6 +18,13 @@
 class MarksRenderer;
 class MeshRenderer;
 
+class CityGMLListener{
+public:
+  virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings) = 0;
+  
+  virtual void onError() = 0;
+};
+
 class CityGMLParser{
   
 public:
@@ -28,8 +35,8 @@ public:
                                           const Planet* planet,
                                           MeshRenderer* meshRenderer,
                                           MarksRenderer* marksRenderer,
-                                          CityGMLBuildingColorProvider* colorProvider,
-                                          std::vector<CityGMLBuilding*>* buildings);
+                                          CityGMLListener* listener,
+                                          bool deleteListener);
   
 };
 

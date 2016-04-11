@@ -19,9 +19,8 @@ class G3MCityGMLDemoScene : public G3MDemoScene {
 private:
   long long _requestId;
   
-  std::vector<CityGMLBuilding*>* _buildings;
   
-  void colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY prop);
+  void colorBuildings(CityGMLBuildingColorProvider* cp);
   
   
   
@@ -34,7 +33,10 @@ protected:
 public:
   
   
-  GeoJSONDataBuildingColorPicker* _colorProvider;
+  std::vector<CityGMLBuilding*> _buildings;
+  
+  
+//  GeoJSONDataBuildingColorPicker* _colorProvider;
   
   G3MCityGMLDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "CityGML", "", -1),
@@ -52,7 +54,6 @@ public:
   void deactivate(const G3MContext* context);
   
   ~G3MCityGMLDemoScene(){
-    _colorProvider->_release();
   }
   
   

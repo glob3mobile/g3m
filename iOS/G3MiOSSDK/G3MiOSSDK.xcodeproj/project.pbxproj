@@ -500,6 +500,8 @@
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D84D95201CBB9CB3003BB11B /* BuildingDataParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */; };
+		D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */; };
 		D85024281CB6431500519C60 /* ColorLegend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85024261CB6431500519C60 /* ColorLegend.cpp */; };
 		D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85024271CB6431500519C60 /* ColorLegend.hpp */; };
 		D850242C1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */; };
@@ -795,6 +797,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */,
 				D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */,
 				D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */,
 				D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */,
@@ -1862,6 +1865,8 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuildingDataParser.cpp; path = Commons/Rendererers/BuildingDataParser.cpp; sourceTree = "<group>"; };
+		D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BuildingDataParser.hpp; path = Commons/Rendererers/BuildingDataParser.hpp; sourceTree = "<group>"; };
 		D85024261CB6431500519C60 /* ColorLegend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorLegend.cpp; path = Commons/Basic/ColorLegend.cpp; sourceTree = "<group>"; };
 		D85024271CB6431500519C60 /* ColorLegend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorLegend.hpp; path = Commons/Basic/ColorLegend.hpp; sourceTree = "<group>"; };
 		D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLBuildingColorProvider.cpp; path = Commons/Rendererers/CityGMLBuildingColorProvider.cpp; sourceTree = "<group>"; };
@@ -2685,6 +2690,8 @@
 				D8D781F81CA425690025E988 /* CityGMLBuilding.hpp */,
 				D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */,
 				D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */,
+				D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */,
+				D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3483,6 +3490,7 @@
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
+				D84D95201CBB9CB3003BB11B /* BuildingDataParser.cpp in Sources */,
 				D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */,
 				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,

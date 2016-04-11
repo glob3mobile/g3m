@@ -28,6 +28,7 @@
 
 #include <G3MiOSSDK/TerrainTouchListener.hpp>
 #include <G3MiOSSDK/ColorLegend.hpp>
+#include <G3MiOSSDK/BuildingDataParser.hpp>
 
 class MyTerrainTL: public TerrainTouchListener {
   
@@ -63,9 +64,11 @@ public:
 class ColouringCityGMLDemoSceneBDL : public IBufferDownloadListener {
 private:
   G3MCityGMLDemoScene* _demo;
+  std::vector<CityGMLBuilding*> _buildings;
 public:
-  ColouringCityGMLDemoSceneBDL(G3MCityGMLDemoScene* demo) :
-  _demo(demo)
+  ColouringCityGMLDemoSceneBDL(G3MCityGMLDemoScene* demo, std::vector<CityGMLBuilding*> buildings) :
+  _demo(demo),
+  _buildings(buildings)
   {
   }
   
@@ -75,20 +78,7 @@ public:
     
     std::string s = buffer->getAsString();
     delete buffer;
-    
-    std::vector<ColorLegend::ColorAndValue*> legend;
-    legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), 6336.0));
-    legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
-    //    double gap = 1012376.75;
-    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(254,240,217,255), 6336.0 + gap * 0));
-    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(253,212,158,255), 6336.0 + gap * 1));
-    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(253,187,132,255), 6336.0 + gap * 2));
-    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89,255), 6336.0 + gap * 3));
-    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(179,0,0,255), 6336.0 + gap * 4));
-    ColorLegend* cl = new ColorLegend(legend);
-    
-    
-    _demo->_colorProvider = new GeoJSONDataBuildingColorPicker(s, cl, GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::HEAT_DEMAND);
+    BuildingDataParser::includeDataInBuildingSet(s, _buildings);
   }
   
   void onError(const URL& url) {
@@ -107,13 +97,43 @@ public:
   
 };
 
-void G3MCityGMLDemoScene::colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY prop){
-  _colorProvider->_activeProperty = prop;
-  for (size_t i = 0; i < _buildings->size(); i++) {
-    _buildings->at(i)->changeColorOfBuildingInBoundedMesh(*_colorProvider);
+void G3MCityGMLDemoScene::colorBuildings(CityGMLBuildingColorProvider* cp){
+  
+  for (size_t i = 0; i < _buildings.size(); i++) {
+    CityGMLBuilding* b = _buildings.at(i);
+    Color c = cp->getColor(b);
+    b->changeColorOfBuildingInBoundedMesh(c);
   }
   
 }
+
+class MyCityGMLListener: public CityGMLListener{
+  
+private:
+  G3MCityGMLDemoScene* _demo;
+public:
+  
+  MyCityGMLListener(G3MCityGMLDemoScene* demo):_demo(demo){
+    
+  }
+  
+  virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings){
+    
+    for (int i = 0; i < buildings.size(); i++) {
+      _demo->_buildings.push_back(buildings[i]);
+    }
+    
+    _demo->getModel()->getG3MWidget()->getG3MContext()
+    ->getDownloader()->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
+                                     new ColouringCityGMLDemoSceneBDL(_demo, _demo->_buildings),
+                                     true);
+    
+  }
+  
+  virtual void onError(){
+    
+  }
+};
 
 
 void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
@@ -131,11 +151,11 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   
   std::vector<std::string> cityGMLFiles;
   cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-//  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+  //  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  //  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+  //  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
   //      cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
   //      cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
   //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
@@ -144,16 +164,14 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   
   getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget()));
   
-  downloader->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
-                            new ColouringCityGMLDemoSceneBDL(this),
-                            true);
-  
-  
-  _buildings = new std::vector<CityGMLBuilding*>();
+  //  downloader->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
+  //                            new ColouringCityGMLDemoSceneBDL(this),
+  //                            true);
   
   for (size_t i = 0; i < cityGMLFiles.size(); i++) {
     
-    CityGMLParser::addLOD2MeshAndMarksFromFile(cityGMLFiles[i], downloader, context->getPlanet(), getModel()->getMeshRenderer(), getModel()->getMarksRenderer(), NULL, _buildings);
+    CityGMLParser::addLOD2MeshAndMarksFromFile(cityGMLFiles[i], downloader, context->getPlanet(), getModel()->getMeshRenderer(), getModel()->getMarksRenderer(),
+                                               new MyCityGMLListener(this), true);
   }
   
   
@@ -175,16 +193,10 @@ void G3MCityGMLDemoScene::deactivate(const G3MContext* context) {
 void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
                                           int optionIndex) {
   
-  
-  //  IDownloader* downloader = getModel()->getG3MWidget()->getG3MContext()->getDownloader();
   if (option == "Random Colors"){
     RandomBuildingColorPicker* rcp = new RandomBuildingColorPicker();
-    
-    for (size_t i = 0; i < _buildings->size(); i++) {
-      _buildings->at(i)->changeColorOfBuildingInBoundedMesh(*rcp);
-    }
-    
-    rcp->_release();
+    colorBuildings(rcp);
+    delete rcp;
   }
   
   
@@ -194,14 +206,9 @@ void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
     legend.push_back(new ColorLegend::ColorAndValue(Color::green(), 6336.0));
     legend.push_back(new ColorLegend::ColorAndValue(Color::white(), 70000.0));
     ColorLegend* cl = new ColorLegend(legend);
-    _colorProvider->setLegend(cl);
-    
-    //    downloader->requestBuffer(URL("file:///Innenstadt_west_all_data.geojson"), 1000, TimeInterval::forever(), true,
-    //                              new ColouringCityGMLDemoSceneBDL(_buildings,
-    //                                                               GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::HEAT_DEMAND),
-    //                              true);
-    
-    colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::HEAT_DEMAND);
+    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
+    colorBuildings(colorProvider);
+    delete colorProvider;
     
   }
   
@@ -215,12 +222,12 @@ void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
     legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(153,213,148, 255), 62472.0));
     legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(50,136,189, 255), 122553.0));
     ColorLegend* cl = new ColorLegend(legend);
-    _colorProvider->setLegend(cl);
     
-    colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::VOLUME);
-    
+    BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider("Bui_Volu_1", cl);
+    colorBuildings(colorProvider);
+    delete colorProvider;
   }
-
+  
   if (option == "QCL"){
     
     int nClasses = 18;
@@ -253,8 +260,9 @@ void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
     }
     
     ColorLegend* cl = new ColorLegend(legend);
-    _colorProvider->setLegend(cl);
-    colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::QCL);
+    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("QCL_1", cl);
+    colorBuildings(colorProvider);
+    delete colorProvider;
     
   }
   
@@ -288,9 +296,9 @@ void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
     }
     
     ColorLegend* cl = new ColorLegend(legend);
-    _colorProvider->setLegend(cl);
-    
-    colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::SOM);
+    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("SOMcluster", cl);
+    colorBuildings(colorProvider);
+    delete colorProvider;
     
   }
   
@@ -301,9 +309,9 @@ void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
     legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 0.05));
     
     ColorLegend* cl = new ColorLegend(legend);
-    _colorProvider->setLegend(cl);
-    
-    colorBuildings(GeoJSONDataBuildingColorPicker::BUILDING_PROPERTY::FIELD2);
+    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Field2_12", cl);
+    colorBuildings(colorProvider);
+    delete colorProvider;
     
   }
   
