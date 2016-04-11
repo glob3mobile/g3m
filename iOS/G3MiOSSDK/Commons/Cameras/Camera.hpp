@@ -114,7 +114,8 @@ public:
     delete _geodeticPosition;
   }
 
-  void copyFrom(const Camera &c);
+  void copyFrom(const Camera &c,
+                bool  ignoreTimestamp);
 
   void resizeViewport(int width, int height);
 
