@@ -34,6 +34,9 @@
 #include <G3MiOSSDK/CameraDoubleDragHandler.hpp>
 #include <G3MiOSSDK/CameraRotationHandler.hpp>
 #include <G3MiOSSDK/CameraDoubleTapHandler.hpp>
+#include <G3MiOSSDK/PeriodicalTask.hpp>
+
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 
 class MyTerrainTL: public TerrainTouchListener {
   
@@ -119,6 +122,61 @@ public:
   
 };
 
+class PointCloudChangeColorTask: public GTask{
+  
+  AbstractMesh* _abstractMesh;
+  
+  float _delta;
+  
+  float* _initialColors;
+public:
+  
+  PointCloudChangeColorTask(AbstractMesh* abstractMesh): _abstractMesh(abstractMesh), _delta(0.0){
+    
+    IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
+    _initialColors = new float[colors->size()];
+    
+    for (int i = 0; i < colors->size(); i++) {
+      _initialColors[i] = colors->get(i);
+    }
+    
+    
+  }
+  
+  void run(const G3MContext* context){
+    
+    IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
+    const IMathUtils* mu = IMathUtils::instance();
+    
+    double factor = (1.0f + mu->sin(_delta)) / 2.0;
+    _delta += 0.1;
+    
+    
+    for (int i = 0; i < colors->size(); i+=4) {
+      float r = _initialColors[i];
+      float g = _initialColors[i+1];
+      float b = _initialColors[i+2];
+      float a = _initialColors[i+3];
+      
+      r *= factor;
+      r = mu->clamp(r, 0.0f, 1.0f);
+      
+      g *= factor;
+      g = mu->clamp(g, 0.0f, 1.0f);
+      
+      b *= 1.0f / factor;
+      b = mu->clamp(b, 0.0f, 1.0f);
+      
+      colors->put(i, r);
+      colors->put(i+1, g);
+      colors->put(i+2, b);
+      colors->put(i+3, a);
+    }
+    
+  }
+  
+};
+
 
 class PointCloudBDL : public IBufferDownloadListener {
 private:
@@ -140,6 +198,9 @@ public:
     Mesh* m = BuildingDataParser::createPointCloudMesh(s, _demo->getModel()->getG3MWidget()->getG3MContext()->getPlanet());
     
     _demo->getModel()->getMeshRenderer()->addMesh(m);
+    
+    _demo->getModel()->getG3MWidget()->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+                                                                            new PointCloudChangeColorTask((AbstractMesh*)m)));
     
   }
   
@@ -203,6 +264,59 @@ public:
   }
 };
 
+class MyEDListener: public IElevationDataListener{
+  
+  
+private:
+  G3MCityGMLDemoScene* _demo;
+  
+public:
+  
+  MyEDListener(G3MCityGMLDemoScene* demo):_demo(demo){}
+  
+  virtual void onData(const Sector& sector,
+                      const Vector2I& extent,
+                      ElevationData* elevationData){
+    
+    std::vector<std::string> cityGMLFiles;
+    cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
+    //  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+    //  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+    //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+    //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+    //  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+    //      cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+    //      cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+    
+    const G3MContext* context = _demo->getModel()->getG3MWidget()->getG3MContext();
+    IDownloader* downloader = context->getDownloader();
+    
+    for (size_t i = 0; i < cityGMLFiles.size(); i++) {
+      
+      CityGMLParser::addLOD2MeshAndMarksFromFile(cityGMLFiles[i], downloader,
+                                                 context->getPlanet(),
+                                                 _demo->getModel()->getMeshRenderer(),
+                                                 _demo->getModel()->getMarksRenderer(),
+                                                 new MyCityGMLListener(_demo),
+                                                 true);
+    }
+    
+  }
+  
+  virtual void onError(const Sector& sector,
+                       const Vector2I& extent){
+    
+  }
+  
+  virtual void onCancel(const Sector& sector,
+                        const Vector2I& extent){
+    
+  }
+};
+
 
 void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   
@@ -215,20 +329,7 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   getModel()->getLayerSet()->addLayer(layer);
   
   
-  IDownloader* downloader = context->getDownloader();
   
-  std::vector<std::string> cityGMLFiles;
-  cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  //  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  //  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  //  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  //      cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  //      cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-  //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-  //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-  //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   
   getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget()));
   
@@ -236,11 +337,16 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   //                            new ColouringCityGMLDemoSceneBDL(this),
   //                            true);
   
-  for (size_t i = 0; i < cityGMLFiles.size(); i++) {
-    
-    CityGMLParser::addLOD2MeshAndMarksFromFile(cityGMLFiles[i], downloader, context->getPlanet(), getModel()->getMeshRenderer(), getModel()->getMarksRenderer(),
-                                               new MyCityGMLListener(this), true);
-  }
+  Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
+  
+  SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
+                                                                           karlsruheSector,
+                                                                           Vector2I(308, 177));
+  
+  getModel()->getPlanetRenderer()->setElevationDataProvider(edp, true);
+  
+  edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(this), true);
+  
   
   
   

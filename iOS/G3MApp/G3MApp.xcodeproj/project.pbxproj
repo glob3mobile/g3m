@@ -71,6 +71,7 @@
 		CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D2091A7C5014005429A6 /* anchorWidget.png */; };
 		CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-mark.png */; };
 		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
+		D83AD2D71CBCF507007AD423 /* ka_31467.bil in Resources */ = {isa = PBXBuildFile; fileRef = D83AD2D61CBCF507007AD423 /* ka_31467.bil */; };
 		D84D95231CBBF3FF003BB11B /* random_cluster.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D84D95221CBBF3FF003BB11B /* random_cluster.geojson */; };
 		D84D95261CBC037F003BB11B /* random_cluster_fewer_points.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */; };
 		D85024241CB50F7500519C60 /* Innenstadt_west_all_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */; };
@@ -248,6 +249,7 @@
 		CFF9D2091A7C5014005429A6 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
 		CFF9D20B1A7C5048005429A6 /* g3m-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-mark.png"; sourceTree = "<group>"; };
 		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
+		D83AD2D61CBCF507007AD423 /* ka_31467.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = ka_31467.bil; sourceTree = "<group>"; };
 		D84D95221CBBF3FF003BB11B /* random_cluster.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = random_cluster.geojson; sourceTree = "<group>"; };
 		D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = random_cluster_fewer_points.geojson; sourceTree = "<group>"; };
 		D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Innenstadt_west_all_data.geojson; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D83AD2D61CBCF507007AD423 /* ka_31467.bil */,
 				D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */,
 				D84D95221CBBF3FF003BB11B /* random_cluster.geojson */,
 				D850242E1CB7AF9500519C60 /* karlsruhe_data.geojson */,
@@ -707,6 +710,7 @@
 				D87179101AE501B100A9A14F /* pin.png in Resources */,
 				CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
+				D83AD2D71CBCF507007AD423 /* ka_31467.bil in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
 				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
