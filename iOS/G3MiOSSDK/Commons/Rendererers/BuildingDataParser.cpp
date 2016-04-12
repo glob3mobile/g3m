@@ -10,6 +10,9 @@
 
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
+#include "Color.hpp"
+#include "ColorLegend.hpp"
 
 void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
                                                   const std::vector<CityGMLBuilding*>& buildings){
@@ -67,11 +70,26 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
   
   //{ "type": "Feature", "properties": { "OBJECTID": 1, "SOURCE_ID": 1, "Value": 72, "GiZScore": -1.341899, "GiPValue": 0.179629, "Gi_Bin": 0 }, "geometry": { "type": "Point", "coordinates": [ 8.406533595313695, 49.025119962101599 ] } },
   
+  std::vector<ColorLegend::ColorAndValue*> legend;
+  legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), -2.0));
+  legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 2.0));
+  ColorLegend cl(legend);
+  
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-  int pointCounter = 0;
+  FloatBufferBuilderFromColor colors;
+//  int pointCounter = 0;
   size_t pos = 0;
   size_t dataL = data.length();
   while (pos < dataL){
+    
+    StringAndPos value = extractSubStringBetween(data, "\"GiZScore\": ", ",", pos);
+    if (value._endingPos == std::string::npos){
+      break;
+    }
+    pos = value._endingPos +1 ;
+    double v = IStringUtils::instance()->parseDouble(value._string);
+    
+    
     StringAndPos point = extractSubStringBetween(data, "\"coordinates\": [", " ] ", pos);
     if (point._endingPos == std::string::npos){
       break;
@@ -81,12 +99,14 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
     std::vector<double> vd = IStringUtils::instance()->parseDoubles(point._string, ", ");
     
     Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
-    
     vertices->add(g);
     
-    if (pointCounter++ % 100 == 0){
-      ILogger::instance()->logInfo("%d points parsed", pointCounter);
-    }
+    Color color = cl.getColor(v);
+    colors.add(color);
+    
+//    if (pointCounter++ % 100 == 0){
+//      ILogger::instance()->logInfo("%d points parsed", pointCounter);
+//    }
   }
   
   DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
@@ -95,8 +115,8 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
                                   vertices->create(),
                                   1.0,
                                   2.0,
-                                  new Color(Color::red()),
-                                  NULL);
+                                  NULL, //new Color(Color::red()),
+                                  colors.create());
   
   delete vertices;
   

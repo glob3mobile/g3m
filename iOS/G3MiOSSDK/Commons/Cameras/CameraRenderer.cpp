@@ -77,3 +77,10 @@ void CameraRenderer::removeHandler(CameraEventHandler* handler){
   
   ILogger::instance()->logError("Could not remove camera handler.");
 }
+
+void CameraRenderer::clearHandlers() {
+  for (int i = 0; i < _handlers.size(); i++){
+    delete _handlers[i];
+  }
+  _handlers.clear();
+}

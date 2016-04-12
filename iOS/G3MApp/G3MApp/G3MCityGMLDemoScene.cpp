@@ -30,15 +30,27 @@
 #include <G3MiOSSDK/ColorLegend.hpp>
 #include <G3MiOSSDK/BuildingDataParser.hpp>
 
+#include <G3MiOSSDK/CameraSingleDragHandler.hpp>
+#include <G3MiOSSDK/CameraDoubleDragHandler.hpp>
+#include <G3MiOSSDK/CameraRotationHandler.hpp>
+#include <G3MiOSSDK/CameraDoubleTapHandler.hpp>
+
 class MyTerrainTL: public TerrainTouchListener {
   
   G3MWidget* _widget;
   
+  bool _usingVR;
+  
+  class LM: public ILocationModifier{
+    Geodetic3D modify(const Geodetic3D& location){
+      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 12);
+    }
+  };
   
 public:
   
   
-  MyTerrainTL(G3MWidget* widget):_widget(widget){
+  MyTerrainTL(G3MWidget* widget):_widget(widget), _usingVR(false){
     
   }
   
@@ -47,14 +59,24 @@ public:
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile){
-    class LM: public ILocationModifier{
-      Geodetic3D modify(const Geodetic3D& location){
-        return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 12);
-      }
-    };
     
-    DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, new LM());
-    _widget->getCameraRenderer()->addHandler(dac);
+    CameraRenderer* cameraRenderer = _widget->getCameraRenderer();
+    cameraRenderer->clearHandlers();
+    
+    if (_usingVR){
+      const bool useInertia = true;
+      cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+      cameraRenderer->addHandler(new CameraDoubleDragHandler());
+      //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+      cameraRenderer->addHandler(new CameraRotationHandler());
+      cameraRenderer->addHandler(new CameraDoubleTapHandler());
+    } else{
+      
+      DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, new LM());
+      cameraRenderer->addHandler(dac);
+    }
+    
+    _usingVR = !_usingVR;
     
     return true;
   }

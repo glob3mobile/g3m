@@ -120,6 +120,8 @@ public:
   }
   
   void removeHandler(CameraEventHandler* handler);
+  
+  void clearHandlers();
 };
 
 
