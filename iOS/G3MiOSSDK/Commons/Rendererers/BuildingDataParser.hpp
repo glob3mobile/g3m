@@ -49,7 +49,7 @@ public:
   static void includeDataInBuildingSet(const std::string& data,
                                        const std::vector<CityGMLBuilding*>& buildings);
   
-  static Mesh* createPointCloudMesh(const std::string& data, const Planet* planet);
+  static Mesh* createPointCloudMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData);
   
 };
 

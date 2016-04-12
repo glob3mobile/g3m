@@ -31,17 +31,20 @@ private:
   
   CityGMLListener* _listener;
   bool _deleteListener;
+  ElevationData* _elevationData;
 public:
   G3MCityGMLDemoScene_BufferDownloadListener(const Planet* planet,
                                              MeshRenderer* meshRenderer,
                                              MarksRenderer* marksRenderer,
                                              CityGMLListener* listener,
-                                             bool deleteListener) :
+                                             bool deleteListener,
+                                             ElevationData* elevationData) :
   _planet(planet),
   _meshRenderer(meshRenderer),
   _marksRenderer(marksRenderer),
   _listener(listener),
-  _deleteListener(deleteListener)
+  _deleteListener(deleteListener),
+  _elevationData(elevationData)
   {
   }
   
@@ -69,7 +72,7 @@ public:
     ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
     
     //Creating mesh model
-    Mesh* mesh = CityGMLBuilding::createMesh(buildings, *_planet, false, false, NULL);
+    Mesh* mesh = CityGMLBuilding::createMesh(buildings, *_planet, false, false, NULL, _elevationData);
     
     _meshRenderer->addMesh(mesh);
     
@@ -103,7 +106,8 @@ void CityGMLParser::addLOD2MeshAndMarksFromFile(const std::string& url,
                                                 MeshRenderer* meshRenderer,
                                                 MarksRenderer* marksRenderer,
                                                 CityGMLListener* listener,
-                                                bool deleteListener){
+                                                bool deleteListener,
+                                                ElevationData* elevationData){
   downloader->requestBuffer(URL(url),
                             DownloadPriority::HIGHEST,
                             TimeInterval::fromHours(1),
@@ -112,7 +116,8 @@ void CityGMLParser::addLOD2MeshAndMarksFromFile(const std::string& url,
                                                                            meshRenderer,
                                                                            marksRenderer,
                                                                            listener,
-                                                                           deleteListener),
+                                                                           deleteListener,
+                                                                           elevationData),
                             true);
 }
 

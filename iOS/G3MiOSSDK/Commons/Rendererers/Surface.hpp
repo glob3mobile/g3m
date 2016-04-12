@@ -116,13 +116,25 @@ public:
   }
   
   std::vector<Vector3D*> createCartesianCoordinates(const Planet& planet,
-                                                    const double baseHeight) {
+                                                    const double baseHeight,
+                                                    ElevationData* elevationData) {
     
     std::vector<Vector3D*> coor3D;
     
-    for (int i = 0; i < _geodeticCoordinates.size(); i++) {
-      Geodetic3D* g= _geodeticCoordinates[i];
-      coor3D.push_back(new Vector3D(planet.toCartesian(*g)));
+    if (elevationData == NULL){
+      for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+        Geodetic3D* g= _geodeticCoordinates[i];
+        coor3D.push_back(new Vector3D(planet.toCartesian(*g)));
+      }
+    }
+    else{
+      for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+        Geodetic3D* g= _geodeticCoordinates[i];
+        double h = elevationData->getElevationAt(g->_latitude, g->_longitude);
+        coor3D.push_back(new Vector3D(planet.toCartesian(Geodetic3D::fromDegrees(g->_latitude._degrees,
+                                                                                 g->_longitude._degrees,
+                                                                                 h + g->_height))));
+      }
     }
     return coor3D;
   }
@@ -134,8 +146,9 @@ public:
                                   const double baseHeight,
                                   const Planet& planet,
                                   const short firstIndex,
-                                  const Color& color) {
-    const std::vector<Vector3D*> cartesianC = createCartesianCoordinates(planet, baseHeight);
+                                  const Color& color,
+                                  ElevationData* elevationData) {
+    const std::vector<Vector3D*> cartesianC = createCartesianCoordinates(planet, baseHeight, elevationData);
     const Polygon3D polygon(cartesianC);
     const short lastVertex = polygon.addTrianglesByEarClipping(fbb, normals, indexes, firstIndex);
     

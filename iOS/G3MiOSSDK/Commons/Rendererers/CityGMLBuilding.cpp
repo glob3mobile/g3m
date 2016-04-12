@@ -12,7 +12,8 @@ Mesh* CityGMLBuilding::createMesh(const std::vector<CityGMLBuilding*> buildings,
                                   const Planet& planet,
                                   const bool fixOnGround,
                                   const bool includeGround,
-                                  CityGMLBuildingColorProvider* colorProvider) {
+                                  CityGMLBuildingColorProvider* colorProvider,
+                                  ElevationData* elevationData) {
   
   CompositeMesh* cm = NULL;
   int buildingCounter = 0;
@@ -41,12 +42,14 @@ Mesh* CityGMLBuilding::createMesh(const std::vector<CityGMLBuilding*> buildings,
     if (colorProvider == NULL){
       firstIndex = b->addTrianglesCuttingEarsForAllWalls(*vertices, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
                                                          colorWheel.wheelStep((int)buildings.size(), buildingCounter),
-                                                         includeGround);
+                                                         includeGround,
+                                                         elevationData);
       
     } else{
       firstIndex = b->addTrianglesCuttingEarsForAllWalls(*vertices, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
                                                          colorProvider->getColor(b),
-                                                         includeGround);
+                                                         includeGround,
+                                                         elevationData);
     }
     
     buildingVertexIndex.push_back(vertices->size() / 3);

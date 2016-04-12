@@ -181,9 +181,11 @@ public:
 class PointCloudBDL : public IBufferDownloadListener {
 private:
   G3MCityGMLDemoScene* _demo;
+  ElevationData* _ed;
 public:
-  PointCloudBDL(G3MCityGMLDemoScene* demo) :
-  _demo(demo)
+  PointCloudBDL(G3MCityGMLDemoScene* demo, ElevationData* ed) :
+  _demo(demo),
+  _ed(ed)
   {
   }
   
@@ -195,7 +197,7 @@ public:
     delete buffer;
     
     
-    Mesh* m = BuildingDataParser::createPointCloudMesh(s, _demo->getModel()->getG3MWidget()->getG3MContext()->getPlanet());
+    Mesh* m = BuildingDataParser::createPointCloudMesh(s, _demo->getModel()->getG3MWidget()->getG3MContext()->getPlanet(), _ed);
     
     _demo->getModel()->getMeshRenderer()->addMesh(m);
     
@@ -235,9 +237,10 @@ class MyCityGMLListener: public CityGMLListener{
   
 private:
   G3MCityGMLDemoScene* _demo;
+  ElevationData* _ed;
 public:
   
-  MyCityGMLListener(G3MCityGMLDemoScene* demo):_demo(demo){
+  MyCityGMLListener(G3MCityGMLDemoScene* demo, ElevationData* ed):_demo(demo), _ed(ed){
     
   }
   
@@ -254,7 +257,7 @@ public:
     
     _demo->getModel()->getG3MWidget()->getG3MContext()
     ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
-                                     new PointCloudBDL(_demo),
+                                     new PointCloudBDL(_demo, _ed),
                                      true);
     
   }
@@ -300,8 +303,9 @@ public:
                                                  context->getPlanet(),
                                                  _demo->getModel()->getMeshRenderer(),
                                                  _demo->getModel()->getMarksRenderer(),
-                                                 new MyCityGMLListener(_demo),
-                                                 true);
+                                                 new MyCityGMLListener(_demo, elevationData),
+                                                 true,
+                                                 elevationData);
     }
     
   }
@@ -328,9 +332,6 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   getModel()->getLayerSet()->addLayer(layer);
   
-  
-  
-  
   getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget()));
   
   //  downloader->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
@@ -346,10 +347,6 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   getModel()->getPlanetRenderer()->setElevationDataProvider(edp, true);
   
   edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(this), true);
-  
-  
-  
-  
   
   //Whole city!
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),

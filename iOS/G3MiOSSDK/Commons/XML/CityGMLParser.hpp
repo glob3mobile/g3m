@@ -36,7 +36,8 @@ public:
                                           MeshRenderer* meshRenderer,
                                           MarksRenderer* marksRenderer,
                                           CityGMLListener* listener,
-                                          bool deleteListener);
+                                          bool deleteListener,
+                                          ElevationData* elevationData);
   
 };
 

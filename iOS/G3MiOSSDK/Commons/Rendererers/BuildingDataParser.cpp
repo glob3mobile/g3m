@@ -66,7 +66,7 @@ void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
   }
 }
 
-Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Planet* planet){
+Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData){
   
   //{ "type": "Feature", "properties": { "OBJECTID": 1, "SOURCE_ID": 1, "Value": 72, "GiZScore": -1.341899, "GiPValue": 0.179629, "Gi_Bin": 0 }, "geometry": { "type": "Point", "coordinates": [ 8.406533595313695, 49.025119962101599 ] } },
   
@@ -98,8 +98,14 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
     
     std::vector<double> vd = IStringUtils::instance()->parseDoubles(point._string, ", ");
     
-    Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
-    vertices->add(g);
+    if (elevationData == NULL){
+      Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
+      vertices->add(g);
+    } else{
+      double h = elevationData->getElevationAt(Angle::fromDegrees(vd[1]), Angle::fromDegrees(vd[0]));
+      Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2 + h);
+      vertices->add(g);
+    }
     
     Color color = cl.getColor(v);
     colors.add(color);

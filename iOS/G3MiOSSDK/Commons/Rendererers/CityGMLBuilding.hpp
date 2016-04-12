@@ -145,7 +145,8 @@ public:
                                            const Planet& planet,
                                            const short firstIndex,
                                            const Color& color,
-                                           const bool includeGround) const {
+                                           const bool includeGround,
+                                           ElevationData* elevationData) const {
     short buildingFirstIndex = firstIndex;
     for (int w = 0; w < _surfaces.size(); w++) {
 #ifdef C_CODE
@@ -163,7 +164,7 @@ public:
       
       buildingFirstIndex = s->addTrianglesByEarClipping(fbb, normals, indexes, colors,
                                                         baseHeight, planet,
-                                                        buildingFirstIndex, color);
+                                                        buildingFirstIndex, color, elevationData);
     }
     return buildingFirstIndex;
   }
@@ -172,7 +173,8 @@ public:
   Mesh* createIndexedMeshWithColorPerVertex(const Planet planet,
                                             const bool fixOnGround,
                                             const Color color,
-                                            const bool includeGround) {
+                                            const bool includeGround,
+                                            ElevationData* elevationData) {
     
     
     const double baseHeight = fixOnGround ? getBaseHeight() : 0;
@@ -183,7 +185,7 @@ public:
     FloatBufferBuilderFromColor colors;
     
     const short firstIndex = 0;
-    addTrianglesCuttingEarsForAllWalls(*fbb, *normals, indexes, colors, baseHeight, planet, firstIndex, color, includeGround);
+    addTrianglesCuttingEarsForAllWalls(*fbb, *normals, indexes, colors, baseHeight, planet, firstIndex, color, includeGround, elevationData);
     
     IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
                                       fbb->getCenter(), fbb->create(), true,
@@ -202,7 +204,8 @@ public:
                           const Planet& planet,
                           const bool fixOnGround,
                           const bool includeGround,
-                          CityGMLBuildingColorProvider* colorProvider);
+                          CityGMLBuildingColorProvider* colorProvider,
+                          ElevationData* elevationData);
   
   Geodetic3D getMin() {
     double minLat = IMathUtils::instance()->maxDouble();
