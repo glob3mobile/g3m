@@ -87,6 +87,11 @@ public class ShortBuffer_WebGL extends IShortBuffer {
 		jsPut(i, value);
 	}
 
+	@Override
+	public void put(short[] value) {
+		
+	}
+
 	private native void jsPut(int i, short value) /*-{
 
 		if (value < 0 || value > 65535) {
@@ -109,6 +114,11 @@ public class ShortBuffer_WebGL extends IShortBuffer {
 
 		this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] = value;
 	}-*/;
+
+	@Override
+	public void rewind() {
+
+	}
 
 	public JavaScriptObject getBuffer() {
 		return _buffer;

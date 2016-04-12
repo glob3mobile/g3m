@@ -26,7 +26,7 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
   protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, _indices.size(), _glState, rc.getGPUProgramManager());
   }
 
   public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor)

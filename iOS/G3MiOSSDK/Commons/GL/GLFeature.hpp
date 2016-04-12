@@ -33,7 +33,8 @@ enum GLFeatureID{
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE
+  GLF_BLENDING_MODE,
+  GLF_CUSTOM_SHADER
 };
 
 class GLFeature: public RCObject {
@@ -579,5 +580,35 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
+class CustomShaderGLFeature: public GLFeature {
+private:
+    bool _initializedShader;
+    
+    ~CustomShaderGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+
+protected:
+    virtual bool onInitializeShader(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
+    virtual void onAfterApplyShaderOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
+    
+public:
+    CustomShaderGLFeature(const std::string shaderName) :
+    GLFeature(NO_GROUP, GLF_CUSTOM_SHADER), _initializedShader(false)
+    {
+        _values->setCustomShaderName(shaderName);
+    }
+    
+    void afterApplyOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram) {
+        if (!_initializedShader) {
+            _initializedShader = onInitializeShader(gl, state, linkedProgram);
+        }
+        if (_initializedShader) {
+            onAfterApplyShaderOnGPU(gl, state, linkedProgram);
+        }
+    }
+};
 
 #endif

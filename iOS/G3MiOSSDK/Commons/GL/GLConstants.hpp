@@ -220,6 +220,7 @@ class GLTextureParameterValue {
   static int _linearMipmapLinear;
 
   static int _clampToEdge;
+  static int _repeat;
 
 
 public:
@@ -231,7 +232,8 @@ public:
   static int linearMipmapLinear()   { return _linearMipmapLinear;   }
 
   static int clampToEdge()          { return _clampToEdge;          }
-  
+  static int repeat()          { return _repeat;          }
+
   static void init(const INativeGL* ngl) {
     _nearest               = ngl->TextureParameterValue_Nearest();
     _linear                = ngl->TextureParameterValue_Linear();
@@ -241,6 +243,7 @@ public:
     _linearMipmapLinear    = ngl->TextureParameterValue_LinearMipmapLinear();
 
     _clampToEdge           = ngl->TextureParameterValue_ClampToEdge();
+    _repeat                = ngl->TextureParameterValue_Repeat();
   }
 };
 

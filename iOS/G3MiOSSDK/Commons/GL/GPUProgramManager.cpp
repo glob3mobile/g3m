@@ -41,6 +41,26 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   return p;
 }
 
+GPUProgram* GPUProgramManager::getProgram(GL* gl, const std::string& name) {
+    GPUProgram* p = getCompiledProgram(name);
+    if (p == NULL) {
+        p = compileProgramWithName(gl, name, true);
+        if (p == NULL) {
+            ILogger::instance()->logError("Problem at compiling program.");
+            return NULL;
+        }
+
+        if (p->getName() != name) {
+            //#warning GIVE MORE DETAIL
+            ILogger::instance()->logError("New compiled program does not match GL state.");
+        }
+    }
+    
+    p->addReference();
+    
+    return p;
+}
+
 GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
 
   const bool texture     = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS);
@@ -133,14 +153,14 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     //#warning GPUProgram getUniformsCode avoid call
     GPUProgram* p = it->second;
-    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
+    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode && !p->isReferencedByName()) {
       return p;
     }
   }
 #endif
 #ifdef JAVA_CODE
   for (final GPUProgram p : _programs.values()) {
-    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode) && !p.isReferencedByName()) {
       return p;
     }
   }
@@ -150,6 +170,12 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
 
 GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
                                                       const std::string& name) {
+  return compileProgramWithName(gl, name, false);
+}
+
+GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
+                                                      const std::string& name,
+                                                      bool referencedByName) {
 
   GPUProgram* prog = getCompiledProgram(name);
   if (prog == NULL) {
@@ -160,7 +186,8 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
       prog = GPUProgram::createProgram(gl,
                                        ps->_name,
                                        ps->_vertexSource,
-                                       ps->_fragmentSource);
+                                       ps->_fragmentSource,
+                                       referencedByName);
       //#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
       if (prog == NULL) {
         ILogger::instance()->logError("Problem at creating program named %s.", name.c_str());

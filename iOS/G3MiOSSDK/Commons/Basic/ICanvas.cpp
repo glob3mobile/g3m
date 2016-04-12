@@ -306,3 +306,10 @@ void ICanvas::fillAndStrokeEllipse(float left, float top,
   _fillAndStrokeEllipse(left, top,
                         width, height);
 }
+
+void ICanvas::scale(float scaleX, float scaleY,
+                    float pivotX, float pivotY) {
+  checkInitialized();
+  _scale(scaleX, scaleY,
+         pivotX, pivotY);
+}

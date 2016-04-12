@@ -80,7 +80,8 @@ public:
   int getNumberOfGLFeatures() const;
 
   GLFeature* getGLFeature(GLFeatureID id) const;
-
+  GLFeature* getGLFeatureIncludingAncestors(GLFeatureID id) const;
+    
   GLFeatureSet* getGLFeatures(GLFeatureID id) const;
 };
 
