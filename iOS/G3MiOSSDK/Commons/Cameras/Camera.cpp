@@ -98,6 +98,8 @@ void Camera::copyFrom(const Camera &that) {
 
   _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
   _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  
+  _forcedZNear = that._forcedZNear;
 }
 
 
@@ -121,7 +123,8 @@ _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
 _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
-_timestamp(timestamp)
+_timestamp(timestamp),
+_forcedZNear(NAND)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
@@ -362,9 +365,15 @@ void Camera::setPointOfView(const Geodetic3D& center,
   //  _dirtyFlags.setAllDirty();
 }
 
+
+
 FrustumData Camera::calculateFrustumData() const {
   const double height = getGeodeticPosition()._height;
   double zNear = height * 0.1;
+  
+  if (!ISNAN(_forcedZNear)){
+    zNear = _forcedZNear;
+  }
 
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 

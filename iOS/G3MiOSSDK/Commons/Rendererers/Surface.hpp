@@ -117,7 +117,7 @@ public:
   
   std::vector<Vector3D*> createCartesianCoordinates(const Planet& planet,
                                                     const double baseHeight,
-                                                    ElevationData* elevationData) {
+                                                    const ElevationData* elevationData) {
     
     std::vector<Vector3D*> coor3D;
     
@@ -147,7 +147,7 @@ public:
                                   const Planet& planet,
                                   const short firstIndex,
                                   const Color& color,
-                                  ElevationData* elevationData) {
+                                  const ElevationData* elevationData) {
     const std::vector<Vector3D*> cartesianC = createCartesianCoordinates(planet, baseHeight, elevationData);
     const Polygon3D polygon(cartesianC);
     const short lastVertex = polygon.addTrianglesByEarClipping(fbb, normals, indexes, firstIndex);

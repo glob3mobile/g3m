@@ -30,14 +30,10 @@ class CityGMLParser{
 public:
   static std::vector<CityGMLBuilding*> parseLOD2Buildings2(IXMLNode* cityGMLDoc);
   
-  static void addLOD2MeshAndMarksFromFile(const std::string& url,
-                                          IDownloader* downloader,
-                                          const Planet* planet,
-                                          MeshRenderer* meshRenderer,
-                                          MarksRenderer* marksRenderer,
-                                          CityGMLListener* listener,
-                                          bool deleteListener,
-                                          ElevationData* elevationData);
+  static void parseFromURL(const URL& url,
+                           IDownloader* downloader,
+                           CityGMLListener* listener,
+                           bool deleteListener);
   
 };
 

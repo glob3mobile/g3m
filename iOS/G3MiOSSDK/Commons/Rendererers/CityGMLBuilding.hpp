@@ -10,12 +10,8 @@
 #define CityGMLBuilding_hpp
 
 #include "CityGMLBuildingSurface.hpp"
-#include "IndexedMesh.hpp"
-#include "CompositeMesh.hpp"
 #include <string>
 #include <vector>
-
-#include "CityGMLBuildingColorProvider.hpp"
 
 class CityGMLBuildingProperty{
 public:
@@ -30,6 +26,10 @@ public:
   CityGMLBuildingProperty(name), _value(value){}
 };
 
+class CityGMLBuildingTessellatorData{
+  
+};
+
 class CityGMLBuilding {
   
   Mesh* _containerMesh;
@@ -37,6 +37,8 @@ class CityGMLBuilding {
   short _lastVertexIndexWithinContainerMesh;
   
   std::vector<CityGMLBuildingNumericProperty*> _numericProperties;
+  
+  CityGMLBuildingTessellatorData* _tessllatorData;
   
 public:
   
@@ -55,12 +57,15 @@ public:
                   std::vector<CityGMLBuildingSurface*> walls):
   _name(name),
   _roofTypeCode(roofType),
-  _surfaces(walls)
+  _surfaces(walls),
+  _tessllatorData(NULL)
   {
   }
   
   ~CityGMLBuilding()
   {
+    delete _tessllatorData;
+    
     for (int i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
@@ -74,6 +79,10 @@ public:
     for (int i = 0; i < _numericProperties.size(); i++){
       delete _numericProperties[i];
     }
+  }
+  
+  std::vector<CityGMLBuildingSurface*> getSurfaces() const{
+    return _surfaces;
   }
   
   void addNumericProperty(CityGMLBuildingNumericProperty* value){
@@ -91,7 +100,7 @@ public:
   }
   
   
-  double getBaseHeight() {
+  double getBaseHeight() const {
     double min = IMathUtils::instance()->maxDouble();
     for (int i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
@@ -136,78 +145,8 @@ public:
     delete isb;
     return s;
   }
-  
-  short addTrianglesCuttingEarsForAllWalls(FloatBufferBuilderFromCartesian3D& fbb,
-                                           FloatBufferBuilderFromCartesian3D& normals,
-                                           ShortBufferBuilder& indexes,
-                                           FloatBufferBuilderFromColor& colors,
-                                           const double baseHeight,
-                                           const Planet& planet,
-                                           const short firstIndex,
-                                           const Color& color,
-                                           const bool includeGround,
-                                           ElevationData* elevationData) const {
-    short buildingFirstIndex = firstIndex;
-    for (int w = 0; w < _surfaces.size(); w++) {
-#ifdef C_CODE
-      CityGMLBuildingSurface* s = _surfaces[w];
-#endif
-#ifdef JAVA_CODE
-      CityGMLBuildingSurface s = _surfaces.get(w);
-#endif
-      
-      if ((!includeGround && s->getType() == GROUND) ||
-          !s->isVisible())
-      {
-        continue;
-      }
-      
-      buildingFirstIndex = s->addTrianglesByEarClipping(fbb, normals, indexes, colors,
-                                                        baseHeight, planet,
-                                                        buildingFirstIndex, color, elevationData);
-    }
-    return buildingFirstIndex;
-  }
-  
-  
-  Mesh* createIndexedMeshWithColorPerVertex(const Planet planet,
-                                            const bool fixOnGround,
-                                            const Color color,
-                                            const bool includeGround,
-                                            ElevationData* elevationData) {
-    
-    
-    const double baseHeight = fixOnGround ? getBaseHeight() : 0;
-    
-    FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-    FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-    ShortBufferBuilder indexes;
-    FloatBufferBuilderFromColor colors;
-    
-    const short firstIndex = 0;
-    addTrianglesCuttingEarsForAllWalls(*fbb, *normals, indexes, colors, baseHeight, planet, firstIndex, color, includeGround, elevationData);
-    
-    IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
-                                      fbb->getCenter(), fbb->create(), true,
-                                      indexes.create(),true,
-                                      1.0f, 1.0f, NULL,
-                                      colors.create(), 1.0f, true, normals->create());
-    
-    delete fbb;
-    delete normals;
-    
-    return im;
-  }
-  
-  
-  static Mesh* createMesh(const std::vector<CityGMLBuilding*> buildings,
-                          const Planet& planet,
-                          const bool fixOnGround,
-                          const bool includeGround,
-                          CityGMLBuildingColorProvider* colorProvider,
-                          ElevationData* elevationData);
-  
-  Geodetic3D getMin() {
+
+  Geodetic3D getMin() const{
     double minLat = IMathUtils::instance()->maxDouble();
     double minLon =  IMathUtils::instance()->maxDouble();
     double minH =  IMathUtils::instance()->maxDouble();
@@ -234,7 +173,7 @@ public:
   }
   
   
-  Geodetic3D getMax() {
+  Geodetic3D getMax() const {
     double maxLat = IMathUtils::instance()->minDouble();
     double maxLon = IMathUtils::instance()->minDouble();
     double maxH = IMathUtils::instance()->minDouble();
@@ -261,26 +200,13 @@ public:
   }
   
   
-  Geodetic3D getCenter() {
+  Geodetic3D getCenter() const {
     const Geodetic3D min = getMin();
     const Geodetic3D max = getMax();
     
     return Geodetic3D::fromDegrees((min._latitude._degrees + max._latitude._degrees) / 2,
                                    (min._longitude._degrees + max._longitude._degrees) / 2, (min._height + max._height) / 2);
   }
-  
-  
-  Mark* createMark(const bool fixOnGround) {
-    const double deltaH = fixOnGround ? getBaseHeight() : 0;
-    
-    const Geodetic3D center = getCenter();
-    const Geodetic3D pos = Geodetic3D::fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-                                                   - deltaH);
-    
-    Mark* m = new Mark(_name, pos, ABSOLUTE, 100.0);
-    return m;
-  }
-  
   
   void addMarkersToCorners(MarksRenderer* mr,
                            const bool fixOnGround) {
@@ -348,12 +274,13 @@ public:
       return nInvisibleWalls;
     }
     
-    void setContainerMesh(Mesh* containerMesh,
-                          short firstVertexIndexWithinContainerMesh,
-                          short lastVertexIndexWithinContainerMesh){
-      _containerMesh = containerMesh;
-      _firstVertexIndexWithinContainerMesh = firstVertexIndexWithinContainerMesh;
-      _lastVertexIndexWithinContainerMesh = lastVertexIndexWithinContainerMesh;
+    CityGMLBuildingTessellatorData* getTessllatorData() const{
+      return _tessllatorData;
+    }
+    
+    void setTessellatorData(CityGMLBuildingTessellatorData* data){
+      delete _tessllatorData;
+      _tessllatorData = data;
     }
     
     int getNumberOfVertex(){
@@ -362,23 +289,6 @@ public:
         n += (int)_surfaces[i]->_geodeticCoordinates.size();
       }
       return n;
-    }
-    
-    void changeColorOfBuildingInBoundedMesh(const Color& color){
-      if (_containerMesh != NULL){
-        //TODO
-        IFloatBuffer* colors = ((AbstractMesh*)_containerMesh)->getColorsFloatBuffer();
-        
-        const int initPos = _firstVertexIndexWithinContainerMesh * 4;
-        const int finalPos = _lastVertexIndexWithinContainerMesh * 4;
-        
-        for (int i = initPos; i < finalPos;) {
-          colors->put(i++, color._red);
-          colors->put(i++, color._green);
-          colors->put(i++, color._blue);
-          colors->put(i++, color._alpha);
-        }
-      }
     }
   };
   

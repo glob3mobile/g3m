@@ -22,33 +22,22 @@
 #include "MeshRenderer.hpp"
 #include "URL.hpp"
 
+#include "CityGMLBuildingTessellator.hpp"
 
-class G3MCityGMLDemoScene_BufferDownloadListener : public IBufferDownloadListener {
+
+class CityGMLParser_BufferDownloadListener : public IBufferDownloadListener {
 private:
-  const Planet* _planet;
-  MeshRenderer* _meshRenderer;
-  MarksRenderer* _marksRenderer;
-  
   CityGMLListener* _listener;
   bool _deleteListener;
-  ElevationData* _elevationData;
 public:
-  G3MCityGMLDemoScene_BufferDownloadListener(const Planet* planet,
-                                             MeshRenderer* meshRenderer,
-                                             MarksRenderer* marksRenderer,
-                                             CityGMLListener* listener,
-                                             bool deleteListener,
-                                             ElevationData* elevationData) :
-  _planet(planet),
-  _meshRenderer(meshRenderer),
-  _marksRenderer(marksRenderer),
+  CityGMLParser_BufferDownloadListener(CityGMLListener* listener,
+                                       bool deleteListener) :
   _listener(listener),
-  _deleteListener(deleteListener),
-  _elevationData(elevationData)
+  _deleteListener(deleteListener)
   {
   }
   
-  ~G3MCityGMLDemoScene_BufferDownloadListener(){
+  ~CityGMLParser_BufferDownloadListener(){
   }
   
   void onDownload(const URL& url,
@@ -59,23 +48,7 @@ public:
     delete buffer;
     
     IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
-    
     std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
-    
-    //Adding marks
-    for (size_t i = 0; i < buildings.size(); i++) {
-      _marksRenderer->addMark( buildings[i]->createMark(false) );
-    }
-    
-    //Checking walls visibility
-    int n = CityGMLBuilding::checkWallsVisibility(buildings);
-    ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
-    
-    //Creating mesh model
-    Mesh* mesh = CityGMLBuilding::createMesh(buildings, *_planet, false, false, NULL, _elevationData);
-    
-    _meshRenderer->addMesh(mesh);
-    
     delete xml;
     
     _listener->onBuildingsCreated(buildings);
@@ -100,24 +73,16 @@ public:
   
 };
 
-void CityGMLParser::addLOD2MeshAndMarksFromFile(const std::string& url,
-                                                IDownloader* downloader,
-                                                const Planet* planet,
-                                                MeshRenderer* meshRenderer,
-                                                MarksRenderer* marksRenderer,
-                                                CityGMLListener* listener,
-                                                bool deleteListener,
-                                                ElevationData* elevationData){
-  downloader->requestBuffer(URL(url),
+void CityGMLParser::parseFromURL(const URL& url,
+                                 IDownloader* downloader,
+                                 CityGMLListener* listener,
+                                 bool deleteListener){
+  downloader->requestBuffer(url,
                             DownloadPriority::HIGHEST,
                             TimeInterval::fromHours(1),
                             true,
-                            new G3MCityGMLDemoScene_BufferDownloadListener(planet,
-                                                                           meshRenderer,
-                                                                           marksRenderer,
-                                                                           listener,
-                                                                           deleteListener,
-                                                                           elevationData),
+                            new CityGMLParser_BufferDownloadListener(listener,
+                                                                     deleteListener),
                             true);
 }
 

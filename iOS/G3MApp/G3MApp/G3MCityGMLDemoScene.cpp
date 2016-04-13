@@ -37,6 +37,11 @@
 #include <G3MiOSSDK/PeriodicalTask.hpp>
 
 #include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/OSMLayer.hpp>
+#include <G3MiOSSDK/AbstractMesh.hpp>
+#include <G3MiOSSDK/CityGMLBuildingTessellator.hpp>
+#include <G3MiOSSDK/URL.hpp>
+
 
 class MyTerrainTL: public TerrainTouchListener {
   
@@ -44,16 +49,21 @@ class MyTerrainTL: public TerrainTouchListener {
   
   bool _usingVR;
   
-  class LM: public ILocationModifier{
+  class AltitudeFixerLM: public ILocationModifier{
     Geodetic3D modify(const Geodetic3D& location){
-      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 12);
+      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 3);
     }
   };
+  
+  bool _fixAltitude;
   
 public:
   
   
-  MyTerrainTL(G3MWidget* widget):_widget(widget), _usingVR(false){
+  MyTerrainTL(G3MWidget* widget, bool fixAltitude):
+  _widget(widget),
+  _usingVR(false),
+  _fixAltitude(fixAltitude){
     
   }
   
@@ -70,13 +80,22 @@ public:
       const bool useInertia = true;
       cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
       cameraRenderer->addHandler(new CameraDoubleDragHandler());
-      //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
       cameraRenderer->addHandler(new CameraRotationHandler());
       cameraRenderer->addHandler(new CameraDoubleTapHandler());
+      
+      
+      _widget->getNextCamera()->forceZNear(NAND);
     } else{
       
-      DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, new LM());
+      ILocationModifier * lm = NULL;
+      if (_fixAltitude){
+        lm = new AltitudeFixerLM();
+      }
+      
+      DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
       cameraRenderer->addHandler(dac);
+      
+      _widget->getNextCamera()->forceZNear(1.0);
     }
     
     _usingVR = !_usingVR;
@@ -195,15 +214,7 @@ public:
     
     std::string s = buffer->getAsString();
     delete buffer;
-    
-    
-    Mesh* m = BuildingDataParser::createPointCloudMesh(s, _demo->getModel()->getG3MWidget()->getG3MContext()->getPlanet(), _ed);
-    
-    _demo->getModel()->getMeshRenderer()->addMesh(m);
-    
-    _demo->getModel()->getG3MWidget()->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                                            new PointCloudChangeColorTask((AbstractMesh*)m)));
-    
+    _demo->createPointCloud(_ed, s);
   }
   
   void onError(const URL& url) {
@@ -228,7 +239,7 @@ void G3MCityGMLDemoScene::colorBuildings(CityGMLBuildingColorProvider* cp){
   for (size_t i = 0; i < _buildings.size(); i++) {
     CityGMLBuilding* b = _buildings.at(i);
     Color c = cp->getColor(b);
-    b->changeColorOfBuildingInBoundedMesh(c);
+    CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(b, c);
   }
   
 }
@@ -245,21 +256,7 @@ public:
   }
   
   virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings){
-    
-    for (int i = 0; i < buildings.size(); i++) {
-      _demo->_buildings.push_back(buildings[i]);
-    }
-    
-    _demo->getModel()->getG3MWidget()->getG3MContext()
-    ->getDownloader()->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
-                                     new ColouringCityGMLDemoSceneBDL(_demo, _demo->_buildings),
-                                     true);
-    
-    _demo->getModel()->getG3MWidget()->getG3MContext()
-    ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
-                                     new PointCloudBDL(_demo, _ed),
-                                     true);
-    
+    _demo->addBuildings(buildings, _ed);
   }
   
   virtual void onError(){
@@ -281,33 +278,9 @@ public:
                       const Vector2I& extent,
                       ElevationData* elevationData){
     
-    std::vector<std::string> cityGMLFiles;
-    cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-    //  cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-    //  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-    //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-    //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-    //  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-    //      cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-    //      cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
     
-    const G3MContext* context = _demo->getModel()->getG3MWidget()->getG3MContext();
-    IDownloader* downloader = context->getDownloader();
-    
-    for (size_t i = 0; i < cityGMLFiles.size(); i++) {
-      
-      CityGMLParser::addLOD2MeshAndMarksFromFile(cityGMLFiles[i], downloader,
-                                                 context->getPlanet(),
-                                                 _demo->getModel()->getMeshRenderer(),
-                                                 _demo->getModel()->getMarksRenderer(),
-                                                 new MyCityGMLListener(_demo, elevationData),
-                                                 true,
-                                                 elevationData);
-    }
-    
+    _demo->requestPointCloud(elevationData);
+    _demo->loadCityModel(elevationData);
   }
   
   virtual void onError(const Sector& sector,
@@ -321,32 +294,114 @@ public:
   }
 };
 
+void G3MCityGMLDemoScene::addBuildings(const std::vector<CityGMLBuilding*>& buildings, const ElevationData* ed){
+  
+  _modelsLoadedCounter++;
+  
+  for (int i = 0; i < buildings.size(); i++) {
+    _buildings.push_back(buildings[i]);
+  }
+  
+  getModel()->getG3MWidget()->getG3MContext()
+  ->getDownloader()->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
+                                   new ColouringCityGMLDemoSceneBDL(this, buildings),
+                                   true);
+  
+  bool createCityMeshAndMarks = true;
+  if (createCityMeshAndMarks){
+    
+    MarksRenderer* marksR = getModel()->getMarksRenderer();
+    MeshRenderer* meshR = getModel()->getMeshRenderer();
+    
+    
+    //Adding marks
+    for (size_t i = 0; i < buildings.size(); i++) {
+      marksR->addMark( CityGMLBuildingTessellator::createMark(buildings[i], false) );
+    }
+    
+    //Checking walls visibility
+    int n = CityGMLBuilding::checkWallsVisibility(buildings);
+    ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
+    
+    //Creating mesh model
+    Mesh* mesh = CityGMLBuildingTessellator::createMesh(buildings,
+                                                        *getModel()->getG3MWidget()->getG3MContext()->getPlanet(),
+                                                        false, false, NULL,
+                                                        ed);
+    meshR->addMesh(mesh);
+  }
+  
+  if (_modelsLoadedCounter == _cityGMLFiles.size()){
+    ILogger::instance()->logInfo("City Model Loaded");
+    
+    //Whole city!
+    getModel()->getG3MWidget()->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                          Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
+                                                          Angle::fromDegrees(-109.452892),
+                                                          Angle::fromDegrees(-44.938813)
+                                                          );
+  }
+}
+
+void G3MCityGMLDemoScene::requestPointCloud(ElevationData* ed){
+  getModel()->getG3MWidget()->getG3MContext()
+  ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
+                                   new PointCloudBDL(this, ed),
+                                   true);
+}
+
+void G3MCityGMLDemoScene::createPointCloud(ElevationData* ed, const std::string& pointCloudDescriptor){
+  
+  
+  Mesh* m = BuildingDataParser::createPointCloudMesh(pointCloudDescriptor, getModel()->getG3MWidget()->getG3MContext()->getPlanet(), ed);
+  getModel()->getMeshRenderer()->addMesh(m);
+  getModel()->getG3MWidget()->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+                                                                   new PointCloudChangeColorTask((AbstractMesh*)m)));
+}
+
+
+void G3MCityGMLDemoScene::loadCityModel(ElevationData* ed){
+  
+  
+  const G3MContext* context = getModel()->getG3MWidget()->getG3MContext();
+  IDownloader* downloader = context->getDownloader();
+  
+  for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
+    CityGMLParser::parseFromURL(URL(_cityGMLFiles[i]),
+                                downloader,
+                                new MyCityGMLListener(this, ed),
+                                true);
+  }
+}
+
 
 void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
   
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  //  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+  //                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+  //                                           TimeInterval::fromDays(30));
+  
+  OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
+  
   getModel()->getLayerSet()->addLayer(layer);
   
-  getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget()));
+  getModel()->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL(getModel()->getG3MWidget(), !_useDEM));
   
-  //  downloader->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
-  //                            new ColouringCityGMLDemoSceneBDL(this),
-  //                            true);
-  
-  Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
-  
-  SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
-                                                                           karlsruheSector,
-                                                                           Vector2I(308, 177));
-  
-  getModel()->getPlanetRenderer()->setElevationDataProvider(edp, true);
-  
-  edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(this), true);
+  if (_useDEM){
+    Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
+    SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
+                                                                             karlsruheSector,
+                                                                             Vector2I(308, 177));
+    getModel()->getPlanetRenderer()->setElevationDataProvider(edp, true);
+    edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(this), true);
+  } else{
+    
+    requestPointCloud(NULL);
+    loadCityModel(NULL);
+  }
   
   //Whole city!
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),

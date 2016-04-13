@@ -479,6 +479,8 @@
 		D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */; };
 		D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */; };
 		D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */; };
+		D8114E651CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8114E631CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp */; };
+		D8114E661CBE3DE9004E2BF0 /* CityGMLBuildingTessellator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8114E641CBE3109004E2BF0 /* CityGMLBuildingTessellator.hpp */; };
 		D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */; };
 		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
@@ -797,6 +799,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8114E661CBE3DE9004E2BF0 /* CityGMLBuildingTessellator.hpp in CopyFiles */,
 				D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */,
 				D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */,
 				D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */,
@@ -1832,6 +1835,8 @@
 		D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix44DProvider.cpp; path = Commons/Geometry/Matrix44DProvider.cpp; sourceTree = "<group>"; };
 		D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneLighting.hpp; path = Commons/Basic/SceneLighting.hpp; sourceTree = "<group>"; };
 		D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLighting.cpp; path = Commons/Basic/SceneLighting.cpp; sourceTree = "<group>"; };
+		D8114E631CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLBuildingTessellator.cpp; path = Commons/Rendererers/CityGMLBuildingTessellator.cpp; sourceTree = "<group>"; };
+		D8114E641CBE3109004E2BF0 /* CityGMLBuildingTessellator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CityGMLBuildingTessellator.hpp; path = Commons/Rendererers/CityGMLBuildingTessellator.hpp; sourceTree = "<group>"; };
 		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
 		D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TaitBryanAngles.hpp; path = Commons/Geometry/TaitBryanAngles.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2692,6 +2697,8 @@
 				D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */,
 				D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */,
 				D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */,
+				D8114E631CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp */,
+				D8114E641CBE3109004E2BF0 /* CityGMLBuildingTessellator.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3438,6 +3445,7 @@
 				D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */,
 				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,
 				D80A28711746572E0058CEC3 /* GLState.cpp in Sources */,
+				D8114E651CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp in Sources */,
 				D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */,
 				D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */,
 				D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */,

@@ -25,7 +25,7 @@ bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
 
   const double radii = planet->getRadii().maxAxis();
   const double maxHeight = radii*9;
-  const double minHeight = 10;
+  const double minHeight = 1;
 
   const double height = nextCamera->getGeodeticPosition()._height;
 

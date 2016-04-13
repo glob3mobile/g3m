@@ -350,6 +350,10 @@ public:
                                   const MutableMatrix44D& modelViewMatrix);
 
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
+  
+  void forceZNear(double zNear){
+    _forcedZNear = zNear;
+  }
 
 
 private:
@@ -516,6 +520,8 @@ private:
     }
     return _modelViewMatrix;
   }
+  
+  double _forcedZNear;
   
 };
 
