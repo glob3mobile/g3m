@@ -47,7 +47,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   
     final double radii = planet.getRadii().maxAxis();
     final double maxHeight = radii *9;
-    final double minHeight = 10;
+    final double minHeight = 1;
   
     final double height = nextCamera.getGeodeticPosition()._height;
   

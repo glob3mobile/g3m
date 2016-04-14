@@ -36,4 +36,11 @@ public abstract class IFloatBuffer implements IBuffer
     rawPut(i, srcBuffer, 0, srcBuffer.size());
   }
 
+  public abstract void put(int i, IFloatBuffer srcBuffer, int srcFromIndex, int count);
+
+  public final void put(int i, IFloatBuffer srcBuffer)
+  {
+    put(i, srcBuffer, 0, srcBuffer.size());
+  }
+
 }

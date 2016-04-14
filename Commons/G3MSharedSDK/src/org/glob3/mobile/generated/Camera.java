@@ -24,6 +24,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _timestamp = timestamp;
+     _forcedZNear = java.lang.Double.NaN;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning VR => Diego at work!
     resizeViewport(0, 0);
@@ -87,6 +88,7 @@ public class Camera
       _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
     }
   
+    _forcedZNear = that._forcedZNear;
   }
 
   public final void resizeViewport(int width, int height)
@@ -635,6 +637,11 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
+  public final void forceZNear(double zNear)
+  {
+    _forcedZNear = zNear;
+  }
+
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -792,6 +799,11 @@ public class Camera
     final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
   
+    if (!(_forcedZNear != _forcedZNear))
+    {
+      zNear = _forcedZNear;
+    }
+  
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   
     final double goalRatio = 1000;
@@ -878,5 +890,7 @@ public class Camera
     }
     return _modelViewMatrix;
   }
+
+  private double _forcedZNear;
 
 }

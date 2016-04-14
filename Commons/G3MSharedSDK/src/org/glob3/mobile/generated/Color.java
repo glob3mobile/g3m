@@ -197,6 +197,13 @@ public class Color
     return middle.mixedWith(to, (d - 0.5f) * 2);
   }
 
+  public static Color interpolateColor(Color from, Color to, float d)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    return Color.fromRGBA(mu.linearInterpolation(from._red, to._red, d), mu.linearInterpolation(from._green, to._green, d), mu.linearInterpolation(from._blue, to._blue, d), mu.linearInterpolation(from._alpha, to._alpha, d));
+
+  }
+
   public static Color transparent()
   {
     return Color.fromRGBA(0, 0, 0, 0);

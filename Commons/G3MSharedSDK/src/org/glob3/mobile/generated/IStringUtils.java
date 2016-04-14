@@ -108,4 +108,35 @@ public abstract class IStringUtils
 
   public abstract java.util.ArrayList<Double> parseDoubles(String str, String separator);
 
+  //Used for data parsing
+  public static class StringExtractionResult
+  {
+
+    public String _string;
+    public int _endingPos;
+
+    public StringExtractionResult(String String, int endingPos)
+    {
+       _string = String;
+       _endingPos = endingPos;
+    }
+  }
+
+  //Returns the desired string and the position of the last character where endTag was found
+  public static StringExtractionResult extractSubStringBetween(String String, String startTag, String endTag, int startPos)
+  {
+
+    int pos1 = String.indexOf(startTag, startPos) + startTag.length();
+    int pos2 = String.indexOf(endTag, pos1+1);
+
+    if (pos1 == String.npos || pos2 == String.npos || pos1 < startPos || pos2 < startPos)
+    {
+      return new StringExtractionResult("", String.npos);
+    }
+
+    String str = String.substring(pos1, pos2);
+
+    return new StringExtractionResult(str, pos2 + endTag.length());
+  }
+
 }

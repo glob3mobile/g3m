@@ -283,4 +283,9 @@ public abstract class AbstractMesh extends Mesh
     _showNormals = v;
   }
 
+  public final IFloatBuffer getColorsFloatBuffer()
+  {
+    return (IFloatBuffer)_colors;
+  }
+
 }
