@@ -77,6 +77,7 @@
 		D84D95261CBC037F003BB11B /* random_cluster_fewer_points.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */; };
 		D85024241CB50F7500519C60 /* Innenstadt_west_all_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */; };
 		D850242F1CB7AF9600519C60 /* karlsruhe_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D850242E1CB7AF9500519C60 /* karlsruhe_data.geojson */; };
+		D82CA3F01C64D837008FAAD2 /* G3MStereoDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */; };
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
@@ -256,6 +257,8 @@
 		D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = random_cluster_fewer_points.geojson; sourceTree = "<group>"; };
 		D85024231CB50F7500519C60 /* Innenstadt_west_all_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Innenstadt_west_all_data.geojson; sourceTree = "<group>"; };
 		D850242E1CB7AF9500519C60 /* karlsruhe_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = karlsruhe_data.geojson; sourceTree = "<group>"; };
+		D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MStereoDemoScene.mm; sourceTree = "<group>"; };
+		D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStereoDemoScene.hpp; sourceTree = "<group>"; };
 		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };

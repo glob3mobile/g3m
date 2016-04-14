@@ -95,8 +95,9 @@ void Camera::copyFrom(const Camera &that,
 #endif
     _angle2Horizon = that._angle2Horizon;
 
-  _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
-  _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+    _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
+    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  }
   
   _forcedZNear = that._forcedZNear;
 }

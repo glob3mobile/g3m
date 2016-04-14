@@ -28,6 +28,8 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LabelImageBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.NonOverlappingMark;
@@ -67,7 +69,8 @@ public class G3MWebGLTestingApplication
       g3mWidgetHolder.add(_g3mWidget);
 
 
-      g3mWidgetHolder.add(_g3mWidget);
+      // // Buenos Aires, there we go!
+      // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
 
       // Canarias
       _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(49.0159538369538, 8.39245743376133, 69.1385));
@@ -231,8 +234,7 @@ public class G3MWebGLTestingApplication
       layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
-      final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
-      builder.addRenderer(renderer);
+      builder.addRenderer(createMarksRenderer());
 
       renderer.addMark(createMark("Label #1", Geodetic3D.fromDegrees(28.131817, -15.440219, 0)));
       renderer.addMark(createMark(Geodetic3D.fromDegrees(28.947345, -13.523105, 0)));

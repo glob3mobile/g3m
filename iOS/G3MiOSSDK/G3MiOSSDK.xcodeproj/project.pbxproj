@@ -815,6 +815,8 @@
 				D8D781F61CA416190025E988 /* CityGMLBuildingSurface.hpp in CopyFiles */,
 				D8D781ED1CA402260025E988 /* Polygon2D.hpp in CopyFiles */,
 				D8D781EE1CA402260025E988 /* Polygon3D.hpp in CopyFiles */,
+				CF236E281CB3EF50002D4D77 /* ViewMode.hpp in CopyFiles */,
+				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
 				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
