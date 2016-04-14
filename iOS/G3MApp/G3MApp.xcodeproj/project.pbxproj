@@ -71,6 +71,7 @@
 		CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D2091A7C5014005429A6 /* anchorWidget.png */; };
 		CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-mark.png */; };
 		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
+		D8114E681CBE4C7D004E2BF0 /* eifer_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D8114E671CBE4C7D004E2BF0 /* eifer_logo.png */; };
 		D83AD2D71CBCF507007AD423 /* ka_31467.bil in Resources */ = {isa = PBXBuildFile; fileRef = D83AD2D61CBCF507007AD423 /* ka_31467.bil */; };
 		D84D95231CBBF3FF003BB11B /* random_cluster.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D84D95221CBBF3FF003BB11B /* random_cluster.geojson */; };
 		D84D95261CBC037F003BB11B /* random_cluster_fewer_points.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */; };
@@ -249,6 +250,7 @@
 		CFF9D2091A7C5014005429A6 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
 		CFF9D20B1A7C5048005429A6 /* g3m-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-mark.png"; sourceTree = "<group>"; };
 		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
+		D8114E671CBE4C7D004E2BF0 /* eifer_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eifer_logo.png; sourceTree = "<group>"; };
 		D83AD2D61CBCF507007AD423 /* ka_31467.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = ka_31467.bil; sourceTree = "<group>"; };
 		D84D95221CBBF3FF003BB11B /* random_cluster.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = random_cluster.geojson; sourceTree = "<group>"; };
 		D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = random_cluster_fewer_points.geojson; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8114E671CBE4C7D004E2BF0 /* eifer_logo.png */,
 				D83AD2D61CBCF507007AD423 /* ka_31467.bil */,
 				D84D95251CBC037F003BB11B /* random_cluster_fewer_points.geojson */,
 				D84D95221CBBF3FF003BB11B /* random_cluster.geojson */,
@@ -749,6 +752,7 @@
 				CFE3B3E2183ADAB80078C796 /* arcdeTriomphe.bson in Resources */,
 				D8A6EA0C1CAE6CA80085AA94 /* knielingen_4326_lod2_PART_2.gml in Resources */,
 				E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */,
+				D8114E681CBE4C7D004E2BF0 /* eifer_logo.png in Resources */,
 				E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */,
 				CFE3B3D9183AD2D40078C796 /* textures-A320 in Resources */,
 				E780A3CF16D29EA5000F0395 /* marker-wikipedia-72x72.png in Resources */,

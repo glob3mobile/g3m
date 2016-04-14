@@ -15,6 +15,7 @@
 
 class CityGMLBuilding;
 class ElevationData;
+class LabelImageBuilder;
 
 class G3MCityGMLDemoScene : public G3MDemoScene {
 private:
@@ -31,6 +32,8 @@ private:
   std::vector<std::string> _cityGMLFiles;
   int _modelsLoadedCounter;
   
+  LabelImageBuilder* _labelBuilder;
+  
 protected:
   void rawActivate(const G3MContext* context);
   
@@ -38,7 +41,7 @@ protected:
                        int optionIndex);
   
 public:
-
+  
   
   G3MCityGMLDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "CityGML", "", -1),
@@ -56,15 +59,15 @@ public:
     
     _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
     _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-    //  cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-    //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-    //  cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-    //  cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-    //      cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-    //      cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-    //      cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+    _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+    _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+    _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   }
   
   void deactivate(const G3MContext* context);

@@ -42,6 +42,18 @@
 #include <G3MiOSSDK/CityGMLBuildingTessellator.hpp>
 #include <G3MiOSSDK/URL.hpp>
 
+#include <G3MiOSSDK/HUDQuadWidget.hpp>
+#include <G3MiOSSDK/HUDRenderer.hpp>
+#include <G3MiOSSDK/HUDRelativePosition.hpp>
+#include <G3MiOSSDK/HUDRelativeSize.hpp>
+#include <G3MiOSSDK/LabelImageBuilder.hpp>
+#include <G3MiOSSDK/DownloaderImageBuilder.hpp>
+#include <G3MiOSSDK/HUDAbsolutePosition.hpp>
+#include <G3MiOSSDK/GTask.hpp>
+#include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/PeriodicalTask.hpp>
+#include <G3MiOSSDK/FloatBuffer_iOS.hpp>
+
 
 class MyTerrainTL: public TerrainTouchListener {
   
@@ -141,16 +153,23 @@ public:
   
 };
 
-class PointCloudChangeColorTask: public GTask{
+class TimeEvolutionTask: public GTask{
   
   AbstractMesh* _abstractMesh;
   
   float _delta;
+  int _step;
   
   float* _initialColors;
+  LabelImageBuilder* _labelBuilder;
 public:
   
-  PointCloudChangeColorTask(AbstractMesh* abstractMesh): _abstractMesh(abstractMesh), _delta(0.0){
+  TimeEvolutionTask(AbstractMesh* abstractMesh, LabelImageBuilder* labelBuilder):
+  _abstractMesh(abstractMesh),
+  _delta(0.0),
+  _step(0),
+  _labelBuilder(labelBuilder)
+  {
     
     IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
     _initialColors = new float[colors->size()];
@@ -170,6 +189,8 @@ public:
     double factor = (1.0f + mu->sin(_delta)) / 2.0;
     _delta += 0.1;
     
+    FloatBuffer_iOS fb(colors->size());
+    float *newColors = fb.getPointer();
     
     for (int i = 0; i < colors->size(); i+=4) {
       float r = _initialColors[i];
@@ -186,12 +207,59 @@ public:
       b *= 1.0f / factor;
       b = mu->clamp(b, 0.0f, 1.0f);
       
-      colors->put(i, r);
-      colors->put(i+1, g);
-      colors->put(i+2, b);
-      colors->put(i+3, a);
+//      colors->put(i, r);
+//      colors->put(i+1, g);
+//      colors->put(i+2, b);
+//      colors->put(i+3, a);
+      
+      
+      newColors[i] = r;
+      newColors[i+1] = g;
+      newColors[i+2] = b;
+      newColors[i+3] = a;
     }
     
+    colors->put(0, &fb);
+    
+    
+    //Label
+    _step++;
+    int min = _step % 60;
+    int hour = (_step / 60) % 24;
+    std::string s = context->getStringUtils()->toString(hour) + ":" + context->getStringUtils()->toString(min);
+    _labelBuilder->setText(s);
+  }
+  
+};
+
+class ColorChangingMeshTask: public GTask{
+  
+  AbstractMesh* _abstractMesh;
+  int _step;
+  std::vector<IFloatBuffer*> _colors;
+public:
+  
+  ColorChangingMeshTask(AbstractMesh* abstractMesh, std::vector<IFloatBuffer*> colors):
+  _abstractMesh(abstractMesh),
+  _step(0),
+  _colors(colors)
+  {
+    IFloatBuffer* meshColors = _abstractMesh->getColorsFloatBuffer();
+    
+    for (size_t i = 0; i < _colors.size(); i++) {
+      if (colors[i]->size() != meshColors->size()){
+        THROW_EXCEPTION("WRONG NUMBER OF COLORS");
+      }
+    }
+  }
+  
+  void run(const G3MContext* context){
+    IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
+    IFloatBuffer* newColors = _colors[_step];
+    
+    colors->put(0, newColors);
+    
+    _step++; //Advance
   }
   
 };
@@ -277,8 +345,6 @@ public:
   virtual void onData(const Sector& sector,
                       const Vector2I& extent,
                       ElevationData* elevationData){
-    
-    
     _demo->requestPointCloud(elevationData);
     _demo->loadCityModel(elevationData);
   }
@@ -356,7 +422,7 @@ void G3MCityGMLDemoScene::createPointCloud(ElevationData* ed, const std::string&
   Mesh* m = BuildingDataParser::createPointCloudMesh(pointCloudDescriptor, getModel()->getG3MWidget()->getG3MContext()->getPlanet(), ed);
   getModel()->getMeshRenderer()->addMesh(m);
   getModel()->getG3MWidget()->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                                   new PointCloudChangeColorTask((AbstractMesh*)m)));
+                                                                   new TimeEvolutionTask((AbstractMesh*)m, _labelBuilder)));
 }
 
 
@@ -378,7 +444,6 @@ void G3MCityGMLDemoScene::loadCityModel(ElevationData* ed){
 void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
   
   G3MDemoModel* model     = getModel();
-  G3MWidget*    g3mWidget = model->getG3MWidget();
   
   //  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
   //                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
@@ -403,12 +468,39 @@ void G3MCityGMLDemoScene::rawActivate(const G3MContext* context) {
     loadCityModel(NULL);
   }
   
-  //Whole city!
-  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                       Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
-                                       Angle::fromDegrees(-109.452892),
-                                       Angle::fromDegrees(-44.938813)
-                                       );
+  HUDRenderer* hudRenderer = model->getHUDRenderer();
+  
+  _labelBuilder = new LabelImageBuilder("00:00",               // text
+                                        GFont::monospaced(38), // font
+                                        6,                     // margin
+                                        Color::yellow(),       // color
+                                        Color::black(),        // shadowColor
+                                        3,                     // shadowBlur
+                                        1,                     // shadowOffsetX
+                                        -1,                    // shadowOffsetY
+                                        Color::fromRGBA255(102, 255, 51, 255),          // backgroundColor
+                                        10,                     // cornerRadius
+                                        true                   // mutable
+                                        );
+  
+  HUDQuadWidget* label = new HUDQuadWidget(_labelBuilder,
+                                           new HUDAbsolutePosition(10),
+                                           new HUDAbsolutePosition(60),
+                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
+  
+  HUDQuadWidget* logo = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///eifer_logo.png")),
+                                          new HUDAbsolutePosition(0),
+                                          new HUDRelativePosition(0.82,
+                                                                  HUDRelativePosition::VIEWPORT_HEIGHT,
+                                                                  HUDRelativePosition::MIDDLE),
+                                          new HUDRelativeSize(0.5,
+                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                          new HUDRelativeSize(0.25,
+                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS));
+  
+  hudRenderer->addWidget(label);
+  hudRenderer->addWidget(logo);
 }
 
 void G3MCityGMLDemoScene::deactivate(const G3MContext* context) {
@@ -429,8 +521,8 @@ void G3MCityGMLDemoScene::rawSelectOption(const std::string& option,
   if (option == "Heat Demand"){
     
     std::vector<ColorLegend::ColorAndValue*> legend;
-    legend.push_back(new ColorLegend::ColorAndValue(Color::green(), 6336.0));
-    legend.push_back(new ColorLegend::ColorAndValue(Color::white(), 70000.0));
+    legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), 6336.0));
+    legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
     ColorLegend* cl = new ColorLegend(legend);
     CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
     colorBuildings(colorProvider);

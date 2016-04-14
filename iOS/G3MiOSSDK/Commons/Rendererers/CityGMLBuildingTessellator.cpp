@@ -110,7 +110,7 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
   for (int i = 0; i < buildings.size(); i++) {
     CityGMLBuilding* b = buildings[i];
     
-    buildingVertexIndex.push_back((short)vertices->size() / 3);
+    buildingVertexIndex.push_back(vertices->size() / 3);
     processedBuildings.push_back(b);
     
     const double baseHeight = fixOnGround ? b->getBaseHeight() : 0;
@@ -128,7 +128,7 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
                                                       elevationData);
     }
     
-    buildingVertexIndex.push_back((short)vertices->size() / 3);
+    buildingVertexIndex.push_back(vertices->size() / 3);
     
     buildingCounter++;
     
@@ -157,12 +157,14 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
       
       //Linking buildings with its mesh
       for (int j = 0; j < processedBuildings.size(); j++) {
-        DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
-        data->_containerMesh = im;
-        data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
-        data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
+//        DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
+//        data->_containerMesh = im;
+//        data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
+//        data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
         
-        processedBuildings[j]->setTessellatorData(data);
+        processedBuildings[j]->setTessellatorData(new DefaultCityGMLBuildingTessellatorData(im,
+                                                                                            buildingVertexIndex[j*2],
+                                                                                            buildingVertexIndex[j*2+1]));
       }
       
       //Reset
@@ -189,12 +191,14 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
   
   //Linking buildings with its mesh
   for (int j = 0; j < processedBuildings.size(); j++) {
-    DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
-    data->_containerMesh = im;
-    data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
-    data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
+//    DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
+//    data->_containerMesh = im;
+//    data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
+//    data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
     
-    processedBuildings[j]->setTessellatorData(data);
+    processedBuildings[j]->setTessellatorData(new DefaultCityGMLBuildingTessellatorData(im,
+                                                                                        buildingVertexIndex[j*2],
+                                                                                        buildingVertexIndex[j*2+1]));
   }
   
   delete vertices;
@@ -219,6 +223,11 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
 void CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(const CityGMLBuilding* building, const Color& color){
   
   DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) building->getTessllatorData();
+  
+  if (data == NULL){
+    THROW_EXCEPTION("NO TESSELLATOR DATA FOR BUILDING");
+  }
+  
   AbstractMesh* mesh = (AbstractMesh*)data->_containerMesh;
   
   if (mesh != NULL){
@@ -235,6 +244,17 @@ void CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(const CityGM
       colors->put(i++, color._alpha);
     }
   }
+}
+
+Mark* CityGMLBuildingTessellator::createMark(const CityGMLBuilding* building, const bool fixOnGround) {
+  const double deltaH = fixOnGround ? building->getBaseHeight() : 0;
+  
+  const Geodetic3D center = building->getCenter();
+  const Geodetic3D pos = Geodetic3D::fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
+                                                 - deltaH);
+  
+  Mark* m = new Mark(building->_name, pos, RELATIVE_TO_GROUND, 100.0);
+  return m;
 }
 
 

@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "Color.hpp"
+#include "ErrorHandling.hpp"
 
 class ColorLegend{
   
@@ -24,7 +25,15 @@ public:
     ColorAndValue(const Color& color, double value):_value(value), _color(color){}
   };
   
-  ColorLegend(std::vector<ColorAndValue*> legend):_legend(legend){}
+  ColorLegend(std::vector<ColorAndValue*> legend):_legend(legend){
+  
+    for (int i = 0; i < _legend.size() -1; i++) {
+      if (_legend[i]->_value >= _legend[i+1]->_value){
+        THROW_EXCEPTION("ColorLegend -> List of colors must be passed in ascendant order.");
+      }
+    }
+  
+  }
   
   ~ColorLegend(){
     for (int i = 0; i < _legend.size(); i++) {
@@ -38,22 +47,16 @@ public:
     ColorAndValue* inf= NULL, *sup = NULL;
     
     for (int i = 0; i < _legend.size(); i++) {
-      ColorAndValue* cv = _legend[i];
-      if (cv->_value == value){
-        return cv->_color;
-      }
-      if (cv->_value <= value &&
-          (inf == NULL || (cv->_value > inf->_value))){
-        inf = cv;
-      }
-      if (cv->_value >= value &&
-          ((sup == NULL) || (cv->_value < sup->_value))){
-        sup = cv;
+      if (_legend[i]->_value <= value){
+        inf = _legend[i];
+        if (i < _legend.size() -1){
+          sup = _legend[i+1];
+        }
       }
     }
     
     if (inf == NULL){
-      return sup->_color;
+      return _legend[0]->_color;
     }
     if (sup == NULL){
       return inf->_color;

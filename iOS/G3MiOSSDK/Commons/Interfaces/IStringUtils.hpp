@@ -117,6 +117,37 @@ public:
   
   virtual std::vector<double> parseDoubles(const std::string& str, const std::string& separator) const = 0;
   
+  //Used for data parsing
+  class StringExtractionResult{
+    
+  public:
+    std::string _string;
+    size_t _endingPos;
+    
+    StringExtractionResult(std::string string,
+                 size_t endingPos):
+    _string(string),
+    _endingPos(endingPos){}
+  };
+  
+  //Returns the desired string and the position of the last character where endTag was found
+  static StringExtractionResult extractSubStringBetween(const std::string& string,
+                                              const std::string& startTag,
+                                              const std::string& endTag,
+                                              const size_t startPos){
+    
+    size_t pos1 = string.find(startTag, startPos) + startTag.length();
+    size_t pos2 = string.find(endTag, pos1+1);
+    
+    if (pos1 == std::string::npos || pos2 == std::string::npos || pos1 < startPos || pos2 < startPos){
+      return StringExtractionResult("", std::string::npos);
+    }
+    
+    std::string str = string.substr(pos1, pos2-pos1);
+    
+    return StringExtractionResult(str, pos2 + endTag.length());
+  }
+  
 };
 
 #endif

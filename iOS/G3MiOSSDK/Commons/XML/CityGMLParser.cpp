@@ -46,10 +46,13 @@ public:
     
     std::string s = buffer->getAsString();
     delete buffer;
+
+    //More "expensive" way of parsing 
+//    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
+//    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
+//    delete xml;
     
-    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
-    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
-    delete xml;
+    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(s);
     
     _listener->onBuildingsCreated(buildings);
     if (_deleteListener){
@@ -87,6 +90,8 @@ void CityGMLParser::parseFromURL(const URL& url,
 }
 
 std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityGMLDoc) {
+  
+  ILogger::instance()->logInfo("CityGMLParser starting parse");
   
   std::vector<CityGMLBuilding*> buildings;
   
@@ -172,6 +177,68 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityG
     delete b;
     
   }
+  
+  ILogger::instance()->logInfo("CityGMLParser parse finished: %d buildings.", buildings.size());
+  
+  return buildings;
+}
+
+
+std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(const std::string& cityGMLString) {
+  
+  ILogger::instance()->logInfo("CityGMLParser starting parse");
+  
+  std::vector<CityGMLBuilding*> buildings;
+  
+  
+  int pos = 0;
+  const int length = cityGMLString.length();
+  while (pos < length){
+    IStringUtils::StringExtractionResult beginning = IStringUtils::extractSubStringBetween(cityGMLString, "bldg:Building gml:id=\"", "\"", pos);
+    std::string name = beginning._string;
+    if (beginning._endingPos == std::string::npos){
+      break;
+    }
+    pos = beginning._endingPos +1;
+    
+    
+    
+    int endPos = cityGMLString.find("</bldg:Building>", pos);
+    
+    //Reading surfaces
+    std::vector<CityGMLBuildingSurface*> surfaces;
+    while (true){
+      IStringUtils::StringExtractionResult points = IStringUtils::extractSubStringBetween(cityGMLString,
+                                                                                "<gml:posList>", "</gml:posList>",
+                                                                                pos);
+      
+      if (points._endingPos == std::string::npos || points._endingPos >= endPos){
+        break;
+      }
+      
+      CityGMLBuildingSurfaceType type = WALL;
+      int groundPos = cityGMLString.find("bldg:GroundSurface", pos);
+      if (groundPos < points._endingPos){
+        type = GROUND;
+      } else{
+        int roofPos = cityGMLString.find("bldg:RoofSurface", pos);
+        if (roofPos < points._endingPos){
+          type = ROOF;
+        }
+      }
+      
+      pos = points._endingPos +1 ;
+      
+      std::vector<double> coors = IStringUtils::instance()->parseDoubles(points._string, " ");
+      surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, type));
+      
+    }
+    
+    CityGMLBuilding* nb = new CityGMLBuilding(name, 1, surfaces);
+    buildings.push_back(nb);
+    
+  }
+  ILogger::instance()->logInfo("CityGMLParser parse finished: %d buildings.", buildings.size());
   
   return buildings;
 }

@@ -20,11 +20,28 @@ public:
   Mesh* _containerMesh;
   short _firstVertexIndexWithinContainerMesh;
   short _lastVertexIndexWithinContainerMesh;
+  
+  DefaultCityGMLBuildingTessellatorData(Mesh* containerMesh,
+                                        short firstVertexIndexWithinContainerMesh,
+                                        short lastVertexIndexWithinContainerMesh):
+  _containerMesh(containerMesh),
+  _firstVertexIndexWithinContainerMesh(firstVertexIndexWithinContainerMesh),
+  _lastVertexIndexWithinContainerMesh(lastVertexIndexWithinContainerMesh)
+  {
+    
+    if (_firstVertexIndexWithinContainerMesh < 0 ||
+        _lastVertexIndexWithinContainerMesh < 0 ||
+        _lastVertexIndexWithinContainerMesh < _firstVertexIndexWithinContainerMesh){
+      THROW_EXCEPTION("DefaultCityGMLBuildingTessellatorData constructor. Wrong parameters.");
+    }
+    
+  }
+  
+                                        
 };
 
 class CityGMLBuildingTessellator{
   
-public:
   static short addTrianglesCuttingEarsForAllWalls(const CityGMLBuilding* building,
                                                   FloatBufferBuilderFromCartesian3D& fbb,
                                                   FloatBufferBuilderFromCartesian3D& normals,
@@ -45,6 +62,9 @@ public:
                                                    const bool includeGround,
                                                    const ElevationData* elevationData);
   
+public:
+ 
+  
   static Mesh* createMesh(const std::vector<CityGMLBuilding*> buildings,
                           const Planet& planet,
                           const bool fixOnGround,
@@ -54,16 +74,7 @@ public:
   
   static void changeColorOfBuildingInBoundedMesh(const CityGMLBuilding* building, const Color& color);
   
-  static Mark* createMark(const CityGMLBuilding* building, const bool fixOnGround) {
-    const double deltaH = fixOnGround ? building->getBaseHeight() : 0;
-    
-    const Geodetic3D center = building->getCenter();
-    const Geodetic3D pos = Geodetic3D::fromDegrees(center._latitude._degrees, center._longitude._degrees, center._height
-                                                   - deltaH);
-    
-    Mark* m = new Mark(building->_name, pos, RELATIVE_TO_GROUND, 100.0);
-    return m;
-  }
+  static Mark* createMark(const CityGMLBuilding* building, const bool fixOnGround);
   
 };
 

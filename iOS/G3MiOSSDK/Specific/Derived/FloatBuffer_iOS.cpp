@@ -109,3 +109,18 @@ void FloatBuffer_iOS::rawPut(size_t i,
     _values[i + j] = iosSrcBuffer->_values[srcFromIndex + j];
   }
 }
+
+void FloatBuffer_iOS::put(size_t i,
+         const IFloatBuffer* srcBuffer,
+         size_t srcFromIndex,
+         size_t count){
+  
+  if ((i + count) > _size) {
+    THROW_EXCEPTION("buffer put error");
+  }
+  
+  FloatBuffer_iOS* iosSrcBuffer = (FloatBuffer_iOS*) srcBuffer;
+  memcpy(_values, iosSrcBuffer->_values, sizeof(float) * count);
+  
+  _timestamp++;
+}

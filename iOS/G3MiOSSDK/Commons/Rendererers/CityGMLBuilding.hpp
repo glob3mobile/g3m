@@ -38,7 +38,7 @@ class CityGMLBuilding {
   
   std::vector<CityGMLBuildingNumericProperty*> _numericProperties;
   
-  CityGMLBuildingTessellatorData* _tessllatorData;
+  CityGMLBuildingTessellatorData* _tessellatorData;
   
 public:
   
@@ -58,13 +58,13 @@ public:
   _name(name),
   _roofTypeCode(roofType),
   _surfaces(walls),
-  _tessllatorData(NULL)
+  _tessellatorData(NULL)
   {
   }
   
   ~CityGMLBuilding()
   {
-    delete _tessllatorData;
+    delete _tessellatorData;
     
     for (int i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
@@ -275,12 +275,12 @@ public:
     }
     
     CityGMLBuildingTessellatorData* getTessllatorData() const{
-      return _tessllatorData;
+      return _tessellatorData;
     }
     
     void setTessellatorData(CityGMLBuildingTessellatorData* data){
-      delete _tessllatorData;
-      _tessllatorData = data;
+      delete _tessellatorData;
+      _tessellatorData = data;
     }
     
     int getNumberOfVertex(){

@@ -167,6 +167,11 @@ public:
               const IFloatBuffer* srcBuffer,
               size_t srcFromIndex,
               size_t srcToIndex);
+  
+  void put(size_t i,
+           const IFloatBuffer* srcBuffer,
+           size_t srcFromIndex,
+           size_t count);
 
 };
 
