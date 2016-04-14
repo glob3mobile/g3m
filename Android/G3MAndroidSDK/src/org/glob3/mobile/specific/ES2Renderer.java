@@ -17,8 +17,8 @@ import android.os.Looper;
 
 
 public final class ES2Renderer
-         implements
-            GLSurfaceView.Renderer {
+   implements
+      GLSurfaceView.Renderer {
 
    private static final int        GOAL_MS_PER_FRAME = 33;   // 33ms => 30FPS
 
@@ -40,7 +40,7 @@ public final class ES2Renderer
       _width = 1;
       _height = 1;
       _nativeGL = new NativeGL2_Android();
-      _gl = new GL(_nativeGL, false);
+      _gl = new GL(_nativeGL);
 
       _startTime = System.currentTimeMillis();
    }

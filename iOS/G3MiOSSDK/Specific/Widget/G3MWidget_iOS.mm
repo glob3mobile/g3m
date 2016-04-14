@@ -100,7 +100,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                 gpuProgramManager,
                                 sceneLighting,
                                 icpp,
-                                infoDisplay);
+                                infoDisplay,
+                                MONO);
 
   [self widget]->setUserData(userData);
 }

@@ -24,7 +24,7 @@
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 
 void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
-  if (_dac != NULL){
+  if (_dac != NULL) {
     getModel()->getG3MWidget()->getCameraRenderer()->removeHandler(_dac);
     delete _dac;
     _dac = NULL;
@@ -39,10 +39,9 @@ void G3MAugmentedRealityDemoScene::deactivate(const G3MContext* context) {
 void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-  
+
   _dac = new DeviceAttitudeCameraHandler(true);
   g3mWidget->getCameraRenderer()->addHandler(_dac);
-
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",

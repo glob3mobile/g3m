@@ -89,6 +89,7 @@ _context(NULL)
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
+  _scenes.push_back( new G3MStereoDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -108,6 +109,8 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
+  _g3mWidget->setViewMode(MONO);
+
   _g3mWidget->cancelAllEffects();
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();

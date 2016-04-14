@@ -87,7 +87,8 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      GPUProgramManager*                   gpuProgramManager,
                      SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider,
-                     InfoDisplay* infoDisplay):
+                     InfoDisplay*                         infoDisplay,
+                     ViewMode                             viewMode):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -130,7 +131,8 @@ _context(new G3MContext(IFactory::instance(),
                         downloader,
                         _effectsScheduler,
                         storage,
-                        mainRenderer->getSurfaceElevationProvider()
+                        mainRenderer->getSurfaceElevationProvider(),
+                        viewMode
                         )),
 _paused(false),
 _initializationTaskWasRun(false),
@@ -145,7 +147,11 @@ _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
 _infoDisplay(infoDisplay),
 _touchDownPositionX(0),
-_touchDownPositionY(0)
+_touchDownPositionY(0),
+_viewMode(viewMode),
+_leftEyeCam(NULL),
+_rightEyeCam(NULL),
+_auxCam(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -194,7 +200,8 @@ _touchDownPositionY(0)
                                         IFactory::instance()->createTimer(),
                                         _storage,
                                         _gpuProgramManager,
-                                        _surfaceElevationProvider);
+                                        _surfaceElevationProvider,
+                                        _viewMode);
 
 
   //#ifdef C_CODE
@@ -228,7 +235,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              GPUProgramManager*                   gpuProgramManager,
                              SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider,
-                             InfoDisplay* infoDisplay) {
+                             InfoDisplay* infoDisplay,
+                             ViewMode viewMode) {
 
   return new G3MWidget(gl,
                        storage,
@@ -251,7 +259,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        gpuProgramManager,
                        sceneLighting,
                        initialCameraPositionProvider,
-                       infoDisplay);
+                       infoDisplay,
+                       viewMode);
 }
 
 G3MWidget::~G3MWidget() {
@@ -302,6 +311,10 @@ G3MWidget::~G3MWidget() {
   if(_infoDisplay != NULL) {
     delete _infoDisplay;
   }
+  
+  delete _rightEyeCam;
+  delete _leftEyeCam;
+  delete _auxCam;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -360,7 +373,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _downloader,
                      _effectsScheduler,
                      _storage,
-                     _surfaceElevationProvider);
+                     _surfaceElevationProvider,
+                     _viewMode);
 
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
@@ -416,7 +430,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                      _downloader,
                      _effectsScheduler,
                      _storage,
-                     _surfaceElevationProvider);
+                     _surfaceElevationProvider,
+                     _viewMode);
 
   _nextCamera->resizeViewport(width, height);
   _currentCamera->resizeViewport(width, height);
@@ -476,6 +491,136 @@ RenderState G3MWidget::calculateRendererState() {
   }
 
   return busyFlag ? RenderState::busy() : RenderState::ready();
+}
+
+void G3MWidget::rawRender(const RenderState_Type renderStateType) {
+  
+  if (_rootState == NULL) {
+    _rootState = new GLState();
+  }
+  
+  switch (renderStateType) {
+    case RENDER_READY:
+      setSelectedRenderer(_mainRenderer);
+      _cameraRenderer->render(_renderContext, _rootState);
+      
+      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
+      
+      if (_mainRenderer->isEnable()) {
+        _mainRenderer->render(_renderContext, _rootState);
+      }
+      
+      break;
+      
+    case RENDER_BUSY:
+      setSelectedRenderer(_busyRenderer);
+      _busyRenderer->render(_renderContext, _rootState);
+      break;
+      
+    default:
+      _errorRenderer->setErrors( _rendererState->getErrors() );
+      setSelectedRenderer(_errorRenderer);
+      _errorRenderer->render(_renderContext, _rootState);
+      break;
+      
+  }
+  
+  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+  if (orderedRenderables != NULL) {
+    const size_t orderedRenderablesCount = orderedRenderables->size();
+    for (size_t i = 0; i < orderedRenderablesCount; i++) {
+      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
+      orderedRenderable->render(_renderContext);
+      delete orderedRenderable;
+    }
+    
+    orderedRenderables->clear();
+  }
+  
+  if (_hudRenderer != NULL) {
+    if (renderStateType == RENDER_READY) {
+      if (_hudRenderer->isEnable()) {
+        _hudRenderer->render(_renderContext, _rootState);
+      }
+    }
+  }
+
+
+}
+
+void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
+  
+  if (_auxCam == NULL) {
+    _auxCam = new Camera(-1);
+  }
+  
+  const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
+  if (eyesUpdated) {
+    
+    //Saving central camera
+    if (_rightEyeCam == NULL) {
+      _rightEyeCam = new Camera(-1);
+    }
+    if (_leftEyeCam == NULL) {
+      _leftEyeCam = new Camera(-1);
+    }
+    _auxCam->copyFrom(*_currentCamera, true);
+    _leftEyeCam->copyFrom(*_auxCam, true);
+    _rightEyeCam->copyFrom(*_auxCam, true);
+    
+    //For 3D scenes we create the "eyes" cameras
+    if (renderStateType == RENDER_READY) {
+      Vector3D camPos = _currentCamera->getCartesianPosition();
+      Vector3D camCenter = _currentCamera->getCenter();
+      Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+      const double eyesSeparation = 200;// 0.03;
+      Vector3D up = _currentCamera->getUp();
+      
+      const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
+      const Angle vFOV = _currentCamera->getVerticalFOV();
+      
+      Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
+      Vector3D leftEyeCenter   = camCenter.add(eyesDirection.times(-eyesSeparation));
+      _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(),
+                                   leftEyeCenter.asMutableVector3D(),
+                                   up.asMutableVector3D());
+      _leftEyeCam->setFOV(vFOV, hFOV_2);
+
+      Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
+      Vector3D rightEyeCenter   = camCenter.add(eyesDirection.times(eyesSeparation));
+      
+      _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(),
+                                    rightEyeCenter.asMutableVector3D(),
+                                    up.asMutableVector3D());
+      _rightEyeCam->setFOV(vFOV, hFOV_2);
+    }
+    
+  }
+  
+  const int halfWidth = _width / 2;
+  
+  _gl->clearScreen(*_backgroundColor);
+  //Left
+  _gl->viewport(0, 0, halfWidth, _height);
+  _currentCamera->copyFrom(*_leftEyeCam,
+                           true);
+  rawRender(renderStateType);
+  
+  //Right
+  _gl->viewport(halfWidth, 0, halfWidth, _height);
+  _currentCamera->copyFrom(*_rightEyeCam,
+                           true);
+  rawRender(renderStateType);
+
+  //Restoring central camera
+  _currentCamera->copyFrom(*_auxCam, true);
+}
+
+void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
+  
+  _gl->clearScreen(*_backgroundColor);
+  _gl->viewport(0, 0, _width, _height);
+  rawRender(renderStateType);
 }
 
 void G3MWidget::render(int width, int height) {
@@ -544,7 +689,8 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFrom(*_nextCamera);
+  _currentCamera->copyFrom(*_nextCamera,
+                           false);
 
 #ifdef C_CODE
   delete _rendererState;
@@ -560,57 +706,18 @@ void G3MWidget::render(int width, int height) {
   _effectsScheduler->doOneCyle(_renderContext);
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
-
-  _gl->clearScreen(*_backgroundColor);
-
-  if (_rootState == NULL) {
-    _rootState = new GLState();
-  }
-
-  switch (renderStateType) {
-    case RENDER_READY:
-      setSelectedRenderer(_mainRenderer);
-      _cameraRenderer->render(_renderContext, _rootState);
-
-      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
-
-      if (_mainRenderer->isEnable()) {
-        _mainRenderer->render(_renderContext, _rootState);
-      }
-
+  
+  switch (_viewMode) {
+    case MONO:
+      rawRenderMono(renderStateType);
       break;
-
-    case RENDER_BUSY:
-      setSelectedRenderer(_busyRenderer);
-      _busyRenderer->render(_renderContext, _rootState);
+    case STEREO:
+      rawRenderStereoParallelAxis(renderStateType);
       break;
-
     default:
-      _errorRenderer->setErrors( _rendererState->getErrors() );
-      setSelectedRenderer(_errorRenderer);
-      _errorRenderer->render(_renderContext, _rootState);
-      break;
-
+      THROW_EXCEPTION("WRONG VIEW MODE.");
   }
-
-  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
-  if (orderedRenderables != NULL) {
-    const size_t orderedRenderablesCount = orderedRenderables->size();
-    for (size_t i = 0; i < orderedRenderablesCount; i++) {
-      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(_renderContext);
-      delete orderedRenderable;
-    }
-  }
-
-  if (_hudRenderer != NULL) {
-    if (renderStateType == RENDER_READY) {
-      if (_hudRenderer->isEnable()) {
-        _hudRenderer->render(_renderContext, _rootState);
-      }
-    }
-  }
-
+  
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
@@ -883,4 +990,22 @@ void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
   //  }
 }
 
+void G3MWidget::setViewMode(ViewMode viewMode) {
+  if (_viewMode != viewMode) {
+    _viewMode = viewMode;
 
+    if (_viewMode != STEREO) {
+      delete _auxCam;
+      _auxCam = NULL;
+      delete _leftEyeCam;
+      _leftEyeCam = NULL;
+      delete _rightEyeCam;
+      _rightEyeCam = NULL;
+    }
+
+    _context->setViewMode(_viewMode);
+    _renderContext->setViewMode(_viewMode);
+
+    onResizeViewportEvent(_width, _height);
+  }
+}

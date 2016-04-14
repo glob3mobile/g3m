@@ -43,21 +43,17 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+   implements
+      EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
-
-
-   private native void runUserPlugin() /*-{
-		$wnd.onLoadG3M();
-   }-*/;
 
 
    @Override
@@ -71,8 +67,7 @@ public class G3MWebGLTestingApplication
       g3mWidgetHolder.add(_g3mWidget);
 
 
-      // // Buenos Aires, there we go!
-      // _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 35000));
+      g3mWidgetHolder.add(_g3mWidget);
 
       // Canarias
       _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(49.0159538369538, 8.39245743376133, 69.1385));
@@ -226,17 +221,15 @@ public class G3MWebGLTestingApplication
    private static G3MWidget_WebGL createWidget() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
-
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-
-      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
+      final String proxy = null;
       builder.setDownloader(new Downloader_WebGL( //
                8, // maxConcurrentOperationCount
                10, // delayMillis
                proxy));
 
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
       builder.addRenderer(renderer);
@@ -379,23 +372,28 @@ public class G3MWebGLTestingApplication
    }
 
 
-   private static G3MWidget_WebGL createWidgetPlanetDebug() {
-      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+   private static MarksRenderer createMarksRenderer() {
+      final MarksRenderer marksRenderer = new MarksRenderer(false);
 
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
-
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-      builder.getPlanetRendererBuilder().setRenderDebug(true);
-
-      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
-      builder.setDownloader(new Downloader_WebGL( //
-               8, // maxConcurrentOperationCount
-               10, // delayMillis
-               proxy));
+      marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+         @Override
+         public boolean touchedMark(final Mark touchedMark) {
+            Window.alert("click on mark: " + touchedMark);
+            return true;
+         }
+      }, true);
 
 
-      return builder.createWidget();
+      final Mark mark = new Mark( //
+               new URL("g3m-marker.png"), //
+               Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 0), //
+               AltitudeMode.ABSOLUTE, //
+               0 // minDistanceToCamera
+      );
+      marksRenderer.addMark(mark);
+
+
+      return marksRenderer;
    }
 
 

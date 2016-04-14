@@ -39,7 +39,7 @@ bool DeviceAttitude_iOS::isTracking() const{
 
 void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const{
   
-  if (isTracking()){
+  if (isTracking()) {
     
     CMRotationMatrix m = _mm.deviceMotion.attitude.rotationMatrix;
     

@@ -24,7 +24,7 @@ public:
   
   DeviceAttitude_iOS(bool showsDeviceMovementDisplay);
   
-  ~DeviceAttitude_iOS(){}
+  ~DeviceAttitude_iOS() {}
   
   /**
    Must be called before any other operation

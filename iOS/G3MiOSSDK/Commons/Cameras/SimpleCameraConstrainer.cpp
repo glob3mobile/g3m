@@ -30,7 +30,8 @@ bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
   const double height = nextCamera->getGeodeticPosition()._height;
 
   if ((height < minHeight) || (height > maxHeight)) {
-    nextCamera->copyFrom(*previousCamera);
+    nextCamera->copyFrom(*previousCamera,
+                         true);
   }
   
   return true;

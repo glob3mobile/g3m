@@ -38,10 +38,10 @@ enum {
 // Create an OpenGL ES 2.0 context
 - (id)init {
   self = [super init];
-    
+
   if (self) {
-      NativeGL2_iOS* nGL = new NativeGL2_iOS();
-      _gl = new GL(nGL,false);
+    NativeGL2_iOS* nGL = new NativeGL2_iOS();
+    _gl = new GL(nGL);
     _firstRender = true;
     _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
@@ -50,23 +50,22 @@ enum {
         ) {
       return nil;
     }
-    
+
     // Create default framebuffer object. The backing will be allocated for the current layer in -resizeFromLayer
     glGenFramebuffers(1, &_defaultFramebuffer);
     glGenRenderbuffers(1, &_colorRenderbuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderbuffer);
-    
+
     // Create the depthbuffer
     glGenRenderbuffers(1, &_depthRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
   }
-  
+
   return self;
 }
-
 
 - (void)render: (void*) widgetV
 {
@@ -103,7 +102,7 @@ enum {
 
 - (BOOL)validateProgram:(GLuint)prog {
   GLint logLength, status;
-  
+
   glValidateProgram(prog);
   glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
@@ -112,56 +111,17 @@ enum {
     NSLog(@"Program validate log:\n%s", log);
     free(log);
   }
-  
+
   glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
   if (status == 0)
     return FALSE;
-  
+
   return TRUE;
 }
 
-//- (BOOL)loadShaders {
-//  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-//                                                                 ofType: @"vsh"];
-//  if (!vertShaderPathname) {
-//    NSLog(@"Can't load Shader.vsh");
-//    return FALSE;
-//  }
-//  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-//                                                             encoding: NSUTF8StringEncoding
-//                                                                error: nil] UTF8String]);
-//
-//  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-//                                                                 ofType: @"fsh"];
-//  if (!fragShaderPathname) {
-//    NSLog(@"Can't load Shader.fsh");
-//    return FALSE;
-//  }
-//
-//  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-//                                                               encoding: NSUTF8StringEncoding
-//                                                                  error: nil] UTF8String]);
-////  
-////  try {
-////    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
-////    if (_gpuProgram != NULL) {
-////      NSLog(@"GPU Program Loaded");
-////      try {
-////        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
-////      } catch (G3MError* e) {
-////        NSLog(@"%s", e->getMessage().c_str());
-////      }
-////    }
-////  } catch (G3MError* e) {
-////    NSLog(@"%s", e->getMessage().c_str());
-////  }
-//
-//  return TRUE;
-//}
-
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
   _firstRender = true;
-  
+
   // Allocate color buffer backing based on the current layer size
   glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
   [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
@@ -171,12 +131,12 @@ enum {
   // damos tamaño al buffer de profundidad
   glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
-  
+
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
     NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
     return NO;
   }
-  
+
   return YES;
 }
 
@@ -186,23 +146,23 @@ enum {
     glDeleteFramebuffers(1, &_defaultFramebuffer);
     _defaultFramebuffer = 0;
   }
-  
+
   if (_colorRenderbuffer) {
     glDeleteRenderbuffers(1, &_colorRenderbuffer);
     _colorRenderbuffer = 0;
   }
-  
+
   if (_depthRenderbuffer) {
     glDeleteRenderbuffers(1, &_depthRenderbuffer);
     _depthRenderbuffer = 0;
   }
-  
+
   // Tear down context
   if ([EAGLContext currentContext] == _context)
     [EAGLContext setCurrentContext:nil];
-  
+
   _context = nil;
-  
+
 }
 
 - (GL*)getGL {

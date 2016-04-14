@@ -40,6 +40,7 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -51,10 +52,10 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-         extends
-            GLSurfaceView
-         implements
-            OnGestureListener {
+   extends
+      GLSurfaceView
+   implements
+      OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -346,7 +347,8 @@ public final class G3MWidget_Android
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
    }
