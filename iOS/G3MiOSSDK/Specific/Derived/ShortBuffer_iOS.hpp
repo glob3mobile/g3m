@@ -99,6 +99,8 @@ public:
   short* getPointer() const {
     return _values;
   }
+    
+  void rewind() {}
 
   const std::string description() const;
 

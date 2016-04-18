@@ -137,6 +137,7 @@ public:
   // methods only used in Android for performance
   void put(float values[]) {}
   void rewind() {}
+  int position() {}
     
     
   void rawPut(size_t i,

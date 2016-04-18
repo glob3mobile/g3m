@@ -23,11 +23,9 @@ public:
   
   virtual void put(size_t i, float value) = 0;
     
-  virtual void put(float values[]) = 0;
 
   virtual void rawPut(size_t i, float value) = 0;
     
-  virtual void rewind() = 0;
 
   virtual void rawAdd(size_t i, float value) = 0;
 
@@ -40,6 +38,11 @@ public:
               const IFloatBuffer* srcBuffer) {
     rawPut(i, srcBuffer, 0, srcBuffer->size());
   }
+
+    
+  virtual void put(float values[]) = 0;
+  virtual void rewind() = 0;
+  virtual int position() = 0;
 
 };
 
