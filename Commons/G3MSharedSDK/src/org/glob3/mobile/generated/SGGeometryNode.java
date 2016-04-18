@@ -90,7 +90,7 @@ public class SGGeometryNode extends SGNode
   public final void rawRender(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _indices.size(), glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager());
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
