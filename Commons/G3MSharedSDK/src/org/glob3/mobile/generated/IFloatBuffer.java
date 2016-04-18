@@ -25,15 +25,11 @@ public abstract class IFloatBuffer implements IBuffer
 
   public abstract void put(int i, float value);
 
-  public final void put(float[] values)
-  {
-  }
+  public abstract void put(float[] values);
 
   public abstract void rawPut(int i, float value);
 
-  public final void rewind()
-  {
-  }
+  public abstract void rewind();
 
   public abstract void rawAdd(int i, float value);
 
