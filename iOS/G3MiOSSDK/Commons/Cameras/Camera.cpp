@@ -137,6 +137,9 @@ void Camera::resizeViewport(int width, int height) {
   _viewPortHeight = height;
 
   _dirtyFlags.setAllDirty();
+  
+  _tanHalfHorizontalFieldOfView = NAND;
+  _tanHalfVerticalFieldOfView = NAND;
 }
 
 void Camera::print() {

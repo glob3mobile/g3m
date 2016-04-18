@@ -1,0 +1,845 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 4415B4AA19CC26B800E73D38 /* countries.geojson */; };
+		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
+		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
+		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
+		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
+		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
+		CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF04CCF916D3E4D5004DFACF /* 409_554.bil */; };
+		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
+		CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CF0FC6ED1899A443005988D7 /* g3mesh.json */; };
+		CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */ = {isa = PBXBuildFile; fileRef = CF0FC6F11899B86B005988D7 /* 3d_.json */; };
+		CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */; };
+		CF15759318649D410059312A /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF15759218649D410059312A /* altimeter-ruler-1536x113.png */; };
+		CF186B0416B8572400A39478 /* A320.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0316B8572400A39478 /* A320.json */; };
+		CF186B0616B857DE00A39478 /* textures-A320 in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0516B857DE00A39478 /* textures-A320 */; };
+		CF186B0816B85A3600A39478 /* citation.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0716B85A3600A39478 /* citation.json */; };
+		CF186B0A16B85A5F00A39478 /* textures-citation in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0916B85A5F00A39478 /* textures-citation */; };
+		CF290D58187F322C000BE644 /* altitude_ladder.png in Resources */ = {isa = PBXBuildFile; fileRef = CF290D57187F322C000BE644 /* altitude_ladder.png */; };
+		CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */; };
+		CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CF3CA9DA182D99D500483977 /* isosurface-mesh.json */; };
+		CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E61770E8F100D5A80C /* libicucore.dylib */; };
+		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
+		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
+		CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */ = {isa = PBXBuildFile; fileRef = CF4968F71889810100D1C35E /* CompassHeadings.png */; };
+		CF61A643186384BD00DDC0DC /* DebugTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A642186384BD00DDC0DC /* DebugTexture.png */; };
+		CF61A6451863880500DDC0DC /* debug-texture.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A6441863880500DDC0DC /* debug-texture.png */; };
+		CF61A647186388B200DDC0DC /* debug-compass.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A646186388B200DDC0DC /* debug-compass.png */; };
+		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
+		CF88E728186C8A78003112BF /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF88E727186C8A78003112BF /* widget-background.png */; };
+		CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF8BE69217E0D22D0072273A /* aus4326.bil */; };
+		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
+		CF8E9887180D98DC00A08208 /* pointcloud in Resources */ = {isa = PBXBuildFile; fileRef = CF8E9886180D98DC00A08208 /* pointcloud */; };
+		CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CF8EE55A16CE94E40033AB7A /* mercator_debug.png */; };
+		CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */; };
+		CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */ = {isa = PBXBuildFile; fileRef = CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */; };
+		CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */; };
+		CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */; };
+		CFA245431800708D00921325 /* washington-memorial.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA245421800708D00921325 /* washington-memorial.json */; };
+		CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */ = {isa = PBXBuildFile; fileRef = CFB57D9E1860DAD900D5B094 /* Compass_rose_browns_00.png */; };
+		CFB57DA11860DF4700D5B094 /* Compass_rose_browns_00_transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = CFB57DA01860DF4700D5B094 /* Compass_rose_browns_00_transparent.png */; };
+		CFB57DA31860E13F00D5B094 /* compass-360.png in Resources */ = {isa = PBXBuildFile; fileRef = CFB57DA21860E13F00D5B094 /* compass-360.png */; };
+		CFC04FC2185F7F3900E7494A /* hud.png in Resources */ = {isa = PBXBuildFile; fileRef = CFC04FC1185F7F3900E7494A /* hud.png */; };
+		CFC04FC4185FA00400E7494A /* hud2.png in Resources */ = {isa = PBXBuildFile; fileRef = CFC04FC3185FA00400E7494A /* hud2.png */; };
+		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
+		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
+		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
+		CFE26D6018A153DB00253709 /* 3d_1.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D5F18A153DB00253709 /* 3d_1.json */; };
+		CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6118A1547B00253709 /* 3d_1-1.json */; };
+		CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6218A1547B00253709 /* 3d_1-2.json */; };
+		CFE26D6618A1547B00253709 /* 3d_1-3.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6318A1547B00253709 /* 3d_1-3.json */; };
+		CFE26D6A18A154D700253709 /* 3d_2-0.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6718A154D700253709 /* 3d_2-0.json */; };
+		CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6818A154D700253709 /* 3d_2-1.json */; };
+		CFE26D6C18A154D700253709 /* 3d_2-2.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE26D6918A154D700253709 /* 3d_2-2.json */; };
+		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
+		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
+		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
+		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
+		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; };
+		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
+		D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D84D3C97194753A900D16D69 /* radar-sprite.png */; };
+		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
+		D8DF55861CC4C73E00D7D084 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF55851CC4C73E00D7D084 /* libxml2.2.tbd */; };
+		D8DF55881CC4C74B00D7D084 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF55871CC4C74B00D7D084 /* libxml2.tbd */; };
+		D8DF558A1CC4C8FC00D7D084 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF55891CC4C8FC00D7D084 /* CoreMotion.framework */; };
+		D8DF558C1CC4C90900D7D084 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF558B1CC4C90900D7D084 /* CoreLocation.framework */; };
+		D8DF558F1CC4D4D100D7D084 /* EIFER Resources in Resources */ = {isa = PBXBuildFile; fileRef = D8DF558E1CC4D4D100D7D084 /* EIFER Resources */; };
+		D8DF55C91CC4D9C300D7D084 /* bulach_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55B61CC4D9C300D7D084 /* bulach_4326_lod2.gml */; };
+		D8DF55CA1CC4D9C300D7D084 /* daxlanden_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55B71CC4D9C300D7D084 /* daxlanden_4326_lod2.gml */; };
+		D8DF55CB1CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55B81CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml */; };
+		D8DF55CC1CC4D9C300D7D084 /* durlach_4326_lod2_PART_2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55B91CC4D9C300D7D084 /* durlach_4326_lod2_PART_2.gml */; };
+		D8DF55CD1CC4D9C300D7D084 /* durlach_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55BA1CC4D9C300D7D084 /* durlach_4326_lod2.gml */; };
+		D8DF55CE1CC4D9C300D7D084 /* eifer_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55BB1CC4D9C300D7D084 /* eifer_logo.png */; };
+		D8DF55CF1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55BC1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml */; };
+		D8DF55D01CC4D9C300D7D084 /* hohenwettersbach_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55BD1CC4D9C300D7D084 /* hohenwettersbach_4326_lod2.gml */; };
+		D8DF55D11CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55BE1CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml */; };
+		D8DF55D21CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55BF1CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml */; };
+		D8DF55D31CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C01CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson */; };
+		D8DF55D41CC4D9C300D7D084 /* ka_31467.bil in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C11CC4D9C300D7D084 /* ka_31467.bil */; };
+		D8DF55D51CC4D9C300D7D084 /* karlsruhe_data.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C21CC4D9C300D7D084 /* karlsruhe_data.geojson */; };
+		D8DF55D61CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C31CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml */; };
+		D8DF55D71CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C41CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml */; };
+		D8DF55D81CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C51CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml */; };
+		D8DF55D91CC4D9C300D7D084 /* knielingen_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C61CC4D9C300D7D084 /* knielingen_4326_lod2.gml */; };
+		D8DF55DA1CC4D9C300D7D084 /* random_cluster_fewer_points.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C71CC4D9C300D7D084 /* random_cluster_fewer_points.geojson */; };
+		D8DF55DB1CC4D9C300D7D084 /* random_cluster.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C81CC4D9C300D7D084 /* random_cluster.geojson */; };
+		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
+		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
+		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
+		D8EEF38F1577920B003FEB5E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */; };
+		D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF3931577920B003FEB5E /* InfoPlist.strings */; };
+		D8EEF3971577920B003FEB5E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3961577920B003FEB5E /* main.m */; };
+		D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF39A1577920B003FEB5E /* AppDelegate.m */; };
+		D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */; };
+		D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3A31577920B003FEB5E /* ViewController.mm */; };
+		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
+		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
+		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
+		E70B224D1700DBA300172DF3 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E70B224C1700DBA300172DF3 /* A320.bson */; };
+		E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152C1626D27F003D1013 /* Default-Landscape.png */; };
+		E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */; };
+		E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152E1626D27F003D1013 /* Default-Portrait.png */; };
+		E71B153A1626D27F003D1013 /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152F1626D27F003D1013 /* Default-Portrait@2x.png */; };
+		E71B153B1626D27F003D1013 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15301626D27F003D1013 /* Icon-72.png */; };
+		E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15311626D27F003D1013 /* Icon-72@2x.png */; };
+		E71B153D1626D27F003D1013 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15321626D27F003D1013 /* Icon-Small-50.png */; };
+		E71B153E1626D27F003D1013 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15331626D27F003D1013 /* Icon-Small.png */; };
+		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
+		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
+		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
+		E728385516E914D80037AA5C /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E728385416E914D80037AA5C /* g3m-marker.png */; };
+		E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */ = {isa = PBXBuildFile; fileRef = E736067C16F8D7BE000E32AD /* horizontal-gears.png */; };
+		E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A99316F202B700D138D8 /* sand-clock.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D8EEF41D1577AEC8003FEB5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D8EEF3B51577924D003FEB5E;
+			remoteInfo = G3MiOSSDK;
+		};
+		D8EEF4201577AEDC003FEB5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D8EEF3B41577924D003FEB5E;
+			remoteInfo = G3MiOSSDK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4415B4AA19CC26B800E73D38 /* countries.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = countries.geojson; sourceTree = "<group>"; };
+		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
+		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
+		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
+		CF04CCF916D3E4D5004DFACF /* 409_554.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = 409_554.bil; sourceTree = "<group>"; };
+		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
+		CF0FC6ED1899A443005988D7 /* g3mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = g3mesh.json; sourceTree = "<group>"; };
+		CF0FC6F11899B86B005988D7 /* 3d_.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 3d_.json; sourceTree = "<group>"; };
+		CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "caceres-2008x2032.bil"; sourceTree = "<group>"; };
+		CF15759218649D410059312A /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
+		CF186B0316B8572400A39478 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320.json; sourceTree = "<group>"; };
+		CF186B0516B857DE00A39478 /* textures-A320 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-A320"; sourceTree = "<group>"; };
+		CF186B0716B85A3600A39478 /* citation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citation.json; sourceTree = "<group>"; };
+		CF186B0916B85A5F00A39478 /* textures-citation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "textures-citation"; sourceTree = "<group>"; };
+		CF290D57187F322C000BE644 /* altitude_ladder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = altitude_ladder.png; sourceTree = "<group>"; };
+		CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_bil16_150x150.bil; sourceTree = "<group>"; };
+		CF3CA9DA182D99D500483977 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
+		CF4027E61770E8F100D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		CF4027E81770E8F900D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CF4968F71889810100D1C35E /* CompassHeadings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CompassHeadings.png; sourceTree = "<group>"; };
+		CF61A642186384BD00DDC0DC /* DebugTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DebugTexture.png; sourceTree = "<group>"; };
+		CF61A6441863880500DDC0DC /* debug-texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "debug-texture.png"; sourceTree = "<group>"; };
+		CF61A646186388B200DDC0DC /* debug-compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "debug-compass.png"; sourceTree = "<group>"; };
+		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
+		CF88E727186C8A78003112BF /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
+		CF8BE69217E0D22D0072273A /* aus4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = aus4326.bil; sourceTree = "<group>"; };
+		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
+		CF8E9886180D98DC00A08208 /* pointcloud */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pointcloud; sourceTree = "<group>"; };
+		CF8EE55A16CE94E40033AB7A /* mercator_debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mercator_debug.png; sourceTree = "<group>"; };
+		CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-4096x2048.bil"; sourceTree = "<group>"; };
+		CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial-normals.json"; sourceTree = "<group>"; };
+		CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MDT200-A_CORUNIA.bil"; sourceTree = "<group>"; };
+		CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
+		CFA245421800708D00921325 /* washington-memorial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial.json"; sourceTree = "<group>"; };
+		CFB57D9E1860DAD900D5B094 /* Compass_rose_browns_00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Compass_rose_browns_00.png; sourceTree = "<group>"; };
+		CFB57DA01860DF4700D5B094 /* Compass_rose_browns_00_transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Compass_rose_browns_00_transparent.png; sourceTree = "<group>"; };
+		CFB57DA21860E13F00D5B094 /* compass-360.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compass-360.png"; sourceTree = "<group>"; };
+		CFC04FC1185F7F3900E7494A /* hud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud.png; sourceTree = "<group>"; };
+		CFC04FC3185FA00400E7494A /* hud2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud2.png; sourceTree = "<group>"; };
+		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
+		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
+		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "elev-35.0_-6.0_38.0_-2.0_4096x2048.bil"; sourceTree = "<group>"; };
+		CFE26D5F18A153DB00253709 /* 3d_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 3d_1.json; sourceTree = "<group>"; };
+		CFE26D6118A1547B00253709 /* 3d_1-1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_1-1.json"; sourceTree = "<group>"; };
+		CFE26D6218A1547B00253709 /* 3d_1-2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_1-2.json"; sourceTree = "<group>"; };
+		CFE26D6318A1547B00253709 /* 3d_1-3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_1-3.json"; sourceTree = "<group>"; };
+		CFE26D6718A154D700253709 /* 3d_2-0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_2-0.json"; sourceTree = "<group>"; };
+		CFE26D6818A154D700253709 /* 3d_2-1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_2-1.json"; sourceTree = "<group>"; };
+		CFE26D6918A154D700253709 /* 3d_2-2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "3d_2-2.json"; sourceTree = "<group>"; };
+		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
+		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		D80D57301BBAA1F400BA4762 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
+		D84D3C97194753A900D16D69 /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
+		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
+		D8DF55851CC4C73E00D7D084 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		D8DF55871CC4C74B00D7D084 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		D8DF55891CC4C8FC00D7D084 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		D8DF558B1CC4C90900D7D084 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D8DF558E1CC4D4D100D7D084 /* EIFER Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "EIFER Resources"; sourceTree = "<group>"; };
+		D8DF55B61CC4D9C300D7D084 /* bulach_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = bulach_4326_lod2.gml; path = "EIFER Resources/bulach_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55B71CC4D9C300D7D084 /* daxlanden_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = daxlanden_4326_lod2.gml; path = "EIFER Resources/daxlanden_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55B81CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = durlach_4326_lod2_PART_1.gml; path = "EIFER Resources/durlach_4326_lod2_PART_1.gml"; sourceTree = "<group>"; };
+		D8DF55B91CC4D9C300D7D084 /* durlach_4326_lod2_PART_2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = durlach_4326_lod2_PART_2.gml; path = "EIFER Resources/durlach_4326_lod2_PART_2.gml"; sourceTree = "<group>"; };
+		D8DF55BA1CC4D9C300D7D084 /* durlach_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = durlach_4326_lod2.gml; path = "EIFER Resources/durlach_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55BB1CC4D9C300D7D084 /* eifer_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = eifer_logo.png; path = "EIFER Resources/eifer_logo.png"; sourceTree = "<group>"; };
+		D8DF55BC1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = hagsfeld_4326_lod2.gml; path = "EIFER Resources/hagsfeld_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55BD1CC4D9C300D7D084 /* hohenwettersbach_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = hohenwettersbach_4326_lod2.gml; path = "EIFER Resources/hohenwettersbach_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55BE1CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = innenstadt_ost_4326_lod2.gml; path = "EIFER Resources/innenstadt_ost_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55BF1CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = innenstadt_west_4326_lod2.gml; path = "EIFER Resources/innenstadt_west_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55C01CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Innenstadt_west_all_data.geojson; path = "EIFER Resources/Innenstadt_west_all_data.geojson"; sourceTree = "<group>"; };
+		D8DF55C11CC4D9C300D7D084 /* ka_31467.bil */ = {isa = PBXFileReference; lastKnownFileType = file; name = ka_31467.bil; path = "EIFER Resources/ka_31467.bil"; sourceTree = "<group>"; };
+		D8DF55C21CC4D9C300D7D084 /* karlsruhe_data.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = karlsruhe_data.geojson; path = "EIFER Resources/karlsruhe_data.geojson"; sourceTree = "<group>"; };
+		D8DF55C31CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = knielingen_4326_lod2_PART_1.gml; path = "EIFER Resources/knielingen_4326_lod2_PART_1.gml"; sourceTree = "<group>"; };
+		D8DF55C41CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = knielingen_4326_lod2_PART_2.gml; path = "EIFER Resources/knielingen_4326_lod2_PART_2.gml"; sourceTree = "<group>"; };
+		D8DF55C51CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = knielingen_4326_lod2_PART_3.gml; path = "EIFER Resources/knielingen_4326_lod2_PART_3.gml"; sourceTree = "<group>"; };
+		D8DF55C61CC4D9C300D7D084 /* knielingen_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = knielingen_4326_lod2.gml; path = "EIFER Resources/knielingen_4326_lod2.gml"; sourceTree = "<group>"; };
+		D8DF55C71CC4D9C300D7D084 /* random_cluster_fewer_points.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = random_cluster_fewer_points.geojson; path = "EIFER Resources/random_cluster_fewer_points.geojson"; sourceTree = "<group>"; };
+		D8DF55C81CC4D9C300D7D084 /* random_cluster.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = random_cluster.geojson; path = "EIFER Resources/random_cluster.geojson"; sourceTree = "<group>"; };
+		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
+		D8EEF3861577920B003FEB5E /* EIFER App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EIFER App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		D8EEF38C1577920B003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		D8EEF3921577920B003FEB5E /* EIFER App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EIFER App-Info.plist"; sourceTree = "<group>"; };
+		D8EEF3941577920B003FEB5E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D8EEF3961577920B003FEB5E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D8EEF3981577920B003FEB5E /* EIFER App-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EIFER App-Prefix.pch"; sourceTree = "<group>"; };
+		D8EEF3991577920B003FEB5E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		D8EEF39A1577920B003FEB5E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		D8EEF39D1577920B003FEB5E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		D8EEF3A21577920B003FEB5E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		D8EEF3A31577920B003FEB5E /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = ViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
+		E70B224C1700DBA300172DF3 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
+		E71B152C1626D27F003D1013 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
+		E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Default-Landscape@2x.png"; sourceTree = "<group>"; };
+		E71B152E1626D27F003D1013 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Default-Portrait.png"; sourceTree = "<group>"; };
+		E71B152F1626D27F003D1013 /* Default-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x.png"; path = "Resources/Default-Portrait@2x.png"; sourceTree = "<group>"; };
+		E71B15301626D27F003D1013 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/Icon-72.png"; sourceTree = "<group>"; };
+		E71B15311626D27F003D1013 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "Resources/Icon-72@2x.png"; sourceTree = "<group>"; };
+		E71B15321626D27F003D1013 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "Resources/Icon-Small-50.png"; sourceTree = "<group>"; };
+		E71B15331626D27F003D1013 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Resources/Icon-Small.png"; sourceTree = "<group>"; };
+		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
+		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
+		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
+		E736067C16F8D7BE000E32AD /* horizontal-gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "horizontal-gears.png"; sourceTree = "<group>"; };
+		E7A1A99316F202B700D138D8 /* sand-clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sand-clock.png"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D8EEF3831577920A003FEB5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8DF558C1CC4C90900D7D084 /* CoreLocation.framework in Frameworks */,
+				D8DF558A1CC4C8FC00D7D084 /* CoreMotion.framework in Frameworks */,
+				D8DF55881CC4C74B00D7D084 /* libxml2.tbd in Frameworks */,
+				D8DF55861CC4C73E00D7D084 /* libxml2.2.tbd in Frameworks */,
+				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
+				CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */,
+				CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */,
+				CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */,
+				443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */,
+				44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */,
+				D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */,
+				D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */,
+				D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */,
+				D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */,
+				D8EEF38F1577920B003FEB5E /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D8EEF37B1577920A003FEB5E = {
+			isa = PBXGroup;
+			children = (
+				D8EEF3891577920B003FEB5E /* Frameworks */,
+				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
+				D8EEF3871577920B003FEB5E /* Products */,
+				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
+			);
+			sourceTree = "<group>";
+		};
+		D8EEF3871577920B003FEB5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8EEF3861577920B003FEB5E /* EIFER App.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D8EEF3891577920B003FEB5E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8DF558B1CC4C90900D7D084 /* CoreLocation.framework */,
+				D8DF55891CC4C8FC00D7D084 /* CoreMotion.framework */,
+				D8DF55871CC4C74B00D7D084 /* libxml2.tbd */,
+				D8DF55851CC4C73E00D7D084 /* libxml2.2.tbd */,
+				CF4027E61770E8F100D5A80C /* libicucore.dylib */,
+				44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */,
+				CF4027E81770E8F900D5A80C /* CFNetwork.framework */,
+				443BBC8215A5C21F00EAE280 /* CoreData.framework */,
+				D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */,
+				D8EEF38C1577920B003FEB5E /* Foundation.framework */,
+				CFCCFE0C16F506C20082F383 /* GLKit.framework */,
+				D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */,
+				D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */,
+				CF4027EA1770E90000D5A80C /* Security.framework */,
+				D8EEF38A1577920B003FEB5E /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D8EEF3901577920B003FEB5E /* G3MiOSDemo */ = {
+			isa = PBXGroup;
+			children = (
+				D8EEF4271577B0D6003FEB5E /* Resources */,
+				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
+				D8EEF39A1577920B003FEB5E /* AppDelegate.m */,
+				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
+				D8EEF3A21577920B003FEB5E /* ViewController.h */,
+				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
+				D80D57301BBAA1F400BA4762 /* Images.xcassets */,
+				D8EEF3911577920B003FEB5E /* Supporting Files */,
+			);
+			name = G3MiOSDemo;
+			path = Glob3iOSDemo;
+			sourceTree = "<group>";
+		};
+		D8EEF3911577920B003FEB5E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D8EEF3921577920B003FEB5E /* EIFER App-Info.plist */,
+				D8EEF3931577920B003FEB5E /* InfoPlist.strings */,
+				D8EEF3961577920B003FEB5E /* main.m */,
+				D8EEF3981577920B003FEB5E /* EIFER App-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D8EEF4171577AEC8003FEB5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D8EEF4271577B0D6003FEB5E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D8DF55B61CC4D9C300D7D084 /* bulach_4326_lod2.gml */,
+				D8DF55B71CC4D9C300D7D084 /* daxlanden_4326_lod2.gml */,
+				D8DF55B81CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml */,
+				D8DF55B91CC4D9C300D7D084 /* durlach_4326_lod2_PART_2.gml */,
+				D8DF55BA1CC4D9C300D7D084 /* durlach_4326_lod2.gml */,
+				D8DF55BB1CC4D9C300D7D084 /* eifer_logo.png */,
+				D8DF55BC1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml */,
+				D8DF55BD1CC4D9C300D7D084 /* hohenwettersbach_4326_lod2.gml */,
+				D8DF55BE1CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml */,
+				D8DF55BF1CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml */,
+				D8DF55C01CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson */,
+				D8DF55C11CC4D9C300D7D084 /* ka_31467.bil */,
+				D8DF55C21CC4D9C300D7D084 /* karlsruhe_data.geojson */,
+				D8DF55C31CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml */,
+				D8DF55C41CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml */,
+				D8DF55C51CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml */,
+				D8DF55C61CC4D9C300D7D084 /* knielingen_4326_lod2.gml */,
+				D8DF55C71CC4D9C300D7D084 /* random_cluster_fewer_points.geojson */,
+				D8DF55C81CC4D9C300D7D084 /* random_cluster.geojson */,
+				D8DF558E1CC4D4D100D7D084 /* EIFER Resources */,
+				D84D3C97194753A900D16D69 /* radar-sprite.png */,
+				D80C8B481A77B44000E67587 /* anchorWidget.png */,
+				4415B4AA19CC26B800E73D38 /* countries.geojson */,
+				CFE26D6718A154D700253709 /* 3d_2-0.json */,
+				CFE26D6818A154D700253709 /* 3d_2-1.json */,
+				CFE26D6918A154D700253709 /* 3d_2-2.json */,
+				CFE26D6118A1547B00253709 /* 3d_1-1.json */,
+				CFE26D6218A1547B00253709 /* 3d_1-2.json */,
+				CFE26D6318A1547B00253709 /* 3d_1-3.json */,
+				CFE26D5F18A153DB00253709 /* 3d_1.json */,
+				CF0FC6F11899B86B005988D7 /* 3d_.json */,
+				CF0FC6ED1899A443005988D7 /* g3mesh.json */,
+				CF4968F71889810100D1C35E /* CompassHeadings.png */,
+				CF290D57187F322C000BE644 /* altitude_ladder.png */,
+				CF88E727186C8A78003112BF /* widget-background.png */,
+				D8317202186C5BAD00522E1B /* simpleStencil.png */,
+				CF15759218649D410059312A /* altimeter-ruler-1536x113.png */,
+				CF61A646186388B200DDC0DC /* debug-compass.png */,
+				CF61A6441863880500DDC0DC /* debug-texture.png */,
+				CF61A642186384BD00DDC0DC /* DebugTexture.png */,
+				CFB57DA21860E13F00D5B094 /* compass-360.png */,
+				CFB57DA01860DF4700D5B094 /* Compass_rose_browns_00_transparent.png */,
+				CFB57D9E1860DAD900D5B094 /* Compass_rose_browns_00.png */,
+				CFC04FC3185FA00400E7494A /* hud2.png */,
+				CFC04FC1185F7F3900E7494A /* hud.png */,
+				CF3CA9DA182D99D500483977 /* isosurface-mesh.json */,
+				CF8E9886180D98DC00A08208 /* pointcloud */,
+				CFA245421800708D00921325 /* washington-memorial.json */,
+				CF935B4B18006CCB0032A9C8 /* washington-memorial-normals.json */,
+				CF8BE69217E0D22D0072273A /* aus4326.bil */,
+				CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */,
+				CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */,
+				CF04CCF916D3E4D5004DFACF /* 409_554.bil */,
+				E70B224C1700DBA300172DF3 /* A320.bson */,
+				CF186B0316B8572400A39478 /* A320.json */,
+				CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */,
+				CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */,
+				CF186B0716B85A3600A39478 /* citation.json */,
+				E71B152C1626D27F003D1013 /* Default-Landscape.png */,
+				E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */,
+				E71B152E1626D27F003D1013 /* Default-Portrait.png */,
+				E71B152F1626D27F003D1013 /* Default-Portrait@2x.png */,
+				CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */,
+				D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */,
+				CF91C52F16D7C03B00E25C24 /* full-earth-4096x2048.bil */,
+				CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */,
+				E728385416E914D80037AA5C /* g3m-marker.png */,
+				CF0223821668318600024B73 /* geojson */,
+				E736067C16F8D7BE000E32AD /* horizontal-gears.png */,
+				E71B15301626D27F003D1013 /* Icon-72.png */,
+				E71B15311626D27F003D1013 /* Icon-72@2x.png */,
+				E71B15321626D27F003D1013 /* Icon-Small-50.png */,
+				E71B15331626D27F003D1013 /* Icon-Small.png */,
+				E71B15341626D27F003D1013 /* Icon-Small@2x.png */,
+				E71B15351626D27F003D1013 /* Icon.png */,
+				E71B15361626D27F003D1013 /* Icon@2x.png */,
+				CFEA76671666DCB000E89BC7 /* images */,
+				CF883B831591053100AEE39C /* mark.png */,
+				A717C99515EBA71D00EEC830 /* mercator.jpg */,
+				CF8EE55A16CE94E40033AB7A /* mercator_debug.png */,
+				CFF95F7C158A748F00B56E11 /* plane.png */,
+				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
+				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
+				E7A1A99316F202B700D138D8 /* sand-clock.png */,
+				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
+				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
+				CF09A94D16A09F7000E72811 /* test.bson */,
+				CF186B0516B857DE00A39478 /* textures-A320 */,
+				CF186B0916B85A5F00A39478 /* textures-citation */,
+				D8E93BDF1588A171009D497C /* world.jpg */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D8EEF3851577920A003FEB5E /* EIFER App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8EEF3A71577920B003FEB5E /* Build configuration list for PBXNativeTarget "EIFER App" */;
+			buildPhases = (
+				D8EEF3821577920A003FEB5E /* Sources */,
+				D8EEF3831577920A003FEB5E /* Frameworks */,
+				D8EEF3841577920A003FEB5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D8EEF4211577AEDC003FEB5E /* PBXTargetDependency */,
+			);
+			name = "EIFER App";
+			productName = Glob3iOSDemo;
+			productReference = D8EEF3861577920B003FEB5E /* EIFER App.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D8EEF37D1577920A003FEB5E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					D8EEF3851577920A003FEB5E = {
+						DevelopmentTeam = CTLLY45L74;
+					};
+				};
+			};
+			buildConfigurationList = D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "EIFER App" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D8EEF37B1577920A003FEB5E;
+			productRefGroup = D8EEF3871577920B003FEB5E /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D8EEF4171577AEC8003FEB5E /* Products */;
+					ProjectRef = D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				D8EEF3851577920A003FEB5E /* EIFER App */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libG3MiOSSDK.a;
+			remoteRef = D8EEF41D1577AEC8003FEB5E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D8EEF3841577920A003FEB5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
+				D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */,
+				D8DF55CA1CC4D9C300D7D084 /* daxlanden_4326_lod2.gml in Resources */,
+				D8DF55D31CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson in Resources */,
+				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
+				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
+				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
+				D8E93BE01588A171009D497C /* world.jpg in Resources */,
+				D8DF55D91CC4D9C300D7D084 /* knielingen_4326_lod2.gml in Resources */,
+				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
+				CF883B841591053100AEE39C /* mark.png in Resources */,
+				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
+				D8DF55D01CC4D9C300D7D084 /* hohenwettersbach_4326_lod2.gml in Resources */,
+				D8DF55CC1CC4D9C300D7D084 /* durlach_4326_lod2_PART_2.gml in Resources */,
+				D8DF55D51CC4D9C300D7D084 /* karlsruhe_data.geojson in Resources */,
+				CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */,
+				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
+				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
+				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
+				CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */,
+				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
+				D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */,
+				D8DF55D21CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml in Resources */,
+				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
+				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
+				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
+				CF935B4C18006CCB0032A9C8 /* washington-memorial-normals.json in Resources */,
+				E71B153A1626D27F003D1013 /* Default-Portrait@2x.png in Resources */,
+				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
+				E71B153B1626D27F003D1013 /* Icon-72.png in Resources */,
+				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
+				D8DF55CF1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml in Resources */,
+				E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */,
+				E71B153D1626D27F003D1013 /* Icon-Small-50.png in Resources */,
+				D8DF55D71CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml in Resources */,
+				CFE26D6A18A154D700253709 /* 3d_2-0.json in Resources */,
+				D8DF55D81CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml in Resources */,
+				E71B153E1626D27F003D1013 /* Icon-Small.png in Resources */,
+				D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */,
+				E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */,
+				E71B15401626D27F003D1013 /* Icon.png in Resources */,
+				D8DF55D41CC4D9C300D7D084 /* ka_31467.bil in Resources */,
+				D8DF558F1CC4D4D100D7D084 /* EIFER Resources in Resources */,
+				E71B15411626D27F003D1013 /* Icon@2x.png in Resources */,
+				CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */,
+				CFEA76681666DCB000E89BC7 /* images in Resources */,
+				CF0223831668318600024B73 /* geojson in Resources */,
+				CF186B0416B8572400A39478 /* A320.json in Resources */,
+				CF61A643186384BD00DDC0DC /* DebugTexture.png in Resources */,
+				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
+				CFC04FC2185F7F3900E7494A /* hud.png in Resources */,
+				CF186B0816B85A3600A39478 /* citation.json in Resources */,
+				D8DF55C91CC4D9C300D7D084 /* bulach_4326_lod2.gml in Resources */,
+				D8DF55CE1CC4D9C300D7D084 /* eifer_logo.png in Resources */,
+				CFE26D6618A1547B00253709 /* 3d_1-3.json in Resources */,
+				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
+				D8DF55DA1CC4D9C300D7D084 /* random_cluster_fewer_points.geojson in Resources */,
+				CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */,
+				CF290D58187F322C000BE644 /* altitude_ladder.png in Resources */,
+				CF61A6451863880500DDC0DC /* debug-texture.png in Resources */,
+				CF8EE55B16CE94E40033AB7A /* mercator_debug.png in Resources */,
+				D8DF55CD1CC4D9C300D7D084 /* durlach_4326_lod2.gml in Resources */,
+				D8DF55DB1CC4D9C300D7D084 /* random_cluster.geojson in Resources */,
+				D8DF55D11CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml in Resources */,
+				CF35A20B16D3D70100D795D8 /* sample_bil16_150x150.bil in Resources */,
+				CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */,
+				D8DF55D61CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml in Resources */,
+				CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */,
+				D8DF55CB1CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml in Resources */,
+				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
+				CFE26D6C18A154D700253709 /* 3d_2-2.json in Resources */,
+				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
+				CFB57DA31860E13F00D5B094 /* compass-360.png in Resources */,
+				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
+				E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */,
+				CFB57DA11860DF4700D5B094 /* Compass_rose_browns_00_transparent.png in Resources */,
+				E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */,
+				D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */,
+				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
+				CF15759318649D410059312A /* altimeter-ruler-1536x113.png in Resources */,
+				CF61A647186388B200DDC0DC /* debug-compass.png in Resources */,
+				CF88E728186C8A78003112BF /* widget-background.png in Resources */,
+				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
+				4415B4AB19CC26B800E73D38 /* countries.geojson in Resources */,
+				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
+				CFE26D6418A1547B00253709 /* 3d_1-1.json in Resources */,
+				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
+				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
+				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
+				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
+				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
+				CFA245431800708D00921325 /* washington-memorial.json in Resources */,
+				CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D8EEF3821577920A003FEB5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8EEF3971577920B003FEB5E /* main.m in Sources */,
+				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
+				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D8EEF4211577AEDC003FEB5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = G3MiOSSDK;
+			targetProxy = D8EEF4201577AEDC003FEB5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D8EEF3931577920B003FEB5E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8EEF3941577920B003FEB5E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8EEF39D1577920B003FEB5E /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D8EEF3A51577920B003FEB5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D8EEF3A61577920B003FEB5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D8EEF3A81577920B003FEB5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Glob3iOSDemo/EIFER App-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					C_CODE,
+				);
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/**",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
+				INFOPLIST_FILE = "Glob3iOSDemo/EIFER App-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.glob3mobile.EIFERApp;
+				PRODUCT_NAME = "EIFER App";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		D8EEF3A91577920B003FEB5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Glob3iOSDemo/EIFER App-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/**",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
+				INFOPLIST_FILE = "Glob3iOSDemo/EIFER App-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.glob3mobile.EIFERApp;
+				PRODUCT_NAME = "EIFER App";
+				PROVISIONING_PROFILE = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "EIFER App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8EEF3A51577920B003FEB5E /* Debug */,
+				D8EEF3A61577920B003FEB5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8EEF3A71577920B003FEB5E /* Build configuration list for PBXNativeTarget "EIFER App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8EEF3A81577920B003FEB5E /* Debug */,
+				D8EEF3A91577920B003FEB5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D8EEF37D1577920A003FEB5E /* Project object */;
+}
