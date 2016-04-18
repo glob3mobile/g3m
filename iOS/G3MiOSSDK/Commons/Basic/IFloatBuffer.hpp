@@ -22,8 +22,14 @@ public:
   virtual float get(size_t i) const = 0;
   
   virtual void put(size_t i, float value) = 0;
+    
+  void put(float values[]) {
+  }
 
   virtual void rawPut(size_t i, float value) = 0;
+    
+  void rewind() {
+  }
 
   virtual void rawAdd(size_t i, float value) = 0;
 

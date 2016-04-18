@@ -133,7 +133,7 @@ public:
       _timestamp++;
     }
   }
-
+    
   void rawPut(size_t i,
               float value) {
     if (i >= _size) {

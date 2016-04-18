@@ -38,7 +38,7 @@ public:
   {
   }
 
-  int getType() {
+  int getType() const {
     return _type;
   }
     
