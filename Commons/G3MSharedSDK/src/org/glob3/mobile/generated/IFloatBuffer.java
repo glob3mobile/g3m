@@ -25,11 +25,9 @@ public abstract class IFloatBuffer implements IBuffer
 
   public abstract void put(int i, float value);
 
-  public abstract void put(float[] values);
 
   public abstract void rawPut(int i, float value);
 
-  public abstract void rewind();
 
   public abstract void rawAdd(int i, float value);
 
@@ -39,5 +37,10 @@ public abstract class IFloatBuffer implements IBuffer
   {
     rawPut(i, srcBuffer, 0, srcBuffer.size());
   }
+
+
+  public abstract void put(float[] values);
+  public abstract void rewind();
+  public abstract int position();
 
 }
