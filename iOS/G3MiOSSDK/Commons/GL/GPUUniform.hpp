@@ -38,6 +38,10 @@ public:
   {
   }
 
+  int getType() {
+    return _type;
+  }
+    
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
