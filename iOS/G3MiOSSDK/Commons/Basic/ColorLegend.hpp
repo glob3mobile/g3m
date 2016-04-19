@@ -27,7 +27,7 @@ public:
   
   ColorLegend(std::vector<ColorAndValue*> legend):_legend(legend){
   
-    for (int i = 0; i < _legend.size() -1; i++) {
+    for (size_t i = 0; i < _legend.size() -1; i++) {
       if (_legend[i]->_value >= _legend[i+1]->_value){
         THROW_EXCEPTION("ColorLegend -> List of colors must be passed in ascendant order.");
       }
@@ -36,7 +36,7 @@ public:
   }
   
   ~ColorLegend(){
-    for (int i = 0; i < _legend.size(); i++) {
+    for (size_t i = 0; i < _legend.size(); i++) {
       delete _legend[i];
     }
   }
@@ -46,7 +46,7 @@ public:
     
     ColorAndValue* inf= NULL, *sup = NULL;
     
-    for (int i = 0; i < _legend.size(); i++) {
+    for (size_t i = 0; i < _legend.size(); i++) {
       if (_legend[i]->_value <= value){
         inf = _legend[i];
         if (i < _legend.size() -1){

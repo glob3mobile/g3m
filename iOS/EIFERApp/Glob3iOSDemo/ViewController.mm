@@ -204,65 +204,65 @@
 
 
 //class MyTerrainTL: public TerrainTouchListener {
-//  
+//
 //  G3MWidget* _widget;
-//  
+//
 //  bool _usingVR;
-//  
+//
 //  class AltitudeFixerLM: public ILocationModifier{
 //    Geodetic3D modify(const Geodetic3D& location){
 //      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 3);
 //    }
 //  };
-//  
+//
 //  bool _fixAltitude;
-//  
+//
 //public:
-//  
-//  
+//
+//
 //  MyTerrainTL(G3MWidget* widget, bool fixAltitude):
 //  _widget(widget),
 //  _usingVR(false),
 //  _fixAltitude(fixAltitude){
-//    
+//
 //  }
-//  
+//
 //  bool onTerrainTouch(const G3MEventContext* ec,
 //                      const Vector2F&        pixel,
 //                      const Camera*          camera,
 //                      const Geodetic3D&      position,
 //                      const Tile*            tile){
-//    
+//
 //    CameraRenderer* cameraRenderer = _widget->getCameraRenderer();
 //    cameraRenderer->clearHandlers();
-//    
+//
 //    if (_usingVR){
 //      const bool useInertia = true;
 //      cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
 //      cameraRenderer->addHandler(new CameraDoubleDragHandler());
 //      cameraRenderer->addHandler(new CameraRotationHandler());
 //      cameraRenderer->addHandler(new CameraDoubleTapHandler());
-//      
-//      
+//
+//
 //      _widget->getNextCamera()->forceZNear(NAND);
 //    } else{
-//      
+//
 //      ILocationModifier * lm = NULL;
 //      if (_fixAltitude){
 //        lm = new AltitudeFixerLM();
 //      }
-//      
+//
 //      DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
 //      cameraRenderer->addHandler(dac);
-//      
+//
 //      _widget->getNextCamera()->forceZNear(1.0);
 //    }
-//    
+//
 //    _usingVR = !_usingVR;
-//    
+//
 //    return true;
 //  }
-//  
+//
 //};
 
 class ColouringCityGMLDemoSceneBDL : public IBufferDownloadListener {
@@ -514,6 +514,7 @@ public:
 {
   [super viewDidLoad];
   
+  _showingMenu = true;
   
   G3MWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin |
   UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
@@ -522,20 +523,20 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  //    _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+  //  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  //      _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  //      _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  //      _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+  //      _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+  //      _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+  //      _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+  //      _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+  //      _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+  //      _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
   
-  
-  [self initEIFERG3m:true];
+  _useDem = true;
+  [self initEIFERG3m:_useDem];
   
   
   [[self G3MWidget] startAnimation];
@@ -593,22 +594,22 @@ public:
   
   _hudRenderer->addWidget(label);
   
-//  HUDQuadWidget* logo = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///eifer_logo.png")),
-//                                          new HUDAbsolutePosition(0),
-//                                          new HUDRelativePosition(0.82,
-//                                                                  HUDRelativePosition::VIEWPORT_HEIGHT,
-//                                                                  HUDRelativePosition::MIDDLE),
-//                                          new HUDRelativeSize(0.5,
-//                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS),
-//                                          new HUDRelativeSize(0.25,
-//                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS));
-//  _hudRenderer->addWidget(logo);
+  //  HUDQuadWidget* logo = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///eifer_logo.png")),
+  //                                          new HUDAbsolutePosition(0),
+  //                                          new HUDRelativePosition(0.82,
+  //                                                                  HUDRelativePosition::VIEWPORT_HEIGHT,
+  //                                                                  HUDRelativePosition::MIDDLE),
+  //                                          new HUDRelativeSize(0.5,
+  //                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS),
+  //                                          new HUDRelativeSize(0.25,
+  //                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS));
+  //  _hudRenderer->addWidget(logo);
   
   
   builder.initializeWidget();
   
   
-//  [G3MWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL([G3MWidget widget], !useDEM));
+  //  [G3MWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL([G3MWidget widget], !useDEM));
   
   if (useDEM){
     Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
@@ -626,17 +627,27 @@ public:
 -(void) createPointCloud:(ElevationData*) ed withDescriptor:(const std::string&) pointCloudDescriptor {
   
   
-  Mesh* m = BuildingDataParser::createPointCloudMesh(pointCloudDescriptor, _planet, ed);
+  //Mesh* m = BuildingDataParser::createPointCloudMesh(pointCloudDescriptor, _planet, ed);
+  Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, ed);
+  
   _meshRenderer->addMesh(m);
-  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                           new TimeEvolutionTask((AbstractMesh*)m, _labelBuilder)));
+  
+  //TODO: CHANGE POINTCLOUD WITH TIME
+  //  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+  //                                                           new TimeEvolutionTask((AbstractMesh*)m, _labelBuilder)));
 }
 
 -(void) requestPointCloud:(ElevationData*) ed{
+  //  [G3MWidget widget]->getG3MContext()
+  //  ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
+  //                                   new PointCloudBDL(self, ed),
+  //                                   true);
+  
   [G3MWidget widget]->getG3MContext()
-  ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
+  ->getDownloader()->requestBuffer(URL("file:///SolarRadiation.geojson"), 1000, TimeInterval::forever(), true,
                                    new PointCloudBDL(self, ed),
                                    true);
+  
 }
 
 
@@ -725,7 +736,7 @@ public:
   
   if (usingVR){
     
-    bool fixAltitude = true;
+    bool fixAltitude = !_useDem;
     
     ILocationModifier * lm = NULL;
     if (fixAltitude){
@@ -788,6 +799,25 @@ public:
     return YES;
   }
 }
+
+//// MENU
+
+
+- (IBAction)showMenuButtonPressed:(id)sender {
+  
+  if (_showingMenu){
+    
+    UIImage* image = [UIImage imageNamed:@"down"];
+    [_showMenuButton setImage:image forState:UIControlStateNormal];
+  } else{
+    UIImage* image = [UIImage imageNamed:@"up"];
+    [_showMenuButton setImage:image forState:UIControlStateNormal];
+  }
+  
+  _showingMenu = !_showingMenu;
+}
+
+
 
 /////PICKER VIEW
 

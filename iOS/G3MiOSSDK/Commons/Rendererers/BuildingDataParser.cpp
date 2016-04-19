@@ -130,3 +130,64 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
   return dm;
 }
 
+Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData){
+  
+  std::vector<ColorLegend::ColorAndValue*> legend;
+  legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0.0));
+  legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 25.0));
+  ColorLegend cl(legend);
+  
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  FloatBufferBuilderFromColor colors;
+  //  int pointCounter = 0;
+  size_t pos = 0;
+  size_t dataL = data.length();
+  while (pos < dataL){
+    
+    IStringUtils::StringExtractionResult value = IStringUtils::extractSubStringBetween(data, "\"represente\": ", ",", pos);
+    if (value._endingPos == std::string::npos){
+      break;
+    }
+    pos = value._endingPos +1 ;
+    double v = IStringUtils::instance()->parseDouble(value._string);
+    
+    
+    IStringUtils::StringExtractionResult point = IStringUtils::extractSubStringBetween(data, "\"coordinates\": [", " ] ", pos);
+    if (point._endingPos == std::string::npos){
+      break;
+    }
+    pos = point._endingPos +1 ;
+    
+    std::vector<double> vd = IStringUtils::instance()->parseDoubles(point._string, ", ");
+    
+    if (elevationData == NULL){
+      Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
+      vertices->add(g);
+    } else{
+      double h = elevationData->getElevationAt(Angle::fromDegrees(vd[1]), Angle::fromDegrees(vd[0]));
+      Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2 + h);
+      vertices->add(g);
+    }
+    
+    Color color = cl.getColor(v);
+    colors.add(color);
+    
+    //    if (pointCounter++ % 100 == 0){
+    //      ILogger::instance()->logInfo("%d points parsed", pointCounter);
+    //    }
+  }
+  
+  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
+                                  true,
+                                  vertices->getCenter(),
+                                  vertices->create(),
+                                  1.0,
+                                  4.0,
+                                  NULL, //new Color(Color::red()),
+                                  colors.create());
+  
+  delete vertices;
+  
+  return dm;
+}
+

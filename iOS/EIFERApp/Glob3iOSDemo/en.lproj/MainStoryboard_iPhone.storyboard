@@ -20,53 +20,121 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lOt-Xd-eJz" customClass="G3MWidget_iOS">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eifer_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="43Y-r4-tOo">
+                                <rect key="frame" x="0.0" y="0.0" width="120" height="63"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="6Qs-DH-3X2"/>
+                                    <constraint firstAttribute="height" constant="63" id="DX3-bF-AeS"/>
+                                    <constraint firstAttribute="height" constant="128" id="TV8-XK-5XL"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="jF8-IG-ZMK"/>
+                                    <constraint firstAttribute="width" constant="240" id="lEX-VE-1LI"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="sfU-Kg-nuc"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="TV8-XK-5XL"/>
+                                        <exclude reference="jF8-IG-ZMK"/>
+                                        <exclude reference="lEX-VE-1LI"/>
+                                        <exclude reference="sfU-Kg-nuc"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IpR-T2-IV5">
+                                <rect key="frame" x="0.0" y="370" width="600" height="230"/>
                                 <subviews>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4bm-fF-v2U">
-                                        <rect key="frame" x="0.0" y="384" width="600" height="216"/>
+                                        <rect key="frame" x="0.0" y="14" width="600" height="216"/>
                                         <connections>
                                             <outlet property="dataSource" destination="90h-7u-REb" id="bRf-a6-qFh"/>
                                             <outlet property="delegate" destination="90h-7u-REb" id="1Kf-66-iiS"/>
                                         </connections>
                                     </pickerView>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lse-Zd-nJs">
-                                        <rect key="frame" x="543" y="561" width="51" height="31"/>
+                                        <rect key="frame" x="543" y="178" width="51" height="31"/>
                                         <connections>
                                             <action selector="switchVR:" destination="90h-7u-REb" eventType="touchUpInside" id="QHV-E7-cKt"/>
                                         </connections>
                                     </switch>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="eifer_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="43Y-r4-tOo">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="64"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieu-7s-ThD">
+                                        <rect key="frame" x="543" y="0.0" width="49" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="128" id="TV8-XK-5XL"/>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="jF8-IG-ZMK"/>
-                                            <constraint firstAttribute="width" constant="240" id="lEX-VE-1LI"/>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="sfU-Kg-nuc"/>
+                                            <constraint firstAttribute="height" constant="30" id="C3b-8Z-5OD"/>
+                                            <constraint firstAttribute="width" constant="49" id="gV5-c2-lDF"/>
                                         </constraints>
-                                    </imageView>
+                                        <state key="normal" image="up.png"/>
+                                        <connections>
+                                            <action selector="showMenuButtonPressed:" destination="90h-7u-REb" eventType="touchUpInside" id="VN5-Nc-64L"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="0.040183829109999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="lse-Zd-nJs" secondAttribute="bottom" constant="8" id="OX0-Tc-9A5"/>
-                                    <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="QBd-kI-RxA"/>
-                                    <constraint firstItem="43Y-r4-tOo" firstAttribute="leading" secondItem="lOt-Xd-eJz" secondAttribute="leading" id="bcu-Lp-2m6"/>
-                                    <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" id="e0J-cJ-vdG"/>
-                                    <constraint firstItem="43Y-r4-tOo" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="top" id="gUh-Ox-J3G"/>
-                                    <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="lOt-Xd-eJz" secondAttribute="leading" id="pIb-7b-fDh"/>
-                                    <constraint firstAttribute="trailing" secondItem="lse-Zd-nJs" secondAttribute="trailing" constant="8" id="xBX-pd-HmI"/>
+                                    <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="7qz-Q6-Er8"/>
+                                    <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" id="Arc-Qn-IOP"/>
+                                    <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="Hvg-7V-kk4"/>
+                                    <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="Jxs-D3-Gad"/>
+                                    <constraint firstAttribute="height" constant="230" id="Rpz-dR-6Le"/>
+                                    <constraint firstAttribute="trailing" secondItem="lse-Zd-nJs" secondAttribute="trailing" constant="8" id="Umd-gn-SGE"/>
+                                    <constraint firstItem="ieu-7s-ThD" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="top" id="Uo4-Xx-w4E"/>
+                                    <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="VqU-8m-nyh"/>
+                                    <constraint firstAttribute="trailing" secondItem="ieu-7s-ThD" secondAttribute="trailing" constant="8" id="YcL-sM-FSH"/>
+                                    <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" id="bNO-z8-IdW"/>
+                                    <constraint firstAttribute="trailing" secondItem="lse-Zd-nJs" secondAttribute="trailing" constant="8" id="juO-60-1L6"/>
+                                    <constraint firstAttribute="bottom" secondItem="lse-Zd-nJs" secondAttribute="bottom" constant="8" id="ueD-2y-4ok"/>
+                                    <constraint firstAttribute="bottom" secondItem="lse-Zd-nJs" secondAttribute="bottom" constant="21" id="z5z-ie-88i"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Hvg-7V-kk4"/>
+                                        <exclude reference="VqU-8m-nyh"/>
+                                        <exclude reference="bNO-z8-IdW"/>
+                                        <exclude reference="Umd-gn-SGE"/>
+                                        <exclude reference="ueD-2y-4ok"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="IpR-T2-IV5" firstAttribute="top" secondItem="alZ-1c-GDj" secondAttribute="top" constant="333" id="3cw-8O-Uo4"/>
+                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerX" secondItem="IpR-T2-IV5" secondAttribute="centerX" id="Ab1-0i-V0u"/>
+                            <constraint firstItem="IpR-T2-IV5" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leadingMargin" constant="-20" id="B15-PW-9C4"/>
+                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerX" secondItem="alZ-1c-GDj" secondAttribute="centerX" id="CVw-vE-7KL"/>
+                            <constraint firstItem="IpR-T2-IV5" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leading" id="DD9-Bf-Tsf"/>
                             <constraint firstItem="lOt-Xd-eJz" firstAttribute="top" secondItem="alZ-1c-GDj" secondAttribute="topMargin" id="Gu3-Bn-qep"/>
+                            <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" constant="13" id="HHL-T4-HaV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lOt-Xd-eJz" secondAttribute="trailing" constant="-20" id="Hku-Al-Nab"/>
+                            <constraint firstItem="IpR-T2-IV5" firstAttribute="top" secondItem="tsc-ag-hrd" secondAttribute="bottom" constant="173" id="Ibd-AX-6R6"/>
+                            <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" id="TRP-0o-3Hd"/>
+                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerY" secondItem="IpR-T2-IV5" secondAttribute="centerY" id="W3X-n0-iA5"/>
+                            <constraint firstAttribute="trailing" secondItem="IpR-T2-IV5" secondAttribute="trailing" id="ZXK-i8-FtA"/>
+                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerY" secondItem="alZ-1c-GDj" secondAttribute="centerY" id="huV-ac-Jsn"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="IpR-T2-IV5" secondAttribute="trailing" constant="-20" id="kTn-Gq-Ngy"/>
+                            <constraint firstItem="43Y-r4-tOo" firstAttribute="top" secondItem="tsc-ag-hrd" secondAttribute="bottom" id="lzE-mA-8Ba"/>
                             <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="bottom" id="uRh-bf-lbO"/>
                             <constraint firstItem="lOt-Xd-eJz" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leadingMargin" constant="-20" id="w7k-RG-kDa"/>
+                            <constraint firstItem="43Y-r4-tOo" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leadingMargin" constant="-20" id="yuZ-fD-gIT"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Ab1-0i-V0u"/>
+                                <exclude reference="CVw-vE-7KL"/>
+                                <exclude reference="W3X-n0-iA5"/>
+                                <exclude reference="huV-ac-Jsn"/>
+                                <exclude reference="3cw-8O-Uo4"/>
+                                <exclude reference="DD9-Bf-Tsf"/>
+                                <exclude reference="Ibd-AX-6R6"/>
+                                <exclude reference="ZXK-i8-FtA"/>
+                                <exclude reference="HHL-T4-HaV"/>
+                            </mask>
+                        </variation>
                     </view>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="c8U-QO-hqA"/>
+                        <outlet property="_showMenuButton" destination="ieu-7s-ThD" id="VPk-Zt-r5p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xuj-Dk-csY" sceneMemberID="firstResponder"/>
@@ -76,5 +144,6 @@
     </scenes>
     <resources>
         <image name="eifer_logo.png" width="1856" height="928"/>
+        <image name="up.png" width="68" height="46"/>
     </resources>
 </document>

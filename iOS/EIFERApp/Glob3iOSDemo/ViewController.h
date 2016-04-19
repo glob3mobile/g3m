@@ -39,6 +39,9 @@ class CityGMLBuilding;
   std::vector<CityGMLBuilding*> _buildings;
   
   NSArray* _pickerArray;
+  bool _useDem;
+  __weak IBOutlet UIButton *_showMenuButton;
+  BOOL _showingMenu;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
