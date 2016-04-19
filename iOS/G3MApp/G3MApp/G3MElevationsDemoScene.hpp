@@ -10,6 +10,7 @@
 
 #include "G3MDemoScene.hpp"
 #include "G3MiOSSDK/Sector.hpp"
+#include <G3MiOSSDK/SGShape.hpp>
 
 class G3MElevationsDemoScene : public G3MDemoScene {
 private:
