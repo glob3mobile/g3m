@@ -44,49 +44,49 @@ public class Camera
        _geodeticPosition.dispose();
   }
 
-  public final void copyFrom(Camera that)
+  public final void copyFrom(Camera that, boolean ignoreTimestamp)
   {
   
-    if (_timestamp == that._timestamp)
+    if (ignoreTimestamp || _timestamp != that._timestamp)
     {
-      return;
+  
+      that.forceMatrixCreation();
+  
+      _timestamp = that._timestamp;
+  
+      _viewPortWidth = that._viewPortWidth;
+      _viewPortHeight = that._viewPortHeight;
+  
+      _planet = that._planet;
+  
+      _position.copyFrom(that._position);
+      _center.copyFrom(that._center);
+      _up.copyFrom(that._up);
+      _normalizedPosition.copyFrom(that._normalizedPosition);
+  
+      _dirtyFlags.copyFrom(that._dirtyFlags);
+  
+      _frustumData = that._frustumData;
+  
+      _projectionMatrix.copyValue(that._projectionMatrix);
+      _modelMatrix.copyValue(that._modelMatrix);
+      _modelViewMatrix.copyValue(that._modelViewMatrix);
+  
+      _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+  
+      _geodeticCenterOfView = that._geodeticCenterOfView;
+  
+      _frustum = that._frustum;
+  
+      _frustumInModelCoordinates = that._frustumInModelCoordinates;
+  
+      _geodeticPosition = that._geodeticPosition;
+      _angle2Horizon = that._angle2Horizon;
+  
+      _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
+      _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
     }
   
-    that.forceMatrixCreation();
-  
-    _timestamp = that._timestamp;
-  
-    _viewPortWidth = that._viewPortWidth;
-    _viewPortHeight = that._viewPortHeight;
-  
-    _planet = that._planet;
-  
-    _position.copyFrom(that._position);
-    _center.copyFrom(that._center);
-    _up.copyFrom(that._up);
-    _normalizedPosition.copyFrom(that._normalizedPosition);
-  
-    _dirtyFlags.copyFrom(that._dirtyFlags);
-  
-    _frustumData = that._frustumData;
-  
-    _projectionMatrix.copyValue(that._projectionMatrix);
-    _modelMatrix.copyValue(that._modelMatrix);
-    _modelViewMatrix.copyValue(that._modelViewMatrix);
-  
-    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
-  
-    _geodeticCenterOfView = that._geodeticCenterOfView;
-  
-    _frustum = that._frustum;
-  
-    _frustumInModelCoordinates = that._frustumInModelCoordinates;
-  
-    _geodeticPosition = that._geodeticPosition;
-    _angle2Horizon = that._angle2Horizon;
-  
-    _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
-    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   }
 
   public final void resizeViewport(int width, int height)

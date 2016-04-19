@@ -46,16 +46,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 public class G3MWebGLTestingApplication
-         implements
-            EntryPoint {
+   implements
+      EntryPoint {
 
    private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
    private G3MWidget_WebGL     _g3mWidget         = null;
-
-
-   private native void runUserPlugin() /*-{
-		$wnd.onLoadG3M();
-   }-*/;
 
 
    @Override
@@ -106,179 +101,48 @@ public class G3MWebGLTestingApplication
    }
 
 
-   private static G3MWidget_WebGL createWidget() {
+   /*private static G3MWidget_WebGL createWidget() {
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
-
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-
-      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
+      final String proxy = null;
       builder.setDownloader(new Downloader_WebGL( //
                8, // maxConcurrentOperationCount
                10, // delayMillis
                proxy));
 
-
-      final NonOverlappingMarksRenderer renderer = new NonOverlappingMarksRenderer(30);
-      builder.addRenderer(renderer);
-
-      renderer.addMark(createMark("Label #1", Geodetic3D.fromDegrees(28.131817, -15.440219, 0)));
-      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.947345, -13.523105, 0)));
-      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.473802, -13.859360, 0)));
-      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.467706, -16.251426, 0)));
-      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.701819, -17.762003, 0)));
-      renderer.addMark(createMark(Geodetic3D.fromDegrees(28.086595, -17.105796, 0)));
-      renderer.addMark(createMark(Geodetic3D.fromDegrees(27.810709, -17.917639, 0)));
-
-
-      final boolean testCanvas = false;
-      if (testCanvas) {
-         final ShapesRenderer shapesRenderer = new ShapesRenderer();
-         builder.addRenderer(shapesRenderer);
-
-
-         builder.setInitializationTask(new GInitializationTask() {
-            @Override
-            public void run(final G3MContext context) {
-
-               final IImageDownloadListener listener = new IImageDownloadListener() {
-                  @Override
-                  public void onError(final URL url) {
-                  }
-
-
-                  @Override
-                  public void onDownload(final URL url,
-                                         final IImage image,
-                                         final boolean expired) {
-                     final ICanvas canvas = context.getFactory().createCanvas();
-                     final int width = 1024;
-                     final int height = 1024;
-                     canvas.initialize(width, height);
-
-                     canvas.setFillColor(Color.fromRGBA(1f, 1f, 0f, 0.5f));
-                     canvas.fillRectangle(0, 0, width, height);
-                     canvas.setLineWidth(4);
-                     canvas.setLineColor(Color.black());
-                     canvas.strokeRectangle(0, 0, width, height);
-
-                     final int steps = 8;
-                     final float leftStep = (float) width / steps;
-                     final float topStep = (float) height / steps;
-
-                     canvas.setLineWidth(1);
-                     canvas.setFillColor(Color.fromRGBA(0f, 0f, 0f, 0.75f));
-                     for (int i = 1; i < steps; i++) {
-                        canvas.fillRectangle(0, topStep * i, width, 1);
-                        canvas.fillRectangle(leftStep * i, 0, 1, height);
-                     }
-
-                     canvas.setFont(GFont.monospaced());
-                     canvas.setFillColor(Color.black());
-                     // canvas.fillText("0,0", 0, 0);
-                     // canvas.fillText("w,h", width, height);
-                     for (int i = 0; i < steps; i++) {
-                        canvas.fillText("Hellow World", leftStep * i, topStep * i);
-                     }
-
-
-                     final float width8 = (float) width / 8;
-                     final float height8 = (float) height / 8;
-                     canvas.drawImage(image, width8, height8); // ok
-                     canvas.drawImage(image, width8 * 3, height8, 0.5f); // ok
-
-                     final int imageWidth = image.getWidth();
-                     final int imageHeight = image.getHeight();
-                     canvas.drawImage(image, width8, height8 * 3, imageWidth * 2, imageHeight * 2); // ok
-                     canvas.drawImage(image, width8 * 3, height8 * 3, imageWidth * 2, imageHeight * 2, 0.5f); //ok
-
-                     // ok
-                     canvas.drawImage(image, //
-                              0, 0, imageWidth, imageHeight, //
-                              width8 * 5, height8 * 5, imageWidth * 2, imageHeight * 2);
-                     // ok
-                     canvas.drawImage(image, //
-                              0, 0, imageWidth, imageHeight, //
-                              width8 * 7, height8 * 7, imageWidth * 2, imageHeight * 2, //
-                              0.5f);
-
-
-                     canvas.createImage(new IImageListener() {
-                        @Override
-                        public void imageCreated(final IImage canvasImage) {
-                           final QuadShape quad = new QuadShape( //
-                                    Geodetic3D.fromDegrees(-34.615047738942699596, -58.4447233540403559, 1000), //
-                                    AltitudeMode.ABSOLUTE, //
-                                    canvasImage, //
-                                    canvasImage.getWidth() * 15.0f, //
-                                    canvasImage.getHeight() * 15.0f, //
-                                    true);
-
-                           shapesRenderer.addShape(quad);
-                        }
-                     }, true);
-
-                     canvas.dispose();
-
-                     image.dispose();
-                  }
-
-
-                  @Override
-                  public void onCanceledDownload(final URL url,
-                                                 final IImage image,
-                                                 final boolean expired) {
-                  }
-
-
-                  @Override
-                  public void onCancel(final URL url) {
-                  }
-               };
-
-
-               context.getDownloader().requestImage( //
-                        new URL("/g3m-marker.png"), //
-                        1, // priority, //
-                        TimeInterval.zero(), //
-                        false, //
-                        listener, //
-                        true);
-            }
-
-
-            @Override
-            public boolean isDone(final G3MContext context) {
-               return true;
-            }
-         });
-      }
-
-
-      return builder.createWidget();
-   }
-
-
-   private static G3MWidget_WebGL createWidgetPlanetDebug() {
-      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
-
       final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
-
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-      builder.getPlanetRendererBuilder().setRenderDebug(true);
 
-      final String proxy = null; // "http://galileo.glob3mobile.com/" + "proxy.php?url="
-      builder.setDownloader(new Downloader_WebGL( //
-               8, // maxConcurrentOperationCount
-               10, // delayMillis
-               proxy));
-
+      builder.addRenderer(createMarksRenderer());
 
       return builder.createWidget();
    }
+
+
+   private static MarksRenderer createMarksRenderer() {
+      final MarksRenderer marksRenderer = new MarksRenderer(false);
+
+      marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+         @Override
+         public boolean touchedMark(final Mark touchedMark) {
+            Window.alert("click on mark: " + touchedMark);
+            return true;
+         }
+      }, true);
+
+
+      final Mark mark = new Mark( //
+               new URL("g3m-marker.png"), //
+               Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 0), //
+               AltitudeMode.ABSOLUTE, //
+               0 // minDistanceToCamera
+      );
+      marksRenderer.addMark(mark);
+
+
+      return marksRenderer;
+   }*/
    
    
    
@@ -396,8 +260,8 @@ public static void loadGlobe(int layer, boolean wireframe, float vertEx){
 	    	  layerSector = Sector.fromDegrees(34,-10,70,52);
 	    	  break;
 	      case 3:
-	    	  //layerServer = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
-	    	  layerServer = "http://www.elnublo.net/temporal/var-euro-16/";
+	    	  layerServer = "http://193.145.147.50:8080/DemoElevs/elevs/var-euro-16/";
+	    	  //layerServer = "http://www.elnublo.net/temporal/var-euro-16/";
 	    	  layerSector = Sector.fromDegrees(34,-10,70,52);
 	    	  break;
 	      default:
