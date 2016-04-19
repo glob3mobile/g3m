@@ -32,7 +32,7 @@ void GL::clearScreen(const Color& color) {
 }
 
 void GL::drawElements(int mode, IShortBuffer* indices,
-                      int indexCount,
+                      size_t indexCount,
                       const GLState* state,
                       GPUProgramManager& progManager) {
 

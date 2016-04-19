@@ -97,7 +97,7 @@ public:
 
   void drawElements(int mode,
                     IShortBuffer* indices,
-                    int indexCount,
+                    size_t indexCount,
                     const GLState* state,
                     GPUProgramManager& progManager);
 
