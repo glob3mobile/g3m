@@ -42,17 +42,20 @@
                                 </variation>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IpR-T2-IV5">
-                                <rect key="frame" x="0.0" y="370" width="600" height="230"/>
+                                <rect key="frame" x="0.0" y="408" width="600" height="192"/>
                                 <subviews>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4bm-fF-v2U">
-                                        <rect key="frame" x="0.0" y="14" width="600" height="216"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="192"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="192" id="0sg-I7-DRF"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="dataSource" destination="90h-7u-REb" id="bRf-a6-qFh"/>
                                             <outlet property="delegate" destination="90h-7u-REb" id="1Kf-66-iiS"/>
                                         </connections>
                                     </pickerView>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lse-Zd-nJs">
-                                        <rect key="frame" x="543" y="178" width="51" height="31"/>
+                                        <rect key="frame" x="543" y="140" width="51" height="31"/>
                                         <connections>
                                             <action selector="switchVR:" destination="90h-7u-REb" eventType="touchUpInside" id="QHV-E7-cKt"/>
                                         </connections>
@@ -69,13 +72,13 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="0.040183829109999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.040183829109999999" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="7qz-Q6-Er8"/>
                                     <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" id="Arc-Qn-IOP"/>
                                     <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="Hvg-7V-kk4"/>
                                     <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="Jxs-D3-Gad"/>
-                                    <constraint firstAttribute="height" constant="230" id="Rpz-dR-6Le"/>
+                                    <constraint firstAttribute="height" constant="192" id="Rpz-dR-6Le"/>
                                     <constraint firstAttribute="trailing" secondItem="lse-Zd-nJs" secondAttribute="trailing" constant="8" id="Umd-gn-SGE"/>
                                     <constraint firstItem="ieu-7s-ThD" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="top" id="Uo4-Xx-w4E"/>
                                     <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="VqU-8m-nyh"/>
@@ -107,7 +110,7 @@
                             <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" constant="13" id="HHL-T4-HaV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lOt-Xd-eJz" secondAttribute="trailing" constant="-20" id="Hku-Al-Nab"/>
                             <constraint firstItem="IpR-T2-IV5" firstAttribute="top" secondItem="tsc-ag-hrd" secondAttribute="bottom" constant="173" id="Ibd-AX-6R6"/>
-                            <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" id="TRP-0o-3Hd"/>
+                            <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" identifier="menuDistanceToBottom" id="TRP-0o-3Hd"/>
                             <constraint firstItem="43Y-r4-tOo" firstAttribute="centerY" secondItem="IpR-T2-IV5" secondAttribute="centerY" id="W3X-n0-iA5"/>
                             <constraint firstAttribute="trailing" secondItem="IpR-T2-IV5" secondAttribute="trailing" id="ZXK-i8-FtA"/>
                             <constraint firstItem="43Y-r4-tOo" firstAttribute="centerY" secondItem="alZ-1c-GDj" secondAttribute="centerY" id="huV-ac-Jsn"/>
@@ -134,6 +137,8 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="c8U-QO-hqA"/>
+                        <outlet property="_menuHeightConstraint" destination="TRP-0o-3Hd" id="Sd8-DV-Q1e"/>
+                        <outlet property="_menuView" destination="IpR-T2-IV5" id="aid-md-dMw"/>
                         <outlet property="_showMenuButton" destination="ieu-7s-ThD" id="VPk-Zt-r5p"/>
                     </connections>
                 </viewController>

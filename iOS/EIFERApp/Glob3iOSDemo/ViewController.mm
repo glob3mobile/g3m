@@ -514,8 +514,6 @@ public:
 {
   [super viewDidLoad];
   
-  _showingMenu = true;
-  
   G3MWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin |
   UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
   UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -804,17 +802,22 @@ public:
 
 
 - (IBAction)showMenuButtonPressed:(id)sender {
-  
-  if (_showingMenu){
+
+  if (_menuHeightConstraint.constant == 0){
     
     UIImage* image = [UIImage imageNamed:@"down"];
     [_showMenuButton setImage:image forState:UIControlStateNormal];
+    
+    _menuHeightConstraint.constant = - _menuView.bounds.size.height + _showMenuButton.bounds.size.height;
   } else{
     UIImage* image = [UIImage imageNamed:@"up"];
     [_showMenuButton setImage:image forState:UIControlStateNormal];
+    _menuHeightConstraint.constant = 0;
   }
   
-  _showingMenu = !_showingMenu;
+  [UIView animateWithDuration:1 animations:^{
+    [self.view layoutIfNeeded];
+  }];
 }
 
 

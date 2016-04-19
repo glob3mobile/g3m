@@ -40,8 +40,10 @@ class CityGMLBuilding;
   
   NSArray* _pickerArray;
   bool _useDem;
+  
   __weak IBOutlet UIButton *_showMenuButton;
-  BOOL _showingMenu;
+  __weak IBOutlet NSLayoutConstraint *_menuHeightConstraint;
+  __weak IBOutlet UIView *_menuView;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
