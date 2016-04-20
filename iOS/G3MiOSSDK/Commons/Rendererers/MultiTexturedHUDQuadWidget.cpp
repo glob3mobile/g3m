@@ -90,7 +90,10 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   }
 
   const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getViewPortWidth();
+  int viewPortWidth  = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
   const int viewPortHeight = camera->getViewPortHeight();
 
   const float width  = _width;

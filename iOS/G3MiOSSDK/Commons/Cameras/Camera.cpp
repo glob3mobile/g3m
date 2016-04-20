@@ -15,7 +15,7 @@
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
-// #warning move this to Planet, and remove isFlat() method (DGD)
+  // #warning move this to Planet, and remove isFlat() method (DGD)
   if (_planet->isFlat()) {
     setCartesianPosition( MutableVector3D(0, 0, _planet->getRadii()._y * 5) );
     setUp(MutableVector3D(0, 1, 0));
@@ -95,10 +95,10 @@ void Camera::copyFrom(const Camera &that,
 #endif
     _angle2Horizon = that._angle2Horizon;
 
-    _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
-    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+    _tanHalfVerticalFOV   = that._tanHalfVerticalFOV;
+    _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
   }
-  
+
 }
 
 
@@ -120,21 +120,29 @@ _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
 _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
-_tanHalfVerticalFieldOfView(NAND),
-_tanHalfHorizontalFieldOfView(NAND),
-_timestamp(timestamp)
+_tanHalfVerticalFOV(NAND),
+_tanHalfHorizontalFOV(NAND),
+_timestamp(timestamp),
+_viewPortWidth(-1),
+_viewPortHeight(-1)
 {
-#warning VR => Diego at work!
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
 }
 
 void Camera::resizeViewport(int width, int height) {
-  _timestamp++;
-  _viewPortWidth  = width;
-  _viewPortHeight = height;
+  if ((width  != _viewPortWidth) ||
+      (height != _viewPortHeight)) {
+    _timestamp++;
 
-  _dirtyFlags.setAllDirty();
+    _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * _viewPortWidth;
+    _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * _viewPortHeight;
+
+    _viewPortWidth  = width;
+    _viewPortHeight = height;
+
+    _dirtyFlags.setAllDirty();
+  }
 }
 
 void Camera::print() {
@@ -376,43 +384,31 @@ FrustumData Camera::calculateFrustumData() const {
     zNear = zFar / goalRatio;
   }
 
-  // compute rest of frustum numbers
-
-  double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
-  double tanHalfVFOV = _tanHalfVerticalFieldOfView;
-
-  if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)) {
+  if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
     const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
 
-    if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
-      tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
-      tanHalfHFOV = tanHalfVFOV / ratioScreen;
+    if (ISNAN(_tanHalfHorizontalFOV) && ISNAN(_tanHalfVerticalFOV)) {
+      //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+      _tanHalfVerticalFOV   = 0.3;
+      _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
     }
     else {
-      if (ISNAN(tanHalfHFOV)) {
-        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+      if (ISNAN(_tanHalfHorizontalFOV)) {
+        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
       }
-      else {
-        if ISNAN(tanHalfVFOV) {
-          tanHalfVFOV = tanHalfHFOV * ratioScreen;
-        }
+      else if ISNAN(_tanHalfVerticalFOV) {
+        _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
       }
     }
-
-#warning VR => Diego at work!
-    _tanHalfHorizontalFieldOfView = tanHalfHFOV;
-    _tanHalfVerticalFieldOfView = tanHalfVFOV;
   }
 
-  const double right = tanHalfHFOV * zNear;
-  const double left = -right;
-  const double top = tanHalfVFOV * zNear;
+  const double right  = _tanHalfHorizontalFOV * zNear;
+  const double left   = -right;
+  const double top    = _tanHalfVerticalFOV * zNear;
   const double bottom = -top;
-
-  return FrustumData(left, right,
+  return FrustumData(left,   right,
                      bottom, top,
-                     zNear, zFar);
-
+                     zNear,  zFar);
 }
 
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
@@ -439,11 +435,11 @@ void Camera::setFOV(const Angle& vertical,
   const Angle halfVFOV = vertical.div(2.0);
   const double newH = halfHFOV.tangent();
   const double newV = halfVFOV.tangent();
-  if ((newH != _tanHalfHorizontalFieldOfView) ||
-      (newV != _tanHalfVerticalFieldOfView)) {
+  if ((newH != _tanHalfHorizontalFOV) ||
+      (newV != _tanHalfVerticalFOV)) {
     _timestamp++;
-    _tanHalfHorizontalFieldOfView = newH;
-    _tanHalfVerticalFieldOfView   = newV;
+    _tanHalfHorizontalFOV = newH;
+    _tanHalfVerticalFOV   = newV;
 
     _dirtyFlags._frustumDataDirty      = true;
     _dirtyFlags._projectionMatrixDirty = true;
@@ -454,11 +450,11 @@ void Camera::setFOV(const Angle& vertical,
 }
 
 Angle Camera::getHorizontalFOV() const{
-  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFieldOfView)).times(2);
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFOV) * 2);
 }
 
 Angle Camera::getVerticalFOV() const{
-  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFieldOfView)).times(2);
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFOV) * 2);
 }
 
 void Camera::setRoll(const Angle& angle) {

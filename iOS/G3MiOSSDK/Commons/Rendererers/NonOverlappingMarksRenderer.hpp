@@ -15,6 +15,7 @@
 #include "Vector3D.hpp"
 #include "IImageBuilderListener.hpp"
 #include "MutableVector2F.hpp"
+#include "ViewMode.hpp"
 
 class IImageBuilder;
 class Geodetic3D;
@@ -267,7 +268,7 @@ private:
   void computeForces(const Camera* camera, const Planet* planet);
   void renderMarks(const G3MRenderContext* rc,
                    GLState* glState);
-  void applyForces(long long now, const Camera* camera);
+  void applyForces(long long now, const Camera* camera, ViewMode viewMode);
 
 public:
   NonOverlappingMarksRenderer(size_t maxVisibleMarks,

@@ -65,14 +65,8 @@ public:
               GLState* glState);
   
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-    const int halfWidth = width / 2;
-    const int halfHeight = height / 2;
-    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                                    -halfHeight, halfHeight,
-                                                                                    -halfWidth, halfWidth));
-  }
-
+                             int width, int height);
+  
   virtual ~BusyQuadRenderer() {
     //rc->getFactory()->deleteImage(_image);
     //_image = NULL;
