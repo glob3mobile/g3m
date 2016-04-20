@@ -24,12 +24,6 @@ void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& building
     _buildings.push_back(buildings[i]);
   }
   
-  //  _context->getDownloader()->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
-  //                                   new ColouringCityGMLDemoSceneBDL(self, buildings),
-  //                                   true);
-  
-  //  [self onDataLoaded];
-  
   bool createCityMeshAndMarks = true;
   if (createCityMeshAndMarks){
     _context->getThreadUtils()->invokeAsyncTask(new TessellationTask(this, buildings, listener, autoDelete), true);
