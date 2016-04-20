@@ -78,6 +78,11 @@ public:
     return _values[i];
   }
 
+  // only used in Android
+  void put(short values[]) {
+    THROW_EXCEPTION("This method should only be used in Android!");
+  }
+  
   void put(size_t i, short value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");

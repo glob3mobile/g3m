@@ -135,9 +135,15 @@ public:
   }
     
   // methods only used in Android for performance
-  void put(float values[]) {}
-  void rewind() {}
-  int position() {}
+  void put(float values[]) {
+    THROW_EXCEPTION("This method should only be used in Android!");
+  }
+  void rewind() {
+    THROW_EXCEPTION("This method should only be used in Android!");
+  }
+  int position() {
+    THROW_EXCEPTION("This method should only be used in Android!");
+  }
     
     
   void rawPut(size_t i,
