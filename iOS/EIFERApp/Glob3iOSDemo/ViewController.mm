@@ -275,7 +275,7 @@ public:
     int min = _step % 60;
     int hour = (_step / 60) % 24;
     std::string s = context->getStringUtils()->toString(hour) + ":" + context->getStringUtils()->toString(min);
-
+    
     [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
   }
   
@@ -418,13 +418,13 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  //  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+//  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
@@ -438,9 +438,12 @@ public:
   _useDem = true;
   [self initEIFERG3m:_useDem];
   
+  //HIDING MENU
+  [self showMenuButtonPressed:_showMenuButton];
+  
   
   [[self G3MWidget] startAnimation];
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.034039522888807738, -15.391984897940172772, 19995.736280033790536));
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.0990178, -15.4203257, 19995.736280033790536));
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
   
 }
@@ -512,13 +515,8 @@ public:
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
   
   Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
-  
   meshRenderer->addMesh(m);
-  
   _pointClouds.push_back(m);
-  
-//  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-//                                                           new TimeEvolutionTask((AbstractMesh*)m, self)));
   
   [self onPointCloudLoaded];
 }
@@ -559,9 +557,6 @@ public:
 -(void) loadCityModelWithThreadUtils{
   
   for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
-    //    CityGMLParser::parseFromURL(URL(_cityGMLFiles[i]),
-    //                                new MyCityGMLListener(self, threadUtils),
-    //                                true);
     cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]),
                                          new MyCityGMLRendererListener(self),
                                          true);

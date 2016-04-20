@@ -33,9 +33,32 @@ void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& building
 class BuildingDataBDL : public IBufferDownloadListener {
 private:
   std::vector<CityGMLBuilding*> _buildings;
+  
+  class DataParsingTask: public GAsyncTask {
+    const std::vector<CityGMLBuilding*> _buildings;
+    const std::string _s;
+  public:
+    
+    DataParsingTask(const std::string& s,
+                     const std::vector<CityGMLBuilding*>& buildings):
+    _s(s),
+    _buildings(buildings)
+    {}
+    
+    virtual void runInBackground(const G3MContext* context){
+      BuildingDataParser::includeDataInBuildingSet(_s, _buildings);
+    }
+    
+    virtual void onPostExecute(const G3MContext* context){
+    }
+  };
+  
+  const G3MContext* _context;
+  
 public:
-  BuildingDataBDL(std::vector<CityGMLBuilding*> buildings) :
-  _buildings(buildings)
+  BuildingDataBDL(const std::vector<CityGMLBuilding*>& buildings, const G3MContext* context) :
+  _buildings(buildings),
+  _context(context)
   {
   }
   
@@ -45,7 +68,8 @@ public:
     
     std::string s = buffer->getAsString();
     delete buffer;
-    BuildingDataParser::includeDataInBuildingSet(s, _buildings);
+    
+    _context->getThreadUtils()->invokeAsyncTask(new DataParsingTask(s, _buildings), true);
   }
   
   void onError(const URL& url) {
@@ -64,13 +88,16 @@ public:
   
 };
 
+
+
+
 void CityGMLRenderer::addBuildingDataFromURL(const URL& url){
   
   
   _context->getDownloader()->requestBuffer(url,
                                            1000,
                                            TimeInterval::forever(), true,
-                                           new BuildingDataBDL(_buildings),
+                                           new BuildingDataBDL(_buildings, _context),
                                            true);
 }
 
