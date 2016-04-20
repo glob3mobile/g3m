@@ -36,6 +36,11 @@ public abstract class GPUUniformValue extends RCObject
      _type = type;
   }
 
+  public final int getType()
+  {
+    return _type;
+  }
+
   public abstract void setUniform(GL gl, IGLUniformID id);
   public abstract boolean isEquals(GPUUniformValue v);
 

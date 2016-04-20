@@ -31,13 +31,15 @@ void GL::clearScreen(const Color& color) {
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
-void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
+void GL::drawElements(int mode, IShortBuffer* indices,
+                      size_t indexCount,
+                      const GLState* state,
                       GPUProgramManager& progManager) {
 
   state->applyOnGPU(this, progManager);
 
   _nativeGL->drawElements(mode,
-                          (int)indices->size(),
+                          (int)indexCount,
                           indices);
 }
 

@@ -584,6 +584,24 @@ public:
     glViewport(x, y, width, height);
   }
   
+
+  void depthFunc(int func) const {
+    glDepthFunc(func);
+  }
+
+  int DepthFuncParameterValue_Never()              const { return GL_NEVER;                }
+  int DepthFuncParameterValue_Less()               const { return GL_LESS;                 }
+  int DepthFuncParameterValue_Equal()              const { return GL_EQUAL;                }
+  int DepthFuncParameterValue_LEqual()             const { return GL_LEQUAL;               }
+  int DepthFuncParameterValue_Greater()            const { return GL_GREATER;              }
+  int DepthFuncParameterValue_NotEqual()           const { return GL_NOTEQUAL;             }
+  int DepthFuncParameterValue_GEqual()             const { return GL_GEQUAL;               }
+  int DepthFuncParameterValue_Always()             const { return GL_ALWAYS;               }
+
+  void colorMask(bool rv, bool gv, bool bv, bool av) const {
+    glColorMask(rv, gv, bv, av);
+  }
+
 };
 
 #endif
