@@ -14,12 +14,12 @@
 
 #include <vector>
 #include <string>
-
-class MarksRenderer;
-class MeshRenderer;
+#include "G3MContext.hpp"
 
 class CityGMLListener{
 public:
+  virtual ~CityGMLListener(){}
+  
   virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings) = 0;
   
   virtual void onError() = 0;
@@ -27,13 +27,22 @@ public:
 
 class CityGMLParser{
   
+  static const IThreadUtils* _threadUtils;
+  static IDownloader* _downloader;
+  
+
 public:
+  
+  static void initialize(G3MContext* context){
+    _threadUtils = context->getThreadUtils();
+    _downloader = context->getDownloader();
+  }
+  
   static std::vector<CityGMLBuilding*> parseLOD2Buildings2(IXMLNode* cityGMLDoc);
   
   static std::vector<CityGMLBuilding*> parseLOD2Buildings2(const std::string& cityGMLString);
   
   static void parseFromURL(const URL& url,
-                           IDownloader* downloader,
                            CityGMLListener* listener,
                            bool deleteListener);
   

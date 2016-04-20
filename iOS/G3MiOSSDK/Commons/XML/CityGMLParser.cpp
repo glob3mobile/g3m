@@ -23,15 +23,49 @@
 #include "URL.hpp"
 
 #include "CityGMLBuildingTessellator.hpp"
+#include "IThreadUtils.hpp"
 
 
 class CityGMLParser_BufferDownloadListener : public IBufferDownloadListener {
 private:
   CityGMLListener* _listener;
   bool _deleteListener;
+  const IThreadUtils* _threadUtils;
+  
+  class ParsingTask: public GAsyncTask {
+    const std::string _s;
+    std::vector<CityGMLBuilding*> _buildings;
+    
+    CityGMLListener* _listener;
+    bool _deleteListener;
+  public:
+    
+    ParsingTask(std::string& s,
+                CityGMLListener* listener,
+                bool deleteListener):
+    _s(s),
+    _listener(listener),
+    _deleteListener(deleteListener)
+    {}
+    
+    virtual void runInBackground(const G3MContext* context){
+      _buildings = CityGMLParser::parseLOD2Buildings2(_s);
+    }
+    
+    virtual void onPostExecute(const G3MContext* context){
+      _listener->onBuildingsCreated(_buildings);
+      if (_deleteListener){
+        delete _listener;
+      }
+    }
+  };
+  
+  
 public:
-  CityGMLParser_BufferDownloadListener(CityGMLListener* listener,
+  CityGMLParser_BufferDownloadListener(const IThreadUtils* threadUtils,
+                                       CityGMLListener* listener,
                                        bool deleteListener) :
+  _threadUtils(threadUtils),
   _listener(listener),
   _deleteListener(deleteListener)
   {
@@ -46,18 +80,20 @@ public:
     
     std::string s = buffer->getAsString();
     delete buffer;
-
-    //More "expensive" way of parsing 
-//    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
-//    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
-//    delete xml;
     
-    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(s);
+    //More "expensive" way of parsing
+    //    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
+    //    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
+    //    delete xml;
     
-    _listener->onBuildingsCreated(buildings);
-    if (_deleteListener){
-      delete _listener;
-    }
+    _threadUtils->invokeAsyncTask(new ParsingTask(s, _listener, _deleteListener), true);
+    
+    //    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(s);
+    //
+    //    _listener->onBuildingsCreated(buildings);
+    //    if (_deleteListener){
+    //      delete _listener;
+    //    }
   }
   
   void onError(const URL& url) {
@@ -76,17 +112,25 @@ public:
   
 };
 
+const IThreadUtils* CityGMLParser::_threadUtils = NULL;
+IDownloader* CityGMLParser::_downloader = NULL;
+
 void CityGMLParser::parseFromURL(const URL& url,
-                                 IDownloader* downloader,
                                  CityGMLListener* listener,
                                  bool deleteListener){
-  downloader->requestBuffer(url,
-                            DownloadPriority::HIGHEST,
-                            TimeInterval::fromHours(1),
-                            true,
-                            new CityGMLParser_BufferDownloadListener(listener,
-                                                                     deleteListener),
-                            true);
+  
+  if (_downloader == NULL){
+    THROW_EXCEPTION("CityGMLParser not initialized");
+  }
+  
+  _downloader->requestBuffer(url,
+                             DownloadPriority::HIGHEST,
+                             TimeInterval::fromHours(1),
+                             true,
+                             new CityGMLParser_BufferDownloadListener(_threadUtils,
+                                                                      listener,
+                                                                      deleteListener),
+                             true);
 }
 
 std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(IXMLNode* cityGMLDoc) {
@@ -191,37 +235,37 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(const std::stri
   std::vector<CityGMLBuilding*> buildings;
   
   
-  int pos = 0;
-  const int length = cityGMLString.length();
+  size_t pos = 0;
+  const size_t length = cityGMLString.length();
   while (pos < length){
     IStringUtils::StringExtractionResult beginning = IStringUtils::extractSubStringBetween(cityGMLString, "bldg:Building gml:id=\"", "\"", pos);
     std::string name = beginning._string;
     if (beginning._endingPos == std::string::npos){
       break;
     }
-    pos = beginning._endingPos +1;
+    pos = beginning._endingPos + 1;
     
     
     
-    int endPos = cityGMLString.find("</bldg:Building>", pos);
+    size_t endPos = cityGMLString.find("</bldg:Building>", pos);
     
     //Reading surfaces
     std::vector<CityGMLBuildingSurface*> surfaces;
     while (true){
       IStringUtils::StringExtractionResult points = IStringUtils::extractSubStringBetween(cityGMLString,
-                                                                                "<gml:posList>", "</gml:posList>",
-                                                                                pos);
+                                                                                          "<gml:posList>", "</gml:posList>",
+                                                                                          pos);
       
       if (points._endingPos == std::string::npos || points._endingPos >= endPos){
         break;
       }
       
       CityGMLBuildingSurfaceType type = WALL;
-      int groundPos = cityGMLString.find("bldg:GroundSurface", pos);
+      size_t groundPos = cityGMLString.find("bldg:GroundSurface", pos);
       if (groundPos < points._endingPos){
         type = GROUND;
       } else{
-        int roofPos = cityGMLString.find("bldg:RoofSurface", pos);
+        size_t roofPos = cityGMLString.find("bldg:RoofSurface", pos);
         if (roofPos < points._endingPos){
           type = ROOF;
         }

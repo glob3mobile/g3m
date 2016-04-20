@@ -27,11 +27,10 @@ class CityGMLBuilding;
   MapBooBuilder_iOS* _g3mcBuilder;
   
   const Planet * _planet;
-  MeshRenderer* _meshRenderer;
-  MarksRenderer* _marksRenderer;
+
   HUDRenderer* _hudRenderer;
   
-  LabelImageBuilder* _labelBuilder;
+//  LabelImageBuilder* _labelBuilder;
   
   std::vector<std::string> _cityGMLFiles;
   size_t _modelsLoadedCounter;
@@ -50,11 +49,19 @@ class CityGMLBuilding;
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
 
--(void) createPointCloud:(ElevationData*) ed withDescriptor:(const std::string&) pointCloudDescriptor;
--(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings withED:(const ElevationData*) ed;
+@property __weak IBOutlet UILabel *_timeLabel;
+@property MeshRenderer* meshRenderer;
+@property MarksRenderer* marksRenderer;
+@property const ElevationData* elevationData;
 
--(void) requestPointCloud:(ElevationData*) ed;
--(void) loadCityModel:(ElevationData*) ed;
+-(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor;
+-(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings
+     withThreadUtils: (const IThreadUtils*) threadUtils;
+
+-(void) requestPointCloud;
+-(void) loadCityModelWithThreadUtils: (const IThreadUtils*) threadUtils;
+
+-(void) onDataLoaded;
 
 -(IBAction)switchVR:(id)sender;
 

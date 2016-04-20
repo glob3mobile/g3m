@@ -202,71 +202,6 @@
 
 #include <typeinfo>
 
-
-
-
-//class MyTerrainTL: public TerrainTouchListener {
-//
-//  G3MWidget* _widget;
-//
-//  bool _usingVR;
-//
-//  class AltitudeFixerLM: public ILocationModifier{
-//    Geodetic3D modify(const Geodetic3D& location){
-//      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 3);
-//    }
-//  };
-//
-//  bool _fixAltitude;
-//
-//public:
-//
-//
-//  MyTerrainTL(G3MWidget* widget, bool fixAltitude):
-//  _widget(widget),
-//  _usingVR(false),
-//  _fixAltitude(fixAltitude){
-//
-//  }
-//
-//  bool onTerrainTouch(const G3MEventContext* ec,
-//                      const Vector2F&        pixel,
-//                      const Camera*          camera,
-//                      const Geodetic3D&      position,
-//                      const Tile*            tile){
-//
-//    CameraRenderer* cameraRenderer = _widget->getCameraRenderer();
-//    cameraRenderer->clearHandlers();
-//
-//    if (_usingVR){
-//      const bool useInertia = true;
-//      cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-//      cameraRenderer->addHandler(new CameraDoubleDragHandler());
-//      cameraRenderer->addHandler(new CameraRotationHandler());
-//      cameraRenderer->addHandler(new CameraDoubleTapHandler());
-//
-//
-//      _widget->getNextCamera()->forceZNear(NAND);
-//    } else{
-//
-//      ILocationModifier * lm = NULL;
-//      if (_fixAltitude){
-//        lm = new AltitudeFixerLM();
-//      }
-//
-//      DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
-//      cameraRenderer->addHandler(dac);
-//
-//      _widget->getNextCamera()->forceZNear(1.0);
-//    }
-//
-//    _usingVR = !_usingVR;
-//
-//    return true;
-//  }
-//
-//};
-
 class ColouringCityGMLDemoSceneBDL : public IBufferDownloadListener {
 private:
   ViewController* _demo;
@@ -311,14 +246,15 @@ class TimeEvolutionTask: public GTask{
   int _step;
   
   float* _initialColors;
-  LabelImageBuilder* _labelBuilder;
+  ViewController* _vc;
 public:
   
-  TimeEvolutionTask(AbstractMesh* abstractMesh, LabelImageBuilder* labelBuilder):
+  TimeEvolutionTask(AbstractMesh* abstractMesh,
+                    ViewController* vc):
   _abstractMesh(abstractMesh),
   _delta(0.0),
   _step(0),
-  _labelBuilder(labelBuilder)
+  _vc(vc)
   {
     
     IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
@@ -357,12 +293,6 @@ public:
       b *= 1.0f / factor;
       b = mu->clamp(b, 0.0f, 1.0f);
       
-      //      colors->put(i, r);
-      //      colors->put(i+1, g);
-      //      colors->put(i+2, b);
-      //      colors->put(i+3, a);
-      
-      
       newColors[i] = r;
       newColors[i+1] = g;
       newColors[i+2] = b;
@@ -377,7 +307,9 @@ public:
     int min = _step % 60;
     int hour = (_step / 60) % 24;
     std::string s = context->getStringUtils()->toString(hour) + ":" + context->getStringUtils()->toString(min);
-    _labelBuilder->setText(s);
+    //    _labelBuilder->setText(s);
+    
+    [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
   }
   
 };
@@ -418,11 +350,9 @@ public:
 class PointCloudBDL : public IBufferDownloadListener {
 private:
   ViewController* _demo;
-  ElevationData* _ed;
 public:
-  PointCloudBDL(ViewController* demo, ElevationData* ed) :
-  _demo(demo),
-  _ed(ed)
+  PointCloudBDL(ViewController* demo) :
+  _demo(demo)
   {
   }
   
@@ -432,7 +362,7 @@ public:
     
     std::string s = buffer->getAsString();
     delete buffer;
-    [_demo createPointCloud:_ed withDescriptor:s];
+    [_demo createPointCloudWithDescriptor:s];
   }
   
   void onError(const URL& url) {
@@ -455,27 +385,17 @@ class MyCityGMLListener: public CityGMLListener{
   
 private:
   ViewController* _demo;
-  ElevationData* _ed;
+  const IThreadUtils* _threadUtils;
 public:
   
-  MyCityGMLListener(ViewController* demo, ElevationData* ed):_demo(demo), _ed(ed){
+  MyCityGMLListener(ViewController* demo,
+                    const IThreadUtils* threadUtils):
+  _demo(demo), _threadUtils(threadUtils){
     
   }
   
   virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings){
-    
-//    dispatch_queue_t queue = dispatch_queue_create("myqueue", NULL);
-//    dispatch_async(queue, ^{
-//      // create UIwebview, other things too
-//      
-//      // Perform on main thread/queue
-//      dispatch_async(dispatch_get_main_queue(), ^{
-//        [_demo addBuildings:buildings withED:_ed];
-//      });
-//    });
-    
-    
-    [_demo addBuildings:buildings withED:_ed];
+    [_demo addBuildings:buildings withThreadUtils:_threadUtils];
   }
   
   virtual void onError(){
@@ -488,16 +408,19 @@ class MyEDListener: public IElevationDataListener{
   
 private:
   ViewController* _demo;
+  const IThreadUtils* _threadUtils;
   
 public:
   
-  MyEDListener(ViewController* demo):_demo(demo){}
+  MyEDListener(ViewController* demo, const IThreadUtils* threadUtils):_demo(demo), _threadUtils(threadUtils){}
   
   virtual void onData(const Sector& sector,
                       const Vector2I& extent,
                       ElevationData* elevationData){
-    [_demo requestPointCloud:elevationData];
-    [_demo loadCityModel:elevationData];
+    [_demo setElevationData:elevationData];
+    
+    [_demo requestPointCloud];
+    [_demo loadCityModelWithThreadUtils:_threadUtils];
   }
   
   virtual void onError(const Sector& sector,
@@ -517,6 +440,10 @@ public:
 @implementation ViewController
 
 @synthesize G3MWidget;
+@synthesize meshRenderer;
+@synthesize marksRenderer;
+@synthesize elevationData;
+@synthesize _timeLabel;
 
 - (void)didReceiveMemoryWarning
 {
@@ -528,6 +455,10 @@ public:
 {
   [super viewDidLoad];
   
+  elevationData = NULL;
+  meshRenderer = NULL;
+  marksRenderer = NULL;
+  
   G3MWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin |
   UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
   UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -535,16 +466,16 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-//  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+  //  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+  //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+  //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
   [_progressBar setProgress:0.0f];
   
@@ -575,10 +506,10 @@ public:
                                                                                karlsruheSector,
                                                                                Vector2I(308, 177));
       [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
-      edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc), true);
+      edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc, context->getThreadUtils()), true);
     } else{
-      [_vc requestPointCloud:NULL];
-      [_vc loadCityModel:NULL];
+      [_vc requestPointCloud];
+      [_vc loadCityModelWithThreadUtils:context->getThreadUtils()];
     }
   }
   
@@ -607,83 +538,35 @@ public:
   _planet = EllipsoidalPlanet::createEarth();
   builder.setPlanet(_planet);
   
-  _meshRenderer = new MeshRenderer();
-  builder.addRenderer(_meshRenderer);
-  _marksRenderer = new MarksRenderer(false);
-  builder.addRenderer(_marksRenderer);
+  meshRenderer = new MeshRenderer();
+  builder.addRenderer(meshRenderer);
+  marksRenderer = new MarksRenderer(false);
+  builder.addRenderer(marksRenderer);
   _hudRenderer = new HUDRenderer();
   builder.addRenderer(_hudRenderer);
-  
-  _labelBuilder = new LabelImageBuilder("00:00",               // text
-                                        GFont::monospaced(38), // font
-                                        6,                     // margin
-                                        Color::yellow(),       // color
-                                        Color::black(),        // shadowColor
-                                        3,                     // shadowBlur
-                                        1,                     // shadowOffsetX
-                                        -1,                    // shadowOffsetY
-                                        Color::fromRGBA255(102, 255, 51, 255),          // backgroundColor
-                                        10,                     // cornerRadius
-                                        true                   // mutable
-                                        );
-  
-//  HUDQuadWidget* label = new HUDQuadWidget(_labelBuilder,
-//                                           new HUDAbsolutePosition(260),
-//                                           new HUDRelativePosition(0.9,
-//                                                                   HUDRelativePosition::VIEWPORT_HEIGHT,
-//                                                                   HUDRelativePosition::MIDDLE),
-//                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
-//                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
-//  
-//  _hudRenderer->addWidget(label);
-  
-  //  HUDQuadWidget* logo = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///eifer_logo.png")),
-  //                                          new HUDAbsolutePosition(0),
-  //                                          new HUDRelativePosition(0.82,
-  //                                                                  HUDRelativePosition::VIEWPORT_HEIGHT,
-  //                                                                  HUDRelativePosition::MIDDLE),
-  //                                          new HUDRelativeSize(0.5,
-  //                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS),
-  //                                          new HUDRelativeSize(0.25,
-  //                                                              HUDRelativeSize::VIEWPORT_MIN_AXIS));
-  //  _hudRenderer->addWidget(logo);
-  
-  
+
   builder.setInitializationTask(new MyInitTask(self, useDEM));
   
   
   builder.initializeWidget();
-  
-  
-  //  [G3MWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL([G3MWidget widget], !useDEM));
-  
-//  if (useDEM){
-//    Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
-//    SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
-//                                                                             karlsruheSector,
-//                                                                             Vector2I(308, 177));
-//    [G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
-//    edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(self), true);
-//  } else{
-//    [self requestPointCloud:NULL];
-//    [self loadCityModel:NULL];
-//  }
 }
 
--(void) createPointCloud:(ElevationData*) ed withDescriptor:(const std::string&) pointCloudDescriptor {
+-(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
   
   
   //Mesh* m = BuildingDataParser::createPointCloudMesh(pointCloudDescriptor, _planet, ed);
-  Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, ed);
+  Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
   
-  _meshRenderer->addMesh(m);
+  meshRenderer->addMesh(m);
   
   //TODO: CHANGE POINTCLOUD WITH TIME
-  //  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-  //                                                           new TimeEvolutionTask((AbstractMesh*)m, _labelBuilder)));
+  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+                                                           new TimeEvolutionTask((AbstractMesh*)m, self)));
+  
+  [self onDataLoaded];
 }
 
--(void) requestPointCloud:(ElevationData*) ed{
+-(void) requestPointCloud{
   //  [G3MWidget widget]->getG3MContext()
   //  ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
   //                                   new PointCloudBDL(self, ed),
@@ -691,22 +574,17 @@ public:
   
   [G3MWidget widget]->getG3MContext()
   ->getDownloader()->requestBuffer(URL("file:///SolarRadiation.geojson"), 1000, TimeInterval::forever(), true,
-                                   new PointCloudBDL(self, ed),
+                                   new PointCloudBDL(self),
                                    true);
   
 }
 
 
--(void) loadCityModel:(ElevationData*) ed{
-  
-  
-  const G3MContext* context = [G3MWidget widget]->getG3MContext();
-  IDownloader* downloader = context->getDownloader();
+-(void) loadCityModelWithThreadUtils: (const IThreadUtils*) threadUtils{
   
   for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
     CityGMLParser::parseFromURL(URL(_cityGMLFiles[i]),
-                                downloader,
-                                new MyCityGMLListener(self, ed),
+                                new MyCityGMLListener(self, threadUtils),
                                 true);
   }
 }
@@ -723,9 +601,42 @@ public:
   
 }
 
--(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings withED:(const ElevationData*) ed{
+class TessellationTask: public GAsyncTask {
+  ViewController* _vc;
+  std::vector<CityGMLBuilding*> _buildings;
+public:
   
-  _modelsLoadedCounter++;
+  TessellationTask(ViewController* vc,
+                   std::vector<CityGMLBuilding*> buildings):
+  _vc(vc),
+  _buildings(buildings)
+  {}
+  
+  virtual void runInBackground(const G3MContext* context){
+    //Adding marks
+    for (size_t i = 0; i < _buildings.size(); i++) {
+      _vc.marksRenderer->addMark( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
+    }
+    
+    //Checking walls visibility
+    int n = CityGMLBuilding::checkWallsVisibility(_buildings);
+    ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
+    
+    //Creating mesh model
+    Mesh* mesh = CityGMLBuildingTessellator::createMesh(_buildings,
+                                                        *[_vc.G3MWidget widget]->getG3MContext()->getPlanet(),
+                                                        false, false, NULL,
+                                                        _vc.elevationData);
+    _vc.meshRenderer->addMesh(mesh);
+  }
+  
+  virtual void onPostExecute(const G3MContext* context){
+    [_vc onDataLoaded];
+  }
+};
+
+-(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings
+     withThreadUtils:(const IThreadUtils*) threadUtils{
   
   for (size_t i = 0; i < buildings.size(); i++) {
     _buildings.push_back(buildings[i]);
@@ -736,42 +647,38 @@ public:
                                    new ColouringCityGMLDemoSceneBDL(self, buildings),
                                    true);
   
+  [self onDataLoaded];
+  
   bool createCityMeshAndMarks = true;
   if (createCityMeshAndMarks){
-    //Adding marks
-    for (size_t i = 0; i < buildings.size(); i++) {
-      _marksRenderer->addMark( CityGMLBuildingTessellator::createMark(buildings[i], false) );
-    }
-    
-    //Checking walls visibility
-    int n = CityGMLBuilding::checkWallsVisibility(buildings);
-    ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
-    
-    //Creating mesh model
-    Mesh* mesh = CityGMLBuildingTessellator::createMesh(buildings,
-                                                        *[G3MWidget widget]->getG3MContext()->getPlanet(),
-                                                        false, false, NULL,
-                                                        ed);
-    _meshRenderer->addMesh(mesh);
+    threadUtils->invokeAsyncTask(new TessellationTask(self, buildings), true);
   }
+}
+
+-(void) onDataLoaded {
+  _modelsLoadedCounter++;
   
-  float p = (float)_modelsLoadedCounter / (float)_cityGMLFiles.size();
+  //N MODELS * 2 + 1 POINT CLOUD
+  float p = (float)_modelsLoadedCounter / (2 * (float)_cityGMLFiles.size() + 1);
   [_progressBar setProgress: p animated:TRUE];
-  [_progressBar setNeedsDisplay];
   
-  if (_modelsLoadedCounter == _cityGMLFiles.size()){
-    ILogger::instance()->logInfo("City Model Loaded");
-    
-    //Whole city!
-    [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                  Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
-                                                  Angle::fromDegrees(-109.452892),
-                                                  Angle::fromDegrees(-44.938813)
-                                                  );
-    
-    //NO WAITING ANYMORE
-    _waitingMessageView.hidden = TRUE;
+  if (p == 1){
+    [self onCityModelLoaded];
   }
+}
+
+-(void) onCityModelLoaded{
+  ILogger::instance()->logInfo("City Model Loaded");
+  
+  //Whole city!
+  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
+                                                Angle::fromDegrees(-109.452892),
+                                                Angle::fromDegrees(-44.938813)
+                                                );
+  
+  //NO WAITING ANYMORE
+  _waitingMessageView.hidden = TRUE;
 }
 
 -(IBAction)switchVR:(id)sender{

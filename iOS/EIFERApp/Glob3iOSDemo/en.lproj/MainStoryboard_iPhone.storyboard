@@ -190,6 +190,7 @@
                         <outlet property="_menuView" destination="IpR-T2-IV5" id="aid-md-dMw"/>
                         <outlet property="_progressBar" destination="f5V-gh-SMQ" id="dQo-rb-USl"/>
                         <outlet property="_showMenuButton" destination="ieu-7s-ThD" id="VPk-Zt-r5p"/>
+                        <outlet property="_timeLabel" destination="LE9-lB-bmo" id="eNA-BK-rkA"/>
                         <outlet property="_waitingMessageView" destination="Uti-MQ-TpT" id="jIX-tj-WMC"/>
                     </connections>
                 </viewController>
