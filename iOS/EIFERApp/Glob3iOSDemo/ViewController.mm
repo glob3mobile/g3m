@@ -197,6 +197,8 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PeriodicalTask.hpp>
 #include <G3MiOSSDK/FloatBuffer_iOS.hpp>
+#include <G3MiOSSDK/GInitializationTask.hpp>
+
 
 #include <typeinfo>
 
@@ -461,6 +463,18 @@ public:
   }
   
   virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings){
+    
+//    dispatch_queue_t queue = dispatch_queue_create("myqueue", NULL);
+//    dispatch_async(queue, ^{
+//      // create UIwebview, other things too
+//      
+//      // Perform on main thread/queue
+//      dispatch_async(dispatch_get_main_queue(), ^{
+//        [_demo addBuildings:buildings withED:_ed];
+//      });
+//    });
+    
+    
     [_demo addBuildings:buildings withED:_ed];
   }
   
@@ -521,17 +535,18 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  //      _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  //      _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  //      _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  //      _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  //      _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  //      _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-  //      _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-  //      _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-  //      _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+//  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+//  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
+  [_progressBar setProgress:0.0f];
   
   _useDem = true;
   [self initEIFERG3m:_useDem];
@@ -542,6 +557,36 @@ public:
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
   
 }
+
+
+class MyInitTask: public GInitializationTask{
+  bool _useDEM;
+  ViewController* _vc;
+public:
+  
+  MyInitTask(ViewController* vc, bool useDEM):_useDEM(useDEM), _vc(vc){
+    
+  }
+  
+  void run(const G3MContext* context){
+    if (_useDEM){
+      Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
+      SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
+                                                                               karlsruheSector,
+                                                                               Vector2I(308, 177));
+      [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
+      edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc), true);
+    } else{
+      [_vc requestPointCloud:NULL];
+      [_vc loadCityModel:NULL];
+    }
+  }
+  
+  bool isDone(const G3MContext* context){
+    return true;
+  }
+  
+};
 
 - (void)initEIFERG3m:(BOOL) useDEM
 {
@@ -582,15 +627,15 @@ public:
                                         true                   // mutable
                                         );
   
-  HUDQuadWidget* label = new HUDQuadWidget(_labelBuilder,
-                                           new HUDAbsolutePosition(260),
-                                           new HUDRelativePosition(0.9,
-                                                                   HUDRelativePosition::VIEWPORT_HEIGHT,
-                                                                   HUDRelativePosition::MIDDLE),
-                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
-                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
-  
-  _hudRenderer->addWidget(label);
+//  HUDQuadWidget* label = new HUDQuadWidget(_labelBuilder,
+//                                           new HUDAbsolutePosition(260),
+//                                           new HUDRelativePosition(0.9,
+//                                                                   HUDRelativePosition::VIEWPORT_HEIGHT,
+//                                                                   HUDRelativePosition::MIDDLE),
+//                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+//                                           new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
+//  
+//  _hudRenderer->addWidget(label);
   
   //  HUDQuadWidget* logo = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///eifer_logo.png")),
   //                                          new HUDAbsolutePosition(0),
@@ -604,22 +649,25 @@ public:
   //  _hudRenderer->addWidget(logo);
   
   
+  builder.setInitializationTask(new MyInitTask(self, useDEM));
+  
+  
   builder.initializeWidget();
   
   
   //  [G3MWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new MyTerrainTL([G3MWidget widget], !useDEM));
   
-  if (useDEM){
-    Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
-    SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
-                                                                             karlsruheSector,
-                                                                             Vector2I(308, 177));
-    [G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
-    edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(self), true);
-  } else{
-    [self requestPointCloud:NULL];
-    [self loadCityModel:NULL];
-  }
+//  if (useDEM){
+//    Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
+//    SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
+//                                                                             karlsruheSector,
+//                                                                             Vector2I(308, 177));
+//    [G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
+//    edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(self), true);
+//  } else{
+//    [self requestPointCloud:NULL];
+//    [self loadCityModel:NULL];
+//  }
 }
 
 -(void) createPointCloud:(ElevationData*) ed withDescriptor:(const std::string&) pointCloudDescriptor {
@@ -707,6 +755,10 @@ public:
     _meshRenderer->addMesh(mesh);
   }
   
+  float p = (float)_modelsLoadedCounter / (float)_cityGMLFiles.size();
+  [_progressBar setProgress: p animated:TRUE];
+  [_progressBar setNeedsDisplay];
+  
   if (_modelsLoadedCounter == _cityGMLFiles.size()){
     ILogger::instance()->logInfo("City Model Loaded");
     
@@ -716,6 +768,9 @@ public:
                                                   Angle::fromDegrees(-109.452892),
                                                   Angle::fromDegrees(-44.938813)
                                                   );
+    
+    //NO WAITING ANYMORE
+    _waitingMessageView.hidden = TRUE;
   }
 }
 
@@ -802,7 +857,7 @@ public:
 
 
 - (IBAction)showMenuButtonPressed:(id)sender {
-
+  
   if (_menuHeightConstraint.constant == 0){
     
     UIImage* image = [UIImage imageNamed:@"down"];

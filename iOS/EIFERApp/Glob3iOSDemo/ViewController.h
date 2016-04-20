@@ -44,6 +44,8 @@ class CityGMLBuilding;
   __weak IBOutlet UIButton *_showMenuButton;
   __weak IBOutlet NSLayoutConstraint *_menuHeightConstraint;
   __weak IBOutlet UIView *_menuView;
+  __weak IBOutlet UIView *_waitingMessageView;
+  __weak IBOutlet UIProgressView *_progressBar;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
