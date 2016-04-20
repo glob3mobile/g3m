@@ -19,6 +19,7 @@ class HUDRenderer;
 class LabelImageBuilder;
 class ElevationData;
 class CityGMLBuilding;
+class CityGMLRenderer;
 
 
 @interface ViewController : UIViewController <UIPickerViewDelegate>  {
@@ -33,9 +34,13 @@ class CityGMLBuilding;
 //  LabelImageBuilder* _labelBuilder;
   
   std::vector<std::string> _cityGMLFiles;
+  std::vector<std::string> _pointCloudFiles;
   size_t _modelsLoadedCounter;
+  size_t _pointCloudsLoaded;
   
-  std::vector<CityGMLBuilding*> _buildings;
+  std::vector<Mesh*> _pointClouds;
+  
+//  std::vector<CityGMLBuilding*> _buildings;
   
   NSArray* _pickerArray;
   bool _useDem;
@@ -52,16 +57,19 @@ class CityGMLBuilding;
 @property __weak IBOutlet UILabel *_timeLabel;
 @property MeshRenderer* meshRenderer;
 @property MarksRenderer* marksRenderer;
+@property CityGMLRenderer* cityGMLRenderer;
 @property const ElevationData* elevationData;
 
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor;
--(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings
-     withThreadUtils: (const IThreadUtils*) threadUtils;
+//-(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings
+//     withThreadUtils: (const IThreadUtils*) threadUtils;
 
 -(void) requestPointCloud;
--(void) loadCityModelWithThreadUtils: (const IThreadUtils*) threadUtils;
+-(void) loadCityModelWithThreadUtils;
 
--(void) onDataLoaded;
+-(void) onCityModelLoaded;
+-(void) onPointCloudLoaded;
+-(void) onProgress;
 
 -(IBAction)switchVR:(id)sender;
 

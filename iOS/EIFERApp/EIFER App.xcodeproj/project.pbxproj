@@ -40,6 +40,8 @@
 		D8DF55D91CC4D9C300D7D084 /* knielingen_4326_lod2.gml in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C61CC4D9C300D7D084 /* knielingen_4326_lod2.gml */; };
 		D8DF55DA1CC4D9C300D7D084 /* random_cluster_fewer_points.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C71CC4D9C300D7D084 /* random_cluster_fewer_points.geojson */; };
 		D8DF55DB1CC4D9C300D7D084 /* random_cluster.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D8DF55C81CC4D9C300D7D084 /* random_cluster.geojson */; };
+		D8EA744E1CC7884D007464C8 /* ulpgc_logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8EA744D1CC7884D007464C8 /* ulpgc_logo.jpg */; };
+		D8EA74501CC78ACB007464C8 /* ulpgc_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D8EA744F1CC78ACB007464C8 /* ulpgc_logo.png */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
 		D8EEF38F1577920B003FEB5E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */; };
@@ -116,6 +118,8 @@
 		D8DF55C61CC4D9C300D7D084 /* knielingen_4326_lod2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = knielingen_4326_lod2.gml; path = "EIFER Resources/knielingen_4326_lod2.gml"; sourceTree = "<group>"; };
 		D8DF55C71CC4D9C300D7D084 /* random_cluster_fewer_points.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = random_cluster_fewer_points.geojson; path = "EIFER Resources/random_cluster_fewer_points.geojson"; sourceTree = "<group>"; };
 		D8DF55C81CC4D9C300D7D084 /* random_cluster.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = random_cluster.geojson; path = "EIFER Resources/random_cluster.geojson"; sourceTree = "<group>"; };
+		D8EA744D1CC7884D007464C8 /* ulpgc_logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ulpgc_logo.jpg; sourceTree = "<group>"; };
+		D8EA744F1CC78ACB007464C8 /* ulpgc_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ulpgc_logo.png; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* EIFER App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EIFER App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D8EEF38C1577920B003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -249,6 +253,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8EA744F1CC78ACB007464C8 /* ulpgc_logo.png */,
+				D8EA744D1CC7884D007464C8 /* ulpgc_logo.jpg */,
 				D88F1F111CC65B18005866FA /* down.png */,
 				D88F1F0F1CC65390005866FA /* up.png */,
 				D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */,
@@ -317,7 +323,7 @@
 				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					D8EEF3851577920A003FEB5E = {
-						DevelopmentTeam = CTLLY45L74;
+						DevelopmentTeam = T7H86739Q3;
 					};
 				};
 			};
@@ -361,6 +367,7 @@
 			files = (
 				D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */,
 				D8DF55CA1CC4D9C300D7D084 /* daxlanden_4326_lod2.gml in Resources */,
+				D8EA744E1CC7884D007464C8 /* ulpgc_logo.jpg in Resources */,
 				D88F1F0D1CC6298B005866FA /* SolarRadiation.geojson in Resources */,
 				D8DF55D31CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
@@ -370,6 +377,7 @@
 				D8DF55CC1CC4D9C300D7D084 /* durlach_4326_lod2_PART_2.gml in Resources */,
 				D8DF55D51CC4D9C300D7D084 /* karlsruhe_data.geojson in Resources */,
 				D8DF55D21CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml in Resources */,
+				D8EA74501CC78ACB007464C8 /* ulpgc_logo.png in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,

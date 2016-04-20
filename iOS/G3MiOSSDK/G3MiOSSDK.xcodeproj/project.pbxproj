@@ -588,6 +588,8 @@
 		D8D781F91CA425690025E988 /* CityGMLBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D781F71CA425690025E988 /* CityGMLBuilding.cpp */; };
 		D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D894EB17731870007E41A5 /* GPUVariable.cpp */; };
 		D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D894EC17731870007E41A5 /* GPUVariable.hpp */; };
+		D8EA74531CC79991007464C8 /* CityGMLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EA74511CC79991007464C8 /* CityGMLRenderer.cpp */; };
+		D8EA74541CC79A69007464C8 /* CityGMLRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8EA74521CC79991007464C8 /* CityGMLRenderer.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
@@ -802,6 +804,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8EA74541CC79A69007464C8 /* CityGMLRenderer.hpp in CopyFiles */,
 				D8114E661CBE3DE9004E2BF0 /* CityGMLBuildingTessellator.hpp in CopyFiles */,
 				D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */,
 				D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */,
@@ -2003,6 +2006,8 @@
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
 		D8E76950160742FD008EC7B9 /* GLConstants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLConstants.hpp; sourceTree = "<group>"; };
+		D8EA74511CC79991007464C8 /* CityGMLRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLRenderer.cpp; path = Commons/Rendererers/CityGMLRenderer.cpp; sourceTree = "<group>"; };
+		D8EA74521CC79991007464C8 /* CityGMLRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CityGMLRenderer.hpp; path = Commons/Rendererers/CityGMLRenderer.hpp; sourceTree = "<group>"; };
 		D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CameraGoToPositionEffect.hpp; path = Commons/Basic/CameraGoToPositionEffect.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2708,6 +2713,8 @@
 				D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */,
 				D8114E631CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp */,
 				D8114E641CBE3109004E2BF0 /* CityGMLBuildingTessellator.hpp */,
+				D8EA74511CC79991007464C8 /* CityGMLRenderer.cpp */,
+				D8EA74521CC79991007464C8 /* CityGMLRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3344,6 +3351,7 @@
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
 				CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */,
 				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
+				D8EA74531CC79991007464C8 /* CityGMLRenderer.cpp in Sources */,
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 				CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */,

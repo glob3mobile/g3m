@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LE9-lB-bmo">
-                                        <rect key="frame" x="491" y="8" width="101" height="48"/>
+                                        <rect key="frame" x="250" y="8" width="101" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="101" id="1ZY-jc-2W3"/>
                                             <constraint firstAttribute="height" constant="48" id="Nqc-ol-43P"/>
@@ -32,33 +32,112 @@
                                         <nil key="highlightedColor"/>
                                         <color key="shadowColor" red="0.550485322" green="0.550485322" blue="0.550485322" alpha="1" colorSpace="calibratedRGB"/>
                                     </label>
+                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="Uti-MQ-TpT">
+                                        <rect key="frame" x="180" y="270" width="240" height="59"/>
+                                        <subviews>
+                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="f5V-gh-SMQ">
+                                                <rect key="frame" x="45" y="37" width="150" height="2"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="150" id="AWP-5x-aMS"/>
+                                                    <constraint firstAttribute="height" constant="2" id="Qna-Xg-ZdM"/>
+                                                    <constraint firstAttribute="height" constant="2" id="YSY-7L-F4U"/>
+                                                    <constraint firstAttribute="width" constant="150" id="t7I-af-dal"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="Qna-Xg-ZdM"/>
+                                                        <exclude reference="t7I-af-dal"/>
+                                                    </mask>
+                                                </variation>
+                                            </progressView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading City Model" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Db1-GC-S6W">
+                                                <rect key="frame" x="34" y="8" width="173" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="173" id="RS7-gW-WqB"/>
+                                                    <constraint firstAttribute="width" constant="186" id="UZM-l7-gFL"/>
+                                                    <constraint firstAttribute="height" constant="21" id="vzG-fG-2yv"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="UZM-l7-gFL"/>
+                                                        <exclude reference="vzG-fG-2yv"/>
+                                                    </mask>
+                                                </variation>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.550485322" green="0.550485322" blue="0.550485322" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="Db1-GC-S6W" firstAttribute="top" secondItem="Uti-MQ-TpT" secondAttribute="top" constant="8" id="5Q3-FI-fmg"/>
+                                            <constraint firstAttribute="height" constant="59" id="9z5-FO-ThW"/>
+                                            <constraint firstItem="Db1-GC-S6W" firstAttribute="centerY" secondItem="Uti-MQ-TpT" secondAttribute="centerY" constant="-26" id="KWG-EA-196"/>
+                                            <constraint firstItem="f5V-gh-SMQ" firstAttribute="top" secondItem="Db1-GC-S6W" secondAttribute="bottom" constant="8" id="Nbo-NN-6sb"/>
+                                            <constraint firstAttribute="width" constant="240" id="YZQ-ug-Ze8"/>
+                                            <constraint firstItem="Db1-GC-S6W" firstAttribute="centerX" secondItem="Uti-MQ-TpT" secondAttribute="centerX" id="ZjP-Fc-p3f"/>
+                                            <constraint firstItem="Db1-GC-S6W" firstAttribute="centerX" secondItem="Uti-MQ-TpT" secondAttribute="centerX" id="gNi-SL-SYc"/>
+                                            <constraint firstItem="f5V-gh-SMQ" firstAttribute="centerX" secondItem="Uti-MQ-TpT" secondAttribute="centerX" id="nJp-L2-djk"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="KWG-EA-196"/>
+                                                <exclude reference="ZjP-Fc-p3f"/>
+                                            </mask>
+                                        </variation>
+                                    </view>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eifer_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="43Y-r4-tOo">
+                                        <rect key="frame" x="8" y="8" width="120" height="63"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="6Qs-DH-3X2"/>
+                                            <constraint firstAttribute="height" constant="63" id="DX3-bF-AeS"/>
+                                            <constraint firstAttribute="height" constant="128" id="TV8-XK-5XL"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="jF8-IG-ZMK"/>
+                                            <constraint firstAttribute="width" constant="240" id="lEX-VE-1LI"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="sfU-Kg-nuc"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="TV8-XK-5XL"/>
+                                                <exclude reference="jF8-IG-ZMK"/>
+                                                <exclude reference="lEX-VE-1LI"/>
+                                                <exclude reference="sfU-Kg-nuc"/>
+                                            </mask>
+                                        </variation>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ulpgc_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="TVZ-yh-qdP">
+                                        <rect key="frame" x="472" y="8" width="120" height="63"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="63" id="aLk-w0-tDx"/>
+                                            <constraint firstAttribute="width" constant="120" id="wFx-Wp-Cfz"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="Uti-MQ-TpT" firstAttribute="centerX" secondItem="lOt-Xd-eJz" secondAttribute="centerX" id="2zo-LE-CGr"/>
+                                    <constraint firstItem="43Y-r4-tOo" firstAttribute="leading" secondItem="lOt-Xd-eJz" secondAttribute="leading" constant="8" id="8dH-fS-BWC"/>
+                                    <constraint firstItem="Uti-MQ-TpT" firstAttribute="centerX" secondItem="lOt-Xd-eJz" secondAttribute="centerX" id="JWK-00-vdn"/>
+                                    <constraint firstItem="LE9-lB-bmo" firstAttribute="centerX" secondItem="lOt-Xd-eJz" secondAttribute="centerX" id="Wfo-Cs-QGH"/>
+                                    <constraint firstItem="Uti-MQ-TpT" firstAttribute="centerY" secondItem="lOt-Xd-eJz" secondAttribute="centerY" id="XvQ-Gv-71u"/>
+                                    <constraint firstItem="Uti-MQ-TpT" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="top" constant="26" id="d7Y-eo-acy"/>
                                     <constraint firstAttribute="bottom" secondItem="LE9-lB-bmo" secondAttribute="bottom" constant="544" id="g5s-9V-TA9"/>
+                                    <constraint firstItem="43Y-r4-tOo" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="top" constant="8" id="m8E-jI-X6H"/>
                                     <constraint firstItem="LE9-lB-bmo" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="top" constant="8" id="mp7-yD-Hdz"/>
+                                    <constraint firstItem="Uti-MQ-TpT" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="top" constant="26" id="rYb-XN-LbM"/>
+                                    <constraint firstItem="TVZ-yh-qdP" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="top" constant="8" id="sEl-S3-M1a"/>
                                     <constraint firstAttribute="trailing" secondItem="LE9-lB-bmo" secondAttribute="trailing" constant="8" id="seT-rS-wWw"/>
-                                </constraints>
-                            </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eifer_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="43Y-r4-tOo">
-                                <rect key="frame" x="0.0" y="0.0" width="120" height="63"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="6Qs-DH-3X2"/>
-                                    <constraint firstAttribute="height" constant="63" id="DX3-bF-AeS"/>
-                                    <constraint firstAttribute="height" constant="128" id="TV8-XK-5XL"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="jF8-IG-ZMK"/>
-                                    <constraint firstAttribute="width" constant="240" id="lEX-VE-1LI"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="sfU-Kg-nuc"/>
+                                    <constraint firstAttribute="trailing" secondItem="TVZ-yh-qdP" secondAttribute="trailing" constant="8" id="yKS-Pv-1Br"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="TV8-XK-5XL"/>
-                                        <exclude reference="jF8-IG-ZMK"/>
-                                        <exclude reference="lEX-VE-1LI"/>
-                                        <exclude reference="sfU-Kg-nuc"/>
+                                        <exclude reference="seT-rS-wWw"/>
+                                        <exclude reference="2zo-LE-CGr"/>
+                                        <exclude reference="d7Y-eo-acy"/>
+                                        <exclude reference="rYb-XN-LbM"/>
                                     </mask>
                                 </variation>
-                            </imageView>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IpR-T2-IV5">
                                 <rect key="frame" x="0.0" y="408" width="600" height="192"/>
                                 <subviews>
@@ -116,65 +195,24 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="Uti-MQ-TpT">
-                                <rect key="frame" x="180" y="236" width="240" height="128"/>
-                                <subviews>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="f5V-gh-SMQ">
-                                        <rect key="frame" x="45" y="90" width="150" height="2"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="2" id="Qna-Xg-ZdM"/>
-                                            <constraint firstAttribute="width" constant="150" id="t7I-af-dal"/>
-                                        </constraints>
-                                    </progressView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading City Model" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Db1-GC-S6W">
-                                        <rect key="frame" x="27" y="28" width="186" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="186" id="UZM-l7-gFL"/>
-                                            <constraint firstAttribute="height" constant="21" id="vzG-fG-2yv"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="f5V-gh-SMQ" firstAttribute="centerX" secondItem="Uti-MQ-TpT" secondAttribute="centerX" id="30T-Ji-u8Q"/>
-                                    <constraint firstItem="f5V-gh-SMQ" firstAttribute="centerY" secondItem="Uti-MQ-TpT" secondAttribute="centerY" constant="27" id="KAG-Cy-Lnb"/>
-                                    <constraint firstItem="Db1-GC-S6W" firstAttribute="centerY" secondItem="Uti-MQ-TpT" secondAttribute="centerY" constant="-26" id="KWG-EA-196"/>
-                                    <constraint firstItem="Db1-GC-S6W" firstAttribute="centerX" secondItem="Uti-MQ-TpT" secondAttribute="centerX" id="ZjP-Fc-p3f"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="IpR-T2-IV5" firstAttribute="top" secondItem="alZ-1c-GDj" secondAttribute="top" constant="333" id="3cw-8O-Uo4"/>
-                            <constraint firstItem="Uti-MQ-TpT" firstAttribute="centerY" secondItem="alZ-1c-GDj" secondAttribute="centerY" id="56i-hW-wZf"/>
-                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerX" secondItem="IpR-T2-IV5" secondAttribute="centerX" id="Ab1-0i-V0u"/>
                             <constraint firstItem="IpR-T2-IV5" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leadingMargin" constant="-20" id="B15-PW-9C4"/>
-                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerX" secondItem="alZ-1c-GDj" secondAttribute="centerX" id="CVw-vE-7KL"/>
                             <constraint firstItem="IpR-T2-IV5" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leading" id="DD9-Bf-Tsf"/>
                             <constraint firstItem="lOt-Xd-eJz" firstAttribute="top" secondItem="alZ-1c-GDj" secondAttribute="topMargin" id="Gu3-Bn-qep"/>
                             <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" constant="13" id="HHL-T4-HaV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lOt-Xd-eJz" secondAttribute="trailing" constant="-20" id="Hku-Al-Nab"/>
                             <constraint firstItem="IpR-T2-IV5" firstAttribute="top" secondItem="tsc-ag-hrd" secondAttribute="bottom" constant="173" id="Ibd-AX-6R6"/>
                             <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="bottom" identifier="menuDistanceToBottom" id="TRP-0o-3Hd"/>
-                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerY" secondItem="IpR-T2-IV5" secondAttribute="centerY" id="W3X-n0-iA5"/>
                             <constraint firstAttribute="trailing" secondItem="IpR-T2-IV5" secondAttribute="trailing" id="ZXK-i8-FtA"/>
-                            <constraint firstItem="43Y-r4-tOo" firstAttribute="centerY" secondItem="alZ-1c-GDj" secondAttribute="centerY" id="huV-ac-Jsn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="IpR-T2-IV5" secondAttribute="trailing" constant="-20" id="kTn-Gq-Ngy"/>
-                            <constraint firstItem="43Y-r4-tOo" firstAttribute="top" secondItem="tsc-ag-hrd" secondAttribute="bottom" id="lzE-mA-8Ba"/>
-                            <constraint firstItem="Uti-MQ-TpT" firstAttribute="centerX" secondItem="alZ-1c-GDj" secondAttribute="centerX" id="rLF-iv-azI"/>
                             <constraint firstItem="JNz-Wr-fbN" firstAttribute="top" secondItem="lOt-Xd-eJz" secondAttribute="bottom" id="uRh-bf-lbO"/>
                             <constraint firstItem="lOt-Xd-eJz" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leadingMargin" constant="-20" id="w7k-RG-kDa"/>
-                            <constraint firstItem="43Y-r4-tOo" firstAttribute="leading" secondItem="alZ-1c-GDj" secondAttribute="leadingMargin" constant="-20" id="yuZ-fD-gIT"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="Ab1-0i-V0u"/>
-                                <exclude reference="CVw-vE-7KL"/>
-                                <exclude reference="W3X-n0-iA5"/>
-                                <exclude reference="huV-ac-Jsn"/>
                                 <exclude reference="3cw-8O-Uo4"/>
                                 <exclude reference="DD9-Bf-Tsf"/>
                                 <exclude reference="Ibd-AX-6R6"/>
@@ -201,6 +239,7 @@
     </scenes>
     <resources>
         <image name="eifer_logo.png" width="1856" height="928"/>
+        <image name="ulpgc_logo.png" width="3846" height="1483"/>
         <image name="up.png" width="68" height="46"/>
     </resources>
 </document>

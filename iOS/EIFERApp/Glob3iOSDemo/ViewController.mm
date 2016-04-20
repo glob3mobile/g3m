@@ -199,44 +199,12 @@
 #include <G3MiOSSDK/FloatBuffer_iOS.hpp>
 #include <G3MiOSSDK/GInitializationTask.hpp>
 
+#include <G3MiOSSDK/CityGMLRenderer.hpp>
+
+#import <QuartzCore/QuartzCore.h>
+
 
 #include <typeinfo>
-
-class ColouringCityGMLDemoSceneBDL : public IBufferDownloadListener {
-private:
-  ViewController* _demo;
-  std::vector<CityGMLBuilding*> _buildings;
-public:
-  ColouringCityGMLDemoSceneBDL(ViewController* demo, std::vector<CityGMLBuilding*> buildings) :
-  _demo(demo),
-  _buildings(buildings)
-  {
-  }
-  
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-    
-    std::string s = buffer->getAsString();
-    delete buffer;
-    BuildingDataParser::includeDataInBuildingSet(s, _buildings);
-  }
-  
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
-  }
-  
-  void onCancel(const URL& url) {
-    // do nothing
-  }
-  
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired) {
-    // do nothing
-  }
-  
-};
 
 class TimeEvolutionTask: public GTask{
   
@@ -307,8 +275,7 @@ public:
     int min = _step % 60;
     int hour = (_step / 60) % 24;
     std::string s = context->getStringUtils()->toString(hour) + ":" + context->getStringUtils()->toString(min);
-    //    _labelBuilder->setText(s);
-    
+
     [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
   }
   
@@ -381,28 +348,6 @@ public:
   
 };
 
-class MyCityGMLListener: public CityGMLListener{
-  
-private:
-  ViewController* _demo;
-  const IThreadUtils* _threadUtils;
-public:
-  
-  MyCityGMLListener(ViewController* demo,
-                    const IThreadUtils* threadUtils):
-  _demo(demo), _threadUtils(threadUtils){
-    
-  }
-  
-  virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings){
-    [_demo addBuildings:buildings withThreadUtils:_threadUtils];
-  }
-  
-  virtual void onError(){
-    
-  }
-};
-
 class MyEDListener: public IElevationDataListener{
   
   
@@ -417,10 +362,13 @@ public:
   virtual void onData(const Sector& sector,
                       const Vector2I& extent,
                       ElevationData* elevationData){
+    
+    _demo.cityGMLRenderer->setElevationData(elevationData);
+    
     [_demo setElevationData:elevationData];
     
     [_demo requestPointCloud];
-    [_demo loadCityModelWithThreadUtils:_threadUtils];
+    [_demo loadCityModelWithThreadUtils];
   }
   
   virtual void onError(const Sector& sector,
@@ -442,6 +390,7 @@ public:
 @synthesize G3MWidget;
 @synthesize meshRenderer;
 @synthesize marksRenderer;
+@synthesize cityGMLRenderer;
 @synthesize elevationData;
 @synthesize _timeLabel;
 
@@ -459,6 +408,9 @@ public:
   meshRenderer = NULL;
   marksRenderer = NULL;
   
+  _waitingMessageView.layer.cornerRadius = 5;
+  _waitingMessageView.layer.masksToBounds = TRUE;
+  
   G3MWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin |
   UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
   UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -466,10 +418,10 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
   //  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
   //  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
   //  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
@@ -477,6 +429,10 @@ public:
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
+  
+  _pointCloudFiles.push_back("file:///SolarRadiation.geojson");
+  _pointCloudsLoaded = 0;
+  
   [_progressBar setProgress:0.0f];
   
   _useDem = true;
@@ -509,7 +465,7 @@ public:
       edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc, context->getThreadUtils()), true);
     } else{
       [_vc requestPointCloud];
-      [_vc loadCityModelWithThreadUtils:context->getThreadUtils()];
+      [_vc loadCityModelWithThreadUtils];
     }
   }
   
@@ -538,13 +494,15 @@ public:
   _planet = EllipsoidalPlanet::createEarth();
   builder.setPlanet(_planet);
   
-  meshRenderer = new MeshRenderer();
-  builder.addRenderer(meshRenderer);
-  marksRenderer = new MarksRenderer(false);
-  builder.addRenderer(marksRenderer);
   _hudRenderer = new HUDRenderer();
+  
   builder.addRenderer(_hudRenderer);
-
+  
+  meshRenderer = new MeshRenderer();
+  marksRenderer = new MarksRenderer(false);
+  cityGMLRenderer = new CityGMLRenderer(meshRenderer, marksRenderer);
+  builder.addRenderer(cityGMLRenderer);
+  
   builder.setInitializationTask(new MyInitTask(self, useDEM));
   
   
@@ -553,122 +511,82 @@ public:
 
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
   
-  
-  //Mesh* m = BuildingDataParser::createPointCloudMesh(pointCloudDescriptor, _planet, ed);
   Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
   
   meshRenderer->addMesh(m);
   
-  //TODO: CHANGE POINTCLOUD WITH TIME
-  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                           new TimeEvolutionTask((AbstractMesh*)m, self)));
+  _pointClouds.push_back(m);
   
-  [self onDataLoaded];
+//  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+//                                                           new TimeEvolutionTask((AbstractMesh*)m, self)));
+  
+  [self onPointCloudLoaded];
 }
 
 -(void) requestPointCloud{
-  //  [G3MWidget widget]->getG3MContext()
-  //  ->getDownloader()->requestBuffer(URL("file:///random_cluster.geojson"), 1000, TimeInterval::forever(), true,
-  //                                   new PointCloudBDL(self, ed),
-  //                                   true);
-  
-  [G3MWidget widget]->getG3MContext()
-  ->getDownloader()->requestBuffer(URL("file:///SolarRadiation.geojson"), 1000, TimeInterval::forever(), true,
-                                   new PointCloudBDL(self),
-                                   true);
-  
-}
-
-
--(void) loadCityModelWithThreadUtils: (const IThreadUtils*) threadUtils{
-  
-  for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
-    CityGMLParser::parseFromURL(URL(_cityGMLFiles[i]),
-                                new MyCityGMLListener(self, threadUtils),
-                                true);
+  for (size_t i = 0; i < _pointCloudFiles.size(); i++) {
+    [G3MWidget widget]->getG3MContext()
+    ->getDownloader()->requestBuffer(URL(_pointCloudFiles[i]), 1000, TimeInterval::forever(), true,
+                                     new PointCloudBDL(self),
+                                     true);
   }
 }
 
-
-
--(void) colorBuildings:(CityGMLBuildingColorProvider*) cp{
-  
-  for (size_t i = 0; i < _buildings.size(); i++) {
-    CityGMLBuilding* b = _buildings.at(i);
-    Color c = cp->getColor(b);
-    CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(b, c);
-  }
-  
-}
-
-class TessellationTask: public GAsyncTask {
+class MyCityGMLRendererListener: public CityGMLRendererListener{
   ViewController* _vc;
-  std::vector<CityGMLBuilding*> _buildings;
 public:
-  
-  TessellationTask(ViewController* vc,
-                   std::vector<CityGMLBuilding*> buildings):
-  _vc(vc),
-  _buildings(buildings)
-  {}
-  
-  virtual void runInBackground(const G3MContext* context){
-    //Adding marks
-    for (size_t i = 0; i < _buildings.size(); i++) {
-      _vc.marksRenderer->addMark( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
-    }
-    
-    //Checking walls visibility
-    int n = CityGMLBuilding::checkWallsVisibility(_buildings);
-    ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
-    
-    //Creating mesh model
-    Mesh* mesh = CityGMLBuildingTessellator::createMesh(_buildings,
-                                                        *[_vc.G3MWidget widget]->getG3MContext()->getPlanet(),
-                                                        false, false, NULL,
-                                                        _vc.elevationData);
-    _vc.meshRenderer->addMesh(mesh);
+  MyCityGMLRendererListener(ViewController* vc):_vc(vc){}
+  virtual void onBuildingsLoaded(const std::vector<CityGMLBuilding*>& buildings){
+    [_vc onCityModelLoaded];
   }
   
-  virtual void onPostExecute(const G3MContext* context){
-    [_vc onDataLoaded];
-  }
 };
 
--(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings
-     withThreadUtils:(const IThreadUtils*) threadUtils{
-  
-  for (size_t i = 0; i < buildings.size(); i++) {
-    _buildings.push_back(buildings[i]);
+-(void) onCityModelLoaded{
+  _modelsLoadedCounter++;
+  if (_modelsLoadedCounter == _cityGMLFiles.size()){
+    cityGMLRenderer->addBuildingDataFromURL(URL("file:///karlsruhe_data.geojson"));
   }
+  [self onProgress];
+}
+
+-(void) onPointCloudLoaded{
+  _pointCloudsLoaded++;
+  [self onProgress];
+}
+
+
+-(void) loadCityModelWithThreadUtils{
   
-  [G3MWidget widget]->getG3MContext()
-  ->getDownloader()->requestBuffer(URL("file:///karlsruhe_data.geojson"), 1000, TimeInterval::forever(), true,
-                                   new ColouringCityGMLDemoSceneBDL(self, buildings),
-                                   true);
-  
-  [self onDataLoaded];
-  
-  bool createCityMeshAndMarks = true;
-  if (createCityMeshAndMarks){
-    threadUtils->invokeAsyncTask(new TessellationTask(self, buildings), true);
+  for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
+    //    CityGMLParser::parseFromURL(URL(_cityGMLFiles[i]),
+    //                                new MyCityGMLListener(self, threadUtils),
+    //                                true);
+    cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]),
+                                         new MyCityGMLRendererListener(self),
+                                         true);
   }
 }
 
--(void) onDataLoaded {
-  _modelsLoadedCounter++;
-  
-  //N MODELS * 2 + 1 POINT CLOUD
-  float p = (float)_modelsLoadedCounter / (2 * (float)_cityGMLFiles.size() + 1);
+-(void) onProgress {
+  //N MODELS + 1 POINT CLOUD
+  float p = (float)(_modelsLoadedCounter + _pointCloudsLoaded) / ((float)_cityGMLFiles.size() + 1);
   [_progressBar setProgress: p animated:TRUE];
   
   if (p == 1){
-    [self onCityModelLoaded];
+    [self onAllDataLoaded];
   }
 }
 
--(void) onCityModelLoaded{
+-(void) onAllDataLoaded{
   ILogger::instance()->logInfo("City Model Loaded");
+  
+  for (size_t i = 0; i < _pointClouds.size(); i++) {
+    
+    [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+                                                             new TimeEvolutionTask((AbstractMesh*)_pointClouds[i], self)));
+  }
+  
   
   //Whole city!
   [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
@@ -809,7 +727,7 @@ public:
 {
   if (row == 0){
     RandomBuildingColorPicker* rcp = new RandomBuildingColorPicker();
-    [self colorBuildings:rcp];
+    cityGMLRenderer->colorBuildings(rcp);
     delete rcp;
   }
   
@@ -821,7 +739,7 @@ public:
     legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
     ColorLegend* cl = new ColorLegend(legend);
     CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
-    [self colorBuildings:colorProvider];
+    cityGMLRenderer->colorBuildings(colorProvider);
     delete colorProvider;
     
   }
@@ -838,7 +756,7 @@ public:
     ColorLegend* cl = new ColorLegend(legend);
     
     BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider("Bui_Volu_1", cl);
-    [self colorBuildings:colorProvider];
+    cityGMLRenderer->colorBuildings(colorProvider);
     delete colorProvider;
   }
   
@@ -875,7 +793,7 @@ public:
     
     ColorLegend* cl = new ColorLegend(legend);
     CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("QCL_1", cl);
-    [self colorBuildings:colorProvider];
+    cityGMLRenderer->colorBuildings(colorProvider);
     delete colorProvider;
     
   }
@@ -911,7 +829,7 @@ public:
     
     ColorLegend* cl = new ColorLegend(legend);
     CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("SOMcluster", cl);
-    [self colorBuildings:colorProvider];
+    cityGMLRenderer->colorBuildings(colorProvider);
     delete colorProvider;
     
   }
@@ -924,7 +842,7 @@ public:
     
     ColorLegend* cl = new ColorLegend(legend);
     CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Field2_12", cl);
-    [self colorBuildings:colorProvider];
+    cityGMLRenderer->colorBuildings(colorProvider);
     delete colorProvider;
     
   }
