@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3M3DModelDemoScene.hpp"
@@ -60,7 +59,7 @@ public:
 void G3M3DModelDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-
+  
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",

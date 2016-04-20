@@ -12,12 +12,13 @@
 #include "RenderState.hpp"
 #include "LayerCondition.hpp"
 #include "TiledVectorLayerTileImageProvider.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "Tile.hpp"
 #include "TileImageContribution.hpp"
 #include "IDownloader.hpp"
 #include "MercatorUtils.hpp"
 #include "GEORasterSymbolizer.hpp"
+
 
 TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
                                    const std::string&                                    urlTemplate,

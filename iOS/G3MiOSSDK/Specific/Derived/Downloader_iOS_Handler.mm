@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 28/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import "Downloader_iOS_Handler.h"
@@ -187,7 +186,9 @@
 
       NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
 
-      NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName, dotPos + 1, fileFullName.size()) ];
+      NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName,
+                                                                        dotPos + 1,
+                                                                        fileFullName.size()) ];
 
       NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
                                                            ofType: fileExt];

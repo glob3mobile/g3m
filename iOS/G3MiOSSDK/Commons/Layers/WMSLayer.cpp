@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 18/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "WMSLayer.hpp"
@@ -394,11 +393,11 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 	}
 
   //If the server refer to itself as localhost...
-  int pos = req.find("localhost");
+  size_t pos = req.find("localhost");
   if (pos != -1) {
     req = req.substr(pos+9);
 
-    int pos2 = req.find("/", 8);
+    size_t pos2 = req.find("/", 8);
     std::string newHost = req.substr(0, pos2);
 
     req = newHost + req;
@@ -632,7 +631,7 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   }
   else {
     const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-    if (contributionSector.hasNoArea()){
+    if (contributionSector.hasNoArea()) {
       return NULL;
     }
 

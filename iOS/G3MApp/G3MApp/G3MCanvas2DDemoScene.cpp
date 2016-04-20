@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 2/12/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #include "G3MCanvas2DDemoScene.hpp"
@@ -140,7 +139,6 @@ public:
 void G3MCanvas2DDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-
 
   OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);

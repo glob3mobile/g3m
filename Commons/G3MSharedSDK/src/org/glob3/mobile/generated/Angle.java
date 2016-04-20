@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -97,6 +95,11 @@ public class Angle
     return Angle.fromDegrees(180);
   }
 
+  public static Angle halfPi()
+  {
+    return Angle.fromDegrees(90);
+  }
+
   public static Angle nan()
   {
     return Angle.fromDegrees(java.lang.Double.NaN);
@@ -110,6 +113,21 @@ public class Angle
   public static Angle linearInterpolation(Angle from, Angle to, double alpha)
   {
     return Angle.fromRadians((1.0-alpha) * from._radians + alpha * to._radians);
+  }
+
+  public static Angle cosineInterpolation(Angle from, Angle to, double alpha)
+  {
+    return Angle.fromRadians(IMathUtils.instance().cosineInterpolation(from._radians, to._radians, alpha));
+  }
+
+  public static Angle linearInterpolationFromRadians(double fromRadians, double toRadians, double alpha)
+  {
+    return Angle.fromRadians((1.0-alpha) * fromRadians + alpha * toRadians);
+  }
+
+  public static Angle linearInterpolationFromDegrees(double fromDegrees, double toDegrees, double alpha)
+  {
+    return Angle.fromDegrees((1.0-alpha) * fromDegrees + alpha * toDegrees);
   }
 
   public final boolean isNan()

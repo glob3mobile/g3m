@@ -24,6 +24,8 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _timestamp = timestamp;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VR => Diego at work!
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -42,49 +44,49 @@ public class Camera
        _geodeticPosition.dispose();
   }
 
-  public final void copyFrom(Camera that)
+  public final void copyFrom(Camera that, boolean ignoreTimestamp)
   {
   
-    if (_timestamp == that._timestamp)
+    if (ignoreTimestamp || _timestamp != that._timestamp)
     {
-      return;
+  
+      that.forceMatrixCreation();
+  
+      _timestamp = that._timestamp;
+  
+      _viewPortWidth = that._viewPortWidth;
+      _viewPortHeight = that._viewPortHeight;
+  
+      _planet = that._planet;
+  
+      _position.copyFrom(that._position);
+      _center.copyFrom(that._center);
+      _up.copyFrom(that._up);
+      _normalizedPosition.copyFrom(that._normalizedPosition);
+  
+      _dirtyFlags.copyFrom(that._dirtyFlags);
+  
+      _frustumData = that._frustumData;
+  
+      _projectionMatrix.copyValue(that._projectionMatrix);
+      _modelMatrix.copyValue(that._modelMatrix);
+      _modelViewMatrix.copyValue(that._modelViewMatrix);
+  
+      _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+  
+      _geodeticCenterOfView = that._geodeticCenterOfView;
+  
+      _frustum = that._frustum;
+  
+      _frustumInModelCoordinates = that._frustumInModelCoordinates;
+  
+      _geodeticPosition = that._geodeticPosition;
+      _angle2Horizon = that._angle2Horizon;
+  
+      _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
+      _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
     }
   
-    that.forceMatrixCreation();
-  
-    _timestamp = that._timestamp;
-  
-    _viewPortWidth = that._viewPortWidth;
-    _viewPortHeight = that._viewPortHeight;
-  
-    _planet = that._planet;
-  
-    _position.copyFrom(that._position);
-    _center.copyFrom(that._center);
-    _up.copyFrom(that._up);
-    _normalizedPosition.copyFrom(that._normalizedPosition);
-  
-    _dirtyFlags.copyFrom(that._dirtyFlags);
-  
-    _frustumData = that._frustumData;
-  
-    _projectionMatrix.copyValue(that._projectionMatrix);
-    _modelMatrix.copyValue(that._modelMatrix);
-    _modelViewMatrix.copyValue(that._modelViewMatrix);
-  
-    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
-  
-    _geodeticCenterOfView = that._geodeticCenterOfView;
-  
-    _frustum = that._frustum;
-  
-    _frustumInModelCoordinates = that._frustumInModelCoordinates;
-  
-    _geodeticPosition = that._geodeticPosition;
-    _angle2Horizon = that._angle2Horizon;
-  
-    _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
-    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   }
 
   public final void resizeViewport(int width, int height)
@@ -204,6 +206,12 @@ public class Camera
 
     // perform the substraction inlinde to avoid a temporary MutableVector3D instance
     return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+  }
+
+  public final boolean hasValidViewDirection()
+  {
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !(d != d);
   }
 
   public final void getViewDirectionInto(MutableVector3D result)
@@ -608,6 +616,25 @@ public class Camera
     return obj.sub(position.asVector3D());
   }
 
+  public final Angle getHorizontalFOV()
+  {
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFieldOfView)).times(2);
+  }
+
+  public final Angle getVerticalFOV()
+  {
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFieldOfView)).times(2);
+  }
+
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
+  }
+
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -671,6 +698,8 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VR => Diego at work!
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
 
@@ -800,6 +829,11 @@ public class Camera
           }
         }
       }
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VR => Diego at work!
+      _tanHalfHorizontalFieldOfView = tanHalfHFOV;
+      _tanHalfVerticalFieldOfView = tanHalfVFOV;
     }
   
     final double right = tanHalfHFOV * zNear;
@@ -843,15 +877,6 @@ public class Camera
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
-  }
-
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
   }
 
 }

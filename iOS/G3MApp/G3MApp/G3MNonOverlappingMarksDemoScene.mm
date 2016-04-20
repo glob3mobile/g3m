@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 1/30/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #include "G3MNonOverlappingMarksDemoScene.hpp"
@@ -15,7 +14,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/LabelImageBuilder.hpp>
 #include <G3MiOSSDK/ColumnLayoutImageBuilder.hpp>
-#include <G3MiOSSDK/Context.hpp>
+#include <G3MiOSSDK/G3MContext.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
 #include <G3MiOSSDK/IBufferDownloadListener.hpp>
 #include <G3MiOSSDK/IJSONParser.hpp>

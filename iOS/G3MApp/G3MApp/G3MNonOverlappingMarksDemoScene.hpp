@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 1/30/15.
-//  Copyright (c) 2015 Igo Software SL. All rights reserved.
 //
 
 #ifndef __G3MApp__G3MNonOverlappingMarksDemoScene__

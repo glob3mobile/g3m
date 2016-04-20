@@ -3,13 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "CameraRenderer.hpp"
 #include "Camera.hpp"
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
@@ -56,4 +56,24 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 
   // if no handler processed the event, return not-handled
   return false;
+}
+
+void CameraRenderer::removeHandler(CameraEventHandler* handler) {
+  
+#ifdef C_CODE
+  size_t size = _handlers.size();
+  for (size_t i = 0; i < size; i++) {
+    if (_handlers[i] == handler) {
+      _handlers.erase(_handlers.begin() + i);
+      return;
+    }
+  }
+#endif
+#ifdef JAVA_CODE
+  if ( _handlers.remove(handler) ) {
+    return;
+  }
+#endif
+  
+  ILogger::instance()->logError("Could not remove camera handler.");
 }

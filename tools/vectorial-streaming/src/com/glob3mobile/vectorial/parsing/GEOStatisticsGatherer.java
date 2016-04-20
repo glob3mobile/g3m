@@ -149,18 +149,13 @@ public class GEOStatisticsGatherer
       System.out.println("-------------------------\n");
 
       final GEOParser parser = GEONamesParser.INSTANCE;
-      final String featuresFileName = "test-files/geonames/ES.txt";
-      // final String featuresFileName = "test-files/geonames/MX.txt";
-      // final String featuresFileName = "test-files/geonames/US.txt";
-      // final String featuresFileName = "test-files/geonames/cities1000.txt";
-      // final String featuresFileName = "test-files/geonames/AR.txt";
-      // final String featuresFileName = "test-files/geonames/NO.txt";
-      // final String featuresFileName = "test-files/geonames/allCountries.txt";
+      final String featuresFileName = "test-files/geonames/allCountries.txt";
 
       final File file = new File(featuresFileName);
 
       final GEOStatisticsGatherer.Statistics statistics = GEOStatisticsGatherer.getStatistics(parser, file, null);
 
+      System.out.println();
       System.out.println("   Features Count: " + statistics._featuresCount);
       System.out.println(" Average Position: " + statistics._averagePosition);
       System.out.println("  Bounding Sector: " + statistics._boundingSector);

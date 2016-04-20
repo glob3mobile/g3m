@@ -40,11 +40,11 @@ public:
 
   }
 
-  int getVertexCount() const {
+  size_t getVertexCount() const {
     return _mesh->getVertexCount();
   }
 
-  const Vector3D getVertex(int i) const {
+  const Vector3D getVertex(size_t i) const {
     return _mesh->getVertex(i);
   }
 
@@ -62,6 +62,10 @@ public:
 
   void showNormals(bool v) const {
     _mesh->showNormals(v);
+  }
+  
+  Mesh* getMesh() const {
+    return _mesh;
   }
 
 };

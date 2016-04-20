@@ -32,6 +32,10 @@ protected:
   const float             _pointSize;
   const bool              _depthTest;
   
+  const bool _polygonOffsetFill;
+  const float _polygonOffsetFactor;
+  const float _polygonOffsetUnits;
+  
   mutable BoundingVolume* _extent;
   BoundingVolume* computeBoundingVolume() const;
   
@@ -43,7 +47,10 @@ protected:
                        bool            ownsNormals,
                        float           lineWidth,
                        float           pointSize,
-                       bool            depthTest);
+                       bool            depthTest,
+                       bool polygonOffsetFill,
+                       float polygonOffsetFactor,
+                       float polygonOffsetUnits);
   
   GLState* _glState;
   
@@ -60,9 +67,9 @@ public:
   
   BoundingVolume* getBoundingVolume() const;
   
-  int getVertexCount() const;
+  size_t getVertexCount() const;
   
-  const Vector3D getVertex(int i) const;
+  const Vector3D getVertex(size_t i) const;
   
   bool isTransparent(const G3MRenderContext* rc) const {
     return false; //TODO: CHECK

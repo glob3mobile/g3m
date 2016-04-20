@@ -76,7 +76,7 @@ public class Sphere extends BoundingVolume
       indices.add((short)(j));
     }
   
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, new Color(color));
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();
@@ -227,6 +227,8 @@ public class Sphere extends BoundingVolume
   }
   public final boolean touchesFrustum(Frustum frustum)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning This implementation could gives false positives
     // this implementation is not right exact, but it's faster.
     if (frustum.getNearPlane().signedDistance(_center) > _radius)
        return false;

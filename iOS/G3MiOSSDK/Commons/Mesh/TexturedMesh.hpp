@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 12/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_TexturedMesh
@@ -66,11 +65,11 @@ public:
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
   
-  int getVertexCount() const {
+  size_t getVertexCount() const {
     return _mesh->getVertexCount();
   }
   
-  const Vector3D getVertex(int i) const {
+  const Vector3D getVertex(size_t i) const {
     return _mesh->getVertex(i);
   }
   

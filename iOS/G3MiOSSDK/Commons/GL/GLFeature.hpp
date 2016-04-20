@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GLFeature
@@ -13,6 +12,7 @@
 #include "GLFeatureGroup.hpp"
 #include "GPUAttribute.hpp"
 #include "Vector2F.hpp"
+#include "ViewMode.hpp"
 
 #include "RCObject.hpp"
 
@@ -89,11 +89,11 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
   
   void changeSize(int textureWidth,
-                  int textureHeight){
+                  int textureHeight) {
     _size->changeValue(textureWidth, textureHeight);
   }
   
-  void changeAnchor(float anchorU, float anchorV){
+  void changeAnchor(float anchorU, float anchorV) {
     _anchor->changeValue(anchorU, anchorV);
   }
 };
@@ -112,7 +112,8 @@ public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
 
-  ViewportExtentGLFeature(const Camera* camera);
+  ViewportExtentGLFeature(const Camera* camera,
+                          ViewMode      viewMode);
 
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
   
@@ -186,7 +187,7 @@ public:
                       float pointSize,
                       const Vector2F& translation);
 
-  void setTranslation(float x, float y){
+  void setTranslation(float x, float y) {
     _translation->changeValue(x, y);
   }
 

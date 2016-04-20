@@ -35,6 +35,8 @@
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
 #include "DefaultInfoDisplay.hpp"
+#include "EllipsoidalPlanet.hpp"
+#include "PlanetRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -168,7 +170,7 @@ ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
  */
 const Planet* IG3MBuilder::getPlanet() {
   if (!_planet) {
-    _planet = Planet::createEarth();
+    _planet = EllipsoidalPlanet::createEarth();
   }
   return _planet;
 }
@@ -733,7 +735,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            infoDisplay);
+                                            infoDisplay,
+                                            MONO);
 
   g3mWidget->setUserData(getUserData());
 
@@ -832,9 +835,8 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
   if (_sceneLighting == NULL) {
-    //_sceneLighting = new DefaultSceneLighting();
-    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
-                                                  Color::yellow());
+    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0),
+                                                  Color::white());
   }
   return _sceneLighting;
 }

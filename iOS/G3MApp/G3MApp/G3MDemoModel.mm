@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/16/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MDemoModel.hpp"
@@ -44,6 +43,7 @@
 #include "G3MAnimatedMarksDemoScene.hpp"
 #include "G3MVectorStreaming1DemoScene.hpp"
 #include "G3MVectorStreaming2DemoScene.hpp"
+#include "G3MStereoDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            LayerSet*                    layerSet,
@@ -88,6 +88,7 @@ _context(NULL)
   // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
+  _scenes.push_back( new G3MStereoDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -107,6 +108,8 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
+  _g3mWidget->setViewMode(MONO);
+
   _g3mWidget->cancelAllEffects();
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();

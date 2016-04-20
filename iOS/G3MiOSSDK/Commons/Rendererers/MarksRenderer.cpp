@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "MarksRenderer.hpp"
@@ -19,6 +18,8 @@
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
+#include "G3MEventContext.hpp"
+
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
                                          bool autoDelete) {
@@ -290,7 +291,8 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
 
   if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL) {
     _glState->clearGLFeatureGroup(NO_GROUP);
-    _glState->addGLFeature(new ViewportExtentGLFeature(camera),
+    _glState->addGLFeature(new ViewportExtentGLFeature(camera,
+                                                       rc->getViewMode()),
                            false);
   }
 }
@@ -298,7 +300,14 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
 void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                           int width, int height) {
   _glState->clearGLFeatureGroup(NO_GROUP);
-  _glState->addGLFeature(new ViewportExtentGLFeature(width, height), false);
+
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+
+  _glState->addGLFeature(new ViewportExtentGLFeature(logicWidth, height),
+                         false);
 }
 
 size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,

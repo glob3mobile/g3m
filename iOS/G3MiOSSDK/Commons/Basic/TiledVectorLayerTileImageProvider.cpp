@@ -24,7 +24,6 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
   if (_imageAssembler != NULL) {
     _imageAssembler->deletedRasterizer();
   }
-
   delete _symbolizer;
   delete _buffer;
   delete _geoObject;
@@ -206,21 +205,9 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
                                                               const Tile*             tile,
                                                               long long               tileDownloadPriority,
                                                               bool                    logDownloadActivity) {
-//  _downloadListener = new GEOJSONBufferDownloadListener(this);
-//
-//  _symbolizer = layer->symbolizerCopy();
-
-//  _downloadRequestId = layer->requestGEOJSONBuffer(tile,
-//                                                   _downloader,
-//                                                   tileDownloadPriority,
-//                                                   logDownloadActivity,
-//                                                   _downloadListener,
-//                                                   true /* deleteListener */);
-
-
+  
   TiledVectorLayer::RequestGEOJSONBufferData* requestData = layer->getRequestGEOJSONBufferData(tile);
 
-//  GEOObject* geoObject = _tileImageProvider->getGEOObjectFor(requestData->_url);
   const GEOObjectHolder* geoObjectHolder = _tileImageProvider->getGEOObjectFor(requestData->_url);
   if (geoObjectHolder == NULL) {
     _symbolizer = layer->symbolizerCopy();
@@ -237,10 +224,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
                                                     true /* deleteListener */);
   }
   else {
-//    geoObjectDownloaded(geoObject,
-//                        _symbolizer);
-//    aa
-
     const GEORasterSymbolizer* symbolizer = layer->symbolizerCopy();
 
     _rasterizer = new GEOJSONBufferRasterizer(this,

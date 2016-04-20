@@ -3,7 +3,6 @@
  *  Prueba Opengl iPad
  *
  *  Created by Agustin Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
 
@@ -16,7 +15,7 @@
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableVector2F.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"
@@ -115,7 +114,8 @@ public:
     delete _geodeticPosition;
   }
 
-  void copyFrom(const Camera &c);
+  void copyFrom(const Camera &c,
+                bool  ignoreTimestamp);
 
   void resizeViewport(int width, int height);
 
@@ -159,6 +159,11 @@ public:
     return Vector3D(_center.x() - _position.x(),
                     _center.y() - _position.y(),
                     _center.z() - _position.z());
+  }
+  
+  bool hasValidViewDirection() const{
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !ISNAN(d);
   }
 
   const void getViewDirectionInto(MutableVector3D& result) const {
@@ -310,9 +315,9 @@ public:
     return _timestamp;
   }
 
-  void setLookAtParams(MutableVector3D position,
-                       MutableVector3D center,
-                       MutableVector3D up) {
+  void setLookAtParams(const MutableVector3D& position,
+                       const MutableVector3D& center,
+                       const MutableVector3D& up) {
     setCartesianPosition(position);
     setCenter(center);
     setUp(up);
@@ -344,6 +349,12 @@ public:
                                   const Vector2F& pixel,
                                   const MutableVector2I& viewport,
                                   const MutableMatrix44D& modelViewMatrix);
+  
+  Angle getHorizontalFOV() const;
+  
+  Angle getVerticalFOV() const;
+
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
 
 
 private:
@@ -412,8 +423,9 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
-  double                   _tanHalfVerticalFieldOfView;
-  double                   _tanHalfHorizontalFieldOfView;
+#warning VR => Diego at work!
+  mutable double           _tanHalfVerticalFieldOfView;
+  mutable double           _tanHalfHorizontalFieldOfView;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
@@ -510,8 +522,6 @@ private:
     }
     return _modelViewMatrix;
   }
-  
-  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 28/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import "Downloader_iOS_Listener.h"
@@ -41,7 +40,7 @@
                  data:(NSData*) data
 {
   if (_cppBufferListener) {
-    const int length = [data length];
+    const size_t length = [data length];
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];
@@ -89,7 +88,7 @@
                          data:(NSData*) data
 {
   if (_cppBufferListener) {
-    const int length = [data length];
+    const size_t length = [data length];
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];

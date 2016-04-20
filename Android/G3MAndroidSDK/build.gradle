@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+
+dependencies {
+  compile fileTree(dir: 'libs', include: '*.jar')
+//  compile project (':G3MSharedSDK')
+}
+
+android {
+  compileSdkVersion 14
+  buildToolsVersion "23.0.1"
+ 
+  defaultConfig {
+    minSdkVersion 14
+    targetSdkVersion 23
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+
+  sourceSets {
+    main {
+      manifest.srcFile 'AndroidManifest.xml'
+      java.srcDirs = ['src']
+    }
+  }
+}

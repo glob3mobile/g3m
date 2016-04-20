@@ -3,7 +3,6 @@
 //  wikiglob3-ios
 //
 //  Created by Diego Gomez Deck on 08/03/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import "SQDatabase.h"

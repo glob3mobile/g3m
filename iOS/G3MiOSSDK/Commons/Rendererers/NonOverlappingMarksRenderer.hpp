@@ -116,9 +116,10 @@ public:
 
   void resetPosition();
 
-  void onResizeViewportEvent(int width, int height);
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height);
 
-  bool isReady() const{
+  bool isReady() const {
     return _image != NULL;
   }
 
@@ -216,7 +217,8 @@ public:
                                       int viewportHeight,
                                       float viewportMargin);
 
-  void onResizeViewportEvent(int width, int height);
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height);
 
   void resetWidgetPositionVelocityAndForce() {
     _widget->resetPosition();

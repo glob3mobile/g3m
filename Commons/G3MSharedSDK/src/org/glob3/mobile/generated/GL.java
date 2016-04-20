@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -13,7 +12,6 @@ package org.glob3.mobile.generated;
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 14/06/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -22,8 +20,6 @@ package org.glob3.mobile.generated;
 
 //class IGLProgramId;
 //class IGLUniformID;
-
-
 //class GPUProgramManager;
 //class GPUProgramState;
 //class GLState;
@@ -95,7 +91,6 @@ public class GL
   //Get Locations warning of errors
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
-//  const bool _verbose;
 
   private GLGlobalState _clearScreenState; //State used to clear screen with certain color
 
@@ -108,8 +103,7 @@ public class GL
 
 
 
-  public GL(INativeGL nativeGL, boolean verbose)
-//  _verbose(verbose),
+  public GL(INativeGL nativeGL)
   {
      _nativeGL = nativeGL;
      _texturesIdAllocationCounter = 0;
@@ -149,24 +143,24 @@ public class GL
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
+  //  void drawElements(int mode,
+  //                    IShortBuffer* indices, const GLGlobalState& state,
+  //                    GPUProgramManager& progManager,
+  //                    const GPUProgramState* gpuState);
 
-  public final void drawElements(int mode, IShortBuffer indices, int indexCount, GLState state, GPUProgramManager progManager)
+  public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
   
     state.applyOnGPU(this, progManager);
   
-    _nativeGL.drawElements(mode, indexCount, indices);
+    _nativeGL.drawElements(mode, (int)indices.size(), indices);
   }
 
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
+  //  void drawArrays(int mode,
+  //                  int first,
+  //                  int count, const GLGlobalState& state,
+  //                  GPUProgramManager& progManager,
+  //                  const GPUProgramState* gpuState);
 
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
@@ -278,10 +272,9 @@ public class GL
     }
   }
 
-//  void getViewport(int v[]) {
-////    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-//    _nativeGL->getIntegerv(GLVariable::viewport(), v);
-//  }
+  //  void getViewport(int v[]) {
+  //    _nativeGL->getIntegerv(GLVariable::viewport(), v);
+  //  }
 
   public void dispose()
   {
@@ -446,6 +439,11 @@ public class GL
   public final GLGlobalState getCurrentGLGlobalState()
   {
     return _currentGLGlobalState;
+  }
+
+  public final void viewport(int x, int y, int width, int height)
+  {
+    _nativeGL.viewport(x, y, width, height);
   }
 
 

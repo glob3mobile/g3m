@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Angle.hpp"
@@ -57,4 +56,12 @@ const std::string Angle::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+Angle Angle::cosineInterpolation(const Angle& from,
+                                 const Angle& to,
+                                 double alpha) {
+  return Angle::fromRadians( IMathUtils::instance()->cosineInterpolation(from._radians,
+                                                                         to._radians,
+                                                                         alpha) );
 }

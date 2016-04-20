@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 07/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -11,6 +10,7 @@
 #include "MutableVector2D.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,

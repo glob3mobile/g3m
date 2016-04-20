@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MCameraDemoScene.hpp"
@@ -15,7 +14,7 @@
 #include <G3MiOSSDK/SGShape.hpp>
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-//#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/G3MWidget.hpp>
 
 #include "G3MDemoModel.hpp"
 

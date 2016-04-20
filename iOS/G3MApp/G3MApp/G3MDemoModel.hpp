@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/16/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #ifndef __G3MApp__G3MDemoModel__
@@ -112,11 +111,11 @@ public:
 
   PlanetRenderer* getPlanetRenderer() const;
 
-  int getScenesCount() const {
+  size_t getScenesCount() const {
     return _scenes.size();
   }
 
-  const G3MDemoScene* getScene(int index) {
+  const G3MDemoScene* getScene(size_t index) {
     return _scenes[index];
   }
 

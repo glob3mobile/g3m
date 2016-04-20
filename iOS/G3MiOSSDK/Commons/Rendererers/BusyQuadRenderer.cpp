@@ -3,14 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
 #include "BusyQuadRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "TexturesHandler.hpp"

@@ -3,7 +3,6 @@
  *  Prueba Opengl iPad
  *
  *  Created by Agustin Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
 
@@ -29,76 +28,77 @@ void Camera::initialize(const G3MContext* context) {
 }
 
 
-void Camera::copyFrom(const Camera &that) {
+void Camera::copyFrom(const Camera &that,
+                      bool  ignoreTimestamp) {
 
-  if (_timestamp == that._timestamp) {
-    return;
+  if (ignoreTimestamp || _timestamp != that._timestamp) {
+
+    that.forceMatrixCreation();
+
+    _timestamp = that._timestamp;
+
+    _viewPortWidth  = that._viewPortWidth;
+    _viewPortHeight = that._viewPortHeight;
+
+    _planet = that._planet;
+
+    _position.copyFrom(that._position);
+    _center.copyFrom(that._center);
+    _up.copyFrom(that._up);
+    _normalizedPosition.copyFrom(that._normalizedPosition);
+
+    _dirtyFlags.copyFrom(that._dirtyFlags);
+
+#ifdef C_CODE
+    _frustumData = FrustumData(that._frustumData);
+#endif
+#ifdef JAVA_CODE
+    _frustumData = that._frustumData;
+#endif
+
+    _projectionMatrix.copyValue(that._projectionMatrix);
+    _modelMatrix.copyValue(that._modelMatrix);
+    _modelViewMatrix.copyValue(that._modelViewMatrix);
+
+    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+
+#ifdef C_CODE
+    delete _geodeticCenterOfView;
+    _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
+#endif
+#ifdef JAVA_CODE
+    _geodeticCenterOfView = that._geodeticCenterOfView;
+#endif
+
+#ifdef C_CODE
+    delete _frustum;
+    _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+#endif
+#ifdef JAVA_CODE
+    _frustum = that._frustum;
+#endif
+
+#ifdef C_CODE
+    delete _frustumInModelCoordinates;
+    _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
+#endif
+#ifdef JAVA_CODE
+    _frustumInModelCoordinates = that._frustumInModelCoordinates;
+#endif
+
+#ifdef C_CODE
+    delete _geodeticPosition;
+    _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
+#endif
+#ifdef JAVA_CODE
+    _geodeticPosition = that._geodeticPosition;
+#endif
+    _angle2Horizon = that._angle2Horizon;
+
+    _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
+    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   }
-
-  that.forceMatrixCreation();
-
-  _timestamp = that._timestamp;
-
-  _viewPortWidth  = that._viewPortWidth;
-  _viewPortHeight = that._viewPortHeight;
-
-  _planet = that._planet;
-
-  _position.copyFrom(that._position);
-  _center.copyFrom(that._center);
-  _up.copyFrom(that._up);
-  _normalizedPosition.copyFrom(that._normalizedPosition);
-
-  _dirtyFlags.copyFrom(that._dirtyFlags);
-
-#ifdef C_CODE
-  _frustumData = FrustumData(that._frustumData);
-#endif
-#ifdef JAVA_CODE
-  _frustumData = that._frustumData;
-#endif
-
-  _projectionMatrix.copyValue(that._projectionMatrix);
-  _modelMatrix.copyValue(that._modelMatrix);
-  _modelViewMatrix.copyValue(that._modelViewMatrix);
-
-  _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
-
-#ifdef C_CODE
-  delete _geodeticCenterOfView;
-  _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
-#endif
-#ifdef JAVA_CODE
-  _geodeticCenterOfView = that._geodeticCenterOfView;
-#endif
-
-#ifdef C_CODE
-  delete _frustum;
-  _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
-#endif
-#ifdef JAVA_CODE
-  _frustum = that._frustum;
-#endif
-
-#ifdef C_CODE
-  delete _frustumInModelCoordinates;
-  _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
-#endif
-#ifdef JAVA_CODE
-  _frustumInModelCoordinates = that._frustumInModelCoordinates;
-#endif
-
-#ifdef C_CODE
-  delete _geodeticPosition;
-  _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
-#endif
-#ifdef JAVA_CODE
-  _geodeticPosition = that._geodeticPosition;
-#endif
-  _angle2Horizon = that._angle2Horizon;
-
-  _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
-  _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  
 }
 
 
@@ -124,6 +124,7 @@ _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
 _timestamp(timestamp)
 {
+#warning VR => Diego at work!
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
 }
@@ -397,6 +398,10 @@ FrustumData Camera::calculateFrustumData() const {
         }
       }
     }
+
+#warning VR => Diego at work!
+    _tanHalfHorizontalFieldOfView = tanHalfHFOV;
+    _tanHalfVerticalFieldOfView = tanHalfVFOV;
   }
 
   const double right = tanHalfHFOV * zNear;
@@ -446,6 +451,14 @@ void Camera::setFOV(const Angle& vertical,
     _dirtyFlags._frustumDirty          = true;
     _dirtyFlags._frustumMCDirty        = true;
   }
+}
+
+Angle Camera::getHorizontalFOV() const{
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFieldOfView)).times(2);
+}
+
+Angle Camera::getVerticalFOV() const{
+  return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFieldOfView)).times(2);
 }
 
 void Camera::setRoll(const Angle& angle) {

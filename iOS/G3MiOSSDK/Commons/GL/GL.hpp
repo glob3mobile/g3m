@@ -3,7 +3,6 @@
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 14/06/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GL
@@ -18,19 +17,17 @@
 #include "IFloatBuffer.hpp"
 #include "GLConstants.hpp"
 #include "GLGlobalState.hpp"
+#include "IGLTextureId.hpp"
+#include "GPUProgram.hpp"
 
 #include <list>
 
 class IGLProgramId;
 class IGLUniformID;
-
-#include "IGLTextureId.hpp"
-
 class GPUProgramManager;
 class GPUProgramState;
 class GLState;
 
-#include "GPUProgram.hpp"
 
 class GL {
 private:
@@ -45,15 +42,14 @@ private:
 
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
-  
+
   inline void loadModelView();
-  
+
   const IGLTextureId* getGLTextureId();
 
   //Get Locations warning of errors
   IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
                                           const std::string& name);
-//  const bool _verbose;
 
   GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 
@@ -61,12 +57,10 @@ private:
 
 
 public:
-  
-  
-  GL(INativeGL* const nativeGL,
-     bool verbose) :
+
+
+  GL(INativeGL* const nativeGL) :
   _nativeGL(nativeGL),
-//  _verbose(verbose),
   _texturesIdAllocationCounter(0),
   _currentGPUProgram(NULL),
   _clearScreenState(NULL)
@@ -90,34 +84,34 @@ public:
 
     _currentGLGlobalState = new GLGlobalState();
     _clearScreenState = new GLGlobalState();
-    
+
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
-  
+
   void clearScreen(const Color& color);
-  
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
+
+  //  void drawElements(int mode,
+  //                    IShortBuffer* indices, const GLGlobalState& state,
+  //                    GPUProgramManager& progManager,
+  //                    const GPUProgramState* gpuState);
 
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState* state,
                     GPUProgramManager& progManager);
-  
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
+
+  //  void drawArrays(int mode,
+  //                  int first,
+  //                  int count, const GLGlobalState& state,
+  //                  GPUProgramManager& progManager,
+  //                  const GPUProgramState* gpuState);
 
   void drawArrays(int mode,
                   int first,
                   int count, const GLState* state,
                   GPUProgramManager& progManager);
-  
+
   int getError();
-  
+
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
@@ -129,10 +123,9 @@ public:
   
   void deleteTexture(const IGLTextureId* textureId);
 
-//  void getViewport(int v[]) {
-////    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-//    _nativeGL->getIntegerv(GLVariable::viewport(), v);
-//  }
+  //  void getViewport(int v[]) {
+  //    _nativeGL->getIntegerv(GLVariable::viewport(), v);
+  //  }
 
   ~GL() {
 #ifdef C_CODE
@@ -146,39 +139,39 @@ public:
     _currentGLGlobalState.dispose();
 #endif
   }
-  
+
   int createProgram() const {
     return _nativeGL->createProgram();
   }
-  
+
   void attachShader(int program, int shader) const {
     _nativeGL->attachShader(program, shader);
   }
-  
+
   int createShader(ShaderType type) const {
     return _nativeGL->createShader(type);
   }
-  
+
   bool compileShader(int shader, const std::string& source) const {
     return _nativeGL->compileShader(shader, source);
   }
-  
+
   bool deleteShader(int shader) const {
     return _nativeGL->deleteShader(shader);
   }
-  
+
   void printShaderInfoLog(int shader) const {
     _nativeGL->printShaderInfoLog(shader);
   }
-  
+
   bool linkProgram(int program) const {
     return _nativeGL->linkProgram(program);
   }
-  
+
   void printProgramInfoLog(int program) const {
     _nativeGL->linkProgram(program);
   }
-  
+
   bool deleteProgram(const GPUProgram* program) {
 
     if (program == NULL) {
@@ -192,17 +185,17 @@ public:
 
     return _nativeGL->deleteProgram(program->getProgramID());
   }
-  
+
   INativeGL* getNative() const {
     return _nativeGL;
   }
-  
+
   void uniform2f(const IGLUniformID* loc,
                  float x,
                  float y) const {
     _nativeGL->uniform2f(loc, x, y);
   }
-  
+
   void uniform1f(const IGLUniformID* loc,
                  float x) const {
     _nativeGL->uniform1f(loc, x);
@@ -212,13 +205,13 @@ public:
                  int v) const {
     _nativeGL->uniform1i(loc, v);
   }
-  
+
   void uniformMatrix4fv(const IGLUniformID* location,
                         bool transpose,
                         const Matrix44D* matrix) const {
     _nativeGL->uniformMatrix4fv(location, transpose, matrix);
   }
-  
+
   void uniform4f(const IGLUniformID* location,
                  float v0,
                  float v1,
@@ -241,35 +234,39 @@ public:
                            const IFloatBuffer* buffer) const {
     _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
   }
-  
+
   void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
     _nativeGL->bindAttribLocation(program, loc, name);
   }
-  
+
   int getProgramiv(const GPUProgram* program, int pname) const {
     return _nativeGL->getProgramiv(program, pname);
   }
-  
+
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
     return _nativeGL->getActiveUniform(program, i);
   }
-  
+
   GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
     return _nativeGL->getActiveAttribute(program, i);
   }
-    
+
   void useProgram(GPUProgram* program) ;
-  
+
   void enableVertexAttribArray(int location) const {
     _nativeGL->enableVertexAttribArray(location);
   }
-  
+
   void disableVertexAttribArray(int location) const {
     _nativeGL->disableVertexAttribArray(location);
   }
 
   GLGlobalState* getCurrentGLGlobalState() {
     return _currentGLGlobalState;
+  }
+
+  void viewport(int x, int y, int width, int height) const{
+    _nativeGL->viewport(x, y, width, height);
   }
   
   

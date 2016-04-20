@@ -26,24 +26,36 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
   protected final void rawRender(G3MRenderContext rc)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _indices.size(), _glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
   }
 
-  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor)
   {
-     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, pointSize, true);
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, pointSize, depthTest, polygonOffsetFill, polygonOffsetFactor, 0);
   }
-  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth)
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill)
   {
-     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, 1, true);
-  }
-  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices)
-  {
-     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, 1, 1, true);
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, pointSize, depthTest, polygonOffsetFill, 0, 0);
   }
   public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest)
   {
-     super(primitive, center, vertices, ownsVertices, null, false, lineWidth, pointSize, depthTest);
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, pointSize, depthTest, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
+  {
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, pointSize, true, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth)
+  {
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, 1, true, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices)
+  {
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, 1, 1, true, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
+  {
+     super(primitive, center, vertices, ownsVertices, null, false, lineWidth, pointSize, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits);
      _indices = indices;
      _ownsIndices = ownsIndices;
   //  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices",
@@ -51,21 +63,33 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
   //                               indices->size());
   }
 
-  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor)
   {
-     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, pointSize, true);
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, pointSize, depthTest, polygonOffsetFill, polygonOffsetFactor, 0);
   }
-  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth)
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill)
   {
-     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, 1, true);
-  }
-  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices)
-  {
-     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, 1, 1, true);
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, pointSize, depthTest, polygonOffsetFill, 0, 0);
   }
   public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest)
   {
-     super(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest);
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, pointSize, depthTest, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
+  {
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, pointSize, true, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth)
+  {
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, 1, true, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices)
+  {
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, 1, 1, true, false, 0, 0);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
+  {
+     super(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits);
      _indices = indices;
      _ownsIndices = ownsIndices;
   //  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices, %d normals",
@@ -86,5 +110,8 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
   
   }
 
-
+  public final IShortBuffer getIndices()
+  {
+    return _indices;
+  }
 }

@@ -22,8 +22,6 @@
 class GPUUniform;
 
 class GPUUniformValue: public RCObject {
-private:
-  const int _type;
 
 protected:
   virtual ~GPUUniformValue() {
@@ -33,12 +31,13 @@ protected:
   }
 
 public:
-  GPUUniformValue(int type):_type(type)
-  {}
+  const int _type;
 
+  GPUUniformValue(int type) :
+  _type(type)
+  {
+  }
 
-
-  int getType() const { return _type;}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
@@ -111,7 +110,7 @@ public:
   void unset();
 
   void set(const GPUUniformValue* v) {
-    if (_type == v->getType()) { //type checking
+    if (_type == v->_type) { //type checking
       if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
         v->_retain();
@@ -122,7 +121,7 @@ public:
       }
     }
     else {
-      ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
+      THROW_EXCEPTION("Attempting to set uniform \"" + _name + "\" with invalid value type.");
     }
   }
 

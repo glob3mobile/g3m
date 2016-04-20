@@ -12,6 +12,9 @@
 #include "Camera.hpp"
 
 
+const Planet* FlatPlanet::createEarth() {
+  return new FlatPlanet(Vector2D(4*6378137.0, 2*6378137.0));
+}
 
 FlatPlanet::FlatPlanet(const Vector2D& size):
 _size(size),
@@ -44,12 +47,6 @@ std::vector<double> FlatPlanet::intersectionsDistances(double originX,
   intersections.push_back(t);
   return intersections;
 }
-
-//Vector3D FlatPlanet::toCartesian(const Angle& latitude,
-//                                 const Angle& longitude,
-//                                 const double height) const {
-//  return toCartesian(Geodetic3D(latitude, longitude, height));
-//}
 
 Geodetic2D FlatPlanet::toGeodetic2D(const Vector3D& position) const {
   const double longitude = position._x * 360.0 / _size._x;
@@ -130,7 +127,6 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
   _initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
   _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
   _centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
-  //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
 
   // middle point in 3D
   _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
@@ -169,7 +165,6 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     delta = delta.add(viewDirection.times(t2));
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
     positionCamera = positionCamera.transformedBy(translation, 1.0);
-//    matrix.copyValue(translation.multiply(matrix));
     matrix.copyValueOfMultiplication(translation, matrix);
   }
 
@@ -185,7 +180,6 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(centerPoint2.sub(finalPoint));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
-//    matrix.copyValue(translation.multiply(matrix));
     matrix.copyValueOfMultiplication(translation, matrix);
   }
 
@@ -199,7 +193,6 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
-//    matrix.copyValue(rotation.multiply(matrix));
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
@@ -236,12 +229,5 @@ MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& de
 
 void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                          Camera* nextCamera) const {
-//  Vector3D pos = nextCamera->getCartesianPosition();
-//  Vector3D origin = _origin.asVector3D();
-//  double maxDist = _size.length() * 1.5;
-//
-//  if (pos.distanceTo(origin) > maxDist) {
-//    //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-//    nextCamera->copyFrom(*previousCamera);
-//  }
+
 }

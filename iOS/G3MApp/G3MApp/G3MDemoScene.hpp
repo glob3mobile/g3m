@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/16/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #ifndef __G3MApp__G3MDemoScene__
@@ -63,7 +62,7 @@ public:
     return _model;
   }
 
-  const int getOptionsCount() const {
+  const size_t getOptionsCount() const {
     return _options.size();
   }
 

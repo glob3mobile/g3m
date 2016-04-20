@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 5/17/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MTiledVectorDemoScene.hpp"
@@ -184,7 +183,6 @@ public:
 void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-
 
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 

@@ -1,8 +1,31 @@
 package org.glob3.mobile.generated; 
-//************************************************************
+//
+//  G3MRenderContext.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/29/16.
+//
+//
+
+//
+//  G3MRenderContext.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/29/16.
+//
+//
 
 
+
+//class OrderedRenderable;
 //class FrameTasksExecutor;
+//class GL;
+//class Camera;
+//class TexturesHandler;
+//class ITimer;
+//class GPUProgramManager;
+
+
 
 
 public class G3MRenderContext extends G3MContext
@@ -15,11 +38,12 @@ public class G3MRenderContext extends G3MContext
   private ITimer _frameStartTimer;
   private GPUProgramManager _gpuProgramManager;
 
+
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider)
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider, ViewMode viewMode)
   {
-     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider);
+     super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider, viewMode);
      _frameTasksExecutor = frameTasksExecutor;
      _gl = gl;
      _currentCamera = currentCamera;
@@ -34,7 +58,7 @@ public class G3MRenderContext extends G3MContext
   public final void clear()
   {
     _frameStartTimer.start();
-
+  
     _orderedRenderables = null;
     _orderedRenderables = null;
   }
@@ -81,7 +105,6 @@ public class G3MRenderContext extends G3MContext
     _orderedRenderables = null;
   
     super.dispose();
-  
   }
 
   /*

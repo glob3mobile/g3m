@@ -3,13 +3,12 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Mesh
 #define G3MiOSSDK_Mesh
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "BoundingVolume.hpp"
 
 #include "GLState.hpp"
@@ -37,9 +36,9 @@ public:
   virtual ~Mesh() {
   }
   
-  virtual int getVertexCount() const = 0;
+  virtual size_t getVertexCount() const = 0;
   
-  virtual const Vector3D getVertex(int i) const = 0;
+  virtual const Vector3D getVertex(size_t i) const = 0;
     
   virtual BoundingVolume* getBoundingVolume() const = 0;
   

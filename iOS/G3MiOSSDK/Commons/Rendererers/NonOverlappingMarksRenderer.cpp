@@ -12,7 +12,8 @@
 #include "Planet.hpp"
 #include "GLState.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
+#include "G3MEventContext.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"
@@ -64,7 +65,8 @@ MarkWidget::~MarkWidget() {
 void MarkWidget::init(const G3MRenderContext* rc) {
   if (_glState == NULL) {
     _glState = new GLState();
-    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera());
+    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera(),
+                                                           rc->getViewMode());
 
     _texHandler = rc->getTexturesHandler();
     _imageBuilder->build(rc, new WidgetImageListener(this), true);
@@ -86,11 +88,11 @@ void MarkWidget::prepareWidget(const IImage* image,
   }
 
   FloatBufferBuilderFromCartesian2D pos2D;
-  pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
-  pos2D.add( -_halfWidth,  _halfHeight );   // vertex 2
-  pos2D.add(  _halfWidth, -_halfHeight );   // vertex 3
-  pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
 // #warning TODO: share vertices for marks of the same size?
+  pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
+  pos2D.add(  _halfWidth, -_halfHeight );   // vertex 2
+  pos2D.add( -_halfWidth,  _halfHeight );   // vertex 3
+  pos2D.add(  _halfWidth,  _halfHeight );   // vertex 4
 
   _vertices = pos2D.create();
 
@@ -110,8 +112,8 @@ void MarkWidget::prepareWidget(const IImage* image,
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add( 0.0f, 1.0f );   // vertex 1
-  texCoords.add( 0.0f, 0.0f );   // vertex 2
-  texCoords.add( 1.0f, 1.0f );   // vertex 3
+  texCoords.add( 1.0f, 1.0f );   // vertex 2
+  texCoords.add( 0.0f, 0.0f );   // vertex 3
   texCoords.add( 1.0f, 0.0f );   // vertex 4
 
   const TextureIDReference* textureID = _texHandler->getTextureIDReference(_image,
@@ -172,9 +174,15 @@ void MarkWidget::resetPosition() {
   _y = NANF;
 }
 
-void MarkWidget::onResizeViewportEvent(int width, int height) {
+void MarkWidget::onResizeViewportEvent(const G3MEventContext* ec,
+                                       int width, int height) {
   if (_viewportExtentGLFeature != NULL) {
-    _viewportExtentGLFeature->changeExtent(width, height);
+    int logicWidth = width;
+    if (ec->getViewMode() == STEREO) {
+      logicWidth /= 2;
+    }
+
+    _viewportExtentGLFeature->changeExtent(logicWidth, height);
   }
 }
 
@@ -367,7 +375,8 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                                          ),
                                  false);
 
-    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera());
+    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera(),
+                                                                 rc->getViewMode());
     _springGLState->addGLFeature(_springViewportExtentGLFeature, false);
   }
   else {
@@ -413,12 +422,17 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
                                 viewportMargin);
 }
 
-void NonOverlappingMark::onResizeViewportEvent(int width, int height) {
-  _widget->onResizeViewportEvent(width, height);
-  _anchorWidget->onResizeViewportEvent(width, height);
+void NonOverlappingMark::onResizeViewportEvent(const G3MEventContext* ec,
+                                               int width, int height) {
+  _widget->onResizeViewportEvent(ec, width, height);
+  _anchorWidget->onResizeViewportEvent(ec, width, height);
 
   if (_springViewportExtentGLFeature != NULL) {
-    _springViewportExtentGLFeature->changeExtent(width, height);
+    int logicWidth = width;
+    if (ec->getViewMode() == STEREO) {
+      logicWidth /= 2;
+    }
+    _springViewportExtentGLFeature->changeExtent(logicWidth, height);
   }
 }
 
@@ -582,14 +596,16 @@ void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camer
 }
 
 void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const Camera* camera = rc->getCurrentCamera();
-  const Planet* planet = rc->getPlanet();
+  if (!_marks.empty()) {
+    const Camera* camera = rc->getCurrentCamera();
+    const Planet* planet = rc->getPlanet();
 
-  computeMarksToBeRendered(camera, planet);
-  computeForces(camera, planet);
-  applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
+    computeMarksToBeRendered(camera, planet);
+    computeForces(camera, planet);
+    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
 
-  renderMarks(rc, glState);
+    renderMarks(rc, glState);
+  }
 }
 
 void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
@@ -597,7 +613,7 @@ void NonOverlappingMarksRenderer::onResizeViewportEvent(const G3MEventContext* e
                                                         int height) {
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
-    _marks[i]->onResizeViewportEvent(width, height);
+    _marks[i]->onResizeViewportEvent(ec, width, height);
   }
 }
 

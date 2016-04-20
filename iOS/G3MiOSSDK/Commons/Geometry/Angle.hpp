@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Angle
@@ -92,6 +91,10 @@ public:
     return Angle::fromDegrees(180);
   }
   
+  static Angle halfPi() {
+    return Angle::fromDegrees(90);
+  }
+  
   static Angle nan() {
     return Angle::fromDegrees(NAND);
   }
@@ -104,6 +107,22 @@ public:
                                    const Angle& to,
                                    double alpha) {
     return Angle::fromRadians( (1.0-alpha) * from._radians + alpha * to._radians );
+  }
+
+  static Angle cosineInterpolation(const Angle& from,
+                                   const Angle& to,
+                                   double alpha);
+
+  static Angle linearInterpolationFromRadians(const double fromRadians,
+                                              const double toRadians,
+                                              double alpha) {
+    return Angle::fromRadians( (1.0-alpha) * fromRadians + alpha * toRadians );
+  }
+
+  static Angle linearInterpolationFromDegrees(const double fromDegrees,
+                                              const double toDegrees,
+                                              double alpha) {
+    return Angle::fromDegrees( (1.0-alpha) * fromDegrees + alpha * toDegrees );
   }
 
   bool isNan() const {

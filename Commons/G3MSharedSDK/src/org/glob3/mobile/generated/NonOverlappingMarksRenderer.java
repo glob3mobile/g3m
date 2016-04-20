@@ -209,14 +209,17 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    final Camera camera = rc.getCurrentCamera();
-    final Planet planet = rc.getPlanet();
+    if (!_marks.isEmpty())
+    {
+      final Camera camera = rc.getCurrentCamera();
+      final Planet planet = rc.getPlanet();
   
-    computeMarksToBeRendered(camera, planet);
-    computeForces(camera, planet);
-    applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
+      computeMarksToBeRendered(camera, planet);
+      computeForces(camera, planet);
+      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
   
-    renderMarks(rc, glState);
+      renderMarks(rc, glState);
+    }
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -284,7 +287,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
-      _marks.get(i).onResizeViewportEvent(width, height);
+      _marks.get(i).onResizeViewportEvent(ec, width, height);
     }
   }
 

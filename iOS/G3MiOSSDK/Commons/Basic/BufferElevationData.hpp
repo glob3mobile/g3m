@@ -13,7 +13,7 @@
 
 class BufferElevationData : public ElevationData {
 protected:
-  const int    _bufferSize;
+  const size_t _bufferSize;
   const double _deltaHeight;
 
   virtual double getValueInBufferAt(int index) const = 0;
@@ -23,7 +23,7 @@ public:
                       const Vector2I& extent,
                       const Sector& realSector,
                       const Vector2I& realExtent,
-                      int bufferSize,
+                      size_t bufferSize,
                       double deltaHeight);
 
   virtual ~BufferElevationData() {

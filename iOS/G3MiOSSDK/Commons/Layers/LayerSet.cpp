@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "LayerSet.hpp"
@@ -13,7 +12,7 @@
 #include "RenderState.hpp"
 #include "ChangedListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
 #include "Color.hpp"
@@ -287,8 +286,8 @@ private:
   int     _maxLevel;
   int     _tileTextureWidth;
   int     _tileTextureHeight;
-  int     _tileMeshWidth;
-  int     _tileMeshHeight;
+  short     _tileMeshWidth;
+  short     _tileMeshHeight;
   bool    _mercator;
 
 public:
@@ -414,7 +413,7 @@ public:
                                           _firstLevel,
                                           _maxLevel,
                                           Vector2I(_tileTextureWidth, _tileTextureHeight),
-                                          Vector2I(_tileMeshWidth,    _tileMeshHeight),
+                                          Vector2S(_tileMeshWidth,    _tileMeshHeight),
                                           _mercator);
   }
 };
@@ -479,8 +478,8 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   }
 
   std::vector<Layer*> thatLayers;
-  const int thatSize = that->size();
-  for (int i = 0; i < thatSize; i++) {
+  const size_t thatSize = that->size();
+  for (size_t i = 0; i < thatSize; i++) {
     thatLayers.push_back( that->getLayer(i) );
   }
 
@@ -496,8 +495,8 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
   TileImageProvider*          singleTileImageProvider    = NULL;
   CompositeTileImageProvider* compositeTileImageProvider = NULL;
 
-  const int layersSize = _layers.size();
-  for (int i = 0; i < layersSize; i++) {
+  const size_t layersSize = _layers.size();
+  for (size_t i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       TileImageProvider* layerTileImageProvider = layer->createTileImageProvider(rc, layerTilesRenderParameters);
@@ -530,13 +529,13 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 
 const std::vector<const Info*> LayerSet::getInfo() {
   _infos.clear();
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       const std::vector<const Info*> layerInfo = layer->getInfo();
-      const int infoSize = layerInfo.size();
-      for (int j = 0; j < infoSize; j++) {
+      const size_t infoSize = layerInfo.size();
+      for (size_t j = 0; j < infoSize; j++) {
         _infos.push_back(layerInfo[j]);
       }
     }
