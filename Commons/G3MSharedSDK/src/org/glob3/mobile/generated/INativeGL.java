@@ -171,6 +171,19 @@ public abstract class INativeGL
 
   public abstract void depthMask(boolean v);
 
+  public abstract void depthFunc(int func);
+
+  public abstract int DepthFuncParameterValue_Never();
+  public abstract int DepthFuncParameterValue_Less();
+  public abstract int DepthFuncParameterValue_Equal();
+  public abstract int DepthFuncParameterValue_LEqual();
+  public abstract int DepthFuncParameterValue_Greater();
+  public abstract int DepthFuncParameterValue_NotEqual();
+  public abstract int DepthFuncParameterValue_GEqual();
+  public abstract int DepthFuncParameterValue_Always();
+
+  public abstract void colorMask(boolean rv, boolean gv, boolean bv, boolean av);
+
   public abstract void setActiveTexture(int i);
 
   public abstract void viewport(int x, int y, int width, int height);

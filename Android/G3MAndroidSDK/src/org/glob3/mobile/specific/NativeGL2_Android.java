@@ -834,6 +834,50 @@ public final class NativeGL2_Android
 
 
    @Override
+   public void depthFunc(int func) {
+      GLES20.glDepthFunc(func);
+   }
+
+
+   @Override
+   public int DepthFuncParameterValue_Never()  { return GLES20.GL_NEVER; }
+
+
+   @Override
+   public int DepthFuncParameterValue_Less()  { return GLES20.GL_LESS; }
+
+
+   @Override
+   public int DepthFuncParameterValue_Equal()  { return GLES20.GL_EQUAL; }
+
+
+   @Override
+   public int DepthFuncParameterValue_LEqual()  { return GLES20.GL_LEQUAL; }
+
+
+   @Override
+   public int DepthFuncParameterValue_Greater()  { return GLES20.GL_GREATER; }
+
+
+   @Override
+   public int DepthFuncParameterValue_NotEqual() { return GLES20.GL_NOTEQUAL; }
+
+
+   @Override
+   public int DepthFuncParameterValue_GEqual() { return GLES20.GL_GEQUAL; }
+
+
+   @Override
+   public int DepthFuncParameterValue_Always() { return GLES20.GL_ALWAYS; }
+
+
+   @Override
+   public void colorMask(boolean rv, boolean gv, boolean bv, boolean av) {
+      GLES20.glColorMask(rv, gv, bv, av);
+   }
+
+
+   @Override
    public int TextureParameterValue_Linear() {
       return GLES20.GL_LINEAR;
    }

@@ -828,6 +828,69 @@ public final class NativeGL_WebGL
 				.depthMask(depthMask);
    }-*/;
 
+   
+   @Override
+   public native void depthFunc(int func) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.depthFunc(func);
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_Never() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NEVER;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_Less() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LESS;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_Equal() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.EQUAL;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_LEqual() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LEQUAL;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_Greater() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.GREATER;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_NotEqual() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NOTEQUAL;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_GEqual() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.GEQUAL;
+   }-*/;
+
+
+   @Override
+   public native int DepthFuncParameterValue_Always() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ALWAYS;
+   }-*/;
+
+
+   @Override
+   public native void colorMask(final boolean rv,
+                                final boolean gv,
+                                final boolean bv,
+                                final boolean av) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.colorMask(rv, gv, bv, av);
+   }-*/;
+
 
    @Override
    public native int TextureParameterValue_Linear() /*-{

@@ -204,6 +204,19 @@ public:
 
   virtual void depthMask(bool v) const = 0;
 
+  virtual void depthFunc(int func) const = 0;
+
+  virtual int DepthFuncParameterValue_Never() const = 0;
+  virtual int DepthFuncParameterValue_Less() const = 0;
+  virtual int DepthFuncParameterValue_Equal() const = 0;
+  virtual int DepthFuncParameterValue_LEqual() const = 0;
+  virtual int DepthFuncParameterValue_Greater() const = 0;
+  virtual int DepthFuncParameterValue_NotEqual() const = 0;
+  virtual int DepthFuncParameterValue_GEqual() const = 0;
+  virtual int DepthFuncParameterValue_Always() const = 0;
+
+  virtual void colorMask(bool rv, bool gv, bool bv, bool av) const = 0;
+
   virtual void setActiveTexture(int i) const = 0;
   
   virtual void viewport(int x, int y, int width, int height) const = 0;
