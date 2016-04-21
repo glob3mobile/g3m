@@ -382,6 +382,15 @@ public:
   }
 };
 
+class MyCityGMLBuildingTouchedListener : public CityGMLBuildingTouchedListener{
+public:
+  virtual ~MyCityGMLBuildingTouchedListener(){}
+  virtual void onBuildingTouched(CityGMLBuilding* building){
+    
+  }
+  
+};
+
 
 ///////////////////
 
@@ -504,6 +513,8 @@ public:
   meshRenderer = new MeshRenderer();
   marksRenderer = new MarksRenderer(false);
   cityGMLRenderer = new CityGMLRenderer(meshRenderer, marksRenderer);
+  cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener());
+  
   builder.addRenderer(cityGMLRenderer);
   
   builder.setInitializationTask(new MyInitTask(self, useDEM));

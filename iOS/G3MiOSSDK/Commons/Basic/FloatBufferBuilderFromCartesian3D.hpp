@@ -130,8 +130,18 @@ public:
     }
   }
 
-  Vector3D getCenter() {
+  Vector3D getCenter() const{
     return Vector3D(_cx, _cy, _cz);
+  }
+  
+  Vector3D getAbsoluteVector3D(int i) const {
+    int pos = i * 3;
+#ifdef C_CODE
+    return Vector3D(_values[pos] + _cx, _values[pos + 1] + _cy, _values[pos+2] + _cz);
+#endif
+#ifdef JAVA_CODE
+    return new Vector3D(_values.get(pos) + _cx, _values.get(pos + 1) + _cy, _values.get(pos + 2) + _cz);
+#endif
   }
 
 };

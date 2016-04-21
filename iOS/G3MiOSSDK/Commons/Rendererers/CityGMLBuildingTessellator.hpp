@@ -64,7 +64,10 @@ class CityGMLBuildingTessellator{
                                                    const bool includeGround,
                                                    const ElevationData* elevationData);
   
-  static CityGMLBuildingTessellatorData* createData(short firstV, short lastV, Mesh* mesh, const FloatBufferBuilder& vertices);
+  static CityGMLBuildingTessellatorData* createData(short firstV,
+                                                    short lastV,
+                                                    Mesh* mesh,
+                                                    const FloatBufferBuilderFromCartesian3D& vertices);
   
 public:
  
@@ -80,7 +83,7 @@ public:
   
   static Mark* createMark(const CityGMLBuilding* building, const bool fixOnGround);
   
-  const Sphere* getSphereOfBuilding(const CityGMLBuilding* b);
+  static const Sphere* getSphereOfBuilding(const CityGMLBuilding* b);
 };
 
 #endif /* CityGMLBuildingTessellator_hpp */

@@ -87,12 +87,12 @@ Mesh* CityGMLBuildingTessellator::createIndexedMeshWithColorPerVertex(const City
 CityGMLBuildingTessellatorData* CityGMLBuildingTessellator::createData(short firstV,
                                                                        short lastV,
                                                                        Mesh* mesh,
-                                                                       const FloatBufferBuilder& vertices){
+                                                                       const FloatBufferBuilderFromCartesian3D& vertices){
   
   //Creating sphere
   std::vector<Vector3D*> vs;
   for (short i = firstV; i < lastV; i++) {
-    vs.push_back(new Vector3D(vertices.getVector3D(i)));
+    vs.push_back(new Vector3D(vertices.getAbsoluteVector3D(i)));
   }
   
   Sphere bSphere = Sphere::createSphereContainingPoints(vs);
@@ -128,7 +128,6 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
   
   std::vector<short> buildingVertexIndex;
   std::vector<CityGMLBuilding*> processedBuildings;
-  std::vector<Sphere*> bSpheres;
   
   const Color colorWheel = Color::red();
   
@@ -282,5 +281,8 @@ Mark* CityGMLBuildingTessellator::createMark(const CityGMLBuilding* building, co
 
 const Sphere* CityGMLBuildingTessellator::getSphereOfBuilding(const CityGMLBuilding* b){
   DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) b->getTessllatorData();
+  if (data == NULL){
+    return NULL;
+  }
   return data->_bSphere;
 }

@@ -19,16 +19,16 @@ Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
   if (points.size() < 2) {
     return NULL;
   }
-
+  
   const Vector3D first = points[0];
-
+  
   MutableVector3D xmin(first);
   MutableVector3D xmax(first);
   MutableVector3D ymin(first);
   MutableVector3D ymax(first);
   MutableVector3D zmin(first);
   MutableVector3D zmax(first);
-
+  
   for (int i = 1; i < points.size(); i++) {
     const Vector3D p = points[i];
     if (p._x < xmin.x()) xmin.copyFrom(p);
@@ -38,7 +38,7 @@ Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
     if (p._z < zmin.z()) zmin.copyFrom(p);
     if (p._z > zmax.z()) zmax.copyFrom(p);
   }
-
+  
   double xSpan = xmax.squaredDistanceTo(xmin);
   double ySpan = ymax.squaredDistanceTo(ymin);
   double zSpan = zmax.squaredDistanceTo(zmin);
@@ -54,11 +54,11 @@ Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
     dia1.copyFrom(zmin);
     dia2.copyFrom(zmax);
   }
-
+  
   MutableVector3D center((dia1.x() + dia2.x()) / 2,
                          (dia1.y() + dia2.y()) / 2,
                          (dia1.z() + dia2.z()) / 2);
-
+  
   double sqRad = dia2.squaredDistanceTo(center);
   double radius = IMathUtils::instance()->sqrt(sqRad);
   for (int i = 0; i < points.size(); i++) {
@@ -75,7 +75,7 @@ Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
                  (radius * center.z() + offset * p._z) / r);
     }
   }
-
+  
   return new Sphere(center.asVector3D(), radius);
 }
 
@@ -93,7 +93,7 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
                                   short resolution) const {
   const IMathUtils* mu = IMathUtils::instance();
   const double delta = PI / (resolution-1);
-
+  
   // create vertices
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   for (int i=0; i<2*resolution-2; i++) {
@@ -107,7 +107,7 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
       vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
     }
   }
-
+  
   // create border indices for vertical lines
   ShortBufferBuilder indices;
   for (short i=0; i<2*resolution-2; i++) {
@@ -116,7 +116,7 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
       indices.add((short) (j+1+i*resolution));
     }
   }
-
+  
   // create border indices for horizontal lines
   for (short j=1; j<resolution-1; j++) {
     for (short i=0; i<2*resolution-3; i++) {
@@ -129,19 +129,22 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
     indices.add((short) (j+i*resolution));
     indices.add((short) (j));
   }
-
+  
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
                                vertices->getCenter(),
                                vertices->create(),
                                true,
                                indices.create(),
                                true,
+                               20,
                                1,
-                               1,
-                               new Color(color));
-
+                               new Color(color),
+                               NULL,
+                               0,
+                               false);
+  
   delete vertices;
-
+  
   return mesh;
 }
 
@@ -188,31 +191,31 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
   if (that->fullContainedInSphere(this)) {
     return new Sphere(*this);
   }
-
+  
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
-
+  
   double minX = _center._x - _radius;
   if (lower._x < minX) { minX = lower._x; }
-
+  
   double maxX = _center._x + _radius;
   if (upper._x > maxX) { maxX = upper._x; }
-
+  
   double minY = _center._y - _radius;
   if (lower._y < minY) { minY = lower._y; }
-
+  
   double maxY = _center._y + _radius;
   if (upper._y > maxY) { maxY = upper._y; }
-
+  
   double minZ = _center._z - _radius;
   if (lower._z < minZ) { minZ = lower._z; }
-
+  
   double maxZ = _center._z + _radius;
   if (upper._z > maxZ) { maxZ = upper._z; }
-
+  
   return new Box(Vector3D(minX, minY, minZ),
                  Vector3D(maxX, maxY, maxZ));
-
+  
   /* Diego: creo que este test ya no hace falta, porque el coste del método
    fullContainedInBox es casi tanto es casi similar a todo lo anterior
    if (fullContainedInBox(that)) {
@@ -221,24 +224,24 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
    if (that->fullContainedInSphere(this)) {
    return new Sphere(*this);
    }*/
-
+  
 }
 
 
 BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
   const double d = _center.distanceTo(that->_center);
-
+  
   if (d + that->_radius <= _radius) {
     return new Sphere(*this);
   }
   if (d + _radius <= that->_radius)  {
     return new Sphere(*that);
   }
-
+  
   const double radius = (d + _radius + that->_radius) / 2.0;
   const Vector3D u = _center.sub(that->_center).normalized();
   const Vector3D center = _center.add( u.times( radius - _radius ) );
-
+  
   return new Sphere(center, radius);
 }
 
@@ -283,6 +286,52 @@ Sphere Sphere::createSphereContainingPoints(const std::vector<Vector3D*>& points
   }
   
   return Sphere(center, IMathUtils::instance()->sqrt(d) );
-    
+  
+}
+
+std::vector<double> Sphere::intersectionsDistances(double originX,
+                                                   double originY,
+                                                   double originZ,
+                                                   double directionX,
+                                                   double directionY,
+                                                   double directionZ) const {
+  std::vector<double> intersections;
+  
+  // By laborious algebraic manipulation....
+  const double a = directionX * directionX  + directionY * directionY + directionZ * directionZ;
+  
+  const double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+  
+  const double c = originX * originX + originY * originY + originZ * originZ - _radiusSquared;
+  
+  // Solve the quadratic equation: ax^2 + bx + c = 0.
+  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+  const double discriminant = b * b - 4 * a * c;
+  if (discriminant < 0.0) {
+    // no intersections
+    return intersections;
+  }
+  else if (discriminant == 0.0) {
+    // one intersection at a tangent point
+    //return new double[1] { -0.5 * b / a };
+    intersections.push_back(-0.5 * b / a);
+    return intersections;
+  }
+  
+  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
+  const double root1 = (-b + rootDiscriminant) / (2*a);
+  const double root2 = (-b - rootDiscriminant) / (2*a);
+  
+  // Two intersections - return the smallest first.
+  if (root1 < root2) {
+    intersections.push_back(root1);
+    intersections.push_back(root2);
+  }
+  else {
+    intersections.push_back(root2);
+    intersections.push_back(root1);
+  }
+  return intersections;
 }
 

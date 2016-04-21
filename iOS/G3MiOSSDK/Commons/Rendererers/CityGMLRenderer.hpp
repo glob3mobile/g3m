@@ -29,6 +29,13 @@ public:
   
 };
 
+class CityGMLBuildingTouchedListener{
+public:
+  virtual ~CityGMLBuildingTouchedListener(){}
+  virtual void onBuildingTouched(CityGMLBuilding* building) = 0;
+  
+};
+
 class CityGMLRenderer: public DefaultRenderer{
   
   std::vector<CityGMLBuilding*> _buildings;
@@ -38,6 +45,8 @@ class CityGMLRenderer: public DefaultRenderer{
   MarksRenderer* _marksRenderer;
   
   const Camera* _lastCamera;
+  
+  CityGMLBuildingTouchedListener* _touchListener;
   
   class TessellationTask: public GAsyncTask {
     CityGMLRenderer* _vc;
@@ -100,7 +109,8 @@ public:
   _elevationData(NULL),
   _meshRenderer(meshRenderer),
   _marksRenderer(marksRenderer),
-  _lastCamera(NULL){}
+  _lastCamera(NULL),
+  _touchListener(NULL){}
   
   void setElevationData(ElevationData* ed){
     _elevationData = ed;
@@ -145,7 +155,9 @@ public:
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
   
-  Sphere getSphereOfBuilding(const CityGMLBuilding* b);
+  void setTouchListener(CityGMLBuildingTouchedListener* touchListener){
+    _touchListener = touchListener;
+  }
   
   
 };

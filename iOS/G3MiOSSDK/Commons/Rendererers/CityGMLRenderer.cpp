@@ -42,7 +42,7 @@ private:
   public:
     
     DataParsingTask(const std::string& s,
-                     const std::vector<CityGMLBuilding*>& buildings):
+                    const std::vector<CityGMLBuilding*>& buildings):
     _s(s),
     _buildings(buildings)
     {}
@@ -110,6 +110,15 @@ void CityGMLRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   
   _meshRenderer->render(rc, glState);
   _marksRenderer->render(rc, glState);
+  
+  //Rendering Spheres
+  Color red = Color::red();
+  for (size_t i = 0; i < _buildings.size(); i++) {
+    const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
+    if (s != NULL){
+      s->render(rc, glState, red);
+    }
+  }
 }
 
 class CityGMLParsingListener: public CityGMLListener{
@@ -153,9 +162,9 @@ void CityGMLRenderer::addBuildingsFromURL(const URL& url,
 
 
 bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
-                                  const TouchEvent* touchEvent) {
+                                   const TouchEvent* touchEvent) {
   
-  if (_lastCamera == NULL) {
+  if (_lastCamera == NULL || _touchListener == NULL) {
     return false;
   }
   
@@ -164,14 +173,36 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
     
-    const Planet* planet = ec->getPlanet();
+//    const Planet* planet = ec->getPlanet();
+//    
+//    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+//    if (positionCartesian.isNan()) {
+//      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
+//      return false;
+//    }
     
-    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-    if (positionCartesian.isNan()) {
-      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
-      return false;
+    double minDis = 1e20;
+    CityGMLBuilding* touchedB = NULL;
+    
+    for (size_t i = 0; i < _buildings.size(); i++) {
+      const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
+      if (s != NULL){
+        std::vector<double> dists = s->intersectionsDistances(origin._x, origin._y, origin._z,
+                                                              ray._x, ray._y, ray._z);
+        
+        for (size_t j = 0; j < dists.size(); j++){
+          if (dists[j] < minDis){
+            minDis = dists[j];
+            touchedB = _buildings[i];
+          }
+        }
+        
+      }
     }
     
+    if (touchedB != NULL){
+      
+    }
   }
   
   return false;

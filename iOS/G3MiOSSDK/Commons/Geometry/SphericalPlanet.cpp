@@ -25,7 +25,7 @@ _radii( Vector3D(sphere._radius, sphere._radius, sphere._radius) )
 Vector3D SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                 const Angle& longitude) const {
   const double cosLatitude = COS(latitude._radians);
-
+  
   return Vector3D(cosLatitude * COS(longitude._radians),
                   cosLatitude * SIN(longitude._radians),
                   SIN(latitude._radians));
@@ -35,7 +35,7 @@ void SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                             const Angle& longitude,
                                             MutableVector3D& result) const {
   const double cosLatitude = COS(latitude._radians);
-
+  
   result.set(cosLatitude * COS(longitude._radians),
              cosLatitude * SIN(longitude._radians),
              SIN(latitude._radians));
@@ -47,44 +47,48 @@ std::vector<double> SphericalPlanet::intersectionsDistances(double originX,
                                                             double directionX,
                                                             double directionY,
                                                             double directionZ) const {
-  std::vector<double> intersections;
-
-  // By laborious algebraic manipulation....
-  const double a = directionX * directionX  + directionY * directionY + directionZ * directionZ;
-
-  const double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
-
-  const double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
-
-  // Solve the quadratic equation: ax^2 + bx + c = 0.
-  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
-  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-  const double discriminant = b * b - 4 * a * c;
-  if (discriminant < 0.0) {
-    // no intersections
-    return intersections;
-  }
-  else if (discriminant == 0.0) {
-    // one intersection at a tangent point
-    //return new double[1] { -0.5 * b / a };
-    intersections.push_back(-0.5 * b / a);
-    return intersections;
-  }
-
-  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
-  const double root1 = (-b + rootDiscriminant) / (2*a);
-  const double root2 = (-b - rootDiscriminant) / (2*a);
-
-  // Two intersections - return the smallest first.
-  if (root1 < root2) {
-    intersections.push_back(root1);
-    intersections.push_back(root2);
-  }
-  else {
-    intersections.push_back(root2);
-    intersections.push_back(root1);
-  }
-  return intersections;
+  
+  return _sphere.intersectionsDistances(originX, originY, originZ,
+                                        directionX, directionY, directionZ);
+//  
+//  std::vector<double> intersections;
+//  
+//  // By laborious algebraic manipulation....
+//  const double a = directionX * directionX  + directionY * directionY + directionZ * directionZ;
+//  
+//  const double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+//  
+//  const double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
+//  
+//  // Solve the quadratic equation: ax^2 + bx + c = 0.
+//  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+//  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+//  const double discriminant = b * b - 4 * a * c;
+//  if (discriminant < 0.0) {
+//    // no intersections
+//    return intersections;
+//  }
+//  else if (discriminant == 0.0) {
+//    // one intersection at a tangent point
+//    //return new double[1] { -0.5 * b / a };
+//    intersections.push_back(-0.5 * b / a);
+//    return intersections;
+//  }
+//  
+//  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
+//  const double root1 = (-b + rootDiscriminant) / (2*a);
+//  const double root2 = (-b - rootDiscriminant) / (2*a);
+//  
+//  // Two intersections - return the smallest first.
+//  if (root1 < root2) {
+//    intersections.push_back(root1);
+//    intersections.push_back(root2);
+//  }
+//  else {
+//    intersections.push_back(root2);
+//    intersections.push_back(root1);
+//  }
+//  return intersections;
 }
 
 Vector3D SphericalPlanet::toCartesian(const Angle& latitude,
@@ -101,7 +105,7 @@ void SphericalPlanet::toCartesian(const Angle& latitude,
   const double nX = result.x();
   const double nY = result.y();
   const double nZ = result.z();
-
+  
   const double K = _sphere._radius + height;
   result.set(nX * K,
              nY * K,
@@ -110,7 +114,7 @@ void SphericalPlanet::toCartesian(const Angle& latitude,
 
 Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {
   const Vector3D n = geodeticSurfaceNormal(position);
-
+  
   const IMathUtils* mu = IMathUtils::instance();
   return Geodetic2D(Angle::fromRadians(mu->asin(n._z)),
                     Angle::fromRadians(mu->atan2(n._y, n._x)));
@@ -120,9 +124,9 @@ Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {
 Geodetic3D SphericalPlanet::toGeodetic3D(const Vector3D& position) const {
   const Vector3D p = scaleToGeodeticSurface(position);
   const Vector3D h = position.sub(p);
-
+  
   const double height = (h.dot(position) < 0) ? -1 * h.length() : h.length();
-
+  
   return Geodetic3D(toGeodetic2D(p), height);
 }
 
@@ -155,24 +159,24 @@ std::list<Vector3D> SphericalPlanet::computeCurve(const Vector3D& start,
     //throw new ArgumentOutOfRangeException("granularity", "Granularity must be greater than zero.");
     return std::list<Vector3D>();
   }
-
+  
   const Vector3D normal = start.cross(stop).normalized();
   const double theta = start.angleBetween(stop)._radians;
-
+  
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
-
+  
   std::list<Vector3D> positions;
-
+  
   positions.push_back(start);
-
+  
   for (int i = 1; i <= n; ++i) {
     double phi = (i * granularity);
-
+    
     positions.push_back(scaleToGeocentricSurface(start.rotateAroundAxis(normal, Angle::fromRadians(phi))));
   }
-
+  
   positions.push_back(stop);
-
+  
   return positions;
 }
 
@@ -181,9 +185,9 @@ std::list<Vector3D> SphericalPlanet::computeCurve(const Vector3D& start,
 double SphericalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                      const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
-
+  
   const double R = _sphere._radius;
-
+  
   // spheric distance from P to Q
   // this is the right form, but it's the most complex
   // theres is a minimum error considering SphericalPlanet instead of ellipsoid
@@ -210,23 +214,23 @@ double SphericalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
 double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
                                                   const Geodetic2D& g2) const {
   const IMathUtils* mu = IMathUtils::instance();
-
+  
   const double R = _sphere._radius;
-
+  
   const double medLat = g1._latitude._degrees;
   const double medLon = g1._longitude._degrees;
-
+  
   // this way is faster, and works properly further away from the poles
   double diflat = mu->abs(g2._latitude._degrees - medLat);
   if (diflat > 180) {
     diflat = 360 - diflat;
   }
-
+  
   double diflon = mu->abs(g2._longitude._degrees - medLon);
   if (diflon > 180) {
     diflon = 360 - diflon;
   }
-
+  
   double dist = mu->sqrt(diflat * diflat + diflon * diflon);
   return dist * PI / 180 * R;
 }
@@ -234,12 +238,12 @@ double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
 
 Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
-
+  
   double t = 0;
-
+  
   // compute radius for the rotation
   const double R0 = _sphere._radius;
-
+  
   // compute the point in this ray that are to a distance R from the origin.
   const double U2 = ray.squaredLength();
   const double O2 = pos.squaredLength();
@@ -248,7 +252,7 @@ Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector
   const double b = 2 * OU;
   const double c = O2 - R0 * R0;
   double rad = b * b - 4 * a * c;
-
+  
   // if there is solution, the ray intersects the SphericalPlanet
   if (rad > 0) {
     // compute the final point (the smaller positive t value)
@@ -257,7 +261,7 @@ Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector
     // if the ideal ray intersects, but not the mesh --> case 2
     if (t < 1) rad = -12345;
   }
-
+  
   // if no solution found, find a point in the contour line
   if (rad < 0) {
     const double D = mu->sqrt(O2);
@@ -268,7 +272,7 @@ Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector
     const double rad_ = b_ * b_ - 4 * a_ * c_;
     t = (-b_ - mu->sqrt(rad_)) / (2 * a_);
   }
-
+  
   // compute the final point
   Vector3D result = pos.add(ray.times(t));
   return result;
@@ -277,7 +281,7 @@ Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector
 MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
   const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
   const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
-
+  
   return translation.multiply(rotation);
 }
 
@@ -294,7 +298,7 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
 {
   // check if initialPoint is valid
   if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
-
+  
   // compute final point
   const Vector3D origin = _origin.asVector3D();
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
@@ -306,22 +310,22 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
       return MutableMatrix44D::invalid();
     }
   }
-
+  
   // compute the rotation axis
   const Vector3D rotationAxis = _initialPoint.cross(finalPoint).asVector3D();
-
+  
   // compute the angle
   double sinus = rotationAxis.length()/_initialPoint.length()/finalPoint.length();
   const Angle rotationDelta = Angle::fromRadians(-IMathUtils::instance()->asin(sinus));
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
-
+  
   // save params for possible inertial animations
   _lastDragAxis.copyFrom(rotationAxis);
   double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
   _validSingleDrag = true;
-
+  
   // return rotation matrix
   return MutableMatrix44D::createRotationMatrix(rotationDelta, rotationAxis);
 }
@@ -346,7 +350,7 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1)._degrees;
   _centerPoint.copyFrom(closestIntersection(origin, centerRay));
   _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1)._degrees;
-
+  
   // middle point in 3D
   Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
   Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
@@ -361,7 +365,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
     return MutableMatrix44D::invalid();
-
+  
   // init params
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
@@ -369,7 +373,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   const double factor = finalRaysAngle / _angleBetweenInitialRays;
   double dAccum=0, angle0, angle1;
   double distance = _origin.sub(_centerPoint).length();
-
+  
   // compute estimated camera translation: step 0
   double d = distance*(factor-1)/factor;
   MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
@@ -381,7 +385,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     angle0 = point0.angleBetween(point1)._degrees;
     if (ISNAN(angle0)) return MutableMatrix44D::invalid();
   }
-
+  
   // compute estimated camera translation: step 1
   d = mu->abs((distance-d)*0.3);
   if (angle0 < _angleBetweenInitialPoints) d*=-1;
@@ -394,7 +398,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     angle1 = point0.angleBetween(point1)._degrees;
     if (ISNAN(angle1)) return MutableMatrix44D::invalid();
   }
-
+  
   // compute estimated camera translation: steps 2..n until convergence
   //int iter=0;
   double precision = mu->pow(10, mu->log10(distance)-8.0);
@@ -414,14 +418,14 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     }
   }
   //if (iter>2) printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
-
+  
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera = _origin;
   MutableVector3D viewDirection = _centerRay;
   MutableVector3D ray0 = finalRay0.asMutableVector3D();
   MutableVector3D ray1 = finalRay1.asMutableVector3D();
-
+  
   // drag from initialPoint to centerPoint
   {
     Vector3D initialPoint = _initialPoint.asVector3D();
@@ -435,23 +439,23 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     ray1 = ray1.transformedBy(rotation, 0.0);
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
-
+  
   // move the camera forward
   {
     MutableMatrix44D translation2 = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
     positionCamera = positionCamera.transformedBy(translation2, 1.0);
     matrix.copyValueOfMultiplication(translation2, matrix);
   }
-
+  
   // compute 3D point of view center
   Vector3D centerPoint2 = closestIntersection(positionCamera.asVector3D(), viewDirection.asVector3D());
-
+  
   // compute middle point in 3D
   Vector3D P0 = closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());
   Vector3D P1 = closestIntersection(positionCamera.asVector3D(), ray1.asVector3D());
   Geodetic2D g = getMidPoint(toGeodetic2D(P0), toGeodetic2D(P1));
   Vector3D finalPoint = toCartesian(g);
-
+  
   // drag globe from centerPoint to finalPoint
   {
     const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
@@ -464,7 +468,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     ray1 = ray1.transformedBy(rotation, 0.0);
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
-
+  
   // camera rotation
   {
     Vector3D normal = geodeticSurfaceNormal(centerPoint2);
@@ -477,7 +481,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
-
+  
   return matrix;
 }
 
@@ -488,19 +492,19 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
 {
   const Vector3D initialPoint = closestIntersection(origin, tapRay);
   if (initialPoint.isNan()) return NULL;
-
+  
   // compute central point of view
   const Vector3D centerPoint = closestIntersection(origin, centerRay);
-
+  
   // compute drag parameters
   const IMathUtils* mu = IMathUtils::instance();
   const Vector3D axis = initialPoint.cross(centerPoint);
   const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/initialPoint.length()/centerPoint.length()));
-
+  
   // compute zoom factor
   const double height   = toGeodetic3D(origin)._height;
   const double distance = height * 0.6;
-
+  
   // create effect
   return new DoubleTapRotationEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
 }
@@ -520,7 +524,7 @@ MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3
   const Vector3D P1 = toCartesian(destination);
   const Vector3D axis = P0.cross(P1);
   if (axis.length()<1e-3) return MutableMatrix44D::invalid();
-
+  
   const Angle angle = P0.angleBetween(P1);
   const MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(angle, axis);
   const Vector3D rotatedP0 = P0.transformedBy(rotation, 1);
@@ -530,7 +534,7 @@ MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3
 
 void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                               Camera* nextCamera) const {
-
+  
 }
 
 
