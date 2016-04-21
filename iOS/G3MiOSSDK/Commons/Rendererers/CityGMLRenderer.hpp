@@ -43,6 +43,9 @@ class CityGMLRenderer: public DefaultRenderer{
     
     CityGMLRendererListener* _listener;
     bool _autoDelete;
+    
+    std::vector<Mark*> _marks;
+    Mesh* _mesh;
   public:
     
     TessellationTask(CityGMLRenderer* vc,
@@ -51,13 +54,14 @@ class CityGMLRenderer: public DefaultRenderer{
     _vc(vc),
     _buildings(buildings),
     _listener(listener),
-    _autoDelete(autoDelete)
+    _autoDelete(autoDelete),
+    _mesh(NULL)
     {}
     
     virtual void runInBackground(const G3MContext* context){
       //Adding marks
       for (size_t i = 0; i < _buildings.size(); i++) {
-        _vc->_marksRenderer->addMark( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
+        _marks.push_back( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
       }
       
       //Checking walls visibility
@@ -65,14 +69,21 @@ class CityGMLRenderer: public DefaultRenderer{
       ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
       
       //Creating mesh model
-      Mesh* mesh = CityGMLBuildingTessellator::createMesh(_buildings,
+      _mesh = CityGMLBuildingTessellator::createMesh(_buildings,
                                                           *_vc->_context->getPlanet(),
                                                           false, false, NULL,
                                                           _vc->_elevationData);
-      _vc->_meshRenderer->addMesh(mesh);
     }
     
     virtual void onPostExecute(const G3MContext* context){
+      
+      //Including elements must be done in the rendering thread
+      _vc->_meshRenderer->addMesh(_mesh);
+      for (size_t i = 0; i < _marks.size(); i++) {
+        _vc->_marksRenderer->addMark( _marks[i] );
+      }
+      
+      
       _listener->onBuildingsLoaded(_buildings);
       if (_autoDelete){
         delete _listener;
