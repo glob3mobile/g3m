@@ -596,7 +596,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     }
     
   }
-  
+
   const int halfWidth = _width / 2;
   
   _gl->clearScreen(*_backgroundColor);
