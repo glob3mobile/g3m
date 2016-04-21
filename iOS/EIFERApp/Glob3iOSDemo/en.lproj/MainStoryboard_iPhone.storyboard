@@ -172,8 +172,12 @@
                                         <rect key="frame" x="-11" y="28" width="616" height="2"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="VR:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baz-ac-hm1">
-                                        <rect key="frame" x="500" y="140" width="52" height="31"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VR:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baz-ac-hm1">
+                                        <rect key="frame" x="500" y="140" width="35" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="0Lz-up-GGy"/>
+                                            <constraint firstAttribute="height" constant="31" id="wVb-0U-vUG"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -184,6 +188,7 @@
                                     <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="7qz-Q6-Er8"/>
                                     <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" id="Arc-Qn-IOP"/>
                                     <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="Hvg-7V-kk4"/>
+                                    <constraint firstItem="lse-Zd-nJs" firstAttribute="leading" secondItem="baz-ac-hm1" secondAttribute="trailing" constant="8" id="JaJ-47-ybk"/>
                                     <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="Jxs-D3-Gad"/>
                                     <constraint firstAttribute="height" constant="192" id="Rpz-dR-6Le"/>
                                     <constraint firstAttribute="trailing" secondItem="lse-Zd-nJs" secondAttribute="trailing" constant="8" id="Umd-gn-SGE"/>
@@ -194,6 +199,7 @@
                                     <constraint firstAttribute="trailing" secondItem="lse-Zd-nJs" secondAttribute="trailing" constant="8" id="juO-60-1L6"/>
                                     <constraint firstAttribute="bottom" secondItem="lse-Zd-nJs" secondAttribute="bottom" constant="8" id="ueD-2y-4ok"/>
                                     <constraint firstAttribute="bottom" secondItem="lse-Zd-nJs" secondAttribute="bottom" constant="21" id="z5z-ie-88i"/>
+                                    <constraint firstAttribute="bottom" secondItem="baz-ac-hm1" secondAttribute="bottom" constant="21" id="zIA-jU-TEJ"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
