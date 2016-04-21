@@ -57,9 +57,8 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
                                       deltaHeight);
 }
 
-ShortBufferElevationData* BilParser::parseBil16Redim (const Sector& sector, IByteBuffer *buffer, double deltaHeight)
+ShortBufferElevationData* BilParser::parseBil16Redim (const Sector& sector, IByteBuffer *buffer, const short noData, double deltaHeight)
 {
-#warning Chano at work here!
     
     ByteBufferIterator *iterator = new ByteBufferIterator(buffer);
     
@@ -79,7 +78,7 @@ ShortBufferElevationData* BilParser::parseBil16Redim (const Sector& sector, IByt
     {
         short height = iterator->nextInt16();
         
-        if (height == 15000) //Our own NODATA, since -9999 is a valid height.
+        if (height == noData)
         {
             height = ShortBufferElevationData::NO_DATA_VALUE;
         }

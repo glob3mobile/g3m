@@ -55,8 +55,8 @@ public:
         const Vector2I *resolution = parser->getResolution();
         ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);
         
-        /*ShortBufferElevationData *elevationData = BilParser::parseBil16Redim(*_sector, buffer);
-        const Vector2I *resolution = new Vector2I(elevationData->getExtent());*/
+       /* ShortBufferElevationData *elevationData = BilParser::parseBil16Redim(*_sector, buffer, (short) _noDataValue);
+        const Vector2I *resolution = new Vector2I(elevationData->getExtent()); */
         
         if (buffer != NULL){
             delete buffer;
