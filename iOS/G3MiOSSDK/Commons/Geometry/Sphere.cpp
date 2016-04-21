@@ -269,3 +269,20 @@ bool Sphere::fullContainedInSphere(const Sphere* that) const {
 Sphere* Sphere::createSphere() const {
   return new Sphere(*this);
 }
+
+Sphere Sphere::createSphereContainingPoints(const std::vector<Vector3D*>& points){
+  
+  Vector3D center = Vector3D::getCenter(points);
+  
+  double d = center.squaredDistanceTo(*points[0]);
+  for (size_t i = 1; i < points.size(); i++) {
+    double di =  center.squaredDistanceTo(*points[i]);
+    if (di > d){
+      d = di;
+    }
+  }
+  
+  return Sphere(center, IMathUtils::instance()->sqrt(d) );
+    
+}
+

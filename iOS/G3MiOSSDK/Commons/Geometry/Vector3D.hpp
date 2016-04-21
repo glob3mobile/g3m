@@ -12,6 +12,8 @@
 
 #include "MutableMatrix44D.hpp"
 
+#include <vector>
+
 class MutableVector3D;
 
 class Vector3D {
@@ -214,6 +216,8 @@ public:
   const double squaredDistanceTo(const Vector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
+  
+  static Vector3D getCenter(const std::vector<Vector3D*>& points);
 
 };
 
