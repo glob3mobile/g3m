@@ -174,7 +174,10 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
         istr.addInt(column);
         istr.addString("/");
         istr.addInt(row);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Use bil line instead of json line when needed
         istr.addString(".json");
+        //istr->addString(".bil");
         String res = istr.getString();
         if (istr != null)
            istr.dispose();

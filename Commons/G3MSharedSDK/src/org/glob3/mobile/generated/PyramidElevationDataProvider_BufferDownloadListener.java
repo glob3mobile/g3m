@@ -26,9 +26,14 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Bil parser code commented to be applied when necessary.
         JSONDemParser parser = new JSONDemParser(buffer.getAsString());
         final Vector2I resolution = parser.getResolution();
         ShortBufferElevationData elevationData = parser.parseJSONDemElevationData(_sector, resolution, buffer, (short) _noDataValue, _deltaHeight);
+
+       /* ShortBufferElevationData *elevationData = BilParser::parseBil16Redim(*_sector, buffer, (short) _noDataValue);
+        const Vector2I *resolution = new Vector2I(elevationData->getExtent()); */
 
         if (buffer != null)
         {
@@ -59,6 +64,8 @@ public class PyramidElevationDataProvider_BufferDownloadListener extends IBuffer
             }
             _listener = null;
         }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Discard parser deletion when bil needed.
         if (parser != null)
            parser.dispose();
         if (_sector != null)
