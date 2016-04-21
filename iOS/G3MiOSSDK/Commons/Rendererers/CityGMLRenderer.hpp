@@ -145,6 +145,8 @@ public:
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
   
+  Sphere getSphereOfBuilding(const CityGMLBuilding* b);
+  
   
 };
 

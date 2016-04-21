@@ -12,6 +12,7 @@
 #include "CityGMLBuildingSurface.hpp"
 #include <string>
 #include <vector>
+#include "Sphere.hpp"
 
 class CityGMLBuildingProperty{
 public:
@@ -66,7 +67,7 @@ public:
   {
     delete _tessellatorData;
     
-    for (int i = 0; i < _surfaces.size(); i++) {
+    for (size_t i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
 #endif
@@ -76,7 +77,7 @@ public:
       delete s;
     }
     
-    for (int i = 0; i < _numericProperties.size(); i++){
+    for (size_t i = 0; i < _numericProperties.size(); i++){
       delete _numericProperties[i];
     }
   }
@@ -91,7 +92,7 @@ public:
   
   double getNumericProperty(std::string name){
     
-    for (int i = 0; i < _numericProperties.size(); i++){
+    for (size_t i = 0; i < _numericProperties.size(); i++){
       if (_numericProperties[i]->_name == name){
         return _numericProperties[i]->_value;
       }
@@ -102,7 +103,7 @@ public:
   
   double getBaseHeight() const {
     double min = IMathUtils::instance()->maxDouble();
-    for (int i = 0; i < _surfaces.size(); i++) {
+    for (size_t i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
 #endif
@@ -123,7 +124,7 @@ public:
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Building Name: " + _name + "\nRoof Type: ");
     isb->addInt(_roofTypeCode);
-    for (int i = 0; i < _surfaces.size(); i++) {
+    for (size_t i = 0; i < _surfaces.size(); i++) {
       isb->addString("\n Wall: Coordinates: ");
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
@@ -131,7 +132,7 @@ public:
 #ifdef JAVA_CODE
       CityGMLBuildingSurface s = _surfaces.get(i);
 #endif
-      for (int j = 0; j < s->_geodeticCoordinates.size(); j += 3) {
+      for (size_t j = 0; j < s->_geodeticCoordinates.size(); j += 3) {
 #ifdef C_CODE
         Geodetic3D* g = s->_geodeticCoordinates.at(j);
 #endif
@@ -145,13 +146,13 @@ public:
     delete isb;
     return s;
   }
-
+  
   Geodetic3D getMin() const{
     double minLat = IMathUtils::instance()->maxDouble();
     double minLon =  IMathUtils::instance()->maxDouble();
     double minH =  IMathUtils::instance()->maxDouble();
     
-    for (int i = 0; i < _surfaces.size(); i++) {
+    for (size_t i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
 #endif
@@ -178,7 +179,7 @@ public:
     double maxLon = IMathUtils::instance()->minDouble();
     double maxH = IMathUtils::instance()->minDouble();
     
-    for (int i = 0; i < _surfaces.size(); i++) {
+    for (size_t i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
 #endif
@@ -213,7 +214,7 @@ public:
     
     const double deltaH = fixOnGround ? getBaseHeight() : 0;
     
-    for (int i = 0; i < _surfaces.size(); i++) {
+    for (size_t i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
 #endif
@@ -226,7 +227,7 @@ public:
   
   static int checkWallsVisibility(CityGMLBuilding* b1, CityGMLBuilding* b2){
     int nInvisibleWalls = 0;
-    for (int i = 0; i < b1->_surfaces.size(); i++) {
+    for (size_t i = 0; i < b1->_surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s1 = b1->_surfaces[i];
 #endif
@@ -234,7 +235,7 @@ public:
       final CityGMLBuildingSurface s1 = b1._surfaces.get(i);
 #endif
       if (s1->getType() == WALL){
-        for (int j = 0; j < b2->_surfaces.size(); j++) {
+        for (size_t j = 0; j < b2->_surfaces.size(); j++) {
 #ifdef C_CODE
           CityGMLBuildingSurface* s2 = b2->_surfaces[j];
 #endif
@@ -262,10 +263,10 @@ public:
     
     static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings){
       int nInvisibleWalls = 0;
-      for (int i = 0; i < buildings.size() - 1; i++){
+      for (size_t i = 0; i < buildings.size() - 1; i++){
         CityGMLBuilding* b1 = buildings[i];
         
-        for (int j = i+1; j < i+30 && j < buildings.size() - 1; j++){
+        for (size_t j = i+1; j < i+30 && j < buildings.size() - 1; j++){
           CityGMLBuilding* b2 = buildings[j];
           nInvisibleWalls += checkWallsVisibility(b1, b2);
         }

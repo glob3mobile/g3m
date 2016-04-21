@@ -9,16 +9,16 @@
 #include "CityGMLBuildingTessellator.hpp"
 
 short CityGMLBuildingTessellator::addTrianglesCuttingEarsForAllWalls(const CityGMLBuilding* building,
-                                                FloatBufferBuilderFromCartesian3D& fbb,
-                                                FloatBufferBuilderFromCartesian3D& normals,
-                                                ShortBufferBuilder& indexes,
-                                                FloatBufferBuilderFromColor& colors,
-                                                const double baseHeight,
-                                                const Planet& planet,
-                                                const short firstIndex,
-                                                const Color& color,
-                                                const bool includeGround,
-                                                const ElevationData* elevationData) {
+                                                                     FloatBufferBuilderFromCartesian3D& fbb,
+                                                                     FloatBufferBuilderFromCartesian3D& normals,
+                                                                     ShortBufferBuilder& indexes,
+                                                                     FloatBufferBuilderFromColor& colors,
+                                                                     const double baseHeight,
+                                                                     const Planet& planet,
+                                                                     const short firstIndex,
+                                                                     const Color& color,
+                                                                     const bool includeGround,
+                                                                     const ElevationData* elevationData) {
   const std::vector<CityGMLBuildingSurface*> surfaces = building->getSurfaces();
   
   short buildingFirstIndex = firstIndex;
@@ -45,11 +45,11 @@ short CityGMLBuildingTessellator::addTrianglesCuttingEarsForAllWalls(const CityG
 
 
 Mesh* CityGMLBuildingTessellator::createIndexedMeshWithColorPerVertex(const CityGMLBuilding* building,
-                                                 const Planet planet,
-                                                 const bool fixOnGround,
-                                                 const Color color,
-                                                 const bool includeGround,
-                                                 const ElevationData* elevationData) {
+                                                                      const Planet planet,
+                                                                      const bool fixOnGround,
+                                                                      const Color color,
+                                                                      const bool includeGround,
+                                                                      const ElevationData* elevationData) {
   
   
   const double baseHeight = fixOnGround ? building->getBaseHeight() : 0;
@@ -84,12 +84,37 @@ Mesh* CityGMLBuildingTessellator::createIndexedMeshWithColorPerVertex(const City
   return im;
 }
 
+CityGMLBuildingTessellatorData* CityGMLBuildingTessellator::createData(short firstV,
+                                                                       short lastV,
+                                                                       Mesh* mesh,
+                                                                       const FloatBufferBuilder& vertices){
+  
+  //Creating sphere
+  std::vector<Vector3D*> vs;
+  for (short i = firstV; i < lastV; i++) {
+    vs.push_back(new Vector3D(vertices.getVector3D(i)));
+  }
+  
+  Sphere bSphere = Sphere::createSphereContainingPoints(vs);
+  
+  for (size_t i = 0; i < vs.size(); i++) {
+    delete vs[i];
+  }
+  
+  
+  return new DefaultCityGMLBuildingTessellatorData(mesh,
+                                                   firstV,
+                                                   lastV,
+                                                   new Sphere(bSphere));
+  
+}
+
 Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*> buildings,
-                        const Planet& planet,
-                        const bool fixOnGround,
-                        const bool includeGround,
-                        CityGMLBuildingColorProvider* colorProvider,
-                        const ElevationData* elevationData) {
+                                             const Planet& planet,
+                                             const bool fixOnGround,
+                                             const bool includeGround,
+                                             CityGMLBuildingColorProvider* colorProvider,
+                                             const ElevationData* elevationData) {
   
   CompositeMesh* cm = NULL;
   int buildingCounter = 0;
@@ -103,6 +128,7 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
   
   std::vector<short> buildingVertexIndex;
   std::vector<CityGMLBuilding*> processedBuildings;
+  std::vector<Sphere*> bSpheres;
   
   const Color colorWheel = Color::red();
   
@@ -132,7 +158,6 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
     
     int lastV = ((int)vertices->size()) / 3;
     buildingVertexIndex.push_back((short)lastV);
-    
     buildingCounter++;
     
     if (firstIndex > 30000) { //Max number of vertex per mesh (CHECK SHORT RANGE)
@@ -160,14 +185,11 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
       
       //Linking buildings with its mesh
       for (int j = 0; j < processedBuildings.size(); j++) {
-//        DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
-//        data->_containerMesh = im;
-//        data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
-//        data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
         
-        processedBuildings[j]->setTessellatorData(new DefaultCityGMLBuildingTessellatorData(im,
-                                                                                            buildingVertexIndex[j*2],
-                                                                                            buildingVertexIndex[j*2+1]));
+        processedBuildings[j]->setTessellatorData(createData(buildingVertexIndex[j*2],
+                                                             buildingVertexIndex[j*2+1],
+                                                             im,
+                                                             *vertices));
       }
       
       //Reset
@@ -194,14 +216,11 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
   
   //Linking buildings with its mesh
   for (int j = 0; j < processedBuildings.size(); j++) {
-//    DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
-//    data->_containerMesh = im;
-//    data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
-//    data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
     
-    processedBuildings[j]->setTessellatorData(new DefaultCityGMLBuildingTessellatorData(im,
-                                                                                        buildingVertexIndex[j*2],
-                                                                                        buildingVertexIndex[j*2+1]));
+    processedBuildings[j]->setTessellatorData(createData(buildingVertexIndex[j*2],
+                                                         buildingVertexIndex[j*2+1],
+                                                         im,
+                                                         *vertices));
   }
   
   delete vertices;
@@ -261,3 +280,7 @@ Mark* CityGMLBuildingTessellator::createMark(const CityGMLBuilding* building, co
 }
 
 
+const Sphere* CityGMLBuildingTessellator::getSphereOfBuilding(const CityGMLBuilding* b){
+  DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) b->getTessllatorData();
+  return data->_bSphere;
+}

@@ -176,3 +176,4 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
   
   return false;
 }
+

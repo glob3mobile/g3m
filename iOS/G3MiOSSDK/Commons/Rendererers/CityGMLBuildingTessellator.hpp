@@ -20,13 +20,16 @@ public:
   Mesh* _containerMesh;
   short _firstVertexIndexWithinContainerMesh;
   short _lastVertexIndexWithinContainerMesh;
+  const Sphere* _bSphere;
   
   DefaultCityGMLBuildingTessellatorData(Mesh* containerMesh,
                                         short firstVertexIndexWithinContainerMesh,
-                                        short lastVertexIndexWithinContainerMesh):
+                                        short lastVertexIndexWithinContainerMesh,
+                                        Sphere* bSphere):
   _containerMesh(containerMesh),
   _firstVertexIndexWithinContainerMesh(firstVertexIndexWithinContainerMesh),
-  _lastVertexIndexWithinContainerMesh(lastVertexIndexWithinContainerMesh)
+  _lastVertexIndexWithinContainerMesh(lastVertexIndexWithinContainerMesh),
+  _bSphere(bSphere)
   {
     
     if (_firstVertexIndexWithinContainerMesh < 0 ||
@@ -36,8 +39,7 @@ public:
     }
     
   }
-  
-                                        
+
 };
 
 class CityGMLBuildingTessellator{
@@ -62,6 +64,8 @@ class CityGMLBuildingTessellator{
                                                    const bool includeGround,
                                                    const ElevationData* elevationData);
   
+  static CityGMLBuildingTessellatorData* createData(short firstV, short lastV, Mesh* mesh, const FloatBufferBuilder& vertices);
+  
 public:
  
   
@@ -76,6 +80,7 @@ public:
   
   static Mark* createMark(const CityGMLBuilding* building, const bool fixOnGround);
   
+  const Sphere* getSphereOfBuilding(const CityGMLBuilding* b);
 };
 
 #endif /* CityGMLBuildingTessellator_hpp */
