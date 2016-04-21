@@ -110,7 +110,9 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
   for (int i = 0; i < buildings.size(); i++) {
     CityGMLBuilding* b = buildings[i];
     
-    buildingVertexIndex.push_back(vertices->size() / 3);
+    int firstV = ((int)vertices->size()) / 3;
+    buildingVertexIndex.push_back((short)firstV);
+    
     processedBuildings.push_back(b);
     
     const double baseHeight = fixOnGround ? b->getBaseHeight() : 0;
@@ -128,7 +130,8 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
                                                       elevationData);
     }
     
-    buildingVertexIndex.push_back(vertices->size() / 3);
+    int lastV = ((int)vertices->size()) / 3;
+    buildingVertexIndex.push_back((short)lastV);
     
     buildingCounter++;
     

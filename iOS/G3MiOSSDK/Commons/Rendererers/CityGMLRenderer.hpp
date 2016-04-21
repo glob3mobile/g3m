@@ -37,6 +37,8 @@ class CityGMLRenderer: public DefaultRenderer{
   MeshRenderer* _meshRenderer;
   MarksRenderer* _marksRenderer;
   
+  const Camera* _lastCamera;
+  
   class TessellationTask: public GAsyncTask {
     CityGMLRenderer* _vc;
     std::vector<CityGMLBuilding*> _buildings;
@@ -70,9 +72,9 @@ class CityGMLRenderer: public DefaultRenderer{
       
       //Creating mesh model
       _mesh = CityGMLBuildingTessellator::createMesh(_buildings,
-                                                          *_vc->_context->getPlanet(),
-                                                          false, false, NULL,
-                                                          _vc->_elevationData);
+                                                     *_vc->_context->getPlanet(),
+                                                     false, false, NULL,
+                                                     _vc->_elevationData);
     }
     
     virtual void onPostExecute(const G3MContext* context){
@@ -97,7 +99,8 @@ public:
                   MarksRenderer* marksRenderer):
   _elevationData(NULL),
   _meshRenderer(meshRenderer),
-  _marksRenderer(marksRenderer){}
+  _marksRenderer(marksRenderer),
+  _lastCamera(NULL){}
   
   void setElevationData(ElevationData* ed){
     _elevationData = ed;
@@ -107,10 +110,10 @@ public:
     DefaultRenderer::initialize(context);
     _meshRenderer->initialize(context);
     _marksRenderer->initialize(context);
-  } 
+  }
   
   void addBuildingsFromURL(const URL& url,
-                    CityGMLRendererListener* listener, bool autoDelete);
+                           CityGMLRendererListener* listener, bool autoDelete);
   
   void addBuildingDataFromURL(const URL& url);
   
@@ -123,10 +126,10 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState);
   
-  virtual bool onTouchEvent(const G3MEventContext* ec,
-                            const TouchEvent* touchEvent) {
-    return false;
-  }
+//  virtual bool onTouchEvent(const G3MEventContext* ec,
+//                            const TouchEvent* touchEvent) {
+//    return false;
+//  }
   
   void colorBuildings(CityGMLBuildingColorProvider* cp){
     
@@ -137,6 +140,11 @@ public:
     }
     
   }
+  
+  
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent);
+  
   
 };
 

@@ -16,6 +16,8 @@
 #include "CityGMLParser.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "BuildingDataParser.hpp"
+#include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& buildings,
                                    CityGMLRendererListener* listener, bool autoDelete){
@@ -104,6 +106,8 @@ void CityGMLRenderer::addBuildingDataFromURL(const URL& url){
 
 
 void CityGMLRenderer::render(const G3MRenderContext* rc, GLState* glState) {
+  _lastCamera = rc->getCurrentCamera();
+  
   _meshRenderer->render(rc, glState);
   _marksRenderer->render(rc, glState);
 }
@@ -145,4 +149,30 @@ void CityGMLRenderer::addBuildingsFromURL(const URL& url,
                               new CityGMLParsingListener(this, listener, autoDelete),
                               true);
   
+}
+
+
+bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
+                                  const TouchEvent* touchEvent) {
+  
+  if (_lastCamera == NULL) {
+    return false;
+  }
+  
+  if ( touchEvent->getType() == LongPress ) {
+    const Vector2F pixel = touchEvent->getTouch(0)->getPos();
+    const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+    const Vector3D origin = _lastCamera->getCartesianPosition();
+    
+    const Planet* planet = ec->getPlanet();
+    
+    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+    if (positionCartesian.isNan()) {
+      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
+      return false;
+    }
+    
+  }
+  
+  return false;
 }
