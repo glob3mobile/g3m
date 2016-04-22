@@ -411,6 +411,7 @@ public:
 @synthesize G3MWidget;
 @synthesize meshRenderer;
 @synthesize marksRenderer;
+@synthesize meshRendererPC;
 @synthesize cityGMLRenderer;
 @synthesize elevationData;
 @synthesize _timeLabel;
@@ -529,6 +530,8 @@ public:
   builder.addRenderer(_hudRenderer);
   
   meshRenderer = new MeshRenderer();
+  meshRendererPC = new MeshRenderer();
+  builder.addRenderer(meshRendererPC);
   marksRenderer = new MarksRenderer(false);
   cityGMLRenderer = new CityGMLRenderer(meshRenderer, marksRenderer);
   cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener(self));
@@ -544,7 +547,7 @@ public:
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
   
   Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
-  meshRenderer->addMesh(m);
+  meshRendererPC->addMesh(m);
   _pointClouds.push_back(m);
   
   [self onPointCloudLoaded];
@@ -621,6 +624,25 @@ public:
   
   //NO WAITING ANYMORE
   _waitingMessageView.hidden = TRUE;
+}
+
+- (IBAction)switchCityGML:(id)sender {
+  bool viewBuildings = [((UISwitch*) sender) isOn];
+  
+  if (viewBuildings){
+    cityGMLRenderer->setEnable(true);
+    [_dataPicker setUserInteractionEnabled:TRUE];
+    
+  } else{
+    cityGMLRenderer->setEnable(false);
+    [_dataPicker setUserInteractionEnabled:FALSE];
+  }
+}
+
+- (IBAction)switchSolarRadiationPC:(id)sender {
+  bool viewPC = [((UISwitch*) sender) isOn];
+  
+  meshRendererPC->setEnable(viewPC);
 }
 
 -(IBAction)switchVR:(id)sender{

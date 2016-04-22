@@ -52,12 +52,14 @@ class CityGMLRenderer;
   __weak IBOutlet UIView *_menuView;
   __weak IBOutlet UIView *_waitingMessageView;
   __weak IBOutlet UIProgressView *_progressBar;
+  __weak IBOutlet UIPickerView *_dataPicker;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
 
 @property __weak IBOutlet UILabel *_timeLabel;
 @property MeshRenderer* meshRenderer;
+@property MeshRenderer* meshRendererPC;
 @property MarksRenderer* marksRenderer;
 @property CityGMLRenderer* cityGMLRenderer;
 @property const ElevationData* elevationData;
