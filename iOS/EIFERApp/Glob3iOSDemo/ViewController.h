@@ -22,7 +22,7 @@ class CityGMLBuilding;
 class CityGMLRenderer;
 
 
-@interface ViewController : UIViewController <UIPickerViewDelegate>  {
+@interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
 
   MapBooBuilder_iOS* _g3mcBuilder;
@@ -31,8 +31,6 @@ class CityGMLRenderer;
 
   HUDRenderer* _hudRenderer;
   
-//  LabelImageBuilder* _labelBuilder;
-  
   std::vector<std::string> _cityGMLFiles;
   std::vector<std::string> _pointCloudFiles;
   size_t _modelsLoadedCounter;
@@ -40,10 +38,14 @@ class CityGMLRenderer;
   
   std::vector<Mesh*> _pointClouds;
   
-//  std::vector<CityGMLBuilding*> _buildings;
-  
   NSArray* _pickerArray;
   bool _useDem;
+  
+  //VR
+  Geodetic3D* _prevPos;
+  Angle* _prevHeading;
+  Angle* _prevRoll;
+  Angle* _prevPitch;
   
   __weak IBOutlet UIButton *_showMenuButton;
   __weak IBOutlet NSLayoutConstraint *_menuHeightConstraint;

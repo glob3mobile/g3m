@@ -90,6 +90,12 @@ class CityGMLRenderer: public DefaultRenderer{
       
       //Including elements must be done in the rendering thread
       _vc->_meshRenderer->addMesh(_mesh);
+
+      //Uncomment for seeing spheres
+//      for (size_t i = 0; i < _buildings.size(); i++) {
+//      _vc->_meshRenderer->addMesh(CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i])->createWireframeMesh(Color::red(), 5));
+//      }
+      
       for (size_t i = 0; i < _marks.size(); i++) {
         _vc->_marksRenderer->addMark( _marks[i] );
       }

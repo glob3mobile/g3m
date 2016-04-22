@@ -136,12 +136,12 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
                                true,
                                indices.create(),
                                true,
-                               20,
+                               2,
                                1,
                                new Color(color),
                                NULL,
                                0,
-                               false);
+                               true);
   
   delete vertices;
   
@@ -295,6 +295,12 @@ std::vector<double> Sphere::intersectionsDistances(double originX,
                                                    double directionX,
                                                    double directionY,
                                                    double directionZ) const {
+  
+  //Sphere is places in the cartesian origin for this math to work
+  originX -= _center._x;
+  originY -= _center._y;
+  originZ -= _center._z;
+  
   std::vector<double> intersections;
   
   // By laborious algebraic manipulation....

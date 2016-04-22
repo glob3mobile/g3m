@@ -19,8 +19,7 @@ class Sphere : public BoundingVolume {
 private:
   
   mutable Mesh* _mesh;
-  Mesh* createWireframeMesh(const Color& color,
-                            short resolution) const;
+
   
   
 public:
@@ -108,6 +107,9 @@ public:
                                              double directionX,
                                              double directionY,
                                              double directionZ) const;
+  
+  Mesh* createWireframeMesh(const Color& color,
+                            short resolution) const;
   
 };
 

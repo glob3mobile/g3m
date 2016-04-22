@@ -18,6 +18,7 @@
 #include "BuildingDataParser.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
+#include "DirectMesh.hpp"
 
 void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& buildings,
                                    CityGMLRendererListener* listener, bool autoDelete){
@@ -111,14 +112,14 @@ void CityGMLRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _meshRenderer->render(rc, glState);
   _marksRenderer->render(rc, glState);
   
-  //Rendering Spheres
-  Color red = Color::red();
-  for (size_t i = 0; i < _buildings.size(); i++) {
-    const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
-    if (s != NULL){
-      s->render(rc, glState, red);
-    }
-  }
+//  //Rendering Spheres
+//  Color red = Color::red();
+//  for (size_t i = 0; i < _buildings.size(); i++) {
+//    const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
+//    if (s != NULL){
+//      s->render(rc, glState, red);
+//    }
+//  }
 }
 
 class CityGMLParsingListener: public CityGMLListener{
@@ -173,13 +174,34 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
     
-//    const Planet* planet = ec->getPlanet();
+//    FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+//    fbb->add(origin);
+//    fbb->add(origin.add(ray.times(10)));
+//    DirectMesh* dm = new DirectMesh(GLPrimitive::lines(),
+//                                    true,
+//                                    fbb->getCenter(),
+//                                    fbb->create(),
+//                                    4.0f,
+//                                    1.0f,
+//                                    new Color(Color::green()));
+//    _meshRenderer->addMesh(dm);
 //    
-//    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-//    if (positionCartesian.isNan()) {
-//      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
-//      return false;
-//    }
+//    delete fbb;
+//    
+//    fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+//    fbb->add(origin);
+//    
+//    DirectMesh* dm2 = new DirectMesh(GLPrimitive::lines(),
+//                                     true,
+//                                     fbb->getCenter(),
+//                                     fbb->create(),
+//                                     4.0f,
+//                                     1.0f,
+//                                     new Color(Color::blue()));
+//    
+//    
+//    delete fbb;
+//    _meshRenderer->addMesh(dm2);
     
     double minDis = 1e20;
     CityGMLBuilding* touchedB = NULL;
@@ -187,8 +209,9 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
     for (size_t i = 0; i < _buildings.size(); i++) {
       const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
       if (s != NULL){
-        std::vector<double> dists = s->intersectionsDistances(origin._x, origin._y, origin._z,
-                                                              ray._x, ray._y, ray._z);
+        
+        const std::vector<double> dists = s->intersectionsDistances(origin._x, origin._y, origin._z,
+                                                                    ray._x, ray._y, ray._z);
         
         for (size_t j = 0; j < dists.size(); j++){
           if (dists[j] < minDis){
@@ -201,7 +224,7 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
     }
     
     if (touchedB != NULL){
-      
+      _touchListener->onBuildingTouched(touchedB);
     }
   }
   

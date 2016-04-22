@@ -101,7 +101,6 @@ CityGMLBuildingTessellatorData* CityGMLBuildingTessellator::createData(short fir
     delete vs[i];
   }
   
-  
   return new DefaultCityGMLBuildingTessellatorData(mesh,
                                                    firstV,
                                                    lastV,

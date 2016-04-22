@@ -200,6 +200,7 @@
 #include <G3MiOSSDK/GInitializationTask.hpp>
 
 #include <G3MiOSSDK/CityGMLRenderer.hpp>
+#include <G3MiOSSDK/SphericalPlanet.hpp>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -383,10 +384,21 @@ public:
 };
 
 class MyCityGMLBuildingTouchedListener : public CityGMLBuildingTouchedListener{
+  ViewController* _vc;
 public:
+  
+  MyCityGMLBuildingTouchedListener(ViewController* vc):_vc(vc){}
+  
   virtual ~MyCityGMLBuildingTouchedListener(){}
   virtual void onBuildingTouched(CityGMLBuilding* building){
-    
+    std::string name = "ID: " + building->_name;
+    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Building selected"
+                                                     message:[NSString stringWithUTF8String:name.c_str()]
+                                                    delegate:_vc
+                                           cancelButtonTitle:@"Accept"
+                                           otherButtonTitles: nil];
+    //    [alert addButtonWithTitle:@"GOO"];
+    [alert show];
   }
   
 };
@@ -417,6 +429,12 @@ public:
   meshRenderer = NULL;
   marksRenderer = NULL;
   
+  //VR;
+  _prevPos = NULL;
+  _prevHeading = NULL;
+  _prevRoll = NULL;
+  _prevPitch = NULL;
+  
   _waitingMessageView.layer.cornerRadius = 5;
   _waitingMessageView.layer.masksToBounds = TRUE;
   
@@ -427,13 +445,13 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-//  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+  //  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+  //  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
   //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
@@ -503,7 +521,7 @@ public:
   
   layerSet->addLayer(layer);
   
-  _planet = EllipsoidalPlanet::createEarth();
+  _planet = SphericalPlanet::createEarth();
   builder.setPlanet(_planet);
   
   _hudRenderer = new HUDRenderer();
@@ -513,7 +531,7 @@ public:
   meshRenderer = new MeshRenderer();
   marksRenderer = new MarksRenderer(false);
   cityGMLRenderer = new CityGMLRenderer(meshRenderer, marksRenderer);
-  cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener());
+  cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener(self));
   
   builder.addRenderer(cityGMLRenderer);
   
@@ -618,7 +636,15 @@ public:
     }
   };
   
+  
   if (usingVR){
+    
+    //Storing prev cam
+    const Camera* cam = [G3MWidget widget]->getCurrentCamera();
+    _prevPos = new Geodetic3D(cam->getGeodeticPosition());
+    _prevRoll = new Angle(cam->getRoll());
+    _prevPitch = new Angle(cam->getPitch());
+    _prevHeading = new Angle(cam->getHeading());
     
     bool fixAltitude = !_useDem;
     
@@ -633,6 +659,23 @@ public:
     [G3MWidget widget]->getNextCamera()->forceZNear(1.0);
     
   } else{
+    
+    //Restoring prev cam
+    const Camera* cam = [G3MWidget widget]->getCurrentCamera();
+    [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(2),
+                                                  cam->getGeodeticPosition(), *_prevPos,
+                                                  cam->getHeading(), *_prevHeading,
+                                                  cam->getPitch(), *_prevPitch);
+    delete _prevPitch;
+    _prevPitch = NULL;
+    delete _prevHeading;
+    _prevHeading = NULL;
+    delete _prevRoll;
+    _prevRoll = NULL;
+    delete _prevPos;
+    _prevPos = NULL;
+    
+    
     const bool useInertia = true;
     cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
     cameraRenderer->addHandler(new CameraDoubleDragHandler());
