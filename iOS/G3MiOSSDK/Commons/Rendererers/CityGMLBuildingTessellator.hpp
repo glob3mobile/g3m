@@ -53,7 +53,6 @@ class CityGMLBuildingTessellator{
                                                   const Planet& planet,
                                                   const short firstIndex,
                                                   const Color& color,
-                                                  const bool includeGround,
                                                   const ElevationData* elevationData);
   
   
@@ -61,7 +60,7 @@ class CityGMLBuildingTessellator{
                                                    const Planet planet,
                                                    const bool fixOnGround,
                                                    const Color color,
-                                                   const bool includeGround,
+                                                   const bool checkSurfacesVisibility,
                                                    const ElevationData* elevationData);
   
   static CityGMLBuildingTessellatorData* createData(short firstV,
@@ -75,7 +74,7 @@ public:
   static Mesh* createMesh(const std::vector<CityGMLBuilding*> buildings,
                           const Planet& planet,
                           const bool fixOnGround,
-                          const bool includeGround,
+                          const bool checkSurfacesVisibility,
                           CityGMLBuildingColorProvider* colorProvider,
                           const ElevationData* elevationData);
   

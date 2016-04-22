@@ -682,7 +682,6 @@ public:
     cameraRenderer->addHandler(new CameraRotationHandler());
     cameraRenderer->addHandler(new CameraDoubleTapHandler());
     
-    
     [G3MWidget widget]->getNextCamera()->forceZNear(NAND);
   }
 }

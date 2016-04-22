@@ -273,6 +273,8 @@ std::vector<CityGMLBuilding*> CityGMLParser::parseLOD2Buildings2(const std::stri
       
       pos = points._endingPos +1 ;
       
+      pos = cityGMLString.find("</bldg:boundedBy>", pos);
+      
       std::vector<double> coors = IStringUtils::instance()->parseDoubles(points._string, " ");
       surfaces.push_back(CityGMLBuildingSurface::createFromArrayOfCityGMLWGS84Coordinates(coors, type));
       

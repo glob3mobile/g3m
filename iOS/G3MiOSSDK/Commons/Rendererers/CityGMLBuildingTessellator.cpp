@@ -17,7 +17,6 @@ short CityGMLBuildingTessellator::addTrianglesCuttingEarsForAllWalls(const CityG
                                                                      const Planet& planet,
                                                                      const short firstIndex,
                                                                      const Color& color,
-                                                                     const bool includeGround,
                                                                      const ElevationData* elevationData) {
   const std::vector<CityGMLBuildingSurface*> surfaces = building->getSurfaces();
   
@@ -30,15 +29,12 @@ short CityGMLBuildingTessellator::addTrianglesCuttingEarsForAllWalls(const CityG
     CityGMLBuildingSurface s = surfaces.get(w);
 #endif
     
-    if ((!includeGround && s->getType() == GROUND) ||
-        !s->isVisible())
+    if (s->isVisible())
     {
-      continue;
+      buildingFirstIndex = s->addTrianglesByEarClipping(fbb, normals, indexes, colors,
+                                                        baseHeight, planet,
+                                                        buildingFirstIndex, color, elevationData);
     }
-    
-    buildingFirstIndex = s->addTrianglesByEarClipping(fbb, normals, indexes, colors,
-                                                      baseHeight, planet,
-                                                      buildingFirstIndex, color, elevationData);
   }
   return buildingFirstIndex;
 }
@@ -69,7 +65,6 @@ Mesh* CityGMLBuildingTessellator::createIndexedMeshWithColorPerVertex(const City
                                      planet,
                                      firstIndex,
                                      color,
-                                     includeGround,
                                      elevationData);
   
   IndexedMesh* im = new IndexedMesh(GLPrimitive::triangles(),
@@ -111,13 +106,18 @@ CityGMLBuildingTessellatorData* CityGMLBuildingTessellator::createData(short fir
 Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*> buildings,
                                              const Planet& planet,
                                              const bool fixOnGround,
-                                             const bool includeGround,
+                                             const bool checkSurfacesVisibility,
                                              CityGMLBuildingColorProvider* colorProvider,
                                              const ElevationData* elevationData) {
   
   CompositeMesh* cm = NULL;
   int buildingCounter = 0;
   int meshesCounter = 0;
+  
+  if (checkSurfacesVisibility){
+    int n = CityGMLBuilding::checkWallsVisibility(buildings);
+    ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
+  }
   
   
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
@@ -144,13 +144,11 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
     if (colorProvider == NULL){
       firstIndex = addTrianglesCuttingEarsForAllWalls(b, *vertices, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
                                                       colorWheel.wheelStep((int)buildings.size(), buildingCounter),
-                                                      includeGround,
                                                       elevationData);
       
     } else{
       firstIndex = addTrianglesCuttingEarsForAllWalls(b, *vertices, *normals, *indexes, *colors, baseHeight, planet, firstIndex,
                                                       colorProvider->getColor(b),
-                                                      includeGround,
                                                       elevationData);
     }
     

@@ -234,6 +234,14 @@ public:
 #ifdef JAVA_CODE
       final CityGMLBuildingSurface s1 = b1._surfaces.get(i);
 #endif
+      
+      //Grounds are internal by definition
+      if (s1->getType() == GROUND){
+        s1->setIsVisible(false);
+        nInvisibleWalls++;
+        continue;
+      }
+      
       if (s1->getType() == WALL){
         for (size_t j = 0; j < b2->_surfaces.size(); j++) {
 #ifdef C_CODE

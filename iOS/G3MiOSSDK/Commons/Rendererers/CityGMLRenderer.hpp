@@ -76,13 +76,14 @@ class CityGMLRenderer: public DefaultRenderer{
       }
       
       //Checking walls visibility
-      int n = CityGMLBuilding::checkWallsVisibility(_buildings);
-      ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
+//      int n = CityGMLBuilding::checkWallsVisibility(_buildings);
+//      ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
+      const bool checkSurfacesVisibility = true;
       
       //Creating mesh model
       _mesh = CityGMLBuildingTessellator::createMesh(_buildings,
                                                      *_vc->_context->getPlanet(),
-                                                     false, false, NULL,
+                                                     false, checkSurfacesVisibility, NULL,
                                                      _vc->_elevationData);
     }
     
