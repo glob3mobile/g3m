@@ -256,6 +256,10 @@ public:
   
   void setViewMode(ViewMode viewMode);
 
+  void setEyesSeparation(double separation) {
+    eyesSeparation = separation;
+  }
+
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -372,16 +376,11 @@ private:
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
-  void setEyesSeparation(double separation) {
-    eyesSeparation = separation;
-  }
-  
   void rawRender(const RenderState_Type renderStateType);
   
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
-
   
 };
 
