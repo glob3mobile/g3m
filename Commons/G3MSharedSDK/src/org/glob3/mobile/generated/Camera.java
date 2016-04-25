@@ -795,17 +795,21 @@ public class Camera
   private FrustumData calculateFrustumData()
   {
     final double height = getGeodeticPosition()._height;
+    double zNear = 0.5;
+
+    double zFar = 30;
+/*
     double zNear = height * 0.1;
-  
+
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
-  
+
     final double goalRatio = 1000;
     final double ratio = zFar / zNear;
     if (ratio < goalRatio)
     {
       zNear = zFar / goalRatio;
     }
-  
+  */
     if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;

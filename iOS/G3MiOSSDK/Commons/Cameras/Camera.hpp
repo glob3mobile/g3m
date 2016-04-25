@@ -196,6 +196,10 @@ public:
     }
     return _frustumInModelCoordinates;
   }
+  
+  void resetFrustumPlanes();
+  void overrideFrustumPlanes(double near, double far);
+
 
   Vector3D getHorizontalVector();
 
@@ -397,6 +401,11 @@ private:
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _viewPortWidth;
   int _viewPortHeight;
+  
+  bool _overrideFrustumPlanes;
+  double _zNear;
+  double _zFar;
+  
 #ifdef C_CODE
   const Planet *_planet;
 #else

@@ -273,6 +273,7 @@ private:
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
   ProtoRenderer*      _selectedRenderer;
+  double              eyesSeparation = 200;
 
   EffectsScheduler*   _effectsScheduler;
 
@@ -370,6 +371,10 @@ private:
   RenderState calculateRendererState();
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
+  
+  void setEyesSeparation(double separation) {
+    eyesSeparation = separation;
+  }
   
   void rawRender(const RenderState_Type renderStateType);
   

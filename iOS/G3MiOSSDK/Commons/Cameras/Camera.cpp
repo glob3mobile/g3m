@@ -36,6 +36,10 @@ void Camera::copyFrom(const Camera &that,
     that.forceMatrixCreation();
 
     _timestamp = that._timestamp;
+    
+    _overrideFrustumPlanes = that._overrideFrustumPlanes;
+    _zFar = that._zFar;
+    _zNear = that._zNear;
 
     _viewPortWidth  = that._viewPortWidth;
     _viewPortHeight = that._viewPortHeight;
@@ -124,7 +128,10 @@ _tanHalfVerticalFOV(NAND),
 _tanHalfHorizontalFOV(NAND),
 _timestamp(timestamp),
 _viewPortWidth(-1),
-_viewPortHeight(-1)
+_viewPortHeight(-1),
+_overrideFrustumPlanes(false),
+_zNear(0.0),
+_zFar(0.0)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
@@ -372,11 +379,31 @@ void Camera::setPointOfView(const Geodetic3D& center,
   //  _dirtyFlags.setAllDirty();
 }
 
+
+
+void Camera::overrideFrustumPlanes(double near, double far) {
+  _overrideFrustumPlanes = true;
+  _zFar = far;
+  _zNear = near;
+}
+
+void Camera::resetFrustumPlanes() {
+  _overrideFrustumPlanes = false;
+  _zFar = 0.0;
+  _zNear = 0.0;
+}
+
 FrustumData Camera::calculateFrustumData() const {
   const double height = getGeodeticPosition()._height;
-  double zNear = height * 0.1;
-
-  double zFar = _planet->distanceToHorizon(_position.asVector3D());
+  double zFar, zNear;
+  
+  if (_overrideFrustumPlanes) {
+    zFar = _zFar;
+    zNear = _zNear;
+  } else {
+    zNear = height * 0.1;
+    zFar = _planet->distanceToHorizon(_position.asVector3D());
+  }
 
   const double goalRatio = 1000;
   const double ratio = zFar / zNear;
