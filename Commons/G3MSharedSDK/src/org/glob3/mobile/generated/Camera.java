@@ -26,6 +26,9 @@ public class Camera
      _timestamp = timestamp;
      _viewPortWidth = -1;
      _viewPortHeight = -1;
+     _overrideFrustumPlanes = false;
+     _zNear = 0.0;
+     _zFar = 0.0;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -53,6 +56,10 @@ public class Camera
       that.forceMatrixCreation();
   
       _timestamp = that._timestamp;
+  
+      _overrideFrustumPlanes = that._overrideFrustumPlanes;
+      _zFar = that._zFar;
+      _zNear = that._zNear;
   
       _viewPortWidth = that._viewPortWidth;
       _viewPortHeight = that._viewPortHeight;
@@ -288,6 +295,20 @@ public class Camera
     }
     return _frustumInModelCoordinates;
   }
+
+  public final void resetFrustumPlanes()
+  {
+    _overrideFrustumPlanes = false;
+    _zFar = 0.0;
+    _zNear = 0.0;
+  }
+  public final void overrideFrustumPlanes(double near, double far)
+  {
+    _overrideFrustumPlanes = true;
+    _zFar = far;
+    _zNear = near;
+  }
+
 
   public final Vector3D getHorizontalVector()
   {
@@ -683,6 +704,11 @@ public class Camera
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _viewPortWidth;
   private int _viewPortHeight;
+
+  private boolean _overrideFrustumPlanes;
+  private double _zNear;
+  private double _zFar;
+
   private Planet _planet;
   private MutableVector3D _position = new MutableVector3D(); // position
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
@@ -795,21 +821,27 @@ public class Camera
   private FrustumData calculateFrustumData()
   {
     final double height = getGeodeticPosition()._height;
-    double zNear = 0.5;
-
-    double zFar = 30;
-/*
-    double zNear = height * 0.1;
-
-    double zFar = _planet.distanceToHorizon(_position.asVector3D());
-
+    double zFar;
+    double zNear;
+  
+    if (_overrideFrustumPlanes)
+    {
+      zFar = _zFar;
+      zNear = _zNear;
+    }
+    else
+    {
+      zNear = height * 0.1;
+      zFar = _planet.distanceToHorizon(_position.asVector3D());
+    }
+  
     final double goalRatio = 1000;
     final double ratio = zFar / zNear;
     if (ratio < goalRatio)
     {
       zNear = zFar / goalRatio;
     }
-  */
+  
     if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;

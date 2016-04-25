@@ -718,6 +718,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   private Renderer _hudRenderer;
   private RenderState _rendererState;
   private ProtoRenderer _selectedRenderer;
+  private double eyesSeparation = 200;
 
   private EffectsScheduler _effectsScheduler;
 
@@ -994,6 +995,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  private void setEyesSeparation(double separation)
+  {
+    eyesSeparation = separation;
+  }
+
   private void rawRender(RenderState_Type renderStateType)
   {
   
@@ -1098,7 +1104,6 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D camPos = _currentCamera.getCartesianPosition();
         Vector3D camCenter = _currentCamera.getCenter();
         Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        final double eyesSeparation = 0.03;
         Vector3D up = _currentCamera.getUp();
   
         final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
