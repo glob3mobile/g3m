@@ -702,6 +702,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  public final void setEyesSeparation(double separation)
+  {
+    eyesSeparation = separation;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -995,11 +1000,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
-  private void setEyesSeparation(double separation)
-  {
-    eyesSeparation = separation;
-  }
-
   private void rawRender(RenderState_Type renderStateType)
   {
   
@@ -1139,6 +1139,5 @@ public class G3MWidget implements ChangedRendererInfoListener
     //Restoring central camera
     _currentCamera.copyFrom(_auxCam, true);
   }
-
 
 }
