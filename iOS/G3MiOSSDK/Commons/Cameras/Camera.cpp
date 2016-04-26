@@ -13,6 +13,11 @@
 #include "Sphere.hpp"
 #include "Sector.hpp"
 
+
+bool Camera::_overrideFrustumPlanes = false;
+double Camera::_zFar = 0.0;
+double Camera::_zNear = 0.0;
+
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
   // #warning move this to Planet, and remove isFlat() method (DGD)
@@ -128,10 +133,7 @@ _tanHalfVerticalFOV(NAND),
 _tanHalfHorizontalFOV(NAND),
 _timestamp(timestamp),
 _viewPortWidth(-1),
-_viewPortHeight(-1),
-_overrideFrustumPlanes(false),
-_zNear(0.0),
-_zFar(0.0)
+_viewPortHeight(-1)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
