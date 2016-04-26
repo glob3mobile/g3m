@@ -26,9 +26,6 @@ public class Camera
      _timestamp = timestamp;
      _viewPortWidth = -1;
      _viewPortHeight = -1;
-     _overrideFrustumPlanes = false;
-     _zNear = 0.0;
-     _zFar = 0.0;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -296,13 +293,13 @@ public class Camera
     return _frustumInModelCoordinates;
   }
 
-  public final void resetFrustumPlanes()
+  public static void resetFrustumPlanes()
   {
     _overrideFrustumPlanes = false;
     _zFar = 0.0;
     _zNear = 0.0;
   }
-  public final void overrideFrustumPlanes(double near, double far)
+  public static void overrideFrustumPlanes(double near, double far)
   {
     _overrideFrustumPlanes = true;
     _zFar = far;
@@ -705,9 +702,9 @@ public class Camera
   private int _viewPortWidth;
   private int _viewPortHeight;
 
-  private boolean _overrideFrustumPlanes;
-  private double _zNear;
-  private double _zFar;
+  private static boolean _overrideFrustumPlanes = false;
+  private static double _zNear = 0.0;
+  private static double _zFar = 0.0;
 
   private Planet _planet;
   private MutableVector3D _position = new MutableVector3D(); // position
