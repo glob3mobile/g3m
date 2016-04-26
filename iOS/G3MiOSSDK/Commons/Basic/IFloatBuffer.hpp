@@ -39,11 +39,13 @@ public:
     rawPut(i, srcBuffer, 0, srcBuffer->size());
   }
 
-    
+#ifdef JAVA_CODE
   virtual void put(float values[]) = 0;
-  virtual void rewind() = 0;
-  virtual int position() = 0;
 
+  virtual void rewind() = 0;
+  
+  virtual int position() = 0;
+#endif
 };
 
 #endif

@@ -21,11 +21,13 @@ public:
 
   virtual void put(size_t i, short value) = 0;
     
-  virtual void put(short values[]) = 0;
-
   virtual void rawPut(size_t i, short value) = 0;
-    
+  
+#ifdef JAVA_CODE
   virtual void rewind() = 0;
+
+  virtual void put(short values[]) = 0;
+#endif
   
 };
 
