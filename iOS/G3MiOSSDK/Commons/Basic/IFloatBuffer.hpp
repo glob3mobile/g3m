@@ -40,11 +40,11 @@ public:
   }
 
 #ifdef JAVA_CODE
-  public void put(float values[]);
+  public abstract void put(float values[]);
 
-  public void rewind();
+  public abstract void rewind();
   
-  public int position();
+  public abstract int position();
 #endif
 };
 
