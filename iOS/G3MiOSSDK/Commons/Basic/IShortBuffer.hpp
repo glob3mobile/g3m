@@ -24,9 +24,9 @@ public:
   virtual void rawPut(size_t i, short value) = 0;
   
 #ifdef JAVA_CODE
-  virtual void rewind() = 0;
+  public void rewind();
 
-  virtual void put(short values[]) = 0;
+  public void put(short values[]);
 #endif
   
 };

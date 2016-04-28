@@ -750,7 +750,8 @@ public class G3MWidget implements ChangedRendererInfoListener
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
 
-  private java.util.ArrayList<PeriodicalTask> _periodicalTasks = new java.util.ArrayList<PeriodicalTask>();
+  private java.util.ArrayList<PeriodicalTask> _periodicalTasks
+          = new java.util.ArrayList<PeriodicalTask>();
 
   private int _width;
   private int _height;
