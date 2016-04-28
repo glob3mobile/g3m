@@ -22,8 +22,8 @@ public abstract class IShortBuffer implements IBuffer
 
   public abstract void rawPut(int i, short value);
 
-  public void rewind();
+  public abstract void rewind();
 
-  public void put(short values[]);
+  public abstract void put(short values[]);
 
 }
