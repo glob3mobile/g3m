@@ -571,9 +571,12 @@ void NonOverlappingMarksRenderer::renderMarks(const G3MRenderContext *rc,
   }
 }
 
-void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camera) {
+void NonOverlappingMarksRenderer::applyForces(long long now, const Camera* camera, ViewMode viewMode) {
   if (_lastPositionsUpdatedTime != 0) { //If not First frame
-    const int viewPortWidth  = camera->getViewPortWidth();
+    int viewPortWidth  = camera->getViewPortWidth();
+    if (viewMode == STEREO) {
+      viewPortWidth /= 2;
+    }
     const int viewPortHeight = camera->getViewPortHeight();
 
     const double elapsedMS = now - _lastPositionsUpdatedTime;
@@ -599,10 +602,11 @@ void NonOverlappingMarksRenderer::render(const G3MRenderContext* rc, GLState* gl
   if (!_marks.empty()) {
     const Camera* camera = rc->getCurrentCamera();
     const Planet* planet = rc->getPlanet();
+    ViewMode viewMode = rc->getViewMode();
 
     computeMarksToBeRendered(camera, planet);
     computeForces(camera, planet);
-    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera);
+    applyForces(rc->getFrameStartTimer()->nowInMilliseconds(), camera, viewMode);
 
     renderMarks(rc, glState);
   }

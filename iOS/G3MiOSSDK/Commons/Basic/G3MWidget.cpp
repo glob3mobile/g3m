@@ -564,9 +564,9 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     if (_leftEyeCam == NULL) {
       _leftEyeCam = new Camera(-1);
     }
-    _auxCam->copyFrom(*_currentCamera);
-    _leftEyeCam->copyFrom(*_auxCam);
-    _rightEyeCam->copyFrom(*_auxCam);
+    _auxCam->copyFrom(*_currentCamera, true);
+    _leftEyeCam->copyFrom(*_auxCam, true);
+    _rightEyeCam->copyFrom(*_auxCam, true);
     
     //For 3D scenes we create the "eyes" cameras
     if (renderStateType == RENDER_READY) {
@@ -596,22 +596,24 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     }
     
   }
-  
+
   const int halfWidth = _width / 2;
   
   _gl->clearScreen(*_backgroundColor);
   //Left
   _gl->viewport(0, 0, halfWidth, _height);
-  _currentCamera->copyFrom(*_leftEyeCam);
+  _currentCamera->copyFrom(*_leftEyeCam,
+                           true);
   rawRender(renderStateType);
   
   //Right
   _gl->viewport(halfWidth, 0, halfWidth, _height);
-  _currentCamera->copyFrom(*_rightEyeCam);
+  _currentCamera->copyFrom(*_rightEyeCam,
+                           true);
   rawRender(renderStateType);
 
   //Restoring central camera
-  _currentCamera->copyFrom(*_auxCam);
+  _currentCamera->copyFrom(*_auxCam, true);
 }
 
 void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
@@ -687,7 +689,8 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFrom(*_nextCamera);
+  _currentCamera->copyFrom(*_nextCamera,
+                           false);
 
 #ifdef C_CODE
   delete _rendererState;

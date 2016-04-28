@@ -44,7 +44,7 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
         }
         else
         {
-          nextCamera.copyFrom(previousCamera);
+          nextCamera.copyFrom(previousCamera, true);
         }
       }
     }

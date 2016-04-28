@@ -114,7 +114,8 @@ public:
     delete _geodeticPosition;
   }
 
-  void copyFrom(const Camera &c);
+  void copyFrom(const Camera &c,
+                bool  ignoreTimestamp);
 
   void resizeViewport(int width, int height);
 
@@ -422,9 +423,8 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
-#warning VR => Diego at work!
-  mutable double           _tanHalfVerticalFieldOfView;
-  mutable double           _tanHalfHorizontalFieldOfView;
+  mutable double           _tanHalfVerticalFOV;
+  mutable double           _tanHalfHorizontalFOV;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {

@@ -190,7 +190,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _planet.applyCameraConstrainers(_currentCamera, _nextCamera);
   
-    _currentCamera.copyFrom(_nextCamera);
+    _currentCamera.copyFrom(_nextCamera, false);
   
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
@@ -1088,9 +1088,9 @@ public class G3MWidget implements ChangedRendererInfoListener
       {
         _leftEyeCam = new Camera(-1);
       }
-      _auxCam.copyFrom(_currentCamera);
-      _leftEyeCam.copyFrom(_auxCam);
-      _rightEyeCam.copyFrom(_auxCam);
+      _auxCam.copyFrom(_currentCamera, true);
+      _leftEyeCam.copyFrom(_auxCam, true);
+      _rightEyeCam.copyFrom(_auxCam, true);
   
       //For 3D scenes we create the "eyes" cameras
       if (renderStateType == RenderState_Type.RENDER_READY)
@@ -1123,16 +1123,16 @@ public class G3MWidget implements ChangedRendererInfoListener
     _gl.clearScreen(_backgroundColor);
     //Left
     _gl.viewport(0, 0, halfWidth, _height);
-    _currentCamera.copyFrom(_leftEyeCam);
+    _currentCamera.copyFrom(_leftEyeCam, true);
     rawRender(renderStateType);
   
     //Right
     _gl.viewport(halfWidth, 0, halfWidth, _height);
-    _currentCamera.copyFrom(_rightEyeCam);
+    _currentCamera.copyFrom(_rightEyeCam, true);
     rawRender(renderStateType);
   
     //Restoring central camera
-    _currentCamera.copyFrom(_auxCam);
+    _currentCamera.copyFrom(_auxCam, true);
   }
 
 

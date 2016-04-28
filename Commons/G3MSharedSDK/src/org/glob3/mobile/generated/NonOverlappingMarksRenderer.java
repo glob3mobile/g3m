@@ -108,11 +108,15 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       }
     }
   }
-  private void applyForces(long now, Camera camera)
+  private void applyForces(long now, Camera camera, ViewMode viewMode)
   {
     if (_lastPositionsUpdatedTime != 0) //If not First frame
     {
-      final int viewPortWidth = camera.getViewPortWidth();
+      int viewPortWidth = camera.getViewPortWidth();
+      if (viewMode == ViewMode.STEREO)
+      {
+        viewPortWidth /= 2;
+      }
       final int viewPortHeight = camera.getViewPortHeight();
   
       final double elapsedMS = now - _lastPositionsUpdatedTime;
@@ -213,10 +217,11 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     {
       final Camera camera = rc.getCurrentCamera();
       final Planet planet = rc.getPlanet();
+      ViewMode viewMode = rc.getViewMode();
   
       computeMarksToBeRendered(camera, planet);
       computeForces(camera, planet);
-      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera);
+      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera, viewMode);
   
       renderMarks(rc, glState);
     }
