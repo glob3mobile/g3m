@@ -87,6 +87,8 @@ public:
   static Mark* createMark(const CityGMLBuilding* building, const bool fixOnGround);
   
   static const Sphere* getSphereOfBuilding(const CityGMLBuilding* b);
+  
+  static bool areClose(const CityGMLBuilding* b1, const CityGMLBuilding* b2);
 };
 
 #endif /* CityGMLBuildingTessellator_hpp */

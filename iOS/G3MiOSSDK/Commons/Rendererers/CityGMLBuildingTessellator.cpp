@@ -283,3 +283,39 @@ const Sphere* CityGMLBuildingTessellator::getSphereOfBuilding(const CityGMLBuild
   }
   return data->_bSphere;
 }
+
+bool CityGMLBuildingTessellator::areClose(const CityGMLBuilding* b1, const CityGMLBuilding* b2){
+  
+  const double threshold = 0.005;
+  
+  double dLat = b1->_surfaces[0]->_geodeticCoordinates[0]->_latitude._degrees -
+                b2->_surfaces[0]->_geodeticCoordinates[0]->_latitude._degrees;
+  dLat = IMathUtils::instance()->abs(dLat);
+  
+  if (dLat > threshold){
+    return false;
+  }
+  
+  double dLon = b1->_surfaces[0]->_geodeticCoordinates[0]->_longitude._degrees -
+                b2->_surfaces[0]->_geodeticCoordinates[0]->_longitude._degrees;
+  dLon = IMathUtils::instance()->abs(dLon);
+  
+  if (dLon > threshold){
+    return false;
+  }
+  
+  return true;
+  
+  /*
+   
+   //This implementation does not work prior to the mesh generation
+  const Sphere* s1 = getSphereOfBuilding(b1);
+  const Sphere* s2 = getSphereOfBuilding(b2);
+  
+  if (s1 == NULL || s2 == NULL){
+    return true;
+  }
+  
+  return s1->touchesSphere(s2);
+   */
+}

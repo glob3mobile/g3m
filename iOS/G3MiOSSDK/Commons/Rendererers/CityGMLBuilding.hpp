@@ -234,6 +234,23 @@ public:
     }
   }
   
+  bool markGroundAsNotVisible(){
+    for (size_t i = 0; i < _surfaces.size(); i++) {
+#ifdef C_CODE
+      CityGMLBuildingSurface* s1 = _surfaces[i];
+#endif
+#ifdef JAVA_CODE
+      final CityGMLBuildingSurface s1 = _surfaces.get(i);
+#endif
+      //Grounds are internal by definition
+      if (s1->getType() == GROUND){
+        s1->setIsVisible(false);
+        return true;
+      }
+    }
+    return false;
+  }
+  
   static int checkWallsVisibility(CityGMLBuilding* b1, CityGMLBuilding* b2){
     int nInvisibleWalls = 0;
     for (size_t i = 0; i < b1->_surfaces.size(); i++) {
@@ -243,13 +260,6 @@ public:
 #ifdef JAVA_CODE
       final CityGMLBuildingSurface s1 = b1._surfaces.get(i);
 #endif
-      
-      //Grounds are internal by definition
-      if (s1->getType() == GROUND){
-        s1->setIsVisible(false);
-        nInvisibleWalls++;
-        continue;
-      }
       
       if (s1->getType() == WALL){
         for (size_t j = 0; j < b2->_surfaces.size(); j++) {
@@ -278,19 +288,7 @@ public:
       return nInvisibleWalls;
     }
     
-    static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings){
-      int nInvisibleWalls = 0;
-      for (size_t i = 0; i < buildings.size() - 1; i++){
-        CityGMLBuilding* b1 = buildings[i];
-        
-        for (size_t j = i+1; j < i+30 && j < buildings.size() - 1; j++){
-          CityGMLBuilding* b2 = buildings[j];
-          nInvisibleWalls += checkWallsVisibility(b1, b2);
-        }
-        
-      }
-      return nInvisibleWalls;
-    }
+    static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings);
     
     CityGMLBuildingTessellatorData* getTessllatorData() const{
       return _tessellatorData;
