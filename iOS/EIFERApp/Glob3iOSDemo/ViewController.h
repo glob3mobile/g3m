@@ -20,6 +20,7 @@ class LabelImageBuilder;
 class ElevationData;
 class CityGMLBuilding;
 class CityGMLRenderer;
+class MyEDCamConstrainer;
 
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
@@ -40,6 +41,9 @@ class CityGMLRenderer;
   
   NSArray* _pickerArray;
   bool _useDem;
+  bool _isMenuAvailable;
+  
+ 
   
   //VR
   Geodetic3D* _prevPos;
@@ -63,6 +67,7 @@ class CityGMLRenderer;
 @property MarksRenderer* marksRenderer;
 @property CityGMLRenderer* cityGMLRenderer;
 @property const ElevationData* elevationData;
+@property MyEDCamConstrainer* camConstrainer;
 
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor;
 //-(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings

@@ -40,7 +40,7 @@ public:
   
   ~Surface(){
 #ifdef C_CODE
-    for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+    for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
       delete _geodeticCoordinates[i];
     }
 #endif
@@ -49,7 +49,7 @@ public:
   double getBaseHeight() const {
     double minHeight = 0;
     minHeight = IMathUtils::instance()->maxDouble();
-    for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+    for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
       const double h = _geodeticCoordinates[i]->_height;
       if (h < minHeight) {
         minHeight = h;
@@ -64,7 +64,7 @@ public:
     double minLon = IMathUtils::instance()->maxDouble();
     double minH = IMathUtils::instance()->maxDouble();
     
-    for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+    for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
       Geodetic3D* g = _geodeticCoordinates[i];
       const double lon = g->_longitude._degrees;
       if (lon < minLon) {
@@ -88,7 +88,7 @@ public:
     double maxLon = IMathUtils::instance()->minDouble();
     double maxH = IMathUtils::instance()->minDouble();
     
-    for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+    for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
       Geodetic3D* g = _geodeticCoordinates[i];
       const double lon = g->_longitude._degrees;
       if (lon > maxLon) {
@@ -122,13 +122,13 @@ public:
     std::vector<Vector3D*> coor3D;
     
     if (elevationData == NULL){
-      for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+      for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
         Geodetic3D* g= _geodeticCoordinates[i];
         coor3D.push_back(new Vector3D(planet.toCartesian(*g)));
       }
     }
     else{
-      for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+      for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
         Geodetic3D* g= _geodeticCoordinates[i];
         double h = elevationData->getElevationAt(g->_latitude, g->_longitude);
         coor3D.push_back(new Vector3D(planet.toCartesian(Geodetic3D::fromDegrees(g->_latitude._degrees,
@@ -162,9 +162,9 @@ public:
   void addMarkersToCorners(MarksRenderer* mr,
                            const double substractHeight) {
     
-    for (int i = 0; i < _geodeticCoordinates.size(); i++) {
+    for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
-      isb->addInt(i);
+      isb->addInt((int)i);
 #ifdef C_CODE
       Mark* m = new Mark(isb->getString(), *_geodeticCoordinates[i], ABSOLUTE, 10000.0);
 #endif

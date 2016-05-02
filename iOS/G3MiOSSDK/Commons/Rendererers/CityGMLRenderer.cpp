@@ -23,13 +23,31 @@
 void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& buildings,
                                    CityGMLRendererListener* listener, bool autoDelete){
   
+  std::vector<CityGMLBuilding*> notRepeatedBuildings;
+  
   for (size_t i = 0; i < buildings.size(); i++) {
-    _buildings.push_back(buildings[i]);
+    
+    CityGMLBuilding* b = buildings[i];
+    for (size_t j = 0; j < _buildings.size(); j++) {
+      if (_buildings[j]->_name == b->_name){
+        delete b;
+        b = NULL;
+        break;
+      }
+    }
+    
+    if (b != NULL){
+      notRepeatedBuildings.push_back(b);
+    }
+  }
+  
+  for (size_t i = 0; i < notRepeatedBuildings.size(); i++) {
+    _buildings.push_back(notRepeatedBuildings[i]);
   }
   
   bool createCityMeshAndMarks = true;
   if (createCityMeshAndMarks){
-    _context->getThreadUtils()->invokeAsyncTask(new TessellationTask(this, buildings, listener, autoDelete), true);
+    _context->getThreadUtils()->invokeAsyncTask(new TessellationTask(this, notRepeatedBuildings, listener, autoDelete), true);
   }
 }
 
@@ -110,7 +128,9 @@ void CityGMLRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   _lastCamera = rc->getCurrentCamera();
   
   _meshRenderer->render(rc, glState);
-  _marksRenderer->render(rc, glState);
+  if (_marksRenderer != NULL){
+    _marksRenderer->render(rc, glState);
+  }
   
 //  //Rendering Spheres
 //  Color red = Color::red();

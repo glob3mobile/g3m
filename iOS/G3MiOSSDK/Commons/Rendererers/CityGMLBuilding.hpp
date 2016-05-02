@@ -28,7 +28,8 @@ public:
 };
 
 class CityGMLBuildingTessellatorData{
-  
+public:
+  virtual ~CityGMLBuildingTessellatorData(){}
 };
 
 class CityGMLBuilding {
@@ -47,7 +48,7 @@ public:
   const int                        _roofTypeCode;
   
 #ifdef C_CODE
-  const std::vector<CityGMLBuildingSurface*> _surfaces;
+  std::vector<CityGMLBuildingSurface*> _surfaces;
 #endif
 #ifdef JAVA_CODE
   public final java.util.ArrayList<CityGMLBuildingSurface> _surfaces;
@@ -67,6 +68,14 @@ public:
   {
     delete _tessellatorData;
     
+    removeSurfaceData();
+    
+    for (size_t i = 0; i < _numericProperties.size(); i++){
+      delete _numericProperties[i];
+    }
+  }
+  
+  void removeSurfaceData(){
     for (size_t i = 0; i < _surfaces.size(); i++) {
 #ifdef C_CODE
       CityGMLBuildingSurface* s = _surfaces[i];
@@ -77,9 +86,7 @@ public:
       delete s;
     }
     
-    for (size_t i = 0; i < _numericProperties.size(); i++){
-      delete _numericProperties[i];
-    }
+    _surfaces.clear();
   }
   
   std::vector<CityGMLBuildingSurface*> getSurfaces() const{
@@ -99,6 +106,8 @@ public:
     }
     return NAND;
   }
+  
+  std::string getPropertiesDescription() const;
   
   
   double getBaseHeight() const {

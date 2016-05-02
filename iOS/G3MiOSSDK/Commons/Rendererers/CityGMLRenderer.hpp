@@ -71,13 +71,15 @@ class CityGMLRenderer: public DefaultRenderer{
     
     virtual void runInBackground(const G3MContext* context){
       //Adding marks
-      for (size_t i = 0; i < _buildings.size(); i++) {
-        _marks.push_back( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
+      if (_vc->_marksRenderer != NULL){
+        for (size_t i = 0; i < _buildings.size(); i++) {
+          _marks.push_back( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
+        }
       }
       
       //Checking walls visibility
-//      int n = CityGMLBuilding::checkWallsVisibility(_buildings);
-//      ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
+      //      int n = CityGMLBuilding::checkWallsVisibility(_buildings);
+      //      ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
       const bool checkSurfacesVisibility = true;
       
       //Creating mesh model
@@ -85,17 +87,22 @@ class CityGMLRenderer: public DefaultRenderer{
                                                      *_vc->_context->getPlanet(),
                                                      false, checkSurfacesVisibility, NULL,
                                                      _vc->_elevationData);
+      
+      //Decreasing consumed memory
+      for (size_t i = 0; i < _buildings.size(); i++) {
+        _buildings[i]->removeSurfaceData();
+      }
     }
     
     virtual void onPostExecute(const G3MContext* context){
       
       //Including elements must be done in the rendering thread
       _vc->_meshRenderer->addMesh(_mesh);
-
+      
       //Uncomment for seeing spheres
-//      for (size_t i = 0; i < _buildings.size(); i++) {
-//      _vc->_meshRenderer->addMesh(CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i])->createWireframeMesh(Color::red(), 5));
-//      }
+      //      for (size_t i = 0; i < _buildings.size(); i++) {
+      //      _vc->_meshRenderer->addMesh(CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i])->createWireframeMesh(Color::red(), 5));
+      //      }
       
       for (size_t i = 0; i < _marks.size(); i++) {
         _vc->_marksRenderer->addMark( _marks[i] );
@@ -126,7 +133,9 @@ public:
   virtual void initialize(const G3MContext* context) {
     DefaultRenderer::initialize(context);
     _meshRenderer->initialize(context);
-    _marksRenderer->initialize(context);
+    if (_marksRenderer != NULL){
+      _marksRenderer->initialize(context);
+    }
   }
   
   void addBuildingsFromURL(const URL& url,
@@ -143,10 +152,10 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState);
   
-//  virtual bool onTouchEvent(const G3MEventContext* ec,
-//                            const TouchEvent* touchEvent) {
-//    return false;
-//  }
+  //  virtual bool onTouchEvent(const G3MEventContext* ec,
+  //                            const TouchEvent* touchEvent) {
+  //    return false;
+  //  }
   
   void colorBuildings(CityGMLBuildingColorProvider* cp){
     

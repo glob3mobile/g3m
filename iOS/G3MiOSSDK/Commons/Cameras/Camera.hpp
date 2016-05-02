@@ -359,6 +359,8 @@ public:
   void forceZNear(double zNear){
     _forcedZNear = zNear;
   }
+  
+  double computeZNear() const;
 
 
 private:

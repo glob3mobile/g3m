@@ -39,6 +39,10 @@ public:
     }
     
   }
+  
+  ~DefaultCityGMLBuildingTessellatorData(){
+    delete _bSphere;
+  }
 
 };
 

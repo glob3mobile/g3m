@@ -369,15 +369,18 @@ void Camera::setPointOfView(const Geodetic3D& center,
   //  _dirtyFlags.setAllDirty();
 }
 
-
-
-FrustumData Camera::calculateFrustumData() const {
+double Camera::computeZNear() const{
+  if (!ISNAN(_forcedZNear)){
+    return _forcedZNear;
+  }
+  
   const double height = getGeodeticPosition()._height;
   double zNear = height * 0.1;
-  
-  if (!ISNAN(_forcedZNear)){
-    zNear = _forcedZNear;
-  }
+  return zNear;
+}
+
+FrustumData Camera::calculateFrustumData() const {
+  double zNear = computeZNear();
 
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 

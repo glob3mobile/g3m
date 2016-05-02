@@ -201,8 +201,10 @@
 
 #include <G3MiOSSDK/CityGMLRenderer.hpp>
 #include <G3MiOSSDK/SphericalPlanet.hpp>
+#include <G3MiOSSDK/ElevationData.hpp>
 
 #import <QuartzCore/QuartzCore.h>
+
 
 
 #include <typeinfo>
@@ -349,6 +351,39 @@ public:
   
 };
 
+
+class MyEDCamConstrainer: public ICameraConstrainer {
+  
+  ElevationData* _ed;
+public:
+  
+  MyEDCamConstrainer(ElevationData* ed):_ed(ed){}
+  
+  void setED(ElevationData* ed){
+    _ed = ed;
+  }
+  
+  //Returns false if it could not create a valid nextCamera
+  virtual bool onCameraChange(const Planet* planet,
+                              const Camera* previousCamera,
+                              Camera* nextCamera) const{
+    
+    if (_ed != NULL){
+      Geodetic3D g = nextCamera->getGeodeticPosition();
+      Geodetic2D g2D = g.asGeodetic2D();
+      if (_ed->getSector().contains(g2D)){
+        double d = _ed->getElevationAt(g2D);
+        const double limit = d + 1.1 * nextCamera->computeZNear();
+        
+        if (g._height < limit){
+          nextCamera->copyFrom(*previousCamera, false);
+        }
+      }
+    }
+    return true;
+  }
+};
+
 class MyEDListener: public IElevationDataListener{
   
   
@@ -365,6 +400,8 @@ public:
                       ElevationData* elevationData){
     
     _demo.cityGMLRenderer->setElevationData(elevationData);
+    
+    [_demo camConstrainer]->setED(elevationData);
     
     [_demo setElevationData:elevationData];
     
@@ -391,7 +428,7 @@ public:
   
   virtual ~MyCityGMLBuildingTouchedListener(){}
   virtual void onBuildingTouched(CityGMLBuilding* building){
-    std::string name = "ID: " + building->_name;
+    std::string name = "ID: " + building->_name + "\n" + building->getPropertiesDescription();
     UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Building selected"
                                                      message:[NSString stringWithUTF8String:name.c_str()]
                                                     delegate:_vc
@@ -402,6 +439,7 @@ public:
   }
   
 };
+
 
 
 ///////////////////
@@ -415,6 +453,7 @@ public:
 @synthesize cityGMLRenderer;
 @synthesize elevationData;
 @synthesize _timeLabel;
+@synthesize camConstrainer;
 
 - (void)didReceiveMemoryWarning
 {
@@ -436,6 +475,8 @@ public:
   _prevRoll = NULL;
   _prevPitch = NULL;
   
+  _isMenuAvailable = false;
+  
   _waitingMessageView.layer.cornerRadius = 5;
   _waitingMessageView.layer.masksToBounds = TRUE;
   
@@ -446,16 +487,16 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  //  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  //  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-  //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-  //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-  //  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
   
   _pointCloudFiles.push_back("file:///SolarRadiation.geojson");
@@ -471,7 +512,9 @@ public:
   
   
   [[self G3MWidget] startAnimation];
-  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(28.0990178, -15.4203257, 19995.736280033790536));
+  
+  //Las Palmas de G.C.
+  [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.995258816253532075, -15.431324237687769951, 19995.736280026820168));
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
   
 }
@@ -533,12 +576,15 @@ public:
   meshRendererPC = new MeshRenderer();
   builder.addRenderer(meshRendererPC);
   marksRenderer = new MarksRenderer(false);
-  cityGMLRenderer = new CityGMLRenderer(meshRenderer, marksRenderer);
+  cityGMLRenderer = new CityGMLRenderer(meshRenderer, NULL /* marksRenderer */);
   cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener(self));
   
   builder.addRenderer(cityGMLRenderer);
   
   builder.setInitializationTask(new MyInitTask(self, useDEM));
+  
+  camConstrainer = new MyEDCamConstrainer(NULL); //Wait for ED to arrive
+  builder.addCameraConstraint(camConstrainer);
   
   
   builder.initializeWidget();
@@ -624,6 +670,7 @@ public:
   
   //NO WAITING ANYMORE
   _waitingMessageView.hidden = TRUE;
+  _isMenuAvailable = true;
 }
 
 - (IBAction)switchCityGML:(id)sender {
@@ -678,7 +725,7 @@ public:
     DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
     cameraRenderer->addHandler(dac);
     
-    [G3MWidget widget]->getNextCamera()->forceZNear(1.0);
+    [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
     
   } else{
     
@@ -760,6 +807,10 @@ public:
     
     _menuHeightConstraint.constant = - _menuView.bounds.size.height + _showMenuButton.bounds.size.height;
   } else{
+    if (!_isMenuAvailable){
+      return;
+    }
+    
     UIImage* image = [UIImage imageNamed:@"up"];
     [_showMenuButton setImage:image forState:UIControlStateNormal];
     _menuHeightConstraint.constant = 0;
