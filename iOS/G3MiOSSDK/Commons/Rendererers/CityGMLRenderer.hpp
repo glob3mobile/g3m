@@ -20,6 +20,10 @@
 #include "CityGMLBuildingTessellator.hpp"
 #include "IThreadUtils.hpp"
 
+#include "GEO2DLineRasterStyle.hpp"
+#include "GEOLineRasterSymbol.hpp"
+#import "GEOVectorLayer.hpp"
+
 class Mesh;
 
 class CityGMLRendererListener{
@@ -43,6 +47,7 @@ class CityGMLRenderer: public DefaultRenderer{
   ElevationData* _elevationData;
   MeshRenderer* _meshRenderer;
   MarksRenderer* _marksRenderer;
+  GEOVectorLayer* _vectorLayer;
   
   const Camera* _lastCamera;
   
@@ -56,7 +61,42 @@ class CityGMLRenderer: public DefaultRenderer{
     bool _autoDelete;
     
     std::vector<Mark*> _marks;
+    std::vector<GEORasterSymbol*> _geoSymbol;
     Mesh* _mesh;
+    
+    
+    
+    GEORasterSymbol* createBuildingFootprints(const CityGMLBuilding* b){
+      
+      
+      float dashLengths[] = {};
+      int dashCount = 0;
+      
+      GEO2DLineRasterStyle style(Color::red(),
+                                 3,
+                                 CAP_ROUND,
+                                 JOIN_ROUND,
+                                 1,
+                                 dashLengths,
+                                 dashCount,
+                                 0);
+      
+      for (size_t j = 0; j < b->_surfaces.size(); j++) {
+        CityGMLBuildingSurface* s  = b->_surfaces[j];
+        if (s->getType() == GROUND){
+          
+          std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+          for (size_t k = 0; k < s->_geodeticCoordinates.size(); k++) {
+            const Geodetic2D g2D = s->_geodeticCoordinates[k]->asGeodetic2D();
+            coordinates->push_back(new Geodetic2D(g2D));
+          }
+          
+          return new GEOLineRasterSymbol(new GEO2DCoordinatesData(coordinates), style);
+        }
+        
+      }
+      return NULL;
+    }
   public:
     
     TessellationTask(CityGMLRenderer* vc,
@@ -69,11 +109,22 @@ class CityGMLRenderer: public DefaultRenderer{
     _mesh(NULL)
     {}
     
+    
+    
     virtual void runInBackground(const G3MContext* context){
       //Adding marks
       if (_vc->_marksRenderer != NULL){
         for (size_t i = 0; i < _buildings.size(); i++) {
           _marks.push_back( CityGMLBuildingTessellator::createMark(_buildings[i], false) );
+        }
+      }
+      
+      if (_vc->_vectorLayer!= NULL){
+        for (size_t i = 0; i < _buildings.size(); i++) {
+          GEORasterSymbol* s = createBuildingFootprints(_buildings[i]);
+          if (s != NULL){
+            _geoSymbol.push_back(s);
+          }
         }
       }
       
@@ -87,11 +138,6 @@ class CityGMLRenderer: public DefaultRenderer{
                                                      *_vc->_context->getPlanet(),
                                                      false, checkSurfacesVisibility, NULL,
                                                      _vc->_elevationData);
-      
-      //Decreasing consumed memory
-      for (size_t i = 0; i < _buildings.size(); i++) {
-        _buildings[i]->removeSurfaceData();
-      }
     }
     
     virtual void onPostExecute(const G3MContext* context){
@@ -108,6 +154,9 @@ class CityGMLRenderer: public DefaultRenderer{
         _vc->_marksRenderer->addMark( _marks[i] );
       }
       
+      for (size_t i = 0; i < _geoSymbol.size(); i++) {
+        _vc->_vectorLayer->addSymbol(_geoSymbol[i]);
+      }
       
       _listener->onBuildingsLoaded(_buildings);
       if (_autoDelete){
@@ -119,11 +168,13 @@ class CityGMLRenderer: public DefaultRenderer{
 public:
   
   CityGMLRenderer(MeshRenderer* meshRenderer,
-                  MarksRenderer* marksRenderer):
+                  MarksRenderer* marksRenderer,
+                  GEOVectorLayer* vectorLayer):
   _elevationData(NULL),
   _meshRenderer(meshRenderer),
   _marksRenderer(marksRenderer),
   _lastCamera(NULL),
+  _vectorLayer(vectorLayer),
   _touchListener(NULL){}
   
   void setElevationData(ElevationData* ed){
@@ -136,6 +187,10 @@ public:
     if (_marksRenderer != NULL){
       _marksRenderer->initialize(context);
     }
+  }
+  
+  const std::vector<CityGMLBuilding*>* getBuildings() const{
+    return &_buildings;
   }
   
   void addBuildingsFromURL(const URL& url,

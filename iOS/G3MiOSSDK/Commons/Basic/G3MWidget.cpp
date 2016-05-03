@@ -152,7 +152,8 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL)
+_auxCam(NULL),
+_interOcularDistance(200.0)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -577,7 +578,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       Vector3D camPos = _currentCamera->getCartesianPosition();
       Vector3D camCenter = _currentCamera->getCenter();
       Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      const double eyesSeparation = 200;// 0.03;
+      const double eyesSeparation = _interOcularDistance;
       Vector3D up = _currentCamera->getUp();
       
       const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);

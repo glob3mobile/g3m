@@ -21,7 +21,7 @@ class ElevationData;
 class CityGMLBuilding;
 class CityGMLRenderer;
 class MyEDCamConstrainer;
-
+class GEOVectorLayer;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
@@ -43,7 +43,7 @@ class MyEDCamConstrainer;
   bool _useDem;
   bool _isMenuAvailable;
   
- 
+  BOOL _usingStereo;
   
   //VR
   Geodetic3D* _prevPos;
@@ -66,6 +66,9 @@ class MyEDCamConstrainer;
 @property MeshRenderer* meshRendererPC;
 @property MarksRenderer* marksRenderer;
 @property CityGMLRenderer* cityGMLRenderer;
+
+@property GEOVectorLayer* vectorLayer;
+
 @property const ElevationData* elevationData;
 @property MyEDCamConstrainer* camConstrainer;
 

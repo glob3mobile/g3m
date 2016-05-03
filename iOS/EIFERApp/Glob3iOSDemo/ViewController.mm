@@ -454,6 +454,7 @@ public:
 @synthesize elevationData;
 @synthesize _timeLabel;
 @synthesize camConstrainer;
+@synthesize vectorLayer;
 
 - (void)didReceiveMemoryWarning
 {
@@ -474,6 +475,7 @@ public:
   _prevHeading = NULL;
   _prevRoll = NULL;
   _prevPitch = NULL;
+  _usingStereo = false;
   
   _isMenuAvailable = false;
   
@@ -487,16 +489,16 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-  _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-//  _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-//  _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-//  _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+//    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+//    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+//    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+//    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+//    _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+//    _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+//    _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
   
   _pointCloudFiles.push_back("file:///SolarRadiation.geojson");
@@ -516,6 +518,7 @@ public:
   //Las Palmas de G.C.
   [G3MWidget widget]->setCameraPosition(Geodetic3D::fromDegrees(27.995258816253532075, -15.431324237687769951, 19995.736280026820168));
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
+  
   
 }
 
@@ -576,7 +579,16 @@ public:
   meshRendererPC = new MeshRenderer();
   builder.addRenderer(meshRendererPC);
   marksRenderer = new MarksRenderer(false);
-  cityGMLRenderer = new CityGMLRenderer(meshRenderer, NULL /* marksRenderer */);
+  
+  
+  //Showing Footprints
+  vectorLayer = new GEOVectorLayer();
+  layerSet->addLayer(vectorLayer);
+  
+  cityGMLRenderer = new CityGMLRenderer(meshRenderer,
+                                        NULL /* marksRenderer */,
+                                        vectorLayer);
+
   cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener(self));
   
   builder.addRenderer(cityGMLRenderer);
@@ -588,6 +600,21 @@ public:
   
   
   builder.initializeWidget();
+}
+
+- (IBAction)switchStereo:(UISwitch *)sender {
+  _usingStereo = sender.on;
+  
+  if (_usingStereo == TRUE){
+    [G3MWidget widget]->setViewMode(STEREO);
+    [G3MWidget widget]->setInterocularDistanceForStereoView(0.03); //VR distance between eyes
+    
+    //Forcing orientation
+    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+  } else{
+    [G3MWidget widget]->setViewMode(MONO);
+  }
 }
 
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
@@ -612,8 +639,15 @@ class MyCityGMLRendererListener: public CityGMLRendererListener{
   ViewController* _vc;
 public:
   MyCityGMLRendererListener(ViewController* vc):_vc(vc){}
-  virtual void onBuildingsLoaded(const std::vector<CityGMLBuilding*>& buildings){
+  
+  void onBuildingsLoaded(const std::vector<CityGMLBuilding*>& buildings){
     [_vc onCityModelLoaded];
+    
+#pragma mark UNCOMMENT TO SAVE MEMORY
+    //Decreasing consumed memory
+    for (size_t i = 0; i < buildings.size(); i++) {
+      buildings[i]->removeSurfaceData();
+    }
   }
   
 };
@@ -653,7 +687,6 @@ public:
 
 -(void) onAllDataLoaded{
   ILogger::instance()->logInfo("City Model Loaded");
-  
   for (size_t i = 0; i < _pointClouds.size(); i++) {
     
     [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
@@ -787,6 +820,12 @@ public:
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+  
+  //FORCE ORTIENTATION FOR STEREO
+  if (_usingStereo && interfaceOrientation != UIInterfaceOrientationLandscapeLeft){
+    return FALSE;
+  }
+  
   // Return YES for supported orientations
   if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);

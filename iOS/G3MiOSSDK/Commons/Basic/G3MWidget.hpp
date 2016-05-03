@@ -255,6 +255,10 @@ public:
   void removeAllPeriodicalTasks();
   
   void setViewMode(ViewMode viewMode);
+  
+  void setInterocularDistanceForStereoView(double iod){
+    _interOcularDistance = iod;
+  }
 
 private:
   IStorage*                _storage;
@@ -338,6 +342,7 @@ private:
   Camera* _auxCam;
   Camera* _leftEyeCam;
   Camera* _rightEyeCam;
+  double _interOcularDistance;
 
 
   G3MWidget(GL*                                  gl,

@@ -43,6 +43,7 @@ public:
     for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
       delete _geodeticCoordinates[i];
     }
+    _geodeticCoordinates.clear();
 #endif
   }
   
