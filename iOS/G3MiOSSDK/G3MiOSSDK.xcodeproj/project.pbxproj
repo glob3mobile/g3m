@@ -504,6 +504,8 @@
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
 		D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
+		D84B45051CD8A8070041CA1F /* PointCloudMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84B45031CD8A8070041CA1F /* PointCloudMesh.cpp */; };
+		D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84D95201CBB9CB3003BB11B /* BuildingDataParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */; };
 		D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */; };
@@ -804,6 +806,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */,
 				D8EA74541CC79A69007464C8 /* CityGMLRenderer.hpp in CopyFiles */,
 				D8114E661CBE3DE9004E2BF0 /* CityGMLBuildingTessellator.hpp in CopyFiles */,
 				D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */,
@@ -1878,6 +1881,10 @@
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
+		D84B45011CD8A1F60041CA1F /* RoundedColoredPoints.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RoundedColoredPoints.vsh; sourceTree = "<group>"; };
+		D84B45021CD8A1F60041CA1F /* RoundedColoredPoints.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RoundedColoredPoints.fsh; sourceTree = "<group>"; };
+		D84B45031CD8A8070041CA1F /* PointCloudMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointCloudMesh.cpp; path = Commons/Mesh/PointCloudMesh.cpp; sourceTree = "<group>"; };
+		D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PointCloudMesh.hpp; path = Commons/Mesh/PointCloudMesh.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuildingDataParser.cpp; path = Commons/Rendererers/BuildingDataParser.cpp; sourceTree = "<group>"; };
@@ -2948,6 +2955,8 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				D84B45031CD8A8070041CA1F /* PointCloudMesh.cpp */,
+				D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */,
 				D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */,
 				D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */,
 				D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */,
@@ -3079,6 +3088,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D84B45011CD8A1F60041CA1F /* RoundedColoredPoints.vsh */,
+				D84B45021CD8A1F60041CA1F /* RoundedColoredPoints.fsh */,
 				D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */,
 				D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */,
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
@@ -3446,6 +3457,7 @@
 				CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
 				CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */,
+				D84B45051CD8A8070041CA1F /* PointCloudMesh.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,

@@ -33,7 +33,8 @@ enum GLFeatureID{
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE
+  GLF_BLENDING_MODE,
+  GLF_POINT_SHAPE
 };
 
 class GLFeature: public RCObject {
@@ -96,6 +97,26 @@ public:
     _anchor->changeValue(anchorU, anchorV);
   }
 };
+
+//////////////////////////
+
+class PointShapeGLFeature: public GLFeature {
+private:
+  ~PointShapeGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  GPUUniformValueVec4Float* _borderColor;
+  
+public:
+  PointShapeGLFeature(const Color& borderColor);
+  
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+};
+
+/////////////////////////
 
 class ViewportExtentGLFeature: public GLFeature {
 private:

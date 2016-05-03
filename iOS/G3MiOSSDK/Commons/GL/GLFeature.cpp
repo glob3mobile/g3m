@@ -45,6 +45,12 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
   _extent->changeValue(viewportWidth, viewportHeight);
 }
 
+PointShapeGLFeature::PointShapeGLFeature(const Color& borderColor):
+GLFeature(NO_GROUP, GLF_POINT_SHAPE),
+_borderColor(new GPUUniformValueVec4Float(borderColor)){
+  _values->addUniformValue(ROUNDED_POINT_BORDER_COLOR, _borderColor, false);
+}
+
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        float billboardWidth,
                                        float billboardHeight,

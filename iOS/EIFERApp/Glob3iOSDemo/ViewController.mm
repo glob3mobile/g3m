@@ -202,6 +202,7 @@
 #include <G3MiOSSDK/CityGMLRenderer.hpp>
 #include <G3MiOSSDK/SphericalPlanet.hpp>
 #include <G3MiOSSDK/ElevationData.hpp>
+#include <G3MiOSSDK/PointCloudMesh.hpp>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -211,7 +212,7 @@
 
 class TimeEvolutionTask: public GTask{
   
-  AbstractMesh* _abstractMesh;
+  PointCloudMesh* _abstractMesh;
   
   float _delta;
   int _step;
@@ -220,7 +221,7 @@ class TimeEvolutionTask: public GTask{
   ViewController* _vc;
 public:
   
-  TimeEvolutionTask(AbstractMesh* abstractMesh,
+  TimeEvolutionTask(PointCloudMesh* abstractMesh,
                     ViewController* vc):
   _abstractMesh(abstractMesh),
   _delta(0.0),
@@ -488,7 +489,7 @@ public:
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
-  _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
+//  _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
 //    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
 //    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
 //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
@@ -598,6 +599,7 @@ public:
   camConstrainer = new MyEDCamConstrainer(NULL); //Wait for ED to arrive
   builder.addCameraConstraint(camConstrainer);
   
+  builder.setBackgroundColor(new Color(Color::fromRGBA255(255, 0, 0, 0)));
   
   builder.initializeWidget();
 }
@@ -690,7 +692,7 @@ public:
   for (size_t i = 0; i < _pointClouds.size(); i++) {
     
     [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                             new TimeEvolutionTask((AbstractMesh*)_pointClouds[i], self)));
+                                                             new TimeEvolutionTask((PointCloudMesh*)_pointClouds[i], self)));
   }
   
   

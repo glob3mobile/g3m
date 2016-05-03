@@ -374,6 +374,35 @@ public:
 "}\n");
     this->add(sourcesNoColorMesh);
 
+    GPUProgramSources sourcesRoundedColoredPoints("RoundedColoredPoints",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec4 aColor;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"varying vec4 VertexColor;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"VertexColor = aColor;\n" +
+"gl_PointSize = uPointSize;\n" +
+"}\n",
+ emptyString +  
+"varying mediump vec4 VertexColor;\n" +
+"uniform lowp vec4 uRoundedPointBorderColor;\n" +
+"void main() {\n" +
+"highp vec2 circCoord = 2.0 * gl_PointCoord - 1.0;\n" +
+"highp float dist = dot(circCoord, circCoord);\n" +
+"if (dist > 1.0) {\n" +
+"discard;\n" +
+"}\n" +
+"if (dist < 0.9){\n" +
+"gl_FragColor = VertexColor;\n" +
+"} else{\n" +
+"gl_FragColor = uRoundedPointBorderColor;\n" +
+"}\n" +
+"}\n");
+    this->add(sourcesRoundedColoredPoints);
+
     GPUProgramSources sourcesShader("Shader",
  emptyString +  
 "attribute vec4 Position;\n" +

@@ -57,8 +57,13 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   
   const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
   
+  const bool isPoints = GPUVariable::hasUniform(uniformsCode, ROUNDED_POINT_BORDER_COLOR);
+  
 //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
 
+  if (isPoints){
+    return compileProgramWithName(gl, "RoundedColoredPoints");
+  }
   
   if (is2D) {
     if (flatColor) {

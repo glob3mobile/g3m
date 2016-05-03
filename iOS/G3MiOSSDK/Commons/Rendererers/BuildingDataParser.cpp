@@ -14,6 +14,7 @@
 #include "Color.hpp"
 #include "ColorLegend.hpp"
 #include "IStringUtils.hpp"
+#include "PointCloudMesh.hpp"
 
 void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
                                                   const std::vector<CityGMLBuilding*>& buildings){
@@ -177,17 +178,26 @@ Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, cons
     //    }
   }
   
-  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
-                                  true,
-                                  vertices->getCenter(),
-                                  vertices->create(),
-                                  1.0,
-                                  4.0,
-                                  NULL, //new Color(Color::red()),
-                                  colors.create());
+  PointCloudMesh* pcm = new PointCloudMesh(true,
+                                           vertices->getCenter(),
+                                           vertices->create(),
+                                           20.0,
+                                           colors.create(),
+                                           true,
+                                           Color::blue());
+  
+  
+//  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
+//                                  true,
+//                                  vertices->getCenter(),
+//                                  vertices->create(),
+//                                  1.0,
+//                                  20.0,
+//                                  NULL, //new Color(Color::red()),
+//                                  colors.create());
   
   delete vertices;
   
-  return dm;
+  return pcm;
 }
 
