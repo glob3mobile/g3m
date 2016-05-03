@@ -599,7 +599,7 @@ public:
   camConstrainer = new MyEDCamConstrainer(NULL); //Wait for ED to arrive
   builder.addCameraConstraint(camConstrainer);
   
-  builder.setBackgroundColor(new Color(Color::fromRGBA255(255, 0, 0, 0)));
+  builder.setBackgroundColor(new Color(Color::fromRGBA255(0, 0, 0, 0)));
   
   builder.initializeWidget();
 }

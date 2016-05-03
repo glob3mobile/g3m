@@ -122,9 +122,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     // Get the layer
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *) self.layer;
 
-    eaglLayer.opaque = TRUE;
-    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+    
+#warning WORKING ON TRANSPARENCIES JM
+    eaglLayer.opaque = NO;
+    eaglLayer.backgroundColor = [[UIColor colorWithWhite:1.0 alpha:0.0] CGColor];
+    
+eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil]; 
     _scale = 1;
 //    // for retina display
 //    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
