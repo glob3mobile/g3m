@@ -109,9 +109,12 @@
                                             <action selector="showMenuButtonPressed:" destination="90h-7u-REb" eventType="touchUpInside" id="VN5-Nc-64L"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Grh-v7-GZ9">
-                                        <rect key="frame" x="-16" y="28" width="616" height="2"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Grh-v7-GZ9">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="2"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="2" id="gqO-Z4-qy9"/>
+                                        </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="0Ms-GA-W9d">
                                         <rect key="frame" x="8" y="183" width="584" height="71"/>
@@ -178,13 +181,16 @@
                                 <color key="backgroundColor" red="1" green="0.040183829109999999" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="7qz-Q6-Er8"/>
+                                    <constraint firstAttribute="trailing" secondItem="Grh-v7-GZ9" secondAttribute="trailing" id="8QA-ih-Kdm"/>
                                     <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" constant="80" id="Arc-Qn-IOP"/>
                                     <constraint firstItem="4bm-fF-v2U" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="Hvg-7V-kk4"/>
                                     <constraint firstAttribute="trailing" secondItem="0Ms-GA-W9d" secondAttribute="trailing" constant="8" id="Hzc-C4-Ybe"/>
                                     <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="Jxs-D3-Gad"/>
                                     <constraint firstAttribute="height" constant="262" id="Rpz-dR-6Le"/>
                                     <constraint firstItem="ieu-7s-ThD" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="top" id="Uo4-Xx-w4E"/>
+                                    <constraint firstItem="Grh-v7-GZ9" firstAttribute="top" secondItem="IpR-T2-IV5" secondAttribute="top" constant="28" id="Von-eq-wgF"/>
                                     <constraint firstAttribute="trailing" secondItem="4bm-fF-v2U" secondAttribute="trailing" id="VqU-8m-nyh"/>
+                                    <constraint firstItem="Grh-v7-GZ9" firstAttribute="leading" secondItem="IpR-T2-IV5" secondAttribute="leading" id="X8N-bM-gsX"/>
                                     <constraint firstAttribute="trailing" secondItem="ieu-7s-ThD" secondAttribute="trailing" constant="8" id="YcL-sM-FSH"/>
                                     <constraint firstAttribute="bottom" secondItem="4bm-fF-v2U" secondAttribute="bottom" id="bNO-z8-IdW"/>
                                     <constraint firstAttribute="bottom" secondItem="0Ms-GA-W9d" secondAttribute="bottom" constant="8" id="eRa-7W-ttz"/>

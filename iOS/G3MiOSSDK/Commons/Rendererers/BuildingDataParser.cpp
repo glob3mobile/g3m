@@ -181,9 +181,9 @@ Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, cons
   PointCloudMesh* pcm = new PointCloudMesh(true,
                                            vertices->getCenter(),
                                            vertices->create(),
-                                           20.0,
+                                           15.0,
                                            colors.create(),
-                                           true,
+                                           false,
                                            Color::blue());
   
   
