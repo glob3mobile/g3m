@@ -13,6 +13,7 @@
 		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
 		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
 		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; };
+		D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86F55911CD9E75700A724F8 /* CameraViewController.m */; };
 		D88F1F0D1CC6298B005866FA /* SolarRadiation.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */; };
 		D88F1F101CC65390005866FA /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0F1CC65390005866FA /* up.png */; };
 		D88F1F121CC65B18005866FA /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F111CC65B18005866FA /* down.png */; };
@@ -91,6 +92,8 @@
 		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		D80D57301BBAA1F400BA4762 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		D86F55901CD9E75700A724F8 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		D86F55911CD9E75700A724F8 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolarRadiation.geojson; sourceTree = "<group>"; };
 		D88F1F0F1CC65390005866FA /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 		D88F1F111CC65B18005866FA /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D80D57301BBAA1F400BA4762 /* Images.xcassets */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
+				D86F55901CD9E75700A724F8 /* CameraViewController.h */,
+				D86F55911CD9E75700A724F8 /* CameraViewController.m */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -415,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
+				D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 			);
@@ -543,6 +549,8 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -560,7 +568,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = "Glob3iOSDemo/EIFER App-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.glob3mobile.EIFERApp;
 				PRODUCT_NAME = "EIFER App";
 				PROVISIONING_PROFILE = "";
@@ -578,6 +586,8 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -591,7 +601,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = "Glob3iOSDemo/EIFER App-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.glob3mobile.EIFERApp;
 				PRODUCT_NAME = "EIFER App";
 				PROVISIONING_PROFILE = "";

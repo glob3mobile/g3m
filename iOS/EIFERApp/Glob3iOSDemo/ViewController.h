@@ -57,6 +57,7 @@ class GEOVectorLayer;
   __weak IBOutlet UIView *_waitingMessageView;
   __weak IBOutlet UIProgressView *_progressBar;
   __weak IBOutlet UIPickerView *_dataPicker;
+  __weak IBOutlet UIView *cameraView;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
