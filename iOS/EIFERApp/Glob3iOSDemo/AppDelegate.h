@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property void* cameraVC;
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application;
+
+- (void) enableCameraBackground:(BOOL) active;
 
 @end

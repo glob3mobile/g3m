@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+
+
 @import AVFoundation;
 @import UIKit;
 
@@ -15,6 +17,7 @@
   AVCaptureSession *session;
   AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 }
-@property (weak, nonatomic) IBOutlet UIView *cameraView;
+
+-(void) enableVideo:(BOOL) enabled;
 
 @end

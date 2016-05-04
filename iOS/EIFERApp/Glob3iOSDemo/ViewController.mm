@@ -206,6 +206,8 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "AppDelegate.h"
+
 
 
 #include <typeinfo>
@@ -489,17 +491,17 @@ public:
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
-//  _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-//    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-//    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-//    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-//    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-//    _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-//    _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-//    _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-//    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+  //  _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
+  //    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
+  //    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
+  //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
+  //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
+  //    _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
+  //    _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
+  //    _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
+  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
+  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
+  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
   _modelsLoadedCounter = 0;
   
   _pointCloudFiles.push_back("file:///SolarRadiation.geojson");
@@ -589,7 +591,7 @@ public:
   cityGMLRenderer = new CityGMLRenderer(meshRenderer,
                                         NULL /* marksRenderer */,
                                         vectorLayer);
-
+  
   cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener(self));
   
   builder.addRenderer(cityGMLRenderer);
@@ -727,9 +729,46 @@ public:
   meshRendererPC->setEnable(viewPC);
 }
 
--(IBAction)switchVR:(id)sender{
+-(void) activateMapMode{
   
-  bool usingVR = [((UISwitch*) sender) isOn];
+  [G3MWidget widget]->setViewMode(MONO);
+  
+  CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
+  cameraRenderer->clearHandlers();
+  
+  //Restoring prev cam
+  const Camera* cam = [G3MWidget widget]->getCurrentCamera();
+  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(2),
+                                                cam->getGeodeticPosition(), *_prevPos,
+                                                cam->getHeading(), *_prevHeading,
+                                                cam->getPitch(), *_prevPitch);
+  delete _prevPitch;
+  _prevPitch = NULL;
+  delete _prevHeading;
+  _prevHeading = NULL;
+  delete _prevRoll;
+  _prevRoll = NULL;
+  delete _prevPos;
+  _prevPos = NULL;
+  
+  
+  const bool useInertia = true;
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  cameraRenderer->addHandler(new CameraDoubleDragHandler());
+  cameraRenderer->addHandler(new CameraRotationHandler());
+  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  
+  [G3MWidget widget]->getNextCamera()->forceZNear(NAND);
+}
+
+-(void) activateMonoVRMode{
+  
+  [G3MWidget widget]->setViewMode(MONO);
+  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+  [self activateDeviceAttitudeTracking];
+}
+
+-(void) activateDeviceAttitudeTracking{
   
   CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
   cameraRenderer->clearHandlers();
@@ -740,53 +779,111 @@ public:
     }
   };
   
-  
-  if (usingVR){
-    
-    //Storing prev cam
+  //Storing prev cam
+  if (_prevPos == NULL){
     const Camera* cam = [G3MWidget widget]->getCurrentCamera();
     _prevPos = new Geodetic3D(cam->getGeodeticPosition());
     _prevRoll = new Angle(cam->getRoll());
     _prevPitch = new Angle(cam->getPitch());
     _prevHeading = new Angle(cam->getHeading());
+  }
+  
+  bool fixAltitude = !_useDem;
+  
+  ILocationModifier * lm = NULL;
+  if (fixAltitude){
+    lm = new AltitudeFixerLM();
+  }
+  
+  DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
+  cameraRenderer->addHandler(dac);
+  
+  [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
+}
+
+-(void) activateStereoVRMode{
+  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+  
+  [G3MWidget widget]->setViewMode(STEREO);
+  [G3MWidget widget]->setInterocularDistanceForStereoView(0.03); //VR distance between eyes
+  
+  //Forcing orientation
+  NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+  [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+  
+  [self activateDeviceAttitudeTracking];
+}
+
+-(void) activateARMode{
+  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
+  [G3MWidget widget]->setViewMode(MONO);
+  [self activateDeviceAttitudeTracking];
+}
+
+-(IBAction)switchVR:(id)sender{
+  
+  bool usingVR = [((UISwitch*) sender) isOn];
+  
+  //  CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
+  //  cameraRenderer->clearHandlers();
+  //
+  //  class AltitudeFixerLM: public ILocationModifier{
+  //    Geodetic3D modify(const Geodetic3D& location){
+  //      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 3);
+  //    }
+  //  };
+  
+  
+  if (usingVR){
     
-    bool fixAltitude = !_useDem;
+    [self activateMonoVRMode];
     
-    ILocationModifier * lm = NULL;
-    if (fixAltitude){
-      lm = new AltitudeFixerLM();
-    }
-    
-    DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
-    cameraRenderer->addHandler(dac);
-    
-    [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
+    //    //Storing prev cam
+    //    const Camera* cam = [G3MWidget widget]->getCurrentCamera();
+    //    _prevPos = new Geodetic3D(cam->getGeodeticPosition());
+    //    _prevRoll = new Angle(cam->getRoll());
+    //    _prevPitch = new Angle(cam->getPitch());
+    //    _prevHeading = new Angle(cam->getHeading());
+    //
+    //    bool fixAltitude = !_useDem;
+    //
+    //    ILocationModifier * lm = NULL;
+    //    if (fixAltitude){
+    //      lm = new AltitudeFixerLM();
+    //    }
+    //
+    //    DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
+    //    cameraRenderer->addHandler(dac);
+    //
+    //    [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
     
   } else{
     
-    //Restoring prev cam
-    const Camera* cam = [G3MWidget widget]->getCurrentCamera();
-    [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(2),
-                                                  cam->getGeodeticPosition(), *_prevPos,
-                                                  cam->getHeading(), *_prevHeading,
-                                                  cam->getPitch(), *_prevPitch);
-    delete _prevPitch;
-    _prevPitch = NULL;
-    delete _prevHeading;
-    _prevHeading = NULL;
-    delete _prevRoll;
-    _prevRoll = NULL;
-    delete _prevPos;
-    _prevPos = NULL;
+    [self activateMapMode];
     
-    
-    const bool useInertia = true;
-    cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-    cameraRenderer->addHandler(new CameraDoubleDragHandler());
-    cameraRenderer->addHandler(new CameraRotationHandler());
-    cameraRenderer->addHandler(new CameraDoubleTapHandler());
-    
-    [G3MWidget widget]->getNextCamera()->forceZNear(NAND);
+    //    //Restoring prev cam
+    //    const Camera* cam = [G3MWidget widget]->getCurrentCamera();
+    //    [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(2),
+    //                                                  cam->getGeodeticPosition(), *_prevPos,
+    //                                                  cam->getHeading(), *_prevHeading,
+    //                                                  cam->getPitch(), *_prevPitch);
+    //    delete _prevPitch;
+    //    _prevPitch = NULL;
+    //    delete _prevHeading;
+    //    _prevHeading = NULL;
+    //    delete _prevRoll;
+    //    _prevRoll = NULL;
+    //    delete _prevPos;
+    //    _prevPos = NULL;
+    //
+    //
+    //    const bool useInertia = true;
+    //    cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+    //    cameraRenderer->addHandler(new CameraDoubleDragHandler());
+    //    cameraRenderer->addHandler(new CameraRotationHandler());
+    //    cameraRenderer->addHandler(new CameraDoubleTapHandler());
+    //
+    //    [G3MWidget widget]->getNextCamera()->forceZNear(NAND);
   }
 }
 
@@ -836,7 +933,28 @@ public:
   }
 }
 
+- (IBAction)switchAR:(UISwitch *)sender {
+  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:[sender isOn]];
+}
+
 //// MENU
+- (IBAction)modeChanged:(UISegmentedControl *)sender {
+  
+  switch (sender.selectedSegmentIndex){
+    case 0:
+      [self activateMapMode];
+      break;
+    case 1:
+      [self activateMonoVRMode];
+      break;
+    case 2:
+      [self activateStereoVRMode];
+      break;
+    case 3:
+      [self activateARMode];
+      break;
+  }
+}
 
 
 - (IBAction)showMenuButtonPressed:(id)sender {

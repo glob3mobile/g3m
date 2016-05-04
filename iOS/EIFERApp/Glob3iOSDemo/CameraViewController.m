@@ -8,6 +8,9 @@
 
 #import "CameraViewController.h"
 
+#import "AppDelegate.h"
+
+
 @interface CameraViewController ()
 
 @end
@@ -15,33 +18,39 @@
 @implementation CameraViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+  [super viewDidLoad];
+  // Do any additional setup after loading the view.
+  
+  session = nil;
+  captureVideoPreviewLayer = nil;
+  
+  //Registering the VC in the app delegate
+  ((AppDelegate*)[UIApplication sharedApplication].delegate).cameraVC = (__bridge void *)(self);
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
   [super viewDidAppear:animated];
-  [self startRecordingSession];
+  //[self startRecordingSession];
 }
 
 -(void) startRecordingSession{
   session = [[AVCaptureSession alloc] init];
   session.sessionPreset = AVCaptureSessionPresetMedium;
   
-  CALayer *viewLayer = self.cameraView.layer;
-  NSLog(@"viewLayer = %@", viewLayer);
+  CALayer *viewLayer = self.view.layer;
+  //  NSLog(@"viewLayer = %@", viewLayer);
   
   captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
   
-  captureVideoPreviewLayer.frame = self.cameraView.bounds;
+  captureVideoPreviewLayer.frame = self.view.bounds;
   
-  [self.cameraView.layer addSublayer:captureVideoPreviewLayer];
+  [self.view.layer addSublayer:captureVideoPreviewLayer];
   
   captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
   
@@ -62,13 +71,27 @@
 
 -(void) stopRecordingSession{
   [session stopRunning];
+  session = nil;
+  
   [captureVideoPreviewLayer removeFromSuperlayer];
+  captureVideoPreviewLayer = nil;
+}
 
+-(void) enableVideo:(BOOL) enabled{
+  if (enabled){
+    if (session == nil){
+      [self startRecordingSession];
+    }
+  } else{
+    if (session != nil){
+      [self stopRecordingSession];
+    }
+  }
 }
 
 -(void) adjustCameraLayer{
   
-  captureVideoPreviewLayer.frame = self.cameraView.bounds;
+  captureVideoPreviewLayer.frame = self.view.bounds;
   
   //Orientation
   UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -98,7 +121,7 @@
   
   [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context)
    {
-
+     
    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context)
    {
      [self adjustCameraLayer];
@@ -108,13 +131,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import <G3MiOSSDK/G3MWidget_iOS.h>
+
+
 class MapBooBuilder_iOS;
 
 class Sector;
