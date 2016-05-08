@@ -53,7 +53,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   
     if ((height < minHeight) || (height > maxHeight))
     {
-      nextCamera.copyFrom(previousCamera);
+      nextCamera.copyFrom(previousCamera, true);
     }
   
     return true;

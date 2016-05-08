@@ -21,9 +21,9 @@ class HeightOffsetLocationModifier: public ILocationModifier{
 
 public:
   
-  HeightOffsetLocationModifier(double offsetInMeters):_offsetInMeters(offsetInMeters){}
+  HeightOffsetLocationModifier(double offsetInMeters):_offsetInMeters(offsetInMeters) {}
   
-  Geodetic3D modify(const Geodetic3D& location){
+  Geodetic3D modify(const Geodetic3D& location) {
     return Geodetic3D::fromDegrees(location._latitude._degrees,
                                    location._longitude._degrees,
                                    location._height + _offsetInMeters);
@@ -55,26 +55,26 @@ public:
   
   virtual bool onTouchEvent(const G3MEventContext *eventContext,
                             const TouchEvent* touchEvent,
-                            CameraContext *cameraContext){ return false;}
+                            CameraContext *cameraContext) { return false;}
   
   
   virtual void onDown(const G3MEventContext *eventContext,
                       const TouchEvent& touchEvent,
-                      CameraContext *cameraContext){}
+                      CameraContext *cameraContext) {}
   
   virtual void onMove(const G3MEventContext *eventContext,
                       const TouchEvent& touchEvent,
-                      CameraContext *cameraContext){}
+                      CameraContext *cameraContext) {}
   
   virtual void onUp(const G3MEventContext *eventContext,
                     const TouchEvent& touchEvent,
-                    CameraContext *cameraContext){}
+                    CameraContext *cameraContext) {}
   
   void setDebugMeshRenderer(MeshRenderer* meshRenderer) {}
   
   void onMouseWheel(const G3MEventContext *eventContext,
                     const TouchEvent& touchEvent,
-                    CameraContext *cameraContext){}
+                    CameraContext *cameraContext) {}
   
 };
 

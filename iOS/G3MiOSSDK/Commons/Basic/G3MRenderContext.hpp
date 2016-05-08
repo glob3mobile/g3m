@@ -27,7 +27,7 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2);
 #endif
 
-class G3MRenderContext: public G3MContext {
+class G3MRenderContext : public G3MContext {
 private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
@@ -36,6 +36,7 @@ private:
   TexturesHandler*    _texturesHandler;
   ITimer*             _frameStartTimer;
   GPUProgramManager*  _gpuProgramManager;
+
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
@@ -57,7 +58,8 @@ public:
                    ITimer*                   frameStartTimer,
                    IStorage*                 storage,
                    GPUProgramManager*        gpuProgramManager,
-                   SurfaceElevationProvider* surfaceElevationProvider) :
+                   SurfaceElevationProvider* surfaceElevationProvider,
+                   ViewMode                  viewMode) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -68,7 +70,8 @@ public:
              downloader,
              scheduler,
              storage,
-             surfaceElevationProvider),
+             surfaceElevationProvider,
+             viewMode),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),

@@ -29,21 +29,23 @@ package org.glob3.mobile.generated;
 //class SurfaceElevationProvider;
 
 
+
 public class G3MContext
 {
-  protected final IFactory _factory;
-  protected final IStringUtils _stringUtils;
-  protected final IThreadUtils _threadUtils;
-  protected final ILogger _logger;
-  protected final IMathUtils _mathUtils;
-  protected final IJSONParser _jsonParser;
-  protected final Planet _planet;
-  protected IDownloader _downloader;
-  protected EffectsScheduler _effectsScheduler;
-  protected IStorage _storage;
-  protected SurfaceElevationProvider _surfaceElevationProvider;
+  private final IFactory _factory;
+  private final IStringUtils _stringUtils;
+  private final IThreadUtils _threadUtils;
+  private final ILogger _logger;
+  private final IMathUtils _mathUtils;
+  private final IJSONParser _jsonParser;
+  private final Planet _planet;
+  private IDownloader _downloader;
+  private EffectsScheduler _effectsScheduler;
+  private IStorage _storage;
+  private SurfaceElevationProvider _surfaceElevationProvider;
+  private ViewMode _viewMode;
 
-  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
+  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider, ViewMode viewMode)
   {
      _factory = factory;
      _stringUtils = stringUtils;
@@ -56,6 +58,7 @@ public class G3MContext
      _effectsScheduler = effectsScheduler;
      _storage = storage;
      _surfaceElevationProvider = surfaceElevationProvider;
+     _viewMode = viewMode;
   }
 
   public void dispose()
@@ -115,6 +118,16 @@ public class G3MContext
   public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
     return _surfaceElevationProvider;
+  }
+
+  public final ViewMode getViewMode()
+  {
+    return _viewMode;
+  }
+
+  public final void setViewMode(ViewMode viewMode)
+  {
+    _viewMode = viewMode;
   }
 
 }
