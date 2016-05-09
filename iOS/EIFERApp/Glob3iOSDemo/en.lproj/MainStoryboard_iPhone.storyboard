@@ -141,7 +141,7 @@
                                                     <constraint firstAttribute="width" constant="67" id="hxe-kb-OQB"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjz-yp-AO3">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jjz-yp-AO3">
                                                 <rect key="frame" x="141" y="0.0" width="67" height="71"/>
                                                 <subviews>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a8C-tZ-8cA">
@@ -163,7 +163,7 @@
                                                     <constraint firstAttribute="width" constant="67" id="Q6B-bf-ybF"/>
                                                 </constraints>
                                             </view>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="UP6-Y9-qrJ">
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="UP6-Y9-qrJ">
                                                 <rect key="frame" x="281" y="0.0" width="303" height="72"/>
                                                 <segments>
                                                     <segment title="Map"/>
@@ -292,6 +292,7 @@
                     <connections>
                         <outlet property="G3MWidget" destination="lOt-Xd-eJz" id="c8U-QO-hqA"/>
                         <outlet property="_dataPicker" destination="4bm-fF-v2U" id="Qka-WC-6bZ"/>
+                        <outlet property="_headerView" destination="GOX-9d-L0c" id="Edy-Cf-d3a"/>
                         <outlet property="_menuHeightConstraint" destination="TRP-0o-3Hd" id="Sd8-DV-Q1e"/>
                         <outlet property="_menuView" destination="IpR-T2-IV5" id="aid-md-dMw"/>
                         <outlet property="_progressBar" destination="f5V-gh-SMQ" id="dQo-rb-USl"/>
@@ -325,7 +326,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DP1-E8-0cL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="240" y="105"/>
+            <point key="canvasLocation" x="255" y="35"/>
         </scene>
     </scenes>
     <resources>

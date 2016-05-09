@@ -256,6 +256,10 @@ public:
   
   void setViewMode(ViewMode viewMode);
   
+  ViewMode getViewMode() const{
+    return _viewMode;
+  }
+  
   void setInterocularDistanceForStereoView(double iod){
     _interOcularDistance = iod;
   }

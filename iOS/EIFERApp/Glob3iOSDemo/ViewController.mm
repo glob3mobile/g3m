@@ -208,8 +208,6 @@
 
 #import "AppDelegate.h"
 
-
-
 #include <typeinfo>
 
 class TimeEvolutionTask: public GTask{
@@ -482,7 +480,6 @@ public:
   _prevHeading = NULL;
   _prevRoll = NULL;
   _prevPitch = NULL;
-  _usingStereo = false;
   
   _isMenuAvailable = false;
   
@@ -720,6 +717,8 @@ public:
 
 -(void) activateMapMode{
   
+  _headerView.hidden = FALSE;
+  
   [G3MWidget widget]->setViewMode(MONO);
   
   CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
@@ -751,6 +750,8 @@ public:
 }
 
 -(void) activateMonoVRMode{
+  
+  _headerView.hidden = FALSE;
   
   [G3MWidget widget]->setViewMode(MONO);
   [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
@@ -791,6 +792,9 @@ public:
 }
 
 -(void) activateStereoVRMode{
+  
+  _headerView.hidden = TRUE;
+  
   [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   
   [G3MWidget widget]->setViewMode(STEREO);
@@ -804,6 +808,9 @@ public:
 }
 
 -(void) activateARMode{
+  
+  _headerView.hidden = FALSE;
+  
   [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
   [G3MWidget widget]->setViewMode(MONO);
   [self activateDeviceAttitudeTracking];
@@ -841,8 +848,10 @@ public:
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
   
+  bool usingStereo = [G3MWidget widget]->getViewMode() == STEREO;
+  
   //FORCE ORTIENTATION FOR STEREO
-  if (_usingStereo && interfaceOrientation != UIInterfaceOrientationLandscapeLeft){
+  if (usingStereo && interfaceOrientation != UIInterfaceOrientationLandscapeLeft){
     return FALSE;
   }
   
