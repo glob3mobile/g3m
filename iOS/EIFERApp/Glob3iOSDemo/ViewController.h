@@ -11,6 +11,9 @@
 #import <G3MiOSSDK/G3MWidget_iOS.h>
 
 
+#import "CameraViewController.h"
+
+
 class MapBooBuilder_iOS;
 
 class Sector;
@@ -34,7 +37,14 @@ class GEOVectorLayer;
 
   HUDRenderer* _hudRenderer;
   
-  std::vector<std::string> _cityGMLFiles;
+  struct CityGMLModelFile{
+    std::string _fileName;
+    bool _needsToBeFixedOnGround;
+  };
+  
+  std::vector<CityGMLModelFile> _cityGMLFiles;
+  
+  
   std::vector<std::string> _pointCloudFiles;
   size_t _modelsLoadedCounter;
   size_t _pointCloudsLoaded;
@@ -50,6 +60,9 @@ class GEOVectorLayer;
   Angle* _prevHeading;
   Angle* _prevRoll;
   Angle* _prevPitch;
+  
+  //VC
+  CameraViewController* _camVC;
   
   __weak IBOutlet UIButton *_showMenuButton;
   __weak IBOutlet NSLayoutConstraint *_menuHeightConstraint;

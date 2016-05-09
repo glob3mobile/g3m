@@ -58,11 +58,13 @@ class CityGMLRenderer: public DefaultRenderer{
     std::vector<CityGMLBuilding*> _buildings;
     
     CityGMLRendererListener* _listener;
-    bool _autoDelete;
+    const bool _autoDelete;
     
     std::vector<Mark*> _marks;
     std::vector<GEORasterSymbol*> _geoSymbol;
     Mesh* _mesh;
+    
+    const bool _fixOnGround;
     
     
     
@@ -101,12 +103,14 @@ class CityGMLRenderer: public DefaultRenderer{
     
     TessellationTask(CityGMLRenderer* vc,
                      const std::vector<CityGMLBuilding*>& buildings,
+                     bool fixOnGround,
                      CityGMLRendererListener* listener, bool autoDelete):
     _vc(vc),
     _buildings(buildings),
     _listener(listener),
     _autoDelete(autoDelete),
-    _mesh(NULL)
+    _mesh(NULL),
+    _fixOnGround(fixOnGround)
     {}
     
     
@@ -136,7 +140,7 @@ class CityGMLRenderer: public DefaultRenderer{
       //Creating mesh model
       _mesh = CityGMLBuildingTessellator::createMesh(_buildings,
                                                      *_vc->_context->getPlanet(),
-                                                     false, checkSurfacesVisibility, NULL,
+                                                     _fixOnGround, checkSurfacesVisibility, NULL,
                                                      _vc->_elevationData);
     }
     
@@ -194,11 +198,13 @@ public:
   }
   
   void addBuildingsFromURL(const URL& url,
+                           bool fixBuildingsOnGround,
                            CityGMLRendererListener* listener, bool autoDelete);
   
   void addBuildingDataFromURL(const URL& url);
   
   void addBuildings(const std::vector<CityGMLBuilding*>& buildings,
+                    bool fixOnGround,
                     CityGMLRendererListener* listener, bool autoDelete);
   
   void onResizeViewportEvent(const G3MEventContext* ec,

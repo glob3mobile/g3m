@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import <AVFoundation/AVFoundation.h>
 
-
-@import AVFoundation;
-@import UIKit;
+//@import AVFoundation;
+//@import UIKit;
 
 @interface CameraViewController : UIViewController{
   AVCaptureSession *session;

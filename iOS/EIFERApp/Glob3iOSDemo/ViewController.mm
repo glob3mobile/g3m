@@ -208,6 +208,7 @@
 
 #import "AppDelegate.h"
 
+
 #include <typeinfo>
 
 class TimeEvolutionTask: public GTask{
@@ -467,6 +468,13 @@ public:
   // Release any cached data, images, etc that aren't in use.
 }
 
+-(void) addCityGMLFile:(const std::string&) fileName needsToBeFixOnGround:(BOOL) fix{
+  CityGMLModelFile m;
+  m._fileName = fileName;
+  m._needsToBeFixedOnGround = fix;
+  _cityGMLFiles.push_back(m);
+}
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -492,17 +500,19 @@ public:
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
-    _cityGMLFiles.push_back("file:///innenstadt_ost_4326_lod2.gml");
-    _cityGMLFiles.push_back("file:///innenstadt_west_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///hagsfeld_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_1.gml");
-  //    _cityGMLFiles.push_back("file:///durlach_4326_lod2_PART_2.gml");
-  //    _cityGMLFiles.push_back("file:///hohenwettersbach_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///bulach_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///daxlanden_4326_lod2.gml");
-  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_1.gml");
-  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_2.gml");
-  //    _cityGMLFiles.push_back("file:///knielingen_4326_lod2_PART_3.gml");
+  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///technologiepark_WGS84.xml" needsToBeFixOnGround:true];
+//  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+
   _modelsLoadedCounter = 0;
   
   _pointCloudFiles.push_back("file:///SolarRadiation.geojson");
@@ -659,7 +669,8 @@ public:
 -(void) loadCityModelWithThreadUtils{
   
   for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
-    cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]),
+    cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]._fileName),
+                                         _cityGMLFiles[i]._needsToBeFixedOnGround,
                                          new MyCityGMLRendererListener(self),
                                          true);
   }
@@ -754,7 +765,8 @@ public:
   _headerView.hidden = FALSE;
   
   [G3MWidget widget]->setViewMode(MONO);
-  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+//  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+  [_camVC enableVideo:FALSE];
   [self activateDeviceAttitudeTracking];
 }
 
@@ -795,7 +807,9 @@ public:
   
   _headerView.hidden = TRUE;
   
-  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+//  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+  
+  [_camVC enableVideo:FALSE];
   
   [G3MWidget widget]->setViewMode(STEREO);
   [G3MWidget widget]->setInterocularDistanceForStereoView(0.03); //VR distance between eyes
@@ -811,7 +825,8 @@ public:
   
   _headerView.hidden = FALSE;
   
-  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
+//  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
+  [_camVC enableVideo:TRUE];
   [G3MWidget widget]->setViewMode(MONO);
   [self activateDeviceAttitudeTracking];
 }
@@ -848,7 +863,7 @@ public:
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
   
-  bool usingStereo = [G3MWidget widget]->getViewMode() == STEREO;
+  const bool usingStereo = [G3MWidget widget]->getViewMode() == STEREO;
   
   //FORCE ORTIENTATION FOR STEREO
   if (usingStereo && interfaceOrientation != UIInterfaceOrientationLandscapeLeft){
@@ -861,6 +876,13 @@ public:
   } else {
     return YES;
   }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+  if ([segue.identifier isEqualToString:@"cameraViewSegue"])
+    _camVC = (CameraViewController *)segue.destinationViewController;
+  
 }
 
 //// MENU

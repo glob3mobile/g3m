@@ -17,6 +17,8 @@
 		D88F1F0D1CC6298B005866FA /* SolarRadiation.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */; };
 		D88F1F101CC65390005866FA /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0F1CC65390005866FA /* up.png */; };
 		D88F1F121CC65B18005866FA /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F111CC65B18005866FA /* down.png */; };
+		D8BA7B011CE0B834003754DE /* SR_24h.csv in Resources */ = {isa = PBXBuildFile; fileRef = D8BA7AFF1CE0B834003754DE /* SR_24h.csv */; };
+		D8BA7B021CE0B834003754DE /* technologiepark_WGS84.xml in Resources */ = {isa = PBXBuildFile; fileRef = D8BA7B001CE0B834003754DE /* technologiepark_WGS84.xml */; };
 		D8DF55861CC4C73E00D7D084 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF55851CC4C73E00D7D084 /* libxml2.2.tbd */; };
 		D8DF55881CC4C74B00D7D084 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF55871CC4C74B00D7D084 /* libxml2.tbd */; };
 		D8DF558A1CC4C8FC00D7D084 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DF55891CC4C8FC00D7D084 /* CoreMotion.framework */; };
@@ -97,6 +99,8 @@
 		D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolarRadiation.geojson; sourceTree = "<group>"; };
 		D88F1F0F1CC65390005866FA /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 		D88F1F111CC65B18005866FA /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
+		D8BA7AFF1CE0B834003754DE /* SR_24h.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = SR_24h.csv; path = "EIFER Resources/SR_24h.csv"; sourceTree = "<group>"; };
+		D8BA7B001CE0B834003754DE /* technologiepark_WGS84.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = technologiepark_WGS84.xml; path = "EIFER Resources/technologiepark_WGS84.xml"; sourceTree = "<group>"; };
 		D8DF55851CC4C73E00D7D084 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		D8DF55871CC4C74B00D7D084 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		D8DF55891CC4C8FC00D7D084 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -258,6 +262,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8BA7AFF1CE0B834003754DE /* SR_24h.csv */,
+				D8BA7B001CE0B834003754DE /* technologiepark_WGS84.xml */,
 				D8EA744F1CC78ACB007464C8 /* ulpgc_logo.png */,
 				D8EA744D1CC7884D007464C8 /* ulpgc_logo.jpg */,
 				D88F1F111CC65B18005866FA /* down.png */,
@@ -384,6 +390,7 @@
 				D8DF55D21CC4D9C300D7D084 /* innenstadt_west_4326_lod2.gml in Resources */,
 				D8EA74501CC78ACB007464C8 /* ulpgc_logo.png in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
+				D8BA7B011CE0B834003754DE /* SR_24h.csv in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
 				E71B153A1626D27F003D1013 /* Default-Portrait@2x.png in Resources */,
@@ -396,6 +403,7 @@
 				E71B153E1626D27F003D1013 /* Icon-Small.png in Resources */,
 				E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */,
 				E71B15401626D27F003D1013 /* Icon.png in Resources */,
+				D8BA7B021CE0B834003754DE /* technologiepark_WGS84.xml in Resources */,
 				D8DF55D41CC4D9C300D7D084 /* ka_31467.bil in Resources */,
 				D8DF558F1CC4D4D100D7D084 /* EIFER Resources in Resources */,
 				E71B15411626D27F003D1013 /* Icon@2x.png in Resources */,

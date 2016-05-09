@@ -21,6 +21,7 @@
 #include "DirectMesh.hpp"
 
 void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& buildings,
+                                   bool fixOnGround,
                                    CityGMLRendererListener* listener, bool autoDelete){
   
   std::vector<CityGMLBuilding*> notRepeatedBuildings;
@@ -47,7 +48,7 @@ void CityGMLRenderer::addBuildings(const std::vector<CityGMLBuilding*>& building
   
   bool createCityMeshAndMarks = true;
   if (createCityMeshAndMarks){
-    _context->getThreadUtils()->invokeAsyncTask(new TessellationTask(this, notRepeatedBuildings, listener, autoDelete), true);
+    _context->getThreadUtils()->invokeAsyncTask(new TessellationTask(this, notRepeatedBuildings, fixOnGround, listener, autoDelete), true);
   }
 }
 
@@ -149,11 +150,14 @@ private:
   const IThreadUtils* _threadUtils;
   CityGMLRendererListener *_listener;
   bool _autoDelete;
+  const bool _fixBuidlingsOnGround;
 public:
   
   CityGMLParsingListener(CityGMLRenderer* demo,
+                         bool fixBuidlingsOnGround,
                          CityGMLRendererListener *listener, bool autoDelete):
-  _demo(demo), _listener(listener), _autoDelete(autoDelete){
+  _demo(demo), _listener(listener), _autoDelete(autoDelete),
+  _fixBuidlingsOnGround(fixBuidlingsOnGround){
     
   }
   
@@ -164,7 +168,7 @@ public:
   };
   
   virtual void onBuildingsCreated(const std::vector<CityGMLBuilding*>& buildings){
-    _demo->addBuildings(buildings, _listener, _autoDelete);
+    _demo->addBuildings(buildings, _fixBuidlingsOnGround, _listener, _autoDelete);
   }
   
   virtual void onError(){
@@ -173,10 +177,12 @@ public:
 };
 
 void CityGMLRenderer::addBuildingsFromURL(const URL& url,
-                                          CityGMLRendererListener* listener, bool autoDelete){
+                                          bool fixBuildingsOnGround,
+                                          CityGMLRendererListener* listener,
+                                          bool autoDelete){
   
   CityGMLParser::parseFromURL(url,
-                              new CityGMLParsingListener(this, listener, autoDelete),
+                              new CityGMLParsingListener(this, fixBuildingsOnGround, listener, autoDelete),
                               true);
   
 }

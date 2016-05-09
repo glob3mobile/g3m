@@ -16,10 +16,6 @@
 @synthesize window = _window;
 @synthesize cameraVC;
 
--(void) enableCameraBackground:(BOOL) active{
-  [(__bridge CameraViewController*)cameraVC enableVideo:active];
-}
-
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
   //  [[NSURLCache sharedURLCache] removeAllCachedResponses];

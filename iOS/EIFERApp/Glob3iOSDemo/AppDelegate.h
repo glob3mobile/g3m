@@ -17,6 +17,4 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application;
 
-- (void) enableCameraBackground:(BOOL) active;
-
 @end

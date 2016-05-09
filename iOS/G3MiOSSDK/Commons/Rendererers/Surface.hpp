@@ -125,16 +125,18 @@ public:
     if (elevationData == NULL){
       for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
         Geodetic3D* g= _geodeticCoordinates[i];
-        coor3D.push_back(new Vector3D(planet.toCartesian(*g)));
+        coor3D.push_back(new Vector3D(planet.toCartesian(g->_latitude,
+                                                         g->_longitude,
+                                                         g->_height - baseHeight)));
       }
     }
     else{
       for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
         Geodetic3D* g= _geodeticCoordinates[i];
         double h = elevationData->getElevationAt(g->_latitude, g->_longitude);
-        coor3D.push_back(new Vector3D(planet.toCartesian(Geodetic3D::fromDegrees(g->_latitude._degrees,
-                                                                                 g->_longitude._degrees,
-                                                                                 h + g->_height))));
+        coor3D.push_back(new Vector3D(planet.toCartesian(g->_latitude,
+                                                         g->_longitude,
+                                                         h + g->_height - baseHeight)));
       }
     }
     return coor3D;
