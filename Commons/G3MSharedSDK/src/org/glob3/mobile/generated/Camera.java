@@ -86,9 +86,10 @@ public class Camera
   
       _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
       _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+  
+      _forcedZNear = that._forcedZNear;
     }
   
-    _forcedZNear = that._forcedZNear;
   }
 
   public final void resizeViewport(int width, int height)
@@ -98,6 +99,9 @@ public class Camera
     _viewPortHeight = height;
   
     _dirtyFlags.setAllDirty();
+  
+    _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
+    _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
@@ -642,6 +646,18 @@ public class Camera
     _forcedZNear = zNear;
   }
 
+  public final double computeZNear()
+  {
+    if (!(_forcedZNear != _forcedZNear))
+    {
+      return _forcedZNear;
+    }
+  
+    final double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
+    return zNear;
+  }
+
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -796,13 +812,7 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-    final double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
-  
-    if (!(_forcedZNear != _forcedZNear))
-    {
-      zNear = _forcedZNear;
-    }
+    double zNear = computeZNear();
   
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   

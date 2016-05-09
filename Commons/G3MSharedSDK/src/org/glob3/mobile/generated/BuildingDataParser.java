@@ -20,35 +20,7 @@ package org.glob3.mobile.generated;
 public class BuildingDataParser
 {
 
-//  class StringExtractionResult{
-//    
-//  public:
-//    std::string _string;
-//    size_t _endingPos;
-//    
-//    StringExtractionResult(std::string string,
-//                 size_t endingPos):
-//    _string(string),
-//    _endingPos(endingPos){}
-//  };
-//  
-//  static StringExtractionResult extractSubStringBetween(const std::string& string,
-//                                              const std::string& startTag,
-//                                              const std::string& endTag,
-//                                              const size_t startPos){
-//    
-//    size_t pos1 = string.find(startTag, startPos) + startTag.length();
-//    size_t pos2 = string.find(endTag, pos1);
-//    
-//    if (pos1 == std::string::npos || pos2 == std::string::npos || pos1 < startPos || pos2 < startPos){
-//      return StringExtractionResult("", std::string::npos);
-//    }
-//    
-//    std::string str = string.substr(pos1, pos2-pos1);
-//    
-//    return StringExtractionResult(str, pos2 + endTag.length());
-//  }
-//  
+
 
   public static void includeDataInBuildingSet(String data, java.util.ArrayList<CityGMLBuilding> buildings)
   {
@@ -169,6 +141,78 @@ public class BuildingDataParser
        vertices.dispose();
   
     return dm;
+  }
+
+  public static Mesh createSolarRadiationMesh(String data, Planet planet, ElevationData elevationData)
+  {
+  
+    java.util.ArrayList<ColorLegend.ColorAndValue> legend = new java.util.ArrayList<ColorLegend.ColorAndValue>();
+    legend.add(new ColorLegend.ColorAndValue(Color.black(), 0.0));
+    legend.add(new ColorLegend.ColorAndValue(Color.red(), 25.0));
+    ColorLegend cl = new ColorLegend(legend);
+  
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+    //  int pointCounter = 0;
+    int pos = 0;
+    int dataL = data.length();
+    while (pos < dataL)
+    {
+  
+      IStringUtils.StringExtractionResult value = IStringUtils.extractSubStringBetween(data, "\"represente\": ", ",", pos);
+      if (value._endingPos == String.npos)
+      {
+        break;
+      }
+      pos = value._endingPos +1;
+      double v = IStringUtils.instance().parseDouble(value._string);
+  
+  
+      IStringUtils.StringExtractionResult point = IStringUtils.extractSubStringBetween(data, "\"coordinates\": [", " ] ", pos);
+      if (point._endingPos == String.npos)
+      {
+        break;
+      }
+      pos = point._endingPos +1;
+  
+      java.util.ArrayList<Double> vd = IStringUtils.instance().parseDoubles(point._string, ", ");
+  
+      if (elevationData == null)
+      {
+        Geodetic3D g = Geodetic3D.fromDegrees(vd.get(1), vd.get(0), 2);
+        vertices.add(g);
+      }
+      else
+      {
+        double h = elevationData.getElevationAt(Angle.fromDegrees(vd.get(1)), Angle.fromDegrees(vd.get(0)));
+        Geodetic3D g = Geodetic3D.fromDegrees(vd.get(1), vd.get(0), 2 + h);
+        vertices.add(g);
+      }
+  
+      Color color = cl.getColor(v);
+      colors.add(color);
+  
+      //    if (pointCounter++ % 100 == 0){
+      //      ILogger::instance()->logInfo("%d points parsed", pointCounter);
+      //    }
+    }
+  
+    PointCloudMesh pcm = new PointCloudMesh(true, vertices.getCenter(), vertices.create(), 15.0, colors.create(), false, Color.blue());
+  
+  
+  //  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
+  //                                  true,
+  //                                  vertices->getCenter(),
+  //                                  vertices->create(),
+  //                                  1.0,
+  //                                  20.0,
+  //                                  NULL, //new Color(Color::red()),
+  //                                  colors.create());
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return pcm;
   }
 
 }

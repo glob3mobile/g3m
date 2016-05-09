@@ -18,12 +18,13 @@ package org.glob3.mobile.generated;
 
 
 
-//class MarksRenderer;
-//class MeshRenderer;
-
-public interface CityGMLListener
+public abstract class CityGMLListener
 {
-  void onBuildingsCreated(java.util.ArrayList<CityGMLBuilding> buildings);
+  public void dispose()
+  {
+  }
 
-  void onError();
+  public abstract void onBuildingsCreated(java.util.ArrayList<CityGMLBuilding> buildings);
+
+  public abstract void onError();
 }

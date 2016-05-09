@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+/////////////////////////
+
 public class ViewportExtentGLFeature extends GLFeature
 {
   public void dispose()

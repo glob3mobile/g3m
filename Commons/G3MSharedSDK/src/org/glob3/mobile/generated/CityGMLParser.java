@@ -2,6 +2,17 @@ package org.glob3.mobile.generated;
 public class CityGMLParser
 {
 
+  private static final IThreadUtils _threadUtils = null;
+  private static IDownloader _downloader = null;
+
+
+
+  public static void initialize(G3MContext context)
+  {
+    _threadUtils = context.getThreadUtils();
+    _downloader = context.getDownloader();
+  }
+
   public static java.util.ArrayList<CityGMLBuilding> parseLOD2Buildings2(IXMLNode cityGMLDoc)
   {
   
@@ -130,7 +141,7 @@ public class CityGMLParser
       {
         break;
       }
-      pos = beginning._endingPos +1;
+      pos = beginning._endingPos + 1;
   
   
   
@@ -164,6 +175,8 @@ public class CityGMLParser
   
         pos = points._endingPos +1;
   
+        pos = cityGMLString.indexOf("</bldg:boundedBy>", pos);
+  
         java.util.ArrayList<Double> coors = IStringUtils.instance().parseDoubles(points._string, " ");
         surfaces.add(CityGMLBuildingSurface.createFromArrayOfCityGMLWGS84Coordinates(coors, type));
   
@@ -178,9 +191,15 @@ public class CityGMLParser
     return buildings;
   }
 
-  public static void parseFromURL(URL url, IDownloader downloader, CityGMLListener listener, boolean deleteListener)
+  public static void parseFromURL(URL url, CityGMLListener listener, boolean deleteListener)
   {
-    downloader.requestBuffer(url, DownloadPriority.HIGHEST, TimeInterval.fromHours(1), true, new CityGMLParser_BufferDownloadListener(listener, deleteListener), true);
+  
+    if (_downloader == null)
+    {
+      throw new RuntimeException("CityGMLParser not initialized");
+    }
+  
+    _downloader.requestBuffer(url, DownloadPriority.HIGHEST, TimeInterval.fromHours(1), true, new CityGMLParser_BufferDownloadListener(_threadUtils, listener, deleteListener), true);
   }
 
 }

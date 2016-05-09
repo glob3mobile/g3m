@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class MutableVector3D;
 
 public class Vector3D
@@ -385,6 +386,51 @@ public class Vector3D
   public final double distanceTo(Vector3D that)
   {
     return IMathUtils.instance().sqrt(squaredDistanceTo(that));
+  }
+
+  public static Vector3D getCenter(java.util.ArrayList<Vector3D> points)
+  {
+    double _minX = points.get(0)._x;
+    double _minY = points.get(0)._y;
+    double _minZ = points.get(0)._z;
+    double _maxX = points.get(0)._x;
+    double _maxY = points.get(0)._y;
+    double _maxZ = points.get(0)._z;
+    for (int i = 1; i < points.size(); i++)
+    {
+      Vector3D p = points.get(i);
+      if (p.isNan())
+      {
+        continue;
+      }
+      if (_minX > p._x)
+      {
+        _minX = p._x;
+      }
+      if (_minY > p._y)
+      {
+        _minY = p._y;
+      }
+      if (_minZ > p._z)
+      {
+        _minX = p._x;
+      }
+  
+      if (_maxX < p._x)
+      {
+        _maxX = p._x;
+      }
+      if (_maxY < p._y)
+      {
+        _maxY = p._y;
+      }
+      if (_maxZ < p._z)
+      {
+        _maxZ = p._z;
+      }
+    }
+  
+    return new Vector3D((_minX + _maxX) / 2.0, (_minY + _maxY) / 2.0, (_minZ + _maxZ) / 2.0);
   }
 
 }

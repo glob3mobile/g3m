@@ -24,7 +24,8 @@ public enum GPUUniformKey
   SAMPLER2(19),
   SAMPLER3(20),
   TRANSLATION_2D(21),
-  BILLBOARD_ANCHOR(22);
+  BILLBOARD_ANCHOR(22),
+  ROUNDED_POINT_BORDER_COLOR(23);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

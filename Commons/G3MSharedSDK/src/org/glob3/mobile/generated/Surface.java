@@ -166,7 +166,7 @@ public class Surface
     for (int i = 0; i < _geodeticCoordinates.size(); i++)
     {
       IStringBuilder isb = IStringBuilder.newStringBuilder();
-      isb.addInt(i);
+      isb.addInt((int)i);
       Mark m = new Mark(isb.getString(), _geodeticCoordinates.get(i), AltitudeMode.ABSOLUTE, 10000.0);
       if (isb != null)
          isb.dispose();

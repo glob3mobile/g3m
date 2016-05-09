@@ -76,8 +76,14 @@ public class GPUProgramManager
   
     final boolean is2D = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.POSITION_2D);
   
+    final boolean isPoints = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.ROUNDED_POINT_BORDER_COLOR);
+  
   //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
   
+    if (isPoints)
+    {
+      return compileProgramWithName(gl, "RoundedColoredPoints");
+    }
   
     if (is2D)
     {

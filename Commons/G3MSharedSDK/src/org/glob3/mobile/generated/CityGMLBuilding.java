@@ -29,17 +29,24 @@ public class CityGMLBuilding
     if (_tessellatorData != null)
        _tessellatorData.dispose();
 
-    for (int i = 0; i < _surfaces.size(); i++)
-    {
-      CityGMLBuildingSurface s = _surfaces.get(i);
-      s = null;
-    }
+    removeSurfaceData();
 
     for (int i = 0; i < _numericProperties.size(); i++)
     {
       if (_numericProperties.get(i) != null)
          _numericProperties.get(i).dispose();
     }
+  }
+
+  public final void removeSurfaceData()
+  {
+    for (int i = 0; i < _surfaces.size(); i++)
+    {
+      CityGMLBuildingSurface s = _surfaces.get(i);
+      s = null;
+    }
+
+    _surfaces.clear();
   }
 
   public final java.util.ArrayList<CityGMLBuildingSurface> getSurfaces()
@@ -63,6 +70,21 @@ public class CityGMLBuilding
       }
     }
     return java.lang.Double.NaN;
+  }
+
+  public final String getPropertiesDescription()
+  {
+  
+    String d = "";
+    for (int i = 0; i < _numericProperties.size(); i++)
+    {
+      d += _numericProperties.get(i)._name + ": " + IStringUtils.instance().toString(_numericProperties.get(i)._value);
+      if (i < _numericProperties.size() - 1)
+      {
+        d += "\n";
+      }
+    }
+    return d;
   }
 
 
@@ -178,12 +200,28 @@ public class CityGMLBuilding
     }
   }
 
+  public final boolean markGroundAsNotVisible()
+  {
+    for (int i = 0; i < _surfaces.size(); i++)
+    {
+      final CityGMLBuildingSurface s1 = _surfaces.get(i);
+      //Grounds are internal by definition
+      if (s1.getType() == CityGMLBuildingSurfaceType.GROUND)
+      {
+        s1.setIsVisible(false);
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static int checkWallsVisibility(CityGMLBuilding b1, CityGMLBuilding b2)
   {
     int nInvisibleWalls = 0;
     for (int i = 0; i < b1._surfaces.size(); i++)
     {
       final CityGMLBuildingSurface s1 = b1._surfaces.get(i);
+
       if (s1.getType() == CityGMLBuildingSurfaceType.WALL)
       {
         for (int j = 0; j < b2._surfaces.size(); j++)

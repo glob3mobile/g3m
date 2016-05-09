@@ -104,4 +104,10 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
     return new Vector3D(_cx, _cy, _cz);
   }
 
+  public final Vector3D getAbsoluteVector3D(int i)
+  {
+    int pos = i * 3;
+    return new Vector3D(_values.get(pos) + _cx, _values.get(pos + 1) + _cy, _values.get(pos + 2) + _cz);
+  }
+
 }

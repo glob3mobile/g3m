@@ -702,6 +702,16 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  public final ViewMode getViewMode()
+  {
+    return _viewMode;
+  }
+
+  public final void setInterocularDistanceForStereoView(double iod)
+  {
+    _interOcularDistance = iod;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -783,6 +793,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   private Camera _auxCam;
   private Camera _leftEyeCam;
   private Camera _rightEyeCam;
+  private double _interOcularDistance;
 
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode)
@@ -838,11 +849,15 @@ public class G3MWidget implements ChangedRendererInfoListener
      _leftEyeCam = null;
      _rightEyeCam = null;
      _auxCam = null;
+     _interOcularDistance = 200.0;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
     _busyRenderer.initialize(_context);
     _errorRenderer.initialize(_context);
+  
+    CityGMLParser.initialize(_context);
+  
     if (_hudRenderer != null)
     {
       _hudRenderer.initialize(_context);
@@ -1098,7 +1113,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D camPos = _currentCamera.getCartesianPosition();
         Vector3D camCenter = _currentCamera.getCenter();
         Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        final double eyesSeparation = 200; // 0.03;
+        final double eyesSeparation = _interOcularDistance;
         Vector3D up = _currentCamera.getUp();
   
         final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);

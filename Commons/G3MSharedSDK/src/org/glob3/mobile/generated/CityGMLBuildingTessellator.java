@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class CityGMLBuildingTessellator
 {
 
-  private static short addTrianglesCuttingEarsForAllWalls(CityGMLBuilding building, FloatBufferBuilderFromCartesian3D fbb, FloatBufferBuilderFromCartesian3D normals, ShortBufferBuilder indexes, FloatBufferBuilderFromColor colors, double baseHeight, Planet planet, short firstIndex, Color color, boolean includeGround, ElevationData elevationData)
+  private static short addTrianglesCuttingEarsForAllWalls(CityGMLBuilding building, FloatBufferBuilderFromCartesian3D fbb, FloatBufferBuilderFromCartesian3D normals, ShortBufferBuilder indexes, FloatBufferBuilderFromColor colors, double baseHeight, Planet planet, short firstIndex, Color color, ElevationData elevationData)
   {
     final java.util.ArrayList<CityGMLBuildingSurface> surfaces = building.getSurfaces();
   
@@ -11,12 +11,10 @@ public class CityGMLBuildingTessellator
     {
       CityGMLBuildingSurface s = surfaces.get(w);
   
-      if ((!includeGround && s.getType() == CityGMLBuildingSurfaceType.GROUND) || !s.isVisible())
+      if (s.isVisible())
       {
-        continue;
+        buildingFirstIndex = s.addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet, buildingFirstIndex, color, elevationData);
       }
-  
-      buildingFirstIndex = s.addTrianglesByEarClipping(fbb, normals, indexes, colors, baseHeight, planet, buildingFirstIndex, color, elevationData);
     }
     return buildingFirstIndex;
   }
@@ -34,7 +32,7 @@ public class CityGMLBuildingTessellator
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     final short firstIndex = 0;
-    addTrianglesCuttingEarsForAllWalls(building, fbb, normals, indexes, colors, baseHeight, planet, firstIndex, color, includeGround, elevationData);
+    addTrianglesCuttingEarsForAllWalls(building, fbb, normals, indexes, colors, baseHeight, planet, firstIndex, color, elevationData);
   
     IndexedMesh im = new IndexedMesh(GLPrimitive.triangles(), fbb.getCenter(), fbb.create(), true, indexes.create(),true, 1.0f, 1.0f, null, colors.create(), 1.0f, true, normals.create());
   
@@ -46,14 +44,42 @@ public class CityGMLBuildingTessellator
     return im;
   }
 
+  private static CityGMLBuildingTessellatorData createData(short firstV, short lastV, Mesh mesh, FloatBufferBuilderFromCartesian3D vertices)
+  {
+  
+    //Creating sphere
+    java.util.ArrayList<Vector3D> vs = new java.util.ArrayList<Vector3D>();
+    for (short i = firstV; i < lastV; i++)
+    {
+      vs.add(new Vector3D(vertices.getAbsoluteVector3D(i)));
+    }
+  
+    Sphere bSphere = Sphere.createSphereContainingPoints(vs);
+  
+    for (int i = 0; i < vs.size(); i++)
+    {
+      if (vs.get(i) != null)
+         vs.get(i).dispose();
+    }
+  
+    return new DefaultCityGMLBuildingTessellatorData(mesh, firstV, lastV, new Sphere(bSphere));
+  
+  }
 
 
-  public static Mesh createMesh(java.util.ArrayList<CityGMLBuilding> buildings, Planet planet, boolean fixOnGround, boolean includeGround, CityGMLBuildingColorProvider colorProvider, ElevationData elevationData)
+
+  public static Mesh createMesh(java.util.ArrayList<CityGMLBuilding> buildings, Planet planet, boolean fixOnGround, boolean checkSurfacesVisibility, CityGMLBuildingColorProvider colorProvider, ElevationData elevationData)
   {
   
     CompositeMesh cm = null;
     int buildingCounter = 0;
     int meshesCounter = 0;
+  
+    if (checkSurfacesVisibility)
+    {
+      int n = CityGMLBuilding.checkWallsVisibility(buildings);
+      ILogger.instance().logInfo("Removed %d invisible walls from the model.", n);
+    }
   
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
@@ -71,23 +97,25 @@ public class CityGMLBuildingTessellator
     {
       CityGMLBuilding b = buildings.get(i);
   
-      buildingVertexIndex.add(vertices.size() / 3);
+      int firstV = ((int)vertices.size()) / 3;
+      buildingVertexIndex.add((short)firstV);
+  
       processedBuildings.add(b);
   
       final double baseHeight = fixOnGround ? b.getBaseHeight() : 0;
   
       if (colorProvider == null)
       {
-        firstIndex = addTrianglesCuttingEarsForAllWalls(b, vertices, normals, indexes, colors, baseHeight, planet, firstIndex, colorWheel.wheelStep((int)buildings.size(), buildingCounter), includeGround, elevationData);
+        firstIndex = addTrianglesCuttingEarsForAllWalls(b, vertices, normals, indexes, colors, baseHeight, planet, firstIndex, colorWheel.wheelStep((int)buildings.size(), buildingCounter), elevationData);
   
       }
       else
       {
-        firstIndex = addTrianglesCuttingEarsForAllWalls(b, vertices, normals, indexes, colors, baseHeight, planet, firstIndex, colorProvider.getColor(b), includeGround, elevationData);
+        firstIndex = addTrianglesCuttingEarsForAllWalls(b, vertices, normals, indexes, colors, baseHeight, planet, firstIndex, colorProvider.getColor(b), elevationData);
       }
   
-      buildingVertexIndex.add(vertices.size() / 3);
-  
+      int lastV = ((int)vertices.size()) / 3;
+      buildingVertexIndex.add((short)lastV);
       buildingCounter++;
   
       if (firstIndex > 30000) //Max number of vertex per mesh (CHECK SHORT RANGE)
@@ -106,12 +134,8 @@ public class CityGMLBuildingTessellator
         //Linking buildings with its mesh
         for (int j = 0; j < processedBuildings.size(); j++)
         {
-  //        DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
-  //        data->_containerMesh = im;
-  //        data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
-  //        data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
   
-          processedBuildings.get(j).setTessellatorData(new DefaultCityGMLBuildingTessellatorData(im, buildingVertexIndex.get(j *2), buildingVertexIndex.get(j *2+1)));
+          processedBuildings.get(j).setTessellatorData(createData(buildingVertexIndex.get(j *2), buildingVertexIndex.get(j *2+1), im, vertices));
         }
   
         //Reset
@@ -137,12 +161,8 @@ public class CityGMLBuildingTessellator
     //Linking buildings with its mesh
     for (int j = 0; j < processedBuildings.size(); j++)
     {
-  //    DefaultCityGMLBuildingTessellatorData* data = new DefaultCityGMLBuildingTessellatorData();
-  //    data->_containerMesh = im;
-  //    data->_firstVertexIndexWithinContainerMesh = buildingVertexIndex[j*2];
-  //    data->_lastVertexIndexWithinContainerMesh = buildingVertexIndex[j*2+1];
   
-      processedBuildings.get(j).setTessellatorData(new DefaultCityGMLBuildingTessellatorData(im, buildingVertexIndex.get(j *2), buildingVertexIndex.get(j *2+1)));
+      processedBuildings.get(j).setTessellatorData(createData(buildingVertexIndex.get(j *2), buildingVertexIndex.get(j *2+1), im, vertices));
     }
   
     if (vertices != null)
@@ -205,4 +225,50 @@ public class CityGMLBuildingTessellator
     return m;
   }
 
+  public static Sphere getSphereOfBuilding(CityGMLBuilding b)
+  {
+    DefaultCityGMLBuildingTessellatorData data = (DefaultCityGMLBuildingTessellatorData) b.getTessllatorData();
+    if (data == null)
+    {
+      return null;
+    }
+    return data._bSphere;
+  }
+
+  public static boolean areClose(CityGMLBuilding b1, CityGMLBuilding b2)
+  {
+  
+    final double threshold = 0.005;
+  
+    double dLat = b1._surfaces[0]._geodeticCoordinates[0]._latitude._degrees - b2._surfaces[0]._geodeticCoordinates[0]._latitude._degrees;
+    dLat = IMathUtils.instance().abs(dLat);
+  
+    if (dLat > threshold)
+    {
+      return false;
+    }
+  
+    double dLon = b1._surfaces[0]._geodeticCoordinates[0]._longitude._degrees - b2._surfaces[0]._geodeticCoordinates[0]._longitude._degrees;
+    dLon = IMathUtils.instance().abs(dLon);
+  
+    if (dLon > threshold)
+    {
+      return false;
+    }
+  
+    return true;
+  
+    /*
+    
+     //This implementation does not work prior to the mesh generation
+    const Sphere* s1 = getSphereOfBuilding(b1);
+    const Sphere* s2 = getSphereOfBuilding(b2);
+    
+    if (s1 == NULL || s2 == NULL){
+      return true;
+    }
+    
+    return s1->touchesSphere(s2);
+     */
+  }
 }

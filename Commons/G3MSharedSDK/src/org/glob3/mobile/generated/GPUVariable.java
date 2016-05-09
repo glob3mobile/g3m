@@ -110,6 +110,11 @@ public class GPUVariable
       return GPUUniformKey.BILLBOARD_ANCHOR;
     }
   
+    if (name.compareTo("uRoundedPointBorderColor") == 0)
+    {
+      return GPUUniformKey.ROUNDED_POINT_BORDER_COLOR;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)

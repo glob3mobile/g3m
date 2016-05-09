@@ -98,48 +98,47 @@ public class SphericalPlanet extends Planet
 
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
-    // By laborious algebraic manipulation....
-    final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
-  
-    final double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
-  
-    final double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
-  
-    // Solve the quadratic equation: ax^2 + bx + c = 0.
-    // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
-    // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-    final double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0.0)
-    {
-      // no intersections
-      return intersections;
-    }
-    else if (discriminant == 0.0)
-    {
-      // one intersection at a tangent point
-      //return new double[1] { -0.5 * b / a };
-      intersections.add(-0.5 * b / a);
-      return intersections;
-    }
-  
-    final double rootDiscriminant = IMathUtils.instance().sqrt(discriminant);
-    final double root1 = (-b + rootDiscriminant) / (2 *a);
-    final double root2 = (-b - rootDiscriminant) / (2 *a);
-  
-    // Two intersections - return the smallest first.
-    if (root1 < root2)
-    {
-      intersections.add(root1);
-      intersections.add(root2);
-    }
-    else
-    {
-      intersections.add(root2);
-      intersections.add(root1);
-    }
-    return intersections;
+    return _sphere.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ);
+  //
+  //  std::vector<double> intersections;
+  //
+  //  // By laborious algebraic manipulation....
+  //  const double a = directionX * directionX  + directionY * directionY + directionZ * directionZ;
+  //
+  //  const double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+  //
+  //  const double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
+  //
+  //  // Solve the quadratic equation: ax^2 + bx + c = 0.
+  //  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+  //  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+  //  const double discriminant = b * b - 4 * a * c;
+  //  if (discriminant < 0.0) {
+  //    // no intersections
+  //    return intersections;
+  //  }
+  //  else if (discriminant == 0.0) {
+  //    // one intersection at a tangent point
+  //    //return new double[1] { -0.5 * b / a };
+  //    intersections.push_back(-0.5 * b / a);
+  //    return intersections;
+  //  }
+  //
+  //  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
+  //  const double root1 = (-b + rootDiscriminant) / (2*a);
+  //  const double root2 = (-b - rootDiscriminant) / (2*a);
+  //
+  //  // Two intersections - return the smallest first.
+  //  if (root1 < root2) {
+  //    intersections.push_back(root1);
+  //    intersections.push_back(root2);
+  //  }
+  //  else {
+  //    intersections.push_back(root2);
+  //    intersections.push_back(root1);
+  //  }
+  //  return intersections;
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)

@@ -3,8 +3,43 @@ public class CityGMLParser_BufferDownloadListener extends IBufferDownloadListene
 {
   private CityGMLListener _listener;
   private boolean _deleteListener;
-  public CityGMLParser_BufferDownloadListener(CityGMLListener listener, boolean deleteListener)
+  private final IThreadUtils _threadUtils;
+
+  private static class ParsingTask extends GAsyncTask
   {
+    private final String _s;
+    private java.util.ArrayList<CityGMLBuilding> _buildings = new java.util.ArrayList<CityGMLBuilding>();
+
+    private CityGMLListener _listener;
+    private boolean _deleteListener;
+
+    public ParsingTask(String s, CityGMLListener listener, boolean deleteListener)
+    {
+       _s = s;
+       _listener = listener;
+       _deleteListener = deleteListener;
+    }
+
+    public void runInBackground(G3MContext context)
+    {
+      _buildings = CityGMLParser.parseLOD2Buildings2(_s);
+    }
+
+    public void onPostExecute(G3MContext context)
+    {
+      _listener.onBuildingsCreated(_buildings);
+      if (_deleteListener)
+      {
+        if (_listener != null)
+           _listener.dispose();
+      }
+    }
+  }
+
+
+  public CityGMLParser_BufferDownloadListener(IThreadUtils threadUtils, CityGMLListener listener, boolean deleteListener)
+  {
+     _threadUtils = threadUtils;
      _listener = listener;
      _deleteListener = deleteListener;
   }
@@ -20,19 +55,19 @@ public class CityGMLParser_BufferDownloadListener extends IBufferDownloadListene
     if (buffer != null)
        buffer.dispose();
 
-    //More "expensive" way of parsing 
-//    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
-//    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
-//    delete xml;
+    //More "expensive" way of parsing
+    //    IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(s);
+    //    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(xml);
+    //    delete xml;
 
-    java.util.ArrayList<CityGMLBuilding> buildings = CityGMLParser.parseLOD2Buildings2(s);
+    _threadUtils.invokeAsyncTask(new ParsingTask(s, _listener, _deleteListener), true);
 
-    _listener.onBuildingsCreated(buildings);
-    if (_deleteListener)
-    {
-      if (_listener != null)
-         _listener.dispose();
-    }
+    //    std::vector<CityGMLBuilding*> buildings = CityGMLParser::parseLOD2Buildings2(s);
+    //
+    //    _listener->onBuildingsCreated(buildings);
+    //    if (_deleteListener){
+    //      delete _listener;
+    //    }
   }
 
   public final void onError(URL url)
