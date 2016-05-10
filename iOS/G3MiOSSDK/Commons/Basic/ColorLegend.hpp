@@ -26,6 +26,10 @@ public:
   };
   
   ColorLegend(std::vector<ColorAndValue*> legend):_legend(legend){
+    
+    if (_legend.size() == 0){
+      return;
+    }
   
     for (size_t i = 0; i < _legend.size() -1; i++) {
       if (_legend[i]->_value >= _legend[i+1]->_value){
@@ -47,6 +51,9 @@ public:
     ColorAndValue* inf= NULL, *sup = NULL;
     
     for (size_t i = 0; i < _legend.size(); i++) {
+      if (_legend[i]->_value == value){
+        return _legend[i]->_color;
+      }
       if (_legend[i]->_value <= value){
         inf = _legend[i];
         if (i < _legend.size() -1){

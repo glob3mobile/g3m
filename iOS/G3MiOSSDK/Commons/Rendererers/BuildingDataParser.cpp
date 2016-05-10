@@ -79,7 +79,7 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
   
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
-//  int pointCounter = 0;
+  //  int pointCounter = 0;
   size_t pos = 0;
   size_t dataL = data.length();
   while (pos < dataL){
@@ -112,9 +112,9 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
     Color color = cl.getColor(v);
     colors.add(color);
     
-//    if (pointCounter++ % 100 == 0){
-//      ILogger::instance()->logInfo("%d points parsed", pointCounter);
-//    }
+    //    if (pointCounter++ % 100 == 0){
+    //      ILogger::instance()->logInfo("%d points parsed", pointCounter);
+    //    }
   }
   
   DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
@@ -131,80 +131,80 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
   return dm;
 }
 /*
-Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData){
-  
-  std::vector<ColorLegend::ColorAndValue*> legend;
-  legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0.0));
-  legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 25.0));
-  ColorLegend cl(legend);
-  
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-  FloatBufferBuilderFromColor colors;
-  //  int pointCounter = 0;
-  size_t pos = 0;
-  size_t dataL = data.length();
-  while (pos < dataL){
-    
-    IStringUtils::StringExtractionResult value = IStringUtils::extractSubStringBetween(data, "\"represente\": ", ",", pos);
-    if (value._endingPos == std::string::npos){
-      break;
-    }
-    pos = value._endingPos +1 ;
-    double v = IStringUtils::instance()->parseDouble(value._string);
-    
-    
-    IStringUtils::StringExtractionResult point = IStringUtils::extractSubStringBetween(data, "\"coordinates\": [", " ] ", pos);
-    if (point._endingPos == std::string::npos){
-      break;
-    }
-    pos = point._endingPos +1 ;
-    
-    std::vector<double> vd = IStringUtils::instance()->parseDoubles(point._string, ", ");
-    
-    if (elevationData == NULL){
-      Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
-      vertices->add(g);
-    } else{
-      double h = elevationData->getElevationAt(Angle::fromDegrees(vd[1]), Angle::fromDegrees(vd[0]));
-      Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2 + h);
-      vertices->add(g);
-    }
-    
-    Color color = cl.getColor(v);
-    colors.add(color);
-    
-    //    if (pointCounter++ % 100 == 0){
-    //      ILogger::instance()->logInfo("%d points parsed", pointCounter);
-    //    }
-  }
-  
-  PointCloudMesh* pcm = new PointCloudMesh(true,
-                                           vertices->getCenter(),
-                                           vertices->create(),
-                                           15.0,
-                                           colors.create(),
-                                           false,
-                                           Color::blue());
-  
-  
-//  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
-//                                  true,
-//                                  vertices->getCenter(),
-//                                  vertices->create(),
-//                                  1.0,
-//                                  20.0,
-//                                  NULL, //new Color(Color::red()),
-//                                  colors.create());
-  
-  delete vertices;
-  
-  return pcm;
-}
-*/
+ Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData){
+ 
+ std::vector<ColorLegend::ColorAndValue*> legend;
+ legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0.0));
+ legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 25.0));
+ ColorLegend cl(legend);
+ 
+ FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+ FloatBufferBuilderFromColor colors;
+ //  int pointCounter = 0;
+ size_t pos = 0;
+ size_t dataL = data.length();
+ while (pos < dataL){
+ 
+ IStringUtils::StringExtractionResult value = IStringUtils::extractSubStringBetween(data, "\"represente\": ", ",", pos);
+ if (value._endingPos == std::string::npos){
+ break;
+ }
+ pos = value._endingPos +1 ;
+ double v = IStringUtils::instance()->parseDouble(value._string);
+ 
+ 
+ IStringUtils::StringExtractionResult point = IStringUtils::extractSubStringBetween(data, "\"coordinates\": [", " ] ", pos);
+ if (point._endingPos == std::string::npos){
+ break;
+ }
+ pos = point._endingPos +1 ;
+ 
+ std::vector<double> vd = IStringUtils::instance()->parseDoubles(point._string, ", ");
+ 
+ if (elevationData == NULL){
+ Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2);
+ vertices->add(g);
+ } else{
+ double h = elevationData->getElevationAt(Angle::fromDegrees(vd[1]), Angle::fromDegrees(vd[0]));
+ Geodetic3D g = Geodetic3D::fromDegrees(vd[1], vd[0], 2 + h);
+ vertices->add(g);
+ }
+ 
+ Color color = cl.getColor(v);
+ colors.add(color);
+ 
+ //    if (pointCounter++ % 100 == 0){
+ //      ILogger::instance()->logInfo("%d points parsed", pointCounter);
+ //    }
+ }
+ 
+ PointCloudMesh* pcm = new PointCloudMesh(true,
+ vertices->getCenter(),
+ vertices->create(),
+ 15.0,
+ colors.create(),
+ false,
+ Color::blue());
+ 
+ 
+ //  DirectMesh* dm = new DirectMesh(GLPrimitive::points(),
+ //                                  true,
+ //                                  vertices->getCenter(),
+ //                                  vertices->create(),
+ //                                  1.0,
+ //                                  20.0,
+ //                                  NULL, //new Color(Color::red()),
+ //                                  colors.create());
+ 
+ delete vertices;
+ 
+ return pcm;
+ }
+ */
 Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& data,
-                                             const Planet* planet,
-                                             const ElevationData* elevationData,
-                                             const ColorLegend& colorLegend){
+                                                          const Planet* planet,
+                                                          const ElevationData* elevationData,
+                                                          const ColorLegend& colorLegend){
   
   std::vector<std::string> lines = IStringUtils::instance()->splitLines(data);
   
@@ -213,10 +213,8 @@ Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& dat
   
   std::vector<Geodetic3D*> points;
   
-  Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
-  
   for (size_t i = 0; i < lines.size(); i++) {
-//    ILogger::instance()->logInfo(lines[i]);    
+    //    ILogger::instance()->logInfo(lines[i]);
     std::vector<double> vs = IStringUtils::instance()->parseDoubles(lines[i], ",");
     if (vs.size() < 3){
       continue;
@@ -224,10 +222,6 @@ Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& dat
     
     Geodetic3D g = Geodetic3D::fromDegrees(vs[1], vs[0], vs[2]);
     vertices->add(g);
-    
-    if (!karlsruheSector.contains(g.asGeodetic2D())){
-      ILogger::instance()->logError("Out of Karlsruhe");
-    }
     
     for (size_t j = 3; j < vs.size(); j++){
       const int time = (int)j - 3;
@@ -263,4 +257,105 @@ Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& dat
   return pcm;
   
 }
+
+Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& data,
+                                                          const Planet* planet,
+                                                          const ElevationData* elevationData){
+  
+  std::vector<std::string> lines = IStringUtils::instance()->splitLines(data);
+  
+  std::vector<Geodetic3D*> points;
+  
+  
+  
+  for (size_t i = 0; i < lines.size(); i++) {
+    //    ILogger::instance()->logInfo(lines[i]);
+    std::vector<double> vs = IStringUtils::instance()->parseDoubles(lines[i], ",");
+    if (vs.size() < 3){
+      continue;
+    }
+    
+    Geodetic3D* g = new Geodetic3D( Geodetic3D::fromDegrees(vs[1], vs[0], vs[2]));
+    points.push_back(g);
+    
+  }
+  
+  
+  double minH = points[0]->_height;
+  if (elevationData != NULL){
+    for (size_t i = 0; i < points.size(); i++) {
+      if (points[i]->_height < minH){
+        minH = points[i]->_height;
+      }
+    }
+  }
+  
+  
+  
+  FloatBufferBuilderFromColor colors;
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  Color color = Color::green();
+  for (size_t i = 0; i < points.size(); i++) {
+    
+    Geodetic2D g2D = points[i]->asGeodetic2D();
+    
+    double h = points[i]->_height;
+    if (elevationData != NULL){
+      h = h - minH + elevationData->getElevationAt(g2D);
+    }
+    
+    
+    vertices->add(Geodetic3D(g2D, h));
+    delete points[i];
+    colors.add(color);
+  }
+  
+  std::vector<IFloatBuffer*> colorsCollection;
+  colorsCollection.push_back(colors.create());
+  
+  PointCloudMesh* pcm = new PointCloudMesh(true,
+                                           vertices->getCenter(),
+                                           vertices->create(),
+                                           15.0,
+                                           colorsCollection,
+                                           true,
+                                           Color::blue());
+  
+  ILogger::instance()->logInfo("Created point cloud of %d points.", vertices->size() / 3);
+  
+  delete vertices;
+  
+  return pcm;
+  
+}
+
+IFloatBuffer* BuildingDataParser::createColorsForSolarRadiationMeshFromCSV(const std::string& data,
+                                                                           const ColorLegend& colorLegend){
+  
+  std::vector<double> vs = IStringUtils::instance()->parseDoubles(data, ",");
+  
+  FloatBufferBuilderFromColor colors;
+  
+  std::vector<Geodetic3D*> points;
+  
+  for (size_t i = 0; i < vs.size(); i++) {
+    Color color = colorLegend.getColor(vs[i]);
+    colors.add(color);
+  }
+  
+  return colors.create();
+}
+
+IFloatBuffer* BuildingDataParser::create0ColorsForSolarRadiationMeshFromCSV(const ColorLegend& colorLegend, int nVertices){
+  FloatBufferBuilderFromColor colors;
+  std::vector<Geodetic3D*> points;
+  
+  Color color = colorLegend.getColor(0);
+  for (size_t i = 0; i < nVertices; i++) {
+    colors.add(color);
+  }
+  
+  return colors.create();
+}
+
 

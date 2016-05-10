@@ -24,7 +24,7 @@ protected:
   const Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
   const IFloatBuffer*           _vertices;
-//  const IFloatBuffer*           _colors;
+  const IFloatBuffer*           _colors;
   const float             _pointSize;
   const bool              _depthTest;
   Color _borderColor;
@@ -45,7 +45,7 @@ public:
                  const Vector3D& center,
                  const IFloatBuffer* vertices,
                  float pointSize,
-                 const std::vector<IFloatBuffer*> colorsCollection,
+                 const std::vector<IFloatBuffer*>& colorsCollection,
                  bool depthTest,
                  const Color& borderColor);
   
@@ -74,6 +74,7 @@ public:
     return (int)_colorsCollection.size();
   }
   
+  void changeToColors(IFloatBuffer* colors);
 };
 
 #endif

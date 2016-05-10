@@ -211,34 +211,123 @@
 
 #include <typeinfo>
 
-class TimeEvolutionTask: public GTask{
+//class TimeEvolutionTask: public GTask{
+//  
+//  PointCloudMesh* _abstractMesh;
+//  
+//  float _delta;
+//  int _step;
+//  ViewController* _vc;
+//public:
+//  
+//  TimeEvolutionTask(PointCloudMesh* abstractMesh,
+//                    ViewController* vc):
+//  _abstractMesh(abstractMesh),
+//  _delta(0.0),
+//  _step(0),
+//  _vc(vc)
+//  {
+//  }
+//  
+//  void run(const G3MContext* context){
+//    
+//    _step++;
+//    //int min = 0; //int min = _step % 60;
+//    int hour = (_step / 10) % _abstractMesh->getNumberOfColors(); // int hour = (_step / 60) % 24;
+//    
+//    _abstractMesh->changeToColors(hour);
+//    
+//    //Label
+//    
+//    std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
+//    context->getStringUtils()->toString(hour % 24) + ":00";// + context->getStringUtils()->toString(min);
+//    
+//    [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
+//  }
+//  
+//};
+
+class PointCloudEvolutionTask: public GTask{
   
-  PointCloudMesh* _abstractMesh;
+  PointCloudMesh* _pcMesh;
   
   float _delta;
   int _step;
   ViewController* _vc;
+  
+  ColorLegend* _colorLegend;
+  bool _using0Color;
 public:
   
-  TimeEvolutionTask(PointCloudMesh* abstractMesh,
-                    ViewController* vc):
-  _abstractMesh(abstractMesh),
+  PointCloudEvolutionTask(ViewController* vc):
+  _pcMesh(NULL),
   _delta(0.0),
   _step(0),
-  _vc(vc)
+  _vc(vc),
+  _colorLegend(NULL),
+  _using0Color(false)
   {
+    
+    std::vector<ColorLegend::ColorAndValue*> legend;
+    legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0)); //Min
+//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(51, 31, 0, 255), 6)); //Percentile 10 (without 0's)
+    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(128, 77, 0, 255), 21)); //Percentile 25 (without 0's)
+    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 153, 0, 255), 75)); //Mean (without 0's)
+    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 204, 128, 255), 100)); //Percentile 75 (without 0's)
+    legend.push_back(new ColorLegend::ColorAndValue(Color::white(), 806.0)); //Max
+    _colorLegend = new ColorLegend(legend);
+  }
+  
+  ~PointCloudEvolutionTask(){
+    delete _colorLegend;
   }
   
   void run(const G3MContext* context){
     
     _step++;
-    //int min = 0; //int min = _step % 60;
-    int hour = (_step / 10) % _abstractMesh->getNumberOfColors(); // int hour = (_step / 60) % 24;
     
-    _abstractMesh->changeToColors(hour);
+    if (_pcMesh == NULL){
+      
+      //      NSArray* array = [[NSBundle mainBundle] pathsForResourcesOfType:@"csv" inDirectory:@""];
+      
+      NSString *filePath = [[NSBundle mainBundle] pathForResource:@"vertices" ofType:@"csv" inDirectory:@"EIFER Resources/pointcloud"];
+      if (filePath) {
+        NSString *myText = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+        
+        _pcMesh = (PointCloudMesh*) BuildingDataParser::createSolarRadiationMeshFromCSV([myText UTF8String],
+                                                                                        [[_vc G3MWidget] widget]->getG3MContext()->getPlanet(),
+                                                                                        [_vc elevationData]);
+        
+        [_vc meshRenderer]->addMesh(_pcMesh);
+      }
+      
+    }
+    
+    if (_pcMesh != NULL){
+      NSString* fileColors = [NSString stringWithFormat:@"values_t%d", _step, nil];
+      NSString *filePath = [[NSBundle mainBundle] pathForResource:fileColors ofType:@"csv" inDirectory:@"EIFER Resources/pointcloud"];
+      if (filePath) {
+        NSString *myText = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+        
+        IFloatBuffer* colors = BuildingDataParser::createColorsForSolarRadiationMeshFromCSV([myText UTF8String], *_colorLegend);
+        
+        
+        _pcMesh->changeToColors(colors);
+        _using0Color = false;
+      } else{
+        if (!_using0Color){
+          IFloatBuffer* colors = BuildingDataParser::create0ColorsForSolarRadiationMeshFromCSV(*_colorLegend, (int) _pcMesh->getVertexCount());
+          _pcMesh->changeToColors(colors);
+          _using0Color = true;
+        }
+      }
+    }
+    
+    //int min = 0; //int min = _step % 60;
+    int hour = (_step / 10) % _pcMesh->getNumberOfColors(); // int hour = (_step / 60) % 24;
     
     //Label
-
+    
     std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
     context->getStringUtils()->toString(hour % 24) + ":00";// + context->getStringUtils()->toString(min);
     
@@ -476,7 +565,8 @@ public:
   
   _modelsLoadedCounter = 0;
   
-  _pointCloudFiles.push_back("file:///SR_24h.csv");
+  //  _pointCloudFiles.push_back("file:///SR_24h.csv");
+  //  _pointCloudFiles.push_back("file:///SR_1Year.csv");
   //_pointCloudFiles.push_back("file:///SolarRadiation.geojson");
   
   _pointCloudsLoaded = 0;
@@ -516,6 +606,7 @@ public:
                                                                                karlsruheSector,
                                                                                Vector2I(308, 177));
       [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
+      
       edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc, context->getThreadUtils()), true);
     } else{
       [_vc requestPointCloud];
@@ -650,7 +741,7 @@ public:
 
 -(void) onProgress {
   //N MODELS + 1 POINT CLOUD
-  float p = (float)(_modelsLoadedCounter + _pointCloudsLoaded) / ((float)_cityGMLFiles.size() + 1);
+  float p = (float)(_modelsLoadedCounter + _pointCloudsLoaded) / ((float)_cityGMLFiles.size() + _pointCloudFiles.size());
   [_progressBar setProgress: p animated:TRUE];
   
   if (p == 1){
@@ -660,11 +751,16 @@ public:
 
 -(void) onAllDataLoaded{
   ILogger::instance()->logInfo("City Model Loaded");
-  for (size_t i = 0; i < _pointClouds.size(); i++) {
-    
-    [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                             new TimeEvolutionTask((PointCloudMesh*)_pointClouds[i], self)));
-  }
+//  for (size_t i = 0; i < _pointClouds.size(); i++) {
+//    
+////    [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+////                                                             new TimeEvolutionTask((PointCloudMesh*)_pointClouds[i], self)));
+//    
+//  }
+  
+  
+  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+                                                           new PointCloudEvolutionTask(self)));
   
   
   //Whole city!
@@ -702,6 +798,8 @@ public:
   
   _headerView.hidden = FALSE;
   
+  [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
+  
   [G3MWidget widget]->setViewMode(MONO);
   
   CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
@@ -736,6 +834,8 @@ public:
   
   _headerView.hidden = FALSE;
   
+  [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
+  
   [G3MWidget widget]->setViewMode(MONO);
   //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   [_camVC enableVideo:FALSE];
@@ -749,7 +849,10 @@ public:
   
   class AltitudeFixerLM: public ILocationModifier{
     Geodetic3D modify(const Geodetic3D& location){
-      return Geodetic3D::fromDegrees(location._latitude._degrees, location._longitude._degrees, 3);
+      //return location;
+      return Geodetic3D::fromDegrees(location._latitude._degrees,
+                                     location._longitude._degrees,
+                                     location._height + 15);
     }
   };
   
@@ -773,11 +876,13 @@ public:
   cameraRenderer->addHandler(dac);
   
   [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
+  [G3MWidget widget]->getNextCamera()->setFOV(Angle::fromDegrees(63.54).times([G3MWidget widget]->getNextCamera()->getViewPortRatio()), Angle::fromDegrees(63.54));
 }
 
 -(void) activateStereoVRMode{
   
   _headerView.hidden = TRUE;
+  [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
   
   //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   
@@ -799,6 +904,7 @@ public:
   
   //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
   [_camVC enableVideo:TRUE];
+  [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   [G3MWidget widget]->setViewMode(MONO);
   [self activateDeviceAttitudeTracking];
 }
@@ -888,7 +994,7 @@ public:
     
     //Gradient background
     CAGradientLayer *gradient = [CAGradientLayer layer];
-//    gradient.frame = _menuView.bounds;
+    //    gradient.frame = _menuView.bounds;
     gradient.frame = CGRectMake(_menuView.bounds.origin.x, _menuView.bounds.origin.y,
                                 _menuView.bounds.size.width*3, _menuView.bounds.size.height);//  _menuView.bounds.
     gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
