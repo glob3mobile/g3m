@@ -24,7 +24,7 @@ protected:
   const Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
   const IFloatBuffer*           _vertices;
-  const IFloatBuffer*           _colors;
+//  const IFloatBuffer*           _colors;
   const float             _pointSize;
   const bool              _depthTest;
   Color _borderColor;
@@ -36,9 +36,8 @@ protected:
   
   void createGLState();
   
-  mutable bool _showNormals;
-  mutable Mesh* _normalsMesh;
-  Mesh* createNormalsMesh() const;
+  const std::vector<IFloatBuffer*> _colorsCollection;
+  
   
 public:
   
@@ -46,7 +45,7 @@ public:
                  const Vector3D& center,
                  const IFloatBuffer* vertices,
                  float pointSize,
-                 const IFloatBuffer* colors,
+                 const std::vector<IFloatBuffer*> colorsCollection,
                  bool depthTest,
                  const Color& borderColor);
   
@@ -63,12 +62,16 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
   
-  void showNormals(bool v) const {
-    _showNormals = v;
+  IFloatBuffer* getColorsFloatBuffer() const{
+    return (IFloatBuffer*)_colorsCollection[0];
   }
   
-  IFloatBuffer* getColorsFloatBuffer() const{
-    return (IFloatBuffer*)_colors;
+  void changeToColors(int i);
+  
+  void showNormals(bool v) const{} //NO NORMALS
+  
+  int getNumberOfColors() const{
+    return (int)_colorsCollection.size();
   }
   
 };

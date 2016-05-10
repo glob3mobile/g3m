@@ -130,7 +130,7 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
   
   return dm;
 }
-
+/*
 Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData){
   
   std::vector<ColorLegend::ColorAndValue*> legend;
@@ -199,5 +199,68 @@ Mesh* BuildingDataParser::createSolarRadiationMesh(const std::string& data, cons
   delete vertices;
   
   return pcm;
+}
+*/
+Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& data,
+                                             const Planet* planet,
+                                             const ElevationData* elevationData,
+                                             const ColorLegend& colorLegend){
+  
+  std::vector<std::string> lines = IStringUtils::instance()->splitLines(data);
+  
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  std::vector<FloatBufferBuilderFromColor*> colorsCollectionBuilders;
+  
+  std::vector<Geodetic3D*> points;
+  
+  Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
+  
+  for (size_t i = 0; i < lines.size(); i++) {
+//    ILogger::instance()->logInfo(lines[i]);    
+    std::vector<double> vs = IStringUtils::instance()->parseDoubles(lines[i], ",");
+    if (vs.size() < 3){
+      continue;
+    }
+    
+    Geodetic3D g = Geodetic3D::fromDegrees(vs[1], vs[0], vs[2]);
+    vertices->add(g);
+    
+    if (!karlsruheSector.contains(g.asGeodetic2D())){
+      ILogger::instance()->logError("Out of Karlsruhe");
+    }
+    
+    for (size_t j = 3; j < vs.size(); j++){
+      const int time = (int)j - 3;
+      
+      if (colorsCollectionBuilders.size()  <= time){
+        colorsCollectionBuilders.push_back(new FloatBufferBuilderFromColor());
+      }
+      Color color = colorLegend.getColor(vs[time]);
+      colorsCollectionBuilders[time]->add(color);
+    }
+  }
+  
+  std::vector<IFloatBuffer*> colorsCollection;
+  for (size_t i = 0; i < colorsCollectionBuilders.size(); i++) {
+    colorsCollection.push_back( colorsCollectionBuilders[i]->create() );
+    delete colorsCollectionBuilders[i];
+  }
+  
+  
+  
+  PointCloudMesh* pcm = new PointCloudMesh(true,
+                                           vertices->getCenter(),
+                                           vertices->create(),
+                                           15.0,
+                                           colorsCollection,
+                                           true,
+                                           Color::blue());
+  
+  ILogger::instance()->logInfo("Created point cloud of %d points.", vertices->size() / 3);
+  
+  delete vertices;
+  
+  return pcm;
+  
 }
 

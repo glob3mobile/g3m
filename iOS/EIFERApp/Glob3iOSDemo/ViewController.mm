@@ -217,8 +217,6 @@ class TimeEvolutionTask: public GTask{
   
   float _delta;
   int _step;
-  
-  float* _initialColors;
   ViewController* _vc;
 public:
   
@@ -229,57 +227,20 @@ public:
   _step(0),
   _vc(vc)
   {
-    
-    IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
-    _initialColors = new float[colors->size()];
-    
-    for (size_t i = 0; i < colors->size(); i++) {
-      _initialColors[i] = colors->get(i);
-    }
-    
-    
   }
   
   void run(const G3MContext* context){
     
-    IFloatBuffer* colors = _abstractMesh->getColorsFloatBuffer();
-    const IMathUtils* mu = IMathUtils::instance();
+    _step++;
+    //int min = 0; //int min = _step % 60;
+    int hour = (_step / 10) % _abstractMesh->getNumberOfColors(); // int hour = (_step / 60) % 24;
     
-    double factor = (1.0f + mu->sin(_delta)) / 2.0;
-    _delta += 0.1;
-    
-    FloatBuffer_iOS fb(colors->size());
-    float *newColors = fb.getPointer();
-    
-    for (size_t i = 0; i < colors->size(); i+=4) {
-      float r = _initialColors[i];
-      float g = _initialColors[i+1];
-      float b = _initialColors[i+2];
-      float a = _initialColors[i+3];
-      
-      r *= factor;
-      r = mu->clamp(r, 0.0f, 1.0f);
-      
-      g *= factor;
-      g = mu->clamp(g, 0.0f, 1.0f);
-      
-      b *= 1.0f / factor;
-      b = mu->clamp(b, 0.0f, 1.0f);
-      
-      newColors[i] = r;
-      newColors[i+1] = g;
-      newColors[i+2] = b;
-      newColors[i+3] = a;
-    }
-    
-    colors->put(0, &fb);
-    
+    _abstractMesh->changeToColors(hour);
     
     //Label
-    _step++;
-    int min = _step % 60;
-    int hour = (_step / 60) % 24;
-    std::string s = context->getStringUtils()->toString(hour) + ":" + context->getStringUtils()->toString(min);
+
+    std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
+    context->getStringUtils()->toString(hour % 24) + ":00";// + context->getStringUtils()->toString(min);
     
     [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
   }
@@ -500,22 +461,24 @@ public:
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
-  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///technologiepark_WGS84.xml" needsToBeFixOnGround:true];
-//  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
-
+  //  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+  
   _modelsLoadedCounter = 0;
   
-  _pointCloudFiles.push_back("file:///SolarRadiation.geojson");
+  _pointCloudFiles.push_back("file:///SR_24h.csv");
+  //_pointCloudFiles.push_back("file:///SolarRadiation.geojson");
+  
   _pointCloudsLoaded = 0;
   
   [_progressBar setProgress:0.0f];
@@ -618,8 +581,17 @@ public:
 }
 
 -(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
+  std::vector<ColorLegend::ColorAndValue*> legend;
+  legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0)); //Min
+  legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(128, 77, 0, 255), 21)); //Percentile 25 (without 0's)
+  legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 153, 0, 255), 75)); //Mean (without 0's)
+  legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 204, 128, 255), 100)); //Percentile 75 (without 0's)
+  legend.push_back(new ColorLegend::ColorAndValue(Color::white(), 806.0)); //Max
+  ColorLegend cl(legend);
   
-  Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
+  Mesh* m = BuildingDataParser::createSolarRadiationMeshFromCSV(pointCloudDescriptor, _planet, elevationData, cl);
+  
+  //  Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
   meshRendererPC->addMesh(m);
   _pointClouds.push_back(m);
   
@@ -765,7 +737,7 @@ public:
   _headerView.hidden = FALSE;
   
   [G3MWidget widget]->setViewMode(MONO);
-//  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+  //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   [_camVC enableVideo:FALSE];
   [self activateDeviceAttitudeTracking];
 }
@@ -807,7 +779,7 @@ public:
   
   _headerView.hidden = TRUE;
   
-//  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
+  //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   
   [_camVC enableVideo:FALSE];
   
@@ -825,7 +797,7 @@ public:
   
   _headerView.hidden = FALSE;
   
-//  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
+  //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
   [_camVC enableVideo:TRUE];
   [G3MWidget widget]->setViewMode(MONO);
   [self activateDeviceAttitudeTracking];
@@ -913,6 +885,15 @@ public:
     [_showMenuButton setImage:image forState:UIControlStateNormal];
     
     _menuHeightConstraint.constant = - _menuView.bounds.size.height + _showMenuButton.bounds.size.height;
+    
+    //Gradient background
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+//    gradient.frame = _menuView.bounds;
+    gradient.frame = CGRectMake(_menuView.bounds.origin.x, _menuView.bounds.origin.y,
+                                _menuView.bounds.size.width*3, _menuView.bounds.size.height);//  _menuView.bounds.
+    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
+    [_menuView.layer insertSublayer:gradient atIndex:0];
+    
   } else{
     if (!_isMenuAvailable){
       return;

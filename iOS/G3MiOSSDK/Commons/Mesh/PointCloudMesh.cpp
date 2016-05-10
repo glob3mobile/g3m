@@ -25,15 +25,18 @@
 PointCloudMesh::~PointCloudMesh() {
   if (_owner) {
     delete _vertices;
-    delete _colors;
+//    delete _colors;
+    
+    for (size_t i = 0; i < _colorsCollection.size(); i++){
+      delete _colorsCollection[i];
+    }
+    
   }
   
   delete _boundingVolume;
   delete _translationMatrix;
   
   _glState->_release();
-  
-  delete _normalsMesh;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -44,12 +47,11 @@ PointCloudMesh::PointCloudMesh(bool owner,
                                const Vector3D& center,
                                const IFloatBuffer* vertices,
                                float pointSize,
-                               const IFloatBuffer* colors,
+                               const std::vector<IFloatBuffer*> colorsCollection,
                                bool depthTest,
                                const Color& borderColor) :
 _owner(owner),
 _vertices(vertices),
-_colors(colors),
 _boundingVolume(NULL),
 _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
@@ -58,9 +60,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _pointSize(pointSize),
 _depthTest(depthTest),
 _glState(new GLState()),
-_normalsMesh(NULL),
-_showNormals(false),
-_borderColor(borderColor)
+_borderColor(borderColor),
+_colorsCollection(colorsCollection)
 {
   createGLState();
 }
@@ -143,23 +144,49 @@ void PointCloudMesh::createGLState() {
     _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
   
-  if (_colors != NULL) {
-    _glState->addGLFeature(new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
-                                              4,            // Our buffer contains elements of 4
-                                              0,            // Index 0
-                                              false,        // Not normalized
-                                              0,            // Stride 0
-                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
-                           false);
-    
-  } else{
-    THROW_EXCEPTION("PointCloudMesh without colors")
-  }
+  changeToColors(0);
+  
+//  if (_colorsCollection.size() > 0) {
+//    
+//    for (size_t i = 0; i < _colorsCollection.size(); i++){
+//      
+//      ColorGLFeature* c = new ColorGLFeature(_colorsCollection[0],      // The attribute is a float vector of 4 elements RGBA
+//                                             4,            // Our buffer contains elements of 4
+//                                             0,            // Index 0
+//                                             false,        // Not normalized
+//                                             0,            // Stride 0
+//                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+//      
+//      _colorsGLFCollection.push_back(c);
+//    }
+//    
+//    _glState->addGLFeature(_colorsGLFCollection[0], false);
+//    
+//  } else{
+//    THROW_EXCEPTION("PointCloudMesh without colors")
+//  }
   
 }
 
+void PointCloudMesh::changeToColors(int i){
+  
+  if (i > _colorsCollection.size()){
+    THROW_EXCEPTION("PointCloudMesh without colors for given time.")
+  }
+  
+  _glState->clearGLFeatureGroup(COLOR_GROUP);
+  
+  ColorGLFeature* c = new ColorGLFeature(_colorsCollection[i],      // The attribute is a float vector of 4 elements RGBA
+                                         4,            // Our buffer contains elements of 4
+                                         0,            // Index 0
+                                         false,        // Not normalized
+                                         0,            // Stride 0
+                                         true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  _glState->addGLFeature(c, false);
+}
+
 void PointCloudMesh::rawRender(const G3MRenderContext* rc,
-                             const GLState* parentGLState) const {
+                               const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
   
   GL* gl = rc->getGL();

@@ -227,13 +227,13 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LE9-lB-bmo">
-                                        <rect key="frame" x="230" y="0.0" width="101" height="37"/>
+                                        <rect key="frame" x="130" y="0.0" width="300" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="101" id="1ZY-jc-2W3"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="4C3-aY-pJr"/>
                                             <constraint firstAttribute="height" constant="48" id="Nqc-ol-43P"/>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="48" id="O5c-AF-kth"/>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="101" id="nte-vI-rwg"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="nte-vI-rwg"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" red="0.43529411764705883" green="0.72156862745098038" blue="0.027450980392156862" alpha="1" colorSpace="calibratedRGB"/>
@@ -241,6 +241,7 @@
                                         <color key="shadowColor" red="0.550485322" green="0.550485322" blue="0.550485322" alpha="1" colorSpace="calibratedRGB"/>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="1ZY-jc-2W3"/>
                                                 <exclude reference="4C3-aY-pJr"/>
                                                 <exclude reference="Nqc-ol-43P"/>
                                             </mask>
