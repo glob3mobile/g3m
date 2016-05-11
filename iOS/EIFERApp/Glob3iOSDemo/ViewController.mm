@@ -243,6 +243,8 @@ public:
   
   ~PointCloudEvolutionTask(){
     delete _colorLegend;
+    
+    [_vc removePointCloudMesh];
   }
   
   void run(const G3MContext* context){
@@ -261,8 +263,7 @@ public:
                                                                                         [[_vc G3MWidget] widget]->getG3MContext()->getPlanet(),
                                                                                         [_vc elevationData],
                                                                                         *_colorLegend);
-        
-        [_vc meshRenderer]->addMesh(_pcMesh);
+        [_vc addPointCloudMesh:_pcMesh];
       }
       
     }
@@ -331,42 +332,6 @@ public:
   
 };
 
-
-class PointCloudBDL : public IBufferDownloadListener {
-private:
-  ViewController* _demo;
-public:
-  PointCloudBDL(ViewController* demo) :
-  _demo(demo)
-  {
-  }
-  
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-    
-    std::string s = buffer->getAsString();
-    delete buffer;
-    [_demo createPointCloudWithDescriptor:s];
-  }
-  
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
-  }
-  
-  void onCancel(const URL& url) {
-    // do nothing
-  }
-  
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired) {
-    // do nothing
-  }
-  
-};
-
-
 class MyEDCamConstrainer: public ICameraConstrainer {
   
   ElevationData* _ed;
@@ -424,8 +389,7 @@ public:
     
     [_demo setElevationData:elevationData];
     
-    [_demo requestPointCloud];
-    [_demo loadCityModelWithThreadUtils];
+    [_demo loadCityModel];
   }
   
   virtual void onError(const Sector& sector,
@@ -448,14 +412,6 @@ public:
   virtual ~MyCityGMLBuildingTouchedListener(){}
   virtual void onBuildingTouched(CityGMLBuilding* building){
     std::string name = "ID: " + building->_name + "\n" + building->getPropertiesDescription();
-    //    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Building selected"
-    //                                                     message:[NSString stringWithUTF8String:name.c_str()]
-    //                                                    delegate:_vc
-    //                                           cancelButtonTitle:@"Accept"
-    //                                           otherButtonTitles: nil];
-    //    [alert addButtonWithTitle:@"Show Solar Radiation Data"];
-    //    [alert show];
-    
     
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:@"Building selected"
@@ -469,16 +425,13 @@ public:
                                 {
                                   //Handel your yes please button action here
                                   
-                                  
                                 }];
     UIAlertAction* SRButton = [UIAlertAction
                                actionWithTitle:@"Show Solar Radiation Data"
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction * action)
                                {
-                                 [_vc loadSolarRadiationPointCloud];
-                                 
-                                 
+                                 [_vc loadSolarRadiationPointCloudForBuilding:building];
                                }];
     
     [alert addAction:yesButton];
@@ -491,6 +444,68 @@ public:
 
 
 
+class MyInitTask: public GInitializationTask{
+  bool _useDEM;
+  ViewController* _vc;
+public:
+  
+  MyInitTask(ViewController* vc, bool useDEM):_useDEM(useDEM), _vc(vc){
+    
+  }
+  
+  void run(const G3MContext* context){
+    if (_useDEM){
+      Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
+      SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
+                                                                               karlsruheSector,
+                                                                               Vector2I(308, 177));
+      [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
+      
+      edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc, context->getThreadUtils()), true);
+    } else{
+      [_vc loadCityModel];
+    }
+  }
+  
+  bool isDone(const G3MContext* context){
+    return true;
+  }
+  
+};
+
+class MyCityGMLRendererListener: public CityGMLRendererListener{
+  ViewController* _vc;
+public:
+  MyCityGMLRendererListener(ViewController* vc):_vc(vc){}
+  
+  void onBuildingsLoaded(const std::vector<CityGMLBuilding*>& buildings){
+    [_vc onCityModelLoaded];
+    
+#pragma mark UNCOMMENT TO SAVE MEMORY
+    //Decreasing consumed memory
+    for (size_t i = 0; i < buildings.size(); i++) {
+      buildings[i]->removeSurfaceData();
+    }
+  }
+  
+};
+
+
+class AltitudeFixerLM: public ILocationModifier{
+  const ElevationData* _ed;
+public:
+  AltitudeFixerLM(const ElevationData* ed):_ed(ed){}
+  
+  Geodetic3D modify(const Geodetic3D& location){
+    double minH = _ed->getElevationAt(location._latitude, location._longitude) + 1.6;
+    if (location._height < minH){
+      return Geodetic3D::fromDegrees(location._latitude._degrees,
+                                     location._longitude._degrees,
+                                     minH);
+    }
+    return location;
+  }
+};
 
 ///////////////////
 
@@ -544,8 +559,8 @@ public:
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
-  //    [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
   //    [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
   //    [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
@@ -558,12 +573,6 @@ public:
   //  [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
   
   _modelsLoadedCounter = 0;
-  
-  //  _pointCloudFiles.push_back("file:///SR_24h.csv");
-  //  _pointCloudFiles.push_back("file:///SR_1Year.csv");
-  //_pointCloudFiles.push_back("file:///SolarRadiation.geojson");
-  
-  _pointCloudsLoaded = 0;
   
   [_progressBar setProgress:0.0f];
   
@@ -583,42 +592,33 @@ public:
   
 }
 
-
-class MyInitTask: public GInitializationTask{
-  bool _useDEM;
-  ViewController* _vc;
-public:
+-(void) loadSolarRadiationPointCloudForBuilding:(CityGMLBuilding*) building{
   
-  MyInitTask(ViewController* vc, bool useDEM):_useDEM(useDEM), _vc(vc){
-    
+  if (_buildingShowingPC != NULL){
+    CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(_buildingShowingPC, Color::blue());
   }
   
-  void run(const G3MContext* context){
-    if (_useDEM){
-      Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
-      SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
-                                                                               karlsruheSector,
-                                                                               Vector2I(308, 177));
-      [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
-      
-      edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc, context->getThreadUtils()), true);
-    } else{
-      [_vc requestPointCloud];
-      [_vc loadCityModelWithThreadUtils];
-    }
-  }
+  _buildingShowingPC = building;
+  CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(_buildingShowingPC, Color::transparent());
   
-  bool isDone(const G3MContext* context){
-    return true;
+  if (_pointCloudTask != NULL){
+    [G3MWidget widget]->removeAllPeriodicalTasks();
   }
+  _pointCloudTask = new PointCloudEvolutionTask(self);
   
-};
-
-
--(void) loadSolarRadiationPointCloud{
   [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
                                                            new PointCloudEvolutionTask(self)));
 }
+
+-(void) addPointCloudMesh:(Mesh*) pc{
+  meshRendererPC->addMesh(pc);
+}
+
+-(void) removePointCloudMesh{
+  meshRendererPC->clearMeshes();
+}
+
+
 
 - (void)initEIFERG3m:(BOOL) useDEM
 {
@@ -671,50 +671,6 @@ public:
   builder.initializeWidget();
 }
 
--(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor {
-  std::vector<ColorLegend::ColorAndValue*> legend;
-  legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0)); //Min
-  legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(128, 77, 0, 255), 21)); //Percentile 25 (without 0's)
-  legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 153, 0, 255), 75)); //Mean (without 0's)
-  legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 204, 128, 255), 100)); //Percentile 75 (without 0's)
-  legend.push_back(new ColorLegend::ColorAndValue(Color::white(), 806.0)); //Max
-  ColorLegend cl(legend);
-  
-  Mesh* m = BuildingDataParser::createSolarRadiationMeshFromCSV(pointCloudDescriptor, _planet, elevationData, cl);
-  
-  //  Mesh* m = BuildingDataParser::createSolarRadiationMesh(pointCloudDescriptor, _planet, elevationData);
-  meshRendererPC->addMesh(m);
-  _pointClouds.push_back(m);
-  
-  [self onPointCloudLoaded];
-}
-
--(void) requestPointCloud{
-  for (size_t i = 0; i < _pointCloudFiles.size(); i++) {
-    [G3MWidget widget]->getG3MContext()
-    ->getDownloader()->requestBuffer(URL(_pointCloudFiles[i]), 1000, TimeInterval::forever(), true,
-                                     new PointCloudBDL(self),
-                                     true);
-  }
-}
-
-class MyCityGMLRendererListener: public CityGMLRendererListener{
-  ViewController* _vc;
-public:
-  MyCityGMLRendererListener(ViewController* vc):_vc(vc){}
-  
-  void onBuildingsLoaded(const std::vector<CityGMLBuilding*>& buildings){
-    [_vc onCityModelLoaded];
-    
-#pragma mark UNCOMMENT TO SAVE MEMORY
-    //Decreasing consumed memory
-    for (size_t i = 0; i < buildings.size(); i++) {
-      buildings[i]->removeSurfaceData();
-    }
-  }
-  
-};
-
 -(void) onCityModelLoaded{
   _modelsLoadedCounter++;
   if (_modelsLoadedCounter == _cityGMLFiles.size()){
@@ -723,13 +679,7 @@ public:
   [self onProgress];
 }
 
--(void) onPointCloudLoaded{
-  _pointCloudsLoaded++;
-  [self onProgress];
-}
-
-
--(void) loadCityModelWithThreadUtils{
+-(void) loadCityModel{
   
   for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
     cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]._fileName),
@@ -741,7 +691,7 @@ public:
 
 -(void) onProgress {
   //N MODELS + 1 POINT CLOUD
-  float p = (float)(_modelsLoadedCounter + _pointCloudsLoaded) / ((float)_cityGMLFiles.size() + _pointCloudFiles.size());
+  float p = (float)(_modelsLoadedCounter) / ((float)_cityGMLFiles.size());
   [_progressBar setProgress: p animated:TRUE];
   
   if (p == 1){
@@ -751,15 +701,6 @@ public:
 
 -(void) onAllDataLoaded{
   ILogger::instance()->logInfo("City Model Loaded");
-  //  for (size_t i = 0; i < _pointClouds.size(); i++) {
-  //
-  ////    [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-  ////                                                             new TimeEvolutionTask((PointCloudMesh*)_pointClouds[i], self)));
-  //
-  //  }
-  
-  
-  
   
   //Whole city!
   [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
@@ -835,7 +776,6 @@ public:
   [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
   
   [G3MWidget widget]->setViewMode(MONO);
-  //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   [_camVC enableVideo:FALSE];
   [self activateDeviceAttitudeTracking];
   
@@ -847,15 +787,6 @@ public:
   
   CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
   cameraRenderer->clearHandlers();
-  
-  class AltitudeFixerLM: public ILocationModifier{
-    Geodetic3D modify(const Geodetic3D& location){
-      //return location;
-      return Geodetic3D::fromDegrees(location._latitude._degrees,
-                                     location._longitude._degrees,
-                                     location._height + 15);
-    }
-  };
   
   //Storing prev cam
   if (_prevPos == NULL){
@@ -870,7 +801,7 @@ public:
   
   ILocationModifier * lm = NULL;
   if (fixAltitude){
-    lm = new AltitudeFixerLM();
+    lm = new AltitudeFixerLM([self elevationData]);
   }
   
   DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
@@ -888,8 +819,6 @@ public:
   _headerView.hidden = TRUE;
   [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
   
-  //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
-  
   [_camVC enableVideo:FALSE];
   
   [G3MWidget widget]->setViewMode(STEREO);
@@ -906,7 +835,6 @@ public:
   
   _headerView.hidden = FALSE;
   
-  //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:TRUE];
   [_camVC enableVideo:TRUE];
   [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   [G3MWidget widget]->setViewMode(MONO);
@@ -998,10 +926,8 @@ public:
     
     //Gradient background
     CAGradientLayer *gradient = [CAGradientLayer layer];
-    //    gradient.frame = _menuView.bounds;
     gradient.frame = CGRectMake(_menuView.bounds.origin.x, _menuView.bounds.origin.y,
-                                _menuView.bounds.size.width*3, _menuView.bounds.size.height);//  _menuView.bounds.
-    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
+                                _menuView.bounds.size.width*3, _menuView.bounds.size.height);    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
     [_menuView.layer insertSublayer:gradient atIndex:0];
     
   } else{

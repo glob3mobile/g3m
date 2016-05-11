@@ -47,7 +47,7 @@ public:
   ~Polygon3D() {
     delete _polygon2D;
 #ifdef C_CODE
-    for (int j = 0; j < _coor3D.size(); j++) {
+    for (int j = 0; j < (int)_coor3D.size(); j++) {
       delete _coor3D[j];
     }
 #endif

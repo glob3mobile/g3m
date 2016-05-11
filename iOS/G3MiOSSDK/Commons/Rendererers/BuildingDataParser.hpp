@@ -24,13 +24,6 @@ public:
   
   static Mesh* createPointCloudMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData);
   
-  //  static Mesh* createSolarRadiationMesh(const std::string& data, const Planet* planet, const ElevationData* elevationData);
-//  
-//  static Mesh* createSolarRadiationMeshFromCSV(const std::string& data,
-//                                               const Planet* planet,
-//                                               const ElevationData* elevationData,
-//                                               const ColorLegend& colorLegend);
-  
   static Mesh* createSolarRadiationMeshFromCSV(const std::string& data,
                                                const Planet* planet,
                                                const ElevationData* elevationData,

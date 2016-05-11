@@ -27,6 +27,7 @@ class CityGMLBuilding;
 class CityGMLRenderer;
 class MyEDCamConstrainer;
 class GEOVectorLayer;
+class PointCloudEvolutionTask;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
@@ -43,13 +44,7 @@ class GEOVectorLayer;
   };
   
   std::vector<CityGMLModelFile> _cityGMLFiles;
-  
-  
-  std::vector<std::string> _pointCloudFiles;
   size_t _modelsLoadedCounter;
-  size_t _pointCloudsLoaded;
-  
-  std::vector<Mesh*> _pointClouds;
   
   NSArray* _pickerArray;
   bool _useDem;
@@ -63,6 +58,10 @@ class GEOVectorLayer;
   
   //VC
   CameraViewController* _camVC;
+  
+  PointCloudEvolutionTask* _pointCloudTask;
+  
+  CityGMLBuilding* _buildingShowingPC;
   
   __weak IBOutlet UIButton *_showMenuButton;
   __weak IBOutlet NSLayoutConstraint *_menuHeightConstraint;
@@ -87,18 +86,14 @@ class GEOVectorLayer;
 @property const ElevationData* elevationData;
 @property MyEDCamConstrainer* camConstrainer;
 
--(void) createPointCloudWithDescriptor:(const std::string&) pointCloudDescriptor;
-//-(void) addBuildings:(const std::vector<CityGMLBuilding*>&) buildings
-//     withThreadUtils: (const IThreadUtils*) threadUtils;
-
--(void) requestPointCloud;
--(void) loadCityModelWithThreadUtils;
+-(void) loadCityModel;
 
 -(void) onCityModelLoaded;
--(void) onPointCloudLoaded;
 -(void) onProgress;
--(void) loadSolarRadiationPointCloud;
 
--(IBAction)switchVR:(id)sender;
+-(void) addPointCloudMesh:(Mesh*) pc;
+-(void) removePointCloudMesh;
+
+-(void) loadSolarRadiationPointCloudForBuilding:(CityGMLBuilding*) building;
 
 @end

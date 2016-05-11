@@ -56,7 +56,7 @@ class Polygon2D{
   
   bool isConcave() {
     const double a0 = angleInRadiansOfCorner(0);
-    for (size_t i = 1; i < (_nVertices - 1); i++) {
+    for (int i = 1; i < ((int)_nVertices - 1); i++) {
       const double ai = angleInRadiansOfCorner(i);
       if ((ai * a0) < 0) {
         return true;
@@ -140,7 +140,7 @@ class Polygon2D{
     const Vector2D* cornerB = remainingCorners[i2];
     const Vector2D* cornerC = remainingCorners[i3];
     
-    for (size_t j = 0; j < remainingCorners.size(); j++) {
+    for (int j = 0; j < (int)remainingCorners.size(); j++) {
       if ((j != i1) && (j != i2) && (j != i3)) {
         const Vector2D* p = remainingCorners[j];
         if (Vector2D::isPointInsideTriangle(*p, *cornerA, *cornerB, *cornerC)) {
