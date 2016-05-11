@@ -97,6 +97,7 @@ class GEOVectorLayer;
 -(void) onCityModelLoaded;
 -(void) onPointCloudLoaded;
 -(void) onProgress;
+-(void) loadSolarRadiationPointCloud;
 
 -(IBAction)switchVR:(id)sender;
 

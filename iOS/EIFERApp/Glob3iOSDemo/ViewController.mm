@@ -448,16 +448,47 @@ public:
   virtual ~MyCityGMLBuildingTouchedListener(){}
   virtual void onBuildingTouched(CityGMLBuilding* building){
     std::string name = "ID: " + building->_name + "\n" + building->getPropertiesDescription();
-    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Building selected"
-                                                     message:[NSString stringWithUTF8String:name.c_str()]
-                                                    delegate:_vc
-                                           cancelButtonTitle:@"Accept"
-                                           otherButtonTitles: nil];
-    //    [alert addButtonWithTitle:@"GOO"];
-    [alert show];
+    //    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Building selected"
+    //                                                     message:[NSString stringWithUTF8String:name.c_str()]
+    //                                                    delegate:_vc
+    //                                           cancelButtonTitle:@"Accept"
+    //                                           otherButtonTitles: nil];
+    //    [alert addButtonWithTitle:@"Show Solar Radiation Data"];
+    //    [alert show];
+    
+    
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:@"Building selected"
+                                  message:[NSString stringWithUTF8String:name.c_str()]
+                                  preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* yesButton = [UIAlertAction
+                                actionWithTitle:@"Ok"
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action)
+                                {
+                                  //Handel your yes please button action here
+                                  
+                                  
+                                }];
+    UIAlertAction* SRButton = [UIAlertAction
+                               actionWithTitle:@"Show Solar Radiation Data"
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction * action)
+                               {
+                                 [_vc loadSolarRadiationPointCloud];
+                                 
+                                 
+                               }];
+    
+    [alert addAction:yesButton];
+    [alert addAction:SRButton];
+    
+    [_vc presentViewController:alert animated:YES completion:nil];
   }
   
 };
+
 
 
 
@@ -582,6 +613,12 @@ public:
   }
   
 };
+
+
+-(void) loadSolarRadiationPointCloud{
+  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+                                                           new PointCloudEvolutionTask(self)));
+}
 
 - (void)initEIFERG3m:(BOOL) useDEM
 {
@@ -722,8 +759,6 @@ public:
   //  }
   
   
-  [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-                                                           new PointCloudEvolutionTask(self)));
   
   
   //Whole city!
