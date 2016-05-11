@@ -293,6 +293,8 @@ public:
       std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
       context->getStringUtils()->toString(hour % 24) + ":00";
       
+      [_vc._timeLabel setHidden:FALSE];
+      
       [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
     }
     
@@ -557,6 +559,8 @@ public:
   UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
   UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
   
+  [_timeLabel setHidden:TRUE];
+  
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
@@ -616,6 +620,7 @@ public:
 
 -(void) removePointCloudMesh{
   meshRendererPC->clearMeshes();
+  [_timeLabel setHidden:TRUE];
 }
 
 
