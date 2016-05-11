@@ -36,7 +36,8 @@ protected:
   
   void createGLState();
   
-  const std::vector<IFloatBuffer*> _colorsCollection;
+//  const std::vector<IFloatBuffer*> _colorsCollection;
+  void applyColor();
   
   
 public:
@@ -45,7 +46,7 @@ public:
                  const Vector3D& center,
                  const IFloatBuffer* vertices,
                  float pointSize,
-                 const std::vector<IFloatBuffer*>& colorsCollection,
+                 const IFloatBuffer* colors,
                  bool depthTest,
                  const Color& borderColor);
   
@@ -62,17 +63,17 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
   
-  IFloatBuffer* getColorsFloatBuffer() const{
-    return (IFloatBuffer*)_colorsCollection[0];
-  }
+//  IFloatBuffer* getColorsFloatBuffer() const{
+//    return (IFloatBuffer*)_colorsCollection[0];
+//  }
   
-  void changeToColors(int i);
+//  void changeToColors(int i);
   
   void showNormals(bool v) const{} //NO NORMALS
   
-  int getNumberOfColors() const{
-    return (int)_colorsCollection.size();
-  }
+//  int getNumberOfColors() const{
+//    return (int)_colorsCollection.size();
+//  }
   
   void changeToColors(IFloatBuffer* colors);
 };

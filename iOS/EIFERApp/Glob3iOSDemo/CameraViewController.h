@@ -16,8 +16,11 @@
 @interface CameraViewController : UIViewController{
   AVCaptureSession *session;
   AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
+  AVCaptureDevice *device;
 }
 
 -(void) enableVideo:(BOOL) enabled;
+
+-(float) fieldOfViewInDegrees;
 
 @end

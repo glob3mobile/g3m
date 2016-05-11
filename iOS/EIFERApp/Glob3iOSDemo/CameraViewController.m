@@ -23,6 +23,7 @@
   
   session = nil;
   captureVideoPreviewLayer = nil;
+  device = nil;
   
   //Registering the VC in the app delegate
   ((AppDelegate*)[UIApplication sharedApplication].delegate).cameraVC = (__bridge void *)(self);
@@ -43,9 +44,6 @@
   session = [[AVCaptureSession alloc] init];
   session.sessionPreset = AVCaptureSessionPresetMedium;
   
-  CALayer *viewLayer = self.view.layer;
-  //  NSLog(@"viewLayer = %@", viewLayer);
-  
   captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
   
   captureVideoPreviewLayer.frame = self.view.bounds;
@@ -54,7 +52,11 @@
   
   captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
   
-  AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+  if (device == NULL){
+    device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+  }
+  
+  
   
   NSError *error = nil;
   AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
@@ -67,6 +69,14 @@
   [session startRunning];
   
   [self adjustCameraLayer];
+}
+
+-(float) fieldOfViewInDegrees{
+  // https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureDeviceFormat_Class/index.html#//apple_ref/occ/instp/AVCaptureDeviceFormat/videoFieldOfView
+  if (device == NULL){
+    return NAN;
+  }
+  return device.activeFormat.videoFieldOfView;
 }
 
 -(void) stopRecordingSession{

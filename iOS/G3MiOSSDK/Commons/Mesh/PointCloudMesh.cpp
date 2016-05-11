@@ -27,9 +27,9 @@ PointCloudMesh::~PointCloudMesh() {
     delete _vertices;
     delete _colors;
     
-    for (size_t i = 0; i < _colorsCollection.size(); i++){
-      delete _colorsCollection[i];
-    }
+//    for (size_t i = 0; i < _colorsCollection.size(); i++){
+//      delete _colorsCollection[i];
+//    }
     
   }
   
@@ -47,7 +47,7 @@ PointCloudMesh::PointCloudMesh(bool owner,
                                const Vector3D& center,
                                const IFloatBuffer* vertices,
                                float pointSize,
-                               const std::vector<IFloatBuffer*>& colorsCollection,
+                               const IFloatBuffer* colors,
                                bool depthTest,
                                const Color& borderColor) :
 _owner(owner),
@@ -61,8 +61,7 @@ _pointSize(pointSize),
 _depthTest(depthTest),
 _glState(new GLState()),
 _borderColor(borderColor),
-_colorsCollection(colorsCollection),
-_colors(NULL)
+_colors(colors)
 {
   createGLState();
 }
@@ -145,24 +144,7 @@ void PointCloudMesh::createGLState() {
     _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
   }
   
-  changeToColors(0);
-}
-
-void PointCloudMesh::changeToColors(int i){
-  
-  if (i > _colorsCollection.size()){
-    THROW_EXCEPTION("PointCloudMesh without colors for given time.")
-  }
-  
-  _glState->clearGLFeatureGroup(COLOR_GROUP);
-  
-  ColorGLFeature* c = new ColorGLFeature(_colorsCollection[i],      // The attribute is a float vector of 4 elements RGBA
-                                         4,            // Our buffer contains elements of 4
-                                         0,            // Index 0
-                                         false,        // Not normalized
-                                         0,            // Stride 0
-                                         true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  _glState->addGLFeature(c, false);
+  applyColor();
 }
 
 void PointCloudMesh::rawRender(const G3MRenderContext* rc,
@@ -178,6 +160,18 @@ void PointCloudMesh::rawRender(const G3MRenderContext* rc,
                  *rc->getGPUProgramManager());
 }
 
+void PointCloudMesh::applyColor(){
+  _glState->clearGLFeatureGroup(COLOR_GROUP);
+  
+  ColorGLFeature* c = new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
+                                         4,            // Our buffer contains elements of 4
+                                         0,            // Index 0
+                                         false,        // Not normalized
+                                         0,            // Stride 0
+                                         true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+  _glState->addGLFeature(c, false);
+}
+
 void PointCloudMesh::changeToColors(IFloatBuffer* colors){
   if (_colors == colors){
     return;
@@ -188,15 +182,7 @@ void PointCloudMesh::changeToColors(IFloatBuffer* colors){
     _colors = colors;
   }
   
-  _glState->clearGLFeatureGroup(COLOR_GROUP);
-  
-  ColorGLFeature* c = new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
-                                         4,            // Our buffer contains elements of 4
-                                         0,            // Index 0
-                                         false,        // Not normalized
-                                         0,            // Stride 0
-                                         true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-  _glState->addGLFeature(c, false);
+  applyColor();
 }
 
 

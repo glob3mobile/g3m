@@ -201,66 +201,67 @@ Mesh* BuildingDataParser::createPointCloudMesh(const std::string& data, const Pl
  return pcm;
  }
  */
+//Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& data,
+//                                                          const Planet* planet,
+//                                                          const ElevationData* elevationData,
+//                                                          const ColorLegend& colorLegend){
+//  
+//  std::vector<std::string> lines = IStringUtils::instance()->splitLines(data);
+//  
+//  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+//  std::vector<FloatBufferBuilderFromColor*> colorsCollectionBuilders;
+//  
+//  std::vector<Geodetic3D*> points;
+//  
+//  for (size_t i = 0; i < lines.size(); i++) {
+//    //    ILogger::instance()->logInfo(lines[i]);
+//    std::vector<double> vs = IStringUtils::instance()->parseDoubles(lines[i], ",");
+//    if (vs.size() < 3){
+//      continue;
+//    }
+//    
+//    Geodetic3D g = Geodetic3D::fromDegrees(vs[1], vs[0], vs[2]);
+//    vertices->add(g);
+//    
+//    for (size_t j = 3; j < vs.size(); j++){
+//      const int time = (int)j - 3;
+//      
+//      if (colorsCollectionBuilders.size()  <= time){
+//        colorsCollectionBuilders.push_back(new FloatBufferBuilderFromColor());
+//      }
+//      Color color = colorLegend.getColor(vs[time]);
+//      colorsCollectionBuilders[time]->add(color);
+//    }
+//  }
+//  
+//  std::vector<IFloatBuffer*> colorsCollection;
+//  for (size_t i = 0; i < colorsCollectionBuilders.size(); i++) {
+//    colorsCollection.push_back( colorsCollectionBuilders[i]->create() );
+//    delete colorsCollectionBuilders[i];
+//  }
+//  
+//  
+//  
+//  PointCloudMesh* pcm = new PointCloudMesh(true,
+//                                           vertices->getCenter(),
+//                                           vertices->create(),
+//                                           15.0,
+//                                           colorsCollection,
+//                                           true,
+//                                           Color::blue());
+//  
+//  ILogger::instance()->logInfo("Created point cloud of %d points.", vertices->size() / 3);
+//  
+//  delete vertices;
+//  
+//  return pcm;
+//  
+//}
+
 Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& data,
                                                           const Planet* planet,
                                                           const ElevationData* elevationData,
                                                           const ColorLegend& colorLegend){
-  
-  std::vector<std::string> lines = IStringUtils::instance()->splitLines(data);
-  
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-  std::vector<FloatBufferBuilderFromColor*> colorsCollectionBuilders;
-  
-  std::vector<Geodetic3D*> points;
-  
-  for (size_t i = 0; i < lines.size(); i++) {
-    //    ILogger::instance()->logInfo(lines[i]);
-    std::vector<double> vs = IStringUtils::instance()->parseDoubles(lines[i], ",");
-    if (vs.size() < 3){
-      continue;
-    }
-    
-    Geodetic3D g = Geodetic3D::fromDegrees(vs[1], vs[0], vs[2]);
-    vertices->add(g);
-    
-    for (size_t j = 3; j < vs.size(); j++){
-      const int time = (int)j - 3;
-      
-      if (colorsCollectionBuilders.size()  <= time){
-        colorsCollectionBuilders.push_back(new FloatBufferBuilderFromColor());
-      }
-      Color color = colorLegend.getColor(vs[time]);
-      colorsCollectionBuilders[time]->add(color);
-    }
-  }
-  
-  std::vector<IFloatBuffer*> colorsCollection;
-  for (size_t i = 0; i < colorsCollectionBuilders.size(); i++) {
-    colorsCollection.push_back( colorsCollectionBuilders[i]->create() );
-    delete colorsCollectionBuilders[i];
-  }
-  
-  
-  
-  PointCloudMesh* pcm = new PointCloudMesh(true,
-                                           vertices->getCenter(),
-                                           vertices->create(),
-                                           15.0,
-                                           colorsCollection,
-                                           true,
-                                           Color::blue());
-  
-  ILogger::instance()->logInfo("Created point cloud of %d points.", vertices->size() / 3);
-  
-  delete vertices;
-  
-  return pcm;
-  
-}
-
-Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& data,
-                                                          const Planet* planet,
-                                                          const ElevationData* elevationData){
   
   std::vector<std::string> lines = IStringUtils::instance()->splitLines(data);
   
@@ -290,11 +291,7 @@ Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& dat
     }
   }
   
-  
-  
-  FloatBufferBuilderFromColor colors;
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-  Color color = Color::green();
   for (size_t i = 0; i < points.size(); i++) {
     
     Geodetic2D g2D = points[i]->asGeodetic2D();
@@ -307,17 +304,15 @@ Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& dat
     
     vertices->add(Geodetic3D(g2D, h));
     delete points[i];
-    colors.add(color);
   }
-  
-  std::vector<IFloatBuffer*> colorsCollection;
-  colorsCollection.push_back(colors.create());
+
+  IFloatBuffer* colors = create0ColorsForSolarRadiationMeshFromCSV(colorLegend, (int)vertices->size() / 3);
   
   PointCloudMesh* pcm = new PointCloudMesh(true,
                                            vertices->getCenter(),
                                            vertices->create(),
                                            15.0,
-                                           colorsCollection,
+                                           colors,
                                            true,
                                            Color::blue());
   

@@ -208,44 +208,7 @@
 
 #import "AppDelegate.h"
 
-
 #include <typeinfo>
-
-//class TimeEvolutionTask: public GTask{
-//  
-//  PointCloudMesh* _abstractMesh;
-//  
-//  float _delta;
-//  int _step;
-//  ViewController* _vc;
-//public:
-//  
-//  TimeEvolutionTask(PointCloudMesh* abstractMesh,
-//                    ViewController* vc):
-//  _abstractMesh(abstractMesh),
-//  _delta(0.0),
-//  _step(0),
-//  _vc(vc)
-//  {
-//  }
-//  
-//  void run(const G3MContext* context){
-//    
-//    _step++;
-//    //int min = 0; //int min = _step % 60;
-//    int hour = (_step / 10) % _abstractMesh->getNumberOfColors(); // int hour = (_step / 60) % 24;
-//    
-//    _abstractMesh->changeToColors(hour);
-//    
-//    //Label
-//    
-//    std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
-//    context->getStringUtils()->toString(hour % 24) + ":00";// + context->getStringUtils()->toString(min);
-//    
-//    [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
-//  }
-//  
-//};
 
 class PointCloudEvolutionTask: public GTask{
   
@@ -270,7 +233,7 @@ public:
     
     std::vector<ColorLegend::ColorAndValue*> legend;
     legend.push_back(new ColorLegend::ColorAndValue(Color::black(), 0)); //Min
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(51, 31, 0, 255), 6)); //Percentile 10 (without 0's)
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(51, 31, 0, 255), 6)); //Percentile 10 (without 0's)
     legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(128, 77, 0, 255), 21)); //Percentile 25 (without 0's)
     legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 153, 0, 255), 75)); //Mean (without 0's)
     legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(255, 204, 128, 255), 100)); //Percentile 75 (without 0's)
@@ -286,17 +249,18 @@ public:
     
     _step++;
     
+    NSString* folder = @"EIFER Resources/Solar Radiation/buildings_imp_table_0";
+    
     if (_pcMesh == NULL){
       
-      //      NSArray* array = [[NSBundle mainBundle] pathsForResourcesOfType:@"csv" inDirectory:@""];
-      
-      NSString *filePath = [[NSBundle mainBundle] pathForResource:@"vertices" ofType:@"csv" inDirectory:@"EIFER Resources/pointcloud"];
+      NSString *filePath = [[NSBundle mainBundle] pathForResource:@"vertices" ofType:@"csv" inDirectory:folder];
       if (filePath) {
         NSString *myText = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
         
         _pcMesh = (PointCloudMesh*) BuildingDataParser::createSolarRadiationMeshFromCSV([myText UTF8String],
                                                                                         [[_vc G3MWidget] widget]->getG3MContext()->getPlanet(),
-                                                                                        [_vc elevationData]);
+                                                                                        [_vc elevationData],
+                                                                                        *_colorLegend);
         
         [_vc meshRenderer]->addMesh(_pcMesh);
       }
@@ -305,7 +269,7 @@ public:
     
     if (_pcMesh != NULL){
       NSString* fileColors = [NSString stringWithFormat:@"values_t%d", _step, nil];
-      NSString *filePath = [[NSBundle mainBundle] pathForResource:fileColors ofType:@"csv" inDirectory:@"EIFER Resources/pointcloud"];
+      NSString *filePath = [[NSBundle mainBundle] pathForResource:fileColors ofType:@"csv" inDirectory:folder];
       if (filePath) {
         NSString *myText = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
         
@@ -321,17 +285,16 @@ public:
           _using0Color = true;
         }
       }
+      
+      int hour = _step;
+      
+      //Label
+      std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
+      context->getStringUtils()->toString(hour % 24) + ":00";
+      
+      [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
     }
     
-    //int min = 0; //int min = _step % 60;
-    int hour = (_step / 10) % _pcMesh->getNumberOfColors(); // int hour = (_step / 60) % 24;
-    
-    //Label
-    
-    std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
-    context->getStringUtils()->toString(hour % 24) + ":00";// + context->getStringUtils()->toString(min);
-    
-    [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
   }
   
 };
@@ -550,12 +513,12 @@ public:
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
   
-  //  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-  //  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///technologiepark_WGS84.xml" needsToBeFixOnGround:true];
-  //  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-  //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+  //    [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
   //  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
   //  [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
   //  [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
@@ -751,12 +714,12 @@ public:
 
 -(void) onAllDataLoaded{
   ILogger::instance()->logInfo("City Model Loaded");
-//  for (size_t i = 0; i < _pointClouds.size(); i++) {
-//    
-////    [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
-////                                                             new TimeEvolutionTask((PointCloudMesh*)_pointClouds[i], self)));
-//    
-//  }
+  //  for (size_t i = 0; i < _pointClouds.size(); i++) {
+  //
+  ////    [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
+  ////                                                             new TimeEvolutionTask((PointCloudMesh*)_pointClouds[i], self)));
+  //
+  //  }
   
   
   [G3MWidget widget]->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(0.1),
@@ -840,6 +803,9 @@ public:
   //  [((AppDelegate*)[UIApplication sharedApplication].delegate) enableCameraBackground:FALSE];
   [_camVC enableVideo:FALSE];
   [self activateDeviceAttitudeTracking];
+  
+  
+  [G3MWidget widget]->getNextCamera()->setFOV(Angle::nan(), Angle::nan());
 }
 
 -(void) activateDeviceAttitudeTracking{
@@ -876,7 +842,10 @@ public:
   cameraRenderer->addHandler(dac);
   
   [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
-  [G3MWidget widget]->getNextCamera()->setFOV(Angle::fromDegrees(63.54).times([G3MWidget widget]->getNextCamera()->getViewPortRatio()), Angle::fromDegrees(63.54));
+  
+  //Theoretical horizontal FOV
+  float hFOVDegrees = [_camVC fieldOfViewInDegrees];
+  [G3MWidget widget]->getNextCamera()->setFOV(Angle::nan(), Angle::fromDegrees(hFOVDegrees));
 }
 
 -(void) activateStereoVRMode{

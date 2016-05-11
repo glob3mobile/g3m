@@ -56,7 +56,7 @@ class Polygon2D{
   
   bool isConcave() {
     const double a0 = angleInRadiansOfCorner(0);
-    for (int i = 1; i < (_nVertices - 1); i++) {
+    for (size_t i = 1; i < (_nVertices - 1); i++) {
       const double ai = angleInRadiansOfCorner(i);
       if ((ai * a0) < 0) {
         return true;
@@ -68,7 +68,7 @@ class Polygon2D{
   
   double convexPolygonArea() {
     double sum = 0;
-    for (int i = 0; i < (_nVertices - 1); i++) {
+    for (size_t i = 0; i < (_nVertices - 1); i++) {
       const Vector2D* vi = _coor2D[i];
       const Vector2D* vi1 = _coor2D[i + 1];
       sum += ((vi->_x * vi1->_y) - (vi1->_x * vi->_y));
@@ -109,7 +109,7 @@ class Polygon2D{
     const Vector2D* a = remainingCorners[i];
     const Vector2D* b = remainingCorners[j];
     
-    for (int k = 0; k < (remainingCorners.size() - 2); k++) {
+    for (int k = 0; k < ((int)remainingCorners.size() - 2); k++) {
       
       const int kadd1 = (k + 1) % (remainingCorners.size() - 1);
       
@@ -140,7 +140,7 @@ class Polygon2D{
     const Vector2D* cornerB = remainingCorners[i2];
     const Vector2D* cornerC = remainingCorners[i3];
     
-    for (int j = 0; j < remainingCorners.size(); j++) {
+    for (size_t j = 0; j < remainingCorners.size(); j++) {
       if ((j != i1) && (j != i2) && (j != i3)) {
         const Vector2D* p = remainingCorners[j];
         if (Vector2D::isPointInsideTriangle(*p, *cornerA, *cornerB, *cornerC)) {
@@ -170,7 +170,7 @@ public:
   
   ~Polygon2D() {
 #ifdef C_CODE
-    for (int j = 0; j < _nVertices; j++) {
+    for (size_t j = 0; j < _nVertices; j++) {
       delete _coor2D[j];
     }
 #endif
