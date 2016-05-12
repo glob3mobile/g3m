@@ -61,10 +61,7 @@ public final class ES2Renderer
 
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
 
-
-     pre
       widget.render(_width, _height);
-     post
 
       if (!_widgetAndroid.getNoFPSReduction()) {
          // experimental FPS reduction - DGD
