@@ -11,4 +11,18 @@
 
 #include <stdio.h>
 
+
+class IPrePostTasks {
+public:
+
+  virtual void preRenderTask() = 0;
+  virtual void postRenderTask() = 0;
+  
+  virtual ~IPrePostTasks() {
+  }
+  
+};
+
+
+
 #endif /* IPrePostTasks_hpp */

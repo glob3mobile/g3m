@@ -39,6 +39,7 @@
 #include "IDeviceAttitude.hpp"
 #include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
+#include "IPrePostTasks.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -75,6 +76,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      std::vector<ICameraConstrainer*>     cameraConstrainers,
                      CameraRenderer*                      cameraRenderer,
                      Renderer*                            mainRenderer,
+                     IPrePostTasks*                        prePostTask,
                      ProtoRenderer*                       busyRenderer,
                      ErrorRenderer*                       errorRenderer,
                      Renderer*                            hudRenderer,
@@ -101,6 +103,7 @@ _planet(planet),
 _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
+_prePostTask(prePostTask),
 _busyRenderer(busyRenderer),
 _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
@@ -223,6 +226,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              std::vector<ICameraConstrainer*>     cameraConstrainers,
                              CameraRenderer*                      cameraRenderer,
                              Renderer*                            mainRenderer,
+                             IPrePostTasks*                        prePostTask,
                              ProtoRenderer*                       busyRenderer,
                              ErrorRenderer*                       errorRenderer,
                              Renderer*                            hudRenderer,
@@ -247,6 +251,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        cameraConstrainers,
                        cameraRenderer,
                        mainRenderer,
+                       prePostTask,
                        busyRenderer,
                        errorRenderer,
                        hudRenderer,
@@ -627,7 +632,11 @@ void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
   }
-
+  
+  if (_prePostTask != NULL) {
+    _prePostTask->preRenderTask();
+  }
+  
   if (_width != width || _height != height) {
     _width = width;
     _height = height;
@@ -760,6 +769,10 @@ void G3MWidget::render(int width, int height) {
       ILogger::instance()->logInfo("%s" , cacheStatistics.c_str());
       _lastCacheStatistics = cacheStatistics;
     }
+  }
+  
+  if (_prePostTask != NULL) {
+    _prePostTask->postRenderTask();
   }
 }
 

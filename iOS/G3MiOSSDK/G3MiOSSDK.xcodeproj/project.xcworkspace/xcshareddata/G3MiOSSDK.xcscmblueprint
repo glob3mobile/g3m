@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "65D138EA860EF67A7E12DFE350BA7684C80E73EB",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "0BD313F17B026E1FBE177895ED4E8786BDDE5FDE" : 0,
+    "65D138EA860EF67A7E12DFE350BA7684C80E73EB" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6ADF482C-C38E-4D1C-AA6B-2CEFC11E72EE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "0BD313F17B026E1FBE177895ED4E8786BDDE5FDE" : "..\/..",
+    "65D138EA860EF67A7E12DFE350BA7684C80E73EB" : "g3m\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "G3MiOSSDK",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iOS\/G3MiOSSDK\/G3MiOSSDK.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/aeroglass\/aeroglass.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0BD313F17B026E1FBE177895ED4E8786BDDE5FDE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/glob3mobile\/g3m.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "65D138EA860EF67A7E12DFE350BA7684C80E73EB"
+    }
+  ]
+}
