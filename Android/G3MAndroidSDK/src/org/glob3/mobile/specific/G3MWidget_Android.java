@@ -322,6 +322,7 @@ public final class G3MWidget_Android
                           final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
                           final CameraRenderer cameraRenderer,
                           final org.glob3.mobile.generated.Renderer mainRenderer,
+                          final org.glob3.mobile.generated.IPrePostTasks prePostTasks,
                           final org.glob3.mobile.generated.Renderer busyRenderer,
                           final ErrorRenderer errorRenderer,
                           final org.glob3.mobile.generated.Renderer hudRenderer,
@@ -346,6 +347,7 @@ public final class G3MWidget_Android
                cameraConstrainers, //
                cameraRenderer, //
                mainRenderer, //
+               prePostTasks, //
                busyRenderer, //
                errorRenderer, //
                hudRenderer, //

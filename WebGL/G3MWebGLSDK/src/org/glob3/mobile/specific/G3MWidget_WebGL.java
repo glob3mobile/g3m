@@ -25,6 +25,7 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.IPrePostTasks;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
@@ -366,6 +367,7 @@ public class G3MWidget_WebGL
                           final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
+                          final IPrePostTasks prePostTasks,
                           final ProtoRenderer busyRenderer,
                           final ErrorRenderer errorRenderer,
                           final Renderer hudRenderer,
@@ -390,6 +392,7 @@ public class G3MWidget_WebGL
                cameraConstrainers, //
                cameraRenderer, //
                mainRenderer, //
+               prePostTasks, //
                busyRenderer, //
                errorRenderer, //
                hudRenderer, //

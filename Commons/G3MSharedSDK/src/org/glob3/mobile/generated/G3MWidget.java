@@ -238,7 +238,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         final double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
         final double fps = 1000.0 / averageTimePerRender;
         ILogger.instance().logInfo("FPS=%f", fps);
-  
+
         _renderCounter = 0;
         _totalRenderTime = 0;
   
@@ -1110,7 +1110,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D camPos = _currentCamera.getCartesianPosition();
         Vector3D camCenter = _currentCamera.getCenter();
         Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        final double eyesSeparation = 200; // 0.03;
+        final double eyesSeparation = 0.03;
         Vector3D up = _currentCamera.getUp();
   
         final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
@@ -1144,7 +1144,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     rawRender(renderStateType);
   
     //Restoring central camera
-    _currentCamera.copyFrom(_auxCam, true);
+    //_currentCamera.copyFrom(_auxCam, true);
   }
 
 
