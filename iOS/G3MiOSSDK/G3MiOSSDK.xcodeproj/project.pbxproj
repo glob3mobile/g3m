@@ -768,6 +768,7 @@
 		FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2B1B2617F880B5006307EC /* Quadric.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
+		FB6B64071CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6B64051CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.cpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 		FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */; };
 		FBB7C63D1C77A8C900AC1DE1 /* OrientedBox.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C63C1C77A2BB00AC1DE1 /* OrientedBox.hpp */; };
@@ -1992,6 +1993,8 @@
 		FB2B1B2617F880B5006307EC /* Quadric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quadric.hpp; path = Commons/Geometry/Quadric.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
+		FB6B64051CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoundingVolumeTileVisibilityTester.cpp; path = Commons/Rendererers/BoundingVolumeTileVisibilityTester.cpp; sourceTree = "<group>"; };
+		FB6B64061CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BoundingVolumeTileVisibilityTester.hpp; path = Commons/Rendererers/BoundingVolumeTileVisibilityTester.hpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StraightLine.hpp; path = Commons/Geometry/StraightLine.hpp; sourceTree = "<group>"; };
@@ -2549,6 +2552,8 @@
 		CCC2A01A15CA6B8200923850 /* Renderers */ = {
 			isa = PBXGroup;
 			children = (
+				FB6B64051CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.cpp */,
+				FB6B64061CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.hpp */,
 				CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */,
 				CCC2A01C15CA6C7D00923850 /* BusyMeshRenderer.hpp */,
 				CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */,
@@ -3091,6 +3096,7 @@
 				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
+				FB6B64071CDF2ECA00B1CA75 /* BoundingVolumeTileVisibilityTester.cpp in Sources */,
 				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
 				CFAB53F51A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp in Sources */,
 				383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */,

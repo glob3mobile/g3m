@@ -22,6 +22,7 @@ class ElevationDataProvider;
 class PlanetRenderer;
 class TileData;
 class TilesStatistics;
+class BoundingVolume;
 
 class OrientedBox;
 
@@ -95,6 +96,8 @@ private:
 
   mutable TileData** _data;
   mutable size_t     _dataSize;
+  
+  BoundingVolume* _boundingVolume;
 
 public:
   const Sector      _sector;
@@ -220,7 +223,11 @@ public:
     return (_subtiles != NULL);
   }
   
+  BoundingVolume* getBoundingVolume() {
+    return _boundingVolume;
+  }
   
+  /*
 #warning temp_Agustin;
   mutable double _minOrientedElevation;
   mutable double _maxOrientedElevation;
@@ -232,6 +239,8 @@ public:
   mutable MutableVector3D _eastVector;
   mutable MutableVector3D _normalVector;
   OrientedBox* _obb;
+  int _vertexCount;
+   */
   
 };
 

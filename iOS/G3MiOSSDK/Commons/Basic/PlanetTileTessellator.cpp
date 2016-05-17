@@ -139,6 +139,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             data);
   
   
+  /*
   ///////////////////////////////////
 #warning temp_Agustin
   // compute limits for future bounding OrientedBox
@@ -158,6 +159,9 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
   tile->_minEastValue = 1e10;
   tile->_maxNorthValue = -1e10;
   tile->_minNorthValue = 1e10;
+  
+  tile->_vertexCount = meshResolution._x*meshResolution._y;
+  
   for (int n=0; n<meshResolution._x*meshResolution._y; n++) {
     Vector3D vertex = vertices->getVector3D(n).add(tileCenter);
     double elevation = normalAxe.signedDistanceToProjectedPoint(vertex);
@@ -172,7 +176,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
   }
   ///////////////////////////////////
   ///////////////////////////////////
-
+*/
   
   if (_skirted) {
     const double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
@@ -233,8 +237,27 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
   //#warning Testing_Terrain_Normals;
   //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
   
+  
+#warning temp_Agustin
+  // compute limits for future bounding OrientedBox
+  Geodetic2D sectorCenter = tileSector.getCenter();
+  Vector3D tileCenter = planet->toCartesian(sectorCenter);
+  const Vector3D normalVector = planet->geodeticSurfaceNormal(sectorCenter);
+  Vector3D middleNorthPoint = planet->toCartesian(tileSector.getInnerPoint(0.5, 0));
+  StraightLine normalAxe(tileCenter, normalVector);
+  const Vector3D northVector = normalAxe.projectPointToNormalPlane(middleNorthPoint).sub(tileCenter).normalized();
+  const Vector3D eastVector = northVector.cross(normalVector);
+
+  
   Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                          vertices->getCenter(),
+                                         
+                                         
+                                         northVector,
+                                         eastVector,
+                                         normalVector,
+                                         
+                                         
                                          verticesB, true,
                                          normals,   true,
                                          indicesB,  true);

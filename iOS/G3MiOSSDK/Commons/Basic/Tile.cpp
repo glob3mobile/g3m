@@ -83,16 +83,13 @@ _tessellatorData(NULL),
 _id( createTileId(level, row, column) ),
 _data(NULL),
 _dataSize(0),
-_obb(NULL)
+_boundingVolume(NULL)
 {
 }
 
 Tile::~Tile() {
   //  prune(NULL, NULL);
   
-  
-  delete _obb;
-
   delete _debugMesh;
   _debugMesh = NULL;
 
@@ -124,6 +121,9 @@ Tile::~Tile() {
     delete data;
   }
   delete [] _data;
+  
+  if (_boundingVolume != NULL)
+    delete _boundingVolume;
 }
 
 void Tile::setTexturizerData(ITexturizerData* texturizerData) {
@@ -257,6 +257,11 @@ void Tile::prepareForFullRendering(const G3MRenderContext*    rc,
 void Tile::rawRender(const G3MRenderContext*    rc,
                      const PlanetRenderContext* prc,
                      const GLState*             glState) {
+  
+  
+  if (!_sector.contains(Angle::fromDegrees(27.970125), Angle::fromDegrees(-15.749145))) return;
+                       
+                       
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc, prc);
   if (tessellatorMesh == NULL) {
@@ -296,11 +301,16 @@ void Tile::rawRender(const G3MRenderContext*    rc,
 void Tile::debugRender(const G3MRenderContext*    rc,
                        const PlanetRenderContext* prc,
                        const GLState*             glState) {
+  
+  
+  if (!_sector.contains(Angle::fromDegrees(27.970125), Angle::fromDegrees(-15.749145))) return;
+  
   Mesh* debugMesh = getDebugMesh(rc, prc);
   if (debugMesh != NULL) {
     debugMesh->render(rc, glState);
   }
   
+  /*
   /////////////////////////
   #warning temp_Agustin;
   // use box
@@ -313,8 +323,12 @@ void Tile::debugRender(const G3MRenderContext*    rc,
                            _northVector.asVector3D().times(_maxNorthValue-_minNorthValue),
                            _eastVector.asVector3D().times(_maxEastValue-_minEastValue),
                            _normalVector.asVector3D().times(_maxOrientedElevation-_minOrientedElevation));
-  }
+   }
   _obb->getMesh()->render(rc, glState);
+   */
+  BoundingVolume* obb2 = _tessellatorMesh->getBoundingVolume();
+  obb2->getMesh()->render(rc, glState);
+
   //////////////////////////
 }
 
@@ -402,9 +416,14 @@ void Tile::render(const G3MRenderContext*    rc,
                   const GLState*             parentState,
                   TilesStatistics*           tilesStatistics,
                   std::vector<Tile*>*        toVisitInNextIteration) {
-
+  
+  if (_sector.contains(Angle::fromDegrees(27.970125), Angle::fromDegrees(-15.749145)))
+    printf("jaja\n");
+ 
+  
   const bool visible = prc->_tileVisibilityTester->isVisible(rc, prc, this);
   bool rendered = false;
+  
   if (visible) {
     setIsVisible(true, prc->_texturizer);
 

@@ -32,6 +32,11 @@ protected:
   const float             _pointSize;
   const bool              _depthTest;
   
+  const Vector3D          _northVector;
+  const Vector3D          _eastVector;
+  const Vector3D          _normalVector;
+
+  
   const bool _polygonOffsetFill;
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;
@@ -39,8 +44,14 @@ protected:
   mutable BoundingVolume* _extent;
   BoundingVolume* computeBoundingVolume() const;
   
+  BoundingVolume* computeBoundingBox() const;
+  BoundingVolume* computeBoundingOrientedBox() const;
+  
   AbstractGeometryMesh(const int       primitive,
                        const Vector3D& center,
+                       const Vector3D& northVector,
+                       const Vector3D& eastVector,
+                       const Vector3D& normalVector,
                        IFloatBuffer*   vertices,
                        bool            ownsVertices,
                        IFloatBuffer*   normals,
@@ -66,6 +77,12 @@ public:
   ~AbstractGeometryMesh();
   
   BoundingVolume* getBoundingVolume() const;
+  
+  #warning temp_Agustin;
+  BoundingVolume* getBoundingOrientedBox() {
+    return computeBoundingOrientedBox();
+  }
+  
   
   size_t getVertexCount() const;
   

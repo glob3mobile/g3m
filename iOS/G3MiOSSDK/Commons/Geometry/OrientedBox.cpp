@@ -361,7 +361,7 @@ verticesLocation OrientedBox::touchesPolygon3D(const Polygon3D& polygon) const {
   if (vertLoc != BOTH_SIDES_OF_THE_PLANE)
     return vertLoc;
   
-  // vertices are located at both sides of the plane
+/*  // vertices are located at both sides of the plane
   switch (innerVertex) {
 
     case SOUTH_WEST_BOTTOM:
@@ -412,6 +412,15 @@ verticesLocation OrientedBox::touchesPolygon3D(const Polygon3D& polygon) const {
       if (polygon.touchesPolygon3D(_topFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
       break;
   }
+  */
+  
+  if (polygon.touchesPolygon3D(_southFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+  if (polygon.touchesPolygon3D(_westFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+  if (polygon.touchesPolygon3D(_bottomFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+  if (polygon.touchesPolygon3D(_northFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+  if (polygon.touchesPolygon3D(_eastFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+  if (polygon.touchesPolygon3D(_topFace)) return BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE;
+
   
   return BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE;
 }

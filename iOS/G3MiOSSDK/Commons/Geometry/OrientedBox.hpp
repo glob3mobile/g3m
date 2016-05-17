@@ -178,7 +178,7 @@ public:
   
   Mesh* getMesh() const {
     if (_mesh == NULL)
-      _mesh = createMesh(Color::fromRGBA(0, 0, 0, 1), 4);
+      _mesh = createMesh(Color::fromRGBA(0, 1, 0, 1), 4);
     return _mesh;
   }
 

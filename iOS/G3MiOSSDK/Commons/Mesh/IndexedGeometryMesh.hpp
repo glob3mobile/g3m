@@ -23,6 +23,9 @@ protected:
 public:
   IndexedGeometryMesh(const int       primitive,
                       const Vector3D& center,
+                      const Vector3D& northVector,
+                      const Vector3D& eastVector,
+                      const Vector3D& normalVector,
                       IFloatBuffer*   vertices,
                       bool            ownsVertices,
                       IShortBuffer*   indices,
@@ -36,6 +39,9 @@ public:
 
   IndexedGeometryMesh(const int       primitive,
                       const Vector3D& center,
+                      const Vector3D& northVector,
+                      const Vector3D& eastVector,
+                      const Vector3D& normalVector,
                       IFloatBuffer*   vertices,
                       bool            ownsVertices,
                       IFloatBuffer*   normals,
