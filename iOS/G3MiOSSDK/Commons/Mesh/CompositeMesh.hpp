@@ -28,6 +28,13 @@ public:
   const Vector3D getVertex(size_t i) const;
 
   BoundingVolume* getBoundingVolume() const;
+  BoundingVolume* getBoundingBox() const {
+    return getBoundingVolume();
+  }
+  BoundingVolume* getBoundingOrientedBox() const {
+    return getBoundingVolume();
+  }
+
 
   bool isTransparent(const G3MRenderContext* rc) const;
 

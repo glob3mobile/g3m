@@ -25,8 +25,6 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "DecimatedSubviewElevationData.hpp"
 
-#include "OrientedBox.hpp"
-
 
 std::string Tile::createTileId(int level,
                                int row,

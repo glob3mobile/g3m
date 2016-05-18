@@ -14,25 +14,26 @@
 #include "PlanetRenderContext.hpp"
 
 
-bool MeshBoundingVolumeTileVisibilityTester::isVisible(const G3MRenderContext* rc,
-                                                       const PlanetRenderContext* prc,
-                                                       Tile* tile) const {
+bool MeshBoundingBoxTileVisibilityTester::isVisible(const G3MRenderContext* rc,
+                                                    const PlanetRenderContext* prc,
+                                                    Tile* tile) const {
   const Mesh* mesh = tile->getTessellatorMesh(rc, prc);
   if (mesh == NULL) {
     return false;
   }
-
-  return mesh->getBoundingVolume()->touchesFrustum(prc->_frustumInModelCoordinates);
+  
+  return mesh->getBoundingBox()->touchesFrustum(prc->_frustumInModelCoordinates);
 }
 
-void MeshBoundingVolumeTileVisibilityTester::onTileHasChangedMesh(const Tile* tile) const {
 
+bool MeshBoundingOrientedBoxTileVisibilityTester::isVisible(const G3MRenderContext* rc,
+                                                    const PlanetRenderContext* prc,
+                                                    Tile* tile) const {
+  const Mesh* mesh = tile->getTessellatorMesh(rc, prc);
+  if (mesh == NULL) {
+    return false;
+  }
+  
+  return mesh->getBoundingOrientedBox()->touchesFrustum(prc->_frustumInModelCoordinates);
 }
 
-void MeshBoundingVolumeTileVisibilityTester::onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
-
-}
-
-void MeshBoundingVolumeTileVisibilityTester::renderStarted() const {
-
-}

@@ -153,6 +153,14 @@ public:
   const Vector3D getVertex(size_t i) const;
 
   BoundingVolume* getBoundingVolume() const;
+  
+  BoundingVolume* getBoundingBox() const {
+    return getBoundingVolume();
+  }
+  BoundingVolume* getBoundingOrientedBox() const {
+    return getBoundingVolume();
+  }
+
 
   bool setGLTextureIdForLevel(int level,
                               const TextureIDReference* glTextureId);

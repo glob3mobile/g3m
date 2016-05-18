@@ -51,6 +51,14 @@ public:
   BoundingVolume* getBoundingVolume() const {
     return _mesh->getBoundingVolume();
   }
+  
+  BoundingVolume* getBoundingBox() const {
+    return getBoundingVolume();
+  }
+  BoundingVolume* getBoundingOrientedBox() const {
+    return getBoundingVolume();
+  }
+
 
   bool isTransparent(const G3MRenderContext* rc) const {
     return _mesh->isTransparent(rc);

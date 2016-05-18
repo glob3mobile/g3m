@@ -24,8 +24,6 @@ class TileData;
 class TilesStatistics;
 class BoundingVolume;
 
-class OrientedBox;
-
 
 class Tile {
 private:

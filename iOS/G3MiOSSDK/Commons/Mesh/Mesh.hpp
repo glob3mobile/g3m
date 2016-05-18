@@ -41,6 +41,9 @@ public:
   virtual const Vector3D getVertex(size_t i) const = 0;
     
   virtual BoundingVolume* getBoundingVolume() const = 0;
+  virtual BoundingVolume* getBoundingBox() const = 0;
+  virtual BoundingVolume* getBoundingOrientedBox() const = 0;
+
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
   

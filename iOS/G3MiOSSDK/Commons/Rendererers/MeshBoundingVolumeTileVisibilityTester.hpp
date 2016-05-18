@@ -21,16 +21,33 @@ public:
 #endif
   }
 
+  virtual bool isVisible(const G3MRenderContext* rc,
+                 const PlanetRenderContext* prc,
+                 Tile* tile) const = 0;
+
+  void onTileHasChangedMesh(const Tile* tile) const {}
+
+  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {}
+
+  void renderStarted() const {}
+
+};
+
+
+class MeshBoundingBoxTileVisibilityTester : public MeshBoundingVolumeTileVisibilityTester {
+public:
   bool isVisible(const G3MRenderContext* rc,
                  const PlanetRenderContext* prc,
                  Tile* tile) const;
-
-  void onTileHasChangedMesh(const Tile* tile) const;
-
-  void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp);
-
-  void renderStarted() const;
-
 };
+
+class MeshBoundingOrientedBoxTileVisibilityTester : public MeshBoundingVolumeTileVisibilityTester {
+public:
+  bool isVisible(const G3MRenderContext* rc,
+                 const PlanetRenderContext* prc,
+                 Tile* tile) const;
+};
+
+
 
 #endif

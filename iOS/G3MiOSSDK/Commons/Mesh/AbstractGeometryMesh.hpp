@@ -43,7 +43,6 @@ protected:
   
   mutable BoundingVolume* _extent;
   BoundingVolume* computeBoundingVolume() const;
-  
   BoundingVolume* computeBoundingBox() const;
   BoundingVolume* computeBoundingOrientedBox() const;
   
@@ -77,6 +76,8 @@ public:
   ~AbstractGeometryMesh();
   
   BoundingVolume* getBoundingVolume() const;
+  BoundingVolume* getBoundingBox() const;
+  BoundingVolume* getBoundingOrientedBox() const;
   
   #warning temp_Agustin;
   BoundingVolume* getBoundingOrientedBox() {

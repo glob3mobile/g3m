@@ -88,10 +88,12 @@ _polygonOffsetFill(polygonOffsetFill)
   createGLState();
 }
 
+
 BoundingVolume* AbstractGeometryMesh::computeBoundingVolume() const {
-  //return computeBoundingBox();
-  return computeBoundingOrientedBox();
+  return computeBoundingBox();
+  //return computeBoundingOrientedBox();
 }
+ 
 
 
 BoundingVolume* AbstractGeometryMesh::computeBoundingBox() const {
@@ -180,6 +182,21 @@ BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   }
   return _extent;
 }
+
+BoundingVolume* AbstractGeometryMesh::getBoundingBox() const {
+  if (_extent == NULL) {
+    _extent = computeBoundingBox();
+  }
+  return _extent;
+}
+
+BoundingVolume* AbstractGeometryMesh::getBoundingOrientedBox() const {
+  if (_extent == NULL) {
+    _extent = computeBoundingOrientedBox();
+  }
+  return _extent;
+}
+
 
 const Vector3D AbstractGeometryMesh::getVertex(size_t i) const {
   const size_t p = i * 3;

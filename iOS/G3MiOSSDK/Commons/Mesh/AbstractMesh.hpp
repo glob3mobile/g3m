@@ -70,6 +70,13 @@ public:
   ~AbstractMesh();
   
   BoundingVolume* getBoundingVolume() const;
+  BoundingVolume* getBoundingBox() const {
+    return getBoundingVolume();
+  }
+  BoundingVolume* getBoundingOrientedBox() const {
+    return getBoundingVolume();
+  }
+  
 
   size_t getVertexCount() const;
 

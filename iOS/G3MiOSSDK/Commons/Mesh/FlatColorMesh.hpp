@@ -65,6 +65,13 @@ public:
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
   
+  BoundingVolume* getBoundingBox() const {
+    return getBoundingVolume();
+  }
+  BoundingVolume* getBoundingOrientedBox() const {
+    return getBoundingVolume();
+  }
+
   size_t getVertexCount() const {
     return _mesh->getVertexCount();
   }
