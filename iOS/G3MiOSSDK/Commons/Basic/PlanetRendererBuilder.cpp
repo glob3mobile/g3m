@@ -451,6 +451,7 @@ TileLODTester* PlanetRendererBuilder::getTileLODTester() {
 
 TileVisibilityTester* PlanetRendererBuilder::createDefaultTileVisibilityTester() const {
   return new TimedCacheTileVisibilityTester(TimeInterval::fromMilliseconds(1000),
+                                            //new MeshBoundingBoxTileVisibilityTester());
                                             new MeshBoundingOrientedBoxTileVisibilityTester());
 }
 
