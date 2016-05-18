@@ -316,10 +316,10 @@ bool Frustum::touchesWithSphere(const Sphere* sphere) const {
 bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   // based on http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Intersecci%f3n%20OrientedBox%20con%20frustum.pdf
   
-  bool fullInside = true;
+  int fullInside = 0;
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_leftFace);
-    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside = false;
+    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside++;
     else {
       if (vertLoc == COMPLETELY_OUTSIDE) return false;
       if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE) return true;
@@ -327,7 +327,7 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   }
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_rightFace);
-    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside = false;
+    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside++;
     else {
       if (vertLoc == COMPLETELY_OUTSIDE) return false;
       if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE) return true;
@@ -335,7 +335,7 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   }
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_bottomFace);
-    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside = false;
+    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside++;
     else {
       if (vertLoc == COMPLETELY_OUTSIDE) return false;
       if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE) return true;
@@ -343,7 +343,7 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   }
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_topFace);
-    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside = false;
+    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside++;
     else {
       if (vertLoc == COMPLETELY_OUTSIDE) return false;
       if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE) return true;
@@ -351,7 +351,7 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   }
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_nearFace);
-    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside = false;
+    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside++;
     else {
       if (vertLoc == COMPLETELY_OUTSIDE) return false;
       if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE) return true;
@@ -359,13 +359,13 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   }
   {
     verticesLocation vertLoc = obb->touchesPolygon3D(_farFace);
-    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside = false;
+    if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_NOT_TOUCHING_FACE) fullInside++;
     else {
       if (vertLoc == COMPLETELY_OUTSIDE) return false;
       if (vertLoc == BOTH_SIDES_OF_THE_PLANE_AND_TOUCHING_FACE) return true;
     }
   }
-  return fullInside;
+  return fullInside % 6 == 0;
 }
 
 

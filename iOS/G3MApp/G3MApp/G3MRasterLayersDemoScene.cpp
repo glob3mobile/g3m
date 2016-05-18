@@ -250,7 +250,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   }
   {
     // outside, close to a frustum face
-    Vector3D lower(6384000-1000, 0, 686000);
+    Vector3D lower(6384000-5000, 1000, 686000);
     OrientedBox obb(lower, Vector3D(1000,0,3000), Vector3D(0,2000,0), Vector3D(3000,0,-1000));
     Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(obb.createMesh(color));
@@ -258,7 +258,16 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   {
     // inside the frustum center
     Vector3D lower(6380000, 0, 686000);
-    OrientedBox obb(lower, Vector3D(500,0,1000), Vector3D(1000,0,-500), Vector3D(0,1000,0));
+    //OrientedBox obb(lower, Vector3D(500,0,1000), Vector3D(1000,0,-500), Vector3D(0,1000,0));
+    OrientedBox obb(lower, Vector3D(500,0,0), Vector3D(0,1000,0), Vector3D(0,0,1500));
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
+  }
+  {
+    // bounding the frustum
+    Vector3D lower(6370000, -10000, 676000);
+    //OrientedBox obb(lower, Vector3D(500,0,1000), Vector3D(1000,0,-500), Vector3D(0,1000,0));
+    OrientedBox obb(lower, Vector3D(15000,0,0), Vector3D(0,15000,0), Vector3D(0,0,20000));
     Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(obb.createMesh(color));
   }
