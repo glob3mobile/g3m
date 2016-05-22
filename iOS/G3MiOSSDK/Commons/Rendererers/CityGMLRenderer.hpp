@@ -22,7 +22,8 @@
 
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEOLineRasterSymbol.hpp"
-#import "GEOVectorLayer.hpp"
+#include "ColorLegendHelper.hpp"
+#include "GEOVectorLayer.hpp"
 
 class Mesh;
 
@@ -56,6 +57,7 @@ class CityGMLRenderer: public DefaultRenderer{
   class TessellationTask: public GAsyncTask {
     CityGMLRenderer* _vc;
     std::vector<CityGMLBuilding*> _buildings;
+    std::vector<Mesh*> _buildingMeshes;
     
     CityGMLRendererListener* _listener;
     const bool _autoDelete;
@@ -135,19 +137,37 @@ class CityGMLRenderer: public DefaultRenderer{
       //Checking walls visibility
       //      int n = CityGMLBuilding::checkWallsVisibility(_buildings);
       //      ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
-      const bool checkSurfacesVisibility = true;
+      
       
       //Creating mesh model
-      _mesh = CityGMLBuildingTessellator::createMesh(_buildings,
-                                                     *_vc->_context->getPlanet(),
-                                                     _fixOnGround, checkSurfacesVisibility, NULL,
-                                                     _vc->_elevationData);
+            const bool checkSurfacesVisibility = true;
+            _mesh = CityGMLBuildingTessellator::createMesh(_buildings,
+                                                           *_vc->_context->getPlanet(),
+                                                           _fixOnGround, checkSurfacesVisibility, NULL,
+                                                           _vc->_elevationData);
+      _buildingMeshes.push_back(_mesh);
+      
+#warning TEST CODE
+//      for (size_t i = 0; i < _buildings.size(); i++) {
+//        std::vector<CityGMLBuilding*> bs;
+//        bs.push_back(_buildings[i]);
+//        _mesh = CityGMLBuildingTessellator::createMesh(bs,
+//                                                       *_vc->_context->getPlanet(),
+//                                                       _fixOnGround, checkSurfacesVisibility, NULL,
+//                                                       _vc->_elevationData);
+//        _buildingMeshes.push_back(_mesh);
+//      }
+      
     }
     
     virtual void onPostExecute(const G3MContext* context){
       
       //Including elements must be done in the rendering thread
-      _vc->_meshRenderer->addMesh(_mesh);
+      //      _vc->_meshRenderer->addMesh(_mesh);
+      
+      for (size_t i = 0; i < _buildingMeshes.size(); i++) {
+        _vc->_meshRenderer->addMesh(_buildingMeshes[i]);
+      }
       
       //Uncomment for seeing spheres
       //      for (size_t i = 0; i < _buildings.size(); i++) {
@@ -219,12 +239,37 @@ public:
   //  }
   
   void colorBuildings(CityGMLBuildingColorProvider* cp){
-    
     for (size_t i = 0; i < _buildings.size(); i++) {
       CityGMLBuilding* b = _buildings.at(i);
       Color c = cp->getColor(b);
       CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(b, c);
     }
+  }
+  
+  std::vector<double> getAllValuesOfProperty(const std::string& name){
+    std::vector<double> v;
+    for (size_t i = 0; i < _buildings.size(); i++) {
+      double value = _buildings[i]->getNumericProperty(name);
+      if (!ISNAN(value)){
+        v.push_back(value);
+      }
+    }
+    return v;
+  }
+  
+  void colorBuildingsWithColorBrewer(const std::string& propertyName,
+                                     const std::string& colorScheme,
+                                     int nClasses){
+    
+    std::vector<double> vs = getAllValuesOfProperty(propertyName);
+    
+    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(vs, colorScheme, nClasses);
+    
+    BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider(propertyName, cl);
+    
+    colorBuildings(colorProvider);
+    
+    delete colorProvider;
     
   }
   

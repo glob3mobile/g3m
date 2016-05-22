@@ -182,10 +182,10 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3vG-Pl-tA1">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3vG-Pl-tA1">
                                 <rect key="frame" x="0.0" y="20" width="600" height="100"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="GOX-9d-L0c">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="GOX-9d-L0c">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="63"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eifer_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="43Y-r4-tOo">
@@ -217,7 +217,7 @@
                                         </subviews>
                                         <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="0.0" right="8"/>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LE9-lB-bmo">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LE9-lB-bmo">
                                         <rect key="frame" x="0.0" y="63" width="600" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="101" id="1ZY-jc-2W3"/>
@@ -266,10 +266,10 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="cwe-9I-WpT"/>
                                 <exclude reference="1TP-qP-qM9"/>
                                 <exclude reference="Kkt-5R-vNb"/>
                                 <exclude reference="Wib-dZ-UIl"/>
+                                <exclude reference="cwe-9I-WpT"/>
                             </mask>
                         </variation>
                     </view>
