@@ -29,6 +29,7 @@
 #include <G3MiOSSDK/Sphere.hpp>
 #include <G3MiOSSDK/OrientedBox.hpp>
 #include <G3MiOSSDK/Box.hpp>
+#include <G3MiOSSDK/SimpleOrientedBox.hpp>
 
 
 
@@ -234,7 +235,8 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   */
   
   // creating oriented boxes
-  {
+/*
+ {
     // outside, close to a frustum corner
     Vector3D lower(6383750+1000, -5000-3100, 680000-1000);
     OrientedBox obb(lower, Vector3D(1000,2000,0), Vector3D(-2000,1000,0), Vector3D(0,0,3000));
@@ -271,21 +273,36 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(obb.createMesh(color));
   }
- /* {
+  {
     // behind the center of proyection, with big radius
     Sphere sphere(Vector3D(6380000-5000, 0, 700000), 8500);
     Color color =  (sphere.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
     meshRenderer->addMesh(sphere.createWireframeMesh(color, 50));
   }*/
+  
+  
+  // creating simple oriented boxes
+  {
+    // inside the frustum center
+    Vector3D lower(6380000, -10000, 683000);
+    Vector3D upper = lower.add(Vector3D(9000,3000,3000));
+    MutableMatrix44D transMatrix = MutableMatrix44D::createTranslationMatrix(0, 12000, 0);
+    MutableMatrix44D rotationMatrix = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(90), Vector3D(0,0,-1), lower);
+    MutableMatrix44D matrix = transMatrix.multiply(rotationMatrix);
+    SimpleOrientedBox obb(lower, upper, matrix);
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
+  }
+
 
  
-  /*
+  
   // locating camera
   G3MWidget*    g3mWidget = getModel()->getG3MWidget();
   g3mWidget->setCameraPosition(Geodetic3D(Angle::fromDegrees(5.88), Angle::fromDegrees(0.5), 71600));
   g3mWidget->setCameraHeading(Angle::fromDegrees(59.30));
   g3mWidget->setCameraPitch(Angle::fromDegrees(-29.15));
-*/
+
   
   
 }

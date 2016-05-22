@@ -12,6 +12,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "DirectMesh.hpp"
 #include "OrientedBox.hpp"
+#include "SimpleOrientedBox.hpp"
 
 
 
@@ -368,4 +369,8 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
   return fullInside % 6 == 0;
 }
 
+
+bool Frustum::touchesWithSimpleOrientedBox(const SimpleOrientedBox* obb) const {
+  return true;
+}
 

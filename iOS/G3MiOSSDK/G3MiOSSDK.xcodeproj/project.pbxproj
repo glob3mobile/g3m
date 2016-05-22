@@ -768,6 +768,8 @@
 		FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2B1B2617F880B5006307EC /* Quadric.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
+		FB547D331CF199730065F36B /* SimpleOrientedBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB547D311CF199730065F36B /* SimpleOrientedBox.cpp */; };
+		FB547D341CF19E5A0065F36B /* SimpleOrientedBox.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB547D321CF199730065F36B /* SimpleOrientedBox.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 		FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */; };
 		FBB7C63D1C77A8C900AC1DE1 /* OrientedBox.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBB7C63C1C77A2BB00AC1DE1 /* OrientedBox.hpp */; };
@@ -783,6 +785,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB547D341CF19E5A0065F36B /* SimpleOrientedBox.hpp in CopyFiles */,
 				CCB2B4891C82F5CC00DDE101 /* Polygon3D.hpp in CopyFiles */,
 				FBB7C63D1C77A8C900AC1DE1 /* OrientedBox.hpp in CopyFiles */,
 				FBB7C6371C63B3A300AC1DE1 /* StraightLine.hpp in CopyFiles */,
@@ -1992,6 +1995,8 @@
 		FB2B1B2617F880B5006307EC /* Quadric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quadric.hpp; path = Commons/Geometry/Quadric.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
+		FB547D311CF199730065F36B /* SimpleOrientedBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleOrientedBox.cpp; path = Commons/Geometry/SimpleOrientedBox.cpp; sourceTree = "<group>"; };
+		FB547D321CF199730065F36B /* SimpleOrientedBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimpleOrientedBox.hpp; path = Commons/Geometry/SimpleOrientedBox.hpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBB7C6361C63AD4200AC1DE1 /* StraightLine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StraightLine.hpp; path = Commons/Geometry/StraightLine.hpp; sourceTree = "<group>"; };
@@ -2338,6 +2343,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				FB547D311CF199730065F36B /* SimpleOrientedBox.cpp */,
+				FB547D321CF199730065F36B /* SimpleOrientedBox.hpp */,
 				CCB2B48A1C82F7F100DDE101 /* Polygon3D.cpp */,
 				CCB2B4881C82F10100DDE101 /* Polygon3D.hpp */,
 				FBB7C63E1C77AC8100AC1DE1 /* OrientedBox.cpp */,
@@ -3408,6 +3415,7 @@
 				CFE60469190442FE00E6C78B /* TextureMapping.cpp in Sources */,
 				4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */,
 				349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */,
+				FB547D331CF199730065F36B /* SimpleOrientedBox.cpp in Sources */,
 				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
 				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
 				CFCBA3BE1906F3C200FD2A2F /* RasterLayer.cpp in Sources */,

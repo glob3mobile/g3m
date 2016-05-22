@@ -17,6 +17,7 @@
 
 class Box;
 class Mesh;
+class SimpleOrientedBox;
 
 
 class FrustumData {
@@ -235,6 +236,7 @@ public:
   bool touchesWithBox(const Box* box) const;
   bool touchesWithSphere(const Sphere* sphere) const;
   bool touchesWithOrientedBox(const OrientedBox* obb) const;
+  bool touchesWithSimpleOrientedBox(const SimpleOrientedBox* obb) const;
   
   
   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
