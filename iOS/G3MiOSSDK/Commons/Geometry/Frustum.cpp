@@ -370,7 +370,64 @@ bool Frustum::touchesWithOrientedBox(const OrientedBox* obb) const {
 }
 
 
-bool Frustum::touchesWithSimpleOrientedBox(const SimpleOrientedBox* obb) const {
-  return true;
+bool Frustum::touchesWithSimpleOrientedBox(const SimpleOrientedBox* that) const {
+/*  // test first if frustum extent intersect with box
+  if (!getBoundingVolume()->touchesBox(that)) {
+    return false;
+  }*/
+  
+#warning This implementation could gives false positives
+#ifdef C_CODE
+  // create an array with the 8 corners of the box
+  const Vector3D min = that->getLower();
+  const Vector3D max = that->getUpper();
+  Vector3D corners[8] = {
+    Vector3D((float) min._x, (float) min._y, (float) min._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) min._x, (float) min._y, (float) max._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) min._x, (float) max._y, (float) min._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) min._x, (float) max._y, (float) max._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) max._x, (float) min._y, (float) min._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) max._x, (float) min._y, (float) max._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) max._x, (float) max._y, (float) min._z).transformedBy(that->_matrix, 1),
+    Vector3D((float) max._x, (float) max._y, (float) max._z).transformedBy(that->_matrix, 1)
+  };
+  
+  return (!testAllCornersInside(_leftFace._plane,   corners) &&
+          !testAllCornersInside(_bottomFace._plane, corners) &&
+          !testAllCornersInside(_rightFace._plane,  corners) &&
+          !testAllCornersInside(_topFace._plane,    corners) &&
+          !testAllCornersInside(_nearFace._plane,   corners) &&
+          !testAllCornersInside(_farFace._plane,    corners));
+#endif
+/*
+ #ifdef JAVA_CODE
+  final Vector3F[] corners = that.getCornersArray();
+  
+  return !((_leftPlane.signedDistance(corners[0]) >= 0) && (_leftPlane.signedDistance(corners[1]) >= 0)
+           && (_leftPlane.signedDistance(corners[2]) >= 0) && (_leftPlane.signedDistance(corners[3]) >= 0)
+           && (_leftPlane.signedDistance(corners[4]) >= 0) && (_leftPlane.signedDistance(corners[5]) >= 0)
+           && (_leftPlane.signedDistance(corners[6]) >= 0) && (_leftPlane.signedDistance(corners[7]) >= 0))
+  && !((_bottomPlane.signedDistance(corners[0]) >= 0) && (_bottomPlane.signedDistance(corners[1]) >= 0)
+       && (_bottomPlane.signedDistance(corners[2]) >= 0) && (_bottomPlane.signedDistance(corners[3]) >= 0)
+       && (_bottomPlane.signedDistance(corners[4]) >= 0) && (_bottomPlane.signedDistance(corners[5]) >= 0)
+       && (_bottomPlane.signedDistance(corners[6]) >= 0) && (_bottomPlane.signedDistance(corners[7]) >= 0))
+  && !((_rightPlane.signedDistance(corners[0]) >= 0) && (_rightPlane.signedDistance(corners[1]) >= 0)
+       && (_rightPlane.signedDistance(corners[2]) >= 0) && (_rightPlane.signedDistance(corners[3]) >= 0)
+       && (_rightPlane.signedDistance(corners[4]) >= 0) && (_rightPlane.signedDistance(corners[5]) >= 0)
+       && (_rightPlane.signedDistance(corners[6]) >= 0) && (_rightPlane.signedDistance(corners[7]) >= 0))
+  && !((_topPlane.signedDistance(corners[0]) >= 0) && (_topPlane.signedDistance(corners[1]) >= 0)
+       && (_topPlane.signedDistance(corners[2]) >= 0) && (_topPlane.signedDistance(corners[3]) >= 0)
+       && (_topPlane.signedDistance(corners[4]) >= 0) && (_topPlane.signedDistance(corners[5]) >= 0)
+       && (_topPlane.signedDistance(corners[6]) >= 0) && (_topPlane.signedDistance(corners[7]) >= 0))
+  && !((_nearPlane.signedDistance(corners[0]) >= 0) && (_nearPlane.signedDistance(corners[1]) >= 0)
+       && (_nearPlane.signedDistance(corners[2]) >= 0) && (_nearPlane.signedDistance(corners[3]) >= 0)
+       && (_nearPlane.signedDistance(corners[4]) >= 0) && (_nearPlane.signedDistance(corners[5]) >= 0)
+       && (_nearPlane.signedDistance(corners[6]) >= 0) && (_nearPlane.signedDistance(corners[7]) >= 0))
+  && !((_farPlane.signedDistance(corners[0]) >= 0) && (_farPlane.signedDistance(corners[1]) >= 0)
+       && (_farPlane.signedDistance(corners[2]) >= 0) && (_farPlane.signedDistance(corners[3]) >= 0)
+       && (_farPlane.signedDistance(corners[4]) >= 0) && (_farPlane.signedDistance(corners[5]) >= 0)
+       && (_farPlane.signedDistance(corners[6]) >= 0) && (_farPlane.signedDistance(corners[7]) >= 0));
+#endif
+ */
 }
 

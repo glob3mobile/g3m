@@ -286,8 +286,19 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
     // inside the frustum center
     Vector3D lower(6380000, -10000, 683000);
     Vector3D upper = lower.add(Vector3D(9000,3000,3000));
-    MutableMatrix44D transMatrix = MutableMatrix44D::createTranslationMatrix(0, 12000, 0);
-    MutableMatrix44D rotationMatrix = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(90), Vector3D(0,0,-1), lower);
+    MutableMatrix44D transMatrix = MutableMatrix44D::createTranslationMatrix(0, 000, 0);
+    MutableMatrix44D rotationMatrix = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(0), Vector3D(0,0,-1), lower);
+    MutableMatrix44D matrix = transMatrix.multiply(rotationMatrix);
+    SimpleOrientedBox obb(lower, upper, matrix);
+    Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
+    meshRenderer->addMesh(obb.createMesh(color));
+  }
+  {
+    // inside the frustum center
+    Vector3D lower(6380000, -10000, 683000);
+    Vector3D upper = lower.add(Vector3D(9000,3000,3000));
+    MutableMatrix44D transMatrix = MutableMatrix44D::createTranslationMatrix(0, 000, 0);
+    MutableMatrix44D rotationMatrix = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(-15), Vector3D(0,0,-1), lower);
     MutableMatrix44D matrix = transMatrix.multiply(rotationMatrix);
     SimpleOrientedBox obb(lower, upper, matrix);
     Color color =  (obb.touchesFrustum(frustum))? Color::fromRGBA(0, 1, 0, 1) : Color::fromRGBA(1, 0, 0, 1);
