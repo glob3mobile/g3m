@@ -69,7 +69,7 @@ void G3MDemoBuilder::build() {
   
   
 #warning temp_Agustin;
-  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  builder->getPlanetRendererBuilder()->setRenderDebug(true);
   //builder->getPlanetRendererBuilder()->setShowStatistics(true);
   
   

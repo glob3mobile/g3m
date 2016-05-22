@@ -160,6 +160,9 @@ public:
   BoundingVolume* getBoundingOrientedBox() const {
     return getBoundingVolume();
   }
+  BoundingVolume* getBoundingSimpleOrientedBox() const {
+    return getBoundingVolume();
+  }
 
 
   bool setGLTextureIdForLevel(int level,

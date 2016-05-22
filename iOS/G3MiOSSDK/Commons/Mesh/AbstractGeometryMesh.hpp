@@ -45,6 +45,7 @@ protected:
   BoundingVolume* computeBoundingVolume() const;
   BoundingVolume* computeBoundingBox() const;
   BoundingVolume* computeBoundingOrientedBox() const;
+  BoundingVolume* computeBoundingSimpleOrientedBox() const;
   
   AbstractGeometryMesh(const int       primitive,
                        const Vector3D& center,
@@ -78,11 +79,7 @@ public:
   BoundingVolume* getBoundingVolume() const;
   BoundingVolume* getBoundingBox() const;
   BoundingVolume* getBoundingOrientedBox() const;
-  
-  #warning temp_Agustin;
-  BoundingVolume* getBoundingOrientedBox() {
-    return computeBoundingOrientedBox();
-  }
+  BoundingVolume* getBoundingSimpleOrientedBox() const;
   
   
   size_t getVertexCount() const;

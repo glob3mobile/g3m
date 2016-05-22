@@ -309,13 +309,13 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
 
 
  
-  
+/*
   // locating camera
   G3MWidget*    g3mWidget = getModel()->getG3MWidget();
   g3mWidget->setCameraPosition(Geodetic3D(Angle::fromDegrees(5.88), Angle::fromDegrees(0.5), 71600));
   g3mWidget->setCameraHeading(Angle::fromDegrees(59.30));
   g3mWidget->setCameraPitch(Angle::fromDegrees(-29.15));
-
+*/
   
   
 }

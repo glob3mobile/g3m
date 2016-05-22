@@ -145,7 +145,7 @@ public:
                    float lineWidth=2) const;
   Mesh* getMesh() const {
     if (_mesh == NULL)
-      _mesh = createMesh(Color::fromRGBA(1, 1, 0, 1), 4);
+      _mesh = createMesh(Color::fromRGBA(1, 0, 0, 1), 4);
     return _mesh;
   }
 

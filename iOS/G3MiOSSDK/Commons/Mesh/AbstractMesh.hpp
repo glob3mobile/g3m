@@ -76,6 +76,9 @@ public:
   BoundingVolume* getBoundingOrientedBox() const {
     return getBoundingVolume();
   }
+  BoundingVolume* getBoundingSimpleOrientedBox() const {
+    return getBoundingVolume();
+  }
   
 
   size_t getVertexCount() const;

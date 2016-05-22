@@ -25,6 +25,7 @@
 
 #include "StraightLine.hpp"
 #include "OrientedBox.hpp"
+#include "SimpleOrientedBox.hpp"
 
 
 AbstractGeometryMesh::~AbstractGeometryMesh() {
@@ -176,6 +177,49 @@ BoundingVolume* AbstractGeometryMesh::computeBoundingOrientedBox() const {
 }
 
 
+BoundingVolume* AbstractGeometryMesh::computeBoundingSimpleOrientedBox() const {
+  StraightLine normalAxe(_center, _normalVector);
+  StraightLine northAxe(_center, _northVector);
+  StraightLine eastAxe(_center, _eastVector);
+  
+  double maxOrientedElevation = -1e10;
+  double minOrientedElevation = 1e10;
+  double maxEastValue = -1e10;
+  double minEastValue = 1e10;
+  double maxNorthValue = -1e10;
+  double minNorthValue = 1e10;
+  const size_t vertexCount = getVertexCount();
+  
+  for (size_t i=0; i < vertexCount; i++) {
+    const size_t i3 = i * 3;
+    const double x = _vertices->get(i3    ) + _center._x;
+    const double y = _vertices->get(i3 + 1) + _center._y;
+    const double z = _vertices->get(i3 + 2) + _center._z;
+    const Vector3D vertex(x,y,z);
+    double elevation = normalAxe.signedDistanceToProjectedPoint(vertex);
+    if (elevation < minOrientedElevation) minOrientedElevation = elevation;
+    if (elevation > maxOrientedElevation) maxOrientedElevation = elevation;
+    double northDiff = northAxe.signedDistanceToProjectedPoint(vertex);
+    if (northDiff < minNorthValue) minNorthValue = northDiff;
+    if (northDiff > maxNorthValue) maxNorthValue = northDiff;
+    double eastDiff = eastAxe.signedDistanceToProjectedPoint(vertex);
+    if (eastDiff < minEastValue) minEastValue = eastDiff;
+    if (eastDiff > maxEastValue) maxEastValue = eastDiff;
+  }
+  
+  Vector3D lower = _center.add(_northVector.times(minNorthValue).add(_eastVector.times(minEastValue).add(_normalVector.times(minOrientedElevation))));
+  
+  /*  printf("values: %d; %f %f %f %f %f %f\n",
+   vertexCount, maxNorthValue, minNorthValue, maxEastValue, minEastValue, maxOrientedElevation, minOrientedElevation);
+   */
+  
+  return new SimpleOrientedBox(lower,
+                               _northVector.times(maxNorthValue-minNorthValue),
+                               _eastVector.times(maxEastValue-minEastValue),
+                               _normalVector.times(maxOrientedElevation-minOrientedElevation));
+}
+
+
 BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   if (_extent == NULL) {
     _extent = computeBoundingVolume();
@@ -193,6 +237,13 @@ BoundingVolume* AbstractGeometryMesh::getBoundingBox() const {
 BoundingVolume* AbstractGeometryMesh::getBoundingOrientedBox() const {
   if (_extent == NULL) {
     _extent = computeBoundingOrientedBox();
+  }
+  return _extent;
+}
+
+BoundingVolume* AbstractGeometryMesh::getBoundingSimpleOrientedBox() const {
+  if (_extent == NULL) {
+    _extent = computeBoundingSimpleOrientedBox();
   }
   return _extent;
 }

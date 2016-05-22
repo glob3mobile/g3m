@@ -27,13 +27,24 @@ bool MeshBoundingBoxTileVisibilityTester::isVisible(const G3MRenderContext* rc,
 
 
 bool MeshBoundingOrientedBoxTileVisibilityTester::isVisible(const G3MRenderContext* rc,
-                                                    const PlanetRenderContext* prc,
-                                                    Tile* tile) const {
+                                                            const PlanetRenderContext* prc,
+                                                            Tile* tile) const {
   const Mesh* mesh = tile->getTessellatorMesh(rc, prc);
   if (mesh == NULL) {
     return false;
   }
   
   return mesh->getBoundingOrientedBox()->touchesFrustum(prc->_frustumInModelCoordinates);
+}
+
+bool MeshBoundingSimpleOrientedBoxTileVisibilityTester::isVisible(const G3MRenderContext* rc,
+                                                                  const PlanetRenderContext* prc,
+                                                                  Tile* tile) const {
+  const Mesh* mesh = tile->getTessellatorMesh(rc, prc);
+  if (mesh == NULL) {
+    return false;
+  }
+  
+  return mesh->getBoundingSimpleOrientedBox()->touchesFrustum(prc->_frustumInModelCoordinates);
 }
 

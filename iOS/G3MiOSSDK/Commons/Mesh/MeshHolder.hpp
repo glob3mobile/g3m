@@ -58,6 +58,9 @@ public:
   BoundingVolume* getBoundingOrientedBox() const {
     return getBoundingVolume();
   }
+  BoundingVolume* getBoundingSimpleOrientedBox() const {
+    return getBoundingVolume();
+  }
 
 
   bool isTransparent(const G3MRenderContext* rc) const {

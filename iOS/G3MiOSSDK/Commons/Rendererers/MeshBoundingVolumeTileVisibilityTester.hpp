@@ -48,6 +48,13 @@ public:
                  Tile* tile) const;
 };
 
+class MeshBoundingSimpleOrientedBoxTileVisibilityTester : public MeshBoundingVolumeTileVisibilityTester {
+public:
+  bool isVisible(const G3MRenderContext* rc,
+                 const PlanetRenderContext* prc,
+                 Tile* tile) const;
+};
+
 
 
 #endif

@@ -43,6 +43,7 @@ public:
   virtual BoundingVolume* getBoundingVolume() const = 0;
   virtual BoundingVolume* getBoundingBox() const = 0;
   virtual BoundingVolume* getBoundingOrientedBox() const = 0;
+  virtual BoundingVolume* getBoundingSimpleOrientedBox() const = 0;
 
   
   virtual bool isTransparent(const G3MRenderContext* rc) const = 0;
