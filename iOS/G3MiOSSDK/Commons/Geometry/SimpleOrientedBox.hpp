@@ -44,6 +44,17 @@ public:
   _mesh(NULL)
   {
   }
+  
+  SimpleOrientedBox(const Vector3D& lower,
+                    const Vector3D& xAxis,
+                    const Vector3D& yAxis,
+                    const Vector3D& zAxis):
+  _lower(lower),
+  _upper(lower.add(Vector3D(1,0,0).times(xAxis.length())).add(Vector3D(0,1,0).times((yAxis.length()))).add(Vector3D(0,0,1).times(zAxis.length()))),
+  _matrix(MutableMatrix44D::createGeneralRotationMatrix(xAxis, yAxis, zAxis, lower)),
+  _mesh(NULL)
+  {
+  }
 
   ~SimpleOrientedBox();
   

@@ -13,6 +13,7 @@
 #include "IFloatBuffer.hpp"
 #include "Vector3F.hpp"
 #include "Vector2F.hpp"
+#include "Vector3D.hpp"
 
 
 MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
@@ -395,10 +396,33 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                           0, 0, 0, 1);
 }
 
+MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Vector3D& xAxis,
+                                                        const Vector3D& yAxis,
+                                                        const Vector3D& zAxis) {
+  const Vector3D u = xAxis.normalized();
+  const Vector3D v = yAxis.normalized();
+  const Vector3D w = zAxis.normalized();
+  return MutableMatrix44D(u._x, u._y, u._z, 0,
+                          v._x, v._y, v._z, 0,
+                          w._x, w._y, w._z, 0,
+                          0, 0, 0, 1);
+}
+
+
 MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,
                                                                const Vector3D& axis, const Vector3D& point) {
   const MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
   const MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(angle, axis);
+  const MutableMatrix44D T2 = MutableMatrix44D::createTranslationMatrix(point);
+  return T2.multiply(R).multiply(T1);
+}
+
+MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Vector3D& xAxis,
+                                                               const Vector3D& yAxis,
+                                                               const Vector3D& zAxis,
+                                                               const Vector3D& point) {
+  const MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
+  const MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(xAxis, yAxis, zAxis);
   const MutableMatrix44D T2 = MutableMatrix44D::createTranslationMatrix(point);
   return T2.multiply(R).multiply(T1);
 }
