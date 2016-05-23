@@ -133,6 +133,7 @@ public:
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
+    _mark->resetRequestIconId();
     const bool hasLabel = ( _label.length() != 0 );
     
     if (hasLabel) {
@@ -159,11 +160,13 @@ public:
   }
   
   void onError(const URL& url) {
+    _mark->resetRequestIconId();
     ILogger::instance()->logError("Error trying to download image \"%s\"", url._path.c_str());
     _mark->onTextureDownloadError();
   }
   
   void onCancel(const URL& url) {
+    _mark->resetRequestIconId();
     // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
     _mark->onTextureDownloadError();
   }
@@ -171,6 +174,7 @@ public:
   void onCanceledDownload(const URL& url,
                           IImage* image,
                           bool expired) {
+    _mark->resetRequestIconId();
     // do nothing
   }
 };
@@ -478,9 +482,9 @@ void Mark::initialize(const G3MContext* context,
     else {
       const bool hasIconURL = ( _iconURL._path.length() != 0 );
       if (hasIconURL) {
-        IDownloader* downloader = context->getDownloader();
+        _downloader = context->getDownloader();
 
-        downloader->requestImage(_iconURL,
+        _requestIconID = _downloader->requestImage(_iconURL,
                                  downloadPriority,
                                  TimeInterval::fromDays(30),
                                  true,
@@ -550,7 +554,16 @@ bool Mark::isReady() const {
   return _textureSolved;
 }
 
+void Mark::resetRequestIconId() {
+  _requestIconID = -1;
+}
+
+
 Mark::~Mark() {
+  if (_requestIconID != -1) {
+    _downloader->cancelRequest(_requestIconID);
+  }
+  
   if (_effectsScheduler != NULL) {
     _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
   }

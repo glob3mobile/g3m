@@ -189,6 +189,9 @@ private:
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
+  
+  IDownloader* _downloader;
+  long long _requestIconID = -1;
 
 public:
 
@@ -392,6 +395,9 @@ public:
   bool getZoomInAppears() const {
     return _zoomInAppears;
   }
+  
+  
+  void resetRequestIconId();
 
 };
 
