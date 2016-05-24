@@ -16,6 +16,10 @@
 #include "ShortBufferBuilder.hpp"
 #include <vector>
 
+
+int numberOfP3D = 0;
+int numberOfP3D_4 = 0;
+
 class Polygon3D{
   
   std::vector<Vector3D*> _coor3D;

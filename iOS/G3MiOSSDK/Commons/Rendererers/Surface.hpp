@@ -20,6 +20,7 @@
 #include "IStringBuilder.hpp"
 #include "Mark.hpp"
 
+int numberOfWalls = 0;
 
 class Surface {
   
@@ -34,6 +35,7 @@ public:
   _geodeticCoordinates(geodeticCoordinates),
   _maxHeight(NAND)
   {
+    numberOfWalls++;
   }
   
   

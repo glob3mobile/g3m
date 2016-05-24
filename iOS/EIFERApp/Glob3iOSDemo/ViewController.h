@@ -28,6 +28,7 @@ class CityGMLRenderer;
 class MyEDCamConstrainer;
 class GEOVectorLayer;
 class PointCloudEvolutionTask;
+class LayerSet;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
@@ -58,6 +59,9 @@ class PointCloudEvolutionTask;
   
   //VC
   CameraViewController* _camVC;
+  
+  //LayerSet
+  LayerSet* layerSet;
   
   PointCloudEvolutionTask* _pointCloudTask;
   

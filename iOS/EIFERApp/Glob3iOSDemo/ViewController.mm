@@ -203,6 +203,7 @@
 #include <G3MiOSSDK/SphericalPlanet.hpp>
 #include <G3MiOSSDK/ElevationData.hpp>
 #include <G3MiOSSDK/PointCloudMesh.hpp>
+#include <G3MiOSSDK/Surface.hpp>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -566,15 +567,15 @@ public:
 //  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
-//      [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//    [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
-//    [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
-//    [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
-//    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
   
   _modelsLoadedCounter = 0;
   
@@ -623,20 +624,27 @@ public:
   [_timeLabel setHidden:TRUE];
 }
 
+-(void) useOSM:(BOOL) v{
+  layerSet->removeAllLayers(true);
+  if (v){
+    OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
+    layerSet->addLayer(layer);
+  } else{
+    BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                             "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                             TimeInterval::fromDays(30));
+    layerSet->addLayer(layer);
+  }
+  
+}
 
 
 - (void)initEIFERG3m:(BOOL) useDEM
 {
   
   G3MBuilder_iOS builder([self G3MWidget]);
-  LayerSet* layerSet = new LayerSet();
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  layerSet = new LayerSet();
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-  
-  //  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-  //                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-  //                                           TimeInterval::fromDays(30));
-  
   OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
   
   layerSet->addLayer(layer);
@@ -653,9 +661,39 @@ public:
   builder.addRenderer(meshRendererPC);
   marksRenderer = new MarksRenderer(false);
   
+  //Karlsruhe Schloss model
+  ShapesRenderer* sr = new ShapesRenderer();
+  builder.addRenderer(sr);
+  
+  class SchlossListener : public ShapeLoadListener {
+  public:
+    SchlossListener()
+    {
+    }
+    
+    void onBeforeAddShape(SGShape* shape) {
+      shape->setPitch(Angle::fromDegrees(90));
+    }
+    
+    void onAfterAddShape(SGShape* shape) {
+      shape->setScale(250);
+      shape->setHeading(Angle::fromDegrees(-4));
+    }
+  };
+  
+  sr->loadJSONSceneJS(URL("file:///k_s/k_schloss.json"),
+                      "file:///k_s/",
+                      false, // isTransparent
+                      new Geodetic3D(Geodetic3D::fromDegrees(49.013487,8.404333, 117.82)), //
+                      ABSOLUTE,
+                      new SchlossListener());
+  
   
   //Showing Footprints
-  vectorLayer = new GEOVectorLayer();
+  vectorLayer = new GEOVectorLayer(2,18,
+                                   0,18,
+                                   1.0f,
+                                   new LevelTileCondition(17, 18));
   layerSet->addLayer(vectorLayer);
   
   cityGMLRenderer = new CityGMLRenderer(meshRenderer,
@@ -717,6 +755,10 @@ public:
   //NO WAITING ANYMORE
   _waitingMessageView.hidden = TRUE;
   _isMenuAvailable = true;
+  
+  printf("N OF WALLS: %d\n", numberOfWalls);
+  printf("N OF TESSELLATED WALLS: %d\n", numberOfP3D);
+  printf("N OF TESSELLATED WALLS_4: %d\n", numberOfP3D_4);
 }
 
 - (IBAction)switchCityGML:(id)sender {
@@ -739,6 +781,8 @@ public:
 }
 
 -(void) activateMapMode{
+  
+  [self useOSM:TRUE];
   
   _headerView.hidden = FALSE;
   
@@ -775,6 +819,8 @@ public:
 }
 
 -(void) activateMonoVRMode{
+  
+  [self useOSM:FALSE];
   
   _headerView.hidden = FALSE;
   
@@ -820,6 +866,8 @@ public:
 }
 
 -(void) activateStereoVRMode{
+  
+  [self useOSM:FALSE];
   
   _headerView.hidden = TRUE;
   [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
@@ -998,61 +1046,61 @@ public:
     
     cityGMLRenderer->colorBuildingsWithColorBrewer("Bui_Volu_1", "BuGn", 7);
     
-//    std::vector<double> vs = cityGMLRenderer->getAllValuesOfProperty("Bui_Volu_1");
-//    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(vs, "BuGn", 4);
-//    BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider("Bui_Volu_1", cl);
-//    cityGMLRenderer->colorBuildings(colorProvider);
-//    delete colorProvider;
+    //    std::vector<double> vs = cityGMLRenderer->getAllValuesOfProperty("Bui_Volu_1");
+    //    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(vs, "BuGn", 4);
+    //    BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider("Bui_Volu_1", cl);
+    //    cityGMLRenderer->colorBuildings(colorProvider);
+    //    delete colorProvider;
     
-//    std::vector<ColorLegend::ColorAndValue*> legend;
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(213,62,79, 255), 2196.0));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 6816.0));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(254,224,139, 255), 17388.0));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(230,245,152, 255), 33165.0));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(153,213,148, 255), 62472.0));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(50,136,189, 255), 122553.0));
-//    ColorLegend* cl = new ColorLegend(legend);
-//    
-//    BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider("Bui_Volu_1", cl);
-//    cityGMLRenderer->colorBuildings(colorProvider);
-//    delete colorProvider;
+    //    std::vector<ColorLegend::ColorAndValue*> legend;
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(213,62,79, 255), 2196.0));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 6816.0));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(254,224,139, 255), 17388.0));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(230,245,152, 255), 33165.0));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(153,213,148, 255), 62472.0));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(50,136,189, 255), 122553.0));
+    //    ColorLegend* cl = new ColorLegend(legend);
+    //
+    //    BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider("Bui_Volu_1", cl);
+    //    cityGMLRenderer->colorBuildings(colorProvider);
+    //    delete colorProvider;
   }
   
   if (row == 3){
     
-//    int nClasses = 18;
-//    int colors[] = {103,0,31,
-//      178,24,43,
-//      214,96,77,
-//      244,165,130,
-//      253,219,199,
-//      247,247,247,
-//      209,229,240,
-//      146,197,222,
-//      67,147,195,
-//      33,102,172,
-//      5,48,97,
-//      171,221,164,
-//      102,194,165,
-//      50,136,189,
-//      94,79,162,
-//      227,26,28,
-//      253,191,111,
-//      255,127,0};
-//    
-//    std::vector<ColorLegend::ColorAndValue*> legend;
-//    for (int i = 0; i < nClasses;i++) {
-//      legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(colors[i*3],
-//                                                                         colors[i*3+1],
-//                                                                         colors[i*3+2],
-//                                                                         255),
-//                                                      (double)(i+1)));
-//    }
-//    
-//    ColorLegend* cl = new ColorLegend(legend);
-//    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("QCL_1", cl);
-//    cityGMLRenderer->colorBuildings(colorProvider);
-//    delete colorProvider;
+    //    int nClasses = 18;
+    //    int colors[] = {103,0,31,
+    //      178,24,43,
+    //      214,96,77,
+    //      244,165,130,
+    //      253,219,199,
+    //      247,247,247,
+    //      209,229,240,
+    //      146,197,222,
+    //      67,147,195,
+    //      33,102,172,
+    //      5,48,97,
+    //      171,221,164,
+    //      102,194,165,
+    //      50,136,189,
+    //      94,79,162,
+    //      227,26,28,
+    //      253,191,111,
+    //      255,127,0};
+    //
+    //    std::vector<ColorLegend::ColorAndValue*> legend;
+    //    for (int i = 0; i < nClasses;i++) {
+    //      legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(colors[i*3],
+    //                                                                         colors[i*3+1],
+    //                                                                         colors[i*3+2],
+    //                                                                         255),
+    //                                                      (double)(i+1)));
+    //    }
+    //
+    //    ColorLegend* cl = new ColorLegend(legend);
+    //    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("QCL_1", cl);
+    //    cityGMLRenderer->colorBuildings(colorProvider);
+    //    delete colorProvider;
     
     cityGMLRenderer->colorBuildingsWithColorBrewer("QCL_1", "YlGn", 7);
     
@@ -1061,38 +1109,38 @@ public:
   if (row == 4){
     
     cityGMLRenderer->colorBuildingsWithColorBrewer("SOMcluster", "GnBu", 7);
-//    
-//    std::vector<ColorLegend::ColorAndValue*> legend;
-//    
-//    int nClasses = 15;
-//    int colors[] = {103,0,31,
-//      178,24,43,
-//      214,96,77,
-//      244,165,130,
-//      253,219,199,
-//      247,247,247,
-//      209,229,240,
-//      146,197,222,
-//      67,147,195,
-//      33,102,172,
-//      5,48,97,
-//      166,219,160,
-//      90,174,97,
-//      27,120,55,
-//      0,68,27};
-//    
-//    for (int i = 0; i < nClasses;i++) {
-//      legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(colors[i*3],
-//                                                                         colors[i*3+1],
-//                                                                         colors[i*3+2],
-//                                                                         255),
-//                                                      (double)(i+1)));
-//    }
-//    
-//    ColorLegend* cl = new ColorLegend(legend);
-//    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("SOMcluster", cl);
-//    cityGMLRenderer->colorBuildings(colorProvider);
-//    delete colorProvider;
+    //
+    //    std::vector<ColorLegend::ColorAndValue*> legend;
+    //
+    //    int nClasses = 15;
+    //    int colors[] = {103,0,31,
+    //      178,24,43,
+    //      214,96,77,
+    //      244,165,130,
+    //      253,219,199,
+    //      247,247,247,
+    //      209,229,240,
+    //      146,197,222,
+    //      67,147,195,
+    //      33,102,172,
+    //      5,48,97,
+    //      166,219,160,
+    //      90,174,97,
+    //      27,120,55,
+    //      0,68,27};
+    //
+    //    for (int i = 0; i < nClasses;i++) {
+    //      legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(colors[i*3],
+    //                                                                         colors[i*3+1],
+    //                                                                         colors[i*3+2],
+    //                                                                         255),
+    //                                                      (double)(i+1)));
+    //    }
+    //
+    //    ColorLegend* cl = new ColorLegend(legend);
+    //    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("SOMcluster", cl);
+    //    cityGMLRenderer->colorBuildings(colorProvider);
+    //    delete colorProvider;
     
   }
   
@@ -1100,14 +1148,14 @@ public:
     
     cityGMLRenderer->colorBuildingsWithColorBrewer("Field2_12", "PuOr", 7);
     
-//    std::vector<ColorLegend::ColorAndValue*> legend;
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(213,62,79, 255), -0.05));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 0.05));
-//    
-//    ColorLegend* cl = new ColorLegend(legend);
-//    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Field2_12", cl);
-//    cityGMLRenderer->colorBuildings(colorProvider);
-//    delete colorProvider;
+    //    std::vector<ColorLegend::ColorAndValue*> legend;
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(213,62,79, 255), -0.05));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 0.05));
+    //    
+    //    ColorLegend* cl = new ColorLegend(legend);
+    //    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Field2_12", cl);
+    //    cityGMLRenderer->colorBuildings(colorProvider);
+    //    delete colorProvider;
     
   }
 }

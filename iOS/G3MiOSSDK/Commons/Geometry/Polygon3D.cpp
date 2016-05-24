@@ -8,7 +8,12 @@
 
 #include "Polygon3D.hpp"
 
+
 std::vector<Vector2D*> Polygon3D::createCoordinates2D() {
+  
+  if (_coor3D.size() == 5){
+    numberOfP3D_4++;
+  }
   
   const Vector3D z = Vector3D::upZ();
   const Vector3D rotationAxis = z.cross(_normal);
@@ -45,6 +50,10 @@ short Polygon3D::addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D& fb
                                 FloatBufferBuilderFromCartesian3D& normals,
                                 ShortBufferBuilder& indexes,
                                 const short firstIndex) const {
+  
+  
+  numberOfP3D++;
+  
   std::vector<short> indexes2D = _polygon2D->calculateTrianglesIndexesByEarClipping();
   if (indexes2D.size() > 3){
     

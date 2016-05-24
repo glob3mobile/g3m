@@ -13,6 +13,7 @@
 		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
 		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
 		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; };
+		D82D00501CF4ACB20038C6FB /* k_s in Resources */ = {isa = PBXBuildFile; fileRef = D82D004F1CF4ACB20038C6FB /* k_s */; };
 		D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86F55911CD9E75700A724F8 /* CameraViewController.m */; };
 		D88F1F0D1CC6298B005866FA /* SolarRadiation.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */; };
 		D88F1F101CC65390005866FA /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0F1CC65390005866FA /* up.png */; };
@@ -94,6 +95,7 @@
 		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		D80D57301BBAA1F400BA4762 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		D82D004F1CF4ACB20038C6FB /* k_s */ = {isa = PBXFileReference; lastKnownFileType = folder; path = k_s; sourceTree = "<group>"; };
 		D86F55901CD9E75700A724F8 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		D86F55911CD9E75700A724F8 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolarRadiation.geojson; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				D8DF55C51CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml */,
 				D8DF55C61CC4D9C300D7D084 /* knielingen_4326_lod2.gml */,
 				D8D0DF3C1CE3300100B5B6D3 /* technologiepark_WGS84.gml */,
+				D82D004F1CF4ACB20038C6FB /* k_s */,
 				D8DF55C71CC4D9C300D7D084 /* random_cluster_fewer_points.geojson */,
 				D8DF55C81CC4D9C300D7D084 /* random_cluster.geojson */,
 				D8DF558E1CC4D4D100D7D084 /* EIFER Resources */,
@@ -416,6 +419,7 @@
 				D8DF55DB1CC4D9C300D7D084 /* random_cluster.geojson in Resources */,
 				D8DF55D11CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml in Resources */,
 				D8DF55D61CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml in Resources */,
+				D82D00501CF4ACB20038C6FB /* k_s in Resources */,
 				D8DF55CB1CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
