@@ -69,7 +69,7 @@ public:
   void onCancel(const Sector& sector,
                 const Vector2I& resolution);
   
-  void sendRequest();
+  void sendRequest(const G3MRenderContext *rc, const PlanetRenderContext *prc);
   
   void cancelRequest();
   

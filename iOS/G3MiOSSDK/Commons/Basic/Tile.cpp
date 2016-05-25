@@ -627,7 +627,7 @@ void Tile::initializeElevationData(const G3MRenderContext* rc,
     const Vector2S res = prc->_tessellator->getTileMeshResolution(rc, prc, this);
 #warning should ElevationData res should be short?
     _elevationDataRequest = new TileElevationDataRequest(this, res.asVector2I(), prc->_elevationDataProvider);
-    _elevationDataRequest->sendRequest();
+    _elevationDataRequest->sendRequest(rc,prc);
   }
 
   if (_elevationData == NULL){

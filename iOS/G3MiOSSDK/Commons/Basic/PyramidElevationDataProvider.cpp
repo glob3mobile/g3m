@@ -143,6 +143,7 @@ PyramidElevationDataProvider::PyramidElevationDataProvider(const std::string &la
   _pyrComposition = new std::vector<PyramidComposition>();
   _deltaHeight = deltaHeight;
   _minRes = MutableVector2I(256, 256);
+  _maxLevel = -1;
 }
 
 PyramidElevationDataProvider::~PyramidElevationDataProvider(){
@@ -174,9 +175,13 @@ const long long PyramidElevationDataProvider::requestElevationData(const Sector&
                                              IElevationDataListener* listener,
                                              bool autodeleteListener){
     Sector * sectorCopy = new Sector(sector);
+    bool above = aboveLevel(*sectorCopy, level);
 
-    if ((_downloader == NULL) || (aboveLevel(*sectorCopy, level))){
+    if ((_downloader == NULL) || (above)){
         delete sectorCopy;
+        if (above) {
+            return -(_maxLevel);
+        }
         return -1;
     }
     
@@ -219,14 +224,15 @@ std::vector<const Sector*> PyramidElevationDataProvider::getSectors() const{
 }
 
 bool PyramidElevationDataProvider::aboveLevel(const Sector &sector, int level){
-  int maxLevel = 0;
-  for (size_t i=0; i< _pyrComposition->size(); i++) {
-    if (sector.touchesWith(_pyrComposition->at(i).getSector())) {
-      maxLevel = IMathUtils::instance()->max(maxLevel,_pyrComposition->at(i)._pyramidLevel);
+  if (_maxLevel == -1){
+    for (size_t i=0; i< _pyrComposition->size(); i++) {
+      if (sector.touchesWith(_pyrComposition->at(i).getSector())) {
+        _maxLevel = IMathUtils::instance()->max(_maxLevel,_pyrComposition->at(i)._pyramidLevel);
+      }
     }
   }
 
-  return ((level > maxLevel) || (!sector.touchesWith(_sector)));
+  return ((level > _maxLevel) || (!sector.touchesWith(_sector)));
 }
 
 const Vector2I PyramidElevationDataProvider::getMinResolution() const {

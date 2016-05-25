@@ -25,6 +25,7 @@ private:
     double _deltaHeight;
     const std::string _layer;
     MutableVector2I _minRes;
+    int _maxLevel;
 
     class PyramidComposition {
     public:
