@@ -43,7 +43,7 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class ErrorRenderer;
 //class InfoDisplay;
-//class IPrePostTasks;
+//class IPrePostRenderTasks;
 
 
 public abstract class IG3MBuilder
@@ -61,7 +61,7 @@ public abstract class IG3MBuilder
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
   private java.util.ArrayList<Renderer> _renderers;
-  private IPrePostTasks _prePostTasks;
+  private IPrePostRenderTasks _prePostTasks;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
   private java.util.ArrayList<PeriodicalTask> _periodicalTasks;
@@ -188,7 +188,7 @@ public abstract class IG3MBuilder
     }
     return _renderers;
   }
-  private IPrePostTasks getPrePostTasks()
+  private IPrePostRenderTasks getPrePostTasks()
   {
     return _prePostTasks;
   }
@@ -861,7 +861,7 @@ public abstract class IG3MBuilder
     getRenderers().add(renderer);
   }
 
-  public final void addPrePostRenderTasks(IPrePostTasks tasks)
+  public final void setPrePostRenderTasks(IPrePostRenderTasks tasks)
   {
     _prePostTasks = tasks;
   }

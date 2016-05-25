@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  IPrePostTasks.hpp
+//  IPrePostRenderTasks.hpp
 //  G3MiOSSDK
 //
 //  Created by Premecz Matyas on 12/05/16.
@@ -10,7 +10,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IPrePostTasks
+public abstract class IPrePostRenderTasks
 {
 
   public abstract void preRenderTask();
