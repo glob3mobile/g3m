@@ -757,7 +757,7 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning should ElevationData res should be short?
       _elevationDataRequest = new TileElevationDataRequest(this, res.asVector2I(), prc._elevationDataProvider);
-      _elevationDataRequest.sendRequest();
+      _elevationDataRequest.sendRequest(rc, prc);
     }
   
     if (_elevationData == null)

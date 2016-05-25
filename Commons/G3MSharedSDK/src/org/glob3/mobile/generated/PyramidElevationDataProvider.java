@@ -24,6 +24,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     private double _deltaHeight;
     private final String _layer;
     private MutableVector2I _minRes = new MutableVector2I();
+    private int _maxLevel;
 
     private static class PyramidComposition
     {
@@ -90,16 +91,18 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
 
     private boolean aboveLevel(Sector sector, int level)
     {
-      int maxLevel = 0;
-      for (int i = 0; i< _pyrComposition.size(); i++)
+      if (_maxLevel == -1)
       {
-        if (sector.touchesWith(_pyrComposition.get(i).getSector()))
+        for (int i = 0; i< _pyrComposition.size(); i++)
         {
-          maxLevel = IMathUtils.instance().max(maxLevel, _pyrComposition.get(i)._pyramidLevel);
+          if (sector.touchesWith(_pyrComposition.get(i).getSector()))
+          {
+            _maxLevel = IMathUtils.instance().max(_maxLevel, _pyrComposition.get(i)._pyramidLevel);
+          }
         }
       }
     
-      return ((level > maxLevel) || (!sector.touchesWith(_sector)));
+      return ((level > _maxLevel) || (!sector.touchesWith(_sector)));
     }
 
     public PyramidElevationDataProvider(String layer, Sector sector, int noDataValue)
@@ -118,6 +121,7 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
       _pyrComposition = new java.util.ArrayList<PyramidComposition>();
       _deltaHeight = deltaHeight;
       _minRes = new MutableVector2I(256, 256);
+      _maxLevel = -1;
     }
 
     public void dispose()
@@ -149,11 +153,16 @@ public class PyramidElevationDataProvider extends ElevationDataProvider
     public final long requestElevationData(Sector sector, Vector2I extent, int level, int row, int column, IElevationDataListener listener, boolean autodeleteListener)
     {
         Sector sectorCopy = new Sector(sector);
+        boolean above = aboveLevel(sectorCopy, level);
     
-        if ((_downloader == null) || (aboveLevel(sectorCopy, level)))
+        if ((_downloader == null) || (above))
         {
             if (sectorCopy != null)
                sectorCopy.dispose();
+            if (above)
+            {
+                return -(_maxLevel);
+            }
             return -1;
         }
     
