@@ -238,7 +238,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         final double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
         final double fps = 1000.0 / averageTimePerRender;
         ILogger.instance().logInfo("FPS=%f", fps);
-
+  
         _renderCounter = 0;
         _totalRenderTime = 0;
   
@@ -1144,7 +1144,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     rawRender(renderStateType);
   
     //Restoring central camera
-    //_currentCamera.copyFrom(_auxCam, true);
+    //_currentCamera->copyFrom(*_auxCam, true);
   }
 
 
