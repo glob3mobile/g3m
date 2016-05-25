@@ -578,7 +578,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       Vector3D camPos = _currentCamera->getCartesianPosition();
       Vector3D camCenter = _currentCamera->getCenter();
       Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      const double eyesSeparation = 200;// 0.03;
+      const double eyesSeparation = 0.03;
       Vector3D up = _currentCamera->getUp();
       
       const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
@@ -618,7 +618,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   rawRender(renderStateType);
 
   //Restoring central camera
-  _currentCamera->copyFrom(*_auxCam, true);
+  //_currentCamera->copyFrom(*_auxCam, true);
 }
 
 void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
