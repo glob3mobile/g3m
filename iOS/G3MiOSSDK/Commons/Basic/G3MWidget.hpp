@@ -55,7 +55,7 @@ class IDeviceLocation;
 
 #include "Color.hpp"
 #include "Angle.hpp"
-#include "IPrePostTasks.hpp"
+#include "IPrePostRenderTasks.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "RenderState.hpp"
 #include "InfoDisplay.hpp"
@@ -116,7 +116,7 @@ public:
                            std::vector<ICameraConstrainer*>     cameraConstrainers,
                            CameraRenderer*                      cameraRenderer,
                            Renderer*                            mainRenderer,
-                           IPrePostTasks*                        prePostTask,
+                           IPrePostRenderTasks*                        prePostTask,
                            ProtoRenderer*                       busyRenderer,
                            ErrorRenderer*                       errorRenderer,
                            Renderer*                            hudRenderer,
@@ -270,7 +270,7 @@ private:
 
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
-  IPrePostTasks*       _prePostTask;
+  IPrePostRenderTasks*       _prePostTask;
   ProtoRenderer*      _busyRenderer;
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
@@ -352,7 +352,7 @@ private:
             std::vector<ICameraConstrainer*>     cameraConstrainers,
             CameraRenderer*                      cameraRenderer,
             Renderer*                            mainRenderer,
-            IPrePostTasks*                       prePostTask,
+            IPrePostRenderTasks*                 prePostTask,
             ProtoRenderer*                       busyRenderer,
             ErrorRenderer*                       errorRenderer,
             Renderer*                            hudRenderer,

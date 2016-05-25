@@ -37,7 +37,7 @@ class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
 class InfoDisplay;
-class IPrePostTasks;
+class IPrePostRenderTasks;
 
 
 class IG3MBuilder {
@@ -59,7 +59,7 @@ private:
   ErrorRenderer*                    _errorRenderer;
   Renderer*                         _hudRenderer;
   std::vector<Renderer*>*           _renderers;
-  IPrePostTasks*                    _prePostTasks;
+  IPrePostRenderTasks*              _prePostTasks;
   GInitializationTask*              _initializationTask;
   bool                              _autoDeleteInitializationTask;
   std::vector<PeriodicalTask*>*     _periodicalTasks;
@@ -80,7 +80,7 @@ private:
   Renderer*                         getHUDRenderer() const;
   Color*                            getBackgroundColor();
   std::vector<Renderer*>*           getRenderers();
-  IPrePostTasks*                    getPrePostTasks();
+  IPrePostRenderTasks*              getPrePostTasks();
   bool                              getLogFPS();
   bool                              getLogDownloaderStatistics();
   GInitializationTask*              getInitializationTask();
@@ -149,7 +149,7 @@ public:
 
   void addRenderer(Renderer* renderer);
   
-  void addPrePostRenderTasks(IPrePostTasks* tasks);
+  void setPrePostRenderTasks(IPrePostRenderTasks* tasks);
 
   void setRenderers(std::vector<Renderer*> renderers);
 

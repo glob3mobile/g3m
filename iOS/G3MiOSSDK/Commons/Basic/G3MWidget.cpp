@@ -39,7 +39,7 @@
 #include "IDeviceAttitude.hpp"
 #include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
-#include "IPrePostTasks.hpp"
+#include "IPrePostRenderTasks.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -76,7 +76,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      std::vector<ICameraConstrainer*>     cameraConstrainers,
                      CameraRenderer*                      cameraRenderer,
                      Renderer*                            mainRenderer,
-                     IPrePostTasks*                        prePostTask,
+                     IPrePostRenderTasks*                 prePostRenderTasks,
                      ProtoRenderer*                       busyRenderer,
                      ErrorRenderer*                       errorRenderer,
                      Renderer*                            hudRenderer,
@@ -103,7 +103,7 @@ _planet(planet),
 _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
-_prePostTask(prePostTask),
+_prePostTask(prePostRenderTasks),
 _busyRenderer(busyRenderer),
 _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
@@ -226,7 +226,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              std::vector<ICameraConstrainer*>     cameraConstrainers,
                              CameraRenderer*                      cameraRenderer,
                              Renderer*                            mainRenderer,
-                             IPrePostTasks*                        prePostTask,
+                             IPrePostRenderTasks*                 prePostTask,
                              ProtoRenderer*                       busyRenderer,
                              ErrorRenderer*                       errorRenderer,
                              Renderer*                            hudRenderer,

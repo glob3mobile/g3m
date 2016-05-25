@@ -37,7 +37,7 @@
 #include "DefaultInfoDisplay.hpp"
 #include "EllipsoidalPlanet.hpp"
 #include "PlanetRenderer.hpp"
-#include "IPrePostTasks.hpp"
+#include "IPrePostRenderTasks.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -268,7 +268,7 @@ std::vector<Renderer*>* IG3MBuilder::getRenderers() {
   return _renderers;
 }
 
-IPrePostTasks* IG3MBuilder::getPrePostTasks() {
+IPrePostRenderTasks* IG3MBuilder::getPrePostTasks() {
   return _prePostTasks;
 }
 
@@ -560,7 +560,7 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
 }
 
 
-void IG3MBuilder::addPrePostRenderTasks(IPrePostTasks* tasks) {
+void IG3MBuilder::setPrePostRenderTasks(IPrePostRenderTasks* tasks) {
   _prePostTasks = tasks;
 }
 
