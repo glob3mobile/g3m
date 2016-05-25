@@ -62,7 +62,7 @@ public final class ES2Renderer
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
       widget.render(_width, _height);
 
-      if (!_widgetAndroid.getNoFPSReduction()) {
+      if (_widgetAndroid.getFPSReduction()) {
          // experimental FPS reduction - DGD
          final long now = System.currentTimeMillis();
          final long timeElapsedInRender = now - _startTime;

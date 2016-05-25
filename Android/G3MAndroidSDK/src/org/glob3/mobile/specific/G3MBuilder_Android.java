@@ -19,10 +19,10 @@ public class G3MBuilder_Android
 
    private final G3MWidget_Android _nativeWidget;
 
-   public G3MBuilder_Android(final Context context, final boolean noFPSReduction) {
+   public G3MBuilder_Android(final Context context) {
       super();
 
-      _nativeWidget = new G3MWidget_Android(context, noFPSReduction);
+      _nativeWidget = new G3MWidget_Android(context);
    }
 
 
@@ -89,5 +89,15 @@ public class G3MBuilder_Android
                new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext()), //
                getStorage(), //
                saveInBackground);
+   }
+
+   /**
+    * Sets the _FPSReduction
+    *
+    * @param FPSReduction
+    */
+   public final void setFPSReduction(boolean FPSReduction)
+   {
+      _nativeWidget.setFPSReduction(FPSReduction);
    }
 }
