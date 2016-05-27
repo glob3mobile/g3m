@@ -792,6 +792,45 @@ public class Camera
     return _frustum;
   }
 
+  //FrustumData calculateFrustumData() const {
+  //  const double height = getGeodeticPosition()._height;
+  //  double zNear = height * 0.1;
+  //
+  //  double zFar = _planet->distanceToHorizon(_position.asVector3D());
+  //
+  //  const double goalRatio = 1000;
+  //  const double ratio = zFar / zNear;
+  //  if (ratio < goalRatio) {
+  //    zNear = zFar / goalRatio;
+  //  }
+  //
+  //  if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
+  //    const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
+  //
+  //    if (ISNAN(_tanHalfHorizontalFOV) && ISNAN(_tanHalfVerticalFOV)) {
+  //      //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+  //      _tanHalfVerticalFOV   = 0.3;
+  //      _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
+  //    }
+  //    else {
+  //      if (ISNAN(_tanHalfHorizontalFOV)) {
+  //        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
+  //      }
+  //      else if ISNAN(_tanHalfVerticalFOV) {
+  //        _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
+  //      }
+  //    }
+  //  }
+  //
+  //  const double right  = _tanHalfHorizontalFOV * zNear;
+  //  const double left   = -right;
+  //  const double top    = _tanHalfVerticalFOV * zNear;
+  //  const double bottom = -top;
+  //  return FrustumData(left,   right,
+  //                     bottom, top,
+  //                     zNear,  zFar);
+  //}
+  
   private FrustumData calculateFrustumData()
   {
     final double height = getGeodeticPosition()._height;
@@ -806,34 +845,50 @@ public class Camera
       zNear = zFar / goalRatio;
     }
   
-    if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
+    //  int __TODO_remove_debug_code;
+    //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+    //         height,
+    //         zNear,
+    //         zFar,
+    //         ratio);
+  
+    // compute rest of frustum numbers
+  
+    double tanHalfHFOV = _tanHalfHorizontalFOV;
+    double tanHalfVFOV = _tanHalfVerticalFOV;
+  
+    if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
   
-      if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) && (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
+      if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
       {
-        //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
-        _tanHalfVerticalFOV = 0.3;
-        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
+        tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3 => aprox tan(34 degrees / 2)
+        tanHalfHFOV = tanHalfVFOV / ratioScreen;
       }
       else
       {
-        if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV))
+        if ((tanHalfHFOV != tanHalfHFOV))
         {
-          _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
+          tanHalfHFOV = tanHalfVFOV / ratioScreen;
         }
-        else if (_tanHalfVerticalFOV != _tanHalfVerticalFOV)
+        else
         {
-          _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
+          if (tanHalfVFOV != tanHalfVFOV)
+          {
+            tanHalfVFOV = tanHalfHFOV * ratioScreen;
+          }
         }
       }
     }
   
-    final double right = _tanHalfHorizontalFOV * zNear;
+    final double right = tanHalfHFOV * zNear;
     final double left = -right;
-    final double top = _tanHalfVerticalFOV * zNear;
+    final double top = tanHalfVFOV * zNear;
     final double bottom = -top;
+  
     return new FrustumData(left, right, bottom, top, zNear, zFar);
+  
   }
 
   // opengl projection matrix
