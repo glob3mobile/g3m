@@ -123,11 +123,6 @@ public class G3MWidget implements ChangedRendererInfoListener
       return;
     }
   
-    if (_prePostTask != null)
-    {
-      _prePostTask.preRenderTask();
-    }
-  
     if (_width != width || _height != height)
     {
       _width = width;
@@ -205,6 +200,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     _effectsScheduler.doOneCyle(_renderContext);
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
+  
+    if (_prePostTask != null)
+    {
+      _prePostTask.preRenderTask();
+    }
   
     switch (_viewMode)
     {
@@ -1144,7 +1144,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     rawRender(renderStateType);
   
     //Restoring central camera
-    //_currentCamera->copyFrom(*_auxCam, true);
+    _currentCamera.copyFrom(_auxCam, true);
   }
 
 
