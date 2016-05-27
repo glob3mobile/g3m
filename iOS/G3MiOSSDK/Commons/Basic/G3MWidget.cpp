@@ -618,7 +618,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   rawRender(renderStateType);
 
   //Restoring central camera
-  //_currentCamera->copyFrom(*_auxCam, true);
+  _currentCamera->copyFrom(*_auxCam, true);
 }
 
 void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
