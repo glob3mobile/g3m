@@ -11,8 +11,8 @@ import org.glob3.mobile.generated.MutableMatrix44D;
 
 
 public class DeviceAttitude_WebGL
-extends
-IDeviceAttitude {
+   extends
+      IDeviceAttitude {
 
    InterfaceOrientation _currentIO = null;
 
@@ -99,21 +99,17 @@ IDeviceAttitude {
 
 
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
-
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
 				console.log("IO CHROME");
 				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-			} else {
-				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-					console.log("IO MOZ");
-					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
-				}
+			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+				console.log("IO MOZ");
+				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
 			}
 		} catch (err) {
 			console.error("Unable to track Interface Orientation. " + err);
 		}
-
    }-*/;
 
 
