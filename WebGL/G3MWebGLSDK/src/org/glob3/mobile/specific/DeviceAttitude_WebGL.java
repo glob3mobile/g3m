@@ -77,24 +77,17 @@ public class DeviceAttitude_WebGL
       if (orientation.equalsIgnoreCase("portrait-primary")) {
          _currentIO = InterfaceOrientation.PORTRAIT;
       }
-      else {
-         if (orientation.equalsIgnoreCase("portrait-secondary")) {
-            _currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
-         }
-         else {
-            if (orientation.equalsIgnoreCase("landscape-primary")) {
-               _currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
-            }
-            else {
-               if (orientation.equalsIgnoreCase("landscape-secondary")) {
-                  _currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
-               }
-            }
-         }
+      else if (orientation.equalsIgnoreCase("portrait-secondary")) {
+         _currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
+      }
+      else if (orientation.equalsIgnoreCase("landscape-primary")) {
+         _currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
+      }
+      else if (orientation.equalsIgnoreCase("landscape-secondary")) {
+         _currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
       }
 
-      ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
-
+      // ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
    }
 
 
@@ -121,13 +114,11 @@ public class DeviceAttitude_WebGL
 				$wnd.screen.orientation.onchange = function() {
 					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				};
-			} else {
-				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-					console.log("IO MOZ");
-					$wnd.screen.onmozorientationchange = function(event) {
-						event.preventDefault();
-						devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-					}
+			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+				console.log("IO MOZ");
+				$wnd.screen.onmozorientationchange = function(event) {
+					event.preventDefault();
+					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				}
 			}
 		} catch (err) {
