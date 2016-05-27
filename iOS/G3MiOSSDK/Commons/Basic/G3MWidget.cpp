@@ -633,10 +633,6 @@ void G3MWidget::render(int width, int height) {
     return;
   }
   
-  if (_prePostTask != NULL) {
-    _prePostTask->preRenderTask();
-  }
-  
   if (_width != width || _height != height) {
     _width = width;
     _height = height;
@@ -715,6 +711,10 @@ void G3MWidget::render(int width, int height) {
   _effectsScheduler->doOneCyle(_renderContext);
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
+  
+  if (_prePostTask != NULL) {
+    _prePostTask->preRenderTask();
+  }
   
   switch (_viewMode) {
     case MONO:
