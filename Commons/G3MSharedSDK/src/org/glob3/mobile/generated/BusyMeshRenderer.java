@@ -153,7 +153,7 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
     GL gl = rc.getGL();
     createGLState();
   
-    gl.clearScreen(_backgroundColor);
+    //gl->clearScreen(*_backgroundColor);
   
     Mesh mesh = getMesh(rc);
     if (mesh != null)

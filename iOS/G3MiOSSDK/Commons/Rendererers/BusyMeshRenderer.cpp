@@ -155,7 +155,7 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   GL* gl = rc->getGL();
   createGLState();
   
-  gl->clearScreen(*_backgroundColor);
+  //gl->clearScreen(*_backgroundColor);
   
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {

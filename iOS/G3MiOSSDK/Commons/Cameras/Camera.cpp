@@ -134,9 +134,11 @@ void Camera::resizeViewport(int width, int height) {
   if ((width  != _viewPortWidth) ||
       (height != _viewPortHeight)) {
     _timestamp++;
-
-    _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * _viewPortWidth;
-    _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * _viewPortHeight;
+      
+    const int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+    const int viewPortW = (_viewPortWidth  == 0) ? width  : _viewPortWidth;
+    _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * viewPortW;
+    _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
 
     _viewPortWidth  = width;
     _viewPortHeight = height;
@@ -372,45 +374,6 @@ void Camera::setPointOfView(const Geodetic3D& center,
   //  _dirtyFlags.setAllDirty();
 }
 
-//FrustumData Camera::calculateFrustumData() const {
-//  const double height = getGeodeticPosition()._height;
-//  double zNear = height * 0.1;
-//
-//  double zFar = _planet->distanceToHorizon(_position.asVector3D());
-//
-//  const double goalRatio = 1000;
-//  const double ratio = zFar / zNear;
-//  if (ratio < goalRatio) {
-//    zNear = zFar / goalRatio;
-//  }
-//
-//  if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
-//    const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
-//
-//    if (ISNAN(_tanHalfHorizontalFOV) && ISNAN(_tanHalfVerticalFOV)) {
-//      //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
-//      _tanHalfVerticalFOV   = 0.3;
-//      _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
-//    }
-//    else {
-//      if (ISNAN(_tanHalfHorizontalFOV)) {
-//        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
-//      }
-//      else if ISNAN(_tanHalfVerticalFOV) {
-//        _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
-//      }
-//    }
-//  }
-//
-//  const double right  = _tanHalfHorizontalFOV * zNear;
-//  const double left   = -right;
-//  const double top    = _tanHalfVerticalFOV * zNear;
-//  const double bottom = -top;
-//  return FrustumData(left,   right,
-//                     bottom, top,
-//                     zNear,  zFar);
-//}
-
 FrustumData Camera::calculateFrustumData() const {
   const double height = getGeodeticPosition()._height;
   double zNear = height * 0.1;
@@ -423,47 +386,34 @@ FrustumData Camera::calculateFrustumData() const {
     zNear = zFar / goalRatio;
   }
 
-  //  int __TODO_remove_debug_code;
-  //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
-  //         height,
-  //         zNear,
-  //         zFar,
-  //         ratio);
-
-  // compute rest of frustum numbers
-
-  double tanHalfHFOV = _tanHalfHorizontalFOV;
-  double tanHalfVFOV = _tanHalfVerticalFOV;
-
-  if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)) {
+  if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
     const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
 
-    if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
-      tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
-      tanHalfHFOV = tanHalfVFOV / ratioScreen;
+    if (ISNAN(_tanHalfHorizontalFOV) && ISNAN(_tanHalfVerticalFOV)) {
+      //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+      _tanHalfVerticalFOV   = 0.3;
+      _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
     }
     else {
-      if (ISNAN(tanHalfHFOV)) {
-        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+      if (ISNAN(_tanHalfHorizontalFOV)) {
+        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
       }
-      else {
-        if ISNAN(tanHalfVFOV) {
-          tanHalfVFOV = tanHalfHFOV * ratioScreen;
-        }
+      else if ISNAN(_tanHalfVerticalFOV) {
+        _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
       }
     }
   }
 
-  const double right = tanHalfHFOV * zNear;
-  const double left = -right;
-  const double top = tanHalfVFOV * zNear;
+  const double right  = _tanHalfHorizontalFOV * zNear;
+  const double left   = -right;
+  const double top    = _tanHalfVerticalFOV * zNear;
   const double bottom = -top;
-
-  return FrustumData(left, right,
+  return FrustumData(left,   right,
                      bottom, top,
-                     zNear, zFar);
-  
+                     zNear,  zFar);
 }
+
+
 
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   // this implementation is not right exact, but it's faster.
