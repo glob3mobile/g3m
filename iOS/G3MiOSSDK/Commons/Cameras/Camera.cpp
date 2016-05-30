@@ -135,8 +135,8 @@ void Camera::resizeViewport(int width, int height) {
       (height != _viewPortHeight)) {
     _timestamp++;
       
-    const int viewPortH = (_viewPortHeight == 0)?height:_viewPortHeight;
-    const int viewPortW = (_viewPortWidth == 0)?width:_viewPortWidth;
+    const int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+    const int viewPortW = (_viewPortWidth  == 0) ? width  : _viewPortWidth;
     _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * viewPortW;
     _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
 
