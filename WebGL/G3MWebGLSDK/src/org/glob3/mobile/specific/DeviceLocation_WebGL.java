@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.Geodetic3D;
@@ -5,34 +7,39 @@ import org.glob3.mobile.generated.IDeviceLocation;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class DeviceLocation_WebGL extends IDeviceLocation {
-	
-	static private double _lat = Double.NaN;
-	static private double _lon = Double.NaN;
-	static private double _altitude = Double.NaN;
 
-	int _watchId = -1;
-	
-	boolean _isTracking = false;
+public class DeviceLocation_WebGL
+   extends
+      IDeviceLocation {
 
-	private native boolean onPositionChanged(JavaScriptObject location)/*-{
+   static private double _lat        = Double.NaN;
+   static private double _lon        = Double.NaN;
+   static private double _altitude   = Double.NaN;
+
+   int                   _watchId    = -1;
+
+   boolean               _isTracking = false;
+
+
+   private native boolean onPositionChanged(JavaScriptObject location)/*-{
 		@org.glob3.mobile.specific.DeviceLocation_WebGL::_lat = location.coords.latitude;
 		@org.glob3.mobile.specific.DeviceLocation_WebGL::_lon = location.coords.longitude;
-		
-		if (location.coords.altitude == null){
+
+		if (location.coords.altitude == null) {
 			console.log("Device altitude is undefined, assuming 0");
 			@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = 0;
-		} else{
+		} else {
 			@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = location.coords.altitude;
 		}
-	}-*/;
+   }-*/;
 
-	private native boolean onError(JavaScriptObject error)/*-{
+
+   private native boolean onError(JavaScriptObject error)/*-{
 		console.log(error);
-	}-*/;
+   }-*/;
 
 
-	native boolean startTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
+   native boolean startTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
 		if ("geolocation" in navigator) {
 	    	// Request repeated updates.
 			devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = 
@@ -43,38 +50,44 @@ public class DeviceLocation_WebGL extends IDeviceLocation {
 		} 
 		return false;
 	}-*/;
-	
-	native void stopTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
+
+
+   native void stopTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
 		if ("geolocation" in navigator) {
-	    	navigator.geolocation.clearWatch(devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId);
-	    	devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = -1;
-		} 
-	}-*/;
+			navigator.geolocation
+					.clearWatch(devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId);
+			devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = -1;
+		}
+   }-*/;
 
-	@Override
-	public boolean startTrackingLocation() {
-		_isTracking = startTrackingLocationJS(this);
-		return _isTracking;
-	}
 
-	@Override
-	public void stopTrackingLocation() {
-		stopTrackingLocationJS(this);
-		_isTracking = false;
-		_lat = Double.NaN;
-		_lon = Double.NaN;
-		_altitude = Double.NaN;
-	}
+   @Override
+   public boolean startTrackingLocation() {
+      _isTracking = startTrackingLocationJS(this);
+      return _isTracking;
+   }
 
-	@Override
-	public boolean isTrackingLocation() {
-		return _isTracking;
-	}
 
-	@Override
-	public Geodetic3D getLocation() {
-		
-		return Geodetic3D.fromDegrees(_lat, _lon, _altitude);
-	}
+   @Override
+   public void stopTrackingLocation() {
+      stopTrackingLocationJS(this);
+      _isTracking = false;
+      _lat = Double.NaN;
+      _lon = Double.NaN;
+      _altitude = Double.NaN;
+   }
+
+
+   @Override
+   public boolean isTrackingLocation() {
+      return _isTracking;
+   }
+
+
+   @Override
+   public Geodetic3D getLocation() {
+
+      return Geodetic3D.fromDegrees(_lat, _lon, _altitude);
+   }
 
 }

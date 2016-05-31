@@ -18,8 +18,8 @@ import org.glob3.mobile.generated.JSONString;
 
 
 public class JSONParser_WebGL
-         extends
-            IJSONParser {
+   extends
+      IJSONParser {
 
    @Override
    public JSONBaseObject parse(final IByteBuffer buffer,

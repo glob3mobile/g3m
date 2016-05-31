@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_WebGL
-extends
-IMathUtils {
+   extends
+      IMathUtils {
 
    private final Random _random = new Random();
 
@@ -281,16 +281,16 @@ IMathUtils {
       final int b8 = byteArray[7] & 0xFF;
 
       return (b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40)
-               | ((long) b7 << 48) | ((long) b8 << 56);
+             | ((long) b7 << 48) | ((long) b8 << 56);
    }
 
 
    private native byte[] doubleToByteArray(final double value) /*-{
-        var buffer = new ArrayBuffer(8);
-        var doubleView = new Float64Array(buffer);
-        doubleView[0] = value;
+		var buffer = new ArrayBuffer(8);
+		var doubleView = new Float64Array(buffer);
+		doubleView[0] = value;
 
-        return (new Uint8Array(buffer));
+		return (new Uint8Array(buffer));
    }-*/;
 
 
@@ -312,10 +312,10 @@ IMathUtils {
 
 
    private native double byteArrayToDouble(final int[] byteArray) /*-{
-        var uint8Array = new Uint8Array(byteArray);
-        var doubleView = new Float64Array(uint8Array.buffer);
+		var uint8Array = new Uint8Array(byteArray);
+		var doubleView = new Float64Array(uint8Array.buffer);
 
-        return doubleView[0];
+		return doubleView[0];
    }-*/;
 
 
@@ -333,10 +333,10 @@ IMathUtils {
 
 
    private native float byteArrayToFloat(final int[] byteArray) /*-{
-        var uint8Array = new Uint8Array(byteArray);
-        var floatView = new Float32Array(uint8Array.buffer);
+		var uint8Array = new Uint8Array(byteArray);
+		var floatView = new Float32Array(uint8Array.buffer);
 
-        return floatView[0];
+		return floatView[0];
    }-*/;
 
 
