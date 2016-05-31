@@ -4,8 +4,8 @@ package org.glob3.mobile.specific;
 
 
 public final class Downloader_WebGL_Handler_WebkitImpl
-         extends
-            Downloader_WebGL_Handler_DefaultImpl {
+   extends
+      Downloader_WebGL_Handler_DefaultImpl {
 
    private static final boolean _isChrome = jsIsChrome();
 
@@ -21,9 +21,6 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 
    @Override
    public native void jsRequest(String url) /*-{
-		//              debugger;
-		//		console.log("jsRequest safari");
-
 		var that = this;
 
 		var xhr = new XMLHttpRequest();
@@ -42,18 +39,15 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 							response = new Blob([ dataView ], {
 								type : 'image/png'
 							});
-						}
-						else {
+						} else {
 							response = new Blob([ xhr.response ]);
 						}
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
-					}
-					else {
+					} else {
 						response = xhr.response;
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
 					}
-				}
-				else {
+				} else {
 					console.log("Error Retrieving Data!");
 					that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
 				}
