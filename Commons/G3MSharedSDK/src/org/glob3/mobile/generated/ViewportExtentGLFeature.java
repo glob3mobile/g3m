@@ -16,10 +16,17 @@ public class ViewportExtentGLFeature extends GLFeature
     _values.addUniformValue(GPUUniformKey.VIEWPORT_EXTENT, _extent, false);
   }
 
-  public ViewportExtentGLFeature(Camera camera)
+  public ViewportExtentGLFeature(Camera camera, ViewMode viewMode)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_VIEWPORT_EXTENT);
-    _extent = new GPUUniformValueVec2FloatMutable(camera.getViewPortWidth(), camera.getViewPortHeight());
+  
+    int logicWidth = camera.getViewPortWidth();
+    if (viewMode == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+  
+    _extent = new GPUUniformValueVec2FloatMutable(logicWidth, camera.getViewPortHeight());
   
     _values.addUniformValue(GPUUniformKey.VIEWPORT_EXTENT, _extent, false);
   }

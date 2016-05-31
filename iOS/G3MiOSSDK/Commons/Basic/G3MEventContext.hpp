@@ -12,7 +12,7 @@
 #include "G3MContext.hpp"
 
 
-class G3MEventContext: public G3MContext {
+class G3MEventContext : public G3MContext {
 public:
   G3MEventContext(const IFactory*           factory,
                   const IStringUtils*       stringUtils,
@@ -24,7 +24,8 @@ public:
                   IDownloader*              downloader,
                   EffectsScheduler*         scheduler,
                   IStorage*                 storage,
-                  SurfaceElevationProvider* surfaceElevationProvider) :
+                  SurfaceElevationProvider* surfaceElevationProvider,
+                  ViewMode                  viewMode) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -35,8 +36,11 @@ public:
              downloader,
              scheduler,
              storage,
-             surfaceElevationProvider) {
+             surfaceElevationProvider,
+             viewMode)
+  {
   }
+
 };
 
 #endif

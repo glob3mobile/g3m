@@ -95,6 +95,11 @@ public class Angle
     return Angle.fromDegrees(180);
   }
 
+  public static Angle halfPi()
+  {
+    return Angle.fromDegrees(90);
+  }
+
   public static Angle nan()
   {
     return Angle.fromDegrees(java.lang.Double.NaN);

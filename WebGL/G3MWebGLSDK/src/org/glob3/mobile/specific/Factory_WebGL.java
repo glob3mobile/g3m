@@ -21,8 +21,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class Factory_WebGL
-         extends
-            IFactory {
+   extends
+      IFactory {
 
    boolean first = true;
 

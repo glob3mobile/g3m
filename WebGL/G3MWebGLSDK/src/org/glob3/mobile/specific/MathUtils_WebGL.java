@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_WebGL
-         extends
-            IMathUtils {
+   extends
+      IMathUtils {
 
    private final Random _random = new Random();
 

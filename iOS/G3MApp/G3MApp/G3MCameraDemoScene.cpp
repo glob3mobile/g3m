@@ -14,7 +14,7 @@
 #include <G3MiOSSDK/SGShape.hpp>
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-//#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/G3MWidget.hpp>
 
 #include "G3MDemoModel.hpp"
 

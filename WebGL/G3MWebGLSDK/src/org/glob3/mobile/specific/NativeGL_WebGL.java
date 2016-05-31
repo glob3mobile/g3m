@@ -21,8 +21,8 @@ import com.google.gwt.core.client.JsArrayInteger;
 
 
 public final class NativeGL_WebGL
-extends
-INativeGL {
+   extends
+      INativeGL {
    /*
    Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
    work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex
@@ -44,8 +44,8 @@ INativeGL {
                                 final float x,
                                 final float y) /*-{
 		var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform2f(locId, x,
-				y);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.uniform2f(locId, x, y);
    }-*/;
 
 
@@ -72,8 +72,8 @@ INativeGL {
                                 final float v2,
                                 final float v3) /*-{
 		var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId,
-				v0, v1, v2, v3);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId, v0,
+				v1, v2, v3);
    }-*/;
 
 
@@ -84,8 +84,8 @@ INativeGL {
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 		var buffer = matrix.@org.glob3.mobile.generated.Matrix44D::getColumnMajorFloatBuffer()();
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
-				id, transpose, value);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(id,
+				transpose, value);
    }-*/;
 
 
@@ -120,8 +120,8 @@ INativeGL {
    @Override
    public native void polygonOffset(final float factor,
                                     final float units) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(
-				factor, units);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(factor,
+				units);
    }-*/;
 
 
@@ -270,8 +270,8 @@ INativeGL {
    public native void texParameteri(final int target,
                                     final int par,
                                     final int v) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(
-				target, par, v);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(target,
+				par, v);
    }-*/;
 
 
@@ -818,8 +818,7 @@ INativeGL {
 
    @Override
    public native void depthMask(final boolean depthMask) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-				.depthMask(depthMask);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.depthMask(depthMask);
    }-*/;
 
 
@@ -863,6 +862,16 @@ INativeGL {
    public native void setActiveTexture(final int i) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.activeTexture(gl.TEXTURE0 + i);
+   }-*/;
+
+
+   @Override
+   public native void viewport(int x,
+                               int y,
+                               int width,
+                               int height) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.viewport(x, y, width, height);
    }-*/;
 
 

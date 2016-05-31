@@ -118,4 +118,14 @@ public class CameraRenderer implements ProtoRenderer
   {
 
   }
+
+  public final void removeHandler(CameraEventHandler handler)
+  {
+  
+    if ( _handlers.remove(handler) ) {
+      return;
+    }
+  
+    ILogger.instance().logError("Could not remove camera handler.");
+  }
 }

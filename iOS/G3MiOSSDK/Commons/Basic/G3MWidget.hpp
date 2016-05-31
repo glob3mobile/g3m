@@ -46,6 +46,8 @@ class GLState;
 class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
+class IDeviceAttitude;
+class IDeviceLocation;
 //class InfoDisplay;
 
 #include <vector>
@@ -57,6 +59,8 @@ class G3MRenderContext;
 #include "RenderState.hpp"
 #include "InfoDisplay.hpp"
 #include "ChangedRendererInfoListener.hpp"
+
+#include "ViewMode.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -98,7 +102,9 @@ public:
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
-                             ITextUtils*         textUtils);
+                             ITextUtils*         textUtils,
+                             IDeviceAttitude*    devAttitude,
+                             IDeviceLocation*    devLocation);
 
   static G3MWidget* create(GL*                                  gl,
                            IStorage*                            storage,
@@ -121,7 +127,8 @@ public:
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
                            const InitialCameraPositionProvider* initialCameraPositionProvider,
-                           InfoDisplay* infoDisplay);
+                           InfoDisplay* infoDisplay,
+                           ViewMode viewMode);
 
   ~G3MWidget();
 
@@ -246,7 +253,8 @@ public:
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
-
+  
+  void setViewMode(ViewMode viewMode);
 
 private:
   IStorage*                _storage;
@@ -296,7 +304,8 @@ private:
   int _width;
   int _height;
 
-  const G3MContext* _context;
+  G3MContext*       _context;
+  G3MRenderContext* _renderContext;
 
   bool _paused;
   bool _initializationTaskWasRun;
@@ -314,7 +323,6 @@ private:
   const InitialCameraPositionProvider* _initialCameraPositionProvider;
   bool _initialCameraPositionHasBeenSet;
 
-  G3MRenderContext* _renderContext;
 
   bool _forceBusyRenderer;
   
@@ -323,30 +331,38 @@ private:
 
   float _touchDownPositionX;
   float _touchDownPositionY;
+  
+  ViewMode _viewMode;
+  
+  //For stereo vision
+  Camera* _auxCam;
+  Camera* _leftEyeCam;
+  Camera* _rightEyeCam;
 
 
-  G3MWidget(GL*                              gl,
-            IStorage*                        storage,
-            IDownloader*                     downloader,
-            IThreadUtils*                    threadUtils,
-            ICameraActivityListener*         cameraActivityListener,
-            const Planet*                    planet,
-            std::vector<ICameraConstrainer*> cameraConstrainers,
-            CameraRenderer*                  cameraRenderer,
-            Renderer*                        mainRenderer,
-            ProtoRenderer*                   busyRenderer,
-            ErrorRenderer*                   errorRenderer,
-            Renderer*                        hudRenderer,
-            const Color&                     backgroundColor,
-            const bool                       logFPS,
-            const bool                       logDownloaderStatistics,
-            GInitializationTask*             initializationTask,
-            bool                             autoDeleteInitializationTask,
-            std::vector<PeriodicalTask*>     periodicalTasks,
-            GPUProgramManager*               gpuProgramManager,
-            SceneLighting*                   sceneLighting,
+  G3MWidget(GL*                                  gl,
+            IStorage*                            storage,
+            IDownloader*                         downloader,
+            IThreadUtils*                        threadUtils,
+            ICameraActivityListener*             cameraActivityListener,
+            const Planet*                        planet,
+            std::vector<ICameraConstrainer*>     cameraConstrainers,
+            CameraRenderer*                      cameraRenderer,
+            Renderer*                            mainRenderer,
+            ProtoRenderer*                       busyRenderer,
+            ErrorRenderer*                       errorRenderer,
+            Renderer*                            hudRenderer,
+            const Color&                         backgroundColor,
+            const bool                           logFPS,
+            const bool                           logDownloaderStatistics,
+            GInitializationTask*                 initializationTask,
+            bool                                 autoDeleteInitializationTask,
+            std::vector<PeriodicalTask*>         periodicalTasks,
+            GPUProgramManager*                   gpuProgramManager,
+            SceneLighting*                       sceneLighting,
             const InitialCameraPositionProvider* initialCameraPositionProvider,
-            InfoDisplay* infoDisplay);
+            InfoDisplay*                         infoDisplay,
+            ViewMode                             viewMode);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
@@ -354,6 +370,13 @@ private:
   RenderState calculateRendererState();
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
+  
+  void rawRender(const RenderState_Type renderStateType);
+  
+  void rawRenderMono(const RenderState_Type renderStateType);
+  
+  void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
+
   
 };
 

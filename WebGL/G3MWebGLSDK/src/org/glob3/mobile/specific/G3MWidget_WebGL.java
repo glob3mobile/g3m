@@ -17,6 +17,8 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -37,6 +39,7 @@ import org.glob3.mobile.generated.ProtoRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -82,7 +85,7 @@ public class G3MWidget_WebGL
       onSizeChanged(1, 1);
 
       final INativeGL nativeGL = new NativeGL_WebGL(_webGLContext);
-      _gl = new GL(nativeGL, false);
+      _gl = new GL(nativeGL);
 
       jsDefineG3MBrowserObjects();
 
@@ -210,8 +213,10 @@ public class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
       final ITextUtils textUtils = new TextUtils_WebGL();
+      final IDeviceAttitude devAtt = new DeviceAttitude_WebGL();
+      final IDeviceLocation devLoc = new DeviceLocation_WebGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAtt, devLoc);
    }
 
 
@@ -285,12 +290,9 @@ public class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
+			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame || function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -298,8 +300,7 @@ public class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -328,8 +329,7 @@ public class G3MWidget_WebGL
 				} catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
+					jsCanvas.addEventListener("webglcontextlost", function(event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);
@@ -397,7 +397,8 @@ public class G3MWidget_WebGL
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
 

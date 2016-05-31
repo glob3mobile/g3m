@@ -41,8 +41,6 @@ public class TilesStatistics
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
   private int[] _tilesRenderedByLevel = new int[_maxLOD];
 
-  private int _buildersStartsInFrame;
-
   private double _visibleLowerLatitudeDegrees;
   private double _visibleLowerLongitudeDegrees;
   private double _visibleUpperLatitudeDegrees;
@@ -63,7 +61,6 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _buildersStartsInFrame = 0;
 
     final IMathUtils mu = IMathUtils.instance();
     _visibleLowerLatitudeDegrees = mu.maxDouble();
@@ -79,30 +76,25 @@ public class TilesStatistics
     }
   }
 
-  public final int getBuildersStartsInFrame()
+  public final void computeTileProcessed(Tile tile, boolean visible, boolean rendered)
   {
-    return _buildersStartsInFrame;
-  }
+    final int level = tile._level;
 
-  public final void computeBuilderStartInFrame()
-  {
-    _buildersStartsInFrame++;
-  }
-
-  public final void computeTileProcessed(Tile tile)
-  {
     _tilesProcessed++;
-
-    final int level = tile._level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
-  }
 
-  public final void computeVisibleTile(Tile tile)
-  {
-    _tilesVisible++;
+    if (visible)
+    {
+      _tilesVisible++;
+      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    }
 
-    final int level = tile._level;
-    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    if (rendered)
+    {
+      _tilesRendered++;
+      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+      computeRenderedSector(tile);
+    }
   }
 
   public final void computeRenderedSector(Tile tile)
@@ -145,16 +137,6 @@ public class TilesStatistics
     {
       _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
-  }
-
-  public final void computeTileRenderered(Tile tile)
-  {
-    _tilesRendered++;
-
-    final int level = tile._level;
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-    computeRenderedSector(tile);
   }
 
   public final Sector updateVisibleSector(Sector visibleSector)

@@ -21,9 +21,11 @@ public class Camera
      _geodeticPosition = null;
      _angle2Horizon = -99;
      _normalizedPosition = new MutableVector3D(0, 0, 0);
-     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
-     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
+     _tanHalfVerticalFOV = java.lang.Double.NaN;
+     _tanHalfHorizontalFOV = java.lang.Double.NaN;
      _timestamp = timestamp;
+     _viewPortWidth = -1;
+     _viewPortHeight = -1;
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
   }
@@ -42,58 +44,67 @@ public class Camera
        _geodeticPosition.dispose();
   }
 
-  public final void copyFrom(Camera that)
+  public final void copyFrom(Camera that, boolean ignoreTimestamp)
   {
   
-    if (_timestamp == that._timestamp)
+    if (ignoreTimestamp || _timestamp != that._timestamp)
     {
-      return;
+  
+      that.forceMatrixCreation();
+  
+      _timestamp = that._timestamp;
+  
+      _viewPortWidth = that._viewPortWidth;
+      _viewPortHeight = that._viewPortHeight;
+  
+      _planet = that._planet;
+  
+      _position.copyFrom(that._position);
+      _center.copyFrom(that._center);
+      _up.copyFrom(that._up);
+      _normalizedPosition.copyFrom(that._normalizedPosition);
+  
+      _dirtyFlags.copyFrom(that._dirtyFlags);
+  
+      _frustumData = that._frustumData;
+  
+      _projectionMatrix.copyValue(that._projectionMatrix);
+      _modelMatrix.copyValue(that._modelMatrix);
+      _modelViewMatrix.copyValue(that._modelViewMatrix);
+  
+      _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+  
+      _geodeticCenterOfView = that._geodeticCenterOfView;
+  
+      _frustum = that._frustum;
+  
+      _frustumInModelCoordinates = that._frustumInModelCoordinates;
+  
+      _geodeticPosition = that._geodeticPosition;
+      _angle2Horizon = that._angle2Horizon;
+  
+      _tanHalfVerticalFOV = that._tanHalfVerticalFOV;
+      _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
     }
   
-    that.forceMatrixCreation();
-  
-    _timestamp = that._timestamp;
-  
-    _viewPortWidth = that._viewPortWidth;
-    _viewPortHeight = that._viewPortHeight;
-  
-    _planet = that._planet;
-  
-    _position.copyFrom(that._position);
-    _center.copyFrom(that._center);
-    _up.copyFrom(that._up);
-    _normalizedPosition.copyFrom(that._normalizedPosition);
-  
-    _dirtyFlags.copyFrom(that._dirtyFlags);
-  
-    _frustumData = that._frustumData;
-  
-    _projectionMatrix.copyValue(that._projectionMatrix);
-    _modelMatrix.copyValue(that._modelMatrix);
-    _modelViewMatrix.copyValue(that._modelViewMatrix);
-  
-    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
-  
-    _geodeticCenterOfView = that._geodeticCenterOfView;
-  
-    _frustum = that._frustum;
-  
-    _frustumInModelCoordinates = that._frustumInModelCoordinates;
-  
-    _geodeticPosition = that._geodeticPosition;
-    _angle2Horizon = that._angle2Horizon;
-  
-    _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
-    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   }
 
   public final void resizeViewport(int width, int height)
   {
-    _timestamp++;
-    _viewPortWidth = width;
-    _viewPortHeight = height;
+    if ((width != _viewPortWidth) || (height != _viewPortHeight))
+    {
+      _timestamp++;
   
-    _dirtyFlags.setAllDirty();
+      final int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+      final int viewPortW = (_viewPortWidth == 0) ? width : _viewPortWidth;
+      _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * viewPortW;
+      _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
+  
+      _viewPortWidth = width;
+      _viewPortHeight = height;
+  
+      _dirtyFlags.setAllDirty();
+    }
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
@@ -206,6 +217,12 @@ public class Camera
     return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
+  public final boolean hasValidViewDirection()
+  {
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !(d != d);
+  }
+
   public final void getViewDirectionInto(MutableVector3D result)
   {
     result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
@@ -301,7 +318,7 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
-  // #warning move this to Planet, and remove isFlat() method (DGD)
+    // #warning move this to Planet, and remove isFlat() method (DGD)
     if (_planet.isFlat())
     {
       setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
@@ -492,11 +509,11 @@ public class Camera
     final Angle halfVFOV = vertical.div(2.0);
     final double newH = halfHFOV.tangent();
     final double newV = halfVFOV.tangent();
-    if ((newH != _tanHalfHorizontalFieldOfView) || (newV != _tanHalfVerticalFieldOfView))
+    if ((newH != _tanHalfHorizontalFOV) || (newV != _tanHalfVerticalFOV))
     {
       _timestamp++;
-      _tanHalfHorizontalFieldOfView = newH;
-      _tanHalfVerticalFieldOfView = newV;
+      _tanHalfHorizontalFOV = newH;
+      _tanHalfVerticalFOV = newV;
   
       _dirtyFlags._frustumDataDirty = true;
       _dirtyFlags._projectionMatrixDirty = true;
@@ -608,6 +625,25 @@ public class Camera
     return obj.sub(position.asVector3D());
   }
 
+  public final Angle getHorizontalFOV()
+  {
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFOV) * 2);
+  }
+
+  public final Angle getVerticalFOV()
+  {
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFOV) * 2);
+  }
+
+  public final void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
+  }
+
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -671,8 +707,8 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
-  private double _tanHalfVerticalFieldOfView;
-  private double _tanHalfHorizontalFieldOfView;
+  private double _tanHalfVerticalFOV;
+  private double _tanHalfHorizontalFOV;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
@@ -772,43 +808,34 @@ public class Camera
       zNear = zFar / goalRatio;
     }
   
-    // compute rest of frustum numbers
-  
-    double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
-    double tanHalfVFOV = _tanHalfVerticalFieldOfView;
-  
-    if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
+    if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
   
-      if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
+      if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) && (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
       {
-        tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3 => aprox tan(34 degrees / 2)
-        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+        //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+        _tanHalfVerticalFOV = 0.3;
+        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
       }
       else
       {
-        if ((tanHalfHFOV != tanHalfHFOV))
+        if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV))
         {
-          tanHalfHFOV = tanHalfVFOV / ratioScreen;
+          _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
         }
-        else
+        else if (_tanHalfVerticalFOV != _tanHalfVerticalFOV)
         {
-          if (tanHalfVFOV != tanHalfVFOV)
-          {
-            tanHalfVFOV = tanHalfHFOV * ratioScreen;
-          }
+          _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
         }
       }
     }
   
-    final double right = tanHalfHFOV * zNear;
+    final double right = _tanHalfHorizontalFOV * zNear;
     final double left = -right;
-    final double top = tanHalfVFOV * zNear;
+    final double top = _tanHalfVerticalFOV * zNear;
     final double bottom = -top;
-  
     return new FrustumData(left, right, bottom, top, zNear, zFar);
-  
   }
 
   // opengl projection matrix
@@ -843,15 +870,6 @@ public class Camera
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
-  }
-
-  private void setCameraCoordinateSystem(CoordinateSystem rs)
-  {
-    _timestamp++;
-    _center.copyFrom(_position);
-    _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
-    _dirtyFlags.setAllDirty();
   }
 
 }

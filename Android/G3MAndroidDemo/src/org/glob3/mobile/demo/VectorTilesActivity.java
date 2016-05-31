@@ -25,7 +25,6 @@ import org.glob3.mobile.generated.Info;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
@@ -44,8 +43,8 @@ import android.widget.RelativeLayout;
 
 
 public class VectorTilesActivity
-extends
-Activity {
+         extends
+            Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -87,14 +86,19 @@ Activity {
 
 
    private LayerSet createLayerSet() {
-      final LayerSet layerSet = new LayerSet();
+      //   final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
 
       //      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
       //               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
+
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
+
+      //  layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
 
       //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
       //final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
@@ -139,7 +143,7 @@ Activity {
                1, // transparency
                new LevelTileCondition(10, 21), // condition
                new ArrayList<Info>() // disclaimerInfo
-               );
+      );
       layerSet.addLayer(tiledVectorLayer);
 
 
@@ -148,8 +152,8 @@ Activity {
 
 
    private static class SampleRasterSymbolizer
-   extends
-   GEORasterSymbolizer {
+            extends
+               GEORasterSymbolizer {
 
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
 
@@ -204,7 +208,7 @@ Activity {
                   geometry.getPolygonData(), //
                   createPolygonLineRasterStyle(geometry), //
                   createPolygonSurfaceRasterStyle(geometry) //
-                  );
+         );
          symbols.add(symbol);
          return symbols;
       }

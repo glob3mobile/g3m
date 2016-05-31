@@ -17,6 +17,8 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -38,6 +40,7 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -49,10 +52,10 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-extends
-GLSurfaceView
-implements
-OnGestureListener {
+   extends
+      GLSurfaceView
+   implements
+      OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -78,7 +81,7 @@ OnGestureListener {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
             throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                     + ", CurrentThread=" + currentThread + ")");
+                                       + ", CurrentThread=" + currentThread + ")");
          }
       }
    }
@@ -164,8 +167,11 @@ OnGestureListener {
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
+      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.5f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
+
    }
 
 
@@ -341,7 +347,8 @@ OnGestureListener {
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
    }

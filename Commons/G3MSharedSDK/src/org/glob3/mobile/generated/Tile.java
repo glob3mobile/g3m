@@ -32,7 +32,6 @@ public class Tile
   private Tile _parent;
 
   private Mesh _tessellatorMesh;
-  private boolean _tessellatorMeshIsMeshHolder;
 
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
@@ -233,7 +232,6 @@ public class Tile
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
      _id = createTileId(level, row, column);
-     _tessellatorMeshIsMeshHolder = false;
      _data = null;
      _dataSize = 0;
   }
@@ -328,18 +326,16 @@ public class Tile
 
   public final void render(G3MRenderContext rc, PlanetRenderContext prc, GLState parentState, TilesStatistics tilesStatistics, java.util.ArrayList<Tile> toVisitInNextIteration)
   {
-    tilesStatistics.computeTileProcessed(this);
   
-    final boolean amIVisible = prc._tileVisibilityTester.isVisible(rc, prc, this);
-    if (amIVisible)
+    final boolean visible = prc._tileVisibilityTester.isVisible(rc, prc, this);
+    boolean rendered = false;
+    if (visible)
     {
       setIsVisible(true, prc._texturizer);
   
-      tilesStatistics.computeVisibleTile(this);
+      rendered = ((toVisitInNextIteration == null) || prc._tileLODTester.meetsRenderCriteria(rc, prc, this) || (prc._tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || prc._tileLODTester.meetsRenderCriteria(rc, prc, this) || (prc._tilesRenderParameters._incrementalTileQuality && !_textureSolved));
-  
-      if (isRawRender)
+      if (rendered)
       {
         if (prc._renderTileMeshes)
         {
@@ -349,8 +345,6 @@ public class Tile
         {
           debugRender(rc, prc, parentState);
         }
-  
-        tilesStatistics.computeTileRenderered(this);
   
         prune(prc._texturizer, prc._elevationDataProvider);
         //TODO: AVISAR CAMBIO DE TERRENO
@@ -380,6 +374,7 @@ public class Tile
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
+    tilesStatistics.computeTileProcessed(this, visible, rendered);
   }
 
   public final void setTextureSolved(boolean textureSolved)
@@ -665,7 +660,7 @@ public class Tile
   public final void initializeElevationData(G3MRenderContext rc, PlanetRenderContext prc)
   {
   
-    final Vector2I tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
+    final Vector2S tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
   
     //Storing for subviewing
     _lastElevationDataProvider = prc._elevationDataProvider;
@@ -674,15 +669,17 @@ public class Tile
     if (_elevationDataRequest == null)
     {
   
-      final Vector2I res = prc._tessellator.getTileMeshResolution(rc, prc, this);
-      _elevationDataRequest = new TileElevationDataRequest(this, res, prc._elevationDataProvider);
+      final Vector2S res = prc._tessellator.getTileMeshResolution(rc, prc, this);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning should ElevationData res should be short?
+      _elevationDataRequest = new TileElevationDataRequest(this, res.asVector2I(), prc._elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }
   
     //If after petition we still have no data we request from ancestor (provider asynchronous)
     if (_elevationData == null)
     {
-      getElevationDataFromAncestor(tileMeshResolution);
+      getElevationDataFromAncestor(tileMeshResolution.asVector2I());
     }
   
   }
@@ -823,7 +820,6 @@ public class Tile
       {
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, null, _tileTessellatorMeshData);
-        _tessellatorMeshIsMeshHolder = false;
       }
       else
       {
@@ -834,7 +830,6 @@ public class Tile
         {
           meshHolder = new MeshHolder(tessellatorMesh);
           _tessellatorMesh = meshHolder;
-          _tessellatorMeshIsMeshHolder = true;
         }
         else
         {

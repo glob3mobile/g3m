@@ -72,7 +72,11 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
     }
   
     final Camera camera = rc.getCurrentCamera();
-    final int viewPortWidth = camera.getViewPortWidth();
+    int viewPortWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      viewPortWidth /= 2;
+    }
     final int viewPortHeight = camera.getViewPortHeight();
   
     final float width = _width;

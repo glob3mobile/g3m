@@ -140,7 +140,6 @@ void G3MCanvas2DDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-
   OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 

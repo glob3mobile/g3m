@@ -7,14 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.CanvasElement;
@@ -111,10 +108,9 @@ public final class MotionEventProcessor {
    private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<Integer, Vector2F>();
 
 
-   private ArrayList<Touch> createTouches(final Event event) {
+   private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
       final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<Integer, Vector2F>();
 
-      final JsArray<com.google.gwt.dom.client.Touch> jsTouches = event.getTouches();
       final int jsTouchesSize = jsTouches.length();
       final ArrayList<Touch> touches = new ArrayList<Touch>(jsTouchesSize);
       for (int i = 0; i < jsTouchesSize; i++) {
@@ -145,28 +141,32 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processTouchStart(final Event event) {
-      return TouchEvent.create(TouchEventType.Down, createTouches(event));
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchStart");
+      return TouchEvent.create(TouchEventType.Down, createTouches(event.getTouches()));
    }
 
 
    private TouchEvent processTouchMove(final Event event) {
-      return TouchEvent.create(TouchEventType.Move, createTouches(event));
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchMove ");
+      return TouchEvent.create(TouchEventType.Move, createTouches(event.getTouches()));
    }
 
 
    private TouchEvent processTouchEnd(final Event event) {
-      return TouchEvent.create(TouchEventType.Up, createTouches(event));
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchEnd");
+      return TouchEvent.create(TouchEventType.Up, createTouches(event.getChangedTouches()));
    }
 
 
    private TouchEvent processTouchCancel(@SuppressWarnings("unused")
    final Event event) {
-      _previousTouchesPositions = new HashMap<Integer, Vector2F>();
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchCancel");
+
+      _previousTouchesPositions.clear();
       return null;
    }
 
 
-   //   private void dispatchEvents(final ArrayList<TouchEvent> events) {
    private void dispatchEvents(final TouchEvent... events) {
       if (events.length > 0) {
          final Scheduler scheduler = Scheduler.get();
@@ -184,7 +184,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseMove(final Event event) {
-      //            log(LogLevel.InfoLevel, " onMouseMove");
+      //log(LogLevel.InfoLevel, " onMouseMove");
 
       if (!_mouseDown) {
          return null;
@@ -209,7 +209,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseDown(final Event event) {
-      //            log(LogLevel.InfoLevel, " onMouseDown");
+      //log(LogLevel.InfoLevel, " onMouseDown");
 
       final Vector2F currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches = new ArrayList<Touch>();
@@ -231,7 +231,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseUp(final Event event) {
-      //      log(LogLevel.InfoLevel, " onMouseUp");
+      //log(LogLevel.InfoLevel, " onMouseUp");
 
       final Vector2F currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches = new ArrayList<Touch>();
@@ -258,7 +258,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processDoubleClick(final Event event) {
-      //          log(LogLevel.InfoLevel, " onDoubleClick");
+      //log(LogLevel.InfoLevel, " onDoubleClick");
 
       final Vector2F currentMousePosition = createPosition(event);
 
@@ -269,7 +269,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processContextMenu(final Event event) {
-      //      log(LogLevel.InfoLevel, " onContextMenu");
+      //log(LogLevel.InfoLevel, " onContextMenu");
 
       _mouseDown = false;
 
@@ -284,7 +284,7 @@ public final class MotionEventProcessor {
    private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
-      //      log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
+      //log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
 
       final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
       final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
@@ -328,8 +328,8 @@ public final class MotionEventProcessor {
 
 			if (canvas.addEventListener) {
 				// IE9, Chrome, Safari, Opera
-				canvas.addEventListener("mousewheel",
-						$wnd.g3mMouseWheelHandler, false);
+				canvas.addEventListener("mousewheel", $wnd.g3mMouseWheelHandler,
+						false);
 				// Firefox
 				canvas.addEventListener("DOMMouseScroll",
 						$wnd.g3mMouseWheelHandler, false);
@@ -343,27 +343,28 @@ public final class MotionEventProcessor {
    }-*/;
 
 
-   private void log(final LogLevel level,
-                    final String msg) {
-      final ILogger logger = ILogger.instance();
-      if (logger != null) {
-         switch (level) {
-            case InfoLevel:
-               logger.logInfo(TAG + msg);
-               break;
-            case WarningLevel:
-               logger.logWarning(TAG + msg);
-               break;
-            case ErrorLevel:
-               logger.logError(TAG + msg);
-               break;
-            default:
-               break;
-         }
-      }
-      else {
-         GWT.log(TAG + msg);
-      }
-   }
+   //   private static void log(final LogLevel level,
+   //                           final String msg) {
+   //      final ILogger logger = ILogger.instance();
+   //      if (logger != null) {
+   //         switch (level) {
+   //            case InfoLevel:
+   //               logger.logInfo(TAG + msg);
+   //               break;
+   //            case WarningLevel:
+   //               logger.logWarning(TAG + msg);
+   //               break;
+   //            case ErrorLevel:
+   //               logger.logError(TAG + msg);
+   //               break;
+   //            default:
+   //               break;
+   //         }
+   //      }
+   //      else {
+   //         GWT.log(TAG + msg);
+   //      }
+   //   }
+
 
 }
