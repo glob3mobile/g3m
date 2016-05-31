@@ -95,8 +95,10 @@ public class Camera
     {
       _timestamp++;
   
-      _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * _viewPortWidth;
-      _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * _viewPortHeight;
+      final int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+      final int viewPortW = (_viewPortWidth == 0) ? width : _viewPortWidth;
+      _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * viewPortW;
+      _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
   
       _viewPortWidth = width;
       _viewPortHeight = height;

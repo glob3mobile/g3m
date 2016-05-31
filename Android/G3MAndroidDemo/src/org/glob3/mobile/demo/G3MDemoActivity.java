@@ -159,14 +159,14 @@ public class G3MDemoActivity
          }
       });
 
-      final Button pointCloudStreaming = (Button) findViewById(R.id.pointCloudStreamingButton);
-      pointCloudStreaming.setOnClickListener(new OnClickListener() {
-         @Override
-         public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), PointCloudStreamimgActivity.class);
-            startActivity(intent);
-         }
-      });
+      //      final Button pointCloudStreaming = (Button) findViewById(R.id.pointCloudStreamingButton);
+      //      pointCloudStreaming.setOnClickListener(new OnClickListener() {
+      //         @Override
+      //         public void onClick(final View v) {
+      //            final Intent intent = new Intent(getApplicationContext(), PointCloudStreamimgActivity.class);
+      //            startActivity(intent);
+      //         }
+      //      });
 
 
    }

@@ -203,9 +203,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    public native void jsRequest(String url) /*-{
-		//		debugger;
-		//		console.log("jsRequest url=" + url);
-
 		var that = this;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);

@@ -23,12 +23,12 @@ public class MapBooOLDBuilder_WebGL
 
 
    public MapBooOLDBuilder_WebGL(final URL serverURL,
-                              final URL tubesURL,
-                              final String sceneId,
-                              final MapBooOLD_ViewType viewType,
-                              final MapBooOLDApplicationChangeListener applicationListener,
-                              final boolean enableNotifications,
-                              final String token) {
+                                 final URL tubesURL,
+                                 final String sceneId,
+                                 final MapBooOLD_ViewType viewType,
+                                 final MapBooOLDApplicationChangeListener applicationListener,
+                                 final boolean enableNotifications,
+                                 final String token) {
       super(serverURL, tubesURL, sceneId, viewType, applicationListener, enableNotifications, token);
       _nativeWidget = new G3MWidget_WebGL();
    }

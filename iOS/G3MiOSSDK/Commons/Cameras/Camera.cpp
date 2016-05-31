@@ -134,9 +134,11 @@ void Camera::resizeViewport(int width, int height) {
   if ((width  != _viewPortWidth) ||
       (height != _viewPortHeight)) {
     _timestamp++;
-
-    _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * _viewPortWidth;
-    _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * _viewPortHeight;
+      
+    const int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+    const int viewPortW = (_viewPortWidth  == 0) ? width  : _viewPortWidth;
+    _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * viewPortW;
+    _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
 
     _viewPortWidth  = width;
     _viewPortHeight = height;
@@ -410,6 +412,8 @@ FrustumData Camera::calculateFrustumData() const {
                      bottom, top,
                      zNear,  zFar);
 }
+
+
 
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   // this implementation is not right exact, but it's faster.

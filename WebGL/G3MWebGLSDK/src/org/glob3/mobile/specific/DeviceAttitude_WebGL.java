@@ -11,8 +11,8 @@ import org.glob3.mobile.generated.MutableMatrix44D;
 
 
 public class DeviceAttitude_WebGL
-extends
-IDeviceAttitude {
+   extends
+      IDeviceAttitude {
 
    InterfaceOrientation _currentIO = null;
 
@@ -77,43 +77,32 @@ IDeviceAttitude {
       if (orientation.equalsIgnoreCase("portrait-primary")) {
          _currentIO = InterfaceOrientation.PORTRAIT;
       }
-      else {
-         if (orientation.equalsIgnoreCase("portrait-secondary")) {
-            _currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
-         }
-         else {
-            if (orientation.equalsIgnoreCase("landscape-primary")) {
-               _currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
-            }
-            else {
-               if (orientation.equalsIgnoreCase("landscape-secondary")) {
-                  _currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
-               }
-            }
-         }
+      else if (orientation.equalsIgnoreCase("portrait-secondary")) {
+         _currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
+      }
+      else if (orientation.equalsIgnoreCase("landscape-primary")) {
+         _currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
+      }
+      else if (orientation.equalsIgnoreCase("landscape-secondary")) {
+         _currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
       }
 
-      ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
-
+      // ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
    }
 
 
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
-
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
 				console.log("IO CHROME");
 				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-			} else {
-				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-					console.log("IO MOZ");
-					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
-				}
+			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+				console.log("IO MOZ");
+				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
 			}
 		} catch (err) {
 			console.error("Unable to track Interface Orientation. " + err);
 		}
-
    }-*/;
 
 
@@ -125,13 +114,11 @@ IDeviceAttitude {
 				$wnd.screen.orientation.onchange = function() {
 					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				};
-			} else {
-				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-					console.log("IO MOZ");
-					$wnd.screen.onmozorientationchange = function(event) {
-						event.preventDefault();
-						devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-					}
+			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+				console.log("IO MOZ");
+				$wnd.screen.onmozorientationchange = function(event) {
+					event.preventDefault();
+					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				}
 			}
 		} catch (err) {

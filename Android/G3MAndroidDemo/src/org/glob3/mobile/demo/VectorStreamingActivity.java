@@ -10,7 +10,6 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoo;
 import org.glob3.mobile.generated.MapBoo.MBHandler;
 import org.glob3.mobile.generated.MapBoo.MBMap;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -119,8 +118,12 @@ public class VectorStreamingActivity
 
 
    private LayerSet createLayerSet() {
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
+
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
+      //      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
 
 
       return layerSet;

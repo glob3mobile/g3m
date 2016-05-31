@@ -25,8 +25,8 @@ import android.widget.RelativeLayout;
 
 
 public class CameraAnimation
-   extends
-      Activity {
+         extends
+            Activity {
 
    private G3MBuilder_Android _builder;
    private G3MWidget_Android  _g3mWidget;
@@ -43,7 +43,7 @@ public class CameraAnimation
 
       final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
       layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
 
       _builder = new G3MBuilder_Android(this);
       _builder.setPlanet(SphericalPlanet.createEarth());
@@ -71,8 +71,8 @@ public class CameraAnimation
          }
       };
 
-      sphinxRenderer.loadBSONSceneJS(new URL("file:///sphinx.bson", false), "file:///images/", false, new Geodetic3D(latitude,
-               longitude, 0), AltitudeMode.ABSOLUTE, sphynxListener);
+      sphinxRenderer.loadBSONSceneJS(new URL("file:///sphinx.bson", false), "file:///images/", false,
+               new Geodetic3D(latitude, longitude, 0), AltitudeMode.ABSOLUTE, sphynxListener);
 
 
       final ShapesRenderer eifelTowerRenderer = new ShapesRenderer();
@@ -132,8 +132,8 @@ public class CameraAnimation
       };
 
 
-      arcRenderer.loadBSONSceneJS(new URL("file:///arcdeTriomphe.bson", false), "file:///images/arc/", false, new Geodetic3D(
-               latitudeA, longitudeA, 0), AltitudeMode.ABSOLUTE, arcListener);
+      arcRenderer.loadBSONSceneJS(new URL("file:///arcdeTriomphe.bson", false), "file:///images/arc/", false,
+               new Geodetic3D(latitudeA, longitudeA, 0), AltitudeMode.ABSOLUTE, arcListener);
 
 
       final Button sphynxButton = (Button) findViewById(R.id.sphinx);
@@ -152,8 +152,8 @@ public class CameraAnimation
             final Angle fromAltitude = Angle.fromDegrees(90);
             final Angle toAltitude = Angle.fromDegrees(30);
 
-            _sphynxShape.orbitCamera(TimeInterval.fromSeconds(20), fromDistance, toDistance, fromAzimuth, toAzimuth,
-                     fromAltitude, toAltitude);
+            _sphynxShape.orbitCamera(TimeInterval.fromSeconds(20), fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude,
+                     toAltitude);
 
          }
       });
@@ -174,8 +174,8 @@ public class CameraAnimation
             final Angle fromAltitude = Angle.fromDegrees(90);
             final Angle toAltitude = Angle.fromDegrees(15);
 
-            _eiffelShape.orbitCamera(TimeInterval.fromSeconds(20), fromDistance, toDistance, fromAzimuth, toAzimuth,
-                     fromAltitude, toAltitude);
+            _eiffelShape.orbitCamera(TimeInterval.fromSeconds(20), fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude,
+                     toAltitude);
 
 
          }

@@ -12,8 +12,8 @@ import com.google.gwt.regexp.shared.RegExp;
 
 
 public final class Logger_WebGL
-         extends
-            ILogger {
+   extends
+      ILogger {
 
    private final Logger _logger;
 

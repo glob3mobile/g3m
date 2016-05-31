@@ -24,8 +24,8 @@ import android.widget.TextView;
 
 
 public class SimplestRasterActivity
-   extends
-      Activity {
+         extends
+            Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -47,9 +47,8 @@ public class SimplestRasterActivity
       _g3mWidget = builder.createWidget();
 
       _spinnerLayer = (Spinner) findViewById(R.id.spinnerLayers);
-      final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this, Arrays.asList("Map Box OSM",
-               "Open Street Map", "Map Box Terrain", "Map Box Aerial", "CartoDB Meteorites", "MapQuest Aerial", "MapQuest OSM",
-               "WMS Nasa Blue Marble", "ESRI ArcGis Online", "Bing Aerial", "Bing Aerial With Labels"));
+      final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this, Arrays.asList("Open Street Map",
+               "MapQuest Aerial", "MapQuest OSM", "WMS Nasa Blue Marble", "Bing Aerial", "Bing Aerial With Labels"));
       _spinnerLayer.setAdapter(viewAdapter);
 
       _spinnerLayer.setOnItemSelectedListener(new OnItemSelectedListener() {

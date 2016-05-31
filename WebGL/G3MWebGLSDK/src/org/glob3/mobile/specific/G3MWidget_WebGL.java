@@ -290,12 +290,9 @@ public class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
+			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame || function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -303,8 +300,7 @@ public class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -333,8 +329,7 @@ public class G3MWidget_WebGL
 				} catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
+					jsCanvas.addEventListener("webglcontextlost", function(event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);

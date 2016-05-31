@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 
-
 public final class WebGL {
    //
    //   private final int                    numIndices = 0;
@@ -1141,7 +1140,7 @@ public final class WebGL {
    //		$wnd.vertexBuffer = null, $wnd.texBuffer = null,
    //				$wnd.floatArrayV = null, $wnd.floatArrayT = null;
    //
-   //		$wnd.vertexIndexBuffer = null; //Indices for drawElements 
+   //		$wnd.vertexIndexBuffer = null; //Indices for drawElements
    //
    //   }-*/;
    //
