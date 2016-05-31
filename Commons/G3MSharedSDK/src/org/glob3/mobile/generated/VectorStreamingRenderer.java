@@ -951,7 +951,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
            _features.dispose();
         _features = features;
     
-        _featureMarksCount = _features.createFeatureMarks(_vectorSet, this);
+        //As this method is called in an asynchronous way, checking for visibility and size is again needed:
+        _featureMarksCount = (_wasVisible && _wasBigEnough)? _features.createFeatureMarks(_vectorSet, this) : 0;
+    
         if (_verbose && (_featureMarksCount > 0))
         {
           ILogger.instance().logInfo("\"%s\": Created %d feature-marks",
@@ -979,7 +981,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
     
         _clusters = clusters;
-        createClusterMarks();
+    
+        if (_wasVisible && _wasBigEnough)
+        {
+          createClusterMarks();
+        }
       }
     }
 
