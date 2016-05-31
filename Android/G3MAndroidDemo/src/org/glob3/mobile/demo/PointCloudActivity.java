@@ -22,7 +22,6 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -35,12 +34,12 @@ import android.widget.RelativeLayout;
 
 
 public class PointCloudActivity
-   extends
-      Activity {
+         extends
+            Activity {
 
    private final class PointsCloudParser
-      extends
-         GAsyncTask {
+            extends
+               GAsyncTask {
 
       private final IByteBuffer _buffer;
       private DirectMesh        _mesh;
@@ -57,7 +56,8 @@ public class PointCloudActivity
          final JSONObject object = objectBase.asObject();
          final JSONArray pointsJson = object.getAsArray("points");
 
-         final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_builder.getPlanet());
+         final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(
+                  _builder.getPlanet());
 
          final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
@@ -123,8 +123,8 @@ public class PointCloudActivity
    }
 
    private final class PointsCloudDownloader
-      extends
-         IBufferDownloadListener {
+            extends
+               IBufferDownloadListener {
 
       private final IThreadUtils _threadUtils;
 
@@ -186,9 +186,12 @@ public class PointCloudActivity
       //      layerSet.disableAllLayers();
       //      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
 
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2));
+      //      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2));
 
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
