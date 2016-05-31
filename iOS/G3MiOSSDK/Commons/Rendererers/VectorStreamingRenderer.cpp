@@ -327,8 +327,10 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
   if (features != NULL) {
     delete _features;
     _features = features;
-
-    _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
+      
+    //As this method is called in an asynchronous way, checking for visibility and size is again needed:
+    _featureMarksCount = (_wasVisible && _wasBigEnough)? _features->createFeatureMarks(_vectorSet, this) : 0;
+      
     if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
       ILogger::instance()->logInfo("\"%s\": Created %ld feature-marks",
@@ -357,7 +359,10 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
     }
 
     _clusters = clusters;
-    createClusterMarks();
+      
+    if (_wasVisible && _wasBigEnough){
+      createClusterMarks();
+    }
   }
 }
 
