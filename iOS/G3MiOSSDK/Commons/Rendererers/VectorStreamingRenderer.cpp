@@ -324,12 +324,12 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
 
   parsedChildren(children);
 
+  delete _features;
+  _featureMarksCount = 0;
+    
   if (features != NULL) {
-    delete _features;
     _features = features;
-      
-    //As this method is called in an asynchronous way, checking for visibility and size is again needed:
-    _featureMarksCount = (_wasVisible && _wasBigEnough)? _features->createFeatureMarks(_vectorSet, this) : 0;
+    _featureMarksCount =  _features->createFeatureMarks(_vectorSet, this);
       
     if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
@@ -343,26 +343,22 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
                                  _featureMarksCount);
 #endif
     }
-
-    //  Delete _features???
     delete _features;
     _features = NULL;
   }
+    
+  if (_clusters != NULL) {
+    for (size_t i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
+    }
+    delete _clusters;
+    _clusterMarksCount = 0;
+  }
 
   if (clusters != NULL) {
-    if (_clusters != NULL) {
-      for (size_t i = 0; i < _clusters->size(); i++) {
-        Cluster* cluster = _clusters->at(i);
-        delete cluster;
-      }
-      delete _clusters;
-    }
-
     _clusters = clusters;
-      
-    if (_wasVisible && _wasBigEnough){
-      createClusterMarks();
-    }
+    createClusterMarks();
   }
 }
 
@@ -498,6 +494,7 @@ void VectorStreamingRenderer::Node::unloadChildren() {
   if (_children != NULL) {
     for (size_t i = 0; i < _childrenSize; i++) {
       Node* child = _children->at(i);
+#warning Evitar problemas de tareas.
       child->_release();
     }
     delete _children;
@@ -557,10 +554,10 @@ void VectorStreamingRenderer::Node::removeMarks() {
 
 bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
                                               const Frustum* frustumInModelCoordinates) {
-  //  if ((_sector->_deltaLatitude._degrees  > 80) ||
-  //      (_sector->_deltaLongitude._degrees > 80)) {
-  //    return true;
-  //  }
+    if ((_nodeSector->_deltaLatitude._degrees  > 80) ||
+        (_nodeSector->_deltaLongitude._degrees > 80)) {
+      return true;
+    }
 
   return getBoundingVolume(rc)->touchesFrustum(frustumInModelCoordinates);
 }
@@ -576,7 +573,7 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
 }
 
 void VectorStreamingRenderer::Node::unload() {
-  removeMarks();
+  
 
   if (_loadingFeatures) {
     cancelLoadFeatures();
@@ -596,6 +593,8 @@ void VectorStreamingRenderer::Node::unload() {
   if (_children != NULL) {
     unloadChildren();
   }
+    
+  removeMarks();
 }
 
 
