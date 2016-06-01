@@ -544,10 +544,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _wasVisible;
     private boolean isVisible(G3MRenderContext rc, Frustum frustumInModelCoordinates)
     {
-      //  if ((_sector->_deltaLatitude._degrees  > 80) ||
-      //      (_sector->_deltaLongitude._degrees > 80)) {
-      //    return true;
-      //  }
+        if ((_nodeSector._deltaLatitude._degrees > 80) || (_nodeSector._deltaLongitude._degrees > 80))
+        {
+          return true;
+        }
     
       return getBoundingVolume(rc).touchesFrustum(frustumInModelCoordinates);
     }
@@ -637,6 +637,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _childrenSize; i++)
         {
           Node child = _children.get(i);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Evitar problemas de tareas.
           child._release();
         }
         _children = null;
@@ -655,7 +657,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void unload()
     {
-      removeMarks();
+    
     
       if (_loadingFeatures)
       {
@@ -679,6 +681,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         unloadChildren();
       }
+    
+      removeMarks();
     }
 
     private void removeMarks()
@@ -945,14 +949,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       parsedChildren(children);
     
+      if (_features != null)
+         _features.dispose();
+      _featureMarksCount = 0;
+    
       if (features != null)
       {
-        if (_features != null)
-           _features.dispose();
         _features = features;
-    
-        //As this method is called in an asynchronous way, checking for visibility and size is again needed:
-        _featureMarksCount = (_wasVisible && _wasBigEnough)? _features.createFeatureMarks(_vectorSet, this) : 0;
+        _featureMarksCount = _features.createFeatureMarks(_vectorSet, this);
     
         if (_verbose && (_featureMarksCount > 0))
         {
@@ -960,32 +964,27 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                      getFullName(),
                                      _featureMarksCount);
         }
-    
-        //  Delete _features???
         if (_features != null)
            _features.dispose();
         _features = null;
       }
     
+      if (_clusters != null)
+      {
+        for (int i = 0; i < _clusters.size(); i++)
+        {
+          Cluster cluster = _clusters.get(i);
+          if (cluster != null)
+             cluster.dispose();
+        }
+        _clusters = null;
+        _clusterMarksCount = 0;
+      }
+    
       if (clusters != null)
       {
-        if (_clusters != null)
-        {
-          for (int i = 0; i < _clusters.size(); i++)
-          {
-            Cluster cluster = _clusters.get(i);
-            if (cluster != null)
-               cluster.dispose();
-          }
-          _clusters = null;
-        }
-    
         _clusters = clusters;
-    
-        if (_wasVisible && _wasBigEnough)
-        {
-          createClusterMarks();
-        }
+        createClusterMarks();
       }
     }
 
