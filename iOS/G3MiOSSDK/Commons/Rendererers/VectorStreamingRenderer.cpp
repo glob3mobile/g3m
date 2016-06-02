@@ -110,6 +110,7 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
   _node->_featuresTask = NULL;
+  
   if (_buffer != NULL){
     delete _buffer;
   }
@@ -179,7 +180,9 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
 
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-  if (_shouldCancel) return;
+   if (_shouldCancel) {
+     return;
+   }
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   delete _buffer;
   _buffer = NULL;
@@ -196,7 +199,9 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
-  if (_shouldCancel) return;
+   if (_shouldCancel){
+     return;
+   }
   _node->parsedFeatures(_clusters, _features, _children);
   _clusters = NULL; // moved ownership to _node
   _features = NULL; // moved ownership to _node
@@ -341,7 +346,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
     
   if (features != NULL) {
     _features = features;
-    _featureMarksCount =  _features->createFeatureMarks(_vectorSet, this);
+    _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
       
     if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
@@ -653,6 +658,16 @@ void VectorStreamingRenderer::Node::childStopRendered() {
     if (_clusters->size() > 0) {
       if (_clusterMarksCount <= 0) {
         createClusterMarks();
+        //En este punto no deberían haber marcas. Si las hay, allahu error!
+          if (_children != NULL && _children->size() > 0){
+              for (int i=0; i<_children->size(); i++){
+                  Node *child = _children->at(i);
+                  if (child->_featureMarksCount > 0){
+                      ILogger::instance()->logError("_____ FATAL ERROR _____");
+                      child->unload();
+                  }
+              }
+          }
       }
     }
   }

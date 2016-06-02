@@ -295,6 +295,7 @@ public:
     size_t _childrenSize;
 
     const bool _verbose;
+    
 
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
