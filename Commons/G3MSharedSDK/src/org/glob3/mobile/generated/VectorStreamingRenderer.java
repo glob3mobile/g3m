@@ -775,7 +775,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           if (_clusterMarksCount <= 0)
           {
             createClusterMarks();
-            //En este punto no deberían haber marcas. Si las hay, allahu error!
+            //Checking to ensure no children marks are drawn.
               if (_children != null && _children.size() > 0)
               {
                   for (int i = 0; i<_children.size(); i++)
@@ -783,7 +783,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
                       Node child = _children.get(i);
                       if (child._featureMarksCount > 0)
                       {
-                          ILogger.instance().logError("_____ FATAL ERROR _____");
                           child.unload();
                       }
                   }
