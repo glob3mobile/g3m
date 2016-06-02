@@ -158,6 +158,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
   {
     private Node _node;
     private boolean _verbose;
+      private boolean _shouldCancel;
     private IByteBuffer _buffer;
 
     private java.util.ArrayList<Node> _children;
@@ -167,15 +168,20 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _node = node;
        _verbose = verbose;
        _buffer = buffer;
+       _shouldCancel = false;
        _children = null;
       _node._retain();
     }
 
     public void dispose()
     {
+      _node._childrenTask = null;
       _node._release();
       if (_buffer != null)
-         _buffer.dispose();
+      {
+        if (_buffer != null)
+           _buffer.dispose();
+      }
     
       if (_children != null)
       {
@@ -190,8 +196,17 @@ public class VectorStreamingRenderer extends DefaultRenderer
       super.dispose();
     }
 
+    public final void shouldBeCancelled()
+    {
+        _shouldCancel = true;
+    }
+
     public final void runInBackground(G3MContext context)
     {
+      if (_shouldCancel)
+      {
+          return;
+      }
       final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
       if (jsonBaseObject != null)
       {
@@ -217,6 +232,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onPostExecute(G3MContext context)
     {
+      if (_shouldCancel)
+      {
+        return;
+      }
       _node.parsedChildren(_children);
       _children = null; // moved ownership to _node
     }
@@ -253,8 +272,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                    _node.getFullName(),
                                    buffer.size());
       }
-    
-      _threadUtils.invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer), true);
+      _node._childrenTask = new ChildrenParserAsyncTask(_node, _verbose, buffer);
+      _threadUtils.invokeAsyncTask(_node._childrenTask, true);
     }
 
     public final void onError(URL url)
@@ -280,6 +299,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
   {
     private Node _node;
     private boolean _verbose;
+    private boolean _shouldCancel;
     private IByteBuffer _buffer;
 
     private java.util.ArrayList<Cluster> _clusters;
@@ -334,6 +354,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _node = node;
        _verbose = verbose;
        _buffer = buffer;
+       _shouldCancel = false;
        _clusters = null;
        _features = null;
        _children = null;
@@ -343,9 +364,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public void dispose()
     {
       _node._release();
-    
+      _node._featuresTask = null;
       if (_buffer != null)
-         _buffer.dispose();
+      {
+        if (_buffer != null)
+           _buffer.dispose();
+      }
     
       if (_clusters != null)
       {
@@ -374,9 +398,15 @@ public class VectorStreamingRenderer extends DefaultRenderer
       super.dispose();
     }
 
+    public final void shouldBeCancelled()
+    {
+      _shouldCancel = true;
+    }
+
     public final void runInBackground(G3MContext context)
     {
-    
+      if (_shouldCancel)
+         return;
       final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
       if (_buffer != null)
          _buffer.dispose();
@@ -397,6 +427,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onPostExecute(G3MContext context)
     {
+      if (_shouldCancel)
+         return;
       _node.parsedFeatures(_clusters, _features, _children);
       _clusters = null; // moved ownership to _node
       _features = null; // moved ownership to _node
@@ -434,8 +466,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                    _node.getFullName(),
                                    buffer.size());
       }
-    
-      _threadUtils.invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer), true);
+      _node._featuresTask = new FeaturesParserAsyncTask(_node, _verbose, buffer);
+      _threadUtils.invokeAsyncTask(_node._featuresTask, true);
     }
 
     public final void onError(URL url)
@@ -637,10 +669,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _childrenSize; i++)
         {
           Node child = _children.get(i);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Evitar problemas de tareas.
+          child.unload();
           child._release();
         }
+    
         _children = null;
         _children = null;
         _childrenSize = 0;
@@ -658,6 +690,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private void unload()
     {
     
+      cancelTasks();
     
       if (_loadingFeatures)
       {
@@ -753,6 +786,18 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
+    private void cancelTasks()
+    {
+      if (_featuresTask != null)
+      {
+        _featuresTask.shouldBeCancelled();
+      }
+      if (_childrenTask != null)
+      {
+        _childrenTask.shouldBeCancelled();
+      }
+    }
+
     private void setParent(Node parent)
     {
       if (_parent != null)
@@ -796,6 +841,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       super.dispose();
     }
 
+    public ChildrenParserAsyncTask _childrenTask;
+    public FeaturesParserAsyncTask _featuresTask;
+
     public Node(VectorSet vectorSet, Node parent, String id, Sector nodeSector, Sector minimumSector, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, java.util.ArrayList<Node> children, boolean verbose)
     {
        _vectorSet = vectorSet;
@@ -822,6 +870,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _features = null;
        _clusterMarksCount = 0;
        _featureMarksCount = 0;
+       _childrenTask = null;
+       _featuresTask = null;
       if (_parent != null)
       {
         _parent._retain();
