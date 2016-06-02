@@ -570,7 +570,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         points.add( planet.toCartesian( _nodeSector.getSW()     ) );
         points.add( planet.toCartesian( _nodeSector.getCenter() ) );
     
-        _boundingVolume = Sphere.enclosingSphere(points);
+        //_boundingVolume = Sphere::enclosingSphere(points);
+          _boundingVolume = Sphere.enclosingSphereWithDouble(points);
       }
     
       return _boundingVolume;
