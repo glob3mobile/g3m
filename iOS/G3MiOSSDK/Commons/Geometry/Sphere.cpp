@@ -12,8 +12,35 @@
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
 
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+Sphere* Sphere::enclosingSphereWithDouble(const std::vector<Vector3D>& points){
+    if (points.size() < 2) {
+        return NULL;
+    }
+    double xmin = points[0]._x;
+    double xmax = points[0]._x;
+    double ymin = points[0]._y;
+    double ymax = points[0]._y;
+    double zmin = points[0]._z;
+    double zmax = points[0]._z;
+    for (int i = 1; i < points.size(); i++) {
+        const Vector3D p = points[i];
+        if (p._x < xmin) xmin = p._x;
+        if (p._x > xmax) xmax = p._x;
+        if (p._y < ymin) ymin = p._y;
+        if (p._y > ymax) ymax = p._y;
+        if (p._z < zmin) zmin = p._z;
+        if (p._z > zmax) zmax = p._z;
+    }
+    Vector3D center = Vector3D((xmin+xmax)/2,(ymin+ymax)/2,(zmin+zmax)/2);
+    double sqRad = center.squaredDistanceTo(points[0]);
+    for (int i = 1; i < points.size(); i++) {
+        double dt = center.squaredDistanceTo(points[i]);
+        if (dt > sqRad) sqRad = dt;
+    }
+    return new Sphere(center,IMathUtils::instance()->sqrt(sqRad));
+}
 
 Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
   if (points.size() < 2) {

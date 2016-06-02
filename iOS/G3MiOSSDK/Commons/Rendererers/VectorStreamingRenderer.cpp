@@ -431,7 +431,8 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     points.add( planet.toCartesian( _nodeSector.getCenter() ) );
 #endif
 
-    _boundingVolume = Sphere::enclosingSphere(points);
+    //_boundingVolume = Sphere::enclosingSphere(points);
+      _boundingVolume = Sphere::enclosingSphereWithDouble(points);
   }
 
   return _boundingVolume;
