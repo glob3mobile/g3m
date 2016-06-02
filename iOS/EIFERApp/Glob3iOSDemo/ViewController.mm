@@ -529,8 +529,17 @@ public:
 
 class AltitudeFixerLM: public ILocationModifier{
   const ElevationData* _ed;
+  const Geodetic2D* _initialPosition;
 public:
-  AltitudeFixerLM(const ElevationData* ed):_ed(ed){}
+  AltitudeFixerLM(const ElevationData* ed):
+  _ed(ed),
+  _initialPosition(NULL)
+  {}
+  
+  ~AltitudeFixerLM() {
+    if (_initialPosition != NULL)
+      delete _initialPosition;
+  }
   
   Geodetic3D modify(const Geodetic3D& location){
     const double heightDEM = _ed->getElevationAt(location._latitude, location._longitude);
@@ -547,6 +556,22 @@ public:
     }
     
     return location;
+    */
+    
+    /*
+     // code to virtually walk in Karlsruhe
+  
+    // the first time save GPS position
+    if (_initialPosition == NULL)
+      _initialPosition = new Geodetic2D(location._latitude, location._longitude);
+    
+    // compute what I have walked from initial position
+    const Geodetic2D Karlsruhe(Angle::fromDegrees(49.010), Angle::fromDegrees(8.394));
+    const Geodetic2D incGeo = location.asGeodetic2D().sub(*_initialPosition);
+    return Geodetic3D(Karlsruhe.add(incGeo.times(100)), 160);
+     */
+    
+    return Geodetic3D(Angle::fromDegrees(49.010), Angle::fromDegrees(8.394), 160);
   }
 };
 
@@ -907,7 +932,7 @@ public:
   DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
   cameraRenderer->addHandler(dac);
   
-  [G3MWidget widget]->getNextCamera()->forceZNear(0.5);
+  [G3MWidget widget]->getNextCamera()->forceZNear(0.1);
   
   //Theoretical horizontal FOV
   float hFOVDegrees = [_camVC fieldOfViewInDegrees];
