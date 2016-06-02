@@ -497,6 +497,35 @@ public:
   
 };
 
+class KarlsruheVirtualWalkLM: public ILocationModifier{
+  const ElevationData* _ed;
+  const Geodetic2D* _initialPosition;
+public:
+  KarlsruheVirtualWalkLM(const ElevationData* ed):
+  _ed(ed),
+  _initialPosition(NULL)
+  {}
+  
+  ~KarlsruheVirtualWalkLM() {
+    if (_initialPosition != NULL)
+      delete _initialPosition;
+  }
+  
+  Geodetic3D modify(const Geodetic3D& location){
+    // code to virtually walk in Karlsruhe
+    
+    // the first time save GPS position
+    if (_initialPosition == NULL){
+      _initialPosition = new Geodetic2D(location._latitude, location._longitude);
+    }
+    
+    // compute what I have walked from initial position
+    const Geodetic2D Karlsruhe(Angle::fromDegrees(49.010), Angle::fromDegrees(8.394));
+    const Geodetic2D incGeo = location.asGeodetic2D().sub(*_initialPosition);
+    return Geodetic3D(Karlsruhe.add(incGeo.times(100)), 160);
+  }
+};
+
 
 class AltitudeFixerLM: public ILocationModifier{
   const ElevationData* _ed;
@@ -578,16 +607,16 @@ public:
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
-////  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
-//        [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-//        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+  ////  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+  //        [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  //        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
   
   _modelsLoadedCounter = 0;
   
@@ -1050,17 +1079,17 @@ public:
   }
   
   
-//  if (row == 1){
-//    
-//    std::vector<ColorLegend::ColorAndValue*> legend;
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), 6336.0));
-//    legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
-//    ColorLegend* cl = new ColorLegend(legend);
-//    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
-//    cityGMLRenderer->colorBuildings(colorProvider);
-//    delete colorProvider;
-//    
-//  }
+  //  if (row == 1){
+  //
+  //    std::vector<ColorLegend::ColorAndValue*> legend;
+  //    legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), 6336.0));
+  //    legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
+  //    ColorLegend* cl = new ColorLegend(legend);
+  //    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
+  //    cityGMLRenderer->colorBuildings(colorProvider);
+  //    delete colorProvider;
+  //
+  //  }
   
   if (row == 1){
     
