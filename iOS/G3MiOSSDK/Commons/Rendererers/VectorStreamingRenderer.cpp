@@ -658,12 +658,11 @@ void VectorStreamingRenderer::Node::childStopRendered() {
     if (_clusters->size() > 0) {
       if (_clusterMarksCount <= 0) {
         createClusterMarks();
-        //En este punto no deberían haber marcas. Si las hay, allahu error!
+        //Checking to ensure no children marks are drawn.
           if (_children != NULL && _children->size() > 0){
               for (int i=0; i<_children->size(); i++){
                   Node *child = _children->at(i);
                   if (child->_featureMarksCount > 0){
-                      ILogger::instance()->logError("_____ FATAL ERROR _____");
                       child->unload();
                   }
               }
