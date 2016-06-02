@@ -365,6 +365,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       _node._release();
       _node._featuresTask = null;
+    
       if (_buffer != null)
       {
         if (_buffer != null)
@@ -405,8 +406,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void runInBackground(G3MContext context)
     {
-      if (_shouldCancel)
+       if (_shouldCancel)
+       {
          return;
+       }
       final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
       if (_buffer != null)
          _buffer.dispose();
@@ -427,8 +430,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onPostExecute(G3MContext context)
     {
-      if (_shouldCancel)
+       if (_shouldCancel)
+       {
          return;
+       }
       _node.parsedFeatures(_clusters, _features, _children);
       _clusters = null; // moved ownership to _node
       _features = null; // moved ownership to _node
@@ -541,6 +546,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private int _childrenSize;
 
     private final boolean _verbose;
+
 
     private java.util.ArrayList<Cluster> _clusters;
     private GEOObject _features;
@@ -769,6 +775,19 @@ public class VectorStreamingRenderer extends DefaultRenderer
           if (_clusterMarksCount <= 0)
           {
             createClusterMarks();
+            //En este punto no deberían haber marcas. Si las hay, allahu error!
+              if (_children != null && _children.size() > 0)
+              {
+                  for (int i = 0; i<_children.size(); i++)
+                  {
+                      Node child = _children.get(i);
+                      if (child._featureMarksCount > 0)
+                      {
+                          ILogger.instance().logError("_____ FATAL ERROR _____");
+                          child.unload();
+                      }
+                  }
+              }
           }
         }
       }
