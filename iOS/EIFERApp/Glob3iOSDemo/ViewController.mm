@@ -253,8 +253,8 @@ public:
     
     _step++;
     
-#warning REMOVE DEMOSNTRATION FOR SCREENSHOTS
-    _step = 59;
+//#warning REMOVE DEMOSNTRATION FOR SCREENSHOTS
+//    _step = 59;
     
     NSString* folder = @"EIFER Resources/Solar Radiation/buildings_imp_table_0";
     
@@ -556,22 +556,6 @@ public:
     }
     
     return location;
-    */
-    
-    /*
-     // code to virtually walk in Karlsruhe
-  
-    // the first time save GPS position
-    if (_initialPosition == NULL)
-      _initialPosition = new Geodetic2D(location._latitude, location._longitude);
-    
-    // compute what I have walked from initial position
-    const Geodetic2D Karlsruhe(Angle::fromDegrees(49.010), Angle::fromDegrees(8.394));
-    const Geodetic2D incGeo = location.asGeodetic2D().sub(*_initialPosition);
-    return Geodetic3D(Karlsruhe.add(incGeo.times(100)), 160);
-     */
-    
-    return Geodetic3D(Angle::fromDegrees(49.010), Angle::fromDegrees(8.394), 160);
   }
 };
 
