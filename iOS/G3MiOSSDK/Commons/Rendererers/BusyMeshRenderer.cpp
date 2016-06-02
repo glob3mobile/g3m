@@ -152,7 +152,7 @@ Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
 void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
-  GL* gl = rc->getGL();
+  //GL* gl = rc->getGL();
   createGLState();
   
   //gl->clearScreen(*_backgroundColor);

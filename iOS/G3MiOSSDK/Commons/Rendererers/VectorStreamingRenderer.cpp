@@ -22,8 +22,11 @@
 #include "Mark.hpp"
 
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
+  _node->_childrenTask = NULL;
   _node->_release();
-  delete _buffer;
+  if (_buffer != NULL){
+    delete _buffer;
+  }
 
   if (_children != NULL) {
     for (size_t i = 0; i > _children->size(); i++) {
@@ -39,6 +42,9 @@ VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
+  if (_shouldCancel) {
+      return;
+  }
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   if (jsonBaseObject != NULL) {
     const JSONArray* nodesJSON = jsonBaseObject->asArray();
@@ -61,6 +67,9 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MContext* context) {
+  if (_shouldCancel) {
+    return;
+  }
   _node->parsedChildren(_children);
   _children = NULL; // moved ownership to _node
 }
@@ -80,9 +89,8 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
                                buffer.size());
 #endif
   }
-
-  _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer),
-                                true);
+  _node->_childrenTask = new ChildrenParserAsyncTask(_node, _verbose, buffer);
+  _threadUtils->invokeAsyncTask(_node->_childrenTask, true);
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
@@ -101,8 +109,10 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
-
-  delete _buffer;
+  _node->_featuresTask = NULL;
+  if (_buffer != NULL){
+    delete _buffer;
+  }
 
   if (_clusters != NULL) {
     for (size_t i = 0; i < _clusters->size(); i++) {
@@ -169,7 +179,7 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
 
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-
+  if (_shouldCancel) return;
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   delete _buffer;
   _buffer = NULL;
@@ -186,6 +196,7 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
+  if (_shouldCancel) return;
   _node->parsedFeatures(_clusters, _features, _children);
   _clusters = NULL; // moved ownership to _node
   _features = NULL; // moved ownership to _node
@@ -207,9 +218,8 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
                                buffer.size());
 #endif
   }
-
-  _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer),
-                                true);
+  _node->_featuresTask = new FeaturesParserAsyncTask(_node, _verbose, buffer);
+  _threadUtils->invokeAsyncTask(_node->_featuresTask,true);
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
@@ -259,7 +269,9 @@ _downloader(NULL),
 _clusters(NULL),
 _features(NULL),
 _clusterMarksCount(0),
-_featureMarksCount(0)
+_featureMarksCount(0),
+_childrenTask(NULL),
+_featuresTask(NULL)
 {
   if (_parent != NULL) {
     _parent->_retain();
@@ -494,12 +506,22 @@ void VectorStreamingRenderer::Node::unloadChildren() {
   if (_children != NULL) {
     for (size_t i = 0; i < _childrenSize; i++) {
       Node* child = _children->at(i);
-#warning Evitar problemas de tareas.
+      child->unload();
       child->_release();
     }
+      
     delete _children;
     _children = NULL;
     _childrenSize = 0;
+  }
+}
+
+void VectorStreamingRenderer::Node::cancelTasks(){
+  if (_featuresTask != NULL){
+    _featuresTask->shouldBeCancelled();
+  }
+  if (_childrenTask != NULL){
+    _childrenTask->shouldBeCancelled();
   }
 }
 
@@ -574,6 +596,7 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
 
 void VectorStreamingRenderer::Node::unload() {
   
+  cancelTasks();
 
   if (_loadingFeatures) {
     cancelLoadFeatures();
