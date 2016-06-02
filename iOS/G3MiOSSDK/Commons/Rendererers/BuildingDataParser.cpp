@@ -16,6 +16,19 @@
 #include "IStringUtils.hpp"
 #include "PointCloudMesh.hpp"
 
+size_t BuildingDataParser::extractFeature(CityGMLBuilding* b,
+                                          const std::string& name, const std::string& nameInJSON,
+                                          const std::string& data, size_t pos){
+  IStringUtils::StringExtractionResult heatDem = IStringUtils::extractSubStringBetween(data, "\"" + nameInJSON + "\": ", ",", pos);
+  if (heatDem._endingPos == std::string::npos){
+    return heatDem._endingPos;
+  }
+  pos = heatDem._endingPos+1;
+  double v = IStringUtils::instance()->parseDouble(heatDem._string);
+  b->addNumericProperty(new CityGMLBuildingNumericProperty(name, v));
+  return pos;
+}
+
 void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
                                                   const std::vector<CityGMLBuilding*>& buildings){
   
@@ -39,30 +52,36 @@ void BuildingDataParser::includeDataInBuildingSet(const std::string& data,
     
     if (b != NULL){
       
-      IStringUtils::StringExtractionResult heatDem = IStringUtils::extractSubStringBetween(data, "\"Heat_Dem_1\": ", ",", pos);
-      pos = heatDem._endingPos+1;
-      double v = IStringUtils::instance()->parseDouble(heatDem._string);
-      b->addNumericProperty(new CityGMLBuildingNumericProperty("Heat_Dem_1", v));
+      pos = extractFeature(b, "GHG Emissions", "GHG_Emis_1", data, pos);
+      pos = extractFeature(b, "Heat Demand", "Heat_Dem_1", data, pos);
+      pos = extractFeature(b, "Building Volume", "Bui_Volu_1", data, pos);
+      pos = extractFeature(b, "Demographic Clusters (SOM)", "SOMcluster", data, pos);
+      pos = extractFeature(b, "Demographic Clusters (k-Means)", "Field2_12", data, pos);
       
-      IStringUtils::StringExtractionResult vol = IStringUtils::extractSubStringBetween(data, "\"Bui_Volu_1\": ", ",", pos);
-      pos = vol._endingPos+1;
-      v = IStringUtils::instance()->parseDouble(vol._string);
-      b->addNumericProperty(new CityGMLBuildingNumericProperty("Bui_Volu_1", v));
-      
-      IStringUtils::StringExtractionResult qcl = IStringUtils::extractSubStringBetween(data, "\"QCL_1\": ", ",", pos);
-      pos = qcl._endingPos+1;
-      v = IStringUtils::instance()->parseDouble(qcl._string);
-      b->addNumericProperty(new CityGMLBuildingNumericProperty("QCL_1", v));
-      
-      IStringUtils::StringExtractionResult som = IStringUtils::extractSubStringBetween(data, "\"SOMcluster\": ", ",", pos);
-      pos = som._endingPos+1;
-      v = IStringUtils::instance()->parseDouble(som._string);
-      b->addNumericProperty(new CityGMLBuildingNumericProperty("SOMcluster", v));
-      
-      IStringUtils::StringExtractionResult field2 = IStringUtils::extractSubStringBetween(data, "\"Field2_12\": ", ",", pos);
-      pos = field2._endingPos+1;
-      v = IStringUtils::instance()->parseDouble(field2._string);
-      b->addNumericProperty(new CityGMLBuildingNumericProperty("Field2_12", v));
+//      IStringUtils::StringExtractionResult heatDem = IStringUtils::extractSubStringBetween(data, "\"Heat_Dem_1\": ", ",", pos);
+//      pos = heatDem._endingPos+1;
+//      double v = IStringUtils::instance()->parseDouble(heatDem._string);
+//      b->addNumericProperty(new CityGMLBuildingNumericProperty("Heat_Dem_1", v));
+//      
+//      IStringUtils::StringExtractionResult vol = IStringUtils::extractSubStringBetween(data, "\"Bui_Volu_1\": ", ",", pos);
+//      pos = vol._endingPos+1;
+//      v = IStringUtils::instance()->parseDouble(vol._string);
+//      b->addNumericProperty(new CityGMLBuildingNumericProperty("Bui_Volu_1", v));
+//      
+//      IStringUtils::StringExtractionResult qcl = IStringUtils::extractSubStringBetween(data, "\"QCL_1\": ", ",", pos);
+//      pos = qcl._endingPos+1;
+//      v = IStringUtils::instance()->parseDouble(qcl._string);
+//      b->addNumericProperty(new CityGMLBuildingNumericProperty("QCL_1", v));
+//      
+//      IStringUtils::StringExtractionResult som = IStringUtils::extractSubStringBetween(data, "\"SOMcluster\": ", ",", pos);
+//      pos = som._endingPos+1;
+//      v = IStringUtils::instance()->parseDouble(som._string);
+//      b->addNumericProperty(new CityGMLBuildingNumericProperty("SOMcluster", v));
+//      
+//      IStringUtils::StringExtractionResult field2 = IStringUtils::extractSubStringBetween(data, "\"Field2_12\": ", ",", pos);
+//      pos = field2._endingPos+1;
+//      v = IStringUtils::instance()->parseDouble(field2._string);
+//      b->addNumericProperty(new CityGMLBuildingNumericProperty("Field2_12", v));
       
     }
   }
@@ -170,10 +189,14 @@ Mesh* BuildingDataParser::createSolarRadiationMeshFromCSV(const std::string& dat
     Geodetic2D g2D = points[i]->asGeodetic2D();
     
     double h = points[i]->_height;
+    
+//#warning REMOVE THIS IS JUST FOR TECHNOLOGY PARK
+//    double scale = 1.4;
+//    h = h + scale * (h - minH);
+
     if (elevationData != NULL){
       h = h - minH + elevationData->getElevationAt(g2D);
     }
-    
     
     vertices->add(Geodetic3D(g2D, h));
     delete points[i];
@@ -225,5 +248,3 @@ IFloatBuffer* BuildingDataParser::create0ColorsForSolarRadiationMeshFromCSV(cons
   
   return colors.create();
 }
-
-

@@ -234,11 +234,10 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
     
     for (size_t i = 0; i < _buildings.size(); i++) {
       const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
+      
       if (s != NULL){
-        
         const std::vector<double> dists = s->intersectionsDistances(origin._x, origin._y, origin._z,
                                                                     ray._x, ray._y, ray._z);
-        
         for (size_t j = 0; j < dists.size(); j++){
           if (dists[j] < minDis){
             minDis = dists[j];

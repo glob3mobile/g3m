@@ -29,6 +29,7 @@ class MyEDCamConstrainer;
 class GEOVectorLayer;
 class PointCloudEvolutionTask;
 class LayerSet;
+class ShapesRenderer;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
@@ -79,10 +80,11 @@ class LayerSet;
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
 
-@property __weak IBOutlet UILabel *_timeLabel;
+@property __weak IBOutlet UILabel *timeLabel;
 @property MeshRenderer* meshRenderer;
 @property MeshRenderer* meshRendererPC;
 @property MarksRenderer* marksRenderer;
+@property ShapesRenderer* shapesRenderer;
 @property CityGMLRenderer* cityGMLRenderer;
 
 @property GEOVectorLayer* vectorLayer;

@@ -205,6 +205,7 @@
 #include <G3MiOSSDK/PointCloudMesh.hpp>
 #include <G3MiOSSDK/Surface.hpp>
 
+
 #import <QuartzCore/QuartzCore.h>
 
 #import "AppDelegate.h"
@@ -252,6 +253,9 @@ public:
     
     _step++;
     
+#warning REMOVE DEMOSNTRATION FOR SCREENSHOTS
+    _step = 59;
+    
     NSString* folder = @"EIFER Resources/Solar Radiation/buildings_imp_table_0";
     
     if (_pcMesh == NULL){
@@ -294,9 +298,9 @@ public:
       std::string s = "Day " + context->getStringUtils()->toString(hour / 24) + " " +
       context->getStringUtils()->toString(hour % 24) + ":00";
       
-      [_vc._timeLabel setHidden:FALSE];
+      [_vc.timeLabel setHidden:FALSE];
       
-      [[_vc _timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
+      [[_vc timeLabel] setText:[NSString stringWithUTF8String:s.c_str()]];
     }
     
   }
@@ -500,12 +504,19 @@ public:
   AltitudeFixerLM(const ElevationData* ed):_ed(ed){}
   
   Geodetic3D modify(const Geodetic3D& location){
-    double minH = _ed->getElevationAt(location._latitude, location._longitude) + 1.6;
-    if (location._height < minH){
+    const double heightDEM = _ed->getElevationAt(location._latitude, location._longitude);
+    if (location._height < heightDEM + 1.6){
       return Geodetic3D::fromDegrees(location._latitude._degrees,
                                      location._longitude._degrees,
-                                     minH);
+                                     heightDEM + 1.6);
     }
+    
+    if (location._height > heightDEM + 25){
+      return Geodetic3D::fromDegrees(location._latitude._degrees,
+                                     location._longitude._degrees,
+                                     heightDEM + 25);
+    }
+    
     return location;
   }
 };
@@ -520,9 +531,10 @@ public:
 @synthesize meshRendererPC;
 @synthesize cityGMLRenderer;
 @synthesize elevationData;
-@synthesize _timeLabel;
+@synthesize timeLabel;
 @synthesize camConstrainer;
 @synthesize vectorLayer;
+@synthesize shapesRenderer;
 
 - (void)didReceiveMemoryWarning
 {
@@ -560,22 +572,22 @@ public:
   UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
   UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
   
-  [_timeLabel setHidden:TRUE];
+  [timeLabel setHidden:TRUE];
   
-  _pickerArray = @[@"Random Colors", @"Heat Demand", @"Volume", @"QCL", @"SOM Cluster", @"Field 2"];
+  _pickerArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
   
-//  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
-  //      [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-  //    [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+////  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+//        [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//      [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+//      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+//      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+//      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
   
   _modelsLoadedCounter = 0;
   
@@ -621,7 +633,7 @@ public:
 
 -(void) removePointCloudMesh{
   meshRendererPC->clearMeshes();
-  [_timeLabel setHidden:TRUE];
+  [timeLabel setHidden:TRUE];
 }
 
 -(void) useOSM:(BOOL) v{
@@ -662,32 +674,8 @@ public:
   marksRenderer = new MarksRenderer(false);
   
   //Karlsruhe Schloss model
-  ShapesRenderer* sr = new ShapesRenderer();
-  builder.addRenderer(sr);
-  
-  class SchlossListener : public ShapeLoadListener {
-  public:
-    SchlossListener()
-    {
-    }
-    
-    void onBeforeAddShape(SGShape* shape) {
-      shape->setPitch(Angle::fromDegrees(90));
-    }
-    
-    void onAfterAddShape(SGShape* shape) {
-      shape->setScale(250);
-      shape->setHeading(Angle::fromDegrees(-4));
-    }
-  };
-  
-  sr->loadJSONSceneJS(URL("file:///k_s/k_schloss.json"),
-                      "file:///k_s/",
-                      false, // isTransparent
-                      new Geodetic3D(Geodetic3D::fromDegrees(49.013487,8.404333, 117.82)), //
-                      ABSOLUTE,
-                      new SchlossListener());
-  
+  shapesRenderer = new ShapesRenderer();
+  builder.addRenderer(shapesRenderer);
   
   //Showing Footprints
   vectorLayer = new GEOVectorLayer(2,18,
@@ -744,6 +732,43 @@ public:
 
 -(void) onAllDataLoaded{
   ILogger::instance()->logInfo("City Model Loaded");
+  
+  const bool includeCastleModel = true;
+  if (includeCastleModel){
+    class SchlossListener : public ShapeLoadListener {
+    public:
+      SchlossListener()
+      {
+      }
+      
+      void onBeforeAddShape(SGShape* shape) {
+        shape->setPitch(Angle::fromDegrees(90));
+      }
+      
+      void onAfterAddShape(SGShape* shape) {
+        shape->setScale(250);
+        //      shape->setHeading(Angle::fromDegrees(-4));
+      }
+    };
+    
+    shapesRenderer->loadJSONSceneJS(URL("file:///k_s/k_schloss.json"),
+                                    "file:///k_s/",
+                                    false, // isTransparent
+                                    new Geodetic3D(Geodetic3D::fromDegrees(49.013500, 8.404249, 117.82)), //
+                                    ABSOLUTE,
+                                    new SchlossListener());
+    
+    std::string v[] = {"91214493", "23638639", "15526553", "15526562", "15526550", "13956101", "156061723", "15526578"};
+    
+    for (int i = 0; i < 8; i++){
+      CityGMLBuilding* b = cityGMLRenderer->getBuildingWithName(v[i]);
+      if (b != NULL){
+        CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(b, Color::transparent());
+      }
+    }
+    
+    
+  }
   
   //Whole city!
   [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
@@ -848,12 +873,7 @@ public:
     _prevHeading = new Angle(cam->getHeading());
   }
   
-  bool fixAltitude = !_useDem;
-  
-  ILocationModifier * lm = NULL;
-  if (fixAltitude){
-    lm = new AltitudeFixerLM([self elevationData]);
-  }
+  ILocationModifier * lm = new AltitudeFixerLM([self elevationData]);
   
   DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
   cameraRenderer->addHandler(dac);
@@ -1030,21 +1050,21 @@ public:
   }
   
   
+//  if (row == 1){
+//    
+//    std::vector<ColorLegend::ColorAndValue*> legend;
+//    legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), 6336.0));
+//    legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
+//    ColorLegend* cl = new ColorLegend(legend);
+//    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
+//    cityGMLRenderer->colorBuildings(colorProvider);
+//    delete colorProvider;
+//    
+//  }
+  
   if (row == 1){
     
-    std::vector<ColorLegend::ColorAndValue*> legend;
-    legend.push_back(new ColorLegend::ColorAndValue(Color::blue(), 6336.0));
-    legend.push_back(new ColorLegend::ColorAndValue(Color::red(), 70000.0));
-    ColorLegend* cl = new ColorLegend(legend);
-    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Heat_Dem_1", cl);
-    cityGMLRenderer->colorBuildings(colorProvider);
-    delete colorProvider;
-    
-  }
-  
-  if (row == 2){
-    
-    cityGMLRenderer->colorBuildingsWithColorBrewer("Bui_Volu_1", "BuGn", 7);
+    cityGMLRenderer->colorBuildingsWithColorBrewer("Heat Demand", "Pastel1", 8);
     
     //    std::vector<double> vs = cityGMLRenderer->getAllValuesOfProperty("Bui_Volu_1");
     //    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(vs, "BuGn", 4);
@@ -1066,7 +1086,7 @@ public:
     //    delete colorProvider;
   }
   
-  if (row == 3){
+  if (row == 2){
     
     //    int nClasses = 18;
     //    int colors[] = {103,0,31,
@@ -1102,13 +1122,13 @@ public:
     //    cityGMLRenderer->colorBuildings(colorProvider);
     //    delete colorProvider;
     
-    cityGMLRenderer->colorBuildingsWithColorBrewer("QCL_1", "YlGn", 7);
+    cityGMLRenderer->colorBuildingsWithColorBrewer("Building Volume", "Pastel1", 8);
     
   }
   
-  if (row == 4){
+  if (row == 3){
     
-    cityGMLRenderer->colorBuildingsWithColorBrewer("SOMcluster", "GnBu", 7);
+    cityGMLRenderer->colorBuildingsWithColorBrewer("GHG Emissions", "Pastel1", 8);
     //
     //    std::vector<ColorLegend::ColorAndValue*> legend;
     //
@@ -1144,14 +1164,29 @@ public:
     
   }
   
-  if (row == 5){
+  if (row == 4){
     
-    cityGMLRenderer->colorBuildingsWithColorBrewer("Field2_12", "PuOr", 7);
+    cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (SOM)", "Pastel1", 8);
     
     //    std::vector<ColorLegend::ColorAndValue*> legend;
     //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(213,62,79, 255), -0.05));
     //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 0.05));
-    //    
+    //
+    //    ColorLegend* cl = new ColorLegend(legend);
+    //    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Field2_12", cl);
+    //    cityGMLRenderer->colorBuildings(colorProvider);
+    //    delete colorProvider;
+    
+  }
+  
+  if (row == 5){
+    
+    cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (k-Means)", "Pastel1", 8);
+    
+    //    std::vector<ColorLegend::ColorAndValue*> legend;
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(213,62,79, 255), -0.05));
+    //    legend.push_back(new ColorLegend::ColorAndValue(Color::fromRGBA255(252,141,89, 255), 0.05));
+    //
     //    ColorLegend* cl = new ColorLegend(legend);
     //    CityGMLBuildingColorProvider* colorProvider = new BuildingDataColorProvider("Field2_12", cl);
     //    cityGMLRenderer->colorBuildings(colorProvider);

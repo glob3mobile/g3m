@@ -11,10 +11,9 @@
 ColorLegend* ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(std::vector<double>& sListDouble,
                                                                        const std::string& colorName,
                                                                        int sClassCount){
-//  std::vector<double>  naturalBreaks = getJenksBreaks(sListDouble, sClassCount);
-  
+#warning TODO CHECK CJenksBreaks
   CJenksBreaks jenks(&sListDouble, sClassCount);
-  std::vector<long>* res = jenks.get_Results();
+  std::vector<long>* res = jenks.get_Results(); //NOT WORKING
   
   std::vector<double> naturalBreaks;
   for (size_t i = 0; i < res->size(); i++) {
@@ -39,6 +38,47 @@ ColorLegend* ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(std::vect
   
   return new ColorLegend(legend);
 }
+
+
+ColorLegend* ColorLegendHelper::createColorBrewLegendWithEquallySpacedBreaks(std::vector<double>& sListDouble,
+                                                                       const std::string& colorName,
+                                                                       int sClassCount){
+  double min = sListDouble[0];
+  double max = sListDouble[0];
+  
+  for (size_t i = 1; i < sListDouble.size(); i++){
+    double v = sListDouble[i];
+    if (v < min){
+      min = v;
+    } else{
+      if (v > max){
+        max = v;
+      }
+    }
+  }
+  std::vector<double> res;
+  for (int i = 0; i < sClassCount; i++){
+    double v = min + i*((max-min) / sClassCount);
+    res.push_back(v);
+  }
+
+  
+  std::vector<std::string> colorNames = brew(colorName, sClassCount);
+  
+  if (res.size() != colorNames.size()){
+    THROW_EXCEPTION("Error at ColorLegendHelper::createColorBrewLegendWithNaturalBreaks()");
+  }
+  
+  std::vector<ColorLegend::ColorAndValue*> legend;
+  for (int i = 0; i < sClassCount;i++) {
+    Color* c = Color::parse(colorNames[i]);
+    legend.push_back(new ColorLegend::ColorAndValue(*c, res[i]));
+    delete c;
+  }
+  
+  return new ColorLegend(legend);
+}
+
 
 ////Transformed from C# [http://www.gal-systems.com/2011/08/calculating-jenks-natural-breaks-in.html]
 //std::vector<double> ColorLegendHelper::getJenksBreaks(std::vector<double>& sListDouble, int sClassCount)

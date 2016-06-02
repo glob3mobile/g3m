@@ -121,14 +121,14 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="wMT-ub-uvc">
                                                 <rect key="frame" x="0.0" y="0.0" width="92" height="58"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CityGML:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pb0-UF-Qjf">
-                                                        <rect key="frame" x="1" y="0.0" width="92" height="27"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CityGML:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pb0-UF-Qjf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="92" height="27"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FHj-Ca-U23">
-                                                        <rect key="frame" x="22" y="27" width="51" height="31"/>
+                                                        <rect key="frame" x="21" y="27" width="51" height="31"/>
                                                         <connections>
                                                             <action selector="switchCityGML:" destination="90h-7u-REb" eventType="touchUpInside" id="TeT-61-sII"/>
                                                         </connections>
@@ -282,9 +282,9 @@
                         <outlet property="_menuView" destination="IpR-T2-IV5" id="aid-md-dMw"/>
                         <outlet property="_progressBar" destination="f5V-gh-SMQ" id="dQo-rb-USl"/>
                         <outlet property="_showMenuButton" destination="ieu-7s-ThD" id="VPk-Zt-r5p"/>
-                        <outlet property="_timeLabel" destination="LE9-lB-bmo" id="eNA-BK-rkA"/>
                         <outlet property="_waitingMessageView" destination="Uti-MQ-TpT" id="jIX-tj-WMC"/>
                         <outlet property="cameraView" destination="xwA-fO-Akv" id="MOC-km-mGO"/>
+                        <outlet property="timeLabel" destination="LE9-lB-bmo" id="Xfq-4O-ABs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xuj-Dk-csY" sceneMemberID="firstResponder"/>

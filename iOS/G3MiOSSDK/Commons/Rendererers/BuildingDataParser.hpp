@@ -16,6 +16,9 @@
 
 class BuildingDataParser{
   
+  static size_t extractFeature(CityGMLBuilding* b,
+                               const std::string& name, const std::string& nameInJSON,
+                               const std::string& data, size_t pos);
   
 public:
   

@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "INativeGL.hpp"
+#include "GLConstants.hpp"
 
 class IImage;
 class G3MRenderContext;
@@ -28,6 +29,7 @@ private:
   const int         _width;
   const int         _height;
   const bool        _generateMipmap;
+  const int         _wrapping;
 
   TextureSpec& operator=(const TextureSpec& that);
 
@@ -35,22 +37,25 @@ public:
   TextureSpec(const std::string& id,
               const int          width,
               const int          height,
-              const bool         generateMipmap):
+              const bool         generateMipmap,
+              const int          wrapping):
   _id(id),
   _width(width),
   _height(height),
-  _generateMipmap(generateMipmap)
+  _generateMipmap(generateMipmap),
+  _wrapping(wrapping)
   {
 
   }
 
-  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false) {}
+  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false), _wrapping(GLTextureParameterValue::clampToEdge()) {}
 
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
   _height(that._height),
-  _generateMipmap(that._generateMipmap)
+  _generateMipmap(that._generateMipmap),
+  _wrapping(that._wrapping)
   {
 
   }
@@ -66,11 +71,16 @@ public:
   int getHeight() const {
     return _height;
   }
+  
+  int getWrapping() const {
+    return _wrapping;
+  }
 
   bool equalsTo(const TextureSpec& that) const {
     return ((_id.compare(that._id) == 0) &&
             (_width  == that._width) &&
-            (_height == that._height));
+            (_height == that._height) &&
+            (_wrapping == that._wrapping));
   }
 
   bool lowerThan(const TextureSpec& that) const {
@@ -164,7 +174,8 @@ public:
   const TextureIDReference* getTextureIDReference(const IImage* image,
                                                   int format,
                                                   const std::string& name,
-                                                  bool generateMipmap);
+                                                  bool generateMipmap,
+                                                  int wrapping = GLTextureParameterValue::clampToEdge());
 
 
   //This two methods are supposed to be accessed only by TextureIDReference class

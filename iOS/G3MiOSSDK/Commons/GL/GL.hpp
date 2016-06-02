@@ -114,7 +114,8 @@ public:
 
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
-                                    bool generateMipmap);
+                                    bool generateMipmap,
+                                    int wrapping = GLTextureParameterValue::clampToEdge());
 
   void deleteTexture(const IGLTextureId* textureId);
 

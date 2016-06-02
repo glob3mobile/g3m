@@ -147,7 +147,6 @@ class CityGMLRenderer: public DefaultRenderer{
                                                            _vc->_elevationData);
       _buildingMeshes.push_back(_mesh);
       
-#warning TEST CODE
 //      for (size_t i = 0; i < _buildings.size(); i++) {
 //        std::vector<CityGMLBuilding*> bs;
 //        bs.push_back(_buildings[i]);
@@ -255,6 +254,15 @@ public:
       }
     }
     return v;
+  }
+  
+  CityGMLBuilding* getBuildingWithName(const std::string& name){
+    for (size_t i = 0; i < _buildings.size(); i++) {
+      if (_buildings[i]->_name == name){
+        return _buildings[i];
+      }
+    }
+    return NULL;
   }
   
   void colorBuildingsWithColorBrewer(const std::string& propertyName,

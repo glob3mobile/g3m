@@ -59,6 +59,7 @@ int GLTextureParameterValue::_nearestMipmapNearest = 0;
 int GLTextureParameterValue::_nearestMipmapLinear  = 0;
 int GLTextureParameterValue::_linearMipmapNearest  = 0;
 int GLTextureParameterValue::_linearMipmapLinear   = 0;
+int GLTextureParameterValue::_repeat               = 0;
 
 int GLTextureParameterValue::_clampToEdge = 0;
 

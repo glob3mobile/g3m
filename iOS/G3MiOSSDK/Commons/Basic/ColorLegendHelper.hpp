@@ -15,14 +15,14 @@
 #include <string>
 #include "float.h"
 
-#include <G3MiOSSDK/ColorLegend.hpp>
+#include "ColorLegend.hpp"
 
 class ColorLegendHelper{
   
 public:
   
-//  //Transformed from C# [http://www.gal-systems.com/2011/08/calculating-jenks-natural-breaks-in.html]
-//  static std::vector<double> getJenksBreaks(std::vector<double>& sListDouble, int sClassCount);
+  //  //Transformed from C# [http://www.gal-systems.com/2011/08/calculating-jenks-natural-breaks-in.html]
+  //  static std::vector<double> getJenksBreaks(std::vector<double>& sListDouble, int sClassCount);
   
   //Adapted from https://github.com/schulzch/colorbrewercpp/blob/master/colorbrewer.h
   static std::vector<std::string> brew(const std::string& colorName, size_t colorCount);
@@ -30,6 +30,11 @@ public:
   static ColorLegend* createColorBrewLegendWithNaturalBreaks(std::vector<double>& sListDouble,
                                                              const std::string& colorName,
                                                              int sClassCount);
+  
+  
+  static ColorLegend* createColorBrewLegendWithEquallySpacedBreaks(std::vector<double>& sListDouble,
+                                                                   const std::string& colorName,
+                                                                   int sClassCount);
   
 };
 
@@ -165,174 +170,174 @@ public:
   }
   ~CJenksBreaks(){}
   
-//  std::vector<int>* TestIt(std::vector<double>* data, int numClasses)
-//  {
-//    int numValues = data->size();
-//    
-//    //std::vector<std::vector<int>> mat1;
-//    //std::vector<std::vector<float>> mat2;
-//    //mat1.resize(numValues + 1);
-//    //mat2.resize(numValues + 1);
-//    
-//    //for (int i = 0; i <= numValues; i++)
-//    //{
-//    //	mat1[i].resize(numClasses + 1);
-//    //	mat2[i].resize(numClasses + 1, FLT_MAX);
-//    //}
-//    
-//    //for (int j = 1; j < numClasses + 1; j++)
-//    //{
-//    //	mat1[1][j] = 1;
-//    //	mat2[1][j] = 0.0;
-//    //}
-//    //
-//    //double s1,s2,w,SSD;
-//    //SSD = 0.0;
-//    //for(int l = 2; l <= numValues; l++)	//arrays are 0 based, but we skip 1
-//    //   {
-//    //       s1=s2=w=0;
-//    //       for(int m = 1; m <= l; m++)
-//    //       {
-//    //		int i3 = l - m + 1;
-//    //		double val = (*data)[i3 - 1];
-//    //		s2 += val * val;
-//    //		s1 += val;
-//    //		w++;
-//    //		SSD = s2 - (s1 * s1) / w;
-//    //		int i4 = i3 - 1;
-//    
-//    //		if(i4 != 0 )
-//    //		{
-//    //			 for(int j = 2; j <= numClasses; j++)
-//    //			{
-//    //				double newVal = mat2[i4][j - 1] + SSD;
-//    //				double oldValue = mat2[l][j];
-//    //				if(newVal <= oldValue)		// if new class is better than previous than let's write it
-//    //				{
-//    //					mat1[l][j] = i3;
-//    //					mat2[l][j] = mat2[i4][j - 1] + SSD;
-//    //				}
-//    //			}
-//    //		}
-//    //       }
-//    //       mat1[l][0] = 0;
-//    //	mat2[l][0] =SSD;
-//    //}
-//    //
-//    std::vector<int>* result = new std::vector<int>;
-//    result->resize(numClasses + 1);
-//    (*result)[numClasses] = numValues;
-//    //
-//    //int k = numValues;
-//    //   for(int j = result->size() - 1; j >= 1; j--)
-//    //   {
-//    //        int id = mat1[k][j] - 1;
-//    //        (*result)[j - 1] = id;
-//    //        k = id;
-//    //   }
-//    
-//    // ESRI breaks
-//    /*(*result)[0] = 0;
-//     (*result)[1] = 387;
-//     (*result)[2] = 1261;
-//     (*result)[3] = 2132;
-//     (*result)[4] = 2698;
-//     (*result)[5] = 2890;
-//     (*result)[6] = 2996;
-//     (*result)[7] = 3064;
-//     (*result)[8] = 3093;
-//     (*result)[9] = 3107;*/
-//    /*for (int i = 1; i <= numClasses; i++)
-//     {
-//     (*result)[i] = numValues/numClasses * i;
-//     }*/
-//    
-//    double step = ((*data)[numValues - 1] - (*data)[0])/(numClasses);
-//    int cnt = 0;
-//    for (int i = 0; i < numValues; i++)
-//    {
-//      if ((*data)[i] > step * cnt)
-//      {
-//        cnt++;
-//        if (cnt > numClasses) break;
-//        (*result)[cnt] = i;
-//      }
-//    }
-//    
-//    double s1,s2,w,SSD;
-//    SSD = 0;
-//    for (int i = 1; i< numClasses + 1; i++)
-//    {
-//      int low, high;
-//      if ( i == 1) low = 0;
-//      else low = (*result)[i-1];
-//      
-//      if ( i == numClasses) high = numValues;
-//      else high = (*result)[i] -1;
-//      
-//      s2 = s1 = w = 0;
-//      for (int j = low; j < high; j++)
-//      {
-//        double val = (*data)[j];
-//        s2 += val * val;
-//        s1 += val;
-//        w++;
-//      }
-//      if (w != 0.0)
-//        SSD += s2 - (s1 * s1) / w;
-//    }
-//    
-//    //// cleaning
-//    //for (int i = 0; i < numValues; i++)
-//    //{
-//    //	delete[] mat1[i];
-//    //	delete[] mat2[i];
-//    //}
-//    //delete[] mat1;
-//    //delete[] mat2;
-//    
-//    return result;
-//  }
-//  
-//  // -------------------------------------------------------------------
-//  // Optimization routine
-//  // -------------------------------------------------------------------
-//  void Optimize()
-//  {
-//    // initialization
-//    double minValue = get_SumStandardDeviations();	// current best minimum
-//    _leftBound = 0;							// we'll consider all classes in the beginning
-//    _rightBound = _classes.size() - 1;
-//    _previousMaxId = -1;
-//    _previousTargetId = - 1;
-//    int numAttemmpts = 0;
-//    
-//    bool proceed = true;
-//    while (proceed)
-//    {
-//      for (int i = 0; i < _numValues; i++)
-//      {
-//        FindShift();
-//        
-//        // when there are only 2 classes left we should stop on the local max value
-//        if (_rightBound - _leftBound == 0)
-//        {
-//          double val = get_SumStandardDeviations();	// the final minimum
-//          numAttemmpts++;
-//          
-//          if ( numAttemmpts > 5)
-//          {
-//            return;
-//          }
-//        }
-//      }
-//      double value = get_SumStandardDeviations();
-//      proceed = (value < minValue)?true:false;	// if the deviations became smaller we'll execute one more loop
-//      
-//      if (value < minValue)
-//        minValue = value;
-//    }
-//  }
+  //  std::vector<int>* TestIt(std::vector<double>* data, int numClasses)
+  //  {
+  //    int numValues = data->size();
+  //
+  //    //std::vector<std::vector<int>> mat1;
+  //    //std::vector<std::vector<float>> mat2;
+  //    //mat1.resize(numValues + 1);
+  //    //mat2.resize(numValues + 1);
+  //
+  //    //for (int i = 0; i <= numValues; i++)
+  //    //{
+  //    //	mat1[i].resize(numClasses + 1);
+  //    //	mat2[i].resize(numClasses + 1, FLT_MAX);
+  //    //}
+  //
+  //    //for (int j = 1; j < numClasses + 1; j++)
+  //    //{
+  //    //	mat1[1][j] = 1;
+  //    //	mat2[1][j] = 0.0;
+  //    //}
+  //    //
+  //    //double s1,s2,w,SSD;
+  //    //SSD = 0.0;
+  //    //for(int l = 2; l <= numValues; l++)	//arrays are 0 based, but we skip 1
+  //    //   {
+  //    //       s1=s2=w=0;
+  //    //       for(int m = 1; m <= l; m++)
+  //    //       {
+  //    //		int i3 = l - m + 1;
+  //    //		double val = (*data)[i3 - 1];
+  //    //		s2 += val * val;
+  //    //		s1 += val;
+  //    //		w++;
+  //    //		SSD = s2 - (s1 * s1) / w;
+  //    //		int i4 = i3 - 1;
+  //
+  //    //		if(i4 != 0 )
+  //    //		{
+  //    //			 for(int j = 2; j <= numClasses; j++)
+  //    //			{
+  //    //				double newVal = mat2[i4][j - 1] + SSD;
+  //    //				double oldValue = mat2[l][j];
+  //    //				if(newVal <= oldValue)		// if new class is better than previous than let's write it
+  //    //				{
+  //    //					mat1[l][j] = i3;
+  //    //					mat2[l][j] = mat2[i4][j - 1] + SSD;
+  //    //				}
+  //    //			}
+  //    //		}
+  //    //       }
+  //    //       mat1[l][0] = 0;
+  //    //	mat2[l][0] =SSD;
+  //    //}
+  //    //
+  //    std::vector<int>* result = new std::vector<int>;
+  //    result->resize(numClasses + 1);
+  //    (*result)[numClasses] = numValues;
+  //    //
+  //    //int k = numValues;
+  //    //   for(int j = result->size() - 1; j >= 1; j--)
+  //    //   {
+  //    //        int id = mat1[k][j] - 1;
+  //    //        (*result)[j - 1] = id;
+  //    //        k = id;
+  //    //   }
+  //
+  //    // ESRI breaks
+  //    /*(*result)[0] = 0;
+  //     (*result)[1] = 387;
+  //     (*result)[2] = 1261;
+  //     (*result)[3] = 2132;
+  //     (*result)[4] = 2698;
+  //     (*result)[5] = 2890;
+  //     (*result)[6] = 2996;
+  //     (*result)[7] = 3064;
+  //     (*result)[8] = 3093;
+  //     (*result)[9] = 3107;*/
+  //    /*for (int i = 1; i <= numClasses; i++)
+  //     {
+  //     (*result)[i] = numValues/numClasses * i;
+  //     }*/
+  //
+  //    double step = ((*data)[numValues - 1] - (*data)[0])/(numClasses);
+  //    int cnt = 0;
+  //    for (int i = 0; i < numValues; i++)
+  //    {
+  //      if ((*data)[i] > step * cnt)
+  //      {
+  //        cnt++;
+  //        if (cnt > numClasses) break;
+  //        (*result)[cnt] = i;
+  //      }
+  //    }
+  //
+  //    double s1,s2,w,SSD;
+  //    SSD = 0;
+  //    for (int i = 1; i< numClasses + 1; i++)
+  //    {
+  //      int low, high;
+  //      if ( i == 1) low = 0;
+  //      else low = (*result)[i-1];
+  //
+  //      if ( i == numClasses) high = numValues;
+  //      else high = (*result)[i] -1;
+  //
+  //      s2 = s1 = w = 0;
+  //      for (int j = low; j < high; j++)
+  //      {
+  //        double val = (*data)[j];
+  //        s2 += val * val;
+  //        s1 += val;
+  //        w++;
+  //      }
+  //      if (w != 0.0)
+  //        SSD += s2 - (s1 * s1) / w;
+  //    }
+  //
+  //    //// cleaning
+  //    //for (int i = 0; i < numValues; i++)
+  //    //{
+  //    //	delete[] mat1[i];
+  //    //	delete[] mat2[i];
+  //    //}
+  //    //delete[] mat1;
+  //    //delete[] mat2;
+  //
+  //    return result;
+  //  }
+  //
+  //  // -------------------------------------------------------------------
+  //  // Optimization routine
+  //  // -------------------------------------------------------------------
+  //  void Optimize()
+  //  {
+  //    // initialization
+  //    double minValue = get_SumStandardDeviations();	// current best minimum
+  //    _leftBound = 0;							// we'll consider all classes in the beginning
+  //    _rightBound = _classes.size() - 1;
+  //    _previousMaxId = -1;
+  //    _previousTargetId = - 1;
+  //    int numAttemmpts = 0;
+  //
+  //    bool proceed = true;
+  //    while (proceed)
+  //    {
+  //      for (int i = 0; i < _numValues; i++)
+  //      {
+  //        FindShift();
+  //
+  //        // when there are only 2 classes left we should stop on the local max value
+  //        if (_rightBound - _leftBound == 0)
+  //        {
+  //          double val = get_SumStandardDeviations();	// the final minimum
+  //          numAttemmpts++;
+  //
+  //          if ( numAttemmpts > 5)
+  //          {
+  //            return;
+  //          }
+  //        }
+  //      }
+  //      double value = get_SumStandardDeviations();
+  //      proceed = (value < minValue)?true:false;	// if the deviations became smaller we'll execute one more loop
+  //
+  //      if (value < minValue)
+  //        minValue = value;
+  //    }
+  //  }
   
   // -------------------------------------------------------------------
   // Returning of results (indices of values to start each class)
