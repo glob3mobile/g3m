@@ -56,8 +56,7 @@ public:
   public:
     static Sector*     parseSector(const JSONArray* json);
     static Geodetic2D* parseGeodetic2D(const JSONArray* json);
-    static Node*       parseNode(Node*             parent,
-                                 const JSONObject* json,
+    static Node*       parseNode(const JSONObject* json,
                                  const VectorSet*  vectorSet,
                                  const bool        verbose);
 
@@ -281,7 +280,6 @@ public:
     Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
-    const Sector*                  _minimumSector;
     const int                      _clustersCount;
     const int                      _featuresCount;
 #ifdef C_CODE
@@ -296,8 +294,6 @@ public:
 
     const bool _verbose;
 
-//    bool _isCanceled;
-
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
 
@@ -307,15 +303,15 @@ public:
     IDownloader* _downloader;
     bool _loadingChildren;
 
-    bool _wasVisible;
     bool isVisible(const G3MRenderContext* rc,
                    const Frustum* frustumInModelCoordinates);
 
     bool _loadedFeatures;
     bool _loadingFeatures;
 
-    bool _wasBigEnough;
     bool isBigEnough(const G3MRenderContext *rc);
+
+    bool _isBeingRendered;
 
     long long _featuresRequestID;
     void loadFeatures(const G3MRenderContext* rc);
@@ -343,6 +339,8 @@ public:
 
     void setParent(Node* parent);
 
+    void setChildren(std::vector<Node*>* children);
+
   protected:
     ~Node();
 
@@ -351,19 +349,17 @@ public:
     FeaturesParserAsyncTask *_featuresTask;
 
     Node(const VectorSet*                vectorSet,
-         Node*                           parent,
          const std::string&              id,
          const Sector*                   nodeSector,
-         const Sector*                   minimumSector,
          const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,
          std::vector<Node*>*             children,
          const bool                      verbose);
 
-//    const bool isCanceled() const {
-//      return _isCanceled;
-//    }
+    bool isBeingRendered() const {
+      return _isBeingRendered;
+    }
 
     const VectorSet* getVectorSet() const {
       return _vectorSet;
