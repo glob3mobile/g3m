@@ -96,7 +96,7 @@ public:
   private:
     Node*               _node;
     bool                _verbose;
-      bool                _shouldCancel;
+    bool                _isCanceled;
     IByteBuffer*        _buffer;
 
     std::vector<Node*>* _children;
@@ -108,16 +108,16 @@ public:
     _node(node),
     _verbose(verbose),
     _buffer(buffer),
-    _shouldCancel(false),
+    _isCanceled(false),
     _children(NULL)
     {
       _node->_retain();
     }
 
     ~ChildrenParserAsyncTask();
-      
-    void shouldBeCancelled() {
-        _shouldCancel = true;
+
+    void cancel() {
+      _isCanceled = true;
     }
 
     void runInBackground(const G3MContext* context);
@@ -172,7 +172,7 @@ public:
   private:
     Node*               _node;
     bool                _verbose;
-    bool                _shouldCancel;
+    bool                _isCanceled;
     IByteBuffer*        _buffer;
 
     std::vector<Cluster*>* _clusters;
@@ -190,7 +190,7 @@ public:
     _node(node),
     _verbose(verbose),
     _buffer(buffer),
-    _shouldCancel(false),
+    _isCanceled(false),
     _clusters(NULL),
     _features(NULL),
     _children(NULL)
@@ -199,9 +199,9 @@ public:
     }
 
     ~FeaturesParserAsyncTask();
-      
-    void shouldBeCancelled(){
-      _shouldCancel = true;
+
+    void cancel() {
+      _isCanceled = true;
     }
 
     void runInBackground(const G3MContext* context);
@@ -272,7 +272,7 @@ public:
     bool test(const Mark* mark) const;
 
   };
-  
+
 
 
   class Node : public RCObject {
@@ -295,7 +295,7 @@ public:
     size_t _childrenSize;
 
     const bool _verbose;
-    
+
 
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
@@ -337,7 +337,7 @@ public:
     void childStopRendered();
 
     void createClusterMarks();
-      
+
     void cancelTasks();
 
     void setParent(Node* parent);
@@ -348,7 +348,7 @@ public:
   public:
     ChildrenParserAsyncTask *_childrenTask;
     FeaturesParserAsyncTask *_featuresTask;
-      
+
     Node(const VectorSet*                vectorSet,
          Node*                           parent,
          const std::string&              id,

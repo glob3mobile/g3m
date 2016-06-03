@@ -14,7 +14,7 @@
 #include "GLConstants.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-Sphere* Sphere::enclosingSphereWithDouble(const std::vector<Vector3D>& points){
+Sphere* Sphere::enclosingSphereWithDouble(const std::vector<Vector3D>& points) {
     if (points.size() < 2) {
         return NULL;
     }

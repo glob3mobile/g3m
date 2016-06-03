@@ -24,7 +24,7 @@
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
   _node->_childrenTask = NULL;
   _node->_release();
-  if (_buffer != NULL){
+  if (_buffer != NULL) {
     delete _buffer;
   }
 
@@ -42,8 +42,8 @@ VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
-  if (_shouldCancel) {
-      return;
+  if (_isCanceled) {
+    return;
   }
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   if (jsonBaseObject != NULL) {
@@ -67,7 +67,7 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MContext* context) {
-  if (_shouldCancel) {
+  if (_isCanceled) {
     return;
   }
   _node->parsedChildren(_children);
@@ -110,8 +110,8 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
   _node->_release();
   _node->_featuresTask = NULL;
-  
-  if (_buffer != NULL){
+
+  if (_buffer != NULL) {
     delete _buffer;
   }
 
@@ -180,9 +180,9 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
 
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
-   if (_shouldCancel) {
-     return;
-   }
+  if (_isCanceled) {
+    return;
+  }
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
   delete _buffer;
   _buffer = NULL;
@@ -199,9 +199,9 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
-   if (_shouldCancel){
-     return;
-   }
+  if (_isCanceled) {
+    return;
+  }
   _node->parsedFeatures(_clusters, _features, _children);
   _clusters = NULL; // moved ownership to _node
   _features = NULL; // moved ownership to _node
@@ -343,11 +343,11 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
 
   delete _features;
   _featureMarksCount = 0;
-    
+
   if (features != NULL) {
     _features = features;
     _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
-      
+
     if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
       ILogger::instance()->logInfo("\"%s\": Created %ld feature-marks",
@@ -363,7 +363,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
     delete _features;
     _features = NULL;
   }
-    
+
   if (_clusters != NULL) {
     for (size_t i = 0; i < _clusters->size(); i++) {
       Cluster* cluster = _clusters->at(i);
@@ -403,11 +403,11 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 #ifdef C_CODE
     const Vector3D c[5] = {
-//      planet->toCartesian( _minimumSector->getNE()     ),
-//      planet->toCartesian( _minimumSector->getNW()     ),
-//      planet->toCartesian( _minimumSector->getSE()     ),
-//      planet->toCartesian( _minimumSector->getSW()     ),
-//      planet->toCartesian( _minimumSector->getCenter() )
+      //      planet->toCartesian( _minimumSector->getNE()     ),
+      //      planet->toCartesian( _minimumSector->getNW()     ),
+      //      planet->toCartesian( _minimumSector->getSE()     ),
+      //      planet->toCartesian( _minimumSector->getSW()     ),
+      //      planet->toCartesian( _minimumSector->getCenter() )
       planet->toCartesian( _nodeSector->getNE()     ),
       planet->toCartesian( _nodeSector->getNW()     ),
       planet->toCartesian( _nodeSector->getSE()     ),
@@ -419,11 +419,11 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 #endif
 #ifdef JAVA_CODE
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-//    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
+    //    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
+    //    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
     points.add( planet.toCartesian( _nodeSector.getNE()     ) );
     points.add( planet.toCartesian( _nodeSector.getNW()     ) );
     points.add( planet.toCartesian( _nodeSector.getSE()     ) );
@@ -432,7 +432,7 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 #endif
 
     //_boundingVolume = Sphere::enclosingSphere(points);
-      _boundingVolume = Sphere::enclosingSphereWithDouble(points);
+    _boundingVolume = Sphere::enclosingSphereWithDouble(points);
   }
 
   return _boundingVolume;
@@ -515,19 +515,19 @@ void VectorStreamingRenderer::Node::unloadChildren() {
       child->unload();
       child->_release();
     }
-      
+
     delete _children;
     _children = NULL;
     _childrenSize = 0;
   }
 }
 
-void VectorStreamingRenderer::Node::cancelTasks(){
-  if (_featuresTask != NULL){
-    _featuresTask->shouldBeCancelled();
+void VectorStreamingRenderer::Node::cancelTasks() {
+  if (_featuresTask != NULL) {
+    _featuresTask->cancel();
   }
-  if (_childrenTask != NULL){
-    _childrenTask->shouldBeCancelled();
+  if (_childrenTask != NULL) {
+    _childrenTask->cancel();
   }
 }
 
@@ -582,10 +582,10 @@ void VectorStreamingRenderer::Node::removeMarks() {
 
 bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
                                               const Frustum* frustumInModelCoordinates) {
-    if ((_nodeSector->_deltaLatitude._degrees  > 80) ||
-        (_nodeSector->_deltaLongitude._degrees > 80)) {
-      return true;
-    }
+  if ((_nodeSector->_deltaLatitude._degrees  > 80) ||
+      (_nodeSector->_deltaLongitude._degrees > 80)) {
+    return true;
+  }
 
   return getBoundingVolume(rc)->touchesFrustum(frustumInModelCoordinates);
 }
@@ -601,7 +601,7 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
 }
 
 void VectorStreamingRenderer::Node::unload() {
-  
+
   cancelTasks();
 
   if (_loadingFeatures) {
@@ -622,7 +622,7 @@ void VectorStreamingRenderer::Node::unload() {
   if (_children != NULL) {
     unloadChildren();
   }
-    
+
   removeMarks();
 }
 
@@ -660,14 +660,14 @@ void VectorStreamingRenderer::Node::childStopRendered() {
       if (_clusterMarksCount <= 0) {
         createClusterMarks();
         //Checking to ensure no children marks are drawn.
-          if (_children != NULL && _children->size() > 0){
-              for (int i=0; i<_children->size(); i++){
-                  Node *child = _children->at(i);
-                  if (child->_featureMarksCount > 0){
-                      child->unload();
-                  }
-              }
+        if (_children != NULL && _children->size() > 0) {
+          for (int i=0; i<_children->size(); i++) {
+            Node *child = _children->at(i);
+            if (child->_featureMarksCount > 0) {
+              child->unload();
+            }
           }
+        }
       }
     }
   }
