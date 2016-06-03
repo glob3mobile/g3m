@@ -413,8 +413,6 @@ FrustumData Camera::calculateFrustumData() const {
                      zNear,  zFar);
 }
 
-
-
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   // this implementation is not right exact, but it's faster.
   const double z = sphere._center.distanceTo(getCartesianPosition());

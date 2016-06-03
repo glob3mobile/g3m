@@ -24,9 +24,8 @@
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
   _node->_childrenTask = NULL;
   _node->_release();
-  if (_buffer != NULL) {
-    delete _buffer;
-  }
+
+  delete _buffer;
 
   if (_children != NULL) {
     for (size_t i = 0; i > _children->size(); i++) {
@@ -45,7 +44,12 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
   if (_isCanceled) {
     return;
   }
+
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
+
+  delete _buffer;
+  _buffer = NULL;
+
   if (jsonBaseObject != NULL) {
     const JSONArray* nodesJSON = jsonBaseObject->asArray();
     if (nodesJSON != NULL) {
@@ -61,9 +65,6 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
 
     delete jsonBaseObject;
   }
-
-  delete _buffer;
-  _buffer = NULL;
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MContext* context) {
@@ -89,8 +90,9 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
                                buffer.size());
 #endif
   }
-  _node->_childrenTask = new ChildrenParserAsyncTask(_node, _verbose, buffer);
-  _threadUtils->invokeAsyncTask(_node->_childrenTask, true);
+//  _node->_childrenTask = new ChildrenParserAsyncTask(_node, _verbose, buffer);
+//  _threadUtils->invokeAsyncTask(_node->_childrenTask, true);
+  _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer), true);
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
@@ -108,12 +110,9 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 }
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
-  _node->_release();
   _node->_featuresTask = NULL;
 
-  if (_buffer != NULL) {
-    delete _buffer;
-  }
+  delete _buffer;
 
   if (_clusters != NULL) {
     for (size_t i = 0; i < _clusters->size(); i++) {
@@ -224,7 +223,7 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
 #endif
   }
   _node->_featuresTask = new FeaturesParserAsyncTask(_node, _verbose, buffer);
-  _threadUtils->invokeAsyncTask(_node->_featuresTask,true);
+  _threadUtils->invokeAsyncTask(_node->_featuresTask, true);
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
@@ -325,10 +324,11 @@ VectorStreamingRenderer::Node::~Node() {
 }
 
 void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children) {
-  if (children != NULL) {
+  if (children != _children) {
+#warning TODO:  deletechildren();
     _children = children;
     _loadingChildren = false;
-    _childrenSize = _children->size();
+    _childrenSize = (children == NULL) ? 0 : _children->size();
   }
 }
 
@@ -431,8 +431,7 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     points.add( planet.toCartesian( _nodeSector.getCenter() ) );
 #endif
 
-    //_boundingVolume = Sphere::enclosingSphere(points);
-    _boundingVolume = Sphere::enclosingSphereWithDouble(points);
+    _boundingVolume = Sphere::enclosingSphere(points);
   }
 
   return _boundingVolume;
@@ -497,7 +496,6 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
   //  }
 
   _downloader = rc->getDownloader();
-
   _childrenRequestID = _downloader->requestBuffer(_vectorSet->getNodeChildrenURL(_id, _childrenIDs),
                                                   _vectorSet->getDownloadPriority(),
                                                   _vectorSet->getTimeToCache(),
@@ -597,7 +595,8 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
   }
 
   const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
-  return (projectedArea > 350000);
+  //return (projectedArea > 350000);
+  return (projectedArea > 1000000);
 }
 
 void VectorStreamingRenderer::Node::unload() {
@@ -623,11 +622,12 @@ void VectorStreamingRenderer::Node::unload() {
     unloadChildren();
   }
 
+  if (_parent != NULL) {
+    _parent->childStopRendered();
+  }
+
   removeMarks();
 }
-
-
-
 
 void VectorStreamingRenderer::Node::childRendered() {
   if (_clusters != NULL) {
@@ -715,15 +715,10 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
           loadFeatures(rc);
         }
       }
-
     }
     else {
       if (_wasBigEnough) {
         unload();
-        if (_parent != NULL) {
-          //_parent->childUnloaded();
-          _parent->childStopRendered();
-        }
       }
     }
     _wasBigEnough = bigEnough;
@@ -731,10 +726,6 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   else {
     if (_wasVisible) {
       unload();
-      if (_parent != NULL) {
-        //_parent->childUnloaded();
-        _parent->childStopRendered();
-      }
     }
   }
   _wasVisible = visible;

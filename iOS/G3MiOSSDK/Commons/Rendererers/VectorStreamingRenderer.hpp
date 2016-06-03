@@ -296,6 +296,7 @@ public:
 
     const bool _verbose;
 
+//    bool _isCanceled;
 
     std::vector<Cluster*>* _clusters;
     GEOObject*             _features;
@@ -359,6 +360,10 @@ public:
          const std::vector<std::string>& childrenIDs,
          std::vector<Node*>*             children,
          const bool                      verbose);
+
+//    const bool isCanceled() const {
+//      return _isCanceled;
+//    }
 
     const VectorSet* getVectorSet() const {
       return _vectorSet;
