@@ -85,9 +85,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public static VectorStreamingRenderer.Node parseNode(JSONObject json, VectorSet vectorSet, boolean verbose)
     {
       final String id = json.getAsString("id").value();
-      Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
-      int clustersCount = (int) json.getAsNumber("clustersCount").value();
-      int featuresCount = (int) json.getAsNumber("featuresCount").value();
+      final Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
+      final int clustersCount = (int) json.getAsNumber("clustersCount", 0.0);
+      final int featuresCount = (int) json.getAsNumber("featuresCount", 0.0);
     
       java.util.ArrayList<String> childrenIDs = new java.util.ArrayList<String>();
       java.util.ArrayList<Node> children = null;

@@ -749,9 +749,9 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
   const std::string id            = json->getAsString("id")->value();
-  Sector*           nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-  int               clustersCount = (int) json->getAsNumber("clustersCount")->value();
-  int               featuresCount = (int) json->getAsNumber("featuresCount")->value();
+  const Sector*     nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+  const int         clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
+  const int         featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
 
   std::vector<std::string> childrenIDs;
   std::vector<Node*>*      children = NULL;
