@@ -33,6 +33,24 @@ private:
 #endif
     }
 
+    if (iu->beginsWith(result, "https:/")) {
+#ifdef C_CODE
+      result = "https://" + iu->substring(result, 6);
+#endif
+#ifdef JAVA_CODE
+      result = "https://" + iu.substring(result, 6);
+#endif
+    }
+
+    if (iu->beginsWith(result, "file:/")) {
+#ifdef C_CODE
+      result = "file:///" + iu->substring(result, 6);
+#endif
+#ifdef JAVA_CODE
+      result = "file:///" + iu.substring(result, 6);
+#endif
+    }
+
     return result;
   }
 
@@ -57,7 +75,7 @@ public:
   _path(  escapePath ? escape(path) : path  )
   {
   }
-  
+
   URL(const URL& parent,
       const std::string& path,
       const bool escapePath=false) :
@@ -83,9 +101,9 @@ public:
   bool isEquals(const URL& that) const {
     return (_path == that._path);
   }
-  
+
   static const std::string FILE_PROTOCOL;
-  
+
   bool isFileProtocol() const;
 
   const std::string description() const;
@@ -109,13 +127,13 @@ public:
 
 #ifdef JAVA_CODE
   @Override
-	public int hashCode() {
-		return _path.hashCode();
-	}
+  public int hashCode() {
+    return _path.hashCode();
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
     if (obj == null) {
@@ -129,9 +147,9 @@ public:
       return true;
     }
     return false;
-	}
+  }
 #endif
-
+  
 };
 
 
