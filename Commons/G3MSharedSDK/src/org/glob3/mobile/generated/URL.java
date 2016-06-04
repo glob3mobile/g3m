@@ -35,6 +35,16 @@ public class URL
       result = "http://" + iu.substring(result, 6);
     }
 
+    if (iu.beginsWith(result, "https:/"))
+    {
+      result = "https://" + iu.substring(result, 6);
+    }
+
+    if (iu.beginsWith(result, "file:/"))
+    {
+      result = "file:///" + iu.substring(result, 6);
+    }
+
     return result;
   }
 
@@ -143,13 +153,13 @@ public class URL
 
 
   @Override
-	public int hashCode() {
-		return _path.hashCode();
-	}
+  public int hashCode() {
+    return _path.hashCode();
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
     if (obj == null) {
@@ -163,6 +173,6 @@ public class URL
       return true;
     }
     return false;
-	}
+  }
 
 }
