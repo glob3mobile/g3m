@@ -87,7 +87,7 @@ public class Sphere extends BoundingVolume
 
   public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points)
   {
-    int size = points.size();
+    final int size = points.size();
   
     if (size < 2)
     {
