@@ -202,10 +202,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_isCanceled)
       {
-        if (_node.isBeingRendered())
-        {
-    
-        }
         return;
       }
     
@@ -237,12 +233,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_isCanceled)
       {
-        if (_node.isBeingRendered())
-        {
-    
-        }
         return;
       }
+    
       _node.parsedChildren(_children);
       _children = null; // moved ownership to _node
     }
@@ -412,10 +405,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_isCanceled)
       {
-        if (_node.isBeingRendered())
-        {
-    
-        }
         return;
       }
     
@@ -442,10 +431,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_isCanceled)
       {
-        if (_node.isBeingRendered())
-        {
-    
-        }
         return;
       }
       _node.parsedFeatures(_clusters, _features, _children);
@@ -837,6 +822,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private void setChildren(java.util.ArrayList<Node> children)
     {
       _loadingChildren = false;
+    
+      if ((children == null) && (_children != null))
+      {
+        return;
+      }
+    
       if (children != _children)
       {
         if (_children != null)
@@ -923,11 +914,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _childrenTask = null;
        _featuresTask = null;
       setChildren(children);
-    }
-
-    public final boolean isBeingRendered()
-    {
-      return _isBeingRendered;
     }
 
     public final VectorSet getVectorSet()
