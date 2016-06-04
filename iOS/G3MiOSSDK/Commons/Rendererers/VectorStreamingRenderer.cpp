@@ -42,9 +42,6 @@ VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
   if (_isCanceled) {
-    if (_node->isBeingRendered()) {
-
-    }
     return;
   }
 
@@ -71,11 +68,9 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MContext* context) {
   if (_isCanceled) {
-    if (_node->isBeingRendered()) {
-
-    }
     return;
   }
+
   _node->parsedChildren(_children);
   _children = NULL; // moved ownership to _node
 }
@@ -184,9 +179,6 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
   if (_isCanceled) {
-    if (_node->isBeingRendered()) {
-
-    }
     return;
   }
 
@@ -208,9 +200,6 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
   if (_isCanceled) {
-    if (_node->isBeingRendered()) {
-
-    }
     return;
   }
   _node->parsedFeatures(_clusters, _features, _children);
@@ -290,6 +279,11 @@ _featuresTask(NULL)
 
 void VectorStreamingRenderer::Node::setChildren(std::vector<Node*>* children) {
   _loadingChildren = false;
+
+  if ((children == NULL) && (_children != NULL)) {
+    return;
+  }
+
   if (children != _children) {
     if (_children != NULL) {
       for (size_t i = 0; i < _childrenSize; i++) {

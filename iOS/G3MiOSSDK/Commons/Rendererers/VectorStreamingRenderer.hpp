@@ -357,10 +357,6 @@ public:
          std::vector<Node*>*             children,
          const bool                      verbose);
 
-    bool isBeingRendered() const {
-      return _isBeingRendered;
-    }
-
     const VectorSet* getVectorSet() const {
       return _vectorSet;
     }
