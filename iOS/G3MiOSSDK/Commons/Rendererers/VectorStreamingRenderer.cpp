@@ -22,7 +22,9 @@
 #include "Mark.hpp"
 
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
+  _node->_childrenTask = NULL;
   _node->_release();
+
   delete _buffer;
 
   if (_children != NULL) {
@@ -39,15 +41,22 @@ VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3MContext* context) {
+  if (_isCanceled) {
+    return;
+  }
+
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
+
+  delete _buffer;
+  _buffer = NULL;
+
   if (jsonBaseObject != NULL) {
     const JSONArray* nodesJSON = jsonBaseObject->asArray();
     if (nodesJSON != NULL) {
       _children = new std::vector<Node*>();
       for (size_t i = 0; i < nodesJSON->size(); i++) {
         const JSONObject* nodeJSON = nodesJSON->getAsObject(i);
-        _children->push_back( GEOJSONUtils::parseNode(_node,
-                                                      nodeJSON,
+        _children->push_back( GEOJSONUtils::parseNode(nodeJSON,
                                                       _node->getVectorSet(),
                                                       _verbose) );
       }
@@ -55,12 +64,13 @@ void VectorStreamingRenderer::ChildrenParserAsyncTask::runInBackground(const G3M
 
     delete jsonBaseObject;
   }
-
-  delete _buffer;
-  _buffer = NULL;
 }
 
 void VectorStreamingRenderer::ChildrenParserAsyncTask::onPostExecute(const G3MContext* context) {
+  if (_isCanceled) {
+    return;
+  }
+
   _node->parsedChildren(_children);
   _children = NULL; // moved ownership to _node
 }
@@ -80,9 +90,8 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
                                buffer.size());
 #endif
   }
-
-  _threadUtils->invokeAsyncTask(new ChildrenParserAsyncTask(_node, _verbose, buffer),
-                                true);
+  _node->_childrenTask = new ChildrenParserAsyncTask(_node, _verbose, buffer);
+  _threadUtils->invokeAsyncTask(_node->_childrenTask, true);
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
@@ -100,6 +109,7 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onCanceledDownload(c
 }
 
 VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
+  _node->_featuresTask = NULL;
   _node->_release();
 
   delete _buffer;
@@ -158,8 +168,7 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
   std::vector<Node*>* result = new std::vector<Node*>();
   for (size_t i = 0; i < jsonArray->size(); i++) {
     const JSONObject* nodeJSON = jsonArray->getAsObject(i);
-    result->push_back( GEOJSONUtils::parseNode(_node,
-                                               nodeJSON,
+    result->push_back( GEOJSONUtils::parseNode(nodeJSON,
                                                _node->getVectorSet(),
                                                _verbose) );
   }
@@ -169,8 +178,12 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
 
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3MContext* context) {
+  if (_isCanceled) {
+    return;
+  }
 
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
+
   delete _buffer;
   _buffer = NULL;
 
@@ -186,6 +199,9 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
 }
 
 void VectorStreamingRenderer::FeaturesParserAsyncTask::onPostExecute(const G3MContext* context) {
+  if (_isCanceled) {
+    return;
+  }
   _node->parsedFeatures(_clusters, _features, _children);
   _clusters = NULL; // moved ownership to _node
   _features = NULL; // moved ownership to _node
@@ -207,9 +223,8 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
                                buffer.size());
 #endif
   }
-
-  _threadUtils->invokeAsyncTask(new FeaturesParserAsyncTask(_node, _verbose, buffer),
-                                true);
+  _node->_featuresTask = new FeaturesParserAsyncTask(_node, _verbose, buffer);
+  _threadUtils->invokeAsyncTask(_node->_featuresTask, true);
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
@@ -227,31 +242,27 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
 }
 
 VectorStreamingRenderer::Node::Node(const VectorSet*                vectorSet,
-                                    Node*                           parent,
                                     const std::string&              id,
                                     const Sector*                   nodeSector,
-                                    const Sector*                   minimumSector,
                                     const int                       clustersCount,
                                     const int                       featuresCount,
                                     const std::vector<std::string>& childrenIDs,
                                     std::vector<Node*>*             children,
                                     const bool                      verbose) :
+_parent(NULL),
 _vectorSet(vectorSet),
-_parent(parent),
 _id(id),
 _nodeSector(nodeSector),
-_minimumSector(minimumSector),
 _clustersCount(clustersCount),
 _featuresCount(featuresCount),
 _childrenIDs(childrenIDs),
 _verbose(verbose),
-_wasVisible(false),
 _loadedFeatures(false),
 _loadingFeatures(false),
 _children(children),
 _childrenSize(children == NULL ? 0 : children->size()),
 _loadingChildren(false),
-_wasBigEnough(false),
+_isBeingRendered(false),
 _boundingVolume(NULL),
 _featuresRequestID(-1),
 _childrenRequestID(-1),
@@ -259,15 +270,36 @@ _downloader(NULL),
 _clusters(NULL),
 _features(NULL),
 _clusterMarksCount(0),
-_featureMarksCount(0)
+_featureMarksCount(0),
+_childrenTask(NULL),
+_featuresTask(NULL)
 {
-  if (_parent != NULL) {
-    _parent->_retain();
+  setChildren(children);
+}
+
+void VectorStreamingRenderer::Node::setChildren(std::vector<Node*>* children) {
+  _loadingChildren = false;
+
+  if ((children == NULL) && (_children != NULL)) {
+    return;
   }
-  if (_children != NULL) {
-    for (size_t i = 0; i < _children->size(); i++) {
-      Node* child = _children->at(i);
-      child->setParent(this);
+
+  if (children != _children) {
+    if (_children != NULL) {
+      for (size_t i = 0; i < _childrenSize; i++) {
+        Node* child = _children->at(i);
+        child->_release();
+      }
+      delete _children;
+    }
+
+    _children = children;
+    _childrenSize = (children == NULL) ? 0 : _children->size();
+    if (_children != NULL) {
+      for (size_t i = 0; i < _childrenSize; i++) {
+        Node* child = _children->at(i);
+        child->setParent(this);
+      }
     }
   }
 }
@@ -295,7 +327,6 @@ VectorStreamingRenderer::Node::~Node() {
   }
 
   delete _nodeSector;
-  delete _minimumSector;
   delete _boundingVolume;
 
   if (_parent != NULL) {
@@ -308,11 +339,7 @@ VectorStreamingRenderer::Node::~Node() {
 }
 
 void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children) {
-  if (children != NULL) {
-    _children = children;
-    _loadingChildren = false;
-    _childrenSize = _children->size();
-  }
+  setChildren(children);
 }
 
 void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* clusters,
@@ -324,11 +351,13 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
 
   parsedChildren(children);
 
-  if (features != NULL) {
-    delete _features;
-    _features = features;
+  delete _features;
+  _featureMarksCount = 0;
 
+  if (features != NULL) {
+    _features = features;
     _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
+
     if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
       ILogger::instance()->logInfo("\"%s\": Created %ld feature-marks",
@@ -341,21 +370,20 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
                                  _featureMarksCount);
 #endif
     }
-
-    //  Delete _features???
     delete _features;
     _features = NULL;
   }
 
-  if (clusters != NULL) {
-    if (_clusters != NULL) {
-      for (size_t i = 0; i < _clusters->size(); i++) {
-        Cluster* cluster = _clusters->at(i);
-        delete cluster;
-      }
-      delete _clusters;
+  if (_clusters != NULL) {
+    for (size_t i = 0; i < _clusters->size(); i++) {
+      Cluster* cluster = _clusters->at(i);
+      delete cluster;
     }
+    delete _clusters;
+    _clusterMarksCount = 0;
+  }
 
+  if (clusters != NULL) {
     _clusters = clusters;
     createClusterMarks();
   }
@@ -385,11 +413,6 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 
 #ifdef C_CODE
     const Vector3D c[5] = {
-//      planet->toCartesian( _minimumSector->getNE()     ),
-//      planet->toCartesian( _minimumSector->getNW()     ),
-//      planet->toCartesian( _minimumSector->getSE()     ),
-//      planet->toCartesian( _minimumSector->getSW()     ),
-//      planet->toCartesian( _minimumSector->getCenter() )
       planet->toCartesian( _nodeSector->getNE()     ),
       planet->toCartesian( _nodeSector->getNW()     ),
       planet->toCartesian( _nodeSector->getSE()     ),
@@ -401,11 +424,6 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
 #endif
 #ifdef JAVA_CODE
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-//    points.add( planet.toCartesian( _minimumSector.getNE()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getNW()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getSE()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getSW()     ) );
-//    points.add( planet.toCartesian( _minimumSector.getCenter() ) );
     points.add( planet.toCartesian( _nodeSector.getNE()     ) );
     points.add( planet.toCartesian( _nodeSector.getNW()     ) );
     points.add( planet.toCartesian( _nodeSector.getSE()     ) );
@@ -478,7 +496,6 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
   //  }
 
   _downloader = rc->getDownloader();
-
   _childrenRequestID = _downloader->requestBuffer(_vectorSet->getNodeChildrenURL(_id, _childrenIDs),
                                                   _vectorSet->getDownloadPriority(),
                                                   _vectorSet->getTimeToCache(),
@@ -493,11 +510,22 @@ void VectorStreamingRenderer::Node::unloadChildren() {
   if (_children != NULL) {
     for (size_t i = 0; i < _childrenSize; i++) {
       Node* child = _children->at(i);
+      child->unload();
       child->_release();
     }
+
     delete _children;
     _children = NULL;
     _childrenSize = 0;
+  }
+}
+
+void VectorStreamingRenderer::Node::cancelTasks() {
+  if (_featuresTask != NULL) {
+    _featuresTask->cancel();
+  }
+  if (_childrenTask != NULL) {
+    _childrenTask->cancel();
   }
 }
 
@@ -552,10 +580,10 @@ void VectorStreamingRenderer::Node::removeMarks() {
 
 bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
                                               const Frustum* frustumInModelCoordinates) {
-  //  if ((_sector->_deltaLatitude._degrees  > 80) ||
-  //      (_sector->_deltaLongitude._degrees > 80)) {
-  //    return true;
-  //  }
+  if ((_nodeSector->_deltaLatitude._degrees  > 80) ||
+      (_nodeSector->_deltaLongitude._degrees > 80)) {
+    return true;
+  }
 
   return getBoundingVolume(rc)->touchesFrustum(frustumInModelCoordinates);
 }
@@ -567,11 +595,12 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
   }
 
   const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
-  return (projectedArea > 350000);
+  //return (projectedArea > 350000);
+  return (projectedArea > 1500000);
 }
 
 void VectorStreamingRenderer::Node::unload() {
-  removeMarks();
+  cancelTasks();
 
   if (_loadingFeatures) {
     cancelLoadFeatures();
@@ -588,13 +617,14 @@ void VectorStreamingRenderer::Node::unload() {
     _loadedFeatures = false;
   }
 
-  if (_children != NULL) {
-    unloadChildren();
+  unloadChildren();
+
+  if (_parent != NULL) {
+    _parent->childStopRendered();
   }
+
+  removeMarks();
 }
-
-
-
 
 void VectorStreamingRenderer::Node::childRendered() {
   if (_clusters != NULL) {
@@ -626,6 +656,15 @@ void VectorStreamingRenderer::Node::childStopRendered() {
     if (_clusters->size() > 0) {
       if (_clusterMarksCount <= 0) {
         createClusterMarks();
+        //Checking to ensure no children marks are drawn.
+        if (_children != NULL && _children->size() > 0) {
+          for (int i=0; i<_children->size(); i++) {
+            Node *child = _children->at(i);
+            if (child->_featureMarksCount > 0) {
+              child->unload();
+            }
+          }
+        }
       }
     }
   }
@@ -641,10 +680,13 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
   // #warning Show Bounding Volume
   // getBoundingVolume(rc)->render(rc, glState, Color::red());
 
+  bool wasRendered = false;
+
   const bool visible = isVisible(rc, frustumInModelCoordinates);
   if (visible) {
     const bool bigEnough = isBigEnough(rc);
     if (bigEnough) {
+      wasRendered = true;
       if (_loadedFeatures) {
         renderedCount += _featureMarksCount + _clusterMarksCount;
         if (_parent != NULL) {
@@ -673,29 +715,15 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
           loadFeatures(rc);
         }
       }
+    }
+  }
 
-    }
-    else {
-      if (_wasBigEnough) {
-        unload();
-        if (_parent != NULL) {
-          //_parent->childUnloaded();
-          _parent->childStopRendered();
-        }
-      }
-    }
-    _wasBigEnough = bigEnough;
-  }
-  else {
-    if (_wasVisible) {
+  if (_isBeingRendered != wasRendered) {
+    if (_isBeingRendered) {
       unload();
-      if (_parent != NULL) {
-        //_parent->childUnloaded();
-        _parent->childStopRendered();
-      }
     }
+    _isBeingRendered = wasRendered;
   }
-  _wasVisible = visible;
 
   return renderedCount;
 }
@@ -717,13 +745,11 @@ Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArr
   return new Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
 }
 
-VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(Node*             parent,
-                                                                                const JSONObject* json,
+VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json,
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
   const std::string id            = json->getAsString("id")->value();
   Sector*           nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-  Sector*           minimumSector = GEOJSONUtils::parseSector( json->getAsArray("minimumSector") );
   int               clustersCount = (int) json->getAsNumber("clustersCount")->value();
   int               featuresCount = (int) json->getAsNumber("featuresCount")->value();
 
@@ -738,8 +764,7 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
     else {
       const JSONObject* jsonChild = childrenJSON->getAsObject(i);
       if (jsonChild != NULL) {
-        Node* child = parseNode(NULL, // parent will set in the Node constructor
-                                jsonChild,
+        Node* child = parseNode(jsonChild,
                                 vectorSet,
                                 verbose);
         if (child != NULL) {
@@ -753,10 +778,8 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
   }
 
   return new Node(vectorSet,
-                  parent,
                   id,
                   nodeSector,
-                  minimumSector,
                   clustersCount,
                   featuresCount,
                   childrenIDs,
@@ -831,8 +854,7 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
       _rootNodes = new std::vector<Node*>();
       for (size_t i = 0; i < rootNodesJSON->size(); i++) {
-        Node* node = GEOJSONUtils::parseNode(NULL,
-                                             rootNodesJSON->getAsObject(i),
+        Node* node = GEOJSONUtils::parseNode(rootNodesJSON->getAsObject(i),
                                              _vectorSet,
                                              _verbose);
         _rootNodes->push_back(node);
@@ -1247,7 +1269,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
 
     updateGLState(camera);
     _glState->setParent(glState);
-
+    
     for (size_t i = 0; i < _vectorSetsSize; i++) {
       VectorSet* vectorSector = _vectorSets[i];
       vectorSector->render(rc,

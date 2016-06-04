@@ -150,7 +150,7 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    GL gl = rc.getGL();
+    //GL* gl = rc->getGL();
     createGLState();
   
     //gl->clearScreen(*_backgroundColor);
