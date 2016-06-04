@@ -17,7 +17,7 @@
 
 
 Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
-  size_t size = points.size();
+  const size_t size = points.size();
 
   if (size < 2) {
     return NULL;
