@@ -165,6 +165,13 @@ public:
                     _x * other._y - _y * other._x);
   }
   
+  double crossDot(const Vector3D& other1,
+                  const Vector3D& other2) const {
+    return (_y * other1._z - _z * other1._y) * other2._x +
+            (_z * other1._x - _x * other1._z) * other2._y +
+            (_x * other1._y - _y * other1._x) * other2._z;
+  }
+  
   Angle angleBetween(const Vector3D& other) const;
   double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;

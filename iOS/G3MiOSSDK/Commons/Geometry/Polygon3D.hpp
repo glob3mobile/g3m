@@ -20,6 +20,14 @@ private:
   // temp vector to use in internal computation, avoiding creating many new objects in java
   //mutable MutableVector3D _bb, _p;
   
+  bool intersectionBetweenCoplanarLines(const Vector3D& point1,
+                                        const Vector3D& vector1,
+                                        const Vector3D& point2,
+                                        const Vector3D& vector2,
+                                        double& smin,
+                                        double& smax) const;
+
+  
 
 public:
 

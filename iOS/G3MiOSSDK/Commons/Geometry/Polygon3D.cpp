@@ -8,6 +8,50 @@
 #include "Polygon3D.hpp"
 #include "Vector3D.hpp"
 
+bool Polygon3D::intersectionBetweenCoplanarLines(const Vector3D& point1,
+                                                 const Vector3D& vector1,
+                                                 const Vector3D& point2,
+                                                 const Vector3D& vector2,
+                                                 double& smin,
+                                                 double& smax) const {
+  
+  // this function could be called 6x6x2x4=288 times for each call to
+  // Frustum::touchesWithOrientedBox, so it must be optimized very much
+  // using profiling with Instruments
+  
+  double t, s, normP2;
+  
+  //Vector3D bb = point2.sub(point1);
+  double bbx = point2._x - point1._x;
+  double bby = point2._y - point1._y;
+  double bbz = point2._z - point1._z;
+  
+  //Vector3D p = vector1.cross(vector2);
+  double px = vector1._y * vector2._z - vector1._z * vector2._y;
+  double py = vector1._z * vector2._x - vector1._x * vector2._z;
+  double pz = vector1._x * vector2._y - vector1._y * vector2._x;
+  
+  //t = bb.crossDot(vector2, p);
+  t = (bby * vector2._z - bbz * vector2._y) * px +
+  (bbz * vector2._x - bbx * vector2._z) * py +
+  (bbx * vector2._y - bby * vector2._x) * pz;
+  
+  if (t<0) return false;
+  
+  normP2 = px * px + py * py + pz * pz;
+  if (t>normP2) return false;
+  
+  //s = Vector3D(bbx,bby,bbz).crossDot(vector1, Vector3D(px,py,pz)) / normP2;
+  s = (bby * vector1._z - bbz * vector1._y) * px +
+  (bbz * vector1._x - bbx * vector1._z) * py +
+  (bbx * vector1._y - bby * vector1._x) * pz;
+  s /= normP2;
+  
+  if (s < smin) smin = s;
+  if (s > smax) smax = s;
+  return true;
+}
+
 
 bool Polygon3D::intersectionWithCoplanarLine(const Vector3D& point,
                                              const Vector3D& vector,
@@ -23,64 +67,20 @@ bool Polygon3D::intersectionWithCoplanarLine(const Vector3D& point,
   // many temp Vector3D objects creating here
   
   bool valid = false;
-  smin = 1e10;
-  smax = -1e10;
-  double t, s, normP2;
- 
-  {
-    // test edge (_v1, _v2)
-    Vector3D bb = point.sub(_v1);
-    Vector3D p = _v2.sub(_v1).cross(vector);
-    normP2 = p.squaredLength();
-    t = bb.cross(vector).dot(p) / normP2;
-    if (t>0 && t<1) {
-      valid = true;
-      s = bb.cross(_v2.sub(_v1)).dot(p) / normP2;
-      if (s < smin) smin = s;
-      if (s > smax) smax = s;
-    }
-  }
+  smin = __DBL_MAX__;
+  smax = __DBL_MIN__;
   
-  {
-    // test edge (_v2, _v3)
-    Vector3D bb = point.sub(_v2);
-    Vector3D p = _v3.sub(_v2).cross(vector);
-    normP2 = p.squaredLength();
-    t = bb.cross(vector).dot(p) / normP2;
-    if (t>0 && t<1) {
-      valid = true;
-      s = bb.cross(_v3.sub(_v2)).dot(p) / normP2;
-      if (s < smin) smin = s;
-      if (s > smax) smax = s;
-    }
+  if (intersectionBetweenCoplanarLines(_v1, _v2.sub(_v1), point, vector, smin, smax)) {
+    valid = true;
   }
-  
-  {
-    // test edge (_v3, _v4)
-    Vector3D bb = point.sub(_v3);
-    Vector3D p = _v4.sub(_v3).cross(vector);
-    normP2 = p.squaredLength();
-    t = bb.cross(vector).dot(p) / normP2;
-    if (t>0 && t<1) {
-      valid = true;
-      s = bb.cross(_v4.sub(_v3)).dot(p) / normP2;
-      if (s < smin) smin = s;
-      if (s > smax) smax = s;
-    }
+  if (intersectionBetweenCoplanarLines(_v2, _v3.sub(_v2), point, vector, smin, smax)) {
+    valid = true;
   }
-  
-  {
-    // test edge (_v4, _v1)
-    Vector3D bb = point.sub(_v4);
-    Vector3D p = _v1.sub(_v4).cross(vector);
-    normP2 = p.squaredLength();
-    t = bb.cross(vector).dot(p) / normP2;
-    if (t>0 && t<1) {
-      valid = true;
-      s = bb.cross(_v1.sub(_v4)).dot(p) / normP2;
-      if (s < smin) smin = s;
-      if (s > smax) smax = s;
-    }
+  if (intersectionBetweenCoplanarLines(_v3, _v4.sub(_v3), point, vector, smin, smax)) {
+    valid = true;
+  }
+  if (intersectionBetweenCoplanarLines(_v4, _v1.sub(_v4), point, vector, smin, smax)) {
+    valid = true;
   }
   
   return valid;
