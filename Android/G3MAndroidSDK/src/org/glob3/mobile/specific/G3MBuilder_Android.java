@@ -19,6 +19,8 @@ public class G3MBuilder_Android
 
    private final G3MWidget_Android _nativeWidget;
 
+   private Long _storageExternalThreshold;
+
    public G3MBuilder_Android(final Context context, final boolean noFPSReduction) {
       super();
 
@@ -76,7 +78,7 @@ public class G3MBuilder_Android
 
    @Override
    protected IStorage createDefaultStorage() {
-      return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
+      return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext(), _storageExternalThreshold);
    }
 
 
@@ -89,5 +91,9 @@ public class G3MBuilder_Android
                new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext()), //
                getStorage(), //
                saveInBackground);
+   }
+
+   public void setStorageExternalThreshold(long storageExternalThreshold) {
+      _storageExternalThreshold = storageExternalThreshold;
    }
 }

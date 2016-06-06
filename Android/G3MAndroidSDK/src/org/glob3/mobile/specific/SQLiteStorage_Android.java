@@ -212,13 +212,24 @@ public final class SQLiteStorage_Android
         }
     }
 
+   private String externalFilename( String table, String name ) {
+       StringBuilder str = new StringBuilder();
+       str.append(table + "_");
+
+       byte[] ba = name.getBytes(Charset.forName("UTF-8"));
+       for (byte b : ba) {
+           str.append(String.format("%02x", b));
+       }
+       str.append(".raw_cache");
+       return str.toString();
+   }
+
    private synchronized void rawSave(final String table,
                                      final String name,
                                      final byte[] contents,
                                      final TimeInterval timeToExpires) {
 
-      final boolean external = contents.length >= _dbExternalThreshold && _dbExternalThreshold<Long.MAX_VALUE;
-      final String externalFileName = external ? table + "_" + name + ".raw_cache" : null;
+      final boolean external = _dbExternalThreshold!=null && contents.length >= _dbExternalThreshold;
 
       final ContentValues values = new ContentValues(3);
       values.put("name", name);
@@ -232,7 +243,7 @@ public final class SQLiteStorage_Android
       }
       else {
          if (external) {
-             if (!writeFileToCacheFolder(externalFileName, contents)) {
+             if (!writeFileToCacheFolder(externalFilename(table, name), contents)) {
                  ILogger.instance().logError("SQL: Can't write external file for cache \"%s\"\n", name);
                  return;
              }
@@ -268,7 +279,9 @@ public final class SQLiteStorage_Android
           if (!expired || readExpired) {
               if (cursor.isNull(0)) {
                   // contents is null, means data should be read from file
-                  final byte[] cacheData = readFileFromCacheFolder("buffer2_" + name + ".raw_cache");
+                  final byte[] cacheData = readFileFromCacheFolder(
+                          externalFilename("buffer2", name)
+                  );
                   if (cacheData == null || cacheData.length == 0) {
                       ILogger.instance()
                               .logError("SQL: Can't read external file for cache \"%s\"\n", name);
@@ -353,7 +366,9 @@ public final class SQLiteStorage_Android
              Bitmap bitmap;
              if (cursor.isNull(0)) {
                  // contents is null, means data should be read from file
-                 final byte[] cacheData = readFileFromCacheFolder("image2_" + name + ".raw_cache");
+                 final byte[] cacheData = readFileFromCacheFolder(
+                         externalFilename("buffer2", name)
+                 );
                  if (cacheData == null || cacheData.length == 0) {
                      ILogger.instance()
                              .logError("SQL: Can't read external file for cache \"%s\"\n", name);
