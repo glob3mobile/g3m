@@ -253,8 +253,8 @@ public:
     
     _step++;
     
-//#warning REMOVE DEMOSNTRATION FOR SCREENSHOTS
-//    _step = 59;
+    //#warning REMOVE DEMOSNTRATION FOR SCREENSHOTS
+    //    _step = 59;
     
     NSString* folder = @"EIFER Resources/Solar Radiation/buildings_imp_table_0";
     
@@ -433,6 +433,11 @@ public:
                                   //Handel your yes please button action here
                                   
                                 }];
+    
+    [alert addAction:yesButton];
+    
+    
+    
     UIAlertAction* SRButton = [UIAlertAction
                                actionWithTitle:@"Show Solar Radiation Data"
                                style:UIAlertActionStyleDefault
@@ -441,7 +446,6 @@ public:
                                  [_vc loadSolarRadiationPointCloudForBuilding:building];
                                }];
     
-    [alert addAction:yesButton];
     [alert addAction:SRButton];
     
     [_vc presentViewController:alert animated:YES completion:nil];
@@ -616,10 +620,10 @@ public:
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
-  ////  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
-  //        [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-  //        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  //        [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
