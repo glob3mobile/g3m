@@ -37,7 +37,7 @@ public class URL
 
     if (iu.beginsWith(result, "https:/"))
     {
-      result = "https://" + iu.substring(result, 6);
+      result = "https://" + iu.substring(result, 7);
     }
 
     if (iu.beginsWith(result, "file:/"))
