@@ -88,6 +88,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                 cameraConstraints,
                                 cameraRenderer,
                                 mainRenderer,
+                                NULL,
                                 busyRenderer,
                                 errorRenderer,
                                 hudRenderer,

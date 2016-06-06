@@ -1648,6 +1648,7 @@ G3MWidget* MapBooOLDBuilder::create() {
                                  *cameraConstraints,
                                  createCameraRenderer(),
                                  mainRenderer,
+                                 NULL,
                                  createBusyRenderer(),
                                  createErrorRenderer(),
                                  hudRenderer,

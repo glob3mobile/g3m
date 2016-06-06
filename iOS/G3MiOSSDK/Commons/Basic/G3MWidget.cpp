@@ -39,6 +39,7 @@
 #include "IDeviceAttitude.hpp"
 #include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
+#include "IPrePostRenderTasks.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -75,6 +76,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      std::vector<ICameraConstrainer*>     cameraConstrainers,
                      CameraRenderer*                      cameraRenderer,
                      Renderer*                            mainRenderer,
+                     IPrePostRenderTasks*                 prePostRenderTasks,
                      ProtoRenderer*                       busyRenderer,
                      ErrorRenderer*                       errorRenderer,
                      Renderer*                            hudRenderer,
@@ -101,6 +103,7 @@ _planet(planet),
 _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
+_prePostTask(prePostRenderTasks),
 _busyRenderer(busyRenderer),
 _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
@@ -223,6 +226,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              std::vector<ICameraConstrainer*>     cameraConstrainers,
                              CameraRenderer*                      cameraRenderer,
                              Renderer*                            mainRenderer,
+                             IPrePostRenderTasks*                 prePostTask,
                              ProtoRenderer*                       busyRenderer,
                              ErrorRenderer*                       errorRenderer,
                              Renderer*                            hudRenderer,
@@ -247,6 +251,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        cameraConstrainers,
                        cameraRenderer,
                        mainRenderer,
+                       prePostTask,
                        busyRenderer,
                        errorRenderer,
                        hudRenderer,
@@ -573,7 +578,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       Vector3D camPos = _currentCamera->getCartesianPosition();
       Vector3D camCenter = _currentCamera->getCenter();
       Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      const double eyesSeparation = 200;// 0.03;
+      const double eyesSeparation = 0.03;
       Vector3D up = _currentCamera->getUp();
       
       const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
@@ -627,7 +632,7 @@ void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
   }
-
+  
   if (_width != width || _height != height) {
     _width = width;
     _height = height;
@@ -707,6 +712,10 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
   
+  if (_prePostTask != NULL) {
+    _prePostTask->preRenderTask();
+  }
+  
   switch (_viewMode) {
     case MONO:
       rawRenderMono(renderStateType);
@@ -760,6 +769,10 @@ void G3MWidget::render(int width, int height) {
       ILogger::instance()->logInfo("%s" , cacheStatistics.c_str());
       _lastCacheStatistics = cacheStatistics;
     }
+  }
+  
+  if (_prePostTask != NULL) {
+    _prePostTask->postRenderTask();
   }
 }
 

@@ -43,6 +43,7 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class ErrorRenderer;
 //class InfoDisplay;
+//class IPrePostRenderTasks;
 
 
 public abstract class IG3MBuilder
@@ -60,6 +61,7 @@ public abstract class IG3MBuilder
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
   private java.util.ArrayList<Renderer> _renderers;
+  private IPrePostRenderTasks _prePostTasks;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
   private java.util.ArrayList<PeriodicalTask> _periodicalTasks;
@@ -185,6 +187,10 @@ public abstract class IG3MBuilder
       _renderers = createDefaultRenderers();
     }
     return _renderers;
+  }
+  private IPrePostRenderTasks getPrePostTasks()
+  {
+    return _prePostTasks;
   }
 
   /**
@@ -415,7 +421,7 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getPrePostTasks(), getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO);
   
     g3mWidget.setUserData(getUserData());
   
@@ -853,6 +859,11 @@ public abstract class IG3MBuilder
       return;
     }
     getRenderers().add(renderer);
+  }
+
+  public final void setPrePostRenderTasks(IPrePostRenderTasks tasks)
+  {
+    _prePostTasks = tasks;
   }
 
 

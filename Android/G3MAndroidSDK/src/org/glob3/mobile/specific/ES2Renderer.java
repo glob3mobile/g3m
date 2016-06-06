@@ -60,6 +60,7 @@ public final class ES2Renderer
       _hasRendered = true;
 
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
+
       widget.render(_width, _height);
 
       if (!_widgetAndroid.getNoFPSReduction()) {
