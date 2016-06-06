@@ -37,6 +37,11 @@ public class ColorLegend
   {
      _legend = legend;
 
+    if (_legend.size() == 0)
+    {
+      return;
+    }
+
     for (int i = 0; i < _legend.size() -1; i++)
     {
       if (_legend.get(i)._value >= _legend.get(i+1)._value)
@@ -65,6 +70,10 @@ public class ColorLegend
 
     for (int i = 0; i < _legend.size(); i++)
     {
+      if (_legend.get(i)._value == value)
+      {
+        return _legend.get(i)._color;
+      }
       if (_legend.get(i)._value <= value)
       {
         inf = _legend.get(i);

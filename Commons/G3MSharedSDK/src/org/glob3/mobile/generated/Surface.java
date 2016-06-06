@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  BuildingSurface.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 24/3/16.
-//
-//
-
-//
-//  BuildingSurface.hpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 24/3/16.
-//
-//
-
-
-
-
 public class Surface
 {
 
@@ -31,6 +12,7 @@ public class Surface
   {
      _geodeticCoordinates = geodeticCoordinates;
      _maxHeight = java.lang.Double.NaN;
+    GlobalMembersSurface.numberOfWalls++;
   }
 
 
@@ -131,7 +113,7 @@ public class Surface
       for (int i = 0; i < _geodeticCoordinates.size(); i++)
       {
         Geodetic3D g = _geodeticCoordinates.get(i);
-        coor3D.add(new Vector3D(planet.toCartesian(g)));
+        coor3D.add(new Vector3D(planet.toCartesian(g._latitude, g._longitude, g._height - baseHeight)));
       }
     }
     else
@@ -140,7 +122,7 @@ public class Surface
       {
         Geodetic3D g = _geodeticCoordinates.get(i);
         double h = elevationData.getElevationAt(g._latitude, g._longitude);
-        coor3D.add(new Vector3D(planet.toCartesian(Geodetic3D.fromDegrees(g._latitude._degrees, g._longitude._degrees, h + g._height))));
+        coor3D.add(new Vector3D(planet.toCartesian(g._latitude, g._longitude, h + g._height - baseHeight)));
       }
     }
     return coor3D;

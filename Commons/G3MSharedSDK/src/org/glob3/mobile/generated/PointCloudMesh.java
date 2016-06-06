@@ -92,38 +92,32 @@ public class PointCloudMesh extends Mesh
       _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
     }
   
-    if (_colors != null)
-    {
-      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
-  
-    }
-    else
-    {
-      throw new RuntimeException("PointCloudMesh without colors")
-    }
-  
+    applyColor();
   }
 
-  protected boolean _showNormals;
-  protected Mesh _normalsMesh;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Mesh createNormalsMesh();
+//  const std::vector<IFloatBuffer*> _colorsCollection;
+  protected final void applyColor()
+  {
+    _glState.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
+  
+    ColorGLFeature c = new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
+    _glState.addGLFeature(c, false);
+  }
+
 
 
   public PointCloudMesh(boolean owner, Vector3D center, IFloatBuffer vertices, float pointSize, IFloatBuffer colors, boolean depthTest, Color borderColor)
   {
      _owner = owner;
      _vertices = vertices;
-     _colors = colors;
      _boundingVolume = null;
      _center = new Vector3D(center);
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _pointSize = pointSize;
      _depthTest = depthTest;
      _glState = new GLState();
-     _normalsMesh = null;
-     _showNormals = false;
      _borderColor = new Color(borderColor);
+     _colors = colors;
     createGLState();
   }
 
@@ -135,6 +129,11 @@ public class PointCloudMesh extends Mesh
          _vertices.dispose();
       if (_colors != null)
          _colors.dispose();
+  
+  //    for (size_t i = 0; i < _colorsCollection.size(); i++){
+  //      delete _colorsCollection[i];
+  //    }
+  
     }
   
     if (_boundingVolume != null)
@@ -143,9 +142,6 @@ public class PointCloudMesh extends Mesh
        _translationMatrix.dispose();
   
     _glState._release();
-  
-    if (_normalsMesh != null)
-       _normalsMesh.dispose();
   
     super.dispose();
   }
@@ -184,14 +180,34 @@ public class PointCloudMesh extends Mesh
     gl.drawArrays(GLPrimitive.points(), 0, (int)_vertices.size() / 3, _glState, rc.getGPUProgramManager());
   }
 
-  public final void showNormals(boolean v)
+//  IFloatBuffer* getColorsFloatBuffer() const{
+//    return (IFloatBuffer*)_colorsCollection[0];
+//  }
+
+//  void changeToColors(int i);
+
+  public final void showNormals(boolean v) //NO NORMALS
   {
-    _showNormals = v;
   }
 
-  public final IFloatBuffer getColorsFloatBuffer()
-  {
-    return (IFloatBuffer)_colors;
-  }
+//  int getNumberOfColors() const{
+//    return (int)_colorsCollection.size();
+//  }
 
+  public final void changeToColors(IFloatBuffer colors)
+  {
+    if (_colors == colors)
+    {
+      return;
+    }
+  
+    if (_owner)
+    {
+      if (_colors != null)
+         _colors.dispose();
+      _colors = colors;
+    }
+  
+    applyColor();
+  }
 }

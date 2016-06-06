@@ -58,7 +58,7 @@ public class Polygon2D
   private boolean isConcave()
   {
     final double a0 = angleInRadiansOfCorner(0);
-    for (int i = 1; i < (_nVertices - 1); i++)
+    for (int i = 1; i < ((int)_nVertices - 1); i++)
     {
       final double ai = angleInRadiansOfCorner(i);
       if ((ai * a0) < 0)
@@ -213,7 +213,7 @@ public class Polygon2D
     final Vector2D a = remainingCorners.get(i);
     final Vector2D b = remainingCorners.get(j);
 
-    for (int k = 0; k < (remainingCorners.size() - 2); k++)
+    for (int k = 0; k < ((int)remainingCorners.size() - 2); k++)
     {
 
       final int kadd1 = (k + 1) % (remainingCorners.size() - 1);
@@ -245,7 +245,7 @@ public class Polygon2D
     final Vector2D cornerB = remainingCorners.get(i2);
     final Vector2D cornerC = remainingCorners.get(i3);
 
-    for (int j = 0; j < remainingCorners.size(); j++)
+    for (int j = 0; j < (int)remainingCorners.size(); j++)
     {
       if ((j != i1) && (j != i2) && (j != i3))
       {

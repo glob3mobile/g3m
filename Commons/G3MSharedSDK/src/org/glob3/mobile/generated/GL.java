@@ -187,6 +187,10 @@ public class GL
 
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
+     return uploadTexture(image, format, generateMipmap, GLTextureParameterValue.clampToEdge());
+  }
+  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap, int wrapping)
+  {
   
     //  if (_verbose) {
     //    ILogger::instance()->logInfo("GL::uploadTexture()");
@@ -216,9 +220,10 @@ public class GL
   
       _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
   
-      final int clampToEdge = GLTextureParameterValue.clampToEdge();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
+     // const int clampToEdge = GLTextureParameterValue::clampToEdge();
+  //    const int clampToEdge = GLTextureParameterValue::repeat();
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), wrapping);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), wrapping);
   
       _nativeGL.texImage2D(image, format);
   
@@ -230,7 +235,7 @@ public class GL
         }
         else
         {
-          ILogger.instance().logError("Can't generate bitmap. Texture dimensions are not power of two.");
+          ILogger.instance().logError("Can't generate Mipmap. Texture dimensions are not power of two.");
         }
       }
     }

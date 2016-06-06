@@ -1,4 +1,7 @@
 package org.glob3.mobile.generated; 
+///#import <mach/mach.h>
+
+
 public class CityGMLParser_BufferDownloadListener extends IBufferDownloadListener
 {
   private CityGMLListener _listener;
@@ -20,9 +23,36 @@ public class CityGMLParser_BufferDownloadListener extends IBufferDownloadListene
        _deleteListener = deleteListener;
     }
 
+    //    vm_size_t report_memory(void) {
+    //      struct task_basic_info info;
+    //      mach_msg_type_number_t size = sizeof(info);
+    //      kern_return_t kerr = task_info(mach_task_self(),
+    //                                     TASK_BASIC_INFO,
+    //                                     (task_info_t)&info,
+    //                                     &size);
+    //      if( kerr == KERN_SUCCESS ) {
+    //        //    printf("Memory in use (in bytes): %lu", info.resident_size);
+    //        return info.resident_size;
+    //      } else {
+    //        //    printf("Error with task_info(): %s", mach_error_string(kerr));
+    //        return 0;
+    //      }
+    //    }
+
     public void runInBackground(G3MContext context)
     {
-      _buildings = CityGMLParser.parseLOD2Buildings2(_s);
+
+      //      vm_size_t startM = report_memory();
+      _buildings = CityGMLParser.parseLOD2Buildings2(_s); //SAX
+
+      //      IXMLNode* xml = IFactory::instance()->createXMLNodeFromXML(_s);
+      //      _buildings = CityGMLParser::parseLOD2Buildings2(xml); //DOM
+      //      delete xml;
+
+
+      //      vm_size_t finalM = report_memory();
+      //      printf("MEMORY USAGE DOM PARSING OF %lu buildings: %lu\n", _buildings.size(), (finalM - startM));
+
     }
 
     public void onPostExecute(G3MContext context)

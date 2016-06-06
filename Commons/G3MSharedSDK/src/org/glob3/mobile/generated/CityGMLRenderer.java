@@ -17,13 +17,16 @@ public class CityGMLRenderer extends DefaultRenderer
   {
     private CityGMLRenderer _vc;
     private java.util.ArrayList<CityGMLBuilding> _buildings = new java.util.ArrayList<CityGMLBuilding>();
+    private java.util.ArrayList<Mesh> _buildingMeshes = new java.util.ArrayList<Mesh>();
 
     private CityGMLRendererListener _listener;
-    private boolean _autoDelete;
+    private final boolean _autoDelete;
 
     private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
     private java.util.ArrayList<GEORasterSymbol> _geoSymbol = new java.util.ArrayList<GEORasterSymbol>();
     private Mesh _mesh;
+
+    private final boolean _fixOnGround;
 
 
 
@@ -56,13 +59,14 @@ public class CityGMLRenderer extends DefaultRenderer
       return null;
     }
 
-    public TessellationTask(CityGMLRenderer vc, java.util.ArrayList<CityGMLBuilding> buildings, CityGMLRendererListener listener, boolean autoDelete)
+    public TessellationTask(CityGMLRenderer vc, java.util.ArrayList<CityGMLBuilding> buildings, boolean fixOnGround, CityGMLRendererListener listener, boolean autoDelete)
     {
        _vc = vc;
        _buildings = buildings;
        _listener = listener;
        _autoDelete = autoDelete;
        _mesh = null;
+       _fixOnGround = fixOnGround;
     }
 
 
@@ -93,17 +97,35 @@ public class CityGMLRenderer extends DefaultRenderer
       //Checking walls visibility
       //      int n = CityGMLBuilding::checkWallsVisibility(_buildings);
       //      ILogger::instance()->logInfo("Removed %d invisible walls from the model.", n);
-      final boolean checkSurfacesVisibility = true;
+
 
       //Creating mesh model
-      _mesh = CityGMLBuildingTessellator.createMesh(_buildings, *_vc._context.getPlanet(), false, checkSurfacesVisibility, null, _vc._elevationData);
+            final boolean checkSurfacesVisibility = true;
+            _mesh = CityGMLBuildingTessellator.createMesh(_buildings, *_vc._context.getPlanet(), _fixOnGround, checkSurfacesVisibility, null, _vc._elevationData);
+      _buildingMeshes.add(_mesh);
+
+//      for (size_t i = 0; i < _buildings.size(); i++) {
+//        std::vector<CityGMLBuilding*> bs;
+//        bs.push_back(_buildings[i]);
+//        _mesh = CityGMLBuildingTessellator::createMesh(bs,
+//                                                       *_vc->_context->getPlanet(),
+//                                                       _fixOnGround, checkSurfacesVisibility, NULL,
+//                                                       _vc->_elevationData);
+//        _buildingMeshes.push_back(_mesh);
+//      }
+
     }
 
     public void onPostExecute(G3MContext context)
     {
 
       //Including elements must be done in the rendering thread
-      _vc._meshRenderer.addMesh(_mesh);
+      //      _vc->_meshRenderer->addMesh(_mesh);
+
+      for (int i = 0; i < _buildingMeshes.size(); i++)
+      {
+        _vc._meshRenderer.addMesh(_buildingMeshes.get(i));
+      }
 
       //Uncomment for seeing spheres
       //      for (size_t i = 0; i < _buildings.size(); i++) {
@@ -160,10 +182,10 @@ public class CityGMLRenderer extends DefaultRenderer
     return _buildings;
   }
 
-  public final void addBuildingsFromURL(URL url, CityGMLRendererListener listener, boolean autoDelete)
+  public final void addBuildingsFromURL(URL url, boolean fixBuildingsOnGround, CityGMLRendererListener listener, boolean autoDelete)
   {
   
-    CityGMLParser.parseFromURL(url, new CityGMLParsingListener(this, listener, autoDelete), true);
+    CityGMLParser.parseFromURL(url, new CityGMLParsingListener(this, fixBuildingsOnGround, listener, autoDelete), true);
   
   }
 
@@ -174,7 +196,7 @@ public class CityGMLRenderer extends DefaultRenderer
     _context.getDownloader().requestBuffer(url, 1000, TimeInterval.forever(), true, new BuildingDataBDL(_buildings, _context), true);
   }
 
-  public final void addBuildings(java.util.ArrayList<CityGMLBuilding> buildings, CityGMLRendererListener listener, boolean autoDelete)
+  public final void addBuildings(java.util.ArrayList<CityGMLBuilding> buildings, boolean fixOnGround, CityGMLRendererListener listener, boolean autoDelete)
   {
   
     java.util.ArrayList<CityGMLBuilding> notRepeatedBuildings = new java.util.ArrayList<CityGMLBuilding>();
@@ -208,7 +230,7 @@ public class CityGMLRenderer extends DefaultRenderer
     boolean createCityMeshAndMarks = true;
     if (createCityMeshAndMarks)
     {
-      _context.getThreadUtils().invokeAsyncTask(new TessellationTask(this, notRepeatedBuildings, listener, autoDelete), true);
+      _context.getThreadUtils().invokeAsyncTask(new TessellationTask(this, notRepeatedBuildings, fixOnGround, listener, autoDelete), true);
     }
   }
 
@@ -243,13 +265,53 @@ public class CityGMLRenderer extends DefaultRenderer
 
   public final void colorBuildings(CityGMLBuildingColorProvider cp)
   {
-
     for (int i = 0; i < _buildings.size(); i++)
     {
       CityGMLBuilding b = _buildings.get(i);
       Color c = cp.getColor(b);
       CityGMLBuildingTessellator.changeColorOfBuildingInBoundedMesh(b, c);
     }
+  }
+
+  public final java.util.ArrayList<Double> getAllValuesOfProperty(String name)
+  {
+    java.util.ArrayList<Double> v = new java.util.ArrayList<Double>();
+    for (int i = 0; i < _buildings.size(); i++)
+    {
+      double value = _buildings.get(i).getNumericProperty(name);
+      if (!(value != value))
+      {
+        v.add(value);
+      }
+    }
+    return v;
+  }
+
+  public final CityGMLBuilding getBuildingWithName(String name)
+  {
+    for (int i = 0; i < _buildings.size(); i++)
+    {
+      if (_buildings.get(i)._name.equals(name))
+      {
+        return _buildings.get(i);
+      }
+    }
+    return null;
+  }
+
+  public final void colorBuildingsWithColorBrewer(String propertyName, String colorScheme, int nClasses)
+  {
+
+    java.util.ArrayList<Double> vs = getAllValuesOfProperty(propertyName);
+
+    ColorLegend cl = ColorLegendHelper.createColorBrewLegendWithNaturalBreaks(vs, colorScheme, nClasses);
+
+    BuildingDataColorProvider colorProvider = new BuildingDataColorProvider(propertyName, cl);
+
+    colorBuildings(colorProvider);
+
+    if (colorProvider != null)
+       colorProvider.dispose();
 
   }
 
@@ -303,11 +365,10 @@ public class CityGMLRenderer extends DefaultRenderer
       for (int i = 0; i < _buildings.size(); i++)
       {
         final Sphere s = CityGMLBuildingTessellator.getSphereOfBuilding(_buildings.get(i));
+  
         if (s != null)
         {
-  
           final java.util.ArrayList<Double> dists = s.intersectionsDistances(origin._x, origin._y, origin._z, ray._x, ray._y, ray._z);
-  
           for (int j = 0; j < dists.size(); j++)
           {
             if (dists.get(j) < minDis)

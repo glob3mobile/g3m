@@ -31,16 +31,18 @@ public class TextureSpec
   private final int _width;
   private final int _height;
   private final boolean _generateMipmap;
+  private final int _wrapping;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TextureSpec operator =(TextureSpec that);
 
-  public TextureSpec(String id, int width, int height, boolean generateMipmap)
+  public TextureSpec(String id, int width, int height, boolean generateMipmap, int wrapping)
   {
      _id = id;
      _width = width;
      _height = height;
      _generateMipmap = generateMipmap;
+     _wrapping = wrapping;
 
   }
 
@@ -50,6 +52,7 @@ public class TextureSpec
      _width = 0;
      _height = 0;
      _generateMipmap = false;
+     _wrapping = GLTextureParameterValue.clampToEdge();
   }
 
   public TextureSpec(TextureSpec that)
@@ -58,6 +61,7 @@ public class TextureSpec
      _width = that._width;
      _height = that._height;
      _generateMipmap = that._generateMipmap;
+     _wrapping = that._wrapping;
 
   }
 
@@ -76,9 +80,14 @@ public class TextureSpec
     return _height;
   }
 
+  public final int getWrapping()
+  {
+    return _wrapping;
+  }
+
   public final boolean equalsTo(TextureSpec that)
   {
-    return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height));
+    return ((_id.compareTo(that._id) == 0) && (_width == that._width) && (_height == that._height) && (_wrapping == that._wrapping));
   }
 
   public final boolean lowerThan(TextureSpec that)

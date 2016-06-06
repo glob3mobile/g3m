@@ -20,8 +20,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#import "GEOVectorLayer.hpp"
 
 //class Mesh;
 

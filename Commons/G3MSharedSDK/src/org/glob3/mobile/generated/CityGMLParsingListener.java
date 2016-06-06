@@ -6,12 +6,14 @@ public class CityGMLParsingListener extends CityGMLListener
   private final IThreadUtils _threadUtils;
   private CityGMLRendererListener _listener;
   private boolean _autoDelete;
+  private final boolean _fixBuidlingsOnGround;
 
-  public CityGMLParsingListener(CityGMLRenderer demo, CityGMLRendererListener listener, boolean autoDelete)
+  public CityGMLParsingListener(CityGMLRenderer demo, boolean fixBuidlingsOnGround, CityGMLRendererListener listener, boolean autoDelete)
   {
      _demo = demo;
      _listener = listener;
      _autoDelete = autoDelete;
+     _fixBuidlingsOnGround = fixBuidlingsOnGround;
 
   }
 
@@ -25,7 +27,7 @@ public class CityGMLParsingListener extends CityGMLListener
 
   public void onBuildingsCreated(java.util.ArrayList<CityGMLBuilding> buildings)
   {
-    _demo.addBuildings(buildings, _listener, _autoDelete);
+    _demo.addBuildings(buildings, _fixBuidlingsOnGround, _listener, _autoDelete);
   }
 
   public void onError()

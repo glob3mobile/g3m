@@ -1,22 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Polygon3D.cpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 24/3/16.
-//
-//
-
-//
-//  Polygon3D.hpp
-//  G3MiOSSDK
-//
-//  Created by Jose Miguel SN on 24/3/16.
-//
-//
-
-
-
 public class Polygon3D
 {
 
@@ -60,6 +42,11 @@ public class Polygon3D
   public final java.util.ArrayList<Vector2D> createCoordinates2D()
   {
   
+    if (_coor3D.size() == 5)
+    {
+      GlobalMembersPolygon3D.numberOfP3D_4++;
+    }
+  
     final Vector3D z = Vector3D.upZ();
     final Vector3D rotationAxis = z.cross(_normal);
     java.util.ArrayList<Vector2D> coor2D = new java.util.ArrayList<Vector2D>();
@@ -101,6 +88,10 @@ public class Polygon3D
 
   public final short addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D fbb, FloatBufferBuilderFromCartesian3D normals, ShortBufferBuilder indexes, short firstIndex)
   {
+  
+  
+    GlobalMembersPolygon3D.numberOfP3D++;
+  
     java.util.ArrayList<Short> indexes2D = _polygon2D.calculateTrianglesIndexesByEarClipping();
     if (indexes2D.size() > 3)
     {

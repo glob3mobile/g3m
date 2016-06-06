@@ -61,8 +61,12 @@ public class TexturesHandler
 
   public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap)
   {
+     return getTextureIDReference(image, format, name, generateMipmap, GLTextureParameterValue.clampToEdge());
+  }
+  public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap, int wrapping)
+  {
   
-    final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap);
+    final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap, wrapping);
   
     final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
     if (previousId != null)
@@ -71,7 +75,7 @@ public class TexturesHandler
     }
   
     TextureHolder holder = new TextureHolder(textureSpec);
-    holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.generateMipmap());
+    holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.generateMipmap(), textureSpec.getWrapping());
   
   
     if (_verbose)
