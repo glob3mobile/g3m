@@ -35,10 +35,10 @@ private:
 
     if (iu->beginsWith(result, "https:/")) {
 #ifdef C_CODE
-      result = "https://" + iu->substring(result, 6);
+      result = "https://" + iu->substring(result, 7);
 #endif
 #ifdef JAVA_CODE
-      result = "https://" + iu.substring(result, 6);
+      result = "https://" + iu.substring(result, 7);
 #endif
     }
 
