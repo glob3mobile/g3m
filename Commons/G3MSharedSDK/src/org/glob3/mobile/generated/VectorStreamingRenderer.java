@@ -685,37 +685,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    private void unload()
-    {
-      cancelTasks();
-    
-      if (_loadingFeatures)
-      {
-        cancelLoadFeatures();
-        _loadingFeatures = false;
-      }
-    
-      if (_loadingChildren)
-      {
-        _loadingChildren = true;
-        cancelLoadChildren();
-      }
-    
-      if (_loadedFeatures)
-      {
-        unloadFeatures();
-        _loadedFeatures = false;
-      }
-    
-      unloadChildren();
-    
-      if (_parent != null)
-      {
-        _parent.childStopRendered();
-      }
-    
-      removeMarks();
-    }
 
     private void removeMarks()
     {
@@ -835,6 +804,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           for (int i = 0; i < _childrenSize; i++)
           {
             Node child = _children.get(i);
+            child.unload();
             child._release();
           }
           _children = null;
@@ -914,6 +884,38 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _childrenTask = null;
        _featuresTask = null;
       setChildren(children);
+    }
+
+    public final void unload()
+    {
+      cancelTasks();
+    
+      if (_loadingFeatures)
+      {
+        cancelLoadFeatures();
+        _loadingFeatures = false;
+      }
+    
+      if (_loadingChildren)
+      {
+        _loadingChildren = true;
+        cancelLoadChildren();
+      }
+    
+      if (_loadedFeatures)
+      {
+        unloadFeatures();
+        _loadedFeatures = false;
+      }
+    
+      unloadChildren();
+    
+      if (_parent != null)
+      {
+        _parent.childStopRendered();
+      }
+    
+      removeMarks();
     }
 
     public final VectorSet getVectorSet()
@@ -1348,11 +1350,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_sector != null)
          _sector.dispose();
+    
       if (_rootNodes != null)
       {
         for (int i = 0; i < _rootNodes.size(); i++)
         {
           Node node = _rootNodes.get(i);
+          node.unload();
           node._release();
         }
         _rootNodes = null;
