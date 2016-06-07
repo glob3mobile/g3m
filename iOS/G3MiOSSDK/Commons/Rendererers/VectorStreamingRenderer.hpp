@@ -323,7 +323,6 @@ public:
     void unloadChildren();
     void cancelLoadChildren();
 
-    void unload();
 
     void removeMarks();
 
@@ -356,6 +355,8 @@ public:
          const std::vector<std::string>& childrenIDs,
          std::vector<Node*>*             children,
          const bool                      verbose);
+
+    void unload();
 
     const VectorSet* getVectorSet() const {
       return _vectorSet;

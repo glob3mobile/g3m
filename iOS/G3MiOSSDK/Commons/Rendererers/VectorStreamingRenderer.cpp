@@ -288,6 +288,7 @@ void VectorStreamingRenderer::Node::setChildren(std::vector<Node*>* children) {
     if (_children != NULL) {
       for (size_t i = 0; i < _childrenSize; i++) {
         Node* child = _children->at(i);
+        child->unload();
         child->_release();
       }
       delete _children;
@@ -932,9 +933,11 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
   }
 
   delete _sector;
+
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
       Node* node = _rootNodes->at(i);
+      node->unload();
       node->_release();
     }
     delete _rootNodes;
