@@ -6,12 +6,12 @@ dependencies {
 }
 
 android {
-  compileSdkVersion 14
-  buildToolsVersion "23.0.1"
+  compileSdkVersion Integer.valueOf(project.ext.androidCompileSDKVersion)
+  buildToolsVersion project.ext.androidBuildToolsVersion
  
   defaultConfig {
-    minSdkVersion 14
-    targetSdkVersion 23
+    minSdkVersion Integer.valueOf(project.ext.androidMinSDKVersion)
+    targetSdkVersion Integer.valueOf(project.ext.androidTargetSDKVersion)
   }
 
   buildTypes {
