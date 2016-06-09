@@ -24,7 +24,7 @@ public class MapBooOLDBuilder_ApplicationTubeListener implements IWebSocketListe
     _builder.setApplicationTubeOpened(false);
   }
 
-  public final void onMesssage(IWebSocket ws, String message)
+  public final void onMessage(IWebSocket ws, String message)
   {
     //ILogger::instance()->logInfo(message);
     _builder.parseApplicationJSON(message, ws.getURL());
