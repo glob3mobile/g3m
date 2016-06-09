@@ -122,6 +122,24 @@ public final class Canvas_WebGL
    }-*/;
 
 
+   //   @Override
+   //   protected native Vector2F _textExtent(final String text) /*-{
+   //		var div = document.createElement("div");
+   //
+   //		div.style = "position:absolute; visibility:hidden; height:auto; width:auto; white-space:nowrap; font:"
+   //				+ this.@org.glob3.mobile.specific.Canvas_WebGL::_currentDOMFont;
+   //
+   //		document.body.appendChild(div);
+   //
+   //		var width = div.clientWidth;
+   //		var height = div.clientHeight;
+   //
+   //		div.parentNode.removeChild(div);
+   //
+   //		return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
+   //   }-*/;
+
+
    private static String createDOMColor(final Color color) {
       if (color == null) {
          return null;

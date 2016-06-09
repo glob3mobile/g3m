@@ -9,11 +9,12 @@
 #ifndef __G3MiOSSDK__DeviceAttitudeCameraHandler__
 #define __G3MiOSSDK__DeviceAttitudeCameraHandler__
 
+#include "ILocationModifier.hpp"
+
 #include "CameraEventHandler.hpp"
 #include "MutableMatrix44D.hpp"
-#include "ILocationModifier.hpp"
-#include "MeshRenderer.hpp"
-
+#include "Geodetic3D.hpp"
+class MeshRenderer;
 
 
 class HeightOffsetLocationModifier: public ILocationModifier{
