@@ -18,7 +18,8 @@
 #include "ErrorHandling.hpp"
 
 RasterLayer::~RasterLayer() {
-  delete _parameters;
+  if (_shouldDeleteMyParameters)
+      delete _parameters;
 #ifdef JAVA_CODE
   super.dispose();
 #endif

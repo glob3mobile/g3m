@@ -47,6 +47,7 @@ protected:
 
   float           _transparency;
   const LayerCondition* _condition;
+  bool _shouldDeleteMyParameters;
 
   void notifyChanges() const;
 
@@ -103,6 +104,10 @@ public:
   void setLayerSet(LayerSet* layerSet);
 
   void removeLayerSet(LayerSet* layerSet);
+
+  void shouldDeleteMyParameters(bool should){
+    _shouldDeleteMyParameters = should;
+  };
 
   virtual const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const = 0;
 

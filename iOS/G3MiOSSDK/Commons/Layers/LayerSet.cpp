@@ -156,6 +156,25 @@ void LayerSet::removeAllLayers(const bool deleteLayers) {
   }
 }
 
+void LayerSet::substituteLayers(LayerSet * that, bool deleteLayers){
+    std::vector<Layer *> aux;
+    const int size = _layers.size();
+    for (int i=size-1;i>=0;i--){
+        aux.push_back(_layers[i]);
+        _layers.pop_back();
+    }
+    for (int i = 0; i < size; i++) {
+        Layer *layer = aux[i];
+        layer->removeLayerSet(this);
+        if (deleteLayers) {
+            layer->shouldDeleteMyParameters(false);
+            delete layer;
+        }
+    }
+    aux.clear();
+    takeLayersFrom(that);
+}
+
 void LayerSet::layerChanged(const Layer* layer) const {
   layersChanged();
 }

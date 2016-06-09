@@ -121,6 +121,8 @@ public:
   const std::vector<std::string> getInfo();
 
   void changedInfo(const std::vector<std::string>& info);
+    
+  void substituteLayers(LayerSet * that, bool deleteLayers);
   
 };
 

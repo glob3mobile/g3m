@@ -210,4 +210,16 @@ enum {
   return _gl;
 }
 
+-(void)applicationWillResignActive:(UIApplication *)application{
+    NSLog(@"Lolololololol");
+}
+
+-(void)applicationDidEnterBackground:(UIApplication *)application{
+    NSLog(@"Backgrounded!");
+}
+
+-(void)applicationWillEnterForeground:(UIApplication *)application{
+    NSLog(@"Resurrected!");
+}
+
 @end
