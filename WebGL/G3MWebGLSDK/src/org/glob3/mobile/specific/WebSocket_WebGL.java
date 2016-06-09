@@ -48,7 +48,7 @@ public class WebSocket_WebGL
 			}
 			socket.onmessage = function(event) {
 				if (typeof event.data === "string") {
-					listener.@org.glob3.mobile.generated.IWebSocketListener::onMesssage(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, event.data);
+					listener.@org.glob3.mobile.generated.IWebSocketListener::onMessage(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, event.data);
 				} else {
 					listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "Unsupported message type.");
 				}
