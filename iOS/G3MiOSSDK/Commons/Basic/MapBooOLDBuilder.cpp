@@ -1471,7 +1471,7 @@ public:
     _builder->setApplicationTubeOpened(false);
   }
 
-  void onMesssage(IWebSocket* ws,
+  void onMessage(IWebSocket* ws,
                   const std::string& message) {
     //ILogger::instance()->logInfo(message);
     _builder->parseApplicationJSON(message, ws->getURL());

@@ -27,7 +27,7 @@ public:
   virtual void onError(IWebSocket* ws,
                        const std::string& error) = 0;
 
-  virtual void onMesssage(IWebSocket* ws,
+  virtual void onMessage(IWebSocket* ws,
                           const std::string& message) = 0;
 
   virtual void onClose(IWebSocket* ws) = 0;
