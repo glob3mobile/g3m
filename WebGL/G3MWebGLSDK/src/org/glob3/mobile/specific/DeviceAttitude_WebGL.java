@@ -94,10 +94,10 @@ public class DeviceAttitude_WebGL
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
-				console.log("IO CHROME");
+				//console.log("IO CHROME");
 				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-				console.log("IO MOZ");
+				//console.log("IO MOZ");
 				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
 			}
 		} catch (err) {
@@ -110,12 +110,12 @@ public class DeviceAttitude_WebGL
 
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
-				console.log("IO CHROME");
+				//console.log("IO CHROME");
 				$wnd.screen.orientation.onchange = function() {
 					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				};
 			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-				console.log("IO MOZ");
+				//console.log("IO MOZ");
 				$wnd.screen.onmozorientationchange = function(event) {
 					event.preventDefault();
 					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
