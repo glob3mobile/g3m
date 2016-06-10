@@ -9,23 +9,25 @@
 #ifndef __G3MiOSDemo__StarDomeRenderer__
 #define __G3MiOSDemo__StarDomeRenderer__
 
-#include "DefaultRenderer.hpp"
-#include "GLState.hpp"
+#import <G3MiOSSDK/DefaultRenderer.hpp>
 
-#include "MeshShape.hpp"
-#include "Color.hpp"
+//#include "DefaultRenderer.hpp"
+#include <G3MiOSSDK/GLState.hpp>
+
+#include <G3MiOSSDK/MeshShape.hpp>
+#include <G3MiOSSDK/Color.hpp>
 #include <vector>
 #include <string>
 
-#include "IFactory.hpp"
-#include "ITimer.hpp"
-#include "Geodetic3D.hpp"
-#include "Color.hpp"
-#include "MarksRenderer.hpp"
+#include <G3MiOSSDK/IFactory.hpp>
+#include <G3MiOSSDK/ITimer.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/Color.hpp>
+#include <G3MiOSSDK/MarksRenderer.hpp>
 
-#include "LabelImageBuilder.hpp"
-#include "IImageBuilderListener.hpp"
-#include "MutableVector3D.hpp"
+#include <G3MiOSSDK/LabelImageBuilder.hpp>
+#include <G3MiOSSDK/IImageBuilderListener.hpp>
+#include <G3MiOSSDK/MutableVector3D.hpp>
 
 
 class StarsMeshShape: public MeshShape{

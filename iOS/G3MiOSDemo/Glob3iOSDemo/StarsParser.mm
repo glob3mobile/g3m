@@ -8,7 +8,7 @@
 
 #import "StarsParser.hpp"
 
-#include "Angle.hpp"
+#include <G3MiOSSDK/Angle.hpp>
 
 @implementation StarsParser
 

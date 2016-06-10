@@ -132,7 +132,7 @@
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
-#import <G3MiOSSDK/TileRenderingListener.hpp>
+//#import <G3MiOSSDK/TileRenderingListener.hpp>
 #import <G3MiOSSDK/LayerTouchEventListener.hpp>
 #import <G3MiOSSDK/TiledVectorLayer.hpp>
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
@@ -148,7 +148,7 @@
 
 #import <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 
-#import <G3MiOSSDK/Quaternion.hpp>
+//#import <G3MiOSSDK/Quaternion.hpp>
 #import <G3MiOSSDK/FlatPlanet.hpp>
 
 #import "StarDomeRenderer.hpp"
