@@ -16,8 +16,8 @@ import com.google.gwt.core.client.JsArrayNumber;
 
 
 public final class Canvas_WebGL
-   extends
-      ICanvas {
+         extends
+            ICanvas {
 
    private JavaScriptObject _domCanvas;
    private JavaScriptObject _domCanvasContext;
