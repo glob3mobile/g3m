@@ -500,10 +500,13 @@ RenderState G3MWidget::calculateRendererState() {
   return busyFlag ? RenderState::busy() : RenderState::ready();
 }
 
-void G3MWidget::rawRender(const RenderState_Type renderStateType) {
+void G3MWidget::rawRender(const RenderState_Type renderStateType, GLState* modifier) {
   
   if (_rootState == NULL) {
     _rootState = new GLState();
+  }
+  if (modifier != NULL) {
+    _rootState->setParent(modifier);
   }
   
   switch (renderStateType) {
@@ -607,13 +610,13 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   const int halfWidth = _width / 2;
   
   if (_leftScissor == NULL) {
-    ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth / 2, _height);
+    ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
     
     _leftScissor = new GLState();
     _leftScissor->addGLFeature(leftScissorFeature, false);
   }
   if (_rightScissor == NULL) {
-    ScissorTestGLFeature* rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth / 2, _height);
+    ScissorTestGLFeature* rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth, _height);
     
     _rightScissor = new GLState();
     _rightScissor->addGLFeature(rightScissorFeature, false);
@@ -627,20 +630,13 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   
   _currentCamera->copyFrom(*_leftEyeCam,
                            true);
-  
- 
-  _rootState->setParent(_leftScissor);
-  
-  rawRender(renderStateType);
+  rawRender(renderStateType, _leftScissor);
   
   //Right
   _gl->viewport(halfWidth, 0, halfWidth, _height);
   _currentCamera->copyFrom(*_rightEyeCam,
                            true);
-  
-  _rootState->setParent(_rightScissor);
-
-  rawRender(renderStateType);
+  rawRender(renderStateType, _rightScissor);
 
   //Restoring central camera
   _currentCamera->copyFrom(*_auxCam, true);
@@ -650,7 +646,7 @@ void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
   
   _gl->clearScreen(*_backgroundColor);
   _gl->viewport(0, 0, _width, _height);
-  rawRender(renderStateType);
+  rawRender(renderStateType, NULL);
 }
 
 void G3MWidget::render(int width, int height) {

@@ -378,7 +378,7 @@ private:
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
-  void rawRender(const RenderState_Type renderStateType);
+  void rawRender(const RenderState_Type renderStateType, GLState* modifier);
   
   void rawRenderMono(const RenderState_Type renderStateType);
   

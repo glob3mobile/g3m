@@ -1138,14 +1138,14 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     if (_leftScissor == null)
     {
-      ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth / 2, _height);
+      ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height/2);
   
       _leftScissor = new GLState();
       _leftScissor.addGLFeature(leftScissorFeature, false);
     }
     if (_rightScissor == null)
     {
-      ScissorTestGLFeature rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth / 2, _height);
+      ScissorTestGLFeature rightScissorFeature = new ScissorTestGLFeature(halfWidth, _height/2, halfWidth / 2, _height/2);
   
       _rightScissor = new GLState();
       _rightScissor.addGLFeature(rightScissorFeature, false);
@@ -1156,19 +1156,20 @@ public class G3MWidget implements ChangedRendererInfoListener
     _gl.clearScreen(_backgroundColor);
     //Left
     _gl.viewport(0, 0, halfWidth, _height);
-  
     _currentCamera.copyFrom(_leftEyeCam, true);
   
   
-    _rootState.setParent(_leftScissor);
+    if (_rootState != null)
+      _rootState.setParent(_leftScissor);
   
     rawRender(renderStateType);
   
     //Right
     _gl.viewport(halfWidth, 0, halfWidth, _height);
     _currentCamera.copyFrom(_rightEyeCam, true);
-  
-    _rootState.setParent(_rightScissor);
+
+    if (_rootState != null)
+      _rootState.setParent(_rightScissor);
   
     rawRender(renderStateType);
   

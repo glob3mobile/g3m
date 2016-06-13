@@ -36,17 +36,25 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
   // Scissor Test
   if (_scissorTest != currentState._scissorTest) {
     if (_scissorTest) {
-      nativeGL->scissor(_scissorX, _scissorY, _scissorWidth, _scissorHeight);
       nativeGL->enable(GLStage::scissorTest());
-      currentState._scissorHeight = _scissorHeight;
-      currentState._scissorWidth = _scissorWidth;
-      currentState._scissorX = _scissorX;
-      currentState._scissorY = _scissorY;
     }
     else {
       nativeGL->disable(GLStage::scissorTest());
     }
     currentState._scissorTest = _scissorTest;
+  }
+  
+  if (_scissorTest &&
+      (currentState._scissorX != _scissorX ||
+      currentState._scissorX != _scissorY ||
+       currentState._scissorWidth != _scissorWidth ||
+       currentState._scissorHeight != _scissorHeight)) {
+        
+    nativeGL->scissor(_scissorX, _scissorY, _scissorWidth, _scissorHeight);
+    currentState._scissorHeight = _scissorHeight;
+    currentState._scissorWidth = _scissorWidth;
+    currentState._scissorX = _scissorX;
+    currentState._scissorY = _scissorY;
   }
 
   // Blending
@@ -65,15 +73,19 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     currentState._cullFace = _cullFace;
     if (_cullFace) {
       nativeGL->enable(GLStage::cullFace());
-      if (_culledFace != currentState._culledFace) {
-        nativeGL->cullFace(_culledFace);
-        currentState._culledFace = _culledFace;
-      }
     }
     else {
       nativeGL->disable(GLStage::cullFace());
     }
   }
+
+  if (_cullFace &&
+      _culledFace != currentState._culledFace) {
+    nativeGL->cullFace(_culledFace);
+    currentState._culledFace = _culledFace;
+  }
+
+  
 
   if (_lineWidth != currentState._lineWidth) {
     nativeGL->lineWidth(_lineWidth);
