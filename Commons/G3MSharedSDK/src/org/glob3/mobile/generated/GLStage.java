@@ -3,6 +3,7 @@ public class GLStage
 {
   private static int _polygonOffsetFill = 0;
   private static int _depthTest = 0;
+  private static int _scissorTest = 0;
   private static int _blend = 0;
   private static int _cullFace = 0;
 
@@ -14,6 +15,11 @@ public class GLStage
   public static int depthTest()
   {
     return _depthTest;
+  }
+
+  public static int scissorTest()
+  {
+    return _scissorTest;
   }
 
   public static int blend()
@@ -30,6 +36,7 @@ public class GLStage
   {
     _polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
     _depthTest = ngl.Feature_DepthTest();
+    _scissorTest = ngl.Feature_ScissorTest();
     _blend = ngl.Feature_Blend();
     _cullFace = ngl.Feature_CullFace();
   }
