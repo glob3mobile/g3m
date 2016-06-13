@@ -42,6 +42,24 @@ private:
 #endif
     }
 
+    if (iu->beginsWith(result, "ws:/")) {
+#ifdef C_CODE
+      result = "ws://" + iu->substring(result, 4);
+#endif
+#ifdef JAVA_CODE
+      result = "ws://" + iu.substring(result, 4);
+#endif
+    }
+
+    if (iu->beginsWith(result, "wss:/")) {
+#ifdef C_CODE
+      result = "wss://" + iu->substring(result, 5);
+#endif
+#ifdef JAVA_CODE
+      result = "wss://" + iu.substring(result, 5);
+#endif
+    }
+
     if (iu->beginsWith(result, "file:/")) {
 #ifdef C_CODE
       result = "file:///" + iu->substring(result, 6);
