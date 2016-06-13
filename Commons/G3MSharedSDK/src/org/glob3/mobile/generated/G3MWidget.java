@@ -775,6 +775,8 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private SceneLighting _sceneLighting;
   private GLState _rootState;
+  private GLState _leftScissor;
+  private GLState _rightScissor;
 
   private final InitialCameraPositionProvider _initialCameraPositionProvider;
   private boolean _initialCameraPositionHasBeenSet;
@@ -850,6 +852,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _leftEyeCam = null;
      _rightEyeCam = null;
      _auxCam = null;
+     _leftScissor = null;
+     _rightScissor = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -1012,7 +1016,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_rootState == null)
     {
       _rootState = new GLState();
-      _rootState.
     }
   
     switch (renderStateType)
@@ -1133,15 +1136,40 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     final int halfWidth = _width / 2;
   
+    if (_leftScissor == null)
+    {
+      ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth / 2, _height);
+  
+      _leftScissor = new GLState();
+      _leftScissor.addGLFeature(leftScissorFeature, false);
+    }
+    if (_rightScissor == null)
+    {
+      ScissorTestGLFeature rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth / 2, _height);
+  
+      _rightScissor = new GLState();
+      _rightScissor.addGLFeature(rightScissorFeature, false);
+    }
+  
+  
+  
     _gl.clearScreen(_backgroundColor);
     //Left
     _gl.viewport(0, 0, halfWidth, _height);
+  
     _currentCamera.copyFrom(_leftEyeCam, true);
+  
+  
+    _rootState.setParent(_leftScissor);
+  
     rawRender(renderStateType);
   
     //Right
     _gl.viewport(halfWidth, 0, halfWidth, _height);
     _currentCamera.copyFrom(_rightEyeCam, true);
+  
+    _rootState.setParent(_rightScissor);
+  
     rawRender(renderStateType);
   
     //Restoring central camera
