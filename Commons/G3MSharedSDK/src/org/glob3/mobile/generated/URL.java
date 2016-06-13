@@ -40,6 +40,16 @@ public class URL
       result = "https://" + iu.substring(result, 7);
     }
 
+    if (iu.beginsWith(result, "ws:/"))
+    {
+      result = "ws://" + iu.substring(result, 4);
+    }
+
+    if (iu.beginsWith(result, "wss:/"))
+    {
+      result = "wss://" + iu.substring(result, 5);
+    }
+
     if (iu.beginsWith(result, "file:/"))
     {
       result = "file:///" + iu.substring(result, 6);
