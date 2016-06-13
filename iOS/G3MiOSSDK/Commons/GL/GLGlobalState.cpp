@@ -32,6 +32,22 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     }
     currentState._depthTest = _depthTest;
   }
+  
+  // Scissor Test
+  if (_scissorTest != currentState._scissorTest) {
+    if (_scissorTest) {
+      nativeGL->scissor(_scissorX, _scissorY, _scissorWidth, _scissorHeight);
+      nativeGL->enable(GLStage::scissorTest());
+      currentState._scissorHeight = _scissorHeight;
+      currentState._scissorWidth = _scissorWidth;
+      currentState._scissorX = _scissorX;
+      currentState._scissorY = _scissorY;
+    }
+    else {
+      nativeGL->disable(GLStage::scissorTest());
+    }
+    currentState._scissorTest = _scissorTest;
+  }
 
   // Blending
   if (_blend != currentState._blend) {

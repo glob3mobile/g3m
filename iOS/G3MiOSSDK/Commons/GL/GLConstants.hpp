@@ -44,6 +44,7 @@ public:
 class GLStage {
   static int _polygonOffsetFill;
   static int _depthTest;
+  static int _scissorTest;
   static int _blend;
   static int _cullFace;
   
@@ -54,6 +55,10 @@ public:
   
   static int depthTest() {
     return _depthTest;
+  }
+  
+  static int scissorTest() {
+    return _scissorTest;
   }
   
   static int blend() {
@@ -67,6 +72,7 @@ public:
   static void init(const INativeGL* ngl) {
     _polygonOffsetFill = ngl->Feature_PolygonOffsetFill();
     _depthTest         = ngl->Feature_DepthTest();
+    _scissorTest       = ngl->Feature_ScissorTest();
     _blend             = ngl->Feature_Blend();
     _cullFace          = ngl->Feature_CullFace();
   }

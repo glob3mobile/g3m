@@ -15,6 +15,7 @@ int GLBufferType::_colorBuffer = 0;
 int GLBufferType::_depthBuffer = 0;
 
 int GLStage::_polygonOffsetFill = 0;
+int GLStage::_scissorTest = 0;
 int GLStage::_depthTest = 0;
 int GLStage::_blend = 0;
 int GLStage::_cullFace = 0;
