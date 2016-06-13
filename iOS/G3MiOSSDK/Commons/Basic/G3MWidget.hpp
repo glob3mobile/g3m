@@ -48,6 +48,7 @@ class ErrorRenderer;
 class G3MRenderContext;
 class IDeviceAttitude;
 class IDeviceLocation;
+class ScissorTestGLFeature;
 //class InfoDisplay;
 
 #include <vector>
@@ -270,7 +271,7 @@ private:
 
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
-  IPrePostRenderTasks*       _prePostTask;
+  IPrePostRenderTasks*  _prePostTask;
   ProtoRenderer*      _busyRenderer;
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
@@ -322,6 +323,8 @@ private:
 
   SceneLighting*            _sceneLighting;
   GLState*                  _rootState;
+  GLState*                  _leftScissor;
+  GLState*                  _rightScissor;
 
   const InitialCameraPositionProvider* _initialCameraPositionProvider;
   bool _initialCameraPositionHasBeenSet;

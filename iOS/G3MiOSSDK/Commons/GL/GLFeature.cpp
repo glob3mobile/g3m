@@ -77,6 +77,19 @@ void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
   state->disablePolygonOffsetFill();
 }
 
+ScissorTestGLFeature::ScissorTestGLFeature(int x1, int y1, int w, int h) :
+GLFeature(NO_GROUP, GLF_BILLBOARD)
+{
+  x = x1;
+  y = y1;
+  width = w;
+  height = h;
+}
+
+void ScissorTestGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
+  state->enableScissorTest(x, y, width, height);
+}
+
 GeometryGLFeature::GeometryGLFeature(const IFloatBuffer* buffer,
                                      int arrayElementSize,
                                      int index,

@@ -154,7 +154,9 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL)
+_auxCam(NULL),
+_leftScissor(NULL),
+_rightScissor(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -286,7 +288,7 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
-
+  
   if (_downloader != NULL) {
     _downloader->stop();
     delete _downloader;
@@ -558,7 +560,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   if (_auxCam == NULL) {
     _auxCam = new Camera(-1);
   }
-  
+
   const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
   if (eyesUpdated) {
     
@@ -604,17 +606,40 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
 
   const int halfWidth = _width / 2;
   
+  if (_leftScissor == NULL) {
+    ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth / 2, _height);
+    
+    _leftScissor = new GLState();
+    _leftScissor->addGLFeature(leftScissorFeature, false);
+  }
+  if (_rightScissor == NULL) {
+    ScissorTestGLFeature* rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth / 2, _height);
+    
+    _rightScissor = new GLState();
+    _rightScissor->addGLFeature(rightScissorFeature, false);
+  }
+  
+  
+  
   _gl->clearScreen(*_backgroundColor);
   //Left
   _gl->viewport(0, 0, halfWidth, _height);
+  
   _currentCamera->copyFrom(*_leftEyeCam,
                            true);
+  
+ 
+  _rootState->setParent(_leftScissor);
+  
   rawRender(renderStateType);
   
   //Right
   _gl->viewport(halfWidth, 0, halfWidth, _height);
   _currentCamera->copyFrom(*_rightEyeCam,
                            true);
+  
+  _rootState->setParent(_rightScissor);
+
   rawRender(renderStateType);
 
   //Restoring central camera

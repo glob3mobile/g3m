@@ -1012,6 +1012,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_rootState == null)
     {
       _rootState = new GLState();
+      _rootState.
     }
   
     switch (renderStateType)
