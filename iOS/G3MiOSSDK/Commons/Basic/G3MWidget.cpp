@@ -572,6 +572,17 @@ void G3MWidget::setFocusDistanceModifier(double mod) {
   }
 }
 
+void G3MWidget::setEyeDistance(double eDist) {
+  _eyeDistance = eDist;
+  if (_leftEyeCam != NULL) {
+    delete _leftEyeCam;
+    _leftEyeCam = NULL;
+  }
+  if (_rightEyeCam != NULL) {
+    delete _rightEyeCam;
+    _rightEyeCam = NULL;
+  }
+}
 
 void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
   
@@ -598,7 +609,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       Vector3D camPos = _currentCamera->getCartesianPosition();
       Vector3D camCenter = _currentCamera->getCenter();
       Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      const double eyesSeparation = 0.03;
+      const double eyesSeparation = _eyeDistance / 2.0;
       Vector3D up = _currentCamera->getUp();
       
       const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);

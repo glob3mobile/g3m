@@ -260,6 +260,8 @@ public:
   void setViewMode(ViewMode viewMode);
   
   void setFocusDistanceModifier(double mod);
+  
+  void setEyeDistance(double eDist);
 
 private:
   IStorage*                _storage;
@@ -342,6 +344,7 @@ private:
   
   ViewMode _viewMode;
   double _focusDistanceModifier = -1.0;
+  double _eyeDistance = 0.06;
   
   //For stereo vision
   Camera* _auxCam;
