@@ -258,6 +258,8 @@ public:
   void removeAllPeriodicalTasks();
   
   void setViewMode(ViewMode viewMode);
+  
+  void setFocusDistanceModifier(double mod);
 
 private:
   IStorage*                _storage;
@@ -339,6 +341,7 @@ private:
   float _touchDownPositionY;
   
   ViewMode _viewMode;
+  double _focusDistanceModifier = -1.0;
   
   //For stereo vision
   Camera* _auxCam;
@@ -383,7 +386,6 @@ private:
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
-
   
 };
 

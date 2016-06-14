@@ -558,6 +558,21 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType, GLState* modif
 
 }
 
+void G3MWidget::setFocusDistanceModifier(double mod) {
+  
+  _focusDistanceModifier = mod;
+  
+  if (_leftScissor != NULL) {
+    _leftScissor->_release();
+    _leftScissor = NULL;
+  }
+  if (_rightScissor != NULL) {
+    _rightScissor->_release();
+    _rightScissor = NULL;
+  }
+}
+
+
 void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
   
   if (_auxCam == NULL) {
@@ -608,32 +623,37 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   }
 
   const int halfWidth = _width / 2;
-  
-  if (_leftScissor == NULL) {
-    ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
+  int modifierPx = 0;
+  if (_focusDistanceModifier > 0.0) {
+    // create scissor test GLState/s to prevent the two cameras rendering into each other's framebuffer
+    modifierPx = (int) (halfWidth * _focusDistanceModifier);
     
-    _leftScissor = new GLState();
-    _leftScissor->addGLFeature(leftScissorFeature, false);
+    if (_leftScissor == NULL) {
+      ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(modifierPx, 0, //
+                                                                          halfWidth - modifierPx, _height);
+      _leftScissor = new GLState();
+      _leftScissor->addGLFeature(leftScissorFeature, false);
+    }
+    if (_rightScissor == NULL) {
+      ScissorTestGLFeature* rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, //
+                                                                           halfWidth - modifierPx, _height);
+      _rightScissor = new GLState();
+      _rightScissor->addGLFeature(rightScissorFeature, false);
+    }
   }
-  if (_rightScissor == NULL) {
-    ScissorTestGLFeature* rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth, _height);
-    
-    _rightScissor = new GLState();
-    _rightScissor->addGLFeature(rightScissorFeature, false);
-  }
-  
-  
+
+
   
   _gl->clearScreen(*_backgroundColor);
   //Left
-  _gl->viewport(0, 0, halfWidth, _height);
+  _gl->viewport(modifierPx, 0, halfWidth, _height);
   
   _currentCamera->copyFrom(*_leftEyeCam,
                            true);
   rawRender(renderStateType, _leftScissor);
   
   //Right
-  _gl->viewport(halfWidth, 0, halfWidth, _height);
+  _gl->viewport(halfWidth - modifierPx, 0, halfWidth, _height);
   _currentCamera->copyFrom(*_rightEyeCam,
                            true);
   rawRender(renderStateType, _rightScissor);

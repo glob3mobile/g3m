@@ -45,11 +45,10 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
   }
   
   if (_scissorTest &&
-      (currentState._scissorX != _scissorX ||
-      currentState._scissorX != _scissorY ||
-       currentState._scissorWidth != _scissorWidth ||
+      (currentState._scissorX != _scissorX || //
+      currentState._scissorX != _scissorY ||   //
+       currentState._scissorWidth != _scissorWidth || //
        currentState._scissorHeight != _scissorHeight)) {
-        
     nativeGL->scissor(_scissorX, _scissorY, _scissorWidth, _scissorHeight);
     currentState._scissorHeight = _scissorHeight;
     currentState._scissorWidth = _scissorWidth;
