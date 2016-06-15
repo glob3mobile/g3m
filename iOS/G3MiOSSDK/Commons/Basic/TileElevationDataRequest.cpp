@@ -8,11 +8,14 @@
 
 #include "TileElevationDataRequest.hpp"
 
+#include "PlanetRenderContext.hpp"
+#include "LayerTilesRenderParameters.hpp"
+
 #pragma mark TileElevationDataRequest
 
 TileElevationDataRequest::TileElevationDataRequest(Tile* tile,
                                                    const Vector2I& resolution,
-                                                   ElevationDataProvider* provider) :
+                                                   ElevationDataProvider *provider):
 _tile(tile),
 _resolution(resolution),
 _provider(provider),
@@ -44,15 +47,46 @@ void TileElevationDataRequest::onCancel(const Sector& sector,
 void TileElevationDataRequest::cancelRequest() {
   if (_listener != NULL) {
     _listener->_request = NULL;
-    _provider->cancelRequest(_requestID);
+    if (_requestID > -1){
+        _provider->cancelRequest(_requestID);
+    }
   }
 }
 
-void TileElevationDataRequest::sendRequest() {
+void TileElevationDataRequest::sendRequest(const G3MRenderContext *rc, const PlanetRenderContext *prc) {
   _listener = new TileElevationDataRequestListener(this);
   _requestID = _provider->requestElevationData(_tile->_sector,
                                                _resolution,
-                                               _listener, true);
+                                               _tile->_level,
+                                               _tile->_row,
+                                               _tile->_column,
+                                               _listener,
+                                               true);
+  if (_requestID < -1){
+    //A requestID lower than -1 is defined to represent a tile which won't have elevationData due to the pyramid being shorter than needed.
+    //That case, we will try to get ElevData from ancestor and define it as the one needed in the level.
+    long long maxLevel = - (_requestID);
+    Tile *theLastAncestor = NULL;
+    Tile *theAncestor = _tile->getParent();
+    while ( theAncestor != NULL){
+      if (theAncestor->_level == maxLevel) {
+        theLastAncestor = theAncestor;
+        break;
+      }
+      theAncestor = theAncestor->getParent();
+    }
+    if (theLastAncestor != NULL){
+      if (theLastAncestor->getElevationData() == NULL) {
+        //Ensure lastAncestor to have an ElevData.
+        theLastAncestor->initializeElevationData(rc, prc);
+      }
+      if (theLastAncestor->getElevationData() != NULL) {
+        ElevationData* subView = _tile->createElevationDataSubviewFromAncestor(theLastAncestor);
+        _tile->setElevationData(subView, _tile->_level);
+      }
+    }
+    _requestID = -1;
+  }
 }
 
 #pragma mark TileElevationDataRequestListener

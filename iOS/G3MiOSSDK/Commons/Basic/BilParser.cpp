@@ -56,3 +56,48 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
                                       size,
                                       deltaHeight);
 }
+
+ShortBufferElevationData* BilParser::parseBil16Redim (const Sector& sector, IByteBuffer *buffer, const short noData, double deltaHeight)
+{
+    
+    ByteBufferIterator *iterator = new ByteBufferIterator(buffer);
+    
+    const short size = iterator->nextInt16();
+    
+    const int expectedSizeInBytes = (size * size * 2) + 10;
+    if (buffer->size() != expectedSizeInBytes)
+    {
+        ILogger::instance()->logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer->size());
+        return NULL;
+    }
+    
+    const short minValue = IMathUtils::instance()->minInt16();
+    
+    short* shortBuffer = new short[size*size];
+    for (int i = 0; i < size*size; i++)
+    {
+        short height = iterator->nextInt16();
+        
+        if (height == noData)
+        {
+            height = ShortBufferElevationData::NO_DATA_VALUE;
+        }
+        else if (height == minValue)
+        {
+            height = ShortBufferElevationData::NO_DATA_VALUE;
+        }
+        
+        shortBuffer[i] = height;
+    }
+    
+    short max = iterator->nextInt16();
+    short min = iterator->nextInt16();
+    short children = iterator->nextInt16();
+    short similarity = iterator->nextInt16();
+    
+    
+    Vector2I extent = Vector2I(size,size);
+    
+    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer,
+                                        size*size, deltaHeight,max,min,children,similarity);
+}

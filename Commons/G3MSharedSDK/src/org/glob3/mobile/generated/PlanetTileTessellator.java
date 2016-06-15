@@ -7,7 +7,15 @@ public class PlanetTileTessellator extends TileTessellator
   private Vector2S calculateResolution(PlanetRenderContext prc, Tile tile, Sector renderedSector)
   {
     Sector sector = tile._sector;
-    final Vector2S resolution = prc._layerTilesRenderParameters._tileMeshResolution;
+  
+      MutableVector2I mutableResolution = prc._layerTilesRenderParameters._tileMeshResolution.asVector2I().asMutableVector2I();
+  
+      if (tile.getElevationData() != null)
+      {
+        mutableResolution = tile.getElevationData().getExtent().asMutableVector2I();
+      }
+  
+    final Vector2I resolution = mutableResolution.asVector2I();
   
     final double latRatio = sector._deltaLatitude._degrees / renderedSector._deltaLatitude._degrees;
     final double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;

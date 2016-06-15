@@ -37,6 +37,45 @@ _buffer(buffer)
       break;
     }
   }
+    
+
+  _max = IMathUtils::instance()->minInt16();
+  _min = IMathUtils::instance()->maxInt16();
+  _hasChildren = false;
+  _meshGeometricalErrorWithChildren = IMathUtils::instance()->minDouble();
+}
+
+ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
+                                                   const Vector2I& extent,
+                                                   const Sector& realSector,
+                                                   const Vector2I& realExtent,
+                                                   short* buffer,
+                                                   int bufferSize,
+                                                   double deltaHeight,
+                                                   short max,
+                                                   short min,
+                                                   short hasChildren,
+                                                   double geomError) :
+BufferElevationData(sector, extent, realSector, realExtent, bufferSize, deltaHeight),
+_buffer(buffer)
+{
+    if (_bufferSize != (_width * _height) ) {
+        ILogger::instance()->logError("Invalid buffer size");
+    }
+    
+    const size_t size = _bufferSize;
+    _hasNoData = false;
+    for (size_t i = 0; i < size; i++) {
+        if (buffer[i] == NO_DATA_VALUE) {
+            _hasNoData = true;
+            break;
+        }
+    }
+    
+    _max = max;
+    _min = min;
+    _hasChildren = (hasChildren > 0) ? true: false;
+    _meshGeometricalErrorWithChildren = geomError;
 }
 
 ShortBufferElevationData::~ShortBufferElevationData() {
@@ -105,6 +144,11 @@ Vector3D ShortBufferElevationData::getMinMaxAverageElevations() const {
   }
   if (maxHeight == mu->minInt16()) {
     maxHeight = 0;
+  }
+    
+  if (_max > mu->minInt16() && _min < mu->maxInt16()){
+    minHeight = _min;
+    maxHeight = _max;
   }
 
   return Vector3D(minHeight,

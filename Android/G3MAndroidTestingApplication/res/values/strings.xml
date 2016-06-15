@@ -4,5 +4,24 @@
     <string name="app_name">G3MAndroidTestingApplication</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    
+    <string name="clear">Clear</string>
+    <string name="go">Go</string>
+    <string name="load">Load</string>
+    <string name="ok_button">OK</string>
+	<string name="cancel_button">Cancel</string>
+	
+	<string-array name="size_array">
+	    <item> --- Select an option --- </item>
+	    <item> World Fixed 16x16 </item>
+	    <item> World Variable 16x16 </item>
+	    <item> Euro Fixed 16x16 </item>
+	    <item> Euro Variable 16x16 </item>
+	</string-array>
+	
+	<string-array name="wireframe_array">
+	    <item> --- Select an option --- </item>
+	    <item> Do not use wireframe </item>
+	    <item> Use wireframe </item>
+	</string-array>
 </resources>

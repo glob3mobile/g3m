@@ -99,6 +99,9 @@ public:
 
   const long long requestElevationData(const Sector& sector,
                                        const Vector2I& extent,
+                                       int level,
+                                       int row,
+                                       int column,
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 

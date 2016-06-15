@@ -232,7 +232,7 @@ Activity {
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
-      _builder.setPlanet(EllipsoidalPlanet.createEarth());
+      //_builder.setPlanet(Planet.createEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 

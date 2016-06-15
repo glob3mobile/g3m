@@ -41,6 +41,11 @@ public abstract class ElevationData
 
   protected final Geodetic2D _resolution ;
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning This may suffer further refactoring.
+  protected boolean _hasChildren;
+  protected double _meshGeometricalErrorWithChildren;
+
   public ElevationData(Sector sector, Vector2I extent)
   {
      _sector = new Sector(sector);
@@ -48,6 +53,8 @@ public abstract class ElevationData
      _height = extent._y;
      _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
      _interpolator = null;
+      _hasChildren = false;
+      _meshGeometricalErrorWithChildren = IMathUtils.instance().minFloat();
   }
 
   public void dispose()

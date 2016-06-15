@@ -23,6 +23,9 @@ public class ShortBufferElevationData extends BufferElevationData
   private short[] _buffer;
   private boolean _hasNoData;
 
+  private short _max;
+  private short _min;
+
   protected final double getValueInBufferAt(int index)
   {
     final short value = _buffer[index];
@@ -55,6 +58,38 @@ public class ShortBufferElevationData extends BufferElevationData
         break;
       }
     }
+  
+  
+    _max = IMathUtils.instance().minInt16();
+    _min = IMathUtils.instance().maxInt16();
+    _hasChildren = false;
+    _meshGeometricalErrorWithChildren = IMathUtils.instance().minDouble();
+  }
+
+  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight, short max, short min, short hasChildren, double geomError)
+  {
+     super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
+     _buffer = buffer;
+      if (_bufferSize != (_width * _height))
+      {
+          ILogger.instance().logError("Invalid buffer size");
+      }
+  
+      final int size = _bufferSize;
+      _hasNoData = false;
+      for (int i = 0; i < size; i++)
+      {
+          if (buffer[i] == NO_DATA_VALUE)
+          {
+              _hasNoData = true;
+              break;
+          }
+      }
+  
+      _max = max;
+      _min = min;
+      _hasChildren = (hasChildren > 0) ? true: false;
+      _meshGeometricalErrorWithChildren = geomError;
   }
 
   public void dispose()
@@ -128,12 +163,27 @@ public class ShortBufferElevationData extends BufferElevationData
       maxHeight = 0;
     }
   
+    if (_max > mu.minInt16() && _min < mu.maxInt16())
+    {
+      minHeight = _min;
+      maxHeight = _max;
+    }
+  
     return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
   }
 
   public final boolean hasNoData()
   {
      return _hasNoData;
+  }
+
+  public final boolean hasChildren()
+  {
+     return _hasChildren;
+  }
+  public final double getMeshGeometricalError()
+  {
+     return _meshGeometricalErrorWithChildren;
   }
 
 }

@@ -59,8 +59,15 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
   Sector sector = tile->_sector;
-  const Vector2S resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
-  
+    
+    MutableVector2I mutableResolution = prc->_layerTilesRenderParameters->_tileMeshResolution.asVector2I().asMutableVector2I();
+    
+    if (tile->getElevationData() != NULL) {
+      mutableResolution = tile->getElevationData()->getExtent().asMutableVector2I();
+    }
+    
+  const Vector2I resolution = mutableResolution.asVector2I();
+
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
   const double lonRatio = sector._deltaLongitude._degrees / renderedSector._deltaLongitude._degrees;
   

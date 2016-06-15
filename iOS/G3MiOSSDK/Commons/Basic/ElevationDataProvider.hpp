@@ -17,6 +17,7 @@ class G3MRenderContext;
 
 #include <vector>
 #include "Vector2I.hpp"
+#include "Tile.hpp"
 
 #include "ChangedListener.hpp"
 
@@ -63,12 +64,15 @@ public:
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
 
   virtual void initialize(const G3MContext* context) = 0;
-
+    
   virtual const long long requestElevationData(const Sector& sector,
                                                const Vector2I& extent,
+                                               int level,
+                                               int row,
+                                               int column,
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
-
+    
   virtual void cancelRequest(const long long requestId) = 0;
 
   virtual std::vector<const Sector*> getSectors() const = 0;

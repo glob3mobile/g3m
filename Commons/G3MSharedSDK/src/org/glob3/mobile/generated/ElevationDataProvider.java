@@ -22,7 +22,7 @@ public abstract class ElevationDataProvider
 
   public abstract void initialize(G3MContext context);
 
-  public abstract long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener);
+  public abstract long requestElevationData(Sector sector, Vector2I extent, int level, int row, int column, IElevationDataListener listener, boolean autodeleteListener);
 
   public abstract void cancelRequest(long requestId);
 

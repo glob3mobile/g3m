@@ -33,6 +33,8 @@ private:
 
 public:
 
+#warning Ask JM: Proper working and uses of this class
+
   WMSBilElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                       const Vector2I& extent,
                                                       IElevationDataListener* listener,
@@ -100,9 +102,12 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                   const Vector2I& extent,
-                                                                   IElevationDataListener* listener,
-                                                                   bool autodeleteListener) {
+                                             const Vector2I& extent,
+                                             int level,
+                                             int row,
+                                             int column,
+                                             IElevationDataListener* listener,
+                                             bool autodeleteListener) {
   if (_downloader == NULL) {
     ILogger::instance()->logError("WMSBilElevationDataProvider was not initialized.");
     return -1;

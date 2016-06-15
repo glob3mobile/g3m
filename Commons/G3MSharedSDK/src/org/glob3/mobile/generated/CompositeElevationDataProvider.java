@@ -111,7 +111,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     private final boolean _autodelete;
     private final Vector2I _resolution;
     private final Sector _sector ;
-
+    private final int _level;
+    private final int _row;
+    private final int _column;
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
@@ -126,7 +128,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     
       ElevationDataProvider provider = null;
     
-      final int psSize = ps.size();
+      int psSize = ps.size();
       int selectedIndex = -1;
       for (int i = 0; i < psSize; i++)
       {
@@ -152,7 +154,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       return provider;
     }
 
-    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodelete)
+    public CompositeElevationDataProvider_Request(CompositeElevationDataProvider provider, Sector sector, Vector2I resolution, int level, int row, int column, IElevationDataListener listener, boolean autodelete)
     {
        _providers = provider.getProviders(sector);
        _sector = new Sector(sector);
@@ -162,6 +164,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
        _compProvider = provider;
        _compData = null;
        _currentStep = null;
+       _level = level;
+       _row = row;
+       _column = column;
     }
 
     public void dispose()
@@ -175,8 +180,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       if (_currentProvider != null)
       {
         _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
-    
-        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _currentStep, true);
+        _currentID = _currentProvider.requestElevationData(_sector, _resolution, _level, _row, _column, _currentStep, true);
     
         return true;
       }
@@ -345,10 +349,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, int level, int row, int column, IElevationDataListener listener, boolean autodeleteListener)
   {
   
-    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, listener, autodeleteListener);
+    CompositeElevationDataProvider_Request req = new CompositeElevationDataProvider_Request(this, sector, extent, level, row, column, listener, autodeleteListener);
     _currentID++;
     _requests.put(_currentID, req);
   
@@ -356,6 +360,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
   
     return _currentID;
   }
+
 
   public final void cancelRequest(long requestId)
   {

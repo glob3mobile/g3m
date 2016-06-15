@@ -26,6 +26,8 @@ _resolution(sector._deltaLatitude.div(extent._y),
             sector._deltaLongitude.div(extent._x)),
 _interpolator(NULL)
 {
+    _hasChildren = false;
+    _meshGeometricalErrorWithChildren = IMathUtils::instance()->minFloat();
 }
 
 ElevationData::~ElevationData() {

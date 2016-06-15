@@ -26,7 +26,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   
     for (final Long key : _requestsQueue.keySet()) {
       final SingleBilElevationDataProvider_Request r = _requestsQueue.get(key);
-      requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
+      requestElevationData(r._sector, r._extent,0,0,0, r._listener, r._autodeleteListener);
       if (r != null) {
         r.dispose();
       }
@@ -104,7 +104,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
   }
 
-  public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public final long requestElevationData(Sector sector, Vector2I extent, int level, int row, int column, IElevationDataListener listener, boolean autodeleteListener)
   {
     if (!_elevationDataResolved)
     {

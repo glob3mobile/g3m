@@ -28,6 +28,7 @@
 #include "IImageBuilderListener.hpp"
 #include "PlanetRenderContext.hpp"
 #include "TilesRenderParameters.hpp"
+#include "Vector2S.hpp"
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:

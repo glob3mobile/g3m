@@ -42,10 +42,41 @@ public class TileElevationDataRequest
     _listener = null;
   }
 
-  public final void sendRequest()
+  public final void sendRequest(G3MRenderContext rc, PlanetRenderContext prc)
   {
     _listener = new TileElevationDataRequestListener(this);
-    _requestID = _provider.requestElevationData(_tile._sector, _resolution, _listener, true);
+    _requestID = _provider.requestElevationData(_tile._sector, _resolution, _tile._level, _tile._row, _tile._column, _listener, true);
+    if (_requestID < -1)
+    {
+      //A requestID lower than -1 is defined to represent a tile which won't have elevationData due to the pyramid being shorter than needed.
+      //That case, we will try to get ElevData from ancestor and define it as the one needed in the level.
+      long maxLevel = - (_requestID);
+      Tile theLastAncestor = null;
+      Tile theAncestor = _tile.getParent();
+      while (theAncestor != null)
+      {
+        if (theAncestor._level == maxLevel)
+        {
+          theLastAncestor = theAncestor;
+          break;
+        }
+        theAncestor = theAncestor.getParent();
+      }
+      if (theLastAncestor != null)
+      {
+        if (theLastAncestor.getElevationData() == null)
+        {
+          //Ensure lastAncestor to have an ElevData.
+          theLastAncestor.initializeElevationData(rc, prc);
+        }
+        if (theLastAncestor.getElevationData() != null)
+        {
+          ElevationData subView = _tile.createElevationDataSubviewFromAncestor(theLastAncestor);
+          _tile.setElevationData(subView, _tile._level);
+        }
+      }
+      _requestID = -1;
+    }
   }
 
   public final void cancelRequest()
@@ -53,7 +84,10 @@ public class TileElevationDataRequest
     if (_listener != null)
     {
       _listener._request = null;
-      _provider.cancelRequest(_requestID);
+      if (_requestID > -1)
+      {
+        _provider.cancelRequest(_requestID);
+      }
     }
   }
 

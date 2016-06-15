@@ -31,6 +31,10 @@ protected:
   const int _height;
 
   const Geodetic2D _resolution;
+  
+#warning This may suffer further refactoring.
+  bool _hasChildren;
+  double _meshGeometricalErrorWithChildren;
 
 public:
   ElevationData(const Sector& sector,

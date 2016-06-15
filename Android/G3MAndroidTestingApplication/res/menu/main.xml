@@ -1,9 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
+	<!--  Original item -->
+    <!--  <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/action_settings"/> -->
+    <item
+        android:id="@+id/load"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/load"/>
+    <item
+        android:id="@+id/go"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/go"/>
+    <item
+        android:id="@+id/clear"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/clear"/>
 
 </menu>

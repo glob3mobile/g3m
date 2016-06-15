@@ -16,6 +16,8 @@ class ShortBufferElevationData : public BufferElevationData {
 private:
   short*  _buffer;
   bool    _hasNoData;
+    
+  short _max, _min;
 
 protected:
   double getValueInBufferAt(int index) const;
@@ -31,6 +33,18 @@ public:
                            short* buffer,
                            int bufferSize,
                            double deltaHeight);
+    
+  ShortBufferElevationData(const Sector& sector,
+                           const Vector2I& extent,
+                           const Sector& realSector,
+                           const Vector2I& realExtent,
+                           short* buffer,
+                           int bufferSize,
+                           double deltaHeight,
+                           short max,
+                           short min,
+                           short hasChildren,
+                           double geomError);
 
   virtual ~ShortBufferElevationData();
 
@@ -39,6 +53,9 @@ public:
   Vector3D getMinMaxAverageElevations() const;
   
   bool hasNoData() const { return _hasNoData;}
+
+  bool hasChildren() const { return _hasChildren; }
+  double getMeshGeometricalError() const {return _meshGeometricalErrorWithChildren; }
 
 };
 

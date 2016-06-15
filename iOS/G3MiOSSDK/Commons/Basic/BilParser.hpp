@@ -25,6 +25,11 @@ public:
                                               const Vector2I& extent,
                                               const IByteBuffer* buffer,
                                               double deltaHeight = 0);
+  
+  static ShortBufferElevationData* parseBil16Redim (const Sector& sector,
+                                                    IByteBuffer *buffer,
+                                                    const short noData,
+                                                    double deltaHeight = 0);
 };
 
 #endif

@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>G3MWebGLDemo</title>
+<link type="text/css" rel="stylesheet" href="style/new_style.css">
+<!--                                           -->
+<!-- This script loads your compiled module.   -->
+<!-- If you add any GWT meta tags, they must   -->
+<!-- be added before this line.                -->
+<!--                                           -->
+<script type="text/javascript"
+	src="org.glob3.mobile.G3MWebGLTestingApplication/org.glob3.mobile.G3MWebGLTestingApplication.nocache.js"></script>
+</head>
+
+<body>
+	<!-- OPTIONAL: include this if you want history support -->
+	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
+		style="position: absolute; width: 0; height: 0; border: 0"></iframe>
+
+	<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+	<noscript>
+		<div
+			style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+			Your web browser must have JavaScript enabled in order for this
+			application to display correctly.</div>
+	</noscript>
+        <h1> World DEM Demo </h1>
+        <div id="container">
+            <text> Select configuration: </text>
+            
+            <select id="sizeOption">
+                <option value="0">Fixed 16x16</option>
+                <option value="1">Variable 16x16</option>
+                <option value="2">Euro 16x16</option>
+                <option value="3">Euro Variable 16x16</option>
+            </select>
+            
+            <select id="wireFrameOption">
+                <option value="0">Do not use wireframe</option>
+                <option value="1">Use wireframe</option>
+            </select>
+            
+            <input placeholder="Vertical Exaggeration" type="input" id="vertex"> </input>
+            
+            <button type="button" id="startButton" onclick="loadGlobe()"> Select </button>
+            <button type="button" id="clearButton" onclick="clearGlobe()"> Clear screen </button>
+        </div>
+        <div id="container2">
+            <text> Go to: lat: </text>
+            <input type="input" id="lat"></input>
+            <text> lon: </text>
+            <input type="input" id="lon"></input>
+            <text> hgt: </text>
+            <input type="input" id="hgt"></input>
+            <text> pitch: </text>
+            <input type="input" id="pitch"></input>
+            <button type="button" id="startButton" onclick="goTo()"> Go to </button>
+        </div>
+	<div id="g3mWidgetHolder">
+	</div>
+	
+	<script type="text/javascript">
+	var _onLoadG3MListener = null;
+
+    function onLoadG3M() {
+    	// the G3M objets is already loaded
+    	if (_onLoadG3MListener != null)
+    		_onLoadG3MListener();
+    }
+
+    function setOnLoadG3MListener(func) {
+    	_onLoadG3MListener = func;
+    }
+    
+    function clearGlobe(){
+        try {
+            if (!window.hasOwnProperty("G3M")) {
+                alert("There is not such a globe to remove!");
+                return [];
+            }
+            var lat = G3M.getLatitude();
+            var lon = G3M.getLongitude();
+            var hgt = G3M.getHeight();
+            var head = G3M.getHeading();
+            var pitch = G3M.getPitch();
+            
+            G3M.clearGlobe();
+            var parent = document.getElementById("g3mWidgetHolder");
+            var globe = document.getElementById("_g3m_canvas");
+            parent.removeChild(globe);
+            
+            return [lat, lon, hgt, head, pitch];
+            
+        }
+        catch (err) { return []}
+    }
+    
+    function loadGlobe(){
+        var array = clearGlobe();
+        var wireframeValue = Number(document.getElementById("wireFrameOption").value);
+        var sizeValue = Number(document.getElementById("sizeOption").value);
+        var vertExValue = Number(document.getElementById("vertex").value);
+        if (!window.hasOwnProperty("G3M")) {
+            alert("G3M isn't ready to use");
+            return;
+        }
+        if(typeof vertExValue === "undefined") {
+            alert("Vertical Exaggeration value is needed!");
+            return;
+        }
+        if (wireframeValue == 1) G3M.loadGlobe(sizeValue,true,vertExValue);
+        else G3M.loadGlobe(sizeValue,false,vertExValue);
+        
+        if (array.length > 0){
+        	G3M.setPitch(array[4]);
+        	G3M.setHeading(array[3])
+        	G3M.goTo(array[0],array[1],array[2]);
+        }
+    }
+    
+    function goTo(){
+        if (!window.hasOwnProperty("G3M")) {
+            alert("G3M isn't ready to use");
+            return;
+        }
+        var latValue = Number(document.getElementById("lat").value);
+        var lonValue = Number(document.getElementById("lon").value);
+        var hgtValue = Number(document.getElementById("hgt").value);
+        var pitchValue = Number(document.getElementById("pitch").value);
+        
+        G3M.setPitch(pitchValue);
+        G3M.goTo(latValue,lonValue,hgtValue);
+    }
+	</script>
+	
+</body>
+</html>

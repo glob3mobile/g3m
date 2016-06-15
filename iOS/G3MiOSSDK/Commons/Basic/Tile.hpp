@@ -11,6 +11,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
+#include "FrameTask.hpp"
 
 class TileTexturizer;
 class TileElevationDataRequest;
@@ -28,9 +29,6 @@ private:
   TileTexturizer* _texturizer;
   Tile*           _parent;
 
-  Mesh* _tessellatorMesh;
-
-  Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
 
@@ -41,8 +39,6 @@ private:
   bool _justCreatedSubtiles;
 
   bool _texturizerDirty;
-
-  TileTessellatorMeshData _tileTessellatorMeshData;
 
   void prepareTestLODData(const Planet* planet);
 
@@ -79,7 +75,7 @@ private:
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
-  bool                   _mustActualizeMeshDueToNewElevationData;
+  
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
@@ -92,6 +88,51 @@ private:
 
   mutable TileData** _data;
   mutable size_t     _dataSize;
+    
+  class TessellatorTask : public FrameTask {
+  private:
+    Tile *_tile;
+    const PlanetRenderContext *_prc;
+      
+    const PlanetRenderer *_planetRenderer;
+    bool _shouldCancel;
+  public:
+    TessellatorTask(Tile * tile,
+                    const PlanetRenderContext *prc,
+                    const PlanetRenderer *planetRenderer):
+      _tile(tile),
+      _prc(prc),
+      _planetRenderer(planetRenderer),
+      _shouldCancel(false) {
+            
+      }
+        
+      ~TessellatorTask(){
+        if (_tile != NULL) {
+          _tile->_tessellatorTask = NULL;
+        }
+      }
+        
+      void cancelTask (){
+        _shouldCancel = true;
+        _tile = NULL;
+      }
+        
+      bool isCanceled(const G3MRenderContext* rc){
+        return _shouldCancel;
+      };
+        
+      void execute(const G3MRenderContext* rc);
+  };
+    
+protected:
+  TessellatorTask *_tessellatorTask;
+  bool _shouldInitElevData;
+  bool _mustActualizeMeshDueToNewElevationData;
+  Mesh* _tessellatorMesh;
+    
+  Mesh* _debugMesh;
+  TileTessellatorMeshData _tileTessellatorMeshData;
 
 public:
   const Sector      _sector;

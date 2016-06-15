@@ -145,9 +145,12 @@ void SingleBilElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long SingleBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                      const Vector2I& extent,
-                                                                      IElevationDataListener* listener,
-                                                                      bool autodeleteListener) {
+                                             const Vector2I& extent,
+                                             int level,
+                                             int row,
+                                             int column,
+                                             IElevationDataListener* listener,
+                                             bool autodeleteListener){
   if (!_elevationDataResolved) {
     return queueRequest(sector,
                         extent,
@@ -191,14 +194,14 @@ void SingleBilElevationDataProvider::drainQueue() {
   std::map<long long, SingleBilElevationDataProvider_Request*>::iterator it = _requestsQueue.begin();
   for (; it != _requestsQueue.end(); it++) {
     SingleBilElevationDataProvider_Request* r = it->second;
-    requestElevationData(r->_sector, r->_extent, r->_listener, r->_autodeleteListener);
+    requestElevationData(r->_sector, r->_extent, 0,0,0, r->_listener, r->_autodeleteListener);
     delete r;
   }
 #endif
 #ifdef JAVA_CODE
   for (final Long key : _requestsQueue.keySet()) {
     final SingleBilElevationDataProvider_Request r = _requestsQueue.get(key);
-    requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
+    requestElevationData(r._sector, r._extent,0,0,0, r._listener, r._autodeleteListener);
     if (r != null) {
       r.dispose();
     }
@@ -228,3 +231,4 @@ void SingleBilElevationDataProvider::removeQueueRequest(const long long requestI
   _requestsQueue.remove(requestId);
 #endif
 }
+

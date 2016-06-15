@@ -78,7 +78,7 @@ private:
     private final Vector2I _resolution;
 #endif
     const Sector _sector;
-    
+    const int _level, _row, _column;
   public:
     
     std::vector<ElevationDataProvider*> _providers;
@@ -89,6 +89,9 @@ private:
     CompositeElevationDataProvider_Request(CompositeElevationDataProvider* provider,
                                            const Sector& sector,
                                            const Vector2I &resolution,
+                                           const int level,
+                                           const int row,
+                                           const int column,
                                            IElevationDataListener *listener,
                                            bool autodelete);
 
@@ -141,9 +144,13 @@ public:
   void initialize(const G3MContext* context);
 
   const long long requestElevationData(const Sector& sector,
-                                       const Vector2I& extent,
-                                       IElevationDataListener* listener,
-                                       bool autodeleteListener);
+                                                 const Vector2I& extent,
+                                                 int level,
+                                                 int row,
+                                                 int column,
+                                                 IElevationDataListener* listener,
+                                                 bool autodeleteListener);
+    
 
   void cancelRequest(const long long requestId);
 
