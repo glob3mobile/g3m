@@ -15,7 +15,7 @@
 
 TileElevationDataRequest::TileElevationDataRequest(Tile* tile,
                                                    const Vector2I& resolution,
-                                                   ElevationDataProvider* provider) :
+                                                   ElevationDataProvider *provider):
 _tile(tile),
 _resolution(resolution),
 _provider(provider),
@@ -48,7 +48,7 @@ void TileElevationDataRequest::cancelRequest() {
   if (_listener != NULL) {
     _listener->_request = NULL;
     if (_requestID > -1){
-      _provider->cancelRequest(_requestID);
+        _provider->cancelRequest(_requestID);
     }
   }
 }

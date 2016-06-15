@@ -12,6 +12,7 @@
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/PyramidElevationDataProvider.hpp>
 #include <G3MiOSSDK/TimeInterval.hpp>
+#include <G3MiOSSDK/LayerBuilder.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -79,10 +80,10 @@ public:
 
 void G3MElevationsDemoScene::rawActivate(const G3MContext* context) {
     G3MDemoModel* model     = getModel();
-    BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+    /*BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
                                              "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                             TimeInterval::fromDays(30));
-    
+                                             TimeInterval::fromDays(30));*/
+    WMSLayer *layer = LayerBuilder::createBingLayer(true);
     model->getLayerSet()->addLayer(layer);
 }
 
@@ -90,16 +91,20 @@ void G3MElevationsDemoScene::rawSelectOption(const std::string& option,
                      int optionIndex) {
     switch (optionIndex){
         case 0:
-            loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/fix-16/",Sector::fullSphere(),2.0f);
+            //loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/fix-16/",Sector::fullSphere(),2.0f);
+            loadElevs("http://10.230.172.35:8080/DemoElevs/elevs/wgs_piramid/",Sector::fullSphere(),2.0f);
             break;
         case 1:
-            loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/var-16/",Sector::fullSphere(),2.0f);
+            //loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/var-16/",Sector::fullSphere(),2.0f);
+            loadElevs("http://10.230.172.35:8080/DemoElevs/elevs/wgs_piramid-2/",Sector::fullSphere(),2.0f);
             break;
         case 2:
-            loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/fix-16/",Sector::fromDegrees(34,-10,70,52),2.0f);
+            //loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/fix-16/",Sector::fromDegrees(34,-10,70,52),2.0f);
+            loadElevs("http://10.230.172.35:8080/DemoElevs/elevs/wgs_piramid-3/",Sector::fullSphere(),2.0f);
             break;
         case 3:
-            loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/fix-16/",Sector::fromDegrees(34,-10,70,52),2.0f);
+            //loadElevs("http://193.145.147.50:8080/DemoElevs/elevs/fix-16/",Sector::fromDegrees(34,-10,70,52),2.0f);
+            loadElevs("http://10.230.172.35:8080/DemoElevs/elevs/wgs_piramid/",Sector::fullSphere(),2.0f);
             break;
     }
 }
@@ -113,6 +118,8 @@ void G3MElevationsDemoScene::loadElevs(std::string layerServer,const Sector &lay
 
     
     planetRenderer->setElevationDataProvider(new PyramidElevationDataProvider(layerServer,layerSector), true);
+    model->getG3MWidget()->setCameraPitch(Angle::fromDegrees(-30));
+    model->getG3MWidget()->setCameraPosition(Geodetic3D::fromDegrees(40,0, 100000));
     //LOCALE BIL VERSION
     //planetRenderer->setElevationDataProvider(new PyramidElevationDataProvider("http://10.230.171.227:8080/DemoElevs/elevs/redim/",layerSector), true);
     

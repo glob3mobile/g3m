@@ -51,12 +51,12 @@ public:
                     IByteBuffer* buffer,
                     bool expired){
 #warning Bil parser code commented to be applied when necessary.
-        JSONDemParser *parser = new JSONDemParser(buffer->getAsString());
+        /*JSONDemParser *parser = new JSONDemParser(buffer->getAsString());
         const Vector2I *resolution = parser->getResolution();
-        ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);
+        ShortBufferElevationData *elevationData = parser->parseJSONDemElevationData(*_sector, *resolution, buffer,(short) _noDataValue, _deltaHeight);*/
         
-       /* ShortBufferElevationData *elevationData = BilParser::parseBil16Redim(*_sector, buffer, (short) _noDataValue);
-        const Vector2I *resolution = new Vector2I(elevationData->getExtent()); */
+        ShortBufferElevationData *elevationData = BilParser::parseBil16Redim(*_sector, buffer, (short) _noDataValue);
+        const Vector2I *resolution = new Vector2I(elevationData->getExtent());
         
         if (buffer != NULL){
             delete buffer;
@@ -83,7 +83,7 @@ public:
             _listener = NULL;
         }
 #warning Discard parser deletion when bil needed.
-        delete parser;
+        //delete parser;
         delete _sector;
 #ifdef C_CODE
         delete resolution;
@@ -202,8 +202,8 @@ std::string PyramidElevationDataProvider::requestStringPath(const std::string & 
     istr->addString("/");
     istr->addInt(row);
 #warning Use bil line instead of json line when needed
-    istr->addString(".json");
-    //istr->addString(".bil");
+    //istr->addString(".json");
+    istr->addString(".bil");
     std::string res = istr->getString();
     delete istr;
     return res;
