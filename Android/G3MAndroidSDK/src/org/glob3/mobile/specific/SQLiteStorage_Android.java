@@ -34,8 +34,6 @@ public final class SQLiteStorage_Android
          extends
             IStorage {
 
-   private static final long DB_RAW_DATA_EXTERNAL_THRESHOLD = 1024 * 1024; // 1 MiB
-   private static final String DB_EXTERNAL_TAG = "EXT:";
    private static final Charset UTF8 = Charset.forName("UTF-8");
 
    private static final String[]         COLUMNS       = new String[] { "contents", "expiration" };
@@ -51,6 +49,8 @@ public final class SQLiteStorage_Android
    private final BitmapFactory.Options   _options;
    private final byte[]                  _temp_storage = new byte[128 * 1024];
    private final String                  _documentsDirectory;
+
+   private final Long _dbExternalThreshold;
 
 
    private class MySQLiteOpenHelper
@@ -101,7 +101,8 @@ public final class SQLiteStorage_Android
 
 
    public SQLiteStorage_Android(final String path,
-                                final android.content.Context context) {
+                                final android.content.Context context,
+                                final long dbExternalThreshold) {
        _androidContext = context;
        File f = _androidContext.getExternalCacheDir();
        if ((f == null) || !f.exists()) {
@@ -117,6 +118,14 @@ public final class SQLiteStorage_Android
 
       _options = new BitmapFactory.Options();
       _options.inTempStorage = _temp_storage;
+
+       _dbExternalThreshold = dbExternalThreshold;
+   }
+
+
+   public SQLiteStorage_Android(final String path,
+                                 final android.content.Context context) {
+       this(path, context, Long.MAX_VALUE);
    }
 
 
@@ -175,15 +184,17 @@ public final class SQLiteStorage_Android
         FileInputStream fin = null;
         try {
             fin = new FileInputStream(f2);
-            final int avail = fin.available();
-            if (avail == 0) {
-                return null;
+
+
+            final ByteArrayOutputStream result = new ByteArrayOutputStream();
+            final byte[] buffer = new byte[16384];
+            int read;
+            while ((read = fin.read(buffer, 0, buffer.length)) != -1) {
+                result.write(buffer, 0, read);
             }
-            final byte[] r = new byte[avail];
-            if (fin.read(r) != avail) {
-                return null;
-            }
-            return r;
+            result.flush();
+            return result.toByteArray();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -201,18 +212,29 @@ public final class SQLiteStorage_Android
         }
     }
 
+   private String externalFilename( String table, String name ) {
+       StringBuilder str = new StringBuilder();
+       str.append(table + "_");
+
+       byte[] ba = name.getBytes(Charset.forName("UTF-8"));
+       for (byte b : ba) {
+           str.append(String.format("%02x", b));
+       }
+       str.append(".raw_cache");
+       return str.toString();
+   }
+
    private synchronized void rawSave(final String table,
                                      final String name,
                                      final byte[] contents,
                                      final TimeInterval timeToExpires) {
 
-      final boolean external = contents.length >= DB_RAW_DATA_EXTERNAL_THRESHOLD;
-      final String externalFileName = external ? (table + name).hashCode() + ".raw_cache" : null;
+      final boolean external = _dbExternalThreshold!=null && contents.length >= _dbExternalThreshold;
 
       final ContentValues values = new ContentValues(3);
       values.put("name", name);
       values.put("contents",
-                    external ? (DB_EXTERNAL_TAG + externalFileName).getBytes(UTF8) : contents);
+                    external ? null : contents);
       final long expiration = System.currentTimeMillis() + timeToExpires.milliseconds();
       values.put("expiration", Long.toString(expiration));
 
@@ -221,7 +243,7 @@ public final class SQLiteStorage_Android
       }
       else {
          if (external) {
-             if (!writeFileToCacheFolder(externalFileName, contents)) {
+             if (!writeFileToCacheFolder(externalFilename(table, name), contents)) {
                  ILogger.instance().logError("SQL: Can't write external file for cache \"%s\"\n", name);
                  return;
              }
@@ -251,30 +273,28 @@ public final class SQLiteStorage_Android
                null, //
                null);
       if (cursor.moveToFirst()) {
-         final byte[] data = cursor.getBlob(0);
-         final String expirationS = cursor.getString(1);
-         final long expirationInterval = Long.parseLong(expirationS);
-
-         expired = (expirationInterval <= System.currentTimeMillis());
-         if (!expired || readExpired) {
-             if (data.length > DB_EXTERNAL_TAG.length()) {
-                 final String extTag = new String(data, 0, DB_EXTERNAL_TAG.length(), UTF8);
-                 if (!extTag.isEmpty() && DB_EXTERNAL_TAG.equalsIgnoreCase(extTag)) {
-                     final byte[] cacheData = readFileFromCacheFolder(
-                             new String(data, DB_EXTERNAL_TAG.length(), data.length - DB_EXTERNAL_TAG.length(), UTF8));
-                     if (cacheData == null || cacheData.length == 0) {
-                         ILogger.instance()
-                                 .logError("SQL: Can't read external file for cache \"%s\"\n", name);
-                         cursor.close();
-                         return new IByteBufferResult(null, expired);
-                     }
-                     buffer = new ByteBuffer_Android(cacheData);
-                 }
-             }
-             if (buffer == null) {
-                 buffer = new ByteBuffer_Android(data);
-             }
-         }
+          final String expirationS = cursor.getString(1);
+          final long expirationInterval = Long.parseLong(expirationS);
+          expired = (expirationInterval <= System.currentTimeMillis());
+          if (!expired || readExpired) {
+              if (cursor.isNull(0)) {
+                  // contents is null, means data should be read from file
+                  final byte[] cacheData = readFileFromCacheFolder(
+                          externalFilename("buffer2", name)
+                  );
+                  if (cacheData == null || cacheData.length == 0) {
+                      ILogger.instance()
+                              .logError("SQL: Can't read external file for cache \"%s\"\n", name);
+                      cursor.close();
+                      return new IByteBufferResult(null, expired);
+                  }
+                  buffer = new ByteBuffer_Android(cacheData);
+              } else {
+                  // contents is not null, means data should be read from the cursor
+                  final byte[] data = cursor.getBlob(0);
+                  buffer = new ByteBuffer_Android(data);
+              }
+          }
       }
       cursor.close();
 
@@ -308,13 +328,13 @@ public final class SQLiteStorage_Android
       final byte[] contentsF = contents;
       if (saveInBackground) {
          _context.getThreadUtils().invokeInBackground( //
-                  new GTask() {
+                 new GTask() {
                      @Override
                      public void run(final G3MContext context) {
-                        rawSave(table, name, contentsF, timeToExpires);
+                         rawSave(table, name, contentsF, timeToExpires);
                      }
-                  }, //
-                  true);
+                 }, //
+                 true);
       }
       else {
          rawSave(table, name, contents, timeToExpires);
@@ -338,41 +358,35 @@ public final class SQLiteStorage_Android
                null, //
                null);
       if (cursor.moveToFirst()) {
-         final byte[] data = cursor.getBlob(0);
          final String expirationS = cursor.getString(1);
          final long expirationInterval = Long.parseLong(expirationS);
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
-             Bitmap bitmap = null;
-
-             if (data.length > DB_EXTERNAL_TAG.length()) {
-                 final String extTag = new String(data, 0, DB_EXTERNAL_TAG.length(), UTF8);
-                 if (!extTag.isEmpty() && DB_EXTERNAL_TAG.equalsIgnoreCase(extTag)) {
-                     final byte[] cacheData = readFileFromCacheFolder(
-                             new String(data, DB_EXTERNAL_TAG.length(), data.length - DB_EXTERNAL_TAG.length(), UTF8));
-                     if (cacheData == null || cacheData.length == 0) {
-                         ILogger.instance()
-                                 .logError("SQL: Can't read external file for cache \"%s\"\n", name);
-                         cursor.close();
-                         return new IImageResult(null, expired);
-                     }
-                     bitmap = BitmapFactory.decodeByteArray(cacheData, 0, cacheData.length, _options);
+             Bitmap bitmap;
+             if (cursor.isNull(0)) {
+                 // contents is null, means data should be read from file
+                 final byte[] cacheData = readFileFromCacheFolder(
+                         externalFilename("buffer2", name)
+                 );
+                 if (cacheData == null || cacheData.length == 0) {
+                     ILogger.instance()
+                             .logError("SQL: Can't read external file for cache \"%s\"\n", name);
+                     cursor.close();
+                     return new IImageResult(null, expired);
                  }
+                 bitmap = BitmapFactory.decodeByteArray(cacheData, 0, cacheData.length, _options);
+             } else {
+                 // contents is not null, means data should be read from the cursor
+                 final byte[] data = cursor.getBlob(0);
+                 bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
              }
 
-            // final long start = System.currentTimeMillis();
-            if (bitmap == null) {
-                bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
-            }
-            // ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+             if (bitmap == null) {
+                 ILogger.instance().logError("Can't create bitmap from content of storage");
+             }
 
-            if (bitmap == null) {
-               ILogger.instance().logError("Can't create bitmap from content of storage");
-            }
-            else {
-               image = new Image_Android(bitmap, null);
-            }
+             image = new Image_Android(bitmap, null);
          }
       }
       cursor.close();
