@@ -4,7 +4,11 @@
 //  Created by José Miguel Santana Núñez
 //
 
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 
 uniform lowp vec4 uFlatColor;
 varying vec3 lightColor;
