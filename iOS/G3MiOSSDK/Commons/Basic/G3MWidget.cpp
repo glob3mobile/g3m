@@ -568,6 +568,9 @@ void G3MWidget::setFocusDistanceModifier(double mod) {
     _rightScissor->_release();
     _rightScissor = NULL;
   }
+  if (_rootState != NULL) {
+    _rootState->setParent(NULL);
+  }
 }
 
 void G3MWidget::setEyeDistance(double eDist) {
