@@ -727,6 +727,10 @@ public class G3MWidget implements ChangedRendererInfoListener
       _rightScissor._release();
       _rightScissor = null;
     }
+    if (_rootState != null)
+    {
+      _rootState.setParent(null);
+    }
   }
 
   public final void setEyeDistance(double eDist)
@@ -1111,8 +1115,6 @@ public class G3MWidget implements ChangedRendererInfoListener
         }
       }
     }
-  
-  
   }
 
   private void rawRenderMono(RenderState_Type renderStateType)
@@ -1157,7 +1159,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         final double eyesSeparation = _eyeDistance / 2.0;
         Vector3D up = _currentCamera.getUp();
   
-        final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
+        final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5).times(1.0 + _focusDistanceModifier);
         final Angle vFOV = _currentCamera.getVerticalFOV();
   
         Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
@@ -1183,13 +1185,13 @@ public class G3MWidget implements ChangedRendererInfoListener
   
       if (_leftScissor == null)
       {
-        ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(modifierPx, 0, halfWidth - modifierPx, _height);
+        ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
         _leftScissor = new GLState();
         _leftScissor.addGLFeature(leftScissorFeature, false);
       }
       if (_rightScissor == null)
       {
-        ScissorTestGLFeature rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth - modifierPx, _height);
+        ScissorTestGLFeature rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth, _height);
         _rightScissor = new GLState();
         _rightScissor.addGLFeature(rightScissorFeature, false);
       }
@@ -1198,14 +1200,14 @@ public class G3MWidget implements ChangedRendererInfoListener
   
   
     _gl.clearScreen(_backgroundColor);
-    //Left
-    _gl.viewport(modifierPx, 0, halfWidth, _height);
   
+    //Left
+    _gl.viewport(0, 0, halfWidth + modifierPx, _height);
     _currentCamera.copyFrom(_leftEyeCam, true);
     rawRender(renderStateType, _leftScissor);
   
     //Right
-    _gl.viewport(halfWidth - modifierPx, 0, halfWidth, _height);
+    _gl.viewport(halfWidth - modifierPx, 0, halfWidth + modifierPx, _height);
     _currentCamera.copyFrom(_rightEyeCam, true);
     rawRender(renderStateType, _rightScissor);
   
