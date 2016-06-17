@@ -505,9 +505,9 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType, GLState* modif
   if (_rootState == NULL) {
     _rootState = new GLState();
   }
-  if (modifier != NULL) {
-    _rootState->setParent(modifier);
-  }
+  
+  _rootState->setParent(modifier);
+  
   
   switch (renderStateType) {
     case RENDER_READY:
@@ -635,11 +635,9 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   }
 
   const int halfWidth = _width / 2;
-  int modifierPx = 0;
-  if (_focusDistanceModifier > 0.0) {
+  int modifierPx = (int) (halfWidth * _focusDistanceModifier);
+  if (modifierPx > 0) {
     // create scissor test GLState/s to prevent the two cameras rendering into each other's framebuffer
-    modifierPx = (int) (halfWidth * _focusDistanceModifier);
-    
     if (_leftScissor == NULL) {
       ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
       _leftScissor = new GLState();
@@ -651,7 +649,6 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       _rightScissor->addGLFeature(rightScissorFeature, false);
     }
   }
-
 
   
   _gl->clearScreen(*_backgroundColor);
