@@ -316,7 +316,7 @@ public final class NativeGL_WebGL
 		var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.getParameter(v);
 
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::convertJsArrayIngeterToJavaArrayInt(Lcom/google/gwt/core/client/JsArrayInteger;[I)(result, i);
+		@org.glob3.mobile.specific.NativeGL_WebGL::convertJsArrayIngeterToJavaArrayInt(Lcom/google/gwt/core/client/JsArrayInteger;[I)(result, i);
    }-*/;
 
 
