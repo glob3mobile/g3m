@@ -26,8 +26,8 @@ import android.widget.TextView;
 
 
 public class ShapeSymbolizerActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -55,8 +55,8 @@ public class ShapeSymbolizerActivity
 
       final LayerSet layerSet = new LayerSet();
       //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
-      //     
-      //      final 
+      //
+      //      final
 
       final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
       mqlAerial.setTitle("MapQuest Aerial");
@@ -95,7 +95,7 @@ public class ShapeSymbolizerActivity
    }
 
 
-   private int toAndroidColor(final Color c) {
+   static private int toAndroidColor(final Color c) {
       return android.graphics.Color.argb(Math.round(c._alpha * 255), Math.round(c._red * 255), Math.round(c._green * 255),
                Math.round(c._blue * 255));
    }

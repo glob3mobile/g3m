@@ -31,7 +31,7 @@ public final class NativeGL_WebGL
 
    private final JavaScriptObject                      _gl;
 
-   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
+   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<>();
 
 
    public NativeGL_WebGL(final JavaScriptObject webGLContext) {
@@ -320,8 +320,8 @@ public final class NativeGL_WebGL
    }-*/;
 
 
-   private void convertJsArrayIngeterToJavaArrayInt(final JsArrayInteger jsArray,
-                                                    final int[] javaArray) {
+   static private void convertJsArrayIngeterToJavaArrayInt(final JsArrayInteger jsArray,
+                                                           final int[] javaArray) {
       for (int i = 0; i < jsArray.length(); i++) {
          javaArray[i] = jsArray.get(i);
       }

@@ -24,8 +24,8 @@ import android.widget.Toast;
 
 
 public class VectorStreamingActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -117,7 +117,7 @@ public class VectorStreamingActivity
    }
 
 
-   private LayerSet createLayerSet() {
+   static private LayerSet createLayerSet() {
 
       final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
       layerSet.disableAllLayers();

@@ -47,7 +47,8 @@ public class ShpUtils {
       if (shpFile.exists()) {
          if (new File(parentFile.getAbsoluteFile() + "/" + fileNameWithoutExtension + ".shx").exists()) {
             if (new File(parentFile.getAbsoluteFile() + "/" + fileNameWithoutExtension + ".dbf").exists()) {
-               if (GDAL.instance().validateSRS(shpFile)) {
+               GDAL.instance();
+               if (GDAL.validateSRS(shpFile)) {
                   return true;
                }
                throw new GDALException("Not valid SRS", null);

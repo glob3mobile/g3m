@@ -23,8 +23,8 @@ import android.widget.RelativeLayout;
 
 
 public class PointCloudStreamimgActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -95,7 +95,7 @@ public class PointCloudStreamimgActivity
    }
 
 
-   private LayerSet createLayerSet() {
+   static private LayerSet createLayerSet() {
       //      final LayerSet layerSet = new LayerSet();
       //
       //      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));

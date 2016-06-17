@@ -43,8 +43,8 @@ import android.widget.RelativeLayout;
 
 
 public class VectorTilesActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -85,7 +85,7 @@ public class VectorTilesActivity
    }
 
 
-   private LayerSet createLayerSet() {
+   static private LayerSet createLayerSet() {
       //   final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
@@ -152,8 +152,8 @@ public class VectorTilesActivity
 
 
    private static class SampleRasterSymbolizer
-            extends
-               GEORasterSymbolizer {
+      extends
+         GEORasterSymbolizer {
 
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
 

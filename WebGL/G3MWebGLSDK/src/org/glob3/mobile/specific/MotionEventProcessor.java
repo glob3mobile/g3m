@@ -105,14 +105,14 @@ public final class MotionEventProcessor {
    }
 
 
-   private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<Integer, Vector2F>();
+   private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<>();
 
 
    private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
-      final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<Integer, Vector2F>();
+      final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
 
       final int jsTouchesSize = jsTouches.length();
-      final ArrayList<Touch> touches = new ArrayList<Touch>(jsTouchesSize);
+      final ArrayList<Touch> touches = new ArrayList<>(jsTouchesSize);
       for (int i = 0; i < jsTouchesSize; i++) {
          final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
 
@@ -191,7 +191,7 @@ public final class MotionEventProcessor {
       }
 
       final Vector2F currentMousePosition = createPosition(event);
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
+      final ArrayList<Touch> touches = new ArrayList<>();
 
       if (event.getShiftKey()) {
          touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
@@ -212,7 +212,7 @@ public final class MotionEventProcessor {
       //log(LogLevel.InfoLevel, " onMouseDown");
 
       final Vector2F currentMousePosition = createPosition(event);
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
+      final ArrayList<Touch> touches = new ArrayList<>();
 
       _mouseDown = true;
       if (event.getShiftKey()) {
@@ -234,7 +234,7 @@ public final class MotionEventProcessor {
       //log(LogLevel.InfoLevel, " onMouseUp");
 
       final Vector2F currentMousePosition = createPosition(event);
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
+      final ArrayList<Touch> touches = new ArrayList<>();
 
       final TouchEventType touchType;
 
@@ -289,7 +289,7 @@ public final class MotionEventProcessor {
       final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
       final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
 
-      final ArrayList<Touch> beginTouches = new ArrayList<Touch>(2);
+      final ArrayList<Touch> beginTouches = new ArrayList<>(2);
       beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
       beginTouches.add(new Touch(beginSecondPosition, beginSecondPosition));
 
@@ -297,7 +297,7 @@ public final class MotionEventProcessor {
       final Vector2F endFirstPosition = new Vector2F(beginFirstPosition._x - delta, beginFirstPosition._y - delta);
       final Vector2F endSecondPosition = new Vector2F(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
 
-      final ArrayList<Touch> endTouches = new ArrayList<Touch>(2);
+      final ArrayList<Touch> endTouches = new ArrayList<>(2);
       endTouches.add(new Touch(endFirstPosition, beginFirstPosition));
       endTouches.add(new Touch(endSecondPosition, beginSecondPosition));
 

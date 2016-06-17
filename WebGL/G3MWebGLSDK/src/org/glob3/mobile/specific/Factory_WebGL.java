@@ -34,7 +34,7 @@ public final class Factory_WebGL
 
 
    // TODO TEMP HACK TO PRELOAD IMAGES
-   private final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
+   private final HashMap<String, IImage> _downloadedImages = new HashMap<>();
 
 
    public void storeDownloadedImage(final String url,

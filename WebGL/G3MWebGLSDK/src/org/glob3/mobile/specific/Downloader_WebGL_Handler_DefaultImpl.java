@@ -42,7 +42,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final long requestId) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<ListenerEntry>();
+      _listeners = new ArrayList<>();
       final ListenerEntry entry = new ListenerEntry(bufferListener, null, deleteListener, requestId);
       _listeners.add(entry);
       _requestingImage = false;
@@ -57,7 +57,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final long requestId) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<ListenerEntry>();
+      _listeners = new ArrayList<>();
       final ListenerEntry entry = new ListenerEntry(null, imageListener, deleteListener, requestId);
       _listeners.add(entry);
       _requestingImage = true;
@@ -253,8 +253,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
    }-*/;
 
 
-   public void log(final LogLevel level,
-                   final String msg) {
+   public static void log(final LogLevel level,
+                          final String msg) {
       if (ILogger.instance() != null) {
          switch (level) {
             case InfoLevel:

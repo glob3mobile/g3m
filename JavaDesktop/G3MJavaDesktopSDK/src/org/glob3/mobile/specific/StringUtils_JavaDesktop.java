@@ -28,7 +28,7 @@ public final class StringUtils_JavaDesktop
    @Override
    public ArrayList<String> splitLines(final String String) {
       final String lines[] = String.split("\\r?\\n");
-      final ArrayList<String> l = new ArrayList<String>();
+      final ArrayList<String> l = new ArrayList<>();
       for (final java.lang.String line : lines) {
          l.add(line);
       }

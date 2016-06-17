@@ -55,8 +55,8 @@ public final class Logger_WebGL
    }
 
 
-   public String stringFormat(final String format,
-                              final Object... args) {
+   static public String stringFormat(final String format,
+                                     final Object... args) {
       final RegExp exp = RegExp.compile("%[sdf]");
       int nextSub = 0;
       String output = "";

@@ -34,12 +34,12 @@ import android.widget.RelativeLayout;
 
 
 public class PointCloudActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private final class PointsCloudParser
-            extends
-               GAsyncTask {
+      extends
+         GAsyncTask {
 
       private final IByteBuffer _buffer;
       private DirectMesh        _mesh;
@@ -123,8 +123,8 @@ public class PointCloudActivity
    }
 
    private final class PointsCloudDownloader
-            extends
-               IBufferDownloadListener {
+      extends
+         IBufferDownloadListener {
 
       private final IThreadUtils _threadUtils;
 
@@ -243,11 +243,11 @@ public class PointCloudActivity
    }
 
 
-   private float normalize(final float value,
-                           final float max,
-                           final float min,
-                           final float new_max,
-                           final float new_min) {
+   static private float normalize(final float value,
+                                  final float max,
+                                  final float min,
+                                  final float new_max,
+                                  final float new_min) {
       return (((value - min) / (max - min)) * (new_max - new_min)) + new_min;
    }
 

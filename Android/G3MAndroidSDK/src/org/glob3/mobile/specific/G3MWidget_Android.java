@@ -138,7 +138,7 @@ public final class G3MWidget_Android
             @Override
             public boolean onDoubleTap(final MotionEvent event) {
 
-               final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
 
                queueEvent(new Runnable() {
                   @Override
@@ -170,7 +170,8 @@ public final class G3MWidget_Android
       final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
       final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.5f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude,
+               devLoc);
 
    }
 
@@ -272,7 +273,7 @@ public final class G3MWidget_Android
    }
 
 
-   private GPUProgramManager createGPUProgramManager() {
+   static private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
 
       /*
@@ -330,7 +331,7 @@ public final class G3MWidget_Android
                storage, //
                downloader, //
                threadUtils, //
-               cameraActivityListener,//
+               cameraActivityListener, //
                planet, //
                cameraConstrainers, //
                cameraRenderer, //

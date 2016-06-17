@@ -44,8 +44,8 @@ import android.widget.LinearLayout;
 
 
 public class G3MNetCDFActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android                          _widgetAndroid;
    private boolean                                    _isDone         = false;
@@ -192,11 +192,11 @@ public class G3MNetCDFActivity
    }
 
 
-   private float normalize(final float value,
-                           final float max,
-                           final float min,
-                           final float new_max,
-                           final float new_min) {
+   static private float normalize(final float value,
+                                  final float max,
+                                  final float min,
+                                  final float new_max,
+                                  final float new_min) {
       return (((value - min) / (max - min)) * (new_max - new_min)) + new_min;
    }
 
@@ -236,7 +236,8 @@ public class G3MNetCDFActivity
 
                      final JSONArray features = yearObject.getAsArray("features");
 
-                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(
+                              planet);
 
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
@@ -384,13 +385,13 @@ public class G3MNetCDFActivity
                            final Color fromColor = Color.fromRGBA(0, 0, 1, 1);
                            final Color toColor = Color.fromRGBA(1, 0, 0, 1);
 
-                           final Color interpolatedColor = fromColor.mixedWith(toColor,
-                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue(), -10, 10, 1, 0));
+                           final Color interpolatedColor = fromColor.mixedWith(toColor, normalize(
+                                    Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue(), -10, 10, 1, 0));
 
                            final Geodetic3D position3D = new Geodetic3D(position, (value.getAsNumber("level").value() * 10000));
 
-                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent,
-                                    borderWidth, interpolatedColor, interpolatedColor));
+                           _shapesRenderer.addShape(new BoxShape(position3D, AltitudeMode.RELATIVE_TO_GROUND, extent, borderWidth,
+                                    interpolatedColor, interpolatedColor));
                         }
 
 
@@ -482,7 +483,8 @@ public class G3MNetCDFActivity
 
                      final JSONArray features = yearObject.getAsArray("features");
 
-                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
+                     final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(
+                              planet);
 
                      final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
@@ -508,8 +510,8 @@ public class G3MNetCDFActivity
                         for (int a = 0; a < values.size(); a++) {
                            final JSONObject value = values.getAsObject(a);
 
-                           final Color interpolatedColor = fromColor.mixedWith(toColor,
-                                    normalize(Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue(), -10, 10, 1, 0));
+                           final Color interpolatedColor = fromColor.mixedWith(toColor, normalize(
+                                    Double.valueOf(value.getAsNumber("merid_wnd").value()).floatValue(), -10, 10, 1, 0));
 
                            colors.add(interpolatedColor);
                         }
