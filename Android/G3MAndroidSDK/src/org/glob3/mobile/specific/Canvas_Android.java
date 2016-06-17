@@ -61,11 +61,13 @@ public final class Canvas_Android
    protected void _setFont(final GFont font) {
       _currentTypeface = createTypeface(font);
 
+      final float fontSize = font.getSize();
+
       _fillPaint.setTypeface(_currentTypeface);
-      _fillPaint.setTextSize(font.getSize());
+      _fillPaint.setTextSize(fontSize);
 
       _strokePaint.setTypeface(_currentTypeface);
-      _strokePaint.setTextSize(font.getSize());
+      _strokePaint.setTextSize(fontSize);
    }
 
 
