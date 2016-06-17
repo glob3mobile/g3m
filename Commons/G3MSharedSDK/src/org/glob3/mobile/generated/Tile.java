@@ -358,11 +358,14 @@ public class Tile
           _justCreatedSubtiles = false;
         }
   
-        final int subTilesSize = subTiles.size();
-        for (int i = 0; i < subTilesSize; i++)
+        if (toVisitInNextIteration != null)
         {
-          Tile subTile = subTiles.get(i);
-          toVisitInNextIteration.add(subTile);
+          final int subTilesSize = subTiles.size();
+          for (int i = 0; i < subTilesSize; i++)
+          {
+            Tile subTile = subTiles.get(i);
+            toVisitInNextIteration.add(subTile);
+          }
         }
       }
     }
