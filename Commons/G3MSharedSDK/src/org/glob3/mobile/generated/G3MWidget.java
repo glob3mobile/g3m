@@ -1202,12 +1202,12 @@ public class G3MWidget implements ChangedRendererInfoListener
     _gl.clearScreen(_backgroundColor);
   
     //Left
-    _gl.viewport(0, 0, halfWidth + modifierPx, _height);
+    _gl.viewport(modifierPx, 0, halfWidth + modifierPx, _height);
     _currentCamera.copyFrom(_leftEyeCam, true);
     rawRender(renderStateType, _leftScissor);
   
     //Right
-    _gl.viewport(halfWidth - modifierPx, 0, halfWidth + modifierPx, _height);
+    _gl.viewport(halfWidth - modifierPx, 0, halfWidth, _height);
     _currentCamera.copyFrom(_rightEyeCam, true);
     rawRender(renderStateType, _rightScissor);
   
