@@ -269,6 +269,10 @@ public:
                                           const Angle& toLon,
                                           const double alpha) const;
 
+  virtual int gcd(int a, int b) const {
+    return (b == 0) ? a : gcd(b, a % b);
+  }
+
 };
 
 #endif
