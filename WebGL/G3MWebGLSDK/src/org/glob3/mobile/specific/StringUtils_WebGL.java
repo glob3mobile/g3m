@@ -31,7 +31,6 @@ public final class StringUtils_WebGL
       for (final java.lang.String line : lines) {
          l.add(line);
       }
-
       return l;
    }
 
@@ -98,13 +97,12 @@ public final class StringUtils_WebGL
    }
 
 
-   @SuppressWarnings("deprecation")
    @Override
    public int indexOfFirstNonBlank(final String string,
                                    final int fromIndex) {
       final int stringLen = string.length();
       for (int i = fromIndex; i < stringLen; i++) {
-         if (!Character.isSpace(string.charAt(i))) {
+         if (!Character.isWhitespace(string.charAt(i))) {
             return i;
          }
       }

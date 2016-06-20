@@ -304,9 +304,6 @@ public:
   void initialize(const G3MContext* context,
                   long long downloadPriority);
 
-  void render(const G3MRenderContext* rc,
-              const MutableVector3D& cameraPosition);
-
   bool isReady() const;
 
   bool isRendered() const {

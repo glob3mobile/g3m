@@ -14,21 +14,6 @@ public class TextUtils_WebGL
    extends
       ITextUtils {
 
-   //   public static native String toJSColor(final Color color) /*-{
-   //		if (color) {
-   //			var r = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getRed()());
-   //			var g = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getGreen()());
-   //			var b = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getBlue()());
-   //			var a = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getAlpha()());
-   //			return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-   //		} else {
-   //			return null;
-   //		}
-   //   }-*/;
 
    private static String toJSColor(final Color color) {
       if (color == null) {

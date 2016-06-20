@@ -150,8 +150,6 @@ public final class NativeGL_WebGL
    public native void drawElements(final int mode,
                                    final int count,
                                    final IShortBuffer indices) /*-{
-		//debugger;
-
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var webGLBuffer = indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
@@ -176,26 +174,14 @@ public final class NativeGL_WebGL
 		var e = gl.getError();
 
 		if (e == gl.INVALID_ENUM) {
-			//                      debugger;
 			console.error("NativeGL_WebGL: INVALID_ENUM");
-		}
-
-		if (e == gl.INVALID_VALUE) {
-			//                   debugger;
+		} else if (e == gl.INVALID_VALUE) {
 			console.error("NativeGL_WebGL: INVALID_VALUE");
-		}
-
-		if (e == gl.INVALID_OPERATION) {
-			//                   debugger;
+		} else if (e == gl.INVALID_OPERATION) {
 			console.error("NativeGL_WebGL: INVALID_OPERATION");
-		}
-
-		if (e == gl.OUT_OF_MEMORY) {
-			//                   debugger;
+		} else if (e == gl.OUT_OF_MEMORY) {
 			console.error("NativeGL_WebGL: INVALID_OPERATION");
-		}
-
-		if (e == gl.CONTEXT_LOST_WEBGL) {
+		} else if (e == gl.CONTEXT_LOST_WEBGL) {
 			console.error("NativeGL_WebGL: CONTEXT_LOST_WEBGL");
 		}
 
@@ -602,7 +588,6 @@ public final class NativeGL_WebGL
    @Override
    public native boolean deleteShader(final int shader) /*-{
 		//TODO: IMPLEMENTATION FAILS
-		//debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);

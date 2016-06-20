@@ -48,8 +48,6 @@ public:
     return ISNAN(_x) || ISNAN(_y);
   }
 
-  MutableVector2D normalized() const;
-  
   double length() const {
     return IMathUtils::instance()->sqrt(squaredLength());
   }
