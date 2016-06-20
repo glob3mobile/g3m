@@ -23,7 +23,7 @@ public final class Canvas_WebGL
    private final JavaScriptObject _domCanvasContext;
 
    private String                 _currentDOMFont;
-   private float                  _currentFontSize;
+   private int                    _currentFontSize;
 
 
    Canvas_WebGL() {
@@ -64,8 +64,8 @@ public final class Canvas_WebGL
          builder.append("bold ");
       }
 
-      builder.append(Math.round(font.getSize() * 0.6f));
-      builder.append("pt ");
+      builder.append(Math.round(font.getSize()));
+      builder.append("px ");
 
       if (font.isSerif()) {
          builder.append("serif");
@@ -91,8 +91,8 @@ public final class Canvas_WebGL
 
    @Override
    protected void _setFont(final GFont font) {
+      _currentFontSize = Math.round(font.getSize());
       _currentDOMFont = createDOMFont(font);
-      _currentFontSize = font.getSize();
 
       tryToSetCurrentFontToContext();
    }
@@ -267,19 +267,17 @@ public final class Canvas_WebGL
                                    final float left,
                                    final float top) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-		var textHeight = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66;
-		context.fillText(text, left, top + textHeight);
+		context.textBaseline = "top";
+		context.fillText(text, left, top - 1);
    }-*/;
 
 
    @Override
    protected native Vector2F _textExtent(final String text) /*-{
-		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext
-				.measureText(text).width;
-
-		var height = Math
-				.round(this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66);
-
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.textBaseline = "top";
+		var width = context.measureText(text).width;
+		var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
 		return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
    }-*/;
 
