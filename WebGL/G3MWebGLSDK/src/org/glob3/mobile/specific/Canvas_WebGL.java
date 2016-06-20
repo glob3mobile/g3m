@@ -372,10 +372,11 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
+		var currentGlobalAlpha = context.globalAlpha;
 		context.globalAlpha = transparency;
 		context.drawImage(imageJS, destLeft, destTop, imageJS.width,
 				imageJS.height);
-		context.globalAlpha = 1.0;
+		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
 
@@ -402,9 +403,10 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
+		var currentGlobalAlpha = context.globalAlpha;
 		context.globalAlpha = transparency;
 		context.drawImage(imageJS, left, top, width, height);
-		context.globalAlpha = 1.0;
+		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
 
@@ -440,10 +442,11 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
+		var currentGlobalAlpha = context.globalAlpha;
 		context.globalAlpha = transparency;
 		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight,
 				destLeft, destTop, destWidth, destHeight);
-		context.globalAlpha = 1.0;
+		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
 
@@ -533,7 +536,6 @@ public final class Canvas_WebGL
                                final int count,
                                final float phase) {
       final JsArrayNumber jsArray = (JsArrayNumber) JavaScriptObject.createArray();
-
       for (int i = 0; i < count; i++) {
          jsArray.push(lengths[i]);
       }
