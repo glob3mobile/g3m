@@ -31,7 +31,6 @@ public final class StringUtils_WebGL
       for (final java.lang.String line : lines) {
          l.add(line);
       }
-
       return l;
    }
 

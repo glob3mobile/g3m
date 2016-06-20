@@ -687,9 +687,6 @@ public class Mark implements SurfaceElevationListener
     }
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void render(G3MRenderContext rc, MutableVector3D cameraPosition);
-
   public final boolean isReady()
   {
     return _textureSolved;

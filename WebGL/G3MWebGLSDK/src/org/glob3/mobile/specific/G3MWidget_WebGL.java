@@ -54,7 +54,7 @@ public class G3MWidget_WebGL
    extends
       Composite {
 
-   private Canvas               _canvas;
+   private final Canvas         _canvas;
    private JavaScriptObject     _webGLContext;
    private int                  _width;
    private int                  _height;
@@ -64,7 +64,6 @@ public class G3MWidget_WebGL
 
 
    public G3MWidget_WebGL() {
-
       initSingletons();
 
       _canvas = Canvas.createIfSupported();
@@ -89,13 +88,6 @@ public class G3MWidget_WebGL
 
       jsDefineG3MBrowserObjects();
 
-
-      // if (TouchEvent.isSupported()) {
-      //    sinkEvents(Event.TOUCHEVENTS);
-      // }
-      // else {
-      //    sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
-      // }
       sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
 
       exportJSFunctions();
@@ -107,14 +99,6 @@ public class G3MWidget_WebGL
 		if (!$wnd.G3M) {
 			$wnd.G3M = {};
 		}
-
-		//	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
-		//	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
-		//		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-		//	});
-		//	$wnd.angleFromDegrees = $entry(function (degrees) {
-		//		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
-		//	});
 
 		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
@@ -129,7 +113,6 @@ public class G3MWidget_WebGL
 			return @org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
 		});
 		$wnd.G3M.moveCameraTo = $entry(function(position) {
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
 		});
    }-*/;

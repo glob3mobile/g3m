@@ -22,7 +22,7 @@ public final class Downloader_WebGL
    extends
       IDownloader {
 
-   final private int                                _maxConcurrentOperationCount;
+   private final int                                _maxConcurrentOperationCount;
    private final Map<URL, Downloader_WebGL_Handler> _downloadingHandlers;
    private final Map<URL, Downloader_WebGL_Handler> _queuedHandlers;
    private final Timer                              _timer;

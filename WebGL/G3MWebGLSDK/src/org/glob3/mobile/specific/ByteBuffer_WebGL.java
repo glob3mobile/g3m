@@ -26,15 +26,6 @@ public final class ByteBuffer_WebGL
    }
 
 
-   //   public ByteBuffer_WebGL(final byte[] data,
-   //                           final int length) {
-   //      _buffer = jsCreateBuffer(length);
-   //
-   //      for (int i = 0; i < length; i++) {
-   //         put(i, data[i]);
-   //      }
-   //   }
-
    public ByteBuffer_WebGL(final byte[] data,
                            final int dataLength) {
       final JsArrayNumber array = JavaScriptObject.createArray().<JsArrayNumber> cast();

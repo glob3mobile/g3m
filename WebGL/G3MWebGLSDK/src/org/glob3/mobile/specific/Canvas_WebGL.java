@@ -19,24 +19,26 @@ public final class Canvas_WebGL
    extends
       ICanvas {
 
-   private JavaScriptObject _domCanvas;
-   private JavaScriptObject _domCanvasContext;
+   private final JavaScriptObject _domCanvas;
+   private final JavaScriptObject _domCanvasContext;
 
-   private String           _currentDOMFont;
-   private float            _currentFontSize;
+   private String                 _currentDOMFont;
+   private int                    _currentFontSize;
 
 
    Canvas_WebGL() {
-      initialize();
+      _domCanvas = createCanvas();
+      _domCanvasContext = getContext2D(_domCanvas);
    }
 
 
-   native void initialize() /*-{
-		var canvas = $doc.createElement("canvas");
-		var context = canvas.getContext("2d");
+   private static native JavaScriptObject createCanvas() /*-{
+		return $doc.createElement("canvas");
+   }-*/;
 
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas = canvas;
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext = context;
+
+   private static native JavaScriptObject getContext2D(final JavaScriptObject canvas) /*-{
+		return canvas.getContext("2d");
    }-*/;
 
 
@@ -62,8 +64,8 @@ public final class Canvas_WebGL
          builder.append("bold ");
       }
 
-      builder.append(Math.round(font.getSize() * 0.6f));
-      builder.append("pt ");
+      builder.append(Math.round(font.getSize()));
+      builder.append("px ");
 
       if (font.isSerif()) {
          builder.append("serif");
@@ -89,8 +91,8 @@ public final class Canvas_WebGL
 
    @Override
    protected void _setFont(final GFont font) {
+      _currentFontSize = Math.round(font.getSize());
       _currentDOMFont = createDOMFont(font);
-      _currentFontSize = font.getSize();
 
       tryToSetCurrentFontToContext();
    }
@@ -265,19 +267,17 @@ public final class Canvas_WebGL
                                    final float left,
                                    final float top) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-		var textHeight = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66;
-		context.fillText(text, left, top + textHeight);
+		context.textBaseline = "top";
+		context.fillText(text, left, top - 1);
    }-*/;
 
 
    @Override
    protected native Vector2F _textExtent(final String text) /*-{
-		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext
-				.measureText(text).width;
-
-		var height = Math
-				.round(this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize * 1.66);
-
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.textBaseline = "top";
+		var width = context.measureText(text).width;
+		var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
 		return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
    }-*/;
 
@@ -372,10 +372,11 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
+		var currentGlobalAlpha = context.globalAlpha;
 		context.globalAlpha = transparency;
 		context.drawImage(imageJS, destLeft, destTop, imageJS.width,
 				imageJS.height);
-		context.globalAlpha = 1.0;
+		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
 
@@ -402,12 +403,10 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
+		var currentGlobalAlpha = context.globalAlpha;
 		context.globalAlpha = transparency;
-
 		context.drawImage(imageJS, left, top, width, height);
-
-		context.globalAlpha = 1.0;
-
+		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
 
@@ -443,10 +442,11 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 
+		var currentGlobalAlpha = context.globalAlpha;
 		context.globalAlpha = transparency;
 		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight,
 				destLeft, destTop, destWidth, destHeight);
-		context.globalAlpha = 1.0;
+		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
 
@@ -536,7 +536,6 @@ public final class Canvas_WebGL
                                final int count,
                                final float phase) {
       final JsArrayNumber jsArray = (JsArrayNumber) JavaScriptObject.createArray();
-
       for (int i = 0; i < count; i++) {
          jsArray.push(lengths[i]);
       }

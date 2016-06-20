@@ -63,9 +63,6 @@ public class MutableVector2D
     return (_x != _x) || (_y != _y);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  MutableVector2D normalized();
-
   public final double length()
   {
     return IMathUtils.instance().sqrt(squaredLength());
