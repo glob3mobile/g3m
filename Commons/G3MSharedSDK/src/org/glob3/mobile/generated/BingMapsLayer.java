@@ -227,9 +227,6 @@ public class BingMapsLayer extends RasterLayer
     return new URL();
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  boolean isReady();
-
   public final void initialize(G3MContext context)
   {
     _metadataErrors.clear();

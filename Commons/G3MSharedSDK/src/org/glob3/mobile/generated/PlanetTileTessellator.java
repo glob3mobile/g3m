@@ -48,9 +48,6 @@ public class PlanetTileTessellator extends TileTessellator
     //  return Vector2I(resolutionX, resolutionY);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Geodetic3D getGeodeticOnPlanetSurface(IMathUtils mu, Planet planet, ElevationData elevationData, float verticalExaggeration, Geodetic2D g);
-
   private boolean needsEastSkirt(Sector tileSector)
   {
     if (_renderedSector == null)

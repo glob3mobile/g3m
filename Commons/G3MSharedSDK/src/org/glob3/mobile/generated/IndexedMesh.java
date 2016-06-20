@@ -28,9 +28,6 @@ public class IndexedMesh extends AbstractMesh
     gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Mesh createNormalsMesh();
-
   public IndexedMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor)
   {
      this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals, polygonOffsetFill, polygonOffsetFactor, 0);
