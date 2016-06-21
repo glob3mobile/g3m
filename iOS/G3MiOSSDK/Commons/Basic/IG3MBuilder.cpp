@@ -37,6 +37,8 @@
 #include "DefaultInfoDisplay.hpp"
 #include "EllipsoidalPlanet.hpp"
 #include "PlanetRenderer.hpp"
+#include "InitialCameraPositionProvider.hpp"
+
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),

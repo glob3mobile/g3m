@@ -56,6 +56,7 @@
 #include "LayerSet.hpp"
 #include "LevelTileCondition.hpp"
 #include "Info.hpp"
+#include "InitialCameraPositionProvider.hpp"
 
 
 const std::string MapBooOLD_CameraPosition::description() const {

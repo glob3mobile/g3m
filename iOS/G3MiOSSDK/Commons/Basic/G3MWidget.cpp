@@ -39,6 +39,7 @@
 #include "IDeviceAttitude.hpp"
 #include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
+#include "InitialCameraPositionProvider.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
