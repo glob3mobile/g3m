@@ -14,56 +14,48 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Renderer;
-//class ProtoRenderer;
-//class TouchEvent;
-//class Planet;
-//class ILogger;
-//class GL;
-//class TexturesHandler;
-//class Downloader;
-//class IDownloader;
-//class Camera;
-//class EffectsScheduler;
-//class IStringUtils;
-//class IThreadUtils;
-//class GInitializationTask;
-//class GTask;
-//class TimeInterval;
-//class IFactory;
-//class ITimer;
-//class PeriodicalTask;
-//class ICameraConstrainer;
-//class FrameTasksExecutor;
+
 //class G3MWidget;
+//class IFactory;
+//class IStringUtils;
 //class IStringBuilder;
-//class IMathUtils;
 //class IJSONParser;
-//class Geodetic3D;
-//class CameraRenderer;
-//class IStorage;
 //class ITextUtils;
-//class G3MEventContext;
-//class SurfaceElevationProvider;
-//class GPUProgram;
-//class GPUProgramManager;
-//class ICameraActivityListener;
-//class GLState;
-//class PlanetRenderer;
-//class ErrorRenderer;
-//class G3MRenderContext;
 //class IDeviceAttitude;
 //class IDeviceLocation;
-//class InfoDisplay;
-
-
-
-
-//class G3MContext;
-//class GLGlobalState;
+//class ICameraActivityListener;
+//class GL;
+//class IStorage;
+//class IDownloader;
+//class IThreadUtils;
+//class Planet;
+//class ICameraConstrainer;
+//class CameraRenderer;
+//class ProtoRenderer;
+//class ErrorRenderer;
+//class Color;
+//class GInitializationTask;
+//class PeriodicalTask;
+//class GPUProgramManager;
 //class SceneLighting;
-
+//class InitialCameraPositionProvider;
+//class TouchEvent;
+//class EffectsScheduler;
+//class Camera;
+//class TimeInterval;
+//class GTask;
+//class Geodetic3D;
+//class G3MContext;
+//class PlanetRenderer;
 //class Sector;
+//class FrameTasksExecutor;
+//class TexturesHandler;
+//class ITimer;
+//class G3MRenderContext;
+//class SurfaceElevationProvider;
+//class GLState;
+//class G3MEventContext;
+
 
 public class WidgetUserData
 {
