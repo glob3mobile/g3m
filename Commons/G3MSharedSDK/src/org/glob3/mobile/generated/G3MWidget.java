@@ -1057,10 +1057,9 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _rootState = new GLState();
     }
-    if (modifier != null)
-    {
-      _rootState.setParent(modifier);
-    }
+  
+    _rootState.setParent(modifier);
+  
   
     switch (renderStateType)
     {
@@ -1177,12 +1176,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   
     final int halfWidth = _width / 2;
-    int modifierPx = 0;
-    if (_focusDistanceModifier > 0.0)
+    int modifierPx = (int)(halfWidth * _focusDistanceModifier);
+    if (modifierPx > 0)
     {
       // create scissor test GLState/s to prevent the two cameras rendering into each other's framebuffer
-      modifierPx = (int)(halfWidth * _focusDistanceModifier);
-  
       if (_leftScissor == null)
       {
         ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
@@ -1196,7 +1193,6 @@ public class G3MWidget implements ChangedRendererInfoListener
         _rightScissor.addGLFeature(rightScissorFeature, false);
       }
     }
-  
   
   
     _gl.clearScreen(_backgroundColor);
