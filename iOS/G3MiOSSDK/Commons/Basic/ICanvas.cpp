@@ -11,6 +11,8 @@
 #include "GFont.hpp"
 #include "RectangleF.hpp"
 #include "IImage.hpp"
+#include "ErrorHandling.hpp"
+
 
 ICanvas::~ICanvas() {
   delete _currentFont;
@@ -18,13 +20,11 @@ ICanvas::~ICanvas() {
 
 void ICanvas::initialize(int width, int height) {
   if ((width <= 0) || (height <= 0)) {
-    ILogger::instance()->logError("Invalid extent");
-    return;
+    THROW_EXCEPTION("Invalid extent");
   }
 
   if (isInitialized()) {
-    ILogger::instance()->logError("Canvas already initialized");
-    return;
+    THROW_EXCEPTION("Canvas already initialized");
   }
 
   _canvasWidth  = width;
@@ -34,13 +34,13 @@ void ICanvas::initialize(int width, int height) {
 
 void ICanvas::checkInitialized() const {
   if (!isInitialized()) {
-    ILogger::instance()->logError("Canvas is not initialized");
+    THROW_EXCEPTION("Canvas is not initialized");
   }
 }
 
 void ICanvas::checkCurrentFont() const {
   if (_currentFont == NULL) {
-    ILogger::instance()->logError("Current font no set");
+    THROW_EXCEPTION("Current font no set");
   }
 }
 
@@ -211,7 +211,7 @@ void ICanvas::drawImage(const IImage* image,
 
   if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),
                                 srcLeft, srcTop, srcWidth, srcHeight)) {
-    ILogger::instance()->logError("Invalid source rectangle in drawImage");
+    THROW_EXCEPTION("Invalid source rectangle in drawImage");
   }
 
   _drawImage(image,
@@ -227,8 +227,9 @@ void ICanvas::drawImage(const IImage* image,
 
   if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),
                                 srcLeft, srcTop, srcWidth, srcHeight)) {
-    ILogger::instance()->logError("Invalid source rectangle in drawImage");
-  } else {
+    THROW_EXCEPTION("Invalid source rectangle in drawImage");
+  }
+  else {
     if (transparency <= 0.0) {
       return;
     }
