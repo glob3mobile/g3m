@@ -14,8 +14,8 @@ import android.content.Context;
 
 
 public class G3MBuilder_Android
-         extends
-            IG3MBuilder {
+   extends
+      IG3MBuilder {
 
    private final G3MWidget_Android _nativeWidget;
 
@@ -27,44 +27,19 @@ public class G3MBuilder_Android
    }
 
 
-   public G3MWidget_Android createWidget() {
-      //Adding Default Program Sources
-
+   private void addGPUProgramSources() {
       final BasicShadersGL2 shaders = new BasicShadersGL2();
-      for (int i = 0; i < shaders.size(); i++) {
+      final int size = shaders.size();
+      for (int i = 0; i < size; i++) {
          addGPUProgramSources(shaders.get(i));
       }
+   }
 
-      //      addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
-      //               GL2Shaders._billboardFragmentShader));
-      //      addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader,
-      //               GL2Shaders._colorMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-      //               GL2Shaders._texturedMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-      //               GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-      //               GL2Shaders._flatColorMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
-      //               GL2Shaders._noColorMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("TexturedMesh+DirectionLight",
-      //               GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("FlatColorMesh+DirectionLight",
-      //               GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      //
 
+   public G3MWidget_Android createWidget() {
+      addGPUProgramSources();
       setGL(_nativeWidget.getGL());
-
       _nativeWidget.setWidget(create());
-
       return _nativeWidget;
    }
 
@@ -81,13 +56,18 @@ public class G3MBuilder_Android
    }
 
 
-   @Override
-   protected IDownloader createDefaultDownloader() {
+   private IDownloader createDefaultAndroidDownloader() {
       final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
       final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+      return new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext());
+   }
+
+
+   @Override
+   protected IDownloader createDefaultDownloader() {
       final boolean saveInBackground = true;
       return new CachedDownloader( //
-               new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext()), //
+               createDefaultAndroidDownloader(), //
                getStorage(), //
                saveInBackground);
    }
