@@ -626,9 +626,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   _statistics.clear();
 
   const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-  const float deviceQualityFactor = deviceInfo->getQualityFactor();
   const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-  const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
+  const double correctionFactor = deviceInfo->getDPI() / factor;
 
   const double texWidth  = correctionFactor * layerTilesRenderParameters->_tileTextureResolution._x;
   const double texHeight = correctionFactor * layerTilesRenderParameters->_tileTextureResolution._y;

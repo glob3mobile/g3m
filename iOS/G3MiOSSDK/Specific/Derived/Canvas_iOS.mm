@@ -341,8 +341,12 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
     return nil;
   }
 
+  UIScreen* mainScreen = [UIScreen mainScreen];
+
+  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
+
   return [UIFont fontWithName: fontName
-                         size: font.getSize()];
+                         size: font.getSize() * devicePixelRatio];
 }
 
 void Canvas_iOS::_setFont(const GFont& font) {

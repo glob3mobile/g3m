@@ -1088,12 +1088,6 @@ void PointCloudsRenderer::removeAllPointClouds() {
 void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
   if (_cloudsSize > 0) {
-//    const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-//    const float deviceQualityFactor = deviceInfo->getQualityFactor();
-////    const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-////    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
-//    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / 256;
-
     if (_timer == NULL) {
       _timer = rc->getFactory()->createTimer();
     }

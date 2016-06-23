@@ -26,7 +26,7 @@
 
 
 @interface G3MWidget_iOS () {
-  CGFloat _scale;
+  CGFloat _devicePixelRatio;
 }
 
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -68,12 +68,12 @@
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-    _scale = 1;
-//    // for retina display
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      _scale = [UIScreen mainScreen].scale;
-//    }
-    eaglLayer.contentsScale = _scale;
+    _devicePixelRatio = 1;
+    // for retina display
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+      _devicePixelRatio = [UIScreen mainScreen].scale;
+    }
+    eaglLayer.contentsScale = _devicePixelRatio;
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -136,8 +136,8 @@
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2F((float)tapPoint.x,
-                                      (float)tapPoint.y),
+    Touch *touch = new Touch(Vector2F((float) (tapPoint.x * _devicePixelRatio),
+                                      (float) (tapPoint.y * _devicePixelRatio)),
                              Vector2F::zero(),
                              1);
     pointers.push_back(touch);
@@ -247,10 +247,10 @@
     CGPoint previous        = [uiTouch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch* touch = new Touch(Vector2F((float)current.x,
-                                      (float)current.y),
-                             Vector2F((float)previous.x,
-                                      (float)previous.y),
+    Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)),
                              tapCount);
 
     pointers.push_back(touch);
@@ -277,10 +277,10 @@
     CGPoint current  = [uiTouch locationInView:self];
     CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch* touch = new Touch(Vector2F((float)current.x,
-                                      (float)current.y),
-                             Vector2F((float)previous.x,
-                                      (float)previous.y));
+    Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)));
 
     pointers.push_back(touch);
   }
@@ -338,10 +338,10 @@
 
     [uiTouch timestamp];
 
-    Touch *touch = new Touch(Vector2F((float)current.x,
-                                      (float)current.y),
-                             Vector2F((float)previous.x,
-                                      (float)previous.y));
+    Touch *touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)));
 
     pointers.push_back(touch);
   }
