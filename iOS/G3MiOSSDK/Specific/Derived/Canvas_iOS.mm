@@ -64,8 +64,7 @@ void Canvas_iOS::_initialize(int width, int height) {
                                    w * 4,  // bitmap bytes per row: 4 bytes per pixel
 =======
   UIScreen* mainScreen = [UIScreen mainScreen];
-
-  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
+  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] && _retina ? mainScreen.scale : 1;
 
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
                                    width  * devicePixelRatio,
@@ -76,7 +75,9 @@ void Canvas_iOS::_initialize(int width, int height) {
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
-  CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
+  if (devicePixelRatio != 1) {
+    CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
+  }
 
   if (_scale != 1) {
     CGContextScaleCTM(_context, _scale, _scale);
@@ -354,13 +355,6 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
     ILogger::instance()->logError("Unsupported Font type");
     return nil;
   }
-
-  UIScreen* mainScreen = [UIScreen mainScreen];
-
-//  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
-//
-//  return [UIFont fontWithName: fontName
-//                         size: font.getSize() * devicePixelRatio];
 
   return [UIFont fontWithName: fontName
                          size: font.getSize() * _scale];

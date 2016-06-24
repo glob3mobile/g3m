@@ -23,7 +23,6 @@ DeviceInfo_iOS::DeviceInfo_iOS() {
 //  const float scale = 1; // doesn't consider the retina factor as the opengl-view doesn't change it size based on retina resolution
 =======
   UIScreen* mainScreen = [UIScreen mainScreen];
-
   _devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
 
 #warning we need more members of iOS device family http://stackoverflow.com/questions/18414032/how-to-identify-a-hw-machine-identifier-reliable

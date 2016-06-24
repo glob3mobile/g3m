@@ -73,7 +73,7 @@ public:
         const std::string thumbnail = article->getAsString("thumbnail", "");
 
         LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,
-                                                                GFont::sansSerif(14),
+                                                                GFont::sansSerif(8),
                                                                 4,
                                                                 Color::black(),
                                                                 Color::transparent(),
@@ -136,8 +136,7 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
 //#warning Testing infos
   std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
 //  layerInfo->push_back( new Info("(C) Stamen") );
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator(//"http://c.tile.stamen.com/toner/{level}/{x}/{y}.png",
-                                                          "http://[abcd].tile.stamen.com/watercolor/{level}/{x}/{y}.png",
+  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://[abcd].tile.stamen.com/watercolor/{level}/{x}/{y}.png",
                                                           Sector::fullSphere(),
                                                           true,
                                                           1,

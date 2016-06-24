@@ -126,7 +126,7 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     const int canvasWidth  = maxWidth          + margin2 + padding2;
     const int canvasHeight = accumulatedHeight + margin2 + padding2 + ((int)resultsSize-1)*_childrenSeparation;
 
-    ICanvas* canvas = context->getFactory()->createCanvas();
+    ICanvas* canvas = context->getFactory()->createCanvas(false);
     canvas->initialize(canvasWidth, canvasHeight);
 
     //#warning remove debug code

@@ -10,7 +10,7 @@
 #include "G3MDemoModel.hpp"
 
 #include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
 #include <G3MiOSSDK/GEOSymbolizer.hpp>
 #include <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
@@ -165,10 +165,17 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
 
-  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
-                                             TimeInterval::fromDays(30),
-                                             true,
-                                             13);
+//  const std::string&    imagerySet,
+//  const std::string&    key,
+//  const TimeInterval&   timeToCache,
+//  const bool            readExpired    = true,
+//  const int             initialLevel   = 2,
+  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
+                                                 "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                                 TimeInterval::fromDays(30),
+                                                 true, // readExpired
+                                                 12    // initialLevel
+                                                 );
   model->getLayerSet()->addLayer(rasterLayer);
 
   GEOVectorLayer* vectorLayer = new GEOVectorLayer();

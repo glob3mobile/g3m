@@ -29,7 +29,7 @@ void IImageUtils::scale(int width,
                         const IImage* image,
                         IImageListener* listener,
                         bool autodelete) {
-  if (width == image->getWidth() &&
+  if (width  == image->getWidth() &&
       height == image->getHeight()) {
     createShallowCopy(image,
                       listener,

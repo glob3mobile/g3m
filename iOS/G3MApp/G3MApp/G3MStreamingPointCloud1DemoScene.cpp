@@ -6,7 +6,7 @@
 //
 
 #include "G3MStreamingPointCloud1DemoScene.hpp"
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
@@ -55,10 +55,9 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
 //                                                                                    Vector2I(2048, 1024));
 //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 //#warning TODO cache

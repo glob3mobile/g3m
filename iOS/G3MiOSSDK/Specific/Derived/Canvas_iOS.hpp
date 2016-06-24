@@ -153,8 +153,13 @@ protected:
 
 
 public:
+<<<<<<< HEAD
   Canvas_iOS(bool scaleToDeviceResolution) :
   ICanvas(scaleToDeviceResolution),
+=======
+  Canvas_iOS(bool retina) :
+  ICanvas(retina),
+>>>>>>> 05b769f... -
   _context(NULL),
   _currentUIFont(nil),
   _path(NULL),

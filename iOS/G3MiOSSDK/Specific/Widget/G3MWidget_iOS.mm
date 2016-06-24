@@ -78,8 +78,9 @@
 =======
     _devicePixelRatio = 1;
     // for retina display
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-      _devicePixelRatio = [UIScreen mainScreen].scale;
+    UIScreen* mainScreen = [UIScreen mainScreen];
+    if ([mainScreen respondsToSelector:@selector(scale)]) {
+      _devicePixelRatio = mainScreen.scale;
     }
     eaglLayer.contentsScale = _devicePixelRatio;
 >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0

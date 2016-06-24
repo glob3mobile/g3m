@@ -18,12 +18,16 @@ DefaultChessCanvasImageBuilder::DefaultChessCanvasImageBuilder(int width,
                                                                const Color& boxColor,
                                                                int splits) :
 <<<<<<< HEAD
+<<<<<<< HEAD
   CanvasImageBuilder(width, height, false),
   _backgroundColor(backgroundColor),
   _boxColor(boxColor),
   _splits(splits)
 =======
 CanvasImageBuilder(width, height),
+=======
+CanvasImageBuilder(width, height, false),
+>>>>>>> 05b769f... -
 _backgroundColor(backgroundColor),
 _boxColor(boxColor),
 _splits(splits)

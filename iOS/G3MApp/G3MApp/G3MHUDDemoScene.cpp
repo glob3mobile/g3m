@@ -7,8 +7,7 @@
 
 #include "G3MHUDDemoScene.hpp"
 
-//#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/CanvasImageBuilder.hpp>
 #include <G3MiOSSDK/ICanvas.hpp>
@@ -26,6 +25,7 @@
 #include <G3MiOSSDK/GTask.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PeriodicalTask.hpp>
+
 #include "G3MDemoModel.hpp"
 
 
@@ -83,7 +83,7 @@ protected:
 
 public:
   AltimeterCanvasImageBuilder() :
-  CanvasImageBuilder(256, 256*3)
+  CanvasImageBuilder(256, 256*3, true)
   {
   }
 
@@ -171,10 +171,9 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
   HUDRenderer* hudRenderer = model->getHUDRenderer();

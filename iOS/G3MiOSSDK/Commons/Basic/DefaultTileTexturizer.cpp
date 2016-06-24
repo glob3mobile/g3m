@@ -449,7 +449,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
     
 =======
 
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
 
     const int width  =  _tileTextureResolution._x;
     const int height =  _tileTextureResolution._y;
