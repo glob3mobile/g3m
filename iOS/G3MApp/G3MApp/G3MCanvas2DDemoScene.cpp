@@ -64,7 +64,7 @@ public:
                   IImage* image,
                   bool expired) {
 
-    ICanvas* canvas = _factory->createCanvas(true);
+    ICanvas* canvas = _factory->createCanvas(false);
     const int width  = 1024;
     const int height = 1024;
     canvas->initialize(width, height);
