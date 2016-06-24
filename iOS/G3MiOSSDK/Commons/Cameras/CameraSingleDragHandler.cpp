@@ -51,11 +51,7 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
 
   // dragging
   const Vector2F pixel = touchEvent.getTouch(0)->getPos();
-<<<<<<< HEAD
-  const Vector3D& initialRay = _camera0.pixel2Ray(pixel);
-=======
   const Vector3D& initialRay = camera->pixel2Ray(pixel);
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   if (!initialRay.isNan()) {
     cameraContext->setCurrentGesture(Drag);
     eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(),initialRay);

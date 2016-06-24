@@ -26,15 +26,9 @@ protected:
   const int _height;
   const bool _retina;
 
-<<<<<<< HEAD
-  CanvasImageBuilder(int width, int height,
-                     bool scaleToDeviceResolution) :
-  AbstractImageBuilder(scaleToDeviceResolution),
-=======
   CanvasImageBuilder(int width,
                      int height,
                      bool retina) :
->>>>>>> 05b769f... -
   _width(width),
   _height(height),
   _retina(retina),

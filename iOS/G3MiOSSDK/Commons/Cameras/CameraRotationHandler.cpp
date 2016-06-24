@@ -57,17 +57,10 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(Rotate);
   
   // middle pixel in 2D 
-<<<<<<< HEAD
-  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
-  const Vector2F pixel2 = touchEvent.getTouch(2)->getPos();
-  const Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-=======
   Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2F pixel2 = touchEvent.getTouch(2)->getPos();
-  Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
+  Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
   _pivotPixel = MutableVector2F(averagePixel._x, averagePixel._y);
   //_lastYValid = _initialPixel.y();
   
@@ -95,7 +88,7 @@ void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
   const Vector2F c0 = touchEvent.getTouch(0)->getPos();
   const Vector2F c1 = touchEvent.getTouch(1)->getPos();
   const Vector2F c2 = touchEvent.getTouch(2)->getPos();
-  const Vector2F cm = c0.add(c1).add(c2).div(3);
+  const Vector2F cm = c0.add(c1).add(c2).div(3.0f);
   
   // compute normal to Initial point
   Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_pivotPoint );
@@ -137,11 +130,7 @@ void CameraRotationHandler::onUp(const G3MEventContext *eventContext,
                                  CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
-<<<<<<< HEAD
-  _pivotPixel = MutableVector2F();
-=======
   _pivotPixel = MutableVector2F::zero();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 }
 
 

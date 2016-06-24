@@ -15,15 +15,8 @@
 
 class Canvas_iOS : public ICanvas {
 private:
-<<<<<<< HEAD
-  CGFloat _scale;
-
-  CGContextRef _context;
-  UIFont*      _currentUIFont;
-=======
   CGContextRef   _context;
   UIFont*        _currentUIFont;
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
   CGMutablePathRef _path;
   CGAffineTransform _transform;
@@ -153,13 +146,8 @@ protected:
 
 
 public:
-<<<<<<< HEAD
-  Canvas_iOS(bool scaleToDeviceResolution) :
-  ICanvas(scaleToDeviceResolution),
-=======
   Canvas_iOS(bool retina) :
   ICanvas(retina),
->>>>>>> 05b769f... -
   _context(NULL),
   _currentUIFont(nil),
   _path(NULL),

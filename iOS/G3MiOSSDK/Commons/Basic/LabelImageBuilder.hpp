@@ -41,7 +41,6 @@ private:
 public:
 
   LabelImageBuilder(const std::string& text,
-                    const bool         scaleToDeviceResolution = true,
                     const GFont&       font                    = GFont::sansSerif(),
                     const float        margin                  = 0,
                     const Color&       color                   = Color::white(),
@@ -52,7 +51,6 @@ public:
                     const Color&       backgroundColor         = Color::transparent(),
                     const float        cornerRadius            = 0,
                     const bool         isMutable               = false) :
-  AbstractImageBuilder(scaleToDeviceResolution),
   _text(text),
   _font(font),
   _margin(margin),

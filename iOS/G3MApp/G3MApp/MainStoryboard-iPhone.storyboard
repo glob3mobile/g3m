@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<<<<<<< HEAD
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="geH-Z2-Bs3">
-    <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
-=======
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="geH-Z2-Bs3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -29,19 +22,12 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="g3m-48.png" translatesAutoresizingMaskIntoConstraints="NO" id="EDZ-1K-yH5">
                                         <rect key="frame" x="5" y="5" width="48" height="48"/>
-<<<<<<< HEAD
-                                    </imageView>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RJB-g1-FpQ">
-                                        <rect key="frame" x="115" y="5" width="200" height="48"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-=======
                                         <animations/>
                                     </imageView>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RJB-g1-FpQ">
                                         <rect key="frame" x="115" y="5" width="200" height="48"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" backgroundImage="selector-background.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -50,15 +36,6 @@
                                             <segue destination="Ghe-vX-Xwj" kind="modal" identifier="changeDemo" id="mkb-UY-jP3"/>
                                         </connections>
                                     </button>
-<<<<<<< HEAD
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="glob3" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RrW-0R-EqI">
-                                        <rect key="frame" x="58" y="18" width="46" height="22"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-=======
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="0.50299269150000003" alpha="0.5" colorSpace="calibratedWhite"/>
@@ -73,12 +50,8 @@
                                 <subviews>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDA-WF-gq2">
                                         <rect key="frame" x="115" y="5" width="200" height="48"/>
-<<<<<<< HEAD
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-=======
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" backgroundImage="selector-background.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -138,10 +111,7 @@
                                     <subviews>
                                         <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5R-pj-xNW">
                                             <rect key="frame" x="5" y="7" width="310" height="33"/>
-<<<<<<< HEAD
-=======
                                             <animations/>
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="                                   ">
                                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -192,10 +162,7 @@
                                     <subviews>
                                         <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tPD-Gf-7JA">
                                             <rect key="frame" x="5" y="7" width="311" height="33"/>
-<<<<<<< HEAD
-=======
                                             <animations/>
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="                               ">
                                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -231,12 +198,4 @@
         <image name="g3m-48.png" width="48" height="48"/>
         <image name="selector-background.png" width="200" height="48"/>
     </resources>
-<<<<<<< HEAD
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
-=======
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 </document>

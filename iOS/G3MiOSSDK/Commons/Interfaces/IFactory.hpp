@@ -85,11 +85,7 @@ public:
 
   virtual IByteBuffer* createByteBuffer(unsigned char data[], size_t length) const = 0;
 
-<<<<<<< HEAD
-  virtual ICanvas* createCanvas(bool scaleToDeviceResolution) const = 0;
-=======
   virtual ICanvas* createCanvas(bool retina) const = 0;
->>>>>>> 05b769f... -
 
   virtual IWebSocket* createWebSocket(const URL& url,
                                       IWebSocketListener* listener,

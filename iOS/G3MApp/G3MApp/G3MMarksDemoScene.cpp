@@ -127,12 +127,7 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 
   IDownloader* downloader = context->getDownloader();
 
-<<<<<<< HEAD
-  _requestId = downloader->requestBuffer(//URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes"),
-                                         URL("http://openweathermap.org/data/2.1/find/city?cluster=yes"),
-=======
   _requestId = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes&appid=e1079e4aa327b6cf16aa5b68d47ed1e2"),
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                          DownloadPriority::HIGHEST,
                                          TimeInterval::fromHours(1),
                                          true,

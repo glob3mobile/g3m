@@ -70,15 +70,10 @@ void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
   const Planet* planet = eventContext->getPlanet();
   const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
-<<<<<<< HEAD
-  const Vector3D& initialRay0 = _camera0.pixel2Ray(pixel0);
-  const Vector3D& initialRay1 = _camera0.pixel2Ray(pixel1);
-=======
   const Vector3D& initialRay0 = Camera::pixel2Ray(_cameraPosition, pixel0,
                                                   _cameraViewPort, _cameraModelViewMatrix);
   const Vector3D& initialRay1 = Camera::pixel2Ray(_cameraPosition, pixel1,
                                                   _cameraViewPort, _cameraModelViewMatrix);
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   
    if (initialRay0.isNan() || initialRay1.isNan() ) return;
   

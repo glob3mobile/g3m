@@ -29,7 +29,6 @@ const double Vector2F::squaredDistanceTo(const Vector2I& that) const {
   return (dx * dx) + (dy * dy);
 }
 
-<<<<<<< HEAD
 Vector2F Vector2F::add(const Vector2F& that) const {
   return Vector2F(_x + that._x,
                   _y + that._y);
@@ -53,9 +52,9 @@ double Vector2F::length() const {
   return IMathUtils::instance()->sqrt(squaredLength());
 }
 
-MutableVector2F Vector2F::asMutableVector2F() const {
-  return MutableVector2F(_x, _y);
-=======
+//MutableVector2F Vector2F::asMutableVector2F() const {
+//  return MutableVector2F(_x, _y);
+//=======
 Vector2F Vector2F::clampLength(float min, float max) const {
   float length = (float) this->length();
   if (length < min) {
@@ -65,5 +64,4 @@ Vector2F Vector2F::clampLength(float min, float max) const {
     return this->times(max / length);
   }
   return *this;
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 }

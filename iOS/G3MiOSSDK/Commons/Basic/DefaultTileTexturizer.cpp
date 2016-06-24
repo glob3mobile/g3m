@@ -437,24 +437,12 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
     IStringBuilder* auxImageId = IStringBuilder::newStringBuilder();
 
     //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
-<<<<<<< HEAD
-    
-    ICanvas* canvas = IFactory::instance()->createCanvas(false);
-    
-    const int _width =  _tileTextureResolution._x;
-    
-    const int _height =  _tileTextureResolution._y;
-    
-    const Sector tileSector = _tile->_sector;
-    
-=======
 
     ICanvas* canvas = IFactory::instance()->createCanvas(false);
 
     const int width  =  _tileTextureResolution._x;
     const int height =  _tileTextureResolution._y;
 
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
     //ILogger::instance()->logInfo("Tile " + _tile->description());
 
     canvas->initialize(width, height);

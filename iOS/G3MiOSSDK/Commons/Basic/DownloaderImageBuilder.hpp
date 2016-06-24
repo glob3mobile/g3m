@@ -30,7 +30,6 @@ private:
 
 public:
   DownloaderImageBuilder(const URL& url) :
-  AbstractImageBuilder(false),
   _url(url),
   _priority(DownloadPriority::MEDIUM),
   _timeToCache(TimeInterval::fromDays(30)),
@@ -42,7 +41,6 @@ public:
                          long long priority,
                          const TimeInterval& timeToCache,
                          const bool readExpired) :
-  AbstractImageBuilder(false),
   _url(url),
   _priority(priority),
   _timeToCache(timeToCache),

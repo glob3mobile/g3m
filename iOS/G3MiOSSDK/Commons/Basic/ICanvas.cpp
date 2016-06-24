@@ -12,10 +12,6 @@
 #include "RectangleF.hpp"
 #include "IImage.hpp"
 #include "ErrorHandling.hpp"
-<<<<<<< HEAD
-=======
-
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
 ICanvas::~ICanvas() {
   delete _currentFont;
@@ -232,31 +228,11 @@ void ICanvas::drawImage(const IImage* image,
                                 srcLeft, srcTop, srcWidth, srcHeight)) {
     THROW_EXCEPTION("Invalid source rectangle in drawImage");
   }
-<<<<<<< HEAD
-=======
-  else {
-    if (transparency <= 0.0) {
-      return;
-    }
-
-    if (transparency >= 1.0) {
-      _drawImage(image,
-                 srcLeft, srcTop, srcWidth, srcHeight,
-                 destLeft, destTop, destWidth, destHeight);
-    }
-    else {
-      _drawImage(image,
-                 srcLeft, srcTop, srcWidth, srcHeight,
-                 destLeft, destTop, destWidth, destHeight,
-                 transparency);
-    }
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
   if (transparency <= 0.0) {
     return;
   }
 
-<<<<<<< HEAD
   if (transparency >= 1.0) {
     _drawImage(image,
                srcLeft, srcTop, srcWidth, srcHeight,
@@ -268,9 +244,6 @@ void ICanvas::drawImage(const IImage* image,
                destLeft, destTop, destWidth, destHeight,
                transparency);
   }
-=======
-
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 }
 
 void ICanvas::beginPath() {

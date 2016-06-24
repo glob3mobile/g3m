@@ -45,24 +45,6 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-<<<<<<< HEAD
-#warning Diego at work
-  _scale = 1;
-  if (_scaleToDeviceResolution) {
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-      _scale = [UIScreen mainScreen].scale;
-    }
-  }
-
-  const int w = (int) ((width  * _scale) + 0.5);
-  const int h = (int) ((height * _scale) + 0.5);
-
-  _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   w,
-                                   h,
-                                   8,          // bits per component
-                                   w * 4,  // bitmap bytes per row: 4 bytes per pixel
-=======
   UIScreen* mainScreen = [UIScreen mainScreen];
   CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] && _retina ? mainScreen.scale : 1;
 
@@ -71,16 +53,11 @@ void Canvas_iOS::_initialize(int width, int height) {
                                    height * devicePixelRatio,
                                    8,          // bits per component
                                    0,          // bytes per row
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
   if (devicePixelRatio != 1) {
     CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
-  }
-
-  if (_scale != 1) {
-    CGContextScaleCTM(_context, _scale, _scale);
   }
 
   CGColorSpaceRelease( colorSpace );
@@ -357,7 +334,7 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
   }
 
   return [UIFont fontWithName: fontName
-                         size: font.getSize() * _scale];
+                         size: font.getSize()];
 }
 
 void Canvas_iOS::_setFont(const GFont& font) {

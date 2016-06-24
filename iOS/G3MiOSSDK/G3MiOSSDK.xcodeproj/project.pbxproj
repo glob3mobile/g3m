@@ -777,9 +777,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-<<<<<<< HEAD
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
-=======
 				CF236E281CB3EF50002D4D77 /* ViewMode.hpp in CopyFiles */,
 				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
@@ -814,7 +812,6 @@
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
 				CFAB53F71A8BCE5800DD0099 /* ColumnLayoutImageBuilder.hpp in CopyFiles */,
 				D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */,
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 				CFBD815719A3E1D500F1A8C4 /* PointCloudsRenderer.hpp in CopyFiles */,
 				44E3C43019C1ADB800857275 /* Info.hpp in CopyFiles */,
 				44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */,

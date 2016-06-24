@@ -73,7 +73,7 @@ public:
         const std::string thumbnail = article->getAsString("thumbnail", "");
 
         LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,
-                                                                GFont::sansSerif(8),
+                                                                GFont::sansSerif(14),
                                                                 4,
                                                                 Color::black(),
                                                                 Color::transparent(),

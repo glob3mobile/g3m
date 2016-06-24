@@ -32,11 +32,7 @@ ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
 
     const IFactory* factory = context->getFactory();
 
-<<<<<<< HEAD
-    _canvas = factory->createCanvas(_scaleToDeviceResolution);
-=======
     _canvas = factory->createCanvas(_retina);
->>>>>>> 05b769f... -
     _canvas->initialize(_width, _height);
     _canvasWidth = _width;
     _canvasHeight = _height;
@@ -83,13 +79,6 @@ public:
   }
 };
 
-//long long CanvasImageBuilder::_counter = 0;
-
-//std::string CanvasImageBuilder::getImageName(const G3MContext* context) const {
-//  const IStringUtils* su = context->getStringUtils();
-//
-//  return "_CanvasImageBuilder_" + su->toString(_counter++);
-//}
 
 void CanvasImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,

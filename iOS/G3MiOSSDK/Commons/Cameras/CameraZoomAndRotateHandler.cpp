@@ -48,20 +48,6 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);
 
   // double dragging
-<<<<<<< HEAD
-  _initialPixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2F();
-  _initialPixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2F();
-  }
-
-
-void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
-                                     const TouchEvent& touchEvent,
-                                     CameraContext *cameraContext) {
-  
-  const Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
-  const Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
-  const Vector2F difCurrentPixels = pixel1.sub(pixel0);
-=======
   _initialPixel0 = MutableVector2F(touchEvent.getTouch(0)->getPos());
   _initialPixel1 = MutableVector2F(touchEvent.getTouch(1)->getPos());
 }
@@ -74,18 +60,12 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   Vector2F pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2F difCurrentPixels = pixel1.sub(pixel0);
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   const Planet* planet = eventContext->getPlanet();
 
   // if it is the first move, let's decide if make zoom or rotate
   if (cameraContext->getCurrentGesture() == DoubleDrag) {
-<<<<<<< HEAD
-    const Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
-    const Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
-=======
     Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
     Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
     if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
         (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       //printf ("zoom..\n");
@@ -191,12 +171,7 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
 
 
 
-<<<<<<< HEAD
-void CameraZoomAndRotateHandler::zoom(Camera* camera,
-                                      const Vector2F& difCurrentPixels)
-=======
 void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrentPixels)
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 {
   const double MIN_CAMERA_HEIGHT = 30;
 
