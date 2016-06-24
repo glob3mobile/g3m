@@ -27,7 +27,6 @@ public class DownloaderImageBuilder extends AbstractImageBuilder
 
   public DownloaderImageBuilder(URL url)
   {
-     super(false);
      _url = url;
      _priority = DownloadPriority.MEDIUM;
      _timeToCache = TimeInterval.fromDays(30);
@@ -36,7 +35,6 @@ public class DownloaderImageBuilder extends AbstractImageBuilder
 
   public DownloaderImageBuilder(URL url, long priority, TimeInterval timeToCache, boolean readExpired)
   {
-     super(false);
      _url = url;
      _priority = priority;
      _timeToCache = timeToCache;

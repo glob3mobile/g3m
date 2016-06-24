@@ -84,8 +84,19 @@ public class MapBooOLD_Scene
     return _hasWarnings;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  LayerSet createLayerSet();
+  public final LayerSet createLayerSet()
+  {
+    LayerSet layerSet = new LayerSet();
+    if (_baseLayer != null)
+    {
+      layerSet.addLayer(_baseLayer.copy());
+    }
+    if (_overlayLayer != null)
+    {
+      layerSet.addLayer(_overlayLayer.copy());
+    }
+    return layerSet;
+  }
 
   public void dispose()
   {

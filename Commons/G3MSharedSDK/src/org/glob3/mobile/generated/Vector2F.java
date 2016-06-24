@@ -70,10 +70,10 @@ public class Vector2F
     return (dx * dx) + (dy * dy);
   }
 
-public final <<<<<<< HEAD Vector2F add(Vector2F that)
-{
-  return new Vector2F(_x + that._x, _y + that._y);
-}
+  public final Vector2F add(Vector2F that)
+  {
+    return new Vector2F(_x + that._x, _y + that._y);
+  }
 
   public final Vector2F sub(Vector2F that)
   {
@@ -95,13 +95,10 @@ public final <<<<<<< HEAD Vector2F add(Vector2F that)
     return IMathUtils.instance().sqrt(squaredLength());
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The following line could not be converted:
-  MutableVector2F asMutableVector2F() const;
-  {
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-    return MutableVector2F(_x, _y);
-//C++ TO JAVA CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
-  ======= Vector2F Vector2F.clampLength(float min, float max) const
+  //MutableVector2F asMutableVector2F() const {
+  //  return MutableVector2F(_x, _y);
+  //=======
+  public final Vector2F Vector2F.clampLength(float min, float max)
   {
     float length = (float) this.length();
     if (length < min)
@@ -113,27 +110,19 @@ public final <<<<<<< HEAD Vector2F add(Vector2F that)
       return this.times(max / length);
     }
     return this;
-  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   }
-  
 
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-======= const double squaredDistanceTo(float x, float y) const;
-
-
-  public final Vector2F add(Vector2F v)
+  public final double squaredDistanceTo(float x, float y)
   {
-    return new Vector2F(_x + v._x, _y + v._y);
+    final double dx = _x - x;
+    final double dy = _y - y;
+    return (dx * dx) + (dy * dy);
   }
+
 
   public final boolean isNan()
   {
     return (_x != _x) || (_y != _y);
-  }
-
-  public final Vector2F sub(Vector2F v)
-  {
-    return new Vector2F(_x - v._x, _y - v._y);
   }
 
   public final Vector2F times(float magnitude)
@@ -146,26 +135,7 @@ public final <<<<<<< HEAD Vector2F add(Vector2F that)
     return new Vector2F(_x / v, _y / v);
   }
 
-  public final double length()
-  {
-    return IMathUtils.instance().sqrt(squaredLength());
-  }
-
-  public final double squaredLength()
-  {
-    return _x * _x + _y * _y;
-  }
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector2F clampLength(float min, float max);
 
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
-}
-
-public final double Vector2F.squaredDistanceTo(float x, float y)
-{
-  final double dx = _x - x;
-  final double dy = _y - y;
-  return (dx * dx) + (dy * dy);
 }

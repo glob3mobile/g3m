@@ -2,37 +2,64 @@ package org.glob3.mobile.generated;
 public class MapBooOLD_HUDRenderer extends DefaultRenderer
 {
   private HUDImageRenderer _hudImageRenderer;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  MapBooOLD_HUDRenderer();
+  public MapBooOLD_HUDRenderer()
+  {
+    _hudImageRenderer = new HUDImageRenderer(new HUDInfoRenderer_ImageFactory());
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  public void dispose()
+  public void dispose()
+  {
+    if (_hudImageRenderer != null)
+       _hudImageRenderer.dispose();
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void updateInfo(java.util.ArrayList<const Info> info);
+  public final void updateInfo(java.util.ArrayList<Info> info)
+  {
+    HUDInfoRenderer_ImageFactory factory = (HUDInfoRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
+    if (factory.setInfo(info))
+    {
+      _hudImageRenderer.recreateImage();
+    }
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void initialize(G3MContext context);
+  public final void initialize(G3MContext context)
+  {
+    _hudImageRenderer.initialize(context);
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void render(G3MRenderContext rc, GLState glState);
+  public final void render(G3MRenderContext rc, GLState glState)
+  {
+    _hudImageRenderer.render(rc, glState);
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void onResizeViewportEvent(G3MEventContext ec, int width, int height);
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
+    _hudImageRenderer.onResizeViewportEvent(ec, width, height);
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void start(G3MRenderContext rc);
+  public final void start(G3MRenderContext rc)
+  {
+    _hudImageRenderer.start(rc);
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void stop(G3MRenderContext rc);
+  public final void stop(G3MRenderContext rc)
+  {
+    _hudImageRenderer.stop(rc);
+  }
 
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void onResume(G3MContext context);
+  public final void onResume(G3MContext context)
+  {
+    _hudImageRenderer.onResume(context);
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void onPause(G3MContext context);
+  public final void onPause(G3MContext context)
+  {
+    _hudImageRenderer.onPause(context);
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void onDestroy(G3MContext context);
+  public final void onDestroy(G3MContext context)
+  {
+    _hudImageRenderer.onDestroy(context);
+  }
 }

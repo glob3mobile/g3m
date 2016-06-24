@@ -42,21 +42,15 @@ public class DTT_TileImageListener extends TileImageListener
       IStringBuilder auxImageId = IStringBuilder.newStringBuilder();
   
       //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
-  <<<<<<< HEAD ICanvas* canvas = IFactory.instance().createCanvas(false);
   
-      final int _width = _tileTextureResolution._x;
-  
-      final int _height = _tileTextureResolution._y;
-  
-      final Sector tileSector = _tile._sector;
-  
-  ======= ICanvas* canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
   
       final int width = _tileTextureResolution._x;
       final int height = _tileTextureResolution._y;
   
-  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0 canvas.initialize(width, height);
       //ILogger::instance()->logInfo("Tile " + _tile->description());
+  
+      canvas.initialize(width, height);
   
       if (_backgroundTileImage != null)
       {
@@ -112,7 +106,8 @@ public class DTT_TileImageListener extends TileImageListener
   
       if (auxImageId != null)
          auxImageId.dispose();
-      canvas = null;
+      if (canvas != null)
+         canvas.dispose();
       if (image != null)
          image.dispose();
       TileImageContribution.releaseContribution(contribution);

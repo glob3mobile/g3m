@@ -8,10 +8,18 @@ public class MapBooOLD_ErrorRenderer extends DefaultRenderer
   public void dispose()
   {
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setErrors(java.util.ArrayList<String> errors);
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  RenderState getRenderState(G3MRenderContext rc);
+  public final void setErrors(java.util.ArrayList<String> errors)
+  {
+    _errors = errors;
+  }
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
   public final void render(G3MRenderContext rc, GLState glState)
   {
   }

@@ -33,7 +33,7 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
   
       final IFactory factory = context.getFactory();
   
-      _canvas = factory.createCanvas(_scaleToDeviceResolution);
+      _canvas = factory.createCanvas(_retina);
       _canvas.initialize(_width, _height);
       _canvasWidth = _width;
       _canvasHeight = _height;
@@ -47,16 +47,15 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
     return _canvas;
   }
 
-//  static long long _counter;
-
   protected final int _width;
   protected final int _height;
+  protected final boolean _retina;
 
-  protected CanvasImageBuilder(int width, int height, boolean scaleToDeviceResolution)
+  protected CanvasImageBuilder(int width, int height, boolean retina)
   {
-     super(scaleToDeviceResolution);
      _width = width;
      _height = height;
+     _retina = retina;
      _canvas = null;
      _canvasWidth = 0;
      _canvasHeight = 0;
@@ -77,15 +76,6 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
 
   protected abstract String getImageName(G3MContext context);
 
-
-  //long long CanvasImageBuilder::_counter = 0;
-  
-  //std::string CanvasImageBuilder::getImageName(const G3MContext* context) const {
-  //  const IStringUtils* su = context->getStringUtils();
-  //
-  //  return "_CanvasImageBuilder_" + su->toString(_counter++);
-  //}
-  
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
     ICanvas canvas = getCanvas(context);

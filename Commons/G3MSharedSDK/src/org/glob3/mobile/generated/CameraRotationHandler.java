@@ -108,15 +108,11 @@ public class CameraRotationHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.Rotate);
   
     // middle pixel in 2D
-  <<<<<<< HEAD const Vector2F pixel0 = touchEvent.getTouch(0).getPos();
-    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-    final Vector2F pixel2 = touchEvent.getTouch(2).getPos();
-    final Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-  ======= Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     Vector2F pixel2 = touchEvent.getTouch(2).getPos();
-    Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0 _pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
+    Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
+    _pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
     //_lastYValid = _initialPixel.y();
   
     // compute center of view
@@ -143,7 +139,7 @@ public class CameraRotationHandler extends CameraEventHandler
     final Vector2F c0 = touchEvent.getTouch(0).getPos();
     final Vector2F c1 = touchEvent.getTouch(1).getPos();
     final Vector2F c2 = touchEvent.getTouch(2).getPos();
-    final Vector2F cm = c0.add(c1).add(c2).div(3);
+    final Vector2F cm = c0.add(c1).add(c2).div(3.0f);
   
     // compute normal to Initial point
     Vector3D normal = eventContext.getPlanet().geodeticSurfaceNormal(_pivotPoint);
@@ -185,9 +181,7 @@ public class CameraRotationHandler extends CameraEventHandler
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     cameraContext.setCurrentGesture(Gesture.None);
-  <<<<<<< HEAD _pivotPixel = new MutableVector2F();
-  ======= _pivotPixel = MutableVector2F.zero();
-  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
+    _pivotPixel = MutableVector2F.zero();
   }
 
 

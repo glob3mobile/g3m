@@ -42,53 +42,48 @@ public class LabelImageBuilder extends AbstractImageBuilder
   }
 
 
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, cornerRadius, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, cornerRadius, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor, float shadowBlur)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, shadowColor, shadowBlur, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, shadowColor, 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color)
   {
-     this(text, scaleToDeviceResolution, font, margin, color, Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin)
+  public LabelImageBuilder(String text, GFont font, float margin)
   {
-     this(text, scaleToDeviceResolution, font, margin, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font)
+  public LabelImageBuilder(String text, GFont font)
   {
-     this(text, scaleToDeviceResolution, font, 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
-  }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution)
-  {
-     this(text, scaleToDeviceResolution, GFont.sansSerif(), 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text)
   {
-     this(text, true, GFont.sansSerif(), 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, GFont.sansSerif(), 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, boolean scaleToDeviceResolution, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius, boolean isMutable)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius, boolean isMutable)
   {
-     super(scaleToDeviceResolution);
      _text = text;
      _font = font;
      _margin = margin;
@@ -131,7 +126,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
   
-    ICanvas canvas = context.getFactory().createCanvas(_scaleToDeviceResolution);
+    ICanvas canvas = context.getFactory().createCanvas(true);
   
     canvas.setFont(_font);
   
