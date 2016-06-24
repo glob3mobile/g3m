@@ -41,4 +41,10 @@ public class DeviceInfo_Android
    }
 
 
+   @Override
+   public float getDevicePixelRatio() {
+
+   }
+
+
 }

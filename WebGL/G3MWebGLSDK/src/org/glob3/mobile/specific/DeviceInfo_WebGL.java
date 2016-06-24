@@ -22,4 +22,10 @@ public class DeviceInfo_WebGL
    }
 
 
+   @Override
+   public float getDevicePixelRatio() {
+
+   }
+
+
 }
