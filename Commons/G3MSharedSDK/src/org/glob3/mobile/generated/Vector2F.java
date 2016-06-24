@@ -16,9 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class Vector2I;
-//class MutableVector2F;
 
 public class Vector2F
 {
@@ -70,48 +68,6 @@ public class Vector2F
     return (dx * dx) + (dy * dy);
   }
 
-  public final Vector2F add(Vector2F that)
-  {
-    return new Vector2F(_x + that._x, _y + that._y);
-  }
-
-  public final Vector2F sub(Vector2F that)
-  {
-    return new Vector2F(_x - that._x, _y - that._y);
-  }
-
-  public final Vector2F div(double d)
-  {
-    return new Vector2F((float)(_x / d), (float)(_y / d));
-  }
-
-  public final double squaredLength()
-  {
-    return (double) _x * _x + _y * _y;
-  }
-
-  public final double length()
-  {
-    return IMathUtils.instance().sqrt(squaredLength());
-  }
-
-  //MutableVector2F asMutableVector2F() const {
-  //  return MutableVector2F(_x, _y);
-  //=======
-  public final Vector2F Vector2F.clampLength(float min, float max)
-  {
-    float length = (float) this.length();
-    if (length < min)
-    {
-      return this.times(min / length);
-    }
-    if (length > max)
-    {
-      return this.times(max / length);
-    }
-    return this;
-  }
-
   public final double squaredDistanceTo(float x, float y)
   {
     final double dx = _x - x;
@@ -120,9 +76,19 @@ public class Vector2F
   }
 
 
+  public final Vector2F add(Vector2F v)
+  {
+    return new Vector2F(_x + v._x, _y + v._y);
+  }
+
   public final boolean isNan()
   {
     return (_x != _x) || (_y != _y);
+  }
+
+  public final Vector2F sub(Vector2F v)
+  {
+    return new Vector2F(_x - v._x, _y - v._y);
   }
 
   public final Vector2F times(float magnitude)
@@ -135,7 +101,28 @@ public class Vector2F
     return new Vector2F(_x / v, _y / v);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Vector2F clampLength(float min, float max);
+  public final double length()
+  {
+    return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+  public final double squaredLength()
+  {
+    return _x * _x + _y * _y;
+  }
+
+  public final Vector2F clampLength(float min, float max)
+  {
+    float length = (float) this.length();
+    if (length < min)
+    {
+      return this.times(min / length);
+    }
+    if (length > max)
+    {
+      return this.times(max / length);
+    }
+    return this;
+  }
 
 }
