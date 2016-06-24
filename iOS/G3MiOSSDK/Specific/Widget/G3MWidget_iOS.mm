@@ -154,7 +154,7 @@
   [super layoutSubviews];
 
   CGSize size = [self frame].size;
-  const int width  = (int) (size.width * _devicePixelRatio);
+  const int width  = (int) (size.width  * _devicePixelRatio);
   const int height = (int) (size.height * _devicePixelRatio);
   //NSLog(@"ResizeViewportEvent: %dx%d", width, height);
 
