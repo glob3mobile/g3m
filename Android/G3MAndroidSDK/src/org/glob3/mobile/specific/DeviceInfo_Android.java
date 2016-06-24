@@ -11,8 +11,8 @@ import android.view.WindowManager;
 
 
 public class DeviceInfo_Android
-         extends
-            IDeviceInfo {
+   extends
+      IDeviceInfo {
 
    private final Context _context;
    private float         _dpi = -1;
@@ -40,11 +40,5 @@ public class DeviceInfo_Android
       return DeviceInfo_Platform.DEVICE_Android;
    }
 
-
-   @Override
-   public float getQualityFactor() {
-      //return 2;
-      return 1;
-   }
 
 }

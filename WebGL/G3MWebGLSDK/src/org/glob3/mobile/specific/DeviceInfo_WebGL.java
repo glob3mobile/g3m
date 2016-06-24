@@ -22,9 +22,4 @@ public class DeviceInfo_WebGL
    }
 
 
-   @Override
-   public float getQualityFactor() {
-      return 1;
-   }
-
 }

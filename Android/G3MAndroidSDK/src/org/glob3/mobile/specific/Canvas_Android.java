@@ -38,7 +38,8 @@ public final class Canvas_Android
    private final Rect  _rect            = new Rect(); // Rect instance for reuse (and avoid garbage)
 
 
-   Canvas_Android() {
+   Canvas_Android(final boolean retina) {
+      super(retina);
       _fillPaint = new Paint();
       _fillPaint.setAntiAlias(true);
       _fillPaint.setStyle(Paint.Style.FILL);

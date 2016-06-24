@@ -26,7 +26,8 @@ public final class Canvas_WebGL
    private int                    _currentFontSize;
 
 
-   Canvas_WebGL() {
+   Canvas_WebGL(final boolean retina) {
+      super(retina);
       _domCanvas = createCanvas();
       _domCanvasContext = getContext2D(_domCanvas);
    }
