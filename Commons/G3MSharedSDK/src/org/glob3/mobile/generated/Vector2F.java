@@ -116,11 +116,11 @@ public class Vector2F
     float length = (float) this.length();
     if (length < min)
     {
-      return this.times(min / length);
+      return times(min / length);
     }
     if (length > max)
     {
-      return this.times(max / length);
+      return times(max / length);
     }
     return this;
   }
