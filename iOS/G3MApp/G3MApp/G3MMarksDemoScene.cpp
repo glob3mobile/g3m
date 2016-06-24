@@ -134,13 +134,9 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                          new G3MMarksDemoScene_BufferDownloadListener(this),
                                          true);
 
-  g3mWidget->setAnimatedCameraPosition(//Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
-                                       Geodetic3D::fromDegrees(53.597834071333302575,
-                                                               -2.2514959129763907342,
-                                                               146127),
-                                       Angle::zero(),          // heading
-                                       //Angle::fromDegrees(-60) // pitch
-                                       Angle::fromDegrees(-27) // pitch
+  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
+                                       Angle::zero(), // heading
+                                       Angle::fromDegrees(30 - 90) // pitch
                                        );
 }
 
