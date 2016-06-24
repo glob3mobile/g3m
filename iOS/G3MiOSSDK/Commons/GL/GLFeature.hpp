@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GLFeature
@@ -12,6 +11,8 @@
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
 #include "GPUAttribute.hpp"
+#include "Vector2F.hpp"
+#include "ViewMode.hpp"
 
 #include "RCObject.hpp"
 
@@ -74,13 +75,26 @@ private:
     super.dispose();
 #endif
   }
-
+  
+  GPUUniformValueVec2FloatMutable* _size;
+  GPUUniformValueVec2FloatMutable* _anchor;
+  
 public:
   BillboardGLFeature(const Vector3D& position,
-                     int textureWidth,
-                     int textureHeight);
-
+                     float billboardWidth,
+                     float billboardHeight,
+                     float anchorU, float anchorV);
+  
   void applyOnGlobalGLState(GLGlobalState* state) const;
+  
+  void changeSize(int textureWidth,
+                  int textureHeight) {
+    _size->changeValue(textureWidth, textureHeight);
+  }
+  
+  void changeAnchor(float anchorU, float anchorV) {
+    _anchor->changeValue(anchorU, anchorV);
+  }
 };
 
 class ViewportExtentGLFeature: public GLFeature {
@@ -90,12 +104,23 @@ private:
     super.dispose();
 #endif
   }
+  
+  GPUUniformValueVec2FloatMutable* _extent;
 
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
+
+  ViewportExtentGLFeature(const Camera* camera,
+                          ViewMode      viewMode);
+
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  
+  void changeExtent(int viewportWidth,
+                    int viewportHeight);
 };
+
+/////////////////////////////////////////////////////////
 
 
 class GeometryGLFeature: public GLFeature {
@@ -115,7 +140,7 @@ private:
 
 public:
 
-  GeometryGLFeature(IFloatBuffer* buffer,
+  GeometryGLFeature(const IFloatBuffer* buffer,
                     int arrayElementSize,
                     int index,
                     bool normalized,
@@ -135,6 +160,42 @@ public:
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+class Geometry2DGLFeature: public GLFeature {
+private:
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec2Float* _position;
+
+  const float _lineWidth;
+
+  ~Geometry2DGLFeature();
+
+  GPUUniformValueVec2FloatMutable* _translation;
+
+public:
+
+  Geometry2DGLFeature(IFloatBuffer* buffer,
+                      int arrayElementSize,
+                      int index,
+                      bool normalized,
+                      int stride,
+                      float lineWidth,
+                      bool needsPointSize,
+                      float pointSize,
+                      const Vector2F& translation);
+
+  void setTranslation(float x, float y) {
+    _translation->changeValue(x, y);
+  }
+
+
+  void applyOnGlobalGLState(GLGlobalState* state) const ;
+
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
 
 class GLCameraGroupFeature: public GLFeature {
 private:
@@ -193,7 +254,7 @@ public:
   {
   }
 
-  ModelViewGLFeature(const Camera* cam);
+  ModelViewGLFeature(const Camera* camera);
 };
 
 class ModelGLFeature: public GLCameraGroupFeature {
@@ -210,7 +271,7 @@ public:
   {
   }
 
-  ModelGLFeature(const Camera* cam);
+  ModelGLFeature(const Camera* camera);
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature {
@@ -227,7 +288,7 @@ public:
   {
   }
 
-  ProjectionGLFeature(const Camera* cam);
+  ProjectionGLFeature(const Camera* camera);
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature {
@@ -360,6 +421,8 @@ public:
                    int sFactor,
                    int dFactor,
                    int target = 0);
+  
+  bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);
@@ -392,7 +455,7 @@ private:
   }
 
 public:
-  ColorGLFeature(IFloatBuffer* colors,
+  ColorGLFeature(const IFloatBuffer* colors,
                  int arrayElementSize,
                  int index,
                  bool normalized,
@@ -416,7 +479,9 @@ private:
 
 public:
   FlatColorGLFeature(const Color& color,
-                     bool blend, int sFactor, int dFactor);
+                     bool blend = false,
+                     int sFactor = GLBlendFactor::srcAlpha(),
+                     int dFactor = GLBlendFactor::oneMinusSrcAlpha());
   void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);
   }
@@ -505,7 +570,7 @@ private:
   }
 
 public:
-  VertexNormalGLFeature(IFloatBuffer* buffer,
+  VertexNormalGLFeature(const IFloatBuffer* buffer,
                         int arrayElementSize,
                         int index,
                         bool normalized,

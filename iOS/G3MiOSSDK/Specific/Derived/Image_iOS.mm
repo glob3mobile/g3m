@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 13/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "Image_iOS.hpp"
@@ -15,24 +14,27 @@
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   const int width  = getWidth();
   const int height = getHeight();
-  
+
   unsigned char* result = new unsigned char[4 * width * height];
-  
+
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(result,
-                                               width, height,
-                                               8, 4 * width,
+                                               width,
+                                               height,
+                                               8,         // bits per component
+                                               4 * width, // bytes per row
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-  
+
   CGColorSpaceRelease( colorSpace );
+
   CGRect bounds = CGRectMake( 0, 0, width, height );
   CGContextClearRect( context, bounds );
-  
+
   CGContextDrawImage( context, bounds, _image.CGImage );
-  
+
   CGContextRelease(context);
-  
+
   return result;
 }
 

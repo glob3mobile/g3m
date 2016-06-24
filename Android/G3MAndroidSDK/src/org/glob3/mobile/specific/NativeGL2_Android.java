@@ -36,8 +36,8 @@ import android.util.Log;
 
 
 public final class NativeGL2_Android
-         extends
-            INativeGL {
+   extends
+      INativeGL {
 
    private Thread _openGLThread = null;
 
@@ -93,7 +93,7 @@ public final class NativeGL2_Android
    //   public void uniformMatrix4fv(final IGLUniformID location,
    //                                final boolean transpose,
    //                                final IFloatBuffer buffer) {
-   // checkOpenGLThread(); 
+   // checkOpenGLThread();
    //      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
    //               ((FloatBuffer_Android) buffer).getBuffer());
    //   }
@@ -658,6 +658,9 @@ public final class NativeGL2_Android
    @Override
    public void useProgram(final GPUProgram program) {
       checkOpenGLThread();
+
+      FloatBuffer_Android.onGPUProgramHasChanged();
+
       GLES20.glUseProgram(program.getProgramID());
    }
 
@@ -863,6 +866,15 @@ public final class NativeGL2_Android
    @Override
    public void setActiveTexture(final int i) {
       GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
+   }
+
+
+   @Override
+   public void viewport(final int x,
+                        final int y,
+                        final int width,
+                        final int height) {
+      GLES20.glViewport(x, y, width, height);
    }
 
 

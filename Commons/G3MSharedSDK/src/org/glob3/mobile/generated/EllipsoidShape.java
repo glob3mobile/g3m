@@ -95,7 +95,7 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
-    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, borderColor);
+    return new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth < 1) ? 1 : _borderWidth, 1, borderColor);
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices, FloatBufferBuilderFromCartesian2D texCoords, FloatBufferBuilderFromCartesian3D normals)
   {
@@ -136,7 +136,7 @@ public class EllipsoidShape extends AbstractMeshShape
   
     // create mesh
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, 1, true, _withNormals? normals.create() : null);
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, 1, true, _withNormals? normals.create() : null);
   
     final TextureIDReference texId = getTextureId(rc);
     if (texId == null)
@@ -232,12 +232,17 @@ public class EllipsoidShape extends AbstractMeshShape
   
     Mesh surfaceMesh = createSurfaceMesh(rc, vertices, texCoords, normals);
   
+    Mesh resultMesh;
     if (_borderWidth > 0)
     {
       CompositeMesh compositeMesh = new CompositeMesh();
       compositeMesh.addMesh(surfaceMesh);
       compositeMesh.addMesh(createBorderMesh(rc, vertices));
-      return compositeMesh;
+      resultMesh = compositeMesh;
+    }
+    else
+    {
+      resultMesh = surfaceMesh;
     }
   
     if (vertices != null)
@@ -245,7 +250,7 @@ public class EllipsoidShape extends AbstractMeshShape
     if (normals != null)
        normals.dispose();
   
-    return surfaceMesh;
+    return resultMesh;
   }
 
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Downloader_iOS.hpp"
@@ -256,9 +255,9 @@ long long Downloader_iOS::request(const URL &url,
 const std::string Downloader_iOS::statistics() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("Downloader_iOS(downloading=");
-  isb->addInt([_downloadingHandlers count]);
+  isb->addLong([_downloadingHandlers count]);
   isb->addString(", queued=");
-  isb->addInt([_queuedHandlers count]);
+  isb->addLong([_queuedHandlers count]);
   isb->addString(", totalRequests=");
   isb->addLong(_requestsCounter);
   isb->addString(", totalCancels=");

@@ -12,8 +12,8 @@ import com.google.gwt.regexp.shared.RegExp;
 
 
 public final class Logger_WebGL
-         extends
-            ILogger {
+   extends
+      ILogger {
 
    private final Logger _logger;
 
@@ -55,8 +55,8 @@ public final class Logger_WebGL
    }
 
 
-   public String stringFormat(final String format,
-                              final Object... args) {
+   static public String stringFormat(final String format,
+                                     final Object... args) {
       final RegExp exp = RegExp.compile("%[sdf]");
       int nextSub = 0;
       String output = "";

@@ -101,7 +101,7 @@ void JSONGenerator::visitArrayInBetweenChildren(const JSONArray* value) {
 }
 
 void JSONGenerator::visitArrayBeforeChild(const JSONArray* value,
-                                          int i) {
+                                          size_t i) {
 
 }
 

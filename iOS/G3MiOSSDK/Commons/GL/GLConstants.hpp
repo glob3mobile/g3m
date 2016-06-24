@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 17/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GLConstants
@@ -173,7 +172,7 @@ public:
   static int oneMinusSrcAlpha() { return _oneMinusSrcAlpha; }
   static int one()              { return _one; }
   static int zero()             { return _zero; }
-  
+
   static void init(const INativeGL* ngl) {
     _srcAlpha         = ngl->BlendFactor_SrcAlpha();
     _oneMinusSrcAlpha = ngl->BlendFactor_OneMinusSrcAlpha();

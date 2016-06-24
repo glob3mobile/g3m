@@ -13,7 +13,7 @@
 #include "Image_iOS.hpp"
 #include "ILogger.hpp"
 #include "IThreadUtils.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
 #import "NSString_CppAdditions.h"
@@ -114,9 +114,9 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger count     = [rs1 integerColumnByIndex: 0];
     NSInteger usedSpace = [rs1 integerColumnByIndex: 1];
 
-    NSLog(@"Initialized Storage on DB \"%@\", buffers=%d, usedSpace=%fMb",
+    NSLog(@"Initialized Storage on DB \"%@\", buffers=%ld, usedSpace=%fMb",
           [NSString stringWithCppString: _databaseName],
-          count,
+          (long)count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
 
@@ -128,9 +128,9 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger count     = [rs2 integerColumnByIndex: 0];
     NSInteger usedSpace = [rs2 integerColumnByIndex: 1];
 
-    NSLog(@"Initialized Storage on DB \"%@\", images=%d, usedSpace=%fMb",
+    NSLog(@"Initialized Storage on DB \"%@\", images=%ld, usedSpace=%fMb",
           [NSString stringWithCppString: _databaseName],
-          count,
+          (long)count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
 
@@ -231,76 +231,122 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
 
 IImageResult SQLiteStorage_iOS::readImage(const URL& url,
                                           bool readExpired) {
-//  @autoreleasepool {
-    //  NSDate* startAll = [NSDate date];
+  //  @autoreleasepool {
+  //  NSDate* startAll = [NSDate date];
 
-    IImage* image = NULL;
-    bool expired = false;
+  IImage* image = NULL;
+  bool expired = false;
 
-    //  double parsedTime = 0;
+  //  double parsedTime = 0;
 
-    NSString* name = [NSString stringWithCppString: url._path];
-    SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
-    if ([rs next]) {
-      NSData* data = [rs dataColumnByIndex: 0];
-      const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-      NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+  NSString* name = [NSString stringWithCppString: url._path];
+  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
+  if ([rs next]) {
+    NSData* data = [rs dataColumnByIndex: 0];
+    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-      expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
+    expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
 
-      if (readExpired || !expired) {
-        //      NSDate* startParse = [NSDate date];
-        UIImage* uiImage = [UIImage imageWithData:data];
-        //      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
+    if (readExpired || !expired) {
+      //      NSDate* startParse = [NSDate date];
+      UIImage* uiImage = [UIImage imageWithData:data];
+      //      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
 
-        if (uiImage) {
-          image = new Image_iOS(uiImage,
-                                NULL /* data is not needed */);
-        }
-        else {
-          ILogger::instance()->logError("Can't create image with contents of storage.");
-        }
+      if (uiImage) {
+        image = new Image_iOS(uiImage,
+                              NULL /* data is not needed */);
+      }
+      else {
+        ILogger::instance()->logError("Can't create image with contents of storage.");
       }
     }
+  }
 
-    [rs close];
+  [rs close];
 
-    //  NSLog(@"STORAGE: read image in %f (parse=%f)",
-    //        ([startAll timeIntervalSinceNow] * -1000.0),
-    //        parsedTime);
-    
-    return IImageResult(image, expired);
-//  }
+  //  NSLog(@"STORAGE: read image in %f (parse=%f)",
+  //        ([startAll timeIntervalSinceNow] * -1000.0),
+  //        parsedTime);
+
+  return IImageResult(image, expired);
+  //  }
 }
 
 
 IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
                                                 bool readExpired) {
-//  @autoreleasepool {
-    IByteBuffer* buffer = NULL;
-    bool expired = false;
+  //  @autoreleasepool {
+  IByteBuffer* buffer = NULL;
+  bool expired = false;
 
-    NSString* name = [NSString stringWithCppString: url._path];
-    SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
-    if ([rs next]) {
-      NSData* nsData = [rs dataColumnByIndex: 0];
-      const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-      NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+  NSString* name = [NSString stringWithCppString: url._path];
+  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
+  if ([rs next]) {
+    NSData* nsData = [rs dataColumnByIndex: 0];
+    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-      expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
+    expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
 
-      if (readExpired || !expired) {
-        NSUInteger length = [nsData length];
-        unsigned char* bytes = new unsigned char[length];
-        [nsData getBytes: bytes
-                  length: length];
+    if (readExpired || !expired) {
+      NSUInteger length = [nsData length];
+      unsigned char* bytes = new unsigned char[length];
+      [nsData getBytes: bytes
+                length: length];
 
-        buffer = IFactory::instance()->createByteBuffer(bytes, length);
-      }
+      buffer = IFactory::instance()->createByteBuffer(bytes, length);
     }
+  }
 
-    [rs close];
-    
-    return IByteBufferResult(buffer, expired);
-//  }
+  [rs close];
+
+  return IByteBufferResult(buffer, expired);
+  //  }
 }
+
+
+void SQLiteStorage_iOS::merge(const std::string &databasePath) {
+  NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString* documentsDirectory = [paths objectAtIndex:0];
+  NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithCppString: databasePath] ];
+  
+  
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  if ([fileManager fileExistsAtPath:dbPath]) {
+    SQDatabase* readDB = [SQDatabase databaseWithPath:dbPath];
+    if (!readDB) {
+      printf("Can't open read-database \"%s\"\n", [dbPath toCppString].c_str());
+    }
+    else {
+      [readDB openReadOnly];
+    }
+    
+    
+    SQResultSet* rs = [readDB executeQuery:@"SELECT name, contents, expiration FROM image2"];
+    NSLog(@"result %@ ",rs);
+    while ([rs next]) {
+      NSString* name = [rs stringColumnByIndex:0];
+      NSData* nsData = [rs dataColumnByIndex: 1];
+      double expirationIntervalInSeconds = [[rs stringColumnByIndex:2] doubleValue];
+      
+      SQResultSet* sqrs = [_readDB executeQuery:@"SELECT expiration FROM image2 WHERE (name = ?)", name];
+      if ([rs next]) {
+        const double actualExpirationIntervalInSeconds = [[rs stringColumnByIndex:0] doubleValue];
+        printf("ExpirationIntervalInSeconds:\n\"%f\"\n\"%f\"\n", expirationIntervalInSeconds, actualExpirationIntervalInSeconds);
+
+        expirationIntervalInSeconds = MAX(expirationIntervalInSeconds, actualExpirationIntervalInSeconds);
+      }
+      
+      
+      [sqrs close];
+      
+      rawSave(@"buffer2", name, nsData, TimeInterval::fromSeconds((int)expirationIntervalInSeconds));
+    }
+    
+    
+    
+    [readDB close];
+  }
+}
+

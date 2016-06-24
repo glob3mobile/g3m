@@ -8,8 +8,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class GLTextureId_WebGL
-         implements
-            IGLTextureId {
+   implements
+      IGLTextureId {
 
    private final JavaScriptObject _webGLTexture; //WebGLTexture
 

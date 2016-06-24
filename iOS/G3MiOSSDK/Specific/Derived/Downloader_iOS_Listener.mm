@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 28/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import "Downloader_iOS_Listener.h"
@@ -41,7 +40,7 @@
                  data:(NSData*) data
 {
   if (_cppBufferListener) {
-    const int length = [data length];
+    const size_t length = [data length];
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];
@@ -68,7 +67,7 @@
   if (_cppBufferListener) {
     _cppBufferListener->onError(url);
   }
-  
+
   if (_cppImageListener) {
     _cppImageListener->onError(url);
   }
@@ -79,7 +78,7 @@
   if (_cppBufferListener) {
     _cppBufferListener->onCancel(url);
   }
-  
+
   if (_cppImageListener) {
     _cppImageListener->onCancel(url);
   }
@@ -89,16 +88,16 @@
                          data:(NSData*) data
 {
   if (_cppBufferListener) {
-    const int length = [data length];
+    const size_t length = [data length];
     unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
     [data getBytes: bytes
             length: length];
-    
+
     IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
     _cppBufferListener->onCanceledDownload(url, buffer, false);
     delete buffer;
   }
-  
+
   if (_cppImageListener) {
     UIImage* uiImage = [UIImage imageWithData:data];
     if (uiImage) {
@@ -115,7 +114,7 @@
     if (_cppBufferListener) {
       delete _cppBufferListener;
     }
-    
+
     if (_cppImageListener) {
       delete _cppImageListener;
     }

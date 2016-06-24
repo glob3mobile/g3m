@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 17/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #include "Box.hpp"
@@ -102,8 +101,8 @@ Vector2F Box::projectedExtent(const G3MRenderContext* rc) const {
   float lowerY = pixel0._y;
   float upperY = pixel0._y;
 
-  const int cornersSize = corners.size();
-  for (int i = 1; i < cornersSize; i++) {
+  const size_t cornersSize = corners.size();
+  for (size_t i = 1; i < cornersSize; i++) {
     const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
 
     const float x = pixel._x;
@@ -137,8 +136,8 @@ double Box::projectedArea(const G3MRenderContext* rc) const {
   float lowerY = pixel0._y;
   float upperY = pixel0._y;
 
-  const int cornersSize = corners.size();
-  for (int i = 1; i < cornersSize; i++) {
+  const size_t cornersSize = corners.size();
+  for (size_t i = 1; i < cornersSize; i++) {
     const Vector2F pixel = currentCamera->point2Pixel(corners[i]);
 
     const float x = pixel._x;
@@ -253,10 +252,11 @@ Mesh* Box::createMesh(const Color& color) const {
   }
 
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               true,
                                vertices->getCenter(),
                                vertices->create(),
+                               true,
                                indices.create(),
+                               true,
                                2,
                                1,
                                new Color(color));

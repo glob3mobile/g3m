@@ -24,7 +24,7 @@ public class CommandLine {
    }
 
 
-   public void showResult(final String result) {
+   public static void showResult(final String result) {
       StreamGobbler sg = null;
       try {
          final StringBuffer cmd = new StringBuffer("echo \"");
@@ -46,7 +46,7 @@ public class CommandLine {
    }
 
 
-   public ExecResult exec(final String... cmd) throws IOException, InterruptedException {
+   public static ExecResult exec(final String... cmd) throws IOException, InterruptedException {
       final Process p = Runtime.getRuntime().exec(cmd);
       final int exitVal = p.waitFor();
 
@@ -69,7 +69,7 @@ public class CommandLine {
    }
 
 
-   public StreamGobbler execute(final String... cmd) throws IOException, InterruptedException {
+   public static StreamGobbler execute(final String... cmd) throws IOException, InterruptedException {
       final Process p = Runtime.getRuntime().exec(cmd);
 
       // any error message?
@@ -78,7 +78,8 @@ public class CommandLine {
 
       // any output?
       final InputStreamReader isrOutput = new InputStreamReader(p.getInputStream());
-      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput), StreamGobbler.streamGobblerType.OUTPUT);
+      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput),
+               StreamGobbler.streamGobblerType.OUTPUT);
 
       // kick them off
       errorGobbler.start();
@@ -102,9 +103,9 @@ public class CommandLine {
    }
 
 
-   public StreamGobbler execute(final String[] cmd,
-                                final String[] envp,
-                                final File dir) throws IOException, InterruptedException {
+   public static StreamGobbler execute(final String[] cmd,
+                                       final String[] envp,
+                                       final File dir) throws IOException, InterruptedException {
       final Process p = Runtime.getRuntime().exec(cmd, envp, dir);
 
 
@@ -114,7 +115,8 @@ public class CommandLine {
 
       // any output?
       final InputStreamReader isrOutput = new InputStreamReader(p.getInputStream());
-      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput), StreamGobbler.streamGobblerType.OUTPUT);
+      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput),
+               StreamGobbler.streamGobblerType.OUTPUT);
 
       // kick them off
       errorGobbler.start();
@@ -152,7 +154,8 @@ public class CommandLine {
 
 
       private ExecResult(final ExecResultType type,
-                         final BufferedReader br) throws IOException {
+                         final BufferedReader br)
+               throws IOException {
          super();
          _type = type;
 
@@ -183,8 +186,8 @@ public class CommandLine {
    }
 
    public static class StreamGobbler
-            extends
-               Thread {
+      extends
+         Thread {
 
       public enum streamGobblerType {
          ERROR,

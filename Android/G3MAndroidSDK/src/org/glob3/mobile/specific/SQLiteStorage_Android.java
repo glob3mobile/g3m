@@ -309,4 +309,57 @@ public final class SQLiteStorage_Android
       return (_readDB != null) && (_writeDB != null);
    }
 
+
+   @Override
+   public void merge(final String databasePath) {
+      final File fromDataBase = new File(databasePath);
+      if (fromDataBase.exists()) {
+         final MySQLiteOpenHelper auxDbHelper = new MySQLiteOpenHelper(_androidContext, getPath());
+
+         final SQLiteDatabase auxReadDB = auxDbHelper.getReadableDatabase();
+
+         if (auxReadDB != null) {
+            final Cursor cursor = auxReadDB.query( //
+                     "image2", //
+                     new String[] { "name", "contents", "expiration" }, //
+                     "", //
+                     new String[] {}, //
+                     null, //
+                     null, //
+                     null);
+
+            if (cursor.moveToFirst()) {
+               do {
+                  final String name = cursor.getString(0);
+                  final byte[] data = cursor.getBlob(1);
+                  final String expirationS = cursor.getString(2);
+                  long expirationInterval = Long.parseLong(expirationS);
+
+
+                  final Cursor auxCursor = _readDB.query( //
+                           "image2", //
+                           COLUMNS, //
+                           SELECTION, //
+                           new String[] { name }, //
+                           null, //
+                           null, //
+                           null);
+                  if (auxCursor.moveToFirst()) {
+                     expirationInterval = Math.max(expirationInterval, Long.parseLong(auxCursor.getString(1)));
+                  }
+                  auxCursor.close();
+
+                  rawSave("image2", name, data, TimeInterval.fromSeconds(expirationInterval));
+               }
+               while (cursor.moveToNext());
+
+
+            }
+            cursor.close();
+            auxReadDB.close();
+         }
+      }
+   }
+
+
 }

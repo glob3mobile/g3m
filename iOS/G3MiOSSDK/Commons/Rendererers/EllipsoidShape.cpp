@@ -101,10 +101,11 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
   }
 
   return new IndexedMesh(GLPrimitive::lines(),
-                         true,
                          vertices->getCenter(),
                          vertices->create(),
+                         true,
                          indices.create(),
+                         true,
                          (_borderWidth < 1) ? 1 : _borderWidth,
                          1,
                          borderColor);
@@ -144,10 +145,11 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   // create mesh
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
   Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                             true,
                              vertices->getCenter(),
                              vertices->create(),
+                             true,
                              indices.create(),
+                             true,
                              (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
                              surfaceColor,
@@ -258,17 +260,21 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
   Mesh* surfaceMesh = createSurfaceMesh(rc, vertices, &texCoords, normals);
 
+  Mesh* resultMesh;
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
     compositeMesh->addMesh(surfaceMesh);
     compositeMesh->addMesh(createBorderMesh(rc, vertices));
-    return compositeMesh;
+    resultMesh = compositeMesh;
+  }
+  else {
+    resultMesh = surfaceMesh;
   }
 
   delete vertices;
   delete normals;
 
-  return surfaceMesh;
+  return resultMesh;
 }
 
 

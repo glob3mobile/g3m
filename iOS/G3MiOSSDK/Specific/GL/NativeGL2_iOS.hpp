@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_NativeGL_iOS
@@ -27,6 +26,12 @@ class NativeGL2_iOS: public INativeGL {
 public:
 
   void useProgram(GPUProgram* program) const {
+    
+#warning TODO: Check all the parameters that should be changed on OpenGL after a glUseProgram()
+    
+    //Must forget bound buffer
+    FloatBuffer_iOS::onGPUProgramHasChanged();
+    
     glUseProgram(program->getProgramID());
   }
 
@@ -569,6 +574,10 @@ public:
 
   void depthMask(bool v) const {
     glDepthMask(v);
+  }
+  
+  void viewport(int x, int y, int width, int height) const{
+    glViewport(x, y, width, height);
   }
   
 };

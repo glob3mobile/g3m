@@ -56,9 +56,20 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
       }
     }
   }
+
+  protected final String getImageName(G3MContext context)
+  {
+    final IStringUtils su = context.getStringUtils();
+  
+    return "_DefaultChessCanvasImage_" + su.toString(_width) + "_" + su.toString(_height) + "_" + _backgroundColor.toID() + "_" + _boxColor.toID() + "_" + su.toString(_splits);
+  }
+
   public DefaultChessCanvasImageBuilder(int width, int height, Color backgroundColor, Color boxColor, int splits)
   {
-     super(width, height, false);
+     <<<<<<< HEAD CanvasImageBuilder = new <type missing>(width, height, false);
+     _backgroundColor = new Color(backgroundColor);
+     _boxColor = new Color(boxColor);
+     _splits = splits;
      _backgroundColor = new Color(backgroundColor);
      _boxColor = new Color(boxColor);
      _splits = splits;

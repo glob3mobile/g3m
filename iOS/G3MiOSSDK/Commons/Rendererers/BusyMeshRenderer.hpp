@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 20/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_BusyMeshRenderer
@@ -21,23 +20,23 @@ private:
   Mesh    *_mesh;
   double  _degrees;
   Color*  _backgroundColor;
-  
+
   MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelviewMatrix;
 
 
   ProjectionGLFeature* _projectionFeature;
   ModelGLFeature* _modelFeature;
-  
+
   GLState* _glState;
-  
+
   void createGLState();
 
   Mesh* createMesh(const G3MRenderContext* rc);
   Mesh* getMesh(const G3MRenderContext* rc);
 
-  
-public:    
+
+public:
   BusyMeshRenderer(Color* backgroundColor):
   _degrees(0),
   _backgroundColor(backgroundColor),
@@ -48,25 +47,16 @@ public:
   {
 
   }
-  
+
   void initialize(const G3MContext* context) {
-    
+
   }
- 
+
   void render(const G3MRenderContext* rc, GLState* glState);
-  
+
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-    const int halfWidth = width / 2;
-    const int halfHeight = height / 2;
-    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
-                                                                                     -halfHeight, halfHeight,
-                                                                                     -halfWidth,  halfWidth));
-    
-    delete _mesh;
-    _mesh = NULL;
-  }
-  
+                             int width, int height);
+
   virtual ~BusyMeshRenderer() {
     delete _mesh;
     delete _backgroundColor;
@@ -75,24 +65,24 @@ public:
   }
 
   void incDegrees(double value) {
-    _degrees += value; 
+    _degrees += value;
     if (_degrees>360) {
       _degrees -= 360;
     }
     _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees),
-                                                                     Vector3D(0, 0, -1)));
+                                                                      Vector3D(0, 0, -1)));
   }
 
   void start(const G3MRenderContext* rc);
-  
+
   void stop(const G3MRenderContext* rc);
-  
+
   void onResume(const G3MContext* context) {
-    
+
   }
-  
+
   void onPause(const G3MContext* context) {
-    
+
   }
 
   void onDestroy(const G3MContext* context) {
@@ -102,7 +92,7 @@ public:
 
 //***************************************************************
 
-class BusyMeshEffect : public EffectWithForce {
+class BusyMeshEffect : public EffectNeverEnding {
 private:
   BusyMeshRenderer* _renderer;
   long long _lastMS;
@@ -110,7 +100,7 @@ private:
 public:
 
   BusyMeshEffect(BusyMeshRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
@@ -121,7 +111,7 @@ public:
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
+    EffectNeverEnding::doStep(rc, when);
 
     const long long now = when.milliseconds();
     const long long ellapsed = now - _lastMS;
@@ -138,7 +128,7 @@ public:
   void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
-
+  
 };
 
 

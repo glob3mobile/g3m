@@ -66,7 +66,11 @@ public final class MotionEventProcessor {
                prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
+<<<<<<< HEAD
                prevPos = new Vector2F(0, 0);
+=======
+               prevPos = Vector2F.zero();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
             }
          }
          else {
@@ -76,7 +80,11 @@ public final class MotionEventProcessor {
                prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
+<<<<<<< HEAD
                prevPos = new Vector2F(0, 0);
+=======
+               prevPos = Vector2F.zero();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
             }
 
          }
@@ -154,7 +162,7 @@ public final class MotionEventProcessor {
    }
 
 
-   public TouchEvent processDoubleTapEvent(final MotionEvent event) {
+   static public TouchEvent processDoubleTapEvent(final MotionEvent event) {
       final PointerCoords pc = new PointerCoords();
       event.getPointerCoords(0, pc);
       final Vector2F pos = new Vector2F(pc.x, pc.y);

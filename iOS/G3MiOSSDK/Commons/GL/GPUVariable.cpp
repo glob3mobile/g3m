@@ -153,6 +153,14 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   if (name.compare("Sampler3") == 0) {
     return SAMPLER3;
   }
+  
+  if (name.compare("uTranslation2D") == 0) {
+    return TRANSLATION_2D;
+  }
+  
+  if (name.compare("uBillboardAnchor") == 0) {
+    return BILLBOARD_ANCHOR;
+  }
 
   return UNRECOGNIZED_UNIFORM;
 }
@@ -181,6 +189,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
 
   if (name.compare("aNormal") == 0) {
     return NORMAL;
+  }
+  
+  if (name.compare("aPosition2D") == 0) {
+    return POSITION_2D;
   }
 
   return UNRECOGNIZED_ATTRIBUTE;

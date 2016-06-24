@@ -25,8 +25,8 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
 
-  const int coordinatesCount = coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
+  const size_t coordinatesCount = coordinates->size();
+  for (size_t i = 0; i < coordinatesCount; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
     vertices->add(coordinate->_latitude,
                   coordinate->_longitude,
@@ -58,12 +58,12 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   ShortBufferBuilder indices;
 
-  const int coordinatesArrayCount = coordinatesArray->size();
+  const size_t coordinatesArrayCount = coordinatesArray->size();
   short index = 0;
-  for (int i = 0; i < coordinatesArrayCount; i++) {
+  for (size_t i = 0; i < coordinatesArrayCount; i++) {
     std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
-    const int coordinatesCount = coordinates->size();
-    for (int j = 0; j < coordinatesCount; j++) {
+    const size_t coordinatesCount = coordinates->size();
+    for (size_t j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
       vertices->add(coordinate->_latitude,
@@ -79,10 +79,11 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
   }
 
   Mesh* result = new IndexedMesh(GLPrimitive::lines(),
-                                 true,
                                  vertices->getCenter(),
                                  vertices->create(),
+                                 true,
                                  indices.create(),
+                                 true,
                                  lineWidth,
                                  1,
                                  new Color(lineColor),

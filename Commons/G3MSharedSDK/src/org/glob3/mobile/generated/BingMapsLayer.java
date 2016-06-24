@@ -133,9 +133,9 @@ public class BingMapsLayer extends RasterLayer
     final String quadkey = getQuadKey(level, column, row);
   
     String path = _imageUrl;
-    path = su.replaceSubstring(path, "{subdomain}", subdomain);
-    path = su.replaceSubstring(path, "{quadkey}", quadkey);
-    path = su.replaceSubstring(path, "{culture}", _culture);
+    path = su.replaceAll(path, "{subdomain}", subdomain);
+    path = su.replaceAll(path, "{quadkey}", quadkey);
+    path = su.replaceAll(path, "{culture}", _culture);
   
     return new URL(path, false);
   }
@@ -226,9 +226,6 @@ public class BingMapsLayer extends RasterLayer
   {
     return new URL();
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  boolean isReady();
 
   public final void initialize(G3MContext context)
   {

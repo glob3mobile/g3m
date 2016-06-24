@@ -8,7 +8,7 @@
 
 #include "WMSBilElevationDataProvider.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IStringBuilder.hpp"
 #include "Sector.hpp"
@@ -137,7 +137,7 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
   isb->addString(",");
   isb->addDouble(sector._upper._longitude._degrees);
 
-#warning TODO_WMS_1_1_1;
+// TODO: #warning TODO_WMS_1_1_1;
 //  isb->addDouble(sector._lower._longitude._degrees);
 //  isb->addString(",");
 //  isb->addDouble(sector._lower._latitude._degrees);

@@ -26,22 +26,26 @@ public abstract class AbstractGeometryMesh extends Mesh
 {
 
   protected final int _primitive;
-  protected Vector3D _center ;
+  protected final Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
-  protected IFloatBuffer _vertices;
+  protected final IFloatBuffer _vertices;
   protected final boolean _ownsVertices;
-  protected IFloatBuffer _normals;
+  protected final IFloatBuffer _normals;
   protected final boolean _ownsNormals;
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
+
+  protected final boolean _polygonOffsetFill;
+  protected final float _polygonOffsetFactor;
+  protected final float _polygonOffsetUnits;
 
   protected BoundingVolume _extent;
   protected final BoundingVolume computeBoundingVolume()
   {
     final int vertexCount = getVertexCount();
   
-    if (vertexCount <= 0)
+    if (vertexCount == 0)
     {
       return null;
     }
@@ -81,7 +85,7 @@ public abstract class AbstractGeometryMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest)
+  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
      _primitive = primitive;
      _vertices = vertices;
@@ -97,6 +101,9 @@ public abstract class AbstractGeometryMesh extends Mesh
      _glState = new GLState();
      _normalsMesh = null;
      _showNormals = false;
+     _polygonOffsetFactor = polygonOffsetFactor;
+     _polygonOffsetUnits = polygonOffsetUnits;
+     _polygonOffsetFill = polygonOffsetFill;
     createGLState();
   }
 
@@ -104,7 +111,7 @@ public abstract class AbstractGeometryMesh extends Mesh
 
   protected final void createGLState()
   {
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, 0, 0, _lineWidth, true, _pointSize), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); //Polygon Offset - Cull and culled face - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {

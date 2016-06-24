@@ -23,7 +23,7 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.Sector;
@@ -65,8 +65,12 @@ public class SymbologyActivity
       final LayerSet layerSet = new LayerSet();
 
 
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 13);
-      layerSet.addLayer(mboxTerrainLayer);
+      //final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 13);
+
+      final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
+      mqlAerial.setTitle("MapQuest Aerial");
+
+      layerSet.addLayer(mqlAerial);
 
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
@@ -121,89 +125,87 @@ public class SymbologyActivity
 
    GEOSymbolizer Symbolizer = new GEOSymbolizer() {
 
-                               @Override
-                               public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
-                                  // TODO Auto-generated method stub
-                                  return null;
-                               }
+      @Override
+      public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
+         // TODO Auto-generated method stub
+         return null;
+      }
 
 
-                               @Override
-                               public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
-                                  final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                  symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(),
-                                           Symbology.createPolygonLineRasterStyle(geometry),
-                                           Symbology.createPolygonSurfaceRasterStyle(geometry)));
+      @Override
+      public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
+         final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
+         symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(), Symbology.createPolygonLineRasterStyle(geometry),
+                  Symbology.createPolygonSurfaceRasterStyle(geometry)));
 
-                                  return symbols;
-                               }
-
-
-                               @Override
-                               public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
-                                  // TODO Auto-generated method stub
-                                  return null;
-                               }
+         return symbols;
+      }
 
 
-                               @Override
-                               public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
-                                  final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                  symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(),
-                                           Symbology.createLineRasterStyle(geometry)));
-                                  return symbols;
-                               }
+      @Override
+      public ArrayList<GEOSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
+         // TODO Auto-generated method stub
+         return null;
+      }
 
 
-                               @Override
-                               public ArrayList<GEOSymbol> createSymbols(final GEO2DPointGeometry geometry) {
-
-                                  final ArrayList<GEOSymbol> result = new ArrayList<GEOSymbol>();
-
-                                  final JSONObject properties = geometry.getFeature().getProperties();
-
-                                  final String name = properties.getAsString("name", "");
+      @Override
+      public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
+         final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
+         symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(), Symbology.createLineRasterStyle(geometry)));
+         return symbols;
+      }
 
 
-                                  final MarkTouchListener markListener = new MarkTouchListener() {
-                                     @Override
-                                     public boolean touchedMark(final Mark mark) {
-                                        runOnUiThread(new Runnable() {
-                                           @Override
-                                           public void run() {
-                                              new AlertDialog.Builder(SymbologyActivity.this) //
-                                              .setTitle("Restaurant Name") //
-                                              .setMessage(name) //
-                                              .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(final DialogInterface dialog,
-                                                                     final int which) {
-                                                    // continue with delete
-                                                 }
-                                              }) //
-                                              .show();
-                                           }
-                                        });
+      @Override
+      public ArrayList<GEOSymbol> createSymbols(final GEO2DPointGeometry geometry) {
 
-                                        return true;
-                                     }
-                                  };
+         final ArrayList<GEOSymbol> result = new ArrayList<GEOSymbol>();
 
-                                  final Mark mark = new Mark( //
-                                           new URL("file:///restaurant-24@2x.png"), //
-                                           new Geodetic3D(geometry.getPosition(), 0), //
-                                           AltitudeMode.RELATIVE_TO_GROUND, //
-                                           5000, //
-                                           null, //
-                                           false, // 
-                                           markListener, //
-                                           true);
+         final JSONObject properties = geometry.getFeature().getProperties();
+
+         final String name = properties.getAsString("name", "");
 
 
-                                  result.add(new GEOMarkSymbol(mark));
-                                  return result;
+         final MarkTouchListener markListener = new MarkTouchListener() {
+            @Override
+            public boolean touchedMark(final Mark mark) {
+               runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                     new AlertDialog.Builder(SymbologyActivity.this) //
+                     .setTitle("Restaurant Name") //
+                     .setMessage(name) //
+                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog,
+                                            final int which) {
+                           // continue with delete
+                        }
+                     }) //
+                     .show();
+                  }
+               });
 
-                               }
-                            };
+               return true;
+            }
+         };
+
+         final Mark mark = new Mark( //
+                  new URL("file:///restaurant-24@2x.png"), //
+                  new Geodetic3D(geometry.getPosition(), 0), //
+                  AltitudeMode.RELATIVE_TO_GROUND, //
+                  5000, //
+                  null, //
+                  false, // 
+                  markListener, //
+                  true);
+
+
+         result.add(new GEOMarkSymbol(mark));
+         return result;
+
+      }
+   };
 
 }

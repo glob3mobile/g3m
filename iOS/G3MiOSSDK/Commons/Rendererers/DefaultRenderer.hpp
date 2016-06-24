@@ -25,13 +25,13 @@ private:
   
   std::vector<const Info*> _info;
   
-  void notifyChangedInfo(const std::vector<const Info*> info);
+  void notifyChangedInfo(const std::vector<const Info*>& info);
   
 protected:
   
   ChangedRendererInfoListener* _changedInfoListener = NULL;
   
-  int _rendererIdentifier = -1;
+  size_t _rendererIdentifier = 0;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -124,16 +124,17 @@ public:
     return false;
   }
   
-  void setInfo(const std::vector<const Info*> info);
+  void setInfo(const std::vector<const Info*>& info);
   
-  void addInfo(const std::vector<const Info*> info);
+  void addInfo(const std::vector<const Info*>& info);
   
   void addInfo(const Info* info);
 
   
   
   
-  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                              const size_t rendererIdentifier);
 };
 
 #endif

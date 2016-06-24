@@ -10,7 +10,7 @@
 
 #include "IGLTextureId.hpp"
 #include "GL.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
 #include "SGShape.hpp"
 #include "IImageDownloadListener.hpp"
@@ -19,8 +19,9 @@
 #include "IStringBuilder.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
+#include "DownloadPriority.hpp"
 
-#define TEXTURES_DOWNLOAD_PRIORITY 1000000
+//#define TEXTURES_DOWNLOAD_PRIORITY 1000000
 
 
 class SGLayerNode_ImageDownloadListener : public IImageDownloadListener {
@@ -96,7 +97,8 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
   }
 
   rc->getDownloader()->requestImage(getURL(),
-                                    TEXTURES_DOWNLOAD_PRIORITY,
+                                    //TEXTURES_DOWNLOAD_PRIORITY,
+                                    DownloadPriority::HIGHEST,
                                     TimeInterval::fromDays(30),
                                     true,
                                     new SGLayerNode_ImageDownloadListener(this),

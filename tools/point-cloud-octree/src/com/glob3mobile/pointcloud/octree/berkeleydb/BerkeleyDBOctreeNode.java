@@ -9,11 +9,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.Angle;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
-import com.glob3mobile.pointcloud.octree.Sector;
-import com.glob3mobile.pointcloud.octree.Utils;
+import com.glob3mobile.utils.Angle;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
@@ -24,8 +24,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBOctreeNode
-         implements
-            PersistentOctree.Node {
+   implements
+      PersistentOctree.Node {
 
 
    private static double _upperLimitInDegrees = 85.0511287798;
@@ -337,15 +337,15 @@ public class BerkeleyDBOctreeNode
       //         }
       //      }
 
-      if (getPoints().size() >= _octree.getMaxPointsPerTile()) {
+      if (getPoints().size() > _octree.getMaxPointsPerTile()) {
          split(txn);
          return;
       }
 
-      if (getPoints().size() >= _octree.getMaxPointsPerTile()) {
-         System.out.println("***** logic error, tile " + getID() + " has more points than threshold (" + getPoints().size() + ">"
-                            + _octree.getMaxPointsPerTile() + ")");
-      }
+      //      if (getPoints().size() > _octree.getMaxPointsPerTile()) {
+      //         System.out.println("***** logic error, tile " + getID() + " has more points than threshold (" + getPoints().size() + ">"
+      //                            + _octree.getMaxPointsPerTile() + ")");
+      //      }
 
 
       final Database nodeDB = _octree.getNodeDB();
@@ -505,8 +505,15 @@ public class BerkeleyDBOctreeNode
 
    private void remove(final Transaction txn) {
       final DatabaseEntry key = new DatabaseEntry(_id);
-      _octree.getNodeDB().delete(txn, key);
-      _octree.getNodeDataDB().delete(txn, key);
+      @SuppressWarnings("unused")
+      OperationStatus status = _octree.getNodeDB().delete(txn, key);
+      //      if (status != OperationStatus.SUCCESS) {
+      //         throw new RuntimeException("Unsupported status=" + status);
+      //      }
+      status = _octree.getNodeDataDB().delete(txn, key);
+      //      if (status != OperationStatus.SUCCESS) {
+      //         throw new RuntimeException("Unsupported status=" + status);
+      //      }
    }
 
 

@@ -11,9 +11,10 @@
 
 #include "RCObject.hpp"
 #include "Matrix44D.hpp"
+//#include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 #include <vector>
-
 
 class Matrix44DProvider: public RCObject {
 protected:
@@ -48,14 +49,14 @@ private:
 public:
   Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
     if (matrix == NULL) {
-      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
+      THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
     }
     _matrix->_retain();
   }
 
   void setMatrix(const Matrix44D* matrix) {
     if (matrix == NULL) {
-      ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
+      THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
     }
 
     if (matrix != _matrix) {
@@ -77,7 +78,7 @@ class Matrix44DMultiplicationHolder : public Matrix44DProvider {
 private:
   const Matrix44D**         _matrices;
   const Matrix44DProvider** _providers;
-  const int _matricesSize;
+  const size_t _matricesSize;
   mutable Matrix44D* _modelview;
 
   void pullMatrixes() const;
@@ -86,7 +87,7 @@ private:
 
 public:
   Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
-                                int matricesSize);
+                                size_t matricesSize);
 
   Matrix44D* getMatrix() const;
   
@@ -99,13 +100,13 @@ private:
 
 public:
   ~Matrix44DMultiplicationHolderBuilder() {
-    const int providersSize = _providers.size();
-    for (int i = 0; i < providersSize; i++) {
+    const size_t providersSize = _providers.size();
+    for (size_t i = 0; i < providersSize; i++) {
       _providers[i]->_release();
     }
   }
 
-  int size() const {
+  size_t size() const {
     return _providers.size();
   }
   
@@ -115,9 +116,9 @@ public:
   }
 
   Matrix44DMultiplicationHolder* create() const {
-    const int providersSize = _providers.size();
+    const size_t providersSize = _providers.size();
     const Matrix44DProvider* ps[providersSize];
-    for (int i = 0; i < providersSize; i++) {
+    for (size_t i = 0; i < providersSize; i++) {
       ps[i] = _providers[i];
     }
 

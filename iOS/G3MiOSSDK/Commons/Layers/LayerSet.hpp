@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_LayerSet
@@ -88,7 +87,7 @@ public:
 
   void initialize(const G3MContext* context) const;
 
-  int size() const {
+  size_t size() const {
     return _layers.size();
   }
 
@@ -99,7 +98,7 @@ public:
   void setTileImageProvider(TileImageProvider* tileImageProvider);
 
 
-  Layer* getLayer(int index) const;
+  Layer* getLayer(size_t index) const;
 
   Layer* getLayerByTitle(const std::string& title) const;
 
@@ -120,7 +119,7 @@ public:
 
   const std::vector<const Info*> getInfo();
 
-  void changedInfo(const std::vector<const Info*> info);
+  void changedInfo(const std::vector<const Info*>& info);
   
 };
 

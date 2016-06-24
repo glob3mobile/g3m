@@ -26,9 +26,11 @@ AbstractMesh::~AbstractMesh() {
   if (_owner) {
     delete _vertices;
     delete _colors;
-    delete _flatColor;
     delete _normals;
   }
+  
+  //Always deleting flatColor
+  delete _flatColor;
 
   delete _boundingVolume;
   delete _translationMatrix;
@@ -45,14 +47,17 @@ AbstractMesh::~AbstractMesh() {
 AbstractMesh::AbstractMesh(const int primitive,
                            bool owner,
                            const Vector3D& center,
-                           IFloatBuffer* vertices,
+                           const IFloatBuffer* vertices,
                            float lineWidth,
                            float pointSize,
                            const Color* flatColor,
-                           IFloatBuffer* colors,
+                           const IFloatBuffer* colors,
                            const float colorsIntensity,
                            bool depthTest,
-                           IFloatBuffer* normals) :
+                           const IFloatBuffer* normals,
+                           bool polygonOffsetFill,
+                           float polygonOffsetFactor,
+                           float polygonOffsetUnits) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -70,15 +75,18 @@ _depthTest(depthTest),
 _glState(new GLState()),
 _normals(normals),
 _normalsMesh(NULL),
-_showNormals(false)
+_showNormals(false),
+_polygonOffsetFactor(polygonOffsetFactor),
+_polygonOffsetUnits(polygonOffsetUnits),
+_polygonOffsetFill(polygonOffsetFill)
 {
   createGLState();
 }
 
 BoundingVolume* AbstractMesh::computeBoundingVolume() const {
-  const int vertexCount = getVertexCount();
+  const size_t vertexCount = getVertexCount();
 
-  if (vertexCount <= 0) {
+  if (vertexCount == 0) {
     return NULL;
   }
 
@@ -118,14 +126,14 @@ BoundingVolume* AbstractMesh::getBoundingVolume() const {
   return _boundingVolume;
 }
 
-const Vector3D AbstractMesh::getVertex(int i) const {
-  const int p = i * 3;
+const Vector3D AbstractMesh::getVertex(size_t i) const {
+  const size_t p = i * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
                   _vertices->get(p+1) + _center._y,
                   _vertices->get(p+2) + _center._z);
 }
 
-int AbstractMesh::getVertexCount() const {
+size_t AbstractMesh::getVertexCount() const {
   return _vertices->size() / 3;
 }
 
@@ -138,17 +146,16 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 
 void AbstractMesh::createGLState() {
 
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
-                                               3,            // Our buffer contains elements of 3
-                                               0,            // Index 0
-                                               false,        // Not normalized
-                                               0,            // Stride 0
-                                               _depthTest,   // Depth test
-                                               false, 0,
-                                               false, 0.0f, 0.0f,
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                               3,            //Our buffer contains elements of 3
+                                               0,            //Index 0
+                                               false,        //Not normalized
+                                               0,            //Stride 0
+                                               _depthTest,         //Depth test
+                                               false, 0,     //Cull and culled face
+                                               _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits,  //Polygon Offset
                                                _lineWidth,
-                                               true,
-                                               _pointSize),
+                                               true, _pointSize),
                          false);
 
   if (_normals != NULL) {
@@ -232,8 +239,8 @@ Mesh* AbstractMesh::createNormalsMesh() const {
   double normalsSize = sphere->getRadius() / 100.0;
   delete sphere;
 
-  const int size = _vertices->size();
-  for (int i = 0; i < size; i+=3) {
+  const size_t size = _vertices->size();
+  for (size_t i = 0; i < size; i+=3) {
     const Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     const Vector3D n(_normals->get(i),  _normals->get(i+1),  _normals->get(i+2));
 

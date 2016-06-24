@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_MathUtils
@@ -187,7 +186,11 @@ public:
   float fmod(float f1, float f2) const {
     return fmodf(f1, f2);
   }
-  
+
+  double nextRandomDouble() const {
+    return (double)rand() / RAND_MAX;
+  }
+
 };
 
 #endif

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IFactory
@@ -56,13 +55,9 @@ public:
   virtual ~IFactory() {
   }
 
-//  virtual void deleteImage(const IImage* image) const = 0;
-
   virtual ITimer* createTimer() const = 0;
 
-//  virtual void deleteTimer(const ITimer* timer) const = 0;
-
-  virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
+  virtual IFloatBuffer* createFloatBuffer(size_t size) const = 0;
 
   /* special factory method for creating floatbuffers from matrix */
   virtual IFloatBuffer* createFloatBuffer(float f0,
@@ -82,13 +77,13 @@ public:
                                           float f14,
                                           float f15) const = 0;
 
-  virtual IIntBuffer* createIntBuffer(int size) const = 0;
+  virtual IIntBuffer* createIntBuffer(size_t size) const = 0;
 
-  virtual IShortBuffer* createShortBuffer(int size) const = 0;
+  virtual IShortBuffer* createShortBuffer(size_t size) const = 0;
 
-  virtual IByteBuffer* createByteBuffer(int length) const = 0;
+  virtual IByteBuffer* createByteBuffer(size_t length) const = 0;
 
-  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
+  virtual IByteBuffer* createByteBuffer(unsigned char data[], size_t length) const = 0;
 
   virtual ICanvas* createCanvas(bool scaleToDeviceResolution) const = 0;
 
@@ -101,12 +96,8 @@ public:
 
 
 #ifdef JAVA_CODE
-
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
   public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
-
-//  public abstract float[] getThreadLocalFloatArray();
-//  public abstract void    setThreadLocalFloatArray(final float[] array);
 #endif
   
 };

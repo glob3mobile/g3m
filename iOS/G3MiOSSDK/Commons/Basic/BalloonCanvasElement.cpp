@@ -15,7 +15,7 @@ const Vector2F BalloonCanvasElement::getExtent(ICanvas* canvas) {
 
   const float twoMargin = _margin * 2;
   return Vector2F(childExtent._x + twoMargin,
-                  (childExtent._y + _arrowLenght + twoMargin) * 2);
+                  (childExtent._y + _arrowLength + twoMargin) * 2);
 }
 
 void BalloonCanvasElement::drawAt(float left,

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_BusyQuadRenderer
@@ -66,14 +65,8 @@ public:
               GLState* glState);
   
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-    const int halfWidth = width / 2;
-    const int halfHeight = height / 2;
-    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                                    -halfHeight, halfHeight,
-                                                                                    -halfWidth, halfWidth));
-  }
-
+                             int width, int height);
+  
   virtual ~BusyQuadRenderer() {
     //rc->getFactory()->deleteImage(_image);
     //_image = NULL;
@@ -110,14 +103,14 @@ public:
 
 //***************************************************************
 
-class BusyEffect : public EffectWithForce {
+class BusyEffect : public EffectNeverEnding {
 private:
   BusyQuadRenderer* _renderer;
 
 public:
 
   BusyEffect(BusyQuadRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
@@ -126,7 +119,7 @@ public:
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
+    EffectNeverEnding::doStep(rc, when);
     _renderer->incDegrees(3);
   }
 

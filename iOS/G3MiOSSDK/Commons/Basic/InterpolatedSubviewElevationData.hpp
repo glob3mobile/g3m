@@ -26,7 +26,7 @@ public:
 
     if (sector.isEquals(elevationData->getSector()) &&
         extent._x == elevationData->getExtentWidth() &&
-        extent._y == elevationData->getExtentHeight()){
+        extent._y == elevationData->getExtentHeight()) {
 
       //Performing copy
       for (int x = 0; x < _width; x++) {

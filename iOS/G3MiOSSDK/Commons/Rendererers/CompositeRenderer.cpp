@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "CompositeRenderer.hpp"
@@ -21,7 +20,8 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   addChildRenderer(new ChildRenderer(renderer));
 }
 
-void CompositeRenderer::addRenderer(Renderer *renderer, const std::vector<const Info*> info) {
+void CompositeRenderer::addRenderer(Renderer *renderer,
+                                    const std::vector<const Info*>& info) {
   addChildRenderer(new ChildRenderer(renderer, info));
 }
 
@@ -217,19 +217,21 @@ const std::vector<const Info*> CompositeRenderer::getInfo() {
   return _info;
 }
 
-void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                                       const size_t rendererIdentifier) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of CompositeRenderer already set");
   }
   _changedInfoListener = changedInfoListener;
 
-  if(_changedInfoListener != NULL){
+  if(_changedInfoListener != NULL) {
     _changedInfoListener->changedRendererInfo(-1, getInfo());
   }
 }
 
-void CompositeRenderer::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
-  if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize) {
+void CompositeRenderer::changedRendererInfo(const size_t rendererIdentifier,
+                                            const std::vector<const Info*>& info) {
+  if (rendererIdentifier < _renderersSize) {
     _renderers[rendererIdentifier]->setInfo(info);
   }
   else {

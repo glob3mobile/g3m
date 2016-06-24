@@ -3,18 +3,19 @@
 //  G3MApp
 //
 //  Created by Mari Luz Mateo on 18/02/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 #import <string>
+#import "GAITrackedViewController.h"
 
 @class G3MWidget_iOS;
 class G3MDemoModel;
 class G3MDemoScene;
 
-@interface G3MViewController : UIViewController <UIAlertViewDelegate> {
+//@interface G3MViewController : UIViewController <UIAlertViewDelegate> {
+@interface G3MViewController : GAITrackedViewController <UIAlertViewDelegate> {
   G3MDemoModel* _demoModel;
 }
 

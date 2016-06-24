@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 06/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 06/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -25,6 +23,8 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 //class TextureIDReference;
+//class EffectTarget;
+//class IImageBuilder;
 
 public class MarkUserData
 {

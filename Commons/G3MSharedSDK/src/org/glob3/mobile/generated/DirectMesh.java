@@ -25,35 +25,47 @@ public class DirectMesh extends AbstractMesh
   {
     GL gl = rc.getGL();
   
-    gl.drawArrays(_primitive, 0, _renderVerticesCount, _glState, rc.getGPUProgramManager());
+    gl.drawArrays(_primitive, 0, (int)_renderVerticesCount, _glState, rc.getGPUProgramManager());
   }
 
 //  Mesh* createNormalsMesh() const;
 
 
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, null);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals, polygonOffsetFill, polygonOffsetFactor, 0);
   }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill)
   {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, true, null);
-  }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
-  {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f, true, null);
-  }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
-  {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f, true, null);
-  }
-  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
-  {
-     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f, true, null);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals, polygonOffsetFill, 0, 0);
   }
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals)
   {
-     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals);
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals, false, 0, 0);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, null, false, 0, 0);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, true, null, false, 0, 0);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, 0.0f, true, null, false, 0, 0);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, null, 0.0f, true, null, false, 0, 0);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize)
+  {
+     this(primitive, owner, center, vertices, lineWidth, pointSize, null, null, 0.0f, true, null, false, 0, 0);
+  }
+  public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
+  {
+     super(primitive, owner, center, vertices, lineWidth, pointSize, flatColor, colors, colorsIntensity, depthTest, normals, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits);
     _renderVerticesCount = vertices.size() / 3;
   }
 
@@ -64,7 +76,7 @@ public class DirectMesh extends AbstractMesh
 
   public final void setRenderVerticesCount(int renderVerticesCount)
   {
-    if ((renderVerticesCount < 0) || (renderVerticesCount > getRenderVerticesCount()))
+    if (renderVerticesCount > getRenderVerticesCount())
     {
       throw new RuntimeException("Invalid renderVerticesCount");
     }

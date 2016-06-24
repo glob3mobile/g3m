@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -65,11 +64,7 @@ public abstract class IFactory
   {
   }
 
-//  virtual void deleteImage(const IImage* image) const = 0;
-
   public abstract ITimer createTimer();
-
-//  virtual void deleteTimer(const ITimer* timer) const = 0;
 
   public abstract IFloatBuffer createFloatBuffer(int size);
 
@@ -98,11 +93,7 @@ public abstract class IFactory
   }
 
 
-
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
   public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
-
-//  public abstract float[] getThreadLocalFloatArray();
-//  public abstract void    setThreadLocalFloatArray(final float[] array);
 
 }

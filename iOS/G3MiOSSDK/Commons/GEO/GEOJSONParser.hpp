@@ -78,6 +78,7 @@ private:
   GEO2DPolygonData* parsePolygon2DData(const JSONArray* jsCoordinatesArray) const;
 
   std::vector<Geodetic2D*>* create2DCoordinates(const JSONArray* jsCoordinates) const;
+  std::vector<Geodetic2D*>* createFlat2DCoordinates(const JSONArray* jsCoordinates) const;
 
   void showStatisticsToLogger() const;
 
@@ -90,6 +91,9 @@ public:
   
   static GEOObject* parseBSON(const IByteBuffer* bson,
                               bool showStatistics = true);
+
+  static GEOObject* parse(const JSONObject* jsonObject,
+                          bool showStatistics = true);
 
 };
 

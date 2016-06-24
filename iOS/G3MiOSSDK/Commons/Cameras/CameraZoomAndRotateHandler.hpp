@@ -23,16 +23,17 @@ private:
   MutableVector3D _centralGlobePoint;
   MutableVector3D _centralGlobeNormal;
   
+<<<<<<< HEAD
   void zoom(Camera* camera,
             const Vector2F& difCurrentPixels);
+=======
+  void zoom(Camera* camera, const Vector2F& difCurrentPixels);
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   void rotate();
   
   
 public:
-  CameraZoomAndRotateHandler():
-  _camera0(Camera())
-  //_initialPoint(0,0,0),
-  //_initialPixel(0,0,0)
+  CameraZoomAndRotateHandler()
   {}
   
   ~CameraZoomAndRotateHandler() {
@@ -60,12 +61,20 @@ public:
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
   
+<<<<<<< HEAD
   MutableVector2F _initialPixel0, _initialPixel1;  //Initial pixels at start of gesture
+=======
+  //MutableVector3D _initialPoint;  //Initial point at dragging
+  MutableVector2F _initialPixel0, _initialPixel1;  //Initial pixels at start of gesture
+  //MutableVector3D _initialPoint0, _initialPoint1;
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   double _initialFingerSeparation;
   double _initialFingerInclination;
   
-  Camera _camera0;         //Initial Camera saved on Down event
-  
+  MutableVector3D _cameraPosition;
+  MutableVector3D _cameraCenter;
+  MutableVector3D _cameraUp;
+
 };
 
 

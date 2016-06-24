@@ -8,7 +8,7 @@
 
 #include "LabelImageBuilder.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "IMathUtils.hpp"
@@ -19,15 +19,15 @@
 
 const std::string LabelImageBuilder::getImageName() const {
   const IStringUtils* su = IStringUtils::instance();
-  return (_text                          + "/" +
-          _font.description()            + "/" +
-          su->toString(_margin)          + "/" +
-          _color.description()           + "/" +
-          _shadowColor.description()     + "/" +
-          su->toString(_shadowBlur)      + "/" +
-          su->toString(_shadowOffsetX)   + "/" +
-          su->toString(_shadowOffsetY)   + "/" +
-          _backgroundColor.description() + "/" +
+  return (_text                        + "/" +
+          _font.description()          + "/" +
+          su->toString(_margin)        + "/" +
+          _color.toID()                + "/" +
+          _shadowColor.toID()          + "/" +
+          su->toString(_shadowBlur)    + "/" +
+          su->toString(_shadowOffsetX) + "/" +
+          su->toString(_shadowOffsetY) + "/" +
+          _backgroundColor.toID()      + "/" +
           su->toString(_cornerRadius));
 }
 

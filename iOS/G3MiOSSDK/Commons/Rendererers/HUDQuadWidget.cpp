@@ -8,7 +8,7 @@
 
 #include "HUDQuadWidget.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"
@@ -111,7 +111,10 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   }
 
   const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getViewPortWidth();
+  int viewPortWidth = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
   const int viewPortHeight = camera->getViewPortHeight();
 
   const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);

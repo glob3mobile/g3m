@@ -7,14 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.CanvasElement;
@@ -46,8 +43,15 @@ public final class MotionEventProcessor {
    }
 
 
+<<<<<<< HEAD
    private static Vector2F createPosition(final Event event) {
       return new Vector2F(event.getClientX(), event.getClientY());
+=======
+   private Vector2F createPosition(final Event event) {
+      return new Vector2F(//
+               event.getClientX() - _canvasElement.getAbsoluteLeft(), //
+               event.getClientY() - _canvasElement.getAbsoluteTop());
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
    }
 
 
@@ -106,15 +110,22 @@ public final class MotionEventProcessor {
    }
 
 
+<<<<<<< HEAD
    private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<Integer, Vector2F>();
 
 
    private ArrayList<Touch> createTouches(final Event event) {
       final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<Integer, Vector2F>();
+=======
+   private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<>();
 
-      final JsArray<com.google.gwt.dom.client.Touch> jsTouches = event.getTouches();
+
+   private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
+      final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
+
       final int jsTouchesSize = jsTouches.length();
-      final ArrayList<Touch> touches = new ArrayList<Touch>(jsTouchesSize);
+      final ArrayList<Touch> touches = new ArrayList<>(jsTouchesSize);
       for (int i = 0; i < jsTouchesSize; i++) {
          final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
 
@@ -130,7 +141,6 @@ public final class MotionEventProcessor {
 
          Vector2F previousTouchPosition = _previousTouchesPositions.get(touchId);
          if (previousTouchPosition == null) {
-            //previousTouchPosition = Vector2I.zero();
             previousTouchPosition = currentTouchPosition;
          }
 
@@ -144,28 +154,36 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processTouchStart(final Event event) {
-      return TouchEvent.create(TouchEventType.Down, createTouches(event));
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchStart");
+      return TouchEvent.create(TouchEventType.Down, createTouches(event.getTouches()));
    }
 
 
    private TouchEvent processTouchMove(final Event event) {
-      return TouchEvent.create(TouchEventType.Move, createTouches(event));
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchMove ");
+      return TouchEvent.create(TouchEventType.Move, createTouches(event.getTouches()));
    }
 
 
    private TouchEvent processTouchEnd(final Event event) {
-      return TouchEvent.create(TouchEventType.Up, createTouches(event));
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchEnd");
+      return TouchEvent.create(TouchEventType.Up, createTouches(event.getChangedTouches()));
    }
 
 
    private TouchEvent processTouchCancel(@SuppressWarnings("unused")
    final Event event) {
+<<<<<<< HEAD
       _previousTouchesPositions = new HashMap<Integer, Vector2F>();
+=======
+      //log(LogLevel.InfoLevel, ">>>>>> processTouchCancel");
+
+      _previousTouchesPositions.clear();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
       return null;
    }
 
 
-   //   private void dispatchEvents(final ArrayList<TouchEvent> events) {
    private void dispatchEvents(final TouchEvent... events) {
       if (events.length > 0) {
          final Scheduler scheduler = Scheduler.get();
@@ -183,14 +201,18 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseMove(final Event event) {
-      //            log(LogLevel.InfoLevel, " onMouseMove");
+      //log(LogLevel.InfoLevel, " onMouseMove");
 
       if (!_mouseDown) {
          return null;
       }
 
       final Vector2F currentMousePosition = createPosition(event);
+<<<<<<< HEAD
       final ArrayList<Touch> touches = new ArrayList<Touch>();
+=======
+      final ArrayList<Touch> touches = new ArrayList<>();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       if (event.getShiftKey()) {
          touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
@@ -208,10 +230,14 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseDown(final Event event) {
-      //            log(LogLevel.InfoLevel, " onMouseDown");
+      //log(LogLevel.InfoLevel, " onMouseDown");
 
       final Vector2F currentMousePosition = createPosition(event);
+<<<<<<< HEAD
       final ArrayList<Touch> touches = new ArrayList<Touch>();
+=======
+      final ArrayList<Touch> touches = new ArrayList<>();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       _mouseDown = true;
       if (event.getShiftKey()) {
@@ -230,10 +256,14 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseUp(final Event event) {
-      //      log(LogLevel.InfoLevel, " onMouseUp");
+      //log(LogLevel.InfoLevel, " onMouseUp");
 
       final Vector2F currentMousePosition = createPosition(event);
+<<<<<<< HEAD
       final ArrayList<Touch> touches = new ArrayList<Touch>();
+=======
+      final ArrayList<Touch> touches = new ArrayList<>();
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       final TouchEventType touchType;
 
@@ -257,7 +287,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processDoubleClick(final Event event) {
-      //          log(LogLevel.InfoLevel, " onDoubleClick");
+      //log(LogLevel.InfoLevel, " onDoubleClick");
 
       final Vector2F currentMousePosition = createPosition(event);
 
@@ -268,7 +298,7 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processContextMenu(final Event event) {
-      //      log(LogLevel.InfoLevel, " onContextMenu");
+      //log(LogLevel.InfoLevel, " onContextMenu");
 
       _mouseDown = false;
 
@@ -283,12 +313,12 @@ public final class MotionEventProcessor {
    private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
-      //      log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
+      //log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
 
       final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
       final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
 
-      final ArrayList<Touch> beginTouches = new ArrayList<Touch>(2);
+      final ArrayList<Touch> beginTouches = new ArrayList<>(2);
       beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
       beginTouches.add(new Touch(beginSecondPosition, beginSecondPosition));
 
@@ -296,7 +326,7 @@ public final class MotionEventProcessor {
       final Vector2F endFirstPosition = new Vector2F(beginFirstPosition._x - delta, beginFirstPosition._y - delta);
       final Vector2F endSecondPosition = new Vector2F(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
 
-      final ArrayList<Touch> endTouches = new ArrayList<Touch>(2);
+      final ArrayList<Touch> endTouches = new ArrayList<>(2);
       endTouches.add(new Touch(endFirstPosition, beginFirstPosition));
       endTouches.add(new Touch(endSecondPosition, beginSecondPosition));
 
@@ -327,8 +357,8 @@ public final class MotionEventProcessor {
 
 			if (canvas.addEventListener) {
 				// IE9, Chrome, Safari, Opera
-				canvas.addEventListener("mousewheel",
-						$wnd.g3mMouseWheelHandler, false);
+				canvas.addEventListener("mousewheel", $wnd.g3mMouseWheelHandler,
+						false);
 				// Firefox
 				canvas.addEventListener("DOMMouseScroll",
 						$wnd.g3mMouseWheelHandler, false);
@@ -342,27 +372,28 @@ public final class MotionEventProcessor {
    }-*/;
 
 
-   private void log(final LogLevel level,
-                    final String msg) {
-      final ILogger logger = ILogger.instance();
-      if (logger != null) {
-         switch (level) {
-            case InfoLevel:
-               logger.logInfo(TAG + msg);
-               break;
-            case WarningLevel:
-               logger.logWarning(TAG + msg);
-               break;
-            case ErrorLevel:
-               logger.logError(TAG + msg);
-               break;
-            default:
-               break;
-         }
-      }
-      else {
-         GWT.log(TAG + msg);
-      }
-   }
+   //   private static void log(final LogLevel level,
+   //                           final String msg) {
+   //      final ILogger logger = ILogger.instance();
+   //      if (logger != null) {
+   //         switch (level) {
+   //            case InfoLevel:
+   //               logger.logInfo(TAG + msg);
+   //               break;
+   //            case WarningLevel:
+   //               logger.logWarning(TAG + msg);
+   //               break;
+   //            case ErrorLevel:
+   //               logger.logError(TAG + msg);
+   //               break;
+   //            default:
+   //               break;
+   //         }
+   //      }
+   //      else {
+   //         GWT.log(TAG + msg);
+   //      }
+   //   }
+
 
 }

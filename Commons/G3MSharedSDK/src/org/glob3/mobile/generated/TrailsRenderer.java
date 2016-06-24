@@ -6,28 +6,26 @@ public class TrailsRenderer extends DefaultRenderer
 
   private GLState _glState;
 
-  private void updateGLState(G3MRenderContext rc)
+  private void updateGLState(Camera camera)
   {
-  
-    final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _projection = new ProjectionGLFeature(camera.getProjectionMatrix44D());
       _glState.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
+      _projection.setMatrix(camera.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _model = new ModelGLFeature(camera.getModelMatrix44D());
       _glState.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      _model.setMatrix(camera.getModelMatrix44D());
     }
   }
   private ProjectionGLFeature _projection;
@@ -76,6 +74,25 @@ public class TrailsRenderer extends DefaultRenderer
     }
   }
 
+  public final void removeAllTrails()
+  {
+     removeAllTrails(true);
+  }
+  public final void removeAllTrails(boolean deleteTrails)
+  {
+    if (deleteTrails)
+    {
+      final int trailsCount = _trails.size();
+      for (int i = 0; i < trailsCount; i++)
+      {
+        Trail trail = _trails.get(i);
+        if (trail != null)
+           trail.dispose();
+      }
+    }
+    _trails.clear();
+  }
+
   public void dispose()
   {
     final int trailsCount = _trails.size();
@@ -98,14 +115,20 @@ public class TrailsRenderer extends DefaultRenderer
   public final void render(G3MRenderContext rc, GLState glState)
   {
     final int trailsCount = _trails.size();
-    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
-    updateGLState(rc);
-    for (int i = 0; i < trailsCount; i++)
+    if (trailsCount > 0)
     {
-      Trail trail = _trails.get(i);
-      if (trail != null)
+      final Camera camera = rc.getCurrentCamera();
+  
+      updateGLState(camera);
+  
+      final Frustum frustum = camera.getFrustumInModelCoordinates();
+      for (int i = 0; i < trailsCount; i++)
       {
-        trail.render(rc, frustum, _glState);
+        Trail trail = _trails.get(i);
+        if (trail != null)
+        {
+          trail.render(rc, frustum, _glState);
+        }
       }
     }
   }

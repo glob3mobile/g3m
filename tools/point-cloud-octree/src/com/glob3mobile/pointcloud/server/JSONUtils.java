@@ -5,12 +5,12 @@ package com.glob3mobile.pointcloud.server;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.Planet;
-import com.glob3mobile.pointcloud.octree.Angle;
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
 import com.glob3mobile.pointcloud.octree.PersistentLOD.Node;
-import com.glob3mobile.pointcloud.octree.Sector;
+import com.glob3mobile.utils.Angle;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Planet;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
 import es.igosoftware.euclid.vector.GVector3D;

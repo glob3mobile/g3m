@@ -148,8 +148,7 @@ public class G3MMeshParser
   
     IFloatBuffer normals = parseFloatBuffer(jsonMesh.getAsArray("normals"));
     IFloatBuffer colors = parseFloatBuffer(jsonMesh.getAsArray("colors"));
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO texCoords
+  // #warning TODO texCoords
     //IFloatBuffer* texCoords = parseFloatBuffer( jsonMesh->getAsArray("texCoords") );
   
     IShortBuffer indices = parseShortBuffer(jsonMesh.getAsArray("indices"));
@@ -161,7 +160,7 @@ public class G3MMeshParser
     }
     else
     {
-      mesh = new IndexedMesh(toGLPrimitive(primitive), true, new Vector3D(centerX, centerY, centerZ), vertices, indices, lineWidth, pointSize, material._color, colors, 0, depthTest, normals); // colorsIntensity -  flatColor -  owner
+      mesh = new IndexedMesh(toGLPrimitive(primitive), new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, material._color, colors, 0, depthTest, normals); // colorsIntensity -  flatColor
     }
     return mesh;
   }

@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,25 +11,22 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
-//class Tile;
-//class TileTessellator;
+
+//class ITileVisitor;
 //class LayerSet;
-//class VisibleSectorListenerEntry;
+//class TilesRenderParameters;
+//class TileLODTester;
+//class TileVisibilityTester;
+//class ITimer;
 //class VisibleSectorListener;
-//class ElevationDataProvider;
+//class VisibleSectorListenerEntry;
+//class Layer;
 //class LayerTilesRenderParameters;
+//class Layer;
 //class TerrainTouchListener;
-//class ChangedInfoListener;
-//class TileRenderingListener;
-
-
-
-
-//class EllipsoidShape;
 
 
 public class TilesStatistics
@@ -44,8 +40,6 @@ public class TilesStatistics
   private int[] _tilesProcessedByLevel = new int[_maxLOD];
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
   private int[] _tilesRenderedByLevel = new int[_maxLOD];
-
-  private int _buildersStartsInFrame;
 
   private double _visibleLowerLatitudeDegrees;
   private double _visibleLowerLongitudeDegrees;
@@ -67,7 +61,6 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _buildersStartsInFrame = 0;
 
     final IMathUtils mu = IMathUtils.instance();
     _visibleLowerLatitudeDegrees = mu.maxDouble();
@@ -83,40 +76,33 @@ public class TilesStatistics
     }
   }
 
-  public final int getBuildersStartsInFrame()
+  public final void computeTileProcessed(Tile tile, boolean visible, boolean rendered)
   {
-    return _buildersStartsInFrame;
-  }
+    final int level = tile._level;
 
-  public final void computeBuilderStartInFrame()
-  {
-    _buildersStartsInFrame++;
-  }
-
-  public final void computeTileProcessed(Tile tile)
-  {
     _tilesProcessed++;
-
-    final int level = tile._level;
     _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
-  }
 
-  public final void computeVisibleTile(Tile tile)
-  {
-    _tilesVisible++;
+    if (visible)
+    {
+      _tilesVisible++;
+      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    }
 
-    final int level = tile._level;
-    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    if (rendered)
+    {
+      _tilesRendered++;
+      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+      computeRenderedSector(tile);
+    }
   }
 
   public final void computeRenderedSector(Tile tile)
   {
-    final Sector sector = tile._sector;
-
-    final double lowerLatitudeDegrees = sector._lower._latitude._degrees;
-    final double lowerLongitudeDegrees = sector._lower._longitude._degrees;
-    final double upperLatitudeDegrees = sector._upper._latitude._degrees;
-    final double upperLongitudeDegrees = sector._upper._longitude._degrees;
+    final double lowerLatitudeDegrees = tile._sector._lower._latitude._degrees;
+    final double lowerLongitudeDegrees = tile._sector._lower._longitude._degrees;
+    final double upperLatitudeDegrees = tile._sector._upper._latitude._degrees;
+    final double upperLongitudeDegrees = tile._sector._upper._longitude._degrees;
 
     if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees)
     {
@@ -151,16 +137,6 @@ public class TilesStatistics
     {
       _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
-  }
-
-  public final void computeTileRenderered(Tile tile)
-  {
-    _tilesRendered++;
-
-    final int level = tile._level;
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-    computeRenderedSector(tile);
   }
 
   public final Sector updateVisibleSector(Sector visibleSector)

@@ -3,14 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
 #include "BusyQuadRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "TexturesHandler.hpp"
@@ -24,6 +23,7 @@
 #include "GLConstants.hpp"
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
+#include "G3MEventContext.hpp"
 
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
@@ -120,4 +120,18 @@ void BusyQuadRenderer::createGLState() {
   _glState->clearGLFeatureGroup(CAMERA_GROUP);
   _glState->addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
   _glState->addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+}
+
+
+void BusyQuadRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                             int width, int height) {
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  const int halfWidth  = logicWidth / 2;
+  const int halfHeight = height / 2;
+  _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                                   -halfHeight, halfHeight,
+                                                                                   -halfWidth, halfWidth));
 }

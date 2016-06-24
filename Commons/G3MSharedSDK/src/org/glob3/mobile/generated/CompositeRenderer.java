@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -307,7 +305,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
   {
-    if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize)
+    if (rendererIdentifier < _renderersSize)
     {
       _renderers.get(rendererIdentifier).setInfo(info);
     }

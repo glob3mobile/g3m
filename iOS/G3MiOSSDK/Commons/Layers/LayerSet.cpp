@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "LayerSet.hpp"
@@ -13,7 +12,7 @@
 #include "RenderState.hpp"
 #include "ChangedListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
 #include "Color.hpp"
@@ -22,10 +21,6 @@
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
-  }
-  
-  for (unsigned int i = 0; i < _infos.size(); i++) {
-    delete _infos[i];
   }
   
   if (_tileImageProvider != NULL) {
@@ -54,8 +49,8 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
 void LayerSet::initialize(const G3MContext* context) const {
   _context = context;
 
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     _layers[i]->initialize(context);
   }
 }
@@ -79,7 +74,7 @@ RenderState LayerSet::getRenderState() {
   _errors.clear();
   bool busyFlag  = false;
   bool errorFlag = false;
-  const int layersCount = _layers.size();
+  const size_t layersCount = _layers.size();
   
   for (int i = 0; i < layersCount; i++) {
     Layer* child = _layers[i];
@@ -116,7 +111,7 @@ RenderState LayerSet::getRenderState() {
   return RenderState::ready();
 }
 
-Layer* LayerSet::getLayer(int index) const {
+Layer* LayerSet::getLayer(size_t index) const {
   if (index < _layers.size()) {
     return _layers[index];
   }
@@ -125,15 +120,15 @@ Layer* LayerSet::getLayer(int index) const {
 }
 
 void LayerSet::disableAllLayers() {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     _layers[i]->setEnable(false);
   }
 }
 
 Layer* LayerSet::getLayerByTitle(const std::string& title) const {
-  const int layersCount = _layers.size();
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     if (_layers[i]->getTitle() == title) {
       return _layers[i];
     }
@@ -154,9 +149,9 @@ void LayerSet::addLayer(Layer* layer) {
 }
 
 void LayerSet::removeAllLayers(const bool deleteLayers) {
-  const int layersSize = _layers.size();
+  const size_t layersSize = _layers.size();
   if (layersSize > 0) {
-    for (int i = 0; i < layersSize; i++) {
+    for (size_t i = 0; i < layersSize; i++) {
       Layer* layer = _layers[i];
       layer->removeLayerSet(this);
       if (deleteLayers) {
@@ -189,14 +184,14 @@ bool LayerSet::isEquals(const LayerSet* that) const {
     return false;
   }
 
-  const int thisSize = size();
-  const int thatSize = that->size();
+  const size_t thisSize = size();
+  const size_t thatSize = that->size();
 
   if (thisSize != thatSize) {
     return false;
   }
 
-  for (int i = 0; i < thisSize; i++) {
+  for (size_t i = 0; i < thisSize; i++) {
     Layer* thisLayer = getLayer(i);
     Layer* thatLayer = that->getLayer(i);
 
@@ -214,9 +209,9 @@ bool LayerSet::checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStar
   if (forceFirstLevelTilesRenderOnStart) {
     Sector* biggestDataSector = NULL;
 
-    const int layersCount = _layers.size();
+    const size_t layersCount = _layers.size();
     double biggestArea = 0;
-    for (int i = 0; i < layersCount; i++) {
+    for (size_t i = 0; i < layersCount; i++) {
       Layer* layer = _layers[i];
       if (layer->isEnable()) {
         const double layerArea = layer->getDataSector().getAngularAreaInSquaredDegrees();
@@ -230,7 +225,7 @@ bool LayerSet::checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStar
 
     if (biggestDataSector != NULL) {
       bool dataSectorsInconsistency = false;
-      for (int i = 0; i < layersCount; i++) {
+      for (size_t i = 0; i < layersCount; i++) {
         Layer* layer = _layers[i];
         if (layer->isEnable()) {
           if (!biggestDataSector->fullContains(layer->getDataSector())) {
@@ -255,7 +250,7 @@ bool LayerSet::checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStar
 bool LayerSet::checkLayersRenderState(std::vector<std::string>& errors,
                                       std::vector<Layer*>& enableLayers) const {
   bool layerSetNotReadyFlag = false;
-  for (int i = 0; i < _layers.size(); i++) {
+  for (size_t i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
 
     if (layer->isEnable()) {
@@ -291,8 +286,8 @@ private:
   int     _maxLevel;
   int     _tileTextureWidth;
   int     _tileTextureHeight;
-  int     _tileMeshWidth;
-  int     _tileMeshHeight;
+  short     _tileMeshWidth;
+  short     _tileMeshHeight;
   bool    _mercator;
 
 public:
@@ -418,7 +413,7 @@ public:
                                           _firstLevel,
                                           _maxLevel,
                                           Vector2I(_tileTextureWidth, _tileTextureHeight),
-                                          Vector2I(_tileMeshWidth,    _tileMeshHeight),
+                                          Vector2S(_tileMeshWidth,    _tileMeshHeight),
                                           _mercator);
   }
 };
@@ -432,12 +427,12 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
 
   std::vector<Layer*> multiProjectionLayers;
 
-  for (int i = 0; i < enableLayers.size(); i++) {
+  for (size_t i = 0; i < enableLayers.size(); i++) {
     Layer* layer = enableLayers[i];
 
     const std::vector<const LayerTilesRenderParameters*> layerParametersVector = layer->getLayerTilesRenderParametersVector();
 
-    const int layerParametersVectorSize = layerParametersVector.size();
+    const size_t layerParametersVectorSize = layerParametersVector.size();
     if (layerParametersVectorSize == 0) {
       continue;
     }
@@ -451,7 +446,7 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
     }
   }
 
-  for (int i = 0; i < multiProjectionLayers.size(); i++) {
+  for (size_t i = 0; i < multiProjectionLayers.size(); i++) {
     Layer* layer = multiProjectionLayers[i];
     if (!mutableLayerTilesRenderParameters.update(layer, errors)) {
       return NULL;
@@ -483,8 +478,8 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   }
 
   std::vector<Layer*> thatLayers;
-  const int thatSize = that->size();
-  for (int i = 0; i < thatSize; i++) {
+  const size_t thatSize = that->size();
+  for (size_t i = 0; i < thatSize; i++) {
     thatLayers.push_back( that->getLayer(i) );
   }
 
@@ -500,8 +495,8 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
   TileImageProvider*          singleTileImageProvider    = NULL;
   CompositeTileImageProvider* compositeTileImageProvider = NULL;
 
-  const int layersSize = _layers.size();
-  for (int i = 0; i < layersSize; i++) {
+  const size_t layersSize = _layers.size();
+  for (size_t i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       TileImageProvider* layerTileImageProvider = layer->createTileImageProvider(rc, layerTilesRenderParameters);
@@ -533,31 +528,22 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 }
 
 const std::vector<const Info*> LayerSet::getInfo() {
-  for (unsigned int i = 0; i < _infos.size(); i++) {
-    delete _infos[i];
-  }
   _infos.clear();
-
-  const int layersCount = _layers.size();
-  bool anyEnabled = false;
-  for (int i = 0; i < layersCount; i++) {
+  const size_t layersCount = _layers.size();
+  for (size_t i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
-      anyEnabled = true;
       const std::vector<const Info*> layerInfo = layer->getInfo();
-      const int infoSize = layerInfo.size();
-      for (int j = 0; j < infoSize; j++) {
+      const size_t infoSize = layerInfo.size();
+      for (size_t j = 0; j < infoSize; j++) {
         _infos.push_back(layerInfo[j]);
       }
     }
   }
-  if (!anyEnabled) {
-    _infos.push_back(new Info("Can't find any enabled Layer at this zoom level"));
-  }
   return _infos;
 }
 
-void LayerSet::changedInfo(const std::vector<const Info*> info) {
+void LayerSet::changedInfo(const std::vector<const Info*>& info) {
   if (_changedInfoListener != NULL) {
     _changedInfoListener->changedInfo(getInfo());
   }

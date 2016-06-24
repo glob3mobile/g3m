@@ -37,9 +37,10 @@ public class ICanvasUtils
     final int stringsSize = strings.size();
   
     int fontSize = maxFontSize;
-    boolean allFit = true;
+    boolean allFit = false;
     while (!allFit && (fontSize > minFontSize))
     {
+      allFit = true;
       canvas.setFont(GFont.sansSerif(fontSize));
       for (int i = 0; i < stringsSize; i++)
       {
@@ -52,7 +53,8 @@ public class ICanvasUtils
         }
       }
     }
-    canvas.setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+  //  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+    canvas.setShadow(shadowColor, 1.0f, 0.0f, 0.0f);
   
     ColumnCanvasElement column = new ColumnCanvasElement(backgroundColor, 0, padding, cornerRadius, textAlign); // margin
     final GFont labelFont = GFont.sansSerif(fontSize);

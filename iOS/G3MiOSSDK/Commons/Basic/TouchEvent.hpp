@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_TouchEvent
@@ -128,7 +127,7 @@ public:
     return _touchs[i];
   }
 
-  int getTouchCount() const {
+  size_t getTouchCount() const {
     return _touchs.size();
   }
 

@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -235,12 +233,6 @@ public class LayerSet implements ChangedInfoListener
     {
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
-    }
-  
-    for (int i = 0; i < _infos.size(); i++)
-    {
-      if (_infos.get(i) != null)
-         _infos.get(i).dispose();
     }
   
     if (_tileImageProvider != null)
@@ -512,21 +504,13 @@ public class LayerSet implements ChangedInfoListener
 
   public final java.util.ArrayList<Info> getInfo()
   {
-    for (int i = 0; i < _infos.size(); i++)
-    {
-      if (_infos.get(i) != null)
-         _infos.get(i).dispose();
-    }
     _infos.clear();
-  
     final int layersCount = _layers.size();
-    boolean anyEnabled = false;
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
       if (layer.isEnable())
       {
-        anyEnabled = true;
         final java.util.ArrayList<Info> layerInfo = layer.getInfo();
         final int infoSize = layerInfo.size();
         for (int j = 0; j < infoSize; j++)
@@ -534,10 +518,6 @@ public class LayerSet implements ChangedInfoListener
           _infos.add(layerInfo.get(j));
         }
       }
-    }
-    if (!anyEnabled)
-    {
-      _infos.add(new Info("Can't find any enabled Layer at this zoom level"));
     }
     return _infos;
   }

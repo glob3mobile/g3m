@@ -14,7 +14,7 @@
 
 class DirectMesh : public AbstractMesh {
 private:
-  int _renderVerticesCount;
+  size_t _renderVerticesCount;
 
 protected:
   void rawRender(const G3MRenderContext* rc) const;
@@ -26,14 +26,17 @@ public:
   DirectMesh(const int primitive,
              bool owner,
              const Vector3D& center,
-             IFloatBuffer* vertices,
+             const IFloatBuffer* vertices,
              float lineWidth,
              float pointSize,
              const Color* flatColor = NULL,
-             IFloatBuffer* colors = NULL,
+             const IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f,
              bool depthTest = true,
-             IFloatBuffer* normals = NULL);
+             const IFloatBuffer* normals = NULL,
+             bool polygonOffsetFill = false,
+             float polygonOffsetFactor = 0,
+             float polygonOffsetUnits = 0);
 
   ~DirectMesh() {
 #ifdef JAVA_CODE
@@ -41,15 +44,14 @@ public:
 #endif
   }
 
-  void setRenderVerticesCount(int renderVerticesCount) {
-    if ((renderVerticesCount < 0) ||
-        (renderVerticesCount > getRenderVerticesCount())) {
+  void setRenderVerticesCount(size_t renderVerticesCount) {
+    if (renderVerticesCount > getRenderVerticesCount()) {
       THROW_EXCEPTION("Invalid renderVerticesCount");
     }
     _renderVerticesCount = renderVerticesCount;
   }
 
-  int getRenderVerticesCount() const {
+  size_t getRenderVerticesCount() const {
     return _renderVerticesCount;
   }
 

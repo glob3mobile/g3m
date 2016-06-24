@@ -62,7 +62,10 @@
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
+		D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = D80C8B481A77B44000E67587 /* anchorWidget.png */; };
+		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; };
 		D8317203186C5BAD00522E1B /* simpleStencil.png in Resources */ = {isa = PBXBuildFile; fileRef = D8317202186C5BAD00522E1B /* simpleStencil.png */; };
+		D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D84D3C97194753A900D16D69 /* radar-sprite.png */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
@@ -167,7 +170,10 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		D80C8B481A77B44000E67587 /* anchorWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchorWidget.png; sourceTree = "<group>"; };
+		D80D57301BBAA1F400BA4762 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		D8317202186C5BAD00522E1B /* simpleStencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simpleStencil.png; sourceTree = "<group>"; };
+		D84D3C97194753A900D16D69 /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -270,6 +276,7 @@
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
+				D80D57301BBAA1F400BA4762 /* Images.xcassets */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
 			);
 			name = G3MiOSDemo;
@@ -298,6 +305,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D84D3C97194753A900D16D69 /* radar-sprite.png */,
+				D80C8B481A77B44000E67587 /* anchorWidget.png */,
 				4415B4AA19CC26B800E73D38 /* countries.geojson */,
 				CFE26D6718A154D700253709 /* 3d_2-0.json */,
 				CFE26D6818A154D700253709 /* 3d_2-1.json */,
@@ -397,10 +406,10 @@
 		D8EEF37D1577920A003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					D8EEF3851577920A003FEB5E = {
-						DevelopmentTeam = N847RXR927;
+						DevelopmentTeam = CTLLY45L74;
 					};
 				};
 			};
@@ -443,6 +452,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
+				D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */,
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
@@ -456,6 +466,7 @@
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */,
 				CFE26D6018A153DB00253709 /* 3d_1.json in Resources */,
+				D80C8B491A77B44000E67587 /* anchorWidget.png in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,
@@ -497,6 +508,7 @@
 				E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */,
 				CFB57DA11860DF4700D5B094 /* Compass_rose_browns_00_transparent.png in Resources */,
 				E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */,
+				D84D3C98194753A900D16D69 /* radar-sprite.png in Resources */,
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CF15759318649D410059312A /* altimeter-ruler-1536x113.png in Resources */,
 				CF61A647186388B200DDC0DC /* debug-compass.png in Resources */,
@@ -568,12 +580,16 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -611,11 +627,14 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -642,8 +661,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -656,6 +678,7 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.glob3mobile.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = G3MiOSDemo;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -670,8 +693,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
@@ -680,6 +706,7 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.glob3mobile.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = G3MiOSDemo;
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;

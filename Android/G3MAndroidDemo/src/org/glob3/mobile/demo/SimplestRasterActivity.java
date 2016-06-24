@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Layer;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SphericalPlanet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
@@ -40,16 +40,15 @@ public class SimplestRasterActivity
       final LayerSet layerset = SimpleRasterLayerBuilder.createLayerset();
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-      builder.setPlanet(Planet.createSphericalEarth());
+      builder.setPlanet(SphericalPlanet.createEarth());
 
       builder.getPlanetRendererBuilder().setLayerSet(layerset);
 
       _g3mWidget = builder.createWidget();
 
       _spinnerLayer = (Spinner) findViewById(R.id.spinnerLayers);
-      final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this, Arrays.asList("Map Box OSM",
-               "Open Street Map", "Map Box Terrain", "Map Box Aerial", "CartoDB Meteorites", "MapQuest Aerial", "MapQuest OSM",
-               "WMS Nasa Blue Marble", "ESRI ArcGis Online", "Bing Aerial", "Bing Aerial With Labels"));
+      final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this, Arrays.asList("Open Street Map",
+               "MapQuest Aerial", "MapQuest OSM", "WMS Nasa Blue Marble", "Bing Aerial", "Bing Aerial With Labels"));
       _spinnerLayer.setAdapter(viewAdapter);
 
       _spinnerLayer.setOnItemSelectedListener(new OnItemSelectedListener() {

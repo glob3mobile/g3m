@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -13,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -24,11 +22,16 @@ public class CameraRotationHandler extends CameraEventHandler
   private MutableVector2F _pivotPixel = new MutableVector2F(); //Initial pixel at start of gesture
 
 //  int _lastYValid;
-  private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+  private MutableVector3D _cameraPosition = new MutableVector3D();
+  private MutableVector3D _cameraCenter = new MutableVector3D();
+  private MutableVector3D _cameraUp = new MutableVector3D();
+  private MutableVector3D _tempCameraPosition = new MutableVector3D();
+  private MutableVector3D _tempCameraCenter = new MutableVector3D();
+  private MutableVector3D _tempCameraUp = new MutableVector3D();
+
 
   public CameraRotationHandler()
   {
-     _camera0 = new Camera(new Camera());
      _pivotPoint = new MutableVector3D(0, 0, 0);
      _pivotPixel = new MutableVector2F(0, 0);
   }
@@ -101,15 +104,19 @@ public class CameraRotationHandler extends CameraEventHandler
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera camera = cameraContext.getNextCamera();
-    _camera0.copyFrom(camera);
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
     cameraContext.setCurrentGesture(Gesture.Rotate);
   
     // middle pixel in 2D
-    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+  <<<<<<< HEAD const Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     final Vector2F pixel2 = touchEvent.getTouch(2).getPos();
     final Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-    _pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
+  ======= Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+    Vector2F pixel2 = touchEvent.getTouch(2).getPos();
+    Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
+  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0 _pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
     //_lastYValid = _initialPixel.y();
   
     // compute center of view
@@ -143,8 +150,8 @@ public class CameraRotationHandler extends CameraEventHandler
   
     // vertical rotation around normal vector to globe
     Camera camera = cameraContext.getNextCamera();
-    camera.copyFrom(_camera0);
-    Angle angle_v = Angle.fromDegrees((_pivotPixel.x()-cm._x)*0.25);
+    camera.setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
+    Angle angle_v = Angle.fromDegrees((_pivotPixel._x-cm._x)*0.25);
     camera.rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
   
     // compute angle between normal and view direction
@@ -153,7 +160,7 @@ public class CameraRotationHandler extends CameraEventHandler
     double initialAngle = mu.acos(dot) / DefineConstants.PI * 180;
   
     // rotate more than 85 degrees or less than 0 degrees is not allowed
-    double delta = (cm._y - _pivotPixel.y()) * 0.25;
+    double delta = (cm._y - _pivotPixel._y) * 0.25;
     double finalAngle = initialAngle + delta;
     if (finalAngle > 85)
        delta = 85 - initialAngle;
@@ -161,24 +168,26 @@ public class CameraRotationHandler extends CameraEventHandler
        delta = -initialAngle;
   
     // create temporal camera to test if next rotation is valid
-    Camera tempCamera = new Camera(camera);
+    camera.getLookAtParamsInto(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
   
     // horizontal rotation over the original camera horizontal axix
     Vector3D u = camera.getHorizontalVector();
-    tempCamera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
+    camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
   
     // update camera only if new view intersects globe
-    //tempCamera.updateModelMatrix();
-    if (!tempCamera.getXYZCenterOfView().isNan())
+    if (camera.getXYZCenterOfView().isNan())
     {
-      camera.copyFrom(tempCamera);
+      camera.setLookAtParams(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
     }
+  
   }
 
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     cameraContext.setCurrentGesture(Gesture.None);
-    _pivotPixel = new MutableVector2F();
+  <<<<<<< HEAD _pivotPixel = new MutableVector2F();
+  ======= _pivotPixel = MutableVector2F.zero();
+  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   }
 
 

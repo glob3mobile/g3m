@@ -34,10 +34,14 @@ public class FlatPlanet extends Planet
   private MutableVector3D _initialPoint1 = new MutableVector3D();
   private double _distanceBetweenInitialPoints;
   private MutableVector3D _centerPoint = new MutableVector3D();
-//  mutable double          _angleBetweenInitialRays;
 
 
 
+
+  public static Planet createEarth()
+  {
+    return new FlatPlanet(new Vector2D(4 *6378137.0, 2 *6378137.0));
+  }
 
   public FlatPlanet(Vector2D size)
   {
@@ -47,7 +51,7 @@ public class FlatPlanet extends Planet
 
   public void dispose()
   {
-
+    super.dispose();
   }
 
   public final Vector3D getRadii()
@@ -70,6 +74,10 @@ public class FlatPlanet extends Planet
     return new Vector3D(0, 0, 1);
   }
 
+  public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
+  {
+    result.set(0, 0, 1);
+  }
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
@@ -108,16 +116,15 @@ public class FlatPlanet extends Planet
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
   {
-    return toCartesian(new Geodetic3D(latitude, longitude, height));
+    final double x = longitude._degrees * _size._x / 360.0;
+    final double y = latitude._degrees * _size._y / 180.0;
+    return new Vector3D(x, y, height);
   }
 
   public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-    final double x = geodetic._longitude._degrees * _size._x / 360.0;
-    final double y = geodetic._latitude._degrees * _size._y / 180.0;
-    return new Vector3D(x, y, geodetic._height);
+    return toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height);
   }
-
 
   public final Vector3D toCartesian(Geodetic2D geodetic)
   {
@@ -127,6 +134,27 @@ public class FlatPlanet extends Planet
   public final Vector3D toCartesian(Geodetic2D geodetic, double height)
   {
     return toCartesian(geodetic._latitude, geodetic._longitude, height);
+  }
+
+  public final void toCartesian(Angle latitude, Angle longitude, double height, MutableVector3D result)
+  {
+    final double x = longitude._degrees * _size._x / 360.0;
+    final double y = latitude._degrees * _size._y / 180.0;
+    result.set(x, y, height);
+  }
+
+  public final void toCartesian(Geodetic3D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, result);
+  }
+  public final void toCartesian(Geodetic2D geodetic, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, 0.0, result);
+  }
+
+  public final void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result)
+  {
+    toCartesian(geodetic._latitude, geodetic._longitude, height, result);
   }
 
   public final Geodetic2D toGeodetic2D(Vector3D position)
@@ -225,7 +253,6 @@ public class FlatPlanet extends Planet
     _initialPoint1 = Plane.intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
     _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
     _centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
-    //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
   
     // middle point in 3D
     _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
@@ -263,7 +290,6 @@ public class FlatPlanet extends Planet
       delta = delta.add(viewDirection.times(t2));
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(delta.asVector3D());
       positionCamera = positionCamera.transformedBy(translation, 1.0);
-  //    matrix.copyValue(translation.multiply(matrix));
       matrix.copyValueOfMultiplication(translation, matrix);
     }
   
@@ -279,7 +305,6 @@ public class FlatPlanet extends Planet
     {
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(centerPoint2.sub(finalPoint));
       positionCamera = positionCamera.transformedBy(translation, 1.0);
-  //    matrix.copyValue(translation.multiply(matrix));
       matrix.copyValueOfMultiplication(translation, matrix);
     }
   
@@ -294,7 +319,6 @@ public class FlatPlanet extends Planet
       if (sign<0)
          angle = -angle;
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
-  //    matrix.copyValue(rotation.multiply(matrix));
       matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
@@ -338,14 +362,7 @@ public class FlatPlanet extends Planet
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
-  //  Vector3D pos = nextCamera->getCartesianPosition();
-  //  Vector3D origin = _origin.asVector3D();
-  //  double maxDist = _size.length() * 1.5;
-  //
-  //  if (pos.distanceTo(origin) > maxDist) {
-  //    //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
-  //    nextCamera->copyFrom(*previousCamera);
-  //  }
+  
   }
 
   public final Geodetic3D getDefaultCameraPosition(Sector rendereSector)

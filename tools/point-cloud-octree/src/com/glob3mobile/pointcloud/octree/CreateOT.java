@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
 
 import es.igosoftware.euclid.projection.GProjection;
 import es.igosoftware.euclid.vector.GVector2D;
@@ -26,11 +27,33 @@ public class CreateOT {
       System.out.println("CreateOT 0.1");
       System.out.println("------------\n");
 
+      //      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
+      //      final GProjection sourceProjection = GProjection.EPSG_26918;
+      //
+      //
+      //      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      //      //final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      //
+      //      final String cloudName = "Loudoun-VA";
 
+
+      //      final File sourceTXTDirectory = new File("/Volumes/My Passport/_belgium_lidar_/txt");
+      //      final GProjection sourceProjection = GProjection.EPSG_31370;
+      //
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
+      //      final String cloudName = "Wallonia-Belgium";
+
+
+      final GProjection sourceProjection = GProjection.EPSG_31370;
+
+      //    final File sourceTXTDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/txt");
+      //    final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+      //    final String cloudName = "minnesota";
+
+      final File sourceTXTDirectory = new File(System.getProperty("user.dir"));
       final File cloudDirectory = new File(System.getProperty("user.dir"));
-      //final File cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      final String cloudName = "Wallonia";
 
-      final String cloudName = "Loudoun-VA";
 
       final boolean deleteOT = true;
       final boolean loadOT = true;
@@ -43,7 +66,7 @@ public class CreateOT {
       }
 
       if (loadOT) {
-         loadOT(cloudDirectory, cloudName, renameDone, getFilesToLoad());
+         loadOT(cloudDirectory, cloudName, renameDone, sourceProjection, getFilesToLoad(sourceTXTDirectory));
       }
 
       System.out.println();
@@ -61,9 +84,8 @@ public class CreateOT {
    }
 
 
-   private static String[] getFilesToLoad() {
-      final File wd = new File(System.getProperty("user.dir"));
-      final String[] filesNames = wd.list(new FilenameFilter() {
+   private static String[] getFilesToLoad(final File sourceTXTDirectory) {
+      final String[] filesNames = sourceTXTDirectory.list(new FilenameFilter() {
          @Override
          public boolean accept(final File dir,
                                final String name) {
@@ -71,7 +93,12 @@ public class CreateOT {
          }
       });
 
-      return filesNames;
+      final String[] result = new String[filesNames.length];
+      for (int i = 0; i < filesNames.length; i++) {
+         final String fileName = filesNames[i];
+         result[i] = new File(sourceTXTDirectory, fileName).getAbsolutePath();
+      }
+      return result;
    }
 
 
@@ -126,15 +153,20 @@ public class CreateOT {
    private static void loadOT(final File cloudDirectory,
                               final String cloudName,
                               final boolean renameDone,
+                              final GProjection projection,
                               final String... filesNames) throws IOException {
+
+      //      final int bufferSize = 512 * 1024;
+      //      final int maxPointsPerTitle = 512 * 1024;
+      final int bufferSize = 192 * 1024;
+      final int maxPointsPerTitle = 192 * 1024;
 
       final boolean loadPoints = true;
       if (loadPoints) {
          final boolean createIfNotExists = true;
          final int cacheSizeInBytes = 1024 * 1024 * 1024;
          try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists,
-                  cacheSizeInBytes)) {
-            final GProjection projection = GProjection.EPSG_26918;
+                  maxPointsPerTitle, bufferSize, cacheSizeInBytes)) {
 
             final int filesNamesLength = filesNames.length;
             for (int i = 0; i < filesNamesLength; i++) {

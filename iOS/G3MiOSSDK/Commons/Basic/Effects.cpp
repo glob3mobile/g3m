@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -11,7 +10,7 @@
 
 #include "Effects.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
 
 void EffectsScheduler::initialize(const G3MContext* context) {
@@ -22,10 +21,10 @@ void EffectsScheduler::initialize(const G3MContext* context) {
 void EffectsScheduler::cancelAllEffects() {
   const TimeInterval now = _timer->now();
 #ifdef C_CODE
-  std::vector<int> indicesToRemove;
+  std::vector<size_t> indicesToRemove;
 
-  const int size = _effectsRuns.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = _effectsRuns.size();
+  for (size_t i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
 
     if (effectRun->_started) {
@@ -36,7 +35,7 @@ void EffectsScheduler::cancelAllEffects() {
 
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-    const int indexToRemove = indicesToRemove[i];
+    const size_t indexToRemove = indicesToRemove[i];
     EffectRun* effectRun = _effectsRuns[indexToRemove];
     delete effectRun;
 
@@ -71,10 +70,10 @@ void EffectsScheduler::cancelAllEffects() {
 void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   const TimeInterval now = _timer->now();
 #ifdef C_CODE
-  std::vector<int> indicesToRemove;
+  std::vector<size_t> indicesToRemove;
 
-  const int size = _effectsRuns.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = _effectsRuns.size();
+  for (size_t i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
 
     if (effectRun->_target == target) {
@@ -87,7 +86,7 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
 
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-    const int indexToRemove = indicesToRemove[i];
+    const size_t indexToRemove = indicesToRemove[i];
     EffectRun* effectRun = _effectsRuns[indexToRemove];
     delete effectRun;
 
@@ -143,8 +142,8 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
     }
   }
 
-  const int removedSize = effectsToStop.size();
-  for (int i = 0; i < removedSize; i++) {
+  const size_t removedSize = effectsToStop.size();
+  for (size_t i = 0; i < removedSize; i++) {
     EffectRun* effectRun = effectsToStop[i];
     effectRun->_effect->stop(rc, when);
 
@@ -181,8 +180,8 @@ void EffectsScheduler::doOneCyle(const G3MRenderContext* rc) {
     processFinishedEffects(rc, now);
 
     // ask for _effectsRuns.size() here, as processFinishedEffects can modify the size
-    const int effectsRunsSize = _effectsRuns.size();
-    for (int i = 0; i < effectsRunsSize; i++) {
+    const size_t effectsRunsSize = _effectsRuns.size();
+    for (size_t i = 0; i < effectsRunsSize; i++) {
       EffectRun* effectRun = _effectsRuns[i];
       Effect* effect = effectRun->_effect;
       if (!effectRun->_started) {

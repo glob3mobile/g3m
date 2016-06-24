@@ -101,21 +101,27 @@ public class JSONParser_Android
          final org.json.JSONObject jsonObj = (org.json.JSONObject) jsonObject;
          final org.json.JSONArray attributes = jsonObj.names();
          final org.glob3.mobile.generated.JSONObject result = new org.glob3.mobile.generated.JSONObject();
-         final int length = attributes.length();
-         for (int i = 0; i < length; i++) {
-            try {
-               final String key = attributes.getString(i);
-               if (jsonObj.isNull(key)) {
-                  result.put(key, nullAsObject ? new JSONNull() : null);
+         if (attributes != null) {
+            final int length = attributes.length();
+            for (int i = 0; i < length; i++) {
+               try {
+                  final String key = attributes.getString(i);
+                  if (jsonObj.isNull(key)) {
+                     result.put(key, nullAsObject ? new JSONNull() : null);
+                  }
+                  else {
+                     result.put(key, convert(jsonObj.get(key), nullAsObject));
+                  }
                }
-               else {
-                  result.put(key, convert(jsonObj.get(key), nullAsObject));
+               catch (final org.json.JSONException e) {
+                  e.printStackTrace();
                }
-            }
-            catch (final org.json.JSONException e) {
-               e.printStackTrace();
             }
          }
+         else {
+            ILogger.instance().logWarning("JSONObject is empty: " + jsonObject.toString());
+         }
+
          return result;
       }
       else {

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 06/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_FloatBufferBuilderFromCartesian3D
@@ -134,7 +133,7 @@ public:
   Vector3D getCenter() {
     return Vector3D(_cx, _cy, _cz);
   }
-  
+
 };
 
 #endif

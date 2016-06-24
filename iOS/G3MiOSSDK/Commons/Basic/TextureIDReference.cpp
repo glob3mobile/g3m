@@ -15,5 +15,5 @@ TextureIDReference::~TextureIDReference() {
 
 TextureIDReference* TextureIDReference::createCopy() const {
   _texHandler->retainGLTextureId(_id);
-  return new TextureIDReference(_id, _texHandler);
+  return new TextureIDReference(_id, _isPremultiplied, _texHandler);
 }

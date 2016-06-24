@@ -25,7 +25,8 @@ public class DecompressManager {
 
       StreamGobbler sb = null;
       try {
-         sb = CommandLine.getInstance().execute(cmd);
+         CommandLine.getInstance();
+         sb = CommandLine.execute(cmd);
          System.out.println(sb.getResult());
          if (!sb.getResult().contains("not found")) {
             return true;
@@ -66,7 +67,8 @@ public class DecompressManager {
          System.out.println(decompressDir.getAbsolutePath());
          StreamGobbler sb = null;
          try {
-            sb = CommandLine.getInstance().execute(cmd);
+            CommandLine.getInstance();
+            sb = CommandLine.execute(cmd);
             return decompressDir;
          }
          catch (final IOException e) {

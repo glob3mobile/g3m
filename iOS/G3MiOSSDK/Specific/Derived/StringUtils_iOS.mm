@@ -101,8 +101,8 @@ std::string StringUtils_iOS::rtrim(const std::string& string) const {
 
 bool StringUtils_iOS::endsWith(const std::string& string,
                                const std::string& suffix) const {
-  const int stringLength = string.length();
-  const int suffixLength = suffix.length();
+  const size_t stringLength = string.length();
+  const size_t suffixLength = suffix.length();
   if (stringLength >= suffixLength) {
     return (string.compare(stringLength - suffixLength, suffixLength, suffix) == 0);
   }
@@ -137,17 +137,6 @@ int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
   }
   return -1;
 }
-
-//int StringUtils_iOS::indexOfFirstBlank(const std::string& string,
-//                                       int fromIndex) const {
-//  const int stringLen = string.length();
-//  for (int i = fromIndex ; i < stringLen; i++) {
-//    if (std::isspace( string[i] )) {
-//      return i;
-//    }
-//  }
-//  return -1;
-//}
 
 int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
                                          const std::string& chars,
@@ -187,4 +176,22 @@ std::string StringUtils_iOS::toString(float value) const {
 
 double StringUtils_iOS::parseDouble(const std::string& str) const {
   return atof(str.c_str());
+}
+
+
+std::string StringUtils_iOS::replaceAll(const std::string& originalString,
+                                        const std::string& searchString,
+                                        const std::string& replaceString) const {
+  std::string result = originalString;
+  for ( size_t pos = 0; ; pos += replaceString.length() ) {
+    // Locate the substring to replace
+    pos = result.find( searchString, pos );
+    if( pos == std::string::npos ) {
+      break;
+    }
+    // Replace by erasing and inserting
+    result.erase( pos, searchString.length() );
+    result.insert( pos, replaceString );
+  }
+  return result;
 }

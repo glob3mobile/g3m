@@ -15,6 +15,7 @@ public class CameraFocusSceneLighting extends SceneLighting
   private double _upZ;
 
   private MutableVector3D _camDir = new MutableVector3D();
+  private MutableVector3D _up = new MutableVector3D();
 
 
   public CameraFocusSceneLighting(Color ambient, Color diffuse)
@@ -35,11 +36,11 @@ public class CameraFocusSceneLighting extends SceneLighting
   public final void modifyGLState(GLState glState, G3MRenderContext rc)
   {
     final Camera camera = rc.getCurrentCamera();
-  //  const Vector3D camDir = camera->getViewDirectionMutable();
-  //  MutableVector3D camDir;
+  
     camera.getViewDirectionInto(_camDir);
-    final MutableVector3D up = camera.getUpMutable();
-    if ((_cameraDirX == _camDir.x()) && (_cameraDirY == _camDir.y()) && (_cameraDirZ == _camDir.z()) && (_upX == up.x()) && (_upY == up.y()) && (_upZ == up.z()))
+    camera.getUpMutable(_up);
+  
+    if ((_cameraDirX == _camDir.x()) && (_cameraDirY == _camDir.y()) && (_cameraDirZ == _camDir.z()) && (_upX == _up.x()) && (_upY == _up.y()) && (_upZ == _up.z()))
     {
       return;
     }
@@ -47,7 +48,7 @@ public class CameraFocusSceneLighting extends SceneLighting
     final MutableVector3D cameraVector = _camDir.times(-1);
   
     //Light slightly different of camera position
-    final MutableVector3D rotationLightDirAxis = up.cross(cameraVector);
+    final MutableVector3D rotationLightDirAxis = _up.cross(cameraVector);
     final MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle.fromDegrees(45.0));
   
     DirectionLightGLFeature f = (DirectionLightGLFeature) glState.getGLFeature(GLFeatureID.GLF_DIRECTION_LIGTH);
@@ -83,9 +84,9 @@ public class CameraFocusSceneLighting extends SceneLighting
     _cameraDirY = _camDir.y();
     _cameraDirZ = _camDir.z();
   
-    _upX = up.x();
-    _upY = up.y();
-    _upZ = up.z();
+    _upX = _up.x();
+    _upY = _up.y();
+    _upZ = _up.z();
   }
 
   public final void setLightDirectionsMeshRenderer(MeshRenderer meshRenderer)

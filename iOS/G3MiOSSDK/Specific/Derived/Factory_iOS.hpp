@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Factory_iOS
@@ -43,15 +42,15 @@ public:
 //    delete image;
 //  }
 
-  IByteBuffer* createByteBuffer(unsigned char data[], int length) const {
+  IByteBuffer* createByteBuffer(unsigned char data[], size_t length) const {
     return new ByteBuffer_iOS(data, length);
   }
 
-  IByteBuffer* createByteBuffer(int size) const {
+  IByteBuffer* createByteBuffer(size_t size) const {
     return new ByteBuffer_iOS(size);
   }
 
-  IFloatBuffer* createFloatBuffer(int size) const {
+  IFloatBuffer* createFloatBuffer(size_t size) const {
     return new FloatBuffer_iOS(size);
   }
 
@@ -89,12 +88,12 @@ public:
                                f15);
   }
 
-  IIntBuffer* createIntBuffer(int size) const {
+  IIntBuffer* createIntBuffer(size_t size) const {
     return new IntBuffer_iOS(size);
   }
 
 
-  IShortBuffer* createShortBuffer(int size) const {
+  IShortBuffer* createShortBuffer(size_t size) const {
     return new ShortBuffer_iOS(size);
   }
 

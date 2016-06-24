@@ -76,7 +76,7 @@ public class Sphere extends BoundingVolume
       indices.add((short)(j));
     }
   
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, new Color(color));
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();
@@ -84,6 +84,58 @@ public class Sphere extends BoundingVolume
     return mesh;
   }
 
+
+  public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points)
+  {
+    final int size = points.size();
+  
+    if (size < 2)
+    {
+      return null;
+    }
+  
+    double xmin = points.get(0)._x;
+    double xmax = points.get(0)._x;
+    double ymin = points.get(0)._y;
+    double ymax = points.get(0)._y;
+    double zmin = points.get(0)._z;
+    double zmax = points.get(0)._z;
+  
+    for (int i = 1; i < size; i++)
+    {
+      final Vector3D p = points.get(i);
+  
+      final double x = p._x;
+      final double y = p._y;
+      final double z = p._z;
+  
+      if (x < xmin)
+         xmin = x;
+      if (x > xmax)
+         xmax = x;
+      if (y < ymin)
+         ymin = y;
+      if (y > ymax)
+         ymax = y;
+      if (z < zmin)
+         zmin = z;
+      if (z > zmax)
+         zmax = z;
+    }
+  
+    final Vector3D center = new Vector3D((xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2);
+    double sqRad = center.squaredDistanceTo(points.get(0));
+    for (int i = 1; i < size; i++)
+    {
+      final double dt = center.squaredDistanceTo(points.get(i));
+      if (dt > sqRad)
+      {
+        sqRad = dt;
+      }
+    }
+  
+    return new Sphere(center, IMathUtils.instance().sqrt(sqRad));
+  }
 
   public final Vector3D _center ;
   public final double _radius;
@@ -153,6 +205,8 @@ public class Sphere extends BoundingVolume
   }
   public final boolean touchesFrustum(Frustum frustum)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning This implementation could gives false positives
     // this implementation is not right exact, but it's faster.
     if (frustum.getNearPlane().signedDistance(_center) > _radius)
        return false;

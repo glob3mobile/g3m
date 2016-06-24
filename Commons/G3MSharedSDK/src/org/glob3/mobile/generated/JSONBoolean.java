@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 03/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -44,6 +43,11 @@ public class JSONBoolean extends JSONBaseObject
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public final String toString()
+  {
+    return _value ? "true" : "false";
   }
 
   public final JSONBoolean deepCopy()

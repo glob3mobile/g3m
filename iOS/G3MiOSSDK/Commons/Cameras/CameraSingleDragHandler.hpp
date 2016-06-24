@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 28/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_CameraSingleDragHandler
@@ -21,9 +20,6 @@ class CameraSingleDragHandler: public CameraEventHandler {
   
 public:
   CameraSingleDragHandler(bool useInertia):
-  _camera0(Camera()),
-//  _initialPoint(0,0,0),
-//  _initialPixel(0,0),
   _useInertia(useInertia)
   {}
   
@@ -54,7 +50,12 @@ public:
             CameraContext *cameraContext);
 private:
   
-  Camera _camera0;         //Initial Camera saved on Down event
+  MutableVector3D _cameraPosition;
+  MutableVector3D _cameraCenter;
+  MutableVector3D _cameraUp;
+  MutableVector2I _cameraViewPort;
+  MutableMatrix44D _cameraModelViewMatrix;
+  MutableVector3D _finalRay;
 };
 
 

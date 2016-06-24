@@ -11,8 +11,8 @@ import org.glob3.mobile.generated.Tile;
 
 
 public class TileVisitorCache_JavaDesktop
-implements
-ITileVisitor {
+   implements
+      ITileVisitor {
 
    @Override
    public void dispose() {
@@ -33,7 +33,7 @@ ITileVisitor {
       //            System.out.println(pet.get(j).getURL().description());
       //         }
       //      }
-      final int __TODO_Refactor_Layer;
+      //  final int __TODO_Refactor_Layer;
 
    }
 

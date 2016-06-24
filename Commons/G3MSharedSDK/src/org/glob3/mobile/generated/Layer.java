@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -31,7 +30,6 @@ package org.glob3.mobile.generated;
 //class Sector;
 //class LayerTouchEvent;
 //class TileImageProvider;
-//class Info;
 
 
 public abstract class Layer
@@ -148,6 +146,14 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
+  
+    final int numInfos = _layerInfo.size();
+    for (int i = 0; i < numInfos; i++)
+    {
+      final Info inf = _layerInfo.get(i);
+      if (inf != null)
+         inf.dispose();
+    }
     _layerInfo.clear();
   }
 
@@ -305,6 +311,13 @@ public abstract class Layer
 
   public final void setInfo(java.util.ArrayList<Info> info)
   {
+    final int numInfos = _layerInfo.size();
+    for (int i = 0; i < numInfos; i++)
+    {
+      final Info inf = _layerInfo.get(i);
+      if (inf != null)
+         inf.dispose();
+    }
     _layerInfo.clear();
     _layerInfo.addAll(info);
   

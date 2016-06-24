@@ -12,8 +12,52 @@
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
+
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
+
+Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
+  const size_t size = points.size();
+
+  if (size < 2) {
+    return NULL;
+  }
+
+  double xmin = points[0]._x;
+  double xmax = points[0]._x;
+  double ymin = points[0]._y;
+  double ymax = points[0]._y;
+  double zmin = points[0]._z;
+  double zmax = points[0]._z;
+
+  for (size_t i = 1; i < size; i++) {
+    const Vector3D p = points[i];
+
+    const double x = p._x;
+    const double y = p._y;
+    const double z = p._z;
+
+    if (x < xmin) xmin = x;
+    if (x > xmax) xmax = x;
+    if (y < ymin) ymin = y;
+    if (y > ymax) ymax = y;
+    if (z < zmin) zmin = z;
+    if (z > zmax) zmax = z;
+  }
+
+  const Vector3D center = Vector3D((xmin + xmax) / 2,
+                                   (ymin + ymax) / 2,
+                                   (zmin + zmax) / 2);
+  double sqRad = center.squaredDistanceTo(points[0]);
+  for (size_t i = 1; i < size; i++) {
+    const double dt = center.squaredDistanceTo(points[i]);
+    if (dt > sqRad) {
+      sqRad = dt;
+    }
+  }
+
+  return new Sphere(center, IMathUtils::instance()->sqrt(sqRad));
+}
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
   return rc->getCurrentCamera()->getProjectedSphereArea(*this);
@@ -66,10 +110,11 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
   }
 
   Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               true,
                                vertices->getCenter(),
                                vertices->create(),
+                               true,
                                indices.create(),
+                               true,
                                1,
                                1,
                                new Color(color));
@@ -91,6 +136,7 @@ void Sphere::render(const G3MRenderContext* rc,
 
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
+#warning This implementation could gives false positives
   // this implementation is not right exact, but it's faster.
   if (frustum->getNearPlane().signedDistance(_center)   > _radius) return false;
   if (frustum->getFarPlane().signedDistance(_center)    > _radius) return false;

@@ -93,7 +93,11 @@ public class HUDImageRenderer extends DefaultRenderer
   
           final Camera camera = rc.getCurrentCamera();
   
-          final int width = camera.getViewPortWidth();
+          int width = camera.getViewPortWidth();
+          if (rc.getViewMode() == ViewMode.STEREO)
+          {
+            width /= 2;
+          }
           final int height = camera.getViewPortHeight();
   
           _imageFactory.create(rc, width, height, new HUDImageRenderer.ImageListener(this), true);
@@ -135,8 +139,12 @@ public class HUDImageRenderer extends DefaultRenderer
   
   
     final Camera camera = rc.getCurrentCamera();
-  
-    final double halfWidth = camera.getViewPortWidth() / 2.0;
+    int viewPortWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      viewPortWidth /= 2;
+    }
+    final double halfWidth = viewPortWidth / 2.0;
     final double halfHeight = camera.getViewPortHeight() / 2.0;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
@@ -195,7 +203,12 @@ public class HUDImageRenderer extends DefaultRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int halfWidth = width / 2;
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+    final int halfWidth = logicWidth / 2;
     final int halfHeight = height / 2;
     MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   

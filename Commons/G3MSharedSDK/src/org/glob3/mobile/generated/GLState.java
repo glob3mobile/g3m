@@ -14,7 +14,6 @@ package org.glob3.mobile.generated;
 //  Created by Jose Miguel SN on 17/05/13.
 //
 //  Created by Agustin Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -26,8 +25,8 @@ public class GLState extends RCObject
   private GLFeatureSet _features;
   private GLFeatureSet _accumulatedFeatures;
 
-  private int _timeStamp;
-  private int _parentsTimeStamp;
+  private int _timestamp;
+  private int _parentsTimestamp;
 
   private GPUVariableValueSet _valuesSet;
   private GLGlobalState _globalState;
@@ -41,7 +40,7 @@ public class GLState extends RCObject
 
   private void hasChangedStructure()
   {
-    _timeStamp++;
+    _timestamp++;
     if (_valuesSet != null)
        _valuesSet.dispose();
     _valuesSet = null;
@@ -88,17 +87,17 @@ public class GLState extends RCObject
   {
      _parentGLState = null;
      _linkedProgram = null;
-     _parentsTimeStamp = -1;
-     _timeStamp = 0;
+     _parentsTimestamp = -1;
+     _timestamp = 0;
      _valuesSet = null;
      _globalState = null;
      _accumulatedFeatures = null;
     _features = new GLFeatureSet();
   }
 
-  public final int getTimeStamp()
+  public final int getTimestamp()
   {
-     return _timeStamp;
+     return _timestamp;
   }
 
   public final GLFeatureSet getAccumulatedFeatures()
@@ -132,14 +131,14 @@ public class GLState extends RCObject
       if (parent != _parentGLState)
       {
         _parentGLState = null;
-        _parentsTimeStamp = -1;
+        _parentsTimestamp = -1;
         hasChangedStructure();
       }
     }
     else
     {
-      final int parentsTimeStamp = parent.getTimeStamp();
-      if ((parent != _parentGLState) || (_parentsTimeStamp != parentsTimeStamp))
+      final int parentsTimestamp = parent.getTimestamp();
+      if ((parent != _parentGLState) || (_parentsTimestamp != parentsTimestamp))
       {
   
         if (_parentGLState != parent)
@@ -152,7 +151,7 @@ public class GLState extends RCObject
           _parentGLState._retain();
         }
   
-        _parentsTimeStamp = parentsTimeStamp;
+        _parentsTimestamp = parentsTimestamp;
         hasChangedStructure();
       }
     }

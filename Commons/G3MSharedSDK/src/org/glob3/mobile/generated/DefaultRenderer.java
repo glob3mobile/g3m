@@ -44,7 +44,7 @@ public abstract class DefaultRenderer implements Renderer
 
   protected ChangedRendererInfoListener _changedInfoListener = null;
 
-  protected int _rendererIdentifier = -1;
+  protected int _rendererIdentifier = 0;
 
   protected G3MContext _context;
 

@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 8/19/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MStreamingPointCloud1DemoScene.hpp"
@@ -32,7 +31,8 @@ public:
   void onMetadata(long long pointsCount,
                   const Sector& sector,
                   double minHeight,
-                  double maxHeight) {
+                  double maxHeight,
+                  double averageHeight) {
     _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 70000) );
   }
 
@@ -45,6 +45,7 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
 
   const float pointSize = 2;
   const float verticalExaggeration = 1;
+  const double deltaHeight = 0;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -63,11 +64,15 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
 //#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
                                                  "Loudoun-VA_simplified2_LOD",
+                                                 //"Wallonia-Belgium_simplified2_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  false,
+                                                 PointCloudsRenderer::MIN_AVERAGE3_HEIGHT,
+                                                 //PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
                                                  verticalExaggeration,
+                                                 deltaHeight,
                                                  new G3MStreamingPointCloud1DemoScene_PointCloudMetadataListener(g3mWidget),
                                                  true);
 }

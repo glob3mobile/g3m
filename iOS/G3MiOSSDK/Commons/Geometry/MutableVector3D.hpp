@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_MutableVector3D
@@ -51,7 +50,14 @@ public:
   {
   }
 
-  void put(const double x,
+  explicit MutableVector3D(const Vector3D &v) :
+  _x(v._x),
+  _y(v._y),
+  _z(v._z)
+  {
+  }
+
+  void set(const double x,
            const double y,
            const double z) {
     _x = x;
@@ -213,6 +219,20 @@ public:
 
   MutableVector3D rotateAroundAxis(const MutableVector3D& axis,
                                    const Angle& theta) const;
+
+  const double squaredDistanceTo(const Vector3D& that) const {
+    const double dx = _x - that._x;
+    const double dy = _y - that._y;
+    const double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  const double squaredDistanceTo(const MutableVector3D& that) const {
+    const double dx = _x - that._x;
+    const double dy = _y - that._y;
+    const double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
 
 };
 

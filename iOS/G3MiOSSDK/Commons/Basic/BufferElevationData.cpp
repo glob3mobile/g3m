@@ -14,7 +14,7 @@ BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& extent,
                                          const Sector& realSector,
                                          const Vector2I& realExtent,
-                                         int bufferSize,
+                                         size_t bufferSize,
                                          double deltaHeight) :
 ElevationData(sector, extent),
 _bufferSize(bufferSize),
@@ -26,11 +26,6 @@ _deltaHeight(deltaHeight)
 double BufferElevationData::getElevationAt(int x,
                                            int y) const {
   const int index = ((_height-1-y) * _width) + x;
-
-//  if ( (index < 0) || (index >= _bufferSize) ) {
-//    printf("break point on me\n");
-//    return IMathUtils::instance()->NanD();
-//  }
 
   return getValueInBufferAt( index ) + _deltaHeight;
 }

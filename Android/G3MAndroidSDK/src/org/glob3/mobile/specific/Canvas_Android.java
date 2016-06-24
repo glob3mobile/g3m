@@ -23,8 +23,8 @@ import android.graphics.Typeface;
 
 
 public final class Canvas_Android
-         extends
-            ICanvas {
+   extends
+      ICanvas {
 
    private Bitmap      _bitmap          = null;
    private Canvas      _canvas          = null;
@@ -61,11 +61,13 @@ public final class Canvas_Android
    protected void _setFont(final GFont font) {
       _currentTypeface = createTypeface(font);
 
+      final float fontSize = font.getSize();
+
       _fillPaint.setTypeface(_currentTypeface);
-      _fillPaint.setTextSize(font.getSize());
+      _fillPaint.setTextSize(fontSize);
 
       _strokePaint.setTypeface(_currentTypeface);
-      _strokePaint.setTextSize(font.getSize());
+      _strokePaint.setTextSize(fontSize);
    }
 
 
@@ -220,6 +222,36 @@ public final class Canvas_Android
 
 
    @Override
+   protected void _fillEllipse(final float left,
+                               final float top,
+                               final float width,
+                               final float height) {
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawOval(_rectF, _fillPaint);
+   }
+
+
+   @Override
+   protected void _strokeEllipse(final float left,
+                                 final float top,
+                                 final float width,
+                                 final float height) {
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawOval(_rectF, _strokePaint);
+   }
+
+
+   @Override
+   protected void _fillAndStrokeEllipse(final float left,
+                                        final float top,
+                                        final float width,
+                                        final float height) {
+      _fillEllipse(left, top, width, height);
+      _strokeEllipse(left, top, width, height);
+   }
+
+
+   @Override
    protected void _fillRoundedRectangle(final float left,
                                         final float top,
                                         final float width,
@@ -257,7 +289,9 @@ public final class Canvas_Android
    protected void _fillText(final String text,
                             final float left,
                             final float top) {
-      _canvas.drawText(text, left, top, _fillPaint);
+      final Rect textBounds = _rect;
+      _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
+      _canvas.drawText(text, left, top - textBounds.top, _fillPaint);
    }
 
 
@@ -313,7 +347,7 @@ public final class Canvas_Android
 
       final Paint paint = new Paint();
       paint.setAlpha(Math.round(255 * transparency));
-      _canvas.drawBitmap(bitmap, null, dst, null);
+      _canvas.drawBitmap(bitmap, null, dst, paint);
    }
 
 

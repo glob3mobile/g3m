@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 8/19/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MStreamingPointCloud2DemoScene.hpp"
@@ -32,8 +31,16 @@ public:
   void onMetadata(long long pointsCount,
                   const Sector& sector,
                   double minHeight,
-                  double maxHeight) {
-    _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
+                  double maxHeight,
+                  double averageHeight) {
+    // _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
+
+    _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                          Geodetic3D::fromDegrees(44.950996472837502438,
+                                                                  -93.098090960367656521,
+                                                                  301.5960958814906121),
+                                          Angle::zero(),
+                                          Angle::fromDegrees(-26));
   }
 
 };
@@ -45,6 +52,7 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 
   const float pointSize = 2;
   const float verticalExaggeration = 1;
+  const double deltaHeight = -202;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -70,12 +78,14 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 
 //#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
-                                                 "Loudoun-VA_fragment_LOD",
+                                                 "minnesota_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
-                                                 false,
+                                                 true,
+                                                 PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
                                                  verticalExaggeration,
+                                                 deltaHeight,
                                                  new G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener(g3mWidget),
                                                  true);
 }

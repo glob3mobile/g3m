@@ -240,6 +240,8 @@ public class Frustum
       return false;
     }
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning This implementation could gives false positives
     final Vector3F[] corners = that.getCornersArray();
   
     return !((_leftPlane.signedDistance(corners[0]) >= 0) && (_leftPlane.signedDistance(corners[1]) >= 0)

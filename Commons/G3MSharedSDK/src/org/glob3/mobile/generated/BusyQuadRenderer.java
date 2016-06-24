@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -14,7 +13,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -130,7 +128,12 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int halfWidth = width / 2;
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+    final int halfWidth = logicWidth / 2;
     final int halfHeight = height / 2;
     _projectionMatrix.copyValue(MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth));
   }

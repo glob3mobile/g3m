@@ -49,7 +49,12 @@ public:
                  GEOVectorLayer*         geoVectorLayer) const;
 
   virtual GEOGeometry* deepCopy() const = 0;
-  
+
+  virtual long long createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                       const VectorStreamingRenderer::Node*      node) const {
+    return 0;
+  }
+
 };
 
 #endif

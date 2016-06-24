@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 5/17/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MTiledVectorDemoScene.hpp"
@@ -117,9 +116,9 @@ public:
     const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry, baseColor);
 
     const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
-    const int polygonsDataSize = polygonsData->size();
+    const size_t polygonsDataSize = polygonsData->size();
 
-    for (int i = 0; i < polygonsDataSize; i++) {
+    for (size_t i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = polygonsData->at(i);
       symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
                                                      lineStyle,
@@ -184,7 +183,6 @@ public:
 void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-
 
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 

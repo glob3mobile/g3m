@@ -3,39 +3,23 @@
 //  Prueba Opengl iPad
 //
 //  Created by Agustin Trujillo Pino on 12/01/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "TouchEvent.hpp"
-#import "GL.hpp"
-
-//class G3MWidget;
 
 @class ES2Renderer;
 
-class IStorage;
-class IDownloader;
-class IThreadUtils;
-class ICameraActivityListener;
-class Planet;
-class Color;
-class CameraRenderer;
-class LayerSet;
-class ICameraConstrainer;
-class Renderer;
-class ProtoRenderer;
-class WidgetUserData;
-class PlanetRenderer;
-class TilesRenderParameters;
+class TouchEvent;
+class GL;
 class G3MWidget;
-class PeriodicalTask;
-class GInitializationTask;
+class CameraRenderer;
+class Geodetic3D;
 class TimeInterval;
-class ErrorRenderer;
-class InfoDisplay;
+class Angle;
+class WidgetUserData;
+
 
 // This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 // The view content is basically an EAGL surface you render your OpenGL scene into.
@@ -61,27 +45,6 @@ class InfoDisplay;
 - (void)stopAnimation;
 
 - (void)drawView: (id)sender;
-
-- (void)          initWidget: (IStorage*) storage
-                  downloader: (IDownloader*) downloader
-                 threadUtils: (IThreadUtils*) threadUtils
-      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
-                      planet: (const Planet*) planet
-           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
-              cameraRenderer: (CameraRenderer*) cameraRenderer
-                mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (ProtoRenderer*) busyRenderer
-               errorRenderer: (ErrorRenderer*) errorRenderer
-                 hudRenderer: (Renderer*) hudRenderer
-             backgroundColor: (Color) backgroundColor
-                      logFPS: (bool) logFPS
-     logDownloaderStatistics: (bool) logDownloaderStatistics
-          initializationTask: (GInitializationTask*) initializationTask
-autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
-             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-                    userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition
-                 infoDisplay: (InfoDisplay*) infoDisplay;
 
 - (GL*)getGL;
 

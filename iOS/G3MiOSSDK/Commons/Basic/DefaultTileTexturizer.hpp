@@ -19,25 +19,25 @@ class IImage;
 
 class DefaultTileTexturizer : public TileTexturizer {
 private:
-  inline LeveledTexturedMesh* getMesh(Tile* tile) const;
-  
-  
-  IImageBuilder* _defaultBackGroundImageBuilder;
-  bool _defaultBackGroundImageLoaded;
+
+  IImageBuilder* _defaultBackgroundImageBuilder;
+  bool _defaultBackgroundImageLoaded;
 #ifdef C_CODE
-  const IImage* _defaultBackGroundImage;
+  const IImage* _defaultBackgroundImage;
 #endif
 #ifdef JAVA_CODE
-  private IImage _defaultBackGroundImage;
+  private IImage _defaultBackgroundImage;
 #endif
-  std::string _defaultBackGroundImageName;
-  
+  std::string _defaultBackgroundImageName;
+
+  LeveledTexturedMesh* getMesh(Tile* tile) const;
+
 public:
-  
+
   std::vector<std::string> _errors;
 
-  
-  DefaultTileTexturizer(IImageBuilder* defaultBackGroundImageBuilder);
+
+  DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder);
 
   virtual ~DefaultTileTexturizer() {
 #ifdef JAVA_CODE
@@ -50,24 +50,17 @@ public:
   void initialize(const G3MContext* context,
                   const TilesRenderParameters* parameters);
 
-  Mesh* texturize(const G3MRenderContext* rc,
-                  const TileTessellator* tessellator,
-                  const LayerTilesRenderParameters* layerTilesRenderParameters,
-                  const LayerSet* layerSet,
-                  bool forceFullRender,
-                  long long tileDownloadPriority,
+  Mesh* texturize(const G3MRenderContext*    rc,
+                  const PlanetRenderContext* prc,
                   Tile* tile,
                   Mesh* tessellatorMesh,
-                  Mesh* previousMesh,
-                  bool logTilesPetitions);
+                  Mesh* previousMesh);
 
   void tileToBeDeleted(Tile* tile,
                        Mesh* mesh);
 
   void tileMeshToBeDeleted(Tile* tile,
                            Mesh* mesh);
-
-  bool tileMeetsRenderCriteria(Tile* tile);
 
   void justCreatedTopTile(const G3MRenderContext* rc,
                           Tile* tile,
@@ -81,25 +74,25 @@ public:
                            const Geodetic3D& position,
                            const Tile* tile,
                            LayerSet* layerSet);
-  
-  const IImageBuilder* getDefaultBackGroundImageBuilder() const {
-    return _defaultBackGroundImageBuilder;
-  }
-  
-  const IImage* getDefaultBackGroundImage() const {
-    return _defaultBackGroundImage;
-  }
-  
-  void setDefaultBackGroundImage(const IImage* defaultBackGroundImage);
-  
-  const std::string getDefaultBackGroundImageName() const {
-    return _defaultBackGroundImageName;
-  }
-  
-  void setDefaultBackGroundImageName(const std::string& defaultBackGroundImageName);
-  
-  void setDefaultBackGroundImageLoaded(const bool defaultBackGroundImageLoaded);
 
+  const IImageBuilder* getDefaultBackgroundImageBuilder() const {
+    return _defaultBackgroundImageBuilder;
+  }
+
+  const IImage* getDefaultBackgroundImage() const {
+    return _defaultBackgroundImage;
+  }
+
+  void setDefaultBackgroundImage(const IImage* defaultBackgroundImage);
+
+  const std::string getDefaultBackgroundImageName() const {
+    return _defaultBackgroundImageName;
+  }
+
+  void setDefaultBackgroundImageName(const std::string& defaultBackgroundImageName);
+
+  void setDefaultBackgroundImageLoaded(const bool defaultBackgroundImageLoaded);
+  
 };
 
 #endif

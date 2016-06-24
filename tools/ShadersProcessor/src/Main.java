@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,8 +19,8 @@ public class Main {
                                              + "class BasicShadersGL2: public GPUProgramFactory{\n" + "\n" + "public:\n"
                                              + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
                                              + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
-                                             + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
-                                             + "  }\n" + "\n" + "};\n" + "#endif";
+                                             + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS" + "  }\n"
+                                             + "\n" + "};\n" + "#endif\n";
 
    private static String _addProgramSource = "    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
                                              + "    this->add(sourcesShader_Name);\n\n";
@@ -33,27 +32,21 @@ public class Main {
    }
 
 
-   static String readFile(final String fileName) {
-      try {
-         final BufferedReader br = new BufferedReader(new FileReader(fileName));
-         try {
-            final StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
+   static String readFile(final String fileName) throws IOException {
+      try (final BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+         final StringBuilder sb = new StringBuilder();
+         String line = br.readLine();
 
-            while (line != null) {
-               sb.append(line);
-               sb.append("\n");
-               line = br.readLine();
-            }
-            return sb.toString();
+         while (line != null) {
+            sb.append(line);
+            sb.append("\n");
+            line = br.readLine();
          }
-         finally {
-            br.close();
-         }
+         return sb.toString();
       }
-      catch (final IOException e) {
-         return null;
-      }
+      //      catch (final IOException e) {
+      //         return null;
+      //      }
    }
 
 
@@ -77,10 +70,10 @@ public class Main {
          }
 
          //final boolean firstLine = (result == "");
-         result += "\"" + StringEscapeUtils.escapeJava(line) + " \\n \"";
+         result += "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
 
          if (i < (lines.length - 1)) {
-            result += " + \n";
+            result += " +\n";
          }
 
       }
@@ -96,11 +89,11 @@ public class Main {
    }
 
 
-   static ArrayList<Shader> getShadersInFolder(final String path) {
+   static ArrayList<Shader> getShadersInFolder(final String path) throws IOException {
 
       final File folder = new File(path);
 
-      final ArrayList<Shader> shaders = new ArrayList<Main.Shader>();
+      final ArrayList<Shader> shaders = new ArrayList<>();
 
       for (final File fileEntry : folder.listFiles()) {
          if (fileEntry.isDirectory()) {
@@ -139,10 +132,7 @@ public class Main {
    }
 
 
-   /**
-    * @param args
-    */
-   public static void main(final String[] args) {
+   public static void main(final String[] args) throws IOException {
 
       String pwd = "";
       File pwdFile = new File(System.getProperty("user.dir"));
@@ -186,14 +176,9 @@ public class Main {
       _classSource = _classSource.replace("ADDING_SHADERS", addingShadersString);
 
       //THIS SAVES TO FILE IN SHADERS FOLDER
-      try {
-         final String outPath = (new File(filePath)).getAbsolutePath();
-         final PrintWriter out = new PrintWriter(outPath);
+      final String outPath = (new File(filePath)).getAbsolutePath();
+      try (final PrintWriter out = new PrintWriter(outPath)) {
          out.print(_classSource);
-         out.close();
-      }
-      catch (final FileNotFoundException e) {
-         e.printStackTrace();
       }
 
 

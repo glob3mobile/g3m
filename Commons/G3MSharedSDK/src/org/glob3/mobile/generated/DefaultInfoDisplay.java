@@ -12,7 +12,6 @@ public class DefaultInfoDisplay implements InfoDisplay
   public final void changedInfo(java.util.ArrayList<Info> info)
   {
     _defaultHUDRenderer.updateInfo(info);
-
   }
 
   public final void showDisplay()

@@ -24,7 +24,8 @@ public:
     
   }
   
-  ChildRenderer(Renderer* renderer, const std::vector<const Info*> info):
+  ChildRenderer(Renderer* renderer,
+                const std::vector<const Info*>& info):
   _renderer(renderer)
   {
     setInfo(info);
@@ -37,7 +38,7 @@ public:
   
   void addInfo(const Info* inf);
   
-  void setInfo(const std::vector<const Info*> info);
+  void setInfo(const std::vector<const Info*>& info);
 
   Renderer* getRenderer() const {
     return _renderer;

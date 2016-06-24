@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -172,5 +171,7 @@ public abstract class INativeGL
   public abstract void depthMask(boolean v);
 
   public abstract void setActiveTexture(int i);
+
+  public abstract void viewport(int x, int y, int width, int height);
 
 }

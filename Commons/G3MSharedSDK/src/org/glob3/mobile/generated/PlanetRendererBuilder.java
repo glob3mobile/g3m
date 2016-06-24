@@ -16,11 +16,19 @@ package org.glob3.mobile.generated;
 //
 
 
-//class LayerSet;
+
+//class TileTessellator;
+//class TileTexturizer;
 //class GEOVectorLayer;
+//class TileLODTester;
+//class TileVisibilityTester;
+//class LayerSet;
+//class VisibleSectorListener;
+//class ElevationDataProvider;
+//class Sector;
+//class ChangedRendererInfoListener;
 //class IImageBuilder;
-
-
+//class PlanetRenderer;
 
 
 public class PlanetRendererBuilder
@@ -29,12 +37,13 @@ public class PlanetRendererBuilder
   private TileTessellator _tileTessellator;
   private TileTexturizer _texturizer;
   private java.util.ArrayList<GEOVectorLayer> _geoVectorLayers = new java.util.ArrayList<GEOVectorLayer>();
+  private TileLODTester _tileLODTester;
+  private TileVisibilityTester _tileVisibilityTester;
 
   private LayerSet _layerSet;
   private TilesRenderParameters _parameters;
   private boolean _showStatistics;
   private boolean _renderDebug;
-  private boolean _useTilesSplitBudget;
   private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
   private Quality _quality;
@@ -70,7 +79,7 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackGroundImageBuilder());
+      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackgroundImageBuilder());
     }
   
     return _texturizer;
@@ -125,16 +134,6 @@ public class PlanetRendererBuilder
   private boolean getRenderDebug()
   {
     return _renderDebug;
-  }
-
-  /**
-   * Returns the useTilesSplitBudget flag.
-   *
-   * @return _useTilesSplitBudget: bool
-   */
-  private boolean getUseTilesSplitBudget()
-  {
-    return _useTilesSplitBudget;
   }
 
   /**
@@ -197,15 +196,15 @@ public class PlanetRendererBuilder
 
   private LayerSet createLayerSet()
   {
-    return LayerBuilder.createDefaultSatelliteImagery();
+    return LayerBuilder.createDefault();
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getUseTilesSplitBudget(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
+    return new TilesRenderParameters(getRenderDebug(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
   }
   private TileTessellator createTileTessellator()
   {
-  ///#warning Testing Terrain Normals
+    ///#warning Testing Terrain Normals
     final boolean skirted = true;
     return new PlanetTileTessellator(skirted, getRenderedSector());
   }
@@ -244,8 +243,6 @@ public class PlanetRendererBuilder
     return _logTilesPetitions;
   }
 
-  private TileRenderingListener _tileRenderingListener;
-
   private ChangedRendererInfoListener _changedInfoListener;
 
   private TouchEventType _touchEventTypeOfTerrainTouchListener;
@@ -255,22 +252,42 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
-  private IImageBuilder _defaultTileBackGroundImage = null;
+  private IImageBuilder _defaultTileBackgroundImage = null;
 
-  private IImageBuilder getDefaultTileBackGroundImageBuilder()
+  private IImageBuilder getDefaultTileBackgroundImageBuilder()
   {
-    if (_defaultTileBackGroundImage == null)
+    if (_defaultTileBackgroundImage == null)
     {
       return new DefaultChessCanvasImageBuilder(256, 256, Color.black(), Color.white(), 4);
     }
-    return _defaultTileBackGroundImage;
+    return _defaultTileBackgroundImage;
   }
+
+  private TileLODTester createDefaultTileLODTester()
+  {
+    TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
+  
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);
+  
+    TileLODTester maxLevel = new MaxLevelTileLODTester();
+  
+    TileLODTester gradual = new GradualSplitsTileLODTester(TimeInterval.fromMilliseconds(10), timed);
+  
+    TileLODTester composite = new OrTileLODTester(maxLevel, gradual);
+  
+    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(25), composite);
+  }
+
+  private TileVisibilityTester createDefaultTileVisibilityTester()
+  {
+    return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(1000), new MeshBoundingVolumeTileVisibilityTester());
+  }
+
 
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
      _renderDebug = false;
-     _useTilesSplitBudget = true;
      _forceFirstLevelTilesRenderOnStart = true;
      _incrementalTileQuality = false;
      _quality = Quality.QUALITY_LOW;
@@ -286,9 +303,10 @@ public class PlanetRendererBuilder
      _renderedSector = null;
      _renderTileMeshes = true;
      _logTilesPetitions = false;
-     _tileRenderingListener = null;
      _changedInfoListener = null;
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
+     _tileLODTester = null;
+     _tileVisibilityTester = null;
   }
   public void dispose()
   {
@@ -314,9 +332,6 @@ public class PlanetRendererBuilder
   
     if (_renderedSector != null)
        _renderedSector.dispose();
-  
-    if (_tileRenderingListener != null)
-       _tileRenderingListener.dispose();
   }
   public final PlanetRenderer create()
   {
@@ -329,7 +344,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -350,8 +365,6 @@ public class PlanetRendererBuilder
     if (_renderedSector != null)
        _renderedSector.dispose();
     _renderedSector = null;
-  
-    _tileRenderingListener = null;
   
     _geoVectorLayers.clear();
   
@@ -400,10 +413,6 @@ public class PlanetRendererBuilder
   public final void setRenderDebug(boolean renderDebug)
   {
     _renderDebug = renderDebug;
-  }
-  public final void setUseTilesSplitBudget(boolean useTilesSplitBudget)
-  {
-    _useTilesSplitBudget = useTilesSplitBudget;
   }
   public final void setForceFirstLevelTilesRenderOnStart(boolean forceFirstLevelTilesRenderOnStart)
   {
@@ -483,22 +492,6 @@ public class PlanetRendererBuilder
     _logTilesPetitions = logTilesPetitions;
   }
 
-  public final void setTileRenderingListener(TileRenderingListener tileRenderingListener)
-  {
-    if (_tileRenderingListener != null)
-    {
-      ILogger.instance().logError("LOGIC ERROR: TileRenderingListener already set");
-      return;
-    }
-  
-    _tileRenderingListener = tileRenderingListener;
-  }
-
-  public final TileRenderingListener getTileRenderingListener()
-  {
-    return _tileRenderingListener;
-  }
-
   public final ChangedRendererInfoListener getChangedRendererInfoListener()
   {
     return _changedInfoListener;
@@ -520,8 +513,32 @@ public class PlanetRendererBuilder
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
   }
 
-  public final void setDefaultTileBackGroundImage(IImageBuilder defaultTileBackGroundImage)
+  public final void setDefaultTileBackgroundImage(IImageBuilder defaultTileBackgroundImage)
   {
-    _defaultTileBackGroundImage = defaultTileBackGroundImage;
+    _defaultTileBackgroundImage = defaultTileBackgroundImage;
   }
+
+  public final void setTileLODTester(TileLODTester tlt)
+  {
+    _tileLODTester = tlt;
+  }
+
+  public final TileLODTester getTileLODTester()
+  {
+    if (_tileLODTester == null)
+    {
+      _tileLODTester = createDefaultTileLODTester();
+    }
+    return _tileLODTester;
+  }
+
+  public final TileVisibilityTester getTileVisibilityTester()
+  {
+    if (_tileVisibilityTester == null)
+    {
+      _tileVisibilityTester = createDefaultTileVisibilityTester();
+    }
+    return _tileVisibilityTester;
+  }
+
 }

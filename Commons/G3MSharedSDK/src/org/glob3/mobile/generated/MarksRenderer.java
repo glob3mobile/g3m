@@ -1,30 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  MarksRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  MarksRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
-///#include "GPUProgramState.hpp"
-
-
-//class Mark;
-//class Camera;
-//class MarkTouchListener;
-//class IFloatBuffer;
-
 public class MarksRenderer extends DefaultRenderer
 {
   private final boolean _readyWhenMarksReady;
@@ -41,22 +15,22 @@ public class MarksRenderer extends DefaultRenderer
 
   private void updateGLState(G3MRenderContext rc)
   {
-    final Camera cam = rc.getCurrentCamera();
+    final Camera camera = rc.getCurrentCamera();
   
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(cam), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
     }
     else
     {
-      f.setMatrix(cam.getModelViewMatrix44D());
+      f.setMatrix(camera.getModelViewMatrix44D());
     }
   
     if (_glState.getGLFeature(GLFeatureID.GLF_VIEWPORT_EXTENT) == null)
     {
       _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-      _glState.addGLFeature(new ViewportExtentGLFeature(cam.getViewPortWidth(), cam.getViewPortHeight()), false);
+      _glState.addGLFeature(new ViewportExtentGLFeature(camera, rc.getViewMode()), false);
     }
   }
   private IFloatBuffer _billboardTexCoords;
@@ -74,17 +48,42 @@ public class MarksRenderer extends DefaultRenderer
     return _billboardTexCoords;
   }
 
+  private boolean _renderInReverse;
+  private boolean _progressiveInitialization;
+  private ITimer _initializationTimer;
 
+
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
+  {
+     this(readyWhenMarksReady, renderInReverse, true);
+  }
   public MarksRenderer(boolean readyWhenMarksReady)
   {
+     this(readyWhenMarksReady, false, true);
+  }
+  public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse, boolean progressiveInitialization)
+  {
      _readyWhenMarksReady = readyWhenMarksReady;
+     _renderInReverse = renderInReverse;
+     _progressiveInitialization = progressiveInitialization;
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
      _glState = new GLState();
      _billboardTexCoords = null;
+     _initializationTimer = null;
     _context = null;
+  }
+
+  public final void setRenderInReverse(boolean renderInReverse)
+  {
+    _renderInReverse = renderInReverse;
+  }
+
+  public final boolean getRenderInReverse()
+  {
+    return _renderInReverse;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -101,7 +100,10 @@ public class MarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-    int marksSize = _marks.size();
+    if (_initializationTimer != null)
+       _initializationTimer.dispose();
+  
+    final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) != null)
@@ -126,7 +128,7 @@ public class MarksRenderer extends DefaultRenderer
 
   public void onChangedContext()
   {
-    int marksSize = _marks.size();
+    final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
@@ -137,13 +139,15 @@ public class MarksRenderer extends DefaultRenderer
   public void render(G3MRenderContext rc, GLState glState)
   {
     final int marksSize = _marks.size();
+  
     if (marksSize > 0)
     {
       final Camera camera = rc.getCurrentCamera();
   
       _lastCamera = camera; // Saving camera for use in onTouchEvent
   
-      final MutableVector3D cameraPosition = camera.getCartesianPositionMutable();
+      MutableVector3D cameraPosition = new MutableVector3D();
+      camera.getCartesianPositionMutable(cameraPosition);
       final double cameraHeight = camera.getGeodeticPosition()._height;
   
       updateGLState(rc);
@@ -153,9 +157,38 @@ public class MarksRenderer extends DefaultRenderer
   
       IFloatBuffer billboardTexCoord = getBillboardTexCoords();
   
+  
+      if (_progressiveInitialization)
+      {
+        if (_initializationTimer == null)
+        {
+          _initializationTimer = rc.getFactory().createTimer();
+        }
+        else
+        {
+          _initializationTimer.start();
+        }
+  
+        for (int i = 0; i < marksSize; i++)
+        {
+          if (_initializationTimer.elapsedTimeInMilliseconds() > 5)
+          {
+            break;
+          }
+  
+          final int ii = _renderInReverse ? i : (marksSize-1-i);
+          Mark mark = _marks.get(ii);
+          if (!mark.isInitialized())
+          {
+            mark.initialize(_context, _downloadPriority);
+          }
+        }
+      }
+  
       for (int i = 0; i < marksSize; i++)
       {
-        Mark mark = _marks.get(i);
+        final int ii = _renderInReverse ? (marksSize-1-i) : i;
+        Mark mark = _marks.get(ii);
         if (mark.isReady())
         {
           mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
@@ -167,7 +200,7 @@ public class MarksRenderer extends DefaultRenderer
   public final void addMark(Mark mark)
   {
     _marks.add(mark);
-    if (_context != null)
+    if ((_context != null) && !_progressiveInitialization)
     {
       mark.initialize(_context, _downloadPriority);
     }
@@ -175,29 +208,49 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeMark(Mark mark)
   {
-    int pos = -1;
+  //  int pos = -1;
+  //  const int marksSize = _marks.size();
+  //  for (int i = 0; i < marksSize; i++) {
+  //    if (_marks[i] == mark) {
+  //      pos = i;
+  //      break;
+  //    }
+  //  }
+  //  if (pos != -1) {
+  ///#ifdef C_CODE
+  //    _marks.erase(_marks.begin() + pos);
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //    _marks.remove(pos);
+  ///#endif
+  //  }
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) == mark)
       {
-        pos = i;
+        _marks.remove(i);
         break;
       }
     }
-    if (pos != -1)
-    {
-      _marks.remove(pos);
-    }
+  
   }
 
   public final void removeAllMarks()
   {
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
+     removeAllMarks(true);
+  }
+  public final void removeAllMarks(boolean deleteMarks)
+  {
+    if (deleteMarks)
     {
-      if (_marks.get(i) != null)
-         _marks.get(i).dispose();
+      final int marksSize = _marks.size();
+      for (int i = 0; i < marksSize; i++)
+      {
+        if (_marks.get(i) != null)
+           _marks.get(i).dispose();
+      }
     }
     _marks.clear();
   }
@@ -231,14 +284,14 @@ public class MarksRenderer extends DefaultRenderer
             continue;
           }
   
-          final int textureWidth = mark.getTextureWidth();
-          if (textureWidth <= 0)
+          final int markWidth = (int)mark.getTextureWidth();
+          if (markWidth <= 0)
           {
             continue;
           }
   
-          final int textureHeight = mark.getTextureHeight();
-          if (textureHeight <= 0)
+          final int markHeight = (int)mark.getTextureHeight();
+          if (markHeight <= 0)
           {
             continue;
           }
@@ -246,7 +299,7 @@ public class MarksRenderer extends DefaultRenderer
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
-          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+          final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {
@@ -279,14 +332,21 @@ public class MarksRenderer extends DefaultRenderer
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-    _glState.addGLFeature(new ViewportExtentGLFeature(width, height), false);
+  
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+  
+    _glState.addGLFeature(new ViewportExtentGLFeature(logicWidth, height), false);
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
     if (_readyWhenMarksReady)
     {
-      int marksSize = _marks.size();
+      final int marksSize = _marks.size();
       for (int i = 0; i < marksSize; i++)
       {
         if (!_marks.get(i).isReady())
@@ -328,6 +388,38 @@ public class MarksRenderer extends DefaultRenderer
   public final void modifiyGLState(GLState state)
   {
 
+  }
+
+  public final int removeAllMarks(MarksFilter filter, boolean deleteMarks)
+  {
+    int removed = 0;
+    java.util.ArrayList<Mark> newMarks = new java.util.ArrayList<Mark>();
+  
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
+    {
+      Mark mark = _marks.get(i);
+      if (filter.test(mark))
+      {
+        if (deleteMarks)
+        {
+          if (mark != null)
+             mark.dispose();
+        }
+        removed++;
+      }
+      else
+      {
+        newMarks.add(mark);
+      }
+    }
+  
+    if (removed > 0)
+    {
+      _marks = newMarks;
+    }
+  
+    return removed;
   }
 
 }

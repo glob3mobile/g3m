@@ -18,7 +18,7 @@ private:
   const IByteBuffer* _buffer;
   int                _cursor;
   int                _bufferTimestamp;
-  mutable int        _bufferSize;
+  mutable size_t     _bufferSize;
 
   ByteBufferIterator(const ByteBufferIterator& that);
 

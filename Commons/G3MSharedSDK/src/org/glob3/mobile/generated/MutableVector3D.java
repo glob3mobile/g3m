@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -51,7 +49,14 @@ public class MutableVector3D
      _z = v._z;
   }
 
-  public final void put(double x, double y, double z)
+  public MutableVector3D(Vector3D v)
+  {
+     _x = v._x;
+     _y = v._y;
+     _z = v._z;
+  }
+
+  public final void set(double x, double y, double z)
   {
     _x = x;
     _y = y;
@@ -284,6 +289,22 @@ public class MutableVector3D
     final double m = IMathUtils.instance().sqrt(ms);
   
     return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
+  }
+
+  public final double squaredDistanceTo(Vector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  public final double squaredDistanceTo(MutableVector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
   }
 
 }

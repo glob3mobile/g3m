@@ -28,11 +28,11 @@ protected:
 public:
   GEO2DCoordinatesArrayData(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-  int size() const {
+  size_t size() const {
     return (_coordinatesArray == NULL) ? 0 : _coordinatesArray->size();
   }
 
-  const GEO2DCoordinatesData* get(int index) const {
+  const GEO2DCoordinatesData* get(size_t index) const {
     return _coordinatesArray->at(index);
   }
 

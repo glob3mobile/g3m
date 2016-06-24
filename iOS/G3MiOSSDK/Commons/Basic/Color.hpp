@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 13/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Color
@@ -211,6 +210,8 @@ public:
   Color muchLighter() const {
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
+
+  const std::string toID() const;
 
   const std::string description() const;
 #ifdef JAVA_CODE

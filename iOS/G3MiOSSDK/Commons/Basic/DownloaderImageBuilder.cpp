@@ -8,7 +8,7 @@
 
 #include "DownloaderImageBuilder.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "IImageBuilderListener.hpp"

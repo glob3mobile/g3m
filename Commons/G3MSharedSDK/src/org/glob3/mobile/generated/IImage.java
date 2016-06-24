@@ -4,7 +4,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 01/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -24,6 +23,8 @@ public abstract class IImage
   public String toString() {
     return description();
   }
+
+  public abstract boolean isPremultiplied();
 
   public abstract IImage shallowCopy();
 }

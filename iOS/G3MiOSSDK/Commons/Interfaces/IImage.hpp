@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 01/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IImage
@@ -27,6 +26,8 @@ public:
     return description();
   }
 #endif
+
+  virtual bool isPremultiplied() const = 0;
 
   virtual IImage* shallowCopy() const = 0;
 };

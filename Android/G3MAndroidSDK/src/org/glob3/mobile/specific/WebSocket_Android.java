@@ -13,8 +13,8 @@ import org.java_websocket.handshake.ServerHandshake;
 
 
 public class WebSocket_Android
-         extends
-            IWebSocket {
+   extends
+      IWebSocket {
 
    //   static {
    //      System.setProperty("java.net.preferIPv6Addresses", "false");
@@ -52,7 +52,7 @@ public class WebSocket_Android
             @Override
             public void onMessage(final String message) {
                try {
-                  getListener().onMesssage(WebSocket_Android.this, message);
+                  getListener().onMessage(WebSocket_Android.this, message);
                }
                catch (final Exception e) {
                   e.printStackTrace();

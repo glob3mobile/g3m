@@ -1,4 +1,61 @@
 package org.glob3.mobile.generated; 
+//
+//  ICanvas.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 4/9/13.
+//
+//
+
+//
+//  ICanvas.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 4/9/13.
+//
+//
+
+
+//class Color;
+//class IImageListener;
+//class GFont;
+//class IImage;
+
+
+public enum StrokeCap
+{
+  CAP_BUTT,
+  CAP_ROUND,
+  CAP_SQUARE;
+
+   public int getValue()
+   {
+      return this.ordinal();
+   }
+
+   public static StrokeCap forValue(int value)
+   {
+      return values()[value];
+   }
+}
+
+public enum StrokeJoin
+{
+  JOIN_MITER,
+  JOIN_ROUND,
+  JOIN_BEVEL;
+
+   public int getValue()
+   {
+      return this.ordinal();
+   }
+
+   public static StrokeJoin forValue(int value)
+   {
+      return values()[value];
+   }
+}
+
 public abstract class ICanvas
 {
   protected final boolean _scaleToDeviceResolution;
@@ -107,16 +164,19 @@ public abstract class ICanvas
 
   protected abstract void _lineTo(float x, float y);
 
+  protected abstract void _fillEllipse(float left, float top, float width, float height);
 
-  public void dispose()
-  {
-    if (_currentFont != null)
-       _currentFont.dispose();
-  }
+  protected abstract void _strokeEllipse(float left, float top, float width, float height);
 
-  /**
-   Initialize the Canvas, must be called just one time before calling most methods.
-   */
+  protected abstract void _fillAndStrokeEllipse(float left, float top, float width, float height);
+
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  public void dispose()
+
+  //Tangible multiline preserve/**
+  //Tangible multiline preserve Initialize the Canvas, must be called just one time before calling most methods.
+  //Tangible multiline preserve */
   public final void initialize(int width, int height)
   {
     if ((width <= 0) || (height <= 0))
@@ -135,23 +195,23 @@ public abstract class ICanvas
   }
 
 
-  /**
-   Returns the size of the text if it were to be rendered with the actual font on a single line.
-
-   NOTE: The current font has to be set before calling this method.
-   NOTE: No need to initialize the canvas before calling this method.
-   */
+  //Tangible multiline preserve/**
+  //Tangible multiline preserve Returns the size of the text if it were to be rendered with the actual font on a single line.
+//Tangible multiline preserve
+  //Tangible multiline preserve NOTE: The current font has to be set before calling this method.
+  //Tangible multiline preserve NOTE: No need to initialize the canvas before calling this method.
+  //Tangible multiline preserve */
   public final Vector2F textExtent(String text)
   {
     checkCurrentFont();
     return _textExtent(text);
   }
 
-  /**
-   Set the actual font.
-
-   NOTE: No need to initialize the canvas before calling this method.
-   */
+  //Tangible multiline preserve/**
+  //Tangible multiline preserve Set the actual font.
+//Tangible multiline preserve
+  //Tangible multiline preserve NOTE: No need to initialize the canvas before calling this method.
+  //Tangible multiline preserve */
   public final void setFont(GFont font)
   {
     if (_currentFont != null)
@@ -202,10 +262,10 @@ public abstract class ICanvas
     _setLineDash(lengths, count, phase);
   }
 
-  void setLineDash(float[] lengths,
-                   int phase) {
-    setLineDash(lengths, lengths.length, phase);
-  }
+//TangibleCopyWithoutConversion  void setLineDash(float[] lengths,
+//TangibleCopyWithoutConversion                   int phase) {
+//TangibleCopyWithoutConversion    setLineDash(lengths, lengths.length, phase);
+//TangibleCopyWithoutConversion  }
 
   public final void setShadow(Color color, float blur, float offsetX, float offsetY)
   {
@@ -261,6 +321,25 @@ public abstract class ICanvas
     _fillAndStrokeRoundedRectangle(left, top, width, height, radius);
   }
 
+  public final void fillEllipse(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _fillEllipse(left, top, width, height);
+  }
+
+  public final void strokeEllipse(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _strokeEllipse(left, top, width, height);
+  }
+
+  public final void fillAndStrokeEllipse(float left, float top, float width, float height)
+  {
+    checkInitialized();
+    _fillAndStrokeEllipse(left, top, width, height);
+  }
+
+
   public final void createImage(IImageListener listener, boolean autodelete)
   {
     checkInitialized();
@@ -310,29 +389,99 @@ public abstract class ICanvas
     _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
   }
 
-  public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, float transparency)
+//C++ TO JAVA CONVERTER TODO TASK: The following line could not be converted:
+  void drawImage(const IImage* image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, float transparency);
   {
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
     checkInitialized();
   
+//C++ TO JAVA CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
     if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
     {
       throw new RuntimeException("Invalid source rectangle in drawImage");
     }
+//C++ TO JAVA CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
+  <<<<<<< HEAD ======= else
+  {
+      if (transparency <= 0.0)
+      {
+        return;
+      }
   
-    if (transparency <= 0.0)
-    {
+      if (transparency >= 1.0)
+      {
+        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+      }
+      else
+      {
+        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
+      }
+  >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0 if (transparency <= 0.0)
+  {
       return;
     }
   
-    if (transparency >= 1.0)
-    {
+  <<<<<<< HEAD if (transparency >= 1.0)
+  {
       _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
     }
     else
     {
       _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
     }
+  ======= >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
   }
+  
+  public final void ICanvas.beginPath()
+  {
+    checkInitialized();
+    _beginPath();
+  }
+  
+  public final void ICanvas.closePath()
+  {
+    checkInitialized();
+    _closePath();
+  }
+  
+  public final void ICanvas.stroke()
+  {
+    checkInitialized();
+    _stroke();
+  }
+  
+  public final void ICanvas.fill()
+  {
+    checkInitialized();
+    _fill();
+  }
+  
+  public final void ICanvas.fillAndStroke()
+  {
+    checkInitialized();
+    _fillAndStroke();
+  }
+  
+  public final void ICanvas.moveTo(float x, float y)
+  {
+    checkInitialized();
+    _moveTo(x, y);
+  }
+  
+  public final void ICanvas.lineTo(float x, float y)
+  {
+    checkInitialized();
+    _lineTo(x, y);
+  }
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  ignore
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  ignore
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  ignore
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  ignore
+  
 
   public final int getWidth()
   {
@@ -344,56 +493,44 @@ public abstract class ICanvas
     return _canvasHeight;
   }
 
-  public final void beginPath()
-  {
-    checkInitialized();
-    _beginPath();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void beginPath();
 
-  public final void closePath()
-  {
-    checkInitialized();
-    _closePath();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void closePath();
 
-  public final void stroke()
-  {
-    checkInitialized();
-    _stroke();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void stroke();
 
-  public final void fill()
-  {
-    checkInitialized();
-    _fill();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void fill();
 
-  public final void fillAndStroke()
-  {
-    checkInitialized();
-    _fillAndStroke();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void fillAndStroke();
 
-  public final void moveTo(float x, float y)
-  {
-    checkInitialized();
-    _moveTo(x, y);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void moveTo(float x, float y);
 
   public final void moveTo(Vector2F position)
   {
     moveTo(position._x, position._y);
   }
 
-  public final void lineTo(float x, float y)
-  {
-    checkInitialized();
-    _lineTo(x, y);
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void lineTo(float x, float y);
 
   public final void lineTo(Vector2F position)
   {
     lineTo(position._x, position._y);
   }
 
+}
+
+
+
+//C++ TO JAVA CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
+<<<<<<< HEAD ======= >>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0 ICanvas.~ICanvas()
+{
+  if (_currentFont != null)
+     _currentFont.dispose();
 }

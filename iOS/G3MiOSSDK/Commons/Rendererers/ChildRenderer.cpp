@@ -14,7 +14,7 @@ void ChildRenderer::addInfo(const Info* inf) {
 }
 
 
-void ChildRenderer::setInfo(const std::vector<const Info*> info) {
+void ChildRenderer::setInfo(const std::vector<const Info*>& info) {
   _info.clear();
 #ifdef C_CODE
   _info.insert(_info.end(),

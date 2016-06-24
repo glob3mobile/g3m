@@ -15,8 +15,8 @@ Vector2F* ColumnCanvasElement::calculateExtent(ICanvas* canvas) {
   float width  = 0;
   float height = 0;
 
-  const int childrenSize = _children.size();
-  for (int i = 0; i < childrenSize; i++) {
+  const size_t childrenSize = _children.size();
+  for (size_t i = 0; i < childrenSize; i++) {
     CanvasElement* child = _children[i];
 
     const Vector2F childExtent = child->getExtent(canvas);
@@ -39,8 +39,8 @@ void ColumnCanvasElement::rawDrawAt(float left,
 
   float cursorTop = top;
 
-  const int childrenSize = _children.size();
-  for (int i = 0; i < childrenSize; i++) {
+  const size_t childrenSize = _children.size();
+  for (size_t i = 0; i < childrenSize; i++) {
     CanvasElement* child = _children[i];
 
     const Vector2F childExtent = child->getExtent(canvas);

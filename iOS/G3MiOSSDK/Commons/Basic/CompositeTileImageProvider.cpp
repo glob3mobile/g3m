@@ -34,10 +34,10 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
     const TileImageContribution* childContribution = child->contribution(tile);
     if (childContribution != NULL) {
       // ignore previous contributions, they are covered by the current fullCoverage & Opaque contribution.
-      const int childrenContributionsSize = childrenContributions.size();
+      const size_t childrenContributionsSize = childrenContributions.size();
       if ((childrenContributionsSize > 0) &&
           childContribution->isFullCoverageAndOpaque()) {
-        for (int j = 0; j < childrenContributionsSize; j++) {
+        for (size_t j = 0; j < childrenContributionsSize; j++) {
           const CompositeTileImageContribution::ChildContribution* previousContribution = childrenContributions[j];
 #ifdef C_CODE
           delete previousContribution;
@@ -132,6 +132,8 @@ _anyCancelation(false),
 _canceled(false),
 _tileSector(tileSector)
 {
+  _compositeTileImageProvider->_retain();
+
   for (int i = 0; i < _contributionsSize; i++) {
     _results.push_back( NULL );
   }
@@ -144,6 +146,8 @@ CompositeTileImageProvider::Composer::~Composer() {
   }
 
   TileImageContribution::releaseContribution(_compositeContribution);
+
+  _compositeTileImageProvider->_release();
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -328,19 +332,19 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const IImage*                image,
                                                         const std::string&           imageId,
                                                         const TileImageContribution* contribution,
-                                                        const int                    index) {
+                                                        const size_t                 index) {
   _results[index] = ChildResult::image(image, imageId, contribution);
   stepDone();
 }
 
 void CompositeTileImageProvider::Composer::imageCreationError(const std::string& error,
-                                                              const int          index) {
+                                                              const size_t       index) {
   _results[index] = ChildResult::error(error);
   _anyError = true;
   stepDone();
 }
 
-void CompositeTileImageProvider::Composer::imageCreationCanceled(const int index) {
+void CompositeTileImageProvider::Composer::imageCreationCanceled(const size_t index) {
   _results[index] = ChildResult::cancelation();
   _anyCancelation = true;
   stepDone();
@@ -392,8 +396,8 @@ void CompositeTileImageProvider::create(const Tile* tile,
 
   _composers[ tileId ] = composer;
 
-  const int contributionsSize = compositeContribution->size();
-  for (int i = 0; i < contributionsSize; i++) {
+  const size_t contributionsSize = compositeContribution->size();
+  for (size_t i = 0; i < contributionsSize; i++) {
     const CompositeTileImageContribution::ChildContribution* childContribution = compositeContribution->get(i);
 
     TileImageProvider* child = _children[ childContribution->_childIndex ];
@@ -435,16 +439,16 @@ void CompositeTileImageProvider::composerDone(Composer* composer) {
 
 void CompositeTileImageProvider::cancelChildren(const std::string& tileId,
                                                 const CompositeTileImageContribution* compositeContribution) {
-  const int contributionsSize = compositeContribution->size();
+  const size_t contributionsSize = compositeContribution->size();
 
   // store all the indexes before calling child->cancel().
   // child->cancel() can force the deletion of the builder (and in order the deletion of compositeContribution)
-  int* indexes = new int[contributionsSize];
-  for (int i = 0; i < contributionsSize; i++) {
+  size_t* indexes = new size_t[contributionsSize];
+  for (size_t i = 0; i < contributionsSize; i++) {
     indexes[i] = compositeContribution->get(i)->_childIndex;
   }
 
-  for (int i = 0; i < contributionsSize; i++) {
+  for (size_t i = 0; i < contributionsSize; i++) {
     TileImageProvider* child = _children[ indexes[i] ];
     child->cancel(tileId);
   }

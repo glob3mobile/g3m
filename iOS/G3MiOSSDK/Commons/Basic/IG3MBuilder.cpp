@@ -18,6 +18,7 @@
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
+#include "CameraZoomAndRotateHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
 #include "PlanetRendererBuilder.hpp"
 #include "BusyMeshRenderer.hpp"
@@ -33,6 +34,11 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
+#include "DefaultInfoDisplay.hpp"
+#include "EllipsoidalPlanet.hpp"
+#include "PlanetRenderer.hpp"
+#include "InitialCameraPositionProvider.hpp"
+
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -166,7 +172,7 @@ ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
  */
 const Planet* IG3MBuilder::getPlanet() {
   if (!_planet) {
-    _planet = Planet::createEarth();
+    _planet = EllipsoidalPlanet::createEarth();
   }
   return _planet;
 }
@@ -673,7 +679,18 @@ G3MWidget* IG3MBuilder::create() {
   Sector shownSector = getShownSector();
   getPlanetRendererBuilder()->setRenderedSector(shownSector); //Shown sector
 
-  /**
+#warning HUDRenderer doesn't work when this code is uncommented
+  InfoDisplay* infoDisplay = NULL;
+//  InfoDisplay* infoDisplay = getInfoDisplay();
+//  if (infoDisplay == NULL) {
+//    Default_HUDRenderer* hud = new Default_HUDRenderer();
+//
+//    infoDisplay = new DefaultInfoDisplay(hud);
+//
+//    addRenderer(hud);
+//  }
+
+  /*
    * If any renderers were set or added, the main renderer will be a composite renderer.
    *    If the renderers list does not contain a planetRenderer, it will be created and added.
    *    The renderers contained in the list, will be added to the main renderer.
@@ -698,7 +715,7 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
+
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -720,7 +737,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            getInfoDisplay());
+                                            infoDisplay,
+                                            MONO);
 
   g3mWidget->setUserData(getUserData());
 
@@ -765,6 +783,7 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
 
@@ -818,9 +837,8 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
   if (_sceneLighting == NULL) {
-    //_sceneLighting = new DefaultSceneLighting();
-    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
-                                                  Color::yellow());
+    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0),
+                                                  Color::white());
   }
   return _sceneLighting;
 }

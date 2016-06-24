@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_INativeGL
@@ -205,6 +204,8 @@ public:
   virtual void depthMask(bool v) const = 0;
 
   virtual void setActiveTexture(int i) const = 0;
+  
+  virtual void viewport(int x, int y, int width, int height) const = 0;
   
 };
 

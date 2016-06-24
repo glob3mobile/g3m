@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 13/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -415,6 +414,22 @@ public class Color
   public final Color muchLighter()
   {
     return adjustSaturationBrightness(-0.24f, 0.64f);
+  }
+
+  public final String toID()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addFloat(_red);
+    isb.addString("/");
+    isb.addFloat(_green);
+    isb.addString("/");
+    isb.addFloat(_blue);
+    isb.addString("/");
+    isb.addFloat(_alpha);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   public final String description()

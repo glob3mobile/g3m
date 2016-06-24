@@ -14,6 +14,8 @@
 #include <vector>
 #include "DownloadPriority.hpp"
 #include "URL.hpp"
+#include "MutableVector3D.hpp"
+
 
 struct ShapeDistance {
   double _distance;
@@ -108,7 +110,7 @@ private:
   GLState* _glState;
   GLState* _glStateTransparent;
 
-  void updateGLState(const G3MRenderContext* rc);
+  void updateGLState(const Camera* camera);
 
   std::vector<LoadQueueItem*> _loadQueue;
 
@@ -116,6 +118,7 @@ private:
   
   void cleanLoadQueue();
 
+  MutableVector3D _currentCameraPosition;
 
   void requestBuffer(const URL&          url,
                      long long           priority,
@@ -141,8 +144,8 @@ public:
   }
 
   ~ShapesRenderer() {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
     }

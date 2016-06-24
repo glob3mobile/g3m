@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/16/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #ifndef __G3MApp__G3MDemoModel__
@@ -24,6 +23,10 @@ class ShapesRenderer;
 class PlanetRenderer;
 class GEORenderer;
 class PointCloudsRenderer;
+class HUDRenderer;
+class NonOverlappingMarksRenderer;
+class VectorStreamingRenderer;
+
 
 class G3MDemoModel {
 private:
@@ -32,12 +35,15 @@ private:
   G3MDemoListener* _listener;
 
 
-  LayerSet*            _layerSet;
-  MeshRenderer*        _meshRenderer;
-  ShapesRenderer*      _shapesRenderer;
-  MarksRenderer*       _marksRenderer;
-  GEORenderer*         _geoRenderer;
-  PointCloudsRenderer* _pointCloudsRenderer;
+  LayerSet*                    _layerSet;
+  MeshRenderer*                _meshRenderer;
+  ShapesRenderer*              _shapesRenderer;
+  MarksRenderer*               _marksRenderer;
+  GEORenderer*                 _geoRenderer;
+  PointCloudsRenderer*         _pointCloudsRenderer;
+  HUDRenderer*                 _hudRenderer;
+  NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
+  VectorStreamingRenderer*     _vectorStreamingRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -46,13 +52,16 @@ private:
 
 public:
 
-  G3MDemoModel(G3MDemoListener*     listener,
-               LayerSet*            layerSet,
-               MeshRenderer*        meshRenderer,
-               ShapesRenderer*      shapesRenderer,
-               MarksRenderer*       marksRenderer,
-               GEORenderer*         geoRenderer,
-               PointCloudsRenderer* pointCloudsRenderer);
+  G3MDemoModel(G3MDemoListener*             listener,
+               LayerSet*                    layerSet,
+               MeshRenderer*                meshRenderer,
+               ShapesRenderer*              shapesRenderer,
+               MarksRenderer*               marksRenderer,
+               GEORenderer*                 geoRenderer,
+               PointCloudsRenderer*         pointCloudsRenderer,
+               HUDRenderer*                 hudRenderer,
+               NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
+               VectorStreamingRenderer*     vectorStreamingRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -87,13 +96,26 @@ public:
     return _pointCloudsRenderer;
   }
 
+  HUDRenderer* getHUDRenderer() const {
+    return _hudRenderer;
+  }
+
+  NonOverlappingMarksRenderer* getNonOverlappingMarksRenderer() const {
+    return _nonOverlappingMarksRenderer;
+  }
+
+  VectorStreamingRenderer* getVectorStreamingRenderer() const {
+    return _vectorStreamingRenderer;
+  }
+
+
   PlanetRenderer* getPlanetRenderer() const;
 
-  int getScenesCount() const {
+  size_t getScenesCount() const {
     return _scenes.size();
   }
 
-  const G3MDemoScene* getScene(int index) {
+  const G3MDemoScene* getScene(size_t index) {
     return _scenes[index];
   }
 

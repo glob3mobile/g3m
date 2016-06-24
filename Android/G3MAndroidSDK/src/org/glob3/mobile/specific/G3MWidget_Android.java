@@ -17,6 +17,8 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -38,6 +40,10 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
+<<<<<<< HEAD
+=======
+import org.glob3.mobile.generated.ViewMode;
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -49,10 +55,17 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
+<<<<<<< HEAD
 extends
 GLSurfaceView
 implements
 OnGestureListener {
+=======
+   extends
+      GLSurfaceView
+   implements
+      OnGestureListener {
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -135,7 +148,7 @@ OnGestureListener {
             @Override
             public boolean onDoubleTap(final MotionEvent event) {
 
-               final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
 
                queueEvent(new Runnable() {
                   @Override
@@ -164,8 +177,10 @@ OnGestureListener {
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
+      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.5f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
    }
 
 
@@ -223,7 +238,11 @@ OnGestureListener {
    public void onLongPress(final MotionEvent e) {
       final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
+<<<<<<< HEAD
       final Touch t = new Touch(new Vector2F(pc.x, pc.y), new Vector2F(0, 0));
+=======
+      final Touch t = new Touch(new Vector2F(pc.x, pc.y), Vector2F.zero());
+>>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {
@@ -266,7 +285,7 @@ OnGestureListener {
    }
 
 
-   private GPUProgramManager createGPUProgramManager() {
+   static private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
 
       /*
@@ -324,7 +343,7 @@ OnGestureListener {
                storage, //
                downloader, //
                threadUtils, //
-               cameraActivityListener,//
+               cameraActivityListener, //
                planet, //
                cameraConstrainers, //
                cameraRenderer, //
@@ -341,7 +360,8 @@ OnGestureListener {
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
    }

@@ -4,10 +4,13 @@ package com.glob3mobile.pointcloud.octree;
 
 import java.util.List;
 
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+
 
 public interface PersistentOctree
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
 
 
    public interface Node {
@@ -16,6 +19,12 @@ public interface PersistentOctree
 
 
       String getID();
+
+
+      Sector getSector();
+
+
+      int getDepth();
 
 
       int getPointsCount();
@@ -27,10 +36,6 @@ public interface PersistentOctree
       Geodetic3D getAveragePoint();
 
 
-      Sector getSector();
-
-
-      int getDepth();
    }
 
 
@@ -65,6 +70,9 @@ public interface PersistentOctree
 
 
       int getMaxPointsPerNode();
+
+
+      double getAveragePointsPerNode();
    }
 
 

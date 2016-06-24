@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_SphericalPlanet
@@ -41,6 +40,7 @@ private:
   
 
 public:
+  static const Planet* createEarth();
 
   SphericalPlanet(const Sphere& sphere);
 
@@ -48,7 +48,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   Vector3D getRadii() const {
@@ -79,6 +78,10 @@ public:
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
+  void geodeticSurfaceNormal(const Angle& latitude,
+                             const Angle& longitude,
+                             MutableVector3D& result) const;
+
   std::vector<double> intersectionsDistances(double originX,
                                              double originY,
                                              double originZ,
@@ -107,6 +110,35 @@ public:
     return toCartesian(geodetic._latitude,
                        geodetic._longitude,
                        height);
+  }
+
+  void toCartesian(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height,
+                   MutableVector3D& result) const;
+
+  void toCartesian(const Geodetic3D& geodetic,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                geodetic._height,
+                result);
+  }
+
+  void toCartesian(const Geodetic2D& geodetic,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                0,
+                result);
+  }
+  void toCartesian(const Geodetic2D& geodetic,
+                   const double height,
+                   MutableVector3D& result) const {
+    toCartesian(geodetic._latitude,
+                geodetic._longitude,
+                height,
+                result);
   }
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
