@@ -141,27 +141,22 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processTouchStart(final Event event) {
-      //log(LogLevel.InfoLevel, ">>>>>> processTouchStart");
       return TouchEvent.create(TouchEventType.Down, createTouches(event.getTouches()));
    }
 
 
    private TouchEvent processTouchMove(final Event event) {
-      //log(LogLevel.InfoLevel, ">>>>>> processTouchMove ");
       return TouchEvent.create(TouchEventType.Move, createTouches(event.getTouches()));
    }
 
 
    private TouchEvent processTouchEnd(final Event event) {
-      //log(LogLevel.InfoLevel, ">>>>>> processTouchEnd");
       return TouchEvent.create(TouchEventType.Up, createTouches(event.getChangedTouches()));
    }
 
 
    private TouchEvent processTouchCancel(@SuppressWarnings("unused")
    final Event event) {
-      //log(LogLevel.InfoLevel, ">>>>>> processTouchCancel");
-
       _previousTouchesPositions.clear();
       return null;
    }
@@ -184,8 +179,6 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseMove(final Event event) {
-      //log(LogLevel.InfoLevel, " onMouseMove");
-
       if (!_mouseDown) {
          return null;
       }
@@ -209,8 +202,6 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseDown(final Event event) {
-      //log(LogLevel.InfoLevel, " onMouseDown");
-
       final Vector2F currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches = new ArrayList<>();
 
@@ -231,8 +222,6 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processMouseUp(final Event event) {
-      //log(LogLevel.InfoLevel, " onMouseUp");
-
       final Vector2F currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches = new ArrayList<>();
 
@@ -258,19 +247,13 @@ public final class MotionEventProcessor {
 
 
    private TouchEvent processDoubleClick(final Event event) {
-      //log(LogLevel.InfoLevel, " onDoubleClick");
-
       final Vector2F currentMousePosition = createPosition(event);
-
       final Touch touch = new Touch(currentMousePosition, currentMousePosition, (byte) 2);
-
       return TouchEvent.create(TouchEventType.Down, touch);
    }
 
 
    private TouchEvent processContextMenu(final Event event) {
-      //log(LogLevel.InfoLevel, " onContextMenu");
-
       _mouseDown = false;
 
       final Vector2F currentMousePosition = createPosition(event);
@@ -284,8 +267,6 @@ public final class MotionEventProcessor {
    private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
-      //log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
-
       final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
       final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
 
@@ -312,7 +293,6 @@ public final class MotionEventProcessor {
 
 
    private native void jsAddMouseWheelListener() /*-{
-		//      debugger;
 		var thisInstance = this;
 
 		var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
@@ -341,30 +321,6 @@ public final class MotionEventProcessor {
 		}
 
    }-*/;
-
-
-   //   private static void log(final LogLevel level,
-   //                           final String msg) {
-   //      final ILogger logger = ILogger.instance();
-   //      if (logger != null) {
-   //         switch (level) {
-   //            case InfoLevel:
-   //               logger.logInfo(TAG + msg);
-   //               break;
-   //            case WarningLevel:
-   //               logger.logWarning(TAG + msg);
-   //               break;
-   //            case ErrorLevel:
-   //               logger.logError(TAG + msg);
-   //               break;
-   //            default:
-   //               break;
-   //         }
-   //      }
-   //      else {
-   //         GWT.log(TAG + msg);
-   //      }
-   //   }
 
 
 }
