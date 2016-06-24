@@ -12,9 +12,11 @@
 #include "Image_iOS.hpp"
 #include "IImageListener.hpp"
 #include "GFont.hpp"
+#include "IDeviceInfo.hpp"
+#include "Image_iOS.hpp"
+#include "IFactory.hpp"
 
 #import <UIKit/UIKit.h>
-#include "Image_iOS.hpp"
 
 #import "NSString_CppAdditions.h"
 
@@ -45,9 +47,7 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-  UIScreen* mainScreen = [UIScreen mainScreen];
-  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] && _retina ? mainScreen.scale : 1;
-
+  CGFloat devicePixelRatio = _retina ? IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() : 1;
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
                                    width  * devicePixelRatio,
                                    height * devicePixelRatio,

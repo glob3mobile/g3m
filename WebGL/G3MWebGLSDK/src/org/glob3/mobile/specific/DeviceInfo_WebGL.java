@@ -23,9 +23,9 @@ public class DeviceInfo_WebGL
 
 
    @Override
-   public float getDevicePixelRatio() {
-
-   }
+   public native float getDevicePixelRatio() /*-{
+		return $wnd.devicePixelRatio || 1;
+   }-*/;
 
 
 }

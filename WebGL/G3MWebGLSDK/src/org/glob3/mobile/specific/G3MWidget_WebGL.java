@@ -183,7 +183,7 @@ public class G3MWidget_WebGL
    }
 
 
-   boolean isWebGLSupported() {
+   public boolean isWebGLSupported() {
       return ((_canvas != null) && (_webGLContext != null));
    }
 
@@ -227,19 +227,34 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   protected void onSizeChanged(final int w,
-                                final int h) {
+   private static native float getDevicePixelRatio() /*-{
+		return $wnd.devicePixelRatio || 1;
+   }-*/;
+
+
+   private void onSizeChanged(final int w,
+                              final int h) {
 
       if ((_width != w) || (_height != h)) {
          _width = w;
          _height = h;
-
          setPixelSize(_width, _height);
-         _canvas.setCoordinateSpaceWidth(_width);
-         _canvas.setCoordinateSpaceHeight(_height);
+
+         final int Retina_Diego_at_work;
+         final float devicePixelRatio = 1; //getDevicePixelRatio();
+
+         final int logicalWidth = Math.round(_width * devicePixelRatio);
+         final int logicalHeight = Math.round(_height * devicePixelRatio);
+         _canvas.setCoordinateSpaceWidth(logicalWidth);
+         _canvas.setCoordinateSpaceHeight(logicalHeight);
+
+         // ILogger.instance().logInfo("****  " + _width + "x" + _height + "   Logical=" + logicalWidth + "x" + logicalHeight);
+
          if (_g3mWidget != null) {
-            _g3mWidget.onResizeViewportEvent(_width, _height);
-            jsOnResizeViewport(_width, _height);
+            _g3mWidget.onResizeViewportEvent(logicalWidth, logicalHeight);
+            jsOnResizeViewport(logicalWidth, logicalHeight);
+            // _g3mWidget.onResizeViewportEvent(_width, _height);
+            // jsOnResizeViewport(_width, _height);
          }
       }
    }
@@ -304,11 +319,9 @@ public class G3MWidget_WebGL
 				try {
 					context = jsCanvas.getContext(contextNames[cn], {
 						preserveDrawingBuffer : true,
-						alpha : false
+						alpha : false,
+						preferLowPowerToHighPerformance : true
 					});
-					//STORING SIZE FOR GLVIEWPORT
-					context.viewportWidth = jsCanvas.width;
-					context.viewportHeight = jsCanvas.height;
 				} catch (e) {
 				}
 				if (context) {
