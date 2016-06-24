@@ -17,7 +17,6 @@ class Canvas_iOS : public ICanvas {
 private:
   CGContextRef   _context;
   UIFont*        _currentUIFont;
-  unsigned char* _dataRGBA8888;
 
   CGMutablePathRef _path;
   CGAffineTransform _transform;
@@ -151,8 +150,7 @@ public:
   _context(NULL),
   _currentUIFont(nil),
   _path(NULL),
-  _transform(),
-  _dataRGBA8888(NULL)
+  _transform()
   {
   }
   

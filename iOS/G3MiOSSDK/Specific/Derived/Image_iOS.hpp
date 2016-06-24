@@ -17,9 +17,8 @@
 
 class Image_iOS: public IImage {
 private:
-  UIImage*               _image;
-  mutable NSData*        _sourceBuffer;
-  mutable unsigned char* _dataRGBA8888;
+  UIImage*        _image;
+  mutable NSData* _sourceBuffer;
 
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
@@ -29,15 +28,12 @@ public:
   virtual ~Image_iOS() {
     _image        = NULL;
     _sourceBuffer = NULL;
-    delete [] _dataRGBA8888;
   }
 
   Image_iOS(UIImage* image,
-            NSData* sourceBuffer,
-            unsigned char* dataRGBA8888) :
+            NSData* sourceBuffer) :
   _image(image),
-  _sourceBuffer(sourceBuffer),
-  _dataRGBA8888(dataRGBA8888)
+  _sourceBuffer(sourceBuffer)
   {
   }
 

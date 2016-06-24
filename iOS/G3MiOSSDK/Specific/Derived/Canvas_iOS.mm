@@ -30,8 +30,6 @@ Canvas_iOS::~Canvas_iOS() {
     CGContextRelease( _context );
     _context = NULL;
   }
-
-  delete [] _dataRGBA8888;
 }
 
 void Canvas_iOS::tryToSetCurrentFontToContext() {
@@ -47,30 +45,19 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-//  _dataRGBA8888 = new unsigned char[4 * width * height];
-//  _context = CGBitmapContextCreate(_dataRGBA8888,
-//                                   width,
-//                                   height,
-//                                   8,          // bits per component
-//                                   4 * width,  // bytes per row
-//                                   colorSpace,
-//                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-//  if (_context == NULL) {
-//    delete _dataRGBA8888;
-//    _dataRGBA8888 = NULL;
-//    ILogger::instance()->logError("Can't create CGContext");
-//    return;
-//  }
-//
-//  CGContextClearRect( _context, CGRectMake( 0, 0, width, height ) );
+  UIScreen* mainScreen = [UIScreen mainScreen];
+
+  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
 
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   width,
-                                   height,
+                                   width  * devicePixelRatio,
+                                   height * devicePixelRatio,
                                    8,          // bits per component
                                    0,          // bytes per row
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+
+  CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
 
   CGColorSpaceRelease( colorSpace );
 
@@ -85,7 +72,6 @@ void Canvas_iOS::_initialize(int width, int height) {
   CGContextSetShouldSubpixelPositionFonts(_context, NO);
   CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
   CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
-
 
   tryToSetCurrentFontToContext();
 }
@@ -198,8 +184,7 @@ void Canvas_iOS::_createImage(IImageListener* listener,
   UIImage* image = [UIImage imageWithCGImage: cgImage];
   CFRelease(cgImage);
 
-  IImage* result = new Image_iOS(image, NULL, _dataRGBA8888);
-  _dataRGBA8888 = NULL; // moved ownership to image
+  IImage* result = new Image_iOS(image, NULL);
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;
@@ -343,10 +328,13 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
 
   UIScreen* mainScreen = [UIScreen mainScreen];
 
-  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
+//  CGFloat devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
+//
+//  return [UIFont fontWithName: fontName
+//                         size: font.getSize() * devicePixelRatio];
 
   return [UIFont fontWithName: fontName
-                         size: font.getSize() * devicePixelRatio];
+                         size: font.getSize()];
 }
 
 void Canvas_iOS::_setFont(const GFont& font) {

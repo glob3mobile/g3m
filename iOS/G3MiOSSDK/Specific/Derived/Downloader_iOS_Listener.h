@@ -24,10 +24,6 @@
 -(id)initWithCPPImageListener:(IImageDownloadListener*)cppListener
                deleteListener:(bool)deleteListener;
 
-
-//const URL& url,
-//const IByteBuffer& data
-
 -(void) onDownloadURL:(const URL&) url
                  data:(NSData*) data;
 

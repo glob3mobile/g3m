@@ -255,8 +255,7 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
 
       if (uiImage) {
         image = new Image_iOS(uiImage,
-                              NULL, /* data is not needed */
-                              NULL);
+                              NULL /* data is not needed */);
       }
       else {
         ILogger::instance()->logError("Can't create image with contents of storage.");
