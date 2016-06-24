@@ -40,10 +40,7 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
-<<<<<<< HEAD
-=======
 import org.glob3.mobile.generated.ViewMode;
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -55,17 +52,10 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-<<<<<<< HEAD
-extends
-GLSurfaceView
-implements
-OnGestureListener {
-=======
    extends
       GLSurfaceView
    implements
       OnGestureListener {
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
    private G3MWidget                  _g3mWidget;
    private ES2Renderer                _es2renderer;
@@ -91,7 +81,7 @@ OnGestureListener {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
             throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                     + ", CurrentThread=" + currentThread + ")");
+                                       + ", CurrentThread=" + currentThread + ")");
          }
       }
    }
@@ -238,11 +228,7 @@ OnGestureListener {
    public void onLongPress(final MotionEvent e) {
       final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
-<<<<<<< HEAD
-      final Touch t = new Touch(new Vector2F(pc.x, pc.y), new Vector2F(0, 0));
-=======
       final Touch t = new Touch(new Vector2F(pc.x, pc.y), Vector2F.zero());
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {

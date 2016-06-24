@@ -43,15 +43,10 @@ public final class MotionEventProcessor {
    }
 
 
-<<<<<<< HEAD
-   private static Vector2F createPosition(final Event event) {
-      return new Vector2F(event.getClientX(), event.getClientY());
-=======
    private Vector2F createPosition(final Event event) {
       return new Vector2F(//
                event.getClientX() - _canvasElement.getAbsoluteLeft(), //
                event.getClientY() - _canvasElement.getAbsoluteTop());
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
    }
 
 
@@ -110,19 +105,11 @@ public final class MotionEventProcessor {
    }
 
 
-<<<<<<< HEAD
-   private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<Integer, Vector2F>();
-
-
-   private ArrayList<Touch> createTouches(final Event event) {
-      final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<Integer, Vector2F>();
-=======
    private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<>();
 
 
    private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
       final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       final int jsTouchesSize = jsTouches.length();
       final ArrayList<Touch> touches = new ArrayList<>(jsTouchesSize);
@@ -132,7 +119,7 @@ public final class MotionEventProcessor {
          final Vector2F currentTouchPosition = new Vector2F( //
                   jsTouch.getRelativeX(_canvasElement), //
                   jsTouch.getRelativeY(_canvasElement) //
-                  );
+         );
 
          final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
 
@@ -173,13 +160,9 @@ public final class MotionEventProcessor {
 
    private TouchEvent processTouchCancel(@SuppressWarnings("unused")
    final Event event) {
-<<<<<<< HEAD
-      _previousTouchesPositions = new HashMap<Integer, Vector2F>();
-=======
       //log(LogLevel.InfoLevel, ">>>>>> processTouchCancel");
 
       _previousTouchesPositions.clear();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
       return null;
    }
 
@@ -189,12 +172,12 @@ public final class MotionEventProcessor {
          final Scheduler scheduler = Scheduler.get();
          for (final TouchEvent event : events) {
             scheduler.scheduleDeferred( //
-                     new Command() {
-                        @Override
-                        public void execute() {
-                           _widget.onTouchEvent(event);
-                        }
-                     });
+            new Command() {
+               @Override
+               public void execute() {
+                  _widget.onTouchEvent(event);
+               }
+            });
          }
       }
    }
@@ -208,11 +191,7 @@ public final class MotionEventProcessor {
       }
 
       final Vector2F currentMousePosition = createPosition(event);
-<<<<<<< HEAD
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
-=======
       final ArrayList<Touch> touches = new ArrayList<>();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       if (event.getShiftKey()) {
          touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
@@ -233,11 +212,7 @@ public final class MotionEventProcessor {
       //log(LogLevel.InfoLevel, " onMouseDown");
 
       final Vector2F currentMousePosition = createPosition(event);
-<<<<<<< HEAD
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
-=======
       final ArrayList<Touch> touches = new ArrayList<>();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       _mouseDown = true;
       if (event.getShiftKey()) {
@@ -259,11 +234,7 @@ public final class MotionEventProcessor {
       //log(LogLevel.InfoLevel, " onMouseUp");
 
       final Vector2F currentMousePosition = createPosition(event);
-<<<<<<< HEAD
-      final ArrayList<Touch> touches = new ArrayList<Touch>();
-=======
       final ArrayList<Touch> touches = new ArrayList<>();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
 
       final TouchEventType touchType;
 
@@ -278,7 +249,7 @@ public final class MotionEventProcessor {
       else {
          touches.add(new Touch(currentMousePosition, _previousMousePosition));
          touchType = (event.getCtrlKey() && (event.getButton() == NativeEvent.BUTTON_LEFT)) ? TouchEventType.LongPress
-                                                                                            : TouchEventType.Up;
+                                                                                           : TouchEventType.Up;
       }
       _previousMousePosition = currentMousePosition;
 
@@ -334,7 +305,7 @@ public final class MotionEventProcessor {
                TouchEvent.create(TouchEventType.Down, beginTouches), //
                TouchEvent.create(TouchEventType.Move, endTouches), //
                TouchEvent.create(TouchEventType.Up, endTouches) //
-               );
+      );
 
       _previousMousePosition = new Vector2F(x, y);
    }

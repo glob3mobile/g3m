@@ -66,11 +66,7 @@ public final class MotionEventProcessor {
                prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
-<<<<<<< HEAD
-               prevPos = new Vector2F(0, 0);
-=======
                prevPos = Vector2F.zero();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
             }
          }
          else {
@@ -80,11 +76,7 @@ public final class MotionEventProcessor {
                prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
-<<<<<<< HEAD
-               prevPos = new Vector2F(0, 0);
-=======
                prevPos = Vector2F.zero();
->>>>>>> 882166c33bdf9946c54ea507ad5e1c47fb3e83e0
             }
 
          }
@@ -125,20 +117,20 @@ public final class MotionEventProcessor {
          case MotionEvent.ACTION_MOVE:
             _lastEvent._type = TouchEventType.Move;
             break;
-            /**
-             * MotionEvent.ACTION_POINTER_1_UP and MotionEvent.ACTION_POINTER_2_UP are deprecated. MotionEvent.ACTION_POINTER_UP
-             * added as fallback
-             */
-            //         case MotionEvent.ACTION_POINTER_1_UP:
-            //         case MotionEvent.ACTION_POINTER_2_UP:
+         /**
+          * MotionEvent.ACTION_POINTER_1_UP and MotionEvent.ACTION_POINTER_2_UP are deprecated. MotionEvent.ACTION_POINTER_UP
+          * added as fallback
+          */
+         //         case MotionEvent.ACTION_POINTER_1_UP:
+         //         case MotionEvent.ACTION_POINTER_2_UP:
          case MotionEvent.ACTION_POINTER_UP:
          case MotionEvent.ACTION_UP:
             _lastEvent._type = TouchEventType.Up;
             break;
-            /**
-             * MotionEvent.ACTION_POINTER_2_DOWN is deprecated.
-             */
-            //         case MotionEvent.ACTION_POINTER_2_DOWN:
+         /**
+          * MotionEvent.ACTION_POINTER_2_DOWN is deprecated.
+          */
+         //         case MotionEvent.ACTION_POINTER_2_DOWN:
          case MotionEvent.ACTION_POINTER_DOWN:
          case MotionEvent.ACTION_DOWN:
             _lastEvent._type = TouchEventType.Down;
