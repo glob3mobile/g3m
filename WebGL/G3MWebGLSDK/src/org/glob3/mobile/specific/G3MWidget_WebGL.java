@@ -240,7 +240,6 @@ public class G3MWidget_WebGL
          _height = height;
          setPixelSize(_width, _height);
 
-         final int Retina_Diego_at_work;
          final float devicePixelRatio = getDevicePixelRatio();
 
          final int logicalWidth = Math.round(_width * devicePixelRatio);
@@ -248,26 +247,17 @@ public class G3MWidget_WebGL
          _canvas.setCoordinateSpaceWidth(logicalWidth);
          _canvas.setCoordinateSpaceHeight(logicalHeight);
 
-         // ILogger.instance().logInfo("****  " + _width + "x" + _height + "   Logical=" + logicalWidth + "x" + logicalHeight);
 
          jsOnResizeViewport(logicalWidth, logicalHeight);
          if (_g3mWidget != null) {
             _g3mWidget.onResizeViewportEvent(logicalWidth, logicalHeight);
-            // jsOnResizeViewport(_width, _height);
-            // _g3mWidget.onResizeViewportEvent(_width, _height);
          }
       }
    }
 
 
    private void renderG3MWidget() {
-      final int Retina_Diego_at_work;
-      final float devicePixelRatio = 1; //getDevicePixelRatio();
-
-      final int logicalWidth = Math.round(_width * devicePixelRatio);
-      final int logicalHeight = Math.round(_height * devicePixelRatio);
-
-      _g3mWidget.render(logicalWidth, logicalHeight);
+      _g3mWidget.render(_width, _height);
    }
 
 
@@ -282,7 +272,6 @@ public class G3MWidget_WebGL
 
 
    private native void jsDefineG3MBrowserObjects() /*-{
-		//		debugger;
 		var that = this;
 
 		// URL Object
@@ -382,7 +371,7 @@ public class G3MWidget_WebGL
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final InfoDisplay infoDisplay) {
 
-      _g3mWidget = G3MWidget.create(//
+      _g3mWidget = G3MWidget.create( //
                _gl, //
                storage, //
                downloader, //
