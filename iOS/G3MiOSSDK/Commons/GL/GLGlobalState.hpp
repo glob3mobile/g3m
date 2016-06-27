@@ -33,6 +33,13 @@ private:
   static bool _initializationAvailable;
 
   bool _depthTest;
+  bool _scissorTest;
+  int _scissorX;
+  int _scissorY;
+  int _scissorWidth;
+  int _scissorHeight;
+
+  
   bool _blend;
   bool _cullFace;
   int  _culledFace;
@@ -74,6 +81,7 @@ public:
 
   GLGlobalState() :
   _depthTest(false),
+  _scissorTest(false),
   _blend(false),
   _cullFace(false),
   _culledFace(GLCullFace::back()),
@@ -87,7 +95,11 @@ public:
   _clearColorR(0.0),
   _clearColorG(0.0),
   _clearColorB(0.0),
-  _clearColorA(0.0)
+  _clearColorA(0.0),
+  _scissorX(0),
+  _scissorY(0),
+  _scissorWidth(0),
+  _scissorHeight(0)
   {
 
     if (!_initializationAvailable) {
@@ -112,6 +124,17 @@ public:
   }
   void disableDepthTest() {
     _depthTest = false;
+  }
+  
+  void enableScissorTest(int x, int y, int width, int height) {
+    _scissorTest = true;
+    _scissorX = x;
+    _scissorY = y;
+    _scissorWidth = width;
+    _scissorHeight = height;
+  }
+  void disableScissorTest() {
+    _scissorTest = false;
   }
   bool isEnabledDepthTest() const { return _depthTest; }
 

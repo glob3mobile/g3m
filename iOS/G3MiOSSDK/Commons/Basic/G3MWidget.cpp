@@ -154,7 +154,9 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL)
+_auxCam(NULL),
+_leftScissor(NULL),
+_rightScissor(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -286,7 +288,7 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
-
+  
   if (_downloader != NULL) {
     _downloader->stop();
     delete _downloader;
@@ -498,11 +500,14 @@ RenderState G3MWidget::calculateRendererState() {
   return busyFlag ? RenderState::busy() : RenderState::ready();
 }
 
-void G3MWidget::rawRender(const RenderState_Type renderStateType) {
+void G3MWidget::rawRender(const RenderState_Type renderStateType, GLState* modifier) {
   
   if (_rootState == NULL) {
     _rootState = new GLState();
   }
+  
+  _rootState->setParent(modifier);
+  
   
   switch (renderStateType) {
     case RENDER_READY:
@@ -549,8 +554,35 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
       }
     }
   }
+}
 
+void G3MWidget::setFocusDistanceModifier(double mod) {
+  
+  _focusDistanceModifier = mod;
+  
+  if (_leftScissor != NULL) {
+    _leftScissor->_release();
+    _leftScissor = NULL;
+  }
+  if (_rightScissor != NULL) {
+    _rightScissor->_release();
+    _rightScissor = NULL;
+  }
+  if (_rootState != NULL) {
+    _rootState->setParent(NULL);
+  }
+}
 
+void G3MWidget::setEyeDistance(double eDist) {
+  _eyeDistance = eDist;
+  if (_leftEyeCam != NULL) {
+    delete _leftEyeCam;
+    _leftEyeCam = NULL;
+  }
+  if (_rightEyeCam != NULL) {
+    delete _rightEyeCam;
+    _rightEyeCam = NULL;
+  }
 }
 
 void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
@@ -558,7 +590,7 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   if (_auxCam == NULL) {
     _auxCam = new Camera(-1);
   }
-  
+
   const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
   if (eyesUpdated) {
     
@@ -578,10 +610,10 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       Vector3D camPos = _currentCamera->getCartesianPosition();
       Vector3D camCenter = _currentCamera->getCenter();
       Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      const double eyesSeparation = 0.03;
+      const double eyesSeparation = _eyeDistance / 2.0;
       Vector3D up = _currentCamera->getUp();
       
-      const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
+      const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5).times(1.0 + _focusDistanceModifier);
       const Angle vFOV = _currentCamera->getVerticalFOV();
       
       Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
@@ -603,19 +635,33 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
   }
 
   const int halfWidth = _width / 2;
+  int modifierPx = (int) (halfWidth * _focusDistanceModifier);
+  if (modifierPx > 0) {
+    // create scissor test GLState/s to prevent the two cameras rendering into each other's framebuffer
+    if (_leftScissor == NULL) {
+      ScissorTestGLFeature* leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
+      _leftScissor = new GLState();
+      _leftScissor->addGLFeature(leftScissorFeature, false);
+    }
+    if (_rightScissor == NULL) {
+      ScissorTestGLFeature* rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth, _height);
+      _rightScissor = new GLState();
+      _rightScissor->addGLFeature(rightScissorFeature, false);
+    }
+  }
+
   
   _gl->clearScreen(*_backgroundColor);
+  
   //Left
-  _gl->viewport(0, 0, halfWidth, _height);
-  _currentCamera->copyFrom(*_leftEyeCam,
-                           true);
-  rawRender(renderStateType);
+  _gl->viewport(modifierPx, 0, halfWidth + modifierPx, _height);
+  _currentCamera->copyFrom(*_leftEyeCam, true);
+  rawRender(renderStateType, _leftScissor);
   
   //Right
-  _gl->viewport(halfWidth, 0, halfWidth, _height);
-  _currentCamera->copyFrom(*_rightEyeCam,
-                           true);
-  rawRender(renderStateType);
+  _gl->viewport(halfWidth - modifierPx, 0, halfWidth, _height);
+  _currentCamera->copyFrom(*_rightEyeCam, true);
+  rawRender(renderStateType, _rightScissor);
 
   //Restoring central camera
   _currentCamera->copyFrom(*_auxCam, true);
@@ -625,7 +671,7 @@ void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
   
   _gl->clearScreen(*_backgroundColor);
   _gl->viewport(0, 0, _width, _height);
-  rawRender(renderStateType);
+  rawRender(renderStateType, NULL);
 }
 
 void G3MWidget::render(int width, int height) {

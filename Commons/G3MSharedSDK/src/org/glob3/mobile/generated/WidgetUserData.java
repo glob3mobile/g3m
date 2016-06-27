@@ -54,6 +54,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class IDeviceAttitude;
 //class IDeviceLocation;
+//class ScissorTestGLFeature;
 //class InfoDisplay;
 
 

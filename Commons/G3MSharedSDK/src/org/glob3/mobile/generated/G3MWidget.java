@@ -712,6 +712,44 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  public final void setFocusDistanceModifier(double mod)
+  {
+  
+    _focusDistanceModifier = mod;
+  
+    if (_leftScissor != null)
+    {
+      _leftScissor._release();
+      _leftScissor = null;
+    }
+    if (_rightScissor != null)
+    {
+      _rightScissor._release();
+      _rightScissor = null;
+    }
+    if (_rootState != null)
+    {
+      _rootState.setParent(null);
+    }
+  }
+
+  public final void setEyeDistance(double eDist)
+  {
+    _eyeDistance = eDist;
+    if (_leftEyeCam != null)
+    {
+      if (_leftEyeCam != null)
+         _leftEyeCam.dispose();
+      _leftEyeCam = null;
+    }
+    if (_rightEyeCam != null)
+    {
+      if (_rightEyeCam != null)
+         _rightEyeCam.dispose();
+      _rightEyeCam = null;
+    }
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -775,6 +813,8 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private SceneLighting _sceneLighting;
   private GLState _rootState;
+  private GLState _leftScissor;
+  private GLState _rightScissor;
 
   private final InitialCameraPositionProvider _initialCameraPositionProvider;
   private boolean _initialCameraPositionHasBeenSet;
@@ -789,6 +829,8 @@ public class G3MWidget implements ChangedRendererInfoListener
   private float _touchDownPositionY;
 
   private ViewMode _viewMode;
+  private double _focusDistanceModifier = -1.0;
+  private double _eyeDistance = 0.06;
 
   //For stereo vision
   private Camera _auxCam;
@@ -850,6 +892,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _leftEyeCam = null;
      _rightEyeCam = null;
      _auxCam = null;
+     _leftScissor = null;
+     _rightScissor = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -1006,13 +1050,16 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
-  private void rawRender(RenderState_Type renderStateType)
+  private void rawRender(RenderState_Type renderStateType, GLState modifier)
   {
   
     if (_rootState == null)
     {
       _rootState = new GLState();
     }
+  
+    _rootState.setParent(modifier);
+  
   
     switch (renderStateType)
     {
@@ -1067,8 +1114,6 @@ public class G3MWidget implements ChangedRendererInfoListener
         }
       }
     }
-  
-  
   }
 
   private void rawRenderMono(RenderState_Type renderStateType)
@@ -1076,7 +1121,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _gl.clearScreen(_backgroundColor);
     _gl.viewport(0, 0, _width, _height);
-    rawRender(renderStateType);
+    rawRender(renderStateType, null);
   }
 
   private void rawRenderStereoParallelAxis(RenderState_Type renderStateType)
@@ -1110,10 +1155,10 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D camPos = _currentCamera.getCartesianPosition();
         Vector3D camCenter = _currentCamera.getCenter();
         Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        final double eyesSeparation = 0.03;
+        final double eyesSeparation = _eyeDistance / 2.0;
         Vector3D up = _currentCamera.getUp();
   
-        final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
+        final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5).times(1.0 + _focusDistanceModifier);
         final Angle vFOV = _currentCamera.getVerticalFOV();
   
         Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
@@ -1131,21 +1176,39 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   
     final int halfWidth = _width / 2;
+    int modifierPx = (int)(halfWidth * _focusDistanceModifier);
+    if (modifierPx > 0)
+    {
+      // create scissor test GLState/s to prevent the two cameras rendering into each other's framebuffer
+      if (_leftScissor == null)
+      {
+        ScissorTestGLFeature leftScissorFeature = new ScissorTestGLFeature(0, 0, halfWidth, _height);
+        _leftScissor = new GLState();
+        _leftScissor.addGLFeature(leftScissorFeature, false);
+      }
+      if (_rightScissor == null)
+      {
+        ScissorTestGLFeature rightScissorFeature = new ScissorTestGLFeature(halfWidth, 0, halfWidth, _height);
+        _rightScissor = new GLState();
+        _rightScissor.addGLFeature(rightScissorFeature, false);
+      }
+    }
+  
   
     _gl.clearScreen(_backgroundColor);
+  
     //Left
-    _gl.viewport(0, 0, halfWidth, _height);
+    _gl.viewport(modifierPx, 0, halfWidth + modifierPx, _height);
     _currentCamera.copyFrom(_leftEyeCam, true);
-    rawRender(renderStateType);
+    rawRender(renderStateType, _leftScissor);
   
     //Right
-    _gl.viewport(halfWidth, 0, halfWidth, _height);
+    _gl.viewport(halfWidth - modifierPx, 0, halfWidth, _height);
     _currentCamera.copyFrom(_rightEyeCam, true);
-    rawRender(renderStateType);
+    rawRender(renderStateType, _rightScissor);
   
     //Restoring central camera
     _currentCamera.copyFrom(_auxCam, true);
   }
-
 
 }
