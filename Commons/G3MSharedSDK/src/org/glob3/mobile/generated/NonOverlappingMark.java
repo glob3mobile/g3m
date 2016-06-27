@@ -30,8 +30,6 @@ public class NonOverlappingMark
 
   private NonOverlappingMarkTouchListener _touchListener;
 
-//  float _enclosingRadius;
-
 
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge)
   {
@@ -66,18 +64,15 @@ public class NonOverlappingMark
      this(imageBuilderWidget, imageBuilderAnchor, position, null, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float resistanceFactor)
-  //_widgetScreenPosition(MutableVector2F::nan()),
-  //_anchorScreenPosition(MutableVector2F::nan()),
-  //_enclosingRadius(0)
   {
      _cartesianPos = null;
      _speed = new MutableVector2F(MutableVector2F.zero());
      _force = new MutableVector2F(MutableVector2F.zero());
      _geoPosition = new Geodetic3D(position);
-     _springLengthInPixels = springLengthInPixels;
+     _springLengthInPixels = springLengthInPixels * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
      _springK = springK;
-     _minSpringLength = minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f);
-     _maxSpringLength = maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f);
+     _minSpringLength = (minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f)) * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+     _maxSpringLength = (maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f)) * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
      _electricCharge = electricCharge;
      _anchorElectricCharge = anchorElectricCharge;
      _resistanceFactor = resistanceFactor;
@@ -122,7 +117,7 @@ public class NonOverlappingMark
 
   public final Vector3D getCartesianPosition(Planet planet)
   {
-  // #warning toCartesian without garbage
+    // #warning toCartesian without garbage
     if (_cartesianPos == null)
     {
       _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition));
@@ -133,10 +128,6 @@ public class NonOverlappingMark
   public final void computeAnchorScreenPos(Camera camera, Planet planet)
   {
     Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
-  //  _anchorScreenPosition.put(sp._x, sp._y);
-  //  if (_widgetScreenPosition.isNan()) {
-  //    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
-  //  }
   
     _anchorWidget.setScreenPos(sp._x, sp._y);
   
@@ -164,11 +155,6 @@ public class NonOverlappingMark
       if (_anchorWidget.isReady())
       {
         _widget.render(rc, glState);
-  //      if (_enclosingRadius == 0) {
-  //        const float w = _widget->getWidth();
-  //        const float h = _widget->getHeight();
-  //        _enclosingRadius = IMathUtils::instance()->sqrt( w*w + h*h ) / 2;
-  //      }
       }
     }
     else
@@ -233,10 +219,6 @@ public class NonOverlappingMark
   public final void applyCoulombsLaw(NonOverlappingMark that)
   {
     final Vector2F d = getScreenPos().sub(that.getScreenPos());
-  //  double distance = d.length() - this->_enclosingRadius/3 - that->_enclosingRadius/3;
-  //  if (distance <= 0) {
-  //    distance = d.length() + 0.001;
-  //  }
   
     final double distance = d.length() + 0.001;
     Vector2F direction = d.div((float)distance);
@@ -252,10 +234,6 @@ public class NonOverlappingMark
   {
     Vector2F dAnchor = getScreenPos().sub(that.getAnchorScreenPos());
     double distanceAnchor = dAnchor.length() + 0.001;
-  //  double distanceAnchor = dAnchor.length() - this->_enclosingRadius/3;
-  //  if (distanceAnchor <= 0) {
-  //    distanceAnchor = dAnchor.length() + 0.001;
-  //  }
   
     Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
   
@@ -297,7 +275,7 @@ public class NonOverlappingMark
   
     Vector2F anchorPosition = _anchorWidget.getScreenPos();
   
-  //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+    //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
     Vector2F spring = new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
   
     _widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);

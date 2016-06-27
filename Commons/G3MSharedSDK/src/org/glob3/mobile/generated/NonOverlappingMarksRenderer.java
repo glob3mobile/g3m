@@ -36,7 +36,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
       else
       {
         // Resetting marks location of invisible anchors
-  // #warning Do we really need this?
+        // #warning Do we really need this?
         m.resetWidgetPositionVelocityAndForce();
       }
     }
@@ -142,7 +142,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
      this(maxVisibleMarks, 5);
   }
   public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin)
-  //_connectorsGLState(NULL),
   {
      _maxVisibleMarks = maxVisibleMarks;
      _viewportMargin = viewportMargin;
@@ -155,8 +154,6 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   public void dispose()
   {
-  //  _connectorsGLState->_release();
-  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
