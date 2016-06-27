@@ -2,6 +2,10 @@
 
 package org.glob3.mobile.specific;
 
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static android.graphics.Paint.FILTER_BITMAP_FLAG;
+import static android.graphics.Paint.LINEAR_TEXT_FLAG;
+
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IFactory;
@@ -27,25 +31,29 @@ public final class Canvas_Android
    extends
       ICanvas {
 
-   private Bitmap      _bitmap          = null;
-   private Canvas      _canvas          = null;
-   private final Paint _fillPaint;
-   private final Paint _strokePaint;
-   private Typeface    _currentTypeface = null;
+   private static final int PAINT_FLAGS      = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
 
-   private Path        _path            = null;
+   private Bitmap           _bitmap          = null;
+   private Canvas           _canvas          = null;
+   private final Paint      _fillPaint;
+   private final Paint      _strokePaint;
+   private Typeface         _currentTypeface = null;
 
-   private final RectF _rectF           = new RectF(); // RectF instance for reuse (and avoid garbage)
-   private final Rect  _rect            = new Rect(); // Rect instance for reuse (and avoid garbage)
+   private Path             _path            = null;
+
+   private final RectF      _rectF           = new RectF();                                            // RectF instance for reuse (and avoid garbage)
+   private final Rect       _rect            = new Rect();                                             // Rect instance for reuse (and avoid garbage)
 
 
    Canvas_Android(final boolean retina) {
       super(retina);
-      _fillPaint = new Paint();
+      _fillPaint = new Paint(PAINT_FLAGS);
+
       _fillPaint.setAntiAlias(true);
       _fillPaint.setStyle(Paint.Style.FILL);
 
-      _strokePaint = new Paint();
+      _strokePaint = new Paint(PAINT_FLAGS);
+
       _strokePaint.setAntiAlias(true);
       _strokePaint.setStyle(Paint.Style.STROKE);
    }
@@ -353,7 +361,8 @@ public final class Canvas_Android
                left + width, // Right
                top + height); // Bottom
 
-      final Paint paint = new Paint();
+      final Paint paint = new Paint(PAINT_FLAGS);
+
       paint.setAlpha(Math.round(255 * transparency));
       _canvas.drawBitmap(bitmap, null, dst, paint);
    }
@@ -515,7 +524,8 @@ public final class Canvas_Android
                Math.round(srcLeft + srcWidth), // Right
                Math.round(srcTop + srcHeight)); // Bottom
 
-      final Paint paint = new Paint();
+      final Paint paint = new Paint(PAINT_FLAGS);
+
       paint.setAlpha(Math.round(255 * transparency));
 
       _canvas.drawBitmap(bitmap, src, dst, paint);

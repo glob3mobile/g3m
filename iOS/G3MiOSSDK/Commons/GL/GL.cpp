@@ -160,7 +160,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
         _nativeGL->generateMipmap(texture2D);
       }
       else {
-        ILogger::instance()->logError("Can't generate bitmap. Texture dimensions are not power of two.");
+        ILogger::instance()->logError("Can't generate mipmap. Texture dimensions are not power of two.");
       }
     }
   }
