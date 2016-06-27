@@ -305,7 +305,6 @@ public final class MotionEventProcessor {
 		};
 
 		if (canvas) {
-
 			if (canvas.addEventListener) {
 				// IE9, Chrome, Safari, Opera
 				canvas.addEventListener("mousewheel", $wnd.g3mMouseWheelHandler,

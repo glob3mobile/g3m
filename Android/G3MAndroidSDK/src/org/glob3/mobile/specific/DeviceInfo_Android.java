@@ -14,24 +14,20 @@ public class DeviceInfo_Android
    extends
       IDeviceInfo {
 
-   private final Context _context;
-   private float         _dpi = -1;
+   private final float _dpi;
 
 
    DeviceInfo_Android(final Context context) {
-      _context = context;
+      _dpi = calculateDPI(context);
    }
 
 
-   @Override
-   public float getDPI() {
-      if (_dpi < 0) {
-         final DisplayMetrics metrics = new DisplayMetrics();
-         final WindowManager windowManager = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
-         windowManager.getDefaultDisplay().getMetrics(metrics);
-         _dpi = (metrics.xdpi + metrics.ydpi) / 2;
-      }
-      return _dpi;
+   private static float calculateDPI(final Context context) {
+      final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+      final DisplayMetrics metrics = new DisplayMetrics();
+      windowManager.getDefaultDisplay().getMetrics(metrics);
+
+      return (metrics.xdpi + metrics.ydpi) / 2.0f;
    }
 
 
@@ -42,8 +38,14 @@ public class DeviceInfo_Android
 
 
    @Override
-   public float getDevicePixelRatio() {
+   public float getDPI() {
+      return _dpi;
+   }
 
+
+   @Override
+   public float getDevicePixelRatio() {
+      return _dpi / 150.0f;
    }
 
 

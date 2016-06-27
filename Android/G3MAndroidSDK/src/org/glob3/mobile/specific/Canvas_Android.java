@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.GFont;
 import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.StrokeCap;
@@ -53,8 +54,14 @@ public final class Canvas_Android
    @Override
    protected void _initialize(final int width,
                               final int height) {
-      _bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      final float devicePixelRatio = IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+
+      final int scaledWidth = Math.round(width * devicePixelRatio);
+      final int scaledHeight = Math.round(height * devicePixelRatio);
+
+      _bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
       _canvas = new Canvas(_bitmap);
+      _canvas.scale(devicePixelRatio, devicePixelRatio);
    }
 
 

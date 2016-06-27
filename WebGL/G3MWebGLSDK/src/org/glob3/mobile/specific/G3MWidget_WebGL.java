@@ -67,11 +67,11 @@ public class G3MWidget_WebGL
       initSingletons();
 
       _canvas = Canvas.createIfSupported();
-      _canvas.getCanvasElement().setId("_g3m_canvas");
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
          return;
       }
+      _canvas.getCanvasElement().setId("_g3m_canvas");
 
       _webGLContext = jsGetWebGLContext(_canvas.getCanvasElement());
       if (_webGLContext == null) {
@@ -232,16 +232,16 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   private void onSizeChanged(final int w,
-                              final int h) {
+   private void onSizeChanged(final int width,
+                              final int height) {
 
-      if ((_width != w) || (_height != h)) {
-         _width = w;
-         _height = h;
+      if ((_width != width) || (_height != height)) {
+         _width = width;
+         _height = height;
          setPixelSize(_width, _height);
 
          final int Retina_Diego_at_work;
-         final float devicePixelRatio = 1; //getDevicePixelRatio();
+         final float devicePixelRatio = getDevicePixelRatio();
 
          final int logicalWidth = Math.round(_width * devicePixelRatio);
          final int logicalHeight = Math.round(_height * devicePixelRatio);
@@ -250,13 +250,24 @@ public class G3MWidget_WebGL
 
          // ILogger.instance().logInfo("****  " + _width + "x" + _height + "   Logical=" + logicalWidth + "x" + logicalHeight);
 
+         jsOnResizeViewport(logicalWidth, logicalHeight);
          if (_g3mWidget != null) {
             _g3mWidget.onResizeViewportEvent(logicalWidth, logicalHeight);
-            jsOnResizeViewport(logicalWidth, logicalHeight);
-            // _g3mWidget.onResizeViewportEvent(_width, _height);
             // jsOnResizeViewport(_width, _height);
+            // _g3mWidget.onResizeViewportEvent(_width, _height);
          }
       }
+   }
+
+
+   private void renderG3MWidget() {
+      final int Retina_Diego_at_work;
+      final float devicePixelRatio = 1; //getDevicePixelRatio();
+
+      final int logicalWidth = Math.round(_width * devicePixelRatio);
+      final int logicalHeight = Math.round(_height * devicePixelRatio);
+
+      _g3mWidget.render(logicalWidth, logicalHeight);
    }
 
 
@@ -415,11 +426,6 @@ public class G3MWidget_WebGL
    private native void jsStartRenderLoop() /*-{
 		$wnd.g3mTick();
    }-*/;
-
-
-   private void renderG3MWidget() {
-      _g3mWidget.render(_width, _height);
-   }
 
 
    public JavaScriptObject getWebGLContext() {
