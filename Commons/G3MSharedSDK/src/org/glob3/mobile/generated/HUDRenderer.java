@@ -189,6 +189,7 @@ public class HUDRenderer extends DefaultRenderer
   
     nativeGL.depthMask(false);
   
+    _glState.setParent(glState);
     for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
