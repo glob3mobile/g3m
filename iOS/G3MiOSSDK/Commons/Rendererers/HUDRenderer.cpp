@@ -162,6 +162,7 @@ void HUDRenderer::render(const G3MRenderContext* rc,
 
   nativeGL->depthMask(false);
 
+  _glState->setParent(glState);
   for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->render(rc, _glState);
