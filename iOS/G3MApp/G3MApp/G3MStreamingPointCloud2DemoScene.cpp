@@ -76,7 +76,9 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   model->getLayerSet()->addLayer(layer);
 
 //#warning TODO cache
-  model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
+  model->getPointCloudsRenderer()->addPointCloud(//URL("http://glob3mobile.dyndns.org:8080"),
+                                                 //URL("http://aerog3m.cloudapp.net:8082"),
+                                                 URL("http://192.168.1.35:8082"),
                                                  "minnesota_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),

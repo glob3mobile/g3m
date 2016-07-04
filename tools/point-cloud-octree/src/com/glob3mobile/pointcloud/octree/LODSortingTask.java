@@ -67,7 +67,7 @@ class LODSortingTask
          if (pointsSize > _maxPointsPerLeaf) {
             final byte[] binaryID = Utils.toBinaryID(node.getID());
             final Sector sector = TileHeader.sectorFor(binaryID);
-            splitPoints(transaction, _lodDB, binaryID, sector, new ArrayList<Geodetic3D>(points), _maxPointsPerLeaf);
+            splitPoints(transaction, _lodDB, binaryID, sector, new ArrayList<>(points), _maxPointsPerLeaf);
          }
          else {
             process(transaction, _lodDB, node.getID(), points);
@@ -87,7 +87,7 @@ class LODSortingTask
    private static List<Geodetic3D> extractPoints(final Sector sector,
                                                  final List<Geodetic3D> points) {
 
-      final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
+      final List<Geodetic3D> extracted = new ArrayList<>();
 
       final Iterator<Geodetic3D> iterator = points.iterator();
       while (iterator.hasNext()) {
@@ -140,8 +140,8 @@ class LODSortingTask
                         final List<Geodetic3D> points) {
       final int pointsSize = points.size();
 
-      final List<Integer> sortedIndices = new ArrayList<Integer>(pointsSize);
-      final LinkedList<Integer> lodIndices = new LinkedList<Integer>();
+      final List<Integer> sortedIndices = new ArrayList<>(pointsSize);
+      final LinkedList<Integer> lodIndices = new LinkedList<>();
 
       if (pointsSize == 1) {
          // just one vertex, no need to sort
@@ -168,14 +168,14 @@ class LODSortingTask
       //                         ", points=" + pointsSize + //
       //                         ", lodIndices=" + lodIndices);
 
-      final List<List<Geodetic3D>> levelsPoints = new ArrayList<List<Geodetic3D>>(lodLevels);
+      final List<List<Geodetic3D>> levelsPoints = new ArrayList<>(lodLevels);
       int pointsCounter = 0;
       int fromIndexI = 0;
       for (int level = 0; level < lodLevels; level++) {
          final int toIndexI = lodIndices.get(level);
 
          final int levelPointsSize = (toIndexI - fromIndexI) + 1;
-         final List<Geodetic3D> levelPoints = new ArrayList<Geodetic3D>(levelPointsSize);
+         final List<Geodetic3D> levelPoints = new ArrayList<>(levelPointsSize);
          //         System.out.println("Extracting point for level " + level + " range=" + fromIndexI + "->" + toIndexI + " (size="
          //                            + levelPointsSize + ")");
          for (int indexI = fromIndexI; indexI <= toIndexI; indexI++) {

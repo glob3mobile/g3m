@@ -24,7 +24,7 @@ protected:
 
 public:
   G3MTiledVectorDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Tile Vectors", "", 0),
+  G3MDemoScene(model, "Vector Tiles", "", 0),
   _tiledVectorLayer(NULL)
   {
     _options.push_back("Pinkish");

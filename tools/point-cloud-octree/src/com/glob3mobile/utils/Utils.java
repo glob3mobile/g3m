@@ -79,7 +79,7 @@ public class Utils {
 
    public static List<byte[]> getPathFromRoot(final byte[] id) {
       final int length = id.length;
-      final List<byte[]> result = new ArrayList<byte[]>(length + 1);
+      final List<byte[]> result = new ArrayList<>(length + 1);
       int parentIDLenght = 0;
       while (parentIDLenght <= length) {
          final byte[] parentID = Arrays.copyOf(id, parentIDLenght);
@@ -178,7 +178,7 @@ public class Utils {
    public static List<GVector3D> toCartesian(final Planet planet,
             final List<Geodetic3D> positions,
             final float verticalExaggeration) {
-      final List<GVector3D> result = new ArrayList<GVector3D>(positions.size());
+      final List<GVector3D> result = new ArrayList<>(positions.size());
       for (final Geodetic3D position : positions) {
          result.add(planet.toCartesian(position, verticalExaggeration));
       }

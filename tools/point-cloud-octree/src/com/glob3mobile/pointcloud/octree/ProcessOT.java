@@ -339,7 +339,7 @@ public class ProcessOT {
             final long elapsed = System.currentTimeMillis() - start;
             System.out.println("== " + elapsed + "ms");
 
-            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
+            final List<Geodetic3D> accumulatedPoints = new ArrayList<>();
             long totalPoints = 0;
             for (final PersistentLOD.NodeLevel level : node.getLevels()) {
                System.out.println(level);

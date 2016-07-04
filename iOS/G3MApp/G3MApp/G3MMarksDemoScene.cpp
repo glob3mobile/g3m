@@ -40,12 +40,12 @@ public:
 
     const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
     if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse (1) \"%s\"", url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse (1) \"%s\"", url._path.c_str());
     }
     else {
       const JSONObject* jsonObject = jsonBaseObject->asObject();
       if (jsonObject == NULL) {
-        ILogger::instance()->logError("Can't parse (2) \"%s\"", url.getPath().c_str());
+        ILogger::instance()->logError("Can't parse (2) \"%s\"", url._path.c_str());
       }
       else {
         const IStringUtils* su = IStringUtils::instance();
@@ -95,7 +95,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {

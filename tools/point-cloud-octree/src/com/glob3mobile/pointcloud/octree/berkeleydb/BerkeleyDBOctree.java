@@ -278,7 +278,7 @@ public class BerkeleyDBOctree
          final TransactionConfig txnConfig = new TransactionConfig();
          final Transaction txn = _env.beginTransaction(null, txnConfig);
 
-         final PointsSet pointsSet = new PointsSet(new ArrayList<Geodetic3D>(_buffer), averagePoint);
+         final PointsSet pointsSet = new PointsSet(new ArrayList<>(_buffer), averagePoint);
          BerkeleyDBOctreeNode.insertPoints(txn, this, header, pointsSet);
 
          txn.commit();

@@ -5,8 +5,6 @@ package com.glob3mobile.pointcloud.quadtree;
 import java.util.Arrays;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.PositionsSet;
-import com.glob3mobile.utils.FlatPlanet;
 import com.glob3mobile.utils.Geodetic3D;
 
 
@@ -17,7 +15,7 @@ public class QuadTree {
 
    public QuadTree(final List<Geodetic3D> positions,
                    final int maxPointsPerLeaf) {
-      final PositionsSet positionsSet = new PositionsSet(FlatPlanet.EARTH, positions);
+      //      final PositionsSet positionsSet = new PositionsSet(FlatPlanet.EARTH, positions);
 
       final int[] indexes = createIndexes(positions);
       final int duplicatesCount = positions.size() - indexes.length;
@@ -25,7 +23,7 @@ public class QuadTree {
          System.out.println("QuadTree: removed " + duplicatesCount + " of " + positions.size() + " points");
       }
 
-      _root = QuadNode.create(null, positionsSet, indexes, maxPointsPerLeaf);
+      _root = QuadNode.create(null, indexes, maxPointsPerLeaf);
    }
 
 

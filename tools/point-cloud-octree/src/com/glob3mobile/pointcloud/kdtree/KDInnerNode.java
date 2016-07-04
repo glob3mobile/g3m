@@ -8,9 +8,9 @@ import com.glob3mobile.pointcloud.PositionsSet;
 
 
 public class KDInnerNode
-         extends
-            KDNode {
-   private final Axis     _splitAxis;
+   extends
+      KDNode {
+   //   private final Axis     _splitAxis;
    //   private final int    _medianVertexIndex;
    //   private final KDNode _leftNode;
    //   private final KDNode _rightNode;
@@ -21,12 +21,12 @@ public class KDInnerNode
 
    KDInnerNode(final KDNode parent,
                final PositionsSet positions,
-               final Axis splitAxis,
+               //               final Axis splitAxis,
                final int[] mediansVertexIndexes,
                final int[][] childrenVerticesIndexes,
-            final int arity) {
-      super(parent, positions);
-      _splitAxis = splitAxis;
+               final int arity) {
+      super(parent);
+      //      _splitAxis = splitAxis;
       //      _medianVertexIndex = medianVertexIndex;
       //      _leftNode = KDNode.create(this, positions, leftVerticesIndexes, arity);
       //      _rightNode = KDNode.create(this, positions, rightVerticesIndexes, arity);

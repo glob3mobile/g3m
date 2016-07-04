@@ -390,11 +390,11 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   }
 
   if (_errorDownloadingMetadata) {
-    return RenderState::error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL.getPath() + "\"");
+    return RenderState::error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
   }
 
   if (_errorParsingMetadata) {
-    return RenderState::error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL.getPath() + "\"");
+    return RenderState::error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
   }
 
   return RenderState::ready();
@@ -414,8 +414,6 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
 #endif
 
     const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
-    // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
-    // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
@@ -444,7 +442,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
     if (bounds->touchesFrustum(frustum)) {
       bool justRecalculatedProjectedArea = false;
       if ((_projectedArea == -1) ||
-          ((_lastProjectedAreaTimeInMS + 350) < nowInMS)) {
+          ((_lastProjectedAreaTimeInMS + 500) < nowInMS)) {
         const double currentProjectedArea = bounds->projectedArea(rc);
         if (currentProjectedArea != _projectedArea) {
           _projectedArea = currentProjectedArea;
@@ -454,7 +452,8 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
       }
 
 // #warning TODO: quality factor 1
-      const double minProjectedArea = 250;
+//      const double minProjectedArea = 250 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+      const double minProjectedArea = 2500 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(pointCloud,
                                                   rc,
@@ -516,7 +515,7 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                              Vector3D(averageX, averageY, averageZ),
                              pointsBuffer,
                              1,
-                             pointSize * 2,
+                             pointSize * 2 *  IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                              Color::newFromRGBA(1, 1, 0, 1), // flatColor
                              NULL, // colors
                              1,    // colorsIntensity
@@ -749,7 +748,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       *_average,
                                       _firstPointsVerticesBuffer,
                                       1,
-                                      pointSize,
+                                      pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                                       NULL,                     // flatColor
                                       _firstPointsColorsBuffer, // colors
                                       1,                        // colorsIntensity
@@ -820,7 +819,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     *_average,
                                     vertices,
                                     1,
-                                    pointSize,
+                                    pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                                     NULL,   // flatColor
                                     colors, // colors
                                     1,      // colorsIntensity

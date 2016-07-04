@@ -71,11 +71,11 @@ public abstract class KDNode {
       }
 
       if (indexesSize == 1) {
-         return new KDMonoLeafNode(parent, positions, indexes[0]);
+         return new KDMonoLeafNode(parent, /*positions,*/indexes[0]);
       }
 
       if (indexesSize <= arity) {
-         return new KDMultiLeafNode(parent, positions, indexes);
+         return new KDMultiLeafNode(parent, /*positions,*/indexes);
       }
 
       final GAxisAlignedBox cartesianBounds = getBounds(positions._cartesianPoints, indexes);
@@ -134,7 +134,7 @@ public abstract class KDNode {
       //      final boolean ok1 = Arrays.equals(leftVerticesIndexes, childrenVerticesIndexes[0]);
       //      final boolean ok2 = Arrays.equals(rightVerticesIndexes, childrenVerticesIndexes[1]);
 
-      return new KDInnerNode(parent, positions, splitAxis, mediansVertexIndexes, childrenVerticesIndexes, arity);
+      return new KDInnerNode(parent, positions, /*splitAxis,*/mediansVertexIndexes, childrenVerticesIndexes, arity);
    }
 
 
@@ -206,19 +206,22 @@ public abstract class KDNode {
    //   }
 
 
-   private final KDNode       _parent;
-   private final PositionsSet _positions;
+   private final KDNode _parent;
 
 
-   protected KDNode(final KDNode parent,
-                    final PositionsSet positions) {
+   //   private final PositionsSet _positions;
+
+
+   protected KDNode(final KDNode parent
+   /*final PositionsSet positions*/
+   ) {
       _parent = parent;
-      _positions = positions;
+      //      _positions = positions;
    }
 
 
    void breadthFirstAcceptVisitor(final KDTreeVisitor visitor) throws KDTreeVisitor.AbortVisiting {
-      final LinkedList<KDNode> queue = new LinkedList<KDNode>();
+      final LinkedList<KDNode> queue = new LinkedList<>();
       queue.addLast(this);
 
       while (!queue.isEmpty()) {

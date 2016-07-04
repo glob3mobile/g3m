@@ -20,7 +20,7 @@ public class PositionsSet {
                        final List<Geodetic3D> positions) {
       _positions = positions;
 
-      _cartesianPoints = new ArrayList<GVector3D>(positions.size());
+      _cartesianPoints = new ArrayList<>(positions.size());
       for (final Geodetic3D position : positions) {
          final GVector3D point = planet.toCartesian(position, 1);
          _cartesianPoints.add(point);

@@ -66,7 +66,7 @@ public:
     const JSONBaseObject* jsonBaseObject = BSONParser::parse(_buffer);
 
     if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url._path.c_str());
     }
     else {
       const JSONObject* object = jsonBaseObject->asObject();
@@ -139,7 +139,7 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_mesh == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url._path.c_str());
     }
     else {
       _scene->setPointsCloudMesh(_mesh);
@@ -174,7 +174,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
