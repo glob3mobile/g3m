@@ -80,7 +80,6 @@ public abstract class KDNode {
 
       final GAxisAlignedBox cartesianBounds = getBounds(positions._cartesianPoints, indexes);
       final Axis splitAxis = Axis.largestAxis(cartesianBounds);
-      // System.out.println("==> max axis=" + splitAxis + "  " + cartesianBounds._extent);
 
 
       final IComparatorInt comparator = new IComparatorInt() {
@@ -103,18 +102,6 @@ public abstract class KDNode {
       GCollections.quickSort(indexes, 0, indexesSize - 1, comparator);
 
 
-      //      final int medianI = (indexesSize / 2);
-      //
-      //      //      final GVector3D average = average(positions._cartesianPoints, indexes);
-      //      //      final int medianI = findNearest(average, positions._cartesianPoints, indexes);
-      //
-      //      final int[] leftVerticesIndexes = Arrays.copyOfRange(indexes, 0, medianI);
-      //      final int[] rightVerticesIndexes = Arrays.copyOfRange(indexes, medianI + 1, indexesSize);
-      //
-      //      final int medianVertexIndex = indexes[medianI];
-
-      //      return new KDInnerNode(parent, positions, axis, medianVertexIndex, leftVerticesIndexes, rightVerticesIndexes);
-
       final int[] mediansVertexIndexes = new int[arity - 1];
       final int[] mediansIs = new int[arity - 1];
       for (int i = 1; i < arity; i++) {
@@ -130,29 +117,8 @@ public abstract class KDNode {
          from = to + 1;
       }
 
-
-      //      final boolean ok1 = Arrays.equals(leftVerticesIndexes, childrenVerticesIndexes[0]);
-      //      final boolean ok2 = Arrays.equals(rightVerticesIndexes, childrenVerticesIndexes[1]);
-
-      return new KDInnerNode(parent, positions, /*splitAxis,*/mediansVertexIndexes, childrenVerticesIndexes, arity);
+      return new KDInnerNode(parent, positions, mediansVertexIndexes, childrenVerticesIndexes, arity);
    }
-
-
-   //   private static int findNearest(final GVector3D average,
-   //                                  final List<GVector3D> cartesianPoints,
-   //                                  final int[] indexes) {
-   //      double shortestDistance = cartesianPoints.get(indexes[0]).squaredDistance(average);
-   //      int shortestI = 0;
-   //      for (int i = 1; i < indexes.length; i++) {
-   //         final GVector3D point = cartesianPoints.get(indexes[i]);
-   //         final double distance = point.squaredDistance(average);
-   //         if (distance < shortestDistance) {
-   //            shortestDistance = distance;
-   //            shortestI = i;
-   //         }
-   //      }
-   //      return shortestI;
-   //   }
 
 
    private static GAxisAlignedBox getBounds(final List<GVector3D> cartesianPoints,
@@ -187,36 +153,11 @@ public abstract class KDNode {
    }
 
 
-   //   private static GVector3D average(final List<GVector3D> cartesianPoints,
-   //                                    final int[] indexes) {
-   //      double sumX = 0;
-   //      double sumY = 0;
-   //      double sumZ = 0;
-   //      for (final int index : indexes) {
-   //         final GVector3D point = cartesianPoints.get(index);
-   //         sumX += point._x;
-   //         sumY += point._y;
-   //         sumZ += point._z;
-   //      }
-   //      final int indexesSize = indexes.length;
-   //      return new GVector3D( //
-   //               sumX / indexesSize, //
-   //               sumY / indexesSize, //
-   //               sumZ / indexesSize);
-   //   }
-
-
    private final KDNode _parent;
 
 
-   //   private final PositionsSet _positions;
-
-
-   protected KDNode(final KDNode parent
-   /*final PositionsSet positions*/
-   ) {
+   protected KDNode(final KDNode parent) {
       _parent = parent;
-      //      _positions = positions;
    }
 
 
@@ -231,8 +172,8 @@ public abstract class KDNode {
    }
 
 
-   abstract void breadthFirstAcceptVisitor(KDTreeVisitor visitor,
-                                           LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting;
+   protected abstract void breadthFirstAcceptVisitor(KDTreeVisitor visitor,
+                                                     LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting;
 
 
    public final int getDepth() {

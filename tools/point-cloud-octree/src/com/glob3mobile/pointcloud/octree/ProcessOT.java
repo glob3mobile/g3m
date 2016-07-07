@@ -184,42 +184,6 @@ public class ProcessOT {
             final PersistentLOD.Statistics statistics = lodDB.getStatistics(true);
             statistics.show();
 
-            //            final Sector wholeSector = statistics.getSector();
-            //            final TileHeader rootHeader = TileHeader.deepestEnclosingTileHeader(wholeSector);
-            //
-            //            System.out.println(rootHeader);
-            //
-            //
-            //            lodDB.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
-            //               private final List<String> _nodesIDs = new ArrayList<String>((int) statistics.getNodesCount());
-            //               private long               _sumIDLengths;
-            //
-            //
-            //               @Override
-            //               public void start(final PersistentLOD.Transaction transaction) {
-            //                  _sumIDLengths = 0;
-            //               }
-            //
-            //
-            //               @Override
-            //               public void stop(final PersistentLOD.Transaction transaction) {
-            //                  System.out.println(_nodesIDs.size());
-            //
-            //                  System.out.println((_nodesIDs.size() * 3) + _sumIDLengths);
-            //               }
-            //
-            //
-            //               @Override
-            //               public boolean visit(final PersistentLOD.Transaction transaction,
-            //                                    final PersistentLOD.Node node) {
-            //                  final String nodeID = node.getID();
-            //                  //System.out.println(nodeID);
-            //                  _nodesIDs.add(nodeID);
-            //                  _sumIDLengths += nodeID.length();
-            //                  return true;
-            //               }
-            //            });
-
 
             final boolean showStatisticsForSector = false;
             if (showStatisticsForSector) {

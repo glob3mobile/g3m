@@ -2,6 +2,7 @@
 
 package com.glob3mobile.pointcloud.kdtree;
 
+import java.util.LinkedList;
 
 
 public abstract class KDLeafNode
@@ -10,6 +11,13 @@ public abstract class KDLeafNode
 
    protected KDLeafNode(final KDNode parent) {
       super(parent);
+   }
+
+
+   @Override
+   protected void breadthFirstAcceptVisitor(final KDTreeVisitor visitor,
+                                            final LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting {
+      visitor.visitLeafNode(this);
    }
 
 

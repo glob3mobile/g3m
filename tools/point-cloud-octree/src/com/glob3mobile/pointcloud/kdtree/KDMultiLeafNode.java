@@ -2,7 +2,6 @@
 
 package com.glob3mobile.pointcloud.kdtree;
 
-import java.util.LinkedList;
 
 
 public class KDMultiLeafNode
@@ -16,13 +15,6 @@ public class KDMultiLeafNode
                    final int[] vertexIndexes) {
       super(parent);
       _vertexIndexes = vertexIndexes;
-   }
-
-
-   @Override
-   void breadthFirstAcceptVisitor(final KDTreeVisitor visitor,
-                                  final LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting {
-      visitor.visitLeafNode(this);
    }
 
 

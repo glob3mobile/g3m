@@ -22,8 +22,8 @@ import es.igosoftware.util.GProgress;
 
 
 class LODSortingTask
-         implements
-            PersistentOctree.Visitor {
+   implements
+      PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
@@ -36,7 +36,7 @@ class LODSortingTask
 
 
    LODSortingTask(final File cloudDirectory,
-            final String lodCloudName,
+                  final String lodCloudName,
                   final String sourceCloudName,
                   final long pointsCount,
                   final int maxPointsPerLeaf) {
@@ -50,7 +50,7 @@ class LODSortingTask
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- importing \"" + sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _maxPointsPerLeaf = maxPointsPerLeaf;
@@ -160,13 +160,6 @@ class LODSortingTask
 
       final int lodLevels = lodIndices.size();
       _sumLevelsCount += lodLevels;
-
-      //      final String parentID = parentID(nodeID);
-
-      //      System.out.println(nodeID + //
-      //                         " lodLevels=" + lodLevels + //
-      //                         ", points=" + pointsSize + //
-      //                         ", lodIndices=" + lodIndices);
 
       final List<List<Geodetic3D>> levelsPoints = new ArrayList<>(lodLevels);
       int pointsCounter = 0;
