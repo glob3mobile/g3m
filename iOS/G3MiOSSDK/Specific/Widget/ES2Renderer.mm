@@ -51,12 +51,14 @@ enum {
       return nil;
     }
     
+    
     // Create default framebuffer object. The backing will be allocated for the current layer in -resizeFromLayer
     glGenFramebuffers(1, &_defaultFramebuffer);
     glGenRenderbuffers(1, &_colorRenderbuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderbuffer);
+    
     
     //https://www.khronos.org/registry/gles/extensions/OES/OES_depth_texture.txt
     glGenTextures(1, &_depthRenderbuffer);
@@ -68,24 +70,32 @@ enum {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_EXT, GL_NONE);
+    
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderbuffer, 0);
     
     if (glGetError() != GL_NO_ERROR){
       printf("PROBLEMO");
     }
     
-    //    // Create the depthbuffer
-    //    glGenRenderbuffers(1, &_depthRenderbuffer);
-    //    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
-    //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
+    /*
+     // Create the depthbuffer
+     glGenRenderbuffers(1, &_depthRenderbuffer);
+     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
+     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
+     */
   }
   
   return self;
 }
 
 GLuint program = 9999;
+int w,h;
 
-void renderTexture(){
+void renderTexture(GLuint texture){
+  
+  
+  
   
   if (program == 9999){
     const std::string vs = "attribute vec2 aPosition2D;\n"
@@ -99,8 +109,16 @@ void renderTexture(){
     
     const std::string fs =
     "varying mediump vec2 TextureCoordOut;\n"
+    "uniform sampler2D u_depth_tex;\n"
     "void main() {"
-    "  gl_FragColor = vec4(TextureCoordOut.x, 0.0, 0.0, 1.0); //RED\n"
+    " highp float z = texture2D(u_depth_tex, TextureCoordOut).r;"
+    //"if (z != 0.0) gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); else gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);"
+    //"  gl_FragColor = vec4(TextureCoordOut.x,TextureCoordOut.y,0.0, 1.0); //RED\n"
+    //    "highp float n = 31250.719828262609;"
+    //    "highp float f = 31250719.828262608;"
+    //    "highp float c = (2.0 * n) / (f + n - z * (f - n));"
+    //
+    //    "  gl_FragColor = vec4(c,c,c, 1.0); //RED\n"
     "}\n";
     
     program = glCreateProgram();
@@ -142,24 +160,45 @@ void renderTexture(){
   int apos2D = glGetAttribLocation(program, "aPosition2D");
   glEnableVertexAttribArray(apos2D);
   GLfloat vertices[] = {-0.1, -0.1, // bottom left corner
-        -0.1,  0.1, // top right corner
+    -0.1,  0.1, // top right corner
     0.1,  -0.1, // top left corner
-  0.1, 0.1}; // bottom right corner
+    0.1, 0.1}; // bottom right corner
   GLint verticesSize = 8 * sizeof(GLfloat);
   glVertexAttribPointer(apos2D, 2, GL_FLOAT, false, 0, vertices);
   
   //TEX COORDS
   int aTexCoords = glGetAttribLocation(program, "aTextureCoord");
   glEnableVertexAttribArray(aTexCoords);
-  GLfloat tc[] = {-1, -1, // bottom left corner
-    -1,  1, // top right corner
-    1,  -1, // top left corner
+  GLfloat tc[] = {0,0, // bottom left corner
+    0,1, // top right corner
+    1,0, // top left corner
     1, 1}; // bottom right corner
   GLint tcSize = 8 * sizeof(GLfloat);
   glVertexAttribPointer(aTexCoords, 2, GL_FLOAT, false, 0, tc);
   
+  //  GLuint _depthRenderbuffer2;
+  //  glGenTextures(1, &_depthRenderbuffer2);
+  //  glBindTexture(GL_TEXTURE_2D, _depthRenderbuffer2);
+  //  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, w, h, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0);
+  //
+  //
+  //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  //
+  //  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderbuffer2, 0);
+  
+  
+  //Texture
+  glActiveTexture(GL_TEXTURE0);
+  
+  glBindTexture(GL_TEXTURE_2D, texture);
+  GLuint text = glGetUniformLocation(program, "u_depth_tex");
+  glUniform1i(text, 0);
+  
   glDisable(GL_DEPTH_TEST);
-//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
@@ -257,8 +296,16 @@ void renderTexture(){
     // Use shader program
     widget->render(_width, _height);
     
+    w = _width;
+    h = _height;
     
-    renderTexture();
+    
+    
+    renderTexture(_depthRenderbuffer);
+    
+    //    GLfloat pixelDepth;
+    //    glReadPixels(_width/2, _height/2, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &pixelDepth);
+    //    printf("Pixel depth: %d", pixelDepth);
     
     //TEST READING DEPTH
     //HAY Q RENDERIZAR LA TEXTURA PARA PODER LEERLA http://roxlu.com/2014/036/rendering-the-depth-buffer
@@ -304,13 +351,19 @@ void renderTexture(){
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
   
   // damos tamaño al buffer de profundidad
-  //  glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
-  //  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
+  /*
+   glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
+   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
+   */
   
   //We create another texture for storing the depth
   glGenTextures(1, &_depthRenderbuffer);
   glBindTexture(GL_TEXTURE_2D, _depthRenderbuffer);
+  
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_EXT, GL_NONE);
+  //  glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEX, GL_INTENSITY);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _width, _height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0);
+  
   
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -322,6 +375,7 @@ void renderTexture(){
   if (glGetError() != GL_NO_ERROR){
     printf("PROBLEMO");
   }
+  
   
   
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
