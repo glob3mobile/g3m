@@ -62,7 +62,7 @@ public final class Canvas_Android
    @Override
    protected void _initialize(final int width,
                               final int height) {
-      final float devicePixelRatio = IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+      final float devicePixelRatio = _retina ? IFactory.instance().getDeviceInfo().getDevicePixelRatio() : 1;
 
       final int scaledWidth = Math.round(width * devicePixelRatio);
       final int scaledHeight = Math.round(height * devicePixelRatio);
