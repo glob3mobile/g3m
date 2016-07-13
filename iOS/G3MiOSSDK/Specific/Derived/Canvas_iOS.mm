@@ -56,29 +56,24 @@ void Canvas_iOS::_initialize(int width, int height) {
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
+  if (_context == NULL) {
+    ILogger::instance()->logError("Can't create CGContext");
+    return;
+  }
+
   if (devicePixelRatio != 1) {
     CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
   }
 
   CGColorSpaceRelease( colorSpace );
 
-  CGContextSetAllowsAntialiasing(_context, true);
-  CGContextSetAllowsFontSmoothing(_context, true);
-  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
-  CGContextSetShouldAntialias(_context, true);
-
-
-  if (_context == NULL) {
-    ILogger::instance()->logError("Can't create CGContext");
-    return;
-  }
-
+  CGContextSetAllowsAntialiasing(_context, YES);
   CGContextSetShouldAntialias(_context, YES);
   CGContextSetAllowsFontSmoothing(_context, YES);
   CGContextSetShouldSmoothFonts(_context, YES);
+  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
   CGContextSetShouldSubpixelPositionFonts(_context, NO);
   CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
-  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
 
   tryToSetCurrentFontToContext();
 }
@@ -359,7 +354,6 @@ void Canvas_iOS::_fillText(const std::string& text,
   CGContextSaveGState(_context);
   CGContextTranslateCTM(_context, 0.0f, _canvasHeight);
   CGContextScaleCTM(_context, 1.0f, -1.0f);
-//  CGContextScaleCTM(_context, _scale, -_scale);
 
   NSString* nsText = [NSString stringWithCppString: text.c_str()];
 
