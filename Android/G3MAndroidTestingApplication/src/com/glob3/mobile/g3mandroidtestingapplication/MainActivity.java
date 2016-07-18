@@ -36,8 +36,8 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
 
@@ -67,21 +67,33 @@ public class MainActivity
    }
 
 
-   private static NonOverlappingMark createMark(final Geodetic3D position) {
-      final URL markBitmapURL = new URL("file:///g3m-marker.png");
-      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
+   //   private static NonOverlappingMark createMark(final Geodetic3D position) {
+   //      final URL markBitmapURL = new URL("file:///g3m-marker.png");
+   //      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
+   //
+   //      return new NonOverlappingMark( //
+   //               new DownloaderImageBuilder(markBitmapURL), //
+   //               new DownloaderImageBuilder(anchorBitmapURL), //
+   //               position);
+   //   }
 
-      return new NonOverlappingMark( //
-               new DownloaderImageBuilder(markBitmapURL), //
-               new DownloaderImageBuilder(anchorBitmapURL), //
-               position);
-   }
 
+   //   private static NonOverlappingMark createMark(final String label,
+   //                                                final Geodetic3D position) {
+   //      final URL markBitmapURL = new URL("file:///g3m-marker.png");
+   //      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
+   //
+   //      final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
+   //               new DownloaderImageBuilder(markBitmapURL), //
+   //               new LabelImageBuilder(label, GFont.monospaced()) //
+   //      );
+   //
+   //      return new NonOverlappingMark( //
+   //               imageBuilderWidget, //
+   //               new DownloaderImageBuilder(anchorBitmapURL), //
+   //               position);
+   //   }
 
-   private static NonOverlappingMark createMark(final String label,
-                                                final Geodetic3D position) {
-      final URL markBitmapURL = new URL("file:///g3m-marker.png");
-      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
 
       final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
                new DownloaderImageBuilder(markBitmapURL), //

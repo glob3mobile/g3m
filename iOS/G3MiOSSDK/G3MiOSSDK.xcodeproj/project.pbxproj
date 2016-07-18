@@ -505,7 +505,6 @@
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */; };
 		D842D9B01A72906A008D55E4 /* NonOverlappingMarksRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */; };
-		D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D154201C7329AE00E54742 /* Vector2S.hpp */; };
 		D84B45051CD8A8070041CA1F /* PointCloudMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84B45031CD8A8070041CA1F /* PointCloudMesh.cpp */; };
 		D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
@@ -823,7 +822,6 @@
 				D8D781ED1CA402260025E988 /* Polygon2D.hpp in CopyFiles */,
 				D8D781EE1CA402260025E988 /* Polygon3D.hpp in CopyFiles */,
 				CF236E281CB3EF50002D4D77 /* ViewMode.hpp in CopyFiles */,
-				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
 				CFE50D261C6669160002EFD5 /* PlanetRenderContext.hpp in CopyFiles */,
 				CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */,
@@ -3594,11 +3592,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)/**",
-					"$(SDKROOT)/usr/include/libxml2/**",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -3636,11 +3631,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)/**",
-					"$(SDKROOT)/usr/include/libxml2/**",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;

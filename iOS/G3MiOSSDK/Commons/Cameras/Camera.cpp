@@ -95,8 +95,8 @@ void Camera::copyFrom(const Camera &that,
 #endif
     _angle2Horizon = that._angle2Horizon;
 
-    _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
-    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
+    _tanHalfVerticalFOV   = that._tanHalfVerticalFOV;
+    _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
     
     _forcedZNear = that._forcedZNear;
   }
@@ -122,9 +122,11 @@ _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
 _angle2Horizon(-99),
 _normalizedPosition(0, 0, 0),
-_tanHalfVerticalFieldOfView(NAND),
-_tanHalfHorizontalFieldOfView(NAND),
+_tanHalfVerticalFOV(NAND),
+_tanHalfHorizontalFOV(NAND),
 _timestamp(timestamp),
+_viewPortWidth(-1),
+_viewPortHeight(-1),
 _forcedZNear(NAND)
 {
   resizeViewport(0, 0);
@@ -141,10 +143,14 @@ void Camera::resizeViewport(int width, int height) {
     _tanHalfVerticalFOV   = _tanHalfVerticalFOV   / width  * viewPortW;
     _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
 
-  _dirtyFlags.setAllDirty();
-  
-  _tanHalfHorizontalFieldOfView = NAND;
-  _tanHalfVerticalFieldOfView = NAND;
+    _viewPortWidth  = width;
+    _viewPortHeight = height;
+
+    _dirtyFlags.setAllDirty();
+    
+    _tanHalfHorizontalFOV = NAND;
+    _tanHalfVerticalFOV = NAND;
+  }
 }
 
 void Camera::print() {

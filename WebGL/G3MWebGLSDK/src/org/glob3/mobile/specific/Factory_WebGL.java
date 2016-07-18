@@ -20,8 +20,6 @@ public final class Factory_WebGL
 extends
 IFactory {
 
-   boolean first = true;
-
 
    @Override
    public ITimer createTimer() {
@@ -115,10 +113,5 @@ IFactory {
       return new DeviceInfo_WebGL();
    }
 
-
-   @Override
-   public IXMLNode createXMLNodeFromXML(final String xmlText) {
-      return new XMLNode_WebGL(xmlText);
-   }
 
 }

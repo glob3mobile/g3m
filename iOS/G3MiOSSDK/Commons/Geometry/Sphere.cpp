@@ -18,68 +18,45 @@
 
 Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
   const size_t size = points.size();
-
+  
   if (size < 2) {
     return NULL;
   }
   
-  const Vector3D first = points[0];
+  double xmin = points[0]._x;
+  double xmax = points[0]._x;
+  double ymin = points[0]._y;
+  double ymax = points[0]._y;
+  double zmin = points[0]._z;
+  double zmax = points[0]._z;
   
-  MutableVector3D xmin(first);
-  MutableVector3D xmax(first);
-  MutableVector3D ymin(first);
-  MutableVector3D ymax(first);
-  MutableVector3D zmin(first);
-  MutableVector3D zmax(first);
-  
-  for (int i = 1; i < points.size(); i++) {
+  for (size_t i = 1; i < size; i++) {
     const Vector3D p = points[i];
-    if (p._x < xmin.x()) xmin.copyFrom(p);
-    if (p._x > xmax.x()) xmax.copyFrom(p);
-    if (p._y < ymin.y()) ymin.copyFrom(p);
-    if (p._y > ymax.y()) ymax.copyFrom(p);
-    if (p._z < zmin.z()) zmin.copyFrom(p);
-    if (p._z > zmax.z()) zmax.copyFrom(p);
+    
+    const double x = p._x;
+    const double y = p._y;
+    const double z = p._z;
+    
+    if (x < xmin) xmin = x;
+    if (x > xmax) xmax = x;
+    if (y < ymin) ymin = y;
+    if (y > ymax) ymax = y;
+    if (z < zmin) zmin = z;
+    if (z > zmax) zmax = z;
   }
   
-  double xSpan = xmax.squaredDistanceTo(xmin);
-  double ySpan = ymax.squaredDistanceTo(ymin);
-  double zSpan = zmax.squaredDistanceTo(zmin);
-  MutableVector3D dia1(xmin);
-  MutableVector3D dia2(xmax);
-  double maxSpan = xSpan;
-  if (ySpan > maxSpan) {
-    maxSpan = ySpan;
-    dia1.copyFrom(ymin);
-    dia2.copyFrom(ymax);
-  }
-  if (zSpan > maxSpan) {
-    dia1.copyFrom(zmin);
-    dia2.copyFrom(zmax);
-  }
-  
-  MutableVector3D center((dia1.x() + dia2.x()) / 2,
-                         (dia1.y() + dia2.y()) / 2,
-                         (dia1.z() + dia2.z()) / 2);
-  
-  double sqRad = dia2.squaredDistanceTo(center);
-  double radius = IMathUtils::instance()->sqrt(sqRad);
-  for (int i = 0; i < points.size(); i++) {
-    const Vector3D p = points[i];
-    double d = center.squaredDistanceTo(p);
-    if (d > sqRad) {
-      double r = IMathUtils::instance()->sqrt(d);
-      radius = (radius + r) * 0.5f;
-      sqRad = radius * radius;
-      double offset = r - radius;
-      //center = (radius * center + offset * p) / r;
-      center.set((radius * center.x() + offset * p._x) / r,
-                 (radius * center.y() + offset * p._y) / r,
-                 (radius * center.z() + offset * p._z) / r);
+  const Vector3D center = Vector3D((xmin + xmax) / 2,
+                                   (ymin + ymax) / 2,
+                                   (zmin + zmax) / 2);
+  double sqRad = center.squaredDistanceTo(points[0]);
+  for (size_t i = 1; i < size; i++) {
+    const double dt = center.squaredDistanceTo(points[i]);
+    if (dt > sqRad) {
+      sqRad = dt;
     }
   }
   
-  return new Sphere(center.asVector3D(), radius);
+  return new Sphere(center, IMathUtils::instance()->sqrt(sqRad));
 }
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {

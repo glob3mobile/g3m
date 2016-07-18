@@ -13,6 +13,9 @@
 
 #import "CameraViewController.h"
 
+#include <string>
+#include <vector>
+
 
 class MapBooBuilder_iOS;
 
@@ -30,6 +33,7 @@ class GEOVectorLayer;
 class PointCloudEvolutionTask;
 class LayerSet;
 class ShapesRenderer;
+class Planet;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;

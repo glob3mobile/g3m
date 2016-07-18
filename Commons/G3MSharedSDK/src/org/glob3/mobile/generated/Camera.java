@@ -24,6 +24,8 @@ public class Camera
      _tanHalfVerticalFOV = java.lang.Double.NaN;
      _tanHalfHorizontalFOV = java.lang.Double.NaN;
      _timestamp = timestamp;
+     _viewPortWidth = -1;
+     _viewPortHeight = -1;
      _forcedZNear = java.lang.Double.NaN;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning VR => Diego at work!
@@ -84,6 +86,8 @@ public class Camera
       _geodeticPosition = that._geodeticPosition;
       _angle2Horizon = that._angle2Horizon;
   
+      _tanHalfVerticalFOV = that._tanHalfVerticalFOV;
+      _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
       _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
       _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   
@@ -98,10 +102,17 @@ public class Camera
     {
       _timestamp++;
   
+      final int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+      final int viewPortW = (_viewPortWidth == 0) ? width : _viewPortWidth;
+      _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * viewPortW;
+      _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
     _dirtyFlags.setAllDirty();
   
-    _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
-    _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
+      _viewPortWidth = width;
+      _viewPortHeight = height;
+  
+      _dirtyFlags.setAllDirty();
+    }
   }
 
   public final Vector3D pixel2Ray(Vector2I pixel)
