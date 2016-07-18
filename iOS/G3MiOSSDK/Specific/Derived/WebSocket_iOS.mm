@@ -39,7 +39,7 @@
 {
   if (_websocket) {
     if ([message isKindOfClass:[NSString class]]) {
-      _listener->onMesssage( _websocket, [message toCppString] );
+      _listener->onMessage( _websocket, [message toCppString] );
     }
     else {
       NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];

@@ -328,3 +328,12 @@ Our roadmap is changing continuously, and we are open to change the order of new
 License
 =======
 G3M is released under a 2 [clauses BSD license](https://github.com/glob3mobile/g3m/blob/purgatory/LICENSE.txt) Except for the Blender plugin exporter which is available under the GPL 2.0 License.:
+
+
+Information
+===========
+This project has beed developed with the help of Ministerio de Industria Energía y Turismo.
+![logos](http://glob3mobile.com/wp-content/uploads/2016/05/avanza2.gif)
+![logos](http://glob3mobile.com/wp-content/uploads/2016/05/logomityc.png)
+![logos](http://glob3mobile.com/wp-content/uploads/2016/05/ue_feder.jpg)
+

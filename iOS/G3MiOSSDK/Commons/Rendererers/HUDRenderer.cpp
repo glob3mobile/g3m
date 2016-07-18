@@ -15,6 +15,7 @@
 #include "GLState.hpp"
 #include "GL.hpp"
 #include "G3MRenderContext.hpp"
+#include "G3MEventContext.hpp"
 
 
 HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
@@ -126,7 +127,13 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 //  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
 //                                                                                           0, height,
 //                                                                                           -halfWidth, halfWidth);
-  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
+
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+
+  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, logicWidth,
                                                                                            0, height,
                                                                                            -1, +1);
 

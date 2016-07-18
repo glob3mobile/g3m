@@ -252,7 +252,11 @@ public:
 "lightColor.z = min(lightColor.z, 1.0);\n" +
 "}\n",
  emptyString +  
+"#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
 "precision highp float;\n" +
+"#else\n" +
+"precision mediump float;\n" +
+"#endif\n" +
 "uniform lowp vec4 uFlatColor;\n" +
 "varying vec3 lightColor;\n" +
 "void main() {\n" +
@@ -545,7 +549,11 @@ public:
 "lightColor.z = min(lightColor.z, 1.0);\n" +
 "}\n",
  emptyString +  
+"#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
 "precision highp float;\n" +
+"#else\n" +
+"precision mediump float;\n" +
+"#endif\n" +
 "varying mediump vec2 TextureCoordOut;\n" +
 "uniform sampler2D Sampler;\n" +
 "varying vec3 lightColor;\n" +
@@ -640,7 +648,11 @@ public:
 "lightColor.z = min(lightColor.z, 1.0);\n" +
 "}\n",
  emptyString +  
+"#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
 "precision highp float;\n" +
+"#else\n" +
+"precision mediump float;\n" +
+"#endif\n" +
 "varying mediump vec2 TextureCoordOut;\n" +
 "uniform sampler2D Sampler;\n" +
 "varying vec3 lightColor;\n" +

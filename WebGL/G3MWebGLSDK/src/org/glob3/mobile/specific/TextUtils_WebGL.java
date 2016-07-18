@@ -14,21 +14,6 @@ public class TextUtils_WebGL
    extends
       ITextUtils {
 
-   //   public static native String toJSColor(final Color color) /*-{
-   //		if (color) {
-   //			var r = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getRed()());
-   //			var g = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getGreen()());
-   //			var b = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getBlue()());
-   //			var a = Math
-   //					.round(255 * color.@org.glob3.mobile.generated.Color::getAlpha()());
-   //			return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-   //		} else {
-   //			return null;
-   //		}
-   //   }-*/;
 
    private static String toJSColor(final Color color) {
       if (color == null) {
@@ -51,17 +36,14 @@ public class TextUtils_WebGL
                                        final Color shadowColor,
                                        final IImageListener listener,
                                        final boolean autodelete) /*-{
-		//debugger;
-
 		var canvas = $doc.createElement("canvas");
 		var context = canvas.getContext("2d");
 
-		var font = "" + (fontSize * 0.6) + "pt sans-serif";
+		var font = "" + Math.round(fontSize) + "px sans-serif";
 		context.font = font;
 
 		var width = context.measureText(label).width;
-		//var height = Math.round(fontSize * 1.6);
-		var height = Math.round(fontSize * 1.66);
+		var height = Math.round(fontSize);
 		if (shadowColor) {
 			width += 2;
 			height += 2;
@@ -70,9 +52,6 @@ public class TextUtils_WebGL
 		canvas.width = width;
 		canvas.height = height;
 		context.font = font; // set font as the width/height changes reset the context
-
-		// context.fillStyle = "green"; // for debug
-		// context.fillRect(0, 0, width, height); // for debug
 
 		context.fillStyle = @org.glob3.mobile.specific.TextUtils_WebGL::toJSColor(Lorg/glob3/mobile/generated/Color;)(color);
 
@@ -144,12 +123,11 @@ public class TextUtils_WebGL
 		var canvas = $doc.createElement("canvas");
 		var context = canvas.getContext("2d");
 
-		var font = "" + (fontSize * 0.6) + "pt sans-serif";
+		var font = "" + Math.round(fontSize) + "px sans-serif";
 		context.font = font;
 
 		var textWidth = context.measureText(label).width;
-		//var textHeight = Math.round(fontSize * 1.6);
-		var textHeight = Math.round(fontSize * 1.66);
+		var textHeight = Math.round(fontSize);
 		if (shadowColor) {
 			textWidth += 2;
 			textHeight += 2;

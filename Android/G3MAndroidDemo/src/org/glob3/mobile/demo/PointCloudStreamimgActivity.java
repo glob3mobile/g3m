@@ -6,7 +6,6 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
 import org.glob3.mobile.generated.PointCloudsRenderer.PointCloudMetadataListener;
@@ -24,8 +23,8 @@ import android.widget.RelativeLayout;
 
 
 public class PointCloudStreamimgActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -96,10 +95,14 @@ public class PointCloudStreamimgActivity
    }
 
 
-   private LayerSet createLayerSet() {
-      final LayerSet layerSet = new LayerSet();
+   static private LayerSet createLayerSet() {
+      //      final LayerSet layerSet = new LayerSet();
+      //
+      //      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
 
       return layerSet;
    }

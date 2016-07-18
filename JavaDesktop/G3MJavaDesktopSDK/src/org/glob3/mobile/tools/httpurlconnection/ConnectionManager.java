@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 
 import org.apache.commons.fileupload.util.Streams;
@@ -64,7 +65,9 @@ public class ConnectionManager {
             httpConn.disconnect();
             throw new IOException("Outputdir don't exist");
          }
-         Streams.copy(httpConn.getInputStream(), new FileOutputStream(outputFile), true);
+         try (FileOutputStream out = new FileOutputStream(outputFile)) {
+            Streams.copy(httpConn.getInputStream(), out, true);
+         }
          System.out.println("File downloaded");
       }
       else {
@@ -119,7 +122,7 @@ public class ConnectionManager {
       request.writeBytes("Content-Disposition: form-data; name=\"" + "fileuploader" + "\";filename=\"" + fileToUpload.getName()
                          + "\"" + crlf);
 
-      String contentType = HttpURLConnection.guessContentTypeFromName(fileToUpload.getName());
+      String contentType = URLConnection.guessContentTypeFromName(fileToUpload.getName());
       contentType = ((contentType != null) ? contentType : "");
       System.out.println("Content-Type: " + contentType);
       request.writeBytes("Content-Type: " + contentType + crlf);
@@ -129,35 +132,34 @@ public class ConnectionManager {
       request.flush();
 
 
-      final FileInputStream in = new FileInputStream(fileToUpload);
+      try (final FileInputStream in = new FileInputStream(fileToUpload)) {
 
-      final long total = Streams.copy(in, request, false);
-      System.out.println("Count: " + total + "; Total size: " + ((total) / 1000000) + " MB.");
+         final long total = Streams.copy(in, request, false);
+         System.out.println("Count: " + total + "; Total size: " + ((total) / 1000000) + " MB.");
 
-      //End content wrapper:
-      request.writeBytes(crlf);
-      request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
-      //Flush output buffer:
-      request.flush();
+         //End content wrapper:
+         request.writeBytes(crlf);
+         request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
+         //Flush output buffer:
+         request.flush();
 
-      request.close();
-      request = null;
+         request.close();
+         request = null;
 
 
-      final StringBuilder sb = new StringBuilder();
-      final BufferedReader reader = new BufferedReader(new InputStreamReader(httpUrlConnection.getInputStream()));
+         final StringBuilder sb = new StringBuilder();
+         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(httpUrlConnection.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+               sb.append(line);
+            }
+         }
 
-      String line;
-      while ((line = reader.readLine()) != null) {
-         sb.append(line);
+         httpUrlConnection.disconnect();
+
+         System.out.println(sb.toString());
+         return sb.toString();
       }
-      reader.close();
-
-
-      httpUrlConnection.disconnect();
-
-      System.out.println(sb.toString());
-      return sb.toString();
    }
 
 
@@ -181,20 +183,19 @@ public class ConnectionManager {
          }
          connection.setDoOutput(true);
          if (!urlParameters.isEmpty()) {
-            final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            boolean first = true;
-            for (final String key : urlParameters.keySet()) {
-               if (first) {
-                  first = false;
+            try (final DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+               boolean first = true;
+               for (final String key : urlParameters.keySet()) {
+                  if (first) {
+                     first = false;
+                  }
+                  else {
+                     wr.writeBytes("&");
+                  }
+                  wr.writeBytes(key + "=" + urlParameters.get(key));
+                  wr.flush();
                }
-               else {
-                  wr.writeBytes("&");
-               }
-               wr.writeBytes(key + "=" + urlParameters.get(key));
-               wr.flush();
             }
-
-            wr.close();
          }
       }
       else {
@@ -224,13 +225,12 @@ public class ConnectionManager {
 
 
       final StringBuilder sb = new StringBuilder();
-      final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-      String line;
-      while ((line = reader.readLine()) != null) {
-         sb.append(line);
+      try (final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+         String line;
+         while ((line = reader.readLine()) != null) {
+            sb.append(line);
+         }
       }
-      reader.close();
       connection.disconnect();
 
       return sb.toString();

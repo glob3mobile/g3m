@@ -2,14 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.HashMap;
-
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
@@ -17,8 +14,6 @@ import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.IXMLNode;
 import org.glob3.mobile.generated.URL;
-
-import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class Factory_WebGL
@@ -31,20 +26,6 @@ IFactory {
    @Override
    public ITimer createTimer() {
       return new Timer_WebGL();
-   }
-
-
-   // TODO TEMP HACK TO PRELOAD IMAGES
-   private final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
-
-
-   public void storeDownloadedImage(final String url,
-                                    final JavaScriptObject imgJS) {
-      final IImage img = new Image_WebGL(imgJS);
-
-      if (((Image_WebGL) img).getImage() != null) {
-         _downloadedImages.put(url, img);
-      }
    }
 
 
@@ -113,16 +94,6 @@ IFactory {
                                      final boolean autodeleteWebSocket) {
       return new WebSocket_WebGL(url, listener, autodeleteListener, autodeleteWebSocket);
    }
-
-
-   //   @Override
-   //   public IShortBuffer createShortBuffer(final short[] array) {
-   //      return new ShortBuffer_WebGL(array);
-   //   }
-   //   @Override
-   //   public IFloatBuffer createFloatBuffer(final float[] array) {
-   //      return new FloatBuffer_WebGL(array);
-   //   }
 
 
    @Override

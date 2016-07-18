@@ -25,6 +25,8 @@
 #include "IStringUtils.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "IFactory.hpp"
+#include "G3MEventContext.hpp"
+
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 
@@ -59,8 +61,12 @@ _changeCounter(0)
 void HUDImageRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                              int width,
                                              int height) {
-  const int halfWidth  = width  / 2;
-  const int halfHeight = height / 2;
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  const int halfWidth  = logicWidth / 2;
+  const int halfHeight = height     / 2;
   MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
                                                                                            -halfHeight, halfHeight,
                                                                                            -halfWidth,  halfWidth);
@@ -135,8 +141,11 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
 
 
   const Camera* camera = rc->getCurrentCamera();
-
-  const double halfWidth  = camera->getViewPortWidth()  / 2.0;
+  int viewPortWidth = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
+  const double halfWidth  = viewPortWidth               / 2.0;
   const double halfHeight = camera->getViewPortHeight() / 2.0;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
@@ -178,7 +187,10 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
 
         const Camera* camera = rc->getCurrentCamera();
 
-        const int width  = camera->getViewPortWidth();
+        int width = camera->getViewPortWidth();
+        if (rc->getViewMode() == STEREO) {
+          width /= 2;
+        }
         const int height = camera->getViewPortHeight();
 
         _imageFactory->create(rc,

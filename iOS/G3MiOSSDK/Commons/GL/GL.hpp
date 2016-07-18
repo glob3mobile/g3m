@@ -43,13 +43,7 @@ private:
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
 
-  inline void loadModelView();
-
   const IGLTextureId* getGLTextureId();
-
-  //Get Locations warning of errors
-  IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
-                                          const std::string& name);
 
   GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 

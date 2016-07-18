@@ -12,11 +12,14 @@
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
+
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
 
 Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
-  if (points.size() < 2) {
+  const size_t size = points.size();
+
+  if (size < 2) {
     return NULL;
   }
   
@@ -78,7 +81,6 @@ Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
   
   return new Sphere(center.asVector3D(), radius);
 }
-
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
   return rc->getCurrentCamera()->getProjectedSphereArea(*this);

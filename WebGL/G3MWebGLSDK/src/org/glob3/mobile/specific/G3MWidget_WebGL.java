@@ -54,7 +54,7 @@ public class G3MWidget_WebGL
    extends
       Composite {
 
-   private Canvas               _canvas;
+   private final Canvas         _canvas;
    private JavaScriptObject     _webGLContext;
    private int                  _width;
    private int                  _height;
@@ -64,7 +64,6 @@ public class G3MWidget_WebGL
 
 
    public G3MWidget_WebGL() {
-
       initSingletons();
 
       _canvas = Canvas.createIfSupported();
@@ -89,13 +88,6 @@ public class G3MWidget_WebGL
 
       jsDefineG3MBrowserObjects();
 
-
-      // if (TouchEvent.isSupported()) {
-      //    sinkEvents(Event.TOUCHEVENTS);
-      // }
-      // else {
-      //    sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
-      // }
       sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
 
       exportJSFunctions();
@@ -108,14 +100,6 @@ public class G3MWidget_WebGL
 			$wnd.G3M = {};
 		}
 
-		//	$wnd.Geodetic3D = $entry(@org.glob3.mobile.generated.Geodetic3D::new(Lorg/glob3/mobile/generated/Angle;Lorg/glob3/mobile/generated/Angle;D));
-		//	$wnd.setAnimatedCameraPosition = $entry(function (widget, position) {
-		//		widget.@org.glob3.mobile.specific.G3MWidget_WebGL::setAnimatedCameraPosition(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-		//	});
-		//	$wnd.angleFromDegrees = $entry(function (degrees) {
-		//		return @org.glob3.mobile.generated.Angle::fromDegrees(D)(degrees);
-		//	});
-
 		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
 		});
@@ -126,10 +110,9 @@ public class G3MWidget_WebGL
 			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
 		});
 		$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
+			return @org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
 		});
 		$wnd.G3M.moveCameraTo = $entry(function(position) {
-			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
 		});
    }-*/;
@@ -140,9 +123,9 @@ public class G3MWidget_WebGL
    }
 
 
-   public Geodetic3D newGeodetic3D(final double latitude,
-                                   final double longitude,
-                                   final double height) {
+   public static Geodetic3D newGeodetic3D(final double latitude,
+                                          final double longitude,
+                                          final double height) {
       return new Geodetic3D(Angle.fromDegrees(latitude), Angle.fromDegrees(longitude), height);
    }
 
@@ -205,7 +188,7 @@ public class G3MWidget_WebGL
    }
 
 
-   public void initSingletons() {
+   public static void initSingletons() {
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IFactory factory = new Factory_WebGL();
       final IStringUtils stringUtils = new StringUtils_WebGL();
@@ -290,12 +273,9 @@ public class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
+			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame || function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -303,8 +283,7 @@ public class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -333,8 +312,7 @@ public class G3MWidget_WebGL
 				} catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
+					jsCanvas.addEventListener("webglcontextlost", function(event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);
@@ -352,7 +330,7 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   private GPUProgramManager createGPUProgramManager() {
+   static private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
       return new GPUProgramManager(factory);
    }

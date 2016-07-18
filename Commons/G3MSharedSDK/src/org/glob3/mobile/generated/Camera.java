@@ -21,8 +21,8 @@ public class Camera
      _geodeticPosition = null;
      _angle2Horizon = -99;
      _normalizedPosition = new MutableVector3D(0, 0, 0);
-     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
-     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
+     _tanHalfVerticalFOV = java.lang.Double.NaN;
+     _tanHalfHorizontalFOV = java.lang.Double.NaN;
      _timestamp = timestamp;
      _forcedZNear = java.lang.Double.NaN;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
@@ -94,9 +94,9 @@ public class Camera
 
   public final void resizeViewport(int width, int height)
   {
-    _timestamp++;
-    _viewPortWidth = width;
-    _viewPortHeight = height;
+    if ((width != _viewPortWidth) || (height != _viewPortHeight))
+    {
+      _timestamp++;
   
     _dirtyFlags.setAllDirty();
   
@@ -315,7 +315,7 @@ public class Camera
   public final void initialize(G3MContext context)
   {
     _planet = context.getPlanet();
-  // #warning move this to Planet, and remove isFlat() method (DGD)
+    // #warning move this to Planet, and remove isFlat() method (DGD)
     if (_planet.isFlat())
     {
       setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
@@ -506,11 +506,11 @@ public class Camera
     final Angle halfVFOV = vertical.div(2.0);
     final double newH = halfHFOV.tangent();
     final double newV = halfVFOV.tangent();
-    if ((newH != _tanHalfHorizontalFieldOfView) || (newV != _tanHalfVerticalFieldOfView))
+    if ((newH != _tanHalfHorizontalFOV) || (newV != _tanHalfVerticalFOV))
     {
       _timestamp++;
-      _tanHalfHorizontalFieldOfView = newH;
-      _tanHalfVerticalFieldOfView = newV;
+      _tanHalfHorizontalFOV = newH;
+      _tanHalfVerticalFOV = newV;
   
       _dirtyFlags._frustumDataDirty = true;
       _dirtyFlags._projectionMatrixDirty = true;
@@ -624,12 +624,12 @@ public class Camera
 
   public final Angle getHorizontalFOV()
   {
-    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFieldOfView)).times(2);
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFOV) * 2);
   }
 
   public final Angle getVerticalFOV()
   {
-    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFieldOfView)).times(2);
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFOV) * 2);
   }
 
   public final void setCameraCoordinateSystem(CoordinateSystem rs)
@@ -721,10 +721,8 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning VR => Diego at work!
-  private double _tanHalfVerticalFieldOfView;
-  private double _tanHalfHorizontalFieldOfView;
+  private double _tanHalfVerticalFOV;
+  private double _tanHalfHorizontalFOV;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
@@ -823,48 +821,34 @@ public class Camera
       zNear = zFar / goalRatio;
     }
   
-    // compute rest of frustum numbers
-  
-    double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
-    double tanHalfVFOV = _tanHalfVerticalFieldOfView;
-  
-    if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
+    if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
   
-      if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
+      if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) && (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
       {
-        tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3 => aprox tan(34 degrees / 2)
-        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+        //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+        _tanHalfVerticalFOV = 0.3;
+        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
       }
       else
       {
-        if ((tanHalfHFOV != tanHalfHFOV))
+        if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV))
         {
-          tanHalfHFOV = tanHalfVFOV / ratioScreen;
+          _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
         }
-        else
+        else if (_tanHalfVerticalFOV != _tanHalfVerticalFOV)
         {
-          if (tanHalfVFOV != tanHalfVFOV)
-          {
-            tanHalfVFOV = tanHalfHFOV * ratioScreen;
-          }
+          _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
         }
       }
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning VR => Diego at work!
-      _tanHalfHorizontalFieldOfView = tanHalfHFOV;
-      _tanHalfVerticalFieldOfView = tanHalfVFOV;
     }
   
-    final double right = tanHalfHFOV * zNear;
+    final double right = _tanHalfHorizontalFOV * zNear;
     final double left = -right;
-    final double top = tanHalfVFOV * zNear;
+    final double top = _tanHalfVerticalFOV * zNear;
     final double bottom = -top;
-  
     return new FrustumData(left, right, bottom, top, zNear, zFar);
-  
   }
 
   // opengl projection matrix

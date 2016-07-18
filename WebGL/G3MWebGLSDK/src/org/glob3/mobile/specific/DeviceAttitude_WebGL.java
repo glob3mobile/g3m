@@ -11,16 +11,16 @@ import org.glob3.mobile.generated.MutableMatrix44D;
 
 
 public class DeviceAttitude_WebGL
-extends
-IDeviceAttitude {
+   extends
+      IDeviceAttitude {
 
-   InterfaceOrientation _currentIO = null;
+   private InterfaceOrientation _currentIO = null;
 
-   double               _beta      = Double.NaN;
-   double               _gamma     = Double.NaN;
-   double               _alpha     = Double.NaN;
+   private double               _beta      = Double.NaN;
+   private double               _gamma     = Double.NaN;
+   private double               _alpha     = Double.NaN;
 
-   boolean              _isTracking;
+   private boolean              _isTracking;
 
 
    //Implementation of DeviceAttitude_WebGL may be inconsistent with device natural screen orientation
@@ -77,43 +77,30 @@ IDeviceAttitude {
       if (orientation.equalsIgnoreCase("portrait-primary")) {
          _currentIO = InterfaceOrientation.PORTRAIT;
       }
-      else {
-         if (orientation.equalsIgnoreCase("portrait-secondary")) {
-            _currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
-         }
-         else {
-            if (orientation.equalsIgnoreCase("landscape-primary")) {
-               _currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
-            }
-            else {
-               if (orientation.equalsIgnoreCase("landscape-secondary")) {
-                  _currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
-               }
-            }
-         }
+      else if (orientation.equalsIgnoreCase("portrait-secondary")) {
+         _currentIO = InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
+      }
+      else if (orientation.equalsIgnoreCase("landscape-primary")) {
+         _currentIO = InterfaceOrientation.LANDSCAPE_RIGHT;
+      }
+      else if (orientation.equalsIgnoreCase("landscape-secondary")) {
+         _currentIO = InterfaceOrientation.LANDSCAPE_LEFT;
       }
 
-      ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
-
+      // ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
    }
 
 
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
-
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
-				console.log("IO CHROME");
 				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-			} else {
-				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-					console.log("IO MOZ");
-					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
-				}
+			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
 			}
 		} catch (err) {
 			console.error("Unable to track Interface Orientation. " + err);
 		}
-
    }-*/;
 
 
@@ -121,17 +108,13 @@ IDeviceAttitude {
 
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
-				console.log("IO CHROME");
 				$wnd.screen.orientation.onchange = function() {
 					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				};
-			} else {
-				if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-					console.log("IO MOZ");
-					$wnd.screen.onmozorientationchange = function(event) {
-						event.preventDefault();
-						devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-					}
+			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+				$wnd.screen.onmozorientationchange = function(event) {
+					event.preventDefault();
+					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
 				}
 			}
 		} catch (err) {
@@ -188,7 +171,6 @@ IDeviceAttitude {
          final CoordinateSystem cs = CoordinateSystem.global().applyTaitBryanAngles(getHeading(), getPitch(), getRoll());
          rotationMatrix.copyValue(cs.getRotationMatrix());
       }
-
    }
 
 

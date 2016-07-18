@@ -410,10 +410,12 @@ void Tile::render(const G3MRenderContext*    rc,
         _justCreatedSubtiles = false;
       }
 
-      const size_t subTilesSize = subTiles->size();
-      for (size_t i = 0; i < subTilesSize; i++) {
-        Tile* subTile = subTiles->at(i);
-        toVisitInNextIteration->push_back(subTile);
+      if (toVisitInNextIteration != NULL) {
+        const size_t subTilesSize = subTiles->size();
+        for (size_t i = 0; i < subTilesSize; i++) {
+          Tile* subTile = subTiles->at(i);
+          toVisitInNextIteration->push_back(subTile);
+        }
       }
     }
   }

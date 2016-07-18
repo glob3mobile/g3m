@@ -47,9 +47,6 @@ public class Tile
 
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void prepareTestLODData(Planet planet);
-
   private Mesh getDebugMesh(G3MRenderContext rc, PlanetRenderContext prc)
   {
     if (_debugMesh == null)
@@ -358,11 +355,14 @@ public class Tile
           _justCreatedSubtiles = false;
         }
   
-        final int subTilesSize = subTiles.size();
-        for (int i = 0; i < subTilesSize; i++)
+        if (toVisitInNextIteration != null)
         {
-          Tile subTile = subTiles.get(i);
-          toVisitInNextIteration.add(subTile);
+          final int subTilesSize = subTiles.size();
+          for (int i = 0; i < subTilesSize; i++)
+          {
+            Tile subTile = subTiles.get(i);
+            toVisitInNextIteration.add(subTile);
+          }
         }
       }
     }

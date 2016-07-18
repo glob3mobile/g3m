@@ -39,9 +39,6 @@ public class GL
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void loadModelView();
-
   private IGLTextureId getGLTextureId()
   {
     //  if (_verbose) {
@@ -87,10 +84,6 @@ public class GL
   
     return result;
   }
-
-  //Get Locations warning of errors
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
 
   private GLGlobalState _clearScreenState; //State used to clear screen with certain color
 

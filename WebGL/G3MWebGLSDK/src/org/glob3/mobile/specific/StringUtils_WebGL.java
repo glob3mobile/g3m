@@ -27,11 +27,10 @@ public final class StringUtils_WebGL
    @Override
    public ArrayList<String> splitLines(final String string) {
       final String lines[] = string.split("\\r?\\n");
-      final ArrayList<String> l = new ArrayList<String>();
+      final ArrayList<String> l = new ArrayList<>();
       for (final java.lang.String line : lines) {
          l.add(line);
       }
-
       return l;
    }
 

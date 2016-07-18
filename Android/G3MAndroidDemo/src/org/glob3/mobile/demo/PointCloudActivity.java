@@ -22,7 +22,6 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -57,7 +56,8 @@ public class PointCloudActivity
          final JSONObject object = objectBase.asObject();
          final JSONArray pointsJson = object.getAsArray("points");
 
-         final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_builder.getPlanet());
+         final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(
+                  _builder.getPlanet());
 
          final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
@@ -186,9 +186,12 @@ public class PointCloudActivity
       //      layerSet.disableAllLayers();
       //      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
 
-      final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2));
+      //      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2));
 
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
@@ -240,11 +243,11 @@ public class PointCloudActivity
    }
 
 
-   private float normalize(final float value,
-                           final float max,
-                           final float min,
-                           final float new_max,
-                           final float new_min) {
+   static private float normalize(final float value,
+                                  final float max,
+                                  final float min,
+                                  final float new_max,
+                                  final float new_min) {
       return (((value - min) / (max - min)) * (new_max - new_min)) + new_min;
    }
 

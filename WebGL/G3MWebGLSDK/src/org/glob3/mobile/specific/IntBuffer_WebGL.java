@@ -8,18 +8,18 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class IntBuffer_WebGL
-         extends
-            IIntBuffer {
+   extends
+      IIntBuffer {
 
    private final JavaScriptObject _buffer;
    private int                    _timestamp   = 0;
 
    private JavaScriptObject       _webGLBuffer = null;
    private JavaScriptObject       _gl          = null;
-   
+
    //ID
-   private static long _nextID = 0;
-   private final long _id = _nextID++;
+   private static long            _nextID      = 0;
+   private final long             _id          = _nextID++;
 
 
    public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
@@ -152,10 +152,10 @@ public final class IntBuffer_WebGL
    }
 
 
-@Override
-public long getID() {
-	return _id;
-}
+   @Override
+   public long getID() {
+      return _id;
+   }
 
 
 }

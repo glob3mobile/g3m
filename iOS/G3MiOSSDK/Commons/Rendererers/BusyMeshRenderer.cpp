@@ -21,6 +21,7 @@
 #include "GPUProgramManager.hpp"
 #include "GPUUniform.hpp"
 #include "Camera.hpp"
+#include "G3MEventContext.hpp"
 
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -67,7 +68,10 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
   
   //  const float r2=50;
   const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getViewPortWidth();
+  int viewPortWidth  = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
   const int viewPortHeight = camera->getViewPortHeight();
   const int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
   const float outerRadius = minSize / 15.0f;
@@ -122,6 +126,22 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
   return result;
 }
 
+void BusyMeshRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                             int width, int height) {
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  const int halfWidth  = logicWidth / 2;
+  const int halfHeight = height / 2;
+  _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+                                                                                   -halfHeight, halfHeight,
+                                                                                   -halfWidth,  halfWidth));
+
+  delete _mesh;
+  _mesh = NULL;
+}
+
 Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
@@ -132,10 +152,10 @@ Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
 void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
-  GL* gl = rc->getGL();
+  //GL* gl = rc->getGL();
   createGLState();
   
-  gl->clearScreen(*_backgroundColor);
+  //gl->clearScreen(*_backgroundColor);
   
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {

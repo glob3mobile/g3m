@@ -19,7 +19,7 @@ public interface IWebSocketListener
 
   void onError(IWebSocket ws, String error);
 
-  void onMesssage(IWebSocket ws, String message);
+  void onMessage(IWebSocket ws, String message);
 
   void onClose(IWebSocket ws);
 

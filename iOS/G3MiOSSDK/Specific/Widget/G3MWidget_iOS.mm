@@ -9,22 +9,21 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.hpp"
-#include "MathUtils_iOS.hpp"
-#include "Logger_iOS.hpp"
-#include "Factory_iOS.hpp"
-#include "StringUtils_iOS.hpp"
-#include "JSONParser_iOS.hpp"
-#include "StringBuilder_iOS.hpp"
-#include "TextUtils_iOS.hpp"
-#include "GPUProgramManager.hpp"
-#include "SceneLighting.hpp"
-#include "Planet.hpp"
-#include "Sector.hpp"
-#include "InitialCameraPositionProvider.hpp"
-#include "InfoDisplay.hpp"
-#include "DeviceAttitude_iOS.hpp"
-#include "DeviceLocation_iOS.hpp"
+#include <vector>
+
+#import "TouchEvent.hpp"
+#import "G3MWidget.hpp"
+#import "Logger_iOS.hpp"
+#import "Factory_iOS.hpp"
+#import "StringUtils_iOS.hpp"
+#import "StringBuilder_iOS.hpp"
+#import "MathUtils_iOS.hpp"
+#import "JSONParser_iOS.hpp"
+#import "DeviceAttitude_iOS.hpp"
+#import "DeviceLocation_iOS.hpp"
+#import "TextUtils_iOS.hpp"
+#import "GL.hpp"
+
 
 @interface G3MWidget_iOS () {
   CGFloat _scale;
@@ -49,62 +48,6 @@
   return [CAEAGLLayer class];
 }
 
-
-- (void)          initWidget: (IStorage*) storage
-                  downloader: (IDownloader*) downloader
-                 threadUtils: (IThreadUtils*) threadUtils
-      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
-                      planet: (const Planet*) planet
-           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-              cameraRenderer: (CameraRenderer*) cameraRenderer
-                mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (ProtoRenderer*) busyRenderer
-               errorRenderer: (ErrorRenderer*) errorRenderer
-                 hudRenderer: (Renderer*) hudRenderer
-             backgroundColor: (Color) backgroundColor
-                      logFPS: (bool) logFPS
-     logDownloaderStatistics: (bool) logDownloaderStatistics
-          initializationTask: (GInitializationTask*) initializationTask
-autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
-             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-                    userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition
-                 infoDisplay: (InfoDisplay*) infoDisplay;
-{
-  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
-  GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
-
-  SceneLighting* sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA(0.3f, 0.3f, 0.3f, 1.0f),
-                                                              Color::white());
-
-  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-    
-  _widgetVP = G3MWidget::create([_renderer getGL],
-                                storage,
-                                downloader,
-                                threadUtils,
-                                cameraActivityListener,
-                                planet,
-                                cameraConstraints,
-                                cameraRenderer,
-                                mainRenderer,
-                                busyRenderer,
-                                errorRenderer,
-                                hudRenderer,
-                                backgroundColor,
-                                logFPS,
-                                logDownloaderStatistics,
-                                initializationTask,
-                                autoDeleteInitializationTask,
-                                periodicalTasks,
-                                gpuProgramManager,
-                                sceneLighting,
-                                icpp,
-                                infoDisplay,
-                                MONO);
-
-  [self widget]->setUserData(userData);
-}
 
 - (GL*)getGL {
   return [_renderer getGL];
@@ -423,17 +366,16 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
 }
 
 - (void)initSingletons {
-  ILogger*            logger          = new Logger_iOS(InfoLevel);
-  IFactory*           factory         = new Factory_iOS();
-  const IStringUtils* stringUtils     = new StringUtils_iOS();
-  IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
-  IMathUtils*         mathUtils       = new MathUtils_iOS();
-  IJSONParser*        jsonParser      = new JSONParser_iOS();
-  ITextUtils*         textUtils       = new TextUtils_iOS();
-  IDeviceAttitude*    devAttitude     = new DeviceAttitude_iOS(false);
-  IDeviceLocation*    devLocation     = new DeviceLocation_iOS();
+  ILogger*            logger        = new Logger_iOS(InfoLevel);
+  IFactory*           factory       = new Factory_iOS();
+  const IStringUtils* stringUtils   = new StringUtils_iOS();
+  IStringBuilder*     stringBuilder = new StringBuilder_iOS();
+  IMathUtils*         mathUtils     = new MathUtils_iOS();
+  IJSONParser*        jsonParser    = new JSONParser_iOS();
+  ITextUtils*         textUtils     = new TextUtils_iOS();
+  IDeviceAttitude*    devAttitude   = new DeviceAttitude_iOS(false);
+  IDeviceLocation*    devLocation   = new DeviceLocation_iOS();
   
-
   G3MWidget::initSingletons(logger,
                             factory,
                             stringUtils,

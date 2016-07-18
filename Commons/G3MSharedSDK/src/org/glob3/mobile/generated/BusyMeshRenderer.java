@@ -71,7 +71,11 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   
     //  const float r2=50;
     final Camera camera = rc.getCurrentCamera();
-    final int viewPortWidth = camera.getViewPortWidth();
+    int viewPortWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      viewPortWidth /= 2;
+    }
     final int viewPortHeight = camera.getViewPortHeight();
     final int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
     final float outerRadius = minSize / 15.0f;
@@ -146,10 +150,10 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    GL gl = rc.getGL();
+    //GL* gl = rc->getGL();
     createGLState();
   
-    gl.clearScreen(_backgroundColor);
+    //gl->clearScreen(*_backgroundColor);
   
     Mesh mesh = getMesh(rc);
     if (mesh != null)
@@ -160,10 +164,15 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int halfWidth = width / 2;
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+    final int halfWidth = logicWidth / 2;
     final int halfHeight = height / 2;
     _projectionMatrix.copyValue(MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth));
-
+  
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;

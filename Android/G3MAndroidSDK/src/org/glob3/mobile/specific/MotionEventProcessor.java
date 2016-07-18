@@ -154,7 +154,7 @@ public final class MotionEventProcessor {
    }
 
 
-   public TouchEvent processDoubleTapEvent(final MotionEvent event) {
+   static public TouchEvent processDoubleTapEvent(final MotionEvent event) {
       final PointerCoords pc = new PointerCoords();
       event.getPointerCoords(0, pc);
       final Vector2F pos = new Vector2F(pc.x, pc.y);

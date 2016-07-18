@@ -182,9 +182,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     private FrameTasksExecutor _frameTasksExecutor;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector);
-
     private final Sector _tileSector ;
 
     public void dispose()

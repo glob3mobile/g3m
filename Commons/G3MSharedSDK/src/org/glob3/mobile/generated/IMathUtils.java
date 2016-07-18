@@ -287,4 +287,9 @@ public abstract class IMathUtils
     return new Geodetic2D(Angle.fromRadians(latRad), Angle.fromRadians(lngRad));
   }
 
+  public int gcd(int a, int b)
+  {
+    return (b == 0) ? a : gcd(b, a % b);
+  }
+
 }

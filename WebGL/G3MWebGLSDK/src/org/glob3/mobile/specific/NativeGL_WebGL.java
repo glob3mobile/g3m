@@ -21,8 +21,8 @@ import com.google.gwt.core.client.JsArrayInteger;
 
 
 public final class NativeGL_WebGL
-         extends
-            INativeGL {
+   extends
+      INativeGL {
    /*
    Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
    work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex
@@ -31,7 +31,7 @@ public final class NativeGL_WebGL
 
    private final JavaScriptObject                      _gl;
 
-   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
+   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<>();
 
 
    public NativeGL_WebGL(final JavaScriptObject webGLContext) {
@@ -44,8 +44,8 @@ public final class NativeGL_WebGL
                                 final float x,
                                 final float y) /*-{
 		var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform2f(locId, x,
-				y);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.uniform2f(locId, x, y);
    }-*/;
 
 
@@ -72,8 +72,8 @@ public final class NativeGL_WebGL
                                 final float v2,
                                 final float v3) /*-{
 		var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId,
-				v0, v1, v2, v3);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId, v0,
+				v1, v2, v3);
    }-*/;
 
 
@@ -84,8 +84,8 @@ public final class NativeGL_WebGL
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 		var buffer = matrix.@org.glob3.mobile.generated.Matrix44D::getColumnMajorFloatBuffer()();
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
-				id, transpose, value);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(id,
+				transpose, value);
    }-*/;
 
 
@@ -120,8 +120,8 @@ public final class NativeGL_WebGL
    @Override
    public native void polygonOffset(final float factor,
                                     final float units) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(
-				factor, units);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(factor,
+				units);
    }-*/;
 
 
@@ -150,8 +150,6 @@ public final class NativeGL_WebGL
    public native void drawElements(final int mode,
                                    final int count,
                                    final IShortBuffer indices) /*-{
-		//debugger;
-
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var webGLBuffer = indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
@@ -176,26 +174,14 @@ public final class NativeGL_WebGL
 		var e = gl.getError();
 
 		if (e == gl.INVALID_ENUM) {
-			//                      debugger;
 			console.error("NativeGL_WebGL: INVALID_ENUM");
-		}
-
-		if (e == gl.INVALID_VALUE) {
-			//                   debugger;
+		} else if (e == gl.INVALID_VALUE) {
 			console.error("NativeGL_WebGL: INVALID_VALUE");
-		}
-
-		if (e == gl.INVALID_OPERATION) {
-			//                   debugger;
+		} else if (e == gl.INVALID_OPERATION) {
 			console.error("NativeGL_WebGL: INVALID_OPERATION");
-		}
-
-		if (e == gl.OUT_OF_MEMORY) {
-			//                   debugger;
+		} else if (e == gl.OUT_OF_MEMORY) {
 			console.error("NativeGL_WebGL: INVALID_OPERATION");
-		}
-
-		if (e == gl.CONTEXT_LOST_WEBGL) {
+		} else if (e == gl.CONTEXT_LOST_WEBGL) {
 			console.error("NativeGL_WebGL: CONTEXT_LOST_WEBGL");
 		}
 
@@ -270,8 +256,8 @@ public final class NativeGL_WebGL
    public native void texParameteri(final int target,
                                     final int par,
                                     final int v) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(
-				target, par, v);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(target,
+				par, v);
    }-*/;
 
 
@@ -316,12 +302,12 @@ public final class NativeGL_WebGL
 		var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.getParameter(v);
 
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::convertJsArrayIngeterToJavaArrayInt(Lcom/google/gwt/core/client/JsArrayInteger;[I)(result, i);
+		@org.glob3.mobile.specific.NativeGL_WebGL::convertJsArrayIngeterToJavaArrayInt(Lcom/google/gwt/core/client/JsArrayInteger;[I)(result, i);
    }-*/;
 
 
-   private void convertJsArrayIngeterToJavaArrayInt(final JsArrayInteger jsArray,
-                                                    final int[] javaArray) {
+   static private void convertJsArrayIngeterToJavaArrayInt(final JsArrayInteger jsArray,
+                                                           final int[] javaArray) {
       for (int i = 0; i < jsArray.length(); i++) {
          javaArray[i] = jsArray.get(i);
       }
@@ -602,7 +588,6 @@ public final class NativeGL_WebGL
    @Override
    public native boolean deleteShader(final int shader) /*-{
 		//TODO: IMPLEMENTATION FAILS
-		//debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
@@ -818,8 +803,7 @@ public final class NativeGL_WebGL
 
    @Override
    public native void depthMask(final boolean depthMask) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-				.depthMask(depthMask);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.depthMask(depthMask);
    }-*/;
 
 

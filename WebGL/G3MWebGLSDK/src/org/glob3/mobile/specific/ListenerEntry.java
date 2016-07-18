@@ -147,8 +147,8 @@ public final class ListenerEntry {
    }
 
 
-   public void log(final LogLevel level,
-                   final String msg) {
+   static public void log(final LogLevel level,
+                          final String msg) {
       if (ILogger.instance() != null) {
          switch (level) {
             case InfoLevel:

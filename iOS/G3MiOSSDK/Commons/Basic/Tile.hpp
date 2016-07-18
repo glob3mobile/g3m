@@ -44,8 +44,6 @@ private:
 
   TileTessellatorMeshData _tileTessellatorMeshData;
 
-  void prepareTestLODData(const Planet* planet);
-
   Mesh* getDebugMesh(const G3MRenderContext* rc,
                      const PlanetRenderContext* prc);
 

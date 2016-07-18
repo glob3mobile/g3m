@@ -12,6 +12,7 @@
 #include "Sector.hpp"
 #include "Geodetic2D.hpp"
 #include "GEOVectorTileImageProvider.hpp"
+#include <cstdlib>
 
 class GenericQuadTree_Node;
 

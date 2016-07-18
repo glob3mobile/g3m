@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class Proxy
-extends
-HttpServlet {
+   extends
+      HttpServlet {
 
    /**
     *
@@ -62,7 +62,7 @@ HttpServlet {
          final URL url = new URL(reqUrl);
 
          final Enumeration<String> headerNames = request.getHeaderNames();
-         final Map<String, String> headers = new HashMap<String, String>();
+         final Map<String, String> headers = new HashMap<>();
          while (headerNames.hasMoreElements()) {
             final String headerName = headerNames.nextElement();
             String headerValue = request.getHeader(headerName);

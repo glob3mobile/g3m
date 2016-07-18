@@ -145,7 +145,8 @@ public class G3MShowMarkersActivity
             };
 
             downloader.requestBuffer( //
-                     new URL("http://api.openweathermap.org/data/2.5/box/city?bbox=-180,-80,180,80,4&cluster=yes", false), //
+                     new URL("http://api.openweathermap.org/data/2.5/box/city?bbox=-180,-80,180,80,4&cluster=yes&APPID=74328f1a392423fadac3b2d9f6500225",
+                              false), //
                      0, //
                      TimeInterval.fromHours(1.0), //
                      false, //

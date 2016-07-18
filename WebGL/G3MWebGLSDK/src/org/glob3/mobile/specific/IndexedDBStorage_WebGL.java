@@ -15,8 +15,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class IndexedDBStorage_WebGL
-         extends
-            IStorage {
+   extends
+      IStorage {
 
    private JavaScriptObject _db;
 

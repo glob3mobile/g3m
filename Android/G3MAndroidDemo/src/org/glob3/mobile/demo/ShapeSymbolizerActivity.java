@@ -10,7 +10,7 @@ import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -54,8 +54,13 @@ public class ShapeSymbolizerActivity
       builder.setPlanet(FlatPlanet.createEarth());
 
       final LayerSet layerSet = new LayerSet();
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
-      layerSet.addLayer(mboxTerrainLayer);
+      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
+      //
+      //      final
+
+      final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
+      mqlAerial.setTitle("MapQuest Aerial");
+      layerSet.addLayer(mqlAerial);
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());
@@ -90,7 +95,7 @@ public class ShapeSymbolizerActivity
    }
 
 
-   private int toAndroidColor(final Color c) {
+   static private int toAndroidColor(final Color c) {
       return android.graphics.Color.argb(Math.round(c._alpha * 255), Math.round(c._red * 255), Math.round(c._green * 255),
                Math.round(c._blue * 255));
    }

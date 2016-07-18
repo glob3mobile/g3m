@@ -22,7 +22,7 @@ public final class Downloader_WebGL
    extends
       IDownloader {
 
-   final private int                                _maxConcurrentOperationCount;
+   private final int                                _maxConcurrentOperationCount;
    private final Map<URL, Downloader_WebGL_Handler> _downloadingHandlers;
    private final Map<URL, Downloader_WebGL_Handler> _queuedHandlers;
    private final Timer                              _timer;
@@ -42,8 +42,8 @@ public final class Downloader_WebGL
       _requestIdCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
-      _downloadingHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
-      _queuedHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
+      _downloadingHandlers = new HashMap<>();
+      _queuedHandlers = new HashMap<>();
       _delayMillis = delayMillis;
 
       if (proxy == null) {
@@ -322,10 +322,8 @@ public final class Downloader_WebGL
    }
 
 
-   private String defineDefaultProxy() {
-      final String defaultProxy = GWT.getHostPageBaseURL() + "proxy?url=";
-
-      return defaultProxy;
+   static private String defineDefaultProxy() {
+      return GWT.getHostPageBaseURL() + "proxy?url=";
    }
 
 
