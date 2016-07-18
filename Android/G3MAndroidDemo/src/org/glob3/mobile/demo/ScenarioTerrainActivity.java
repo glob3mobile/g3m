@@ -3,12 +3,13 @@
 package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -41,13 +42,13 @@ public class ScenarioTerrainActivity
 
 
       final LayerSet layerSet = new LayerSet();
+      final BingMapsLayer bingMapsAerialLayer = new BingMapsLayer(BingMapType.Aerial(),
+               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30));
+      bingMapsAerialLayer.setTitle("Bing Aerial");
+      bingMapsAerialLayer.setEnable(true);
+      layerSet.addLayer(bingMapsAerialLayer);
 
 
-      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 11);
-      //      layerSet.addLayer(mboxTerrainLayer);
-      final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
-      mqlAerial.setTitle("MapQuest Aerial");
-      layerSet.addLayer(mqlAerial);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       //  builder.setPlanet(Planet.createSphericalEarth());
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);

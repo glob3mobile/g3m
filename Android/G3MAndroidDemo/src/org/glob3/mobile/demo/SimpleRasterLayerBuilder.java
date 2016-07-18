@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.OSMLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.TimeInterval;
@@ -23,15 +23,15 @@ public class SimpleRasterLayerBuilder
    public static LayerSet createLayerset() {
       final LayerSet layerSet = new LayerSet();
 
-      final MapQuestLayer mqOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
-      mqOSM.setEnable(false);
-      mqOSM.setTitle("MapQuest OSM");
-      layerSet.addLayer(mqOSM);
-
-      final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
-      mqlAerial.setTitle("MapQuest Aerial");
-      mqlAerial.setEnable(false);
-      layerSet.addLayer(mqlAerial);
+      //      final MapQuestLayer mqOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
+      //      mqOSM.setEnable(false);
+      //      mqOSM.setTitle("MapQuest OSM");
+      //      layerSet.addLayer(mqOSM);
+      //
+      //      final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
+      //      mqlAerial.setTitle("MapQuest Aerial");
+      //      mqlAerial.setEnable(false);
+      //      layerSet.addLayer(mqlAerial);
 
       //      final MapBoxLayer mboxAerialLayer = new MapBoxLayer("examples.map-m0t0lrpu", TimeInterval.fromDays(30), true, 2);
       //      mboxAerialLayer.setTitle("Map Box Aerial");
@@ -47,6 +47,12 @@ public class SimpleRasterLayerBuilder
       //      mboxOSMLayer.setTitle("Map Box OSM");
       //      mboxOSMLayer.setEnable(true);
       //      layerSet.addLayer(mboxOSMLayer);
+
+
+      final MapBoxLayer mboxOSMLayer = new MapBoxLayer("bobbysud.lff1o1c6", TimeInterval.fromDays(30), true, 2);
+      mboxOSMLayer.setTitle("Mapbox");
+      mboxOSMLayer.setEnable(true);
+      layerSet.addLayer(mboxOSMLayer);
 
       final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
                WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,

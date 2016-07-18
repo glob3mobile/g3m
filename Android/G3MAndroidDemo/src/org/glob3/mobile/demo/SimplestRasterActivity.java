@@ -47,8 +47,8 @@ public class SimplestRasterActivity
       _g3mWidget = builder.createWidget();
 
       _spinnerLayer = (Spinner) findViewById(R.id.spinnerLayers);
-      final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this, Arrays.asList("Open Street Map",
-               "MapQuest Aerial", "MapQuest OSM", "WMS Nasa Blue Marble", "Bing Aerial", "Bing Aerial With Labels"));
+      final DataSourceAdapter viewAdapter = new DataSourceAdapter(SimplestRasterActivity.this,
+               Arrays.asList("Open Street Map", "Mapbox", "WMS Nasa Blue Marble", "Bing Aerial", "Bing Aerial With Labels"));
       _spinnerLayer.setAdapter(viewAdapter);
 
       _spinnerLayer.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -65,11 +65,11 @@ public class SimplestRasterActivity
 
 
             if (activeLayer.getTitle().equals("CartoDB Meteorites")) {
-               layerset.getLayerByTitle("MapQuest OSM").setEnable(true);
+               layerset.getLayerByTitle("Bing Aerial").setEnable(true);
 
             }
             else if (activeLayer.getTitle().equals("ESRI ArcGis Online")) {
-               layerset.getLayerByTitle("Map Box Aerial").setEnable(true);
+               layerset.getLayerByTitle("Bing Aerial").setEnable(true);
                activeLayer.setEnable(true);
 
                _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(38.6), Angle.fromDegrees(-77.2), 30000),

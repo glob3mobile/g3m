@@ -140,24 +140,24 @@ public class G3MDemoActivity
             startActivity(intent);
          }
       });
-
-      final Button vectorTilesButton = (Button) findViewById(R.id.vectorialTilesDemoButton);
-      vectorTilesButton.setOnClickListener(new OnClickListener() {
-         @Override
-         public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), VectorTilesActivity.class);
-            startActivity(intent);
-         }
-      });
-
-      final Button vectorStreainghButton = (Button) findViewById(R.id.vectorialStreamingDemoButton);
-      vectorStreainghButton.setOnClickListener(new OnClickListener() {
-         @Override
-         public void onClick(final View v) {
-            final Intent intent = new Intent(getApplicationContext(), VectorStreamingActivity.class);
-            startActivity(intent);
-         }
-      });
+      //
+      //      final Button vectorTilesButton = (Button) findViewById(R.id.vectorialTilesDemoButton);
+      //      vectorTilesButton.setOnClickListener(new OnClickListener() {
+      //         @Override
+      //         public void onClick(final View v) {
+      //            final Intent intent = new Intent(getApplicationContext(), VectorTilesActivity.class);
+      //            startActivity(intent);
+      //         }
+      //      });
+      //
+      //      final Button vectorStreainghButton = (Button) findViewById(R.id.vectorialStreamingDemoButton);
+      //      vectorStreainghButton.setOnClickListener(new OnClickListener() {
+      //         @Override
+      //         public void onClick(final View v) {
+      //            final Intent intent = new Intent(getApplicationContext(), VectorStreamingActivity.class);
+      //            startActivity(intent);
+      //         }
+      //      });
 
       //      final Button pointCloudStreaming = (Button) findViewById(R.id.pointCloudStreamingButton);
       //      pointCloudStreaming.setOnClickListener(new OnClickListener() {

@@ -10,7 +10,7 @@ import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -26,8 +26,8 @@ import android.widget.TextView;
 
 
 public class ShapeSymbolizerActivity
-   extends
-      Activity {
+         extends
+            Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -58,9 +58,12 @@ public class ShapeSymbolizerActivity
       //
       //      final
 
-      final MapQuestLayer mqlAerial = MapQuestLayer.newOpenAerial(TimeInterval.fromDays(30));
-      mqlAerial.setTitle("MapQuest Aerial");
-      layerSet.addLayer(mqlAerial);
+      final MapBoxLayer mboxOSMLayer = new MapBoxLayer("bobbysud.lff1o1c6", TimeInterval.fromDays(30), true, 2);
+      mboxOSMLayer.setTitle("Map Box");
+      mboxOSMLayer.setEnable(true);
+      layerSet.addLayer(mboxOSMLayer);
+
+
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());

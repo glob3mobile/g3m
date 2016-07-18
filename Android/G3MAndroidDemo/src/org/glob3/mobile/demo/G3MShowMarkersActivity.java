@@ -4,6 +4,8 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GInitializationTask;
@@ -16,6 +18,7 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -56,6 +59,14 @@ public class G3MShowMarkersActivity
 
       builder.setBackgroundColor(Color.fromRGBA255(231, 55, 54, 255));
 
+      final LayerSet layerSet = new LayerSet();
+      final BingMapsLayer bingMapsAerialLayer = new BingMapsLayer(BingMapType.Aerial(),
+               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30));
+      bingMapsAerialLayer.setTitle("Bing Aerial");
+      bingMapsAerialLayer.setEnable(true);
+      layerSet.addLayer(bingMapsAerialLayer);
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
       //Always after setting params
       _widgetAndroid = builder.createWidget();
       final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);
