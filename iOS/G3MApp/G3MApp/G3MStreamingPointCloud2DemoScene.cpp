@@ -6,13 +6,13 @@
 //
 
 #include "G3MStreamingPointCloud2DemoScene.hpp"
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
-
 #include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 
@@ -70,14 +70,15 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
 //  
 //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 //#warning TODO cache
-  model->getPointCloudsRenderer()->addPointCloud(URL("http://glob3mobile.dyndns.org:8080"),
+  model->getPointCloudsRenderer()->addPointCloud(//URL("http://glob3mobile.dyndns.org:8080"),
+                                                 //URL("http://aerog3m.cloudapp.net:8082"),
+                                                 URL("http://192.168.1.35:8082"),
                                                  "minnesota_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),

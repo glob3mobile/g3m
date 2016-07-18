@@ -5,19 +5,16 @@ package com.glob3mobile.pointcloud.quadtree;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.PositionsSet;
-
 
 public class QuadInnerNode
-         extends
-            QuadNode {
+   extends
+      QuadNode {
 
    private final List<QuadNode> _children;
 
 
-   protected QuadInnerNode(final QuadNode parent,
-                           final PositionsSet positionsSet) {
-      super(parent, positionsSet);
+   protected QuadInnerNode(final QuadNode parent) {
+      super(parent);
       throw new RuntimeException("Not yet implemented");
    }
 

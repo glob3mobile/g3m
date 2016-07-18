@@ -6,8 +6,8 @@ import es.igosoftware.euclid.vector.GVector3D;
 
 
 public class EllipsoidalPlanet
-implements
-Planet {
+   implements
+      Planet {
 
    public static final Planet EARTH = new EllipsoidalPlanet(new GVector3D(6378137.0, 6378137.0, 6356752.314245));
 
@@ -38,8 +38,8 @@ Planet {
    }
 
 
-   public GVector3D geodeticSurfaceNormal(final Angle latitude,
-                                          final Angle longitude) {
+   private static GVector3D geodeticSurfaceNormal(final Angle latitude,
+                                                  final Angle longitude) {
       final double cosLatitude = Math.cos(latitude._radians);
 
       return new GVector3D( //

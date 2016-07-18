@@ -1150,5 +1150,4 @@ public class G3MWidget implements ChangedRendererInfoListener
     _currentCamera.copyFrom(_auxCam, true);
   }
 
-
 }

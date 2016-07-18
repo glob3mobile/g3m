@@ -45,7 +45,7 @@ public:
     _x += x;
     _y += y;
   }
-  
+
   void times(float k) {
     _x *= k;
     _y *= k;
@@ -66,7 +66,7 @@ public:
   Vector2F asVector2F() const;
 
   bool isNan() const;
-
+  
 };
 
 #endif

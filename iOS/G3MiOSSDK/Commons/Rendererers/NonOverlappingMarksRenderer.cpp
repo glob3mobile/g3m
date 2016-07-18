@@ -34,6 +34,8 @@
 #include "IMathUtils.hpp"
 #include "TouchEvent.hpp"
 #include "RectangleF.hpp"
+#include "IDeviceInfo.hpp"
+
 
 MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
 _image(NULL),
@@ -88,7 +90,7 @@ void MarkWidget::prepareWidget(const IImage* image,
   }
 
   FloatBufferBuilderFromCartesian2D pos2D;
-// #warning TODO: share vertices for marks of the same size?
+  // #warning TODO: share vertices for marks of the same size?
   pos2D.add( -_halfWidth, -_halfHeight );   // vertex 1
   pos2D.add(  _halfWidth, -_halfHeight );   // vertex 2
   pos2D.add( -_halfWidth,  _halfHeight );   // vertex 3
@@ -121,7 +123,7 @@ void MarkWidget::prepareWidget(const IImage* image,
                                                                            _imageName,
                                                                            false);
 
-// #warning TODO: share unit texCoords
+  // #warning TODO: share unit texCoords
   if (_textureMapping != NULL) {
     delete _textureMapping;
   }
@@ -206,15 +208,13 @@ NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
                                        float anchorElectricCharge,
                                        float resistanceFactor):
 _cartesianPos(NULL),
-//_widgetScreenPosition(MutableVector2F::nan()),
-//_anchorScreenPosition(MutableVector2F::nan()),
 _speed(MutableVector2F::zero()),
 _force(MutableVector2F::zero()),
 _geoPosition(position),
-_springLengthInPixels(springLengthInPixels),
+_springLengthInPixels(springLengthInPixels * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio()),
 _springK(springK),
-_minSpringLength( minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f) ),
-_maxSpringLength( maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f) ),
+_minSpringLength( (minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f)) * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() ),
+_maxSpringLength( (maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f)) * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() ),
 _electricCharge(electricCharge),
 _anchorElectricCharge(anchorElectricCharge),
 _resistanceFactor(resistanceFactor),
@@ -222,7 +222,6 @@ _touchListener(touchListener),
 _springGLState(NULL),
 _springVertices(NULL),
 _springViewportExtentGLFeature(NULL)
-//_enclosingRadius(0)
 {
   _widget = new MarkWidget(imageBuilderWidget);
   _anchorWidget = new MarkWidget(imageBuilderAnchor);
@@ -243,7 +242,7 @@ NonOverlappingMark::~NonOverlappingMark() {
 }
 
 Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
-// #warning toCartesian without garbage
+  // #warning toCartesian without garbage
   if (_cartesianPos == NULL) {
     _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition));
   }
@@ -253,10 +252,6 @@ Vector3D NonOverlappingMark::getCartesianPosition(const Planet* planet) const {
 void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
                                                 const Planet* planet) {
   Vector2F sp(camera->point2Pixel(getCartesianPosition(planet)));
-//  _anchorScreenPosition.put(sp._x, sp._y);
-//  if (_widgetScreenPosition.isNan()) {
-//    _widgetScreenPosition.put(sp._x, sp._y + 0.01f);
-//  }
 
   _anchorWidget->setScreenPos(sp._x, sp._y);
 
@@ -270,10 +265,6 @@ void NonOverlappingMark::computeAnchorScreenPos(const Camera* camera,
 
 void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
   const Vector2F d = getScreenPos().sub(that->getScreenPos());
-//  double distance = d.length() - this->_enclosingRadius/3 - that->_enclosingRadius/3;
-//  if (distance <= 0) {
-//    distance = d.length() + 0.001;
-//  }
 
   const double distance = d.length() + 0.001;
   Vector2F direction = d.div((float)distance);
@@ -289,10 +280,6 @@ void NonOverlappingMark::applyCoulombsLaw(NonOverlappingMark* that) {
 void NonOverlappingMark::applyCoulombsLawFromAnchor(NonOverlappingMark* that) {
   Vector2F dAnchor = getScreenPos().sub(that->getAnchorScreenPos());
   double distanceAnchor = dAnchor.length() + 0.001;
-//  double distanceAnchor = dAnchor.length() - this->_enclosingRadius/3;
-//  if (distanceAnchor <= 0) {
-//    distanceAnchor = dAnchor.length() + 0.001;
-//  }
 
   Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
 
@@ -319,11 +306,6 @@ void NonOverlappingMark::renderWidget(const G3MRenderContext* rc,
   if (_widget->isReady()) {
     if (_anchorWidget->isReady()) {
       _widget->render(rc, glState);
-//      if (_enclosingRadius == 0) {
-//        const float w = _widget->getWidth();
-//        const float h = _widget->getHeight();
-//        _enclosingRadius = IMathUtils::instance()->sqrt( w*w + h*h ) / 2;
-//      }
     }
   }
   else {
@@ -363,15 +345,15 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
     _springVertices->rawPut(2,  asp._x);
     _springVertices->rawPut(3, -asp._y);
 
-    _springGLState->addGLFeature(new Geometry2DGLFeature(_springVertices,  // buffer
-                                                         2,                // arrayElementSize
-                                                         0,                // index
-                                                         true,             // normalized
-                                                         0,                // stride
-                                                         3.0f,             // lineWidth
-                                                         true,             // needsPointSize
-                                                         1.0f,             // pointSize
-                                                         Vector2F::zero()  // translation
+    _springGLState->addGLFeature(new Geometry2DGLFeature(_springVertices, // buffer
+                                                         2,               // arrayElementSize
+                                                         0,               // index
+                                                         true,            // normalized
+                                                         0,               // stride
+                                                         3.0f,            // lineWidth
+                                                         true,            // needsPointSize
+                                                         1.0f,            // pointSize
+                                                         Vector2F::zero() // translation
                                                          ),
                                  false);
 
@@ -412,7 +394,7 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
 
   Vector2F anchorPosition = _anchorWidget->getScreenPos();
 
-//  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+  //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
   Vector2F spring = Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
 
   _widget->setAndClampScreenPos(anchorPosition._x + spring._x,
@@ -448,7 +430,6 @@ NonOverlappingMarksRenderer::NonOverlappingMarksRenderer(size_t maxVisibleMarks,
 _maxVisibleMarks(maxVisibleMarks),
 _viewportMargin(viewportMargin),
 _lastPositionsUpdatedTime(0),
-//_connectorsGLState(NULL),
 _visibleMarksIDsBuilder( IStringBuilder::newStringBuilder() ),
 _visibleMarksIDs(""),
 _touchListener(NULL)
@@ -457,8 +438,6 @@ _touchListener(NULL)
 }
 
 NonOverlappingMarksRenderer::~NonOverlappingMarksRenderer() {
-//  _connectorsGLState->_release();
-
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
@@ -511,7 +490,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
     }
     else {
       // Resetting marks location of invisible anchors
-// #warning Do we really need this?
+      // #warning Do we really need this?
       m->resetWidgetPositionVelocityAndForce();
     }
   }

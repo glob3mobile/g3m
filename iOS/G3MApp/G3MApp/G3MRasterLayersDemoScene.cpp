@@ -101,7 +101,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   BingMapsLayer* bingMapsCollinsBart = new BingMapsLayer(BingMapType::CollinsBart(),
                                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                                          TimeInterval::fromDays(30));
-  bingMapsCollinsBart->setTitle("MapQuest OSM");
+  bingMapsCollinsBart->setTitle("Bing Collins Bart");
   bingMapsCollinsBart->setEnable(false);
   layerSet->addLayer(bingMapsCollinsBart);
 
@@ -210,7 +210,7 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
     layerSet->getLayerByTitle("CartoDB Meteorites")->setEnable(true);
   }
   else if (option == "MapQuest Aerial") {
-    layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
+    layerSet->getLayerByTitle("MapQuest Aerial")->setEnable(true);
   }
   else if (option == "MapQuest OSM") {
     layerSet->getLayerByTitle("MapQuest OSM")->setEnable(true);
@@ -231,6 +231,9 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
   }
   else if (option == "Bing Aerial with Labels") {
     layerSet->getLayerByTitle("Bing Aerial With Labels")->setEnable(true);
+  }
+  else if (option == "Bing Collins Bart") {
+    layerSet->getLayerByTitle("Bing Collins Bart")->setEnable(true);
   }
   else if (option == "Uruguay (WMS)") {
     layerSet->getLayerByTitle("Nasa Blue Marble (WMS)")->setEnable(true);

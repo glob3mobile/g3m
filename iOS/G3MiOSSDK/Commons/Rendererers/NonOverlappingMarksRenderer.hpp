@@ -161,8 +161,6 @@ private:
 
   NonOverlappingMarkTouchListener* _touchListener;
 
-//  float _enclosingRadius;
-
 public:
 
   NonOverlappingMark(IImageBuilder* imageBuilderWidget,

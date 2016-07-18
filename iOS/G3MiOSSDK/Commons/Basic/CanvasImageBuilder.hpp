@@ -21,15 +21,17 @@ private:
 
   ICanvas* getCanvas(const G3MContext* context);
 
-//  static long long _counter;
-
 protected:
   const int _width;
   const int _height;
+  const bool _retina;
 
-  CanvasImageBuilder(int width, int height) :
+  CanvasImageBuilder(int width,
+                     int height,
+                     bool retina) :
   _width(width),
   _height(height),
+  _retina(retina),
   _canvas(NULL),
   _canvasWidth(0),
   _canvasHeight(0)

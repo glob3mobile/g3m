@@ -64,7 +64,7 @@ void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
   std::vector<GenericQuadTree_Element*> elementsToBeInserted = _elements;
   const size_t size = elementsToBeInserted.size();
   for (size_t i = 0; i < size; i++) {
-    this->add(elementsToBeInserted[i], maxElementsPerNode, maxDepth, childAreaProportion);
+    add(elementsToBeInserted[i], maxElementsPerNode, maxDepth, childAreaProportion);
   }
   _elements.clear();
 }
@@ -133,7 +133,7 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
 
     //Node must create children
     splitNode(maxElementsPerNode, maxDepth, childAreaProportion);//We must split
-    return this->add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
+    return add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
   }
 
   //INNER NODE

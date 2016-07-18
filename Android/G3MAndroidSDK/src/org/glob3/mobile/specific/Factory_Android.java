@@ -90,8 +90,8 @@ IFactory {
 
 
    @Override
-   public ICanvas createCanvas() {
-      return new Canvas_Android();
+   public ICanvas createCanvas(final boolean retina) {
+      return new Canvas_Android(retina);
    }
 
 

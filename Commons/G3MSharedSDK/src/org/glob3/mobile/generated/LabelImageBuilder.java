@@ -126,7 +126,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
   
-    ICanvas canvas = context.getFactory().createCanvas();
+    ICanvas canvas = context.getFactory().createCanvas(true);
   
     canvas.setFont(_font);
   

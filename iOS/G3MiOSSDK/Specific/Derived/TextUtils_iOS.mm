@@ -12,6 +12,8 @@
 #include "Image_iOS.hpp"
 #include "Color.hpp"
 #include "IImageListener.hpp"
+#include "IFactory.hpp"
+#include "IDeviceInfo.hpp"
 
 #include <math.h>
 #import "NSString_CppAdditions.h"
@@ -37,8 +39,9 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
                                      bool autodelete) {
   NSString* text = [NSString stringWithCppString: label];
 
-  
-  UIFont *font = [UIFont systemFontOfSize: fontSize];
+  CGFloat devicePixelRatio = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+
+  UIFont* font = [UIFont systemFontOfSize: fontSize * devicePixelRatio];
   CGSize textSize = [text sizeWithFont: font];
 
   CGSize imageSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
@@ -65,7 +68,7 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
   UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
 
-  IImage* result = new Image_iOS(image, NULL, NULL);
+  IImage* result = new Image_iOS(image, NULL);
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;
@@ -92,9 +95,11 @@ void TextUtils_iOS::labelImage(const IImage* image,
                      autodelete);
   }
   else {
+    CGFloat devicePixelRatio = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+
     NSString* text = [NSString stringWithCppString: label];
 
-    UIFont *font = [UIFont systemFontOfSize: fontSize];
+    UIFont* font = [UIFont systemFontOfSize: fontSize * devicePixelRatio];
     CGSize textSize = [text sizeWithFont: font];
 
     CGSize labelSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
@@ -154,7 +159,7 @@ void TextUtils_iOS::labelImage(const IImage* image,
     UIImage* resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    IImage* result = new Image_iOS(resultImage, NULL, NULL);
+    IImage* result = new Image_iOS(resultImage, NULL);
     listener->imageCreated(result);
     if (autodelete) {
       delete listener;

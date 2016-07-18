@@ -171,7 +171,7 @@ public class PCSSServlet
                      (float) (sumZ / pointsCount));
          }
       };
-      _nodeAverageCache = new LRUCache<NodeAverageCacheKey, GVector3F, RuntimeException>(1024, factory);
+      _nodeAverageCache = new LRUCache<>(1024, factory);
    }
 
 
@@ -190,7 +190,7 @@ public class PCSSServlet
    }
 
 
-   private final Map<String, PersistentLOD> _openedDBs = new HashMap<String, PersistentLOD>();
+   private final Map<String, PersistentLOD> _openedDBs = new HashMap<>();
    private File                             _cloudDirectory;
 
 
@@ -267,7 +267,7 @@ public class PCSSServlet
          _levelsPointsCount = Arrays.copyOf(levelsPointsCount, levelsPointsCount.length);
          _average = average;
          _bounds = bounds;
-         _firstPoints = new ArrayList<Geodetic3D>(firstPoints);
+         _firstPoints = new ArrayList<>(firstPoints);
       }
 
    }
@@ -277,7 +277,7 @@ public class PCSSServlet
             final Planet planet,
             final float verticalExaggeration,
             final double deltaHeight) {
-      final List<NodeMetadata> result = new ArrayList<PCSSServlet.NodeMetadata>(10000);
+      final List<NodeMetadata> result = new ArrayList<>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
          @Override
@@ -334,7 +334,7 @@ public class PCSSServlet
 
             final GAxisAlignedBox bounds = new GAxisAlignedBox(new GVector3D(minX, minY, minZ), new GVector3D(maxX, maxY, maxZ));
 
-            final List<Geodetic3D> firstPoints = new ArrayList<Geodetic3D>();
+            final List<Geodetic3D> firstPoints = new ArrayList<>();
             for (int i = 0; i < Math.min(levels.size(), 5); i++) {
                firstPoints.addAll(levels.get(i).getPoints(transaction));
             }
@@ -469,7 +469,7 @@ public class PCSSServlet
       }
    }
 
-   private static Map<String, MetadataEntry> _metadataCache = new HashMap<String, MetadataEntry>();
+   private static Map<String, MetadataEntry> _metadataCache = new HashMap<>();
 
 
    private static MetadataEntry getMetadataEntry(final PersistentLOD db,
@@ -530,9 +530,9 @@ public class PCSSServlet
       final byte idLength = toByte(id.length);
 
       final int[] levelsPointsCount = node._levelsPointsCount;
-      final List<Byte> byteLevels = new ArrayList<Byte>(levelsPointsCount.length);
-      final List<Short> shortLevels = new ArrayList<Short>(levelsPointsCount.length);
-      final List<Integer> intLevels = new ArrayList<Integer>(levelsPointsCount.length);
+      final List<Byte> byteLevels = new ArrayList<>(levelsPointsCount.length);
+      final List<Short> shortLevels = new ArrayList<>(levelsPointsCount.length);
+      final List<Integer> intLevels = new ArrayList<>(levelsPointsCount.length);
 
 
       Area currentArea = Area.BYTE;

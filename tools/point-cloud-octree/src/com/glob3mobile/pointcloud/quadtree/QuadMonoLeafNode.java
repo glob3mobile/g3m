@@ -4,20 +4,17 @@ package com.glob3mobile.pointcloud.quadtree;
 
 import java.util.LinkedList;
 
-import com.glob3mobile.pointcloud.PositionsSet;
-
 
 public class QuadMonoLeafNode
-extends
-QuadLeafNode {
+   extends
+      QuadLeafNode {
 
    private final int _vertexIndex;
 
 
    QuadMonoLeafNode(final QuadNode parent,
-            final PositionsSet positionsSet,
                     final int vertexIndex) {
-      super(parent, positionsSet);
+      super(parent);
       _vertexIndex = vertexIndex;
    }
 

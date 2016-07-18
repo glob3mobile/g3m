@@ -197,7 +197,7 @@ public class BerkeleyDBOctreeNode
                                                             final BerkeleyDBOctree octree,
                                                             final byte[] id,
                                                             final boolean loadPoints) {
-      final List<BerkeleyDBOctreeNode> result = new ArrayList<BerkeleyDBOctreeNode>();
+      final List<BerkeleyDBOctreeNode> result = new ArrayList<>();
 
       final Database nodeDB = octree.getNodeDB();
 
@@ -273,7 +273,7 @@ public class BerkeleyDBOctreeNode
                                                   final TileHeader header,
                                                   final PointsSet pointsSet,
                                                   final List<BerkeleyDBOctreeNode> descendants) {
-      final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsSet._points);
+      final List<Geodetic3D> points = new ArrayList<>(pointsSet._points);
       for (final BerkeleyDBOctreeNode descendant : descendants) {
          final PointsSet descendantPointsSet = extractPoints(descendant._sector, points);
          if (descendantPointsSet != null) {
@@ -309,7 +309,7 @@ public class BerkeleyDBOctreeNode
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
                                                              final int level) {
-      final List<TileHeader> result = new ArrayList<TileHeader>();
+      final List<TileHeader> result = new ArrayList<>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
    }
@@ -419,7 +419,7 @@ public class BerkeleyDBOctreeNode
       double sumLongitudeInRadians = 0;
       double sumHeight = 0;
 
-      final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
+      final List<Geodetic3D> extracted = new ArrayList<>();
 
       final Iterator<Geodetic3D> iterator = points.iterator();
       while (iterator.hasNext()) {
@@ -460,7 +460,7 @@ public class BerkeleyDBOctreeNode
       final int newPointsSize = newPointsSet.size();
       final int mergedPointsSize = oldPointsCount + newPointsSize;
 
-      final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(mergedPointsSize);
+      final List<Geodetic3D> mergedPoints = new ArrayList<>(mergedPointsSize);
       mergedPoints.addAll(getPoints(txn));
       mergedPoints.addAll(newPointsSet._points);
 
@@ -485,7 +485,7 @@ public class BerkeleyDBOctreeNode
 
       remove(txn);
 
-      final List<Geodetic3D> points = new ArrayList<Geodetic3D>(getPoints(txn));
+      final List<Geodetic3D> points = new ArrayList<>(getPoints(txn));
 
       final TileHeader header = new TileHeader(_id, _sector);
       final TileHeader[] children = header.createChildren();
@@ -560,7 +560,7 @@ public class BerkeleyDBOctreeNode
       final int newPointsSize = newPointsSet.size();
       final int mergedPointsSize = oldPointsCount + newPointsSize;
 
-      final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(mergedPointsSize);
+      final List<Geodetic3D> mergedPoints = new ArrayList<>(mergedPointsSize);
       mergedPoints.addAll(getPoints(txn));
       mergedPoints.addAll(newPointsSet._points);
 

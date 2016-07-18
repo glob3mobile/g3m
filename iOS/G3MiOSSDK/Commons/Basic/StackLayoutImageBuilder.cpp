@@ -110,7 +110,7 @@ void StackLayoutImageBuilder::doLayout(const G3MContext* context,
     const int canvasWidth  = maxWidth;
     const int canvasHeight = maxHeight;
 
-    ICanvas* canvas = context->getFactory()->createCanvas();
+    ICanvas* canvas = context->getFactory()->createCanvas(false);
     canvas->initialize(canvasWidth, canvasHeight);
 
     //#warning remove debug code

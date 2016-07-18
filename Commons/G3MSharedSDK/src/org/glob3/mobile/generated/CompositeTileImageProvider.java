@@ -269,7 +269,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         return;
       }
     
-      ICanvas canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
     
       canvas.initialize(_width, _height);
     

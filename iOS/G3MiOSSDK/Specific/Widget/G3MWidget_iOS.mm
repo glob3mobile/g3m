@@ -26,7 +26,7 @@
 
 
 @interface G3MWidget_iOS () {
-  CGFloat _scale;
+  CGFloat _devicePixelRatio;
 }
 
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -129,18 +129,12 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
 }
 
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
-  //  printf ("Longpress. state=%d\n", sender.state);
-  //
-  //  if (sender.state == UIGestureRecognizerStateEnded) {
-  //    NSLog(@"LONG PRESS");
-  //  }
-
   if (sender.state == 1) {
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2F((float)tapPoint.x,
-                                      (float)tapPoint.y),
+    Touch *touch = new Touch(Vector2F((float) (tapPoint.x * _devicePixelRatio),
+                                      (float) (tapPoint.y * _devicePixelRatio)),
                              Vector2F::zero(),
                              1);
     pointers.push_back(touch);
@@ -162,9 +156,10 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
   [super layoutSubviews];
 
   CGSize size = [self frame].size;
-  const int width  = (int) size.width;
-  const int height = (int) size.height;
+  const int width  = (int) (size.width  * _devicePixelRatio);
+  const int height = (int) (size.height * _devicePixelRatio);
   //NSLog(@"ResizeViewportEvent: %dx%d", width, height);
+
 
   G3MWidget* widget = [self widget];
   if (widget) {
@@ -250,10 +245,10 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
     CGPoint previous        = [uiTouch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch* touch = new Touch(Vector2F((float)current.x,
-                                      (float)current.y),
-                             Vector2F((float)previous.x,
-                                      (float)previous.y),
+    Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)),
                              tapCount);
 
     pointers.push_back(touch);
@@ -269,7 +264,6 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
 - (void) touchesMoved: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
-  //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -280,10 +274,10 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
     CGPoint current  = [uiTouch locationInView:self];
     CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch* touch = new Touch(Vector2F((float)current.x,
-                                      (float)current.y),
-                             Vector2F((float)previous.x,
-                                      (float)previous.y));
+    Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)));
 
     pointers.push_back(touch);
   }
@@ -327,7 +321,6 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
 - (void) touchesEnded: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
-  //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -341,10 +334,10 @@ eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNu
 
     [uiTouch timestamp];
 
-    Touch *touch = new Touch(Vector2F((float)current.x,
-                                      (float)current.y),
-                             Vector2F((float)previous.x,
-                                      (float)previous.y));
+    Touch *touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)));
 
     pointers.push_back(touch);
   }

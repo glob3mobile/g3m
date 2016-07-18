@@ -23,8 +23,9 @@ public class DeviceInfo_WebGL
 
 
    @Override
-   public float getQualityFactor() {
-      return 1;
-   }
+   public native float getDevicePixelRatio() /*-{
+		return $wnd.devicePixelRatio || 1;
+   }-*/;
+
 
 }

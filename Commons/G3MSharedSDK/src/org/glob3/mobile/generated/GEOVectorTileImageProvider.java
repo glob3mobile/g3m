@@ -199,7 +199,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
 
   public final void rasterize(TileImageContribution contribution, String tileId, Sector tileSector, boolean tileMercator, int tileLevel, int resolutionWidth, int resolutionHeight, TileImageListener listener, boolean deleteListener)
   {
-    ICanvas canvas = IFactory.instance().createCanvas();
+    ICanvas canvas = IFactory.instance().createCanvas(false);
     canvas.initialize(resolutionWidth, resolutionHeight);
   
     GEORasterProjection projection = new GEORasterProjection(tileSector, tileMercator, resolutionWidth, resolutionHeight);

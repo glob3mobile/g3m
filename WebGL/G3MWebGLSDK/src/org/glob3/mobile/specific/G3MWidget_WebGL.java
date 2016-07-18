@@ -67,11 +67,11 @@ public class G3MWidget_WebGL
       initSingletons();
 
       _canvas = Canvas.createIfSupported();
-      _canvas.getCanvasElement().setId("_g3m_canvas");
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
          return;
       }
+      _canvas.getCanvasElement().setId("_g3m_canvas");
 
       _webGLContext = jsGetWebGLContext(_canvas.getCanvasElement());
       if (_webGLContext == null) {
@@ -183,7 +183,7 @@ public class G3MWidget_WebGL
    }
 
 
-   boolean isWebGLSupported() {
+   public boolean isWebGLSupported() {
       return ((_canvas != null) && (_webGLContext != null));
    }
 
@@ -227,21 +227,37 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   protected void onSizeChanged(final int w,
-                                final int h) {
+   private static native float getDevicePixelRatio() /*-{
+		return $wnd.devicePixelRatio || 1;
+   }-*/;
 
-      if ((_width != w) || (_height != h)) {
-         _width = w;
-         _height = h;
 
+   private void onSizeChanged(final int width,
+                              final int height) {
+
+      if ((_width != width) || (_height != height)) {
+         _width = width;
+         _height = height;
          setPixelSize(_width, _height);
-         _canvas.setCoordinateSpaceWidth(_width);
-         _canvas.setCoordinateSpaceHeight(_height);
+
+         final float devicePixelRatio = getDevicePixelRatio();
+
+         final int logicalWidth = Math.round(_width * devicePixelRatio);
+         final int logicalHeight = Math.round(_height * devicePixelRatio);
+         _canvas.setCoordinateSpaceWidth(logicalWidth);
+         _canvas.setCoordinateSpaceHeight(logicalHeight);
+
+
+         jsOnResizeViewport(logicalWidth, logicalHeight);
          if (_g3mWidget != null) {
-            _g3mWidget.onResizeViewportEvent(_width, _height);
-            jsOnResizeViewport(_width, _height);
+            _g3mWidget.onResizeViewportEvent(logicalWidth, logicalHeight);
          }
       }
+   }
+
+
+   private void renderG3MWidget() {
+      _g3mWidget.render(_width, _height);
    }
 
 
@@ -256,7 +272,6 @@ public class G3MWidget_WebGL
 
 
    private native void jsDefineG3MBrowserObjects() /*-{
-		//		debugger;
 		var that = this;
 
 		// URL Object
@@ -304,11 +319,9 @@ public class G3MWidget_WebGL
 				try {
 					context = jsCanvas.getContext(contextNames[cn], {
 						preserveDrawingBuffer : true,
-						alpha : false
+						alpha : false,
+						preferLowPowerToHighPerformance : true
 					});
-					//STORING SIZE FOR GLVIEWPORT
-					context.viewportWidth = jsCanvas.width;
-					context.viewportHeight = jsCanvas.height;
 				} catch (e) {
 				}
 				if (context) {
@@ -358,7 +371,7 @@ public class G3MWidget_WebGL
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final InfoDisplay infoDisplay) {
 
-      _g3mWidget = G3MWidget.create(//
+      _g3mWidget = G3MWidget.create( //
                _gl, //
                storage, //
                downloader, //
@@ -402,11 +415,6 @@ public class G3MWidget_WebGL
    private native void jsStartRenderLoop() /*-{
 		$wnd.g3mTick();
    }-*/;
-
-
-   private void renderG3MWidget() {
-      _g3mWidget.render(_width, _height);
-   }
 
 
    public JavaScriptObject getWebGLContext() {

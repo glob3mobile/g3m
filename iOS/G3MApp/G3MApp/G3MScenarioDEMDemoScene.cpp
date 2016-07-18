@@ -10,7 +10,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -32,16 +32,15 @@ void G3MScenarioDEMDemoScene::rawActivate(const G3MContext* context) {
 
   const double deltaHeight = -700.905;
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///0576.bil"),
-                                                                                     demSector,
-                                                                                     Vector2I(2516, 1335),
-                                                                                     deltaHeight);
+                                                                                    demSector,
+                                                                                    Vector2I(2516, 1335),
+                                                                                    deltaHeight);
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       11);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 

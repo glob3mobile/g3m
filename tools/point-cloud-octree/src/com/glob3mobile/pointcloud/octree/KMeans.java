@@ -97,7 +97,7 @@ public class KMeans {
          centroidIndexes[i] = index;
       }
 
-      final List<Geodetic3D> result = new ArrayList<Geodetic3D>(k);
+      final List<Geodetic3D> result = new ArrayList<>(k);
       for (final int centroidIndex : centroidIndexes) {
          result.add(positions.get(centroidIndex));
       }

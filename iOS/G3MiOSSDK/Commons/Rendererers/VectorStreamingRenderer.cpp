@@ -1069,11 +1069,11 @@ RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderCo
     }
 
     if (_errorDownloadingMetadata) {
-      return RenderState::error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+      return RenderState::error("Error downloading metadata of \"" + _name + "\" from \"" + _serverURL._path + "\"");
     }
 
     if (_errorParsingMetadata) {
-      return RenderState::error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL.getPath() + "\"");
+      return RenderState::error("Error parsing metadata of \"" + _name + "\" from \"" + _serverURL._path + "\"");
     }
   }
 

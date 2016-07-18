@@ -57,7 +57,7 @@ public class MarkWidget
     }
   
     FloatBufferBuilderFromCartesian2D pos2D = new FloatBufferBuilderFromCartesian2D();
-  // #warning TODO: share vertices for marks of the same size?
+    // #warning TODO: share vertices for marks of the same size?
     pos2D.add(-_halfWidth, -_halfHeight); // vertex 1
     pos2D.add(_halfWidth, -_halfHeight); // vertex 2
     pos2D.add(-_halfWidth, _halfHeight); // vertex 3
@@ -77,7 +77,7 @@ public class MarkWidget
   
     final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
   
-  // #warning TODO: share unit texCoords
+    // #warning TODO: share unit texCoords
     if (_textureMapping != null)
     {
       if (_textureMapping != null)

@@ -4,7 +4,6 @@ public abstract class IDeviceInfo
 
   public void dispose()
   {
-
   }
 
   public final float getPixelsInMM(float millimeters)
@@ -16,6 +15,6 @@ public abstract class IDeviceInfo
 
   public abstract DeviceInfo_Platform getPlatform();
 
-  public abstract float getQualityFactor();
+  public abstract float getDevicePixelRatio();
 
 }

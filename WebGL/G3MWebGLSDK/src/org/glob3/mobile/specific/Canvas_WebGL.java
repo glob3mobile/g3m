@@ -25,8 +25,12 @@ public final class Canvas_WebGL
    private String                 _currentDOMFont;
    private int                    _currentFontSize;
 
+   private int                    _width;
+   private int                    _height;
 
-   Canvas_WebGL() {
+
+   Canvas_WebGL(final boolean retina) {
+      super(retina);
       _domCanvas = createCanvas();
       _domCanvasContext = getContext2D(_domCanvas);
    }
@@ -46,8 +50,25 @@ public final class Canvas_WebGL
    protected native void _initialize(final int width,
                                      final int height) /*-{
 		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
-		canvas.width = width;
-		canvas.height = height;
+
+		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
+		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
+
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = width;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = height;
+
+		if (ratio == 1) {
+			canvas.width = width;
+			canvas.height = height;
+		} else {
+			canvas.width = width * ratio;
+			canvas.height = height * ratio;
+			canvas.style.width = width + 'px';
+			canvas.style.height = height + 'px';
+
+			var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+			context.scale(ratio, ratio);
+		}
 
 		this.@org.glob3.mobile.specific.Canvas_WebGL::tryToSetCurrentFontToContext()();
    }-*/;
@@ -101,7 +122,9 @@ public final class Canvas_WebGL
    @Override
    protected native void _createImage(final IImageListener listener,
                                       final boolean autodelete) /*-{
-		var jsImage = new Image();
+		var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_width;
+		var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_height;
+		var jsImage = new Image(width, height);
 		jsImage.onload = function() {
 			var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsImage);
 			listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
@@ -109,8 +132,8 @@ public final class Canvas_WebGL
 				listener.@org.glob3.mobile.generated.IImageListener::dispose()();
 			}
 		};
-		jsImage.src = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas
-				.toDataURL();
+		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
+		jsImage.src = canvas.toDataURL();
    }-*/;
 
 

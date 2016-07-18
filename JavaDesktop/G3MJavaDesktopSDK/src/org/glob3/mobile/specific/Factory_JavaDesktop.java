@@ -16,8 +16,8 @@ import org.glob3.mobile.generated.URL;
 
 
 public class Factory_JavaDesktop
-         extends
-            IFactory {
+   extends
+      IFactory {
 
 
    @Override
@@ -79,7 +79,7 @@ public class Factory_JavaDesktop
 
 
    @Override
-   public ICanvas createCanvas() {
+   public ICanvas createCanvas(final boolean retina) {
       throw new RuntimeException("Not yet implemented");
    }
 

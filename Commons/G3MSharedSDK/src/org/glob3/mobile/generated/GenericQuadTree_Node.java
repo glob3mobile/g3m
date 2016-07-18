@@ -46,7 +46,7 @@ public class GenericQuadTree_Node
     final int size = elementsToBeInserted.size();
     for (int i = 0; i < size; i++)
     {
-      this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
+      add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
     }
     _elements.clear();
   }
@@ -167,7 +167,7 @@ public class GenericQuadTree_Node
   
       //Node must create children
       splitNode(maxElementsPerNode, maxDepth, childAreaProportion); //We must split
-      return this.add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
+      return add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
     }
   
     //INNER NODE

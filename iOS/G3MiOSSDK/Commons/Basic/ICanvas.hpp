@@ -31,8 +31,11 @@ enum StrokeJoin {
 
 class ICanvas {
 protected:
+  const bool _retina;
+
   int _canvasWidth;
   int _canvasHeight;
+
   GFont* _currentFont;
 
   bool isInitialized() const {
@@ -148,15 +151,15 @@ protected:
   virtual void _fillAndStrokeEllipse(float left, float top,
                                      float width, float height) = 0;
 
-
-public:
-  ICanvas() :
+  ICanvas(bool retina) :
+  _retina(retina),
   _canvasWidth(-1),
   _canvasHeight(-1),
   _currentFont(NULL)
   {
   }
 
+public:
   virtual ~ICanvas();
 
   /**

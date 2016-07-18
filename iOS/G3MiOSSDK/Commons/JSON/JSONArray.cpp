@@ -98,18 +98,18 @@ const std::string JSONArray::description() const {
   isb->addString("[");
 
   if (size > 0) {
-    isb->addString((this->get(0) == NULL) ? "null" : this->get(0)->description());
+    isb->addString((get(0) == NULL) ? "null" : get(0)->description());
 
     if (size <= 10) {
       for (size_t i = 1; i < size; i++) {
         isb->addString(", ");
-        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->description());
+        isb->addString((get(i) == NULL) ? "null" : get(i)->description());
       }
     }
     else {
       for (size_t i = 1; i < 10; i++) {
         isb->addString(", ");
-        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->description());
+        isb->addString((get(i) == NULL) ? "null" : get(i)->description());
       }
       isb->addString(", ...");
       isb->addString(" size=");
@@ -189,18 +189,18 @@ const std::string JSONArray::toString() const {
   isb->addString("[");
 
   if (size > 0) {
-    isb->addString((this->get(0) == NULL) ? "null" : this->get(0)->toString());
+    isb->addString((get(0) == NULL) ? "null" : get(0)->toString());
 
     if (size <= 10) {
       for (size_t i = 1; i < size; i++) {
         isb->addString(", ");
-        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->toString());
+        isb->addString((get(i) == NULL) ? "null" : get(i)->toString());
       }
     }
     else {
       for (size_t i = 1; i < 10; i++) {
         isb->addString(", ");
-        isb->addString((this->get(i) == NULL) ? "null" : this->get(i)->toString());
+        isb->addString((get(i) == NULL) ? "null" : get(i)->toString());
       }
       isb->addString(", ...");
       isb->addString(" size=");

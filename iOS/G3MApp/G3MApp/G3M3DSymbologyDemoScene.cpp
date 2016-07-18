@@ -8,7 +8,7 @@
 #include "G3M3DSymbologyDemoScene.hpp"
 
 #include <G3MiOSSDK/Sector.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
@@ -95,10 +95,9 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
-                                             TimeInterval::fromDays(30),
-                                             true,
-                                             3);
+  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
+                                                 "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                                 TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(rasterLayer);
 
   GEOVectorLayer* vectorLayer = new GEOVectorLayer();
