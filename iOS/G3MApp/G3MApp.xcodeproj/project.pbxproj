@@ -409,6 +409,8 @@
 				CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */,
 				CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */,
 				CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */,
+				CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */,
+				CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */,
 				D8B3C6901CAAB9B900A21D04 /* G3MCityGMLDemoScene.cpp */,
 				D8B3C6911CAAB9B900A21D04 /* G3MCityGMLDemoScene.hpp */,
 				CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */,

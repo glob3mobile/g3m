@@ -65,18 +65,18 @@
     // Get the layer
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *) self.layer;
 
-    
-#warning WORKING ON TRANSPARENCIES JM
     eaglLayer.opaque = NO;
     eaglLayer.backgroundColor = [[UIColor colorWithWhite:1.0 alpha:0.0] CGColor];
     
-eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil]; 
-    _scale = 1;
-//    // for retina display
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      _scale = [UIScreen mainScreen].scale;
-//    }
-    eaglLayer.contentsScale = _scale;
+    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+    _devicePixelRatio = 1;
+    // for retina display
+    UIScreen* mainScreen = [UIScreen mainScreen];
+    if ([mainScreen respondsToSelector:@selector(scale)]) {
+      _devicePixelRatio = mainScreen.scale;
+    }
+    eaglLayer.contentsScale = _devicePixelRatio;
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];

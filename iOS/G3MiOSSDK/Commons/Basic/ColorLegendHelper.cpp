@@ -39,6 +39,46 @@ ColorLegend* ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(std::vect
   return new ColorLegend(legend);
 }
 
+ColorLegend* ColorLegendHelper::createColorBrewLegendWithHomogeneousBreaks(std::vector<double>& sListDouble,
+                                                                       const std::string& colorName,
+                                                                       int sClassCount){
+  
+  std::vector<double> naturalBreaks;
+  
+  std::sort(sListDouble.begin(), sListDouble.end());
+  
+  const double size =(double)sListDouble.size();
+  const double q1 = sListDouble.at((size_t)IMathUtils::instance()->floor( size * 0.25 ));
+  const double q3 = sListDouble.at((size_t)IMathUtils::instance()->floor( size * 0.75 ));
+  const double iqr = q3-q1;
+  
+  const double begin = q1 - 1.5 * iqr > sListDouble.at(0)? q1 - 1.5 * iqr : sListDouble.at(0);
+  const double end = q3 + 1.5 * iqr < sListDouble.at(sListDouble.size()-1)? q3 + 1.5 * iqr : sListDouble.at(sListDouble.size()-1);
+  
+//  const double begin = sListDouble.at((size_t)IMathUtils::instance()->floor( size * 0.2 ));
+//  const double end = sListDouble.at((size_t)IMathUtils::instance()->floor( size * 0.8 )); //Removing outliers
+  const double gap = (end-begin) / sClassCount;
+  for (size_t i = 0; i < sClassCount; i++){
+    naturalBreaks.push_back(begin + i * gap );
+  }
+  
+  
+  std::vector<std::string> colorNames = brew(colorName, sClassCount);
+  
+  if (naturalBreaks.size() != colorNames.size()){
+    THROW_EXCEPTION("Error at ColorLegendHelper::createColorBrewLegendWithNaturalBreaks()");
+  }
+  
+  std::vector<ColorLegend::ColorAndValue*> legend;
+  for (int i = 0; i < sClassCount;i++) {
+    Color* c = Color::parse(colorNames[i]);
+    legend.push_back(new ColorLegend::ColorAndValue(*c, naturalBreaks[i]));
+    delete c;
+  }
+  
+  return new ColorLegend(legend);
+}
+
 
 ColorLegend* ColorLegendHelper::createColorBrewLegendWithEquallySpacedBreaks(std::vector<double>& sListDouble,
                                                                        const std::string& colorName,

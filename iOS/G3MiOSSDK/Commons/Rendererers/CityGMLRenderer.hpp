@@ -271,7 +271,9 @@ public:
     
     std::vector<double> vs = getAllValuesOfProperty(propertyName);
     
-    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(vs, colorScheme, nClasses);
+//    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithNaturalBreaks(vs, colorScheme, nClasses);
+    
+    ColorLegend* cl = ColorLegendHelper::createColorBrewLegendWithHomogeneousBreaks(vs, colorScheme, nClasses);
     
     BuildingDataColorProvider* colorProvider = new BuildingDataColorProvider(propertyName, cl);
     

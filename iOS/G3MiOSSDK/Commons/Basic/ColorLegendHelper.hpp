@@ -31,6 +31,12 @@ public:
                                                              const std::string& colorName,
                                                              int sClassCount);
   
+  static ColorLegend* createColorBrewLegendWithHomogeneousBreaks(std::vector<double>& sListDouble,
+                                                             const std::string& colorName,
+                                                             int sClassCount);
+  
+  
+  
   
   static ColorLegend* createColorBrewLegendWithEquallySpacedBreaks(std::vector<double>& sListDouble,
                                                                    const std::string& colorName,

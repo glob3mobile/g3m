@@ -30,13 +30,13 @@ public:
     if (_legend.size() == 0){
       return;
     }
-  
+    
     for (size_t i = 0; i < _legend.size() -1; i++) {
       if (_legend[i]->_value >= _legend[i+1]->_value){
         THROW_EXCEPTION("ColorLegend -> List of colors must be passed in ascendant order.");
       }
     }
-  
+    
   }
   
   ~ColorLegend(){
@@ -47,30 +47,28 @@ public:
   
   
   Color getColor(double value) const{
-    
-    ColorAndValue* inf= NULL, *sup = NULL;
-    
-    for (size_t i = 0; i < _legend.size(); i++) {
-      if (_legend[i]->_value == value){
-        return _legend[i]->_color;
-      }
-      if (_legend[i]->_value <= value){
-        inf = _legend[i];
-        if (i < _legend.size() -1){
-          sup = _legend[i+1];
+    if (value <= _legend[0]->_value){
+      return _legend[0]->_color;
+    } else{
+      
+      for (size_t i = 0; i < _legend.size(); i++) {
+        if (i == _legend.size()-1 ||
+            _legend[i]->_value == value){
+          return _legend[i]->_color;
+        } else{
+          
+          if (_legend[i]->_value > value){
+            ColorAndValue* inf= _legend[i-1];
+            ColorAndValue* sup =  _legend[i];
+            
+            double x = (value - inf->_value) / (sup->_value - inf->_value);
+            return Color::interpolateColor(inf->_color, sup->_color, (float)x);
+          }
         }
       }
     }
     
-    if (inf == NULL){
-      return _legend[0]->_color;
-    }
-    if (sup == NULL){
-      return inf->_color;
-    }
-    
-    double x = (value - inf->_value) / (sup->_value - inf->_value);
-    return Color::interpolateColor(inf->_color, sup->_color, (float)x);
+    return Color::transparent();
   }
   
 private:

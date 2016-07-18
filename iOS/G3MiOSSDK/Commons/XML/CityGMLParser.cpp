@@ -127,7 +127,7 @@ public:
   }
   
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
   
   void onCancel(const URL& url) {
