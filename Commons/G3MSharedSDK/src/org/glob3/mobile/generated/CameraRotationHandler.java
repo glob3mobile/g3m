@@ -111,7 +111,7 @@ public class CameraRotationHandler extends CameraEventHandler
     Vector2F pixel0 = touchEvent.getTouch(0).getPos();
     Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     Vector2F pixel2 = touchEvent.getTouch(2).getPos();
-    Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
+    Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
     _pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
     //_lastYValid = _initialPixel.y();
   
@@ -139,7 +139,7 @@ public class CameraRotationHandler extends CameraEventHandler
     final Vector2F c0 = touchEvent.getTouch(0).getPos();
     final Vector2F c1 = touchEvent.getTouch(1).getPos();
     final Vector2F c2 = touchEvent.getTouch(2).getPos();
-    final Vector2F cm = c0.add(c1).add(c2).div(3);
+    final Vector2F cm = c0.add(c1).add(c2).div(3.0f);
   
     // compute normal to Initial point
     Vector3D normal = eventContext.getPlanet().geodeticSurfaceNormal(_pivotPoint);

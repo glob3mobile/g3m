@@ -124,7 +124,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       if (_imageAssembler != null)
       {
-        _canvas = IFactory.instance().createCanvas();
+        _canvas = IFactory.instance().createCanvas(false);
         _canvas.initialize(_imageWidth, _imageHeight);
     
         if (_geoObjectHolder != null)

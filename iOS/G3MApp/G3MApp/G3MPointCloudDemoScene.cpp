@@ -8,7 +8,7 @@
 #include "G3MPointCloudDemoScene.hpp"
 
 #include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
@@ -66,7 +66,7 @@ public:
     const JSONBaseObject* jsonBaseObject = BSONParser::parse(_buffer);
 
     if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url._path.c_str());
     }
     else {
       const JSONObject* object = jsonBaseObject->asObject();
@@ -139,7 +139,7 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_mesh == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url._path.c_str());
     }
     else {
       _scene->setPointsCloudMesh(_mesh);
@@ -174,7 +174,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -212,10 +212,9 @@ void G3MPointCloudDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 

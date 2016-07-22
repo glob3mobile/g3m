@@ -85,8 +85,7 @@ public:
 
 RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
 #ifdef C_CODE
-  std::map<std::string, long long>::iterator iter;
-  for (iter = _requestsIdsPerTile.begin();
+  for (std::map<const std::string, long long>::iterator iter = _requestsIdsPerTile.begin();
        iter != _requestsIdsPerTile.end();
        ++iter) {
     const long long requestId = iter->second;

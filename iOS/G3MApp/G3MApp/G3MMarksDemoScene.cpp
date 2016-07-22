@@ -40,12 +40,12 @@ public:
 
     const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
     if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse (1) \"%s\"", url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse (1) \"%s\"", url._path.c_str());
     }
     else {
       const JSONObject* jsonObject = jsonBaseObject->asObject();
       if (jsonObject == NULL) {
-        ILogger::instance()->logError("Can't parse (2) \"%s\"", url.getPath().c_str());
+        ILogger::instance()->logError("Can't parse (2) \"%s\"", url._path.c_str());
       }
       else {
         const IStringUtils* su = IStringUtils::instance();
@@ -76,12 +76,15 @@ public:
                                 URL("http://openweathermap.org/img/w/" + icon),
                                 position,
                                 RELATIVE_TO_GROUND,
-                                0,
-                                true,
-                                14);
+                                0,                              // minDistanceToCamera
+                                true,                           // labelBottom
+                                13,                             // labelFontSize
+                                Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
+                                Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
+                                -10                             // labelGapSize
+                                );
 
           _scene->addMark(mark);
-
         }
       }
 
@@ -92,7 +95,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -133,7 +136,6 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
                                        Angle::zero(), // heading
-                                       //Angle::fromDegrees(30) // pitch
                                        Angle::fromDegrees(30 - 90) // pitch
                                        );
 }

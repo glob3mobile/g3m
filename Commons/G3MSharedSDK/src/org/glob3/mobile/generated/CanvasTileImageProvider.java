@@ -50,7 +50,7 @@ public abstract class CanvasTileImageProvider extends TileImageProvider
       if (_canvas != null)
          _canvas.dispose();
   
-      _canvas = IFactory.instance().createCanvas();
+      _canvas = IFactory.instance().createCanvas(false);
       _canvas.initialize(width, height);
   
       _canvasWidth = width;

@@ -79,8 +79,8 @@ public final class Factory_WebGL
 
 
    @Override
-   public ICanvas createCanvas() {
-      return new Canvas_WebGL();
+   public ICanvas createCanvas(final boolean retina) {
+      return new Canvas_WebGL(retina);
    }
 
 

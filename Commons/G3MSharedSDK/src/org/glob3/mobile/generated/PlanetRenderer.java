@@ -451,9 +451,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _statistics.clear();
   
     final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-    final float deviceQualityFactor = deviceInfo.getQualityFactor();
     final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+    final double correctionFactor = deviceInfo.getDPI() / factor;
   
     final double texWidth = correctionFactor * layerTilesRenderParameters._tileTextureResolution._x;
     final double texHeight = correctionFactor * layerTilesRenderParameters._tileTextureResolution._y;

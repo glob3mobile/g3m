@@ -227,22 +227,22 @@ public:
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;
   }
-  
+
   //void notifyChangedInfo() const;
-  
+
   void setInfoDisplay(InfoDisplay* infoDisplay) {
     _infoDisplay = infoDisplay;
   }
-  
+
   InfoDisplay*  getInfoDisplay() const {
     return _infoDisplay;
   }
-  
+
   void changedRendererInfo(const size_t rendererIdentifier,
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
-  
+
   void setViewMode(ViewMode viewMode);
 
 private:
@@ -314,15 +314,15 @@ private:
 
 
   bool _forceBusyRenderer;
-  
+
   InfoDisplay* _infoDisplay;
 
 
   float _touchDownPositionX;
   float _touchDownPositionY;
-  
+
   ViewMode _viewMode;
-  
+
   //For stereo vision
   Camera* _auxCam;
   Camera* _leftEyeCam;
@@ -357,15 +357,14 @@ private:
                         const TouchEvent* touchEvent) const;
 
   RenderState calculateRendererState();
-  
+
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
-  
+
   void rawRender(const RenderState_Type renderStateType);
-  
+
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
-
   
 };
 

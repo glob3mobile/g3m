@@ -22,6 +22,7 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 {
   private ChangedListener _changeListener;
 
+
   protected final void changed()
   {
     if (_changeListener != null)

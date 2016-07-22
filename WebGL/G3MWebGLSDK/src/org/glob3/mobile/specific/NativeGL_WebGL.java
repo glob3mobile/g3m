@@ -855,8 +855,13 @@ public final class NativeGL_WebGL
                                int y,
                                int width,
                                int height) /*-{
+		var devicePixelRatio = $wnd.devicePixelRatio || 1;
+
+		var logicalWidth = Math.round(width * devicePixelRatio);
+		var logicalHeight = Math.round(height * devicePixelRatio);
+
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-		gl.viewport(x, y, width, height);
+		gl.viewport(x, y, logicalWidth, logicalHeight);
    }-*/;
 
 

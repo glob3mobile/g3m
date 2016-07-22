@@ -1,8 +1,11 @@
 package org.glob3.mobile.generated; 
 public abstract class ICanvas
 {
+  protected final boolean _retina;
+
   protected int _canvasWidth;
   protected int _canvasHeight;
+
   protected GFont _currentFont;
 
   protected final boolean isInitialized()
@@ -14,14 +17,14 @@ public abstract class ICanvas
   {
     if (!isInitialized())
     {
-      ILogger.instance().logError("Canvas is not initialized");
+      throw new RuntimeException("Canvas is not initialized");
     }
   }
   protected final void checkCurrentFont()
   {
     if (_currentFont == null)
     {
-      ILogger.instance().logError("Current font no set");
+      throw new RuntimeException("Current font no set");
     }
   }
 
@@ -100,9 +103,9 @@ public abstract class ICanvas
 
   protected abstract void _fillAndStrokeEllipse(float left, float top, float width, float height);
 
-
-  public ICanvas()
+  protected ICanvas(boolean retina)
   {
+     _retina = retina;
      _canvasWidth = -1;
      _canvasHeight = -1;
      _currentFont = null;
@@ -121,14 +124,12 @@ public abstract class ICanvas
   {
     if ((width <= 0) || (height <= 0))
     {
-      ILogger.instance().logError("Invalid extent");
-      return;
+      throw new RuntimeException("Invalid extent");
     }
   
     if (isInitialized())
     {
-      ILogger.instance().logError("Canvas already initialized");
-      return;
+      throw new RuntimeException("Canvas already initialized");
     }
   
     _canvasWidth = width;
@@ -325,7 +326,7 @@ public abstract class ICanvas
   
     if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
     {
-      ILogger.instance().logError("Invalid source rectangle in drawImage");
+      throw new RuntimeException("Invalid source rectangle in drawImage");
     }
   
     _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
@@ -337,27 +338,22 @@ public abstract class ICanvas
   
     if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
     {
-      ILogger.instance().logError("Invalid source rectangle in drawImage");
+      throw new RuntimeException("Invalid source rectangle in drawImage");
+    }
+  
+    if (transparency <= 0.0)
+    {
+      return;
+    }
+  
+    if (transparency >= 1.0)
+    {
+      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
     }
     else
     {
-      if (transparency <= 0.0)
-      {
-        return;
-      }
-  
-      if (transparency >= 1.0)
-      {
-        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
-      }
-      else
-      {
-        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
-      }
-  
+      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
     }
-  
-  
   }
 
   public final int getWidth()

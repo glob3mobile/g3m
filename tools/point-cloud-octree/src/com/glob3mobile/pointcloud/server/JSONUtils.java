@@ -216,7 +216,7 @@ public class JSONUtils {
                sumLongitude / pointsCount, //
                sumHeight / pointsCount);
 
-      return new GTriplet<Double, Double, Geodetic3D>(minHeight, maxHeight, average);
+      return new GTriplet<>(minHeight, maxHeight, average);
    }
 
 

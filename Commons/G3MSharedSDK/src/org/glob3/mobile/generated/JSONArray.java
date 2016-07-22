@@ -142,14 +142,14 @@ public class JSONArray extends JSONBaseObject
   
     if (size > 0)
     {
-      isb.addString((this.get(0) == null) ? "null" : this.get(0).description());
+      isb.addString((get(0) == null) ? "null" : get(0).description());
   
       if (size <= 10)
       {
         for (int i = 1; i < size; i++)
         {
           isb.addString(", ");
-          isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
+          isb.addString((get(i) == null) ? "null" : get(i).description());
         }
       }
       else
@@ -157,7 +157,7 @@ public class JSONArray extends JSONBaseObject
         for (int i = 1; i < 10; i++)
         {
           isb.addString(", ");
-          isb.addString((this.get(i) == null) ? "null" : this.get(i).description());
+          isb.addString((get(i) == null) ? "null" : get(i).description());
         }
         isb.addString(", ...");
         isb.addString(" size=");
@@ -183,14 +183,14 @@ public class JSONArray extends JSONBaseObject
   
     if (size > 0)
     {
-      isb.addString((this.get(0) == null) ? "null" : this.get(0).toString());
+      isb.addString((get(0) == null) ? "null" : get(0).toString());
   
       if (size <= 10)
       {
         for (int i = 1; i < size; i++)
         {
           isb.addString(", ");
-          isb.addString((this.get(i) == null) ? "null" : this.get(i).toString());
+          isb.addString((get(i) == null) ? "null" : get(i).toString());
         }
       }
       else
@@ -198,7 +198,7 @@ public class JSONArray extends JSONBaseObject
         for (int i = 1; i < 10; i++)
         {
           isb.addString(", ");
-          isb.addString((this.get(i) == null) ? "null" : this.get(i).toString());
+          isb.addString((get(i) == null) ? "null" : get(i).toString());
         }
         isb.addString(", ...");
         isb.addString(" size=");

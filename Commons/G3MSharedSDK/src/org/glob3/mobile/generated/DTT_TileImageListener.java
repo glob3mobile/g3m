@@ -43,7 +43,7 @@ public class DTT_TileImageListener extends TileImageListener
   
       //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
   
-      ICanvas canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
   
       final int width = _tileTextureResolution._x;
       final int height = _tileTextureResolution._y;

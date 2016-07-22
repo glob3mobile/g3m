@@ -97,10 +97,9 @@ public class URL
   {
   }
 
-  public final String getPath()
-  {
-    return _path;
-  }
+//  std::string getPath() const {
+//    return _path;
+//  }
 
   public static URL nullURL()
   {

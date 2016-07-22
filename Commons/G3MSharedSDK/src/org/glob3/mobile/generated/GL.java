@@ -223,7 +223,7 @@ public class GL
         }
         else
         {
-          ILogger.instance().logError("Can't generate bitmap. Texture dimensions are not power of two.");
+          ILogger.instance().logError("Can't generate mipmap. Texture dimensions are not power of two.");
         }
       }
     }

@@ -70,7 +70,7 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
       final int canvasWidth = maxWidth;
       final int canvasHeight = maxHeight;
   
-      ICanvas canvas = context.getFactory().createCanvas();
+      ICanvas canvas = context.getFactory().createCanvas(false);
       canvas.initialize(canvasWidth, canvasHeight);
   
       ///#warning remove debug code

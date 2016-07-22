@@ -12,14 +12,6 @@
 #include "RectangleI.hpp"
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
-
-  if (_dataRGBA8888 != NULL) {
-    unsigned char* result = _dataRGBA8888;
-    _dataRGBA8888 = NULL; // moves ownership to the method caller
-    return result;
-  }
-
-
   const int width  = getWidth();
   const int height = getHeight();
 
@@ -61,5 +53,5 @@ const std::string Image_iOS::description() const {
 }
 
 IImage* Image_iOS::shallowCopy() const {
-  return new Image_iOS(_image, _sourceBuffer, NULL);
+  return new Image_iOS(_image, _sourceBuffer);
 }

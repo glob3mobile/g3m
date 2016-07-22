@@ -139,7 +139,7 @@ public class GPUProgram
     //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
   
     //  if (_manager != NULL) {
-    //    _manager->compiledProgramDeleted(this->_name);
+    //    _manager->compiledProgramDeleted(_name);
     //  }
   
     for (int i = 0; i < _nUniforms; i++)

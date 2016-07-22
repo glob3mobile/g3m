@@ -13,7 +13,7 @@
 
 CircleImageBuilder::CircleImageBuilder(const Color& color,
                                        int radius) :
-CanvasImageBuilder(radius*2 + 2, radius*2 + 2),
+CanvasImageBuilder(radius*2 + 2, radius*2 + 2, true),
 _color(color),
 _radius(radius)
 {

@@ -70,6 +70,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     // make zoom
     camera.moveForward(desp *dist);
   }
+
   private void rotate()
   {
     System.out.print("rotating....\n");
@@ -231,10 +232,9 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
 
-  //MutableVector3D _initialPoint;  //Initial point at dragging
   public MutableVector2F _initialPixel0 = new MutableVector2F(); //Initial pixels at start of gesture
   public MutableVector2F _initialPixel1 = new MutableVector2F();
-  //MutableVector3D _initialPoint0, _initialPoint1;
+
   public double _initialFingerSeparation;
   public double _initialFingerInclination;
 

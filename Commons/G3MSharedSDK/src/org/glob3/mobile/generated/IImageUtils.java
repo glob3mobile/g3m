@@ -48,7 +48,7 @@ public class IImageUtils
     }
     else
     {
-      ICanvas canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
       canvas.initialize(width, height);
   
       canvas.drawImage(image, 0, 0, width, height);
@@ -74,7 +74,7 @@ public class IImageUtils
     }
     else
     {
-      ICanvas canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
   
       final IMathUtils mu = IMathUtils.instance();
       canvas.initialize(mu.round(rect._width), mu.round(rect._height));
@@ -113,7 +113,7 @@ public class IImageUtils
     }
   
   
-    ICanvas canvas = IFactory.instance().createCanvas();
+    ICanvas canvas = IFactory.instance().createCanvas(false);
     canvas.initialize(width, height);
   
     for (int i = 0; i < imagesSize ; i++)

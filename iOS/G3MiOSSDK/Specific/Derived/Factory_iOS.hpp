@@ -97,8 +97,8 @@ public:
     return new ShortBuffer_iOS(size);
   }
 
-  ICanvas* createCanvas() const {
-    return new Canvas_iOS();
+  ICanvas* createCanvas(bool retina) const {
+    return new Canvas_iOS(retina);
   }
 
   IWebSocket* createWebSocket(const URL& url,

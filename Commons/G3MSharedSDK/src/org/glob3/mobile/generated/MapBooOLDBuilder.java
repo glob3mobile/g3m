@@ -334,12 +334,12 @@ public abstract class MapBooOLDBuilder
     }
     else
     {
-  //    result = URLTemplateLayer::newWGS84(urlTemplate,
-  //                                        sector,
-  //                                        transparent,
-  //                                        firstLevel,
-  //                                        maxLevel,
-  //                                        TimeInterval::fromDays(30));
+      //    result = URLTemplateLayer::newWGS84(urlTemplate,
+      //                                        sector,
+      //                                        transparent,
+      //                                        firstLevel,
+      //                                        maxLevel,
+      //                                        TimeInterval::fromDays(30));
   
       result = new URLTemplateLayer(urlTemplate, sector, transparent, TimeInterval.fromDays(30), true, new LevelTileCondition(firstLevel, maxLevel), LayerTilesRenderParameters.createDefaultWGS84(sector, 1, maxLevel));
     }
@@ -562,11 +562,11 @@ public abstract class MapBooOLDBuilder
           }
           else if (_token.length() > 0)
           {
-              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_DummyListener(), false); // readExpired
+            _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_DummyListener(), false); // readExpired
           }
           else
           {
-              ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+            ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
           }
         }
         _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
@@ -925,12 +925,12 @@ public abstract class MapBooOLDBuilder
     switch (_viewType)
     {
       case VIEW_EDITION_PREVIEW:
-        return "edition-preview";
+      return "edition-preview";
       case VIEW_PRESENTATION:
-        return "presentation";
+      return "presentation";
       case VIEW_RUNTIME:
       default:
-        return "runtime";
+      return "runtime";
     }
   }
 
@@ -1351,7 +1351,7 @@ public abstract class MapBooOLDBuilder
     //  std::vector<MapBooOLD_Scene*> _applicationScenes;
     //  int                        _applicationCurrentSceneIndex;
     //  int                        _lastApplicationCurrentSceneIndex;
-  ///#warning Diego at work!
+    ///#warning Diego at work!
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1363,13 +1363,13 @@ public abstract class MapBooOLDBuilder
     switch (_viewType)
     {
       case VIEW_PRESENTATION:
-        view = "presentation";
-        break;
+      view = "presentation";
+      break;
       case VIEW_EDITION_PREVIEW:
-        view = "edition-preview";
-        break;
+      view = "edition-preview";
+      break;
       default:
-        view = "runtime";
+      view = "runtime";
     }
   
     return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
@@ -1670,13 +1670,13 @@ public abstract class MapBooOLDBuilder
   public final void openApplicationTube(G3MContext context)
   {
   
-  //  IDownloader* downloader = context->getDownloader();
-  //  downloader->requestBuffer(createApplicationRestURL(),
-  //                            DownloadPriority::HIGHEST,
-  //                            TimeInterval::zero(),
-  //                            false, // readExpired
-  //                            new MapBooOLDBuilder_RestJSON(this),
-  //                            true);
+    //  IDownloader* downloader = context->getDownloader();
+    //  downloader->requestBuffer(createApplicationRestURL(),
+    //                            DownloadPriority::HIGHEST,
+    //                            TimeInterval::zero(),
+    //                            false, // readExpired
+    //                            new MapBooOLDBuilder_RestJSON(this),
+    //                            true);
   
     final IFactory factory = context.getFactory();
     _webSocket = factory.createWebSocket(createApplicationTubeURL(), new MapBooOLDBuilder_ApplicationTubeListener(this), true, true); // autodeleteWebSocket -  autodeleteListener

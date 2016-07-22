@@ -26,12 +26,18 @@ public class G3MBuilder_WebGL
    }
 
 
+   private void addGPUProgramSources() {
+      final BasicShadersGL2 shaders = new BasicShadersGL2();
+      final int size = shaders.size();
+      for (int i = 0; i < size; i++) {
+         addGPUProgramSources(shaders.get(i));
+      }
+   }
+
+
    public G3MWidget_WebGL createWidget() {
       if (_nativeWidget.isWebGLSupported()) {
-         final BasicShadersGL2 shaders = new BasicShadersGL2();
-         for (int i = 0; i < shaders.size(); i++) {
-            addGPUProgramSources(shaders.get(i));
-         }
+         addGPUProgramSources();
 
          setGL(_nativeWidget.getGL());
 

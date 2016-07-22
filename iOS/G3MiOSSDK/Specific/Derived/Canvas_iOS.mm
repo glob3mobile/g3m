@@ -12,9 +12,11 @@
 #include "Image_iOS.hpp"
 #include "IImageListener.hpp"
 #include "GFont.hpp"
+#include "IDeviceInfo.hpp"
+#include "Image_iOS.hpp"
+#include "IFactory.hpp"
 
 #import <UIKit/UIKit.h>
-#include "Image_iOS.hpp"
 
 #import "NSString_CppAdditions.h"
 
@@ -30,8 +32,6 @@ Canvas_iOS::~Canvas_iOS() {
     CGContextRelease( _context );
     _context = NULL;
   }
-
-  delete [] _dataRGBA8888;
 }
 
 void Canvas_iOS::tryToSetCurrentFontToContext() {
@@ -47,45 +47,33 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-//  _dataRGBA8888 = new unsigned char[4 * width * height];
-//  _context = CGBitmapContextCreate(_dataRGBA8888,
-//                                   width,
-//                                   height,
-//                                   8,          // bits per component
-//                                   4 * width,  // bytes per row
-//                                   colorSpace,
-//                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-//  if (_context == NULL) {
-//    delete _dataRGBA8888;
-//    _dataRGBA8888 = NULL;
-//    ILogger::instance()->logError("Can't create CGContext");
-//    return;
-//  }
-//
-//  CGContextClearRect( _context, CGRectMake( 0, 0, width, height ) );
-
+  CGFloat devicePixelRatio = _retina ? IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() : 1;
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   width,
-                                   height,
+                                   width  * devicePixelRatio,
+                                   height * devicePixelRatio,
                                    8,          // bits per component
                                    0,          // bytes per row
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-
-  CGColorSpaceRelease( colorSpace );
 
   if (_context == NULL) {
     ILogger::instance()->logError("Can't create CGContext");
     return;
   }
 
+  if (devicePixelRatio != 1) {
+    CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
+  }
+
+  CGColorSpaceRelease( colorSpace );
+
+  CGContextSetAllowsAntialiasing(_context, YES);
   CGContextSetShouldAntialias(_context, YES);
   CGContextSetAllowsFontSmoothing(_context, YES);
   CGContextSetShouldSmoothFonts(_context, YES);
+  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
   CGContextSetShouldSubpixelPositionFonts(_context, NO);
   CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
-  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
-
 
   tryToSetCurrentFontToContext();
 }
@@ -198,8 +186,7 @@ void Canvas_iOS::_createImage(IImageListener* listener,
   UIImage* image = [UIImage imageWithCGImage: cgImage];
   CFRelease(cgImage);
 
-  IImage* result = new Image_iOS(image, NULL, _dataRGBA8888);
-  _dataRGBA8888 = NULL; // moved ownership to image
+  IImage* result = new Image_iOS(image, NULL);
   listener->imageCreated(result);
   if (autodelete) {
     delete listener;

@@ -78,7 +78,7 @@ void LabelImageBuilder::build(const G3MContext* context,
                               IImageBuilderListener* listener,
                               bool deleteListener) {
 
-  ICanvas* canvas = context->getFactory()->createCanvas();
+  ICanvas* canvas = context->getFactory()->createCanvas(true);
 
   canvas->setFont(_font);
 

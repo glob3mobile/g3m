@@ -85,7 +85,7 @@ _context(NULL)
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
   _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
   _scenes.push_back( new G3MAnimatedMarksDemoScene(this) );
-  // _scenes.push_back( new G3MCanvas2DDemoScene(this) );
+  _scenes.push_back( new G3MCanvas2DDemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
   _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
   _scenes.push_back( new G3MStereoDemoScene(this) );

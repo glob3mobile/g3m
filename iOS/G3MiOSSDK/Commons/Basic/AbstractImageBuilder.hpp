@@ -18,6 +18,7 @@ private:
   ChangedListener* _changeListener;
 
 protected:
+
   void changed();
 
 public:
