@@ -222,7 +222,7 @@ class PointCloudEvolutionTask: public GTask{
   
   ColorLegend* _colorLegend;
   bool _using0Color;
-public:
+  public:
   
   PointCloudEvolutionTask(ViewController* vc):
   _pcMesh(NULL),
@@ -312,7 +312,7 @@ class ColorChangingMeshTask: public GTask{
   AbstractMesh* _abstractMesh;
   int _step;
   std::vector<IFloatBuffer*> _colors;
-public:
+  public:
   
   ColorChangingMeshTask(AbstractMesh* abstractMesh, std::vector<IFloatBuffer*> colors):
   _abstractMesh(abstractMesh),
@@ -342,7 +342,7 @@ public:
 class MyEDCamConstrainer: public ICameraConstrainer {
   
   ElevationData* _ed;
-public:
+  public:
   
   MyEDCamConstrainer(ElevationData* ed):_ed(ed){}
   
@@ -378,11 +378,11 @@ public:
 class MyEDListener: public IElevationDataListener{
   
   
-private:
+  private:
   ViewController* _demo;
   const IThreadUtils* _threadUtils;
   
-public:
+  public:
   
   MyEDListener(ViewController* demo, const IThreadUtils* threadUtils):_demo(demo), _threadUtils(threadUtils){}
   
@@ -412,7 +412,7 @@ public:
 
 class MyCityGMLBuildingTouchedListener : public CityGMLBuildingTouchedListener{
   ViewController* _vc;
-public:
+  public:
   
   MyCityGMLBuildingTouchedListener(ViewController* vc):_vc(vc){}
   
@@ -458,7 +458,7 @@ public:
 class MyInitTask: public GInitializationTask{
   bool _useDEM;
   ViewController* _vc;
-public:
+  public:
   
   MyInitTask(ViewController* vc, bool useDEM):_useDEM(useDEM), _vc(vc){
     
@@ -486,7 +486,7 @@ public:
 
 class MyCityGMLRendererListener: public CityGMLRendererListener{
   ViewController* _vc;
-public:
+  public:
   MyCityGMLRendererListener(ViewController* vc):_vc(vc){}
   
   void onBuildingsLoaded(const std::vector<CityGMLBuilding*>& buildings){
@@ -504,15 +504,22 @@ public:
 class KarlsruheVirtualWalkLM: public ILocationModifier{
   const ElevationData* _ed;
   const Geodetic2D* _initialPosition;
-public:
+  
+  // compute what I have walked from initial position
+  const Geodetic2D _karlsruhePos;
+  const double _viewHeight;
+  
+  public:
   KarlsruheVirtualWalkLM(const ElevationData* ed):
   _ed(ed),
-  _initialPosition(NULL)
+  _initialPosition(NULL),
+  _karlsruhePos(Angle::fromDegrees(49.011059), Angle::fromDegrees(8.404109)),
+  _viewHeight(2.0)
   {}
   
   ~KarlsruheVirtualWalkLM() {
     if (_initialPosition != NULL)
-      delete _initialPosition;
+    delete _initialPosition;
   }
   
   Geodetic3D modify(const Geodetic3D& location){
@@ -524,9 +531,13 @@ public:
     }
     
     // compute what I have walked from initial position
-    const Geodetic2D Karlsruhe(Angle::fromDegrees(49.010), Angle::fromDegrees(8.394));
     const Geodetic2D incGeo = location.asGeodetic2D().sub(*_initialPosition);
-    return Geodetic3D(Karlsruhe.add(incGeo.times(100)), 160);
+    
+    Geodetic2D fakePos = _karlsruhePos.add(incGeo.times(100));
+    const double h = _ed->getElevationAt(fakePos);
+    
+    
+    return Geodetic3D(fakePos, h + _viewHeight);
   }
 };
 
@@ -534,7 +545,7 @@ public:
 class AltitudeFixerLM: public ILocationModifier{
   const ElevationData* _ed;
   const Geodetic2D* _initialPosition;
-public:
+  public:
   AltitudeFixerLM(const ElevationData* ed):
   _ed(ed),
   _initialPosition(NULL)
@@ -542,7 +553,7 @@ public:
   
   ~AltitudeFixerLM() {
     if (_initialPosition != NULL)
-      delete _initialPosition;
+    delete _initialPosition;
   }
   
   Geodetic3D modify(const Geodetic3D& location){
@@ -607,6 +618,9 @@ public:
   
   _isMenuAvailable = false;
   
+  _locationUsesRealGPS = true;
+  _dac = NULL;
+  
   _waitingMessageView.layer.cornerRadius = 5;
   _waitingMessageView.layer.masksToBounds = TRUE;
   
@@ -619,12 +633,12 @@ public:
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
-//  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
@@ -686,7 +700,10 @@ public:
   } else{
     BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
                                              "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                             TimeInterval::fromDays(30));
+                                             TimeInterval::fromDays(30),
+                                             true,
+                                             2,
+                                             19);
     layerSet->addLayer(layer);
   }
   
@@ -778,7 +795,7 @@ public:
   const bool includeCastleModel = true;
   if (includeCastleModel){
     class SchlossListener : public ShapeLoadListener {
-    public:
+      public:
       SchlossListener()
       {
       }
@@ -819,13 +836,20 @@ public:
                                                 Angle::fromDegrees(-44.938813)
                                                 );
   
+  [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(activateMenu) userInfo:nil repeats:FALSE];
+  
   //NO WAITING ANYMORE
   _waitingMessageView.hidden = TRUE;
-  _isMenuAvailable = true;
   
   printf("N OF WALLS: %d\n", numberOfWalls);
   printf("N OF TESSELLATED WALLS: %d\n", numberOfP3D);
   printf("N OF TESSELLATED WALLS_4: %d\n", numberOfP3D_4);
+}
+
+
+-(void) activateMenu{
+  _isMenuAvailable = true;
+  printf("Menu activated");
 }
 
 - (IBAction)switchCityGML:(id)sender {
@@ -859,6 +883,7 @@ public:
   
   CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
   cameraRenderer->clearHandlers();
+  _dac = NULL; //Clear Handlers has destroyed it
   
   //Restoring prev cam
   const Camera* cam = [G3MWidget widget]->getCurrentCamera();
@@ -883,6 +908,8 @@ public:
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
   [G3MWidget widget]->getNextCamera()->forceZNear(NAND);
+  
+  [locationModeButton setHidden:TRUE];
 }
 
 -(void) activateMonoVRMode{
@@ -899,12 +926,15 @@ public:
   
   
   [G3MWidget widget]->getNextCamera()->setFOV(Angle::nan(), Angle::nan());
+  
+  [locationModeButton setHidden:FALSE];
 }
 
 -(void) activateDeviceAttitudeTracking{
   
   CameraRenderer* cameraRenderer = [G3MWidget widget]->getCameraRenderer();
   cameraRenderer->clearHandlers();
+  _dac = NULL; //Clear Handlers has destroyed it
   
   //Storing prev cam
   if (_prevPos == NULL){
@@ -915,10 +945,13 @@ public:
     _prevHeading = new Angle(cam->getHeading());
   }
   
-  ILocationModifier * lm = new AltitudeFixerLM([self elevationData]);
-  
-  DeviceAttitudeCameraHandler* dac = new DeviceAttitudeCameraHandler(true, lm);
-  cameraRenderer->addHandler(dac);
+  if (_dac == NULL){
+    ILocationModifier * lm = (_locationUsesRealGPS)?  (ILocationModifier *) new AltitudeFixerLM([self elevationData]) :
+    (ILocationModifier *) new KarlsruheVirtualWalkLM(elevationData);
+    
+    _dac = new DeviceAttitudeCameraHandler(true, lm);
+  }
+  cameraRenderer->addHandler(_dac);
   
   [G3MWidget widget]->getNextCamera()->forceZNear(0.1);
   
@@ -944,6 +977,8 @@ public:
   [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
   
   [self activateDeviceAttitudeTracking];
+  
+  [locationModeButton setHidden:FALSE];
 }
 
 -(void) activateARMode{
@@ -954,6 +989,9 @@ public:
   [G3MWidget widget]->getPlanetRenderer()->setEnable(false);
   [G3MWidget widget]->setViewMode(MONO);
   [self activateDeviceAttitudeTracking];
+  
+  [locationModeButton setHidden:FALSE];
+  [self changeLocationMode:true];
 }
 
 - (void)viewDidUnload
@@ -1006,7 +1044,7 @@ public:
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
   if ([segue.identifier isEqualToString:@"cameraViewSegue"])
-    _camVC = (CameraViewController *)segue.destinationViewController;
+  _camVC = (CameraViewController *)segue.destinationViewController;
   
 }
 
@@ -1015,17 +1053,17 @@ public:
   
   switch (sender.selectedSegmentIndex){
     case 0:
-      [self activateMapMode];
-      break;
+    [self activateMapMode];
+    break;
     case 1:
-      [self activateMonoVRMode];
-      break;
+    [self activateMonoVRMode];
+    break;
     case 2:
-      [self activateStereoVRMode];
-      break;
+    [self activateStereoVRMode];
+    break;
     case 3:
-      [self activateARMode];
-      break;
+    [self activateARMode];
+    break;
   }
 }
 
@@ -1060,6 +1098,27 @@ public:
   }];
 }
 
+- (IBAction)onChangeLocationMode:(UIButton *)sender {
+  
+  [self changeLocationMode:!_locationUsesRealGPS];
+  
+  if (_locationUsesRealGPS){
+    [sender setImage:[UIImage imageNamed:@"plane_off"] forState:UIControlStateNormal];
+  }else{
+    [sender setImage:[UIImage imageNamed:@"plane_on"] forState:UIControlStateNormal];
+  }
+}
+
+-(void) changeLocationMode:(BOOL) v{
+  _locationUsesRealGPS = v;
+  
+  if (_dac != NULL){
+    ILocationModifier * lm = (_locationUsesRealGPS)?  (ILocationModifier *) new AltitudeFixerLM([self elevationData]) :
+    (ILocationModifier *) new KarlsruheVirtualWalkLM(elevationData);
+    
+    _dac->setLocationModifier(lm);
+  }
+}
 
 
 /////PICKER VIEW
@@ -1090,13 +1149,13 @@ public:
     cityGMLRenderer->colorBuildings(rcp);
     delete rcp;
   }
-
+  
   if (row == 1){
     cityGMLRenderer->colorBuildingsWithColorBrewer("Heat Demand", "Pastel1", 8);
   }
   
   if (row == 2){
-      cityGMLRenderer->colorBuildingsWithColorBrewer("Building Volume", "Pastel1", 8);
+    cityGMLRenderer->colorBuildingsWithColorBrewer("Building Volume", "Pastel1", 8);
   }
   
   if (row == 3){

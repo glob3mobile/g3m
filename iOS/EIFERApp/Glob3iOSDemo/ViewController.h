@@ -34,6 +34,7 @@ class PointCloudEvolutionTask;
 class LayerSet;
 class ShapesRenderer;
 class Planet;
+class DeviceAttitudeCameraHandler;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
@@ -72,6 +73,10 @@ class Planet;
   
   CityGMLBuilding* _buildingShowingPC;
   
+  //Location Mode
+  bool _locationUsesRealGPS;
+  DeviceAttitudeCameraHandler* _dac;
+  
   __weak IBOutlet UIButton *_showMenuButton;
   __weak IBOutlet NSLayoutConstraint *_menuHeightConstraint;
   __weak IBOutlet UIView *_menuView;
@@ -80,6 +85,7 @@ class Planet;
   __weak IBOutlet UIPickerView *_dataPicker;
   __weak IBOutlet UIView *cameraView;
   __weak IBOutlet UIStackView *_headerView;
+  __weak IBOutlet UIButton *locationModeButton;
 }
 
 @property (retain, nonatomic) G3MWidget_iOS* G3MWidget;

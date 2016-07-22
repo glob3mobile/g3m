@@ -15,6 +15,8 @@
 		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; };
 		D82D00501CF4ACB20038C6FB /* k_s in Resources */ = {isa = PBXBuildFile; fileRef = D82D004F1CF4ACB20038C6FB /* k_s */; };
 		D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86F55911CD9E75700A724F8 /* CameraViewController.m */; };
+		D880482B1D3D068E001E8249 /* plane_off.png in Resources */ = {isa = PBXBuildFile; fileRef = D88048291D3D068E001E8249 /* plane_off.png */; };
+		D880482C1D3D068E001E8249 /* plane_on.png in Resources */ = {isa = PBXBuildFile; fileRef = D880482A1D3D068E001E8249 /* plane_on.png */; };
 		D88F1F0D1CC6298B005866FA /* SolarRadiation.geojson in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */; };
 		D88F1F101CC65390005866FA /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F0F1CC65390005866FA /* up.png */; };
 		D88F1F121CC65B18005866FA /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = D88F1F111CC65B18005866FA /* down.png */; };
@@ -98,6 +100,8 @@
 		D82D004F1CF4ACB20038C6FB /* k_s */ = {isa = PBXFileReference; lastKnownFileType = folder; path = k_s; sourceTree = "<group>"; };
 		D86F55901CD9E75700A724F8 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		D86F55911CD9E75700A724F8 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		D88048291D3D068E001E8249 /* plane_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane_off.png; sourceTree = "<group>"; };
+		D880482A1D3D068E001E8249 /* plane_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane_on.png; sourceTree = "<group>"; };
 		D88F1F0C1CC6298B005866FA /* SolarRadiation.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SolarRadiation.geojson; sourceTree = "<group>"; };
 		D88F1F0F1CC65390005866FA /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 		D88F1F111CC65B18005866FA /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
@@ -264,6 +268,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D88048291D3D068E001E8249 /* plane_off.png */,
+				D880482A1D3D068E001E8249 /* plane_on.png */,
 				D8BA7AFF1CE0B834003754DE /* SR_24h.csv */,
 				D8EA744F1CC78ACB007464C8 /* ulpgc_logo.png */,
 				D8EA744D1CC7884D007464C8 /* ulpgc_logo.jpg */,
@@ -402,6 +408,8 @@
 				D8DF55CF1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml in Resources */,
 				E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */,
 				E71B153D1626D27F003D1013 /* Icon-Small-50.png in Resources */,
+				D880482C1D3D068E001E8249 /* plane_on.png in Resources */,
+				D880482B1D3D068E001E8249 /* plane_off.png in Resources */,
 				D8DF55D71CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml in Resources */,
 				D8DF55D81CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml in Resources */,
 				E71B153E1626D27F003D1013 /* Icon-Small.png in Resources */,
