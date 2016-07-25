@@ -37,10 +37,12 @@ public class SceneJSShapesParser
 {
   private SGShape _rootShape;
   private final String _uriPrefix;
+  private final boolean _depthTest;
 
-  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
      _uriPrefix = uriPrefix;
+     _depthTest = depthTest;
      _rootShape = null;
     _statistics = new SceneJSParserStatistics();
     pvtParse(jsonObject, isTransparent, position, altitudeMode);
@@ -556,7 +558,7 @@ public class SceneJSShapesParser
       ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
     }
   
-    SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
+    SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices, _depthTest);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -653,30 +655,30 @@ public class SceneJSShapesParser
   private SceneJSParserStatistics _statistics;
 
 
-  public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
-  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
-  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
-  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
 }

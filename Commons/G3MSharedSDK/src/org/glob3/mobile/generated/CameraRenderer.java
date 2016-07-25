@@ -24,6 +24,21 @@ public class CameraRenderer implements ProtoRenderer
     }
   }
 
+  public final void removeAllHandlers(boolean deleteHandlers)
+  {
+    if (deleteHandlers)
+    {
+      final int handlersSize = _handlers.size();
+      for (int i = 0; i < handlersSize; i++)
+      {
+        CameraEventHandler handler = _handlers.get(i);
+        if (handler != null)
+           handler.dispose();
+      }
+    }
+    _handlers.clear();
+  }
+
   public final void addHandler(CameraEventHandler handler)
   {
     _handlers.add(handler);

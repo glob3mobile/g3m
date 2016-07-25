@@ -30,12 +30,13 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _uv;
   private IFloatBuffer _normals;
   private IShortBuffer _indices;
+  private final boolean _depthTest;
 
   private GLState _glState;
   private void createGLState()
   {
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); // Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {
@@ -55,7 +56,7 @@ public class SGGeometryNode extends SGNode
   }
 
 
-  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices)
+  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices, boolean depthTest)
   {
      super(id, sId);
      _primitive = primitive;
@@ -64,6 +65,7 @@ public class SGGeometryNode extends SGNode
      _uv = uv;
      _normals = normals;
      _indices = indices;
+     _depthTest = depthTest;
      _glState = new GLState();
     createGLState();
   }
