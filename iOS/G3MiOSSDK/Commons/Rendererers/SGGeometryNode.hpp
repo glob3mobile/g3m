@@ -25,6 +25,7 @@ private:
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
   IShortBuffer* _indices;
+  const bool    _depthTest;
   
   GLState* _glState;
   void createGLState();
@@ -38,7 +39,8 @@ public:
                  IFloatBuffer*      colors,
                  IFloatBuffer*      uv,
                  IFloatBuffer*      normals,
-                 IShortBuffer*      indices) :
+                 IShortBuffer*      indices,
+                 const bool         depthTest) :
   SGNode(id, sId),
   _primitive(primitive),
   _vertices(vertices),
@@ -46,6 +48,7 @@ public:
   _uv(uv),
   _normals(normals),
   _indices(indices),
+  _depthTest(depthTest),
   _glState(new GLState())
   {
     createGLState();

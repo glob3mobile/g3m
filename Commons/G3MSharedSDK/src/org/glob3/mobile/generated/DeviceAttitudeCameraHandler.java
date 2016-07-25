@@ -51,7 +51,6 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     //Updating location
     if (_updateLocation)
     {
-  
       IDeviceLocation loc = IDeviceLocation.instance();
   
       boolean isTracking = loc.isTrackingLocation();
@@ -65,7 +64,6 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
         Geodetic3D g = loc.getLocation();
         if (!g.isNan())
         {
-  
           //Changing current location
           if (_locationModifier == null)
           {
@@ -78,7 +76,6 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
           }
         }
       }
-  
     }
   
     if (devAtt == null)

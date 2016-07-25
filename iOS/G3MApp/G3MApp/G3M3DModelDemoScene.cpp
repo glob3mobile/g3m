@@ -71,7 +71,8 @@ void G3M3DModelDemoScene::rawActivate(const G3MContext* context) {
 
   model->getShapesRenderer()->loadBSONSceneJS(URL("file:///A320.bson"),
                                               "file:///textures-A320/",
-                                              false,
+                                              false, // isTransparent
+                                              true,  // depthTest
                                               new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
                                                              Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
                                                              10000),

@@ -20,6 +20,17 @@ CameraRenderer::~CameraRenderer() {
   }
 }
 
+void CameraRenderer::removeAllHandlers(bool deleteHandlers) {
+  if (deleteHandlers) {
+    const size_t handlersSize = _handlers.size();
+    for (size_t i = 0; i < handlersSize; i++) {
+      CameraEventHandler* handler = _handlers[i];
+      delete handler;
+    }
+  }
+  _handlers.clear();
+}
+
 void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   // create the CameraContext

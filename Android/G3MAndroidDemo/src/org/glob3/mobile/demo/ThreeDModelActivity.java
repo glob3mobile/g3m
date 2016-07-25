@@ -22,8 +22,8 @@ import android.widget.RelativeLayout;
 
 
 public class ThreeDModelActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MBuilder_Android _builder;
    private G3MWidget_Android  _g3mWidget;
@@ -49,10 +49,13 @@ public class ThreeDModelActivity
       _builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
 
       final ShapesRenderer planeShapeRenderer = new ShapesRenderer();
-      planeShapeRenderer.loadBSONSceneJS(new URL("file:///A320.bson", false), "file:///textures-A320/", false,
+      planeShapeRenderer.loadBSONSceneJS( //
+               new URL("file:///A320.bson", false), //
+               "file:///textures-A320/", //
+               false, // isTransparent
+               true, // depthTest
                new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
-                        10000),
-               AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+                        10000), AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
 
                   @Override
                   public void onBeforeAddShape(final SGShape shape) {
@@ -64,10 +67,10 @@ public class ThreeDModelActivity
                   @Override
                   public void onAfterAddShape(final SGShape shape) {
 
-                     shape.setAnimatedPosition(TimeInterval.fromSeconds(26),
-                              new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
-                                       Angle.fromDegreesMinutesSeconds(-78, 2, 10.92), 10000),
-                              true);
+                     shape.setAnimatedPosition(
+                              TimeInterval.fromSeconds(26),
+                              new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-78,
+                                       2, 10.92), 10000), true);
 
                      final double fromDistance = 75000;
                      final double toDistance = 18750;

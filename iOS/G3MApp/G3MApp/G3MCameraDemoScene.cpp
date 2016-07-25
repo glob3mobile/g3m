@@ -93,6 +93,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
                                   "file:///",
                                   false, // isTransparent
+                                  true,  // depthTest
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(29, 58, 30.99),
                                                  Angle::fromDegreesMinutesSeconds(31, 8, 15.84),
                                                  0),
@@ -102,6 +103,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   shapesRenderer->loadBSONSceneJS(URL("file:///eifeltower.bson"),
                                   "file:///eifel/",
                                   true, // isTransparent
+                                  true,  // depthTest
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 51, 29.06),
                                                  Angle::fromDegreesMinutesSeconds(2, 17, 40.48),
                                                  0), //
@@ -110,7 +112,8 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
 
   shapesRenderer->loadBSONSceneJS(URL("file:///arcdeTriomphe.bson"),
                                   "file:///arc/",
-                                  false,
+                                  false, // isTransparent
+                                  true,  // depthTest
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 52, 25.58),
                                                  Angle::fromDegreesMinutesSeconds(2, 17, 42.12),
                                                  0),

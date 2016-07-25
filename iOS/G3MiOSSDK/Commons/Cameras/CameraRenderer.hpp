@@ -73,6 +73,8 @@ public:
 
   ~CameraRenderer();
 
+  void removeAllHandlers(bool deleteHandlers);
+
   void addHandler(CameraEventHandler* handler) {
     _handlers.push_back(handler);
   }
