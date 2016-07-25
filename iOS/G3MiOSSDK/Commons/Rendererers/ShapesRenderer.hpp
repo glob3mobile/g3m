@@ -59,6 +59,7 @@ private:
     const bool         _readExpired;
     const std::string  _uriPrefix;
     const bool         _isTransparent;
+    const bool         _depthTest;
     Geodetic3D*        _position;
     const AltitudeMode _altitudeMode;
     ShapeLoadListener* _listener;
@@ -71,6 +72,7 @@ private:
                   bool                readExpired,
                   const std::string&  uriPrefix,
                   bool                isTransparent,
+                  bool                depthTest,
                   Geodetic3D*         position,
                   AltitudeMode        altitudeMode,
                   ShapeLoadListener*  listener,
@@ -82,6 +84,7 @@ private:
     _readExpired(readExpired),
     _uriPrefix(uriPrefix),
     _isTransparent(isTransparent),
+    _depthTest(depthTest),
     _position(position),
     _altitudeMode(altitudeMode),
     _listener(listener),
@@ -126,6 +129,7 @@ private:
                      bool                readExpired,
                      const std::string&  uriPrefix,
                      bool                isTransparent,
+                     bool                depthTest,
                      Geodetic3D*         position,
                      AltitudeMode        altitudeMode,
                      ShapeLoadListener*  listener,
@@ -204,6 +208,7 @@ public:
                        bool                readExpired,
                        const std::string&  uriPrefix,
                        bool                isTransparent,
+                       bool                depthTest,
                        Geodetic3D*         position,
                        AltitudeMode        altitudeMode,
                        ShapeLoadListener*  listener=NULL,
@@ -212,6 +217,7 @@ public:
   void loadJSONSceneJS(const URL&         url,
                        const std::string& uriPrefix,
                        bool               isTransparent,
+                       bool               depthTest,
                        Geodetic3D*        position,
                        AltitudeMode       altitudeMode,
                        ShapeLoadListener* listener=NULL,
@@ -222,6 +228,7 @@ public:
                     true,
                     uriPrefix,
                     isTransparent,
+                    depthTest,
                     position,
                     altitudeMode,
                     listener,
@@ -234,6 +241,7 @@ public:
                        bool                readExpired,
                        const std::string&  uriPrefix,
                        bool                isTransparent,
+                       bool                depthTest,
                        Geodetic3D*         position,
                        AltitudeMode        altitudeMode,
                        ShapeLoadListener*  listener=NULL,
@@ -242,6 +250,7 @@ public:
   void loadBSONSceneJS(const URL&         url,
                        const std::string& uriPrefix,
                        bool               isTransparent,
+                       bool               depthTest,
                        Geodetic3D*        position,
                        AltitudeMode       altitudeMode,
                        ShapeLoadListener* listener=NULL,
@@ -252,6 +261,7 @@ public:
                     true,
                     uriPrefix,
                     isTransparent,
+                    depthTest,
                     position,
                     altitudeMode,
                     listener,

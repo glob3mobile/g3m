@@ -133,13 +133,13 @@ size_t AbstractGeometryMesh::getVertexCount() const {
 }
 
 void AbstractGeometryMesh::createGLState() {
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
-                                               3,            //Our buffer contains elements of 3
-                                               0,            //Index 0
-                                               false,        //Not normalized
-                                               0,            //Stride 0
-                                               true,         //Depth test
-                                               false, 0,     //Cull and culled face
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
+                                               3,            // Our buffer contains elements of 3
+                                               0,            // Index 0
+                                               false,        // Not normalized
+                                               0,            // Stride 0
+                                               _depthTest,   // Depth test
+                                               false, 0,     // Cull and culled face
                                                _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits,  //Polygon Offset
                                                _lineWidth,
                                                true, _pointSize),

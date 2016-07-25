@@ -235,6 +235,7 @@ void ShapesRenderer::drainLoadQueue() {
                   item->_readExpired,
                   item->_uriPrefix,
                   item->_isTransparent,
+                  item->_depthTest,
                   item->_position,
                   item->_altitudeMode,
                   item->_listener,
@@ -282,6 +283,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                                      bool                readExpired,
                                      const std::string&  uriPrefix,
                                      bool                isTransparent,
+                                     bool                depthTest,
                                      Geodetic3D*         position,
                                      AltitudeMode        altitudeMode,
                                      ShapeLoadListener*  listener,
@@ -293,6 +295,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                                            readExpired,
                                            uriPrefix,
                                            isTransparent,
+                                           depthTest,
                                            position,
                                            altitudeMode,
                                            listener,
@@ -306,6 +309,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                   readExpired,
                   uriPrefix,
                   isTransparent,
+                  depthTest,
                   position,
                   altitudeMode,
                   listener,
@@ -321,6 +325,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                                      bool                readExpired,
                                      const std::string&  uriPrefix,
                                      bool                isTransparent,
+                                     bool                depthTest,
                                      Geodetic3D*         position,
                                      AltitudeMode        altitudeMode,
                                      ShapeLoadListener*  listener,
@@ -332,6 +337,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                                            readExpired,
                                            uriPrefix,
                                            isTransparent,
+                                           depthTest,
                                            position,
                                            altitudeMode,
                                            listener,
@@ -345,6 +351,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                   readExpired,
                   uriPrefix,
                   isTransparent,
+                  depthTest,
                   position,
                   altitudeMode,
                   listener,
@@ -365,6 +372,7 @@ private:
   IByteBuffer*       _buffer;
   const std::string  _uriPrefix;
   const bool         _isTransparent;
+  const bool         _depthTest;
   Geodetic3D*        _position;
   AltitudeMode       _altitudeMode;
   ShapeLoadListener* _listener;
@@ -379,6 +387,7 @@ public:
                                         IByteBuffer*       buffer,
                                         const std::string& uriPrefix,
                                         bool               isTransparent,
+                                        bool               depthTest,
                                         Geodetic3D*        position,
                                         AltitudeMode       altitudeMode,
                                         ShapeLoadListener* listener,
@@ -389,6 +398,7 @@ public:
   _buffer(buffer),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent),
+  _depthTest(depthTest),
   _position(position),
   _altitudeMode(altitudeMode),
   _listener(listener),
@@ -403,6 +413,7 @@ public:
       _sgShape = SceneJSShapesParser::parseFromBSON(_buffer,
                                                     _uriPrefix,
                                                     _isTransparent,
+                                                    _depthTest,
                                                     _position,
                                                     _altitudeMode);
     }
@@ -410,6 +421,7 @@ public:
       _sgShape = SceneJSShapesParser::parseFromJSON(_buffer,
                                                     _uriPrefix,
                                                     _isTransparent,
+                                                    _depthTest,
                                                     _position,
                                                     _altitudeMode);
     }
@@ -456,7 +468,8 @@ class ShapesRenderer_SceneJSBufferDownloadListener : public IBufferDownloadListe
 private:
   ShapesRenderer*     _shapesRenderer;
   const std::string   _uriPrefix;
-  bool                _isTransparent;
+  const bool          _isTransparent;
+  const bool          _depthTest;
   Geodetic3D*         _position;
   AltitudeMode        _altitudeMode;
   ShapeLoadListener*  _listener;
@@ -469,6 +482,7 @@ public:
   ShapesRenderer_SceneJSBufferDownloadListener(ShapesRenderer*     shapesRenderer,
                                                const std::string&  uriPrefix,
                                                bool                isTransparent,
+                                               bool                depthTest,
                                                Geodetic3D*         position,
                                                AltitudeMode        altitudeMode,
                                                ShapeLoadListener*  listener,
@@ -478,6 +492,7 @@ public:
   _shapesRenderer(shapesRenderer),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent),
+  _depthTest(depthTest),
   _position(position),
   _altitudeMode(altitudeMode),
   _listener(listener),
@@ -499,6 +514,7 @@ public:
                                                                             buffer,
                                                                             _uriPrefix,
                                                                             _isTransparent,
+                                                                            _depthTest,
                                                                             _position,
                                                                             _altitudeMode,
                                                                             _listener,
@@ -541,6 +557,7 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                                    bool                readExpired,
                                    const std::string&  uriPrefix,
                                    bool                isTransparent,
+                                   bool                depthTest,
                                    Geodetic3D*         position,
                                    AltitudeMode        altitudeMode,
                                    ShapeLoadListener*  listener,
@@ -555,6 +572,7 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                             new ShapesRenderer_SceneJSBufferDownloadListener(this,
                                                                              uriPrefix,
                                                                              isTransparent,
+                                                                             depthTest,
                                                                              position,
                                                                              altitudeMode,
                                                                              listener,

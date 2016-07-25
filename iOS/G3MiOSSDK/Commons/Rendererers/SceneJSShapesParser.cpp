@@ -31,56 +31,64 @@
 #include "BSONParser.hpp"
 #include "SceneJSParserStatistics.hpp"
 
-SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
-                                                      const std::string &uriPrefix,
-                                                      bool isTransparent,
-                                                      Geodetic3D* position,
-                                                      AltitudeMode altitudeMode) {
+SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
+                                                      const std::string&    uriPrefix,
+                                                      bool                  isTransparent,
+                                                      bool                  depthTest,
+                                                      Geodetic3D*           position,
+                                                      AltitudeMode          altitudeMode) {
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
 
-SGShape* SceneJSShapesParser::parseFromJSON(const std::string &json,
-                                            const std::string &uriPrefix,
-                                            bool isTransparent,
-                                            Geodetic3D* position,
-                                            AltitudeMode altitudeMode) {
+SGShape* SceneJSShapesParser::parseFromJSON(const std::string& json,
+                                            const std::string& uriPrefix,
+                                            bool               isTransparent,
+                                            bool               depthTest,
+                                            Geodetic3D*        position,
+                                            AltitudeMode       altitudeMode) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
 
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
 
 SGShape* SceneJSShapesParser::parseFromJSON(const IByteBuffer* json,
                                             const std::string& uriPrefix,
-                                            bool isTransparent,
-                                            Geodetic3D* position,
-                                            AltitudeMode altitudeMode) {
+                                            bool               isTransparent,
+                                            bool               depthTest,
+                                            Geodetic3D*        position,
+                                            AltitudeMode       altitudeMode) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json->getAsString());
 
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
 
-SGShape* SceneJSShapesParser::parseFromBSON(IByteBuffer *bson,
-                                            const std::string &uriPrefix,
-                                            bool isTransparent,
-                                            Geodetic3D* position,
-                                            AltitudeMode altitudeMode) {
+SGShape* SceneJSShapesParser::parseFromBSON(IByteBuffer*       bson,
+                                            const std::string& uriPrefix,
+                                            bool               isTransparent,
+                                            bool               depthTest,
+                                            Geodetic3D*        position,
+                                            AltitudeMode       altitudeMode) {
   const JSONBaseObject* jsonObject = BSONParser::parse(bson);
 
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
@@ -101,11 +109,13 @@ void SceneJSShapesParser::pvtParse(const JSONBaseObject* json,
 }
 
 SceneJSShapesParser::SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                                         const std::string& uriPrefix,
-                                         bool isTransparent,
-                                         Geodetic3D* position,
-                                         AltitudeMode altitudeMode) :
+                                         const std::string&    uriPrefix,
+                                         bool                  isTransparent,
+                                         bool                  depthTest,
+                                         Geodetic3D*           position,
+                                         AltitudeMode          altitudeMode) :
 _uriPrefix(uriPrefix),
+_depthTest(depthTest),
 _rootShape(NULL)
 {
   _statistics = new SceneJSParserStatistics();
@@ -594,7 +604,8 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
                                             colors,
                                             uv,
                                             normals,
-                                            indices);
+                                            indices,
+                                            _depthTest);
 
   processedKeys += parseChildren(jsonObject, node);
 
