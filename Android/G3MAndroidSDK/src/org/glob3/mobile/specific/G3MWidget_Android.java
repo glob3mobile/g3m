@@ -43,6 +43,7 @@ import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -160,15 +161,17 @@ public final class G3MWidget_Android
 
 
    private void initSingletons() {
+      final Context context = getContext();
+
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-      final IFactory factory = new Factory_Android(getContext());
+      final IFactory factory = new Factory_Android(context);
       final IStringUtils stringUtils = new StringUtils_Android();
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
-      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
-      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.0f);
+      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(context);
+      final IDeviceLocation devLoc = new DeviceLocation_Android(context, (long) 500.0, 0.0f);
 
       G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
    }
