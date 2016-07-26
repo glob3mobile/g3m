@@ -166,6 +166,9 @@ public class Mark implements SurfaceElevationListener
     return _effectTarget;
   }
 
+  private IDownloader _downloader;
+  private long _requestIconID = -1;
+
 
 
   public static class ImageBuilderListener implements IImageBuilderListener
@@ -574,6 +577,11 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
+    if (_requestIconID != -1)
+    {
+      _downloader.cancelRequest(_requestIconID);
+    }
+  
     if (_effectsScheduler != null)
     {
       _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
@@ -666,9 +674,9 @@ public class Mark implements SurfaceElevationListener
         final boolean hasIconURL = (_iconURL._path.length() != 0);
         if (hasIconURL)
         {
-          IDownloader downloader = context.getDownloader();
+          _downloader = context.getDownloader();
   
-          downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
+          _requestIconID = _downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
         }
         else
         {
@@ -1055,6 +1063,12 @@ public class Mark implements SurfaceElevationListener
   public final boolean getZoomInAppears()
   {
     return _zoomInAppears;
+  }
+
+
+  public final void resetRequestIconId()
+  {
+    _requestIconID = -1;
   }
 
 }

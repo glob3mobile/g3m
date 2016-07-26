@@ -778,7 +778,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           layers.add(layer);
         }
       }
-  
       if(forlevels)
       {
         final int numlevels = maxLevelToVisit - firstLevelToVisit;

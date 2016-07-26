@@ -181,4 +181,8 @@ public class TMSLayer extends RasterLayer
     return _dataSector;
   }
 
+  public final boolean isTransparent()
+  {
+    return _isTransparent;
+  }
 }
