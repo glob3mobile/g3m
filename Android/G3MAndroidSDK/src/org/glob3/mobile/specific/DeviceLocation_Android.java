@@ -61,13 +61,14 @@ public class DeviceLocation_Android
 
    }
 
-   private final PositionListener _locationListener = new PositionListener();
 
    private final Context          _ctx;
    private final long             _minTimeMS;                                // minimum time interval between location updates, in milliseconds
    private final float            _minDistanceMeters;                        // minimum distance between location updates, in meters
 
-   private LocationManager        _locationManager;
+   private final PositionListener _locationListener = new PositionListener();
+
+   private LocationManager        _locationManager  = null;
    private boolean                _isTracking       = false;
 
 
@@ -100,6 +101,7 @@ public class DeviceLocation_Android
       _locationManager = (LocationManager) _ctx.getSystemService(Context.LOCATION_SERVICE);
       if (_locationManager != null) {
          final String bestProviderName = getBestProviderName(_locationManager);
+         ILogger.instance().logInfo("* Best Location Provider: \"" + bestProviderName + "\"");
          if (bestProviderName != null) {
             _locationManager.requestLocationUpdates( //
                      bestProviderName, //
