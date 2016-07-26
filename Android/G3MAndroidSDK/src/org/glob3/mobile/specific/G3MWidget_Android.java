@@ -168,7 +168,7 @@ public final class G3MWidget_Android
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
       final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
-      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.5f);
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.0f);
 
       G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
    }
