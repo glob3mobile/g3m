@@ -40,28 +40,27 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     IDeviceLocation.instance().stopTrackingLocation();
   
     _locationModifier = null;
+    super.dispose();
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
-  
-    IDeviceAttitude devAtt = IDeviceAttitude.instance();
     Camera nextCamera = rc.getNextCamera();
   
     //Updating location
     if (_updateLocation)
     {
-      IDeviceLocation loc = IDeviceLocation.instance();
+      IDeviceLocation deviceLocation = IDeviceLocation.instance();
   
-      boolean isTracking = loc.isTrackingLocation();
+      boolean isTracking = deviceLocation.isTrackingLocation();
       if (!isTracking)
       {
-        isTracking = loc.startTrackingLocation();
+        isTracking = deviceLocation.startTrackingLocation();
       }
   
       if (isTracking)
       {
-        Geodetic3D g = loc.getLocation();
+        Geodetic3D g = deviceLocation.getLocation();
         if (!g.isNan())
         {
           //Changing current location
@@ -78,18 +77,21 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
       }
     }
   
-    if (devAtt == null)
+    IDeviceAttitude deviceAttitude = IDeviceAttitude.instance();
+    if (deviceAttitude == null)
     {
-      throw new RuntimeException("IDeviceAttitude not initilized");
+      //THROW_EXCEPTION("IDeviceAttitude not initilized");
+      ILogger.instance().logError("IDeviceAttitude not initilized");
+      return;
     }
   
-    if (!devAtt.isTracking())
+    if (!deviceAttitude.isTracking())
     {
-      devAtt.startTrackingDeviceOrientation();
+      deviceAttitude.startTrackingDeviceOrientation();
     }
   
     //Getting Global Rotation
-    IDeviceAttitude.instance().copyValueOfRotationMatrix(_attitudeMatrix);
+    deviceAttitude.copyValueOfRotationMatrix(_attitudeMatrix);
     if (!_attitudeMatrix.isValid())
     {
       return;
@@ -98,10 +100,10 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     Geodetic3D camPosition = nextCamera.getGeodeticPosition();
   
     //Getting interface orientation
-    InterfaceOrientation ori = IDeviceAttitude.instance().getCurrentInterfaceOrientation();
+    InterfaceOrientation ori = deviceAttitude.getCurrentInterfaceOrientation();
   
     //Getting Attitude Matrix
-    CoordinateSystem camCS = IDeviceAttitude.instance().getCameraCoordinateSystemForInterfaceOrientation(ori);
+    CoordinateSystem camCS = deviceAttitude.getCameraCoordinateSystemForInterfaceOrientation(ori);
   
     //Transforming global rotation to local rotation
     CoordinateSystem local = rc.getPlanet().getCoordinateSystemAt(camPosition);
