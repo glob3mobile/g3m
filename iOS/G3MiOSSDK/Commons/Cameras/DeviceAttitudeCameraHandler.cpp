@@ -25,12 +25,16 @@ DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler() {
   IDeviceLocation::instance()->stopTrackingLocation();
 
   delete _locationModifier;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const{
   if (nextCamera->hasValidViewDirection()) {
     nextCamera->setGeodeticPosition(pos);
-  } else{
+  }
+  else {
     ILogger::instance()->logWarning("Trying to set position of unvalid camera. ViewDirection: %s",
                                     nextCamera->getViewDirection().description().c_str());
   }
@@ -39,21 +43,19 @@ void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Ge
 
 void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc,
                                          CameraContext *cameraContext) {
-
-  IDeviceAttitude* devAtt = IDeviceAttitude::instance();
   Camera* nextCamera = rc->getNextCamera();
 
   //Updating location
   if (_updateLocation) {
-    IDeviceLocation* loc = IDeviceLocation::instance();
+    IDeviceLocation* deviceLocation = IDeviceLocation::instance();
 
-    bool isTracking = loc->isTrackingLocation();
+    bool isTracking = deviceLocation->isTrackingLocation();
     if (!isTracking) {
-      isTracking = loc->startTrackingLocation();
+      isTracking = deviceLocation->startTrackingLocation();
     }
 
     if (isTracking) {
-      Geodetic3D g = loc->getLocation();
+      Geodetic3D g = deviceLocation->getLocation();
       if (!g.isNan()) {
         //Changing current location
         if (_locationModifier == NULL) {
@@ -67,16 +69,19 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc,
     }
   }
 
-  if (devAtt == NULL) {
-    THROW_EXCEPTION("IDeviceAttitude not initilized");
+  IDeviceAttitude* deviceAttitude = IDeviceAttitude::instance();
+  if (deviceAttitude == NULL) {
+    //THROW_EXCEPTION("IDeviceAttitude not initilized");
+    ILogger::instance()->logError("IDeviceAttitude not initilized");
+    return;
   }
 
-  if (!devAtt->isTracking()) {
-    devAtt->startTrackingDeviceOrientation();
+  if (!deviceAttitude->isTracking()) {
+    deviceAttitude->startTrackingDeviceOrientation();
   }
 
   //Getting Global Rotation
-  IDeviceAttitude::instance()->copyValueOfRotationMatrix(_attitudeMatrix);
+  deviceAttitude->copyValueOfRotationMatrix(_attitudeMatrix);
   if (!_attitudeMatrix.isValid()) {
     return;
   }
@@ -84,10 +89,10 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc,
   Geodetic3D camPosition = nextCamera->getGeodeticPosition();
 
   //Getting interface orientation
-  InterfaceOrientation ori = IDeviceAttitude::instance()->getCurrentInterfaceOrientation();
+  InterfaceOrientation ori = deviceAttitude->getCurrentInterfaceOrientation();
 
   //Getting Attitude Matrix
-  CoordinateSystem camCS = IDeviceAttitude::instance()->getCameraCoordinateSystemForInterfaceOrientation(ori);
+  CoordinateSystem camCS = deviceAttitude->getCameraCoordinateSystemForInterfaceOrientation(ori);
 
   //Transforming global rotation to local rotation
   CoordinateSystem local = rc->getPlanet()->getCoordinateSystemAt(camPosition);
@@ -97,5 +102,5 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc,
   //Applying to Camera CS
   CoordinateSystem finalCS = camCS.applyRotation(_camRM);
   nextCamera->setCameraCoordinateSystem(finalCS);
-
+  
 }
