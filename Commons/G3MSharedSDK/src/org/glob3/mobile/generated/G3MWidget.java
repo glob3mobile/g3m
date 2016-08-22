@@ -190,7 +190,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _planet.applyCameraConstrainers(_currentCamera, _nextCamera);
   
-    _currentCamera.copyFrom(_nextCamera, false);
   
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
@@ -205,6 +204,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _prePostTask.preRenderTask();
     }
+  
+    // copy next camera to current after preRenderTask to be able to change the camera in preRenderTask
+    _currentCamera.copyFrom(_nextCamera, false);
+  
   
     switch (_viewMode)
     {
