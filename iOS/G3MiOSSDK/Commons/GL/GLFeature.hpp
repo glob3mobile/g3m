@@ -21,6 +21,7 @@ class Camera;
 enum GLFeatureID{
   GLF_BILLBOARD,
   GLF_VIEWPORT_EXTENT,
+  GLF_SCISSOR_TEST,
   GLF_GEOMETRY,
   GLF_MODEL,
   GLF_PROJECTION,
@@ -97,6 +98,34 @@ public:
     _anchor->changeValue(anchorU, anchorV);
   }
 };
+
+
+class ScissorTestGLFeature: public GLFeature {
+private:
+  ~ScissorTestGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  int x;
+  int y;
+  int width;
+  int height;
+  
+public:
+  ScissorTestGLFeature(int x, int y, int w, int h);
+  
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+  
+  void changeParams(int x1, int y1, int w, int h) {
+    x = x1;
+    y = y1;
+    width = w;
+    height = h;
+  }
+};
+
 
 class ViewportExtentGLFeature: public GLFeature {
 private:

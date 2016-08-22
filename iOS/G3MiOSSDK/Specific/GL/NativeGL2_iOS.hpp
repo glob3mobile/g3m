@@ -94,6 +94,10 @@ public:
   void polygonOffset(float factor, float units) const {
     glPolygonOffset(factor, units);
   }
+  
+  void scissor(int x, int y, int w, int h) const {
+    glScissor(x, y, w, h);
+  }
 
   void vertexAttribPointer(int index,
                            int size,
@@ -264,6 +268,10 @@ public:
     return GL_DEPTH_TEST;
   }
 
+  int Feature_ScissorTest() const {
+    return GL_SCISSOR_TEST;
+  }
+  
   int Feature_Blend() const {
     return GL_BLEND;
   }

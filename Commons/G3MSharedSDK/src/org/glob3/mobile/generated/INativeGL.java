@@ -86,6 +86,8 @@ public abstract class INativeGL
 
   public abstract void cullFace(int c);
 
+  public abstract void scissor(int x, int y, int w, int h);
+
   public abstract void getIntegerv(int v, int[] i);
 
 
@@ -98,6 +100,7 @@ public abstract class INativeGL
 
   public abstract int Feature_PolygonOffsetFill();
   public abstract int Feature_DepthTest();
+  public abstract int Feature_ScissorTest();
   public abstract int Feature_Blend();
   public abstract int Feature_CullFace();
 

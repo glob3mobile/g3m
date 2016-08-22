@@ -48,6 +48,7 @@ class ErrorRenderer;
 class G3MRenderContext;
 class IDeviceAttitude;
 class IDeviceLocation;
+class ScissorTestGLFeature;
 //class InfoDisplay;
 
 #include <vector>
@@ -257,6 +258,10 @@ public:
   void removeAllPeriodicalTasks();
   
   void setViewMode(ViewMode viewMode);
+  
+  void setFocusDistanceModifier(double mod);
+  
+  void setEyeDistance(double eDist);
 
 private:
   IStorage*                _storage;
@@ -270,7 +275,7 @@ private:
 
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
-  IPrePostRenderTasks*       _prePostTask;
+  IPrePostRenderTasks*  _prePostTask;
   ProtoRenderer*      _busyRenderer;
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
@@ -322,6 +327,8 @@ private:
 
   SceneLighting*            _sceneLighting;
   GLState*                  _rootState;
+  GLState*                  _leftScissor;
+  GLState*                  _rightScissor;
 
   const InitialCameraPositionProvider* _initialCameraPositionProvider;
   bool _initialCameraPositionHasBeenSet;
@@ -336,6 +343,8 @@ private:
   float _touchDownPositionY;
   
   ViewMode _viewMode;
+  double _focusDistanceModifier = -1.0;
+  double _eyeDistance = 0.06;
   
   //For stereo vision
   Camera* _auxCam;
@@ -375,12 +384,11 @@ private:
   
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
-  void rawRender(const RenderState_Type renderStateType);
+  void rawRender(const RenderState_Type renderStateType, GLState* modifier);
   
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
-
   
 };
 

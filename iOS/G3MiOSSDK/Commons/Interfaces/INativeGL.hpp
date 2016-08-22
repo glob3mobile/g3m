@@ -119,6 +119,8 @@ public:
 
   virtual void cullFace(int c) const = 0;
 
+  virtual void scissor(int x, int y, int w, int h) const = 0;
+  
   virtual void getIntegerv(int v, int i[]) const = 0;
 
 
@@ -131,6 +133,7 @@ public:
 
   virtual int Feature_PolygonOffsetFill() const = 0;
   virtual int Feature_DepthTest() const = 0;
+  virtual int Feature_ScissorTest() const = 0;
   virtual int Feature_Blend() const = 0;
   virtual int Feature_CullFace() const = 0;
 

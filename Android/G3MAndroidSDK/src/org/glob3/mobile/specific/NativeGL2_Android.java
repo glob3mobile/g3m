@@ -273,6 +273,11 @@ public final class NativeGL2_Android
       GLES20.glCullFace(c);
    }
 
+   @Override
+   public void scissor(int x, int y, int w, int h) {
+      GLES20.glScissor(x, y, w, h);
+   }
+
 
    @Override
    public void getIntegerv(final int v,
@@ -394,6 +399,11 @@ public final class NativeGL2_Android
    @Override
    public int Feature_DepthTest() {
       return GLES20.GL_DEPTH_TEST;
+   }
+
+   @Override
+   public int Feature_ScissorTest() {
+      return GLES20.GL_SCISSOR_TEST;
    }
 
 

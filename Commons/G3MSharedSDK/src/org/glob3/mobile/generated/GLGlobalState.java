@@ -33,6 +33,13 @@ public class GLGlobalState
   private static boolean _initializationAvailable = false;
 
   private boolean _depthTest;
+  private boolean _scissorTest;
+  private int _scissorX;
+  private int _scissorY;
+  private int _scissorWidth;
+  private int _scissorHeight;
+
+
   private boolean _blend;
   private boolean _cullFace;
   private int _culledFace;
@@ -71,6 +78,7 @@ public class GLGlobalState
   public GLGlobalState()
   {
      _depthTest = false;
+     _scissorTest = false;
      _blend = false;
      _cullFace = false;
      _culledFace = GLCullFace.back();
@@ -85,6 +93,10 @@ public class GLGlobalState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
+     _scissorX = 0;
+     _scissorY = 0;
+     _scissorWidth = 0;
+     _scissorHeight = 0;
 
     if (!_initializationAvailable)
     {
@@ -114,6 +126,19 @@ public class GLGlobalState
   public final void disableDepthTest()
   {
     _depthTest = false;
+  }
+
+  public final void enableScissorTest(int x, int y, int width, int height)
+  {
+    _scissorTest = true;
+    _scissorX = x;
+    _scissorY = y;
+    _scissorWidth = width;
+    _scissorHeight = height;
+  }
+  public final void disableScissorTest()
+  {
+    _scissorTest = false;
   }
   public final boolean isEnabledDepthTest()
   {
@@ -244,6 +269,29 @@ public class GLGlobalState
       currentState._depthTest = _depthTest;
     }
   
+    // Scissor Test
+    if (_scissorTest != currentState._scissorTest)
+    {
+      if (_scissorTest)
+      {
+        nativeGL.enable(GLStage.scissorTest());
+      }
+      else
+      {
+        nativeGL.disable(GLStage.scissorTest());
+      }
+      currentState._scissorTest = _scissorTest;
+    }
+  
+    if (_scissorTest && (currentState._scissorX != _scissorX || currentState._scissorX != _scissorY || currentState._scissorWidth != _scissorWidth || currentState._scissorHeight != _scissorHeight))
+    {
+      nativeGL.scissor(_scissorX, _scissorY, _scissorWidth, _scissorHeight);
+      currentState._scissorHeight = _scissorHeight;
+      currentState._scissorWidth = _scissorWidth;
+      currentState._scissorX = _scissorX;
+      currentState._scissorY = _scissorY;
+    }
+  
     // Blending
     if (_blend != currentState._blend)
     {
@@ -265,17 +313,20 @@ public class GLGlobalState
       if (_cullFace)
       {
         nativeGL.enable(GLStage.cullFace());
-        if (_culledFace != currentState._culledFace)
-        {
-          nativeGL.cullFace(_culledFace);
-          currentState._culledFace = _culledFace;
-        }
       }
       else
       {
         nativeGL.disable(GLStage.cullFace());
       }
     }
+  
+    if (_cullFace && _culledFace != currentState._culledFace)
+    {
+      nativeGL.cullFace(_culledFace);
+      currentState._culledFace = _culledFace;
+    }
+  
+  
   
     if (_lineWidth != currentState._lineWidth)
     {
