@@ -374,7 +374,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
 
 FrustumData Camera::calculateFrustumData() const {
   const double height = getGeodeticPosition()._height;
-  double zNear = height * 0.1;
+  double zNear = height * 0.01;
 
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 
