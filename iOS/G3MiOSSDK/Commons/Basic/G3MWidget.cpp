@@ -740,8 +740,6 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFrom(*_nextCamera,
-                           false);
 
 #ifdef C_CODE
   delete _rendererState;
@@ -761,6 +759,11 @@ void G3MWidget::render(int width, int height) {
   if (_prePostTask != NULL) {
     _prePostTask->preRenderTask();
   }
+
+  // copy next camera to current after preRenderTask to be able to change the camera in preRenderTask
+  _currentCamera->copyFrom(*_nextCamera,
+                           false);
+
   
   switch (_viewMode) {
     case MONO:
