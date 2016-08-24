@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated;
+package org.glob3.mobile.generated; 
 public class Camera
 {
 
@@ -46,47 +46,47 @@ public class Camera
 
   public final void copyFrom(Camera that, boolean ignoreTimestamp)
   {
-
+  
     if (ignoreTimestamp || _timestamp != that._timestamp)
     {
-
+  
       that.forceMatrixCreation();
-
+  
       _timestamp = that._timestamp;
-
+  
       _viewPortWidth = that._viewPortWidth;
       _viewPortHeight = that._viewPortHeight;
-
+  
       _planet = that._planet;
-
+  
       _position.copyFrom(that._position);
       _center.copyFrom(that._center);
       _up.copyFrom(that._up);
       _normalizedPosition.copyFrom(that._normalizedPosition);
-
+  
       _dirtyFlags.copyFrom(that._dirtyFlags);
-
+  
       _frustumData = that._frustumData;
-
+  
       _projectionMatrix.copyValue(that._projectionMatrix);
       _modelMatrix.copyValue(that._modelMatrix);
       _modelViewMatrix.copyValue(that._modelViewMatrix);
-
+  
       _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
-
+  
       _geodeticCenterOfView = that._geodeticCenterOfView;
-
+  
       _frustum = that._frustum;
-
+  
       _frustumInModelCoordinates = that._frustumInModelCoordinates;
-
+  
       _geodeticPosition = that._geodeticPosition;
       _angle2Horizon = that._angle2Horizon;
-
+  
       _tanHalfVerticalFOV = that._tanHalfVerticalFOV;
       _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
     }
-
+  
   }
 
   public final void resizeViewport(int width, int height)
@@ -94,13 +94,13 @@ public class Camera
     if ((width != _viewPortWidth) || (height != _viewPortHeight))
     {
       _timestamp++;
-
+  
       _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * _viewPortWidth;
       _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * _viewPortHeight;
-
+  
       _viewPortWidth = width;
       _viewPortHeight = height;
-
+  
       _dirtyFlags.setAllDirty();
     }
   }
@@ -110,14 +110,14 @@ public class Camera
     final int px = pixel._x;
     final int py = _viewPortHeight - pixel._y;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
-
+  
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
       ILogger.instance().logWarning("Pixel to Ray return NaN");
       return obj;
     }
-
+  
     return obj.sub(_position.asVector3D());
   }
   public final Vector3D pixel2Ray(Vector2F pixel)
@@ -125,14 +125,14 @@ public class Camera
     final float px = pixel._x;
     final float py = _viewPortHeight - pixel._y;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
-
+  
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
       ILogger.instance().logWarning("Pixel to Ray return NaN");
       return obj;
     }
-
+  
     return obj.sub(_position.asVector3D());
   }
 
@@ -144,13 +144,13 @@ public class Camera
   public final Vector2F point2Pixel(Vector3D point)
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
-
+  
     return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
-
+  
     return new Vector2F(p._x, (_viewPortHeight - p._y));
   }
 
@@ -231,16 +231,16 @@ public class Camera
   {
     // compute the rotation axe
     final Vector3D rotationAxis = p0.cross(p1);
-
+  
     // compute the angle
     //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
     final Angle rotationDelta = Angle.fromRadians(-IMathUtils.instance().asin(rotationAxis.length()/p0.length()/p1.length()));
-
+  
     if (rotationDelta.isNan())
     {
       return;
     }
-
+  
     rotateWithAxis(rotationAxis, rotationDelta);
   }
   public final void rotateWithAxis(Vector3D axis, Angle delta)
@@ -303,13 +303,13 @@ public class Camera
     {
       return Angle.nan();
     }
-
+  
     final Vector3D point1 = pixel2PlanetPoint(pixel1);
     if (point1.isNan())
     {
       return Angle.nan();
     }
-
+  
     return Vector3D.angleBetween(point0, point1);
   }
 
@@ -483,9 +483,9 @@ public class Camera
   {
     setCartesianPosition(_position.transformedBy(M, 1.0));
     setCenter(_center.transformedBy(M, 1.0));
-
+  
     setUp(_up.transformedBy(M, 0.0));
-
+  
     //_dirtyFlags.setAllDirty();
   }
 
@@ -512,7 +512,7 @@ public class Camera
       _timestamp++;
       _tanHalfHorizontalFOV = newH;
       _tanHalfVerticalFOV = newV;
-
+  
       _dirtyFlags._frustumDataDirty = true;
       _dirtyFlags._projectionMatrixDirty = true;
       _dirtyFlags._modelViewMatrixDirty = true;
@@ -528,7 +528,7 @@ public class Camera
   public final void setRoll(Angle angle)
   {
     final TaitBryanAngles angles = getHeadingPitchRoll();
-
+  
     final CoordinateSystem localRS = getLocalCoordinateSystem();
     final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
     setCameraCoordinateSystem(cameraRS);
@@ -796,20 +796,20 @@ public class Camera
   {
     final double height = getGeodeticPosition()._height;
     double zNear = height * 0.01;
-
+  
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
-
+  
     final double goalRatio = 1000;
     final double ratio = zFar / zNear;
     if (ratio < goalRatio)
     {
       zNear = zFar / goalRatio;
     }
-
+  
     if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
-
+  
       if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) && (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
       {
         //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
@@ -828,7 +828,7 @@ public class Camera
         }
       }
     }
-
+  
     final double right = _tanHalfHorizontalFOV * zNear;
     final double left = -right;
     final double top = _tanHalfVerticalFOV * zNear;
