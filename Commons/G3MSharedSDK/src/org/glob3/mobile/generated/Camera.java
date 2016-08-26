@@ -795,7 +795,7 @@ public class Camera
   private FrustumData calculateFrustumData()
   {
     final double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
+    double zNear = height * 0.01;
   
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   
