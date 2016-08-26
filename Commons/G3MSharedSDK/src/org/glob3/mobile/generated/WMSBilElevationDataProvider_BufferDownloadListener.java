@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
 {
   private final Sector _sector ;
-  private final Vector2I _resolution = new Vector2I();
+  private final Vector2I _resolution;
 
   private IElevationDataListener _listener;
   private final boolean _autodeleteListener;
@@ -13,7 +13,7 @@ public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferD
   public WMSBilElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I resolution, IElevationDataListener listener, boolean autodeleteListener, double deltaHeight)
   {
      _sector = new Sector(sector);
-     _resolution = new Vector2I(resolution);
+     _resolution = resolution;
      _listener = listener;
      _autodeleteListener = autodeleteListener;
      _deltaHeight = deltaHeight;
