@@ -23,7 +23,12 @@
 class WMSBilElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
   const Sector            _sector;
+#ifdef C_CODE
   const Vector2I          _resolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _resolution;
+#endif
 
   IElevationDataListener* _listener;
   const bool              _autodeleteListener;
