@@ -18,9 +18,9 @@
 
 
 SingleBilElevationDataProvider::SingleBilElevationDataProvider(const URL& bilUrl,
-                                                                 const Sector& sector,
-                                                                 const Vector2I& extent,
-                                                                 double deltaHeight) :
+                                                               const Sector& sector,
+                                                               const Vector2I& extent,
+                                                               double deltaHeight) :
 _bilUrl(bilUrl),
 _sector(sector),
 _extentWidth(extent._x),
@@ -48,10 +48,10 @@ private:
 
 public:
   SingleBilElevationDataProvider_BufferDownloadListener(SingleBilElevationDataProvider* singleBilElevationDataProvider,
-                                                         const Sector& sector,
-                                                         int resolutionWidth,
-                                                         int resolutionHeight,
-                                                         double deltaHeight) :
+                                                        const Sector& sector,
+                                                        int resolutionWidth,
+                                                        int resolutionHeight,
+                                                        double deltaHeight) :
   _singleBilElevationDataProvider(singleBilElevationDataProvider),
   _sector(sector),
   _resolutionWidth(resolutionWidth),
@@ -130,10 +130,10 @@ void SingleBilElevationDataProvider::initialize(const G3MContext* context) {
     _downloader = context->getDownloader();
 
     _listener = new SingleBilElevationDataProvider_BufferDownloadListener(this,
-                                                                           _sector,
-                                                                           _extentWidth,
-                                                                           _extentHeight,
-                                                                           _deltaHeight);
+                                                                          _sector,
+                                                                          _extentWidth,
+                                                                          _extentHeight,
+                                                                          _deltaHeight);
 
     _requestToDownloaderID = _downloader->requestBuffer(_bilUrl,
                                                         2000000000,
@@ -145,9 +145,9 @@ void SingleBilElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long SingleBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                      const Vector2I& extent,
-                                                                      IElevationDataListener* listener,
-                                                                      bool autodeleteListener) {
+                                                                     const Vector2I& extent,
+                                                                     IElevationDataListener* listener,
+                                                                     bool autodeleteListener) {
   if (!_elevationDataResolved) {
     return queueRequest(sector,
                         extent,
@@ -196,8 +196,7 @@ void SingleBilElevationDataProvider::drainQueue() {
   }
 #endif
 #ifdef JAVA_CODE
-  for (final Long key : _requestsQueue.keySet()) {
-    final SingleBilElevationDataProvider_Request r = _requestsQueue.get(key);
+  for (final SingleBilElevationDataProvider_Request r : _requestsQueue.values()) {
     requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
     if (r != null) {
       r.dispose();
@@ -208,9 +207,9 @@ void SingleBilElevationDataProvider::drainQueue() {
 }
 
 const long long SingleBilElevationDataProvider::queueRequest(const Sector& sector,
-                                                              const Vector2I& extent,
-                                                              IElevationDataListener* listener,
-                                                              bool autodeleteListener) {
+                                                             const Vector2I& extent,
+                                                             IElevationDataListener* listener,
+                                                             bool autodeleteListener) {
   _currentRequestID++;
   _requestsQueue[_currentRequestID] = new SingleBilElevationDataProvider_Request(sector, extent, listener, autodeleteListener);
   return _currentRequestID;
