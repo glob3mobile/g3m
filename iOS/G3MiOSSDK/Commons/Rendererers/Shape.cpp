@@ -80,9 +80,19 @@ MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
   const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
   const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::upY());
+  const MutableMatrix44D headingRotation2 = MutableMatrix44D::createRotationMatrix(*_heading2, Vector3D::downZ());
+  const MutableMatrix44D pitchRotation2   = MutableMatrix44D::createRotationMatrix(*_pitch2,   Vector3D::upX());
+  const MutableMatrix44D rollRotation2    = MutableMatrix44D::createRotationMatrix(*_roll2,    Vector3D::upY());
   const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
   const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
-  const MutableMatrix44D localTransform  = translation.multiply(headingRotation).multiply(pitchRotation).multiply(rollRotation).multiply(scale);
+  const MutableMatrix44D localTransform  = translation
+                            .multiply(headingRotation2)
+                            .multiply(pitchRotation2)
+                            .multiply(rollRotation2)
+                            .multiply(headingRotation)
+                            .multiply(pitchRotation)
+                            .multiply(rollRotation)
+                            .multiply(scale);
 
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
