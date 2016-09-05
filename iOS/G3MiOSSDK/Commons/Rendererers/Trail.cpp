@@ -63,14 +63,6 @@ void Trail::Segment::addPosition(const Angle& latitude,
                                     alpha));
 }
 
-void Trail::Segment::addPosition(const Geodetic3D& position,
-                                 const double alpha) {
-  addPosition(position._latitude,
-              position._longitude,
-              position._height,
-              alpha);
-}
-
 void Trail::Segment::setNextSegmentFirstPosition(const Angle& latitude,
                                                  const Angle& longitude,
                                                  const double height,

@@ -83,9 +83,6 @@ private:
                      const double height,
                      const double alpha);
 
-    void addPosition(const Geodetic3D& position,
-                     const double alpha);
-
     void setNextSegmentFirstPosition(const Angle& latitude,
                                      const Angle& longitude,
                                      const double height,
