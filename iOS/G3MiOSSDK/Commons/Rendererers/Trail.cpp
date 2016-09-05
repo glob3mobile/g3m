@@ -96,21 +96,21 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
     const Geodetic3D* current  = _positions[i];
     const Geodetic3D* previous = _positions[i - 1];
 
-    const double angleInRadians = Geodetic2D::bearingInRadians(previous->_latitude,
-                                                               previous->_longitude,
-                                                               current->_latitude,
-                                                               current->_longitude);
+    const float angleInRadians = (float) Geodetic2D::bearingInRadians(previous->_latitude,
+                                                                      previous->_longitude,
+                                                                      current->_latitude,
+                                                                      current->_longitude);
     if (i == 1) {
       if (_previousSegmentLastPosition == NULL) {
         bearingsInRadians->rawPut(0, angleInRadians);
         bearingsInRadians->rawPut(1, angleInRadians);
       }
       else {
-        const double angle2InRadians = Geodetic2D::bearingInRadians(_previousSegmentLastPosition->_latitude,
-                                                                    _previousSegmentLastPosition->_longitude,
-                                                                    previous->_latitude,
-                                                                    previous->_longitude);
-        const double avr = (angleInRadians + angle2InRadians) / 2.0;
+        const float angle2InRadians = (float) Geodetic2D::bearingInRadians(_previousSegmentLastPosition->_latitude,
+                                                                           _previousSegmentLastPosition->_longitude,
+                                                                           previous->_latitude,
+                                                                           previous->_longitude);
+        const float avr = (angleInRadians + angle2InRadians) / 2.0f;
 
         bearingsInRadians->rawPut(0, avr);
         bearingsInRadians->rawPut(1, avr);
@@ -118,7 +118,7 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
     }
     else {
       bearingsInRadians->rawPut(i, angleInRadians);
-      const double avr = (angleInRadians + bearingsInRadians->get(i - 1)) / 2.0;
+      const float avr = (angleInRadians + bearingsInRadians->get(i - 1)) / 2.0f;
       bearingsInRadians->rawPut(i - 1, avr);
     }
   }
@@ -126,12 +126,12 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   if (_nextSegmentFirstPosition != NULL) {
     const size_t lastPositionIndex = positionsSize - 1;
     const Geodetic3D* lastPosition = _positions[lastPositionIndex];
-    const double angleInRadians =  Geodetic2D::bearingInRadians(lastPosition->_latitude,
-                                                                lastPosition->_longitude,
-                                                                _nextSegmentFirstPosition->_latitude,
-                                                                _nextSegmentFirstPosition->_longitude);
+    const float angleInRadians = (float) Geodetic2D::bearingInRadians(lastPosition->_latitude,
+                                                                      lastPosition->_longitude,
+                                                                      _nextSegmentFirstPosition->_latitude,
+                                                                      _nextSegmentFirstPosition->_longitude);
 
-    const double avr = (angleInRadians + bearingsInRadians->get(lastPositionIndex)) / 2.0;
+    const float avr = (angleInRadians + bearingsInRadians->get(lastPositionIndex)) / 2.0f;
     bearingsInRadians->rawPut(lastPositionIndex, avr);
   }
 
