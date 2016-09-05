@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class G3MRenderContext;
 //class GLState;
-
+//class IFloatBuffer;
 
 
 public class Trail
@@ -48,67 +48,28 @@ public class Trail
         return null;
       }
     
-    
-      java.util.ArrayList<Double> anglesInRadians = new java.util.ArrayList<Double>();
-      for (int i = 1; i < positionsSize; i++)
-      {
-        final Geodetic3D current = _positions.get(i);
-        final Geodetic3D previous = _positions.get(i - 1);
-    
-        final double angleInRadians = Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
-        if (i == 1)
-        {
-          if (_previousSegmentLastPosition == null)
-          {
-            anglesInRadians.add(angleInRadians);
-            anglesInRadians.add(angleInRadians);
-          }
-          else
-          {
-            final double angle2InRadians = Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
-            final double avr = (angleInRadians + angle2InRadians) / 2.0;
-    
-            anglesInRadians.add(avr);
-            anglesInRadians.add(avr);
-          }
-        }
-        else
-        {
-          anglesInRadians.add(angleInRadians);
-          final double avr = (angleInRadians + anglesInRadians.get(i - 1)) / 2.0;
-          anglesInRadians.set(i - 1, avr);
-        }
-      }
-    
-      if (_nextSegmentFirstPosition != null)
-      {
-        final int lastPositionIndex = positionsSize - 1;
-        final Geodetic3D lastPosition = _positions.get(lastPositionIndex);
-        final double angleInRadians = Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
-    
-        final double avr = (angleInRadians + anglesInRadians.get(lastPositionIndex)) / 2.0;
-        anglesInRadians.set(lastPositionIndex, avr);
-      }
-    
+      final IFloatBuffer bearings = getBearingsInRadians();
     
       final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
       final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
     
       FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
     
-    
       final Vector3D rotationAxis = Vector3D.downZ();
       for (int i = 0; i < positionsSize; i++)
       {
         final Geodetic3D position = _positions.get(i);
     
-        final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(anglesInRadians.get(i)), rotationAxis);
+        final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(bearings.get(i)), rotationAxis);
         final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
         final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
     
         vertices.add(offsetN.transformedBy(matrix, 1));
         vertices.add(offsetP.transformedBy(matrix, 1));
       }
+    
+      if (bearings != null)
+         bearings.dispose();
     
       Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
     
@@ -131,6 +92,54 @@ public class Trail
       return _mesh;
     }
 
+    private IFloatBuffer getBearingsInRadians()
+    {
+      final int positionsSize = _positions.size();
+    
+      IFloatBuffer bearingsInRadians = IFactory.instance().createFloatBuffer(positionsSize);
+    
+      for (int i = 1; i < positionsSize; i++)
+      {
+        final Geodetic3D current = _positions.get(i);
+        final Geodetic3D previous = _positions.get(i - 1);
+    
+        final double angleInRadians = Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
+        if (i == 1)
+        {
+          if (_previousSegmentLastPosition == null)
+          {
+            bearingsInRadians.rawPut(0, angleInRadians);
+            bearingsInRadians.rawPut(1, angleInRadians);
+          }
+          else
+          {
+            final double angle2InRadians = Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
+            final double avr = (angleInRadians + angle2InRadians) / 2.0;
+    
+            bearingsInRadians.rawPut(0, avr);
+            bearingsInRadians.rawPut(1, avr);
+          }
+        }
+        else
+        {
+          bearingsInRadians.rawPut(i, angleInRadians);
+          final double avr = (angleInRadians + bearingsInRadians.get(i - 1)) / 2.0;
+          bearingsInRadians.rawPut(i - 1, avr);
+        }
+      }
+    
+      if (_nextSegmentFirstPosition != null)
+      {
+        final int lastPositionIndex = positionsSize - 1;
+        final Geodetic3D lastPosition = _positions.get(lastPositionIndex);
+        final double angleInRadians = Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
+    
+        final double avr = (angleInRadians + bearingsInRadians.get(lastPositionIndex)) / 2.0;
+        bearingsInRadians.rawPut(lastPositionIndex, avr);
+      }
+    
+      return bearingsInRadians;
+    }
 
     public Segment(Color color, float ribbonWidth)
     {
