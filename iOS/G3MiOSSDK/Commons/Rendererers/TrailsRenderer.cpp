@@ -38,7 +38,6 @@ void TrailsRenderer::updateGLState(const Camera* camera) {
   }
 }
 
-
 TrailsRenderer::~TrailsRenderer() {
   const size_t trailsCount = _trails.size();
   for (size_t i = 0; i < trailsCount; i++) {
@@ -48,6 +47,9 @@ TrailsRenderer::~TrailsRenderer() {
   _trails.clear();
 
   _glState->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void TrailsRenderer::addTrail(Trail* trail) {
@@ -56,7 +58,8 @@ void TrailsRenderer::addTrail(Trail* trail) {
   }
 }
 
-void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
+void TrailsRenderer::render(const G3MRenderContext* rc,
+                            GLState* glState) {
   const size_t trailsCount = _trails.size();
   if (trailsCount > 0) {
     const Camera* camera = rc->getCurrentCamera();
@@ -72,7 +75,6 @@ void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     }
   }
 }
-
 
 void TrailsRenderer::removeTrail(Trail* trail,
                                  bool deleteTrail) {

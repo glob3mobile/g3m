@@ -37,14 +37,15 @@ public:
 
   void removeAllTrails(bool deleteTrails = true);
 
-  virtual ~TrailsRenderer();
+  ~TrailsRenderer();
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
 
   }
 
-  void render(const G3MRenderContext* rc, GLState* glState);
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
   
 };
 

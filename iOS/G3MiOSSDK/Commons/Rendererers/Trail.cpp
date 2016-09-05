@@ -9,8 +9,6 @@
 #include "Trail.hpp"
 
 
-#define MAX_POSITIONS_PER_SEGMENT 64
-
 #include "Vector3D.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Planet.hpp"
@@ -191,6 +189,26 @@ void Trail::Segment::render(const G3MRenderContext* rc,
 }
 
 
+Trail::Trail(const Color& color,
+             float ribbonWidth,
+             double deltaHeight,
+             int maxPositionsPerSegment):
+_visible(true),
+_color(color),
+_ribbonWidth(ribbonWidth),
+_deltaHeight(deltaHeight),
+_maxPositionsPerSegment(maxPositionsPerSegment)
+{
+}
+
+Trail::~Trail() {
+  const size_t segmentsSize = _segments.size();
+  for (size_t i = 0; i < segmentsSize; i++) {
+    Segment* segment = _segments[i];
+    delete segment;
+  }
+}
+
 void Trail::clear() {
   const size_t segmentsSize = _segments.size();
   for (size_t i = 0; i < segmentsSize; i++) {
@@ -203,44 +221,32 @@ void Trail::clear() {
 void Trail::addPosition(const Angle& latitude,
                         const Angle& longitude,
                         const double height) {
-  const size_t segmentsSize = _segments.size();
-
   Segment* currentSegment;
+
+  const size_t segmentsSize = _segments.size();
   if (segmentsSize == 0) {
-    Segment* newSegment = new Segment(_color, _ribbonWidth);
-    _segments.push_back(newSegment);
-    currentSegment = newSegment;
+    currentSegment = new Segment(_color, _ribbonWidth);
+    _segments.push_back(currentSegment);
   }
   else {
-    Segment* previousSegment = _segments[segmentsSize - 1];
-    if (previousSegment->getSize() >= MAX_POSITIONS_PER_SEGMENT) {
+    currentSegment = _segments[segmentsSize - 1];
+    if (currentSegment->getSize() > _maxPositionsPerSegment) {
       Segment* newSegment = new Segment(_color, _ribbonWidth);
 
-      previousSegment->setNextSegmentFirstPosition(latitude,
-                                                   longitude,
-                                                   height  + _heightDelta);
-      newSegment->setPreviousSegmentLastPosition( previousSegment->getPreLastPosition() );
-      newSegment->addPosition( previousSegment->getLastPosition() );
+      currentSegment->setNextSegmentFirstPosition(latitude,
+                                                  longitude,
+                                                  height  + _deltaHeight);
+      newSegment->setPreviousSegmentLastPosition( currentSegment->getPreLastPosition() );
+      newSegment->addPosition( currentSegment->getLastPosition() );
 
       _segments.push_back(newSegment);
       currentSegment = newSegment;
-    }
-    else {
-      currentSegment = previousSegment;
     }
   }
 
   currentSegment->addPosition(latitude,
                               longitude,
-                              height  + _heightDelta);
-}
-
-Trail::~Trail() {
-  const size_t segmentsSize = _segments.size();
-  for (size_t i = 0; i < segmentsSize; i++) {
-    Segment* segment = _segments[i];
-    delete segment;
-  }
+                              height + _deltaHeight);
 }
 
 void Trail::render(const G3MRenderContext* rc,

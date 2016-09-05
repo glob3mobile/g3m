@@ -85,22 +85,18 @@ private:
 
   bool _visible;
 
-  const Color _color;
-  const float _ribbonWidth;
-  const float _heightDelta;
+  const Color  _color;
+  const float  _ribbonWidth;
+  const double _deltaHeight;
+  const int    _maxPositionsPerSegment;
 
   std::vector<Segment*> _segments;
 
 public:
   Trail(const Color& color,
         float ribbonWidth,
-        float heightDelta):
-  _visible(true),
-  _color(color),
-  _ribbonWidth(ribbonWidth),
-  _heightDelta(heightDelta)
-  {
-  }
+        double deltaHeight = 0.0,
+        int maxPositionsPerSegment = 64);
 
   ~Trail();
 
