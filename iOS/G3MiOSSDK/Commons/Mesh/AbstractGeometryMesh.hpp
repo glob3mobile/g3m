@@ -24,9 +24,9 @@ protected:
   const int               _primitive;
   const Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;
-  const IFloatBuffer*           _vertices;
+  const IFloatBuffer*     _vertices;
   const bool              _ownsVertices;
-  const IFloatBuffer*           _normals;
+  const IFloatBuffer*     _normals;
   const bool              _ownsNormals;
   const float             _lineWidth;
   const float             _pointSize;
