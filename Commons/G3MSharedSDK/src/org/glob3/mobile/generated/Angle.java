@@ -24,12 +24,7 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
-//  mutable double _sin;
-//  mutable double _cos;
-
   private Angle(double degrees, double radians)
-//  _sin(2),
-//  _cos(2)
   {
      _degrees = degrees;
      _radians = radians;
@@ -41,12 +36,9 @@ public class Angle
 
 
   public Angle(Angle angle)
-//  _sin(angle._sin),
-//  _cos(angle._cos)
   {
      _degrees = angle._degrees;
      _radians = angle._radians;
-
   }
 
   public static Angle fromDegrees(double degrees)
@@ -134,22 +126,6 @@ public class Angle
   {
     return (_degrees != _degrees);
   }
-
-//  double sinus() const {
-////    if (_sin > 1) {
-////      _sin = SIN(_radians);
-////    }
-////    return _sin;
-//    return SIN(_radians);
-//  }
-//
-//  double cosinus() const {
-////    if (_cos > 1) {
-////      _cos = COS(_radians);
-////    }
-////    return _cos;
-//    return COS(_radians);
-//  }
 
   public final double tangent()
   {

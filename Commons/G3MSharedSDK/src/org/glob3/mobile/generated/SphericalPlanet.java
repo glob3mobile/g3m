@@ -357,11 +357,10 @@ public class SphericalPlanet extends Planet
     return result;
   }
 
-  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  public final MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height)
   {
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
-    final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(position);
-  
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(latitude, longitude, height));
+    final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(latitude, longitude);
     return translation.multiply(rotation);
   }
 

@@ -199,9 +199,9 @@ public class FlatPlanet extends Planet
     return computePreciseLatLonDistance(g1, g2);
   }
 
-  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  public final MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height)
   {
-    return MutableMatrix44D.createTranslationMatrix(toCartesian(position));
+    return MutableMatrix44D.createTranslationMatrix(toCartesian(latitude, longitude, height));
   }
 
   public final boolean isFlat()

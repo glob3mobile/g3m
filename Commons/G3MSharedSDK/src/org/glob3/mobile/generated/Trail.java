@@ -29,15 +29,39 @@ package org.glob3.mobile.generated;
 public class Trail
 {
 
+
+  private static class Position
+  {
+    public final Angle _latitude ;
+    public final Angle _longitude ;
+    public final double _height;
+    public final double _alpha;
+
+    public Position(Angle latitude, Angle longitude, double height, double alpha)
+    {
+       _latitude = new Angle(latitude);
+       _longitude = new Angle(longitude);
+       _height = height;
+       _alpha = alpha;
+
+    }
+
+    public void dispose()
+    {
+
+    }
+  }
+
+
   private static class Segment
   {
     private final Color _color ;
     private final float _ribbonWidth;
 
     private boolean _positionsDirty;
-    private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
-    private Geodetic3D _nextSegmentFirstPosition;
-    private Geodetic3D _previousSegmentLastPosition;
+    private java.util.ArrayList<Position> _positions = new java.util.ArrayList<Position>();
+    private Position _nextSegmentFirstPosition;
+    private Position _previousSegmentLastPosition;
 
     private Mesh createMesh(Planet planet)
     {
@@ -58,10 +82,10 @@ public class Trail
       final Vector3D rotationAxis = Vector3D.downZ();
       for (int i = 0; i < positionsSize; i++)
       {
-        final Geodetic3D position = _positions.get(i);
+        final Position position = _positions.get(i);
     
         final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(bearings.get(i)), rotationAxis);
-        final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
+        final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position._latitude, position._longitude, position._height);
         final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
     
         vertices.add(offsetN.transformedBy(matrix, 1));
@@ -100,8 +124,8 @@ public class Trail
     
       for (int i = 1; i < positionsSize; i++)
       {
-        final Geodetic3D current = _positions.get(i);
-        final Geodetic3D previous = _positions.get(i - 1);
+        final Position current = _positions.get(i);
+        final Position previous = _positions.get(i - 1);
     
         final float angleInRadians = (float) Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
         if (i == 1)
@@ -131,7 +155,7 @@ public class Trail
       if (_nextSegmentFirstPosition != null)
       {
         final int lastPositionIndex = positionsSize - 1;
-        final Geodetic3D lastPosition = _positions.get(lastPositionIndex);
+        final Position lastPosition = _positions.get(lastPositionIndex);
         final float angleInRadians = (float) Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
     
         final float avr = (angleInRadians + bearingsInRadians.get(lastPositionIndex)) / 2.0f;
@@ -164,7 +188,7 @@ public class Trail
       final int positionsSize = _positions.size();
       for (int i = 0; i < positionsSize; i++)
       {
-        final Geodetic3D position = _positions.get(i);
+        final Position position = _positions.get(i);
         if (position != null)
            position.dispose();
       }
@@ -175,39 +199,45 @@ public class Trail
       return _positions.size();
     }
 
-    public final void addPosition(Angle latitude, Angle longitude, double height)
+    public final void addPosition(Position position)
     {
       _positionsDirty = true;
-      _positions.add(new Geodetic3D(latitude, longitude, height));
+      _positions.add(new Position(position._latitude, position._longitude, position._height, position._alpha));
     }
 
-    public final void addPosition(Geodetic3D position)
+    public final void addPosition(Angle latitude, Angle longitude, double height, double alpha)
     {
-      addPosition(position._latitude, position._longitude, position._height);
+      _positionsDirty = true;
+      _positions.add(new Position(latitude, longitude, height, alpha));
     }
 
-    public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height)
+    public final void addPosition(Geodetic3D position, double alpha)
+    {
+      addPosition(position._latitude, position._longitude, position._height, alpha);
+    }
+
+    public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height, double alpha)
     {
       _positionsDirty = true;
       if (_nextSegmentFirstPosition != null)
          _nextSegmentFirstPosition.dispose();
-      _nextSegmentFirstPosition = new Geodetic3D(latitude, longitude, height);
+      _nextSegmentFirstPosition = new Position(latitude, longitude, height, alpha);
     }
 
-    public final void setPreviousSegmentLastPosition(Geodetic3D position)
+    public final void setPreviousSegmentLastPosition(Position position)
     {
       _positionsDirty = true;
       if (_previousSegmentLastPosition != null)
          _previousSegmentLastPosition.dispose();
-      _previousSegmentLastPosition = new Geodetic3D(position);
+      _previousSegmentLastPosition = new Position(position._latitude, position._longitude, position._height, position._alpha);
     }
 
-    public final Geodetic3D getLastPosition()
+    public final Trail.Position getLastPosition()
     {
       return _positions.get(_positions.size() - 1);
     }
 
-    public final Geodetic3D getPreLastPosition()
+    public final Trail.Position getPreLastPosition()
     {
       return _positions.get(_positions.size() - 2);
     }
@@ -292,7 +322,7 @@ public class Trail
     return _visible;
   }
 
-  public final void addPosition(Angle latitude, Angle longitude, double height)
+  public final void addPosition(Angle latitude, Angle longitude, double height, double alpha)
   {
     Segment currentSegment;
   
@@ -309,7 +339,7 @@ public class Trail
       {
         Segment newSegment = new Segment(_color, _ribbonWidth);
   
-        currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight);
+        currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha);
         newSegment.setPreviousSegmentLastPosition(currentSegment.getPreLastPosition());
         newSegment.addPosition(currentSegment.getLastPosition());
   
@@ -318,12 +348,12 @@ public class Trail
       }
     }
   
-    currentSegment.addPosition(latitude, longitude, height + _deltaHeight);
+    currentSegment.addPosition(latitude, longitude, height + _deltaHeight, alpha);
   }
 
-  public final void addPosition(Geodetic3D position)
+  public final void addPosition(Geodetic3D position, double alpha)
   {
-    addPosition(position._latitude, position._longitude, position._height);
+    addPosition(position._latitude, position._longitude, position._height, alpha);
   }
 
   public final void clear()
