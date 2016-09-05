@@ -19,7 +19,7 @@ class Planet;
 class Frustum;
 class G3MRenderContext;
 class GLState;
-
+class IFloatBuffer;
 
 
 class Trail {
@@ -40,6 +40,7 @@ private:
     Mesh* _mesh;
     Mesh* getMesh(const Planet* planet);
 
+    const IFloatBuffer* getBearingsInRadians() const;
 
   public:
     Segment(Color color,

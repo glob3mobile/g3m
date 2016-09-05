@@ -13,6 +13,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Planet.hpp"
 #include "DirectMesh.hpp"
+#include "IFactory.hpp"
 
 
 Trail::Segment::~Segment() {
@@ -86,15 +87,11 @@ Mesh* Trail::Segment::getMesh(const Planet* planet) {
   return _mesh;
 }
 
-Mesh* Trail::Segment::createMesh(const Planet* planet) {
+const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   const size_t positionsSize = _positions.size();
 
-  if (positionsSize < 2) {
-    return NULL;
-  }
+  IFloatBuffer* bearingsInRadians = IFactory::instance()->createFloatBuffer(positionsSize);
 
-
-  std::vector<double> anglesInRadians = std::vector<double>();
   for (size_t i = 1; i < positionsSize; i++) {
     const Geodetic3D* current  = _positions[i];
     const Geodetic3D* previous = _positions[i - 1];
@@ -105,8 +102,8 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                                                current->_longitude);
     if (i == 1) {
       if (_previousSegmentLastPosition == NULL) {
-        anglesInRadians.push_back(angleInRadians);
-        anglesInRadians.push_back(angleInRadians);
+        bearingsInRadians->rawPut(0, angleInRadians);
+        bearingsInRadians->rawPut(1, angleInRadians);
       }
       else {
         const double angle2InRadians = Geodetic2D::bearingInRadians(_previousSegmentLastPosition->_latitude,
@@ -115,14 +112,14 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                                                     previous->_longitude);
         const double avr = (angleInRadians + angle2InRadians) / 2.0;
 
-        anglesInRadians.push_back(avr);
-        anglesInRadians.push_back(avr);
+        bearingsInRadians->rawPut(0, avr);
+        bearingsInRadians->rawPut(1, avr);
       }
     }
     else {
-      anglesInRadians.push_back(angleInRadians);
-      const double avr = (angleInRadians + anglesInRadians[i - 1]) / 2.0;
-      anglesInRadians[i - 1] = avr;
+      bearingsInRadians->rawPut(i, angleInRadians);
+      const double avr = (angleInRadians + bearingsInRadians->get(i - 1)) / 2.0;
+      bearingsInRadians->rawPut(i - 1, avr);
     }
   }
 
@@ -134,22 +131,32 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                                                 _nextSegmentFirstPosition->_latitude,
                                                                 _nextSegmentFirstPosition->_longitude);
 
-    const double avr = (angleInRadians + anglesInRadians[lastPositionIndex]) / 2.0;
-    anglesInRadians[lastPositionIndex] = avr;
+    const double avr = (angleInRadians + bearingsInRadians->get(lastPositionIndex)) / 2.0;
+    bearingsInRadians->rawPut(lastPositionIndex, avr);
   }
 
+  return bearingsInRadians;
+}
+
+Mesh* Trail::Segment::createMesh(const Planet* planet) {
+  const size_t positionsSize = _positions.size();
+
+  if (positionsSize < 2) {
+    return NULL;
+  }
+
+  const IFloatBuffer* bearings = getBearingsInRadians();
 
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
 
-
   const Vector3D rotationAxis = Vector3D::downZ();
   for (size_t i = 0; i < positionsSize; i++) {
     const Geodetic3D* position = _positions[i];
 
-    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(anglesInRadians[i]),
+    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(bearings->get(i)),
                                                                                    rotationAxis);
     const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(*position);
     const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
@@ -157,6 +164,8 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
     vertices->add(offsetN.transformedBy(matrix, 1));
     vertices->add(offsetP.transformedBy(matrix, 1));
   }
+
+  delete bearings;
 
   Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),
                                      true,
