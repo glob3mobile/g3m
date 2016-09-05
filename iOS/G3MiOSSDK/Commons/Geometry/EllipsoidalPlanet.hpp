@@ -175,7 +175,9 @@ public:
 
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
 
-  MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
+  MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
+                                                 const Angle& longitude,
+                                                 const double height) const;
 
   bool isFlat() const { return false; }
 

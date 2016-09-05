@@ -309,9 +309,11 @@ Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vect
   return result;
 }
 
-MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
-  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
-  const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
+MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Angle& latitude,
+                                                                  const Angle& longitude,
+                                                                  const double height) const {
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(latitude, longitude, height) );
+  const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( latitude, longitude );
 
   return translation.multiply(rotation);
 }

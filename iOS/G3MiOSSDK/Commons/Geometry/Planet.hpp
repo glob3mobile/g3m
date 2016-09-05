@@ -94,8 +94,16 @@ public:
   Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   
-  virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;
-  
+  virtual MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
+                                                         const Angle& longitude,
+                                                         const double height) const = 0;
+
+  MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const {
+    return createGeodeticTransformMatrix(position._latitude,
+                                         position._longitude,
+                                         position._height);
+  }
+
   virtual bool isFlat() const = 0;
 
   virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;

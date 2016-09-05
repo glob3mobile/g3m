@@ -83,8 +83,10 @@ double FlatPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   return computePreciseLatLonDistance(g1, g2);
 }
 
-MutableMatrix44D FlatPlanet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
-  return MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
+MutableMatrix44D FlatPlanet::createGeodeticTransformMatrix(const Angle& latitude,
+                                                           const Angle& longitude,
+                                                           const double height) const {
+  return MutableMatrix44D::createTranslationMatrix( toCartesian(latitude, longitude, height) );
 }
 
 void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const {

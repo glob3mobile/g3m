@@ -16,6 +16,17 @@
 #include "IFactory.hpp"
 
 
+Trail::Segment::Segment(const Color& color,
+                        float ribbonWidth) :
+_color(color),
+_ribbonWidth(ribbonWidth),
+_positionsDirty(true),
+_mesh(NULL),
+_nextSegmentFirstPosition(NULL),
+_previousSegmentLastPosition(NULL)
+{
+}
+
 Trail::Segment::~Segment() {
   delete _previousSegmentLastPosition;
   delete _nextSegmentFirstPosition;
@@ -24,43 +35,64 @@ Trail::Segment::~Segment() {
 
   const size_t positionsSize = _positions.size();
   for (size_t i = 0; i < positionsSize; i++) {
-    const Geodetic3D* position = _positions[i];
+    const Position* position = _positions[i];
     delete position;
   }
 }
 
-void Trail::Segment::addPosition(const Angle& latitude,
-                                 const Angle& longitude,
-                                 const double height) {
-  _positionsDirty = true;
-  _positions.push_back(new Geodetic3D(latitude,
-                                      longitude,
-                                      height));
+size_t Trail::Segment::getSize() const {
+  return _positions.size();
 }
 
-void Trail::Segment::addPosition(const Geodetic3D& position) {
+void Trail::Segment::addPosition(const Position& position) {
+  _positionsDirty = true;
+  _positions.push_back(new Position(position._latitude,
+                                    position._longitude,
+                                    position._height,
+                                    position._alpha));
+}
+
+void Trail::Segment::addPosition(const Angle& latitude,
+                                 const Angle& longitude,
+                                 const double height,
+                                 const double alpha) {
+  _positionsDirty = true;
+  _positions.push_back(new Position(latitude,
+                                    longitude,
+                                    height,
+                                    alpha));
+}
+
+void Trail::Segment::addPosition(const Geodetic3D& position,
+                                 const double alpha) {
   addPosition(position._latitude,
               position._longitude,
-              position._height);
+              position._height,
+              alpha);
 }
 
 void Trail::Segment::setNextSegmentFirstPosition(const Angle& latitude,
                                                  const Angle& longitude,
-                                                 const double height) {
+                                                 const double height,
+                                                 const double alpha) {
   _positionsDirty = true;
   delete _nextSegmentFirstPosition;
-  _nextSegmentFirstPosition = new Geodetic3D(latitude,
-                                             longitude,
-                                             height);
+  _nextSegmentFirstPosition = new Position(latitude,
+                                           longitude,
+                                           height,
+                                           alpha);
 }
 
-void Trail::Segment::setPreviousSegmentLastPosition(const Geodetic3D& position) {
+void Trail::Segment::setPreviousSegmentLastPosition(const Position& position) {
   _positionsDirty = true;
   delete _previousSegmentLastPosition;
-  _previousSegmentLastPosition = new Geodetic3D(position);
+  _previousSegmentLastPosition = new Position(position._latitude,
+                                              position._longitude,
+                                              position._height,
+                                              position._alpha);
 }
 
-Geodetic3D Trail::Segment::getLastPosition() const {
+Trail::Position Trail::Segment::getLastPosition() const {
 #ifdef C_CODE
   return *(_positions[ _positions.size() - 1]);
 #endif
@@ -69,7 +101,7 @@ Geodetic3D Trail::Segment::getLastPosition() const {
 #endif
 }
 
-Geodetic3D Trail::Segment::getPreLastPosition() const {
+Trail::Position Trail::Segment::getPreLastPosition() const {
 #ifdef C_CODE
   return *(_positions[ _positions.size() - 2]);
 #endif
@@ -93,8 +125,8 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   IFloatBuffer* bearingsInRadians = IFactory::instance()->createFloatBuffer(positionsSize);
 
   for (size_t i = 1; i < positionsSize; i++) {
-    const Geodetic3D* current  = _positions[i];
-    const Geodetic3D* previous = _positions[i - 1];
+    const Position* current  = _positions[i];
+    const Position* previous = _positions[i - 1];
 
     const float angleInRadians = (float) Geodetic2D::bearingInRadians(previous->_latitude,
                                                                       previous->_longitude,
@@ -125,7 +157,7 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
 
   if (_nextSegmentFirstPosition != NULL) {
     const size_t lastPositionIndex = positionsSize - 1;
-    const Geodetic3D* lastPosition = _positions[lastPositionIndex];
+    const Position* lastPosition = _positions[lastPositionIndex];
     const float angleInRadians = (float) Geodetic2D::bearingInRadians(lastPosition->_latitude,
                                                                       lastPosition->_longitude,
                                                                       _nextSegmentFirstPosition->_latitude,
@@ -154,11 +186,13 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
   const Vector3D rotationAxis = Vector3D::downZ();
   for (size_t i = 0; i < positionsSize; i++) {
-    const Geodetic3D* position = _positions[i];
+    const Position* position = _positions[i];
 
     const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(bearings->get(i)),
                                                                                    rotationAxis);
-    const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(*position);
+    const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(position->_latitude,
+                                                                             position->_longitude,
+                                                                             position->_height);
     const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
 
     vertices->add(offsetN.transformedBy(matrix, 1));
@@ -229,7 +263,8 @@ void Trail::clear() {
 
 void Trail::addPosition(const Angle& latitude,
                         const Angle& longitude,
-                        const double height) {
+                        const double height,
+                        const double alpha) {
   Segment* currentSegment;
 
   const size_t segmentsSize = _segments.size();
@@ -244,7 +279,8 @@ void Trail::addPosition(const Angle& latitude,
 
       currentSegment->setNextSegmentFirstPosition(latitude,
                                                   longitude,
-                                                  height  + _deltaHeight);
+                                                  height + _deltaHeight,
+                                                  alpha);
       newSegment->setPreviousSegmentLastPosition( currentSegment->getPreLastPosition() );
       newSegment->addPosition( currentSegment->getLastPosition() );
 
@@ -255,7 +291,8 @@ void Trail::addPosition(const Angle& latitude,
 
   currentSegment->addPosition(latitude,
                               longitude,
-                              height + _deltaHeight);
+                              height + _deltaHeight,
+                              alpha);
 }
 
 void Trail::render(const G3MRenderContext* rc,

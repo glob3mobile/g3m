@@ -10,8 +10,8 @@
 #define Trail_hpp
 
 #include <vector>
-#include "Color.hpp"
 
+#include "Color.hpp"
 #include "Geodetic3D.hpp"
 
 class Mesh;
@@ -25,15 +25,41 @@ class IFloatBuffer;
 class Trail {
 private:
 
+
+  class Position {
+  public:
+    const Angle  _latitude;
+    const Angle  _longitude;
+    const double _height;
+    const double _alpha;
+
+    Position(const Angle& latitude,
+             const Angle& longitude,
+             const double height,
+             const double alpha) :
+    _latitude(latitude),
+    _longitude(longitude),
+    _height(height),
+    _alpha(alpha)
+    {
+
+    }
+
+    ~Position() {
+
+    }
+  };
+
+
   class Segment {
   private:
     const Color _color;
     const float _ribbonWidth;
 
     bool _positionsDirty;
-    std::vector<Geodetic3D*> _positions;
-    Geodetic3D* _nextSegmentFirstPosition;
-    Geodetic3D* _previousSegmentLastPosition;
+    std::vector<Position*> _positions;
+    Position* _nextSegmentFirstPosition;
+    Position* _previousSegmentLastPosition;
 
     Mesh* createMesh(const Planet* planet);
 
@@ -43,38 +69,33 @@ private:
     const IFloatBuffer* getBearingsInRadians() const;
 
   public:
-    Segment(Color color,
-            float ribbonWidth) :
-    _color(color),
-    _ribbonWidth(ribbonWidth),
-    _positionsDirty(true),
-    _mesh(NULL),
-    _nextSegmentFirstPosition(NULL),
-    _previousSegmentLastPosition(NULL)
-    {
-    }
+    Segment(const Color& color,
+            float ribbonWidth);
 
     ~Segment();
 
-    size_t getSize() const {
-      return _positions.size();
-    }
+    size_t getSize() const;
+
+    void addPosition(const Position& position);
 
     void addPosition(const Angle& latitude,
                      const Angle& longitude,
-                     const double height);
+                     const double height,
+                     const double alpha);
 
-    void addPosition(const Geodetic3D& position);
+    void addPosition(const Geodetic3D& position,
+                     const double alpha);
 
     void setNextSegmentFirstPosition(const Angle& latitude,
                                      const Angle& longitude,
-                                     const double height);
+                                     const double height,
+                                     const double alpha);
 
-    void setPreviousSegmentLastPosition(const Geodetic3D& position);
+    void setPreviousSegmentLastPosition(const Position& position);
 
-    Geodetic3D getLastPosition() const;
+    Position getLastPosition() const;
 
-    Geodetic3D getPreLastPosition() const;
+    Position getPreLastPosition() const;
 
     void render(const G3MRenderContext* rc,
                 const Frustum* frustum,
@@ -115,12 +136,15 @@ public:
 
   void addPosition(const Angle& latitude,
                    const Angle& longitude,
-                   const double height);
+                   const double height,
+                   const double alpha);
 
-  void addPosition(const Geodetic3D& position) {
+  void addPosition(const Geodetic3D& position,
+                   const double alpha) {
     addPosition(position._latitude,
                 position._longitude,
-                position._height);
+                position._height,
+                alpha);
   }
   
   void clear();

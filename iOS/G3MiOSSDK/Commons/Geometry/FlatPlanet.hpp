@@ -164,7 +164,9 @@ public:
   double computeFastLatLonDistance(const Geodetic2D& g1,
                                    const Geodetic2D& g2) const;
 
-  MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
+  MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
+                                                 const Angle& longitude,
+                                                 const double height) const;
 
   bool isFlat() const { return true; }
 
