@@ -227,16 +227,26 @@ public class Trail
 
   private final Color _color ;
   private final float _ribbonWidth;
-  private final float _heightDelta;
+  private final double _deltaHeight;
+  private final int _maxPositionsPerSegment;
 
   private java.util.ArrayList<Segment> _segments = new java.util.ArrayList<Segment>();
 
-  public Trail(Color color, float ribbonWidth, float heightDelta)
+  public Trail(Color color, float ribbonWidth, double deltaHeight)
+  {
+     this(color, ribbonWidth, deltaHeight, 64);
+  }
+  public Trail(Color color, float ribbonWidth)
+  {
+     this(color, ribbonWidth, 0.0, 64);
+  }
+  public Trail(Color color, float ribbonWidth, double deltaHeight, int maxPositionsPerSegment)
   {
      _visible = true;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
-     _heightDelta = heightDelta;
+     _deltaHeight = deltaHeight;
+     _maxPositionsPerSegment = maxPositionsPerSegment;
   }
 
   public void dispose()
@@ -275,36 +285,31 @@ public class Trail
 
   public final void addPosition(Angle latitude, Angle longitude, double height)
   {
-    final int segmentsSize = _segments.size();
-  
     Segment currentSegment;
+  
+    final int segmentsSize = _segments.size();
     if (segmentsSize == 0)
     {
-      Segment newSegment = new Segment(_color, _ribbonWidth);
-      _segments.add(newSegment);
-      currentSegment = newSegment;
+      currentSegment = new Segment(_color, _ribbonWidth);
+      _segments.add(currentSegment);
     }
     else
     {
-      Segment previousSegment = _segments.get(segmentsSize - 1);
-      if (previousSegment.getSize() >= DefineConstants.MAX_POSITIONS_PER_SEGMENT)
+      currentSegment = _segments.get(segmentsSize - 1);
+      if (currentSegment.getSize() > _maxPositionsPerSegment)
       {
         Segment newSegment = new Segment(_color, _ribbonWidth);
   
-        previousSegment.setNextSegmentFirstPosition(latitude, longitude, height + _heightDelta);
-        newSegment.setPreviousSegmentLastPosition(previousSegment.getPreLastPosition());
-        newSegment.addPosition(previousSegment.getLastPosition());
+        currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight);
+        newSegment.setPreviousSegmentLastPosition(currentSegment.getPreLastPosition());
+        newSegment.addPosition(currentSegment.getLastPosition());
   
         _segments.add(newSegment);
         currentSegment = newSegment;
       }
-      else
-      {
-        currentSegment = previousSegment;
-      }
     }
   
-    currentSegment.addPosition(latitude, longitude, height + _heightDelta);
+    currentSegment.addPosition(latitude, longitude, height + _deltaHeight);
   }
 
   public final void addPosition(Geodetic3D position)
@@ -325,5 +330,3 @@ public class Trail
   }
 
 }
-//#define MAX_POSITIONS_PER_SEGMENT 64
-

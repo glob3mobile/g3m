@@ -123,6 +123,7 @@ public class TrailsRenderer extends DefaultRenderer
     _trails.clear();
   
     _glState._release();
+    super.dispose();
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
