@@ -239,6 +239,8 @@
 		CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */; };
 		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
 		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
+		CF6FA7C91D7D761800A4320A /* Trail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FA7C71D7D761800A4320A /* Trail.cpp */; };
+		CF6FA7CA1D7D785400A4320A /* Trail.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FA7C81D7D761800A4320A /* Trail.hpp */; };
 		CF6FE3ED1899812800C05775 /* G3MMeshParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */; };
 		CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */; };
 		CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
@@ -777,6 +779,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF6FA7CA1D7D785400A4320A /* Trail.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CF236E281CB3EF50002D4D77 /* ViewMode.hpp in CopyFiles */,
 				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
@@ -1499,6 +1502,8 @@
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
 		CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnCanvasElement.cpp; path = Commons/Basic/ColumnCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnCanvasElement.hpp; path = Commons/Basic/ColumnCanvasElement.hpp; sourceTree = "<group>"; };
+		CF6FA7C71D7D761800A4320A /* Trail.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Trail.cpp; path = Commons/Rendererers/Trail.cpp; sourceTree = "<group>"; };
+		CF6FA7C81D7D761800A4320A /* Trail.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Trail.hpp; path = Commons/Rendererers/Trail.hpp; sourceTree = "<group>"; };
 		CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MMeshParser.cpp; path = Commons/Mesh/G3MMeshParser.cpp; sourceTree = "<group>"; };
 		CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshParser.hpp; path = Commons/Mesh/G3MMeshParser.hpp; sourceTree = "<group>"; };
 		CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MMeshMaterial.cpp; path = Commons/Mesh/G3MMeshMaterial.cpp; sourceTree = "<group>"; };
@@ -2550,6 +2555,8 @@
 				CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */,
 				CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */,
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
+				CFE50D221C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp */,
+				CFE50D231C66650C0002EFD5 /* GradualSplitsTileLODTester.hpp */,
 				CF1575981864C0E10059312A /* HUDAbsolutePosition.cpp */,
 				CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */,
 				CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */,
@@ -2579,8 +2586,6 @@
 				E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */,
 				D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */,
 				D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */,
-				CFE50D221C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp */,
-				CFE50D231C66650C0002EFD5 /* GradualSplitsTileLODTester.hpp */,
 				D8B78E221C1208CB00DDE2B9 /* MaxLevelTileLODTester.cpp */,
 				D8B78E231C1208CB00DDE2B9 /* MaxLevelTileLODTester.hpp */,
 				CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */,
@@ -2591,10 +2596,12 @@
 				D88EE1C61869B70C00AED85A /* MultiTexturedHUDQuadWidget.hpp */,
 				D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */,
 				D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */,
-				CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */,
-				CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */,
+				CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */,
+				CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */,
 				CF516E911C63EF5D002F19E3 /* PlanetRenderContext.cpp */,
 				CF516E921C63EF5D002F19E3 /* PlanetRenderContext.hpp */,
+				CCC2A02C15CA6C7D00923850 /* PlanetRenderer.cpp */,
+				CCC2A02D15CA6C7D00923850 /* PlanetRenderer.hpp */,
 				CFBD815419A3E0E100F1A8C4 /* PointCloudsRenderer.cpp */,
 				CFBD815519A3E0E100F1A8C4 /* PointCloudsRenderer.hpp */,
 				D8B78E251C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.cpp */,
@@ -2610,8 +2617,6 @@
 				CF792A061C51620800FDE7C9 /* TileData.hpp */,
 				D8019FEE1C11D91800784287 /* TileLODTester.cpp */,
 				D8019FEF1C11D91800784287 /* TileLODTester.hpp */,
-				CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */,
-				CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */,
 				CF1B62D219055B7900AB01A9 /* TilesRenderParameters.cpp */,
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */,
@@ -2620,6 +2625,8 @@
 				D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */,
 				CF67D9C91C5AB44500873661 /* TimedCacheTileVisibilityTester.cpp */,
 				CF67D9CA1C5AB44500873661 /* TimedCacheTileVisibilityTester.hpp */,
+				CF6FA7C71D7D761800A4320A /* Trail.cpp */,
+				CF6FA7C81D7D761800A4320A /* Trail.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 				CFECA7791B6AB9B200A0A44E /* VectorStreamingRenderer.cpp */,
@@ -3372,6 +3379,7 @@
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */,
+				CF6FA7C91D7D761800A4320A /* Trail.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
