@@ -53,23 +53,18 @@ public class TrailsRenderer extends DefaultRenderer
   public final void removeTrail(Trail trail, boolean deleteTrail)
   {
     final int trailsCount = _trails.size();
-    int foundIndex = -1;
     for (int i = 0; i < trailsCount; i++)
     {
       Trail each = _trails.get(i);
       if (trail == each)
       {
-        foundIndex = i;
+        _trails.remove(i);
+        if (deleteTrail)
+        {
+          if (trail != null)
+             trail.dispose();
+        }
         break;
-      }
-    }
-    if (foundIndex >= 0)
-    {
-      _trails.remove(foundIndex);
-      if (deleteTrail)
-      {
-        if (trail != null)
-           trail.dispose();
       }
     }
   }
@@ -134,7 +129,7 @@ public class TrailsRenderer extends DefaultRenderer
   }
 
 }
-//#define MAX_POSITIONS_PER_SEGMENT 128
+//#define MAX_POSITIONS_PER_SEGMENT 64
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TrailsRenderer

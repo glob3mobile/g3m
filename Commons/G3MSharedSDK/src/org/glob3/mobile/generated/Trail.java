@@ -54,10 +54,10 @@ public class Trail
 
   public final void addPosition(Angle latitude, Angle longitude, double height)
   {
-    final int lastSegmentIndex = _segments.size() - 1;
+    final int segmentsSize = _segments.size();
   
     TrailSegment currentSegment;
-    if (lastSegmentIndex < 0)
+    if (segmentsSize == 0)
     {
       TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);
       _segments.add(newSegment);
@@ -65,8 +65,8 @@ public class Trail
     }
     else
     {
-      TrailSegment previousSegment = _segments.get(lastSegmentIndex);
-      if (previousSegment.getSize() > DefineConstants.MAX_POSITIONS_PER_SEGMENT)
+      TrailSegment previousSegment = _segments.get(segmentsSize - 1);
+      if (previousSegment.getSize() >= DefineConstants.MAX_POSITIONS_PER_SEGMENT)
       {
         TrailSegment newSegment = new TrailSegment(_color, _ribbonWidth);
   

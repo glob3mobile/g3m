@@ -143,10 +143,14 @@ public class GL
 
   public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
-  
+    drawElements(mode, indices, (int) indices.size(), state, progManager);
+  }
+
+  public final void drawElements(int mode, IShortBuffer indices, int count, GLState state, GPUProgramManager progManager)
+  {
     state.applyOnGPU(this, progManager);
   
-    _nativeGL.drawElements(mode, (int)indices.size(), indices);
+    _nativeGL.drawElements(mode, count, indices);
   }
 
   //  void drawArrays(int mode,
