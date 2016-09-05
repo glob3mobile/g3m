@@ -103,7 +103,7 @@ public class Trail
         final Geodetic3D current = _positions.get(i);
         final Geodetic3D previous = _positions.get(i - 1);
     
-        final double angleInRadians = Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
+        final float angleInRadians = (float) Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
         if (i == 1)
         {
           if (_previousSegmentLastPosition == null)
@@ -113,8 +113,8 @@ public class Trail
           }
           else
           {
-            final double angle2InRadians = Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
-            final double avr = (angleInRadians + angle2InRadians) / 2.0;
+            final float angle2InRadians = (float) Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
+            final float avr = (angleInRadians + angle2InRadians) / 2.0f;
     
             bearingsInRadians.rawPut(0, avr);
             bearingsInRadians.rawPut(1, avr);
@@ -123,7 +123,7 @@ public class Trail
         else
         {
           bearingsInRadians.rawPut(i, angleInRadians);
-          final double avr = (angleInRadians + bearingsInRadians.get(i - 1)) / 2.0;
+          final float avr = (angleInRadians + bearingsInRadians.get(i - 1)) / 2.0f;
           bearingsInRadians.rawPut(i - 1, avr);
         }
       }
@@ -132,9 +132,9 @@ public class Trail
       {
         final int lastPositionIndex = positionsSize - 1;
         final Geodetic3D lastPosition = _positions.get(lastPositionIndex);
-        final double angleInRadians = Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
+        final float angleInRadians = (float) Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
     
-        final double avr = (angleInRadians + bearingsInRadians.get(lastPositionIndex)) / 2.0;
+        final float avr = (angleInRadians + bearingsInRadians.get(lastPositionIndex)) / 2.0f;
         bearingsInRadians.rawPut(lastPositionIndex, avr);
       }
     
