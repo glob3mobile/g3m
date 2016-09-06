@@ -211,11 +211,6 @@ public class Trail
       _positions.add(new Position(latitude, longitude, height, alpha));
     }
 
-    public final void addPosition(Geodetic3D position, double alpha)
-    {
-      addPosition(position._latitude, position._longitude, position._height, alpha);
-    }
-
     public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height, double alpha)
     {
       _positionsDirty = true;
@@ -335,15 +330,16 @@ public class Trail
     else
     {
       currentSegment = _segments.get(segmentsSize - 1);
-      if (currentSegment.getSize() > _maxPositionsPerSegment)
+  
+      if (currentSegment.getSize() >= _maxPositionsPerSegment)
       {
         Segment newSegment = new Segment(_color, _ribbonWidth);
+        _segments.add(newSegment);
   
         currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha);
         newSegment.setPreviousSegmentLastPosition(currentSegment.getPreLastPosition());
         newSegment.addPosition(currentSegment.getLastPosition());
   
-        _segments.add(newSegment);
         currentSegment = newSegment;
       }
     }
@@ -366,6 +362,13 @@ public class Trail
          segment.dispose();
     }
     _segments.clear();
+  }
+
+  public final void setAlpha(double alpha)
+  {
+    final double a = IMathUtils.instance().clamp(alpha, 0.0, 1.0);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DGD at work: setAlpha(alpha)
   }
 
 }
