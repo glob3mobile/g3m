@@ -146,6 +146,8 @@ public:
   
   void clear();
   
+  void setAlpha(const double alpha);
+  
 };
 
 #endif

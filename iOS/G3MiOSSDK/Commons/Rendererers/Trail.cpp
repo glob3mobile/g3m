@@ -266,8 +266,10 @@ void Trail::addPosition(const Angle& latitude,
   }
   else {
     currentSegment = _segments[segmentsSize - 1];
-    if (currentSegment->getSize() > _maxPositionsPerSegment) {
+
+    if (currentSegment->getSize() >= _maxPositionsPerSegment) {
       Segment* newSegment = new Segment(_color, _ribbonWidth);
+      _segments.push_back(newSegment);
 
       currentSegment->setNextSegmentFirstPosition(latitude,
                                                   longitude,
@@ -276,7 +278,6 @@ void Trail::addPosition(const Angle& latitude,
       newSegment->setPreviousSegmentLastPosition( currentSegment->getPreLastPosition() );
       newSegment->addPosition( currentSegment->getLastPosition() );
 
-      _segments.push_back(newSegment);
       currentSegment = newSegment;
     }
   }
@@ -299,3 +300,7 @@ void Trail::render(const G3MRenderContext* rc,
   }
 }
 
+void Trail::setAlpha(const double alpha) {
+  const double a = IMathUtils::instance()->clamp(alpha, 0.0, 1.0);
+#warning DGD at work: Trail::setAlpha(alpha)
+}
