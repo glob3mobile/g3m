@@ -273,24 +273,15 @@ void Trail::Segment::render(const G3MRenderContext* rc,
     _alphaStatus = calculateAlphaStatus();
   }
 
-  switch (_alphaStatus) {
-    case UNKNOWN:
-    case FULL_HIDDEN:
-      return;
-
-    case HALF:
-      break;
-
-    case FULL_VISIBLE:
-      break;
-  }
-
-  Mesh* mesh = getMesh(rc->getPlanet());
-  if (mesh != NULL) {
-    BoundingVolume* bounding = mesh->getBoundingVolume();
-    if (bounding != NULL) {
-      if (bounding->touchesFrustum(frustum)) {
-        mesh->render(rc, state);
+  if ((_alphaStatus != Trail::SegmentAlphaStatus::UNKNOWN) &&
+      (_alphaStatus != Trail::SegmentAlphaStatus::FULL_HIDDEN)) {
+    Mesh* mesh = getMesh(rc->getPlanet());
+    if (mesh != NULL) {
+      BoundingVolume* bounding = mesh->getBoundingVolume();
+      if (bounding != NULL) {
+        if (bounding->touchesFrustum(frustum)) {
+          mesh->render(rc, state);
+        }
       }
     }
   }
