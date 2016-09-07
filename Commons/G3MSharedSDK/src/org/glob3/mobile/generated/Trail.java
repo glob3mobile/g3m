@@ -50,31 +50,18 @@ public class Trail
   }
 
 
-  private enum SegmentAlphaStatus
-  {
-    UNKNOWN,
-    FULL_HIDDEN,
-    HALF,
-    FULL_VISIBLE;
-
-     public int getValue()
-     {
-        return this.ordinal();
-     }
-
-     public static SegmentAlphaStatus forValue(int value)
-     {
-        return values()[value];
-     }
-  }
+  private static final int SEGMENT_ALPHA_STATUS_UNKNOWN = 1;
+  private static final int SEGMENT_ALPHA_STATUS_FULL_HIDDEN = 2;
+  private static final int SEGMENT_ALPHA_STATUS_HALF = 3;
+  private static final int SEGMENT_ALPHA_STATUS_FULL_VISIBLE = 4;
 
 
   private static class SegmentMeshUserData extends Mesh.MeshUserData
   {
-    private final SegmentAlphaStatus _status;
+    private final int _status;
     private final double _visibleAlpha;
 
-    public SegmentMeshUserData(SegmentAlphaStatus status, double visibleAlpha)
+    public SegmentMeshUserData(int status, double visibleAlpha)
     {
        _status = status;
        _visibleAlpha = visibleAlpha;
@@ -85,14 +72,14 @@ public class Trail
       super.dispose();
     }
 
-    public final boolean isValid(SegmentAlphaStatus status, double visibleAlpha)
+    public final boolean isValid(int status, double visibleAlpha)
     {
       if (status != _status)
       {
         return false;
       }
     
-      if ((status == Trail.SegmentAlphaStatus.HALF) && (visibleAlpha != _visibleAlpha))
+      if ((status == Trail.SEGMENT_ALPHA_STATUS_HALF) && (visibleAlpha != _visibleAlpha))
       {
         return false;
       }
@@ -109,7 +96,7 @@ public class Trail
     private double _minAlpha;
     private double _maxAlpha;
     private double _visibleAlpha;
-    private SegmentAlphaStatus _alphaStatus;
+    private int _alphaStatus;
 
     private boolean _positionsDirty;
     private java.util.ArrayList<Position> _positions = new java.util.ArrayList<Position>();
@@ -137,7 +124,7 @@ public class Trail
       {
         final Position position = _positions.get(i);
     
-        if (_alphaStatus == Trail.SegmentAlphaStatus.HALF)
+        if (_alphaStatus == Trail.SEGMENT_ALPHA_STATUS_HALF)
         {
           if (position._alpha > _visibleAlpha)
           {
@@ -228,19 +215,19 @@ public class Trail
       return bearingsInRadians;
     }
 
-    private Trail.SegmentAlphaStatus calculateAlphaStatus()
+    private int calculateAlphaStatus()
     {
       if (_visibleAlpha <= _minAlpha)
       {
-        return Trail.SegmentAlphaStatus.FULL_HIDDEN;
+        return Trail.SEGMENT_ALPHA_STATUS_FULL_HIDDEN;
       }
       else if (_visibleAlpha >= _maxAlpha)
       {
-        return Trail.SegmentAlphaStatus.FULL_VISIBLE;
+        return Trail.SEGMENT_ALPHA_STATUS_FULL_VISIBLE;
       }
       else
       {
-        return Trail.SegmentAlphaStatus.HALF;
+        return Trail.SEGMENT_ALPHA_STATUS_HALF;
       }
     }
 
@@ -260,7 +247,7 @@ public class Trail
        _color = new Color(color);
        _ribbonWidth = ribbonWidth;
        _visibleAlpha = visibleAlpha;
-       _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
+       _alphaStatus = Trail.SEGMENT_ALPHA_STATUS_UNKNOWN;
        _minAlpha = IMathUtils.instance().maxDouble();
        _maxAlpha = IMathUtils.instance().minDouble();
        _positionsDirty = true;
@@ -305,12 +292,12 @@ public class Trail
       if (alpha < _minAlpha)
       {
          _minAlpha = alpha;
-         _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
+         _alphaStatus = Trail.SEGMENT_ALPHA_STATUS_UNKNOWN;
       }
       if (alpha > _maxAlpha)
       {
          _maxAlpha = alpha;
-         _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
+         _alphaStatus = Trail.SEGMENT_ALPHA_STATUS_UNKNOWN;
       }
     }
 
@@ -343,12 +330,12 @@ public class Trail
     public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
     {
     
-      if (_alphaStatus == Trail.SegmentAlphaStatus.UNKNOWN)
+      if (_alphaStatus == Trail.SEGMENT_ALPHA_STATUS_UNKNOWN)
       {
         _alphaStatus = calculateAlphaStatus();
       }
     
-      if ((_alphaStatus != Trail.SegmentAlphaStatus.UNKNOWN) && (_alphaStatus != Trail.SegmentAlphaStatus.FULL_HIDDEN))
+      if ((_alphaStatus != Trail.SEGMENT_ALPHA_STATUS_UNKNOWN) && (_alphaStatus != Trail.SEGMENT_ALPHA_STATUS_FULL_HIDDEN))
       {
         Mesh mesh = getMesh(rc.getPlanet());
         if (mesh != null)
@@ -370,7 +357,7 @@ public class Trail
       if (visibleAlpha != _visibleAlpha)
       {
         _visibleAlpha = visibleAlpha;
-        _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
+        _alphaStatus = Trail.SEGMENT_ALPHA_STATUS_UNKNOWN;
       }
     }
   }
