@@ -6,9 +6,10 @@
 //
 
 #include "SphericalPlanet.hpp"
-#include "CameraEffects.hpp"
 
+#include "CameraEffects.hpp"
 #include "Camera.hpp"
+#include "Sector.hpp"
 
 
 const Planet* SphericalPlanet::createEarth() {
@@ -535,3 +536,12 @@ void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
 }
 
 
+
+Geodetic3D SphericalPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
+  const Vector3D asw = toCartesian(rendereSector.getSW());
+  const Vector3D ane = toCartesian(rendereSector.getNE());
+  const double height = asw.sub(ane).length() * 1.9;
+
+  return Geodetic3D(rendereSector._center,
+                    height);
+}

@@ -10,6 +10,7 @@
 #include "IndexedMesh.hpp"
 #include "GL.hpp"
 #include "IShortBuffer.hpp"
+#include "G3MRenderContext.hpp"
 
 
 IndexedMesh::~IndexedMesh() {

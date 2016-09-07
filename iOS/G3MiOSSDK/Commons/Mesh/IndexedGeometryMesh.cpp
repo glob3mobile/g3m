@@ -10,6 +10,8 @@
 
 #include "GL.hpp"
 #include "IShortBuffer.hpp"
+#include "G3MRenderContext.hpp"
+
 
 IndexedGeometryMesh::~IndexedGeometryMesh() {
   if (_ownsIndices) {

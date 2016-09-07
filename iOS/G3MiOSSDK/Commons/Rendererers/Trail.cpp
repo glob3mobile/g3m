@@ -14,6 +14,11 @@
 #include "Planet.hpp"
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
+#include "G3MRenderContext.hpp"
+#include "BoundingVolume.hpp"
+#include "IFloatBuffer.hpp"
+#include "MutableMatrix44D.hpp"
+#include "GLConstants.hpp"
 
 
 Trail::Segment::Segment(const Color& color,
@@ -219,10 +224,10 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
 Trail::SegmentAlphaStatus Trail::Segment::calculateAlphaStatus() {
   if (_visibleAlpha <= _minAlpha) {
-    return Trail::SegmentAlphaStatus::HIDDEN;
+    return Trail::SegmentAlphaStatus::FULL_HIDDEN;
   }
   else if (_visibleAlpha >= _maxAlpha) {
-    return Trail::SegmentAlphaStatus::VISIBLE;
+    return Trail::SegmentAlphaStatus::FULL_VISIBLE;
   }
   else {
     return Trail::SegmentAlphaStatus::HALF;
@@ -240,13 +245,13 @@ void Trail::Segment::render(const G3MRenderContext* rc,
 
   switch (_alphaStatus) {
     case UNKNOWN:
-    case HIDDEN:
+    case FULL_HIDDEN:
       return;
 
     case HALF:
       break;
 
-    case VISIBLE:
+    case FULL_VISIBLE:
       break;
   }
 
@@ -349,8 +354,8 @@ void Trail::render(const G3MRenderContext* rc,
 
 void Trail::setAlpha(const double alpha) {
   const double a = IMathUtils::instance()->clamp(alpha, 0.0, 1.0);
-  if (alpha != _alpha) {
-    _alpha = alpha;
+  if (a != _alpha) {
+    _alpha = a;
     const size_t segmentsSize = _segments.size();
     for (size_t i = 0; i < segmentsSize; i++) {
       Segment* segment = _segments[i];

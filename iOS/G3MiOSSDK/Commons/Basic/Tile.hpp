@@ -21,6 +21,7 @@ class ElevationDataProvider;
 class PlanetRenderer;
 class TileData;
 class TilesStatistics;
+class Geodetic3D;
 
 
 class Tile {

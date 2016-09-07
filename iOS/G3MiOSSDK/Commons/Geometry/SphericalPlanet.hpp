@@ -8,14 +8,14 @@
 #ifndef G3MiOSSDK_SphericalPlanet
 #define G3MiOSSDK_SphericalPlanet
 
-#include "MutableVector3D.hpp"
-#include "Geodetic3D.hpp"
 #include "Planet.hpp"
 
+#include <list>
 #include "Sphere.hpp"
-#include "Sector.hpp"
+#include "MutableVector3D.hpp"
 
-class SphericalPlanet: public Planet {
+
+class SphericalPlanet : public Planet {
 private:
 #ifdef C_CODE
   const Sphere _sphere;
@@ -37,7 +37,7 @@ private:
   mutable double          _angleBetweenInitialRays;
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
-  
+
 
 public:
   static const Planet* createEarth();
@@ -46,7 +46,7 @@ public:
 
   ~SphericalPlanet() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
   }
 
@@ -65,11 +65,10 @@ public:
   Vector3D geodeticSurfaceNormal(const MutableVector3D& position) const {
     return position.normalized().asVector3D();
   }
-  
 
   Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                  const Angle& longitude) const;
-  
+
   Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
@@ -171,16 +170,16 @@ public:
   bool isFlat() const { return false; }
 
   void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
-  
+
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
-  
+
   Effect* createEffectFromLastSingleDrag() const;
-  
+
   void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
-                               const Vector3D& initialRay0,
-                               const Vector3D& initialRay1) const;
-  
+                       const Vector3D& initialRay0,
+                       const Vector3D& initialRay1) const;
+
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1) const;
 
@@ -189,9 +188,9 @@ public:
                                 const Vector3D& tapRay) const;
 
   double distanceToHorizon(const Vector3D& position) const;
-  
+
   MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
-  
+
   Vector3D getNorth() const {
     return Vector3D::upZ();
   }
@@ -199,19 +198,12 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
-    const Vector3D asw = toCartesian(rendereSector.getSW());
-    const Vector3D ane = toCartesian(rendereSector.getNE());
-    const double height = asw.sub(ane).length() * 1.9;
-
-    return Geodetic3D(rendereSector._center,
-                      height);
-  }
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const;
 
   const std::string getType() const {
     return "Spherical";
   }
-
+  
 };
 
 #endif

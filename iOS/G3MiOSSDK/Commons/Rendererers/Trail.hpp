@@ -51,9 +51,9 @@ private:
 
   enum SegmentAlphaStatus {
     UNKNOWN,
-    HIDDEN,
+    FULL_HIDDEN,
     HALF,
-    VISIBLE
+    FULL_VISIBLE
   };
 
 

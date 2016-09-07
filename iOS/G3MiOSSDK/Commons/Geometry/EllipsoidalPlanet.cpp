@@ -11,6 +11,8 @@
 #include "EllipsoidalPlanet.hpp"
 #include "CameraEffects.hpp"
 #include "Camera.hpp"
+#include "Sector.hpp"
+
 
 const Planet* EllipsoidalPlanet::createEarth() {
   return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero,
@@ -573,4 +575,13 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                                 Camera* nextCamera) const {
   
+}
+
+Geodetic3D EllipsoidalPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
+  const Vector3D asw = toCartesian(rendereSector.getSW());
+  const Vector3D ane = toCartesian(rendereSector.getNE());
+  const double height = asw.sub(ane).length() * 1.9;
+
+  return Geodetic3D(rendereSector._center,
+                    height);
 }

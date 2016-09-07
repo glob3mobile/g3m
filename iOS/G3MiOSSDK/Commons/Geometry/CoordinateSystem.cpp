@@ -14,6 +14,8 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "ErrorHandling.hpp"
+#include "GLConstants.hpp"
+#include "MutableMatrix44D.hpp"
 
 
 CoordinateSystem CoordinateSystem::global() {

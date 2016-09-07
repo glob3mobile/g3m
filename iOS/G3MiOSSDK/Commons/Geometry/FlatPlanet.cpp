@@ -10,6 +10,7 @@
 #include "Plane.hpp"
 #include "CameraEffects.hpp"
 #include "Camera.hpp"
+#include "Sector.hpp"
 
 
 const Planet* FlatPlanet::createEarth() {
@@ -232,4 +233,13 @@ MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& de
 void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                          Camera* nextCamera) const {
 
+}
+
+Geodetic3D FlatPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
+  const Vector3D asw = toCartesian(rendereSector.getSW());
+  const Vector3D ane = toCartesian(rendereSector.getNE());
+  const double height = asw.sub(ane).length() * 1.9;
+
+  return Geodetic3D(rendereSector._center,
+                    height);
 }

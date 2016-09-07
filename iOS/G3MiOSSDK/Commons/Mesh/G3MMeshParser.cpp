@@ -21,6 +21,9 @@
 #include "DirectMesh.hpp"
 #include "IndexedMesh.hpp"
 #include "Planet.hpp"
+#include "Geodetic3D.hpp"
+#include "GLConstants.hpp"
+
 
 Color* G3MMeshParser::parseColor(const JSONArray* jsonColor) {
   if (jsonColor == NULL) {

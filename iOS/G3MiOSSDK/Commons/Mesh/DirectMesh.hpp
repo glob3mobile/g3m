@@ -10,7 +10,7 @@
 #define __G3MiOSSDK__DirectMesh__
 
 #include "AbstractMesh.hpp"
-#include "ErrorHandling.hpp"
+
 
 class DirectMesh : public AbstractMesh {
 private:
@@ -44,12 +44,7 @@ public:
 #endif
   }
 
-  void setRenderVerticesCount(size_t renderVerticesCount) {
-    if (renderVerticesCount > getRenderVerticesCount()) {
-      THROW_EXCEPTION("Invalid renderVerticesCount");
-    }
-    _renderVerticesCount = renderVerticesCount;
-  }
+  void setRenderVerticesCount(size_t renderVerticesCount);
 
   size_t getRenderVerticesCount() const {
     return _renderVerticesCount;

@@ -15,6 +15,14 @@
 #include "MutableVector3D.hpp"
 
 
+
+MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
+  return createGeodeticTransformMatrix(position._latitude,
+                                       position._longitude,
+                                       position._height);
+}
+
+
 CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
 
   Vector3D origin = toCartesian(geo);

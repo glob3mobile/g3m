@@ -9,14 +9,13 @@
 #ifndef G3MiOSSDK_FlatPlanet
 #define G3MiOSSDK_FlatPlanet
 
-#include "MutableVector3D.hpp"
-#include "Geodetic3D.hpp"
 #include "Planet.hpp"
 #include "Vector2D.hpp"
-#include "Sector.hpp"
+#include "Vector3D.hpp"
+#include "MutableVector3D.hpp"
 
 
-class FlatPlanet: public Planet {
+class FlatPlanet : public Planet {
 private:
   const Vector2D _size;
   const Vector3D _radii;
@@ -36,7 +35,7 @@ private:
 
 
 public:
-  
+
   static const Planet* createEarth();
 
   FlatPlanet(const Vector2D& size);
@@ -199,15 +198,8 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
-    const Vector3D asw = toCartesian(rendereSector.getSW());
-    const Vector3D ane = toCartesian(rendereSector.getNE());
-    const double height = asw.sub(ane).length() * 1.9;
-
-    return Geodetic3D(rendereSector._center,
-                      height);
-  }
-
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const;
+  
   const std::string getType() const {
     return "Flat";
   }

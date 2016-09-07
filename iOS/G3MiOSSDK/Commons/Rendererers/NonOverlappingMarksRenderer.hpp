@@ -30,6 +30,9 @@ class ViewportExtentGLFeature;
 class TexturesHandler;
 class NonOverlappingMark;
 class SimpleTextureMapping;
+class IFloatBuffer;
+class IStringBuilder;
+
 
 class NonOverlappingMarkTouchListener {
 public:

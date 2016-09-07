@@ -11,31 +11,31 @@
 
 #include "Mesh.hpp"
 
-#include "Vector3D.hpp"
-#include "GLState.hpp"
 
-class MutableMatrix44D;
+#include "Vector3D.hpp"
+
 class IFloatBuffer;
 class Color;
+
 
 class AbstractMesh : public Mesh {
 protected:
   const int               _primitive;
   const bool              _owner;
-  const Vector3D                _center;
+  const Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;
-  const IFloatBuffer*           _vertices;
+  const IFloatBuffer*     _vertices;
   const Color*            _flatColor;
-  const IFloatBuffer*           _colors;
+  const IFloatBuffer*     _colors;
   const float             _colorsIntensity;
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
-  const IFloatBuffer*           _normals;
+  const IFloatBuffer*     _normals;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
-  
+
   const bool _polygonOffsetFill;
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;
@@ -56,10 +56,9 @@ protected:
                float polygonOffsetUnits);
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
-//  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
-  
+
   GLState* _glState;
-  
+
   void createGLState();
 
   mutable bool _showNormals;
@@ -68,7 +67,7 @@ protected:
 
 public:
   ~AbstractMesh();
-  
+
   BoundingVolume* getBoundingVolume() const;
 
   size_t getVertexCount() const;
@@ -76,7 +75,7 @@ public:
   const Vector3D getVertex(size_t i) const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
-  
+
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
