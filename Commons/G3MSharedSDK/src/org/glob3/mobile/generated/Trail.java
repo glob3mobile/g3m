@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Mesh;
 //class Planet;
 //class Frustum;
 //class G3MRenderContext;
@@ -67,6 +66,39 @@ public class Trail
      {
         return values()[value];
      }
+  }
+
+
+  private static class SegmentMeshUserData extends Mesh.MeshUserData
+  {
+    private final SegmentAlphaStatus _status;
+    private final double _visibleAlpha;
+
+    public SegmentMeshUserData(SegmentAlphaStatus status, double visibleAlpha)
+    {
+       _status = status;
+       _visibleAlpha = visibleAlpha;
+    }
+
+    public void dispose()
+    {
+      super.dispose();
+    }
+
+    public final boolean isValid(SegmentAlphaStatus status, double visibleAlpha)
+    {
+      if (status != _status)
+      {
+        return false;
+      }
+    
+      if ((status == Trail.SegmentAlphaStatus.HALF) && (visibleAlpha != _visibleAlpha))
+      {
+        return false;
+      }
+    
+      return true;
+    }
   }
 
 
@@ -121,13 +153,15 @@ public class Trail
       if (vertices != null)
          vertices.dispose();
     
+      surfaceMesh.setUserData(new SegmentMeshUserData(_alphaStatus, _visibleAlpha));
+    
       return surfaceMesh;
     }
 
     private Mesh _mesh;
     private Mesh getMesh(Planet planet)
     {
-      if (_positionsDirty || (_mesh == null))
+      if (!isMeshValid())
       {
         if (_mesh != null)
            _mesh.dispose();
@@ -200,6 +234,17 @@ public class Trail
       {
         return Trail.SegmentAlphaStatus.HALF;
       }
+    }
+
+    private boolean isMeshValid()
+    {
+      if (_positionsDirty || (_mesh == null))
+      {
+        return false;
+      }
+    
+      final SegmentMeshUserData userData = (SegmentMeshUserData) _mesh.getUserData();
+      return userData.isValid(_alphaStatus, _visibleAlpha);
     }
 
     public Segment(Color color, float ribbonWidth, double visibleAlpha)
