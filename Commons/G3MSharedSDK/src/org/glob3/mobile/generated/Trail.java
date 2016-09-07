@@ -54,9 +54,9 @@ public class Trail
   private enum SegmentAlphaStatus
   {
     UNKNOWN,
-    HIDDEN,
+    FULL_HIDDEN,
     HALF,
-    VISIBLE;
+    FULL_VISIBLE;
 
      public int getValue()
      {
@@ -190,11 +190,11 @@ public class Trail
     {
       if (_visibleAlpha <= _minAlpha)
       {
-        return Trail.SegmentAlphaStatus.HIDDEN;
+        return Trail.SegmentAlphaStatus.FULL_HIDDEN;
       }
       else if (_visibleAlpha >= _maxAlpha)
       {
-        return Trail.SegmentAlphaStatus.VISIBLE;
+        return Trail.SegmentAlphaStatus.FULL_VISIBLE;
       }
       else
       {
@@ -298,13 +298,13 @@ public class Trail
       switch (_alphaStatus)
       {
         case UNKNOWN:
-        case HIDDEN:
+        case FULL_HIDDEN:
           return;
     
         case HALF:
           break;
     
-        case VISIBLE:
+        case FULL_VISIBLE:
           break;
       }
     
@@ -447,9 +447,9 @@ public class Trail
   public final void setAlpha(double alpha)
   {
     final double a = IMathUtils.instance().clamp(alpha, 0.0, 1.0);
-    if (alpha != _alpha)
+    if (a != _alpha)
     {
-      _alpha = alpha;
+      _alpha = a;
       final int segmentsSize = _segments.size();
       for (int i = 0; i < segmentsSize; i++)
       {

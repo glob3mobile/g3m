@@ -61,7 +61,7 @@ public class FlatColorMesh extends Mesh
 
     _glState._release();
 
-  super.dispose();
+    super.dispose();
 
   }
 

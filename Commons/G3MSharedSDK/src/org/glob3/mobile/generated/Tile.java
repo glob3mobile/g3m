@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 //class TileData;
 //class TilesStatistics;
+//class Geodetic3D;
 
 
 public class Tile

@@ -16,11 +16,17 @@ package org.glob3.mobile.generated;
 
 
 
+//class Geodetic3D;
+//class Vector3D;
+//class MutableVector3D;
+//class Geodetic2D;
+//class Angle;
+//class MutableMatrix44D;
 //class Effect;
 //class Camera;
 //class Sector;
-//class Vector2I;
 //class CoordinateSystem;
+
 
 public abstract class Planet
 {

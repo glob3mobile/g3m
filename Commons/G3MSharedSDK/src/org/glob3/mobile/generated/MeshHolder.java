@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "GPUProgramState.hpp"
 
 public class MeshHolder extends Mesh
 {
@@ -43,8 +42,7 @@ public class MeshHolder extends Mesh
   {
     if (_mesh != null)
        _mesh.dispose();
-  super.dispose();
-
+    super.dispose();
   }
 
   public final int getVertexCount()

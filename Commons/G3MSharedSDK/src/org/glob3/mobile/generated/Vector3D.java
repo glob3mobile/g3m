@@ -15,8 +15,12 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "MutableMatrix44D.hpp"
 
+
+//class MutableMatrix44D;
 //class MutableVector3D;
+
 
 public class Vector3D
 {

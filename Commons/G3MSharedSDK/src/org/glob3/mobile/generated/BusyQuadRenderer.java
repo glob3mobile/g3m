@@ -18,8 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
-
-//***************************************************************
+//class IImage;
+//class Mesh;
+//class Color;
 
 
 public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
