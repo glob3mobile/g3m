@@ -42,12 +42,18 @@ private:
     _height(height),
     _alpha(alpha)
     {
-
     }
 
     ~Position() {
-
     }
+  };
+
+
+  enum SegmentAlphaStatus {
+    UNKNOWN,
+    HIDDEN,
+    HALF,
+    VISIBLE
   };
 
 
@@ -55,6 +61,10 @@ private:
   private:
     const Color _color;
     const float _ribbonWidth;
+    double _minAlpha;
+    double _maxAlpha;
+    double _visibleAlpha;
+    SegmentAlphaStatus _alphaStatus;
 
     bool _positionsDirty;
     std::vector<Position*> _positions;
@@ -68,9 +78,12 @@ private:
 
     const IFloatBuffer* getBearingsInRadians() const;
 
+    SegmentAlphaStatus calculateAlphaStatus();
+
   public:
     Segment(const Color& color,
-            float ribbonWidth);
+            float ribbonWidth,
+            double visibleAlpha);
 
     ~Segment();
 
@@ -98,6 +111,7 @@ private:
                 const Frustum* frustum,
                 const GLState* state);
 
+    void setVisibleAlpha(double visibleAlpha);
   };
 
 
@@ -109,13 +123,15 @@ private:
   const double _deltaHeight;
   const int    _maxPositionsPerSegment;
 
+  double _alpha;
+
   std::vector<Segment*> _segments;
 
 public:
   Trail(const Color& color,
         float ribbonWidth,
         double deltaHeight = 0.0,
-        int maxPositionsPerSegment = 64);
+        int maxPositionsPerSegment = 8);
 
   ~Trail();
 

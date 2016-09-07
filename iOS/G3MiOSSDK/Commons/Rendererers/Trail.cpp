@@ -17,9 +17,14 @@
 
 
 Trail::Segment::Segment(const Color& color,
-                        float ribbonWidth) :
+                        float ribbonWidth,
+                        double visibleAlpha) :
 _color(color),
 _ribbonWidth(ribbonWidth),
+_visibleAlpha(visibleAlpha),
+_alphaStatus(UNKNOWN),
+_minAlpha( IMathUtils::instance()->maxDouble() ),
+_maxAlpha( IMathUtils::instance()->minDouble() ),
 _positionsDirty(true),
 _mesh(NULL),
 _nextSegmentFirstPosition(NULL),
@@ -44,14 +49,6 @@ size_t Trail::Segment::getSize() const {
   return _positions.size();
 }
 
-void Trail::Segment::addPosition(const Position& position) {
-  _positionsDirty = true;
-  _positions.push_back(new Position(position._latitude,
-                                    position._longitude,
-                                    position._height,
-                                    position._alpha));
-}
-
 void Trail::Segment::addPosition(const Angle& latitude,
                                  const Angle& longitude,
                                  const double height,
@@ -61,6 +58,15 @@ void Trail::Segment::addPosition(const Angle& latitude,
                                     longitude,
                                     height,
                                     alpha));
+  if (alpha < _minAlpha) { _minAlpha = alpha; _alphaStatus = UNKNOWN; }
+  if (alpha > _maxAlpha) { _maxAlpha = alpha; _alphaStatus = UNKNOWN; }
+}
+
+void Trail::Segment::addPosition(const Position& position) {
+  addPosition(position._latitude,
+              position._longitude,
+              position._height,
+              position._alpha);
 }
 
 void Trail::Segment::setNextSegmentFirstPosition(const Angle& latitude,
@@ -210,8 +216,40 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
   return surfaceMesh;
 }
 
+
+Trail::SegmentAlphaStatus Trail::Segment::calculateAlphaStatus() {
+  if (_visibleAlpha <= _minAlpha) {
+    return HIDDEN;
+  }
+  else if (_visibleAlpha >= _maxAlpha) {
+    return VISIBLE;
+  }
+  else {
+    return HALF;
+  }
+}
+
+
 void Trail::Segment::render(const G3MRenderContext* rc,
-                            const Frustum* frustum, const GLState* state) {
+                            const Frustum* frustum,
+                            const GLState* state) {
+
+  if (_alphaStatus == UNKNOWN) {
+    _alphaStatus = calculateAlphaStatus();
+  }
+
+  switch (_alphaStatus) {
+    case UNKNOWN:
+    case HIDDEN:
+      return;
+
+    case HALF:
+      break;
+
+    case VISIBLE:
+      break;
+  }
+
   Mesh* mesh = getMesh(rc->getPlanet());
   if (mesh != NULL) {
     BoundingVolume* bounding = mesh->getBoundingVolume();
@@ -223,6 +261,14 @@ void Trail::Segment::render(const G3MRenderContext* rc,
   }
 }
 
+void Trail::Segment::setVisibleAlpha(double visibleAlpha) {
+  if (visibleAlpha != _visibleAlpha) {
+    _visibleAlpha = visibleAlpha;
+    _alphaStatus = UNKNOWN;
+  }
+}
+
+
 
 Trail::Trail(const Color& color,
              float ribbonWidth,
@@ -232,7 +278,8 @@ _visible(true),
 _color(color),
 _ribbonWidth(ribbonWidth),
 _deltaHeight(deltaHeight),
-_maxPositionsPerSegment(maxPositionsPerSegment)
+_maxPositionsPerSegment(maxPositionsPerSegment),
+_alpha(1.0)
 {
 }
 
@@ -261,14 +308,14 @@ void Trail::addPosition(const Angle& latitude,
 
   const size_t segmentsSize = _segments.size();
   if (segmentsSize == 0) {
-    currentSegment = new Segment(_color, _ribbonWidth);
+    currentSegment = new Segment(_color, _ribbonWidth, _alpha);
     _segments.push_back(currentSegment);
   }
   else {
     currentSegment = _segments[segmentsSize - 1];
 
     if (currentSegment->getSize() >= _maxPositionsPerSegment) {
-      Segment* newSegment = new Segment(_color, _ribbonWidth);
+      Segment* newSegment = new Segment(_color, _ribbonWidth, _alpha);
       _segments.push_back(newSegment);
 
       currentSegment->setNextSegmentFirstPosition(latitude,
@@ -302,5 +349,12 @@ void Trail::render(const G3MRenderContext* rc,
 
 void Trail::setAlpha(const double alpha) {
   const double a = IMathUtils::instance()->clamp(alpha, 0.0, 1.0);
-#warning DGD at work: Trail::setAlpha(alpha)
+  if (alpha != _alpha) {
+    _alpha = alpha;
+    const size_t segmentsSize = _segments.size();
+    for (size_t i = 0; i < segmentsSize; i++) {
+      Segment* segment = _segments[i];
+      segment->setVisibleAlpha(_alpha);
+    }
+  }
 }
