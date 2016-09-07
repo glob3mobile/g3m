@@ -22,7 +22,7 @@ Trail::Segment::Segment(const Color& color,
 _color(color),
 _ribbonWidth(ribbonWidth),
 _visibleAlpha(visibleAlpha),
-_alphaStatus(UNKNOWN),
+_alphaStatus(Trail::SegmentAlphaStatus::UNKNOWN),
 _minAlpha( IMathUtils::instance()->maxDouble() ),
 _maxAlpha( IMathUtils::instance()->minDouble() ),
 _positionsDirty(true),
@@ -58,8 +58,8 @@ void Trail::Segment::addPosition(const Angle& latitude,
                                     longitude,
                                     height,
                                     alpha));
-  if (alpha < _minAlpha) { _minAlpha = alpha; _alphaStatus = UNKNOWN; }
-  if (alpha > _maxAlpha) { _maxAlpha = alpha; _alphaStatus = UNKNOWN; }
+  if (alpha < _minAlpha) { _minAlpha = alpha; _alphaStatus = Trail::SegmentAlphaStatus::UNKNOWN; }
+  if (alpha > _maxAlpha) { _maxAlpha = alpha; _alphaStatus = Trail::SegmentAlphaStatus::UNKNOWN; }
 }
 
 void Trail::Segment::addPosition(const Position& position) {
@@ -219,13 +219,13 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
 Trail::SegmentAlphaStatus Trail::Segment::calculateAlphaStatus() {
   if (_visibleAlpha <= _minAlpha) {
-    return HIDDEN;
+    return Trail::SegmentAlphaStatus::HIDDEN;
   }
   else if (_visibleAlpha >= _maxAlpha) {
-    return VISIBLE;
+    return Trail::SegmentAlphaStatus::VISIBLE;
   }
   else {
-    return HALF;
+    return Trail::SegmentAlphaStatus::HALF;
   }
 }
 
@@ -234,7 +234,7 @@ void Trail::Segment::render(const G3MRenderContext* rc,
                             const Frustum* frustum,
                             const GLState* state) {
 
-  if (_alphaStatus == UNKNOWN) {
+  if (_alphaStatus == Trail::SegmentAlphaStatus::UNKNOWN) {
     _alphaStatus = calculateAlphaStatus();
   }
 
@@ -264,7 +264,7 @@ void Trail::Segment::render(const G3MRenderContext* rc,
 void Trail::Segment::setVisibleAlpha(double visibleAlpha) {
   if (visibleAlpha != _visibleAlpha) {
     _visibleAlpha = visibleAlpha;
-    _alphaStatus = UNKNOWN;
+    _alphaStatus = Trail::SegmentAlphaStatus::UNKNOWN;
   }
 }
 
