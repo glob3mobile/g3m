@@ -49,21 +49,19 @@ private:
   };
 
 
-  enum SegmentAlphaStatus {
-    UNKNOWN,
-    FULL_HIDDEN,
-    HALF,
-    FULL_VISIBLE
-  };
+  static const int SEGMENT_ALPHA_STATUS_UNKNOWN;
+  static const int SEGMENT_ALPHA_STATUS_FULL_HIDDEN;
+  static const int SEGMENT_ALPHA_STATUS_HALF;
+  static const int SEGMENT_ALPHA_STATUS_FULL_VISIBLE;
 
 
   class SegmentMeshUserData : public Mesh::MeshUserData {
   private:
-    const SegmentAlphaStatus _status;
+    const int    _status;
     const double _visibleAlpha;
 
   public:
-    SegmentMeshUserData(const SegmentAlphaStatus status,
+    SegmentMeshUserData(const int    status,
                         const double visibleAlpha) :
     _status(status),
     _visibleAlpha(visibleAlpha)
@@ -76,7 +74,7 @@ private:
 #endif
     }
 
-    bool isValid(const SegmentAlphaStatus status,
+    bool isValid(const int    status,
                  const double visibleAlpha) const;
   };
 
@@ -88,7 +86,7 @@ private:
     double _minAlpha;
     double _maxAlpha;
     double _visibleAlpha;
-    SegmentAlphaStatus _alphaStatus;
+    int _alphaStatus;
 
     bool _positionsDirty;
     std::vector<Position*> _positions;
@@ -102,7 +100,7 @@ private:
 
     const IFloatBuffer* getBearingsInRadians() const;
 
-    SegmentAlphaStatus calculateAlphaStatus();
+    int calculateAlphaStatus();
 
     bool isMeshValid() const;
 

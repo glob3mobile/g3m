@@ -20,6 +20,10 @@
 #include "MutableMatrix44D.hpp"
 #include "GLConstants.hpp"
 
+const int Trail::SEGMENT_ALPHA_STATUS_UNKNOWN       = 1;
+const int Trail::SEGMENT_ALPHA_STATUS_FULL_HIDDEN   = 2;
+const int Trail::SEGMENT_ALPHA_STATUS_HALF          = 3;
+const int Trail::SEGMENT_ALPHA_STATUS_FULL_VISIBLE  = 4;
 
 Trail::Segment::Segment(const Color& color,
                         float ribbonWidth,
@@ -27,7 +31,7 @@ Trail::Segment::Segment(const Color& color,
 _color(color),
 _ribbonWidth(ribbonWidth),
 _visibleAlpha(visibleAlpha),
-_alphaStatus(Trail::SegmentAlphaStatus::UNKNOWN),
+_alphaStatus(Trail::SEGMENT_ALPHA_STATUS_UNKNOWN),
 _minAlpha( IMathUtils::instance()->maxDouble() ),
 _maxAlpha( IMathUtils::instance()->minDouble() ),
 _positionsDirty(true),
@@ -63,8 +67,8 @@ void Trail::Segment::addPosition(const Angle& latitude,
                                     longitude,
                                     height,
                                     alpha));
-  if (alpha < _minAlpha) { _minAlpha = alpha; _alphaStatus = Trail::SegmentAlphaStatus::UNKNOWN; }
-  if (alpha > _maxAlpha) { _maxAlpha = alpha; _alphaStatus = Trail::SegmentAlphaStatus::UNKNOWN; }
+  if (alpha < _minAlpha) { _minAlpha = alpha; _alphaStatus = Trail::SEGMENT_ALPHA_STATUS_UNKNOWN; }
+  if (alpha > _maxAlpha) { _maxAlpha = alpha; _alphaStatus = Trail::SEGMENT_ALPHA_STATUS_UNKNOWN; }
 }
 
 void Trail::Segment::addPosition(const Position& position) {
@@ -113,13 +117,13 @@ Trail::Position Trail::Segment::getPreLastPosition() const {
 #endif
 }
 
-bool Trail::SegmentMeshUserData::isValid(const SegmentAlphaStatus status,
+bool Trail::SegmentMeshUserData::isValid(const int    status,
                                          const double visibleAlpha) const {
   if (status != _status) {
     return false;
   }
 
-  if ((status == Trail::SegmentAlphaStatus::HALF) && (visibleAlpha != _visibleAlpha)) {
+  if ((status == Trail::SEGMENT_ALPHA_STATUS_HALF) && (visibleAlpha != _visibleAlpha)) {
     return false;
   }
 
@@ -213,7 +217,7 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
   for (size_t i = 0; i < positionsSize; i++) {
     const Position* position = _positions[i];
 
-    if (_alphaStatus == Trail::SegmentAlphaStatus::HALF) {
+    if (_alphaStatus == Trail::SEGMENT_ALPHA_STATUS_HALF) {
       if (position->_alpha > _visibleAlpha) {
         break;
       }
@@ -251,30 +255,28 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
   return surfaceMesh;
 }
 
-
-Trail::SegmentAlphaStatus Trail::Segment::calculateAlphaStatus() {
+int Trail::Segment::calculateAlphaStatus() {
   if (_visibleAlpha <= _minAlpha) {
-    return Trail::SegmentAlphaStatus::FULL_HIDDEN;
+    return Trail::SEGMENT_ALPHA_STATUS_FULL_HIDDEN;
   }
   else if (_visibleAlpha >= _maxAlpha) {
-    return Trail::SegmentAlphaStatus::FULL_VISIBLE;
+    return Trail::SEGMENT_ALPHA_STATUS_FULL_VISIBLE;
   }
   else {
-    return Trail::SegmentAlphaStatus::HALF;
+    return Trail::SEGMENT_ALPHA_STATUS_HALF;
   }
 }
-
 
 void Trail::Segment::render(const G3MRenderContext* rc,
                             const Frustum* frustum,
                             const GLState* state) {
 
-  if (_alphaStatus == Trail::SegmentAlphaStatus::UNKNOWN) {
+  if (_alphaStatus == Trail::SEGMENT_ALPHA_STATUS_UNKNOWN) {
     _alphaStatus = calculateAlphaStatus();
   }
 
-  if ((_alphaStatus != Trail::SegmentAlphaStatus::UNKNOWN) &&
-      (_alphaStatus != Trail::SegmentAlphaStatus::FULL_HIDDEN)) {
+  if ((_alphaStatus != Trail::SEGMENT_ALPHA_STATUS_UNKNOWN) &&
+      (_alphaStatus != Trail::SEGMENT_ALPHA_STATUS_FULL_HIDDEN)) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
       BoundingVolume* bounding = mesh->getBoundingVolume();
@@ -290,7 +292,7 @@ void Trail::Segment::render(const G3MRenderContext* rc,
 void Trail::Segment::setVisibleAlpha(double visibleAlpha) {
   if (visibleAlpha != _visibleAlpha) {
     _visibleAlpha = visibleAlpha;
-    _alphaStatus = Trail::SegmentAlphaStatus::UNKNOWN;
+    _alphaStatus = Trail::SEGMENT_ALPHA_STATUS_UNKNOWN;
   }
 }
 
