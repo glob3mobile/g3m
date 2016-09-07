@@ -348,28 +348,18 @@ public class Trail
         _alphaStatus = calculateAlphaStatus();
       }
     
-      switch (_alphaStatus)
+      if ((_alphaStatus != Trail.SegmentAlphaStatus.UNKNOWN) && (_alphaStatus != Trail.SegmentAlphaStatus.FULL_HIDDEN))
       {
-        case UNKNOWN:
-        case FULL_HIDDEN:
-          return;
-    
-        case HALF:
-          break;
-    
-        case FULL_VISIBLE:
-          break;
-      }
-    
-      Mesh mesh = getMesh(rc.getPlanet());
-      if (mesh != null)
-      {
-        BoundingVolume bounding = mesh.getBoundingVolume();
-        if (bounding != null)
+        Mesh mesh = getMesh(rc.getPlanet());
+        if (mesh != null)
         {
-          if (bounding.touchesFrustum(frustum))
+          BoundingVolume bounding = mesh.getBoundingVolume();
+          if (bounding != null)
           {
-            mesh.render(rc, state);
+            if (bounding.touchesFrustum(frustum))
+            {
+              mesh.render(rc, state);
+            }
           }
         }
       }
