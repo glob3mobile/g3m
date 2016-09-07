@@ -213,6 +213,12 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
   for (size_t i = 0; i < positionsSize; i++) {
     const Position* position = _positions[i];
 
+    if (_alphaStatus == Trail::SegmentAlphaStatus::HALF) {
+      if (position->_alpha > _visibleAlpha) {
+        break;
+      }
+    }
+
     const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(bearings->get(i)),
                                                                                    rotationAxis);
     const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(position->_latitude,
