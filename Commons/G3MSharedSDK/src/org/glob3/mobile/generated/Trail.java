@@ -190,15 +190,15 @@ public class Trail
     {
       if (_visibleAlpha <= _minAlpha)
       {
-        return HIDDEN;
+        return Trail.SegmentAlphaStatus.HIDDEN;
       }
       else if (_visibleAlpha >= _maxAlpha)
       {
-        return VISIBLE;
+        return Trail.SegmentAlphaStatus.VISIBLE;
       }
       else
       {
-        return HALF;
+        return Trail.SegmentAlphaStatus.HALF;
       }
     }
 
@@ -207,7 +207,7 @@ public class Trail
        _color = new Color(color);
        _ribbonWidth = ribbonWidth;
        _visibleAlpha = visibleAlpha;
-       _alphaStatus = UNKNOWN;
+       _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
        _minAlpha = IMathUtils.instance().maxDouble();
        _maxAlpha = IMathUtils.instance().minDouble();
        _positionsDirty = true;
@@ -252,12 +252,12 @@ public class Trail
       if (alpha < _minAlpha)
       {
          _minAlpha = alpha;
-         _alphaStatus = UNKNOWN;
+         _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
       }
       if (alpha > _maxAlpha)
       {
          _maxAlpha = alpha;
-         _alphaStatus = UNKNOWN;
+         _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
       }
     }
 
@@ -290,7 +290,7 @@ public class Trail
     public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
     {
     
-      if (_alphaStatus == UNKNOWN)
+      if (_alphaStatus == Trail.SegmentAlphaStatus.UNKNOWN)
       {
         _alphaStatus = calculateAlphaStatus();
       }
@@ -327,7 +327,7 @@ public class Trail
       if (visibleAlpha != _visibleAlpha)
       {
         _visibleAlpha = visibleAlpha;
-        _alphaStatus = UNKNOWN;
+        _alphaStatus = Trail.SegmentAlphaStatus.UNKNOWN;
       }
     }
   }
