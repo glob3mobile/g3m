@@ -13,8 +13,8 @@
 
 #include "Color.hpp"
 #include "Geodetic3D.hpp"
+#include "Mesh.hpp"
 
-class Mesh;
 class Planet;
 class Frustum;
 class G3MRenderContext;
@@ -57,6 +57,30 @@ private:
   };
 
 
+  class SegmentMeshUserData : public Mesh::MeshUserData {
+  private:
+    const SegmentAlphaStatus _status;
+    const double _visibleAlpha;
+
+  public:
+    SegmentMeshUserData(const SegmentAlphaStatus status,
+                        const double visibleAlpha) :
+    _status(status),
+    _visibleAlpha(visibleAlpha)
+    {
+    }
+
+    ~SegmentMeshUserData() {
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
+    }
+
+    bool isValid(const SegmentAlphaStatus status,
+                 const double visibleAlpha) const;
+  };
+
+
   class Segment {
   private:
     const Color _color;
@@ -79,6 +103,8 @@ private:
     const IFloatBuffer* getBearingsInRadians() const;
 
     SegmentAlphaStatus calculateAlphaStatus();
+
+    bool isMeshValid() const;
 
   public:
     Segment(const Color& color,

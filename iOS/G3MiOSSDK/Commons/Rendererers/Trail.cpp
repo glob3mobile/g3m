@@ -113,8 +113,30 @@ Trail::Position Trail::Segment::getPreLastPosition() const {
 #endif
 }
 
-Mesh* Trail::Segment::getMesh(const Planet* planet) {
+bool Trail::SegmentMeshUserData::isValid(const SegmentAlphaStatus status,
+                                         const double visibleAlpha) const {
+  if (status != _status) {
+    return false;
+  }
+
+  if ((status == Trail::SegmentAlphaStatus::HALF) && (visibleAlpha != _visibleAlpha)) {
+    return false;
+  }
+
+  return true;
+}
+
+bool Trail::Segment::isMeshValid() const {
   if (_positionsDirty || (_mesh == NULL)) {
+    return false;
+  }
+
+  const SegmentMeshUserData* userData = (SegmentMeshUserData*) _mesh->getUserData();
+  return userData->isValid(_alphaStatus, _visibleAlpha);
+}
+
+Mesh* Trail::Segment::getMesh(const Planet* planet) {
+  if (!isMeshValid()) {
     delete _mesh;
     _mesh = createMesh(planet);
     _positionsDirty = false;
@@ -217,6 +239,8 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                      );
 
   delete vertices;
+
+  surfaceMesh->setUserData(new SegmentMeshUserData(_alphaStatus, _visibleAlpha));
 
   return surfaceMesh;
 }
