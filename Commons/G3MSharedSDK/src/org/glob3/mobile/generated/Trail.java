@@ -137,6 +137,14 @@ public class Trail
       {
         final Position position = _positions.get(i);
     
+        if (_alphaStatus == Trail.SegmentAlphaStatus.HALF)
+        {
+          if (position._alpha > _visibleAlpha)
+          {
+            break;
+          }
+        }
+    
         final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(bearings.get(i)), rotationAxis);
         final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position._latitude, position._longitude, position._height);
         final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
