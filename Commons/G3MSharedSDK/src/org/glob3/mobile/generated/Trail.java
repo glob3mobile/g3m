@@ -43,13 +43,30 @@ public class Trail
        _longitude = new Angle(longitude);
        _height = height;
        _alpha = alpha;
-
     }
 
     public void dispose()
     {
-
     }
+  }
+
+
+  private enum SegmentAlphaStatus
+  {
+    UNKNOWN,
+    HIDDEN,
+    HALF,
+    VISIBLE;
+
+     public int getValue()
+     {
+        return this.ordinal();
+     }
+
+     public static SegmentAlphaStatus forValue(int value)
+     {
+        return values()[value];
+     }
   }
 
 
@@ -57,6 +74,10 @@ public class Trail
   {
     private final Color _color ;
     private final float _ribbonWidth;
+    private double _minAlpha;
+    private double _maxAlpha;
+    private double _visibleAlpha;
+    private SegmentAlphaStatus _alphaStatus;
 
     private boolean _positionsDirty;
     private java.util.ArrayList<Position> _positions = new java.util.ArrayList<Position>();
@@ -165,10 +186,30 @@ public class Trail
       return bearingsInRadians;
     }
 
-    public Segment(Color color, float ribbonWidth)
+    private Trail.SegmentAlphaStatus calculateAlphaStatus()
+    {
+      if (_visibleAlpha <= _minAlpha)
+      {
+        return HIDDEN;
+      }
+      else if (_visibleAlpha >= _maxAlpha)
+      {
+        return VISIBLE;
+      }
+      else
+      {
+        return HALF;
+      }
+    }
+
+    public Segment(Color color, float ribbonWidth, double visibleAlpha)
     {
        _color = new Color(color);
        _ribbonWidth = ribbonWidth;
+       _visibleAlpha = visibleAlpha;
+       _alphaStatus = UNKNOWN;
+       _minAlpha = IMathUtils.instance().maxDouble();
+       _maxAlpha = IMathUtils.instance().minDouble();
        _positionsDirty = true;
        _mesh = null;
        _nextSegmentFirstPosition = null;
@@ -201,14 +242,23 @@ public class Trail
 
     public final void addPosition(Position position)
     {
-      _positionsDirty = true;
-      _positions.add(new Position(position._latitude, position._longitude, position._height, position._alpha));
+      addPosition(position._latitude, position._longitude, position._height, position._alpha);
     }
 
     public final void addPosition(Angle latitude, Angle longitude, double height, double alpha)
     {
       _positionsDirty = true;
       _positions.add(new Position(latitude, longitude, height, alpha));
+      if (alpha < _minAlpha)
+      {
+         _minAlpha = alpha;
+         _alphaStatus = UNKNOWN;
+      }
+      if (alpha > _maxAlpha)
+      {
+         _maxAlpha = alpha;
+         _alphaStatus = UNKNOWN;
+      }
     }
 
     public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height, double alpha)
@@ -239,6 +289,25 @@ public class Trail
 
     public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
     {
+    
+      if (_alphaStatus == UNKNOWN)
+      {
+        _alphaStatus = calculateAlphaStatus();
+      }
+    
+      switch (_alphaStatus)
+      {
+        case UNKNOWN:
+        case HIDDEN:
+          return;
+    
+        case HALF:
+          break;
+    
+        case VISIBLE:
+          break;
+      }
+    
       Mesh mesh = getMesh(rc.getPlanet());
       if (mesh != null)
       {
@@ -253,6 +322,14 @@ public class Trail
       }
     }
 
+    public final void setVisibleAlpha(double visibleAlpha)
+    {
+      if (visibleAlpha != _visibleAlpha)
+      {
+        _visibleAlpha = visibleAlpha;
+        _alphaStatus = UNKNOWN;
+      }
+    }
   }
 
 
@@ -264,15 +341,17 @@ public class Trail
   private final double _deltaHeight;
   private final int _maxPositionsPerSegment;
 
+  private double _alpha;
+
   private java.util.ArrayList<Segment> _segments = new java.util.ArrayList<Segment>();
 
   public Trail(Color color, float ribbonWidth, double deltaHeight)
   {
-     this(color, ribbonWidth, deltaHeight, 64);
+     this(color, ribbonWidth, deltaHeight, 8);
   }
   public Trail(Color color, float ribbonWidth)
   {
-     this(color, ribbonWidth, 0.0, 64);
+     this(color, ribbonWidth, 0.0, 8);
   }
   public Trail(Color color, float ribbonWidth, double deltaHeight, int maxPositionsPerSegment)
   {
@@ -281,6 +360,7 @@ public class Trail
      _ribbonWidth = ribbonWidth;
      _deltaHeight = deltaHeight;
      _maxPositionsPerSegment = maxPositionsPerSegment;
+     _alpha = 1.0;
   }
 
   public void dispose()
@@ -324,7 +404,7 @@ public class Trail
     final int segmentsSize = _segments.size();
     if (segmentsSize == 0)
     {
-      currentSegment = new Segment(_color, _ribbonWidth);
+      currentSegment = new Segment(_color, _ribbonWidth, _alpha);
       _segments.add(currentSegment);
     }
     else
@@ -333,7 +413,7 @@ public class Trail
   
       if (currentSegment.getSize() >= _maxPositionsPerSegment)
       {
-        Segment newSegment = new Segment(_color, _ribbonWidth);
+        Segment newSegment = new Segment(_color, _ribbonWidth, _alpha);
         _segments.add(newSegment);
   
         currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha);
@@ -367,8 +447,16 @@ public class Trail
   public final void setAlpha(double alpha)
   {
     final double a = IMathUtils.instance().clamp(alpha, 0.0, 1.0);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work: setAlpha(alpha)
+    if (alpha != _alpha)
+    {
+      _alpha = alpha;
+      final int segmentsSize = _segments.size();
+      for (int i = 0; i < segmentsSize; i++)
+      {
+        Segment segment = _segments.get(i);
+        segment.setVisibleAlpha(_alpha);
+      }
+    }
   }
 
 }
