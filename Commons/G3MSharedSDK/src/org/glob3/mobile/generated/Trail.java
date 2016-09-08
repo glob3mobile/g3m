@@ -377,11 +377,11 @@ public class Trail
 
   public Trail(Color color, float ribbonWidth, double deltaHeight)
   {
-     this(color, ribbonWidth, deltaHeight, 8);
+     this(color, ribbonWidth, deltaHeight, 32);
   }
   public Trail(Color color, float ribbonWidth)
   {
-     this(color, ribbonWidth, 0.0, 8);
+     this(color, ribbonWidth, 0.0, 32);
   }
   public Trail(Color color, float ribbonWidth, double deltaHeight, int maxPositionsPerSegment)
   {
