@@ -155,7 +155,7 @@ public:
   Trail(const Color& color,
         float ribbonWidth,
         double deltaHeight = 0.0,
-        int maxPositionsPerSegment = 8);
+        int maxPositionsPerSegment = 32);
 
   ~Trail();
 
