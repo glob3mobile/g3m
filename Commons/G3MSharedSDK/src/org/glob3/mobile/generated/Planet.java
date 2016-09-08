@@ -16,11 +16,17 @@ package org.glob3.mobile.generated;
 
 
 
+//class Geodetic3D;
+//class Vector3D;
+//class MutableVector3D;
+//class Geodetic2D;
+//class Angle;
+//class MutableMatrix44D;
 //class Effect;
 //class Camera;
 //class Sector;
-//class Vector2I;
 //class CoordinateSystem;
+
 
 public abstract class Planet
 {
@@ -94,7 +100,12 @@ public abstract class Planet
   }
 
 
-  public abstract MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position);
+  public abstract MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height);
+
+  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  {
+    return createGeodeticTransformMatrix(position._latitude, position._longitude, position._height);
+  }
 
   public abstract boolean isFlat();
 

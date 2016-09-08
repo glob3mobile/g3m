@@ -9,20 +9,16 @@
 #ifndef G3MiOSSDK_EllipsoidalPlanet
 #define G3MiOSSDK_EllipsoidalPlanet
 
-#include <vector>
-#include <list>
-
-#include "Vector3D.hpp"
 #include "Planet.hpp"
 
-#include "MutableVector3D.hpp"
+#include <list>
 
 #include "Ellipsoid.hpp"
-#include "Sector.hpp"
+#include "MutableVector3D.hpp"
 
-class EllipsoidalPlanet: public Planet {
+
+class EllipsoidalPlanet : public Planet {
 private:
-
 #ifdef C_CODE
   const Ellipsoid _ellipsoid;
 #endif
@@ -175,7 +171,9 @@ public:
 
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
 
-  MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
+  MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
+                                                 const Angle& longitude,
+                                                 const double height) const;
 
   bool isFlat() const { return false; }
 
@@ -208,14 +206,7 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
-    const Vector3D asw = toCartesian(rendereSector.getSW());
-    const Vector3D ane = toCartesian(rendereSector.getNE());
-    const double height = asw.sub(ane).length() * 1.9;
-
-    return Geodetic3D(rendereSector._center,
-                      height);
-  }
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const;
   
   const std::string getType() const {
     return "Ellipsoidal";

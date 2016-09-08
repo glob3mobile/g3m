@@ -11,6 +11,9 @@
 
 #include "Mesh.hpp"
 
+#include <vector>
+
+
 class CompositeMesh : public Mesh {
 private:
   std::vector<Mesh*> _children;

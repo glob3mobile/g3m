@@ -12,8 +12,8 @@ public final class ByteBuffer_WebGL
    extends
       IByteBuffer {
 
-   private final JavaScriptObject _buffer;
-   private int                    _timestamp = 0;
+   private JavaScriptObject _buffer;
+   private int              _timestamp = 0;
 
 
    public ByteBuffer_WebGL(final JavaScriptObject data) {
@@ -34,6 +34,13 @@ public final class ByteBuffer_WebGL
          array.set(i, data[i]);
       }
       _buffer = jsCreateBuffer(array);
+   }
+
+
+   @Override
+   public void dispose() {
+      _buffer = null;
+      super.dispose();
    }
 
 

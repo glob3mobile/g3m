@@ -20,15 +20,10 @@
 
 class Angle {
 private:
-//  mutable double _sin;
-//  mutable double _cos;
-
   Angle(const double degrees,
         const double radians) :
   _degrees( degrees ),
   _radians( radians )
-//  _sin(2),
-//  _cos(2)
   {
   }
 
@@ -41,10 +36,7 @@ public:
   Angle(const Angle& angle):
   _degrees(angle._degrees),
   _radians(angle._radians)
-//  _sin(angle._sin),
-//  _cos(angle._cos)
   {
-
   }
 
   static Angle fromDegrees(double degrees) {
@@ -128,22 +120,6 @@ public:
   bool isNan() const {
     return ISNAN(_degrees);
   }
-
-//  double sinus() const {
-////    if (_sin > 1) {
-////      _sin = SIN(_radians);
-////    }
-////    return _sin;
-//    return SIN(_radians);
-//  }
-//
-//  double cosinus() const {
-////    if (_cos > 1) {
-////      _cos = COS(_radians);
-////    }
-////    return _cos;
-//    return COS(_radians);
-//  }
 
   double tangent() const {
     return TAN(_radians);

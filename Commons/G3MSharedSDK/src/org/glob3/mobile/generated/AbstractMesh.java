@@ -18,9 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
-//class MutableMatrix44D;
+
 //class IFloatBuffer;
 //class Color;
+
 
 public abstract class AbstractMesh extends Mesh
 {
@@ -111,7 +112,6 @@ public abstract class AbstractMesh extends Mesh
   }
 
   protected abstract void rawRender(G3MRenderContext rc);
-//  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
 
   protected GLState _glState;
 

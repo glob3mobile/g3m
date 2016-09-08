@@ -10,9 +10,13 @@
 
 #include "IMathUtils.hpp"
 
-#include "MutableMatrix44D.hpp"
+//#include "MutableMatrix44D.hpp"
 
+#include "Angle.hpp"
+
+class MutableMatrix44D;
 class MutableVector3D;
+
 
 class Vector3D {
 private:
@@ -189,7 +193,7 @@ public:
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
 
-  Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
+  Vector3D transformedBy(const MutableMatrix44D& m, const double homogeneus) const;
   
   MutableVector3D asMutableVector3D() const;
   

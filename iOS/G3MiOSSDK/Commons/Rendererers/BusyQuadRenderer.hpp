@@ -12,12 +12,12 @@
 #include "ProtoRenderer.hpp"
 #include "Effects.hpp"
 #include "Vector2D.hpp"
-#include "Color.hpp"
-#include "DirectMesh.hpp"
 #include "MutableMatrix44D.hpp"
+#include "GLState.hpp"
 
-
-//***************************************************************
+class IImage;
+class Mesh;
+class Color;
 
 
 class BusyQuadRenderer : public ProtoRenderer, EffectTarget {
@@ -67,21 +67,9 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
   
-  virtual ~BusyQuadRenderer() {
-    //rc->getFactory()->deleteImage(_image);
-    //_image = NULL;
-    delete _image;
-    delete _quadMesh;
-    delete _backgroundColor;
-
-    _glState->_release();
-  }
+  virtual ~BusyQuadRenderer();
   
-  void incDegrees(double value) {
-    _degrees += value;
-    if (_degrees>360) _degrees -= 360;
-    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
-  }
+  void incDegrees(double value);
   
   void start(const G3MRenderContext* rc);
   

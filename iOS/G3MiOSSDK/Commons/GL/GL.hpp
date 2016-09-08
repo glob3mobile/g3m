@@ -90,7 +90,14 @@ public:
   //                    const GPUProgramState* gpuState);
 
   void drawElements(int mode,
-                    IShortBuffer* indices, const GLState* state,
+                    IShortBuffer* indices,
+                    const GLState* state,
+                    GPUProgramManager& progManager);
+
+  void drawElements(int mode,
+                    IShortBuffer* indices,
+                    int count,
+                    const GLState* state,
                     GPUProgramManager& progManager);
 
   //  void drawArrays(int mode,

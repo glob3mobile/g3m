@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class SphericalPlanet extends Planet
 {
   private Sphere _sphere;
@@ -48,7 +49,7 @@ public class SphericalPlanet extends Planet
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
   }
 
   public final Vector3D getRadii()
@@ -70,7 +71,6 @@ public class SphericalPlanet extends Planet
   {
     return position.normalized().asVector3D();
   }
-
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
@@ -357,11 +357,10 @@ public class SphericalPlanet extends Planet
     return result;
   }
 
-  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  public final MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height)
   {
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
-    final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(position);
-  
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(latitude, longitude, height));
+    final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(latitude, longitude);
     return translation.multiply(rotation);
   }
 
@@ -637,7 +636,7 @@ public class SphericalPlanet extends Planet
     final Vector3D asw = toCartesian(rendereSector.getSW());
     final Vector3D ane = toCartesian(rendereSector.getNE());
     final double height = asw.sub(ane).length() * 1.9;
-
+  
     return new Geodetic3D(rendereSector._center, height);
   }
 

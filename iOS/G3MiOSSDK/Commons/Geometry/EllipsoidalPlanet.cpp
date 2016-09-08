@@ -11,6 +11,8 @@
 #include "EllipsoidalPlanet.hpp"
 #include "CameraEffects.hpp"
 #include "Camera.hpp"
+#include "Sector.hpp"
+
 
 const Planet* EllipsoidalPlanet::createEarth() {
   return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero,
@@ -309,9 +311,11 @@ Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vect
   return result;
 }
 
-MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
-  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
-  const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
+MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Angle& latitude,
+                                                                  const Angle& longitude,
+                                                                  const double height) const {
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(latitude, longitude, height) );
+  const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( latitude, longitude );
 
   return translation.multiply(rotation);
 }
@@ -571,4 +575,13 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                                 Camera* nextCamera) const {
   
+}
+
+Geodetic3D EllipsoidalPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
+  const Vector3D asw = toCartesian(rendereSector.getSW());
+  const Vector3D ane = toCartesian(rendereSector.getNE());
+  const double height = asw.sub(ane).length() * 1.9;
+
+  return Geodetic3D(rendereSector._center,
+                    height);
 }

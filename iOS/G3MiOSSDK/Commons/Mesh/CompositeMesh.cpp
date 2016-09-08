@@ -9,6 +9,8 @@
 #include "CompositeMesh.hpp"
 
 #include "Vector3D.hpp"
+#include "BoundingVolume.hpp"
+
 
 CompositeMesh::~CompositeMesh() {
   const size_t childrenCount = _children.size();

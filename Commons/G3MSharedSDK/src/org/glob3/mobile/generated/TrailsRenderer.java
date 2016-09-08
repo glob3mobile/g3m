@@ -1,8 +1,31 @@
 package org.glob3.mobile.generated; 
+//
+//  TrailsRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 10/23/12.
+//
+//
+
+//
+//  TrailsRenderer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 10/23/12.
+//
+//
+
+
+
+//class Trail;
+//class Camera;
+//class ProjectionGLFeature;
+//class ModelGLFeature;
+
+
 public class TrailsRenderer extends DefaultRenderer
 {
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
-
 
   private GLState _glState;
 
@@ -53,23 +76,18 @@ public class TrailsRenderer extends DefaultRenderer
   public final void removeTrail(Trail trail, boolean deleteTrail)
   {
     final int trailsCount = _trails.size();
-    int foundIndex = -1;
     for (int i = 0; i < trailsCount; i++)
     {
       Trail each = _trails.get(i);
       if (trail == each)
       {
-        foundIndex = i;
+        _trails.remove(i);
+        if (deleteTrail)
+        {
+          if (trail != null)
+             trail.dispose();
+        }
         break;
-      }
-    }
-    if (foundIndex >= 0)
-    {
-      _trails.remove(foundIndex);
-      if (deleteTrail)
-      {
-        if (trail != null)
-           trail.dispose();
       }
     }
   }
@@ -105,6 +123,7 @@ public class TrailsRenderer extends DefaultRenderer
     _trails.clear();
   
     _glState._release();
+    super.dispose();
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -134,7 +153,3 @@ public class TrailsRenderer extends DefaultRenderer
   }
 
 }
-//#define MAX_POSITIONS_PER_SEGMENT 128
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark TrailsRenderer

@@ -12,6 +12,7 @@
 #include "Tile.hpp"
 #include "Mesh.hpp"
 #include "PlanetRenderContext.hpp"
+#include "BoundingVolume.hpp"
 
 
 bool MeshBoundingVolumeTileVisibilityTester::isVisible(const G3MRenderContext* rc,

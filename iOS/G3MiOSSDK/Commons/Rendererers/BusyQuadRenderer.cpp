@@ -24,6 +24,8 @@
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
 #include "G3MEventContext.hpp"
+#include "DirectMesh.hpp"
+
 
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
@@ -134,4 +136,20 @@ void BusyQuadRenderer::onResizeViewportEvent(const G3MEventContext* ec,
   _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
                                                                                    -halfHeight, halfHeight,
                                                                                    -halfWidth, halfWidth));
+}
+
+void BusyQuadRenderer::incDegrees(double value) {
+  _degrees += value;
+  if (_degrees>360) _degrees -= 360;
+  _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
+}
+
+BusyQuadRenderer::~BusyQuadRenderer() {
+  //rc->getFactory()->deleteImage(_image);
+  //_image = NULL;
+  delete _image;
+  delete _quadMesh;
+  delete _backgroundColor;
+
+  _glState->_release();
 }

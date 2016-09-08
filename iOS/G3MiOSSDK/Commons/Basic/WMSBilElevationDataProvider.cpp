@@ -23,8 +23,12 @@
 class WMSBilElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
   const Sector            _sector;
-  const int               _width;
-  const int               _height;
+#ifdef C_CODE
+  const Vector2I          _resolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _resolution;
+#endif
 
   IElevationDataListener* _listener;
   const bool              _autodeleteListener;
@@ -34,13 +38,12 @@ private:
 public:
 
   WMSBilElevationDataProvider_BufferDownloadListener(const Sector& sector,
-                                                      const Vector2I& extent,
-                                                      IElevationDataListener* listener,
-                                                      bool autodeleteListener,
-                                                      double deltaHeight) :
+                                                     const Vector2I& resolution,
+                                                     IElevationDataListener* listener,
+                                                     bool autodeleteListener,
+                                                     double deltaHeight) :
   _sector(sector),
-  _width(extent._x),
-  _height(extent._y),
+  _resolution(resolution),
   _listener(listener),
   _autodeleteListener(autodeleteListener),
   _deltaHeight(deltaHeight)
@@ -51,19 +54,17 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    const Vector2I resolution(_width, _height);
-    
     ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
-                                                                    resolution,
+                                                                    _resolution,
                                                                     buffer,
                                                                     _deltaHeight);
     delete buffer;
 
     if (elevationData == NULL) {
-      _listener->onError(_sector, resolution);
+      _listener->onError(_sector, _resolution);
     }
     else {
-      _listener->onData(_sector, resolution, elevationData);
+      _listener->onData(_sector, _resolution, elevationData);
     }
 
     if (_autodeleteListener) {
@@ -73,9 +74,7 @@ public:
   }
 
   void onError(const URL& url) {
-    const Vector2I resolution(_width, _height);
-
-    _listener->onError(_sector, resolution);
+    _listener->onError(_sector, _resolution);
     if (_autodeleteListener) {
       delete _listener;
       _listener = NULL;
@@ -100,9 +99,9 @@ void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
 }
 
 const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
-                                                                   const Vector2I& extent,
-                                                                   IElevationDataListener* listener,
-                                                                   bool autodeleteListener) {
+                                                                  const Vector2I& extent,
+                                                                  IElevationDataListener* listener,
+                                                                  bool autodeleteListener) {
   if (_downloader == NULL) {
     ILogger::instance()->logError("WMSBilElevationDataProvider was not initialized.");
     return -1;
@@ -110,9 +109,7 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
-  /*
-   // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
-   */
+  // http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10
 
   //isb->addString("http://data.worldwind.arc.nasa.gov/elev");
   isb->addString(_url._path);
@@ -160,10 +157,10 @@ const long long WMSBilElevationDataProvider::requestElevationData(const Sector& 
                                     TimeInterval::fromDays(30),
                                     true,
                                     new WMSBilElevationDataProvider_BufferDownloadListener(sector,
-                                                                                            extent,
-                                                                                            listener,
-                                                                                            autodeleteListener,
-                                                                                            _deltaHeight),
+                                                                                           extent,
+                                                                                           listener,
+                                                                                           autodeleteListener,
+                                                                                           _deltaHeight),
                                     true);
 }
 

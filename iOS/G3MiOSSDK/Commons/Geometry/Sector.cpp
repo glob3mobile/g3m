@@ -12,6 +12,8 @@
 #include "ICanvas.hpp"
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEOLineRasterSymbol.hpp"
+#include "IStringBuilder.hpp"
+
 
 const Sector Sector::FULL_SPHERE = Sector::fromDegrees(-90, -180, 90, 180);
 const Sector Sector::NAN_SECTOR = Sector::fromDegrees(NAND, NAND, NAND, NAND);

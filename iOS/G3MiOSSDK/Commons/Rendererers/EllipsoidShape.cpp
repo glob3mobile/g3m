@@ -24,6 +24,7 @@
 #include "MercatorUtils.hpp"
 #include "TextureIDReference.hpp"
 #include "SimpleTextureMapping.hpp"
+#include "G3MRenderContext.hpp"
 
 
 EllipsoidShape::~EllipsoidShape() {

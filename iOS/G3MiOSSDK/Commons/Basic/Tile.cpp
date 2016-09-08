@@ -88,27 +88,20 @@ Tile::~Tile() {
   //  prune(NULL, NULL);
 
   delete _debugMesh;
-  _debugMesh = NULL;
 
   delete _flatColorMesh;
-  _flatColorMesh = NULL;
 
   delete _tessellatorMesh;
-  _tessellatorMesh = NULL;
 
   delete _texturizerData;
-  _texturizerData = NULL;
 
   delete _texturizedMesh;
-  _texturizedMesh = NULL;
 
   delete _elevationData;
-  _elevationData = NULL;
 
   if (_elevationDataRequest != NULL) {
     _elevationDataRequest->cancelRequest(); //The listener will auto delete
     delete _elevationDataRequest;
-    _elevationDataRequest = NULL;
   }
 
   delete _tessellatorData;

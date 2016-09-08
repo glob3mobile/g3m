@@ -7,6 +7,9 @@
 
 #include "Plane.hpp"
 
+#include "MutableMatrix44D.hpp"
+
+
 Plane Plane::transformedByTranspose(const MutableMatrix44D& M) const {
   //int TODO_Multiplication_with_Matrix;
 

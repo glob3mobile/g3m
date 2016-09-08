@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 //class TileData;
 //class TilesStatistics;
+//class Geodetic3D;
 
 
 public class Tile
@@ -239,34 +240,27 @@ public class Tile
   
     if (_debugMesh != null)
        _debugMesh.dispose();
-    _debugMesh = null;
   
     if (_flatColorMesh != null)
        _flatColorMesh.dispose();
-    _flatColorMesh = null;
   
     if (_tessellatorMesh != null)
        _tessellatorMesh.dispose();
-    _tessellatorMesh = null;
   
     if (_texturizerData != null)
        _texturizerData.dispose();
-    _texturizerData = null;
   
     if (_texturizedMesh != null)
        _texturizedMesh.dispose();
-    _texturizedMesh = null;
   
     if (_elevationData != null)
        _elevationData.dispose();
-    _elevationData = null;
   
     if (_elevationDataRequest != null)
     {
       _elevationDataRequest.cancelRequest(); //The listener will auto delete
       if (_elevationDataRequest != null)
          _elevationDataRequest.dispose();
-      _elevationDataRequest = null;
     }
   
     if (_tessellatorData != null)

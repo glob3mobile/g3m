@@ -15,6 +15,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class TextureMapping;
 
 
 public class TexturedMesh extends Mesh
@@ -56,10 +57,10 @@ public class TexturedMesh extends Mesh
       if (_textureMapping != null)
          _textureMapping.dispose();
     }
-
+  
     _glState._release();
-
-  super.dispose();
+  
+    super.dispose();
   }
 
   public final BoundingVolume getBoundingVolume()

@@ -7,7 +7,11 @@
 //
 
 #include "DirectMesh.hpp"
+
 #include "GL.hpp"
+#include "G3MRenderContext.hpp"
+#include "ErrorHandling.hpp"
+
 
 DirectMesh::DirectMesh(const int primitive,
                        bool owner,
@@ -49,4 +53,11 @@ void DirectMesh::rawRender(const G3MRenderContext* rc) const {
                  (int)_renderVerticesCount,
                  _glState,
                  *rc->getGPUProgramManager());
+}
+
+void DirectMesh::setRenderVerticesCount(size_t renderVerticesCount) {
+  if (renderVerticesCount > getRenderVerticesCount()) {
+    THROW_EXCEPTION("Invalid renderVerticesCount");
+  }
+  _renderVerticesCount = renderVerticesCount;
 }

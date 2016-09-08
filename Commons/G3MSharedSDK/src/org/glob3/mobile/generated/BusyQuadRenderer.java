@@ -18,8 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
-
-//***************************************************************
+//class IImage;
+//class Mesh;
+//class Color;
 
 
 public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
@@ -148,7 +149,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
        _quadMesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
-
+  
     _glState._release();
   }
 

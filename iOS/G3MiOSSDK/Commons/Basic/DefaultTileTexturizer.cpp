@@ -28,6 +28,8 @@
 #include "IImageBuilderListener.hpp"
 #include "PlanetRenderContext.hpp"
 #include "TilesRenderParameters.hpp"
+#include "G3MRenderContext.hpp"
+
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
