@@ -67,15 +67,7 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
   
-  virtual ~BusyQuadRenderer() {
-    //rc->getFactory()->deleteImage(_image);
-    //_image = NULL;
-    delete _image;
-    delete _quadMesh;
-    delete _backgroundColor;
-
-    _glState->_release();
-  }
+  virtual ~BusyQuadRenderer();
   
   void incDegrees(double value);
   

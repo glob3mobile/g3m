@@ -20,6 +20,8 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/TimeInterval.hpp>
 #include <G3MiOSSDK/MercatorTiledLayer.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
+
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",

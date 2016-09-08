@@ -143,3 +143,13 @@ void BusyQuadRenderer::incDegrees(double value) {
   if (_degrees>360) _degrees -= 360;
   _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
 }
+
+BusyQuadRenderer::~BusyQuadRenderer() {
+  //rc->getFactory()->deleteImage(_image);
+  //_image = NULL;
+  delete _image;
+  delete _quadMesh;
+  delete _backgroundColor;
+
+  _glState->_release();
+}
