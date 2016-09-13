@@ -228,7 +228,7 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
 
-  double lastAlpha;
+  double lastAlpha = 0;
 
   const Vector3D rotationAxis = Vector3D::downZ();
   for (size_t i = 0; i < positionsSize; i++) {
