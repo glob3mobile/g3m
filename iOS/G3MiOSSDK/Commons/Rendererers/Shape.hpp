@@ -35,6 +35,9 @@ private:
   Angle*      _heading;
   Angle*      _pitch;
   Angle*      _roll;
+  Angle*      _heading2;
+  Angle*      _pitch2;
+  Angle*      _roll2;
   
   double      _scaleX;
   double      _scaleY;
@@ -73,6 +76,9 @@ public:
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
   _roll( new Angle(Angle::zero()) ),
+  _heading2( new Angle(Angle::zero()) ),
+  _pitch2( new Angle(Angle::zero()) ),
+  _roll2( new Angle(Angle::zero()) ),
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
@@ -101,11 +107,23 @@ public:
   const Angle getPitch() const {
     return *_pitch;
   }
-
+  
   const Angle getRoll() const {
     return *_roll;
   }
-
+  
+  const Angle getHeading2() const {
+    return *_heading;
+  }
+  
+  const Angle getPitch2() const {
+    return *_pitch;
+  }
+  
+  const Angle getRoll2() const {
+    return *_roll;
+  }
+  
 //  void setPosition(Geodetic3D* position,
 //                   AltitudeMode altitudeMode);
 
@@ -154,7 +172,7 @@ public:
 #endif
     cleanTransformMatrix();
   }
-
+  
   void setRoll(const Angle& roll) {
 #ifdef C_CODE
     delete _roll;
@@ -162,6 +180,39 @@ public:
 #endif
 #ifdef JAVA_CODE
     _roll = roll;
+#endif
+    cleanTransformMatrix();
+  }
+  
+  void setHeading2(const Angle& heading) {
+#ifdef C_CODE
+    delete _heading2;
+    _heading2 = new Angle(heading);
+#endif
+#ifdef JAVA_CODE
+    _heading2 = heading;
+#endif
+    cleanTransformMatrix();
+  }
+  
+  void setPitch2(const Angle& pitch) {
+#ifdef C_CODE
+    delete _pitch2;
+    _pitch2 = new Angle(pitch);
+#endif
+#ifdef JAVA_CODE
+    _pitch2 = pitch;
+#endif
+    cleanTransformMatrix();
+  }
+  
+  void setRoll2(const Angle& roll) {
+#ifdef C_CODE
+    delete _roll2;
+    _roll2 = new Angle(roll);
+#endif
+#ifdef JAVA_CODE
+    _roll2 = roll;
 #endif
     cleanTransformMatrix();
   }

@@ -34,6 +34,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private Angle _heading;
   private Angle _pitch;
   private Angle _roll;
+  private Angle _heading2;
+  private Angle _pitch2;
+  private Angle _roll2;
 
   private double _scaleX;
   private double _scaleY;
@@ -91,9 +94,12 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
     final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
     final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.upY());
+    final MutableMatrix44D headingRotation2 = MutableMatrix44D.createRotationMatrix(_heading2, Vector3D.downZ());
+    final MutableMatrix44D pitchRotation2 = MutableMatrix44D.createRotationMatrix(_pitch2, Vector3D.upX());
+    final MutableMatrix44D rollRotation2 = MutableMatrix44D.createRotationMatrix(_roll2, Vector3D.upY());
     final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
+    final MutableMatrix44D localTransform = translation .multiply(headingRotation2).multiply(pitchRotation2).multiply(rollRotation2).multiply(headingRotation).multiply(pitchRotation).multiply(rollRotation).multiply(scale);
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -105,6 +111,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _heading = new Angle(Angle.zero());
      _pitch = new Angle(Angle.zero());
      _roll = new Angle(Angle.zero());
+     _heading2 = new Angle(Angle.zero());
+     _pitch2 = new Angle(Angle.zero());
+     _roll2 = new Angle(Angle.zero());
      _scaleX = 1;
      _scaleY = 1;
      _scaleZ = 1;
@@ -169,6 +178,21 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   }
 
   public final Angle getRoll()
+  {
+    return _roll;
+  }
+
+  public final Angle getHeading2()
+  {
+    return _heading;
+  }
+
+  public final Angle getPitch2()
+  {
+    return _pitch;
+  }
+
+  public final Angle getRoll2()
   {
     return _roll;
   }
@@ -255,6 +279,24 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final void setRoll(Angle roll)
   {
     _roll = roll;
+    cleanTransformMatrix();
+  }
+
+  public final void setHeading2(Angle heading)
+  {
+    _heading2 = heading;
+    cleanTransformMatrix();
+  }
+
+  public final void setPitch2(Angle pitch)
+  {
+    _pitch2 = pitch;
+    cleanTransformMatrix();
+  }
+
+  public final void setRoll2(Angle roll)
+  {
+    _roll2 = roll;
     cleanTransformMatrix();
   }
 
