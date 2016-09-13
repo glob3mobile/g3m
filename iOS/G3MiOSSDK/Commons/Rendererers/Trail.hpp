@@ -20,6 +20,7 @@ class Frustum;
 class G3MRenderContext;
 class GLState;
 class IFloatBuffer;
+class MutableMatrix44D;
 
 
 class Trail {
@@ -103,6 +104,13 @@ private:
     int calculateAlphaStatus();
 
     bool isMeshValid() const;
+
+    const MutableMatrix44D createMatrix(const Angle& bearing,
+                                        const Angle& latitude,
+                                        const Angle& longitude,
+                                        const double height,
+                                        const Vector3D& rotationAxis,
+                                        const Planet* planet) const;
 
   public:
     Segment(const Color& color,

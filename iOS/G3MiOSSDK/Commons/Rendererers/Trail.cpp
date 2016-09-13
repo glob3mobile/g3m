@@ -199,6 +199,21 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   return bearingsInRadians;
 }
 
+const MutableMatrix44D Trail::Segment::createMatrix(const Angle& bearing,
+                                                    const Angle& latitude,
+                                                    const Angle& longitude,
+                                                    const double height,
+                                                    const Vector3D& rotationAxis,
+                                                    const Planet* planet) const {
+  const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(bearing,
+                                                                                 rotationAxis);
+
+  const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(latitude,
+                                                                           longitude,
+                                                                           height);
+  return geoMatrix.multiply(rotationMatrix);
+}
+
 Mesh* Trail::Segment::createMesh(const Planet* planet) {
   const size_t positionsSize = _positions.size();
 
@@ -213,22 +228,48 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
 
+  double lastAlpha;
+
   const Vector3D rotationAxis = Vector3D::downZ();
   for (size_t i = 0; i < positionsSize; i++) {
     const Position* position = _positions[i];
 
     if (_alphaStatus == Trail::SEGMENT_ALPHA_STATUS_HALF) {
       if (position->_alpha > _visibleAlpha) {
+        if (lastAlpha < _visibleAlpha) {
+          if (i > 0) {
+            const Position* previousPosition = _positions[i-1];
+            const double normalizedAlpha = (_visibleAlpha - previousPosition->_alpha) / (position->_alpha - previousPosition->_alpha);
+
+            const MutableMatrix44D matrix = createMatrix(Angle::fromRadians(bearings->get(i)),
+                                                         Angle::linearInterpolation(previousPosition->_latitude,
+                                                                                    position->_latitude,
+                                                                                    normalizedAlpha),
+                                                         Angle::linearInterpolation(previousPosition->_longitude,
+                                                                                    position->_longitude,
+                                                                                    normalizedAlpha),
+                                                         IMathUtils::instance()->linearInterpolation(previousPosition->_height,
+                                                                                                     position->_height,
+                                                                                                     normalizedAlpha),
+                                                         rotationAxis,
+                                                         planet);
+
+            vertices->add(offsetN.transformedBy(matrix, 1));
+            vertices->add(offsetP.transformedBy(matrix, 1));
+          }
+        }
         break;
       }
     }
 
-    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(bearings->get(i)),
-                                                                                   rotationAxis);
-    const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(position->_latitude,
-                                                                             position->_longitude,
-                                                                             position->_height);
-    const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
+    lastAlpha = position->_alpha;
+
+    const MutableMatrix44D matrix = createMatrix(Angle::fromRadians(bearings->get(i)),
+                                                 position->_latitude,
+                                                 position->_longitude,
+                                                 position->_height,
+                                                 rotationAxis,
+                                                 planet);
 
     vertices->add(offsetN.transformedBy(matrix, 1));
     vertices->add(offsetP.transformedBy(matrix, 1));
