@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class GLState;
 //class IFloatBuffer;
+//class MutableMatrix44D;
 
 
 public class Trail
@@ -119,6 +120,8 @@ public class Trail
     
       FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
     
+      double lastAlpha;
+    
       final Vector3D rotationAxis = Vector3D.downZ();
       for (int i = 0; i < positionsSize; i++)
       {
@@ -128,13 +131,26 @@ public class Trail
         {
           if (position._alpha > _visibleAlpha)
           {
+            if (lastAlpha < _visibleAlpha)
+            {
+              if (i > 0)
+              {
+                final Position previousPosition = _positions.get(i-1);
+                final double normalizedAlpha = (_visibleAlpha - previousPosition._alpha) / (position._alpha - previousPosition._alpha);
+    
+                final MutableMatrix44D matrix = createMatrix(Angle.fromRadians(bearings.get(i)), Angle.linearInterpolation(previousPosition._latitude, position._latitude, normalizedAlpha), Angle.linearInterpolation(previousPosition._longitude, position._longitude, normalizedAlpha), IMathUtils.instance().linearInterpolation(previousPosition._height, position._height, normalizedAlpha), rotationAxis, planet);
+    
+                vertices.add(offsetN.transformedBy(matrix, 1));
+                vertices.add(offsetP.transformedBy(matrix, 1));
+              }
+            }
             break;
           }
         }
     
-        final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(bearings.get(i)), rotationAxis);
-        final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position._latitude, position._longitude, position._height);
-        final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
+        lastAlpha = position._alpha;
+    
+        final MutableMatrix44D matrix = createMatrix(Angle.fromRadians(bearings.get(i)), position._latitude, position._longitude, position._height, rotationAxis, planet);
     
         vertices.add(offsetN.transformedBy(matrix, 1));
         vertices.add(offsetP.transformedBy(matrix, 1));
@@ -240,6 +256,14 @@ public class Trail
     
       final SegmentMeshUserData userData = (SegmentMeshUserData) _mesh.getUserData();
       return userData.isValid(_alphaStatus, _visibleAlpha);
+    }
+
+    private MutableMatrix44D createMatrix(Angle bearing, Angle latitude, Angle longitude, double height, Vector3D rotationAxis, Planet planet)
+    {
+      final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(bearing, rotationAxis);
+    
+      final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(latitude, longitude, height);
+      return geoMatrix.multiply(rotationMatrix);
     }
 
     public Segment(Color color, float ribbonWidth, double visibleAlpha)
