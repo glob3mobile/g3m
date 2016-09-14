@@ -99,7 +99,6 @@
 		CF1871C017036EC600092888 /* GEOMeshSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */; };
 		CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */; };
 		CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */; };
-		CF1918AA1A9E5B2C00BF433C /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */; };
 		CF1B62D319055B7900AB01A9 /* TilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1B62D219055B7900AB01A9 /* TilesRenderParameters.cpp */; };
 		CF1E62F8186CB7BB00EB1B6C /* HUDSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E62F6186CB7BB00EB1B6C /* HUDSize.cpp */; };
 		CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */; };
@@ -245,7 +244,6 @@
 		CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */; };
 		CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
 		CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */; };
-		CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */; };
@@ -810,7 +808,6 @@
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
 				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
 				CFECA77C1B6ABA0100A0A44E /* VectorStreamingRenderer.hpp in CopyFiles */,
-				CF701B471A9F93B9007C6B3F /* MutableVector2F.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
 				CFAB53F71A8BCE5800DD0099 /* ColumnLayoutImageBuilder.hpp in CopyFiles */,
@@ -3049,7 +3046,7 @@
 		D8EEF3AC1577924D003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 			};
 			buildConfigurationList = D8EEF3AF1577924D003FEB5E /* Build configuration list for PBXProject "G3MiOSSDK" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3329,7 +3326,6 @@
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
 				CF1F55DF1876F5E70019E8A5 /* LabelImageBuilder.cpp in Sources */,
 				CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */,
-				CF1918AA1A9E5B2C00BF433C /* MutableVector2F.cpp in Sources */,
 				CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */,
 				CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */,
 				CFA59ECB171467890095E2EF /* ICanvas.cpp in Sources */,
@@ -3443,8 +3439,10 @@
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -3473,7 +3471,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -3489,8 +3487,10 @@
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
@@ -3512,7 +3512,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
@@ -3542,7 +3542,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
@@ -3574,7 +3574,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
