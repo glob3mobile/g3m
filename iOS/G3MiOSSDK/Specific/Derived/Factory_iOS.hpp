@@ -34,14 +34,6 @@ public:
     return new Timer_iOS();
   }
 
-//  void deleteTimer(const ITimer* timer) const {
-//    delete timer;
-//  }
-//
-//  void deleteImage(const IImage* image) const {
-//    delete image;
-//  }
-
   IByteBuffer* createByteBuffer(unsigned char data[], size_t length) const {
     return new ByteBuffer_iOS(data, length);
   }

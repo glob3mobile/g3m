@@ -11,8 +11,10 @@
 
 
 #include "IDownloader.hpp"
-#include "IStorage.hpp"
-#include "URL.hpp"
+
+class IStorage;
+class IImageResult;
+
 
 class CachedDownloader : public IDownloader {
 private:

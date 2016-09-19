@@ -78,7 +78,7 @@ public:
     }
   }
 
-  void computeTileProcessed(Tile* tile,
+  void computeTileProcessed(const Tile* tile,
                             bool visible,
                             bool rendered) {
     const int level = tile->_level;
@@ -98,7 +98,7 @@ public:
     }
   }
 
-  void computeRenderedSector(Tile* tile) {
+  void computeRenderedSector(const Tile* tile) {
     const double lowerLatitudeDegrees  = tile->_sector._lower._latitude._degrees;
     const double lowerLongitudeDegrees = tile->_sector._lower._longitude._degrees;
     const double upperLatitudeDegrees  = tile->_sector._upper._latitude._degrees;

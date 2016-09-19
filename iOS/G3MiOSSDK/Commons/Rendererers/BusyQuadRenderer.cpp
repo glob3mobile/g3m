@@ -145,8 +145,6 @@ void BusyQuadRenderer::incDegrees(double value) {
 }
 
 BusyQuadRenderer::~BusyQuadRenderer() {
-  //rc->getFactory()->deleteImage(_image);
-  //_image = NULL;
   delete _image;
   delete _quadMesh;
   delete _backgroundColor;
