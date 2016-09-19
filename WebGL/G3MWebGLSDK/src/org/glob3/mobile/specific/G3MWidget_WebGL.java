@@ -246,12 +246,6 @@ public class G3MWidget_WebGL
          final int logicalHeight = Math.round(_height * devicePixelRatio);
          _canvas.setCoordinateSpaceWidth(logicalWidth);
          _canvas.setCoordinateSpaceHeight(logicalHeight);
-
-
-         jsOnResizeViewport(logicalWidth, logicalHeight);
-         if (_g3mWidget != null) {
-            _g3mWidget.onResizeViewportEvent(logicalWidth, logicalHeight);
-         }
       }
    }
 
@@ -261,29 +255,11 @@ public class G3MWidget_WebGL
    }
 
 
-   private native void jsOnResizeViewport(final int width,
-                                          final int height) /*-{
-		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
-
-		webGLContext.viewport(0, 0, width, height);
-		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
-				| webGLContext.DEPTH_BUFFER_BIT);
-   }-*/;
-
-
    private native void jsDefineG3MBrowserObjects() /*-{
 		var that = this;
 
 		// URL Object
 		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
-
-		// IndexedDB
-		//		$wnd.g3mIDB = $wnd.indexedDB || $wnd.webkitIndexedDB
-		//				|| $wnd.mozIndexedDB || $wnd.OIndexedDB || $wnd.msIndexedDB;
-		//		$wnd.g3mIDBTransaction = $wnd.IDBTransaction
-		//				|| $wnd.webkitIDBTransaction || $wnd.OIDBTransaction
-		//				|| $wnd.msIDBTransaction;
-		//		$wnd.g3mDBVersion = 1;
 
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
@@ -311,16 +287,17 @@ public class G3MWidget_WebGL
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
 		var context = null;
-		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
-				"moz-webgl" ];
 
 		if (jsCanvas != null) {
+			var contextNames = [ "webgl", "experimental-webgl", "webkit-3d",
+					"moz-webgl" ];
 			for ( var cn in contextNames) {
 				try {
 					context = jsCanvas.getContext(contextNames[cn], {
 						preserveDrawingBuffer : true,
 						alpha : false,
-						preferLowPowerToHighPerformance : true
+						preferLowPowerToHighPerformance : true,
+						antialias : false
 					});
 				} catch (e) {
 				}
