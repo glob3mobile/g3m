@@ -54,18 +54,48 @@ public class G3MWidget_WebGL
    extends
       Composite {
 
+
+   static {
+      initSingletons();
+   }
+
+
+   public static void initSingletons() {
+      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
+      final IFactory factory = new Factory_WebGL();
+      final IStringUtils stringUtils = new StringUtils_WebGL();
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
+      final IMathUtils mathUtils = new MathUtils_WebGL();
+      final IJSONParser jsonParser = new JSONParser_WebGL();
+      final ITextUtils textUtils = new TextUtils_WebGL();
+      final IDeviceAttitude deviceAttitude = new DeviceAttitude_WebGL();
+      final IDeviceLocation deviceLocation = new DeviceLocation_WebGL();
+
+      G3MWidget.initSingletons( //
+               logger, //
+               factory, //
+               stringUtils, //
+               stringBuilder, //
+               mathUtils, //
+               jsonParser, //
+               textUtils, //
+               deviceAttitude, //
+               deviceLocation);
+   }
+
+
    private final Canvas         _canvas;
    private JavaScriptObject     _webGLContext;
    private int                  _width;
    private int                  _height;
+   private int                  _physicalWidth;
+   private int                  _physicalHeight;
    private MotionEventProcessor _motionEventProcessor;
    private GL                   _gl;
    private G3MWidget            _g3mWidget;
 
 
    public G3MWidget_WebGL() {
-      initSingletons();
-
       _canvas = Canvas.createIfSupported();
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
@@ -79,9 +109,7 @@ public class G3MWidget_WebGL
          return;
       }
 
-
       initWidget(_canvas);
-      onSizeChanged(1, 1);
 
       final INativeGL nativeGL = new NativeGL_WebGL(_webGLContext);
       _gl = new GL(nativeGL);
@@ -188,21 +216,6 @@ public class G3MWidget_WebGL
    }
 
 
-   public static void initSingletons() {
-      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
-      final IFactory factory = new Factory_WebGL();
-      final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
-      final IMathUtils mathUtils = new MathUtils_WebGL();
-      final IJSONParser jsonParser = new JSONParser_WebGL();
-      final ITextUtils textUtils = new TextUtils_WebGL();
-      final IDeviceAttitude devAtt = new DeviceAttitude_WebGL();
-      final IDeviceLocation devLoc = new DeviceLocation_WebGL();
-
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAtt, devLoc);
-   }
-
-
    @Override
    public void onBrowserEvent(final Event event) {
       _canvas.setFocus(true);
@@ -234,24 +247,22 @@ public class G3MWidget_WebGL
 
    private void onSizeChanged(final int width,
                               final int height) {
-
       if ((_width != width) || (_height != height)) {
          _width = width;
          _height = height;
          setPixelSize(_width, _height);
 
          final float devicePixelRatio = getDevicePixelRatio();
-
-         final int logicalWidth = Math.round(_width * devicePixelRatio);
-         final int logicalHeight = Math.round(_height * devicePixelRatio);
-         _canvas.setCoordinateSpaceWidth(logicalWidth);
-         _canvas.setCoordinateSpaceHeight(logicalHeight);
+         _physicalWidth = Math.round(_width * devicePixelRatio);
+         _physicalHeight = Math.round(_height * devicePixelRatio);
+         _canvas.setCoordinateSpaceWidth(_physicalWidth);
+         _canvas.setCoordinateSpaceHeight(_physicalHeight);
       }
    }
 
 
    private void renderG3MWidget() {
-      _g3mWidget.render(_width, _height);
+      _g3mWidget.render(_physicalWidth, _physicalHeight);
    }
 
 
