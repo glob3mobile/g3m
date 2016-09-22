@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -21,21 +20,19 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 
 
-public final class MotionEventProcessor {
-
-   private static final String   TAG                    = "MotionEventProcessor";
+final class MotionEventProcessor {
 
    private static final Vector2F DELTA                  = new Vector2F(10, 0);
 
 
-   private final G3MWidget       _widget;
+   private final G3MWidget_WebGL _widget;
    private final CanvasElement   _canvasElement;
    private boolean               _mouseDown             = false;
    private Vector2F              _previousMousePosition = null;
 
 
-   public MotionEventProcessor(final G3MWidget widget,
-                               final CanvasElement canvasElement) {
+   MotionEventProcessor(final G3MWidget_WebGL widget,
+                        final CanvasElement canvasElement) {
       _widget = widget;
       _canvasElement = canvasElement;
 
@@ -50,7 +47,7 @@ public final class MotionEventProcessor {
    }
 
 
-   public void processEvent(final Event event) {
+   void processEvent(final Event event) {
 
       TouchEvent touchEvent = null;
 
@@ -117,14 +114,13 @@ public final class MotionEventProcessor {
          final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
 
          final Vector2F currentTouchPosition = new Vector2F( //
-                  jsTouch.getRelativeX(_canvasElement), //
-                  jsTouch.getRelativeY(_canvasElement) //
+                  jsTouch.getRelativeX(_canvasElement) * _widget.getDevicePixelRatio(), //
+                  jsTouch.getRelativeY(_canvasElement) * _widget.getDevicePixelRatio() //
          );
 
          final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
 
          currentTouchesPositions.put(touchId, currentTouchPosition);
-
 
          Vector2F previousTouchPosition = _previousTouchesPositions.get(touchId);
          if (previousTouchPosition == null) {

@@ -69,7 +69,9 @@ public final class Canvas_Android
 
       _bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
       _canvas = new Canvas(_bitmap);
-      _canvas.scale(devicePixelRatio, devicePixelRatio);
+      if (devicePixelRatio != 1) {
+         _canvas.scale(devicePixelRatio, devicePixelRatio);
+      }
    }
 
 

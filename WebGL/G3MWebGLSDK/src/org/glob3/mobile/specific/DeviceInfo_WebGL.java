@@ -12,7 +12,7 @@ public class DeviceInfo_WebGL
 
    @Override
    public float getDPI() {
-      return 96;
+      return 96 * getDevicePixelRatio();
    }
 
 

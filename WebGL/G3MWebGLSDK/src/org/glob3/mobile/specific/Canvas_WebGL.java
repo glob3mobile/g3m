@@ -53,19 +53,16 @@ public final class Canvas_WebGL
 
 		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
 		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
+		var w = width * ratio;
+		var h = height * ratio;
 
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = width;
-		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = height;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = w;
+		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = h;
 
-		if (ratio == 1) {
-			canvas.width = width;
-			canvas.height = height;
-		} else {
-			canvas.width = width * ratio;
-			canvas.height = height * ratio;
-			canvas.style.width = width + 'px';
-			canvas.style.height = height + 'px';
+		canvas.width = w;
+		canvas.height = h;
 
+		if (ratio != 1) {
 			var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 			context.scale(ratio, ratio);
 		}

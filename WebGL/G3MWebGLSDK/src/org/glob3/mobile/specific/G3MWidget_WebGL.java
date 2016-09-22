@@ -39,6 +39,7 @@ import org.glob3.mobile.generated.ProtoRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
@@ -93,6 +94,7 @@ public class G3MWidget_WebGL
    private MotionEventProcessor _motionEventProcessor;
    private GL                   _gl;
    private G3MWidget            _g3mWidget;
+   private float                _devicePixelRatio = 1;
 
 
    public G3MWidget_WebGL() {
@@ -240,9 +242,14 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   private static native float getDevicePixelRatio() /*-{
+   private static native float jsGetDevicePixelRatio() /*-{
 		return $wnd.devicePixelRatio || 1;
    }-*/;
+
+
+   public float getDevicePixelRatio() {
+      return _devicePixelRatio;
+   }
 
 
    private void onSizeChanged(final int width,
@@ -252,9 +259,9 @@ public class G3MWidget_WebGL
          _height = height;
          setPixelSize(_width, _height);
 
-         final float devicePixelRatio = getDevicePixelRatio();
-         _physicalWidth = Math.round(_width * devicePixelRatio);
-         _physicalHeight = Math.round(_height * devicePixelRatio);
+         _devicePixelRatio = jsGetDevicePixelRatio();
+         _physicalWidth = Math.round(_width * _devicePixelRatio);
+         _physicalHeight = Math.round(_height * _devicePixelRatio);
          _canvas.setCoordinateSpaceWidth(_physicalWidth);
          _canvas.setCoordinateSpaceHeight(_physicalHeight);
       }
@@ -392,7 +399,7 @@ public class G3MWidget_WebGL
 
    public void startWidget() {
       if (_g3mWidget != null) {
-         _motionEventProcessor = new MotionEventProcessor(_g3mWidget, _canvas.getCanvasElement());
+         _motionEventProcessor = new MotionEventProcessor(this, _canvas.getCanvasElement());
          jsAddResizeHandler(_canvas.getCanvasElement());
 
          jsStartRenderLoop();
@@ -474,5 +481,13 @@ public class G3MWidget_WebGL
    public GL getGL() {
       return _gl;
    }
+
+
+   void onTouchEvent(final TouchEvent event) {
+      if (_g3mWidget != null) {
+         _g3mWidget.onTouchEvent(event);
+      }
+   }
+
 
 }
