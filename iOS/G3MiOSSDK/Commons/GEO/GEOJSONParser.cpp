@@ -24,6 +24,8 @@
 #include "GEO2DPolygonData.hpp"
 #include "GEO2DMultiPolygonGeometry.hpp"
 #include "BSONParser.hpp"
+#include "IStringBuilder.hpp"
+
 
 GEOObject* GEOJSONParser::parseJSON(const IByteBuffer* json,
                                     bool showStatistics) {

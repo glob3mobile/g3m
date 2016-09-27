@@ -84,9 +84,7 @@ public:
       return _size;
     }
 
-    ~Cluster() {
-      delete _position;
-    }
+    ~Cluster();
 
   };
 

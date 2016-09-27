@@ -14,6 +14,7 @@
 #include "IThreadUtils.hpp"
 #include "VectorStreamingRenderer.hpp"
 #include "MarkTouchListener.hpp"
+#include "Color.hpp"
 
 class IG3MBuilder;
 class LayerSet;

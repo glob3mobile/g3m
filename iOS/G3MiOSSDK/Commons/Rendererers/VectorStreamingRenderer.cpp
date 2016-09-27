@@ -21,6 +21,12 @@
 #include "GEOObject.hpp"
 #include "Mark.hpp"
 
+
+VectorStreamingRenderer::Cluster::~Cluster() {
+  delete _position;
+}
+
+
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
   _node->_childrenTask = NULL;
   _node->_release();
