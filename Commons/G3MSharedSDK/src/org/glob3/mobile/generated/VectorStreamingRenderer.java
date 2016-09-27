@@ -1344,8 +1344,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_deleteSymbolizer)
       {
-        if (_symbolizer != null)
-           _symbolizer.dispose();
+        _symbolizer = null;
       }
     
       if (_sector != null)
