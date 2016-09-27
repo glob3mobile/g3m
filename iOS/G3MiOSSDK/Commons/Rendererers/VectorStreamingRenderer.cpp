@@ -20,6 +20,7 @@
 #include "GEOJSONParser.hpp"
 #include "GEOObject.hpp"
 #include "Mark.hpp"
+#include "Geodetic2D.hpp"
 
 
 VectorStreamingRenderer::Cluster::~Cluster() {
