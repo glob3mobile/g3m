@@ -16,17 +16,7 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 class ITimer;
-
-
-class MarksFilter {
-public:
-  virtual ~MarksFilter() {
-  }
-
-  virtual bool test(const Mark* mark) const = 0;
-
-};
-
+class MarksFilter;
 
 
 class MarksRenderer : public DefaultRenderer {

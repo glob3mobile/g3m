@@ -21,6 +21,7 @@
 #include "GEOObject.hpp"
 #include "Mark.hpp"
 #include "Geodetic2D.hpp"
+#include "MarksRenderer.hpp"
 
 
 VectorStreamingRenderer::Cluster::~Cluster() {

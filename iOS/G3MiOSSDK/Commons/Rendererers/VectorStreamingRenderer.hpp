@@ -16,7 +16,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "RCObject.hpp"
-#include "MarksRenderer.hpp"
+#include "MarksFilter.hpp"
 
 #include <vector>
 #include <string>
@@ -35,6 +35,7 @@ class Camera;
 class Frustum;
 class IDownloader;
 class GEOObject;
+class MarksRenderer;
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
