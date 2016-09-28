@@ -488,12 +488,13 @@ public:
     VectorStreamingRenderer* _renderer;
 #ifdef C_CODE
     const URL _serverURL;
+    const VectorSetSymbolizer* _symbolizer;
 #endif
 #ifdef JAVA_CODE
     private final URL _serverURL;
+    private VectorSetSymbolizer _symbolizer;
 #endif
     const std::string          _name;
-    const VectorSetSymbolizer* _symbolizer;
     const bool                 _deleteSymbolizer;
     const long long            _downloadPriority;
 #ifdef C_CODE
