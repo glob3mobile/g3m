@@ -12,7 +12,7 @@
 #include "Geodetic2D.hpp"
 
 //Altitude modes taken from KML standard (with the exception of relative to sea floor)
-enum AltitudeMode{
+enum AltitudeMode {
   RELATIVE_TO_GROUND,   //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
   ABSOLUTE              //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
 };
