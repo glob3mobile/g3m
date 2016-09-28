@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class IDownloader;
 //class GEOObject;
+//class MarksRenderer;
 
 
 public class VectorStreamingRenderer extends DefaultRenderer

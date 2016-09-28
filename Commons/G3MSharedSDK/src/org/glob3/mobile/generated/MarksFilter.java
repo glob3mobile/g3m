@@ -1,25 +1,22 @@
 package org.glob3.mobile.generated; 
 //
-//  MarksRenderer.cpp
+//  MarksFilter.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 05/06/12.
+//  Created by Diego Gomez Deck on 9/27/16.
+//
 //
 
 //
-//  MarksRenderer.hpp
+//  MarksFilter.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 05/06/12.
+//  Created by Diego Gomez Deck on 9/27/16.
 //
-
+//
 
 
 //class Mark;
-//class Camera;
-//class MarkTouchListener;
-//class IFloatBuffer;
-//class ITimer;
 
 
 public abstract class MarksFilter
