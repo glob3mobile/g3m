@@ -88,7 +88,7 @@ public:
   float  log10(float v)  const { return log10f(v); }
 
   double log(double v) const { return MathAux::log_(v); }
-  float  log(float v)  const { return log(v); }
+  float  log(float v)  const { return (float) log( (double) v); }
 
   short maxInt16() const { return std::numeric_limits<short>::max(); }
   short minInt16() const { return -(std::numeric_limits<short>::max()); }

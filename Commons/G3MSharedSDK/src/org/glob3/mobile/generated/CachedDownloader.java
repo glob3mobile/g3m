@@ -18,6 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
+//class IStorage;
+//class IImageResult;
+
+
 public class CachedDownloader extends IDownloader
 {
   private IDownloader _downloader;

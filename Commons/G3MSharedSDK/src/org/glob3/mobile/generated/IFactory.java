@@ -16,19 +16,17 @@ package org.glob3.mobile.generated;
 
 
 
+//class IDeviceInfo;
 //class ITimer;
-//class IImage;
 //class IFloatBuffer;
 //class IIntBuffer;
 //class IShortBuffer;
 //class IByteBuffer;
-//class ILogger;
-//class IImageListener;
 //class ICanvas;
 //class IWebSocket;
-//class IWebSocketListener;
 //class URL;
-//class IDeviceInfo;
+//class IWebSocketListener;
+
 
 public abstract class IFactory
 {
@@ -37,6 +35,12 @@ public abstract class IFactory
   private IDeviceInfo _deviceInfo;
 
   protected abstract IDeviceInfo createDeviceInfo();
+
+  protected IFactory()
+  {
+     _deviceInfo = null;
+  
+  }
 
   public static void setInstance(IFactory factory)
   {
@@ -52,12 +56,6 @@ public abstract class IFactory
   public static IFactory instance()
   {
     return _instance;
-  }
-
-  public IFactory()
-  {
-     _deviceInfo = null;
-
   }
 
   public void dispose()

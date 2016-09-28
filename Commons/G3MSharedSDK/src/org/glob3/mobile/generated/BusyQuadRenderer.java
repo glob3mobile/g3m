@@ -141,8 +141,6 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
 
   public void dispose()
   {
-    //rc->getFactory()->deleteImage(_image);
-    //_image = NULL;
     if (_image != null)
        _image.dispose();
     if (_quadMesh != null)

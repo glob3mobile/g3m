@@ -19,6 +19,7 @@
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
 #include "G3MEventContext.hpp"
+#include "MarksFilter.hpp"
 
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,

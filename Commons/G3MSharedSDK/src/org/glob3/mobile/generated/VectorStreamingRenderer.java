@@ -33,6 +33,7 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class IDownloader;
 //class GEOObject;
+//class MarksRenderer;
 
 
 public class VectorStreamingRenderer extends DefaultRenderer
@@ -1261,8 +1262,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
   {
     private VectorStreamingRenderer _renderer;
     private final URL _serverURL;
+    private VectorSetSymbolizer _symbolizer;
     private final String _name;
-    private final VectorSetSymbolizer _symbolizer;
     private final boolean _deleteSymbolizer;
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;
@@ -1344,8 +1345,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       if (_deleteSymbolizer)
       {
-        if (_symbolizer != null)
-           _symbolizer.dispose();
+        _symbolizer = null;
       }
     
       if (_sector != null)

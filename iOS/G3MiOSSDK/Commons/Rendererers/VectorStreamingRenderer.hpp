@@ -16,7 +16,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "RCObject.hpp"
-#include "MarksRenderer.hpp"
+#include "MarksFilter.hpp"
 
 #include <vector>
 #include <string>
@@ -35,6 +35,7 @@ class Camera;
 class Frustum;
 class IDownloader;
 class GEOObject;
+class MarksRenderer;
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -84,9 +85,7 @@ public:
       return _size;
     }
 
-    ~Cluster() {
-      delete _position;
-    }
+    ~Cluster();
 
   };
 
@@ -489,12 +488,13 @@ public:
     VectorStreamingRenderer* _renderer;
 #ifdef C_CODE
     const URL _serverURL;
+    const VectorSetSymbolizer* _symbolizer;
 #endif
 #ifdef JAVA_CODE
     private final URL _serverURL;
+    private VectorSetSymbolizer _symbolizer;
 #endif
     const std::string          _name;
-    const VectorSetSymbolizer* _symbolizer;
     const bool                 _deleteSymbolizer;
     const long long            _downloadPriority;
 #ifdef C_CODE

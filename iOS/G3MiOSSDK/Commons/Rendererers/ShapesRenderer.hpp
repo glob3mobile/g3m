@@ -10,22 +10,27 @@
 #define __G3MiOSSDK__ShapesRenderer__
 
 #include "DefaultRenderer.hpp"
-#include "Shape.hpp"
 #include <vector>
-#include "DownloadPriority.hpp"
 #include "URL.hpp"
+#include "Shape.hpp"
+#include "DownloadPriority.hpp"
 #include "MutableVector3D.hpp"
+#include "TimeInterval.hpp"
 
 
-struct ShapeDistance {
+class ShapeDistance {
+public:
   double _distance;
   Shape* _shape;
 
-  ShapeDistance(double distance, Shape* shape):
+  ShapeDistance(double distance,
+                Shape* shape):
   _distance(distance),
   _shape(shape)
-  {}
+  {
+  }
 };
+
 
 class SGShape;
 

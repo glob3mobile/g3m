@@ -20,6 +20,14 @@
 #include "GEOJSONParser.hpp"
 #include "GEOObject.hpp"
 #include "Mark.hpp"
+#include "Geodetic2D.hpp"
+#include "MarksRenderer.hpp"
+
+
+VectorStreamingRenderer::Cluster::~Cluster() {
+  delete _position;
+}
+
 
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
   _node->_childrenTask = NULL;
