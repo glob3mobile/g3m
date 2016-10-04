@@ -377,8 +377,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (_tessellator != null)
        _tessellator.dispose();
-    if (_elevationDataProvider != null)
-       _elevationDataProvider.dispose();
+    if (_ownsElevationDataProvider)
+    {
+      if (_elevationDataProvider != null)
+         _elevationDataProvider.dispose();
+    }
     if (_texturizer != null)
        _texturizer.dispose();
     if (_tilesRenderParameters != null)
