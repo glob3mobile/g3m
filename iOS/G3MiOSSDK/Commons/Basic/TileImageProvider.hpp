@@ -34,7 +34,7 @@ public:
   virtual void create(const Tile* tile,
                       const TileImageContribution* contribution,
                       const Vector2I& resolution,
-                      long long tileDownloadPriority,
+                      long long tileTextureDownloadPriority,
                       bool logDownloadActivity,
                       TileImageListener* listener,
                       bool deleteListener,

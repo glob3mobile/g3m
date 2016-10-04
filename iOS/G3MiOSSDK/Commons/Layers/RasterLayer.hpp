@@ -76,7 +76,7 @@ public:
 
   long long requestImage(const Tile* tile,
                          IDownloader* downloader,
-                         long long tileDownloadPriority,
+                         long long tileTextureDownloadPriority,
                          bool logDownloadActivity,
                          IImageDownloadListener* listener,
                          bool deleteListener) const;

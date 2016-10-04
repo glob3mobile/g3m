@@ -22,11 +22,13 @@ void G3MLandDemoScene::rawSelectOption(const std::string& option,
 void G3MLandDemoScene::rawActivate(const G3MContext* context) {
 #warning Diego at work!
 
-  getModel()->getPlanetRenderer()->setShowStatistics(true);
+  PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
+  planetRenderer->setShowStatistics(true);
+  planetRenderer->setIncrementalTileQuality(true);
 
+
+  // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png",
-                                                          // "https://terrain-preview.mapzen.com/geotiff/{z}/{x}/{y}.tif",
-                                                          // "https://terrain-preview.mapzen.com/terrarium/{z}/{x}/{y}.png",
                                                           Sector::FULL_SPHERE,
                                                           false,                      // isTransparent
                                                           2,                          // firstLevel

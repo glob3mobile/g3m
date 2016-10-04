@@ -202,7 +202,7 @@ private:
 
     void start(const TiledVectorLayer* layer,
                const Tile*             tile,
-               long long               tileDownloadPriority,
+               long long               tileTextureDownloadPriority,
                bool                    logDownloadActivity);
 
     void cancel();
@@ -285,7 +285,7 @@ public:
   void create(const Tile* tile,
               const TileImageContribution* contribution,
               const Vector2I& resolution,
-              long long tileDownloadPriority,
+              long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
               bool deleteListener,

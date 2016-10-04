@@ -46,7 +46,7 @@ private:
   Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
-  long long _tileDownloadPriority;
+  long long _tileTextureDownloadPriority;
 
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
@@ -62,7 +62,7 @@ private:
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
-  long long getTileDownloadPriority();
+  long long getTileTextureDownloadPriority();
 
   bool _logTilesPetitions;
 
@@ -113,7 +113,7 @@ public:
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
-  void setTileDownloadPriority(long long tileDownloadPriority);
+  void setTileTextureDownloadPriority(long long tileTextureDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
 

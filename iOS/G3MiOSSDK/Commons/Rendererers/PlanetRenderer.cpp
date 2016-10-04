@@ -115,9 +115,9 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
                                LayerSet*                    layerSet,
-                               const TilesRenderParameters* tilesRenderParameters,
+                               TilesRenderParameters*       tilesRenderParameters,
                                bool                         showStatistics,
-                               long long                    tileDownloadPriority,
+                               long long                    tileTextureDownloadPriority,
                                const Sector&                renderedSector,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
@@ -138,7 +138,7 @@ _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
 _lastVisibleSector(NULL),
-_tileDownloadPriority(tileDownloadPriority),
+_tileTextureDownloadPriority(tileTextureDownloadPriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _glState(new GLState()),
@@ -478,23 +478,23 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
       _statistics.clear();
 
-      _prc->_tileLODTester              = _tileLODTester;
-      _prc->_tileVisibilityTester       = _tileVisibilityTester;
-      _prc->_frustumInModelCoordinates  = NULL;
-      _prc->_verticalExaggeration       = _verticalExaggeration;
-      _prc->_layerTilesRenderParameters = layerTilesRenderParameters;
-      _prc->_texturizer                 = _texturizer;
-      _prc->_tilesRenderParameters      = _tilesRenderParameters;
-      _prc->_lastSplitTimer             = _lastSplitTimer;
-      _prc->_elevationDataProvider      = _elevationDataProvider;
-      _prc->_tessellator                = _tessellator;
-      _prc->_layerSet                   = _layerSet;
-      _prc->_tileDownloadPriority       = _tileDownloadPriority;
-      _prc->_texWidthSquared            = -1;
-      _prc->_texHeightSquared           = -1;
-      _prc->_nowInMS                    = -1;
-      _prc->_renderTileMeshes           = _renderTileMeshes;
-      _prc->_logTilesPetitions          = _logTilesPetitions;
+      _prc->_tileLODTester               = _tileLODTester;
+      _prc->_tileVisibilityTester        = _tileVisibilityTester;
+      _prc->_frustumInModelCoordinates   = NULL;
+      _prc->_verticalExaggeration        = _verticalExaggeration;
+      _prc->_layerTilesRenderParameters  = layerTilesRenderParameters;
+      _prc->_texturizer                  = _texturizer;
+      _prc->_tilesRenderParameters       = _tilesRenderParameters;
+      _prc->_lastSplitTimer              = _lastSplitTimer;
+      _prc->_elevationDataProvider       = _elevationDataProvider;
+      _prc->_tessellator                 = _tessellator;
+      _prc->_layerSet                    = _layerSet;
+      _prc->_tileTextureDownloadPriority = _tileTextureDownloadPriority;
+      _prc->_texWidthSquared             = -1;
+      _prc->_texHeightSquared            = -1;
+      _prc->_nowInMS                     = -1;
+      _prc->_renderTileMeshes            = _renderTileMeshes;
+      _prc->_logTilesPetitions           = _logTilesPetitions;
 
       for (size_t i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -643,23 +643,23 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const long long nowInMS = _lastSplitTimer->nowInMilliseconds();
 
-  _prc->_tileLODTester              = _tileLODTester;
-  _prc->_tileVisibilityTester       = _tileVisibilityTester;
-  _prc->_frustumInModelCoordinates  = frustumInModelCoordinates;
-  _prc->_verticalExaggeration       = _verticalExaggeration;
-  _prc->_layerTilesRenderParameters = layerTilesRenderParameters;
-  _prc->_texturizer                 = _texturizer;
-  _prc->_tilesRenderParameters      = _tilesRenderParameters;
-  _prc->_lastSplitTimer             = _lastSplitTimer;
-  _prc->_elevationDataProvider      = _elevationDataProvider;
-  _prc->_tessellator                = _tessellator;
-  _prc->_layerSet                   = _layerSet;
-  _prc->_tileDownloadPriority       = _tileDownloadPriority;
-  _prc->_texWidthSquared            = texWidthSquared;
-  _prc->_texHeightSquared           = texHeightSquared;
-  _prc->_nowInMS                    = nowInMS;
-  _prc->_renderTileMeshes           = _renderTileMeshes;
-  _prc->_logTilesPetitions          = _logTilesPetitions;
+  _prc->_tileLODTester               = _tileLODTester;
+  _prc->_tileVisibilityTester        = _tileVisibilityTester;
+  _prc->_frustumInModelCoordinates   = frustumInModelCoordinates;
+  _prc->_verticalExaggeration        = _verticalExaggeration;
+  _prc->_layerTilesRenderParameters  = layerTilesRenderParameters;
+  _prc->_texturizer                  = _texturizer;
+  _prc->_tilesRenderParameters       = _tilesRenderParameters;
+  _prc->_lastSplitTimer              = _lastSplitTimer;
+  _prc->_elevationDataProvider       = _elevationDataProvider;
+  _prc->_tessellator                 = _tessellator;
+  _prc->_layerSet                    = _layerSet;
+  _prc->_tileTextureDownloadPriority = _tileTextureDownloadPriority;
+  _prc->_texWidthSquared             = texWidthSquared;
+  _prc->_texHeightSquared            = texHeightSquared;
+  _prc->_nowInMS                     = nowInMS;
+  _prc->_renderTileMeshes            = _renderTileMeshes;
+  _prc->_logTilesPetitions           = _logTilesPetitions;
 
 
   _tileLODTester->renderStarted();
@@ -917,4 +917,8 @@ void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener*
 void PlanetRenderer::onTileHasChangedMesh(const Tile *tile) const {
   _tileLODTester->onTileHasChangedMesh(tile);
   _tileVisibilityTester->onTileHasChangedMesh(tile);
+}
+
+void PlanetRenderer::setIncrementalTileQuality(bool incrementalTileQuality) {
+  _tilesRenderParameters->_incrementalTileQuality = incrementalTileQuality;
 }

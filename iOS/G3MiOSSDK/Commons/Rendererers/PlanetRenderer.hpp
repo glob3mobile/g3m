@@ -189,19 +189,19 @@ public:
 
 class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
-  TileTessellator*             _tessellator;
-  ElevationDataProvider*       _elevationDataProvider;
-  bool                         _ownsElevationDataProvider;
-  TileTexturizer*              _texturizer;
-  LayerSet*                    _layerSet;
-  const TilesRenderParameters* _tilesRenderParameters;
-  bool                         _showStatistics;
-  const bool                   _logTilesPetitions;
-  ITileVisitor*                _tileVisitor = NULL;
-  TileLODTester*               _tileLODTester;
-  TileVisibilityTester*        _tileVisibilityTester;
+  TileTessellator*       _tessellator;
+  ElevationDataProvider* _elevationDataProvider;
+  bool                   _ownsElevationDataProvider;
+  TileTexturizer*        _texturizer;
+  LayerSet*              _layerSet;
+  TilesRenderParameters* _tilesRenderParameters;
+  bool                   _showStatistics;
+  const bool             _logTilesPetitions;
+  ITileVisitor*          _tileVisitor = NULL;
+  TileLODTester*         _tileLODTester;
+  TileVisibilityTester*  _tileVisibilityTester;
 
-  PlanetRenderContext*         _prc;
+  PlanetRenderContext*  _prc;
 
   TilesStatistics _statistics;
 
@@ -244,7 +244,7 @@ private:
                                 const int topLevel,
                                 const int maxLevel);
 
-  long long _tileDownloadPriority;
+  long long _tileTextureDownloadPriority;
 
   float _verticalExaggeration;
 
@@ -285,9 +285,9 @@ public:
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  LayerSet*                    layerSet,
-                 const TilesRenderParameters* tilesRenderParameters,
+                 TilesRenderParameters*       tilesRenderParameters,
                  bool                         showStatistics,
-                 long long                    tileDownloadPriority,
+                 long long                    tileTextureDownloadPriority,
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
@@ -305,6 +305,8 @@ public:
   void setShowStatistics(bool showStatistics) {
     _showStatistics = showStatistics;
   }
+
+  void setIncrementalTileQuality(bool incrementalTileQuality);
 
   void initialize(const G3MContext* context);
 
@@ -384,19 +386,19 @@ public:
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
-   * @param tileDownloadPriority: new value for download priority of textures
+   * @param tileTextureDownloadPriority: new value for download priority of textures
    */
-  void setTileDownloadPriority(long long tileDownloadPriority) {
-    _tileDownloadPriority = tileDownloadPriority;
+  void setTileTextureDownloadPriority(long long tileTextureDownloadPriority) {
+    _tileTextureDownloadPriority = tileTextureDownloadPriority;
   }
 
   /**
    * Return the current value for the download priority of textures
    *
-   * @return _tileDownloadPriority: long
+   * @return _tileTextureDownloadPriority: long
    */
-  long long getTileDownloadPriority() const {
-    return _tileDownloadPriority;
+  long long getTileTextureDownloadPriority() const {
+    return _tileTextureDownloadPriority;
   }
 
   /**

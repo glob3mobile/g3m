@@ -23,7 +23,7 @@ class TilesRenderParameters {
 public:
   const bool    _renderDebug;
   const bool    _forceFirstLevelTilesRenderOnStart;
-  const bool    _incrementalTileQuality;
+  bool          _incrementalTileQuality;
   double        _texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
   const Quality _quality;
 

@@ -163,7 +163,7 @@ private:
   private final Vector2I _tileTextureResolution;
 #endif
   const bool          _logTilesPetitions;
-  const long long     _tileDownloadPriority;
+  const long long     _tileTextureDownloadPriority;
   bool                _canceled;
   FrameTasksExecutor* _frameTasksExecutor;
   const IImage* _backgroundTileImage;
@@ -247,7 +247,7 @@ public:
                          Tile*                             tile,
                          const Mesh*                       tessellatorMesh,
                          const TileTessellator*            tessellator,
-                         long long                         tileDownloadPriority,
+                         long long                         tileTextureDownloadPriority,
                          bool                              logTilesPetitions,
                          FrameTasksExecutor*               frameTasksExecutor,
                          const IImage*                     backgroundTileImage,
@@ -259,7 +259,7 @@ public:
   _tileId(tile->_id),
   _texturedMesh( NULL ),
   _canceled(false),
-  _tileDownloadPriority(tileDownloadPriority),
+  _tileTextureDownloadPriority(tileTextureDownloadPriority),
   _logTilesPetitions(logTilesPetitions),
   _frameTasksExecutor(frameTasksExecutor),
   _backgroundTileImage(backgroundTileImage),
@@ -300,7 +300,7 @@ public:
         _tileImageProvider->create(_tile,
                                    contribution,
                                    _tileTextureResolution,
-                                   _tileDownloadPriority,
+                                   _tileTextureDownloadPriority,
                                    _logTilesPetitions,
                                    new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backgroundTileImage, _backgroundTileImageName),
                                    true,
@@ -666,9 +666,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
 
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
-    const long long tileTexturePriority = (prc->_tilesRenderParameters->_incrementalTileQuality
-                                           ? prc->_tileDownloadPriority + prc->_layerTilesRenderParameters->_maxLevel - tile->_level
-                                           : prc->_tileDownloadPriority + tile->_level);
+    const long long tileTextureDownloadPriority = prc->getTileTextureDownloadPriority(tile->_level);
 
     builder = new DTT_TileTextureBuilder(rc,
                                          prc->_layerTilesRenderParameters,
@@ -676,7 +674,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
                                          tile,
                                          tessellatorMesh,
                                          prc->_tessellator,
-                                         tileTexturePriority,
+                                         tileTextureDownloadPriority,
                                          prc->_logTilesPetitions,
                                          rc->getFrameTasksExecutor(),
                                          _defaultBackgroundImage,

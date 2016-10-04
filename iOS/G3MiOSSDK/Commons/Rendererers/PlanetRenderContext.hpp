@@ -30,7 +30,7 @@ public:
   ElevationDataProvider* _elevationDataProvider;
   TileTessellator*       _tessellator;
   LayerSet*              _layerSet;
-  long long              _tileDownloadPriority;
+  long long              _tileTextureDownloadPriority;
   double                 _texWidthSquared;
   double                 _texHeightSquared;
   long long              _nowInMS;
@@ -46,6 +46,8 @@ public:
   LayerTilesRenderParameters* _layerTilesRenderParameters;
   TilesRenderParameters*      _tilesRenderParameters;
 #endif
+
+  const long long getTileTextureDownloadPriority(const int tileLevel) const;
 
   ~PlanetRenderContext() {
   }

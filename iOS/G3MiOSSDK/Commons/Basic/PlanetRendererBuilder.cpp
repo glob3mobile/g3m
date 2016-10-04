@@ -41,7 +41,7 @@ _texturizer(NULL),
 _tileTessellator(NULL),
 _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
-_tileDownloadPriority(DownloadPriority::HIGHER),
+_tileTextureDownloadPriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
@@ -199,12 +199,12 @@ std::vector<long long>* PlanetRendererBuilder::getStabilizationMilliSeconds() {
 }
 
 /**
- * Returns the _tileDownloadPriority.
+ * Returns the _tileTextureDownloadPriority.
  *
- * @return _tileDownloadPriority: long long
+ * @return _tileTextureDownloadPriority: long long
  */
-long long PlanetRendererBuilder::getTileDownloadPriority() {
-  return _tileDownloadPriority;
+long long PlanetRendererBuilder::getTileTextureDownloadPriority() {
+  return _tileTextureDownloadPriority;
 }
 
 void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
@@ -261,8 +261,8 @@ void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* list
   getStabilizationMilliSeconds()->push_back(stabilizationInterval._milliseconds);
 }
 
-void PlanetRendererBuilder::setTileDownloadPriority(long long tileDownloadPriority) {
-  _tileDownloadPriority = tileDownloadPriority;
+void PlanetRendererBuilder::setTileTextureDownloadPriority(long long tileTextureDownloadPriority) {
+  _tileTextureDownloadPriority = tileTextureDownloadPriority;
 }
 
 void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
@@ -341,7 +341,7 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       layerSet,
                                                       getParameters(),
                                                       getShowStatistics(),
-                                                      getTileDownloadPriority(),
+                                                      getTileTextureDownloadPriority(),
                                                       getRenderedSector(),
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),

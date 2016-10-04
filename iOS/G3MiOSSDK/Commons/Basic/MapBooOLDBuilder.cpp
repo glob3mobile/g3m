@@ -511,14 +511,13 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   const bool incrementalTileQuality = false;
   const Quality quality = QUALITY_LOW;
 
-  const TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
-                                                                      forceFirstLevelTilesRenderOnStart,
-                                                                      incrementalTileQuality,
-                                                                      quality);
-
+  TilesRenderParameters* parameters = new TilesRenderParameters(renderDebug,
+                                                                forceFirstLevelTilesRenderOnStart,
+                                                                incrementalTileQuality,
+                                                                quality);
 
   const bool showStatistics = false;
-  long long tileDownloadPriority = DownloadPriority::HIGHER;
+  long long tileTextureDownloadPriority = DownloadPriority::HIGHER;
 
   const Sector renderedSector = Sector::fullSphere();
   const bool renderTileMeshes = true;
@@ -537,7 +536,7 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
                                               _layerSet,
                                               parameters,
                                               showStatistics,
-                                              tileDownloadPriority,
+                                              tileTextureDownloadPriority,
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,

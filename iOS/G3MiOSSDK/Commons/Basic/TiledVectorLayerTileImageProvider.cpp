@@ -203,7 +203,7 @@ _symbolizer(NULL)
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorLayer* layer,
                                                               const Tile*             tile,
-                                                              long long               tileDownloadPriority,
+                                                              long long               tileTextureDownloadPriority,
                                                               bool                    logDownloadActivity) {
   
   TiledVectorLayer::RequestGEOJSONBufferData* requestData = layer->getRequestGEOJSONBufferData(tile);
@@ -217,7 +217,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
       ILogger::instance()->logInfo("Downloading %s", requestData->_url._path.c_str());
     }
     _downloadRequestId = _downloader->requestBuffer(requestData->_url,
-                                                    tileDownloadPriority,
+                                                    tileTextureDownloadPriority,
                                                     requestData->_timeToCache,
                                                     requestData->_readExpired,
                                                     _downloadListener,
@@ -366,7 +366,7 @@ const TileImageContribution* TiledVectorLayerTileImageProvider::contribution(con
 void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                const TileImageContribution* contribution,
                                                const Vector2I& resolution,
-                                               long long tileDownloadPriority,
+                                               long long tileTextureDownloadPriority,
                                                bool logDownloadActivity,
                                                TileImageListener* listener,
                                                bool deleteListener,
@@ -385,7 +385,7 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
 
   assembler->start(_layer,
                    tile,
-                   tileDownloadPriority,
+                   tileTextureDownloadPriority,
                    logDownloadActivity);
 }
 
