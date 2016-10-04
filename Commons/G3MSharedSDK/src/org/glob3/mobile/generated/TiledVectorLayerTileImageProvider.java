@@ -342,7 +342,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _symbolizer = null;
     }
 
-    public final void start(TiledVectorLayer layer, Tile tile, long tileDownloadPriority, boolean logDownloadActivity)
+    public final void start(TiledVectorLayer layer, Tile tile, long tileTextureDownloadPriority, boolean logDownloadActivity)
     {
     
       TiledVectorLayer.RequestGEOJSONBufferData requestData = layer.getRequestGEOJSONBufferData(tile);
@@ -357,7 +357,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         {
           ILogger.instance().logInfo("Downloading %s", requestData._url._path);
         }
-        _downloadRequestId = _downloader.requestBuffer(requestData._url, tileDownloadPriority, requestData._timeToCache, requestData._readExpired, _downloadListener, true); // deleteListener
+        _downloadRequestId = _downloader.requestBuffer(requestData._url, tileTextureDownloadPriority, requestData._timeToCache, requestData._readExpired, _downloadListener, true); // deleteListener
       }
       else
       {
@@ -539,14 +539,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     return (_layer == null) ? null : _layer.contribution(tile);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
   
     ImageAssembler assembler = new ImageAssembler(this, tile, contribution, listener, deleteListener, resolution, _downloader, _threadUtils);
   
     _assemblers.put(tile._id, assembler);
   
-    assembler.start(_layer, tile, tileDownloadPriority, logDownloadActivity);
+    assembler.start(_layer, tile, tileTextureDownloadPriority, logDownloadActivity);
   }
 
   public final void cancel(String tileId)

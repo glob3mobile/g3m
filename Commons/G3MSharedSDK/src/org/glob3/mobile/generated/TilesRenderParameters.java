@@ -3,7 +3,7 @@ public class TilesRenderParameters
 {
   public final boolean _renderDebug;
   public final boolean _forceFirstLevelTilesRenderOnStart;
-  public final boolean _incrementalTileQuality;
+  public boolean _incrementalTileQuality;
   public double _texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
   public final Quality _quality;
 

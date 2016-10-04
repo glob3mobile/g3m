@@ -6,8 +6,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private boolean _ownsElevationDataProvider;
   private TileTexturizer _texturizer;
   private LayerSet _layerSet;
-  private final TilesRenderParameters _tilesRenderParameters;
-  private final boolean _showStatistics;
+  private TilesRenderParameters _tilesRenderParameters;
+  private boolean _showStatistics;
   private final boolean _logTilesPetitions;
   private ITileVisitor _tileVisitor = null;
   private TileLODTester _tileLODTester;
@@ -261,7 +261,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
-  private long _tileDownloadPriority;
+  private long _tileTextureDownloadPriority;
 
   private float _verticalExaggeration;
 
@@ -320,7 +320,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileTextureDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -335,7 +335,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _lastCamera = null;
      _firstRender = false;
      _lastVisibleSector = null;
-     _tileDownloadPriority = tileDownloadPriority;
+     _tileTextureDownloadPriority = tileTextureDownloadPriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
      _glState = new GLState();
@@ -415,6 +415,21 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     super.dispose();
   }
 
+  public final boolean isShowStatistics()
+  {
+    return _showStatistics;
+  }
+
+  public final void setShowStatistics(boolean showStatistics)
+  {
+    _showStatistics = showStatistics;
+  }
+
+  public final void setIncrementalTileQuality(boolean incrementalTileQuality)
+  {
+    _tilesRenderParameters._incrementalTileQuality = incrementalTileQuality;
+  }
+
   public final void initialize(G3MContext context)
   {
     _context = context;
@@ -480,7 +495,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _prc._elevationDataProvider = _elevationDataProvider;
     _prc._tessellator = _tessellator;
     _prc._layerSet = _layerSet;
-    _prc._tileDownloadPriority = _tileDownloadPriority;
+    _prc._tileTextureDownloadPriority = _tileTextureDownloadPriority;
     _prc._texWidthSquared = texWidthSquared;
     _prc._texHeightSquared = texHeightSquared;
     _prc._nowInMS = nowInMS;
@@ -691,7 +706,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         _prc._elevationDataProvider = _elevationDataProvider;
         _prc._tessellator = _tessellator;
         _prc._layerSet = _layerSet;
-        _prc._tileDownloadPriority = _tileDownloadPriority;
+        _prc._tileTextureDownloadPriority = _tileTextureDownloadPriority;
         _prc._texWidthSquared = -1;
         _prc._texHeightSquared = -1;
         _prc._nowInMS = -1;
@@ -826,21 +841,21 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
-   * @param tileDownloadPriority: new value for download priority of textures
+   * @param tileTextureDownloadPriority: new value for download priority of textures
    */
-  public final void setTileDownloadPriority(long tileDownloadPriority)
+  public final void setTileTextureDownloadPriority(long tileTextureDownloadPriority)
   {
-    _tileDownloadPriority = tileDownloadPriority;
+    _tileTextureDownloadPriority = tileTextureDownloadPriority;
   }
 
   /**
    * Return the current value for the download priority of textures
    *
-   * @return _tileDownloadPriority: long
+   * @return _tileTextureDownloadPriority: long
    */
-  public final long getTileDownloadPriority()
+  public final long getTileTextureDownloadPriority()
   {
-    return _tileDownloadPriority;
+    return _tileTextureDownloadPriority;
   }
 
   /**

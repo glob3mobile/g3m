@@ -49,7 +49,7 @@ public class PlanetRendererBuilder
   private Quality _quality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
-  private long _tileDownloadPriority;
+  private long _tileTextureDownloadPriority;
 
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
@@ -183,13 +183,13 @@ public class PlanetRendererBuilder
   }
 
   /**
-   * Returns the _tileDownloadPriority.
+   * Returns the _tileTextureDownloadPriority.
    *
-   * @return _tileDownloadPriority: long long
+   * @return _tileTextureDownloadPriority: long long
    */
-  private long getTileDownloadPriority()
+  private long getTileTextureDownloadPriority()
   {
-    return _tileDownloadPriority;
+    return _tileTextureDownloadPriority;
   }
 
   private boolean _logTilesPetitions;
@@ -297,7 +297,7 @@ public class PlanetRendererBuilder
      _tileTessellator = null;
      _visibleSectorListeners = null;
      _stabilizationMilliSeconds = null;
-     _tileDownloadPriority = DownloadPriority.HIGHER;
+     _tileTextureDownloadPriority = DownloadPriority.HIGHER;
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
@@ -344,7 +344,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -431,9 +431,9 @@ public class PlanetRendererBuilder
   {
     addVisibleSectorListener(listener, TimeInterval.zero());
   }
-  public final void setTileDownloadPriority(long tileDownloadPriority)
+  public final void setTileTextureDownloadPriority(long tileTextureDownloadPriority)
   {
-    _tileDownloadPriority = tileDownloadPriority;
+    _tileTextureDownloadPriority = tileTextureDownloadPriority;
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)

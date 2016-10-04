@@ -57,11 +57,10 @@ public abstract class MapBooOLDBuilder
     final boolean incrementalTileQuality = false;
     final Quality quality = Quality.QUALITY_LOW;
   
-    final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
-  
+    TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
     final boolean showStatistics = false;
-    long tileDownloadPriority = DownloadPriority.HIGHER;
+    long tileTextureDownloadPriority = DownloadPriority.HIGHER;
   
     final Sector renderedSector = Sector.fullSphere();
     final boolean renderTileMeshes = true;
@@ -72,7 +71,7 @@ public abstract class MapBooOLDBuilder
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileTextureDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
   
     if (_enableNotifications)
     {

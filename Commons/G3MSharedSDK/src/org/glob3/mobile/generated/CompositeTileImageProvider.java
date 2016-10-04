@@ -482,7 +482,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     return CompositeTileImageContribution.create(childrenContributions);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
   
     final CompositeTileImageContribution compositeContribution = (CompositeTileImageContribution) contribution;
@@ -503,7 +503,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       // retain the childContribution before calling the child, as the child take full ownership of the contribution
       TileImageContribution.retainContribution(childContribution._contribution);
   
-      child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);
+      child.create(tile, childContribution._contribution, resolution, tileTextureDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);
     }
   }
 

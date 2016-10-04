@@ -8,7 +8,7 @@ public class DTT_TileTextureBuilder extends RCObject
   private TexturesHandler _texturesHandler;
   private final Vector2I _tileTextureResolution;
   private final boolean _logTilesPetitions;
-  private final long _tileDownloadPriority;
+  private final long _tileTextureDownloadPriority;
   private boolean _canceled;
   private FrameTasksExecutor _frameTasksExecutor;
   private final IImage _backgroundTileImage;
@@ -67,7 +67,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName)
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileTextureDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName)
 
   {
      _tileImageProvider = tileImageProvider;
@@ -77,7 +77,7 @@ public class DTT_TileTextureBuilder extends RCObject
      _tileId = tile._id;
      _texturedMesh = null;
      _canceled = false;
-     _tileDownloadPriority = tileDownloadPriority;
+     _tileTextureDownloadPriority = tileTextureDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
      _frameTasksExecutor = frameTasksExecutor;
      _backgroundTileImage = backgroundTileImage;
@@ -110,7 +110,7 @@ public class DTT_TileTextureBuilder extends RCObject
       }
       else
       {
-        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backgroundTileImage, _backgroundTileImageName), true, _frameTasksExecutor);
+        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileTextureDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backgroundTileImage, _backgroundTileImageName), true, _frameTasksExecutor);
       }
     }
   }
