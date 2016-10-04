@@ -220,7 +220,9 @@ PlanetRenderer::~PlanetRenderer() {
   delete _layerTilesRenderParameters;
 
   delete _tessellator;
-  delete _elevationDataProvider;
+  if (_ownsElevationDataProvider) {
+    delete _elevationDataProvider;
+  }
   delete _texturizer;
   delete _tilesRenderParameters;
 
