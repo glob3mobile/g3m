@@ -195,7 +195,7 @@ private:
   TileTexturizer*              _texturizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
-  const bool                   _showStatistics;
+  bool                         _showStatistics;
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
   TileLODTester*               _tileLODTester;
@@ -297,6 +297,14 @@ public:
                  TileVisibilityTester*        tileVisibilityTester);
 
   ~PlanetRenderer();
+
+  bool isShowStatistics() const {
+    return _showStatistics;
+  }
+
+  void setShowStatistics(bool showStatistics) {
+    _showStatistics = showStatistics;
+  }
 
   void initialize(const G3MContext* context);
 

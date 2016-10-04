@@ -19,7 +19,6 @@
 #include "MeshHolder.hpp"
 #include "TileVisibilityTester.hpp"
 #include "TileLODTester.hpp"
-#include "FlatColorMesh.hpp"
 #include "TilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
 #include "LayerTilesRenderParameters.hpp"
@@ -62,7 +61,6 @@ _row(row),
 _column(column),
 _tessellatorMesh(NULL),
 _debugMesh(NULL),
-_flatColorMesh(NULL),
 _texturizedMesh(NULL),
 _textureSolved(false),
 _texturizerDirty(true),
@@ -88,8 +86,6 @@ Tile::~Tile() {
   //  prune(NULL, NULL);
 
   delete _debugMesh;
-
-  delete _flatColorMesh;
 
   delete _tessellatorMesh;
 
@@ -264,18 +260,11 @@ void Tile::rawRender(const G3MRenderContext*    rc,
                                                     _texturizedMesh);
     }
 
-    if (_texturizedMesh != NULL) {
-      _texturizedMesh->render(rc, glState);
+    if (_texturizedMesh == NULL) {
+      tessellatorMesh->render(rc, glState);
     }
     else {
-      //Adding flat color if no texture set on the mesh
-      if (_flatColorMesh == NULL) {
-        _flatColorMesh = new FlatColorMesh(tessellatorMesh,
-                                           false,
-                                           Color::newFromRGBA(1.0f, 1.0f, 1.0f, 1.0f),
-                                           true);
-      }
-      _flatColorMesh->render(rc, glState);
+      _texturizedMesh->render(rc, glState);
     }
   }
 }

@@ -116,6 +116,7 @@ void G3MDemoModel::reset() {
   _g3mWidget->cancelAllEffects();
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();
+  planetRenderer->setShowStatistics(false);
   planetRenderer->setVerticalExaggeration(1);
 
   ElevationDataProvider* elevationDataProvider = NULL;
