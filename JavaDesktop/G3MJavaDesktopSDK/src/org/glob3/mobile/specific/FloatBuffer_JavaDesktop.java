@@ -147,5 +147,21 @@ public class FloatBuffer_JavaDesktop
       }
    }
 
+    @Override
+    public void put(float[] values) {
+        _buffer.put(values);
+        _timestamp++;
+    }
+
+    @Override
+    public void rewind() {
+        _buffer.rewind();
+    }
+
+    @Override
+    public int position() {
+        return _buffer.position();
+    }
+
 
 }
