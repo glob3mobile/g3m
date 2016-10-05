@@ -444,12 +444,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
-    if (_errors.empty()) {
-      return RenderState::busy();
-    }
-    else {
-      return RenderState::error(_errors);
-    }
+    return _errors.empty() ? RenderState::busy() : RenderState::error(_errors);
   }
 
   const RenderState layerSetRenderState = _layerSet->getRenderState();
