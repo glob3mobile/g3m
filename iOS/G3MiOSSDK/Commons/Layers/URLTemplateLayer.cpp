@@ -139,7 +139,11 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
   const int column  = tile->_column;
   const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
-  
+
+  const Geodetic2D lower  = sector._lower;
+  const Geodetic2D upper  = sector._upper;
+  const Geodetic2D center = sector._center;
+
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
   const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
   const double east  = MercatorUtils::longitudeToMeters( sector._upper._longitude );
@@ -161,24 +165,26 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
     }
   }
 
-  path = _su->replaceAll(path, "{width}",          _su->toString( tileTextureResolution._x          ) );
-  path = _su->replaceAll(path, "{height}",         _su->toString( tileTextureResolution._y          ) );
-  path = _su->replaceAll(path, "{x}",              _su->toString( column                            ) );
-  path = _su->replaceAll(path, "{col}",            _su->toString( column                            ) );
-  path = _su->replaceAll(path, "{y}",              _su->toString( row                               ) );
-  path = _su->replaceAll(path, "{y2}",             _su->toString( tile->_row                        ) );
-  path = _su->replaceAll(path, "{row}",            _su->toString( tile->_row                        ) );
-  path = _su->replaceAll(path, "{level}",          _su->toString( level                             ) );
-  path = _su->replaceAll(path, "{z}",              _su->toString( level                             ) );
-  path = _su->replaceAll(path, "{level-1}",        _su->toString( level - 1                         ) );
-  path = _su->replaceAll(path, "{lowerLatitude}",  _su->toString( sector._lower._latitude._degrees  ) );
-  path = _su->replaceAll(path, "{lowerLongitude}", _su->toString( sector._lower._longitude._degrees ) );
-  path = _su->replaceAll(path, "{upperLatitude}",  _su->toString( sector._upper._latitude._degrees  ) );
-  path = _su->replaceAll(path, "{upperLongitude}", _su->toString( sector._upper._longitude._degrees ) );
-  path = _su->replaceAll(path, "{north}",          _su->toString( north                             ) );
-  path = _su->replaceAll(path, "{south}",          _su->toString( south                             ) );
-  path = _su->replaceAll(path, "{west}",           _su->toString( west                              ) );
-  path = _su->replaceAll(path, "{east}",           _su->toString( east                              ) );
+  path = _su->replaceAll(path, "{width}",           _su->toString( tileTextureResolution._x   ) );
+  path = _su->replaceAll(path, "{height}",          _su->toString( tileTextureResolution._y   ) );
+  path = _su->replaceAll(path, "{x}",               _su->toString( column                     ) );
+  path = _su->replaceAll(path, "{col}",             _su->toString( column                     ) );
+  path = _su->replaceAll(path, "{y}",               _su->toString( row                        ) );
+  path = _su->replaceAll(path, "{y2}",              _su->toString( tile->_row                 ) );
+  path = _su->replaceAll(path, "{row}",             _su->toString( tile->_row                 ) );
+  path = _su->replaceAll(path, "{level}",           _su->toString( level                      ) );
+  path = _su->replaceAll(path, "{z}",               _su->toString( level                      ) );
+  path = _su->replaceAll(path, "{level-1}",         _su->toString( level - 1                  ) );
+  path = _su->replaceAll(path, "{lowerLatitude}",   _su->toString( lower._latitude._degrees   ) );
+  path = _su->replaceAll(path, "{lowerLongitude}",  _su->toString( lower._longitude._degrees  ) );
+  path = _su->replaceAll(path, "{upperLatitude}",   _su->toString( upper._latitude._degrees   ) );
+  path = _su->replaceAll(path, "{upperLongitude}",  _su->toString( upper._longitude._degrees  ) );
+  path = _su->replaceAll(path, "{centerLatitude}",  _su->toString( center._latitude._degrees  ) );
+  path = _su->replaceAll(path, "{centerLongitude}", _su->toString( center._longitude._degrees ) );
+  path = _su->replaceAll(path, "{north}",           _su->toString( north                      ) );
+  path = _su->replaceAll(path, "{south}",           _su->toString( south                      ) );
+  path = _su->replaceAll(path, "{west}",            _su->toString( west                       ) );
+  path = _su->replaceAll(path, "{east}",            _su->toString( east                       ) );
   
   return URL(path, false);
 }
