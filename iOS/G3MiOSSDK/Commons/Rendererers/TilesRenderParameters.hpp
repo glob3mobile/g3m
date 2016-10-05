@@ -22,17 +22,14 @@ enum Quality {
 class TilesRenderParameters {
 public:
   const bool    _renderDebug;
-  const bool    _forceFirstLevelTilesRenderOnStart;
   bool          _incrementalTileQuality;
   double        _texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
   const Quality _quality;
 
   TilesRenderParameters(const bool    renderDebug,
-                        const bool    forceFirstLevelTilesRenderOnStart,
                         const bool    incrementalTileQuality,
                         const Quality quality) :
   _renderDebug(renderDebug),
-  _forceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart),
   _incrementalTileQuality(incrementalTileQuality),
   _quality(quality)
   {

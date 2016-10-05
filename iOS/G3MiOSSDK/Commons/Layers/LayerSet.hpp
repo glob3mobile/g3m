@@ -53,14 +53,12 @@ private:
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
-  bool checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStart,
-                             std::vector<std::string>& errors) const;
+  bool checkLayersDataSector(std::vector<std::string>& errors) const;
 
   bool checkLayersRenderState(std::vector<std::string>& errors,
                               std::vector<Layer*>& enableLayers) const;
 
-  LayerTilesRenderParameters* checkAndComposeLayerTilesRenderParameters (const bool forceFirstLevelTilesRenderOnStart,
-                                                                        const std::vector<Layer*>& enableLayers,
+  LayerTilesRenderParameters* checkAndComposeLayerTilesRenderParameters(const std::vector<Layer*>& enableLayers,
                                                                         std::vector<std::string>& errors) const;
 
 public:
@@ -94,7 +92,7 @@ public:
   void layerChanged(const Layer* layer) const;
 
   void setChangeListener(ChangedListener* listener);
-  
+
   void setTileImageProvider(TileImageProvider* tileImageProvider);
 
 
@@ -102,8 +100,7 @@ public:
 
   Layer* getLayerByTitle(const std::string& title) const;
 
-  LayerTilesRenderParameters* createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
-                                                               std::vector<std::string>& errors) const;
+  LayerTilesRenderParameters* createLayerTilesRenderParameters(std::vector<std::string>& errors) const;
 
   bool isEquals(const LayerSet* that) const;
 

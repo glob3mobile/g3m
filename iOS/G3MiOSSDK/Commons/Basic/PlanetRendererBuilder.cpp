@@ -32,7 +32,6 @@
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
 _renderDebug(false),
-_forceFirstLevelTilesRenderOnStart(true),
 _incrementalTileQuality(false),
 _quality(QUALITY_LOW),
 _parameters(NULL),
@@ -151,15 +150,6 @@ bool PlanetRendererBuilder::getRenderDebug() {
 }
 
 /**
- * Returns the forceFirstLevelTilesRenderOnStart flag.
- *
- * @return _forceFirstLevelTilesRenderOnStart: bool
- */
-bool PlanetRendererBuilder::getForceFirstLevelTilesRenderOnStart() {
-  return _forceFirstLevelTilesRenderOnStart;
-}
-
-/**
  * Returns the incrementalTileQuality flag.
  *
  * @return _incrementalTileQuality: bool
@@ -245,10 +235,6 @@ void PlanetRendererBuilder::setShowStatistics(const bool showStatistics) {
 
 void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
-}
-
-void PlanetRendererBuilder::setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart) {
-  _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
 }
 
 void PlanetRendererBuilder::setIncrementalTileQuality(const bool incrementalTileQuality) {
@@ -376,7 +362,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
 TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
   return new TilesRenderParameters(getRenderDebug(),
-                                   getForceFirstLevelTilesRenderOnStart(),
                                    getIncrementalTileQuality(),
                                    getQuality());
 }
