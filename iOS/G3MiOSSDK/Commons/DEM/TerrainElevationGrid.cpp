@@ -24,7 +24,7 @@ _resolution(sector._deltaLatitude.div(extent._y),
 }
 
 TerrainElevationGrid::~TerrainElevationGrid() {
-#ifdef JAVA
+#ifdef JAVA_CODE
   super.dispose();
 #endif
 }

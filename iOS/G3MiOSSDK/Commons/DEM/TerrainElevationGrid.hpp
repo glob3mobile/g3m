@@ -21,7 +21,12 @@ class Geodetic3D;
 class TerrainElevationGrid : public RCObject {
 protected:
   const Sector     _sector;
+#ifdef C_CODE
   const Vector2I   _extent;
+#endif
+#ifdef JAVA_CODE
+  protected final Vector2I _extent;
+#endif
   const Geodetic2D _resolution;
 
   TerrainElevationGrid(const Sector&   sector,
