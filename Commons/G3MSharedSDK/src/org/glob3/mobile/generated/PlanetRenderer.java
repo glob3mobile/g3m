@@ -299,7 +299,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _errors.clear();
       _layerTilesRenderParameters = null;
-      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
       if (_layerTilesRenderParameters == null)
       {
         ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
@@ -507,7 +507,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _tileVisibilityTester.renderStarted();
   
   
-    if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+    if (_firstRender)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
       // loaded as they will be used as last-chance fallback texture for any tile.
@@ -654,10 +654,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       if (_errors.isEmpty())
       {
-        if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-        {
-          return RenderState.busy();
-        }
+        return RenderState.busy();
       }
       else
       {
@@ -691,33 +688,30 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
-      if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+      _statistics.clear();
+  
+      _prc._tileLODTester = _tileLODTester;
+      _prc._tileVisibilityTester = _tileVisibilityTester;
+      _prc._frustumInModelCoordinates = null;
+      _prc._verticalExaggeration = _verticalExaggeration;
+      _prc._layerTilesRenderParameters = layerTilesRenderParameters;
+      _prc._texturizer = _texturizer;
+      _prc._tilesRenderParameters = _tilesRenderParameters;
+      _prc._lastSplitTimer = _lastSplitTimer;
+      _prc._elevationDataProvider = _elevationDataProvider;
+      _prc._tessellator = _tessellator;
+      _prc._layerSet = _layerSet;
+      _prc._tileTextureDownloadPriority = _tileTextureDownloadPriority;
+      _prc._texWidthSquared = -1;
+      _prc._texHeightSquared = -1;
+      _prc._nowInMS = -1;
+      _prc._renderTileMeshes = _renderTileMeshes;
+      _prc._logTilesPetitions = _logTilesPetitions;
+  
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        _statistics.clear();
-  
-        _prc._tileLODTester = _tileLODTester;
-        _prc._tileVisibilityTester = _tileVisibilityTester;
-        _prc._frustumInModelCoordinates = null;
-        _prc._verticalExaggeration = _verticalExaggeration;
-        _prc._layerTilesRenderParameters = layerTilesRenderParameters;
-        _prc._texturizer = _texturizer;
-        _prc._tilesRenderParameters = _tilesRenderParameters;
-        _prc._lastSplitTimer = _lastSplitTimer;
-        _prc._elevationDataProvider = _elevationDataProvider;
-        _prc._tessellator = _tessellator;
-        _prc._layerSet = _layerSet;
-        _prc._tileTextureDownloadPriority = _tileTextureDownloadPriority;
-        _prc._texWidthSquared = -1;
-        _prc._texHeightSquared = -1;
-        _prc._nowInMS = -1;
-        _prc._renderTileMeshes = _renderTileMeshes;
-        _prc._logTilesPetitions = _logTilesPetitions;
-  
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, _prc);
-        }
+        Tile tile = _firstLevelTiles.get(i);
+        tile.prepareForFullRendering(rc, _prc);
       }
   
       for (int i = 0; i < firstLevelTilesCount; i++)
@@ -727,7 +721,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       }
     }
   
-    if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved)
+    if (!_allFirstLevelTilesAreTextureSolved)
     {
       final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)

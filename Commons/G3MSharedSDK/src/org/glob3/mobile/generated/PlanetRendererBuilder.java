@@ -44,7 +44,6 @@ public class PlanetRendererBuilder
   private TilesRenderParameters _parameters;
   private boolean _showStatistics;
   private boolean _renderDebug;
-  private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
   private Quality _quality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
@@ -137,16 +136,6 @@ public class PlanetRendererBuilder
   }
 
   /**
-   * Returns the forceFirstLevelTilesRenderOnStart flag.
-   *
-   * @return _forceFirstLevelTilesRenderOnStart: bool
-   */
-  private boolean getForceFirstLevelTilesRenderOnStart()
-  {
-    return _forceFirstLevelTilesRenderOnStart;
-  }
-
-  /**
    * Returns the incrementalTileQuality flag.
    *
    * @return _incrementalTileQuality: bool
@@ -200,7 +189,7 @@ public class PlanetRendererBuilder
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-    return new TilesRenderParameters(getRenderDebug(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
+    return new TilesRenderParameters(getRenderDebug(), getIncrementalTileQuality(), getQuality());
   }
   private TileTessellator createTileTessellator()
   {
@@ -288,7 +277,6 @@ public class PlanetRendererBuilder
   {
      _showStatistics = false;
      _renderDebug = false;
-     _forceFirstLevelTilesRenderOnStart = true;
      _incrementalTileQuality = false;
      _quality = Quality.QUALITY_LOW;
      _parameters = null;
@@ -413,10 +401,6 @@ public class PlanetRendererBuilder
   public final void setRenderDebug(boolean renderDebug)
   {
     _renderDebug = renderDebug;
-  }
-  public final void setForceFirstLevelTilesRenderOnStart(boolean forceFirstLevelTilesRenderOnStart)
-  {
-    _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
   }
   public final void setIncrementalTileQuality(boolean incrementalTileQuality)
   {

@@ -2,15 +2,13 @@ package org.glob3.mobile.generated;
 public class TilesRenderParameters
 {
   public final boolean _renderDebug;
-  public final boolean _forceFirstLevelTilesRenderOnStart;
   public boolean _incrementalTileQuality;
   public double _texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
   public final Quality _quality;
 
-  public TilesRenderParameters(boolean renderDebug, boolean forceFirstLevelTilesRenderOnStart, boolean incrementalTileQuality, Quality quality)
+  public TilesRenderParameters(boolean renderDebug, boolean incrementalTileQuality, Quality quality)
   {
      _renderDebug = renderDebug;
-     _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
      _incrementalTileQuality = incrementalTileQuality;
      _quality = quality;
     switch (quality)

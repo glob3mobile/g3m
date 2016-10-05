@@ -92,55 +92,51 @@ public class LayerSet implements ChangedInfoListener
     return (compositeTileImageProvider == null) ? singleTileImageProvider : compositeTileImageProvider;
   }
 
-  private boolean checkLayersDataSector(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
+  private boolean checkLayersDataSector(java.util.ArrayList<String> errors)
   {
+    Sector biggestDataSector = null;
   
-    if (forceFirstLevelTilesRenderOnStart)
+    final int layersCount = _layers.size();
+    double biggestArea = 0;
+    for (int i = 0; i < layersCount; i++)
     {
-      Sector biggestDataSector = null;
+      Layer layer = _layers.get(i);
+      if (layer.isEnable())
+      {
+        final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
+        if (layerArea > biggestArea)
+        {
+          if (biggestDataSector != null)
+             biggestDataSector.dispose();
+          biggestDataSector = new Sector(layer.getDataSector());
+          biggestArea = layerArea;
+        }
+      }
+    }
   
-      final int layersCount = _layers.size();
-      double biggestArea = 0;
+    if (biggestDataSector != null)
+    {
+      boolean dataSectorsInconsistency = false;
       for (int i = 0; i < layersCount; i++)
       {
         Layer layer = _layers.get(i);
         if (layer.isEnable())
         {
-          final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
-          if (layerArea > biggestArea)
+          if (!biggestDataSector.fullContains(layer.getDataSector()))
           {
-            if (biggestDataSector != null)
-               biggestDataSector.dispose();
-            biggestDataSector = new Sector(layer.getDataSector());
-            biggestArea = layerArea;
+            dataSectorsInconsistency = true;
+            break;
           }
         }
       }
   
       if (biggestDataSector != null)
+         biggestDataSector.dispose();
+  
+      if (dataSectorsInconsistency)
       {
-        boolean dataSectorsInconsistency = false;
-        for (int i = 0; i < layersCount; i++)
-        {
-          Layer layer = _layers.get(i);
-          if (layer.isEnable())
-          {
-            if (!biggestDataSector.fullContains(layer.getDataSector()))
-            {
-              dataSectorsInconsistency = true;
-              break;
-            }
-          }
-        }
-  
-        if (biggestDataSector != null)
-           biggestDataSector.dispose();
-  
-        if (dataSectorsInconsistency)
-        {
-          errors.add("Inconsistency in layers data sectors");
-          return false;
-        }
+        errors.add("Inconsistency in layers data sectors");
+        return false;
       }
     }
   
@@ -175,7 +171,7 @@ public class LayerSet implements ChangedInfoListener
     return !layerSetNotReadyFlag;
   }
 
-  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
+  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
   {
   
     MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters = new MutableLayerTilesRenderParameters();
@@ -401,10 +397,10 @@ public class LayerSet implements ChangedInfoListener
     return null;
   }
 
-  public final LayerTilesRenderParameters createLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
+  public final LayerTilesRenderParameters createLayerTilesRenderParameters(java.util.ArrayList<String> errors)
   {
   
-    if (!checkLayersDataSector(forceFirstLevelTilesRenderOnStart, errors))
+    if (!checkLayersDataSector(errors))
     {
       return null;
     }
@@ -415,7 +411,7 @@ public class LayerSet implements ChangedInfoListener
       return null;
     }
   
-    return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
+    return checkAndComposeLayerTilesRenderParameters(enableLayers, errors);
   }
 
   public final boolean isEquals(LayerSet that)
