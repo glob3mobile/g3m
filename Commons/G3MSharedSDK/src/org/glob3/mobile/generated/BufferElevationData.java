@@ -27,7 +27,7 @@ public abstract class BufferElevationData extends ElevationData
 
   ///#include "Vector2I.hpp"
   
-  public BufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, int bufferSize, double deltaHeight)
+  public BufferElevationData(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
      super(sector, extent);
      _bufferSize = bufferSize;

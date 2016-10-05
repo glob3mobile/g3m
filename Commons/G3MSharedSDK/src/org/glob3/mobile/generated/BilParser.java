@@ -65,6 +65,6 @@ public class BilParser
       shortBuffer[i] = height;
     }
   
-    return new ShortBufferElevationData(sector, extent, sector, extent, shortBuffer, size, deltaHeight);
+    return new ShortBufferElevationData(sector, extent, shortBuffer, size, deltaHeight);
   }
 }

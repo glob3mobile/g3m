@@ -36,9 +36,9 @@ public class FloatBufferElevationData extends BufferElevationData
 
   public static final float NO_DATA_VALUE = java.lang.Float.NaN;
 
-  public FloatBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, IFloatBuffer buffer, double deltaHeight)
+  public FloatBufferElevationData(Sector sector, Vector2I extent, IFloatBuffer buffer, double deltaHeight)
   {
-     super(sector, extent, realSector, realExtent, buffer.size(), deltaHeight);
+     super(sector, extent, buffer.size(), deltaHeight);
      _buffer = buffer;
     if (_buffer.size() != (_width * _height))
     {
@@ -63,7 +63,6 @@ public class FloatBufferElevationData extends BufferElevationData
        _buffer.dispose();
   
     super.dispose();
-  
   }
 
   public final String description(boolean detailed)

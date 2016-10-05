@@ -152,7 +152,8 @@ public abstract class ElevationData
   
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
-    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
+    final Geodetic3D center = new Geodetic3D(sector._center, averageElevation);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, center);
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   

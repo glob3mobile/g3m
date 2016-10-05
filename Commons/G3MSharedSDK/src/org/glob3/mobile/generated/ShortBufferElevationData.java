@@ -36,9 +36,9 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public static final short NO_DATA_VALUE = -32768;
 
-  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight)
+  public ShortBufferElevationData(Sector sector, Vector2I extent, short[] buffer, int bufferSize, double deltaHeight)
   {
-     super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
+     super(sector, extent, bufferSize, deltaHeight);
      _buffer = buffer;
     if (_bufferSize != (_width * _height))
     {
