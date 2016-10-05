@@ -21,25 +21,22 @@ package org.glob3.mobile.generated;
 //class Geodetic3D;
 
 
-public abstract class DEMData extends RCObject
+public abstract class TerrainElevationGrid extends RCObject
 {
   protected final Sector _sector ;
-  protected final Vector2I _extent = new Vector2I();
+  protected final Vector2I _extent;
   protected final Geodetic2D _resolution ;
 
-  protected DEMData(Sector sector, Vector2I extent)
+  protected TerrainElevationGrid(Sector sector, Vector2I extent)
   {
      _sector = new Sector(sector);
-     _extent = new Vector2I(extent);
+     _extent = extent;
      _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
   }
 
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA
     super.dispose();
-//#endif
   }
 
 
