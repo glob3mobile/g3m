@@ -245,7 +245,7 @@
 		CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
 		CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
-		CF7338131DA56EA700C406D1 /* DEMData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338111DA56EA700C406D1 /* DEMData.cpp */; };
+		CF7338131DA56EA700C406D1 /* TerrainElevationGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */; };
 		CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */; };
@@ -1511,8 +1511,8 @@
 		CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshMaterial.hpp; path = Commons/Mesh/G3MMeshMaterial.hpp; sourceTree = "<group>"; };
 		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
 		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
-		CF7338111DA56EA700C406D1 /* DEMData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DEMData.cpp; path = Commons/DEM/DEMData.cpp; sourceTree = "<group>"; };
-		CF7338121DA56EA700C406D1 /* DEMData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DEMData.hpp; path = Commons/DEM/DEMData.hpp; sourceTree = "<group>"; };
+		CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainElevationGrid.cpp; path = Commons/DEM/TerrainElevationGrid.cpp; sourceTree = "<group>"; };
+		CF7338121DA56EA700C406D1 /* TerrainElevationGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainElevationGrid.hpp; path = Commons/DEM/TerrainElevationGrid.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrTileLODTester.cpp; path = Commons/Rendererers/OrTileLODTester.cpp; sourceTree = "<group>"; };
@@ -2647,8 +2647,8 @@
 		CF7338101DA56E9600C406D1 /* DEM */ = {
 			isa = PBXGroup;
 			children = (
-				CF7338111DA56EA700C406D1 /* DEMData.cpp */,
-				CF7338121DA56EA700C406D1 /* DEMData.hpp */,
+				CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */,
+				CF7338121DA56EA700C406D1 /* TerrainElevationGrid.hpp */,
 			);
 			name = DEM;
 			sourceTree = "<group>";
@@ -3306,7 +3306,7 @@
 				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
-				CF7338131DA56EA700C406D1 /* DEMData.cpp in Sources */,
+				CF7338131DA56EA700C406D1 /* TerrainElevationGrid.cpp in Sources */,
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,

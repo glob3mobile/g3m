@@ -18,26 +18,22 @@ class Mesh;
 class Geodetic3D;
 
 
-class DEMData : public RCObject {
+class TerrainElevationGrid : public RCObject {
 protected:
   const Sector     _sector;
   const Vector2I   _extent;
   const Geodetic2D _resolution;
 
-  DEMData(const Sector&   sector,
-          const Vector2I& extent);
+  TerrainElevationGrid(const Sector&   sector,
+                       const Vector2I& extent);
 
-  virtual ~DEMData();
+  virtual ~TerrainElevationGrid();
 
 public:
 
-  const Vector2I getExtent() const {
-    return _extent;
-  }
+  const Vector2I getExtent() const;
 
-  const Geodetic2D getResolution() const {
-    return _resolution;
-  }
+  const Geodetic2D getResolution() const;
 
   virtual double getElevationAt(int x,
                                 int y) const = 0;

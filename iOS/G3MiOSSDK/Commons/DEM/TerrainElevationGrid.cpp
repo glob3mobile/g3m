@@ -6,7 +6,7 @@
 //
 //
 
-#include "DEMData.hpp"
+#include "TerrainElevationGrid.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
@@ -14,8 +14,8 @@
 #include "GLConstants.hpp"
 
 
-DEMData::DEMData(const Sector&   sector,
-                 const Vector2I& extent) :
+TerrainElevationGrid::TerrainElevationGrid(const Sector&   sector,
+                                           const Vector2I& extent) :
 _sector(sector),
 _extent(extent),
 _resolution(sector._deltaLatitude.div(extent._y),
@@ -23,18 +23,24 @@ _resolution(sector._deltaLatitude.div(extent._y),
 {
 }
 
-
-DEMData::~DEMData() {
+TerrainElevationGrid::~TerrainElevationGrid() {
 #ifdef JAVA
   super.dispose();
 #endif
 }
 
+const Vector2I TerrainElevationGrid::getExtent() const {
+  return _extent;
+}
 
-Mesh* DEMData::createMesh(const Planet* planet,
-                          float verticalExaggeration,
-                          const Geodetic3D& positionOffset,
-                          float pointSize) const {
+const Geodetic2D TerrainElevationGrid::getResolution() const {
+  return _resolution;
+}
+
+Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
+                                       float verticalExaggeration,
+                                       const Geodetic3D& positionOffset,
+                                       float pointSize) const {
 
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
   const double minElevation     = minMaxAverageElevations._x;
@@ -81,7 +87,7 @@ Mesh* DEMData::createMesh(const Planet* planet,
                                 0,                    // colorsIntensity
                                 false                 // depthTest
                                 );
-  
+
   delete vertices;
   
   return result;
