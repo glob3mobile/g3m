@@ -11,12 +11,12 @@
 #include "ErrorHandling.hpp"
 
 
-ShortBufferTerrainElevationGrid::ShortBufferTerrainElevationGrid(const Sector&   sector,
+ShortBufferTerrainElevationGrid::ShortBufferTerrainElevationGrid(const Sector& sector,
                                                                  const Vector2I& extent,
-                                                                 short*          buffer,
-                                                                 int             bufferSize,
-                                                                 double          deltaHeight,
-                                                                 short           noDataValue) :
+                                                                 short* buffer,
+                                                                 int bufferSize,
+                                                                 double deltaHeight,
+                                                                 short noDataValue) :
 BufferTerrainElevationGrid(sector, extent, bufferSize, deltaHeight),
 _buffer(buffer),
 _noDataValue(noDataValue)
