@@ -12,8 +12,6 @@
 
 BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& extent,
-                                         const Sector& realSector,
-                                         const Vector2I& realExtent,
                                          size_t bufferSize,
                                          double deltaHeight) :
 ElevationData(sector, extent),

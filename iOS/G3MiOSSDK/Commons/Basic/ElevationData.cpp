@@ -55,7 +55,8 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
                                averageElevation, minElevation, maxElevation, deltaElevation);
 
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+  const Geodetic3D center(sector._center, averageElevation);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, center);
 
   FloatBufferBuilderFromColor colors;
 

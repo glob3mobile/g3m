@@ -33,9 +33,9 @@ struct SingleBilElevationDataProvider_Request {
   const bool _autodeleteListener;
 
   SingleBilElevationDataProvider_Request(const Sector& sector,
-                                          const Vector2I& extent,
-                                          IElevationDataListener* listener,
-                                          bool autodeleteListener):
+                                         const Vector2I& extent,
+                                         IElevationDataListener* listener,
+                                         bool autodeleteListener):
   _sector(sector),
   _extent(extent),
   _listener(listener),
@@ -45,7 +45,7 @@ struct SingleBilElevationDataProvider_Request {
 
   ~SingleBilElevationDataProvider_Request() {
   }
-  
+
 };
 
 class SingleBilElevationDataProvider : public ElevationDataProvider {
@@ -85,9 +85,9 @@ private:
 
 public:
   SingleBilElevationDataProvider(const URL& bilUrl,
-                                  const Sector& sector,
-                                  const Vector2I& extent,
-                                  double deltaHeight = 0);
+                                 const Sector& sector,
+                                 const Vector2I& extent,
+                                 double deltaHeight = 0);
 
   ~SingleBilElevationDataProvider();
 
@@ -116,7 +116,7 @@ public:
   const Vector2I getMinResolution() const {
     return Vector2I(_extentWidth, _extentHeight);
   }
-
+  
 };
 
 #endif

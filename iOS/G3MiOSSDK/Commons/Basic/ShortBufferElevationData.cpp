@@ -17,12 +17,10 @@ const short ShortBufferElevationData::NO_DATA_VALUE = -32768;
 
 ShortBufferElevationData::ShortBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
-                                                   const Sector& realSector,
-                                                   const Vector2I& realExtent,
                                                    short* buffer,
                                                    int bufferSize,
                                                    double deltaHeight) :
-BufferElevationData(sector, extent, realSector, realExtent, bufferSize, deltaHeight),
+BufferElevationData(sector, extent, bufferSize, deltaHeight),
 _buffer(buffer)
 {
   if (_bufferSize != (_width * _height) ) {

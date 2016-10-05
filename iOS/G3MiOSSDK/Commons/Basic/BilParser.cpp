@@ -50,8 +50,6 @@ ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
 
   return new ShortBufferElevationData(sector,
                                       extent,
-                                      sector,
-                                      extent,
                                       shortBuffer,
                                       size,
                                       deltaHeight);
