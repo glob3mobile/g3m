@@ -8,6 +8,8 @@
 
 #include "DeviceLocation_iOS.hpp"
 
+#include "ILogger.hpp"
+
 @implementation LocationDelegate
 
 #pragma mark Location Delegate

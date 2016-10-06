@@ -8,6 +8,46 @@
 #include "Angle.hpp"
 
 #include "IStringBuilder.hpp"
+#include "IMathUtils.hpp"
+
+Angle Angle::fromDegreesMinutes(double degrees,
+                                double minutes) {
+  const IMathUtils* mu = IMathUtils::instance();
+  const double sign = (degrees * minutes) < 0 ? -1.0 : 1.0;
+  const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) );
+  return Angle( d, TO_RADIANS(d) );
+}
+
+Angle Angle::fromDegreesMinutesSeconds(double degrees,
+                                       double minutes,
+                                       double seconds) {
+  const IMathUtils* mu = IMathUtils::instance();
+  const double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
+  const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) + ( mu->abs(seconds) / 3600.0 ) );
+  return Angle( d, TO_RADIANS(d) );
+}
+
+Angle Angle::nan() {
+  return Angle::fromDegrees(NAND);
+}
+
+bool Angle::isEquals(const Angle& that) const {
+  const IMathUtils* mu = IMathUtils::instance();
+  return mu->isEquals(_degrees, that._degrees) || mu->isEquals(_radians, that._radians);
+}
+
+bool Angle::isNan() const {
+  return ISNAN(_degrees);
+}
+
+double Angle::tangent() const {
+  return TAN(_radians);
+}
+
+bool Angle::closeTo(const Angle& other) const {
+  return (IMathUtils::instance()->abs(_degrees - other._degrees) < THRESHOLD);
+}
+
 
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {

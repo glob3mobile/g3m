@@ -52,6 +52,8 @@ class URLTemplateLayer;
 class Sector;
 class IByteBuffer;
 class IBufferDownloadListener;
+class TileVisibilityTester;
+class TileLODTester;
 
 #include <vector>
 #include <string>
@@ -63,8 +65,7 @@ class IBufferDownloadListener;
 #include "HUDImageRenderer.hpp"
 #include "GroupCanvasElement.hpp"
 #include "IBufferDownloadListener.hpp"
-class TileVisibilityTester;
-class TileLODTester;
+#include "Geodetic2D.hpp"
 
 
 
