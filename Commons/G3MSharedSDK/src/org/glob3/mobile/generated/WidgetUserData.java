@@ -15,6 +15,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class IMathUtils;
+//class ILogger;
 //class G3MWidget;
 //class IFactory;
 //class IStringUtils;
