@@ -24,41 +24,8 @@ package org.glob3.mobile.generated;
 
 public class BILParser
 {
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  BILParser();
-
-  private static short pvtParse(int size, IByteBuffer buffer, short noDataValue)
+  private BILParser()
   {
-  
-    final int expectedSizeInBytes = size * 2;
-    if (buffer.size() != expectedSizeInBytes)
-    {
-      ILogger.instance().logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer.size());
-      return null;
-    }
-  
-    ByteBufferIterator iterator = new ByteBufferIterator(buffer);
-  
-    final short minValue = IMathUtils.instance().minInt16();
-  
-    short[] result = new short[size];
-    for (int i = 0; i < size; i++)
-    {
-      short height = iterator.nextInt16();
-  
-      if (height == -9999)
-      {
-        height = noDataValue;
-      }
-      else if (height == minValue)
-      {
-        height = noDataValue;
-      }
-  
-      result[i] = height;
-    }
-  
-    return result;
   }
 
 
@@ -71,10 +38,28 @@ public class BILParser
   
     final int size = extent._x * extent._y;
   
-    short shortBuffer = pvtParse(size, buffer, ShortBufferElevationData.NO_DATA_VALUE);
-    if (shortBuffer == null)
+    final int expectedSizeInBytes = size * 2;
+    if (buffer.size() != expectedSizeInBytes)
     {
+      ILogger.instance().logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer.size());
       return null;
+    }
+  
+    ByteBufferIterator iterator = new ByteBufferIterator(buffer);
+  
+    final short minValue = IMathUtils.instance().minInt16();
+  
+    short[] shortBuffer = new short[size];
+    for (int i = 0; i < size; i++)
+    {
+      short height = iterator.nextInt16();
+  
+      if ((height == -9999) || (height == minValue))
+      {
+        height = ShortBufferElevationData.NO_DATA_VALUE;
+      }
+  
+      shortBuffer[i] = height;
     }
   
     return new ShortBufferElevationData(sector, extent, shortBuffer, size, deltaHeight);
@@ -88,10 +73,28 @@ public class BILParser
   {
     final int size = extent._x * extent._y;
   
-    short shortBuffer = pvtParse(size, buffer, noDataValue);
-    if (shortBuffer == null)
+    final int expectedSizeInBytes = size * 2;
+    if (buffer.size() != expectedSizeInBytes)
     {
+      ILogger.instance().logError("Invalid buffer size, expected %d bytes, but got %d", expectedSizeInBytes, buffer.size());
       return null;
+    }
+  
+    ByteBufferIterator iterator = new ByteBufferIterator(buffer);
+  
+    final short minValue = IMathUtils.instance().minInt16();
+  
+    short[] shortBuffer = new short[size];
+    for (int i = 0; i < size; i++)
+    {
+      short height = iterator.nextInt16();
+  
+      if ((height == -9999) || (height == minValue))
+      {
+        height = noDataValue;
+      }
+  
+      shortBuffer[i] = height;
     }
   
     return new ShortBufferTerrainElevationGrid(sector, extent, shortBuffer, size, deltaHeight, noDataValue);
