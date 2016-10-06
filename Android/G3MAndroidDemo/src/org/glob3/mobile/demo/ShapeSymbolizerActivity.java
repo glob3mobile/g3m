@@ -12,7 +12,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -26,8 +26,8 @@ import android.widget.TextView;
 
 
 public class ShapeSymbolizerActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -68,7 +68,7 @@ public class ShapeSymbolizerActivity
 
       builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());
 
-      final ElevationDataProvider dem = new SingleBilElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
+      final ElevationDataProvider dem = new SingleBILElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
                demSector, new Vector2I(2048, 1024), 0);
 
       _vectorialRenderer = builder.createGEORenderer(Symbology.USCitiesSymbolizer);

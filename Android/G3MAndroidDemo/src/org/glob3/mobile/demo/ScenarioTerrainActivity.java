@@ -11,7 +11,7 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -24,8 +24,8 @@ import android.widget.RelativeLayout;
 
 
 public class ScenarioTerrainActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -68,7 +68,7 @@ public class ScenarioTerrainActivity
 
       // NROWS          1335
       // NCOLS          2516
-      final ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(new URL("file:///0576.bil", false),
+      final ElevationDataProvider elevationDataProvider = new SingleBILElevationDataProvider(new URL("file:///0576.bil", false),
                demSector, new Vector2I(2516, 1335), deltaHeight);
 
       builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
