@@ -14,6 +14,7 @@ class URL;
 class Sector;
 class Vector2I;
 class TimeInterval;
+class ShortBufferTerrainElevationGrid;
 
 
 class BILDownloader {
@@ -23,7 +24,15 @@ private:
 public:
 
   class Handler {
+  public:
+    virtual ~Handler() {
+    }
 
+    virtual void onDownloadError(const URL& url) = 0;
+
+    virtual void onParseError() = 0;
+
+    virtual void onBIL(ShortBufferTerrainElevationGrid* result) = 0;
   };
 
   static void request(const G3MContext*       context,
