@@ -11,6 +11,7 @@
 #include "ErrorHandling.hpp"
 
 
+#ifdef C_CODE
 ShortBufferTerrainElevationGrid::ShortBufferTerrainElevationGrid(const Sector& sector,
                                                                  const Vector2I& extent,
                                                                  short* buffer,
@@ -25,6 +26,22 @@ _noDataValue(noDataValue)
     THROW_EXCEPTION("Invalid bufferSize");
   }
 }
+#endif
+#ifdef JAVA_CODE
+public ShortBufferTerrainElevationGrid(Sector sector,
+                                       Vector2I extent,
+                                       short[] buffer,
+                                       int bufferSize,
+                                       double deltaHeight,
+                                       short noDataValue) {
+  super(sector, extent, bufferSize, deltaHeight);
+  _buffer = buffer;
+  _noDataValue = noDataValue;
+  if (_bufferSize != (_extent._x * _extent._y)) {
+    throw new RuntimeException("Invalid bufferSize");
+  }
+}
+#endif
 
 ShortBufferTerrainElevationGrid::~ShortBufferTerrainElevationGrid() {
   delete [] _buffer;

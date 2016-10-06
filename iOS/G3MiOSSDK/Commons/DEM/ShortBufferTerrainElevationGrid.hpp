@@ -21,12 +21,14 @@ protected:
   double getValueInBufferAt(int index) const;
 
 public:
+#ifdef C_CODE
   ShortBufferTerrainElevationGrid(const Sector& sector,
                                   const Vector2I& extent,
                                   short* buffer,
                                   int bufferSize,
                                   double deltaHeight,
                                   short noDataValue);
+#endif
 
   virtual ~ShortBufferTerrainElevationGrid();
 
