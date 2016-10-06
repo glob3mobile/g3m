@@ -20,22 +20,15 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //class Sector;
 //class Vector2I;
-
+//class ShortBufferTerrainElevationGrid;
 
 public class BILParser
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  BILParser();
 
-
-  public static ShortBufferElevationData oldParseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer)
+  private static short pvtParse(int size, IByteBuffer buffer, short noDataValue)
   {
-     return oldParseBIL16(sector, extent, buffer, 0);
-  }
-  public static ShortBufferElevationData oldParseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
-  {
-  
-    final int size = extent._x * extent._y;
   
     final int expectedSizeInBytes = size * 2;
     if (buffer.size() != expectedSizeInBytes)
@@ -48,23 +41,60 @@ public class BILParser
   
     final short minValue = IMathUtils.instance().minInt16();
   
-    short[] shortBuffer = new short[size];
+    short[] result = new short[size];
     for (int i = 0; i < size; i++)
     {
       short height = iterator.nextInt16();
   
       if (height == -9999)
       {
-        height = ShortBufferElevationData.NO_DATA_VALUE;
+        height = noDataValue;
       }
       else if (height == minValue)
       {
-        height = ShortBufferElevationData.NO_DATA_VALUE;
+        height = noDataValue;
       }
   
-      shortBuffer[i] = height;
+      result[i] = height;
+    }
+  
+    return result;
+  }
+
+
+  public static ShortBufferElevationData oldParseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer)
+  {
+     return oldParseBIL16(sector, extent, buffer, 0);
+  }
+  public static ShortBufferElevationData oldParseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
+  {
+  
+    final int size = extent._x * extent._y;
+  
+    short shortBuffer = pvtParse(size, buffer, ShortBufferElevationData.NO_DATA_VALUE);
+    if (shortBuffer == null)
+    {
+      return null;
     }
   
     return new ShortBufferElevationData(sector, extent, shortBuffer, size, deltaHeight);
   }
+
+  public static ShortBufferTerrainElevationGrid parseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, short noDataValue)
+  {
+     return parseBIL16(sector, extent, buffer, noDataValue, 0);
+  }
+  public static ShortBufferTerrainElevationGrid parseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, short noDataValue, double deltaHeight)
+  {
+    final int size = extent._x * extent._y;
+  
+    short shortBuffer = pvtParse(size, buffer, noDataValue);
+    if (shortBuffer == null)
+    {
+      return null;
+    }
+  
+    return new ShortBufferTerrainElevationGrid(sector, extent, shortBuffer, size, deltaHeight, noDataValue);
+  }
+
 }
