@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  BilParser.cpp
+//  BILParser.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/19/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  BilParser.hpp
+//  BILParser.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/19/13.
@@ -22,17 +22,17 @@ package org.glob3.mobile.generated;
 //class Vector2I;
 
 
-public class BilParser
+public class BILParser
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  BilParser();
+//  BILParser();
 
 
-  public static ShortBufferElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer)
+  public static ShortBufferElevationData oldParseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer)
   {
-     return parseBil16(sector, extent, buffer, 0);
+     return oldParseBIL16(sector, extent, buffer, 0);
   }
-  public static ShortBufferElevationData parseBil16(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
+  public static ShortBufferElevationData oldParseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, double deltaHeight)
   {
   
     final int size = extent._x * extent._y;

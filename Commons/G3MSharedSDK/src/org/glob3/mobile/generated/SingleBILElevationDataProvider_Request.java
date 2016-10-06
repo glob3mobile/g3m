@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  SingleBilElevationDataProvider.cpp
+//  SingleBILElevationDataProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/21/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  SingleBilElevationDataProvider.hpp
+//  SingleBILElevationDataProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/21/13.
@@ -18,17 +18,17 @@ package org.glob3.mobile.generated;
 
 
 
-//class SingleBilElevationDataProvider_BufferDownloadListener;
+//class SingleBILElevationDataProvider_BufferDownloadListener;
 //class IDownloader;
 
-public class SingleBilElevationDataProvider_Request
+public class SingleBILElevationDataProvider_Request
 {
   public final Sector _sector ;
   public final Vector2I _extent;
   public final IElevationDataListener _listener;
   public final boolean _autodeleteListener;
 
-  public SingleBilElevationDataProvider_Request(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
+  public SingleBILElevationDataProvider_Request(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
      _sector = new Sector(sector);
      _extent = extent;

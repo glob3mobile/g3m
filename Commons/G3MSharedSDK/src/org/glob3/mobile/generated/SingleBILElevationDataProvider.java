@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
-public class SingleBilElevationDataProvider extends ElevationDataProvider
+public class SingleBILElevationDataProvider extends ElevationDataProvider
 {
 
 
   private long _currentRequestID;
-  private java.util.HashMap<Long, SingleBilElevationDataProvider_Request> _requestsQueue = new java.util.HashMap<Long, SingleBilElevationDataProvider_Request>();
+  private java.util.HashMap<Long, SingleBILElevationDataProvider_Request> _requestsQueue = new java.util.HashMap<Long, SingleBILElevationDataProvider_Request>();
 
 
   private ElevationData _elevationData;
@@ -24,7 +24,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
       return;
     }
   
-    for (final SingleBilElevationDataProvider_Request r : _requestsQueue.values()) {
+    for (final SingleBILElevationDataProvider_Request r : _requestsQueue.values()) {
       requestElevationData(r._sector, r._extent, r._listener, r._autodeleteListener);
       if (r != null) {
         r.dispose();
@@ -36,7 +36,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   private long queueRequest(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
   {
     _currentRequestID++;
-    _requestsQueue.put(_currentRequestID, new SingleBilElevationDataProvider_Request(sector, extent, listener, autodeleteListener));
+    _requestsQueue.put(_currentRequestID, new SingleBILElevationDataProvider_Request(sector, extent, listener, autodeleteListener));
     return _currentRequestID;
   }
 
@@ -47,13 +47,13 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
 
   private IDownloader _downloader;
   private long _requestToDownloaderID;
-  private SingleBilElevationDataProvider_BufferDownloadListener _listener;
+  private SingleBILElevationDataProvider_BufferDownloadListener _listener;
 
-  public SingleBilElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
+  public SingleBILElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
      this(bilUrl, sector, extent, 0);
   }
-  public SingleBilElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent, double deltaHeight)
+  public SingleBILElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent, double deltaHeight)
   {
      _bilUrl = bilUrl;
      _sector = new Sector(sector);
@@ -97,7 +97,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     {
       _downloader = context.getDownloader();
   
-      _listener = new SingleBilElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight);
+      _listener = new SingleBILElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight);
   
       _requestToDownloaderID = _downloader.requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, _listener, true);
     }
