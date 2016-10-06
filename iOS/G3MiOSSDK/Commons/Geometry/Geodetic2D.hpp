@@ -76,9 +76,19 @@ public:
     const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(deltaLonRad);
     const double radians = IMathUtils::instance()->atan2(y, x);
 
-    return radians;
+    return IMathUtils::instance()->mod(radians, PI*2);
   }
-  
+
+  static double bearingInDegrees(const Angle& fromLatitude,
+                                 const Angle& fromLongitude,
+                                 const Angle& toLatitude,
+                                 const Angle& toLongitude) {
+    return TO_DEGREES(bearingInRadians(fromLatitude,
+                                       fromLongitude,
+                                       toLatitude,
+                                       toLongitude));
+  }
+
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http://williams.best.vwh.net/avform.htm#Crs
