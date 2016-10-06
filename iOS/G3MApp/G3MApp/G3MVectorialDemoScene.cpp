@@ -24,7 +24,7 @@
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/MarkTouchListener.hpp>
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
 

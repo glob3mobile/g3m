@@ -13,7 +13,7 @@
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -57,12 +57,12 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+//  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
 //                                                                                    Sector::fullSphere(),
 //                                                                                    Vector2I(2048, 1024));
 //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///loudoun_4326_300.bil", false),
+//  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///loudoun_4326_300.bil", false),
 //                                                                                    Sector::fromDegrees(38.8423858972, -77.3224512673,
 //                                                                                                        39.3301640652, -77.9660628933),
 //                                                                                    Vector2I(773, 586),

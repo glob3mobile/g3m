@@ -13,7 +13,7 @@
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 //#include <G3MiOSSDK/PlanetRenderer.hpp>
-//#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+//#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -38,7 +38,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   // PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   // planetRenderer->setVerticalExaggeration(1);
   //
-  // ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  // ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
   //                                                                                   Sector::fullSphere(),
   //                                                                                   Vector2I(2048, 1024));
   // planetRenderer->setElevationDataProvider(elevationDataProvider, true);

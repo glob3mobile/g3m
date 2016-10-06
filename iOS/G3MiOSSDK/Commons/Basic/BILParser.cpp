@@ -1,12 +1,12 @@
 //
-//  BilParser.cpp
+//  BILParser.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/19/13.
 //
 //
 
-#include "BilParser.hpp"
+#include "BILParser.hpp"
 
 #include "IByteBuffer.hpp"
 #include "ByteBufferIterator.hpp"
@@ -15,10 +15,10 @@
 #include "Vector2I.hpp"
 
 
-ShortBufferElevationData* BilParser::parseBil16(const Sector& sector,
-                                                const Vector2I& extent,
-                                                const IByteBuffer* buffer,
-                                                double deltaHeight) {
+ShortBufferElevationData* BILParser::oldParseBIL16(const Sector& sector,
+                                                   const Vector2I& extent,
+                                                   const IByteBuffer* buffer,
+                                                   double deltaHeight) {
 
   const int size = extent._x * extent._y;
 

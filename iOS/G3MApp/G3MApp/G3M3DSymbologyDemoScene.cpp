@@ -21,7 +21,7 @@
 #include <G3MiOSSDK/GEOShapeSymbol.hpp>
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -89,7 +89,7 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(16);
 
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);

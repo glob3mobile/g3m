@@ -13,7 +13,7 @@
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
 
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -60,7 +60,7 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+//  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
 //                                                                                    Sector::fullSphere(),
 //                                                                                    Vector2I(2048, 1024));
 //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);

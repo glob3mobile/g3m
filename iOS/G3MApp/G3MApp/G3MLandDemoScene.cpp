@@ -23,17 +23,17 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
 #warning Diego at work!
 
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
-  planetRenderer->setShowStatistics(true);
+//  planetRenderer->setShowStatistics(true);
   planetRenderer->setIncrementalTileQuality(true);
 
 
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png",
                                                           Sector::FULL_SPHERE,
-                                                          false,                      // isTransparent
-                                                          2,                          // firstLevel
-                                                          15,                         // maxLevel
-                                                          TimeInterval::fromDays(30)  // timeToCache
+                                                          false,                     // isTransparent
+                                                          2,                         // firstLevel
+                                                          15,                        // maxLevel
+                                                          TimeInterval::fromDays(30) // timeToCache
                                                           );
 
   getModel()->getLayerSet()->addLayer( layer );

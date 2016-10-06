@@ -9,7 +9,7 @@
 
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 
@@ -31,7 +31,7 @@ void G3MScenarioDEMDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setRenderedSector(demSector.shrinkedByPercent(0.2f));
 
   const double deltaHeight = -700.905;
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///0576.bil"),
+  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///0576.bil"),
                                                                                     demSector,
                                                                                     Vector2I(2516, 1335),
                                                                                     deltaHeight);

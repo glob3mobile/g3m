@@ -143,7 +143,7 @@
 		CF2E59471C5BC5CD001F6AA0 /* DecoratorTileVisibilityTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF67D9CD1C5AB8E800873661 /* DecoratorTileVisibilityTester.hpp */; };
 		CF2E59481C5BC5CD001F6AA0 /* TimedCacheTileVisibilityTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF67D9CA1C5AB44500873661 /* TimedCacheTileVisibilityTester.hpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
-		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
+		CF35A20716D3D44E00D795D8 /* BILParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BILParser.cpp */; };
 		CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */; };
 		CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */; };
 		CF3623401B97AFA400824932 /* CircleImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF36233E1B97AFA400824932 /* CircleImageBuilder.cpp */; };
@@ -407,8 +407,7 @@
 		CFD15C4716E793A7004DC360 /* BilinearInterpolator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA835C16D6758200295F96 /* BilinearInterpolator.hpp */; };
 		CFD15C4816E793A7004DC360 /* ElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */; };
 		CFD15C4916E793A7004DC360 /* ElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */; };
-		CFD15C4A16E793A7004DC360 /* WMSBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8B016D1729A00CE9242 /* WMSBilElevationDataProvider.hpp */; };
-		CFD15C4B16E793A7004DC360 /* BilParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF35A20616D3D44E00D795D8 /* BilParser.hpp */; };
+		CFD15C4B16E793A7004DC360 /* BILParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF35A20616D3D44E00D795D8 /* BILParser.hpp */; };
 		CFD15C4D16E793A7004DC360 /* FloatBufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */; };
 		CFD15C4E16E793A7004DC360 /* SubviewElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */; };
 		CFD15C4F16E793A7004DC360 /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */; };
@@ -422,7 +421,6 @@
 		CFD3D8A516D15BC900CE9242 /* MeshHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */; };
 		CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8A716D15ECF00CE9242 /* ElevationDataProvider.cpp */; };
 		CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */; };
-		CFD3D8B116D1729A00CE9242 /* WMSBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AF16D1729900CE9242 /* WMSBilElevationDataProvider.cpp */; };
 		CFD41F601875E59800889B7C /* DownloaderImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD41F5E1875E59800889B7C /* DownloaderImageBuilder.cpp */; };
 		CFD41F611875E66200889B7C /* IImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD41F591875E3F600889B7C /* IImageBuilder.hpp */; };
 		CFD41F621875E66200889B7C /* IImageBuilderListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD41F5C1875E4E900889B7C /* IImageBuilderListener.hpp */; };
@@ -512,8 +510,8 @@
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
-		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
-		D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */; };
+		D874D08E18900B1600610F85 /* SingleBILElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBILElevationDataProvider.cpp */; };
+		D874D09018900B4500610F85 /* SingleBILElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBILElevationDataProvider.hpp */; };
 		D874D09118900B4500610F85 /* BasicShadersGL2.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
 		D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */; };
@@ -856,7 +854,7 @@
 				D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */,
 				CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */,
 				CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */,
-				D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */,
+				D874D09018900B4500610F85 /* SingleBILElevationDataProvider.hpp in CopyFiles */,
 				D874D09118900B4500610F85 /* BasicShadersGL2.hpp in CopyFiles */,
 				CF9F74E0188054B0008D65F7 /* CanvasImageBuilder.hpp in CopyFiles */,
 				CF290D56187F1A4C000BE644 /* TextureIDReference.hpp in CopyFiles */,
@@ -989,8 +987,7 @@
 				CFD15C4716E793A7004DC360 /* BilinearInterpolator.hpp in CopyFiles */,
 				CFD15C4816E793A7004DC360 /* ElevationDataProvider.hpp in CopyFiles */,
 				CFD15C4916E793A7004DC360 /* ElevationData.hpp in CopyFiles */,
-				CFD15C4A16E793A7004DC360 /* WMSBilElevationDataProvider.hpp in CopyFiles */,
-				CFD15C4B16E793A7004DC360 /* BilParser.hpp in CopyFiles */,
+				CFD15C4B16E793A7004DC360 /* BILParser.hpp in CopyFiles */,
 				CFD15C4D16E793A7004DC360 /* FloatBufferElevationData.hpp in CopyFiles */,
 				CFD15C4E16E793A7004DC360 /* SubviewElevationData.hpp in CopyFiles */,
 				CFD15C4F16E793A7004DC360 /* BufferElevationData.hpp in CopyFiles */,
@@ -1377,8 +1374,8 @@
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
-		CF35A20516D3D44E00D795D8 /* BilParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BilParser.cpp; path = Commons/Basic/BilParser.cpp; sourceTree = "<group>"; };
-		CF35A20616D3D44E00D795D8 /* BilParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BilParser.hpp; path = Commons/Basic/BilParser.hpp; sourceTree = "<group>"; };
+		CF35A20516D3D44E00D795D8 /* BILParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BILParser.cpp; path = Commons/Basic/BILParser.cpp; sourceTree = "<group>"; };
+		CF35A20616D3D44E00D795D8 /* BILParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BILParser.hpp; path = Commons/Basic/BILParser.hpp; sourceTree = "<group>"; };
 		CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector3F.cpp; path = Commons/Geometry/Vector3F.cpp; sourceTree = "<group>"; };
 		CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3F.hpp; path = Commons/Geometry/Vector3F.hpp; sourceTree = "<group>"; };
 		CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2F.cpp; path = Commons/Geometry/Vector2F.cpp; sourceTree = "<group>"; };
@@ -1723,8 +1720,6 @@
 		CFD3D8A816D15ED000CE9242 /* ElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ElevationDataProvider.hpp; path = Commons/Basic/ElevationDataProvider.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ElevationData.cpp; path = Commons/Basic/ElevationData.cpp; sourceTree = "<group>"; };
 		CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ElevationData.hpp; path = Commons/Basic/ElevationData.hpp; sourceTree = "<group>"; };
-		CFD3D8AF16D1729900CE9242 /* WMSBilElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WMSBilElevationDataProvider.cpp; path = Commons/Basic/WMSBilElevationDataProvider.cpp; sourceTree = "<group>"; };
-		CFD3D8B016D1729A00CE9242 /* WMSBilElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WMSBilElevationDataProvider.hpp; path = Commons/Basic/WMSBilElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFD41F591875E3F600889B7C /* IImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageBuilder.hpp; path = Commons/Basic/IImageBuilder.hpp; sourceTree = "<group>"; };
 		CFD41F5C1875E4E900889B7C /* IImageBuilderListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageBuilderListener.hpp; path = Commons/Basic/IImageBuilderListener.hpp; sourceTree = "<group>"; };
 		CFD41F5E1875E59800889B7C /* DownloaderImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = DownloaderImageBuilder.cpp; path = Commons/Basic/DownloaderImageBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1858,8 +1853,8 @@
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = SingleBilElevationDataProvider.cpp; path = Commons/Basic/SingleBilElevationDataProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBilElevationDataProvider.hpp; path = Commons/Basic/SingleBilElevationDataProvider.hpp; sourceTree = "<group>"; };
+		D874D08D18900B1600610F85 /* SingleBILElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = SingleBILElevationDataProvider.cpp; path = Commons/Basic/SingleBILElevationDataProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D874D08F18900B1E00610F85 /* SingleBILElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBILElevationDataProvider.hpp; path = Commons/Basic/SingleBILElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractGeometryMesh.cpp; path = Commons/Mesh/AbstractGeometryMesh.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = AbstractGeometryMesh.hpp; path = Commons/Mesh/AbstractGeometryMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedGeometryMesh.cpp; path = Commons/Mesh/IndexedGeometryMesh.cpp; sourceTree = "<group>"; };
@@ -2137,8 +2132,8 @@
 			children = (
 				CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */,
 				CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */,
-				D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */,
-				D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */,
+				D874D08F18900B1E00610F85 /* SingleBILElevationDataProvider.hpp */,
+				D874D08D18900B1600610F85 /* SingleBILElevationDataProvider.cpp */,
 				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
 				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
@@ -2249,10 +2244,8 @@
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
 				CFFEC12515C2EBA6003FA986 /* URL.cpp */,
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
-				CFD3D8AF16D1729900CE9242 /* WMSBilElevationDataProvider.cpp */,
-				CFD3D8B016D1729A00CE9242 /* WMSBilElevationDataProvider.hpp */,
-				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
-				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
+				CF35A20516D3D44E00D795D8 /* BILParser.cpp */,
+				CF35A20616D3D44E00D795D8 /* BILParser.hpp */,
 				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
@@ -3156,7 +3149,7 @@
 				CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */,
 				CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */,
 				CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */,
-				D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */,
+				D874D08E18900B1600610F85 /* SingleBILElevationDataProvider.cpp in Sources */,
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */,
@@ -3312,9 +3305,8 @@
 				CFD3D8A516D15BC900CE9242 /* MeshHolder.cpp in Sources */,
 				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
-				CFD3D8B116D1729A00CE9242 /* WMSBilElevationDataProvider.cpp in Sources */,
 				CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */,
-				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
+				CF35A20716D3D44E00D795D8 /* BILParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
 				CF7338131DA56EA700C406D1 /* TerrainElevationGrid.cpp in Sources */,
