@@ -121,6 +121,39 @@ public class Angle
     return Angle.fromDegrees((1.0-alpha) * fromDegrees + alpha * toDegrees);
   }
 
+  public static double smoothDegrees(double previousDegrees, double degrees)
+  {
+    if ((previousDegrees != previousDegrees))
+    {
+      return degrees;
+    }
+  
+    final double delta = previousDegrees - degrees;
+    if (IMathUtils.instance().abs(delta) < 180.0)
+    {
+      return degrees;
+    }
+  
+    return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
+  }
+
+  public static double smoothRadians(double previousRadians, double radians)
+  {
+    if ((previousRadians != previousRadians))
+    {
+      return radians;
+    }
+  
+    final double delta = previousRadians - radians;
+    if (IMathUtils.instance().abs(delta) < DefineConstants.PI)
+    {
+      return delta;
+    }
+  
+    final double pi2 = DefineConstants.PI *2;
+    return (delta < 0.0) ? (radians - pi2) : (radians + pi2);
+  }
+
   public final boolean isNan()
   {
     return (_degrees != _degrees);
@@ -280,7 +313,6 @@ public class Angle
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addDouble(_degrees);
-  //  isb->addString("°");
     isb.addString("d");
     final String s = isb.getString();
     if (isb != null)

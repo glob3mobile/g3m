@@ -61,7 +61,6 @@ public class Geodetic2D
    */
   public static double bearingInRadians(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
   {
-  
     final IMathUtils mu = IMathUtils.instance();
   
     final double deltaLonRad = toLongitude._radians - fromLongitude._radians;
@@ -71,21 +70,14 @@ public class Geodetic2D
     final double y = java.lang.Math.sin(deltaLonRad) * toLatCos;
     final double x = java.lang.Math.cos(fromLatitude._radians) * java.lang.Math.sin(toLatitude._radians) - java.lang.Math.sin(fromLatitude._radians) * toLatCos * java.lang.Math.cos(deltaLonRad);
     final double radians = mu.atan2(y, x);
-    //    return radians;
+    return radians;
   
-    //    return IMathUtils::instance()->mod(radians, PI*2);
-    final double r1 = mu.mod(radians, DefineConstants.PI *2);
-    final double r2 = mu.mod(radians + DefineConstants.PI *2, DefineConstants.PI *2);
+  //  const double pi2 = PI*2;
+  //  return mu->mod(radians + pi2, pi2);
   
-    //    return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
-    if (mu.abs(r1) <= mu.abs(r2))
-    {
-      return r1;
-    }
-    else
-    {
-      return r2;
-    }
+  //  const double r1 = mu->mod(radians, pi2);
+  //  const double r2 = mu->mod(radians + pi2, pi2);
+  //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
   }
 
   public static double bearingInDegrees(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
@@ -163,7 +155,6 @@ public class Geodetic2D
     final Vector3D normal2 = new Vector3D(cos2 * java.lang.Math.cos(that._longitude._radians), cos2 * java.lang.Math.sin(that._longitude._radians), java.lang.Math.sin(that._latitude._radians));
   
     return Angle.fromRadians(Math.asin(normal1.cross(normal2).squaredLength()));
-  
   }
 
 

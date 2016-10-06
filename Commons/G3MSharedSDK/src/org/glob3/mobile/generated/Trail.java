@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 //class GLState;
 //class IFloatBuffer;
 //class MutableMatrix44D;
+//class Geodetic2D;
+//class Geodetic3D;
 
 
 public class Trail
@@ -36,13 +38,15 @@ public class Trail
     public final Angle _longitude ;
     public final double _height;
     public final double _alpha;
+    public final Angle _heading ;
 
-    public Position(Angle latitude, Angle longitude, double height, double alpha)
+    public Position(Angle latitude, Angle longitude, double height, double alpha, Angle heading)
     {
        _latitude = new Angle(latitude);
        _longitude = new Angle(longitude);
        _height = height;
        _alpha = alpha;
+       _heading = new Angle(heading);
     }
 
     public void dispose()
@@ -190,10 +194,10 @@ public class Trail
     
       for (int i = 1; i < positionsSize; i++)
       {
-        final Position current = _positions.get(i);
         final Position previous = _positions.get(i - 1);
+        final Position current = _positions.get(i);
     
-        final float angleInRadians = (float) Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
+        final float angleInRadians = (float)(current._heading.isNan() ? Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude) : current._heading._radians);
         if (i == 1)
         {
           if (_previousSegmentLastPosition == null)
@@ -203,8 +207,8 @@ public class Trail
           }
           else
           {
-            final float angle2InRadians = (float) Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
-            final float avr = (angleInRadians + angle2InRadians) / 2.0f;
+            final float previousAngleInRadians = (float)(previous._heading.isNan() ? Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude) : previous._heading._radians);
+            final float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
     
             bearingsInRadians.rawPut(0, avr);
             bearingsInRadians.rawPut(1, avr);
@@ -212,9 +216,12 @@ public class Trail
         }
         else
         {
-          bearingsInRadians.rawPut(i, angleInRadians);
-          final float avr = (angleInRadians + bearingsInRadians.get(i - 1)) / 2.0f;
+          final float previousAngleInRadians = bearingsInRadians.get(i - 1);
+    
+          final float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
           bearingsInRadians.rawPut(i - 1, avr);
+    
+          bearingsInRadians.rawPut(i, angleInRadians);
         }
       }
     
@@ -222,7 +229,7 @@ public class Trail
       {
         final int lastPositionIndex = positionsSize - 1;
         final Position lastPosition = _positions.get(lastPositionIndex);
-        final float angleInRadians = (float) Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
+        final float angleInRadians = (float)(_nextSegmentFirstPosition._heading.isNan() ? Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude) : _nextSegmentFirstPosition._heading._radians);
     
         final float avr = (angleInRadians + bearingsInRadians.get(lastPositionIndex)) / 2.0f;
         bearingsInRadians.rawPut(lastPositionIndex, avr);
@@ -306,13 +313,13 @@ public class Trail
 
     public final void addPosition(Position position)
     {
-      addPosition(position._latitude, position._longitude, position._height, position._alpha);
+      addPosition(position._latitude, position._longitude, position._height, position._alpha, position._heading);
     }
 
-    public final void addPosition(Angle latitude, Angle longitude, double height, double alpha)
+    public final void addPosition(Angle latitude, Angle longitude, double height, double alpha, Angle heading)
     {
       _positionsDirty = true;
-      _positions.add(new Position(latitude, longitude, height, alpha));
+      _positions.add(new Position(latitude, longitude, height, alpha, heading));
       if (alpha < _minAlpha)
       {
          _minAlpha = alpha;
@@ -325,12 +332,12 @@ public class Trail
       }
     }
 
-    public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height, double alpha)
+    public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height, double alpha, Angle heading)
     {
       _positionsDirty = true;
       if (_nextSegmentFirstPosition != null)
          _nextSegmentFirstPosition.dispose();
-      _nextSegmentFirstPosition = new Position(latitude, longitude, height, alpha);
+      _nextSegmentFirstPosition = new Position(latitude, longitude, height, alpha, heading);
     }
 
     public final void setPreviousSegmentLastPosition(Position position)
@@ -338,7 +345,7 @@ public class Trail
       _positionsDirty = true;
       if (_previousSegmentLastPosition != null)
          _previousSegmentLastPosition.dispose();
-      _previousSegmentLastPosition = new Position(position._latitude, position._longitude, position._height, position._alpha);
+      _previousSegmentLastPosition = new Position(position._latitude, position._longitude, position._height, position._alpha, position._heading);
     }
 
     public final Trail.Position getLastPosition()
@@ -451,7 +458,7 @@ public class Trail
     return _visible;
   }
 
-  public final void addPosition(Angle latitude, Angle longitude, double height, double alpha)
+  public final void addPosition(Angle latitude, Angle longitude, double height, double alpha, Angle heading)
   {
     Segment currentSegment;
   
@@ -470,7 +477,7 @@ public class Trail
         Segment newSegment = new Segment(_color, _ribbonWidth, _alpha);
         _segments.add(newSegment);
   
-        currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha);
+        currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha, heading);
         newSegment.setPreviousSegmentLastPosition(currentSegment.getPreLastPosition());
         newSegment.addPosition(currentSegment.getLastPosition());
   
@@ -478,12 +485,17 @@ public class Trail
       }
     }
   
-    currentSegment.addPosition(latitude, longitude, height + _deltaHeight, alpha);
+    currentSegment.addPosition(latitude, longitude, height + _deltaHeight, alpha, heading);
   }
 
-  public final void addPosition(Geodetic3D position, double alpha)
+  public final void addPosition(Geodetic2D position, double height, double alpha, Angle heading)
   {
-    addPosition(position._latitude, position._longitude, position._height, alpha);
+    addPosition(position._latitude, position._longitude, height, alpha, heading);
+  }
+
+  public final void addPosition(Geodetic3D position, double alpha, Angle heading)
+  {
+    addPosition(position._latitude, position._longitude, position._height, alpha, heading);
   }
 
   public final void clear()
