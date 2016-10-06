@@ -15,6 +15,8 @@
 #include "InfoDisplay.hpp"
 #include "ViewMode.hpp"
 
+class IMathUtils;
+class ILogger;
 class G3MWidget;
 class IFactory;
 class IStringUtils;

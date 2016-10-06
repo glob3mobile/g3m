@@ -61,15 +61,23 @@ public class Geodetic2D
    */
   public static double bearingInRadians(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
   {
+    final IMathUtils mu = IMathUtils.instance();
+  
     final double deltaLonRad = toLongitude._radians - fromLongitude._radians;
-
+  
     final double toLatCos = java.lang.Math.cos(toLatitude._radians);
-
+  
     final double y = java.lang.Math.sin(deltaLonRad) * toLatCos;
     final double x = java.lang.Math.cos(fromLatitude._radians) * java.lang.Math.sin(toLatitude._radians) - java.lang.Math.sin(fromLatitude._radians) * toLatCos * java.lang.Math.cos(deltaLonRad);
-    final double radians = IMathUtils.instance().atan2(y, x);
-
-    return IMathUtils.instance().mod(radians, DefineConstants.PI *2);
+    final double radians = mu.atan2(y, x);
+    return radians;
+  
+  //  const double pi2 = PI*2;
+  //  return mu->mod(radians + pi2, pi2);
+  
+  //  const double r1 = mu->mod(radians, pi2);
+  //  const double r2 = mu->mod(radians + pi2, pi2);
+  //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
   }
 
   public static double bearingInDegrees(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
@@ -139,24 +147,14 @@ public class Geodetic2D
     return _latitude.isBetween(min._latitude, max._latitude) && _longitude.isBetween(min._longitude, max._longitude);
   }
 
-  public final Angle angleTo(Geodetic2D other)
+  public final Angle angleTo(Geodetic2D that)
   {
-  //  const double cos1 = _latitude.cosinus();
-  //  const Vector3D normal1(cos1 * _longitude.cosinus(),
-  //                         cos1 * _longitude.sinus(),
-  //                         _latitude.sinus());
-  //  const double cos2 = other._latitude.cosinus();
-  //  const Vector3D normal2(cos2 * other._longitude.cosinus(),
-  //                         cos2 * other._longitude.sinus(),
-  //                         other._latitude.sinus());
-  
     final double cos1 = java.lang.Math.cos(_latitude._radians);
     final Vector3D normal1 = new Vector3D(cos1 * java.lang.Math.cos(_longitude._radians), cos1 * java.lang.Math.sin(_longitude._radians), java.lang.Math.sin(_latitude._radians));
-    final double cos2 = java.lang.Math.cos(other._latitude._radians);
-    final Vector3D normal2 = new Vector3D(cos2 * java.lang.Math.cos(other._longitude._radians), cos2 * java.lang.Math.sin(other._longitude._radians), java.lang.Math.sin(other._latitude._radians));
+    final double cos2 = java.lang.Math.cos(that._latitude._radians);
+    final Vector3D normal2 = new Vector3D(cos2 * java.lang.Math.cos(that._longitude._radians), cos2 * java.lang.Math.sin(that._longitude._radians), java.lang.Math.sin(that._latitude._radians));
   
     return Angle.fromRadians(Math.asin(normal1.cross(normal2).squaredLength()));
-  
   }
 
 

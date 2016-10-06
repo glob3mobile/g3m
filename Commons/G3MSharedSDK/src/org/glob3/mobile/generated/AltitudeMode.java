@@ -14,6 +14,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Geodetic2D;
+
 
 //Altitude modes taken from KML standard (with the exception of relative to sea floor)
 public enum AltitudeMode

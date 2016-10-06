@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 //#define THRESHOLD 1e-5
 
 
-
 //#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
 //#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
 
@@ -120,6 +119,39 @@ public class Angle
   public static Angle linearInterpolationFromDegrees(double fromDegrees, double toDegrees, double alpha)
   {
     return Angle.fromDegrees((1.0-alpha) * fromDegrees + alpha * toDegrees);
+  }
+
+  public static double smoothDegrees(double previousDegrees, double degrees)
+  {
+    if ((previousDegrees != previousDegrees))
+    {
+      return degrees;
+    }
+  
+    final double delta = previousDegrees - degrees;
+    if (IMathUtils.instance().abs(delta) < 180.0)
+    {
+      return degrees;
+    }
+  
+    return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
+  }
+
+  public static double smoothRadians(double previousRadians, double radians)
+  {
+    if ((previousRadians != previousRadians))
+    {
+      return radians;
+    }
+  
+    final double delta = previousRadians - radians;
+    if (IMathUtils.instance().abs(delta) < DefineConstants.PI)
+    {
+      return delta;
+    }
+  
+    final double pi2 = DefineConstants.PI *2;
+    return (delta < 0.0) ? (radians - pi2) : (radians + pi2);
   }
 
   public final boolean isNan()
@@ -281,7 +313,6 @@ public class Angle
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addDouble(_degrees);
-  //  isb->addString("°");
     isb.addString("d");
     final String s = isb.getString();
     if (isb != null)

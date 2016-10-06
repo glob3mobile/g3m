@@ -10,8 +10,6 @@
 
 #define THRESHOLD               1e-5
 
-#include "IMathUtils.hpp"
-
 #include <string>
 
 #define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
@@ -45,21 +43,11 @@ public:
   }
 
   static Angle fromDegreesMinutes(double degrees,
-                                  double minutes) {
-    const IMathUtils* mu = IMathUtils::instance();
-    const double sign = (degrees * minutes) < 0 ? -1.0 : 1.0;
-    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) );
-    return Angle( d, TO_RADIANS(d) );
-  }
+                                  double minutes);
 
   static Angle fromDegreesMinutesSeconds(double degrees,
                                          double minutes,
-                                         double seconds) {
-    const IMathUtils* mu = IMathUtils::instance();
-    const double sign = (degrees * minutes * seconds) < 0 ? -1.0 : 1.0;
-    const double d = sign * ( mu->abs(degrees) + ( mu->abs(minutes) / 60.0) + ( mu->abs(seconds) / 3600.0 ) );
-    return Angle( d, TO_RADIANS(d) );
-  }
+                                         double seconds);
 
   static Angle fromRadians(double radians) {
     return Angle(TO_DEGREES(radians), radians);
@@ -82,14 +70,12 @@ public:
   static Angle pi() {
     return Angle::fromDegrees(180);
   }
-  
+
   static Angle halfPi() {
     return Angle::fromDegrees(90);
   }
-  
-  static Angle nan() {
-    return Angle::fromDegrees(NAND);
-  }
+
+  static Angle nan();
 
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
     return Angle::fromRadians((angle1._radians + angle2._radians) / 2);
@@ -117,17 +103,17 @@ public:
     return Angle::fromDegrees( (1.0-alpha) * fromDegrees + alpha * toDegrees );
   }
 
-  bool isNan() const {
-    return ISNAN(_degrees);
-  }
+  static double smoothDegrees(double previousDegrees,
+                              double degrees);
 
-  double tangent() const {
-    return TAN(_radians);
-  }
+  static double smoothRadians(double previousRadians,
+                              double radians);
 
-  bool closeTo(const Angle& other) const {
-    return (IMathUtils::instance()->abs(_degrees - other._degrees) < THRESHOLD);
-  }
+  bool isNan() const;
+
+  double tangent() const;
+
+  bool closeTo(const Angle& other) const;
 
   Angle add(const Angle& a) const {
     const double r = _radians + a._radians;
@@ -186,10 +172,7 @@ public:
     return (_degrees == 0);
   }
 
-  bool isEquals(const Angle& that) const {
-    const IMathUtils* mu = IMathUtils::instance();
-    return mu->isEquals(_degrees, that._degrees) || mu->isEquals(_radians, that._radians);
-  }
+  bool isEquals(const Angle& that) const;
 
 #ifdef JAVA_CODE
   @Override
@@ -234,7 +217,7 @@ public:
     return description();
   }
 #endif
-
+  
 };
 
 #endif
