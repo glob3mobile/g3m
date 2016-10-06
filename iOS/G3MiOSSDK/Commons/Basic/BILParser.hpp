@@ -17,7 +17,7 @@ class ShortBufferTerrainElevationGrid;
 
 class BILParser {
 private:
-  BILParser();
+  BILParser() {}
 
   static short* pvtParse(const int          size,
                          const IByteBuffer* buffer,
