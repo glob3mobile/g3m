@@ -458,6 +458,10 @@ public class Trail
     return _visible;
   }
 
+  public final void addPosition(Angle latitude, Angle longitude, double height, double alpha)
+  {
+     addPosition(latitude, longitude, height, alpha, Angle.nan());
+  }
   public final void addPosition(Angle latitude, Angle longitude, double height, double alpha, Angle heading)
   {
     Segment currentSegment;
@@ -488,11 +492,19 @@ public class Trail
     currentSegment.addPosition(latitude, longitude, height + _deltaHeight, alpha, heading);
   }
 
+  public final void addPosition(Geodetic2D position, double height, double alpha)
+  {
+     addPosition(position, height, alpha, Angle.nan());
+  }
   public final void addPosition(Geodetic2D position, double height, double alpha, Angle heading)
   {
     addPosition(position._latitude, position._longitude, height, alpha, heading);
   }
 
+  public final void addPosition(Geodetic3D position, double alpha)
+  {
+     addPosition(position, alpha, Angle.nan());
+  }
   public final void addPosition(Geodetic3D position, double alpha, Angle heading)
   {
     addPosition(position._latitude, position._longitude, position._height, alpha, heading);
