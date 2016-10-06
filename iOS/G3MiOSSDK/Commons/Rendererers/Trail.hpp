@@ -190,16 +190,16 @@ public:
                    const Angle& longitude,
                    const double height,
                    const double alpha,
-                   const Angle& heading);
+                   const Angle& heading = Angle::nan());
 
   void addPosition(const Geodetic2D& position,
                    const double height,
                    const double alpha,
-                   const Angle& heading);
+                   const Angle& heading = Angle::nan());
 
   void addPosition(const Geodetic3D& position,
                    const double alpha,
-                   const Angle& heading);
+                   const Angle& heading = Angle::nan());
 
   void clear();
   
