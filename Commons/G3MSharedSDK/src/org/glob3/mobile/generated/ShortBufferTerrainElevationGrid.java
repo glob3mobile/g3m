@@ -29,17 +29,22 @@ public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
     return (value == _noDataValue) ? java.lang.Double.NaN : value;
   }
 
-  public ShortBufferTerrainElevationGrid(Sector sector, Vector2I extent, short buffer, int bufferSize, double deltaHeight, short noDataValue)
-  {
-     super(sector, extent, bufferSize, deltaHeight);
-     _buffer = buffer;
-     _noDataValue = noDataValue;
-    if (_bufferSize != (_extent._x * _extent._y))
-    {
+
+
+  public ShortBufferTerrainElevationGrid(Sector sector,
+                                         Vector2I extent,
+                                         short[] buffer,
+                                         int bufferSize,
+                                         double deltaHeight,
+                                         short noDataValue) {
+    super(sector, extent, bufferSize, deltaHeight);
+    _buffer = buffer;
+    _noDataValue = noDataValue;
+    if (_bufferSize != (_extent._x * _extent._y)) {
       throw new RuntimeException("Invalid bufferSize");
     }
   }
-
+  
   public void dispose()
   {
     _buffer = null;
