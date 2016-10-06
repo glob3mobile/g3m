@@ -16,9 +16,13 @@
 #include "ShortBufferTerrainElevationGrid.hpp"
 
 
-short* BILParser::pvtParse(const int          size,
-                           const IByteBuffer* buffer,
-                           const short        noDataValue) {
+
+ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
+                                                   const Vector2I&    extent,
+                                                   const IByteBuffer* buffer,
+                                                   const double       deltaHeight) {
+
+  const int size = extent._x * extent._y;
 
   const int expectedSizeInBytes = size * 2;
   if (buffer->size() != expectedSizeInBytes) {
@@ -32,34 +36,15 @@ short* BILParser::pvtParse(const int          size,
 
   const short minValue = IMathUtils::instance()->minInt16();
 
-  short* result = new short[size];
+  short* shortBuffer = new short[size];
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
-    if (height == -9999) {
-      height = noDataValue;
-    }
-    else if (height == minValue) {
-      height = noDataValue;
+    if ((height == -9999) || (height == minValue)) {
+      height = ShortBufferElevationData::NO_DATA_VALUE;
     }
 
-    result[i] = height;
-  }
-
-  return result;
-}
-
-
-ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
-                                                   const Vector2I&    extent,
-                                                   const IByteBuffer* buffer,
-                                                   const double       deltaHeight) {
-
-  const int size = extent._x * extent._y;
-
-  short* shortBuffer = pvtParse(size, buffer, ShortBufferElevationData::NO_DATA_VALUE);
-  if (shortBuffer == NULL) {
-    return NULL;
+    shortBuffer[i] = height;
   }
 
   return new ShortBufferElevationData(sector,
@@ -76,9 +61,27 @@ ShortBufferTerrainElevationGrid* BILParser::parseBIL16(const Sector&      sector
                                                        const double       deltaHeight) {
   const int size = extent._x * extent._y;
 
-  short* shortBuffer = pvtParse(size, buffer, noDataValue);
-  if (shortBuffer == NULL) {
+  const int expectedSizeInBytes = size * 2;
+  if (buffer->size() != expectedSizeInBytes) {
+    ILogger::instance()->logError("Invalid buffer size, expected %d bytes, but got %d",
+                                  expectedSizeInBytes,
+                                  buffer->size());
     return NULL;
+  }
+
+  ByteBufferIterator iterator(buffer);
+
+  const short minValue = IMathUtils::instance()->minInt16();
+
+  short* shortBuffer = new short[size];
+  for (int i = 0; i < size; i++) {
+    short height = iterator.nextInt16();
+
+    if ((height == -9999) || (height == minValue)) {
+      height = noDataValue;
+    }
+
+    shortBuffer[i] = height;
   }
 
   return new ShortBufferTerrainElevationGrid(sector,

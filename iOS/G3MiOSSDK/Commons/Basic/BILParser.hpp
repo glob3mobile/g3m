@@ -19,10 +19,6 @@ class BILParser {
 private:
   BILParser() {}
 
-  static short* pvtParse(const int          size,
-                         const IByteBuffer* buffer,
-                         const short        noDataValue);
-
 public:
 
   static ShortBufferElevationData* oldParseBIL16(const Sector&      sector,
