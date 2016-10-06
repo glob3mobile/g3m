@@ -163,8 +163,8 @@ public abstract class IMathUtils
   public abstract double ceil(double d);
   public abstract float ceil(float f);
 
-  public abstract double fmod(double d1, double d2);
-  public abstract float fmod(float f1, float f2);
+  public abstract double mod(double d1, double d2);
+  public abstract float mod(float f1, float f2);
 
   public double linearInterpolation(double from, double to, double alpha)
   {

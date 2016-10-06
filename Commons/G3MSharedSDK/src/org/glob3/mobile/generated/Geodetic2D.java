@@ -69,7 +69,12 @@ public class Geodetic2D
     final double x = java.lang.Math.cos(fromLatitude._radians) * java.lang.Math.sin(toLatitude._radians) - java.lang.Math.sin(fromLatitude._radians) * toLatCos * java.lang.Math.cos(deltaLonRad);
     final double radians = IMathUtils.instance().atan2(y, x);
 
-    return radians;
+    return IMathUtils.instance().mod(radians, DefineConstants.PI *2);
+  }
+
+  public static double bearingInDegrees(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
+  {
+    return ((bearingInRadians(fromLatitude, fromLongitude, toLatitude, toLongitude)) * (180.0 / 3.14159265358979323846264338327950288));
   }
 
   /**
