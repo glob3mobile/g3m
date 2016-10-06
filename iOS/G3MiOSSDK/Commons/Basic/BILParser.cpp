@@ -13,14 +13,12 @@
 #include "IShortBuffer.hpp"
 #include "ShortBufferElevationData.hpp"
 #include "Vector2I.hpp"
+#include "ShortBufferTerrainElevationGrid.hpp"
 
 
-ShortBufferElevationData* BILParser::oldParseBIL16(const Sector& sector,
-                                                   const Vector2I& extent,
-                                                   const IByteBuffer* buffer,
-                                                   double deltaHeight) {
-
-  const int size = extent._x * extent._y;
+short* BILParser::pvtParse(const int          size,
+                           const IByteBuffer* buffer,
+                           const short        noDataValue) {
 
   const int expectedSizeInBytes = size * 2;
   if (buffer->size() != expectedSizeInBytes) {
@@ -34,18 +32,34 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector& sector,
 
   const short minValue = IMathUtils::instance()->minInt16();
 
-  short* shortBuffer = new short[size];
+  short* result = new short[size];
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
     if (height == -9999) {
-      height = ShortBufferElevationData::NO_DATA_VALUE;
+      height = noDataValue;
     }
     else if (height == minValue) {
-      height = ShortBufferElevationData::NO_DATA_VALUE;
+      height = noDataValue;
     }
 
-    shortBuffer[i] = height;
+    result[i] = height;
+  }
+
+  return result;
+}
+
+
+ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
+                                                   const Vector2I&    extent,
+                                                   const IByteBuffer* buffer,
+                                                   const double       deltaHeight) {
+
+  const int size = extent._x * extent._y;
+
+  short* shortBuffer = pvtParse(size, buffer, ShortBufferElevationData::NO_DATA_VALUE);
+  if (shortBuffer == NULL) {
+    return NULL;
   }
 
   return new ShortBufferElevationData(sector,
@@ -53,4 +67,24 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector& sector,
                                       shortBuffer,
                                       size,
                                       deltaHeight);
+}
+
+ShortBufferTerrainElevationGrid* BILParser::parseBIL16(const Sector&      sector,
+                                                       const Vector2I&    extent,
+                                                       const IByteBuffer* buffer,
+                                                       const short        noDataValue,
+                                                       const double       deltaHeight) {
+  const int size = extent._x * extent._y;
+
+  short* shortBuffer = pvtParse(size, buffer, noDataValue);
+  if (shortBuffer == NULL) {
+    return NULL;
+  }
+
+  return new ShortBufferTerrainElevationGrid(sector,
+                                             extent,
+                                             shortBuffer,
+                                             size,
+                                             deltaHeight,
+                                             noDataValue);
 }
