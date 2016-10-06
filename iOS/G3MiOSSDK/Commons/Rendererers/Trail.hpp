@@ -12,8 +12,8 @@
 #include <vector>
 
 #include "Color.hpp"
-#include "Geodetic3D.hpp"
 #include "Mesh.hpp"
+#include "Angle.hpp"
 
 class Planet;
 class Frustum;
@@ -21,6 +21,8 @@ class G3MRenderContext;
 class GLState;
 class IFloatBuffer;
 class MutableMatrix44D;
+class Geodetic2D;
+class Geodetic3D;
 
 
 class Trail {
@@ -33,15 +35,18 @@ private:
     const Angle  _longitude;
     const double _height;
     const double _alpha;
+    const Angle  _heading;
 
     Position(const Angle& latitude,
              const Angle& longitude,
              const double height,
-             const double alpha) :
+             const double alpha,
+             const Angle& heading) :
     _latitude(latitude),
     _longitude(longitude),
     _height(height),
-    _alpha(alpha)
+    _alpha(alpha),
+    _heading(heading)
     {
     }
 
@@ -126,12 +131,14 @@ private:
     void addPosition(const Angle& latitude,
                      const Angle& longitude,
                      const double height,
-                     const double alpha);
+                     const double alpha,
+                     const Angle& heading);
 
     void setNextSegmentFirstPosition(const Angle& latitude,
                                      const Angle& longitude,
                                      const double height,
-                                     const double alpha);
+                                     const double alpha,
+                                     const Angle& heading);
 
     void setPreviousSegmentLastPosition(const Position& position);
 
@@ -182,16 +189,18 @@ public:
   void addPosition(const Angle& latitude,
                    const Angle& longitude,
                    const double height,
-                   const double alpha);
+                   const double alpha,
+                   const Angle& heading = Angle::nan());
+
+  void addPosition(const Geodetic2D& position,
+                   const double height,
+                   const double alpha,
+                   const Angle& heading = Angle::nan());
 
   void addPosition(const Geodetic3D& position,
-                   const double alpha) {
-    addPosition(position._latitude,
-                position._longitude,
-                position._height,
-                alpha);
-  }
-  
+                   const double alpha,
+                   const Angle& heading = Angle::nan());
+
   void clear();
   
   void setAlpha(const double alpha);

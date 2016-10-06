@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_Android
-extends
-IMathUtils {
+   extends
+      IMathUtils {
 
    private final Random _random = new Random();
 
@@ -364,15 +364,15 @@ IMathUtils {
 
 
    @Override
-   public double fmod(final double d1,
-                      final double d2) {
+   public double mod(final double d1,
+                     final double d2) {
       return d1 % d2;
    }
 
 
    @Override
-   public float fmod(final float f1,
-                     final float f2) {
+   public float mod(final float f1,
+                    final float f2) {
       return f1 % f2;
    }
 

@@ -67,18 +67,18 @@ public:
   static double bearingInRadians(const Angle& fromLatitude,
                                  const Angle& fromLongitude,
                                  const Angle& toLatitude,
+                                 const Angle& toLongitude);
+
+  static double bearingInDegrees(const Angle& fromLatitude,
+                                 const Angle& fromLongitude,
+                                 const Angle& toLatitude,
                                  const Angle& toLongitude) {
-    const double deltaLonRad = toLongitude._radians - fromLongitude._radians;
-
-    const double toLatCos = COS(toLatitude._radians);
-
-    const double y = SIN(deltaLonRad) * toLatCos;
-    const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(deltaLonRad);
-    const double radians = IMathUtils::instance()->atan2(y, x);
-
-    return radians;
+    return TO_DEGREES(bearingInRadians(fromLatitude,
+                                       fromLongitude,
+                                       toLatitude,
+                                       toLongitude));
   }
-  
+
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http://williams.best.vwh.net/avform.htm#Crs
@@ -133,7 +133,7 @@ public:
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
   
-  Angle angleTo(const Geodetic2D& other) const;
+  Angle angleTo(const Geodetic2D& that) const;
   
   
   /**
