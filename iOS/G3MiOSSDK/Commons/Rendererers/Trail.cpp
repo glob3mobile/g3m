@@ -61,12 +61,14 @@ size_t Trail::Segment::getSize() const {
 void Trail::Segment::addPosition(const Angle& latitude,
                                  const Angle& longitude,
                                  const double height,
-                                 const double alpha) {
+                                 const double alpha,
+                                 const Angle& heading) {
   _positionsDirty = true;
   _positions.push_back(new Position(latitude,
                                     longitude,
                                     height,
-                                    alpha));
+                                    alpha,
+                                    heading));
   if (alpha < _minAlpha) { _minAlpha = alpha; _alphaStatus = Trail::SEGMENT_ALPHA_STATUS_UNKNOWN; }
   if (alpha > _maxAlpha) { _maxAlpha = alpha; _alphaStatus = Trail::SEGMENT_ALPHA_STATUS_UNKNOWN; }
 }
@@ -75,19 +77,22 @@ void Trail::Segment::addPosition(const Position& position) {
   addPosition(position._latitude,
               position._longitude,
               position._height,
-              position._alpha);
+              position._alpha,
+              position._heading);
 }
 
 void Trail::Segment::setNextSegmentFirstPosition(const Angle& latitude,
                                                  const Angle& longitude,
                                                  const double height,
-                                                 const double alpha) {
+                                                 const double alpha,
+                                                 const Angle& heading) {
   _positionsDirty = true;
   delete _nextSegmentFirstPosition;
   _nextSegmentFirstPosition = new Position(latitude,
                                            longitude,
                                            height,
-                                           alpha);
+                                           alpha,
+                                           heading);
 }
 
 void Trail::Segment::setPreviousSegmentLastPosition(const Position& position) {
@@ -96,7 +101,8 @@ void Trail::Segment::setPreviousSegmentLastPosition(const Position& position) {
   _previousSegmentLastPosition = new Position(position._latitude,
                                               position._longitude,
                                               position._height,
-                                              position._alpha);
+                                              position._alpha,
+                                              position._heading);
 }
 
 Trail::Position Trail::Segment::getLastPosition() const {
@@ -154,43 +160,52 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   IFloatBuffer* bearingsInRadians = IFactory::instance()->createFloatBuffer(positionsSize);
 
   for (size_t i = 1; i < positionsSize; i++) {
-    const Position* current  = _positions[i];
     const Position* previous = _positions[i - 1];
+    const Position* current  = _positions[i];
 
-    const float angleInRadians = (float) Geodetic2D::bearingInRadians(previous->_latitude,
-                                                                      previous->_longitude,
-                                                                      current->_latitude,
-                                                                      current->_longitude);
+    const float angleInRadians = (float) (current->_heading.isNan()
+                                          ? Geodetic2D::bearingInRadians(previous->_latitude,
+                                                                         previous->_longitude,
+                                                                         current->_latitude,
+                                                                         current->_longitude)
+                                          : current->_heading._radians);
     if (i == 1) {
       if (_previousSegmentLastPosition == NULL) {
         bearingsInRadians->rawPut(0, angleInRadians);
         bearingsInRadians->rawPut(1, angleInRadians);
       }
       else {
-        const float angle2InRadians = (float) Geodetic2D::bearingInRadians(_previousSegmentLastPosition->_latitude,
-                                                                           _previousSegmentLastPosition->_longitude,
-                                                                           previous->_latitude,
-                                                                           previous->_longitude);
-        const float avr = (angleInRadians + angle2InRadians) / 2.0f;
+        const float previousAngleInRadians = (float) (previous->_heading.isNan()
+                                                      ?  Geodetic2D::bearingInRadians(_previousSegmentLastPosition->_latitude,
+                                                                                      _previousSegmentLastPosition->_longitude,
+                                                                                      previous->_latitude,
+                                                                                      previous->_longitude)
+                                                      : previous->_heading._radians);
+        const float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
 
         bearingsInRadians->rawPut(0, avr);
         bearingsInRadians->rawPut(1, avr);
       }
     }
     else {
-      bearingsInRadians->rawPut(i, angleInRadians);
-      const float avr = (angleInRadians + bearingsInRadians->get(i - 1)) / 2.0f;
+      const float previousAngleInRadians = bearingsInRadians->get(i - 1);
+
+      const float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
       bearingsInRadians->rawPut(i - 1, avr);
+
+      bearingsInRadians->rawPut(i, angleInRadians);
     }
   }
 
   if (_nextSegmentFirstPosition != NULL) {
     const size_t lastPositionIndex = positionsSize - 1;
     const Position* lastPosition = _positions[lastPositionIndex];
-    const float angleInRadians = (float) Geodetic2D::bearingInRadians(lastPosition->_latitude,
-                                                                      lastPosition->_longitude,
-                                                                      _nextSegmentFirstPosition->_latitude,
-                                                                      _nextSegmentFirstPosition->_longitude);
+    const float angleInRadians = (float) (_nextSegmentFirstPosition->_heading.isNan()
+                                          ? Geodetic2D::bearingInRadians(lastPosition->_latitude,
+                                                                         lastPosition->_longitude,
+                                                                         _nextSegmentFirstPosition->_latitude,
+                                                                         _nextSegmentFirstPosition->_longitude)
+                                          : _nextSegmentFirstPosition->_heading._radians);
 
     const float avr = (angleInRadians + bearingsInRadians->get(lastPositionIndex)) / 2.0f;
     bearingsInRadians->rawPut(lastPositionIndex, avr);
@@ -369,10 +384,32 @@ void Trail::clear() {
   _segments.clear();
 }
 
+void Trail::addPosition(const Geodetic2D& position,
+                        const double height,
+                        const double alpha,
+                        const Angle& heading) {
+  addPosition(position._latitude,
+              position._longitude,
+              height,
+              alpha,
+              heading);
+}
+
+void Trail::addPosition(const Geodetic3D& position,
+                        const double alpha,
+                        const Angle& heading) {
+  addPosition(position._latitude,
+              position._longitude,
+              position._height,
+              alpha,
+              heading);
+}
+
 void Trail::addPosition(const Angle& latitude,
                         const Angle& longitude,
                         const double height,
-                        const double alpha) {
+                        const double alpha,
+                        const Angle& heading) {
   Segment* currentSegment;
 
   const size_t segmentsSize = _segments.size();
@@ -390,7 +427,8 @@ void Trail::addPosition(const Angle& latitude,
       currentSegment->setNextSegmentFirstPosition(latitude,
                                                   longitude,
                                                   height + _deltaHeight,
-                                                  alpha);
+                                                  alpha,
+                                                  heading);
       newSegment->setPreviousSegmentLastPosition( currentSegment->getPreLastPosition() );
       newSegment->addPosition( currentSegment->getLastPosition() );
 
@@ -401,7 +439,8 @@ void Trail::addPosition(const Angle& latitude,
   currentSegment->addPosition(latitude,
                               longitude,
                               height + _deltaHeight,
-                              alpha);
+                              alpha,
+                              heading);
 }
 
 void Trail::render(const G3MRenderContext* rc,

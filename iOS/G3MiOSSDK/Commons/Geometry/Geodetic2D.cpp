@@ -50,14 +50,12 @@ Angle Geodetic2D::angleTo(const Geodetic2D& that) const {
                          SIN(that._latitude._radians));
 
   return Angle::fromRadians(asin(normal1.cross(normal2).squaredLength()));
-
 }
 
 double Geodetic2D::bearingInRadians(const Angle& fromLatitude,
                                     const Angle& fromLongitude,
                                     const Angle& toLatitude,
                                     const Angle& toLongitude) {
-
   const IMathUtils* mu = IMathUtils::instance();
 
   const double deltaLonRad = toLongitude._radians - fromLongitude._radians;
@@ -67,17 +65,12 @@ double Geodetic2D::bearingInRadians(const Angle& fromLatitude,
   const double y = SIN(deltaLonRad) * toLatCos;
   const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(deltaLonRad);
   const double radians = mu->atan2(y, x);
-  //    return radians;
+  return radians;
 
-  //    return IMathUtils::instance()->mod(radians, PI*2);
-  const double r1 = mu->mod(radians, PI*2);
-  const double r2 = mu->mod(radians + PI*2, PI*2);
+//  const double pi2 = PI*2;
+//  return mu->mod(radians + pi2, pi2);
 
-  //    return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
-  if (mu->abs(r1) <= mu->abs(r2)) {
-    return r1;
-  }
-  else {
-    return r2;
-  }
+//  const double r1 = mu->mod(radians, pi2);
+//  const double r2 = mu->mod(radians + pi2, pi2);
+//  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
 }

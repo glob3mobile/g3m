@@ -54,11 +54,11 @@ Angle Angle::clampedTo(const Angle& min,
   if (_radians < min._radians) {
     return min;
   }
-  
+
   if (_radians > max._radians) {
     return max;
   }
-  
+
   return *this;
 }
 
@@ -81,7 +81,7 @@ Angle Angle::nearestAngleInInterval(const Angle& min,
   if (greaterThan(min) && lowerThan(max)) {
     return (*this);
   }
-  
+
   // look for the extreme closest to the angle
   const Angle dif0 = distanceTo(min);
   const Angle dif1 = distanceTo(max);
@@ -91,7 +91,6 @@ Angle Angle::nearestAngleInInterval(const Angle& min,
 const std::string Angle::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addDouble(_degrees);
-//  isb->addString("°");
   isb->addString("d");
   const std::string s = isb->getString();
   delete isb;
@@ -104,4 +103,33 @@ Angle Angle::cosineInterpolation(const Angle& from,
   return Angle::fromRadians( IMathUtils::instance()->cosineInterpolation(from._radians,
                                                                          to._radians,
                                                                          alpha) );
+}
+
+double Angle::smoothDegrees(double previousDegrees,
+                            double degrees) {
+  if (ISNAN(previousDegrees)) {
+    return degrees;
+  }
+
+  const double delta = previousDegrees - degrees;
+  if (IMathUtils::instance()->abs(delta) < 180.0) {
+    return degrees;
+  }
+
+  return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
+}
+
+double Angle::smoothRadians(double previousRadians,
+                            double radians) {
+  if (ISNAN(previousRadians)) {
+    return radians;
+  }
+
+  const double delta = previousRadians - radians;
+  if (IMathUtils::instance()->abs(delta) < PI) {
+    return delta;
+  }
+
+  const double pi2 = PI*2;
+  return (delta < 0.0) ? (radians - pi2) : (radians + pi2);
 }

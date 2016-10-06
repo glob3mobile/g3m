@@ -70,11 +70,11 @@ public:
   static Angle pi() {
     return Angle::fromDegrees(180);
   }
-  
+
   static Angle halfPi() {
     return Angle::fromDegrees(90);
   }
-  
+
   static Angle nan();
 
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
@@ -102,6 +102,12 @@ public:
                                               double alpha) {
     return Angle::fromDegrees( (1.0-alpha) * fromDegrees + alpha * toDegrees );
   }
+
+  static double smoothDegrees(double previousDegrees,
+                              double degrees);
+
+  static double smoothRadians(double previousRadians,
+                              double radians);
 
   bool isNan() const;
 
@@ -211,7 +217,7 @@ public:
     return description();
   }
 #endif
-
+  
 };
 
 #endif
