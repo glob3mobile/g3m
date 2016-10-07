@@ -59,16 +59,15 @@ public:
                                     );
     _model->getMeshRenderer()->addMesh(mesh);
 
-//    const Geodetic3D cameraPosition(result->getSector()._center, 1000);
-//    _model->getG3MWidget()->setAnimatedCameraPosition(cameraPosition);
+    const Geodetic3D cameraPosition(result->getSector()._center, 45000);
+    _model->getG3MWidget()->setAnimatedCameraPosition(cameraPosition);
 
-    const Geodetic3D position = Geodetic3D::fromDegrees(40.13966959177994, -5.89060128999895, 4694.511700438305);
-    const Angle heading = Angle::fromDegrees(-51.146970);
-    const Angle pitch = Angle::fromDegrees(-20.862775);
-
-    _model->getG3MWidget()->setCameraPosition(position);
-    _model->getG3MWidget()->setCameraHeading(heading);
-    _model->getG3MWidget()->setCameraPitch(pitch);
+//    const Geodetic3D position = Geodetic3D::fromDegrees(40.13966959177994, -5.89060128999895, 4694.511700438305);
+//    const Angle heading = Angle::fromDegrees(-51.146970);
+//    const Angle pitch = Angle::fromDegrees(-20.862775);
+//    _model->getG3MWidget()->setCameraPosition(position);
+//    _model->getG3MWidget()->setCameraHeading(heading);
+//    _model->getG3MWidget()->setCameraPitch(pitch);
   }
 
 };
