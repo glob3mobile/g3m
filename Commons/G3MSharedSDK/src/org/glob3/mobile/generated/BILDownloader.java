@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class Sector;
 //class Vector2I;
 //class TimeInterval;
+//class ShortBufferTerrainElevationGrid;
 
 
 public class BILDownloader
@@ -30,22 +31,24 @@ public class BILDownloader
   }
 
 
-  public static class Handler
+  public abstract static class Handler
   {
+    public void dispose()
+    {
+    }
 
+    public abstract void onDownloadError(URL url);
+
+    public abstract void onParseError();
+
+    public abstract void onBIL(ShortBufferTerrainElevationGrid result);
   }
 
   public static void request(G3MContext context, URL url, long priority, TimeInterval timeToCache, boolean readExpired, Sector sector, Vector2I extent, double deltaHeight, short noDataValue, BILDownloader.Handler handler, boolean deleteHandler)
   {
   
-  //  context->getDownloader()->requestBuffer(url,
-  //                                          priority,
-  //                                          timeToCache,
-  //                                          readExpired,
-  //                                          <#IBufferDownloadListener *listener#>,
-  //                                          <#bool deleteListener#>);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error Diego at work!
+  
+    context.getDownloader().requestBuffer(url, priority, timeToCache, readExpired, new BILDownloader_BufferDownloadListener(sector, extent, noDataValue, deltaHeight,handler, deleteHandler, context.getThreadUtils()), true);
   }
 
 
