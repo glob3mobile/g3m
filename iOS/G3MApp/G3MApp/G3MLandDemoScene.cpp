@@ -51,13 +51,13 @@ public:
   void onBIL(const G3MContext* context,
              ShortBufferTerrainElevationGrid* result) {
     Mesh* mesh = result->createMesh(context->getPlanet(),
-                                    1,                    // verticalExaggeration,
-                                    Geodetic3D::zero(),   // positionOffset,
-                                    4                     // pointSize
+                                    1,                    // verticalExaggeration
+                                    Geodetic3D::zero(),   // positionOffset
+                                    1                     // pointSize
                                     );
     _model->getMeshRenderer()->addMesh(mesh);
 
-    const Geodetic3D cameraPosition(result->getSector()._center, 45000);
+    const Geodetic3D cameraPosition(result->getSector()._center, 40000);
     _model->getG3MWidget()->setAnimatedCameraPosition(cameraPosition);
   }
 
