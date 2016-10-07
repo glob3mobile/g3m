@@ -37,18 +37,18 @@ public class BILDownloader
     {
     }
 
-    public abstract void onDownloadError(URL url);
+    public abstract void onDownloadError(G3MContext context, URL url);
 
-    public abstract void onParseError();
+    public abstract void onParseError(G3MContext context);
 
-    public abstract void onBIL(ShortBufferTerrainElevationGrid result);
+    public abstract void onBIL(G3MContext context, ShortBufferTerrainElevationGrid result);
   }
 
   public static void request(G3MContext context, URL url, long priority, TimeInterval timeToCache, boolean readExpired, Sector sector, Vector2I extent, double deltaHeight, short noDataValue, BILDownloader.Handler handler, boolean deleteHandler)
   {
   
   
-    context.getDownloader().requestBuffer(url, priority, timeToCache, readExpired, new BILDownloader_BufferDownloadListener(sector, extent, noDataValue, deltaHeight,handler, deleteHandler, context.getThreadUtils()), true);
+    context.getDownloader().requestBuffer(url, priority, timeToCache, readExpired, new BILDownloader_BufferDownloadListener(sector, extent, noDataValue, deltaHeight,handler, deleteHandler, context), true);
   }
 
 

@@ -40,6 +40,11 @@ public abstract class TerrainElevationGrid extends RCObject
   }
 
 
+  public final Sector getSector()
+  {
+    return _sector;
+  }
+
   public final Vector2I getExtent()
   {
     return _extent;
@@ -60,8 +65,8 @@ public abstract class TerrainElevationGrid extends RCObject
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
     final double minElevation = minMaxAverageElevations._x;
     final double maxElevation = minMaxAverageElevations._y;
-    final double deltaElevation = maxElevation - minElevation;
     final double averageElevation = minMaxAverageElevations._z;
+    final double deltaElevation = maxElevation - minElevation;
   
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
@@ -86,7 +91,7 @@ public abstract class TerrainElevationGrid extends RCObject
   
         final double height = (elevation * verticalExaggeration) + positionOffset._height;
   
-        vertices.add(longitude, latitude, height);
+        vertices.add(latitude, longitude, height);
   
         final float gray = (float)((elevation - minElevation) / deltaElevation);
         colors.add(gray, gray, gray, 1);

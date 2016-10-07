@@ -4,8 +4,8 @@ public class BILDownloader_ParserAsyncTask extends GAsyncTask
   private BILDownloader.Handler _handler;
   private final boolean _deleteHandler;
   private IByteBuffer _buffer;
-  private final Sector _sector;
-  private final Vector2I _extent;
+  private final Sector _sector ;
+  private final Vector2I _extent = new Vector2I();
   private final short _noDataValue;
   private final double _deltaHeight;
 
@@ -50,11 +50,11 @@ public class BILDownloader_ParserAsyncTask extends GAsyncTask
   {
     if (_result == null)
     {
-      _handler.onParseError();
+      _handler.onParseError(context);
     }
     else
     {
-      _handler.onBIL(_result);
+      _handler.onBIL(context, _result);
       _result = null; // moves _result ownership to _handler
     }
   }

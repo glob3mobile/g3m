@@ -61,18 +61,19 @@ public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
     for (int i = 0; i < _bufferSize; i++)
     {
       final short height = _buffer[i];
-      if (height != _noDataValue)
+      if (height == _noDataValue)
       {
-        if (height < minHeight)
-        {
-          minHeight = height;
-        }
-        if (height > maxHeight)
-        {
-          maxHeight = height;
-        }
-        sumHeight += height;
+        continue;
       }
+      if (height < minHeight)
+      {
+        minHeight = height;
+      }
+      if (height > maxHeight)
+      {
+        maxHeight = height;
+      }
+      sumHeight += height;
     }
   
     if (minHeight == mu.maxInt16())
