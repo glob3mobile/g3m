@@ -13,6 +13,8 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "BILParser.hpp"
+#include "Sector.hpp"
+#include "Vector2I.hpp"
 
 
 class BILDownloader_ParserAsyncTask : public GAsyncTask {
@@ -20,8 +22,8 @@ private:
   BILDownloader::Handler* _handler;
   const bool              _deleteHandler;
   IByteBuffer*            _buffer;
-  const Sector&           _sector;
-  const Vector2I&         _extent;
+  const Sector            _sector;
+  const Vector2I          _extent;
   const short             _noDataValue;
   const double            _deltaHeight;
 
@@ -66,10 +68,10 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_result == NULL) {
-      _handler->onParseError();
+      _handler->onParseError(context);
     }
     else {
-      _handler->onBIL(_result);
+      _handler->onBIL(context, _result);
       _result = NULL; // moves _result ownership to _handler
     }
   }
@@ -79,13 +81,13 @@ public:
 
 class BILDownloader_BufferDownloadListener : public IBufferDownloadListener {
 private:
-  const Sector&           _sector;
-  const Vector2I&         _extent;
+  const Sector            _sector;
+  const Vector2I          _extent;
   const short             _noDataValue;
   const double            _deltaHeight;
   BILDownloader::Handler* _handler;
   const bool              _deleteHandler;
-  const IThreadUtils*     _threadUtils;
+  const G3MContext*       _context;
 
 public:
   BILDownloader_BufferDownloadListener(const Sector&           sector,
@@ -94,14 +96,14 @@ public:
                                        const double            deltaHeight,
                                        BILDownloader::Handler* handler,
                                        const bool              deleteHandler,
-                                       const IThreadUtils*     threadUtils) :
+                                       const G3MContext*       context) :
   _sector(sector),
   _extent(extent),
   _noDataValue(noDataValue),
   _deltaHeight(deltaHeight),
   _handler(handler),
   _deleteHandler(deleteHandler),
-  _threadUtils(threadUtils)
+  _context(context)
   {
   }
 
@@ -118,22 +120,20 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-
-    _threadUtils->invokeAsyncTask(new BILDownloader_ParserAsyncTask(buffer,
-                                                                    _sector,
-                                                                    _extent,
-                                                                    _noDataValue,
-                                                                    _deltaHeight,
-                                                                    _handler,
-                                                                    _deleteHandler),
-                                  true);
+    GAsyncTask* parserTask = new BILDownloader_ParserAsyncTask(buffer,
+                                                               _sector,
+                                                               _extent,
+                                                               _noDataValue,
+                                                               _deltaHeight,
+                                                               _handler,
+                                                               _deleteHandler);
+    _context->getThreadUtils()->invokeAsyncTask(parserTask, true);
 
     _handler = NULL; // moves _handler ownership to BILDownloader_ParserAsyncTask
-
   }
 
   void onError(const URL& url) {
-    _handler->onDownloadError(url);
+    _handler->onDownloadError(_context, url);
   }
 
   void onCancel(const URL& url) {
@@ -170,6 +170,6 @@ void BILDownloader::request(const G3MContext*       context,
                                                                                    noDataValue,
                                                                                    deltaHeight,handler,
                                                                                    deleteHandler,
-                                                                                   context->getThreadUtils()),
+                                                                                   context),
                                           true);
 }

@@ -63,15 +63,16 @@ Vector3D ShortBufferTerrainElevationGrid::getMinMaxAverageElevations() const {
 
   for (size_t i = 0; i < _bufferSize; i++) {
     const short height = _buffer[i];
-    if (height != _noDataValue) {
-      if (height < minHeight) {
-        minHeight = height;
-      }
-      if (height > maxHeight) {
-        maxHeight = height;
-      }
-      sumHeight += height;
+    if (height == _noDataValue) {
+      continue;
     }
+    if (height < minHeight) {
+      minHeight = height;
+    }
+    if (height > maxHeight) {
+      maxHeight = height;
+    }
+    sumHeight += height;
   }
 
   if (minHeight == mu->maxInt16()) {

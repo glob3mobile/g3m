@@ -29,6 +29,10 @@ TerrainElevationGrid::~TerrainElevationGrid() {
 #endif
 }
 
+const Sector TerrainElevationGrid::getSector() const {
+  return _sector;
+}
+
 const Vector2I TerrainElevationGrid::getExtent() const {
   return _extent;
 }
@@ -45,8 +49,8 @@ Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
   const double minElevation     = minMaxAverageElevations._x;
   const double maxElevation     = minMaxAverageElevations._y;
-  const double deltaElevation   = maxElevation - minElevation;
   const double averageElevation = minMaxAverageElevations._z;
+  const double deltaElevation   = maxElevation - minElevation;
 
   ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
                                averageElevation, minElevation, maxElevation, deltaElevation);
@@ -69,7 +73,7 @@ Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
 
       const double height = (elevation * verticalExaggeration) + positionOffset._height;
 
-      vertices->add(longitude, latitude, height);
+      vertices->add(latitude, longitude, height);
 
       const float gray = (float) ((elevation - minElevation) / deltaElevation);
       colors.add(gray, gray, gray, 1);

@@ -28,11 +28,13 @@ public:
     virtual ~Handler() {
     }
 
-    virtual void onDownloadError(const URL& url) = 0;
+    virtual void onDownloadError(const G3MContext* context,
+                                 const URL& url) = 0;
 
-    virtual void onParseError() = 0;
+    virtual void onParseError(const G3MContext* context) = 0;
 
-    virtual void onBIL(ShortBufferTerrainElevationGrid* result) = 0;
+    virtual void onBIL(const G3MContext* context,
+                       ShortBufferTerrainElevationGrid* result) = 0;
   };
 
   static void request(const G3MContext*       context,

@@ -36,6 +36,8 @@ protected:
 
 public:
 
+  const Sector getSector() const;
+
   const Vector2I getExtent() const;
 
   const Geodetic2D getResolution() const;
