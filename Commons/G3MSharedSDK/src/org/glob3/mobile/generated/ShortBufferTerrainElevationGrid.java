@@ -60,11 +60,12 @@ public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   
     for (int i = 0; i < _bufferSize; i++)
     {
-      final short height = _buffer[i];
+      short height = _buffer[i];
       if (height == _noDataValue)
       {
         continue;
       }
+      height += _deltaHeight;
       if (height < minHeight)
       {
         minHeight = height;
