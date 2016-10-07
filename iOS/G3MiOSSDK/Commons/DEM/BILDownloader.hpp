@@ -9,16 +9,22 @@
 #ifndef BILDownloader_hpp
 #define BILDownloader_hpp
 
+#include "IThreadUtils.hpp"
+#include "Sector.hpp"
+#include "Vector2I.hpp"
+#include "IBufferDownloadListener.hpp"
+
 class G3MContext;
 class URL;
-class Sector;
-class Vector2I;
 class TimeInterval;
 class ShortBufferTerrainElevationGrid;
+class IByteBuffer;
+
 
 
 class BILDownloader {
 private:
+
   BILDownloader() {}
 
 public:
@@ -48,6 +54,87 @@ public:
                       const short             noDataValue,
                       BILDownloader::Handler* handler,
                       const bool              deleteHandler);
+
+
+
+  class ParserAsyncTask : public GAsyncTask {
+  private:
+    BILDownloader::Handler* _handler;
+    const bool              _deleteHandler;
+    IByteBuffer*            _buffer;
+    const Sector            _sector;
+#ifdef C_CODE
+    const Vector2I          _extent;
+#endif
+#ifdef JAVA_CODE
+    private final Vector2I  _extent;
+#endif
+    const short             _noDataValue;
+    const double            _deltaHeight;
+
+    ShortBufferTerrainElevationGrid* _result;
+
+  public:
+    ParserAsyncTask(IByteBuffer*            buffer,
+                    const Sector&           sector,
+                    const Vector2I&         extent,
+                    const short             noDataValue,
+                    const double            deltaHeight,
+                    BILDownloader::Handler* handler,
+                    const bool              deleteHandler);
+
+    ~ParserAsyncTask();
+
+    void runInBackground(const G3MContext* context);
+
+    void onPostExecute(const G3MContext* context);
+
+  };
+
+
+
+
+  class BufferDownloadListener : public IBufferDownloadListener {
+  private:
+    const Sector            _sector;
+#ifdef C_CODE
+    const Vector2I          _extent;
+#endif
+#ifdef JAVA_CODE
+    private final Vector2I  _extent;
+#endif
+    const short             _noDataValue;
+    const double            _deltaHeight;
+    BILDownloader::Handler* _handler;
+    const bool              _deleteHandler;
+    const G3MContext*       _context;
+
+  public:
+    BufferDownloadListener(const Sector&           sector,
+                                         const Vector2I&         extent,
+                                         const short             noDataValue,
+                                         const double            deltaHeight,
+                                         BILDownloader::Handler* handler,
+                                         const bool              deleteHandler,
+                           const G3MContext*       context);
+
+
+    virtual ~BufferDownloadListener();
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired);
+
+  };
+
 
 
 };

@@ -10,142 +10,114 @@
 
 #include "G3MContext.hpp"
 #include "IDownloader.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "IThreadUtils.hpp"
 #include "BILParser.hpp"
-#include "Sector.hpp"
-#include "Vector2I.hpp"
 
 
-class BILDownloader_ParserAsyncTask : public GAsyncTask {
-private:
-  BILDownloader::Handler* _handler;
-  const bool              _deleteHandler;
-  IByteBuffer*            _buffer;
-  const Sector            _sector;
-  const Vector2I          _extent;
-  const short             _noDataValue;
-  const double            _deltaHeight;
 
-  ShortBufferTerrainElevationGrid* _result;
+BILDownloader::ParserAsyncTask::ParserAsyncTask(IByteBuffer*            buffer,
+                               const Sector&           sector,
+                               const Vector2I&         extent,
+                               const short             noDataValue,
+                               const double            deltaHeight,
+                               BILDownloader::Handler* handler,
+                               const bool              deleteHandler) :
+_buffer(buffer),
+_sector(sector),
+_extent(extent),
+_noDataValue(noDataValue),
+_deltaHeight(deltaHeight),
+_handler(handler),
+_deleteHandler(deleteHandler),
+_result(NULL)
+{
+}
 
-public:
-  BILDownloader_ParserAsyncTask(IByteBuffer*            buffer,
-                                const Sector&           sector,
-                                const Vector2I&         extent,
-                                const short             noDataValue,
-                                const double            deltaHeight,
-                                BILDownloader::Handler* handler,
-                                const bool              deleteHandler) :
-  _buffer(buffer),
-  _sector(sector),
-  _extent(extent),
-  _noDataValue(noDataValue),
-  _deltaHeight(deltaHeight),
-  _handler(handler),
-  _deleteHandler(deleteHandler),
-  _result(NULL)
-  {
+BILDownloader::ParserAsyncTask::~ParserAsyncTask() {
+  delete _buffer;
+  delete _result;
+  if (_deleteHandler) {
+    delete _handler;
   }
-
-  ~BILDownloader_ParserAsyncTask() {
-    delete _buffer;
-    delete _result;
-    if (_deleteHandler) {
-      delete _handler;
-    }
 #ifdef JAVA_CODE
-    super.dispose();
+  super.dispose();
 #endif
+}
+
+void BILDownloader::ParserAsyncTask::runInBackground(const G3MContext* context) {
+  _result = BILParser::parseBIL16(_sector, _extent, _buffer, _noDataValue, _deltaHeight);
+
+  delete _buffer;
+  _buffer = NULL;
+}
+
+void BILDownloader::ParserAsyncTask::onPostExecute(const G3MContext* context) {
+  if (_result == NULL) {
+    _handler->onParseError(context);
   }
-
-  void runInBackground(const G3MContext* context) {
-    _result = BILParser::parseBIL16(_sector, _extent, _buffer, _noDataValue, _deltaHeight);
-
-    delete _buffer;
-    _buffer = NULL;
+  else {
+    _handler->onBIL(context, _result);
+    _result = NULL; // moves _result ownership to _handler
   }
+}
 
-  void onPostExecute(const G3MContext* context) {
-    if (_result == NULL) {
-      _handler->onParseError(context);
-    }
-    else {
-      _handler->onBIL(context, _result);
-      _result = NULL; // moves _result ownership to _handler
-    }
+
+
+
+BILDownloader::BufferDownloadListener::BufferDownloadListener(const Sector&           sector,
+                                                              const Vector2I&         extent,
+                                                              const short             noDataValue,
+                                                              const double            deltaHeight,
+                                                              BILDownloader::Handler* handler,
+                                                              const bool              deleteHandler,
+                                                              const G3MContext*       context) :
+_sector(sector),
+_extent(extent),
+_noDataValue(noDataValue),
+_deltaHeight(deltaHeight),
+_handler(handler),
+_deleteHandler(deleteHandler),
+_context(context)
+{
+}
+
+
+BILDownloader::BufferDownloadListener::~BufferDownloadListener() {
+  if (_deleteHandler) {
+    delete _handler;
   }
-
-};
-
-
-class BILDownloader_BufferDownloadListener : public IBufferDownloadListener {
-private:
-  const Sector            _sector;
-  const Vector2I          _extent;
-  const short             _noDataValue;
-  const double            _deltaHeight;
-  BILDownloader::Handler* _handler;
-  const bool              _deleteHandler;
-  const G3MContext*       _context;
-
-public:
-  BILDownloader_BufferDownloadListener(const Sector&           sector,
-                                       const Vector2I&         extent,
-                                       const short             noDataValue,
-                                       const double            deltaHeight,
-                                       BILDownloader::Handler* handler,
-                                       const bool              deleteHandler,
-                                       const G3MContext*       context) :
-  _sector(sector),
-  _extent(extent),
-  _noDataValue(noDataValue),
-  _deltaHeight(deltaHeight),
-  _handler(handler),
-  _deleteHandler(deleteHandler),
-  _context(context)
-  {
-  }
-
-
-  virtual ~BILDownloader_BufferDownloadListener() {
-    if (_deleteHandler) {
-      delete _handler;
-    }
 #ifdef JAVA_CODE
-    super.dispose();
+  super.dispose();
 #endif
-  }
+}
 
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-    GAsyncTask* parserTask = new BILDownloader_ParserAsyncTask(buffer,
-                                                               _sector,
-                                                               _extent,
-                                                               _noDataValue,
-                                                               _deltaHeight,
-                                                               _handler,
-                                                               _deleteHandler);
-    _context->getThreadUtils()->invokeAsyncTask(parserTask, true);
+void BILDownloader::BufferDownloadListener::onDownload(const URL& url,
+                                                       IByteBuffer* buffer,
+                                                       bool expired) {
+  GAsyncTask* parserTask = new BILDownloader::ParserAsyncTask(buffer,
+                                                              _sector,
+                                                              _extent,
+                                                              _noDataValue,
+                                                              _deltaHeight,
+                                                              _handler,
+                                                              _deleteHandler);
+  _context->getThreadUtils()->invokeAsyncTask(parserTask, true);
 
-    _handler = NULL; // moves _handler ownership to BILDownloader_ParserAsyncTask
-  }
+  _handler = NULL; // moves _handler ownership to ParserAsyncTask
+}
 
-  void onError(const URL& url) {
-    _handler->onDownloadError(_context, url);
-  }
+void BILDownloader::BufferDownloadListener::onError(const URL& url) {
+  _handler->onDownloadError(_context, url);
+}
 
-  void onCancel(const URL& url) {
-    // do nothing!
-  }
+void BILDownloader::BufferDownloadListener::onCancel(const URL& url) {
+  // do nothing!
+}
 
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired)  {
-    // do nothing!
-  }
-};
+void BILDownloader::BufferDownloadListener::onCanceledDownload(const URL& url,
+                                                               IByteBuffer* buffer,
+                                                               bool expired)  {
+  // do nothing!
+}
 
 
 void BILDownloader::request(const G3MContext*       context,
@@ -165,11 +137,11 @@ void BILDownloader::request(const G3MContext*       context,
                                           priority,
                                           timeToCache,
                                           readExpired,
-                                          new BILDownloader_BufferDownloadListener(sector,
-                                                                                   extent,
-                                                                                   noDataValue,
-                                                                                   deltaHeight,handler,
-                                                                                   deleteHandler,
-                                                                                   context),
+                                          new BILDownloader::BufferDownloadListener(sector,
+                                                                                    extent,
+                                                                                    noDataValue,
+                                                                                    deltaHeight,handler,
+                                                                                    deleteHandler,
+                                                                                    context),
                                           true);
 }
