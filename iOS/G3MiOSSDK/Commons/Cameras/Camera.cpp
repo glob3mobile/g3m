@@ -510,3 +510,20 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return distanceInMeters * _viewPortHeight / frustumData._top;
 }
+
+void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
+  
+  Plane zNearPlane = getFrustumInModelCoordinates()->getNearPlane();
+  
+  Vector3D pos = getCartesianPosition();
+  Vector3D vd = getViewDirection();
+  
+  Vector3D c = zNearPlane.intersectionWithRay(pos, vd).add(vd.times(10 / vd.length()));
+  Vector3D up = getUp().normalized().times(getFrustumData()._top);
+  Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right);
+  
+  vertices->putVector3D(0, c.sub(up).sub(right));
+  vertices->putVector3D(1, c.add(up).sub(right));
+  vertices->putVector3D(2, c.sub(up).add(right));
+  vertices->putVector3D(3, c.add(right).add(up));
+}

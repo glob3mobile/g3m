@@ -161,6 +161,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   if (name.compare("uBillboardAnchor") == 0) {
     return BILLBOARD_ANCHOR;
   }
+  
+  if (name.compare("uCameraPosition") == 0) {
+    return CAMERA_POSITION;
+  }
 
   return UNRECOGNIZED_UNIFORM;
 }

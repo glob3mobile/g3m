@@ -21,6 +21,7 @@
 #include <G3MiOSSDK/HUDRenderer.hpp>
 #include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 #include <G3MiOSSDK/VectorStreamingRenderer.hpp>
+#include <G3MiOSSDK/AtmosphereRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -92,6 +93,9 @@ void G3MDemoBuilder::build() {
   
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
+  
+  AtmosphereRenderer* atm = new AtmosphereRenderer();
+  builder->addRenderer(atm);
   
   //Uncomment to see render debug mesh on top of tiles
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);

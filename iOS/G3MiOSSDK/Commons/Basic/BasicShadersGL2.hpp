@@ -410,6 +410,21 @@ public:
 "}\n");
     this->add(sourcesShader);
 
+    GPUProgramSources sourcesSphericalAtmosphere("SphericalAtmosphere",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"}\n",
+ emptyString +  
+"void main() {\n" +
+"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" +
+"}\n");
+    this->add(sourcesSphericalAtmosphere);
+
     GPUProgramSources sourcesTextured2DMesh("Textured2DMesh",
  emptyString +  
 "attribute vec2 aPosition2D;\n" +

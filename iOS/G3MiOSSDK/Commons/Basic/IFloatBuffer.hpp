@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__IFloatBuffer__
 
 #include "IBuffer.hpp"
+#include "Vector3D.hpp"
 
 class IFloatBuffer : public IBuffer {
 public:
@@ -22,6 +23,13 @@ public:
   virtual float get(size_t i) const = 0;
   
   virtual void put(size_t i, float value) = 0;
+  
+  void putVector3D(size_t i, const Vector3D& v){
+    i = i*3;
+    put(i, v._x);
+    put(i+1, v._y);
+    put(i+2, v._z);
+  }
 
   virtual void rawPut(size_t i, float value) = 0;
 

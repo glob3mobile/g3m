@@ -40,7 +40,8 @@ enum GPUUniformKey{
   SAMPLER2 = 19,
   SAMPLER3 = 20,
   TRANSLATION_2D = 21,
-  BILLBOARD_ANCHOR = 22
+  BILLBOARD_ANCHOR = 22,
+  CAMERA_POSITION = 23
 };
 
 enum GPUAttributeKey{

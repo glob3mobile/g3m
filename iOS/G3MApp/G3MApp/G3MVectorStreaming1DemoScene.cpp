@@ -21,6 +21,7 @@
 #include <G3MiOSSDK/StackLayoutImageBuilder.hpp>
 #include <G3MiOSSDK/CircleImageBuilder.hpp>
 #include <G3MiOSSDK/LabelImageBuilder.hpp>
+#include <G3MiOSSDK/MarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 #include <sstream>

@@ -355,7 +355,8 @@ public:
   Angle getVerticalFOV() const;
 
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
-
+  
+  void getVerticesOfZNearPlane(IFloatBuffer* vertices) const;
 
 private:
 

@@ -23,6 +23,7 @@
 #include <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #include <G3MiOSSDK/TiledVectorLayer.hpp>
 #include <G3MiOSSDK/LevelTileCondition.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
 
 
 class SampleRasterSymbolizer : public GEORasterSymbolizer {

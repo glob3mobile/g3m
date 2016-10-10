@@ -13,17 +13,17 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class Main {
 
    private static String _classSource      = "//\n" + "//  BasicShadersGL2.hpp\n" + "//  G3MiOSSDK\n" + "//\n"
-                                             + "//  Created by Jose Miguel SN on 15/11/13.\n" + "//\n" + "//\n" + "\n"
-                                             + "#ifndef G3MiOSSDK_BasicShadersGL2_h\n" + "#define G3MiOSSDK_BasicShadersGL2_h\n"
-                                             + "\n" + "#include \"GPUProgramFactory.hpp\"\n" + "\n"
-                                             + "class BasicShadersGL2: public GPUProgramFactory{\n" + "\n" + "public:\n"
-                                             + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
-                                             + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
-                                             + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS" + "  }\n"
-                                             + "\n" + "};\n" + "#endif\n";
+            + "//  Created by Jose Miguel SN on 15/11/13.\n" + "//\n" + "//\n" + "\n"
+            + "#ifndef G3MiOSSDK_BasicShadersGL2_h\n" + "#define G3MiOSSDK_BasicShadersGL2_h\n"
+            + "\n" + "#include \"GPUProgramFactory.hpp\"\n" + "\n"
+            + "class BasicShadersGL2: public GPUProgramFactory{\n" + "\n" + "public:\n"
+            + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
+            + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
+            + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
+                                             + "  }\n" + "\n" + "};\n" + "#endif\n";
 
    private static String _addProgramSource = "    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
-                                             + "    this->add(sourcesShader_Name);\n\n";
+            + "    this->add(sourcesShader_Name);\n\n";
 
    private static class Shader {
       public String _name;
@@ -93,7 +93,7 @@ public class Main {
 
       final File folder = new File(path);
 
-      final ArrayList<Shader> shaders = new ArrayList<>();
+      final ArrayList<Shader> shaders = new ArrayList<Shader>();
 
       for (final File fileEntry : folder.listFiles()) {
          if (fileEntry.isDirectory()) {
