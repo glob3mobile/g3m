@@ -62,9 +62,6 @@ void G3MDemoBuilder::build() {
   }
   
   IG3MBuilder* builder = getG3MBuilder();
-  
-  AtmosphereRenderer* atm = new AtmosphereRenderer();
-  builder->addRenderer(atm);
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);

@@ -456,22 +456,26 @@ public:
 "const highp float earthRadius = 6.36744e6;\n" +
 "const highp float atmThickness = 1000e3;\n" +
 "const highp float atmUndergroundOffset = 100e3;\n" +
+"const highp float maxDistAtm = 2.0 * sqrt(pow(earthRadius + atmThickness, 2.0) - pow(earthRadius, 2.0));\n" +
 "highp vec3 o = planePos;\n" +
 "highp vec3 d = planePos - uCameraPosition;\n" +
-"highp vec2 interDown = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);\n" +
-"if (interDown.x != -1.0 || interDown.y != -1.0){\n" +
+"highp vec2 interEarth = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);\n" +
+"if (interEarth.x != -1.0 || interEarth.y != -1.0){\n" +
 "discard;\n" +
 "}\n" +
-"highp vec2 interUp = intersectionsWithSphere(o,d, earthRadius + atmThickness);\n" +
-"if (interUp.x == -1.0 || interUp.y == -1.0){\n" +
+"highp vec2 interAtm = intersectionsWithSphere(o,d, earthRadius + atmThickness);\n" +
+"if (interAtm.x == -1.0 || interAtm.y == -1.0){\n" +
 "discard;\n" +
 "}\n" +
-"highp vec3 p1 = o + interUp.x * d;\n" +
-"highp vec3 p2 = o + interUp.y * d;\n" +
+"if (interAtm.x < 0.0){\n" +
+"interAtm.x = 0.0;\n" +
+"}\n" +
+"highp vec3 p1 = o + interAtm.x * d;\n" +
+"highp vec3 p2 = o + interAtm.y * d;\n" +
 "highp float dist = distance(p1,p2);\n" +
 "highp vec4 blueSky = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0);\n" +
 "highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
-"highp float factor = dist / 1e7;\n" +
+"highp float factor = dist / maxDistAtm;\n" +
 "if (factor > 1.0){\n" +
 "factor = 1.0;\n" +
 "}\n" +

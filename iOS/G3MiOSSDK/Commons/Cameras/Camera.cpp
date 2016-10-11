@@ -519,8 +519,8 @@ void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
   Vector3D vd = getViewDirection();
   
   Vector3D c = zNearPlane.intersectionWithRay(pos, vd).add(vd.times(10 / vd.length()));
-  Vector3D up = getUp().normalized().times(getFrustumData()._top);
-  Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right);
+  Vector3D up = getUp().normalized().times(getFrustumData()._top * 1.3);
+  Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 1.3);
   
   vertices->putVector3D(0, c.sub(up).sub(right));
   vertices->putVector3D(1, c.add(up).sub(right));

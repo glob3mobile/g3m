@@ -38,6 +38,7 @@
 #include "EllipsoidalPlanet.hpp"
 #include "PlanetRenderer.hpp"
 #include "InitialCameraPositionProvider.hpp"
+#include "AtmosphereRenderer.hpp"
 
 
 IG3MBuilder::IG3MBuilder() :
@@ -699,6 +700,10 @@ G3MWidget* IG3MBuilder::create() {
   Renderer* mainRenderer = NULL;
   if (getRenderers()->size() > 0) {
     mainRenderer = new CompositeRenderer();
+    
+    //TODO: Decide how to create atmosphere
+    ((CompositeRenderer *) mainRenderer)->addRenderer(new AtmosphereRenderer());
+    
     if (!containsPlanetRenderer(*getRenderers())) {
       ((CompositeRenderer *) mainRenderer)->addRenderer(getPlanetRendererBuilder()->create());
     }

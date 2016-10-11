@@ -56,6 +56,9 @@ void main() {
   const highp float atmThickness = 1000e3;
   const highp float atmUndergroundOffset = 100e3;
   
+  //Max distance on atmosphere (as in: http://www.mathopenref.com/chord.html )
+  const highp float maxDistAtm = 2.0 * sqrt(pow(earthRadius + atmThickness, 2.0) - pow(earthRadius, 2.0));
+  
   //Ray [O + tD = X]
   highp vec3 o = planePos;
   highp vec3 d = planePos - uCameraPosition;
@@ -69,18 +72,22 @@ void main() {
 //    discard;
 //  }
 
-  highp vec2 interDown = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);
-  if (interDown.x != -1.0 || interDown.y != -1.0){
+  highp vec2 interEarth = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);
+  if (interEarth.x != -1.0 || interEarth.y != -1.0){
     discard; 
   }
   
-  highp vec2 interUp = intersectionsWithSphere(o,d, earthRadius + atmThickness);
-  if (interUp.x == -1.0 || interUp.y == -1.0){
+  highp vec2 interAtm = intersectionsWithSphere(o,d, earthRadius + atmThickness);
+  if (interAtm.x == -1.0 || interAtm.y == -1.0){
     discard;
   }
   
-  highp vec3 p1 = o + interUp.x * d;
-  highp vec3 p2 = o + interUp.y * d;
+  if (interAtm.x < 0.0){
+    interAtm.x = 0.0;
+  }
+  
+  highp vec3 p1 = o + interAtm.x * d;
+  highp vec3 p2 = o + interAtm.y * d;
   highp float dist = distance(p1,p2);
   
 
@@ -89,7 +96,7 @@ void main() {
   highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
   
   
-  highp float factor = dist / 1e7;
+  highp float factor = dist / maxDistAtm;
   if (factor > 1.0){
     factor = 1.0;
   }
