@@ -3045,6 +3045,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8EEF3C21577924D003FEB5E /* Build configuration list for PBXNativeTarget "G3MiOSSDK" */;
 			buildPhases = (
+				D855FD3A1DACF93800C31D4F /* ShellScript */,
 				D8EEF3B11577924D003FEB5E /* Sources */,
 				D8EEF3B21577924D003FEB5E /* Frameworks */,
 				E780A4FC16D3ADBE000F0395 /* CopyFiles */,
@@ -3082,6 +3083,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D855FD3A1DACF93800C31D4F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd /Users/josemiguelsn/Desktop/igo_git/g3m/tools/ShadersProcessor/\njava -jar Built_161110.jar";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D8EEF3B11577924D003FEB5E /* Sources */ = {

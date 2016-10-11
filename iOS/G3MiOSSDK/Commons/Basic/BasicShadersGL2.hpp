@@ -437,14 +437,45 @@ public:
 "highp float x = -b - sqrt(q) / (2.0*a);\n" +
 "return o + d * x;\n" +
 "}\n" +
+"highp vec2 intersectionsWithSphere(highp vec3 o,\n" +
+"highp vec3 d,\n" +
+"highp float r){\n" +
+"highp float a = dot(d,d);\n" +
+"highp float b = 2.0 * dot(o,d);\n" +
+"highp float c = dot(o,o) - pow(r, 2.0);\n" +
+"highp float q = pow(b,2.0) - 4.0 * a * c;\n" +
+"if (q < 0.0){\n" +
+"return vec2(-1.0, -1.0); //No idea how to write NAN in GLSL\n" +
+"}\n" +
+"highp float sq = sqrt(q);\n" +
+"highp float t1 = (-b - sq) / (2.0*a);\n" +
+"highp float t2 = (-b + sq) / (2.0*a);\n" +
+"return vec2(t1,t2);\n" +
+"}\n" +
 "void main() {\n" +
-"highp vec3 intersection = closestIntersectionWithSphere(planePos, planePos - uCameraPosition, 6.36744e6 - 200e3);\n" +
-"highp vec3 intersectionUpper = closestIntersectionWithSphere(planePos, planePos - uCameraPosition, 6.36744e6 + 1000e3);\n" +
-"if (intersection.x == 0.0 && intersectionUpper.x != 0.0){\n" +
-"gl_FragColor = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0); //RED\n" +
-"} else{\n" +
+"const highp float earthRadius = 6.36744e6;\n" +
+"const highp float atmThickness = 1000e3;\n" +
+"const highp float atmUndergroundOffset = 100e3;\n" +
+"highp vec3 o = planePos;\n" +
+"highp vec3 d = planePos - uCameraPosition;\n" +
+"highp vec2 interDown = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);\n" +
+"if (interDown.x != -1.0 || interDown.y != -1.0){\n" +
 "discard;\n" +
 "}\n" +
+"highp vec2 interUp = intersectionsWithSphere(o,d, earthRadius + atmThickness);\n" +
+"if (interUp.x == -1.0 || interUp.y == -1.0){\n" +
+"discard;\n" +
+"}\n" +
+"highp vec3 p1 = o + interUp.x * d;\n" +
+"highp vec3 p2 = o + interUp.y * d;\n" +
+"highp float dist = distance(p1,p2);\n" +
+"highp vec4 blueSky = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0);\n" +
+"highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
+"highp float factor = dist / 1e7;\n" +
+"if (factor > 1.0){\n" +
+"factor = 1.0;\n" +
+"}\n" +
+"gl_FragColor = blueSky * factor + darkSpace * (factor - 1.0);\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);
 

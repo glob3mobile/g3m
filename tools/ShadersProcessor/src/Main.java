@@ -13,17 +13,17 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class Main {
 
    private static String _classSource      = "//\n" + "//  BasicShadersGL2.hpp\n" + "//  G3MiOSSDK\n" + "//\n"
-            + "//  Created by Jose Miguel SN on 15/11/13.\n" + "//\n" + "//\n" + "\n"
-            + "#ifndef G3MiOSSDK_BasicShadersGL2_h\n" + "#define G3MiOSSDK_BasicShadersGL2_h\n"
-            + "\n" + "#include \"GPUProgramFactory.hpp\"\n" + "\n"
-            + "class BasicShadersGL2: public GPUProgramFactory{\n" + "\n" + "public:\n"
-            + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
-            + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
-            + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
-                                             + "  }\n" + "\n" + "};\n" + "#endif\n";
+                                             + "//  Created by Jose Miguel SN on 15/11/13.\n" + "//\n" + "//\n" + "\n"
+                                             + "#ifndef G3MiOSSDK_BasicShadersGL2_h\n" + "#define G3MiOSSDK_BasicShadersGL2_h\n"
+                                             + "\n" + "#include \"GPUProgramFactory.hpp\"\n" + "\n"
+                                             + "class BasicShadersGL2: public GPUProgramFactory{\n" + "\n" + "public:\n"
+                                             + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
+                                             + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
+                                             + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
+            + "  }\n" + "\n" + "};\n" + "#endif\n";
 
    private static String _addProgramSource = "    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
-            + "    this->add(sourcesShader_Name);\n\n";
+                                             + "    this->add(sourcesShader_Name);\n\n";
 
    private static class Shader {
       public String _name;
@@ -132,6 +132,48 @@ public class Main {
    }
 
 
+   private static void process(final String sdkProjectPath) {
+
+      final String shadersFolder = sdkProjectPath + "/Resources/Shaders";
+      final String filePath = sdkProjectPath + "/Commons/Basic/BasicShadersGL2.hpp";
+
+      System.out.println("Shaders Directory = " + shadersFolder);
+
+      try {
+         final ArrayList<Shader> shaders = getShadersInFolder(shadersFolder);
+
+         String addingShadersString = "";
+         for (int i = 0; i < shaders.size(); i++) {
+            final Shader shader = shaders.get(i);
+            String source = _addProgramSource.replaceAll("Shader_Name", shader._name);
+            source = source.replace("Shader_Vertex", processSourceString(shader._vertex));
+            source = source.replace("Shader_Fragment", processSourceString(shader._fragment));
+
+            //System.out.println(source);
+
+            addingShadersString += source;
+
+         }
+
+         _classSource = _classSource.replace("ADDING_SHADERS", addingShadersString);
+
+         //THIS SAVES TO FILE IN SHADERS FOLDER
+         final String outPath = (new File(filePath)).getAbsolutePath();
+         try (final PrintWriter out = new PrintWriter(outPath)) {
+            out.print(_classSource);
+         }
+
+
+      }
+      catch (final Exception e) {
+         e.printStackTrace();
+         return;
+      }
+
+
+   }
+
+
    public static void main(final String[] args) throws IOException {
 
       String pwd = "";
@@ -153,39 +195,61 @@ public class Main {
 
       final String sdkProjectPath = pwd;
       final String shadersFolder = sdkProjectPath + "/Resources/Shaders";
-      final String filePath = sdkProjectPath + "/Commons/Basic/BasicShadersGL2.hpp";
+      //      final String shadersFolder = sdkProjectPath + "/Resources/Shaders";
+      //      final String filePath = sdkProjectPath + "/Commons/Basic/BasicShadersGL2.hpp";
+      //
+      //      System.out.println("Shaders Directory = " + shadersFolder);
+      //
+      //      final ArrayList<Shader> shaders = getShadersInFolder(shadersFolder);
+      //
+      //
+      //      String addingShadersString = "";
+      //      for (int i = 0; i < shaders.size(); i++) {
+      //         final Shader shader = shaders.get(i);
+      //         String source = _addProgramSource.replaceAll("Shader_Name", shader._name);
+      //         source = source.replace("Shader_Vertex", processSourceString(shader._vertex));
+      //         source = source.replace("Shader_Fragment", processSourceString(shader._fragment));
+      //
+      //         //System.out.println(source);
+      //
+      //         addingShadersString += source;
+      //
+      //      }
+      //
+      //      _classSource = _classSource.replace("ADDING_SHADERS", addingShadersString);
+      //
+      //      //THIS SAVES TO FILE IN SHADERS FOLDER
+      //      final String outPath = (new File(filePath)).getAbsolutePath();
+      //      try (final PrintWriter out = new PrintWriter(outPath)) {
+      //         out.print(_classSource);
+      //      }
 
-      System.out.println("Shaders Directory = " + shadersFolder);
-
-      final ArrayList<Shader> shaders = getShadersInFolder(shadersFolder);
-
-
-      String addingShadersString = "";
-      for (int i = 0; i < shaders.size(); i++) {
-         final Shader shader = shaders.get(i);
-         String source = _addProgramSource.replaceAll("Shader_Name", shader._name);
-         source = source.replace("Shader_Vertex", processSourceString(shader._vertex));
-         source = source.replace("Shader_Fragment", processSourceString(shader._fragment));
-
-         //System.out.println(source);
-
-         addingShadersString += source;
-
-      }
-
-      _classSource = _classSource.replace("ADDING_SHADERS", addingShadersString);
-
-      //THIS SAVES TO FILE IN SHADERS FOLDER
-      final String outPath = (new File(filePath)).getAbsolutePath();
-      try (final PrintWriter out = new PrintWriter(outPath)) {
-         out.print(_classSource);
-      }
+      process(sdkProjectPath);
 
 
       //THIS SAVES TO CLIPBOARD
       //		StringSelection stringSelection = new StringSelection(classSource);
       //		Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
       //		clpbrd.setContents (stringSelection, null);
+
+      //THIS WATCHES THE FOLDER
+      //      final WatchService watcher = FileSystems.getDefault().newWatchService();
+      //      final Path dir = FileSystems.getDefault().getPath(shadersFolder);
+      //      try {
+      //         final WatchKey key = dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE,
+      //                  StandardWatchEventKinds.ENTRY_MODIFY);
+      //
+      //         while (true) {
+      //            for (final WatchEvent<?> event : key.pollEvents()) {
+      //               process(sdkProjectPath);
+      //            }
+      //         }
+      //
+      //      }
+      //      catch (final IOException x) {
+      //         System.err.println(x);
+      //      }
+
    }
 
 }
