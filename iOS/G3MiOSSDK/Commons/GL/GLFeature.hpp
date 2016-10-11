@@ -136,7 +136,12 @@ private:
 public:
   CameraPositionGLFeature(const Camera* cam);
   
-  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  void applyOnGlobalGLState(GLGlobalState* state)  const {
+    //Used for atmospheric blending
+    state->enableBlend();
+    state->setBlendFactors(GLBlendFactor::srcAlpha(),
+                           GLBlendFactor::oneMinusSrcAlpha());
+  }
   
   void update(const Camera* cam);
 };

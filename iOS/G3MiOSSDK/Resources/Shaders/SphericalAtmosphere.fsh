@@ -91,12 +91,12 @@ void main() {
   highp float dist = distance(p1,p2);
   
 
-  
+  highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
   highp vec4 blueSky = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0);
   highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
   
   
-  highp float factor = dist / maxDistAtm;
+  highp float factor = dist / maxDistAtm; //Reflection factor
   if (factor > 1.0){
     factor = 1.0;
   }

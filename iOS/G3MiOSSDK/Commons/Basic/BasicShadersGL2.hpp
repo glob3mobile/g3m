@@ -473,9 +473,10 @@ public:
 "highp vec3 p1 = o + interAtm.x * d;\n" +
 "highp vec3 p2 = o + interAtm.y * d;\n" +
 "highp float dist = distance(p1,p2);\n" +
+"highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
 "highp vec4 blueSky = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0);\n" +
 "highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
-"highp float factor = dist / maxDistAtm;\n" +
+"highp float factor = dist / maxDistAtm; //Reflection factor\n" +
 "if (factor > 1.0){\n" +
 "factor = 1.0;\n" +
 "}\n" +
