@@ -424,19 +424,6 @@ public:
  emptyString +  
 "uniform highp vec3 uCameraPosition;\n" +
 "varying highp vec3 planePos;\n" +
-"highp vec3 closestIntersectionWithSphere(highp vec3 o,\n" +
-"highp vec3 d,\n" +
-"highp float r){\n" +
-"highp float a = dot(d,d);\n" +
-"highp float b = 2.0 * dot(o,d);\n" +
-"highp float c = dot(o,o) - pow(r, 2.0);\n" +
-"highp float q = pow(b,2.0) - 4.0 * a * c;\n" +
-"if (q < 0.0){\n" +
-"return vec3(0, 0, 0);\n" +
-"}\n" +
-"highp float x = -b - sqrt(q) / (2.0*a);\n" +
-"return o + d * x;\n" +
-"}\n" +
 "highp vec2 intersectionsWithSphere(highp vec3 o,\n" +
 "highp vec3 d,\n" +
 "highp float r){\n" +
@@ -454,7 +441,7 @@ public:
 "}\n" +
 "void main() {\n" +
 "const highp float earthRadius = 6.36744e6;\n" +
-"const highp float atmThickness = 1000e3;\n" +
+"const highp float atmThickness = 500e3;\n" +
 "const highp float atmUndergroundOffset = 100e3;\n" +
 "const highp float maxDistAtm = 2.0 * sqrt(pow(earthRadius + atmThickness, 2.0) - pow(earthRadius, 2.0));\n" +
 "highp vec3 o = planePos;\n" +
@@ -473,14 +460,16 @@ public:
 "highp vec3 p1 = o + interAtm.x * d;\n" +
 "highp vec3 p2 = o + interAtm.y * d;\n" +
 "highp float dist = distance(p1,p2);\n" +
-"highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
-"highp vec4 blueSky = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0);\n" +
-"highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
 "highp float factor = dist / maxDistAtm; //Reflection factor\n" +
 "if (factor > 1.0){\n" +
 "factor = 1.0;\n" +
 "}\n" +
-"gl_FragColor = blueSky * factor + darkSpace * (factor - 1.0);\n" +
+"highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+"highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);\n" +
+"highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
+"highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, factor));\n" +
+"color = mix(color, whiteSky, smoothstep(0.85, 1.0, factor));\n" +
+"gl_FragColor = color;\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);
 
