@@ -415,13 +415,36 @@ public:
 "attribute vec4 aPosition;\n" +
 "uniform mat4 uModelview;\n" +
 "uniform float uPointSize;\n" +
+"varying highp vec3 planePos;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
+"planePos = aPosition.xyz;\n" +
 "}\n",
  emptyString +  
+"uniform highp vec3 uCameraPosition;\n" +
+"varying highp vec3 planePos;\n" +
+"highp vec3 closestIntersectionWithSphere(highp vec3 o,\n" +
+"highp vec3 d,\n" +
+"highp float r){\n" +
+"highp float a = dot(d,d);\n" +
+"highp float b = 2.0 * dot(o,d);\n" +
+"highp float c = dot(o,o) - pow(r, 2.0);\n" +
+"highp float q = pow(b,2.0) - 4.0 * a * c;\n" +
+"if (q < 0.0){\n" +
+"return vec3(0, 0, 0);\n" +
+"}\n" +
+"highp float x = -b - sqrt(q) / (2.0*a);\n" +
+"return o + d * x;\n" +
+"}\n" +
 "void main() {\n" +
-"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" +
+"highp vec3 intersection = closestIntersectionWithSphere(planePos, planePos - uCameraPosition, 6.36744e6 - 200e3);\n" +
+"highp vec3 intersectionUpper = closestIntersectionWithSphere(planePos, planePos - uCameraPosition, 6.36744e6 + 1000e3);\n" +
+"if (intersection.x == 0.0 && intersectionUpper.x != 0.0){\n" +
+"gl_FragColor = vec4(39.0 / 256.0, 227.0 / 256.0, 244.0 / 256.0, 1.0); //RED\n" +
+"} else{\n" +
+"discard;\n" +
+"}\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);
 

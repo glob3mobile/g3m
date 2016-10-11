@@ -9,7 +9,11 @@ uniform mat4 uModelview;
 
 uniform float uPointSize;
 
+varying highp vec3 planePos;
+
 void main() {
   gl_Position = uModelview * aPosition;
   gl_PointSize = uPointSize;
+  
+  planePos = aPosition.xyz;
 }

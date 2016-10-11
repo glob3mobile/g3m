@@ -45,6 +45,18 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
   _extent->changeValue(viewportWidth, viewportHeight);
 }
 
+CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam):
+GLFeature(NO_GROUP, GLF_CAM_POSITION){
+  Vector3D p = cam->getCartesianPosition();
+  _camPos = new GPUUniformValueVec3FloatMutable(p._x, p._y, p._z);
+  _values->addUniformValue(CAMERA_POSITION, _camPos, false);
+}
+
+void CameraPositionGLFeature::update(const Camera* cam){
+  Vector3D p = cam->getCartesianPosition();
+  _camPos->changeValue(p._x, p._y, p._z);
+}
+
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        float billboardWidth,
                                        float billboardHeight,

@@ -62,6 +62,9 @@ void G3MDemoBuilder::build() {
   }
   
   IG3MBuilder* builder = getG3MBuilder();
+  
+  AtmosphereRenderer* atm = new AtmosphereRenderer();
+  builder->addRenderer(atm);
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
@@ -93,9 +96,6 @@ void G3MDemoBuilder::build() {
   
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
   builder->addRenderer(vectorStreamingRenderer);
-  
-  AtmosphereRenderer* atm = new AtmosphereRenderer();
-  builder->addRenderer(atm);
   
   //Uncomment to see render debug mesh on top of tiles
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);

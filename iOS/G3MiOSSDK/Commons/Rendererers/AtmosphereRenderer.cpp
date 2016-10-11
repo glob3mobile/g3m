@@ -34,6 +34,10 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
                                NULL,
                                0.0f,
                                false);
+  
+  //CamPos
+  _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera());
+  _glState->addGLFeature(_camPosGLF, false);
 }
 
 void AtmosphereRenderer::updateGLState(const Camera* camera){
@@ -47,4 +51,7 @@ void AtmosphereRenderer::updateGLState(const Camera* camera){
   
   //Updating ZNEAR plane
   camera->getVerticesOfZNearPlane(_vertices);
+  
+  //CamPos
+  _camPosGLF->update(camera);
 }

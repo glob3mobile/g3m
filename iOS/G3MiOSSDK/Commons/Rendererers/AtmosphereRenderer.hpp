@@ -24,6 +24,7 @@ private:
   Mesh* _directMesh;
   
   IFloatBuffer* _vertices;
+  CameraPositionGLFeature* _camPosGLF;
   
   void updateGLState(const Camera* camera);
   
