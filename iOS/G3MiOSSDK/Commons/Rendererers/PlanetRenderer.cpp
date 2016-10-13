@@ -228,6 +228,9 @@ PlanetRenderer::~PlanetRenderer() {
   if (_ownsElevationDataProvider) {
     delete _elevationDataProvider;
   }
+  if (_ownsTerrainElevationProvider) {
+    delete _terrainElevationProvider;
+  }
   delete _texturizer;
   delete _tilesRenderParameters;
 
@@ -436,6 +439,9 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
+  if (_terrainElevationProvider != NULL) {
+    _terrainElevationProvider->initialize(context);
+  }
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
@@ -459,6 +465,12 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
   if (_elevationDataProvider != NULL) {
     if (!_elevationDataProvider->isReadyToRender(rc)) {
+      return RenderState::busy();
+    }
+  }
+
+  if (_terrainElevationProvider != NULL) {
+    if (!_terrainElevationProvider->isReadyToRender(rc)) {
       return RenderState::busy();
     }
   }

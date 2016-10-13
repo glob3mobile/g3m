@@ -65,15 +65,15 @@ public:
 };
 
 void G3MLandDemoScene::rawActivate(const G3MContext* context) {
-#warning Diego at work!
 
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
   //  planetRenderer->setShowStatistics(true);
   planetRenderer->setIncrementalTileQuality(true);
 
 
-  TerrainElevationProvider* terrainElevationProvider = new MapzenTerrainElevationProvider();
-  planetRenderer->setTerrainElevationProvider(terrainElevationProvider, true);
+#warning Diego at work!
+//  TerrainElevationProvider* terrainElevationProvider = new MapzenTerrainElevationProvider();
+//  planetRenderer->setTerrainElevationProvider(terrainElevationProvider, true);
 
 
   // https://mapzen.com/blog/elevation/
