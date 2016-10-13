@@ -11,7 +11,7 @@
 #include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "BILParser.hpp"
-
+#include "ShortBufferTerrainElevationGrid.hpp"
 
 
 BILDownloader::ParserAsyncTask::ParserAsyncTask(IByteBuffer*            buffer,

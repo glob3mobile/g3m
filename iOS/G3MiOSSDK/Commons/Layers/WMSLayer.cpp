@@ -13,6 +13,8 @@
 #include "LayerCondition.hpp"
 #include "RenderState.hpp"
 #include "TimeInterval.hpp"
+#include "IStringBuilder.hpp"
+
 
 WMSLayer* WMSLayer::newMercator(const std::string&        mapLayer,
                                 const URL&                mapServerURL,

@@ -17,7 +17,7 @@
 #include "GEORasterProjection.hpp"
 #include "TileImageContribution.hpp"
 #include "ErrorHandling.hpp"
-
+#include "IStringBuilder.hpp"
 
 GEOVectorTileImageProvider::GEOVectorTileImageProvider(const GEOVectorLayer* layer) :
 _layer(layer)
@@ -132,7 +132,7 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
 
 void GEOVectorTileImageProvider::create(const Tile* tile,
                                         const TileImageContribution* contribution,
-                                        const Vector2I& resolution,
+                                        const Vector2S& resolution,
                                         long long tileTextureDownloadPriority,
                                         bool logDownloadActivity,
                                         TileImageListener* listener,

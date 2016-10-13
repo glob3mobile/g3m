@@ -13,7 +13,6 @@
 #include "DefaultTileTexturizer.hpp"
 #include "GEOVectorLayer.hpp"
 #include "TileTessellator.hpp"
-#include "ElevationDataProvider.hpp"
 #include "LayerSet.hpp"
 #include "DefaultChessCanvasImageBuilder.hpp"
 #include "PlanetRenderer.hpp"
@@ -27,6 +26,9 @@
 #include "TimedCacheTileVisibilityTester.hpp"
 #include "OrTileLODTester.hpp"
 #include "GradualSplitsTileLODTester.hpp"
+
+#include "ElevationDataProvider.hpp"
+#include "TerrainElevationProvider.hpp"
 
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
@@ -42,6 +44,7 @@ _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
 _tileTextureDownloadPriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
+_terrainElevationProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
 _renderTileMeshes(true),
@@ -66,6 +69,7 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
 
   delete _tileTessellator;
   delete _elevationDataProvider;
+  delete _terrainElevationProvider;
 
   delete _renderedSector;
 }
@@ -199,32 +203,28 @@ long long PlanetRendererBuilder::getTileTextureDownloadPriority() {
 
 void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
   if (_tileTessellator) {
-    ILogger::instance()->logError("LOGIC ERROR: _tileTessellator already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _tileTessellator already initialized");
   }
   _tileTessellator = tileTessellator;
 }
 
 void PlanetRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
   if (_texturizer) {
-    ILogger::instance()->logError("LOGIC ERROR: _texturizer already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _texturizer already initialized");
   }
   _texturizer = tileTexturizer;
 }
 
 void PlanetRendererBuilder::setLayerSet(LayerSet *layerSet) {
   if (_layerSet) {
-    ILogger::instance()->logError("LOGIC ERROR: _layerSet already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _layerSet already initialized");
   }
   _layerSet = layerSet;
 }
 
 void PlanetRendererBuilder::setPlanetRendererParameters(TilesRenderParameters *parameters) {
   if (_parameters) {
-    ILogger::instance()->logError("LOGIC ERROR: _parameters already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _parameters already initialized");
   }
   _parameters = parameters;
 }
@@ -253,22 +253,31 @@ void PlanetRendererBuilder::setTileTextureDownloadPriority(long long tileTexture
 
 void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
   if (_elevationDataProvider != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _elevationDataProvider already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _elevationDataProvider already initialized");
   }
   _elevationDataProvider = elevationDataProvider;
 }
 
+void PlanetRendererBuilder::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider) {
+  if (_terrainElevationProvider != NULL) {
+    THROW_EXCEPTION("LOGIC ERROR: _terrainElevationProvider already initialized");
+  }
+  _terrainElevationProvider = terrainElevationProvider;
+}
+
 void PlanetRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
   if (_verticalExaggeration > 0.0f) {
-    ILogger::instance()->logError("LOGIC ERROR: _verticalExaggeration already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _verticalExaggeration already initialized");
   }
   _verticalExaggeration = verticalExaggeration;
 }
 
 ElevationDataProvider* PlanetRendererBuilder::getElevationDataProvider() {
   return _elevationDataProvider;
+}
+
+TerrainElevationProvider* PlanetRendererBuilder::getTerrainElevationProvider() {
+  return _terrainElevationProvider;
 }
 
 float PlanetRendererBuilder::getVerticalExaggeration() {
@@ -284,11 +293,9 @@ ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListen
 
 void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
   if (_changedInfoListener != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
   }
   _changedInfoListener = changedInfoListener;
-  ILogger::instance()->logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
 }
 
 void PlanetRendererBuilder::setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener) {
@@ -321,6 +328,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
+                                                      true,
+                                                      getTerrainElevationProvider(),
                                                       true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
@@ -386,8 +395,7 @@ LayerSet* PlanetRendererBuilder::createLayerSet() {
 
 void PlanetRendererBuilder::setRenderedSector(const Sector& sector) {
   if (_renderedSector != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _renderedSector already initialized");
-    return;
+    THROW_EXCEPTION("LOGIC ERROR: _renderedSector already initialized");
   }
   _renderedSector = new Sector(sector);
 }

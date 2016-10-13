@@ -501,7 +501,6 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   const bool skirted = true;
   TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::fullSphere());
 
-  ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
 
   TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
@@ -526,8 +525,12 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
 
   TouchEventType touchEventTypeOfTerrainTouchListener = DownUp;
 
+
+
   PlanetRenderer* result = new PlanetRenderer(tessellator,
-                                              elevationDataProvider,
+                                              NULL, // elevationDataProvider,
+                                              true,
+                                              NULL, // terrainElevationProvider,
                                               true,
                                               verticalExaggeration,
                                               texturizer,

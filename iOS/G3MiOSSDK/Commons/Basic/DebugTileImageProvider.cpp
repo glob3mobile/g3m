@@ -17,11 +17,11 @@
 #include "RectangleF.hpp"
 #include "IStringBuilder.hpp"
 #include "TileImageContribution.hpp"
-
 #include "IStringBuilder.hpp"
 #include "TextCanvasElement.hpp"
 #include "ColumnCanvasElement.hpp"
 #include "IFactory.hpp"
+#include "Vector2S.hpp"
 
 DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileId,
                                                      const TileImageContribution* contribution,
@@ -126,14 +126,14 @@ std::string DebugTileImageProvider::getSectorLabel4(const Sector& sector) const 
 
 void DebugTileImageProvider::create(const Tile* tile,
                                     const TileImageContribution* contribution,
-                                    const Vector2I& resolution,
+                                    const Vector2S& resolution,
                                     long long tileTextureDownloadPriority,
                                     bool logDownloadActivity,
                                     TileImageListener* listener,
                                     bool deleteListener,
                                     FrameTasksExecutor* frameTasksExecutor) {
-  const int width  = resolution._x;
-  const int height = resolution._y;
+  const short width  = resolution._x;
+  const short height = resolution._y;
   
   ICanvas* canvas = getCanvas(width, height);
   

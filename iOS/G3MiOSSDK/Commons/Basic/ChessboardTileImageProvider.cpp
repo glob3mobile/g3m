@@ -17,6 +17,8 @@
 #include "Color.hpp"
 #include "IImageListener.hpp"
 #include "TileImageContribution.hpp"
+#include "Vector2S.hpp"
+
 
 class ChessboardTileImageProvider_IImageListener : public IImageListener {
 private:
@@ -75,7 +77,7 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
 
 void ChessboardTileImageProvider::create(const Tile* tile,
                                          const TileImageContribution* contribution,
-                                         const Vector2I& resolution,
+                                         const Vector2S& resolution,
                                          long long tileTextureDownloadPriority,
                                          bool logDownloadActivity,
                                          TileImageListener* listener,

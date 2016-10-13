@@ -119,10 +119,11 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setShowStatistics(false);
   planetRenderer->setIncrementalTileQuality(false);
-  planetRenderer->setVerticalExaggeration(1);
 
-  ElevationDataProvider* elevationDataProvider = NULL;
-  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+  // reset DEM
+  planetRenderer->setVerticalExaggeration(1);
+  planetRenderer->setElevationDataProvider(NULL, true);
+  planetRenderer->setTerrainElevationProvider(NULL, true);
 
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 

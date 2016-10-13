@@ -31,6 +31,7 @@ class Layer;
 class LayerTilesRenderParameters;
 class Layer;
 class TerrainTouchListener;
+class TerrainElevationProvider;
 
 
 class TilesStatistics {
@@ -189,17 +190,19 @@ public:
 
 class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
-  TileTessellator*       _tessellator;
-  ElevationDataProvider* _elevationDataProvider;
-  bool                   _ownsElevationDataProvider;
-  TileTexturizer*        _texturizer;
-  LayerSet*              _layerSet;
-  TilesRenderParameters* _tilesRenderParameters;
-  bool                   _showStatistics;
-  const bool             _logTilesPetitions;
-  ITileVisitor*          _tileVisitor = NULL;
-  TileLODTester*         _tileLODTester;
-  TileVisibilityTester*  _tileVisibilityTester;
+  TileTessellator*          _tessellator;
+  ElevationDataProvider*    _elevationDataProvider;
+  bool                      _ownsElevationDataProvider;
+  TerrainElevationProvider* _terrainElevationProvider;
+  bool                      _ownsTerrainElevationProvider;
+  TileTexturizer*           _texturizer;
+  LayerSet*                 _layerSet;
+  TilesRenderParameters*    _tilesRenderParameters;
+  bool                      _showStatistics;
+  const bool                _logTilesPetitions;
+  ITileVisitor*             _tileVisitor = NULL;
+  TileLODTester*            _tileLODTester;
+  TileVisibilityTester*     _tileVisibilityTester;
 
   PlanetRenderContext*  _prc;
 
@@ -282,6 +285,8 @@ public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
                  bool                         ownsElevationDataProvider,
+                 TerrainElevationProvider*    terrainElevationProvider,
+                 bool                         ownsTerrainElevationProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  LayerSet*                    layerSet,
@@ -435,12 +440,18 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
+  void setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider,
+                                   bool ownsTerrainElevationProvider);
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
   ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;
+  }
+
+  TerrainElevationProvider* getTerrainElevationProvider() const {
+    return _terrainElevationProvider;
   }
 
   void setRenderTileMeshes(bool renderTileMeshes) {

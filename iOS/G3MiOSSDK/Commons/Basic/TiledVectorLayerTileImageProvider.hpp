@@ -18,7 +18,7 @@ class IDownloader;
 #include "IThreadUtils.hpp"
 class GEOObject;
 class GEORasterSymbolizer;
-#include "Vector2I.hpp"
+#include "Vector2S.hpp"
 #include "Sector.hpp"
 #include "IImageListener.hpp"
 #include <list>
@@ -194,7 +194,7 @@ private:
                    const TileImageContribution*       contribution,
                    TileImageListener*                 listener,
                    bool                               deleteListener,
-                   const Vector2I&                    imageResolution,
+                   const Vector2S&                    imageResolution,
                    IDownloader*                       downloader,
                    const IThreadUtils*                threadUtils);
 
@@ -284,7 +284,7 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
+              const Vector2S& resolution,
               long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,

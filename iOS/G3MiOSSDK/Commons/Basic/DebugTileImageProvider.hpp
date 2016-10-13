@@ -88,7 +88,7 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
+              const Vector2S& resolution,
               long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,

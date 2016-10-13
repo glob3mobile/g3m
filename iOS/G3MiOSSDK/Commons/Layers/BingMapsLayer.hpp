@@ -59,8 +59,8 @@ private:
                        const std::string& copyright,
                        const std::string& imageUrl,
                        std::vector<std::string> imageUrlSubdomains,
-                       const int imageWidth,
-                       const int imageHeight,
+                       const short imageWidth,
+                       const short imageHeight,
                        const int zoomMin,
                        const int zoomMax);
 

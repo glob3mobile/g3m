@@ -120,16 +120,16 @@ private:
   const std::string       _backgroundTileImageName;
 
 #ifdef C_CODE
-  const Vector2I          _tileTextureResolution;
+  const Vector2S          _tileTextureResolution;
 #endif
 #ifdef JAVA_CODE
-  private final Vector2I  _tileTextureResolution;
+  private final Vector2S  _tileTextureResolution;
 #endif
 
 public:
   DTT_TileImageListener(DTT_TileTextureBuilder* builder,
                         const Tile*             tile,
-                        const Vector2I&         tileTextureResolution,
+                        const Vector2S&         tileTextureResolution,
                         const IImage*           backgroundTileImage,
                         const std::string&      backgroundTileImageName);
 
@@ -157,10 +157,10 @@ private:
   TileImageProvider*   _tileImageProvider;
   TexturesHandler*     _texturesHandler;
 #ifdef C_CODE
-  const Vector2I       _tileTextureResolution;
+  const Vector2S       _tileTextureResolution;
 #endif
 #ifdef JAVA_CODE
-  private final Vector2I _tileTextureResolution;
+  private final Vector2S _tileTextureResolution;
 #endif
   const bool          _logTilesPetitions;
   const long long     _tileTextureDownloadPriority;
@@ -408,7 +408,7 @@ public:
 
 DTT_TileImageListener::DTT_TileImageListener(DTT_TileTextureBuilder* builder,
                                              const Tile*             tile,
-                                             const Vector2I&         tileTextureResolution,
+                                             const Vector2S&         tileTextureResolution,
                                              const IImage*           backgroundTileImage,
                                              const std::string&      backgroundTileImageName) :
 _builder(builder),

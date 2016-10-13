@@ -22,6 +22,7 @@ class TileVisibilityTester;
 class LayerSet;
 class VisibleSectorListener;
 class ElevationDataProvider;
+class TerrainElevationProvider;
 class Sector;
 class ChangedRendererInfoListener;
 class IImageBuilder;
@@ -47,7 +48,8 @@ private:
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _tileTextureDownloadPriority;
 
-  ElevationDataProvider* _elevationDataProvider;
+  ElevationDataProvider*    _elevationDataProvider;
+  TerrainElevationProvider* _terrainElevationProvider;
   float _verticalExaggeration;
 
   TileTessellator* getTileTessellator();
@@ -68,7 +70,9 @@ private:
   TilesRenderParameters* createPlanetRendererParameters();
   TileTessellator* createTileTessellator();
 
-  ElevationDataProvider* getElevationDataProvider();
+  ElevationDataProvider*    getElevationDataProvider();
+  TerrainElevationProvider* getTerrainElevationProvider();
+
   float getVerticalExaggeration();
 
   Sector* _renderedSector;
@@ -113,6 +117,8 @@ public:
   void setTileTextureDownloadPriority(long long tileTextureDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
+
+  void setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider);
 
   void setVerticalExaggeration(float verticalExaggeration);
 

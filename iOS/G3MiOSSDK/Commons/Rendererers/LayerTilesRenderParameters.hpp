@@ -12,12 +12,11 @@
 #include <vector>
 
 #include "Sector.hpp"
-#include "Vector2I.hpp"
 #include "Vector2S.hpp"
 
 class LayerTilesRenderParameters {
 private:
-  static const Vector2I calculateTopSectorSplitsParametersWGS84(const Sector& topSector);
+  static const Vector2S calculateTopSectorSplitsParametersWGS84(const Sector& topSector);
 public:
   const Sector _topSector;
   const int    _topSectorSplitsByLatitude;
@@ -26,12 +25,11 @@ public:
   const int    _maxLevel;
   const int    _maxLevelForPoles;
 #ifdef C_CODE
-#warning should _tileTextureResolution also be short?
-  const Vector2I _tileTextureResolution;
+  const Vector2S _tileTextureResolution;
   const Vector2S _tileMeshResolution;
 #endif
 #ifdef JAVA_CODE
-  public final Vector2I _tileTextureResolution;
+  public final Vector2S _tileTextureResolution;
   public final Vector2S _tileMeshResolution;
 #endif
   const bool _mercator;
@@ -41,7 +39,7 @@ public:
                              const int       topSectorSplitsByLongitude,
                              const int       firstLevel,
                              const int       maxLevel,
-                             const Vector2I& tileTextureResolution,
+                             const Vector2S& tileTextureResolution,
                              const Vector2S& tileMeshResolution,
                              const bool      mercator) :
   _topSector(topSector),
@@ -61,8 +59,8 @@ public:
     return Vector2S((short)16, (short)16);
   }
 
-  static const Vector2I defaultTileTextureResolution () {
-    return Vector2I(256, 256);
+  static const Vector2S defaultTileTextureResolution () {
+    return Vector2S((short)256, (short)256);
   }
 
   
@@ -74,7 +72,7 @@ public:
   static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector,
                                                         const int firstLevel,
                                                         const int maxLevel) {
-    const Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
+    const Vector2S splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
     const int  topSectorSplitsByLatitude  = splitsParameters._x;
     const int  topSectorSplitsByLongitude = splitsParameters._y;
     const bool mercator = false;

@@ -133,7 +133,7 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
   
   const Sector sector = tile->_sector;
   
-  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
+  const Vector2S tileTextureResolution = _parameters->_tileTextureResolution;
   
   const int level   = tile->_level;
   const int column  = tile->_column;

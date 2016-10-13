@@ -33,6 +33,7 @@
 #include "TileVisibilityTester.hpp"
 #include "G3MEventContext.hpp"
 #include "PlanetRenderContext.hpp"
+#include "TerrainElevationProvider.hpp"
 
 
 class VisibleSectorListenerEntry {
@@ -112,6 +113,8 @@ public:
 PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                ElevationDataProvider*       elevationDataProvider,
                                bool                         ownsElevationDataProvider,
+                               TerrainElevationProvider*    terrainElevationProvider,
+                               bool                         ownsTerrainElevationProvider,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
                                LayerSet*                    layerSet,
@@ -128,6 +131,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
+_terrainElevationProvider(terrainElevationProvider),
+_ownsTerrainElevationProvider(ownsTerrainElevationProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _layerSet(layerSet),
@@ -847,6 +852,27 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
     return true;
   }
   return false;
+}
+
+void PlanetRenderer::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider,
+                                                 bool ownsTerrainElevationProvider) {
+  if (_terrainElevationProvider != terrainElevationProvider) {
+    if (_ownsTerrainElevationProvider) {
+      delete _terrainElevationProvider;
+    }
+
+    _ownsTerrainElevationProvider = ownsTerrainElevationProvider;
+    _terrainElevationProvider = terrainElevationProvider;
+
+    if (_terrainElevationProvider != NULL) {
+      //_terrainElevationProvider->setChangedListener(this);
+      if (_context != NULL) {
+        _terrainElevationProvider->initialize(_context); // initializing TerrainElevationProvider in case it wasn't
+      }
+    }
+
+    changed();
+  }
 }
 
 void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider,

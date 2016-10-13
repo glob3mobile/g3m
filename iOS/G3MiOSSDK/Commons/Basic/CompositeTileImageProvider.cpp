@@ -15,6 +15,8 @@
 #include "IImage.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "Sector.hpp"
+#include "Vector2S.hpp"
+
 
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
@@ -373,7 +375,7 @@ void CompositeTileImageProvider::ChildTileImageListener::imageCreationCanceled(c
 
 void CompositeTileImageProvider::create(const Tile* tile,
                                         const TileImageContribution* contribution,
-                                        const Vector2I& resolution,
+                                        const Vector2S& resolution,
                                         long long tileTextureDownloadPriority,
                                         bool logDownloadActivity,
                                         TileImageListener* listener,

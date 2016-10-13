@@ -12,7 +12,7 @@
 #include "TileImageProvider.hpp"
 
 #include "FrameTask.hpp"
-#include "Vector2I.hpp"
+#include "Vector2S.hpp"
 #include "QuadTree.hpp"
 #include <map>
 #include "IImageListener.hpp"
@@ -85,8 +85,8 @@ public:
     const Sector                 _tileSector;
     const bool                   _tileMercator;
     const int                    _tileLevel;
-    const int                    _resolutionWidth;
-    const int                    _resolutionHeight;
+    const short                  _resolutionWidth;
+    const short                  _resolutionHeight;
     TileImageListener*           _listener;
     const bool                   _deleteListener;
     bool                         _isCanceled;
@@ -98,7 +98,7 @@ public:
                            const Sector& tileSector,
                            bool tileMercator,
                            int tileLevel,
-                           const Vector2I& resolution,
+                           const Vector2S& resolution,
                            TileImageListener* listener,
                            bool deleteListener) :
     _geoVectorTileImageProvider(geoVectorTileImageProvider),
@@ -144,7 +144,7 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
+              const Vector2S& resolution,
               long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,

@@ -178,7 +178,7 @@ TiledVectorLayerTileImageProvider::ImageAssembler::ImageAssembler(TiledVectorLay
                                                                   const TileImageContribution*       contribution,
                                                                   TileImageListener*                 listener,
                                                                   bool                               deleteListener,
-                                                                  const Vector2I&                    imageResolution,
+                                                                  const Vector2S&                    imageResolution,
                                                                   IDownloader*                       downloader,
                                                                   const IThreadUtils*                threadUtils) :
 _tileImageProvider(tileImageProvider),
@@ -365,7 +365,7 @@ const TileImageContribution* TiledVectorLayerTileImageProvider::contribution(con
 
 void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                const TileImageContribution* contribution,
-                                               const Vector2I& resolution,
+                                               const Vector2S& resolution,
                                                long long tileTextureDownloadPriority,
                                                bool logDownloadActivity,
                                                TileImageListener* listener,

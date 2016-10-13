@@ -280,10 +280,10 @@ private:
   int     _topSectorSplitsByLongitude;
   int     _firstLevel;
   int     _maxLevel;
-  int     _tileTextureWidth;
-  int     _tileTextureHeight;
-  short     _tileMeshWidth;
-  short     _tileMeshHeight;
+  short   _tileTextureWidth;
+  short   _tileTextureHeight;
+  short   _tileMeshWidth;
+  short   _tileMeshHeight;
   bool    _mercator;
 
 public:
@@ -408,7 +408,7 @@ public:
                                           _topSectorSplitsByLongitude,
                                           _firstLevel,
                                           _maxLevel,
-                                          Vector2I(_tileTextureWidth, _tileTextureHeight),
+                                          Vector2S(_tileTextureWidth, _tileTextureHeight),
                                           Vector2S(_tileMeshWidth,    _tileMeshHeight),
                                           _mercator);
   }

@@ -157,7 +157,7 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
 
   const LayerTilesRenderParameters* parameters = _parametersVector[_selectedLayerTilesRenderParametersIndex];
 
-  const Vector2I tileTextureResolution = parameters->_tileTextureResolution;
+  const Vector2S tileTextureResolution = parameters->_tileTextureResolution;
 
   const int level   = tile->_level;
   const int column  = tile->_column;

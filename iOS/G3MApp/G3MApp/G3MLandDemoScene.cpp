@@ -18,6 +18,7 @@
 #include <G3MiOSSDK/ShortBufferTerrainElevationGrid.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/MapzenTerrainElevationProvider.hpp>
 
 
 void G3MLandDemoScene::rawSelectOption(const std::string& option,
@@ -69,6 +70,10 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
   //  planetRenderer->setShowStatistics(true);
   planetRenderer->setIncrementalTileQuality(true);
+
+
+  TerrainElevationProvider* terrainElevationProvider = new MapzenTerrainElevationProvider();
+  planetRenderer->setTerrainElevationProvider(terrainElevationProvider, true);
 
 
   // https://mapzen.com/blog/elevation/
