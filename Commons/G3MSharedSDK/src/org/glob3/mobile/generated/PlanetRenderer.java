@@ -386,6 +386,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       if (_elevationDataProvider != null)
          _elevationDataProvider.dispose();
     }
+    if (_ownsTerrainElevationProvider)
+    {
+      if (_terrainElevationProvider != null)
+         _terrainElevationProvider.dispose();
+    }
     if (_texturizer != null)
        _texturizer.dispose();
     if (_tilesRenderParameters != null)
@@ -451,6 +456,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     if (_elevationDataProvider != null)
     {
       _elevationDataProvider.initialize(context);
+    }
+    if (_terrainElevationProvider != null)
+    {
+      _terrainElevationProvider.initialize(context);
     }
   }
 
@@ -668,6 +677,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     if (_elevationDataProvider != null)
     {
       if (!_elevationDataProvider.isReadyToRender(rc))
+      {
+        return RenderState.busy();
+      }
+    }
+  
+    if (_terrainElevationProvider != null)
+    {
+      if (!_terrainElevationProvider.isReadyToRender(rc))
       {
         return RenderState.busy();
       }

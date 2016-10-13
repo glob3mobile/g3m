@@ -18,7 +18,22 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class MapzenTerrainElevationProvider extends TerrainElevationProvider
+public class MapzenTerrainElevationProvider extends TerrainElevationProvider
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
+  public final boolean isReadyToRender(G3MRenderContext rc)
+  {
+    throw new RuntimeException("Diego at work!");
+  }
+
+  public final void initialize(G3MContext context)
+  {
+    throw new RuntimeException("Diego at work!");
+  }
+
 
 }
