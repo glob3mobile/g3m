@@ -47,7 +47,6 @@ public abstract class MapBooOLDBuilder
     final boolean skirted = true;
     TileTessellator tessellator = new PlanetTileTessellator(skirted, Sector.fullSphere());
   
-    ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
   
     TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
@@ -70,7 +69,9 @@ public abstract class MapBooOLDBuilder
   
     TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileTextureDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester());
+  
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, null, true, null, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileTextureDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester()); // terrainElevationProvider, -  elevationDataProvider,
   
     if (_enableNotifications)
     {

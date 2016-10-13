@@ -192,7 +192,7 @@ public class HereLayer extends RasterLayer
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2S((short)256, (short)256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
      _appId = appId;
      _appCode = appCode;
      _initialLevel = initialLevel;

@@ -6,7 +6,7 @@ public class DTT_TileTextureBuilder extends RCObject
   private final String _tileId;
   private TileImageProvider _tileImageProvider;
   private TexturesHandler _texturesHandler;
-  private final Vector2I _tileTextureResolution;
+  private final Vector2S _tileTextureResolution;
   private final boolean _logTilesPetitions;
   private final long _tileTextureDownloadPriority;
   private boolean _canceled;

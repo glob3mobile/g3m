@@ -139,7 +139,7 @@ public class GoogleMapsLayer extends RasterLayer
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2S((short)256, (short)256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
      _key = key;
      _initialLevel = initialLevel;
   }

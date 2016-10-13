@@ -66,7 +66,7 @@ public class TiledVectorLayer extends VectorLayer
   
     final LayerTilesRenderParameters parameters = _parametersVector.get(_selectedLayerTilesRenderParametersIndex);
   
-    final Vector2I tileTextureResolution = parameters._tileTextureResolution;
+    final Vector2S tileTextureResolution = parameters._tileTextureResolution;
   
     final int level = tile._level;
     final int column = tile._column;

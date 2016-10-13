@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class VisibleSectorListener;
 //class ElevationDataProvider;
+//class TerrainElevationProvider;
 //class Sector;
 //class ChangedRendererInfoListener;
 //class IImageBuilder;
@@ -51,6 +52,7 @@ public class PlanetRendererBuilder
   private long _tileTextureDownloadPriority;
 
   private ElevationDataProvider _elevationDataProvider;
+  private TerrainElevationProvider _terrainElevationProvider;
   private float _verticalExaggeration;
 
 
@@ -202,6 +204,11 @@ public class PlanetRendererBuilder
   {
     return _elevationDataProvider;
   }
+  private TerrainElevationProvider getTerrainElevationProvider()
+  {
+    return _terrainElevationProvider;
+  }
+
   private float getVerticalExaggeration()
   {
     if (_verticalExaggeration <= 0.0f)
@@ -287,6 +294,7 @@ public class PlanetRendererBuilder
      _stabilizationMilliSeconds = null;
      _tileTextureDownloadPriority = DownloadPriority.HIGHER;
      _elevationDataProvider = null;
+     _terrainElevationProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
      _renderTileMeshes = true;
@@ -317,6 +325,8 @@ public class PlanetRendererBuilder
        _tileTessellator.dispose();
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
+    if (_terrainElevationProvider != null)
+       _terrainElevationProvider.dispose();
   
     if (_renderedSector != null)
        _renderedSector.dispose();
@@ -332,7 +342,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getTerrainElevationProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -362,8 +372,7 @@ public class PlanetRendererBuilder
   {
     if (_tileTessellator != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _tileTessellator already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _tileTessellator already initialized");
     }
     _tileTessellator = tileTessellator;
   }
@@ -371,8 +380,7 @@ public class PlanetRendererBuilder
   {
     if (_texturizer != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _texturizer already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _texturizer already initialized");
     }
     _texturizer = tileTexturizer;
   }
@@ -380,8 +388,7 @@ public class PlanetRendererBuilder
   {
     if (_layerSet != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _layerSet already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _layerSet already initialized");
     }
     _layerSet = layerSet;
   }
@@ -389,8 +396,7 @@ public class PlanetRendererBuilder
   {
     if (_parameters != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _parameters already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _parameters already initialized");
     }
     _parameters = parameters;
   }
@@ -424,18 +430,25 @@ public class PlanetRendererBuilder
   {
     if (_elevationDataProvider != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _elevationDataProvider already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _elevationDataProvider already initialized");
     }
     _elevationDataProvider = elevationDataProvider;
+  }
+
+  public final void setTerrainElevationProvider(TerrainElevationProvider terrainElevationProvider)
+  {
+    if (_terrainElevationProvider != null)
+    {
+      throw new RuntimeException("LOGIC ERROR: _terrainElevationProvider already initialized");
+    }
+    _terrainElevationProvider = terrainElevationProvider;
   }
 
   public final void setVerticalExaggeration(float verticalExaggeration)
   {
     if (_verticalExaggeration > 0.0f)
     {
-      ILogger.instance().logError("LOGIC ERROR: _verticalExaggeration already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _verticalExaggeration already initialized");
     }
     _verticalExaggeration = verticalExaggeration;
   }
@@ -444,8 +457,7 @@ public class PlanetRendererBuilder
   {
     if (_renderedSector != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _renderedSector already initialized");
-      return;
+      throw new RuntimeException("LOGIC ERROR: _renderedSector already initialized");
     }
     _renderedSector = new Sector(sector);
   }
@@ -485,11 +497,9 @@ public class PlanetRendererBuilder
   {
     if (_changedInfoListener != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
-      return;
+      throw new RuntimeException("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
     }
     _changedInfoListener = changedInfoListener;
-    ILogger.instance().logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
   }
 
   public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)

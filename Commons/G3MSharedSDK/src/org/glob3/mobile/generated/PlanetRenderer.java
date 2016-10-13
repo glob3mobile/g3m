@@ -4,6 +4,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
   private boolean _ownsElevationDataProvider;
+  private TerrainElevationProvider _terrainElevationProvider;
+  private boolean _ownsTerrainElevationProvider;
   private TileTexturizer _texturizer;
   private LayerSet _layerSet;
   private TilesRenderParameters _tilesRenderParameters;
@@ -320,11 +322,13 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileTextureDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, TerrainElevationProvider terrainElevationProvider, boolean ownsTerrainElevationProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileTextureDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _ownsElevationDataProvider = ownsElevationDataProvider;
+     _terrainElevationProvider = terrainElevationProvider;
+     _ownsTerrainElevationProvider = ownsTerrainElevationProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _layerSet = layerSet;
@@ -924,6 +928,31 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
+  public final void setTerrainElevationProvider(TerrainElevationProvider terrainElevationProvider, boolean ownsTerrainElevationProvider)
+  {
+    if (_terrainElevationProvider != terrainElevationProvider)
+    {
+      if (_ownsTerrainElevationProvider)
+      {
+        if (_terrainElevationProvider != null)
+           _terrainElevationProvider.dispose();
+      }
+  
+      _ownsTerrainElevationProvider = ownsTerrainElevationProvider;
+      _terrainElevationProvider = terrainElevationProvider;
+  
+      if (_terrainElevationProvider != null)
+      {
+        //_terrainElevationProvider->setChangedListener(this);
+        if (_context != null)
+        {
+          _terrainElevationProvider.initialize(_context); // initializing TerrainElevationProvider in case it wasn't
+        }
+      }
+  
+      changed();
+    }
+  }
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
   {
     if (_elevationDataProvider != elevationDataProvider)
@@ -961,6 +990,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final ElevationDataProvider getElevationDataProvider()
   {
     return _elevationDataProvider;
+  }
+
+  public final TerrainElevationProvider getTerrainElevationProvider()
+  {
+    return _terrainElevationProvider;
   }
 
   public final void setRenderTileMeshes(boolean renderTileMeshes)

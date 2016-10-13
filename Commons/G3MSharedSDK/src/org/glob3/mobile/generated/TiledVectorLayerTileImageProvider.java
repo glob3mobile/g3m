@@ -302,7 +302,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final boolean _tileIsMercator;
     private final int _tileLevel;
 
-    public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, Tile tile, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2I imageResolution, IDownloader downloader, IThreadUtils threadUtils)
+    public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, Tile tile, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2S imageResolution, IDownloader downloader, IThreadUtils threadUtils)
     {
        _tileImageProvider = tileImageProvider;
        _tileId = tile._id;
@@ -539,7 +539,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     return (_layer == null) ? null : _layer.contribution(tile);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
   
     ImageAssembler assembler = new ImageAssembler(this, tile, contribution, listener, deleteListener, resolution, _downloader, _threadUtils);

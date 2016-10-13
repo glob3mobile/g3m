@@ -50,7 +50,7 @@ public class RasterLayerTileImageProvider extends TileImageProvider
     return (_layer == null) ? null : _layer.contribution(tile);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
     final String tileId = tile._id;
   

@@ -91,7 +91,7 @@ public class URLTemplateLayer extends RasterLayer
   
     final Sector sector = tile._sector;
   
-    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
+    final Vector2S tileTextureResolution = _parameters._tileTextureResolution;
   
     final int level = tile._level;
     final int column = tile._column;

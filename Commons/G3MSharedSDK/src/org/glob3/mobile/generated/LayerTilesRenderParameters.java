@@ -24,7 +24,7 @@ public class LayerTilesRenderParameters
   /*
    return ( topSectorSplitsByLatitude, topSectorSplitsByLongitude )
    */
-  private static Vector2I calculateTopSectorSplitsParametersWGS84(Sector topSector)
+  private static Vector2S calculateTopSectorSplitsParametersWGS84(Sector topSector)
   {
   //  IMathUtils* math = IMathUtils::instance();
     final double maxTile = 90;
@@ -49,7 +49,7 @@ public class LayerTilesRenderParameters
   //  return Vector2I((int) math->round(sLat * factor), (int) math->round(sLon * factor));
   
     final double factor = (factorLat < 1) ? 1 : factorLat;
-    return new Vector2I((int)((sLat * factor) + 0.5), (int)((sLon * factor) + 0.5));
+    return new Vector2S((short)((sLat * factor) + 0.5), (short)((sLon * factor) + 0.5));
   }
   public final Sector _topSector ;
   public final int _topSectorSplitsByLatitude;
@@ -57,11 +57,11 @@ public class LayerTilesRenderParameters
   public final int _firstLevel;
   public final int _maxLevel;
   public final int _maxLevelForPoles;
-  public final Vector2I _tileTextureResolution;
+  public final Vector2S _tileTextureResolution;
   public final Vector2S _tileMeshResolution;
   public final boolean _mercator;
 
-  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2I tileTextureResolution, Vector2S tileMeshResolution, boolean mercator)
+  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2S tileTextureResolution, Vector2S tileMeshResolution, boolean mercator)
   {
      _topSector = new Sector(topSector);
      _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
@@ -80,9 +80,9 @@ public class LayerTilesRenderParameters
     return new Vector2S((short)16, (short)16);
   }
 
-  public static Vector2I defaultTileTextureResolution ()
+  public static Vector2S defaultTileTextureResolution ()
   {
-    return new Vector2I(256, 256);
+    return new Vector2S((short)256, (short)256);
   }
 
 
@@ -93,7 +93,7 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
   {
-    final Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
+    final Vector2S splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
     final int topSectorSplitsByLatitude = splitsParameters._x;
     final int topSectorSplitsByLongitude = splitsParameters._y;
     final boolean mercator = false;

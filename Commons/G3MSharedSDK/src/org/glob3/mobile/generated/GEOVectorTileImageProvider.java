@@ -98,13 +98,13 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     private final Sector _tileSector ;
     private final boolean _tileMercator;
     private final int _tileLevel;
-    private final int _resolutionWidth;
-    private final int _resolutionHeight;
+    private final short _resolutionWidth;
+    private final short _resolutionHeight;
     private TileImageListener _listener;
     private final boolean _deleteListener;
     private boolean _isCanceled;
 
-    public GEORasterizerFrameTask(GEOVectorTileImageProvider geoVectorTileImageProvider, TileImageContribution contribution, String tileId, Sector tileSector, boolean tileMercator, int tileLevel, Vector2I resolution, TileImageListener listener, boolean deleteListener)
+    public GEORasterizerFrameTask(GEOVectorTileImageProvider geoVectorTileImageProvider, TileImageContribution contribution, String tileId, Sector tileSector, boolean tileMercator, int tileLevel, Vector2S resolution, TileImageListener listener, boolean deleteListener)
     {
        _geoVectorTileImageProvider = geoVectorTileImageProvider;
        _contribution = contribution;
@@ -174,7 +174,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     return (_layer == null) ? null : _layer.contribution(tile);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
   
     final String tileId = tile._id;

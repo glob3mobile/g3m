@@ -27,6 +27,7 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 //class Layer;
 //class TerrainTouchListener;
+//class TerrainElevationProvider;
 
 
 public class TilesStatistics
