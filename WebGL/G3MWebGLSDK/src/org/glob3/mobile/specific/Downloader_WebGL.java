@@ -232,9 +232,9 @@ public final class Downloader_WebGL
 
 
    @Override
-   public void cancelRequest(final long requestId) {
+   public boolean cancelRequest(final long requestId) {
       if (requestId < 0) {
-         return;
+         return false;
       }
 
       _cancelsCounter++;
@@ -267,6 +267,7 @@ public final class Downloader_WebGL
          }
       }
 
+      return found;
    }
 
 

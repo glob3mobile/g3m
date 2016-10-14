@@ -18,7 +18,12 @@
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
 private:
   const long long    _downloadPriority;
+#ifdef C_CODE
   const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+  private final TimeInterval _timeToCache;
+#endif
   const bool         _readExpired;
 
 protected:
@@ -26,9 +31,9 @@ protected:
 
 public:
 
-  static MapzenTerrainElevationProvider* createDefault(long long           downloadPriority = DownloadPriority::HIGHER,
-                                                       const TimeInterval& timeToCache      = TimeInterval::fromDays(30),
-                                                       bool                readExpired      = true);
+  static MapzenTerrainElevationProvider* createDefault(long long           downloadPriority,
+                                                       const TimeInterval& timeToCache,
+                                                       bool                readExpired);
 
   MapzenTerrainElevationProvider(long long           downloadPriority,
                                  const TimeInterval& timeToCache,

@@ -199,15 +199,16 @@ public final class Downloader_Android
 
 
    @Override
-   public void cancelRequest(final long requestId) {
+   public boolean cancelRequest(final long requestId) {
       if (requestId < 0) {
-         return;
+         return false;
       }
+
+      boolean found = false;
 
       synchronized (this) {
          _cancelsCounter++;
 
-         boolean found = false;
          Iterator<Map.Entry<String, Downloader_Android_Handler>> iter = _queuedHandlers.entrySet().iterator();
 
          while (iter.hasNext() && !found) {
@@ -237,6 +238,8 @@ public final class Downloader_Android
             }
          }
       }
+
+      return found;
    }
 
 
