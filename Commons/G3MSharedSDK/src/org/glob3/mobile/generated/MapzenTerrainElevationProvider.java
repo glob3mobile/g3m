@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 public class MapzenTerrainElevationProvider extends TerrainElevationProvider
 {
   private final long _downloadPriority;
-  private final TimeInterval _timeToCache = new TimeInterval();
+  private final TimeInterval _timeToCache;
   private final boolean _readExpired;
 
   public void dispose()
@@ -31,13 +31,15 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   }
 
 
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-  static MapzenTerrainElevationProvider* createDefault(long downloadPriority = DownloadPriority.HIGHER, const TimeInterval& timeToCache = TimeInterval.fromDays(30), boolean readExpired = true);
+  public static MapzenTerrainElevationProvider createDefault(long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+  {
+    return new MapzenTerrainElevationProvider(downloadPriority, timeToCache, readExpired);
+  }
 
   public MapzenTerrainElevationProvider(long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
      _downloadPriority = downloadPriority;
-     _timeToCache = new TimeInterval(timeToCache);
+     _timeToCache = timeToCache;
      _readExpired = readExpired;
   
   }
