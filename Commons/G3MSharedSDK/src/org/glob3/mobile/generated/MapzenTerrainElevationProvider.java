@@ -20,20 +20,39 @@ package org.glob3.mobile.generated;
 
 public class MapzenTerrainElevationProvider extends TerrainElevationProvider
 {
+
   public void dispose()
   {
     super.dispose();
   }
 
-  public final boolean isReadyToRender(G3MRenderContext rc)
+
+  public static MapzenTerrainElevationProvider createDefault()
   {
-    throw new RuntimeException("Diego at work!");
+    return new MapzenTerrainElevationProvider();
+  }
+
+  public MapzenTerrainElevationProvider()
+  {
+  
+  }
+
+  public final RenderState getRenderState()
+  {
+    return RenderState.error("MapzenTerrainElevationProvider: under construction");
   }
 
   public final void initialize(G3MContext context)
   {
-    throw new RuntimeException("Diego at work!");
+    IDownloader downloader = context.getDownloader();
+  
+  ///#error Diego at work!
+  //  downloader->requestBuffer(<#const URL &url#>,
+  //                            <#long long priority#>,
+  //                            <#const TimeInterval &timeToCache#>,
+  //                            <#bool readExpired#>,
+  //                            <#IBufferDownloadListener *listener#>,
+  //                            <#bool deleteListener#>);
   }
-
 
 }

@@ -16,17 +16,20 @@ package org.glob3.mobile.generated;
 //
 
 
-//class G3MRenderContext;
+
+//class RenderState;
 //class G3MContext;
 
 
-public abstract class TerrainElevationProvider
+public abstract class TerrainElevationProvider extends RCObject
 {
   public void dispose()
   {
+    super.dispose();
   }
 
-  public abstract boolean isReadyToRender(G3MRenderContext rc);
+
+  public abstract RenderState getRenderState();
 
   public abstract void initialize(G3MContext context);
 

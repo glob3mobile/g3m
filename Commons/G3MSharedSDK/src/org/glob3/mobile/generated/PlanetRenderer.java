@@ -5,7 +5,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private ElevationDataProvider _elevationDataProvider;
   private boolean _ownsElevationDataProvider;
   private TerrainElevationProvider _terrainElevationProvider;
-  private boolean _ownsTerrainElevationProvider;
   private TileTexturizer _texturizer;
   private LayerSet _layerSet;
   private TilesRenderParameters _tilesRenderParameters;
@@ -322,13 +321,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, TerrainElevationProvider terrainElevationProvider, boolean ownsTerrainElevationProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileTextureDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, TerrainElevationProvider terrainElevationProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileTextureDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
      _ownsElevationDataProvider = ownsElevationDataProvider;
      _terrainElevationProvider = terrainElevationProvider;
-     _ownsTerrainElevationProvider = ownsTerrainElevationProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _layerSet = layerSet;
@@ -386,10 +384,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       if (_elevationDataProvider != null)
          _elevationDataProvider.dispose();
     }
-    if (_ownsTerrainElevationProvider)
+    if (_terrainElevationProvider != null)
     {
-      if (_terrainElevationProvider != null)
-         _terrainElevationProvider.dispose();
+      _terrainElevationProvider._release();
     }
     if (_texturizer != null)
        _texturizer.dispose();
@@ -684,9 +681,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (_terrainElevationProvider != null)
     {
-      if (!_terrainElevationProvider.isReadyToRender(rc))
+      final RenderState terrainElevationProviderRenderState = _terrainElevationProvider.getRenderState();
+      if (terrainElevationProviderRenderState._type != RenderState_Type.RENDER_READY)
       {
-        return RenderState.busy();
+        return terrainElevationProviderRenderState;
       }
     }
   
@@ -945,17 +943,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
-  public final void setTerrainElevationProvider(TerrainElevationProvider terrainElevationProvider, boolean ownsTerrainElevationProvider)
+  public final void setTerrainElevationProvider(TerrainElevationProvider terrainElevationProvider)
   {
     if (_terrainElevationProvider != terrainElevationProvider)
     {
-      if (_ownsTerrainElevationProvider)
+      if (_terrainElevationProvider != null)
       {
-        if (_terrainElevationProvider != null)
-           _terrainElevationProvider.dispose();
+        _terrainElevationProvider._release();
       }
   
-      _ownsTerrainElevationProvider = ownsTerrainElevationProvider;
       _terrainElevationProvider = terrainElevationProvider;
   
       if (_terrainElevationProvider != null)

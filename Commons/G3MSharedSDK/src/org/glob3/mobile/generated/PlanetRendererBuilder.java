@@ -326,7 +326,9 @@ public class PlanetRendererBuilder
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
     if (_terrainElevationProvider != null)
-       _terrainElevationProvider.dispose();
+    {
+      _terrainElevationProvider._release();
+    }
   
     if (_renderedSector != null)
        _renderedSector.dispose();
@@ -342,7 +344,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getTerrainElevationProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getTerrainElevationProvider(), getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -359,6 +361,7 @@ public class PlanetRendererBuilder
     _stabilizationMilliSeconds = null;
   
     _elevationDataProvider = null;
+    _terrainElevationProvider = null;
   
     if (_renderedSector != null)
        _renderedSector.dispose();
