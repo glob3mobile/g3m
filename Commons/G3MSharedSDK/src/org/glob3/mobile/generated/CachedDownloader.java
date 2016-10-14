@@ -169,9 +169,9 @@ public class CachedDownloader extends IDownloader
     return _downloader.requestImage(url, priority, TimeInterval.zero(), false, listener, deleteListener);
   }
 
-  public final void cancelRequest(long requestId)
+  public final boolean cancelRequest(long requestId)
   {
-    _downloader.cancelRequest(requestId);
+    return _downloader.cancelRequest(requestId);
   }
 
   public void dispose()

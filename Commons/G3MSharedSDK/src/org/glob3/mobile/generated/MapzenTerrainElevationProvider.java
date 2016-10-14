@@ -18,8 +18,12 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class MapzenTerrainElevationProvider extends TerrainElevationProvider
 {
+  private final long _downloadPriority;
+  private final TimeInterval _timeToCache = new TimeInterval();
+  private final boolean _readExpired;
 
   public void dispose()
   {
@@ -27,13 +31,14 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   }
 
 
-  public static MapzenTerrainElevationProvider createDefault()
-  {
-    return new MapzenTerrainElevationProvider();
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+  static MapzenTerrainElevationProvider* createDefault(long downloadPriority = DownloadPriority.HIGHER, const TimeInterval& timeToCache = TimeInterval.fromDays(30), boolean readExpired = true);
 
-  public MapzenTerrainElevationProvider()
+  public MapzenTerrainElevationProvider(long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
+     _downloadPriority = downloadPriority;
+     _timeToCache = new TimeInterval(timeToCache);
+     _readExpired = readExpired;
   
   }
 
@@ -46,13 +51,18 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   {
     IDownloader downloader = context.getDownloader();
   
-  ///#error Diego at work!
-  //  downloader->requestBuffer(<#const URL &url#>,
-  //                            <#long long priority#>,
-  //                            <#const TimeInterval &timeToCache#>,
-  //                            <#bool readExpired#>,
-  //                            <#IBufferDownloadListener *listener#>,
-  //                            <#bool deleteListener#>);
+  ////#error Diego at work!
+  //  downloader->requestImage(URL("http://terrain-preview.mapzen.com/terrarium/0/0/0.png"),
+  //                           _downloadPriority,
+  //                           _timeToCache,
+  //                           _readExpired,
+  //                           <#IImageDownloadListener *listener#>,
+  //                           <#bool deleteListener#>);
+  }
+
+  public final void cancel()
+  {
+  ///#error man at work!
   }
 
 }

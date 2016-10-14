@@ -28,9 +28,10 @@ public abstract class TerrainElevationProvider extends RCObject
     super.dispose();
   }
 
-
   public abstract RenderState getRenderState();
 
   public abstract void initialize(G3MContext context);
+
+  public abstract void cancel();
 
 }

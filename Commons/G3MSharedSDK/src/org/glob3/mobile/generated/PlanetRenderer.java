@@ -386,6 +386,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
     if (_terrainElevationProvider != null)
     {
+      _terrainElevationProvider.cancel();
       _terrainElevationProvider._release();
     }
     if (_texturizer != null)
@@ -949,6 +950,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       if (_terrainElevationProvider != null)
       {
+        _terrainElevationProvider.cancel();
         _terrainElevationProvider._release();
       }
   

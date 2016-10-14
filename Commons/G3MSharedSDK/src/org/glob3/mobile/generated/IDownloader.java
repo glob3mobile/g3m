@@ -37,7 +37,7 @@ public abstract class IDownloader
 
   public abstract long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener);
 
-  public abstract void cancelRequest(long requestId);
+  public abstract boolean cancelRequest(long requestId);
 
   public abstract String statistics();
 
