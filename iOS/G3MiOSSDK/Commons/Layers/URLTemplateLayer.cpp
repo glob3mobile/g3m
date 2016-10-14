@@ -43,15 +43,15 @@ _tiled(true)
 {
 }
 
-URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&    urlTemplate,
-                                                const Sector&         dataSector,
-                                                const bool            isTransparent,
-                                                const int             firstLevel,
-                                                const int             maxLevel,
-                                                const TimeInterval&   timeToCache,
-                                                const bool            readExpired,
-                                                const float                     transparency,
-                                                const LayerCondition*           condition,
+URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&        urlTemplate,
+                                                const Sector&             dataSector,
+                                                const bool                isTransparent,
+                                                const int                 firstLevel,
+                                                const int                 maxLevel,
+                                                const TimeInterval&       timeToCache,
+                                                const bool                readExpired,
+                                                const float               transparency,
+                                                const LayerCondition*     condition,
                                                 std::vector<const Info*>* layerInfo) {
   return new URLTemplateLayer(urlTemplate,
                               dataSector,

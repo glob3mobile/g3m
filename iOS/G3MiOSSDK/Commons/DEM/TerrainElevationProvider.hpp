@@ -24,10 +24,11 @@ protected:
   }
 
 public:
-
   virtual RenderState getRenderState() = 0;
 
   virtual void initialize(const G3MContext* context) = 0;
+
+  virtual void cancel() = 0;
 
 };
 

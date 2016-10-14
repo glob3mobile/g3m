@@ -72,8 +72,10 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
 
 #warning Diego at work!
   planetRenderer->setVerticalExaggeration(100);
-  planetRenderer->setTerrainElevationProvider(MapzenTerrainElevationProvider::createDefault());
-
+  planetRenderer->setTerrainElevationProvider(MapzenTerrainElevationProvider::createDefault(DownloadPriority::HIGHER,
+                                                                                            TimeInterval::fromDays(0),
+                                                                                            false /* readExpired */));
+  
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png",
                                                           Sector::FULL_SPHERE,

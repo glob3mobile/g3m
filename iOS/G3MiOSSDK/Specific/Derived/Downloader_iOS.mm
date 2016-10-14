@@ -59,9 +59,9 @@ _started(false)
   }
 }
 
-void Downloader_iOS::cancelRequest(long long requestId) {
+bool Downloader_iOS::cancelRequest(long long requestId) {
   if (requestId < 0) {
-    return;
+    return false;
   }
 
   [_lock lock];
@@ -73,11 +73,11 @@ void Downloader_iOS::cancelRequest(long long requestId) {
   [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
                                                         id obj,
                                                         BOOL *stop) {
-    NSURL*                  url     = key;
     Downloader_iOS_Handler* handler = obj;
 
     if ( [handler removeListenerForRequestId: requestId] ) {
       if ( ![handler hasListeners] ) {
+        NSURL* url = key;
         [_queuedHandlers removeObjectForKey:url];
       }
 
@@ -91,31 +91,18 @@ void Downloader_iOS::cancelRequest(long long requestId) {
     [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
                                                                id obj,
                                                                BOOL *stop) {
-      //      NSURL*                  url     = key;
       Downloader_iOS_Handler* handler = obj;
 
       if ( [handler cancelListenerForRequestId: requestId] ) {
         *stop = YES;
         found = true;
       }
-
-
-      //      if ( [handler removeListenerForRequestId: requestId] ) {
-      //        if ( ![handler hasListeners] ) {
-      //          [handler cancel];
-      //        }
-      //
-      //        *stop = YES;
-      //        found = true;
-      //      }
     } ];
   }
 
-  //  if (!found) {
-  //    printf("break (point) on me 1\n");
-  //  }
-
   [_lock unlock];
+
+  return found;
 }
 
 void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* url) {

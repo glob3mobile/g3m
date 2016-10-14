@@ -227,6 +227,7 @@ PlanetRenderer::~PlanetRenderer() {
     delete _elevationDataProvider;
   }
   if (_terrainElevationProvider != NULL) {
+    _terrainElevationProvider->cancel();
     _terrainElevationProvider->_release();
   }
   delete _texturizer;
@@ -868,6 +869,7 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
 void PlanetRenderer::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider) {
   if (_terrainElevationProvider != terrainElevationProvider) {
     if (_terrainElevationProvider != NULL) {
+      _terrainElevationProvider->cancel();
       _terrainElevationProvider->_release();
     }
 

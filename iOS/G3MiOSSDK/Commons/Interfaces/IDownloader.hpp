@@ -49,7 +49,7 @@ public:
                                  IImageDownloadListener* listener,
                                  bool deleteListener) = 0;
 
-  virtual void cancelRequest(long long requestId) = 0;
+  virtual bool cancelRequest(long long requestId) = 0;
 
   virtual const std::string statistics() = 0;
 

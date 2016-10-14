@@ -54,7 +54,7 @@ public:
                          IImageDownloadListener* listener,
                          bool deleteListener);
   
-  void cancelRequest(long long requestId);
+  bool cancelRequest(long long requestId);
   
   Downloader_iOS_Handler* getHandlerToRun();
   

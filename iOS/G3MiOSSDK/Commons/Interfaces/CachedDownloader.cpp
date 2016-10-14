@@ -260,8 +260,8 @@ void CachedDownloader::stop() {
   _downloader->stop();
 }
 
-void CachedDownloader::cancelRequest(long long requestId) {
-  _downloader->cancelRequest(requestId);
+bool CachedDownloader::cancelRequest(long long requestId) {
+  return _downloader->cancelRequest(requestId);
 }
 
 const std::string CachedDownloader::statistics() {

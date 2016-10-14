@@ -11,13 +11,21 @@
 #include "RenderState.hpp"
 #include "G3MContext.hpp"
 #include "IDownloader.hpp"
+#include "URL.hpp"
 
-
-MapzenTerrainElevationProvider* MapzenTerrainElevationProvider::createDefault() {
-  return new MapzenTerrainElevationProvider();
+MapzenTerrainElevationProvider* MapzenTerrainElevationProvider::createDefault(long long           downloadPriority,
+                                                                              const TimeInterval& timeToCache,
+                                                                              bool                readExpired) {
+  return new MapzenTerrainElevationProvider(downloadPriority, timeToCache, readExpired);
 }
 
-MapzenTerrainElevationProvider::MapzenTerrainElevationProvider() {
+MapzenTerrainElevationProvider::MapzenTerrainElevationProvider(long long           downloadPriority,
+                                                               const TimeInterval& timeToCache,
+                                                               bool                readExpired) :
+_downloadPriority(downloadPriority),
+_timeToCache(timeToCache),
+_readExpired(readExpired)
+{
 
 }
 
@@ -34,11 +42,16 @@ RenderState MapzenTerrainElevationProvider::getRenderState() {
 void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
   IDownloader* downloader = context->getDownloader();
 
-//#error Diego at work!
-//  downloader->requestBuffer(<#const URL &url#>,
-//                            <#long long priority#>,
-//                            <#const TimeInterval &timeToCache#>,
-//                            <#bool readExpired#>,
-//                            <#IBufferDownloadListener *listener#>,
-//                            <#bool deleteListener#>);
+////#error Diego at work!
+//  downloader->requestImage(URL("http://terrain-preview.mapzen.com/terrarium/0/0/0.png"),
+//                           _downloadPriority,
+//                           _timeToCache,
+//                           _readExpired,
+//                           <#IImageDownloadListener *listener#>,
+//                           <#bool deleteListener#>);
+}
+
+
+void MapzenTerrainElevationProvider::cancel() {
+//#error man at work!
 }

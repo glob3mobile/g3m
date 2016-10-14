@@ -72,7 +72,7 @@ public:
                          IImageDownloadListener* listener,
                          bool deleteListener);
 
-  void cancelRequest(long long requestId);
+  bool cancelRequest(long long requestId);
 
   virtual ~CachedDownloader();
 
