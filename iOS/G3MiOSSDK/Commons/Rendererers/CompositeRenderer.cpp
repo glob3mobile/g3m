@@ -218,7 +218,7 @@ const std::vector<const Info*> CompositeRenderer::getInfo() {
 }
 
 void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
-                                                       const size_t rendererIdentifier) {
+                                                       const size_t rendererID) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of CompositeRenderer already set");
   }
@@ -229,13 +229,13 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   }
 }
 
-void CompositeRenderer::changedRendererInfo(const size_t rendererIdentifier,
+void CompositeRenderer::changedRendererInfo(const size_t rendererID,
                                             const std::vector<const Info*>& info) {
-  if (rendererIdentifier < _renderersSize) {
-    _renderers[rendererIdentifier]->setInfo(info);
+  if (rendererID < _renderersSize) {
+    _renderers[rendererID]->setInfo(info);
   }
   else {
-    ILogger::instance()->logWarning("Child Render not found: %d", rendererIdentifier);
+    ILogger::instance()->logWarning("Child Render not found: %d", rendererID);
   }
   
   if (_changedInfoListener != NULL) {

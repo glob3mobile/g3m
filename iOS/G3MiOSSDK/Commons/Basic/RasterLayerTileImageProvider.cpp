@@ -85,15 +85,15 @@ public:
 
 RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
 #ifdef C_CODE
-  for (std::map<const std::string, long long>::iterator iter = _requestsIdsPerTile.begin();
-       iter != _requestsIdsPerTile.end();
+  for (std::map<const std::string, long long>::iterator iter = _requestsIDsPerTile.begin();
+       iter != _requestsIDsPerTile.end();
        ++iter) {
     const long long requestID = iter->second;
     _downloader->cancelRequest(requestID);
   }
 #endif
 #ifdef JAVA_CODE
-  for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet()) {
+  for (java.util.Map.Entry<String, Long> entry : _requestsIDsPerTile.entrySet()) {
     _downloader.cancelRequest(entry.getValue());
   }
 
@@ -127,22 +127,22 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
                                                    true /* deleteListener */);
 
   if (requestID >= 0) {
-    _requestsIdsPerTile[tileID] = requestID;
+    _requestsIDsPerTile[tileID] = requestID;
   }
 }
 
 void RasterLayerTileImageProvider::cancel(const std::string& tileID) {
 #ifdef C_CODE
-  if (_requestsIdsPerTile.find(tileID) != _requestsIdsPerTile.end()) {
-    const long long requestID = _requestsIdsPerTile[tileID];
+  if (_requestsIDsPerTile.find(tileID) != _requestsIDsPerTile.end()) {
+    const long long requestID = _requestsIDsPerTile[tileID];
 
     _downloader->cancelRequest(requestID);
 
-    _requestsIdsPerTile.erase(tileID);
+    _requestsIDsPerTile.erase(tileID);
   }
 #endif
 #ifdef JAVA_CODE
-  final Long requestID = _requestsIdsPerTile.remove(tileID);
+  final Long requestID = _requestsIDsPerTile.remove(tileID);
   if (requestID != null) {
     _downloader.cancelRequest(requestID);
   }
@@ -150,7 +150,7 @@ void RasterLayerTileImageProvider::cancel(const std::string& tileID) {
 }
 
 void RasterLayerTileImageProvider::requestFinish(const std::string& tileID) {
-  _requestsIdsPerTile.erase(tileID);
+  _requestsIDsPerTile.erase(tileID);
 }
 
 void RasterLayerTileImageProvider::layerDeleted(const RasterLayer* layer) {

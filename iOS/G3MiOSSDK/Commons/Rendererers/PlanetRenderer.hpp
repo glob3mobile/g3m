@@ -461,7 +461,7 @@ public:
   
   void changedInfo(const std::vector<const Info*>& info) {
     if (_changedInfoListener != NULL) {
-      _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+      _changedInfoListener->changedRendererInfo(_rendererID, info);
     }
   }
 
@@ -470,7 +470,7 @@ public:
   }
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
-                                      const size_t rendererIdentifier);
+                                      const size_t rendererID);
 
   void onTileHasChangedMesh(const Tile* tile) const;
 

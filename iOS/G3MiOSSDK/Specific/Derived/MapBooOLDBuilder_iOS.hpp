@@ -34,7 +34,7 @@ public:
   MapBooOLDBuilder_iOS(G3MWidget_iOS* nativeWidget,
                     const URL& serverURL,
                     const URL& tubesURL,
-                    const std::string& applicationId,
+                    const std::string& applicationID,
                     MapBooOLD_ViewType viewType,
                     MapBooOLDApplicationChangeListener* applicationListener,
                     bool enableNotifications,

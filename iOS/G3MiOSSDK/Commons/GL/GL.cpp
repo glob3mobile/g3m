@@ -191,7 +191,7 @@ const IGLTextureID* GL::getGLTextureID() {
   //    ILogger::instance()->logInfo("GL::getGLTextureID()");
   //  }
 
-  if (_texturesIdBag.size() == 0) {
+  if (_texturesIDBag.size() == 0) {
     //const int bugdetSize = 256;
     const int bugdetSize = 1024;
     //const int bugdetSize = 10240;
@@ -200,25 +200,25 @@ const IGLTextureID* GL::getGLTextureID() {
     const size_t idsCount = ids.size();
     for (size_t i = 0; i < idsCount; i++) {
       // ILogger::instance()->logInfo("  = Created textureID=%s", ids[i]->description().c_str());
-      _texturesIdBag.push_front(ids[i]);
+      _texturesIDBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += idsCount;
+    _texturesIDAllocationCounter += idsCount;
 
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
+    ILogger::instance()->logInfo("= Created %d texturesIDs (accumulated %d).",
                                  idsCount,
-                                 _texturesIdAllocationCounter);
+                                 _texturesIDAllocationCounter);
   }
 
-  //  _texturesIdGetCounter++;
+  //  _texturesIDGetCounter++;
 
-  if (_texturesIdBag.size() == 0) {
+  if (_texturesIDBag.size() == 0) {
     ILogger::instance()->logError("TextureIDs bag exhausted");
     return NULL;
   }
 
-  const IGLTextureID* result = _texturesIdBag.back();
-  _texturesIdBag.pop_back();
+  const IGLTextureID* result = _texturesIDBag.back();
+  _texturesIDBag.pop_back();
 
   return result;
 }
@@ -232,7 +232,7 @@ void GL::deleteTexture(const IGLTextureID* textureID) {
     _currentGLGlobalState->onTextureDelete(textureID);
 
     if ( _nativeGL->deleteTexture(textureID) ) {
-      _texturesIdBag.push_back(textureID);
+      _texturesIDBag.push_back(textureID);
     }
     else {
       delete textureID;

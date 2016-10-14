@@ -28,7 +28,7 @@ private:
 #endif
   IDownloader*       _downloader;
 
-  std::map<const std::string, long long> _requestsIdsPerTile;
+  std::map<const std::string, long long> _requestsIDsPerTile;
 
 protected:
   ~RasterLayerTileImageProvider();

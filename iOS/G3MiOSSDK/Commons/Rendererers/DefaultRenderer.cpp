@@ -18,20 +18,20 @@ void DefaultRenderer::setEnable(bool enable) {
       }
       else {
         const std::vector<const Info*> info;
-        _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+        _changedInfoListener->changedRendererInfo(_rendererID, info);
       }
     }
   }
 }
 
 void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
-                                                     const size_t rendererIdentifier) {
+                                                     const size_t rendererID) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of DefaultRenderer already set");
   }
   else {
     _changedInfoListener = changedInfoListener;
-    _rendererIdentifier = rendererIdentifier;
+    _rendererID = rendererID;
     notifyChangedInfo(_info);
   }
 }
@@ -74,7 +74,7 @@ void DefaultRenderer::addInfo(const Info* info) {
 void DefaultRenderer::notifyChangedInfo(const std::vector<const Info*>& info) {
   if(_changedInfoListener!= NULL) {
     if(isEnable()) {
-      _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+      _changedInfoListener->changedRendererInfo(_rendererID, info);
     }
   }
 }

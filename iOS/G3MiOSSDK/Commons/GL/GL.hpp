@@ -39,8 +39,8 @@ private:
   GPUProgram*    _currentGPUProgram;
   /////////////////////////////////////////////////
 
-  std::list<const IGLTextureID*> _texturesIdBag;
-  long                           _texturesIdAllocationCounter;
+  std::list<const IGLTextureID*> _texturesIDBag;
+  long                           _texturesIDAllocationCounter;
 
   const IGLTextureID* getGLTextureID();
 
@@ -54,7 +54,7 @@ public:
 
   GL(INativeGL* const nativeGL) :
   _nativeGL(nativeGL),
-  _texturesIdAllocationCounter(0),
+  _texturesIDAllocationCounter(0),
   _currentGPUProgram(NULL),
   _clearScreenState(NULL)
   {

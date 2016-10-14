@@ -90,9 +90,9 @@ public:
   }
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
-                                      const size_t rendererIdentifier);
+                                      const size_t rendererID);
   
-  void changedRendererInfo(const size_t rendererIdentifier,
+  void changedRendererInfo(const size_t rendererID,
                            const std::vector<const Info*>& info);
   
 };

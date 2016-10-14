@@ -981,7 +981,7 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const size_t rendererIdentifier,
+void G3MWidget::changedRendererInfo(const size_t rendererID,
                                     const std::vector<const Info*>& info) {
   if(_infoDisplay != NULL) {
     _infoDisplay->changedInfo(info);

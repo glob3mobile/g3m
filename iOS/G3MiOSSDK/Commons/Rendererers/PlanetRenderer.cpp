@@ -161,7 +161,7 @@ _tileVisibilityTester(tileVisibilityTester)
 
   _layerSet->setChangedInfoListener(this);
 
-  _rendererIdentifier = -1;
+  _rendererID = -1;
 
   if (_tileLODTester == NULL) {
     THROW_EXCEPTION("TileLODTester can't be NULL");
@@ -915,16 +915,16 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
 }
 
 void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
-                                                    const size_t rendererIdentifier) {
+                                                    const size_t rendererID) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }
 
-  _rendererIdentifier = rendererIdentifier;
+  _rendererID = rendererID;
   _changedInfoListener = changedInfoListener;
 
   if(_changedInfoListener != NULL) {
-    _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
+    _changedInfoListener->changedRendererInfo(rendererID, _layerSet->getInfo());
   }
 }
 

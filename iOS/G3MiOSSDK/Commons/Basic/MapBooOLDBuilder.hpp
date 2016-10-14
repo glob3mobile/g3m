@@ -594,17 +594,17 @@ private:
 
   const bool _enableNotifications;
 
-  std::string                _applicationId;
+  std::string                _applicationID;
   std::string                _applicationName;
   std::string                _applicationWebsite;
   std::string                _applicationEMail;
   std::string                _applicationAbout;
   int                        _applicationTimestamp;
   std::vector<MapBooOLD_Scene*> _applicationScenes;
-  std::string                _applicationCurrentSceneId;
-  std::string                _lastApplicationCurrentSceneId;
+  std::string                _applicationCurrentSceneID;
+  std::string                _lastApplicationCurrentSceneID;
   
-  int                        _applicationEventId;
+  int                        _applicationEventID;
   const std::string          _token;
 
   GL* _gl;
@@ -675,12 +675,12 @@ private:
   URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer,
                                           const bool transparent) const;
 
-  const std::string getApplicationCurrentSceneId();
+  const std::string getApplicationCurrentSceneID();
   const MapBooOLD_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
 
-//  const std::string parseSceneId(const JSONObject* jsonObject) const;
+//  const std::string parseSceneID(const JSONObject* jsonObject) const;
   MapBooOLD_Scene* parseScene(const JSONObject* json) const;
   
   Color         parseColor(const JSONString* jsonColor) const;
@@ -742,7 +742,7 @@ private:
 protected:
   MapBooOLDBuilder(const URL& serverURL,
                 const URL& tubesURL,
-                const std::string& applicationId,
+                const std::string& applicationID,
                 MapBooOLD_ViewType viewType,
                 MapBooOLDApplicationChangeListener* applicationListener,
                 bool enableNotifications,
@@ -779,10 +779,10 @@ protected:
 
 public:
   /** Private to MapbooBuilder, don't call it */
-  int getApplicationEventId() const;
+  int getApplicationEventID() const;
   
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationEventId(const int eventId);
+  void setApplicationEventID(const int eventId);
   
   /** Private to MapbooBuilder, don't call it */
   int getApplicationTimestamp() const;
@@ -836,7 +836,7 @@ public:
   void openApplicationTube(const G3MContext* context);
 
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationCurrentSceneId(const std::string& currentSceneId);
+  void setApplicationCurrentSceneID(const std::string& currentSceneID);
 
   /** Private to MapbooBuilder, don't call it */
   void rawChangeScene(const std::string& sceneId);
@@ -902,7 +902,7 @@ public:
   /** Private to MapbooBuilder, don't call it */
   void pollApplicationDataFromServer(const G3MContext* context);
   
-  const std::string getApplicationId();
+  const std::string getApplicationID();
   
   void setTileLODTester(TileLODTester* tlt);
   

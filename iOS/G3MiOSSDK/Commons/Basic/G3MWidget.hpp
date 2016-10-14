@@ -240,7 +240,7 @@ public:
     return _infoDisplay;
   }
 
-  void changedRendererInfo(const size_t rendererIdentifier,
+  void changedRendererInfo(const size_t rendererID,
                            const std::vector<const Info*>& info);
 
   void removeAllPeriodicalTasks();
