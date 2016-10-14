@@ -16,14 +16,16 @@ public interface Downloader_WebGL_Handler {
                     final IBufferDownloadListener bufferListener,
                     final boolean deleteListener,
                     final long priority,
-                    final long requestId);
+                    final long requestID,
+                    final String tag);
 
 
    public void init(final URL url,
                     final IImageDownloadListener imageListener,
                     final boolean deleteListener,
                     final long priority,
-                    final long requestId);
+                    final long requestID,
+                    final String tag);
 
 
    public boolean isRequestingImage();
@@ -32,22 +34,24 @@ public interface Downloader_WebGL_Handler {
    public void addListener(final IBufferDownloadListener listener,
                            final boolean deleteListener,
                            final long priority,
-                           final long requestId);
+                           final long requestID,
+                           final String tag);
 
 
    public void addListener(final IImageDownloadListener listener,
                            final boolean deleteListener,
                            final long priority,
-                           final long requestId);
+                           final long requestID,
+                           final String tag);
 
 
    public long getPriority();
 
 
-   public boolean cancelListenerForRequestId(final long requestId);
+   public boolean cancelListenerForRequestId(final long requestID);
 
 
-   public boolean removeListenerForRequestId(final long requestId);
+   public boolean removeListenerForRequestId(final long requestID);
 
 
    public boolean hasListener();
@@ -64,5 +68,11 @@ public interface Downloader_WebGL_Handler {
 
 
    public void jsRequest(String url);
+
+
+   public boolean removeListenersTagged(String tag);
+
+
+   public void cancelListenersTagged(String tag);
 
 }

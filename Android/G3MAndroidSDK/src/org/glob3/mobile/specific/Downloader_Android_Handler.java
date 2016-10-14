@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -50,14 +51,15 @@ public final class Downloader_Android_Handler {
                               final IBufferDownloadListener listener,
                               final boolean deleteListener,
                               final long priority,
-                              final long requestId) {
+                              final long requestID,
+                              final String tag) {
       _priority = priority;
       _g3mURL = url;
       _hasImageListeners = false;
       try {
          _javaURL = new java.net.URL(url._path);
 
-         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, deleteListener, requestId));
+         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, deleteListener, requestID, tag));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -78,14 +80,15 @@ public final class Downloader_Android_Handler {
                               final IImageDownloadListener listener,
                               final boolean deleteListener,
                               final long priority,
-                              final long requestId) {
+                              final long requestID,
+                              final String tag) {
       _priority = priority;
       _g3mURL = url;
       _hasImageListeners = true;
       try {
          _javaURL = new java.net.URL(url._path);
 
-         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, deleteListener, requestId));
+         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, deleteListener, requestID, tag));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -105,9 +108,10 @@ public final class Downloader_Android_Handler {
    void addListener(final IBufferDownloadListener listener,
                     final boolean deleteListener,
                     final long priority,
-                    final long requestId) {
+                    final long requestID,
+                    final String tag) {
       final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, deleteListener,
-               requestId);
+               requestID, tag);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -122,9 +126,10 @@ public final class Downloader_Android_Handler {
    void addListener(final IImageDownloadListener listener,
                     final boolean deleteListener,
                     final long priority,
-                    final long requestId) {
+                    final long requestID,
+                    final String tag) {
       final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, deleteListener,
-               requestId);
+               requestID, tag);
 
       synchronized (this) {
          _hasImageListeners = true;
@@ -143,10 +148,10 @@ public final class Downloader_Android_Handler {
    }
 
 
-   boolean cancelListenerForRequestId(final long requestId) {
+   boolean cancelListenerForRequestId(final long requestID) {
       synchronized (this) {
          for (final Downloader_Android_ListenerEntry entry : _listeners) {
-            if (entry._requestId == requestId) {
+            if (entry._requestID == requestID) {
                entry.cancel();
                return true;
             }
@@ -157,10 +162,23 @@ public final class Downloader_Android_Handler {
    }
 
 
-   boolean removeListenerForRequestId(final long requestId) {
+   void cancelListenersTagged(final String tag) {
+      synchronized (this) {
+         for (final Iterator<Downloader_Android_ListenerEntry> iterator = _listeners.iterator(); iterator.hasNext();) {
+            final Downloader_Android_ListenerEntry entry = iterator.next();
+            if (entry._tag.equals(tag)) {
+               entry.cancel();
+               iterator.remove();
+            }
+         }
+      }
+   }
+
+
+   boolean removeListenerForRequestId(final long requestID) {
       synchronized (this) {
          for (final Downloader_Android_ListenerEntry entry : _listeners) {
-            if (entry._requestId == requestId) {
+            if (entry._requestID == requestID) {
                entry.onCancel(_g3mURL);
                _listeners.remove(entry);
                return true;
@@ -169,6 +187,24 @@ public final class Downloader_Android_Handler {
       }
 
       return false;
+   }
+
+
+   boolean removeListenersTagged(final String tag) {
+      boolean anyRemoved = false;
+
+      synchronized (this) {
+         for (final Iterator<Downloader_Android_ListenerEntry> iterator = _listeners.iterator(); iterator.hasNext();) {
+            final Downloader_Android_ListenerEntry entry = iterator.next();
+            if (entry._tag.equals(tag)) {
+               entry.onCancel(_g3mURL);
+               iterator.remove();
+               anyRemoved = true;
+            }
+         }
+      }
+
+      return anyRemoved;
    }
 
 

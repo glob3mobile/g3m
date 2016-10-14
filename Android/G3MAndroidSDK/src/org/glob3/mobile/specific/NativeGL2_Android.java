@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.GPUUniformVec2Float;
 import org.glob3.mobile.generated.GPUUniformVec3Float;
 import org.glob3.mobile.generated.GPUUniformVec4Float;
 import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.IGLTextureID;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
@@ -191,16 +192,16 @@ public final class NativeGL2_Android
 
    @Override
    public void bindTexture(final int target,
-                           final IGLTextureId texture) {
+                           final IGLTextureID texture) {
       checkOpenGLThread();
-      GLES20.glBindTexture(target, ((GLTextureId_Android) texture).getGLTextureId());
+      GLES20.glBindTexture(target, ((GLTextureID_Android) texture).getGLTextureId());
    }
 
 
    @Override
-   public boolean deleteTexture(final IGLTextureId texture) {
+   public boolean deleteTexture(final IGLTextureID texture) {
       checkOpenGLThread();
-      GLES20.glDeleteTextures(1, new int[] { ((GLTextureId_Android) texture).getGLTextureId() }, 0);
+      GLES20.glDeleteTextures(1, new int[] { ((GLTextureID_Android) texture).getGLTextureId() }, 0);
       return false;
    }
 
@@ -230,9 +231,9 @@ public final class NativeGL2_Android
 
 
    @Override
-   public ArrayList<IGLTextureId> genTextures(final int count) {
+   public ArrayList<IGLTextureID> genTextures(final int count) {
       checkOpenGLThread();
-      final ArrayList<IGLTextureId> result = new ArrayList<IGLTextureId>(count);
+      final ArrayList<IGLTextureID> result = new ArrayList<IGLTextureID>(count);
       final int[] textureIds = new int[count];
       GLES20.glGenTextures(count, textureIds, 0);
       for (int i = 0; i < count; i++) {
@@ -241,7 +242,7 @@ public final class NativeGL2_Android
             ILogger.instance().logError("Can't create a textureId");
          }
          else {
-            result.add(new GLTextureId_Android(textureId));
+            result.add(new GLTextureID_Android(textureId));
          }
       }
       return result;

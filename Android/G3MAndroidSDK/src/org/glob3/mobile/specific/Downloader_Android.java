@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MContext;
@@ -27,7 +28,7 @@ public final class Downloader_Android
    final static String                                      TAG             = "Downloader_Android";
 
    private final int                                        _maxConcurrentOperationCount;
-   private int                                              _requestIdCounter;
+   private int                                              _requestIDCounter;
    private long                                             _requestsCounter;
    private long                                             _cancelsCounter;
    private final ArrayList<Downloader_Android_WorkerThread> _workers;
@@ -50,7 +51,7 @@ public final class Downloader_Android
       _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _appContext = appContext;
-      _requestIdCounter = 1;
+      _requestIDCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
       // TODO String or Url as key??
@@ -129,13 +130,14 @@ public final class Downloader_Android
                              final TimeInterval timeToCache,
                              final boolean readExpired,
                              final IBufferDownloadListener listener,
-                             final boolean deleteListener) {
+                             final boolean deleteListener,
+                             final String tag) {
       Downloader_Android_Handler handler = null;
-      long requestId;
+      long requestID;
 
       synchronized (this) {
          _requestsCounter++;
-         requestId = _requestIdCounter++;
+         requestID = _requestIDCounter++;
          final String path = url._path;
          handler = _downloadingHandlers.get(path);
 
@@ -143,21 +145,21 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestId);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag);
                _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
-               handler.addListener(listener, deleteListener, priority, requestId);
+               handler.addListener(listener, deleteListener, priority, requestID, tag);
             }
          }
          else {
             // the URL is being downloaded, just add the new listener
-            handler.addListener(listener, deleteListener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestID, tag);
          }
       }
 
-      return requestId;
+      return requestID;
    }
 
 
@@ -167,40 +169,41 @@ public final class Downloader_Android
                             final TimeInterval timeToCache,
                             final boolean readExpired,
                             final IImageDownloadListener listener,
-                            final boolean deleteListener) {
+                            final boolean deleteListener,
+                            final String tag) {
       Downloader_Android_Handler handler = null;
-      long requestId;
+      long requestID;
 
       synchronized (this) {
          _requestsCounter++;
-         requestId = _requestIdCounter++;
+         requestID = _requestIDCounter++;
          final String path = url._path;
          handler = _downloadingHandlers.get(path);
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestId);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag);
                _queuedHandlers.put(path, handler);
             }
             else {
                // the URL is queued for future download, just add the new listener
-               handler.addListener(listener, deleteListener, priority, requestId);
+               handler.addListener(listener, deleteListener, priority, requestID, tag);
             }
          }
          else {
             // the URL is being downloaded, just add the new listener
-            handler.addListener(listener, deleteListener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestID, tag);
          }
       }
 
-      return requestId;
+      return requestID;
    }
 
 
    @Override
-   public boolean cancelRequest(final long requestId) {
-      if (requestId < 0) {
+   public boolean cancelRequest(final long requestID) {
+      if (requestID < 0) {
          return false;
       }
 
@@ -216,7 +219,7 @@ public final class Downloader_Android
             final String url = e.getKey();
             final Downloader_Android_Handler handler = e.getValue();
 
-            if (handler.removeListenerForRequestId(requestId)) {
+            if (handler.removeListenerForRequestId(requestID)) {
 
                if (!handler.hasListener()) {
                   _queuedHandlers.remove(url);
@@ -232,7 +235,7 @@ public final class Downloader_Android
                final Map.Entry<String, Downloader_Android_Handler> e = iter.next();
                final Downloader_Android_Handler handler = e.getValue();
 
-               if (handler.cancelListenerForRequestId(requestId)) {
+               if (handler.cancelListenerForRequestId(requestID)) {
                   found = true;
                }
             }
@@ -240,6 +243,34 @@ public final class Downloader_Android
       }
 
       return found;
+   }
+
+
+   @Override
+   public void cancelRequestsTagged(final String tag) {
+      if (tag.isEmpty()) {
+         return;
+      }
+
+
+      synchronized (this) {
+         _cancelsCounter++;
+
+         for (final Iterator<Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
+            final Map.Entry<String, Downloader_Android_Handler> entry = iterator.next();
+
+            final Downloader_Android_Handler handler = entry.getValue();
+            if (handler.removeListenersTagged(tag)) {
+               if (!handler.hasListener()) {
+                  iterator.remove();
+               }
+            }
+         }
+
+         for (final Downloader_Android_Handler handler : _downloadingHandlers.values()) {
+            handler.cancelListenersTagged(tag);
+         }
+      }
    }
 
 

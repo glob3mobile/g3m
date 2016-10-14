@@ -20,18 +20,21 @@ public final class Downloader_Android_ListenerEntry {
    private final IBufferDownloadListener _bufferListener;
    private final IImageDownloadListener  _imageListener;
    private final boolean                 _deleteListener;
-   final long                            _requestId;
+   final long                            _requestID;
+   final String                          _tag;
    private boolean                       _canceled;
 
 
    Downloader_Android_ListenerEntry(final IBufferDownloadListener bufferListener,
                                     final IImageDownloadListener imageListener,
                                     final boolean deleteListener,
-                                    final long requestId) {
+                                    final long requestID,
+                                    final String tag) {
       _bufferListener = bufferListener;
       _imageListener = imageListener;
       _deleteListener = deleteListener;
-      _requestId = requestId;
+      _requestID = requestID;
+      _tag = tag;
       _canceled = false;
    }
 
@@ -39,10 +42,10 @@ public final class Downloader_Android_ListenerEntry {
    void cancel() {
       if (_canceled) {
          if (ILogger.instance() == null) {
-            Log.e(TAG, "Listener for requestId=" + _requestId + " already canceled");
+            Log.e(TAG, "Listener for requestID=" + _requestID + " already canceled");
          }
          else {
-            ILogger.instance().logError(TAG + ": Listener for requestId=" + _requestId + " already canceled");
+            ILogger.instance().logError(TAG + ": Listener for requestID=" + _requestID + " already canceled");
          }
       }
       _canceled = true;

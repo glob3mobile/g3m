@@ -12,20 +12,20 @@ public class IImageDownloadListenerTileCache
          extends
             IImageDownloadListener {
 
-   private final long                _requestId;
+   private final long                _requestID;
    private final TileVisitorListener _listener;
 
 
-   public IImageDownloadListenerTileCache(final long requestId,
+   public IImageDownloadListenerTileCache(final long requestID,
                                           final TileVisitorListener listener) {
-      _requestId = requestId;
+      _requestID = requestID;
       _listener = listener;
    }
 
 
    @Override
    public void onError(final URL pUrl) {
-      ILogger.instance().logError("FAIL Downloaded id: " + _requestId);
+      ILogger.instance().logError("FAIL Downloaded id: " + _requestID);
    }
 
 
@@ -40,7 +40,7 @@ public class IImageDownloadListenerTileCache
    public void onCanceledDownload(final URL arg0,
                                   final IImage arg1,
                                   final boolean arg2) {
-      ILogger.instance().logError("CANCELED Downloaded id: " + _requestId);
+      ILogger.instance().logError("CANCELED Downloaded id: " + _requestID);
 
    }
 

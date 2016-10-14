@@ -30,7 +30,7 @@ public final class Downloader_WebGL
 
    private final String                             _proxy;
 
-   private long                                     _requestIdCounter;
+   private long                                     _requestIDCounter;
    private long                                     _requestsCounter;
    private long                                     _cancelsCounter;
 
@@ -39,7 +39,7 @@ public final class Downloader_WebGL
                            final int delayMillis,
                            final String proxy) {
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
-      _requestIdCounter = 1;
+      _requestIDCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
       _downloadingHandlers = new HashMap<>();
@@ -100,7 +100,7 @@ public final class Downloader_WebGL
    //                             final IBufferDownloadListener listener,
    //                             final boolean deleteListener) {
    //
-   //      final long requestId;
+   //      final long requestID;
    //      Downloader_WebGL_Handler handler = null;
    //      final URL proxyUrl;
    //      final String urlPath = url.getPath();
@@ -113,29 +113,29 @@ public final class Downloader_WebGL
    //      }
    //
    //      _requestsCounter++;
-   //      requestId = _requestIdCounter++;
+   //      requestID = _requestIDCounter++;
    //      handler = _downloadingHandlers.get(proxyUrl);
    //
    //      if ((handler != null) && !handler.isRequestingImage()) {
    //         // the URL is being downloaded, just add the new listener
-   //         handler.addListener(listener, priority, requestId);
+   //         handler.addListener(listener, priority, requestID);
    //      }
    //      else {
    //         handler = _queuedHandlers.get(proxyUrl);
    //         if ((handler != null) && !handler.isRequestingImage()) {
    //            // the URL is queued for future download, just add the new listener
-   //            handler.addListener(listener, priority, requestId);
+   //            handler.addListener(listener, priority, requestID);
    //         }
    //         else {
    //            // new handler, queue it
-   //            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestId);
+   //            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestID);
    //            handler = GWT.create(Downloader_WebGL_Handler.class);
-   //            handler.init(proxyUrl, listener, priority, requestId);
+   //            handler.init(proxyUrl, listener, priority, requestID);
    //            _queuedHandlers.put(proxyUrl, handler);
    //         }
    //      }
    //
-   //      return requestId;
+   //      return requestID;
    //   }
 
 
@@ -145,35 +145,36 @@ public final class Downloader_WebGL
                              final TimeInterval timeToCache,
                              final boolean readExpired,
                              final IBufferDownloadListener listener,
-                             final boolean deleteListener) {
-      final long requestId;
+                             final boolean deleteListener,
+                             final String tag) {
+      final long requestID;
       Downloader_WebGL_Handler handler = null;
       final URL proxyUrl = getProxiedURL(url);
 
       _requestsCounter++;
-      requestId = _requestIdCounter++;
+      requestID = _requestIDCounter++;
       handler = _downloadingHandlers.get(proxyUrl);
 
       if ((handler != null) && !handler.isRequestingImage()) {
          // the URL is being downloaded, just add the new listener
-         handler.addListener(listener, deleteListener, priority, requestId);
+         handler.addListener(listener, deleteListener, priority, requestID, tag);
       }
       else {
          handler = _queuedHandlers.get(proxyUrl);
          if ((handler != null) && !handler.isRequestingImage()) {
             // the URL is queued for future download, just add the new listener
-            handler.addListener(listener, deleteListener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestID, tag);
          }
          else {
             // new handler, queue it
-            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestId);
+            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestID);
             handler = GWT.create(Downloader_WebGL_Handler.class);
-            handler.init(proxyUrl, listener, deleteListener, priority, requestId);
+            handler.init(proxyUrl, listener, deleteListener, priority, requestID, tag);
             _queuedHandlers.put(proxyUrl, handler);
          }
       }
 
-      return requestId;
+      return requestID;
    }
 
 
@@ -199,41 +200,42 @@ public final class Downloader_WebGL
                             final TimeInterval timeToCache,
                             final boolean readExpired,
                             final IImageDownloadListener listener,
-                            final boolean deleteListener) {
-      final long requestId;
+                            final boolean deleteListener,
+                            final String tag) {
+      final long requestID;
       Downloader_WebGL_Handler handler = null;
       final URL proxyUrl = getProxiedURL(url);
 
       _requestsCounter++;
-      requestId = _requestIdCounter++;
+      requestID = _requestIDCounter++;
       handler = _downloadingHandlers.get(proxyUrl);
 
       if ((handler != null) && handler.isRequestingImage()) {
          // the URL is being downloaded, just add the new listener
-         handler.addListener(listener, deleteListener, priority, requestId);
+         handler.addListener(listener, deleteListener, priority, requestID, tag);
       }
       else {
          handler = _queuedHandlers.get(proxyUrl);
          if ((handler != null) && handler.isRequestingImage()) {
             // the URL is queued for future download, just add the new listener
-            handler.addListener(listener, deleteListener, priority, requestId);
+            handler.addListener(listener, deleteListener, priority, requestID, tag);
          }
          else {
             // new handler, queue it
-            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestId);
+            //            handler = new Downloader_WebGL_HandlerImpl(proxyUrl, listener, priority, requestID);
             handler = GWT.create(Downloader_WebGL_Handler.class);
-            handler.init(proxyUrl, listener, deleteListener, priority, requestId);
+            handler.init(proxyUrl, listener, deleteListener, priority, requestID, tag);
             _queuedHandlers.put(proxyUrl, handler);
          }
       }
 
-      return requestId;
+      return requestID;
    }
 
 
    @Override
-   public boolean cancelRequest(final long requestId) {
-      if (requestId < 0) {
+   public boolean cancelRequest(final long requestID) {
+      if (requestID < 0) {
          return false;
       }
 
@@ -246,7 +248,7 @@ public final class Downloader_WebGL
          final Map.Entry<URL, Downloader_WebGL_Handler> e = iter.next();
          final Downloader_WebGL_Handler handler = e.getValue();
 
-         if (handler.removeListenerForRequestId(requestId)) {
+         if (handler.removeListenerForRequestId(requestID)) {
             if (!handler.hasListener()) {
                iter.remove();
             }
@@ -261,13 +263,39 @@ public final class Downloader_WebGL
             final Map.Entry<URL, Downloader_WebGL_Handler> e = iter.next();
             final Downloader_WebGL_Handler handler = e.getValue();
 
-            if (handler.cancelListenerForRequestId(requestId)) {
+            if (handler.cancelListenerForRequestId(requestID)) {
                found = true;
             }
          }
       }
 
       return found;
+   }
+
+
+   @Override
+   public void cancelRequestsTagged(final String tag) {
+      if (tag.isEmpty()) {
+         return;
+      }
+
+      _cancelsCounter++;
+
+
+      for (final Iterator<Map.Entry<URL, Downloader_WebGL_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
+         final Map.Entry<URL, Downloader_WebGL_Handler> entry = iterator.next();
+         final Downloader_WebGL_Handler handler = entry.getValue();
+
+         if (handler.removeListenersTagged(tag)) {
+            if (!handler.hasListener()) {
+               iterator.remove();
+            }
+         }
+      }
+
+      for (final Downloader_WebGL_Handler handler : _downloadingHandlers.values()) {
+         handler.cancelListenersTagged(tag);
+      }
    }
 
 

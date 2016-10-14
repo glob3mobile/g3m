@@ -39,11 +39,12 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final IBufferDownloadListener bufferListener,
                           final boolean deleteListener,
                           final long priority,
-                          final long requestId) {
+                          final long requestID,
+                          final String tag) {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<>();
-      final ListenerEntry entry = new ListenerEntry(bufferListener, null, deleteListener, requestId);
+      final ListenerEntry entry = new ListenerEntry(bufferListener, null, deleteListener, requestID, tag);
       _listeners.add(entry);
       _requestingImage = false;
    }
@@ -54,11 +55,12 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final IImageDownloadListener imageListener,
                           final boolean deleteListener,
                           final long priority,
-                          final long requestId) {
+                          final long requestID,
+                          final String tag) {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<>();
-      final ListenerEntry entry = new ListenerEntry(null, imageListener, deleteListener, requestId);
+      final ListenerEntry entry = new ListenerEntry(null, imageListener, deleteListener, requestID, tag);
       _listeners.add(entry);
       _requestingImage = true;
    }
@@ -74,8 +76,9 @@ public class Downloader_WebGL_Handler_DefaultImpl
    final public void addListener(final IBufferDownloadListener listener,
                                  final boolean deleteListener,
                                  final long priority,
-                                 final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(listener, null, deleteListener, requestId);
+                                 final long requestID,
+                                 final String tag) {
+      final ListenerEntry entry = new ListenerEntry(listener, null, deleteListener, requestID, tag);
 
       _listeners.add(entry);
 
@@ -89,8 +92,9 @@ public class Downloader_WebGL_Handler_DefaultImpl
    final public void addListener(final IImageDownloadListener listener,
                                  final boolean deleteListener,
                                  final long priority,
-                                 final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(null, listener, deleteListener, requestId);
+                                 final long requestID,
+                                 final String tag) {
+      final ListenerEntry entry = new ListenerEntry(null, listener, deleteListener, requestID, tag);
 
       _listeners.add(entry);
 
@@ -107,7 +111,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
 
    @Override
-   final public boolean cancelListenerForRequestId(final long requestId) {
+   final public boolean cancelListenerForRequestId(final long requestID) {
       boolean canceled = false;
 
       final Iterator<ListenerEntry> iter = _listeners.iterator();
@@ -115,7 +119,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
       while (iter.hasNext() && !canceled) {
          final ListenerEntry entry = iter.next();
 
-         if (entry.getRequestId() == requestId) {
+         if (entry.getRequestId() == requestID) {
             entry.cancel();
             canceled = true;
          }
@@ -126,7 +130,19 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
 
    @Override
-   final public boolean removeListenerForRequestId(final long requestId) {
+   public void cancelListenersTagged(final String tag) {
+      final Iterator<ListenerEntry> iter = _listeners.iterator();
+      while (iter.hasNext()) {
+         final ListenerEntry entry = iter.next();
+         if (entry.getTag().equals(tag)) {
+            entry.cancel();
+         }
+      }
+   }
+
+
+   @Override
+   final public boolean removeListenerForRequestId(final long requestID) {
       boolean removed = false;
 
       final Iterator<ListenerEntry> iter = _listeners.iterator();
@@ -134,7 +150,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
       while (iter.hasNext()) {
          final ListenerEntry entry = iter.next();
 
-         if (entry.getRequestId() == requestId) {
+         if (entry.getRequestId() == requestID) {
             entry.onCancel(_url);
             iter.remove();
             removed = true;
@@ -144,6 +160,24 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
 
       return removed;
+   }
+
+
+   @Override
+   final public boolean removeListenersTagged(final String tag) {
+      boolean anyRemoved = false;
+
+      final Iterator<ListenerEntry> iter = _listeners.iterator();
+      while (iter.hasNext()) {
+         final ListenerEntry entry = iter.next();
+         if (entry.getTag().equals(tag)) {
+            entry.onCancel(_url);
+            iter.remove();
+            anyRemoved = true;
+         }
+      }
+
+      return anyRemoved;
    }
 
 
@@ -265,5 +299,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
          GWT.log(TAG + msg);
       }
    }
+
 
 }

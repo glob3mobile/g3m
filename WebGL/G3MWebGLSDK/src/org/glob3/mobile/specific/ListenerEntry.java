@@ -20,24 +20,28 @@ public final class ListenerEntry {
    private final IBufferDownloadListener _bufferListener;
    private final IImageDownloadListener  _imageListener;
    private final boolean                 _deleteListener;
-   private final long                    _requestId;
+   private final long                    _requestID;
    private boolean                       _canceled;
+
+   private final String                  _tag;
 
 
    public ListenerEntry(final IBufferDownloadListener bufferListener,
                         final IImageDownloadListener imageListener,
                         final boolean deleteListener,
-                        final long requestId) {
+                        final long requestID,
+                        final String tag) {
       _bufferListener = bufferListener;
       _imageListener = imageListener;
       _deleteListener = deleteListener;
-      _requestId = requestId;
+      _requestID = requestID;
+      _tag = tag;
       _canceled = false;
    }
 
 
    public long getRequestId() {
-      return _requestId;
+      return _requestID;
    }
 
 
@@ -53,7 +57,7 @@ public final class ListenerEntry {
 
    public void cancel() {
       if (_canceled) {
-         log(LogLevel.ErrorLevel, ": Listener for requestId=" + _requestId + " already canceled");
+         log(LogLevel.ErrorLevel, ": Listener for requestID=" + _requestID + " already canceled");
       }
       _canceled = true;
    }
@@ -168,5 +172,10 @@ public final class ListenerEntry {
          GWT.log(TAG + msg);
       }
 
+   }
+
+
+   public String getTag() {
+      return _tag;
    }
 }

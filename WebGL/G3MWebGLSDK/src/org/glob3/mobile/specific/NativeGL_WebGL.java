@@ -200,7 +200,7 @@ public final class NativeGL_WebGL
    @Override
    public native void bindTexture(final int target,
                                   final IGLTextureID texture) /*-{
-		var id = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
+		var id = texture.@org.glob3.mobile.specific.GLTextureID_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target,
 				id);
    }-*/;
@@ -208,7 +208,7 @@ public final class NativeGL_WebGL
 
    @Override
    public native boolean deleteTexture(final IGLTextureID texture) /*-{
-		var textureID = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
+		var textureID = texture.@org.glob3.mobile.specific.GLTextureID_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.deleteTexture(textureID);
 		return false;
@@ -244,7 +244,7 @@ public final class NativeGL_WebGL
 			var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 					.createTexture();
 
-			var textureID = @org.glob3.mobile.specific.GLTextureId_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(texture);
+			var textureID = @org.glob3.mobile.specific.GLTextureID_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(texture);
 			array.@java.util.ArrayList::add(Ljava/lang/Object;)(textureID);
 		}
 
