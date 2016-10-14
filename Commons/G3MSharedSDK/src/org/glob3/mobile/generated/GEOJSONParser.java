@@ -137,7 +137,7 @@ public class GEOJSONParser
   private GEOFeature createFeature(JSONObject jsonObject)
   {
   
-    final JSONBaseObject jsId = JSONBaseObject.deepCopy(jsonObject.get("id"));
+    final JSONBaseObject jsID = JSONBaseObject.deepCopy(jsonObject.get("id"));
   
     final JSONObject jsGeometry = jsonObject.getAsObject("geometry");
     GEOGeometry geometry = createGeometry(jsGeometry);
@@ -149,7 +149,7 @@ public class GEOJSONParser
     }
   
     _featuresCount++;
-    return new GEOFeature(jsId, geometry, jsProperties);
+    return new GEOFeature(jsID, geometry, jsProperties);
   }
 
   private GEOGeometry createGeometry(JSONObject jsonObject)

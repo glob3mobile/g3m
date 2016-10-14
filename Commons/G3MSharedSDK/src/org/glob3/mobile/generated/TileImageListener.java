@@ -16,10 +16,10 @@ public abstract class TileImageListener
   {
   }
 
-  public abstract void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution);
+  public abstract void imageCreated(String tileID, IImage image, String imageID, TileImageContribution contribution);
 
-  public abstract void imageCreationError(String tileId, String error);
+  public abstract void imageCreationError(String tileID, String error);
 
-  public abstract void imageCreationCanceled(String tileId);
+  public abstract void imageCreationCanceled(String tileID);
 
 }

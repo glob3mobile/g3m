@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  GLTextureId.h
+//  GLTextureID.h
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
@@ -9,10 +9,10 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IGLTextureId
+public interface IGLTextureID
 {
 
-  boolean isEquals(IGLTextureId that);
+  boolean isEquals(IGLTextureID that);
 
   String description();
 

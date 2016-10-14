@@ -180,7 +180,7 @@ public class Tile
 
   private final PlanetRenderer _planetRenderer;
 
-  private static String createTileId(int level, int row, int column)
+  private static String createTileID(int level, int row, int column)
   {
     return level + "/" + row + "/" + column;
   }
@@ -221,7 +221,7 @@ public class Tile
      _lastTileMeshResolutionY = -1;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
-     _id = createTileId(level, row, column);
+     _id = createTileID(level, row, column);
      _data = null;
      _dataSize = 0;
   }

@@ -19,12 +19,12 @@ package org.glob3.mobile.generated;
 
 //class TextureIDReference;
 //class IFloatBuffer;
-//class IGLTextureId;
+//class IGLTextureID;
 
 public class MultiTextureMapping extends TransformableTextureMapping
 {
-  private TextureIDReference _glTextureId;
-  private TextureIDReference _glTextureId2;
+  private TextureIDReference _glTextureID;
+  private TextureIDReference _glTextureID2;
 
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
@@ -35,23 +35,23 @@ public class MultiTextureMapping extends TransformableTextureMapping
   private final boolean _transparent;
   private final boolean _transparent2;
 
-  private void releaseGLTextureId()
+  private void releaseGLTextureID()
   {
   
-    if (_glTextureId != null)
+    if (_glTextureID != null)
     {
-      _glTextureId.dispose();
-      _glTextureId = null;
+      _glTextureID.dispose();
+      _glTextureID = null;
     }
     else
     {
       ILogger.instance().logError("Releasing invalid Multi texture mapping");
     }
   
-    if (_glTextureId2 != null)
+    if (_glTextureID2 != null)
     {
-      _glTextureId2.dispose();
-      _glTextureId2 = null;
+      _glTextureID2.dispose();
+      _glTextureID2 = null;
     }
     else
     {
@@ -60,27 +60,27 @@ public class MultiTextureMapping extends TransformableTextureMapping
   }
 
 
-  public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2)
+  public MultiTextureMapping(TextureIDReference glTextureID, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureID2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2)
   {
      super(0, 0, 1, 1, 0, 0, 0);
-     _glTextureId = glTextureId;
+     _glTextureID = glTextureID;
      _texCoords = texCoords;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
-     _glTextureId2 = glTextureId2;
+     _glTextureID2 = glTextureID2;
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
   }
 
-  public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
+  public MultiTextureMapping(TextureIDReference glTextureID, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureID2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
      super(translationU, translationV, scaleU, scaleV, rotationAngleInRadians, rotationCenterU, rotationCenterV);
-     _glTextureId = glTextureId;
+     _glTextureID = glTextureID;
      _texCoords = texCoords;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
-     _glTextureId2 = glTextureId2;
+     _glTextureID2 = glTextureID2;
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
@@ -100,14 +100,14 @@ public class MultiTextureMapping extends TransformableTextureMapping
          _texCoords2.dispose();
     }
   
-    releaseGLTextureId();
+    releaseGLTextureID();
   
     super.dispose();
   }
 
-  public final IGLTextureId getGLTextureId()
+  public final IGLTextureID getGLTextureID()
   {
-    return _glTextureId.getID();
+    return _glTextureID.getID();
   }
 
   public final IFloatBuffer getTexCoords()
@@ -122,7 +122,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     for (int i = 0; i < tglfs.size(); i++)
     {
       TextureGLFeature tglf = (TextureGLFeature) tglfs.get(0);
-      if (tglf.getTarget() == 0 && tglf.getTextureID() == _glTextureId.getID())
+      if (tglf.getTarget() == 0 && tglf.getTextureID() == _glTextureID.getID())
       {
         tglf.setScale(_scaleU, _scaleV);
         tglf.setTranslation(_translationU, _translationV);
@@ -146,7 +146,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     }
     else
     {
-      state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureId.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
+      state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
   
     }
   
@@ -157,7 +157,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     }
     else
     {
-      state.addGLFeature(new TextureGLFeature(_glTextureId2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, _glTextureId.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
+      state.addGLFeature(new TextureGLFeature(_glTextureID2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
     }
   
   }

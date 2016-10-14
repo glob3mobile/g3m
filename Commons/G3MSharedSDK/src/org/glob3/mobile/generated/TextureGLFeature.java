@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class TextureGLFeature extends GLColorGroupFeature
 {
-  private IGLTextureId _texID = null;
+  private IGLTextureID _texID = null;
 
   public void dispose()
   {
@@ -50,11 +50,11 @@ public class TextureGLFeature extends GLColorGroupFeature
   private GPUUniformValueVec2FloatMutable _rotationCenter;
   private GPUUniformValueFloatMutable _rotationAngle;
 
-  public TextureGLFeature(IGLTextureId texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, float translateU, float translateV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
+  public TextureGLFeature(IGLTextureID texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, float translateU, float translateV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
      this(texID, texCoords, arrayElementSize, index, normalized, stride, blend, sFactor, dFactor, translateU, translateV, scaleU, scaleV, rotationAngleInRadians, rotationCenterU, rotationCenterV, 0);
   }
-  public TextureGLFeature(IGLTextureId texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, float translateU, float translateV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV, int target)
+  public TextureGLFeature(IGLTextureID texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, float translateU, float translateV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV, int target)
   {
      super(GLFeatureID.GLF_TEXTURE, 4, blend, sFactor, dFactor);
      _texID = texID;
@@ -70,11 +70,11 @@ public class TextureGLFeature extends GLColorGroupFeature
     setRotationAngleInRadiansAndRotationCenter(rotationAngleInRadians, rotationCenterU, rotationCenterV);
   }
 
-  public TextureGLFeature(IGLTextureId texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor)
+  public TextureGLFeature(IGLTextureID texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor)
   {
      this(texID, texCoords, arrayElementSize, index, normalized, stride, blend, sFactor, dFactor, 0);
   }
-  public TextureGLFeature(IGLTextureId texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, int target)
+  public TextureGLFeature(IGLTextureID texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, int target)
   {
      super(GLFeatureID.GLF_TEXTURE, 4, blend, sFactor, dFactor);
      _texID = texID;
@@ -166,7 +166,7 @@ public class TextureGLFeature extends GLColorGroupFeature
     return _target;
   }
 
-  public final IGLTextureId getTextureID() {
+  public final IGLTextureID getTextureID() {
     return _texID;
   }
 

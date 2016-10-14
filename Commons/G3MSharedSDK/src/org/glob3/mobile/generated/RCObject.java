@@ -36,14 +36,10 @@ public class RCObject
      _referenceCounter = 1;
   }
 
-
-  ///#include "ILogger.hpp"
-  
   public void dispose()
   {
     if (_referenceCounter != 0)
     {
-  //    ILogger::instance()->logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
       throw new RuntimeException("Deleted RCObject with unreleased references!");
     }
   }

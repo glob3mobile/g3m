@@ -25,7 +25,7 @@ public class TexturesHandler
   //  }
   //}
   
-  private IGLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)
+  private IGLTextureID getGLTextureIDIfAvailable(TextureSpec textureSpec)
   {
     final int _textureHoldersSize = _textureHolders.size();
     for (int i = 0; i < _textureHoldersSize; i++)
@@ -35,9 +35,9 @@ public class TexturesHandler
       {
         holder.retain();
   
-        //showHolders("getGLTextureIdIfAvailable(): retained " + holder->description());
+        //showHolders("getGLTextureIDIfAvailable(): retained " + holder->description());
   
-        return holder._glTextureId;
+        return holder._glTextureID;
       }
     }
   
@@ -64,33 +64,33 @@ public class TexturesHandler
   
     final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap);
   
-    final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
-    if (previousId != null)
+    final IGLTextureID previousID = getGLTextureIDIfAvailable(textureSpec);
+    if (previousID != null)
     {
-      return new TextureIDReference(previousId, image.isPremultiplied(), this);
+      return new TextureIDReference(previousID, image.isPremultiplied(), this);
     }
   
     TextureHolder holder = new TextureHolder(textureSpec);
-    holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.generateMipmap());
+    holder._glTextureID = _gl.uploadTexture(image, format, textureSpec.generateMipmap());
   
   
     if (_verbose)
     {
-      ILogger.instance().logInfo("Uploaded texture \"%s\" to GPU with texId=%s", textureSpec.description(), holder._glTextureId.description());
+      ILogger.instance().logInfo("Uploaded texture \"%s\" to GPU with texID=%s", textureSpec.description(), holder._glTextureID.description());
     }
   
     _textureHolders.add(holder);
   
-    //showHolders("getGLTextureId(): created holder " + holder->description());
+    //showHolders("getGLTextureID(): created holder " + holder->description());
   
-    return new TextureIDReference(holder._glTextureId, image.isPremultiplied(), this);
+    return new TextureIDReference(holder._glTextureID, image.isPremultiplied(), this);
   }
 
 
   //This two methods are supposed to be accessed only by TextureIDReference class
-  public final void releaseGLTextureId(IGLTextureId glTextureId)
+  public final void releaseGLTextureID(IGLTextureID glTextureID)
   {
-    if (glTextureId == null)
+    if (glTextureID == null)
     {
       return;
     }
@@ -99,15 +99,15 @@ public class TexturesHandler
     {
       TextureHolder holder = _textureHolders.get(i);
   
-      if (holder._glTextureId.isEquals(glTextureId))
+      if (holder._glTextureID.isEquals(glTextureID))
       {
         holder.release();
   
-        //showHolders("releaseGLTextureId(  ): released holder " + holder->description());
+        //showHolders("releaseGLTextureID(  ): released holder " + holder->description());
   
         if (!holder.isRetained())
         {
-          _gl.deleteTexture(holder._glTextureId);
+          _gl.deleteTexture(holder._glTextureID);
   
           _textureHolders.remove(i);
   
@@ -119,9 +119,9 @@ public class TexturesHandler
       }
     }
   }
-  public final void retainGLTextureId(IGLTextureId glTextureId)
+  public final void retainGLTextureID(IGLTextureID glTextureID)
   {
-    if (glTextureId == null)
+    if (glTextureID == null)
     {
       return;
     }
@@ -130,11 +130,11 @@ public class TexturesHandler
     {
       TextureHolder holder = _textureHolders.get(i);
   
-      if (holder._glTextureId.isEquals(glTextureId))
+      if (holder._glTextureID.isEquals(glTextureID))
       {
         holder.retain();
   
-        //showHolders("retainGLTextureId(): retained holder " + holder->description());
+        //showHolders("retainGLTextureID(): retained holder " + holder->description());
   
         return;
       }

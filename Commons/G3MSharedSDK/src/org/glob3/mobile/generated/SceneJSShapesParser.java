@@ -177,13 +177,13 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
   
-    SGNode node = new SGNode(id, sId);
+    SGNode node = new SGNode(id, sID);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -201,8 +201,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -239,7 +239,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGRotateNode node = new SGRotateNode(id, sId, x, y, z, angle);
+    SGRotateNode node = new SGRotateNode(id, sID, x, y, z, angle);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -257,8 +257,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -287,7 +287,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGTranslateNode node = new SGTranslateNode(id, sId, x, y, z);
+    SGTranslateNode node = new SGTranslateNode(id, sID, x, y, z);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -305,8 +305,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -367,7 +367,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGMaterialNode node = new SGMaterialNode(id, sId, baseColor, specularColor, specular, shine, alpha, emit);
+    SGMaterialNode node = new SGMaterialNode(id, sID, baseColor, specularColor, specular, shine, alpha, emit);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -385,13 +385,13 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
   
-    SGTextureNode node = new SGTextureNode(id, sId);
+    SGTextureNode node = new SGTextureNode(id, sID);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -425,8 +425,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -558,7 +558,7 @@ public class SceneJSShapesParser
       ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
     }
   
-    SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices, _depthTest);
+    SGGeometryNode node = new SGGeometryNode(id, sID, primitive, vertices, colors, uv, normals, indices, _depthTest);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -577,8 +577,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -633,7 +633,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGLayerNode node = new SGLayerNode(id, sId, uri, applyTo, blendMode, flipY, magFilter, minFilter, wrapS, wrapT);
+    SGLayerNode node = new SGLayerNode(id, sID, uri, applyTo, blendMode, flipY, magFilter, minFilter, wrapS, wrapT);
   
     processedKeys += parseChildren(jsonObject, node);
   

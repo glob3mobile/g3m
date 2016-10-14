@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 //class IFloatBuffer;
-//class IGLTextureId;
+//class IGLTextureID;
 //class MarkTouchListener;
 //class GLGlobalState;
 //class GPUProgramState;

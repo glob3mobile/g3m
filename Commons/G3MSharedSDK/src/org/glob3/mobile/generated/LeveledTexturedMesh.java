@@ -127,16 +127,16 @@ public class LeveledTexturedMesh extends Mesh
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-  public final boolean setGLTextureIdForLevel(int level, TextureIDReference glTextureId)
+  public final boolean setGLTextureIDForLevel(int level, TextureIDReference glTextureID)
   {
   
     if (_mappings.size() > 0)
     {
-      if (glTextureId != null)
+      if (glTextureID != null)
       {
         if ((_currentLevel < 0) || (level < _currentLevel))
         {
-          _mappings.get(level).setGLTextureId(glTextureId);
+          _mappings.get(level).setGLTextureID(glTextureID);
           _currentLevel = -1;
           return true;
         }
@@ -146,14 +146,14 @@ public class LeveledTexturedMesh extends Mesh
     return false;
   }
 
-  public final TextureIDReference getTopLevelTextureId()
+  public final TextureIDReference getTopLevelTextureID()
   {
     final LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping != null)
     {
       if (_currentLevel == 0)
       {
-        return mapping.getGLTextureId();
+        return mapping.getGLTextureID();
       }
     }
   

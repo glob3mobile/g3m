@@ -24,7 +24,7 @@ public abstract class ElevationDataProvider
 
   public abstract long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener);
 
-  public abstract void cancelRequest(long requestId);
+  public abstract void cancelRequest(long requestID);
 
   public abstract java.util.ArrayList<Sector> getSectors();
 

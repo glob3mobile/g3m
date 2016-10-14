@@ -16,12 +16,12 @@ package org.glob3.mobile.generated;
 //
 
 
-//class IGLTextureId;
+//class IGLTextureID;
 //class TexturesHandler;
 
 public class TextureIDReference
 {
-  private final IGLTextureId _id;
+  private final IGLTextureID _id;
   private final boolean _isPremultiplied;
   private TexturesHandler _texHandler;
 
@@ -29,7 +29,7 @@ public class TextureIDReference
 //  TextureIDReference(TextureIDReference that);
 
 
-  public TextureIDReference(IGLTextureId id, boolean isPremultiplied, TexturesHandler texHandler)
+  public TextureIDReference(IGLTextureID id, boolean isPremultiplied, TexturesHandler texHandler)
   {
      _id = id;
      _isPremultiplied = isPremultiplied;
@@ -38,16 +38,16 @@ public class TextureIDReference
 
   public void dispose()
   {
-    _texHandler.releaseGLTextureId(_id);
+    _texHandler.releaseGLTextureID(_id);
   }
 
   public final TextureIDReference createCopy()
   {
-    _texHandler.retainGLTextureId(_id);
+    _texHandler.retainGLTextureID(_id);
     return new TextureIDReference(_id, _isPremultiplied, _texHandler);
   }
 
-  public final IGLTextureId getID()
+  public final IGLTextureID getID()
   {
     return _id;
   }

@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class FloatBufferBuilderFromCartesian3D;
 //class TextureIDReference;
 
-//class IGLTextureId;
+//class IGLTextureID;
 
 
 
@@ -138,13 +138,13 @@ public class EllipsoidShape extends AbstractMeshShape
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
     Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, 1, true, _withNormals? normals.create() : null);
   
-    final TextureIDReference texId = getTextureId(rc);
-    if (texId == null)
+    final TextureIDReference texID = getTextureID(rc);
+    if (texID == null)
     {
       return im;
     }
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping texMap = new SimpleTextureMapping(texID, texCoords.create(), true, true);
   
     return new TexturedMesh(im, true, texMap, true, true);
   
@@ -152,37 +152,37 @@ public class EllipsoidShape extends AbstractMeshShape
 
   private boolean _textureRequested;
   private IImage _textureImage;
-  private TextureIDReference getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureID(G3MRenderContext rc)
   {
   
-    if (_texId == null)
+    if (_texID == null)
     {
       if (_textureImage == null)
       {
         return null;
       }
   
-      _texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
+      _texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
   
       if (_textureImage != null)
          _textureImage.dispose();
       _textureImage = null;
     }
   
-    if (_texId == null)
+    if (_texID == null)
     {
       rc.getLogger().logError("Can't load texture %s", _textureURL._path);
     }
   
-    if (_texId == null)
+    if (_texID == null)
     {
       return null;
     }
   
-    return _texId.createCopy(); //The copy will be handle by the TextureMapping
+    return _texID.createCopy(); //The copy will be handle by the TextureMapping
   }
 
-  TextureIDReference _texId;
+  TextureIDReference _texID;
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -276,7 +276,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _withNormals = withNormals;
-     _texId = null;
+     _texID = null;
 
   }
 
@@ -299,7 +299,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureRequested = false;
      _textureImage = null;
      _withNormals = withNormals;
-     _texId = null;
+     _texID = null;
 
   }
 
@@ -312,7 +312,7 @@ public class EllipsoidShape extends AbstractMeshShape
     if (_borderColor != null)
        _borderColor.dispose();
   
-    _texId = null; //Releasing texture
+    _texID = null; //Releasing texture
   
     super.dispose();
   }

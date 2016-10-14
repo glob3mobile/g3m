@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class TextureIDGLFeature extends PriorityGLFeature
 {
-  private IGLTextureId _texID = null;
+  private IGLTextureID _texID = null;
 
   public void dispose()
   {
@@ -11,7 +11,7 @@ public class TextureIDGLFeature extends PriorityGLFeature
 
   //////////////////////////////////////////
   
-  public TextureIDGLFeature(IGLTextureId texID)
+  public TextureIDGLFeature(IGLTextureID texID)
   {
      super(GLFeatureGroupName.COLOR_GROUP, GLFeatureID.GLF_TEXTURE_ID, 4);
      _texID = texID;

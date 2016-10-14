@@ -104,6 +104,10 @@ public class CachedDownloader extends IDownloader
 
   public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
   {
+     return requestBuffer(url, priority, timeToCache, readExpired, listener, deleteListener, "");
+  }
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener, String tag)
+  {
   
     _requestsCounter++;
   
@@ -131,13 +135,17 @@ public class CachedDownloader extends IDownloader
     // cache miss
     if (useCache)
     {
-      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
+      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true, tag);
     }
   
-    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, listener, deleteListener);
+    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, listener, deleteListener, tag);
   }
 
   public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
+  {
+     return requestImage(url, priority, timeToCache, readExpired, listener, deleteListener, "");
+  }
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener, String tag)
   {
     _requestsCounter++;
   
@@ -164,14 +172,19 @@ public class CachedDownloader extends IDownloader
     final boolean useCache = _storage.isAvailable() && !url.isFileProtocol() && !timeToCache.isZero();
     if (useCache)
     {
-      return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
+      return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true, tag);
     }
-    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, listener, deleteListener);
+    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, listener, deleteListener, tag);
   }
 
-  public final boolean cancelRequest(long requestId)
+  public final boolean cancelRequest(long requestID)
   {
-    return _downloader.cancelRequest(requestId);
+    return _downloader.cancelRequest(requestID);
+  }
+
+  public final void cancelRequestsTagged(String tag)
+  {
+    _downloader.cancelRequestsTagged(tag);
   }
 
   public void dispose()

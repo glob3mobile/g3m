@@ -96,7 +96,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
     }
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
     // do nothing, can't cancel
   }

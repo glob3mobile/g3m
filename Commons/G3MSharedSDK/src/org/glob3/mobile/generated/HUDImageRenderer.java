@@ -126,12 +126,12 @@ public class HUDImageRenderer extends DefaultRenderer
     final IStringUtils su = IStringUtils.instance();
     final String textureName = "HUDImageRenderer" + su.toString(_instanceID) + "/" + su.toString(_changeCounter++);
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false);
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false);
   
     _image = null;
     _image = null;
   
-    if (texId == null)
+    if (texID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return null;
@@ -164,7 +164,7 @@ public class HUDImageRenderer extends DefaultRenderer
     texCoords.add(1, 0);
     texCoords.add(1, 1);
   
-    TextureMapping textureMapping = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping textureMapping = new SimpleTextureMapping(texID, texCoords.create(), true, true);
   
     return new TexturedMesh(mesh, true, textureMapping, true, true);
   }

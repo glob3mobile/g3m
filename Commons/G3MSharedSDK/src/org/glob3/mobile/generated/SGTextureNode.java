@@ -25,9 +25,9 @@ public class SGTextureNode extends SGNode
 
   private GLState _glState;
 
-  public SGTextureNode(String id, String sId)
+  public SGTextureNode(String id, String sID)
   {
-     super(id, sId);
+     super(id, sID);
      _glState = null;
 
   }

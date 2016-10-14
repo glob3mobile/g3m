@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 public class SGNode
 {
   protected final String _id;
-  protected final String _sId;
+  protected final String _sID;
 
   //  SGNode*              _parent;
   protected java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
@@ -40,11 +40,11 @@ public class SGNode
   protected SGShape _shape;
 
 
-  public SGNode(String id, String sId)
+  public SGNode(String id, String sID)
   //  _parent(NULL)
   {
      _id = id;
-     _sId = sId;
+     _sID = sID;
      _context = null;
      _shape = null;
   }

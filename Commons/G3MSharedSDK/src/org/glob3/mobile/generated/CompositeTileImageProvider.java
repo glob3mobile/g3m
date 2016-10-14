@@ -29,23 +29,23 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public final boolean _isError;
     public final boolean _isCanceled;
     public final IImage _image;
-    public final String _imageId;
+    public final String _imageID;
     public final TileImageContribution _contribution;
     public final String _error;
 
-    public static CompositeTileImageProvider.ChildResult image(IImage image, String imageId, TileImageContribution contribution)
+    public static CompositeTileImageProvider.ChildResult image(IImage image, String imageID, TileImageContribution contribution)
     {
-      return new CompositeTileImageProvider.ChildResult(false, false, image, imageId, contribution, ""); // error -  isCanceled -  isError
+      return new CompositeTileImageProvider.ChildResult(false, false, image, imageID, contribution, ""); // error -  isCanceled -  isError
     }
 
     public static CompositeTileImageProvider.ChildResult error(String error)
     {
-      return new CompositeTileImageProvider.ChildResult(true, false, null, "", null, error); // contribution -  imageId -  image -  isCanceled -  isError
+      return new CompositeTileImageProvider.ChildResult(true, false, null, "", null, error); // contribution -  imageID -  image -  isCanceled -  isError
     }
 
     public static CompositeTileImageProvider.ChildResult cancelation()
     {
-      return new CompositeTileImageProvider.ChildResult(false, true, null, "", null, ""); // error -  contribution -  imageId -  image -  isCanceled -  isError
+      return new CompositeTileImageProvider.ChildResult(false, true, null, "", null, ""); // error -  contribution -  imageID -  image -  isCanceled -  isError
     }
 
     public void dispose()
@@ -56,12 +56,12 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     }
 
 
-    private ChildResult(boolean isError, boolean isCanceled, IImage image, String imageId, TileImageContribution contribution, String error)
+    private ChildResult(boolean isError, boolean isCanceled, IImage image, String imageID, TileImageContribution contribution, String error)
     {
        _isError = isError;
        _isCanceled = isCanceled;
        _image = image;
-       _imageId = imageId;
+       _imageID = imageID;
        _contribution = contribution;
        _error = error;
     }
@@ -114,17 +114,17 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     
         if (singleResult._isError)
         {
-          _listener.imageCreationError(_tileId, singleResult._error);
+          _listener.imageCreationError(_tileID, singleResult._error);
         }
         else if (singleResult._isCanceled)
         {
-          _listener.imageCreationCanceled(_tileId);
+          _listener.imageCreationCanceled(_tileID);
         }
         else
         {
           // retain the singleResult->_contribution as the _listener take full ownership of the contribution
           TileImageContribution.retainContribution(singleResult._contribution);
-          _listener.imageCreated(singleResult._imageId, singleResult._image.shallowCopy(), singleResult._imageId, singleResult._contribution);
+          _listener.imageCreated(singleResult._imageID, singleResult._image.shallowCopy(), singleResult._imageID, singleResult._contribution);
         }
     
         cleanUp();
@@ -143,13 +143,13 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
             }
           }
     
-          _listener.imageCreationError(_tileId, composedError);
+          _listener.imageCreationError(_tileID, composedError);
     
           cleanUp();
         }
         else if (_anyCancelation)
         {
-          _listener.imageCreationCanceled(_tileId);
+          _listener.imageCreationCanceled(_tileID);
           cleanUp();
         }
         else
@@ -178,7 +178,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     private final int _width;
     private final int _height;
 
-    private String _imageId;
+    private String _imageID;
 
     private FrameTasksExecutor _frameTasksExecutor;
 
@@ -200,14 +200,14 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       super.dispose();
     }
 
-    public final String _tileId;
+    public final String _tileID;
 
-    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileId, Sector tileSector, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
+    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileID, Sector tileSector, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
     {
        _width = width;
        _height = height;
        _compositeTileImageProvider = compositeTileImageProvider;
-       _tileId = tileId;
+       _tileID = tileID;
        _listener = listener;
        _deleteListener = deleteListener;
        _compositeContribution = compositeContribution;
@@ -227,9 +227,9 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     }
 
 
-    public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index)
+    public final void imageCreated(String tileID, IImage image, String imageID, TileImageContribution contribution, int index)
     {
-      _results.set(index, ChildResult.image(image, imageId, contribution));
+      _results.set(index, ChildResult.image(image, imageID, contribution));
       stepDone();
     }
 
@@ -247,17 +247,17 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       stepDone();
     }
 
-    public final void cancel(String tileId)
+    public final void cancel(String tileID)
     {
       _canceled = true;
-      _compositeTileImageProvider.cancelChildren(tileId, _compositeContribution);
+      _compositeTileImageProvider.cancelChildren(tileID, _compositeContribution);
     }
 
     public final void imageCreated(IImage image)
     {
       final CompositeTileImageContribution compositeContribution = _compositeContribution;
       _compositeContribution = null; // the _compositeContribution ownership moved to the listener
-      _listener.imageCreated(_tileId, image, _imageId, compositeContribution);
+      _listener.imageCreated(_tileID, image, _imageID, compositeContribution);
       cleanUp();
     }
 
@@ -273,15 +273,15 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     
       canvas.initialize(_width, _height);
     
-      IStringBuilder imageId = IStringBuilder.newStringBuilder();
+      IStringBuilder imageID = IStringBuilder.newStringBuilder();
     
       for (int i = 0; i < _contributionsSize; i++)
       {
         final ChildResult result = _results.get(i);
     
     
-        imageId.addString(result._imageId);
-        imageId.addString("|");
+        imageID.addString(result._imageID);
+        imageID.addString("|");
     
         final IImage image = result._image;
     
@@ -295,8 +295,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           }
           else
           {
-            imageId.addFloat(alpha);
-            imageId.addString("|");
+            imageID.addFloat(alpha);
+            imageID.addString("|");
     
             canvas.drawImage(image, 0, 0, _width, _height, alpha);
           }
@@ -306,17 +306,17 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           final Sector imageSector = result._contribution.getSector();
           final Sector visibleContributionSector = imageSector.intersection(_tileSector);
     
-          imageId.addString(visibleContributionSector.id());
-          imageId.addString("|");
+          imageID.addString(visibleContributionSector.id());
+          imageID.addString("|");
     
           final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
     
           final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, _tileSector, visibleContributionSector);
     
-          //We add "destRect->id()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+          //We add "destRect->id()" to "imageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
     
-          imageId.addString(destRect.id());
-          imageId.addString("|");
+          imageID.addString(destRect.id());
+          imageID.addString("|");
     
           canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                             //SRC RECT
@@ -328,10 +328,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
              srcRect.dispose();
         }
       }
-      _imageId = imageId.getString();
+      _imageID = imageID.getString();
     
-      if (imageId != null)
-         imageId.dispose();
+      if (imageID != null)
+         imageID.dispose();
     
       canvas.createImage(new ComposerImageListener(this), true);
     
@@ -409,17 +409,17 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       super.dispose();
     }
 
-    public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution)
+    public final void imageCreated(String tileID, IImage image, String imageID, TileImageContribution contribution)
     {
-      _composer.imageCreated(tileId, image, imageId, contribution, _index);
+      _composer.imageCreated(tileID, image, imageID, contribution, _index);
     }
 
-    public final void imageCreationError(String tileId, String error)
+    public final void imageCreationError(String tileID, String error)
     {
       _composer.imageCreationError(error, _index);
     }
 
-    public final void imageCreationCanceled(String tileId)
+    public final void imageCreationCanceled(String tileID)
     {
       _composer.imageCreationCanceled(_index);
     }
@@ -487,11 +487,11 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
     final CompositeTileImageContribution compositeContribution = (CompositeTileImageContribution) contribution;
   
-    final String tileId = tile._id;
+    final String tileID = tile._id;
   
-    Composer composer = new Composer(resolution._x, resolution._y, this, tileId, tile._sector, listener, deleteListener, compositeContribution, frameTasksExecutor);
+    Composer composer = new Composer(resolution._x, resolution._y, this, tileID, tile._sector, listener, deleteListener, compositeContribution, frameTasksExecutor);
   
-    _composers.put(tileId, composer);
+    _composers.put(tileID, composer);
   
     final int contributionsSize = compositeContribution.size();
     for (int i = 0; i < contributionsSize; i++)
@@ -507,21 +507,21 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     }
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
-    final Composer composer = _composers.remove(tileId);
+    final Composer composer = _composers.remove(tileID);
     if (composer != null) {
-      composer.cancel(tileId);
+      composer.cancel(tileID);
     }
   }
 
   public final void composerDone(Composer composer)
   {
-    _composers.remove(composer._tileId);
+    _composers.remove(composer._tileID);
     composer._release();
   }
 
-  public final void cancelChildren(String tileId, CompositeTileImageContribution compositeContribution)
+  public final void cancelChildren(String tileID, CompositeTileImageContribution compositeContribution)
   {
     final int contributionsSize = compositeContribution.size();
   
@@ -536,7 +536,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     for (int i = 0; i < contributionsSize; i++)
     {
       TileImageProvider child = _children.get(indexes[i]);
-      child.cancel(tileId);
+      child.cancel(tileID);
     }
   
     indexes = null;

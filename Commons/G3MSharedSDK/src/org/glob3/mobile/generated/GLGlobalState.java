@@ -37,7 +37,7 @@ public class GLGlobalState
   private boolean _cullFace;
   private int _culledFace;
 
-  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
+  private final IGLTextureID[] _boundTextureID = new IGLTextureID[DefineConstants.MAX_N_TEXTURES];
 
   private float _lineWidth;
 
@@ -93,7 +93,7 @@ public class GLGlobalState
 
     for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
     {
-      _boundTextureId[i] = null;
+      _boundTextureID[i] = null;
     }
 
   }
@@ -190,7 +190,7 @@ public class GLGlobalState
     _blendDFactor = dFactor;
   }
 
-  public final void bindTexture(int target, IGLTextureId textureId)
+  public final void bindTexture(int target, IGLTextureID textureID)
   {
     if (target > DefineConstants.MAX_N_TEXTURES)
     {
@@ -198,16 +198,16 @@ public class GLGlobalState
       return;
     }
 
-    _boundTextureId[target] = textureId;
+    _boundTextureID[target] = textureID;
   }
 
-  public final void onTextureDelete(IGLTextureId textureId)
+  public final void onTextureDelete(IGLTextureID textureID)
   {
     for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
     {
-      if (_boundTextureId[i] == textureId)
+      if (_boundTextureID[i] == textureID)
       {
-        _boundTextureId[i] = null;
+        _boundTextureID[i] = null;
       }
     }
   }
@@ -317,14 +317,14 @@ public class GLGlobalState
     for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
     {
   
-      if (_boundTextureId[i] != null)
+      if (_boundTextureID[i] != null)
       {
-        if (currentState._boundTextureId[i] == null || !_boundTextureId[i].isEquals(currentState._boundTextureId[i]))
+        if (currentState._boundTextureID[i] == null || !_boundTextureID[i].isEquals(currentState._boundTextureID[i]))
         {
           nativeGL.setActiveTexture(i);
-          nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId[i]);
+          nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureID[i]);
   
-          currentState._boundTextureId[i] = _boundTextureId[i];
+          currentState._boundTextureID[i] = _boundTextureID[i];
         }
         //else {
         //  ILogger::instance()->logInfo("Texture already bound.\n");

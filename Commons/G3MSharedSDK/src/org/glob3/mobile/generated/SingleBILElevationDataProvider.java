@@ -40,9 +40,9 @@ public class SingleBILElevationDataProvider extends ElevationDataProvider
     return _currentRequestID;
   }
 
-  private void removeQueueRequest(long requestId)
+  private void removeQueueRequest(long requestID)
   {
-    _requestsQueue.remove(requestId);
+    _requestsQueue.remove(requestID);
   }
 
   private IDownloader _downloader;
@@ -130,11 +130,11 @@ public class SingleBILElevationDataProvider extends ElevationDataProvider
     return -1;
   }
 
-  public final void cancelRequest(long requestId)
+  public final void cancelRequest(long requestID)
   {
-    if (requestId >= 0)
+    if (requestID >= 0)
     {
-      removeQueueRequest(requestId);
+      removeQueueRequest(requestID);
     }
   }
 

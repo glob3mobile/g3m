@@ -79,7 +79,7 @@ public class Mark implements SurfaceElevationListener
 
   private String _token = "";
 
-  private TextureIDReference _textureId;
+  private TextureIDReference _textureID;
 
   private Vector3D _cartesianPosition;
 
@@ -111,16 +111,16 @@ public class Mark implements SurfaceElevationListener
   
     _glState.addGLFeature(_billboardGLF, false);
   
-    if (_textureId != null)
+    if (_textureID != null)
     {
   
       if (_hasTCTransformations)
       {
-        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureId.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
+        _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
       }
       else
       {
-        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureId.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+        _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
       }
   
       _glState.addGLFeature(_textureGLF, false);
@@ -252,7 +252,7 @@ public class Mark implements SurfaceElevationListener
      _labelFontColor = labelFontColor;
      _labelShadowColor = labelShadowColor;
      _labelGapSize = labelGapSize;
-     _textureId = null;
+     _textureID = null;
      _cartesianPosition = null;
      _textureSolved = false;
      _textureImage = null;
@@ -333,7 +333,7 @@ public class Mark implements SurfaceElevationListener
      _labelFontColor = labelFontColor;
      _labelShadowColor = labelShadowColor;
      _labelGapSize = 2;
-     _textureId = null;
+     _textureID = null;
      _cartesianPosition = null;
      _textureSolved = false;
      _textureImage = null;
@@ -402,7 +402,7 @@ public class Mark implements SurfaceElevationListener
      _labelFontColor = Color.newFromRGBA(1, 1, 1, 1);
      _labelShadowColor = Color.newFromRGBA(0, 0, 0, 1);
      _labelGapSize = 2;
-     _textureId = null;
+     _textureID = null;
      _cartesianPosition = null;
      _textureSolved = false;
      _textureImage = null;
@@ -471,7 +471,7 @@ public class Mark implements SurfaceElevationListener
      _labelFontColor = null;
      _labelShadowColor = null;
      _labelGapSize = 2;
-     _textureId = null;
+     _textureID = null;
      _cartesianPosition = null;
      _textureSolved = true;
      _textureImage = image;
@@ -538,7 +538,7 @@ public class Mark implements SurfaceElevationListener
      _labelFontColor = null;
      _labelShadowColor = null;
      _labelGapSize = 2;
-     _textureId = null;
+     _textureID = null;
      _cartesianPosition = null;
      _textureSolved = false;
      _textureImage = null;
@@ -622,10 +622,10 @@ public class Mark implements SurfaceElevationListener
       _glState._release();
     }
   
-    if (_textureId != null)
+    if (_textureID != null)
     {
-      _textureId.dispose();
-      _textureId = null; //Releasing texture
+      _textureID.dispose();
+      _textureID = null; //Releasing texture
     }
   }
 
@@ -890,15 +890,15 @@ public class Mark implements SurfaceElevationListener
   
       if (!occludedByHorizon)
       {
-        if ((_textureId == null) && (_textureImage != null))
+        if ((_textureID == null) && (_textureImage != null))
         {
-          _textureId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
+          _textureID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
   
           _textureImage = null;
           _textureImage = null;
         }
   
-        if (_textureId != null)
+        if (_textureID != null)
         {
           if (_glState == null)
           {

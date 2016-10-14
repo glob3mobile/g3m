@@ -33,13 +33,13 @@ public class DTT_TileImageListener extends TileImageListener
     super.dispose();
   }
 
-  public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution)
+  public final void imageCreated(String tileID, IImage image, String imageID, TileImageContribution contribution)
   {
   
     if (!contribution.isFullCoverageAndOpaque())
     {
   
-      IStringBuilder auxImageId = IStringBuilder.newStringBuilder();
+      IStringBuilder auxImageID = IStringBuilder.newStringBuilder();
   
       //ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
   
@@ -54,20 +54,20 @@ public class DTT_TileImageListener extends TileImageListener
   
       if (_backgroundTileImage != null)
       {
-        auxImageId.addString(_backgroundTileImageName);
-        auxImageId.addString("|");
+        auxImageID.addString(_backgroundTileImageName);
+        auxImageID.addString("|");
         canvas.drawImage(_backgroundTileImage, 0, 0, width, height);
       }
   
-      auxImageId.addString(imageId);
-      auxImageId.addString("|");
+      auxImageID.addString(imageID);
+      auxImageID.addString("|");
   
       final float alpha = contribution._alpha;
   
       if (contribution.isFullCoverage())
       {
-        auxImageId.addFloat(alpha);
-        auxImageId.addString("|");
+        auxImageID.addFloat(alpha);
+        auxImageID.addString("|");
         canvas.drawImage(image, 0, 0, width, height, alpha);
       }
       else
@@ -76,17 +76,17 @@ public class DTT_TileImageListener extends TileImageListener
   
         final Sector visibleContributionSector = imageSector.intersection(_tileSector);
   
-        auxImageId.addString(visibleContributionSector.id());
-        auxImageId.addString("|");
+        auxImageID.addString(visibleContributionSector.id());
+        auxImageID.addString("|");
   
         final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
   
         final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(width, height, _tileSector, visibleContributionSector);
   
   
-        //We add "destRect->id()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
-        auxImageId.addString(destRect.id());
-        auxImageId.addString("|");
+        //We add "destRect->id()" to "auxImageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+        auxImageID.addString(destRect.id());
+        auxImageID.addString("|");
   
   
         //ILogger::instance()->logInfo("destRect " + destRect->description());
@@ -102,10 +102,10 @@ public class DTT_TileImageListener extends TileImageListener
            srcRect.dispose();
       }
   
-      canvas.createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId.getString()), true);
+      canvas.createImage(new DTT_NotFullProviderImageListener(_builder, auxImageID.getString()), true);
   
-      if (auxImageId != null)
-         auxImageId.dispose();
+      if (auxImageID != null)
+         auxImageID.dispose();
       if (canvas != null)
          canvas.dispose();
       if (image != null)
@@ -115,16 +115,16 @@ public class DTT_TileImageListener extends TileImageListener
     }
     else
     {
-      _builder.imageCreated(image, imageId, contribution);
+      _builder.imageCreated(image, imageID, contribution);
     }
   }
 
-  public final void imageCreationError(String tileId, String error)
+  public final void imageCreationError(String tileID, String error)
   {
     _builder.imageCreationError(error);
   }
 
-  public final void imageCreationCanceled(String tileId)
+  public final void imageCreationCanceled(String tileID)
   {
     _builder.imageCreationCanceled();
   }

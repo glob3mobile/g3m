@@ -162,8 +162,8 @@ public class DefaultTileTexturizer extends TileTexturizer
       return;
     }
   
-    final TextureIDReference glTextureId = ancestorMesh.getTopLevelTextureId();
-    if (glTextureId == null)
+    final TextureIDReference glTextureID = ancestorMesh.getTopLevelTextureID();
+    if (glTextureID == null)
     {
       return;
     }
@@ -174,13 +174,13 @@ public class DefaultTileTexturizer extends TileTexturizer
       return;
     }
   
-    final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
+    final TextureIDReference glTextureIDRetainedCopy = glTextureID.createCopy();
   
     final int level = tile._level - ancestorTile._level;
-    if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
+    if (!tileMesh.setGLTextureIDForLevel(level, glTextureIDRetainedCopy))
     {
-      if (glTextureIdRetainedCopy != null)
-         glTextureIdRetainedCopy.dispose();
+      if (glTextureIDRetainedCopy != null)
+         glTextureIDRetainedCopy.dispose();
     }
   }
 

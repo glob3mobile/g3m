@@ -31,16 +31,16 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   private static class CanvasImageListener extends IImageListener
   {
     private ImageAssembler _imageAssembler;
-    private final String _imageId;
-    public CanvasImageListener(ImageAssembler imageAssembler, String imageId)
+    private final String _imageID;
+    public CanvasImageListener(ImageAssembler imageAssembler, String imageID)
     {
        _imageAssembler = imageAssembler;
-       _imageId = imageId;
+       _imageID = imageID;
     }
 
     public final void imageCreated(IImage image)
     {
-      _imageAssembler.imageCreated(image, _imageId);
+      _imageAssembler.imageCreated(image, _imageID);
     }
   }
 
@@ -60,7 +60,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final int _imageHeight;
 
     private GEORasterSymbolizer _symbolizer;
-    private final String _tileId;
+    private final String _tileID;
     private final Sector _tileSector ;
     private final boolean _tileIsMercator;
     private final int _tileLevel;
@@ -70,7 +70,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       final long coordinatesCount = geoObject.getCoordinatesCount();
       if (coordinatesCount > 5000)
       {
-        ILogger.instance().logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d", _tileId, coordinatesCount);
+        ILogger.instance().logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d", _tileID, coordinatesCount);
       }
     
       final GEORasterProjection projection = new GEORasterProjection(_tileSector, _tileIsMercator, _imageWidth, _imageHeight);
@@ -81,7 +81,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     }
 
 
-    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObjectHolder geoObjectHolder, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileId, Sector tileSector, boolean tileIsMercator, int tileLevel) // GEOObjectHolder, never both -  buffer or
+    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObjectHolder geoObjectHolder, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileID, Sector tileSector, boolean tileIsMercator, int tileLevel) // GEOObjectHolder, never both -  buffer or
     {
        _imageAssembler = imageAssembler;
        _url = url;
@@ -91,7 +91,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _imageWidth = imageWidth;
        _imageHeight = imageHeight;
        _symbolizer = symbolizer;
-       _tileId = tileId;
+       _tileID = tileID;
        _tileSector = new Sector(tileSector);
        _tileIsMercator = tileIsMercator;
        _tileLevel = tileLevel;
@@ -164,7 +164,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     //        const long long coordinatesCount = _geoObject->getCoordinatesCount();
     //        if (coordinatesCount > 5000) {
     //          ILogger::instance()->logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d",
-    //                                          _tileId.c_str(),
+    //                                          _tileID.c_str(),
     //                                          coordinatesCount
     //                                          );
     //        }
@@ -278,7 +278,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   private static class ImageAssembler
   {
     private TiledVectorLayerTileImageProvider _tileImageProvider;
-    private final String _tileId;
+    private final String _tileID;
     private TileImageListener _listener;
     private final boolean _deleteListener;
     private IDownloader _downloader;
@@ -292,7 +292,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private boolean _canceled;
 
     private GEOJSONBufferDownloadListener _downloadListener;
-    private long _downloadRequestId;
+    private long _downloadRequestID;
 
     private GEOJSONBufferRasterizer _rasterizer;
 
@@ -305,7 +305,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, Tile tile, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2S imageResolution, IDownloader downloader, IThreadUtils threadUtils)
     {
        _tileImageProvider = tileImageProvider;
-       _tileId = tile._id;
+       _tileID = tile._id;
        _tileSector = new Sector(tile._sector);
        _tileIsMercator = tile._mercator;
        _tileLevel = tile._level;
@@ -318,7 +318,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _threadUtils = threadUtils;
        _canceled = false;
        _downloadListener = null;
-       _downloadRequestId = -1;
+       _downloadRequestID = -1;
        _rasterizer = null;
        _symbolizer = null;
     }
@@ -357,13 +357,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         {
           ILogger.instance().logInfo("Downloading %s", requestData._url._path);
         }
-        _downloadRequestId = _downloader.requestBuffer(requestData._url, tileTextureDownloadPriority, requestData._timeToCache, requestData._readExpired, _downloadListener, true); // deleteListener
+        _downloadRequestID = _downloader.requestBuffer(requestData._url, tileTextureDownloadPriority, requestData._timeToCache, requestData._readExpired, _downloadListener, true); // deleteListener
       }
       else
       {
         final GEORasterSymbolizer symbolizer = layer.symbolizerCopy();
     
-        _rasterizer = new GEOJSONBufferRasterizer(this, requestData._url, null, geoObjectHolder, _imageWidth, _imageHeight, symbolizer, _tileId, _tileSector, _tileIsMercator, _tileLevel); // buffer,
+        _rasterizer = new GEOJSONBufferRasterizer(this, requestData._url, null, geoObjectHolder, _imageWidth, _imageHeight, symbolizer, _tileID, _tileSector, _tileIsMercator, _tileLevel); // buffer,
         _threadUtils.invokeAsyncTask(_rasterizer, true);
       }
     
@@ -373,24 +373,24 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     public final void cancel()
     {
       _canceled = true;
-      if (_downloadRequestId >= 0)
+      if (_downloadRequestID >= 0)
       {
-        _downloader.cancelRequest(_downloadRequestId);
-        _downloadRequestId = -1;
+        _downloader.cancelRequest(_downloadRequestID);
+        _downloadRequestID = -1;
       }
       if (_rasterizer != null)
       {
         _rasterizer.cancel();
       }
     
-      _listener.imageCreationCanceled(_tileId);
-      _tileImageProvider.requestFinish(_tileId);
+      _listener.imageCreationCanceled(_tileID);
+      _tileImageProvider.requestFinish(_tileID);
     }
 
     public final void bufferDownloaded(URL url, IByteBuffer buffer)
     {
       _downloadListener = null;
-      _downloadRequestId = -1;
+      _downloadRequestID = -1;
     
       if (_canceled)
       {
@@ -402,22 +402,22 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         final GEORasterSymbolizer symbolizer = _symbolizer;
         _symbolizer = null; // moves ownership of _symbolizer to GEOJSONBufferRasterizer
     
-        _rasterizer = new GEOJSONBufferRasterizer(this, url, buffer, null, _imageWidth, _imageHeight, symbolizer, _tileId, _tileSector, _tileIsMercator, _tileLevel); // geoObject
+        _rasterizer = new GEOJSONBufferRasterizer(this, url, buffer, null, _imageWidth, _imageHeight, symbolizer, _tileID, _tileSector, _tileIsMercator, _tileLevel); // geoObject
         _threadUtils.invokeAsyncTask(_rasterizer, true);
       }
     }
     public final void bufferDownloadError(URL url)
     {
       _downloadListener = null;
-      _downloadRequestId = -1;
+      _downloadRequestID = -1;
     
-      _listener.imageCreationError(_tileId, "Download error - " + url._path);
-      _tileImageProvider.requestFinish(_tileId);
+      _listener.imageCreationError(_tileID, "Download error - " + url._path);
+      _tileImageProvider.requestFinish(_tileID);
     }
     public final void bufferDownloadCanceled()
     {
       _downloadListener = null;
-      _downloadRequestId = -1;
+      _downloadRequestID = -1;
     }
 
     public final void rasterizedGEOObject(URL url, GEOObject geoObject, ICanvas canvas)
@@ -430,7 +430,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
       if (canvas == null)
       {
-        _listener.imageCreationError(_tileId, "GEOJSON parser error");
+        _listener.imageCreationError(_tileID, "GEOJSON parser error");
         if (_deleteListener)
         {
           if (_listener != null)
@@ -450,13 +450,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _rasterizer = null;
     }
 
-    public final void imageCreated(IImage image, String imageId)
+    public final void imageCreated(IImage image, String imageID)
     {
       // retain the _contribution before calling the listener, as it takes full ownership of the contribution
       TileImageContribution.retainContribution(_contribution);
     
-      _listener.imageCreated(_tileId, image, imageId, _contribution);
-      _tileImageProvider.requestFinish(_tileId);
+      _listener.imageCreated(_tileID, image, imageID, _contribution);
+      _tileImageProvider.requestFinish(_tileID);
     }
 
   }
@@ -549,17 +549,17 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     assembler.start(_layer, tile, tileTextureDownloadPriority, logDownloadActivity);
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
-    final ImageAssembler assembler = _assemblers.get(tileId);
+    final ImageAssembler assembler = _assemblers.get(tileID);
     if (assembler != null) {
       assembler.cancel();
     }
   }
 
-  public final void requestFinish(String tileId)
+  public final void requestFinish(String tileID)
   {
-    final ImageAssembler assembler = _assemblers.remove(tileId);
+    final ImageAssembler assembler = _assemblers.remove(tileID);
     if (assembler != null) {
       assembler.dispose();
     }

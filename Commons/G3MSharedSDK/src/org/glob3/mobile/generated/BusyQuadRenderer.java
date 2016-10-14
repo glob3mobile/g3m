@@ -36,11 +36,11 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
 
   private boolean initMesh(G3MRenderContext rc)
   {
-    TextureIDReference texId = null;
+    TextureIDReference texID = null;
   
-    texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
+    texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
   
-    if (texId == null)
+    if (texID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return false;
@@ -65,7 +65,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
     if (vertices != null)
        vertices.dispose();
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
+    TextureMapping texMap = new SimpleTextureMapping(texID, texCoords.create(), true, false);
   
     _quadMesh = new TexturedMesh(im, true, texMap, true, true);
   

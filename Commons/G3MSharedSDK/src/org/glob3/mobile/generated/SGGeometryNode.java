@@ -56,9 +56,9 @@ public class SGGeometryNode extends SGNode
   }
 
 
-  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices, boolean depthTest)
+  public SGGeometryNode(String id, String sID, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices, boolean depthTest)
   {
-     super(id, sId);
+     super(id, sID);
      _primitive = primitive;
      _vertices = vertices;
      _colors = colors;

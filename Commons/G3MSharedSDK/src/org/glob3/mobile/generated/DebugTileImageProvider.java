@@ -25,26 +25,26 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
 {
   private static class ImageListener extends IImageListener
   {
-    private final String _tileId;
+    private final String _tileID;
     private final TileImageContribution _contribution;
 
     private TileImageListener _listener;
     private boolean _deleteListener;
 
-    private static String getImageId(String tileId)
+    private static String getImageID(String tileID)
     {
       IStringBuilder isb = IStringBuilder.newStringBuilder();
       isb.addString("DebugTileImageProvider/");
-      isb.addString(tileId);
+      isb.addString(tileID);
       final String s = isb.getString();
       if (isb != null)
          isb.dispose();
       return s;
     }
 
-    public ImageListener(String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
+    public ImageListener(String tileID, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
     {
-       _tileId = tileId;
+       _tileID = tileID;
        _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
@@ -59,8 +59,8 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreated(IImage image)
     {
-      final String imageId = getImageId(_tileId);
-      _listener.imageCreated(_tileId, image, imageId, _contribution);
+      final String imageID = getImageID(_tileID);
+      _listener.imageCreated(_tileID, image, imageID, _contribution);
       if (_deleteListener)
       {
         if (_listener != null)
@@ -189,7 +189,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
     canvas.createImage(new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true);
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
     // do nothing, can't cancel
   }

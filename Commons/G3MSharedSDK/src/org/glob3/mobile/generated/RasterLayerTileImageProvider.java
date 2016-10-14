@@ -52,28 +52,28 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
-    final String tileId = tile._id;
+    final String tileID = tile._id;
   
-    final long requestId = _layer.requestImage(tile, _downloader, tileTextureDownloadPriority, logDownloadActivity, new RLTIP_ImageDownloadListener(this, tileId, contribution, listener, deleteListener), true); // deleteListener
+    final long requestID = _layer.requestImage(tile, _downloader, tileTextureDownloadPriority, logDownloadActivity, new RLTIP_ImageDownloadListener(this, tileID, contribution, listener, deleteListener), true); // deleteListener
   
-    if (requestId >= 0)
+    if (requestID >= 0)
     {
-      _requestsIdsPerTile.put(tileId, requestId);
+      _requestsIdsPerTile.put(tileID, requestID);
     }
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
-    final Long requestId = _requestsIdsPerTile.remove(tileId);
-    if (requestId != null) {
-      _downloader.cancelRequest(requestId);
+    final Long requestID = _requestsIdsPerTile.remove(tileID);
+    if (requestID != null) {
+      _downloader.cancelRequest(requestID);
     }
   }
 
 
-  public final void requestFinish(String tileId)
+  public final void requestFinish(String tileID)
   {
-    _requestsIdsPerTile.remove(tileId);
+    _requestsIdsPerTile.remove(tileID);
   }
 
   public final void layerDeleted(RasterLayer layer)
