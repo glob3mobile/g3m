@@ -70,11 +70,9 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
   //  planetRenderer->setShowStatistics(true);
   planetRenderer->setIncrementalTileQuality(true);
 
-
 #warning Diego at work!
-//  TerrainElevationProvider* terrainElevationProvider = new MapzenTerrainElevationProvider();
-//  planetRenderer->setTerrainElevationProvider(terrainElevationProvider, true);
-
+  planetRenderer->setVerticalExaggeration(100);
+  planetRenderer->setTerrainElevationProvider(MapzenTerrainElevationProvider::createDefault());
 
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png",

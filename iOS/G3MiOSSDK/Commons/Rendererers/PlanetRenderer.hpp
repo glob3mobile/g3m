@@ -194,7 +194,6 @@ private:
   ElevationDataProvider*    _elevationDataProvider;
   bool                      _ownsElevationDataProvider;
   TerrainElevationProvider* _terrainElevationProvider;
-  bool                      _ownsTerrainElevationProvider;
   TileTexturizer*           _texturizer;
   LayerSet*                 _layerSet;
   TilesRenderParameters*    _tilesRenderParameters;
@@ -286,7 +285,6 @@ public:
                  ElevationDataProvider*       elevationDataProvider,
                  bool                         ownsElevationDataProvider,
                  TerrainElevationProvider*    terrainElevationProvider,
-                 bool                         ownsTerrainElevationProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  LayerSet*                    layerSet,
@@ -440,8 +438,7 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
-  void setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider,
-                                   bool ownsTerrainElevationProvider);
+  void setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider);
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);

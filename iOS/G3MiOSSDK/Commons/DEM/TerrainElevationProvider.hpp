@@ -9,16 +9,23 @@
 #ifndef TerrainElevationProvider_hpp
 #define TerrainElevationProvider_hpp
 
-class G3MRenderContext;
+#include "RCObject.hpp"
+
+class RenderState;
 class G3MContext;
 
 
-class TerrainElevationProvider {
-public:
+class TerrainElevationProvider : public RCObject {
+protected:
   virtual ~TerrainElevationProvider() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
-  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
+public:
+
+  virtual RenderState getRenderState() = 0;
 
   virtual void initialize(const G3MContext* context) = 0;
 

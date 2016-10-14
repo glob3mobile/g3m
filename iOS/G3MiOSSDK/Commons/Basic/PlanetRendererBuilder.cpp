@@ -69,7 +69,9 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
 
   delete _tileTessellator;
   delete _elevationDataProvider;
-  delete _terrainElevationProvider;
+  if (_terrainElevationProvider != NULL) {
+    _terrainElevationProvider->_release();
+  }
 
   delete _renderedSector;
 }
@@ -330,7 +332,6 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getElevationDataProvider(),
                                                       true,
                                                       getTerrainElevationProvider(),
-                                                      true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
                                                       layerSet,
@@ -360,6 +361,7 @@ PlanetRenderer* PlanetRendererBuilder::create() {
   _stabilizationMilliSeconds = NULL;
 
   _elevationDataProvider = NULL;
+  _terrainElevationProvider = NULL;
 
   delete _renderedSector;
   _renderedSector = NULL;

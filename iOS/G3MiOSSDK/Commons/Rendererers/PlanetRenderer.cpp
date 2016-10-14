@@ -114,7 +114,6 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                ElevationDataProvider*       elevationDataProvider,
                                bool                         ownsElevationDataProvider,
                                TerrainElevationProvider*    terrainElevationProvider,
-                               bool                         ownsTerrainElevationProvider,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
                                LayerSet*                    layerSet,
@@ -132,7 +131,6 @@ _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
 _terrainElevationProvider(terrainElevationProvider),
-_ownsTerrainElevationProvider(ownsTerrainElevationProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _layerSet(layerSet),
@@ -228,8 +226,8 @@ PlanetRenderer::~PlanetRenderer() {
   if (_ownsElevationDataProvider) {
     delete _elevationDataProvider;
   }
-  if (_ownsTerrainElevationProvider) {
-    delete _terrainElevationProvider;
+  if (_terrainElevationProvider != NULL) {
+    _terrainElevationProvider->_release();
   }
   delete _texturizer;
   delete _tilesRenderParameters;
@@ -470,8 +468,9 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   }
 
   if (_terrainElevationProvider != NULL) {
-    if (!_terrainElevationProvider->isReadyToRender(rc)) {
-      return RenderState::busy();
+    const RenderState terrainElevationProviderRenderState = _terrainElevationProvider->getRenderState();
+    if (terrainElevationProviderRenderState._type != RENDER_READY) {
+      return terrainElevationProviderRenderState;
     }
   }
 
@@ -866,14 +865,12 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
   return false;
 }
 
-void PlanetRenderer::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider,
-                                                 bool ownsTerrainElevationProvider) {
+void PlanetRenderer::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider) {
   if (_terrainElevationProvider != terrainElevationProvider) {
-    if (_ownsTerrainElevationProvider) {
-      delete _terrainElevationProvider;
+    if (_terrainElevationProvider != NULL) {
+      _terrainElevationProvider->_release();
     }
 
-    _ownsTerrainElevationProvider = ownsTerrainElevationProvider;
     _terrainElevationProvider = terrainElevationProvider;
 
     if (_terrainElevationProvider != NULL) {

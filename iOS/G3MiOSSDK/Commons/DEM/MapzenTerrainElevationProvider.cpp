@@ -8,8 +8,18 @@
 
 #include "MapzenTerrainElevationProvider.hpp"
 
-#include "ErrorHandling.hpp"
+#include "RenderState.hpp"
+#include "G3MContext.hpp"
+#include "IDownloader.hpp"
 
+
+MapzenTerrainElevationProvider* MapzenTerrainElevationProvider::createDefault() {
+  return new MapzenTerrainElevationProvider();
+}
+
+MapzenTerrainElevationProvider::MapzenTerrainElevationProvider() {
+
+}
 
 MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
 #ifdef JAVA_CODE
@@ -17,10 +27,18 @@ MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
 #endif
 }
 
-bool MapzenTerrainElevationProvider::isReadyToRender(const G3MRenderContext* rc) {
-  THROW_EXCEPTION("Diego at work!");
+RenderState MapzenTerrainElevationProvider::getRenderState() {
+  return RenderState::error("MapzenTerrainElevationProvider: under construction");
 }
 
 void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
-  THROW_EXCEPTION("Diego at work!");
+  IDownloader* downloader = context->getDownloader();
+
+//#error Diego at work!
+//  downloader->requestBuffer(<#const URL &url#>,
+//                            <#long long priority#>,
+//                            <#const TimeInterval &timeToCache#>,
+//                            <#bool readExpired#>,
+//                            <#IBufferDownloadListener *listener#>,
+//                            <#bool deleteListener#>);
 }

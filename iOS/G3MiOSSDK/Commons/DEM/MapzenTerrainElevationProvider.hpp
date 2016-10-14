@@ -13,13 +13,19 @@
 
 
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
-public:
+
+protected:
   ~MapzenTerrainElevationProvider();
 
-  bool isReadyToRender(const G3MRenderContext* rc);
+public:
+
+  static MapzenTerrainElevationProvider* createDefault();
+
+  MapzenTerrainElevationProvider();
+
+  RenderState getRenderState();
 
   void initialize(const G3MContext* context);
-
 
 };
 
