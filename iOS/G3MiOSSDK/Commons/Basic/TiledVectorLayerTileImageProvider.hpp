@@ -31,12 +31,12 @@ private:
   class CanvasImageListener : public IImageListener {
   private:
     ImageAssembler*   _imageAssembler;
-    const std::string _imageId;
+    const std::string _imageID;
   public:
     CanvasImageListener(ImageAssembler* imageAssembler,
-                        const std::string& imageId) :
+                        const std::string& imageID) :
     _imageAssembler(imageAssembler),
-    _imageId(imageId)
+    _imageID(imageID)
     {
     }
 
@@ -68,7 +68,7 @@ private:
 #ifdef JAVA_CODE
     private GEORasterSymbolizer _symbolizer;
 #endif
-    const std::string _tileId;
+    const std::string _tileID;
     const Sector      _tileSector;
     const bool        _tileIsMercator;
     const int         _tileLevel;
@@ -84,7 +84,7 @@ private:
                             const int                  imageWidth,
                             const int                  imageHeight,
                             const GEORasterSymbolizer* symbolizer,
-                            const std::string&         tileId,
+                            const std::string&         tileID,
                             const Sector&              tileSector,
                             const bool                 tileIsMercator,
                             const int                  tileLevel) :
@@ -96,7 +96,7 @@ private:
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
     _symbolizer(symbolizer),
-    _tileId(tileId),
+    _tileID(tileID),
     _tileSector(tileSector),
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
@@ -154,7 +154,7 @@ private:
   class ImageAssembler {
   private:
     TiledVectorLayerTileImageProvider* _tileImageProvider;
-    const std::string                  _tileId;
+    const std::string                  _tileID;
     TileImageListener*                 _listener;
     const bool                         _deleteListener;
     IDownloader*                       _downloader;
@@ -173,7 +173,7 @@ private:
     bool _canceled;
 
     GEOJSONBufferDownloadListener* _downloadListener;
-    long long _downloadRequestId;
+    long long _downloadRequestID;
 
     GEOJSONBufferRasterizer* _rasterizer;
 
@@ -218,7 +218,7 @@ private:
     void deletedRasterizer();
 
     void imageCreated(const IImage* image,
-                      const std::string& imageId);
+                      const std::string& imageID);
 
   };
 
@@ -291,9 +291,9 @@ public:
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
-  void requestFinish(const std::string& tileId);
+  void requestFinish(const std::string& tileID);
 
   const GEOObjectHolder* getGEOObjectFor(const URL& url);
   void takeGEOObjectFor(const URL& url,

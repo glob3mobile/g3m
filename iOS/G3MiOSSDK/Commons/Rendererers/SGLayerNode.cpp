@@ -8,7 +8,7 @@
 
 #include "SGLayerNode.hpp"
 
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 #include "GL.hpp"
 #include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
@@ -59,10 +59,10 @@ public:
 
 SGLayerNode::~SGLayerNode() {
 #ifdef C_CODE
-  delete _textureId; //Releasing texture through TextureIDReference class
+  delete _textureID; //Releasing texture through TextureIDReference class
 #endif
 #ifdef JAVA_CODE
-  _textureId.dispose(); //Releasing texture through TextureIDReference class
+  _textureID.dispose(); //Releasing texture through TextureIDReference class
 #endif
 }
 
@@ -72,8 +72,8 @@ bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
     requestImage(rc);
   }
 
-  const TextureIDReference* textureId = getTextureId(rc);
-  return (textureId != NULL);
+  const TextureIDReference* textureID = getTextureID(rc);
+  return (textureID != NULL);
 }
 
 void SGLayerNode::onImageDownload(const IImage* image) {
@@ -105,11 +105,11 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
                                     true);
 }
 
-const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
-  if (_textureId == NULL) {
+const TextureIDReference* SGLayerNode::getTextureID(const G3MRenderContext* rc) {
+  if (_textureID == NULL) {
     if (_downloadedImage != NULL) {
       const bool generateMipmap = false;
-      _textureId = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
+      _textureID = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
                                                                    GLFormat::rgba(),
                                                                    getURL()._path,
                                                                    generateMipmap);
@@ -118,7 +118,7 @@ const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) 
       _downloadedImage = NULL;
     }
   }
-  return _textureId;
+  return _textureID;
 }
 
 bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
@@ -128,13 +128,13 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
     requestImage(rc);
   }
 
-  _textureId = getTextureId(rc);
-  if (_textureId == NULL) {
+  _textureID = getTextureID(rc);
+  if (_textureID == NULL) {
     return false;
   }
   state->clearGLFeatureGroup(COLOR_GROUP);
 
-  state->addGLFeature(new TextureIDGLFeature(_textureId->getID()), false);
+  state->addGLFeature(new TextureIDGLFeature(_textureID->getID()), false);
   
   return true;
   

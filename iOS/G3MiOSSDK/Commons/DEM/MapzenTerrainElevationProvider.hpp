@@ -13,10 +13,14 @@
 
 #include "TimeInterval.hpp"
 #include "DownloadPriority.hpp"
+#include <string>
 
 
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
 private:
+  static int _idCounter;
+
+
   const long long    _downloadPriority;
 #ifdef C_CODE
   const TimeInterval _timeToCache;
@@ -26,14 +30,19 @@ private:
 #endif
   const bool         _readExpired;
 
+  const std::string _instanceID;
+
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
 protected:
   ~MapzenTerrainElevationProvider();
 
 public:
-
-  static MapzenTerrainElevationProvider* createDefault(long long           downloadPriority,
-                                                       const TimeInterval& timeToCache,
-                                                       bool                readExpired);
 
   MapzenTerrainElevationProvider(long long           downloadPriority,
                                  const TimeInterval& timeToCache,
@@ -44,7 +53,7 @@ public:
   void initialize(const G3MContext* context);
 
   void cancel();
-
+  
 };
 
 #endif

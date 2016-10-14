@@ -63,16 +63,20 @@ public:
                           const TimeInterval& timeToCache,
                           bool readExpired,
                           IBufferDownloadListener* listener,
-                          bool deleteListener);
+                          bool deleteListener,
+                          const std::string& tag = "");
 
   long long requestImage(const URL& url,
                          long long priority,
                          const TimeInterval& timeToCache,
                          bool readExpired,
                          IImageDownloadListener* listener,
-                         bool deleteListener);
+                         bool deleteListener,
+                         const std::string& tag = "");
 
-  bool cancelRequest(long long requestId);
+  bool cancelRequest(long long requestID);
+
+  void cancelRequestsTagged(const std::string& tag);
 
   virtual ~CachedDownloader();
 

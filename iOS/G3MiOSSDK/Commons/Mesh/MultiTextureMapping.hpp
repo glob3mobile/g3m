@@ -13,17 +13,17 @@
 
 class TextureIDReference;
 class IFloatBuffer;
-class IGLTextureId;
+class IGLTextureID;
 
 class MultiTextureMapping : public TransformableTextureMapping {
 private:
 #ifdef C_CODE
-  const TextureIDReference* _glTextureId;
-  const TextureIDReference* _glTextureId2;
+  const TextureIDReference* _glTextureID;
+  const TextureIDReference* _glTextureID2;
 #endif
 #ifdef JAVA_CODE
-  private TextureIDReference _glTextureId;
-  private TextureIDReference _glTextureId2;
+  private TextureIDReference _glTextureID;
+  private TextureIDReference _glTextureID2;
 #endif
 
   IFloatBuffer* _texCoords;
@@ -35,37 +35,37 @@ private:
   const bool _transparent;
   const bool _transparent2;
 
-  void releaseGLTextureId();
+  void releaseGLTextureID();
 
 public:
 
-  MultiTextureMapping(const TextureIDReference* glTextureId,
+  MultiTextureMapping(const TextureIDReference* glTextureID,
                       IFloatBuffer* texCoords,
                       bool ownedTexCoords,
                       bool transparent,
-                      const TextureIDReference* glTextureId2,
+                      const TextureIDReference* glTextureID2,
                       IFloatBuffer* texCoords2,
                       bool ownedTexCoords2,
                       bool transparent2) :
   TransformableTextureMapping(0, 0,
                               1, 1,
                               0, 0, 0),
-  _glTextureId(glTextureId),
+  _glTextureID(glTextureID),
   _texCoords(texCoords),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent),
-  _glTextureId2(glTextureId2),
+  _glTextureID2(glTextureID2),
   _texCoords2(texCoords2),
   _ownedTexCoords2(ownedTexCoords2),
   _transparent2(transparent2)
   {
   }
 
-  MultiTextureMapping(const TextureIDReference* glTextureId,
+  MultiTextureMapping(const TextureIDReference* glTextureID,
                       IFloatBuffer* texCoords,
                       bool ownedTexCoords,
                       bool transparent,
-                      const TextureIDReference* glTextureId2,
+                      const TextureIDReference* glTextureID2,
                       IFloatBuffer* texCoords2,
                       bool ownedTexCoords2,
                       bool transparent2,
@@ -83,11 +83,11 @@ public:
                               rotationAngleInRadians,
                               rotationCenterU,
                               rotationCenterV),
-  _glTextureId(glTextureId),
+  _glTextureID(glTextureID),
   _texCoords(texCoords),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent),
-  _glTextureId2(glTextureId2),
+  _glTextureID2(glTextureID2),
   _texCoords2(texCoords2),
   _ownedTexCoords2(ownedTexCoords2),
   _transparent2(transparent2)
@@ -96,7 +96,7 @@ public:
 
   virtual ~MultiTextureMapping();
 
-  const IGLTextureId* getGLTextureId() const;
+  const IGLTextureID* getGLTextureID() const;
 
   IFloatBuffer* getTexCoords() const {
     return _texCoords;

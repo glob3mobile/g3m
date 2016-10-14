@@ -216,7 +216,7 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
 }
 
 
-TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
+TextureGLFeature::TextureGLFeature(const IGLTextureID* texID,
                                    IFloatBuffer* texCoords,
                                    int arrayElementSize,
                                    int index,
@@ -248,7 +248,7 @@ _rotationAngle(NULL)
   setRotationAngleInRadiansAndRotationCenter(rotationAngleInRadians, rotationCenterU, rotationCenterV);
 }
 
-TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
+TextureGLFeature::TextureGLFeature(const IGLTextureID* texID,
                                    IFloatBuffer* texCoords,
                                    int arrayElementSize,
                                    int index,
@@ -359,7 +359,7 @@ GLColorGroupFeature(GLF_FLATCOLOR, 2, blend, sFactor, dFactor)
 
 //////////////////////////////////////////
 
-TextureIDGLFeature::TextureIDGLFeature(const IGLTextureId* texID) :
+TextureIDGLFeature::TextureIDGLFeature(const IGLTextureID* texID) :
 PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_ID, 4),
 _texID(texID)
 {

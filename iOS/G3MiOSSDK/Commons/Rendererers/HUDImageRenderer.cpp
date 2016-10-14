@@ -126,7 +126,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const IStringUtils* su = IStringUtils::instance();
   const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
                                                                                     textureName,
                                                                                     false);
@@ -134,7 +134,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   delete _image;
   _image = NULL;
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
@@ -169,7 +169,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
 
-  TextureMapping* textureMapping = new SimpleTextureMapping(texId,
+  TextureMapping* textureMapping = new SimpleTextureMapping(texID,
                                                             texCoords.create(),
                                                             true,
                                                             true);

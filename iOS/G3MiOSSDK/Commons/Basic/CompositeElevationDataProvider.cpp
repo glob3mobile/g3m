@@ -110,18 +110,18 @@ const Vector2I CompositeElevationDataProvider::getMinResolution() const {
   return Vector2I(x,y);
 }
 
-void CompositeElevationDataProvider::cancelRequest(const long long requestId) {
+void CompositeElevationDataProvider::cancelRequest(const long long requestID) {
 #ifdef C_CODE
-  std::map<long long, CompositeElevationDataProvider_Request*>::iterator it = _requests.find(requestId);
+  std::map<long long, CompositeElevationDataProvider_Request*>::iterator it = _requests.find(requestID);
   if (it != _requests.end()) {
     CompositeElevationDataProvider_Request* req = it->second;
     req->cancel();
-    _requests.erase(requestId);
+    _requests.erase(requestID);
     delete req;
   }
 #endif
 #ifdef JAVA_CODE
-  final CompositeElevationDataProvider_Request req = _requests.remove(requestId);
+  final CompositeElevationDataProvider_Request req = _requests.remove(requestID);
   if (req != null) {
     req.cancel();
     req.dispose();

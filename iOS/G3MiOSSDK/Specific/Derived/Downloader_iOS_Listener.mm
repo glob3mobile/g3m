@@ -14,24 +14,28 @@
 
 -(id)initWithCPPBufferListener:(IBufferDownloadListener*)cppListener
                 deleteListener:(bool)deleteListener
+                           tag:(const std::string&)tag
 {
   self = [super init];
   if (self) {
     _cppBufferListener = cppListener;
     _cppImageListener  = NULL;
     _deleteListener    = deleteListener;
+    _tag               = tag;
   }
   return self;
 }
 
 -(id)initWithCPPImageListener:(IImageDownloadListener*)cppListener
                deleteListener:(bool)deleteListener
+                          tag:(const std::string&)tag
 {
   self = [super init];
   if (self) {
     _cppBufferListener = NULL;
     _cppImageListener  = cppListener;
     _deleteListener    = deleteListener;
+    _tag               = tag;
   }
   return self;
 }
@@ -119,6 +123,11 @@
       delete _cppImageListener;
     }
   }
+}
+
+-(const std::string) tag
+{
+  return _tag;
 }
 
 @end

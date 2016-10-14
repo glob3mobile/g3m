@@ -34,14 +34,14 @@ private:
 public:
 
   SGMaterialNode(const std::string& id,
-                 const std::string& sId,
+                 const std::string& sID,
                  Color* baseColor,
                  Color* specularColor,
                  double specular,
                  double shine,
                  double alpha,
                  double emit) :
-  SGNode(id, sId),
+  SGNode(id, sID),
   _baseColor(baseColor),
   _specularColor(specularColor),
   _glState(new GLState())

@@ -138,6 +138,6 @@ void ChessboardTileImageProvider::create(const Tile* tile,
   }
 }
 
-void ChessboardTileImageProvider::cancel(const std::string& tileId) {
+void ChessboardTileImageProvider::cancel(const std::string& tileID) {
   // do nothing, can't cancel
 }

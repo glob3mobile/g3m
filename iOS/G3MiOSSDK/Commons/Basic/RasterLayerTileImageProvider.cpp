@@ -19,7 +19,7 @@
 class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
   RasterLayerTileImageProvider* _rasterLayerTileImageProvider;
-  const std::string             _tileId;
+  const std::string             _tileID;
   TileImageListener*            _listener;
   const bool                    _deleteListener;
 #ifdef C_CODE
@@ -31,12 +31,12 @@ private:
 
 public:
   RLTIP_ImageDownloadListener(RasterLayerTileImageProvider* rasterLayerTileImageProvider,
-                              const std::string&            tileId,
+                              const std::string&            tileID,
                               const TileImageContribution*  contribution,
                               TileImageListener*            listener,
                               bool                          deleteListener) :
   _rasterLayerTileImageProvider(rasterLayerTileImageProvider),
-  _tileId(tileId),
+  _tileID(tileID),
   _contribution(contribution),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -44,7 +44,7 @@ public:
   }
 
   ~RLTIP_ImageDownloadListener() {
-    _rasterLayerTileImageProvider->requestFinish(_tileId);
+    _rasterLayerTileImageProvider->requestFinish(_tileID);
 
     if (_deleteListener) {
       delete _listener;
@@ -61,19 +61,19 @@ public:
                   bool expired) {
     const TileImageContribution* contribution = _contribution;
     _contribution = NULL; // moves ownership of _contribution to _listener
-    _listener->imageCreated(_tileId,
+    _listener->imageCreated(_tileID,
                             image,
                             url._path,
                             contribution);
   }
 
   void onError(const URL& url) {
-    _listener->imageCreationError(_tileId,
+    _listener->imageCreationError(_tileID,
                                   "Download error - " + url._path);
   }
 
   void onCancel(const URL& url) {
-    _listener->imageCreationCanceled(_tileId);
+    _listener->imageCreationCanceled(_tileID);
   }
 
   void onCanceledDownload(const URL& url,
@@ -88,8 +88,8 @@ RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
   for (std::map<const std::string, long long>::iterator iter = _requestsIdsPerTile.begin();
        iter != _requestsIdsPerTile.end();
        ++iter) {
-    const long long requestId = iter->second;
-    _downloader->cancelRequest(requestId);
+    const long long requestID = iter->second;
+    _downloader->cancelRequest(requestID);
   }
 #endif
 #ifdef JAVA_CODE
@@ -113,44 +113,44 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
                                           TileImageListener* listener,
                                           bool deleteListener,
                                           FrameTasksExecutor* frameTasksExecutor) {
-  const std::string tileId = tile->_id;
+  const std::string tileID = tile->_id;
 
-  const long long requestId = _layer->requestImage(tile,
+  const long long requestID = _layer->requestImage(tile,
                                                    _downloader,
                                                    tileTextureDownloadPriority,
                                                    logDownloadActivity,
                                                    new RLTIP_ImageDownloadListener(this,
-                                                                                   tileId,
+                                                                                   tileID,
                                                                                    contribution,
                                                                                    listener,
                                                                                    deleteListener),
                                                    true /* deleteListener */);
 
-  if (requestId >= 0) {
-    _requestsIdsPerTile[tileId] = requestId;
+  if (requestID >= 0) {
+    _requestsIdsPerTile[tileID] = requestID;
   }
 }
 
-void RasterLayerTileImageProvider::cancel(const std::string& tileId) {
+void RasterLayerTileImageProvider::cancel(const std::string& tileID) {
 #ifdef C_CODE
-  if (_requestsIdsPerTile.find(tileId) != _requestsIdsPerTile.end()) {
-    const long long requestId = _requestsIdsPerTile[tileId];
+  if (_requestsIdsPerTile.find(tileID) != _requestsIdsPerTile.end()) {
+    const long long requestID = _requestsIdsPerTile[tileID];
 
-    _downloader->cancelRequest(requestId);
+    _downloader->cancelRequest(requestID);
 
-    _requestsIdsPerTile.erase(tileId);
+    _requestsIdsPerTile.erase(tileID);
   }
 #endif
 #ifdef JAVA_CODE
-  final Long requestId = _requestsIdsPerTile.remove(tileId);
-  if (requestId != null) {
-    _downloader.cancelRequest(requestId);
+  final Long requestID = _requestsIdsPerTile.remove(tileID);
+  if (requestID != null) {
+    _downloader.cancelRequest(requestID);
   }
 #endif
 }
 
-void RasterLayerTileImageProvider::requestFinish(const std::string& tileId) {
-  _requestsIdsPerTile.erase(tileId);
+void RasterLayerTileImageProvider::requestFinish(const std::string& tileID) {
+  _requestsIdsPerTile.erase(tileID);
 }
 
 void RasterLayerTileImageProvider::layerDeleted(const RasterLayer* layer) {

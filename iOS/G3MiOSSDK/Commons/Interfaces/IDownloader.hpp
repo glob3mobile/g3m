@@ -40,16 +40,20 @@ public:
                                   const TimeInterval& timeToCache,
                                   bool readExpired,
                                   IBufferDownloadListener* listener,
-                                  bool deleteListener) = 0;
+                                  bool deleteListener,
+                                  const std::string& tag = "") = 0;
 
   virtual long long requestImage(const URL& url,
                                  long long priority,
                                  const TimeInterval& timeToCache,
                                  bool readExpired,
                                  IImageDownloadListener* listener,
-                                 bool deleteListener) = 0;
+                                 bool deleteListener,
+                                 const std::string& tag = "") = 0;
 
-  virtual bool cancelRequest(long long requestId) = 0;
+  virtual bool cancelRequest(long long requestID) = 0;
+
+  virtual void cancelRequestsTagged(const std::string& tag) = 0;
 
   virtual const std::string statistics() = 0;
 

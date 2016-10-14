@@ -678,7 +678,7 @@
 		E780A56416D3AED9000F0395 /* IByteBuffer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */; };
 		E780A56516D3AED9000F0395 /* IDownloader.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFEC11B15C2E636003FA986 /* IDownloader.hpp */; };
 		E780A56616D3AED9000F0395 /* IFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3B81577EE630012AC53 /* IFactory.hpp */; };
-		E780A56716D3AED9000F0395 /* IGLTextureId.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF08483515D41EF700327171 /* IGLTextureId.hpp */; };
+		E780A56716D3AED9000F0395 /* IGLTextureID.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF08483515D41EF700327171 /* IGLTextureID.hpp */; };
 		E780A56816D3AED9000F0395 /* IGLUniformID.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */; };
 		E780A56916D3AED9000F0395 /* IImage.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; };
 		E780A56A16D3AED9000F0395 /* IImageListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF00E443166FD77E0098CABD /* IImageListener.hpp */; };
@@ -746,7 +746,7 @@
 		E780A5AF16D3AEDA000F0395 /* SQDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8B21BD15DD345D0068601A /* SQDatabase.h */; };
 		E780A5B016D3AEDA000F0395 /* GLUniformID_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */; };
 		E780A5B116D3AEDA000F0395 /* NativeGL2_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; };
-		E780A5B216D3AEDA000F0395 /* GLTextureId_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */; };
+		E780A5B216D3AEDA000F0395 /* GLTextureID_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3A95F160B691C0085D553 /* GLTextureID_iOS.hpp */; };
 		E780A5B316D3AEDA000F0395 /* ByteBuffer_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */; };
 		E780A5B416D3AEDA000F0395 /* Downloader_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; };
 		E780A5B516D3AEDA000F0395 /* Downloader_iOS_Handler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */; };
@@ -1044,7 +1044,7 @@
 				E780A56416D3AED9000F0395 /* IByteBuffer.hpp in CopyFiles */,
 				E780A56516D3AED9000F0395 /* IDownloader.hpp in CopyFiles */,
 				E780A56616D3AED9000F0395 /* IFactory.hpp in CopyFiles */,
-				E780A56716D3AED9000F0395 /* IGLTextureId.hpp in CopyFiles */,
+				E780A56716D3AED9000F0395 /* IGLTextureID.hpp in CopyFiles */,
 				E780A56816D3AED9000F0395 /* IGLUniformID.hpp in CopyFiles */,
 				E780A56916D3AED9000F0395 /* IImage.hpp in CopyFiles */,
 				E780A56A16D3AED9000F0395 /* IImageListener.hpp in CopyFiles */,
@@ -1112,7 +1112,7 @@
 				E780A5AF16D3AEDA000F0395 /* SQDatabase.h in CopyFiles */,
 				E780A5B016D3AEDA000F0395 /* GLUniformID_iOS.hpp in CopyFiles */,
 				E780A5B116D3AEDA000F0395 /* NativeGL2_iOS.hpp in CopyFiles */,
-				E780A5B216D3AEDA000F0395 /* GLTextureId_iOS.hpp in CopyFiles */,
+				E780A5B216D3AEDA000F0395 /* GLTextureID_iOS.hpp in CopyFiles */,
 				E780A5B316D3AEDA000F0395 /* ByteBuffer_iOS.hpp in CopyFiles */,
 				E780A5B416D3AEDA000F0395 /* Downloader_iOS.hpp in CopyFiles */,
 				E780A5B516D3AEDA000F0395 /* Downloader_iOS_Handler.h in CopyFiles */,
@@ -1323,7 +1323,7 @@
 		CF0755941715B9120084CC14 /* GFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GFont.cpp; path = Commons/Basic/GFont.cpp; sourceTree = "<group>"; };
 		CF0755951715B9120084CC14 /* GFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GFont.hpp; path = Commons/Basic/GFont.hpp; sourceTree = "<group>"; };
 		CF07DD0B175D32CC00839F5D /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Color.cpp; path = Commons/Basic/Color.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CF08483515D41EF700327171 /* IGLTextureId.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
+		CF08483515D41EF700327171 /* IGLTextureID.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IGLTextureID.hpp; path = Commons/Interfaces/IGLTextureID.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF0A8181163303E800036277 /* MutableVector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2I.cpp; path = Commons/Geometry/MutableVector2I.cpp; sourceTree = "<group>"; };
 		CF0A8182163303E800036277 /* MutableVector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2I.hpp; path = Commons/Geometry/MutableVector2I.hpp; sourceTree = "<group>"; };
 		CF0C3967157F987200646A2F /* Mark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Mark.hpp; path = Commons/Basic/Mark.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1931,7 +1931,7 @@
 		D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SectorAndHeightCameraConstrainer.cpp; path = Commons/Cameras/SectorAndHeightCameraConstrainer.cpp; sourceTree = "<group>"; };
 		D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLGlobalState.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
-		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
+		D8B3A95F160B691C0085D553 /* GLTextureID_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GLTextureID_iOS.hpp; path = Specific/GL/GLTextureID_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
 		D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
@@ -2446,7 +2446,7 @@
 				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				CFA189AD15F926CA0048BF46 /* IFactory.cpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
-				CF08483515D41EF700327171 /* IGLTextureId.hpp */,
+				CF08483515D41EF700327171 /* IGLTextureID.hpp */,
 				D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
 				CF00E443166FD77E0098CABD /* IImageListener.hpp */,
@@ -2519,7 +2519,7 @@
 				CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */,
 				D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */,
 				D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */,
-				D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */,
+				D8B3A95F160B691C0085D553 /* GLTextureID_iOS.hpp */,
 			);
 			name = GL;
 			sourceTree = "<group>";

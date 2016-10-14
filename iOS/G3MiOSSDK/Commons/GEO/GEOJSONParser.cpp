@@ -485,7 +485,7 @@ GEOGeometry* GEOJSONParser::createGeometry(const JSONObject* jsonObject) const {
 
 GEOFeature* GEOJSONParser::createFeature(const JSONObject* jsonObject) const {
 
-  const JSONBaseObject* jsId = JSONBaseObject::deepCopy( jsonObject->get("id") );
+  const JSONBaseObject* jsID = JSONBaseObject::deepCopy( jsonObject->get("id") );
 
   const JSONObject* jsGeometry = jsonObject->getAsObject("geometry");
   GEOGeometry* geometry = createGeometry(jsGeometry);
@@ -501,7 +501,7 @@ GEOFeature* GEOJSONParser::createFeature(const JSONObject* jsonObject) const {
   }
 
   _featuresCount++;
-  return new GEOFeature(jsId, geometry, jsProperties);
+  return new GEOFeature(jsID, geometry, jsProperties);
 }
 
 GEOFeatureCollection* GEOJSONParser::createFeaturesCollection(const JSONObject* jsonObject) const {

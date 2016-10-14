@@ -367,10 +367,10 @@ public:
 class TextureGLFeature: public GLColorGroupFeature {
 private:
 #ifdef C_CODE
-  IGLTextureId const* _texID;
+  IGLTextureID const* _texID;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _texID = null;
+  private IGLTextureID _texID = null;
 #endif
 
   ~TextureGLFeature() {
@@ -393,7 +393,7 @@ private:
   GPUUniformValueFloatMutable* _rotationAngle;
 
 public:
-  TextureGLFeature(const IGLTextureId* texID,
+  TextureGLFeature(const IGLTextureID* texID,
                    IFloatBuffer* texCoords,
                    int arrayElementSize,
                    int index,
@@ -411,7 +411,7 @@ public:
                    float rotationCenterV,
                    int target = 0);
 
-  TextureGLFeature(const IGLTextureId* texID,
+  TextureGLFeature(const IGLTextureID* texID,
                    IFloatBuffer* texCoords,
                    int arrayElementSize,
                    int index,
@@ -433,12 +433,12 @@ public:
   }
 
 #ifdef C_CODE
-  IGLTextureId const* getTextureID() const {
+  IGLTextureID const* getTextureID() const {
     return _texID;
   }
 #endif
 #ifdef JAVA_CODE
-  public final IGLTextureId getTextureID() {
+  public final IGLTextureID getTextureID() {
     return _texID;
   }
 #endif
@@ -490,10 +490,10 @@ public:
 class TextureIDGLFeature: public PriorityGLFeature {
 private:
 #ifdef C_CODE
-  IGLTextureId const* _texID;
+  IGLTextureID const* _texID;
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _texID = null;
+  private IGLTextureID _texID = null;
 #endif
 
   ~TextureIDGLFeature() {
@@ -503,7 +503,7 @@ private:
   }
 
 public:
-  TextureIDGLFeature(const IGLTextureId* texID);
+  TextureIDGLFeature(const IGLTextureID* texID);
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 

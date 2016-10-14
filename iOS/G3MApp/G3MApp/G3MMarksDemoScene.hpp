@@ -14,7 +14,7 @@ class Mark;
 
 class G3MMarksDemoScene : public G3MDemoScene {
 private:
-  long long _requestId;
+  long long _requestID;
 
 protected:
   void rawActivate(const G3MContext* context);
@@ -26,7 +26,7 @@ public:
 
   G3MMarksDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Marks", "", -1),
-  _requestId(-1)
+  _requestID(-1)
   {
   }
 

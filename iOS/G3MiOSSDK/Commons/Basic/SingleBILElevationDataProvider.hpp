@@ -77,7 +77,7 @@ private:
                                IElevationDataListener* listener,
                                bool autodeleteListener);
 
-  void removeQueueRequest(const long long requestId);
+  void removeQueueRequest(const long long requestID);
 
   IDownloader* _downloader;
   long long    _requestToDownloaderID;
@@ -102,7 +102,7 @@ public:
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 
-  void cancelRequest(const long long requestId);
+  void cancelRequest(const long long requestID);
 
 
   void onElevationData(ElevationData* elevationData);

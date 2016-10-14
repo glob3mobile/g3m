@@ -21,8 +21,8 @@ private:
 
 public:
   SGTextureNode(const std::string& id,
-                const std::string& sId) :
-  SGNode(id, sId),
+                const std::string& sID) :
+  SGNode(id, sID),
   _glState(NULL)
   {
 

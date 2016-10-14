@@ -127,7 +127,7 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 
   IDownloader* downloader = context->getDownloader();
 
-  _requestId = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes&appid=e1079e4aa327b6cf16aa5b68d47ed1e2"),
+  _requestID = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes&appid=e1079e4aa327b6cf16aa5b68d47ed1e2"),
                                          DownloadPriority::HIGHEST,
                                          TimeInterval::fromHours(1),
                                          true,
@@ -141,7 +141,7 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {
-  context->getDownloader()->cancelRequest(_requestId);
+  context->getDownloader()->cancelRequest(_requestID);
 
   G3MDemoScene::deactivate(context);
 }

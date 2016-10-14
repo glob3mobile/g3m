@@ -53,10 +53,10 @@ public:
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
 
-  void requestFinish(const std::string& tileId);
+  void requestFinish(const std::string& tileID);
 
   void layerDeleted(const RasterLayer* layer);
 

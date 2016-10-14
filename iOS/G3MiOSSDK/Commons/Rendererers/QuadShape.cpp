@@ -8,7 +8,7 @@
 
 #include "QuadShape.hpp"
 
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 #include "IImage.hpp"
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
@@ -24,12 +24,12 @@
 #include "G3MRenderContext.hpp"
 
 
-const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
+const TextureIDReference* QuadShape::getTextureID(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {
     return NULL;
   }
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                                     GLFormat::rgba(),
                                                                                     _textureURL._path,
                                                                                     false);
@@ -37,11 +37,11 @@ const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   delete _textureImage;
   _textureImage = NULL;
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
-  return texId;
+  return texID;
 }
 
 class QuadShape_IImageDownloadListener : public IImageDownloadListener {
@@ -154,8 +154,8 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
 
   delete vertices;
 
-  const TextureIDReference* texId = getTextureId(rc);
-  if (texId == NULL) {
+  const TextureIDReference* texID = getTextureID(rc);
+  if (texID == NULL) {
     return im;
   }
 
@@ -165,7 +165,7 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   texCoords.add(0, 0);
   texCoords.add(1, 0);
 
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
+  TextureMapping* texMap = new SimpleTextureMapping(texID,
                                                     texCoords.create(),
                                                     true,
                                                     true);

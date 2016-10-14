@@ -61,13 +61,13 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
 CompositeTileImageProvider::ChildResult::ChildResult(const bool                   isError,
                                                      const bool                   isCanceled,
                                                      const IImage*                image,
-                                                     const std::string&           imageId,
+                                                     const std::string&           imageID,
                                                      const TileImageContribution* contribution,
                                                      const std::string&           error) :
 _isError(isError),
 _isCanceled(isCanceled),
 _image(image),
-_imageId(imageId),
+_imageID(imageID),
 _contribution(contribution),
 _error(error)
 {
@@ -80,12 +80,12 @@ CompositeTileImageProvider::ChildResult::~ChildResult() {
 }
 
 const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::ChildResult::image(const IImage*                image,
-                                                                                              const std::string&           imageId,
+                                                                                              const std::string&           imageID,
                                                                                               const TileImageContribution* contribution) {
   return new CompositeTileImageProvider::ChildResult(false ,       // isError
                                                      false,        // isCanceled
                                                      image,
-                                                     imageId,
+                                                     imageID,
                                                      contribution,
                                                      ""            // error
                                                      );
@@ -95,7 +95,7 @@ const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::Child
   return new CompositeTileImageProvider::ChildResult(true,  // isError
                                                      false, // isCanceled
                                                      NULL,  // image
-                                                     "",    // imageId
+                                                     "",    // imageID
                                                      NULL,  // contribution
                                                      error);
 }
@@ -104,7 +104,7 @@ const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::Child
   return new CompositeTileImageProvider::ChildResult(false, // isError
                                                      true,  // isCanceled
                                                      NULL,  // image
-                                                     "",    // imageId
+                                                     "",    // imageID
                                                      NULL,  // contribution
                                                      ""     // error
                                                      );
@@ -113,7 +113,7 @@ const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::Child
 CompositeTileImageProvider::Composer::Composer(int width,
                                                int height,
                                                CompositeTileImageProvider* compositeTileImageProvider,
-                                               const std::string& tileId,
+                                               const std::string& tileID,
                                                const Sector& tileSector,
                                                TileImageListener* listener,
                                                bool deleteListener,
@@ -122,7 +122,7 @@ CompositeTileImageProvider::Composer::Composer(int width,
 _width(width),
 _height(height),
 _compositeTileImageProvider(compositeTileImageProvider),
-_tileId(tileId),
+_tileID(tileID),
 _listener(listener),
 _deleteListener(deleteListener),
 _compositeContribution(compositeContribution),
@@ -188,18 +188,18 @@ void CompositeTileImageProvider::Composer::done() {
     const ChildResult* singleResult = _results[0];
 
     if (singleResult->_isError) {
-      _listener->imageCreationError(_tileId,
+      _listener->imageCreationError(_tileID,
                                     singleResult->_error);
     }
     else if (singleResult->_isCanceled) {
-      _listener->imageCreationCanceled(_tileId);
+      _listener->imageCreationCanceled(_tileID);
     }
     else {
       // retain the singleResult->_contribution as the _listener take full ownership of the contribution
       TileImageContribution::retainContribution(singleResult->_contribution);
-      _listener->imageCreated(singleResult->_imageId,
+      _listener->imageCreated(singleResult->_imageID,
                               singleResult->_image->shallowCopy(),
-                              singleResult->_imageId,
+                              singleResult->_imageID,
                               singleResult->_contribution);
     }
 
@@ -215,13 +215,13 @@ void CompositeTileImageProvider::Composer::done() {
         }
       }
 
-      _listener->imageCreationError(_tileId,
+      _listener->imageCreationError(_tileID,
                                     composedError);
 
       cleanUp();
     }
     else if (_anyCancelation) {
-      _listener->imageCreationCanceled(_tileId);
+      _listener->imageCreationCanceled(_tileID);
       cleanUp();
     }
     else {
@@ -240,14 +240,14 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
   canvas->initialize(_width, _height);
   
-  IStringBuilder* imageId = IStringBuilder::newStringBuilder();
+  IStringBuilder* imageID = IStringBuilder::newStringBuilder();
   
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
 
     
-    imageId->addString(result->_imageId);
-    imageId->addString("|");
+    imageID->addString(result->_imageID);
+    imageID->addString("|");
 
     const IImage* image = result->_image;
     
@@ -257,8 +257,8 @@ void CompositeTileImageProvider::Composer::mixResult() {
       if ( result->_contribution->isOpaque() ) {
         canvas->drawImage(image, 0, 0, _width, _height);
       } else {
-        imageId->addFloat(alpha);
-        imageId->addString("|");
+        imageID->addFloat(alpha);
+        imageID->addString("|");
         
         canvas->drawImage(image, 0, 0, _width, _height, alpha);
       }
@@ -267,8 +267,8 @@ void CompositeTileImageProvider::Composer::mixResult() {
       const Sector* imageSector = result->_contribution->getSector();
       const Sector visibleContributionSector = imageSector->intersection(_tileSector);
       
-      imageId->addString(visibleContributionSector.id());
-      imageId->addString("|");
+      imageID->addString(visibleContributionSector.id());
+      imageID->addString("|");
 
       const RectangleF* srcRect = RectangleF::calculateInnerRectangleFromSector(image->getWidth(), image->getHeight(),
                                                                                 *imageSector,
@@ -278,10 +278,10 @@ void CompositeTileImageProvider::Composer::mixResult() {
                                                                                 _tileSector,
                                                                                 visibleContributionSector);
       
-      //We add "destRect->id()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+      //We add "destRect->id()" to "imageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
       
-      imageId->addString(destRect->id());
-      imageId->addString("|");
+      imageID->addString(destRect->id());
+      imageID->addString("|");
       
       canvas->drawImage(image,
                         //SRC RECT
@@ -296,9 +296,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
       delete srcRect;
     }
   }
-  _imageId = imageId->getString();
+  _imageID = imageID->getString();
   
-  delete imageId;
+  delete imageID;
 
   canvas->createImage(new ComposerImageListener(this), true);
 
@@ -316,9 +316,9 @@ void CompositeTileImageProvider::ComposerFrameTask::execute(const G3MRenderConte
 void CompositeTileImageProvider::Composer::imageCreated(const IImage* image) {
   const CompositeTileImageContribution* compositeContribution = _compositeContribution;
   _compositeContribution = NULL; // the _compositeContribution ownership moved to the listener
-  _listener->imageCreated(_tileId,
+  _listener->imageCreated(_tileID,
                           image,
-                          _imageId,
+                          _imageID,
                           compositeContribution);
   cleanUp();
 }
@@ -330,12 +330,12 @@ void CompositeTileImageProvider::Composer::stepDone() {
   }
 }
 
-void CompositeTileImageProvider::Composer::imageCreated(const std::string&           tileId,
+void CompositeTileImageProvider::Composer::imageCreated(const std::string&           tileID,
                                                         const IImage*                image,
-                                                        const std::string&           imageId,
+                                                        const std::string&           imageID,
                                                         const TileImageContribution* contribution,
                                                         const size_t                 index) {
-  _results[index] = ChildResult::image(image, imageId, contribution);
+  _results[index] = ChildResult::image(image, imageID, contribution);
   stepDone();
 }
 
@@ -352,24 +352,24 @@ void CompositeTileImageProvider::Composer::imageCreationCanceled(const size_t in
   stepDone();
 }
 
-void CompositeTileImageProvider::Composer::cancel(const std::string& tileId) {
+void CompositeTileImageProvider::Composer::cancel(const std::string& tileID) {
   _canceled = true;
-  _compositeTileImageProvider->cancelChildren(tileId, _compositeContribution);
+  _compositeTileImageProvider->cancelChildren(tileID, _compositeContribution);
 }
 
-void CompositeTileImageProvider::ChildTileImageListener::imageCreated(const std::string&           tileId,
+void CompositeTileImageProvider::ChildTileImageListener::imageCreated(const std::string&           tileID,
                                                                       const IImage*                image,
-                                                                      const std::string&           imageId,
+                                                                      const std::string&           imageID,
                                                                       const TileImageContribution* contribution) {
-  _composer->imageCreated(tileId, image, imageId, contribution, _index);
+  _composer->imageCreated(tileID, image, imageID, contribution, _index);
 }
 
-void CompositeTileImageProvider::ChildTileImageListener::imageCreationError(const std::string& tileId,
+void CompositeTileImageProvider::ChildTileImageListener::imageCreationError(const std::string& tileID,
                                                                             const std::string& error) {
   _composer->imageCreationError(error, _index);
 }
 
-void CompositeTileImageProvider::ChildTileImageListener::imageCreationCanceled(const std::string& tileId) {
+void CompositeTileImageProvider::ChildTileImageListener::imageCreationCanceled(const std::string& tileID) {
   _composer->imageCreationCanceled(_index);
 }
 
@@ -384,19 +384,19 @@ void CompositeTileImageProvider::create(const Tile* tile,
 
   const CompositeTileImageContribution* compositeContribution = (const CompositeTileImageContribution*) contribution;
 
-  const std::string tileId = tile->_id;
+  const std::string tileID = tile->_id;
 
   Composer* composer = new Composer(resolution._x,
                                     resolution._y,
                                     this,
-                                    tileId,
+                                    tileID,
                                     tile->_sector,
                                     listener,
                                     deleteListener,
                                     compositeContribution,
                                     frameTasksExecutor);
 
-  _composers[ tileId ] = composer;
+  _composers[ tileID ] = composer;
 
   const size_t contributionsSize = compositeContribution->size();
   for (size_t i = 0; i < contributionsSize; i++) {
@@ -418,28 +418,28 @@ void CompositeTileImageProvider::create(const Tile* tile,
   }
 }
 
-void CompositeTileImageProvider::cancel(const std::string& tileId) {
+void CompositeTileImageProvider::cancel(const std::string& tileID) {
 #ifdef C_CODE
-  if (_composers.find(tileId) != _composers.end()) {
-    Composer* composer = _composers[tileId];
-    composer->cancel(tileId);
-    _composers.erase(tileId);
+  if (_composers.find(tileID) != _composers.end()) {
+    Composer* composer = _composers[tileID];
+    composer->cancel(tileID);
+    _composers.erase(tileID);
   }
 #endif
 #ifdef JAVA_CODE
-  final Composer composer = _composers.remove(tileId);
+  final Composer composer = _composers.remove(tileID);
   if (composer != null) {
-    composer.cancel(tileId);
+    composer.cancel(tileID);
   }
 #endif
 }
 
 void CompositeTileImageProvider::composerDone(Composer* composer) {
-  _composers.erase( composer->_tileId );
+  _composers.erase( composer->_tileID );
   composer->_release();
 }
 
-void CompositeTileImageProvider::cancelChildren(const std::string& tileId,
+void CompositeTileImageProvider::cancelChildren(const std::string& tileID,
                                                 const CompositeTileImageContribution* compositeContribution) {
   const size_t contributionsSize = compositeContribution->size();
 
@@ -452,7 +452,7 @@ void CompositeTileImageProvider::cancelChildren(const std::string& tileId,
 
   for (size_t i = 0; i < contributionsSize; i++) {
     TileImageProvider* child = _children[ indexes[i] ];
-    child->cancel(tileId);
+    child->cancel(tileID);
   }
   
   delete [] indexes;

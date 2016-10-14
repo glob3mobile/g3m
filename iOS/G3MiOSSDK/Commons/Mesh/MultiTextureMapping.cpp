@@ -13,33 +13,33 @@
 #include "GLState.hpp"
 #include "TextureIDReference.hpp"
 
-const IGLTextureId* MultiTextureMapping::getGLTextureId() const {
-  return _glTextureId->getID();
+const IGLTextureID* MultiTextureMapping::getGLTextureID() const {
+  return _glTextureID->getID();
 }
 
-void MultiTextureMapping::releaseGLTextureId() {
+void MultiTextureMapping::releaseGLTextureID() {
 
-  if (_glTextureId != NULL) {
+  if (_glTextureID != NULL) {
 #ifdef C_CODE
-    delete _glTextureId;
+    delete _glTextureID;
 #endif
 #ifdef JAVA_CODE
-    _glTextureId.dispose();
+    _glTextureID.dispose();
 #endif
-    _glTextureId = NULL;
+    _glTextureID = NULL;
   }
   else {
     ILogger::instance()->logError("Releasing invalid Multi texture mapping");
   }
 
-  if (_glTextureId2 != NULL) {
+  if (_glTextureID2 != NULL) {
 #ifdef C_CODE
-    delete _glTextureId2;
+    delete _glTextureID2;
 #endif
 #ifdef JAVA_CODE
-    _glTextureId2.dispose();
+    _glTextureID2.dispose();
 #endif
-    _glTextureId2 = NULL;
+    _glTextureID2 = NULL;
   }
   else {
     ILogger::instance()->logError("Releasing invalid Multi texture mapping");
@@ -55,7 +55,7 @@ MultiTextureMapping::~MultiTextureMapping() {
     delete _texCoords2;
   }
 
-  releaseGLTextureId();
+  releaseGLTextureID();
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -67,7 +67,7 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
 
   for (int i = 0; i < tglfs->size(); i++) {
     TextureGLFeature* tglf =  (TextureGLFeature*) tglfs->get(0);
-    if (tglf->getTarget() == 0 && tglf->getTextureID() == _glTextureId->getID()) {
+    if (tglf->getTarget() == 0 && tglf->getTextureID() == _glTextureID->getID()) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
@@ -86,14 +86,14 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
   }
   else {
-    state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
+    state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                             _texCoords,
                                             2,
                                             0,
                                             false,
                                             0,
                                             _transparent,
-                                            _glTextureId->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                            _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             _translationU,
                                             _translationV,
@@ -111,14 +111,14 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
   }
   else {
-    state.addGLFeature(new TextureGLFeature(_glTextureId2->getID(),
+    state.addGLFeature(new TextureGLFeature(_glTextureID2->getID(),
                                             _texCoords2,
                                             2,
                                             0,
                                             false,
                                             0,
                                             _transparent2,
-                                            _glTextureId->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                            _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             1), //TARGET
                        false);

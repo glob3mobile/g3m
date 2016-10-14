@@ -11,7 +11,7 @@
 
 #include "Mesh.hpp"
 #include "TextureMapping.hpp"
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 #include "GLState.hpp"
 #include <vector>
 #include "Vector2F.hpp"
@@ -39,10 +39,10 @@ private:
   mutable LazyTextureMappingInitializer* _initializer;
 
 #ifdef C_CODE
-  const TextureIDReference* _glTextureId;
+  const TextureIDReference* _glTextureID;
 #endif
 #ifdef JAVA_CODE
-  private TextureIDReference _glTextureId;
+  private TextureIDReference _glTextureID;
 #endif
 
   mutable bool _initialized;
@@ -59,7 +59,7 @@ private:
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
 
   LazyTextureMapping(const LazyTextureMapping& that);
-  void releaseGLTextureId();
+  void releaseGLTextureID();
 
 
 
@@ -70,7 +70,7 @@ public:
                      bool ownedTexCoords,
                      bool transparent) :
   _initializer(initializer),
-  _glTextureId(NULL),
+  _glTextureID(NULL),
   _initialized(false),
   _texCoords(NULL),
   _translationU(0),
@@ -91,7 +91,7 @@ public:
     }
     _texCoords = NULL;
 
-    releaseGLTextureId();
+    releaseGLTextureID();
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -99,16 +99,16 @@ public:
   }
 
   bool isValid() const {
-    return _glTextureId != NULL;
+    return _glTextureID != NULL;
   }
 
-  void setGLTextureId(const TextureIDReference* glTextureId) {
-    releaseGLTextureId();
-    _glTextureId = glTextureId;
+  void setGLTextureID(const TextureIDReference* glTextureID) {
+    releaseGLTextureID();
+    _glTextureID = glTextureID;
   }
 
-  const TextureIDReference* getGLTextureId() const {
-    return _glTextureId;
+  const TextureIDReference* getGLTextureID() const {
+    return _glTextureID;
   }
 
   void modifyGLState(GLState& state) const;
@@ -154,10 +154,10 @@ public:
 
   BoundingVolume* getBoundingVolume() const;
 
-  bool setGLTextureIdForLevel(int level,
-                              const TextureIDReference* glTextureId);
+  bool setGLTextureIDForLevel(int level,
+                              const TextureIDReference* glTextureID);
 
-  const TextureIDReference* getTopLevelTextureId() const;
+  const TextureIDReference* getTopLevelTextureID() const;
 
   bool isTransparent(const G3MRenderContext* rc) const;
 

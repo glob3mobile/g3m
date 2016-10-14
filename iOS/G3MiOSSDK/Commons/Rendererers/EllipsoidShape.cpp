@@ -32,21 +32,21 @@ EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
   delete _borderColor;
 
-  delete _texId; //Releasing texture
+  delete _texID; //Releasing texture
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
+const TextureIDReference* EllipsoidShape::getTextureID(const G3MRenderContext* rc) {
 
-  if (_texId == NULL) {
+  if (_texID == NULL) {
     if (_textureImage == NULL) {
       return NULL;
     }
 
-    _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+    _texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                              GLFormat::rgba(),
                                                              _textureURL._path,
                                                              false);
@@ -55,15 +55,15 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
     _textureImage = NULL;
   }
 
-  if (_texId == NULL) {
+  if (_texID == NULL) {
     rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
-  if (_texId == NULL) {
+  if (_texID == NULL) {
     return NULL;
   }
 
-  return _texId->createCopy(); //The copy will be handle by the TextureMapping
+  return _texID->createCopy(); //The copy will be handle by the TextureMapping
 }
 
 
@@ -159,12 +159,12 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
                              true,
                              _withNormals? normals->create() : NULL);
 
-  const TextureIDReference* texId = getTextureId(rc);
-  if (texId == NULL) {
+  const TextureIDReference* texID = getTextureID(rc);
+  if (texID == NULL) {
     return im;
   }
 
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
+  TextureMapping* texMap = new SimpleTextureMapping(texID,
                                                     texCoords->create(),
                                                     true,
                                                     true);

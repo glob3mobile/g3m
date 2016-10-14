@@ -17,7 +17,7 @@
 #include "RenderState.hpp"
 #include "URL.hpp"
 
-HereLayer::HereLayer(const std::string&    appId,
+HereLayer::HereLayer(const std::string&    appID,
                      const std::string&    appCode,
                      const TimeInterval&   timeToCache,
                      const bool            readExpired,
@@ -38,7 +38,7 @@ RasterLayer(timeToCache,
             transparency,
             condition,
             layerInfo),
-_appId(appId),
+_appID(appID),
 _appCode(appCode),
 _initialLevel(initialLevel)
 {
@@ -57,7 +57,7 @@ const URL HereLayer::createURL(const Tile* tile) const {
   isb->addString("http://m.nok.it/");
 
   isb->addString("?app_id=");
-  isb->addString(_appId);
+  isb->addString(_appID);
 
   isb->addString("&app_code=");
   isb->addString(_appCode);
@@ -149,7 +149,7 @@ const std::string HereLayer::description() const {
 }
 
 HereLayer* HereLayer::copy() const {
-  return new HereLayer(_appId,
+  return new HereLayer(_appID,
                        _appCode,
                        _timeToCache,
                        _readExpired,
@@ -162,7 +162,7 @@ HereLayer* HereLayer::copy() const {
 bool HereLayer::rawIsEquals(const Layer* that) const {
   HereLayer* t = (HereLayer*) that;
 
-  if (_appId != t->_appId) {
+  if (_appID != t->_appID) {
     return false;
   }
 
@@ -179,8 +179,8 @@ bool HereLayer::rawIsEquals(const Layer* that) const {
 
 RenderState HereLayer::getRenderState() {
   _errors.clear();
-  if (_appId.compare("") == 0) {
-    _errors.push_back("Missing layer parameter: appId");
+  if (_appID.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: appID");
   }
   if (_appCode.compare("") == 0) {
     _errors.push_back("Missing layer parameter: appCode");

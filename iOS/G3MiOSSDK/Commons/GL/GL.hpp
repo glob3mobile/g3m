@@ -17,12 +17,11 @@
 #include "IFloatBuffer.hpp"
 #include "GLConstants.hpp"
 #include "GLGlobalState.hpp"
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 #include "GPUProgram.hpp"
 
 #include <list>
 
-class IGLProgramId;
 class IGLUniformID;
 class GPUProgramManager;
 class GPUProgramState;
@@ -40,10 +39,10 @@ private:
   GPUProgram*    _currentGPUProgram;
   /////////////////////////////////////////////////
 
-  std::list<const IGLTextureId*> _texturesIdBag;
+  std::list<const IGLTextureID*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
 
-  const IGLTextureId* getGLTextureId();
+  const IGLTextureID* getGLTextureID();
 
   GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 
@@ -113,11 +112,11 @@ public:
 
   int getError();
 
-  const IGLTextureId* uploadTexture(const IImage* image,
+  const IGLTextureID* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap);
 
-  void deleteTexture(const IGLTextureId* textureId);
+  void deleteTexture(const IGLTextureID* textureID);
 
   //  void getViewport(int v[]) {
   //    _nativeGL->getIntegerv(GLVariable::viewport(), v);

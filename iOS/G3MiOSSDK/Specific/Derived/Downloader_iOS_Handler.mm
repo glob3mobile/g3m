@@ -16,19 +16,19 @@
 @implementation ListenerEntry
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
-              requestId: (long long) requestId
+              requestID: (long long) requestID
 {
   return [[ListenerEntry alloc] initWithListener: listener
-                                       requestId: requestId];
+                                       requestID: requestID];
 }
 
 -(id) initWithListener: (Downloader_iOS_Listener*) listener
-             requestId: (long long) requestId
+             requestID: (long long) requestID
 {
   self = [super init];
   if (self) {
     _listener  = listener;
-    _requestId = requestId;
+    _requestID = requestID;
     _canceled  = false;
   }
   return self;
@@ -39,15 +39,15 @@
   return _listener;
 }
 
--(long long) requestId
+-(long long) requestID
 {
-  return _requestId;
+  return _requestID;
 }
 
 -(void) cancel
 {
   if (_canceled) {
-    NSLog(@"Listener for RequestId=%lld already canceled", _requestId);
+    NSLog(@"Listener for RequestID=%lld already canceled", _requestID);
   }
   _canceled = YES;
 }
@@ -66,7 +66,7 @@
                  url: (URL*) url
             listener: (Downloader_iOS_Listener*) listener
             priority: (long long) priority
-           requestId: (long long) requestId
+           requestID: (long long) requestID
 {
   self = [super init];
   if (self) {
@@ -75,7 +75,7 @@
     _priority  = priority;
 
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
-                                                  requestId: requestId];
+                                                  requestID: requestID];
     _listeners = [NSMutableArray arrayWithObject:entry];
   }
   return self;
@@ -83,10 +83,10 @@
 
 - (void) addListener: (Downloader_iOS_Listener*) listener
             priority: (long long) priority
-           requestId: (long long) requestId
+           requestID: (long long) requestID
 {
   ListenerEntry* entry = [ListenerEntry entryWithListener: listener
-                                                requestId: requestId];
+                                                requestID: requestID];
 
   [_lock lock];
 
@@ -110,7 +110,7 @@
   return result;
 }
 
-- (bool) cancelListenerForRequestId: (long long)requestId
+- (bool) cancelListenerForRequestID: (long long)requestID
 {
   bool canceled = false;
 
@@ -119,7 +119,7 @@
   const size_t listenersCount = [_listeners count];
   for (size_t i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
-    if ([entry requestId] == requestId) {
+    if (entry.requestID == requestID) {
       [entry cancel];
 
       canceled = true;
@@ -132,7 +132,7 @@
   return canceled;
 }
 
-- (bool) removeListenerForRequestId: (long long)requestId
+- (bool) removeListenerForRequestID: (long long)requestID
 {
   bool removed = false;
 
@@ -141,8 +141,8 @@
   const size_t listenersCount = [_listeners count];
   for (size_t i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
-    if ([entry requestId] == requestId) {
-      [[entry listener] onCancel:*_url];
+    if (entry.requestID == requestID) {
+      [entry.listener onCancel:*_url];
 
       [_listeners removeObjectAtIndex: i];
 
@@ -154,6 +154,47 @@
   [_lock unlock];
 
   return removed;
+}
+
+- (void) cancelListenersTagged: (const std::string&) tag
+{
+  [_lock lock];
+
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    if (entry.listener.tag == tag) {
+      [entry cancel];
+    }
+  }
+
+  [_lock unlock];
+}
+
+- (bool) removeListenersTagged: (const std::string&) tag
+{
+  bool anyRemoved = false;
+
+  [_lock lock];
+
+  NSMutableIndexSet* indexesToDelete = [NSMutableIndexSet indexSet];
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    if (entry.listener.tag == tag) {
+      [entry.listener onCancel:*_url];
+
+      [indexesToDelete addIndex: i];
+
+      anyRemoved = true;
+    }
+  }
+
+  [_listeners removeObjectsAtIndexes: indexesToDelete];
+
+  [_lock unlock];
+
+  return anyRemoved;
 }
 
 - (bool) hasListeners
@@ -231,9 +272,9 @@
       if (dataIsValid) {
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
-          Downloader_iOS_Listener* listener = [entry listener];
+          Downloader_iOS_Listener* listener = entry.listener;
 
-          if ([entry isCanceled]) {
+          if (entry.isCanceled) {
             [listener onCanceledDownloadURL: url
                                        data: data];
 
@@ -249,7 +290,7 @@
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
 
-          [[entry listener] onErrorURL: url];
+          [entry.listener onErrorURL: url];
         }
       }
       

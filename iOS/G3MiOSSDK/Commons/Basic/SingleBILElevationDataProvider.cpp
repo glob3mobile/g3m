@@ -175,9 +175,9 @@ const long long SingleBILElevationDataProvider::requestElevationData(const Secto
   return -1;
 }
 
-void SingleBILElevationDataProvider::cancelRequest(const long long requestId) {
-  if (requestId >= 0) {
-    removeQueueRequest(requestId);
+void SingleBILElevationDataProvider::cancelRequest(const long long requestID) {
+  if (requestID >= 0) {
+    removeQueueRequest(requestID);
   }
 }
 
@@ -215,15 +215,15 @@ const long long SingleBILElevationDataProvider::queueRequest(const Sector& secto
   return _currentRequestID;
 }
 
-void SingleBILElevationDataProvider::removeQueueRequest(const long long requestId) {
+void SingleBILElevationDataProvider::removeQueueRequest(const long long requestID) {
 #ifdef C_CODE
-  std::map<long long, SingleBILElevationDataProvider_Request*>::iterator it = _requestsQueue.find(requestId);
+  std::map<long long, SingleBILElevationDataProvider_Request*>::iterator it = _requestsQueue.find(requestID);
   if (it != _requestsQueue.end()) {
     delete it->second;
     _requestsQueue.erase(it);
   }
 #endif
 #ifdef JAVA_CODE
-  _requestsQueue.remove(requestId);
+  _requestsQueue.remove(requestID);
 #endif
 }

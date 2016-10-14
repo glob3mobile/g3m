@@ -25,7 +25,7 @@
 
 class IImage;
 class IFloatBuffer;
-class IGLTextureId;
+class IGLTextureID;
 class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
@@ -131,10 +131,10 @@ private:
   std::string _token = "";
 
 #ifdef C_CODE
-  const TextureIDReference* _textureId;
+  const TextureIDReference* _textureID;
 #endif
 #ifdef JAVA_CODE
-  private TextureIDReference _textureId;
+  private TextureIDReference _textureID;
 #endif
 
   Vector3D* _cartesianPosition;

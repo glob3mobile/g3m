@@ -23,11 +23,11 @@
 #include "IFactory.hpp"
 #include "Vector2S.hpp"
 
-DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileId,
+DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileID,
                                                      const TileImageContribution* contribution,
                                                      TileImageListener*           listener,
                                                      bool                         deleteListener) :
-_tileId(tileId),
+_tileID(tileID),
 _contribution(contribution),
 _listener(listener),
 _deleteListener(deleteListener)
@@ -42,20 +42,20 @@ DebugTileImageProvider::ImageListener::~ImageListener() {
 #endif
 }
 
-const std::string DebugTileImageProvider::ImageListener::getImageId(const std::string& tileId) {
+const std::string DebugTileImageProvider::ImageListener::getImageID(const std::string& tileID) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("DebugTileImageProvider/");
-  isb->addString(tileId);
+  isb->addString(tileID);
   const std::string s = isb->getString();
   delete isb;
   return s;
 }
 
 void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
-  const std::string imageId = getImageId(_tileId);
-  _listener->imageCreated(_tileId,
+  const std::string imageID = getImageID(_tileID);
+  _listener->imageCreated(_tileID,
                           image,
-                          imageId,
+                          imageID,
                           _contribution);
   if (_deleteListener) {
     delete _listener;
@@ -178,6 +178,6 @@ void DebugTileImageProvider::create(const Tile* tile,
                       true);  
 }
 
-void DebugTileImageProvider::cancel(const std::string& tileId) {
+void DebugTileImageProvider::cancel(const std::string& tileID) {
   // do nothing, can't cancel
 }

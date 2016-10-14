@@ -69,12 +69,12 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     return NULL;
   }
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image1,
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image1,
                                                                                     GLFormat::rgba(),
                                                                                     _imageURL1._path,
                                                                                     false);
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
@@ -122,7 +122,7 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   delete vertices;
 
-  _mtMapping = new MultiTextureMapping(texId,
+  _mtMapping = new MultiTextureMapping(texID,
                                        texCoords.create(),
                                        true,
                                        true,

@@ -83,7 +83,7 @@ private:
 
   const PlanetRenderer* _planetRenderer;
 
-  static std::string createTileId(int level,
+  static std::string createTileID(int level,
                                   int row,
                                   int column);
 

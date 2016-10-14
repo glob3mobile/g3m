@@ -47,18 +47,18 @@ void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
 
 bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 #ifdef C_CODE
-  const TextureIDReference* texId = NULL;
+  const TextureIDReference* texID = NULL;
 #endif
 #ifdef JAVA_CODE
-  TextureIDReference texId = null;
+  TextureIDReference texID = null;
 #endif
 
-  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+  texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                           GLFormat::rgba(),
                                                           "BusyQuadRenderer-Texture",
                                                           false);
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return false;
   }
@@ -86,7 +86,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
   delete vertices;
 
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
+  TextureMapping* texMap = new SimpleTextureMapping(texID,
                                                     texCoords.create(),
                                                     true,
                                                     false);

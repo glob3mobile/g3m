@@ -22,7 +22,7 @@ class DebugTileImageProvider : public CanvasTileImageProvider {
 private:
   class ImageListener : public IImageListener {
   private:
-    const std::string           _tileId;
+    const std::string           _tileID;
 #ifdef C_CODE
     const TileImageContribution* _contribution;
 #endif
@@ -33,10 +33,10 @@ private:
     TileImageListener*          _listener;
     bool                        _deleteListener;
 
-    static const std::string getImageId(const std::string& tileId);
+    static const std::string getImageID(const std::string& tileID);
 
   public:
-    ImageListener(const std::string&           tileId,
+    ImageListener(const std::string&           tileID,
                   const TileImageContribution* contribution,
                   TileImageListener*           listener,
                   bool                         deleteListener);
@@ -95,7 +95,7 @@ public:
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
 };
 

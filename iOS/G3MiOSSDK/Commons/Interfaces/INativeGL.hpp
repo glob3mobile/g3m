@@ -13,7 +13,7 @@ class IFloatBuffer;
 class IShortBuffer;
 class IImage;
 class IGLUniformID;
-class IGLTextureId;
+class IGLTextureID;
 class Matrix44D;
 
 #include <vector>
@@ -91,10 +91,10 @@ public:
                          int dfactor) const = 0;
 
   virtual void bindTexture(int target,
-                           const IGLTextureId* texture) const = 0;
+                           const IGLTextureID* texture) const = 0;
 
-  /* Delete Texture from GPU, and answer if the TextureId can be reused */
-  virtual bool deleteTexture(const IGLTextureId* texture) const = 0;
+  /* Delete Texture from GPU, and answer if the TextureID can be reused */
+  virtual bool deleteTexture(const IGLTextureID* texture) const = 0;
 
   virtual void enableVertexAttribArray(int location) const = 0;
 
@@ -103,7 +103,7 @@ public:
   virtual void pixelStorei(int pname,
                            int param) const = 0;
 
-  virtual std::vector<IGLTextureId*> genTextures(int	n) const = 0;
+  virtual std::vector<IGLTextureID*> genTextures(int	n) const = 0;
 
   virtual void texParameteri(int target,
                              int par,

@@ -145,7 +145,7 @@ public:
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 
-  void cancelRequest(const long long requestId);
+  void cancelRequest(const long long requestID);
 
   std::vector<const Sector*> getSectors() const;
 

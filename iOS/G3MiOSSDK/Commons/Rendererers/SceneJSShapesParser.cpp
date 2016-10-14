@@ -173,12 +173,12 @@ SGNode* SceneJSShapesParser::createNode(const JSONObject* jsonObject) const {
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
-  SGNode* node = new SGNode(id, sId);
+  SGNode* node = new SGNode(id, sID);
 
   processedKeys += parseChildren(jsonObject, node);
 
@@ -195,8 +195,8 @@ SGRotateNode* SceneJSShapesParser::createRotateNode(const JSONObject* jsonObject
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -228,7 +228,7 @@ SGRotateNode* SceneJSShapesParser::createRotateNode(const JSONObject* jsonObject
     processedKeys++;
   }
 
-  SGRotateNode* node = new SGRotateNode(id, sId,
+  SGRotateNode* node = new SGRotateNode(id, sID,
                                         x, y, z,
                                         angle);
 
@@ -247,8 +247,8 @@ SGTranslateNode* SceneJSShapesParser::createTranslateNode(const JSONObject* json
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -273,7 +273,7 @@ SGTranslateNode* SceneJSShapesParser::createTranslateNode(const JSONObject* json
     processedKeys++;
   }
 
-  SGTranslateNode* node = new SGTranslateNode(id, sId,
+  SGTranslateNode* node = new SGTranslateNode(id, sID,
                                               x, y, z);
 
   processedKeys += parseChildren(jsonObject, node);
@@ -300,8 +300,8 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -353,7 +353,7 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
-  SGMaterialNode* node = new SGMaterialNode(id, sId,
+  SGMaterialNode* node = new SGMaterialNode(id, sID,
                                             baseColor,
                                             specularColor,
                                             specular,
@@ -377,8 +377,8 @@ SGLayerNode* SceneJSShapesParser::createLayerNode(const JSONObject* jsonObject) 
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -424,7 +424,7 @@ SGLayerNode* SceneJSShapesParser::createLayerNode(const JSONObject* jsonObject) 
     processedKeys++;
   }
 
-  SGLayerNode* node = new SGLayerNode(id, sId,
+  SGLayerNode* node = new SGLayerNode(id, sID,
                                       uri,
                                       applyTo,
                                       blendMode,
@@ -450,12 +450,12 @@ SGTextureNode* SceneJSShapesParser::createTextureNode(const JSONObject* jsonObje
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
-  SGTextureNode* node = new SGTextureNode(id, sId);
+  SGTextureNode* node = new SGTextureNode(id, sID);
 
   processedKeys += parseChildren(jsonObject, node);
 
@@ -485,8 +485,8 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -598,7 +598,7 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
                                   indicesCount);
   }
 
-  SGGeometryNode* node = new SGGeometryNode(id, sId,
+  SGGeometryNode* node = new SGGeometryNode(id, sID,
                                             primitive,
                                             vertices,
                                             colors,

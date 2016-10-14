@@ -38,10 +38,10 @@ private:
   int  _culledFace;
 
 #ifdef C_CODE
-  const IGLTextureId* _boundTextureId[MAX_N_TEXTURES];
+  const IGLTextureID* _boundTextureID[MAX_N_TEXTURES];
 #endif
 #ifdef JAVA_CODE
-  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
+  private final IGLTextureID[] _boundTextureID = new IGLTextureID[DefineConstants.MAX_N_TEXTURES];
 #endif
 
   float _lineWidth;
@@ -95,7 +95,7 @@ public:
     }
 
     for (int i = 0; i < MAX_N_TEXTURES; i++) {
-      _boundTextureId[i] = NULL;
+      _boundTextureID[i] = NULL;
     }
 
   }
@@ -157,19 +157,19 @@ public:
   }
 
   void bindTexture(const int target,
-                   const IGLTextureId* textureId) {
+                   const IGLTextureID* textureID) {
     if (target > MAX_N_TEXTURES) {
       ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
       return;
     }
 
-    _boundTextureId[target] = textureId;
+    _boundTextureID[target] = textureID;
   }
 
-  void onTextureDelete(const IGLTextureId* textureId) {
+  void onTextureDelete(const IGLTextureID* textureID) {
     for (int i = 0; i < MAX_N_TEXTURES; i++) {
-      if (_boundTextureId[i] == textureId) {
-        _boundTextureId[i] = NULL;
+      if (_boundTextureID[i] == textureID) {
+        _boundTextureID[i] = NULL;
       }
     }
   }

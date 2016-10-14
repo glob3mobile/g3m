@@ -16,13 +16,16 @@
   IBufferDownloadListener* _cppBufferListener;
   IImageDownloadListener*  _cppImageListener;
   bool                     _deleteListener;
+  std::string              _tag;
 }
 
 -(id)initWithCPPBufferListener:(IBufferDownloadListener*)cppListener
-                deleteListener:(bool)deleteListener;
+                deleteListener:(bool)deleteListener
+                           tag:(const std::string&)tag;
 
 -(id)initWithCPPImageListener:(IImageDownloadListener*)cppListener
-               deleteListener:(bool)deleteListener;
+               deleteListener:(bool)deleteListener
+                          tag:(const std::string&)tag;
 
 -(void) onDownloadURL:(const URL&) url
                  data:(NSData*) data;
@@ -33,6 +36,8 @@
 
 -(void) onCanceledDownloadURL:(const URL&) url
                          data:(NSData*) data;
+
+-(const std::string) tag;
 
 -(void) dealloc;
 

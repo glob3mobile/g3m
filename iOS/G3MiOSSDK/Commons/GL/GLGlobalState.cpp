@@ -9,7 +9,7 @@
 #include "GLGlobalState.hpp"
 
 #include "IFloatBuffer.hpp"
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 
 #include "GPUProgram.hpp"
 #include "INativeGL.hpp"
@@ -94,13 +94,13 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
 
   for (int i = 0; i < MAX_N_TEXTURES; i++) {
 
-    if (_boundTextureId[i] != NULL) {
-      if (currentState._boundTextureId[i] == NULL ||
-          !_boundTextureId[i]->isEquals(currentState._boundTextureId[i])) {
+    if (_boundTextureID[i] != NULL) {
+      if (currentState._boundTextureID[i] == NULL ||
+          !_boundTextureID[i]->isEquals(currentState._boundTextureID[i])) {
         nativeGL->setActiveTexture(i);
-        nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId[i]);
+        nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureID[i]);
 
-        currentState._boundTextureId[i] = _boundTextureId[i];
+        currentState._boundTextureID[i] = _boundTextureID[i];
       }
       //else {
       //  ILogger::instance()->logInfo("Texture already bound.\n");

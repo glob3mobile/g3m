@@ -25,20 +25,20 @@ public:
   class GEORasterizerCanvasImageListener : public IImageListener {
   private:
     const TileImageContribution* _contribution;
-    const std::string            _tileId;
+    const std::string            _tileID;
 
     TileImageListener* _listener;
     bool               _deleteListener;
 
-    const std::string getImageId(const std::string& tileId) const;
+    const std::string getImageID(const std::string& tileID) const;
 
   public:
     GEORasterizerCanvasImageListener(const TileImageContribution* contribution,
-                                     const std::string& tileId,
+                                     const std::string& tileID,
                                      TileImageListener* listener,
                                      bool deleteListener) :
     _contribution(contribution),
-    _tileId(tileId),
+    _tileID(tileID),
     _listener(listener),
     _deleteListener(deleteListener)
     {
@@ -81,7 +81,7 @@ public:
 #ifdef JAVA_CODE
     private TileImageContribution _contribution;
 #endif
-    const std::string            _tileId;
+    const std::string            _tileID;
     const Sector                 _tileSector;
     const bool                   _tileMercator;
     const int                    _tileLevel;
@@ -94,7 +94,7 @@ public:
   public:
     GEORasterizerFrameTask(GEOVectorTileImageProvider* geoVectorTileImageProvider,
                            const TileImageContribution* contribution,
-                           const std::string& tileId,
+                           const std::string& tileID,
                            const Sector& tileSector,
                            bool tileMercator,
                            int tileLevel,
@@ -103,7 +103,7 @@ public:
                            bool deleteListener) :
     _geoVectorTileImageProvider(geoVectorTileImageProvider),
     _contribution(contribution),
-    _tileId(tileId),
+    _tileID(tileID),
     _tileSector(tileSector),
     _tileMercator(tileMercator),
     _tileLevel(tileLevel),
@@ -151,12 +151,12 @@ public:
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
-  void rasterizerDeleted(const std::string& tileId);
+  void rasterizerDeleted(const std::string& tileID);
 
   void rasterize(const TileImageContribution* contribution,
-                 const std::string& tileId,
+                 const std::string& tileID,
                  const Sector& tileSector,
                  bool tileMercator,
                  int tileLevel,

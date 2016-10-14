@@ -25,7 +25,7 @@
 #include "DecimatedSubviewElevationData.hpp"
 
 
-std::string Tile::createTileId(int level,
+std::string Tile::createTileID(int level,
                                int row,
                                int column) {
 #ifdef C_CODE
@@ -76,7 +76,7 @@ _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
-_id( createTileId(level, row, column) ),
+_id( createTileID(level, row, column) ),
 _data(NULL),
 _dataSize(0)
 {

@@ -13,15 +13,15 @@
 
 class TextureIDReference;
 class IFloatBuffer;
-class IGLTextureId;
+class IGLTextureID;
 
 class SimpleTextureMapping : public TransformableTextureMapping {
 private:
 #ifdef C_CODE
-  const TextureIDReference* _glTextureId;
+  const TextureIDReference* _glTextureID;
 #endif
 #ifdef JAVA_CODE
-  private TextureIDReference _glTextureId;
+  private TextureIDReference _glTextureID;
 #endif
 
   IFloatBuffer* _texCoords;
@@ -29,25 +29,25 @@ private:
 
   const bool _transparent;
 
-  void releaseGLTextureId();
+  void releaseGLTextureID();
 
 public:
 
-  SimpleTextureMapping(const TextureIDReference* glTextureId,
+  SimpleTextureMapping(const TextureIDReference* glTextureID,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
                        bool transparent) :
   TransformableTextureMapping(0, 0,
                               1, 1,
                               0, 0, 0),
-  _glTextureId(glTextureId),
+  _glTextureID(glTextureID),
   _texCoords(texCoords),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent)
   {
   }
 
-  SimpleTextureMapping(const TextureIDReference* glTextureId,
+  SimpleTextureMapping(const TextureIDReference* glTextureID,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
                        bool transparent,
@@ -65,7 +65,7 @@ public:
                               rotationAngleInRadians,
                               rotationCenterU,
                               rotationCenterV),
-  _glTextureId(glTextureId),
+  _glTextureID(glTextureID),
   _texCoords(texCoords),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent)
@@ -74,7 +74,7 @@ public:
 
   virtual ~SimpleTextureMapping();
 
-  const IGLTextureId* getGLTextureId() const;
+  const IGLTextureID* getGLTextureID() const;
 
   IFloatBuffer* getTexCoords() const {
     return _texCoords;

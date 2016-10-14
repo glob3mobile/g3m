@@ -21,7 +21,7 @@ class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
 class TextureIDReference;
 
-class IGLTextureId;
+class IGLTextureID;
 
 #include "URL.hpp"
 
@@ -66,13 +66,13 @@ private:
 
   bool _textureRequested;
   IImage* _textureImage;
-  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureID(const G3MRenderContext* rc);
 
 #ifdef C_CODE
-  const TextureIDReference* _texId;
+  const TextureIDReference* _texID;
 #endif
 #ifdef JAVA_CODE
-  TextureIDReference _texId;
+  TextureIDReference _texID;
 #endif
 
 protected:
@@ -102,7 +102,7 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _texId(NULL)
+  _texID(NULL)
   {
 
   }
@@ -130,7 +130,7 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _texId(NULL)
+  _texID(NULL)
   {
     
   }

@@ -16,7 +16,7 @@
 
 class HereLayer : public RasterLayer {
 private:
-  const std::string _appId;
+  const std::string _appID;
   const std::string _appCode;
   const int         _initialLevel;
 
@@ -34,7 +34,7 @@ protected:
 
 public:
 
-  HereLayer(const std::string&    appId,
+  HereLayer(const std::string&    appID,
             const std::string&    appCode,
             const TimeInterval&   timeToCache,
             const bool            readExpired    = true,

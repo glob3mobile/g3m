@@ -10,7 +10,7 @@
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "MarkTouchListener.hpp"
@@ -207,7 +207,7 @@ _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
 _labelShadowColor(labelShadowColor),
 _labelGapSize(labelGapSize),
-_textureId(NULL),
+_textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(false),
 _textureImage(NULL),
@@ -263,7 +263,7 @@ _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
 _labelShadowColor(labelShadowColor),
 _labelGapSize(2),
-_textureId(NULL),
+_textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(false),
 _textureImage(NULL),
@@ -316,7 +316,7 @@ _labelFontSize(20),
 _labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
 _labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
 _labelGapSize(2),
-_textureId(NULL),
+_textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(false),
 _textureImage(NULL),
@@ -370,7 +370,7 @@ _labelFontSize(20),
 _labelFontColor(NULL),
 _labelShadowColor(NULL),
 _labelGapSize(2),
-_textureId(NULL),
+_textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(true),
 _textureImage(image),
@@ -421,7 +421,7 @@ _labelFontSize(20),
 _labelFontColor(NULL),
 _labelShadowColor(NULL),
 _labelGapSize(2),
-_textureId(NULL),
+_textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(false),
 _textureImage(NULL),
@@ -585,11 +585,11 @@ Mark::~Mark() {
     _glState->_release();
   }
 
-  if (_textureId != NULL) {
+  if (_textureID != NULL) {
 #ifdef JAVA_CODE
-    _textureId.dispose();
+    _textureID.dispose();
 #endif
-    delete _textureId; //Releasing texture
+    delete _textureID; //Releasing texture
   }
 }
 
@@ -634,17 +634,17 @@ void Mark::createGLState(const Planet* planet,
   _glState->addGLFeature(_billboardGLF,
                          false);
 
-  if (_textureId != NULL) {
+  if (_textureID != NULL) {
 
     if (_hasTCTransformations) {
-      _textureGLF = new TextureGLFeature(_textureId->getID(),
+      _textureGLF = new TextureGLFeature(_textureID->getID(),
                                          billboardTexCoords,
                                          2,
                                          0,
                                          false,
                                          0,
                                          true,
-                                         _textureId->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                         _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                          GLBlendFactor::oneMinusSrcAlpha(),
                                          _translationTCX,
                                          _translationTCY,
@@ -655,14 +655,14 @@ void Mark::createGLState(const Planet* planet,
                                          0.0f);
     }
     else {
-      _textureGLF = new TextureGLFeature(_textureId->getID(),
+      _textureGLF = new TextureGLFeature(_textureID->getID(),
                                          billboardTexCoords,
                                          2,
                                          0,
                                          false,
                                          0,
                                          true,
-                                         _textureId->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                         _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                          GLBlendFactor::oneMinusSrcAlpha(),
                                          0.0f,
                                          0.0f,
@@ -732,8 +732,8 @@ void Mark::render(const G3MRenderContext* rc,
     }
 
     if (!occludedByHorizon) {
-      if ((_textureId == NULL) && (_textureImage != NULL)) {
-        _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+      if ((_textureID == NULL) && (_textureImage != NULL)) {
+        _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                      GLFormat::rgba(),
                                                                      _imageID,
                                                                      false);
@@ -742,7 +742,7 @@ void Mark::render(const G3MRenderContext* rc,
         _textureImage = NULL;
       }
 
-      if (_textureId != NULL) {
+      if (_textureID != NULL) {
         if (_glState == NULL) {
           createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
         }

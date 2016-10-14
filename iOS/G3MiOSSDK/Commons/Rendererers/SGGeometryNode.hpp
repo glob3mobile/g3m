@@ -33,7 +33,7 @@ private:
 public:
 
   SGGeometryNode(const std::string& id,
-                 const std::string& sId,
+                 const std::string& sID,
                  int                primitive,
                  IFloatBuffer*      vertices,
                  IFloatBuffer*      colors,
@@ -41,7 +41,7 @@ public:
                  IFloatBuffer*      normals,
                  IShortBuffer*      indices,
                  const bool         depthTest) :
-  SGNode(id, sId),
+  SGNode(id, sID),
   _primitive(primitive),
   _vertices(vertices),
   _colors(colors),
