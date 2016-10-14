@@ -64,7 +64,7 @@ public:
                           bool readExpired,
                           IBufferDownloadListener* listener,
                           bool deleteListener,
-                          const std::string& tag = "");
+                          const std::string& tag);
 
   long long requestImage(const URL& url,
                          long long priority,
@@ -72,7 +72,7 @@ public:
                          bool readExpired,
                          IImageDownloadListener* listener,
                          bool deleteListener,
-                         const std::string& tag = "");
+                         const std::string& tag);
 
   bool cancelRequest(long long requestID);
 

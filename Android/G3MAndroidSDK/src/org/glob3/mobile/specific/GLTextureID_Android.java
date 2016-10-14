@@ -2,12 +2,12 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IGLTextureId;
+import org.glob3.mobile.generated.IGLTextureID;
 
 
-public final class GLTextureId_Android
-         implements
-            IGLTextureId {
+public final class GLTextureID_Android
+   implements
+      IGLTextureID {
 
    private final int _glTextureId;
 
@@ -17,7 +17,7 @@ public final class GLTextureId_Android
    //   }
 
 
-   GLTextureId_Android(final int textureId) {
+   GLTextureID_Android(final int textureId) {
       _glTextureId = textureId;
    }
 
@@ -28,8 +28,8 @@ public final class GLTextureId_Android
 
 
    @Override
-   public boolean isEquals(final IGLTextureId that) {
-      return (_glTextureId == ((GLTextureId_Android) that).getGLTextureId());
+   public boolean isEquals(final IGLTextureID that) {
+      return (_glTextureId == ((GLTextureID_Android) that).getGLTextureId());
    }
 
 

@@ -20,7 +20,6 @@ import org.glob3.mobile.generated.GPUUniformVec2Float;
 import org.glob3.mobile.generated.GPUUniformVec3Float;
 import org.glob3.mobile.generated.GPUUniformVec4Float;
 import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;

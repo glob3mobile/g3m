@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUProgram;
 import org.glob3.mobile.generated.GPUUniform;
 import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IGLTextureId;
+import org.glob3.mobile.generated.IGLTextureID;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.INativeGL;
@@ -199,7 +199,7 @@ public final class NativeGL_WebGL
 
    @Override
    public native void bindTexture(final int target,
-                                  final IGLTextureId texture) /*-{
+                                  final IGLTextureID texture) /*-{
 		var id = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target,
 				id);
@@ -207,7 +207,7 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public native boolean deleteTexture(final IGLTextureId texture) /*-{
+   public native boolean deleteTexture(final IGLTextureID texture) /*-{
 		var textureID = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.deleteTexture(textureID);
@@ -238,7 +238,7 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public native ArrayList<IGLTextureId> genTextures(final int n) /*-{
+   public native ArrayList<IGLTextureID> genTextures(final int n) /*-{
 		var array = @java.util.ArrayList::new()();
 		for (i = 0; i < n; i++) {
 			var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl

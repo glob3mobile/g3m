@@ -2,26 +2,27 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IGLTextureId;
+
+import org.glob3.mobile.generated.IGLTextureID;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public final class GLTextureId_WebGL
+public final class GLTextureID_WebGL
    implements
-      IGLTextureId {
+      IGLTextureID {
 
    private final JavaScriptObject _webGLTexture; //WebGLTexture
 
 
-   public GLTextureId_WebGL(final JavaScriptObject webGLTexture) {
+   public GLTextureID_WebGL(final JavaScriptObject webGLTexture) {
       _webGLTexture = webGLTexture;
    }
 
 
    @Override
-   public boolean isEquals(final IGLTextureId that) {
-      return (_webGLTexture.equals(((GLTextureId_WebGL) that).getWebGLTexture()));
+   public boolean isEquals(final IGLTextureID that) {
+      return (_webGLTexture.equals(((GLTextureID_WebGL) that).getWebGLTexture()));
    }
 
 
