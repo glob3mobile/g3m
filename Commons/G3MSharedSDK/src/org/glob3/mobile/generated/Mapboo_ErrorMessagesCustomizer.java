@@ -18,7 +18,7 @@ public class Mapboo_ErrorMessagesCustomizer implements ErrorMessagesCustomizer
     final IStringUtils stringUtils = IStringUtils.instance();
     final int errorsSize = errors.size();
 
-    final String appNotFound = "Invalid request: Application #" + _mbBuilder.getApplicationId() + " not found";
+    final String appNotFound = "Invalid request: Application #" + _mbBuilder.getApplicationID() + " not found";
 
     for (int i = 0; i < errorsSize; i++)
     {

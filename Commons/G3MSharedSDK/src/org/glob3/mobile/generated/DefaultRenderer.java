@@ -36,7 +36,7 @@ public abstract class DefaultRenderer implements Renderer
     {
       if(isEnable())
       {
-        _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+        _changedInfoListener.changedRendererInfo(_rendererID, info);
       }
     }
   }
@@ -44,7 +44,7 @@ public abstract class DefaultRenderer implements Renderer
 
   protected ChangedRendererInfoListener _changedInfoListener = null;
 
-  protected int _rendererIdentifier = 0;
+  protected int _rendererID = 0;
 
   protected G3MContext _context;
 
@@ -94,7 +94,7 @@ public abstract class DefaultRenderer implements Renderer
         else
         {
           final java.util.ArrayList<Info> info = new java.util.ArrayList<Info>();
-          _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+          _changedInfoListener.changedRendererInfo(_rendererID, info);
         }
       }
     }
@@ -186,7 +186,7 @@ public abstract class DefaultRenderer implements Renderer
 
 
 
-  public void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  public void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererID)
   {
     if (_changedInfoListener != null)
     {
@@ -195,7 +195,7 @@ public abstract class DefaultRenderer implements Renderer
     else
     {
       _changedInfoListener = changedInfoListener;
-      _rendererIdentifier = rendererIdentifier;
+      _rendererID = rendererID;
       notifyChangedInfo(_info);
     }
   }

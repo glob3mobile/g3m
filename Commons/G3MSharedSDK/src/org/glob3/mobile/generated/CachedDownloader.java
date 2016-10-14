@@ -102,10 +102,6 @@ public class CachedDownloader extends IDownloader
     _downloader.stop();
   }
 
-  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
-  {
-     return requestBuffer(url, priority, timeToCache, readExpired, listener, deleteListener, "");
-  }
   public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener, String tag)
   {
   
@@ -141,10 +137,6 @@ public class CachedDownloader extends IDownloader
     return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, listener, deleteListener, tag);
   }
 
-  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
-  {
-     return requestImage(url, priority, timeToCache, readExpired, listener, deleteListener, "");
-  }
   public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener, String tag)
   {
     _requestsCounter++;

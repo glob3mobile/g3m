@@ -356,7 +356,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     _layerSet.setChangedInfoListener(this);
   
-    _rendererIdentifier = -1;
+    _rendererID = -1;
   
     if (_tileLODTester == null)
     {
@@ -1026,7 +1026,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
     if (_changedInfoListener != null)
     {
-      _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+      _changedInfoListener.changedRendererInfo(_rendererID, info);
     }
   }
 
@@ -1035,19 +1035,19 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _verticalExaggeration;
   }
 
-  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererID)
   {
     if (_changedInfoListener != null)
     {
       ILogger.instance().logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
     }
   
-    _rendererIdentifier = rendererIdentifier;
+    _rendererID = rendererID;
     _changedInfoListener = changedInfoListener;
   
     if(_changedInfoListener != null)
     {
-      _changedInfoListener.changedRendererInfo(rendererIdentifier, _layerSet.getInfo());
+      _changedInfoListener.changedRendererInfo(rendererID, _layerSet.getInfo());
     }
   }
 

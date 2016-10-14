@@ -33,17 +33,20 @@ public abstract class IDownloader
 
   public abstract void stop();
 
-  public abstract long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
-  {
-     return requestBuffer(url, priority, timeToCache, readExpired, listener, deleteListener, "");
-  }
   public abstract long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener, String tag);
 
-  public abstract long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
-  {
-     return requestImage(url, priority, timeToCache, readExpired, listener, deleteListener, "");
-  }
   public abstract long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener, String tag);
+
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
+  {
+    return requestBuffer(url, priority, timeToCache, readExpired, listener, deleteListener, ""); // default tag
+  }
+
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
+  {
+    return requestImage(url, priority, timeToCache, readExpired, listener, deleteListener, ""); // default tag
+  }
+
 
   public abstract boolean cancelRequest(long requestID);
 

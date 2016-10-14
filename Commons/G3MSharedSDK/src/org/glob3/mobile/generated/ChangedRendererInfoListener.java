@@ -25,6 +25,6 @@ public interface ChangedRendererInfoListener
 
   void dispose();
 
-  void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info);
+  void changedRendererInfo(int rendererID, java.util.ArrayList<Info> info);
 
  }

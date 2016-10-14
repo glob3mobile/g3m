@@ -13,17 +13,17 @@ public abstract class MapBooOLDBuilder
 
   private final boolean _enableNotifications;
 
-  private String _applicationId;
+  private String _applicationID;
   private String _applicationName;
   private String _applicationWebsite;
   private String _applicationEMail;
   private String _applicationAbout;
   private int _applicationTimestamp;
   private java.util.ArrayList<MapBooOLD_Scene> _applicationScenes = new java.util.ArrayList<MapBooOLD_Scene>();
-  private String _applicationCurrentSceneId;
-  private String _lastApplicationCurrentSceneId;
+  private String _applicationCurrentSceneID;
+  private String _lastApplicationCurrentSceneID;
 
-  private int _applicationEventId;
+  private int _applicationEventID;
   private final String _token;
 
   private GL _gl;
@@ -346,19 +346,19 @@ public abstract class MapBooOLDBuilder
     return result;
   }
 
-  private String getApplicationCurrentSceneId()
+  private String getApplicationCurrentSceneID()
   {
-    return _applicationCurrentSceneId;
+    return _applicationCurrentSceneID;
   }
   private MapBooOLD_Scene getApplicationCurrentScene()
   {
-    final String currentSceneId = getApplicationCurrentSceneId();
+    final String currentSceneID = getApplicationCurrentSceneID();
   
     final int scenesCount = _applicationScenes.size();
     for (int i = 0; i < scenesCount; i++)
     {
       final String sceneId = _applicationScenes.get(i).getId();
-      if (sceneId.compareTo(currentSceneId) == 0)
+      if (sceneId.compareTo(currentSceneID) == 0)
       {
         return _applicationScenes.get(i);
       }
@@ -372,7 +372,7 @@ public abstract class MapBooOLDBuilder
     return (scene == null) ? Color.black() : scene.getBackgroundColor();
   }
 
-//  const std::string parseSceneId(const JSONObject* jsonObject) const;
+//  const std::string parseSceneID(const JSONObject* jsonObject) const;
   private MapBooOLD_Scene parseScene(JSONObject jsonObject)
   {
     if (jsonObject == null)
@@ -412,7 +412,7 @@ public abstract class MapBooOLDBuilder
     return result;
   }
 
-  //const std::string MapBooOLDBuilder::parseSceneId(const JSONObject* jsonObject) const {
+  //const std::string MapBooOLDBuilder::parseSceneID(const JSONObject* jsonObject) const {
   //  if (jsonObject == NULL) {
   //    ILogger::instance()->logError("Missing Scene ID");
   //    return "";
@@ -546,14 +546,14 @@ public abstract class MapBooOLDBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onCurrentSceneChanged(_context, getApplicationCurrentSceneId(), currentScene);
+      _applicationListener.onCurrentSceneChanged(_context, getApplicationCurrentSceneID(), currentScene);
     }
   
     if (_viewType == MapBooOLD_ViewType.VIEW_EDITION_PREVIEW)
     {
-      if (_applicationCurrentSceneId.compareTo(_lastApplicationCurrentSceneId) != 0)
+      if (_applicationCurrentSceneID.compareTo(_lastApplicationCurrentSceneID) != 0)
       {
-        if (_lastApplicationCurrentSceneId.compareTo("-1") != 0)
+        if (_lastApplicationCurrentSceneID.compareTo("-1") != 0)
         {
           if (_webSocket != null && _isApplicationTubeOpen)
           {
@@ -568,7 +568,7 @@ public abstract class MapBooOLDBuilder
             ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
           }
         }
-        _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
+        _lastApplicationCurrentSceneID = _applicationCurrentSceneID;
       }
     }
   }
@@ -608,8 +608,8 @@ public abstract class MapBooOLDBuilder
   private String getApplicationCurrentSceneCommand()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("currentSceneId=");
-    isb.addString(_applicationCurrentSceneId);
+    isb.addString("currentSceneID=");
+    isb.addString(_applicationCurrentSceneID);
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();
@@ -938,10 +938,10 @@ public abstract class MapBooOLDBuilder
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_serverURL._path);
     isb.addString("/REST/1/applications/");
-    isb.addString(_applicationId);
+    isb.addString(_applicationID);
     isb.addString("/_POST_?");
-    isb.addString("currentSceneId=");
-    isb.addString(_applicationCurrentSceneId);
+    isb.addString("currentSceneID=");
+    isb.addString(_applicationCurrentSceneID);
     isb.addString("&token=");
     isb.addString(_token);
     final String path = isb.getString();
@@ -957,7 +957,7 @@ public abstract class MapBooOLDBuilder
     isb.addString(_serverURL._path);
   
     isb.addString("/Public/applications/");
-    isb.addString(_applicationId);
+    isb.addString(_applicationID);
     isb.addString("/scenes/");
   
     final MapBooOLD_Scene scene = getApplicationCurrentScene();
@@ -1014,18 +1014,18 @@ public abstract class MapBooOLDBuilder
     return new URL(path, false);
   
   }
-  protected MapBooOLDBuilder(URL serverURL, URL tubesURL, String applicationId, MapBooOLD_ViewType viewType, MapBooOLDApplicationChangeListener applicationListener, boolean enableNotifications, String token)
+  protected MapBooOLDBuilder(URL serverURL, URL tubesURL, String applicationID, MapBooOLD_ViewType viewType, MapBooOLDApplicationChangeListener applicationListener, boolean enableNotifications, String token)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
-     _applicationId = applicationId;
+     _applicationID = applicationID;
      _viewType = viewType;
      _applicationName = "";
      _applicationWebsite = "";
      _applicationEMail = "";
      _applicationAbout = "";
      _applicationTimestamp = -1;
-     _applicationEventId = -1;
+     _applicationEventID = -1;
      _token = token;
      _gl = null;
      _g3mWidget = null;
@@ -1038,8 +1038,8 @@ public abstract class MapBooOLDBuilder
      _gpuProgramManager = null;
      _isApplicationTubeOpen = false;
      _initialParse = true;
-     _applicationCurrentSceneId = "-1";
-     _lastApplicationCurrentSceneId = "-1";
+     _applicationCurrentSceneID = "-1";
+     _lastApplicationCurrentSceneID = "-1";
      _context = null;
      _webSocket = null;
      _marksRenderer = null;
@@ -1155,11 +1155,11 @@ public abstract class MapBooOLDBuilder
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_serverURL._path);
     isb.addString("/poll/");
-    isb.addString(_applicationId);
+    isb.addString(_applicationID);
     isb.addString("?view=");
     isb.addString(getViewAsString());
     isb.addString("&eventId=");
-    isb.addInt(_applicationEventId);
+    isb.addInt(_applicationEventID);
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
@@ -1200,15 +1200,15 @@ public abstract class MapBooOLDBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final int getApplicationEventId()
+  public final int getApplicationEventID()
   {
-    return _applicationEventId;
+    return _applicationEventID;
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationEventId(int eventId)
+  public final void setApplicationEventID(int eventId)
   {
-    _applicationEventId = eventId;
+    _applicationEventID = eventId;
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1294,8 +1294,8 @@ public abstract class MapBooOLDBuilder
     int sceneIndex = -1;
     for (int i = 0; i < scenesCount; i++)
     {
-      final String iSceneId = _applicationScenes.get(i).getId();
-      if (iSceneId.compareTo(sceneId) == 0)
+      final String iSceneID = _applicationScenes.get(i).getId();
+      if (iSceneID.compareTo(sceneId) == 0)
       {
         sceneIndex = i;
         break;
@@ -1310,9 +1310,9 @@ public abstract class MapBooOLDBuilder
   
       if (_viewType == MapBooOLD_ViewType.VIEW_RUNTIME)
       {
-        if (_applicationCurrentSceneId.compareTo(sceneId) == 0)
+        if (_applicationCurrentSceneID.compareTo(sceneId) == 0)
         {
-          setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
+          setApplicationCurrentSceneID(_applicationScenes.get(0).getId());
         }
       }
   
@@ -1341,7 +1341,7 @@ public abstract class MapBooOLDBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void saveApplicationData()
   {
-    //  std::string                _applicationId;
+    //  std::string                _applicationID;
     //  std::string                _applicationName;
     //  std::string                _applicationWebsite;
     //  std::string                _applicationEMail;
@@ -1371,7 +1371,7 @@ public abstract class MapBooOLDBuilder
       view = "runtime";
     }
   
-    return new URL(tubesPath + "/application/" + _applicationId + "/" + view, false);
+    return new URL(tubesPath + "/application/" + _applicationID + "/" + view, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1409,7 +1409,7 @@ public abstract class MapBooOLDBuilder
         final int eventId = (int) jsonObject.getAsNumber("eventId", 0);
         final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
   
-        if (getApplicationEventId() != eventId)
+        if (getApplicationEventID() != eventId)
         {
           final JSONString jsonName = jsonObject.getAsString("name");
           if (jsonName != null)
@@ -1482,25 +1482,25 @@ public abstract class MapBooOLDBuilder
               final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
               if (jsonDeleteScene != null)
               {
-                final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
-                if (jsonSceneId != null)
+                final JSONString jsonSceneID = jsonDeleteScene.getAsString("sceneId");
+                if (jsonSceneID != null)
                 {
-                  deleteApplicationScene(jsonSceneId.value());
+                  deleteApplicationScene(jsonSceneID.value());
                 }
               }
             }
           }
   
-          setApplicationEventId(eventId);
+          setApplicationEventID(eventId);
           setApplicationTimestamp(timestamp);
           saveApplicationData();
           setHasParsedApplication();
         }
   
-        final JSONString jsonCurrentSceneId = jsonObject.getAsString("currentSceneId");
-        if (jsonCurrentSceneId != null)
+        final JSONString jsonCurrentSceneID = jsonObject.getAsString("currentSceneID");
+        if (jsonCurrentSceneID != null)
         {
-          setApplicationCurrentSceneId(jsonCurrentSceneId.value());
+          setApplicationCurrentSceneID(jsonCurrentSceneID.value());
         }
   
         if (_enableNotifications)
@@ -1521,11 +1521,11 @@ public abstract class MapBooOLDBuilder
         if (_initialParse)
         {
           _initialParse = false;
-          if (_applicationCurrentSceneId.compareTo("-1") == 0)
+          if (_applicationCurrentSceneID.compareTo("-1") == 0)
           {
             if (_applicationScenes.size() > 0)
             {
-              setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
+              setApplicationCurrentSceneID(_applicationScenes.get(0).getId());
             }
           }
         }
@@ -1646,7 +1646,7 @@ public abstract class MapBooOLDBuilder
   
         _applicationScenes.set(i, newScene);
   
-        if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
+        if (sceneID.compareTo(_applicationCurrentSceneID) == 0)
         {
           updateVisibleScene(cameraPositionChaged);
         }
@@ -1682,17 +1682,17 @@ public abstract class MapBooOLDBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationCurrentSceneId(String currentSceneId)
+  public final void setApplicationCurrentSceneID(String currentSceneID)
   {
-    if (_applicationCurrentSceneId.compareTo(currentSceneId) != 0)
+    if (_applicationCurrentSceneID.compareTo(currentSceneID) != 0)
     {
       final int scenesCount = _applicationScenes.size();
       for (int i = 0; i < scenesCount; i++)
       {
         final String sceneId = _applicationScenes.get(i).getId();
-        if (sceneId.compareTo(currentSceneId) == 0)
+        if (sceneId.compareTo(currentSceneID) == 0)
         {
-          _applicationCurrentSceneId = currentSceneId;
+          _applicationCurrentSceneID = currentSceneID;
           changedCurrentScene();
   
           break;
@@ -1704,7 +1704,7 @@ public abstract class MapBooOLDBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void rawChangeScene(String sceneId)
   {
-    _applicationCurrentSceneId = sceneId;
+    _applicationCurrentSceneID = sceneId;
   
     changedCurrentScene();
   }
@@ -1805,14 +1805,14 @@ public abstract class MapBooOLDBuilder
 
   public final void changeScene(String sceneId)
   {
-    final String currentSceneId = getApplicationCurrentSceneId();
-    if (currentSceneId.compareTo(sceneId) != 0)
+    final String currentSceneID = getApplicationCurrentSceneID();
+    if (currentSceneID.compareTo(sceneId) != 0)
     {
       final int scenesCount = _applicationScenes.size();
       for (int i = 0; i < scenesCount; i++)
       {
-        final String iSceneId = _applicationScenes.get(i).getId();
-        if (sceneId.compareTo(iSceneId) == 0)
+        final String iSceneID = _applicationScenes.get(i).getId();
+        if (sceneId.compareTo(iSceneID) == 0)
         {
           getThreadUtils().invokeInRendererThread(new MapBooOLDBuilder_ChangeSceneTask(this, sceneId), true);
           break;
@@ -1857,9 +1857,9 @@ public abstract class MapBooOLDBuilder
     downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_RestJSON(this), true); // readExpired
   }
 
-  public final String getApplicationId()
+  public final String getApplicationID()
   {
-    return _applicationId;
+    return _applicationID;
   }
 
   public final void setTileLODTester(TileLODTester tlt)

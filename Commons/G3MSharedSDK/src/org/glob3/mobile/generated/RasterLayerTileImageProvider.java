@@ -27,11 +27,11 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   private RasterLayer _layer;
   private IDownloader _downloader;
 
-  private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
+  private final java.util.HashMap<String, Long> _requestsIDsPerTile = new java.util.HashMap<String, Long>();
 
   public void dispose()
   {
-    for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet()) {
+    for (java.util.Map.Entry<String, Long> entry : _requestsIDsPerTile.entrySet()) {
       _downloader.cancelRequest(entry.getValue());
     }
   
@@ -58,13 +58,13 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   
     if (requestID >= 0)
     {
-      _requestsIdsPerTile.put(tileID, requestID);
+      _requestsIDsPerTile.put(tileID, requestID);
     }
   }
 
   public final void cancel(String tileID)
   {
-    final Long requestID = _requestsIdsPerTile.remove(tileID);
+    final Long requestID = _requestsIDsPerTile.remove(tileID);
     if (requestID != null) {
       _downloader.cancelRequest(requestID);
     }
@@ -73,7 +73,7 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 
   public final void requestFinish(String tileID)
   {
-    _requestsIdsPerTile.remove(tileID);
+    _requestsIDsPerTile.remove(tileID);
   }
 
   public final void layerDeleted(RasterLayer layer)

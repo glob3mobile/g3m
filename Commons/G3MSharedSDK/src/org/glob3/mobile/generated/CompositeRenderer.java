@@ -289,7 +289,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     return false;
   }
 
-  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererID)
   {
     if (_changedInfoListener != null)
     {
@@ -303,15 +303,15 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     }
   }
 
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
+  public final void changedRendererInfo(int rendererID, java.util.ArrayList<Info> info)
   {
-    if (rendererIdentifier < _renderersSize)
+    if (rendererID < _renderersSize)
     {
-      _renderers.get(rendererIdentifier).setInfo(info);
+      _renderers.get(rendererID).setInfo(info);
     }
     else
     {
-      ILogger.instance().logWarning("Child Render not found: %d", rendererIdentifier);
+      ILogger.instance().logWarning("Child Render not found: %d", rendererID);
     }
   
     if (_changedInfoListener != null)

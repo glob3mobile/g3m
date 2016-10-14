@@ -51,7 +51,7 @@ public interface Renderer extends ProtoRenderer
 
   public abstract PlanetRenderer getPlanetRenderer();
 
-  public abstract void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier);
+  public abstract void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererID);
 
 //  virtual void setInfo(const std::vector<std::string>& info) = 0;
 

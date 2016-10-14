@@ -35,8 +35,8 @@ public class GL
   private GPUProgram _currentGPUProgram;
   /////////////////////////////////////////////////
 
-  private final java.util.LinkedList<IGLTextureID> _texturesIdBag = new java.util.LinkedList<IGLTextureID>();
-  private int _texturesIdAllocationCounter;
+  private final java.util.LinkedList<IGLTextureID> _texturesIDBag = new java.util.LinkedList<IGLTextureID>();
+  private int _texturesIDAllocationCounter;
 
   private IGLTextureID getGLTextureID()
   {
@@ -44,7 +44,7 @@ public class GL
     //    ILogger::instance()->logInfo("GL::getGLTextureID()");
     //  }
   
-    if (_texturesIdBag.size() == 0)
+    if (_texturesIDBag.size() == 0)
     {
       //const int bugdetSize = 256;
       final int bugdetSize = 1024;
@@ -55,24 +55,24 @@ public class GL
       for (int i = 0; i < idsCount; i++)
       {
         // ILogger::instance()->logInfo("  = Created textureID=%s", ids[i]->description().c_str());
-        _texturesIdBag.addFirst(ids.get(i));
+        _texturesIDBag.addFirst(ids.get(i));
       }
   
-      _texturesIdAllocationCounter += idsCount;
+      _texturesIDAllocationCounter += idsCount;
   
-      ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", idsCount, _texturesIdAllocationCounter);
+      ILogger.instance().logInfo("= Created %d texturesIDs (accumulated %d).", idsCount, _texturesIDAllocationCounter);
     }
   
-    //  _texturesIdGetCounter++;
+    //  _texturesIDGetCounter++;
   
-    if (_texturesIdBag.size() == 0)
+    if (_texturesIDBag.size() == 0)
     {
       ILogger.instance().logError("TextureIDs bag exhausted");
       return null;
     }
   
-    final IGLTextureID result = _texturesIdBag.getLast();
-    _texturesIdBag.removeLast();
+    final IGLTextureID result = _texturesIDBag.getLast();
+    _texturesIDBag.removeLast();
   
     return result;
   }
@@ -91,7 +91,7 @@ public class GL
   public GL(INativeGL nativeGL)
   {
      _nativeGL = nativeGL;
-     _texturesIdAllocationCounter = 0;
+     _texturesIDAllocationCounter = 0;
      _currentGPUProgram = null;
      _clearScreenState = null;
     //Init Constants
@@ -244,7 +244,7 @@ public class GL
   
       if (_nativeGL.deleteTexture(textureID))
       {
-        _texturesIdBag.addLast(textureID);
+        _texturesIDBag.addLast(textureID);
       }
       else
       {
