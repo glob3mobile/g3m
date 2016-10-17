@@ -61,3 +61,18 @@ double MercatorUtils::latitudeToMeters(const Angle& latitude) {
 
 		return my;
 }
+
+Sector MercatorUtils::getSector(int z, int x, int y) {
+  return Sector( Geodetic2D(yToLatitude(  y, z), xToLongitude(  x, z)),
+                 Geodetic2D(yToLatitude(y+1, z), xToLongitude(x+1, z)) );
+}
+
+Angle MercatorUtils::xToLongitude(int x, int z) {
+  return Angle::fromDegrees(x / IMathUtils::instance()->pow(2.0, z) * 360.0 - 180);
+}
+
+Angle MercatorUtils::yToLatitude(int y, int z) {
+  const IMathUtils* mu = IMathUtils::instance();
+  double n = PI - (2.0 * PI * y) / mu->pow(2.0, z);
+  return Angle::fromRadians( mu->atan(mu->sinh(n)) );
+}

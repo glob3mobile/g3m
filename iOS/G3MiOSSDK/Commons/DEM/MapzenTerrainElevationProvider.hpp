@@ -46,9 +46,7 @@ private:
   FloatBufferTerrainElevationGrid* _rootGrid;
   bool _errorDownloadingRootGrid;
 
-  void requestTile(int z,
-                   int x,
-                   int y,
+  void requestTile(int z, int x, int y,
                    const Sector& sector,
                    double deltaHeight);
 
@@ -72,7 +70,7 @@ public:
               FloatBufferTerrainElevationGrid* grid);
 
   void onDownloadError(int z, int x, int y);
-
+  
 };
 
 #endif

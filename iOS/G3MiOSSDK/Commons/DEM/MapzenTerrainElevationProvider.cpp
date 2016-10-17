@@ -17,6 +17,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferTerrainElevationGrid.hpp"
+#include "MercatorUtils.hpp"
 
 
 int MapzenTerrainElevationProvider::_idCounter = 0;
@@ -32,15 +33,11 @@ class MapzenTerrainElevationProvider_ImageDownloadListener : public IImageDownlo
 
 public:
   MapzenTerrainElevationProvider_ImageDownloadListener(MapzenTerrainElevationProvider* provider,
-                                                       int z,
-                                                       int x,
-                                                       int y,
+                                                       int z, int x, int y,
                                                        const Sector& sector,
                                                        double deltaHeight) :
   _provider(provider),
-  _z(z),
-  _x(x),
-  _y(y),
+  _z(z), _x(x), _y(y),
   _sector(sector),
   _deltaHeight(deltaHeight)
   {
@@ -58,7 +55,8 @@ public:
                   IImage* image,
                   bool expired) {
     FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
-    _provider->onGrid(_z, _x, _y, grid);
+    _provider->onGrid(_z, _x, _y,
+                      grid);
   }
 
   void onError(const URL& url) {
@@ -76,7 +74,6 @@ public:
   }
 
 };
-
 
 
 MapzenTerrainElevationProvider::MapzenTerrainElevationProvider(const std::string&  apiKey,
@@ -134,6 +131,9 @@ void MapzenTerrainElevationProvider::requestTile(int z,
 
 void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
   _context = context;
+
+//  Sector s = MercatorUtils::getSector(0, 0, 0);
+//  ILogger::instance()->logInfo( s.description() );
 
   // request root grid
   requestTile(0, // z

@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__MercatorUtils__
 
 #include "Angle.hpp"
+#include "Sector.hpp"
 
 
 class MercatorUtils {
@@ -81,6 +82,12 @@ public:
   }
 
   static double latitudeToMeters(const Angle& latitude);
+
+  static Sector getSector(int z, int x, int y);
+
+  static Angle xToLongitude(int x, int z);
+
+  static Angle yToLatitude(int y, int z);
 
 };
 
