@@ -22,7 +22,7 @@ public class MapzenTerrainElevationProvider_ImageDownloadListener extends IImage
   public final void onDownload(URL url, IImage image, boolean expired)
   {
 
-    MutableColor255 pixel = new MutableColor255(0,0,0,0);
+    MutableColor255 pixel = new MutableColor255((byte) 0, (byte) 0, (byte) 0, (byte) 0);
 
     final int width = image.getWidth();
     final int height = image.getHeight();

@@ -56,7 +56,7 @@ public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   
     for (int i = 0; i < _bufferSize; i++)
     {
-      short height = _buffer[i];
+      double height = _buffer[i];
       if ((height != height))
       {
         continue;

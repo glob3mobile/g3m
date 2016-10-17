@@ -27,9 +27,41 @@ public class ChessboardLayer extends ProceduralLayer
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
-  ChessboardLayer(const java.util.ArrayList<LayerTilesRenderParameters> parametersVector, const Color& backgroundColor = Color.white(), const Color& boxColor = Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), const int splits = 8, const Sector& dataSector = Sector.FULL_SPHERE, const float transparency = 1.0f, const LayerCondition* condition = null, java.util.ArrayList<Info>* layerInfo = new java.util.ArrayList<Info>()) : ProceduralLayer(parametersVector, transparency, condition, layerInfo), _dataSector(dataSector), _backgroundColor(backgroundColor), _boxColor(boxColor), _splits(splits)
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition)
   {
+     this(parametersVector, backgroundColor, boxColor, splits, dataSector, transparency, condition, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency)
+  {
+     this(parametersVector, backgroundColor, boxColor, splits, dataSector, transparency, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector)
+  {
+     this(parametersVector, backgroundColor, boxColor, splits, dataSector, 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits)
+  {
+     this(parametersVector, backgroundColor, boxColor, splits, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor)
+  {
+     this(parametersVector, backgroundColor, boxColor, 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor)
+  {
+     this(parametersVector, backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector)
+  {
+     this(parametersVector, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
+  {
+     super(parametersVector, transparency, condition, layerInfo);
+     _dataSector = new Sector(dataSector);
+     _backgroundColor = new Color(backgroundColor);
+     _boxColor = new Color(boxColor);
+     _splits = splits;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
