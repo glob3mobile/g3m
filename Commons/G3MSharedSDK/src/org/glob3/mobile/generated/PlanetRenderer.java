@@ -341,7 +341,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
      _glState = new GLState();
-     _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
+     _renderedSector = renderedSector.isEquals(Sector.FULL_SPHERE)? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
      _renderTileMeshes = renderTileMeshes;
@@ -913,12 +913,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   public final boolean setRenderedSector(Sector sector)
   {
-    if ((_renderedSector != null && !_renderedSector.isEquals(sector)) || (_renderedSector == null && !sector.isEquals(Sector.fullSphere())))
+    if ((_renderedSector != null && !_renderedSector.isEquals(sector)) || (_renderedSector == null && !sector.isEquals(Sector.FULL_SPHERE)))
     {
       if (_renderedSector != null)
          _renderedSector.dispose();
   
-      if (sector.isEquals(Sector.fullSphere()))
+      if (sector.isEquals(Sector.FULL_SPHERE))
       {
         _renderedSector = null;
       }

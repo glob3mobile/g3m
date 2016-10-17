@@ -96,7 +96,7 @@ public class GEOVectorLayer extends VectorLayer
   public final Sector getDataSector()
   {
     ///#error todo;
-    return Sector.fullSphere();
+    return Sector.FULL_SPHERE;
   }
 
   public final String getLayerType()

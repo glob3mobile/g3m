@@ -88,7 +88,7 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultWGS84(int firstLevel, int maxLevel)
   {
-    return createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
+    return createDefaultWGS84(Sector.FULL_SPHERE, firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
@@ -110,7 +110,7 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)
   {
-    final Sector topSector = Sector.fullSphere();
+    final Sector topSector = Sector.FULL_SPHERE;
     final int topSectorSplitsByLatitude = 1;
     final int topSectorSplitsByLongitude = 1;
     final boolean mercator = true;

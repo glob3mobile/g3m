@@ -383,7 +383,7 @@ public class PlanetTileTessellator extends TileTessellator
   public PlanetTileTessellator(boolean skirted, Sector sector)
   {
      _skirted = skirted;
-     _renderedSector = sector.isEquals(Sector.fullSphere())? null : new Sector(sector);
+     _renderedSector = sector.isEquals(Sector.FULL_SPHERE)? null : new Sector(sector);
   }
 
   public void dispose()
@@ -556,7 +556,7 @@ public class PlanetTileTessellator extends TileTessellator
     {
       _renderedSector = null;
 
-      if (sector.isEquals(Sector.fullSphere()))
+      if (sector.isEquals(Sector.FULL_SPHERE))
       {
         _renderedSector = null;
       }

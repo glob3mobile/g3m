@@ -83,7 +83,7 @@ public class MapBoo
     {
       if (_type.equals("URLTemplate"))
       {
-        URLTemplateLayer layer = URLTemplateLayer.newMercator(_url, Sector.fullSphere(), false, 1, 18, TimeInterval.fromDays(30)); // maxLevel -  firstLevel -  isTransparent
+        URLTemplateLayer layer = URLTemplateLayer.newMercator(_url, Sector.FULL_SPHERE, false, 1, 18, TimeInterval.fromDays(30)); // maxLevel -  firstLevel -  isTransparent
     
         layerSet.addLayer(layer);
       }

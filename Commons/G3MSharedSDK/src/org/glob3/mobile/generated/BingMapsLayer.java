@@ -29,7 +29,7 @@ public class BingMapsLayer extends RasterLayer
   
     final IMathUtils mu = IMathUtils.instance();
   
-    setParameters(new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, mu.max(zoomMin, _initialLevel), mu.min(zoomMax, _maxLevel), new Vector2S(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+    setParameters(new LayerTilesRenderParameters(Sector.FULL_SPHERE, 1, 1, mu.max(zoomMin, _initialLevel), mu.min(zoomMax, _maxLevel), new Vector2S(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
   }
 
   private static String getQuadKey(int zoom, int column, int row)
@@ -402,7 +402,7 @@ public class BingMapsLayer extends RasterLayer
 
   public final Sector getDataSector()
   {
-    return Sector.fullSphere();
+    return Sector.FULL_SPHERE;
   }
 
 }

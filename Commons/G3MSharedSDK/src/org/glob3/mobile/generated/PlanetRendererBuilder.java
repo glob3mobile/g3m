@@ -223,7 +223,7 @@ public class PlanetRendererBuilder
   {
     if (_renderedSector == null)
     {
-      return Sector.fullSphere();
+      return Sector.FULL_SPHERE;
     }
     return _renderedSector;
   }

@@ -298,7 +298,7 @@ public abstract class IG3MBuilder
   {
     if (_shownSector == null)
     {
-      return Sector.fullSphere();
+      return Sector.FULL_SPHERE;
     }
     return _shownSector;
   }

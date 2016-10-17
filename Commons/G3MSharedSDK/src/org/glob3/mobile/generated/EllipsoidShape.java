@@ -196,7 +196,7 @@ public class EllipsoidShape extends AbstractMeshShape
     }
   
     final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid._radii));
-    final Sector sector = new Sector(Sector.fullSphere());
+    final Sector sector = new Sector(Sector.FULL_SPHERE);
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.zero);
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();

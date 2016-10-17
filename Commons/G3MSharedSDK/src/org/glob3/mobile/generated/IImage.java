@@ -8,6 +8,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class MutableColor255;
+
+
 public abstract class IImage
 {
   public void dispose()
@@ -27,4 +30,6 @@ public abstract class IImage
   public abstract boolean isPremultiplied();
 
   public abstract IImage shallowCopy();
+
+  public abstract void getPixel(int x, int y, MutableColor255 pixel);
 }

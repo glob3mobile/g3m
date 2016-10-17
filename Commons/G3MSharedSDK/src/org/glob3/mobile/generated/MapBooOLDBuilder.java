@@ -45,7 +45,7 @@ public abstract class MapBooOLDBuilder
   private PlanetRenderer createPlanetRenderer()
   {
     final boolean skirted = true;
-    TileTessellator tessellator = new PlanetTileTessellator(skirted, Sector.fullSphere());
+    TileTessellator tessellator = new PlanetTileTessellator(skirted, Sector.FULL_SPHERE);
   
     final float verticalExaggeration = 1F;
   
@@ -60,7 +60,7 @@ public abstract class MapBooOLDBuilder
     final boolean showStatistics = false;
     long tileTextureDownloadPriority = DownloadPriority.HIGHER;
   
-    final Sector renderedSector = Sector.fullSphere();
+    final Sector renderedSector = Sector.FULL_SPHERE;
     final boolean renderTileMeshes = true;
   
     final boolean logTilesPetitions = false;
@@ -86,7 +86,7 @@ public abstract class MapBooOLDBuilder
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
     //SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   
-    final Geodetic3D initialCameraPosition = planet.getDefaultCameraPosition(Sector.fullSphere());
+    final Geodetic3D initialCameraPosition = planet.getDefaultCameraPosition(Sector.FULL_SPHERE);
   
     cameraConstraints.add(new RenderedSectorCameraConstrainer(planetRenderer, initialCameraPosition._height * 1.2));
   
@@ -533,7 +533,7 @@ public abstract class MapBooOLDBuilder
         final Sector sector = currentScene.getSector();
         if (sector == null)
         {
-          _g3mWidget.setRenderedSector(Sector.fullSphere());
+          _g3mWidget.setRenderedSector(Sector.FULL_SPHERE);
         }
         else
         {
@@ -590,7 +590,7 @@ public abstract class MapBooOLDBuilder
         final Sector sector = currentScene.getSector();
         if (sector == null)
         {
-          _g3mWidget.setRenderedSector(Sector.fullSphere());
+          _g3mWidget.setRenderedSector(Sector.FULL_SPHERE);
         }
         else
         {
@@ -1174,12 +1174,12 @@ public abstract class MapBooOLDBuilder
   
     if (sector == null)
     {
-      return Sector.fullSphere();
+      return Sector.FULL_SPHERE;
     }
   
     if (sector.asNull() != null)
     {
-      return Sector.fullSphere();
+      return Sector.FULL_SPHERE;
     }
   
     final double lowerLat = sector.getAsNumber("lowerLat", -90.0);

@@ -442,7 +442,7 @@ public class WMSLayer extends RasterLayer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), 0, 17) : parameters, transparency, condition, layerInfo);
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.FULL_SPHERE, 0, 17) : parameters, transparency, condition, layerInfo);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -471,7 +471,7 @@ public class WMSLayer extends RasterLayer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), 0, 17) : parameters, transparency, condition, layerInfo);
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.FULL_SPHERE, 0, 17) : parameters, transparency, condition, layerInfo);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
