@@ -1,5 +1,5 @@
 //
-//  DEM.cpp
+//  TerrainElevationGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -41,10 +41,10 @@ const Geodetic2D TerrainElevationGrid::getResolution() const {
   return _resolution;
 }
 
-Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
-                                       float verticalExaggeration,
-                                       const Geodetic3D& positionOffset,
-                                       float pointSize) const {
+Mesh* TerrainElevationGrid::createDebugMesh(const Planet* planet,
+                                            float verticalExaggeration,
+                                            const Geodetic3D& offset,
+                                            float pointSize) const {
 
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
   const double minElevation     = minMaxAverageElevations._x;
@@ -60,7 +60,7 @@ Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
 
   for (int x = 0; x < _extent._x; x++) {
     const double u = (double) x / (_extent._x  - 1);
-    const Angle longitude = _sector.getInnerPointLongitude(u).add(positionOffset._longitude);
+    const Angle longitude = _sector.getInnerPointLongitude(u).add(offset._longitude);
 
     for (int y = 0; y < _extent._y; y++) {
       const double elevation = getElevationAt(x, y);
@@ -69,9 +69,9 @@ Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
       }
 
       const double v = 1.0 - ( (double) y / (_extent._y - 1) );
-      const Angle latitude = _sector.getInnerPointLatitude(v).add(positionOffset._latitude);
+      const Angle latitude = _sector.getInnerPointLatitude(v).add(offset._latitude);
 
-      const double height = (elevation * verticalExaggeration) + positionOffset._height;
+      const double height = (elevation + offset._height) * verticalExaggeration;
 
       vertices->add(latitude, longitude, height);
 
@@ -91,7 +91,7 @@ Mesh* TerrainElevationGrid::createMesh(const Planet* planet,
                                 0,                    // colorsIntensity
                                 false                 // depthTest
                                 );
-
+  
   delete vertices;
   
   return result;

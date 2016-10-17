@@ -78,6 +78,7 @@
 		CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */; };
 		CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */; };
 		CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */; };
+		CF0672351DB52C2400126E40 /* MapzenTerrariumParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
 		CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF07DD0B175D32CC00839F5D /* Color.cpp */; };
@@ -210,6 +211,7 @@
 		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
 		CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF60500217724C5C00EB48A6 /* JSONNull.hpp */; };
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
+		CF66EB811DB5252900EFF718 /* MapzenTerrariumParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66EB7F1DB5252900EFF718 /* MapzenTerrariumParser.cpp */; };
 		CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */; };
 		CF67D9C61C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */; };
 		CF67D9C71C5AB11A00873661 /* TileVisibilityTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF67D9C21C5A90BB00873661 /* TileVisibilityTester.hpp */; };
@@ -793,9 +795,10 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF0672351DB52C2400126E40 /* MapzenTerrariumParser.hpp in CopyFiles */,
+				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CFBBF1011DB4CD7000BF289E /* MutableColor255.hpp in CopyFiles */,
 				CFBBF1021DB4CD7000BF289E /* FloatBufferTerrainElevationGrid.hpp in CopyFiles */,
-				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CFC35E6A1DAFBC2300929BE6 /* TerrainElevationProvider.hpp in CopyFiles */,
 				CFC35E6B1DAFBC2300929BE6 /* MapzenTerrainElevationProvider.hpp in CopyFiles */,
 				CF8CED381DA6C4420058748E /* TerrainElevationGrid.hpp in CopyFiles */,
@@ -1484,6 +1487,8 @@
 		CF60500217724C5C00EB48A6 /* JSONNull.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONNull.hpp; sourceTree = "<group>"; };
 		CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapePositionEffect.cpp; path = Commons/Rendererers/ShapePositionEffect.cpp; sourceTree = "<group>"; };
 		CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapePositionEffect.hpp; path = Commons/Rendererers/ShapePositionEffect.hpp; sourceTree = "<group>"; };
+		CF66EB7F1DB5252900EFF718 /* MapzenTerrariumParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MapzenTerrariumParser.cpp; path = Commons/DEM/MapzenTerrariumParser.cpp; sourceTree = "<group>"; };
+		CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MapzenTerrariumParser.hpp; path = Commons/DEM/MapzenTerrariumParser.hpp; sourceTree = "<group>"; };
 		CF67D9C11C5A90BB00873661 /* TileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileVisibilityTester.cpp; path = Commons/Rendererers/TileVisibilityTester.cpp; sourceTree = "<group>"; };
 		CF67D9C21C5A90BB00873661 /* TileVisibilityTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileVisibilityTester.hpp; path = Commons/Rendererers/TileVisibilityTester.hpp; sourceTree = "<group>"; };
 		CF67D9C41C5A99C300873661 /* MeshBoundingVolumeTileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshBoundingVolumeTileVisibilityTester.cpp; path = Commons/Rendererers/MeshBoundingVolumeTileVisibilityTester.cpp; sourceTree = "<group>"; };
@@ -1531,8 +1536,8 @@
 		CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshMaterial.hpp; path = Commons/Mesh/G3MMeshMaterial.hpp; sourceTree = "<group>"; };
 		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
 		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
-		CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainElevationGrid.cpp; path = Commons/DEM/TerrainElevationGrid.cpp; sourceTree = "<group>"; };
-		CF7338121DA56EA700C406D1 /* TerrainElevationGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainElevationGrid.hpp; path = Commons/DEM/TerrainElevationGrid.hpp; sourceTree = "<group>"; };
+		CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TerrainElevationGrid.cpp; path = Commons/DEM/TerrainElevationGrid.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF7338121DA56EA700C406D1 /* TerrainElevationGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TerrainElevationGrid.hpp; path = Commons/DEM/TerrainElevationGrid.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7338141DA5799E00C406D1 /* BufferTerrainElevationGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferTerrainElevationGrid.cpp; path = Commons/DEM/BufferTerrainElevationGrid.cpp; sourceTree = "<group>"; };
 		CF7338151DA5799E00C406D1 /* BufferTerrainElevationGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BufferTerrainElevationGrid.hpp; path = Commons/DEM/BufferTerrainElevationGrid.hpp; sourceTree = "<group>"; };
 		CF7338171DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferTerrainElevationGrid.cpp; path = Commons/DEM/ShortBufferTerrainElevationGrid.cpp; sourceTree = "<group>"; };
@@ -2687,6 +2692,8 @@
 				CF9FDBC81DB3B6F5009D972A /* FloatBufferTerrainElevationGrid.hpp */,
 				CFC35E671DAFBBF200929BE6 /* MapzenTerrainElevationProvider.cpp */,
 				CFC35E681DAFBBF200929BE6 /* MapzenTerrainElevationProvider.hpp */,
+				CF66EB7F1DB5252900EFF718 /* MapzenTerrariumParser.cpp */,
+				CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */,
 				CF7338171DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.cpp */,
 				CF7338181DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.hpp */,
 				CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */,
@@ -3227,6 +3234,7 @@
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
 				CFB57DAD1860EB9600D5B094 /* HUDQuadWidget.cpp in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
+				CF66EB811DB5252900EFF718 /* MapzenTerrariumParser.cpp in Sources */,
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,

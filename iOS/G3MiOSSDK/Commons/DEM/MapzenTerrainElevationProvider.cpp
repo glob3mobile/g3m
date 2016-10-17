@@ -13,8 +13,9 @@
 #include "IDownloader.hpp"
 #include "URL.hpp"
 #include "IImageDownloadListener.hpp"
-#include "IImage.hpp"
-#include "MutableColor255.hpp"
+#include "MapzenTerrariumParser.hpp"
+#include "Sector.hpp"
+#include "ErrorHandling.hpp"
 #include "FloatBufferTerrainElevationGrid.hpp"
 
 
@@ -23,14 +24,23 @@ int MapzenTerrainElevationProvider::_idCounter = 0;
 
 class MapzenTerrainElevationProvider_ImageDownloadListener : public IImageDownloadListener {
   MapzenTerrainElevationProvider* _provider;
+  const int _z;
+  const int _x;
+  const int _y;
   const Sector _sector;
   const double _deltaHeight;
 
 public:
   MapzenTerrainElevationProvider_ImageDownloadListener(MapzenTerrainElevationProvider* provider,
+                                                       int z,
+                                                       int x,
+                                                       int y,
                                                        const Sector& sector,
                                                        double deltaHeight) :
   _provider(provider),
+  _z(z),
+  _x(x),
+  _y(y),
   _sector(sector),
   _deltaHeight(deltaHeight)
   {
@@ -47,39 +57,12 @@ public:
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
-
-    MutableColor255 pixel((unsigned char) 0,
-                          (unsigned char) 0,
-                          (unsigned char) 0,
-                          (unsigned char) 0);
-
-    const int width  = image->getWidth();
-    const int height = image->getHeight();
-
-    const int bufferSize = width * height;
-
-    float* buffer = new float[bufferSize];
-
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        image->getPixel(x, y, pixel);
-        const float elevation = ((pixel._red * 256.0f) + pixel._green + (pixel._blue / 256.0f)) - 32768.0f;
-        const int index = ((height-1-y) * width) + x;
-        buffer[index] = elevation;
-      }
-    }
-
-    delete image;
-
-//    _provider->onGrid( new FloatBufferTerrainElevationGrid(_sector,
-//                                                           Vector2I(width, height),
-//                                                           buffer,
-//                                                           bufferSize,
-//                                                           _deltaHeight) );
+    FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
+    _provider->onGrid(_z, _x, _y, grid);
   }
 
   void onError(const URL& url) {
-//    _provider->onDownloadError();
+    _provider->onDownloadError(_z, _x, _y);
   }
 
   void onCancel(const URL& url) {
@@ -105,19 +88,27 @@ _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
 _context(NULL),
-_instanceID("MapzenTerrainElevationProvider_" + (++_idCounter))
+_instanceID("MapzenTerrainElevationProvider_" + IStringUtils::instance()->toString(++_idCounter)),
+_rootGrid(NULL),
+_errorDownloadingRoot(false)
 {
 
 }
 
 MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
+  if (_rootGrid != NULL) {
+    _rootGrid->_release();
+  }
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
 RenderState MapzenTerrainElevationProvider::getRenderState() {
-  return RenderState::error("MapzenTerrainElevationProvider: under construction");
+  if (_errorDownloadingRoot) {
+    return RenderState::error("Error downloading Mapzen root grid");
+  }
+  return (_rootGrid == NULL) ? RenderState::busy() : RenderState::ready();
 }
 
 void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
@@ -126,11 +117,16 @@ void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
 
   // https://tile.mapzen.com/mapzen/terrain/v1/terrarium/{z}/{x}/{y}.png?api_key=mapzen-xxxxxxx
 
+  // MapzenTerrariumParser
+
   downloader->requestImage(URL("https://tile.mapzen.com/mapzen/terrain/v1/terrarium/0/0/0.png?api_key=" + _apiKey),
                            _downloadPriority,
                            _timeToCache,
                            _readExpired,
                            new MapzenTerrainElevationProvider_ImageDownloadListener(this,
+                                                                                    0, // z
+                                                                                    0, // x
+                                                                                    0, // y
                                                                                     Sector::FULL_SPHERE,
                                                                                     0 /* deltaHeight */),
                            true);
@@ -138,4 +134,24 @@ void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
 
 void MapzenTerrainElevationProvider::cancel() {
   _context->getDownloader()->cancelRequestsTagged(_instanceID);
+}
+
+void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
+                                            FloatBufferTerrainElevationGrid* grid) {
+  if ((z == 0) && (x == 0) && (y == 0)) {
+    if (_rootGrid != NULL) {
+      _rootGrid->_release();
+    }
+    _rootGrid = grid;
+  }
+  else {
+    THROW_EXCEPTION("Not yet done");
+  }
+}
+
+void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
+  ILogger::instance()->logError("Error downloading Mapzen terrarium at %i/%i/%i", z, x, y);
+  if ((z == 0) && (x == 0) && (y == 0)) {
+    _errorDownloadingRoot = true;
+  }
 }

@@ -64,15 +64,15 @@ void Image_iOS::getPixel(int x, int y,
     return;
   }
 
-  CGFloat    width = _image.size.width;
-  NSUInteger bytesPerPixel = 4;
-  NSUInteger bytesPerRow   = bytesPerPixel * width;
+  const CGFloat    width = _image.size.width;
+  const NSUInteger bytesPerPixel = 4;
+  const NSUInteger bytesPerRow   = (NSUInteger) (bytesPerPixel * width);
 
   if (_rawData == NULL) {
     _rawData = createByteArrayRGBA8888();
   }
 
-  const int byteIndex = (bytesPerRow * y) + x * bytesPerPixel;
+  const NSUInteger byteIndex = (bytesPerRow * y) + x * bytesPerPixel;
   pixel._red   = _rawData[byteIndex];
   pixel._green = _rawData[byteIndex + 1];
   pixel._blue  = _rawData[byteIndex + 2];

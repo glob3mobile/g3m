@@ -15,6 +15,8 @@
 #include "DownloadPriority.hpp"
 #include <string>
 
+class FloatBufferTerrainElevationGrid;
+
 
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
 private:
@@ -40,6 +42,9 @@ private:
   private G3MContext _context;
 #endif
 
+  FloatBufferTerrainElevationGrid* _rootGrid;
+  bool _errorDownloadingRoot;
+
 protected:
   ~MapzenTerrainElevationProvider();
 
@@ -55,7 +60,12 @@ public:
   void initialize(const G3MContext* context);
 
   void cancel();
-  
+
+  void onGrid(int z, int x, int y,
+              FloatBufferTerrainElevationGrid* grid);
+
+  void onDownloadError(int z, int x, int y);
+
 };
 
 #endif

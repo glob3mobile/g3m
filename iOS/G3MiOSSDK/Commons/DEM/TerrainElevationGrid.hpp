@@ -1,13 +1,13 @@
 //
-//  DEM.hpp
+//  TerrainElevationGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
 //
 //
 
-#ifndef DEM_hpp
-#define DEM_hpp
+#ifndef TerrainElevationGrid_hpp
+#define TerrainElevationGrid_hpp
 
 #include "RCObject.hpp"
 #include "Sector.hpp"
@@ -47,10 +47,10 @@ public:
 
   virtual Vector3D getMinMaxAverageElevations() const = 0;
 
-  Mesh* createMesh(const Planet* planet,
-                   float verticalExaggeration,
-                   const Geodetic3D& positionOffset,
-                   float pointSize) const;
+  Mesh* createDebugMesh(const Planet* planet,
+                        float verticalExaggeration,
+                        const Geodetic3D& offset,
+                        float pointSize) const;
   
 };
 
