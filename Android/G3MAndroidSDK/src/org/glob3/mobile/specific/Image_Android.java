@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.MutableColor255;
 import org.glob3.mobile.generated.Vector2I;
 
 import android.graphics.Bitmap;
@@ -165,11 +166,11 @@ public final class Image_Android
 
    @Override
    public boolean isPremultiplied() {
-      if(_bitmapHolder._bitmap == null) {
+      if (_bitmapHolder._bitmap == null) {
          return false;
       }
-      Bitmap bmp = _bitmapHolder._bitmap;
-      return bmp.getConfig() != Bitmap.Config.RGB_565 && bmp.hasAlpha();
+      final Bitmap bmp = _bitmapHolder._bitmap;
+      return (bmp.getConfig() != Bitmap.Config.RGB_565) && bmp.hasAlpha();
    }
 
 
@@ -209,6 +210,18 @@ public final class Image_Android
       }
 
       super.dispose();
+   }
+
+
+   @Override
+   public void getPixel(final int x,
+                        final int y,
+                        final MutableColor255 pixel) {
+      final int androidPixel = _bitmapHolder._bitmap.getPixel(x, y);
+      pixel._red = (byte) android.graphics.Color.red(androidPixel);
+      pixel._green = (byte) android.graphics.Color.green(androidPixel);
+      pixel._blue = (byte) android.graphics.Color.blue(androidPixel);
+      pixel._alpha = (byte) android.graphics.Color.alpha(androidPixel);
    }
 
 

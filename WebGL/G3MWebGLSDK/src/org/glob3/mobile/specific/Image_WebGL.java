@@ -66,4 +66,12 @@ public final class Image_WebGL
    }
 
 
+   //   @Override
+   //   public void getPixel(final int x,
+   //                        final int y,
+   //                        final MutableColor255 pixel) {
+   //      final int;
+   //   }
+
+
 }
