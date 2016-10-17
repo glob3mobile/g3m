@@ -58,7 +58,7 @@ Vector3D FloatBufferTerrainElevationGrid::getMinMaxAverageElevations() const {
   double sumHeight = 0.0;
 
   for (size_t i = 0; i < _bufferSize; i++) {
-    short height = _buffer[i];
+    double height = _buffer[i];
     if (ISNAN(height)) {
       continue;
     }

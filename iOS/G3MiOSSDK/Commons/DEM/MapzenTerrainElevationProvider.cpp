@@ -48,7 +48,10 @@ public:
                   IImage* image,
                   bool expired) {
 
-    MutableColor255 pixel(0,0,0,0);
+    MutableColor255 pixel((unsigned char) 0,
+                          (unsigned char) 0,
+                          (unsigned char) 0,
+                          (unsigned char) 0);
 
     const int width  = image->getWidth();
     const int height = image->getHeight();
