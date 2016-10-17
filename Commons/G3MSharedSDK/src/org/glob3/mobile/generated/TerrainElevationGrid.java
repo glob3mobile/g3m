@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  DEM.cpp
+//  TerrainElevationGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  DEM.hpp
+//  TerrainElevationGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -59,7 +59,7 @@ public abstract class TerrainElevationGrid extends RCObject
 
   public abstract Vector3D getMinMaxAverageElevations();
 
-  public final Mesh createMesh(Planet planet, float verticalExaggeration, Geodetic3D positionOffset, float pointSize)
+  public final Mesh createDebugMesh(Planet planet, float verticalExaggeration, Geodetic3D offset, float pointSize)
   {
   
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
@@ -76,7 +76,7 @@ public abstract class TerrainElevationGrid extends RCObject
     for (int x = 0; x < _extent._x; x++)
     {
       final double u = (double) x / (_extent._x - 1);
-      final Angle longitude = _sector.getInnerPointLongitude(u).add(positionOffset._longitude);
+      final Angle longitude = _sector.getInnerPointLongitude(u).add(offset._longitude);
   
       for (int y = 0; y < _extent._y; y++)
       {
@@ -87,9 +87,9 @@ public abstract class TerrainElevationGrid extends RCObject
         }
   
         final double v = 1.0 - ((double) y / (_extent._y - 1));
-        final Angle latitude = _sector.getInnerPointLatitude(v).add(positionOffset._latitude);
+        final Angle latitude = _sector.getInnerPointLatitude(v).add(offset._latitude);
   
-        final double height = (elevation * verticalExaggeration) + positionOffset._height;
+        final double height = (elevation + offset._height) * verticalExaggeration;
   
         vertices.add(latitude, longitude, height);
   
