@@ -175,7 +175,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
-            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 17)
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE, 0, 17)
             : parameters,
             transparency,
             condition,
@@ -212,7 +212,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
-            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 17)
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE, 0, 17)
             : parameters,
             transparency,
             condition,

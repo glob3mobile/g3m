@@ -66,7 +66,7 @@ public:
   
   static LayerTilesRenderParameters* createDefaultWGS84(const int firstLevel,
                                                         const int maxLevel) {
-    return createDefaultWGS84(Sector::fullSphere(), firstLevel, maxLevel);
+    return createDefaultWGS84(Sector::FULL_SPHERE, firstLevel, maxLevel);
   }
 
   static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector,
@@ -106,7 +106,7 @@ public:
 
   static LayerTilesRenderParameters* createDefaultMercator(const int firstLevel,
                                                            const int maxLevel) {
-    const Sector topSector = Sector::fullSphere();
+    const Sector topSector = Sector::FULL_SPHERE;
     const int  topSectorSplitsByLatitude  = 1;
     const int  topSectorSplitsByLongitude = 1;
     const bool mercator = true;

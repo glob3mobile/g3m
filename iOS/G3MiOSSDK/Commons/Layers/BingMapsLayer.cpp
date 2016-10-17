@@ -245,7 +245,7 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
 
   const IMathUtils* mu = IMathUtils::instance();
 
-  setParameters(new LayerTilesRenderParameters(Sector::fullSphere(),
+  setParameters(new LayerTilesRenderParameters(Sector::FULL_SPHERE,
                                                1,
                                                1,
                                                mu->max(zoomMin, _initialLevel),

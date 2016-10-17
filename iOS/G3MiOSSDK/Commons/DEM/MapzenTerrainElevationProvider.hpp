@@ -20,6 +20,7 @@ class MapzenTerrainElevationProvider : public TerrainElevationProvider {
 private:
   static int _idCounter;
 
+  const std::string _apiKey;
 
   const long long    _downloadPriority;
 #ifdef C_CODE
@@ -44,7 +45,8 @@ protected:
 
 public:
 
-  MapzenTerrainElevationProvider(long long           downloadPriority,
+  MapzenTerrainElevationProvider(const std::string&  apiKey,
+                                 long long           downloadPriority,
                                  const TimeInterval& timeToCache,
                                  bool                readExpired);
 

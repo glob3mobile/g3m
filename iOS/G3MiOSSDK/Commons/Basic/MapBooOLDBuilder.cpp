@@ -499,7 +499,7 @@ bool MapBooOLDBuilder::onTerrainTouch(const G3MEventContext* ec,
 
 PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   const bool skirted = true;
-  TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::fullSphere());
+  TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::FULL_SPHERE);
 
   const float verticalExaggeration = 1;
 
@@ -516,7 +516,7 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   const bool showStatistics = false;
   long long tileTextureDownloadPriority = DownloadPriority::HIGHER;
 
-  const Sector renderedSector = Sector::fullSphere();
+  const Sector renderedSector = Sector::FULL_SPHERE;
   const bool renderTileMeshes = true;
 
   const bool logTilesPetitions = false;
@@ -561,7 +561,7 @@ std::vector<ICameraConstrainer*>* MapBooOLDBuilder::createCameraConstraints(cons
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
   //SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
 
-  const Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Sector::fullSphere());
+  const Geodetic3D initialCameraPosition = planet->getDefaultCameraPosition(Sector::FULL_SPHERE);
 
   cameraConstraints->push_back( new RenderedSectorCameraConstrainer(planetRenderer,
                                                                     initialCameraPosition._height * 1.2) );
@@ -941,11 +941,11 @@ const Sector MapBooOLDBuilder::parseSector(const JSONObject* jsonObject, const s
   const JSONObject* sector = jsonObject->getAsObject(paramName);
 
   if (sector == NULL) {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
 
   if (sector->asNull() != NULL) {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
 
   const double lowerLat = sector->getAsNumber("lowerLat",  -90.0);
@@ -1842,7 +1842,7 @@ void MapBooOLDBuilder::changedCurrentScene() {
     if (currentScene != NULL) {
       const Sector* sector = currentScene->getSector();
       if (sector == NULL) {
-        _g3mWidget->setRenderedSector( Sector::fullSphere() );
+        _g3mWidget->setRenderedSector( Sector::FULL_SPHERE );
       }
       else {
         _g3mWidget->setRenderedSector( *sector );
@@ -1919,7 +1919,7 @@ void MapBooOLDBuilder::updateVisibleScene(const bool cameraPositionChanged) {
     if (currentScene != NULL) {
       const Sector* sector = currentScene->getSector();
       if (sector == NULL) {
-        _g3mWidget->setRenderedSector( Sector::fullSphere() );
+        _g3mWidget->setRenderedSector( Sector::FULL_SPHERE );
       }
       else {
         _g3mWidget->setRenderedSector( *sector );

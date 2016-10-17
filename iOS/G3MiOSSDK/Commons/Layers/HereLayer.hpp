@@ -53,7 +53,7 @@ public:
   RenderState getRenderState();
 
   const Sector getDataSector() const {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
   
 };

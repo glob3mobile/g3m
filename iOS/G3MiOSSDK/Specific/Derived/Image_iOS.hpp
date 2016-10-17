@@ -20,6 +20,8 @@ private:
   UIImage*        _image;
   mutable NSData* _sourceBuffer;
 
+  mutable unsigned char* _rawData;
+
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
 
@@ -28,12 +30,15 @@ public:
   virtual ~Image_iOS() {
     _image        = NULL;
     _sourceBuffer = NULL;
+
+    delete [] _rawData;
   }
 
   Image_iOS(UIImage* image,
             NSData* sourceBuffer) :
   _image(image),
-  _sourceBuffer(sourceBuffer)
+  _sourceBuffer(sourceBuffer),
+  _rawData(NULL)
   {
   }
 
@@ -70,7 +75,11 @@ public:
   bool isPremultiplied() const {
     return true;
   }
-  
+
+  void getPixel(int x, int y,
+                MutableColor255& pixel) const;
+
+
 };
 
 #endif

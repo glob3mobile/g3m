@@ -853,7 +853,7 @@ void IG3MBuilder::setShownSector(const Sector& sector) {
 
 Sector IG3MBuilder::getShownSector() const {
   if (_shownSector == NULL) {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
   return *_shownSector;
 }

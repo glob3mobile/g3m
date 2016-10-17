@@ -26,7 +26,7 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string&    key,
                                  std::vector<const Info*>*  layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
-            new LayerTilesRenderParameters(Sector::fullSphere(),
+            new LayerTilesRenderParameters(Sector::FULL_SPHERE,
                                            1,
                                            1,
                                            initialLevel,

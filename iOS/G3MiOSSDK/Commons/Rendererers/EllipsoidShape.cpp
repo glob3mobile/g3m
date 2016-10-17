@@ -228,7 +228,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
   const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
                                               _ellipsoid->_radii));
-  const Sector sector(Sector::fullSphere());
+  const Sector sector(Sector::FULL_SPHERE);
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;

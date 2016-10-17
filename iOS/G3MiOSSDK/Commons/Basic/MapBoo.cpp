@@ -283,7 +283,7 @@ MapBoo::MBLayer::~MBLayer() {
 void MapBoo::MBLayer::apply(LayerSet* layerSet) const {
   if (_type == "URLTemplate") {
     URLTemplateLayer* layer = URLTemplateLayer::newMercator(_url,
-                                                            Sector::fullSphere(),
+                                                            Sector::FULL_SPHERE,
                                                             false,                // isTransparent
                                                             1,                    // firstLevel
                                                             18,                   // maxLevel

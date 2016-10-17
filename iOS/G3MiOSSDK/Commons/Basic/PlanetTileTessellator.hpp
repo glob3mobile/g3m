@@ -166,7 +166,7 @@ public:
     if (_renderedSector == NULL || !_renderedSector->isEquals(sector)) {
       delete _renderedSector;
 
-      if (sector.isEquals(Sector::fullSphere())) {
+      if (sector.isEquals(Sector::FULL_SPHERE)) {
         _renderedSector = NULL;
       }
       else {

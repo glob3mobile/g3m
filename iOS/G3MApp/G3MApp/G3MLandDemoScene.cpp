@@ -72,12 +72,18 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
 
 #warning Diego at work!
   planetRenderer->setVerticalExaggeration(100);
-  planetRenderer->setTerrainElevationProvider(new MapzenTerrainElevationProvider(DownloadPriority::HIGHER,
+  planetRenderer->setTerrainElevationProvider(new MapzenTerrainElevationProvider("mapzen-ZB6FqMg",
+                                                                                 DownloadPriority::HIGHER,
                                                                                  TimeInterval::fromDays(0),
                                                                                  false /* readExpired */));
 
+  //  mapzen-ZB6FqMg
+  // https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg
+  // OLD -> "https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png"
+  
+
   // https://mapzen.com/blog/elevation/
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png",
+  URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg",
                                                           Sector::FULL_SPHERE,
                                                           false,                     // isTransparent
                                                           2,                         // firstLevel
@@ -89,19 +95,19 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
 
 
 
-  const double deltaHeight = -700.905;
-  const short  noDataValue = -32768;
-  BILDownloader::request(context,
-                         URL("file:///0576.bil"),
-                         DownloadPriority::MEDIUM,
-                         TimeInterval::fromDays(0),
-                         false,  // readExpired
-                         Sector::fromDegrees(40.1665739916489, -5.85449532145337,
-                                             40.3320215899527, -5.5116079822178570),
-                         Vector2I(2516, 1335),
-                         deltaHeight,
-                         noDataValue,
-                         new G3MLandDemoSceneBILHandler(getModel()),
-                         true);
+//  const double deltaHeight = -700.905;
+//  const short  noDataValue = -32768;
+//  BILDownloader::request(context,
+//                         URL("file:///0576.bil"),
+//                         DownloadPriority::MEDIUM,
+//                         TimeInterval::fromDays(0),
+//                         false,  // readExpired
+//                         Sector::fromDegrees(40.1665739916489, -5.85449532145337,
+//                                             40.3320215899527, -5.5116079822178570),
+//                         Vector2I(2516, 1335),
+//                         deltaHeight,
+//                         noDataValue,
+//                         new G3MLandDemoSceneBILHandler(getModel()),
+//                         true);
 }
 

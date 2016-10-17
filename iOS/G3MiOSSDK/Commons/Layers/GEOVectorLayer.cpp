@@ -63,7 +63,7 @@ GEOVectorLayer::~GEOVectorLayer() {
 
 const Sector GEOVectorLayer::getDataSector() const {
   //#error todo;
-  return Sector::fullSphere();
+  return Sector::FULL_SPHERE;
 }
 
 void GEOVectorLayer::clear() {

@@ -404,7 +404,7 @@ void PlanetRendererBuilder::setRenderedSector(const Sector& sector) {
 
 Sector PlanetRendererBuilder::getRenderedSector() {
   if (_renderedSector == NULL) {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
   return *_renderedSector;
 }

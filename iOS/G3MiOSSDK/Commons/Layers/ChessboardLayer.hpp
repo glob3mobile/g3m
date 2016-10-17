@@ -28,7 +28,7 @@ public:
                   const Color&                                         backgroundColor = Color::white(),
                   const Color&                                         boxColor        = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
                   const int                                            splits          = 8,
-                  const Sector&                                        dataSector      = Sector::fullSphere(),
+                  const Sector&                                        dataSector      = Sector::FULL_SPHERE,
                   const float                                          transparency    = 1.0f,
                   const LayerCondition*                                condition       = NULL,
                   std::vector<const Info*>*                            layerInfo       = new std::vector<const Info*>()) :
@@ -50,7 +50,7 @@ public:
                   const Color&              backgroundColor    = Color::white(),
                   const Color&              boxColor           = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
                   const int                 splits             = 8,
-                  const Sector&             dataSector         = Sector::fullSphere(),
+                  const Sector&             dataSector         = Sector::FULL_SPHERE,
                   const float               transparency       = 1.0f,
                   const LayerCondition*     condition          = NULL,
                   std::vector<const Info*>* layerInfo          = new std::vector<const Info*>());

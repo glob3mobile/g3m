@@ -10,6 +10,9 @@
 
 #include "Vector2I.hpp"
 
+class MutableColor255;
+
+
 class IImage {
 public:
   virtual ~IImage() {
@@ -30,6 +33,9 @@ public:
   virtual bool isPremultiplied() const = 0;
 
   virtual IImage* shallowCopy() const = 0;
+
+  virtual void getPixel(int x, int y,
+                        MutableColor255& pixel) const = 0;
 };
 
 #endif

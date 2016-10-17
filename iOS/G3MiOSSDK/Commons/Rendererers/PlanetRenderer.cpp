@@ -145,7 +145,7 @@ _tileTextureDownloadPriority(tileTextureDownloadPriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _glState(new GLState()),
-_renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
+_renderedSector(renderedSector.isEquals(Sector::FULL_SPHERE)? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
@@ -847,10 +847,10 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const 
 
 bool PlanetRenderer::setRenderedSector(const Sector& sector) {
   if ((_renderedSector != NULL && !_renderedSector->isEquals(sector)) ||
-      (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))) {
+      (_renderedSector == NULL && !sector.isEquals(Sector::FULL_SPHERE))) {
     delete _renderedSector;
 
-    if (sector.isEquals(Sector::fullSphere())) {
+    if (sector.isEquals(Sector::FULL_SPHERE)) {
       _renderedSector = NULL;
     }
     else {

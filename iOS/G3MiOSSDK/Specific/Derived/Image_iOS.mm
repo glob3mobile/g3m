@@ -10,6 +10,8 @@
 #include "IStringBuilder.hpp"
 #include "IImageListener.hpp"
 #include "RectangleI.hpp"
+#include "MutableColor255.hpp"
+
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {
   const int width  = getWidth();
@@ -55,3 +57,25 @@ const std::string Image_iOS::description() const {
 IImage* Image_iOS::shallowCopy() const {
   return new Image_iOS(_image, _sourceBuffer);
 }
+
+void Image_iOS::getPixel(int x, int y,
+                         MutableColor255& pixel) const {
+  if (_image == NULL) {
+    return;
+  }
+
+  CGFloat    width = _image.size.width;
+  NSUInteger bytesPerPixel = 4;
+  NSUInteger bytesPerRow   = bytesPerPixel * width;
+
+  if (_rawData == NULL) {
+    _rawData = createByteArrayRGBA8888();
+  }
+
+  const int byteIndex = (bytesPerRow * y) + x * bytesPerPixel;
+  pixel._red   = _rawData[byteIndex];
+  pixel._green = _rawData[byteIndex + 1];
+  pixel._blue  = _rawData[byteIndex + 2];
+  pixel._alpha = _rawData[byteIndex + 3];
+}
+

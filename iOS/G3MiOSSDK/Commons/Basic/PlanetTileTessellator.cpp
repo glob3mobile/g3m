@@ -36,7 +36,7 @@
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
-_renderedSector(sector.isEquals(Sector::fullSphere())? NULL : new Sector(sector))
+_renderedSector(sector.isEquals(Sector::FULL_SPHERE)? NULL : new Sector(sector))
 {
 }
 
