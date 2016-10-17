@@ -50,8 +50,8 @@ public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   public final Vector3D getMinMaxAverageElevations()
   {
     final IMathUtils mu = IMathUtils.instance();
-    float minHeight = mu.maxFloat();
-    float maxHeight = mu.minFloat();
+    double minHeight = mu.maxDouble();
+    double maxHeight = mu.minDouble();
     double sumHeight = 0.0;
   
     for (int i = 0; i < _bufferSize; i++)
@@ -73,13 +73,13 @@ public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
       sumHeight += height;
     }
   
-    if (minHeight == mu.maxFloat())
+    if (minHeight == mu.maxDouble())
     {
-      minHeight = 0F;
+      minHeight = 0;
     }
-    if (maxHeight == mu.minFloat())
+    if (maxHeight == mu.minDouble())
     {
-      maxHeight = 0F;
+      maxHeight = 0;
     }
   
     return new Vector3D(minHeight, maxHeight, sumHeight / (_extent._x * _extent._y));

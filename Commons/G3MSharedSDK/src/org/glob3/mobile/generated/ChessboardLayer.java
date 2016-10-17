@@ -64,8 +64,58 @@ public class ChessboardLayer extends ProceduralLayer
      _splits = splits;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-  ChessboardLayer(const int mercatorFirstLevel = 2, const int mercatorMaxLevel = 18, const int wgs84firstLevel = 0, const int wgs84maxLevel = 18, const Color& backgroundColor = Color.white(), const Color& boxColor = Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), const int splits = 8, const Sector& dataSector = Sector.FULL_SPHERE, const float transparency = 1.0f, const LayerCondition* condition = null, java.util.ArrayList<Info>* layerInfo = new java.util.ArrayList<Info>());
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, dataSector, transparency, condition, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, dataSector, transparency, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, dataSector, 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel)
+  {
+     this(mercatorFirstLevel, mercatorMaxLevel, 0, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel)
+  {
+     this(mercatorFirstLevel, 18, 0, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer()
+  {
+     this(2, 18, 0, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, new java.util.ArrayList<Info>());
+  }
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
+  {
+     super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, layerInfo);
+     _dataSector = new Sector(dataSector);
+     _backgroundColor = new Color(backgroundColor);
+     _boxColor = new Color(boxColor);
+     _splits = splits;
+  }
 
   public final String getLayerType()
   {
