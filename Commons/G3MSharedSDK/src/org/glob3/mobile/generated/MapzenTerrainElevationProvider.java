@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class FloatBufferTerrainElevationGrid;
+//class Sector;
 
 
 public class MapzenTerrainElevationProvider extends TerrainElevationProvider
@@ -36,7 +37,17 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   private G3MContext _context;
 
   private FloatBufferTerrainElevationGrid _rootGrid;
-  private boolean _errorDownloadingRoot;
+  private boolean _errorDownloadingRootGrid;
+
+  private void requestTile(int z, int x, int y, Sector sector, double deltaHeight)
+  {
+    IDownloader downloader = _context.getDownloader();
+  
+    final IStringUtils su = IStringUtils.instance();
+    final String path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su.toString(z) + "/" + su.toString(x) + "/" + su.toString(y) + ".png?api_key=" + _apiKey;
+  
+    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenTerrainElevationProvider_ImageDownloadListener(this, z, x, y, sector, deltaHeight), true);
+  }
 
   public void dispose()
   {
@@ -57,13 +68,13 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
      _context = null;
      _instanceID = "MapzenTerrainElevationProvider_" + IStringUtils.instance().toString(++_idCounter);
      _rootGrid = null;
-     _errorDownloadingRoot = false;
+     _errorDownloadingRootGrid = false;
   
   }
 
   public final RenderState getRenderState()
   {
-    if (_errorDownloadingRoot)
+    if (_errorDownloadingRootGrid)
     {
       return RenderState.error("Error downloading Mapzen root grid");
     }
@@ -73,13 +84,9 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   public final void initialize(G3MContext context)
   {
     _context = context;
-    IDownloader downloader = context.getDownloader();
   
-    // https://tile.mapzen.com/mapzen/terrain/v1/terrarium/{z}/{x}/{y}.png?api_key=mapzen-xxxxxxx
-  
-    // MapzenTerrariumParser
-  
-    downloader.requestImage(new URL("https://tile.mapzen.com/mapzen/terrain/v1/terrarium/0/0/0.png?api_key=" + _apiKey), _downloadPriority, _timeToCache, _readExpired, new MapzenTerrainElevationProvider_ImageDownloadListener(this, 0, 0, 0, Sector.FULL_SPHERE, 0), true); // deltaHeight -  y -  x -  z
+    // request root grid
+    requestTile(0, 0, 0, Sector.FULL_SPHERE, 0); // deltaHeight -  y -  x -  z
   }
 
   public final void cancel()
@@ -108,7 +115,7 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
     ILogger.instance().logError("Error downloading Mapzen terrarium at %i/%i/%i", z, x, y);
     if ((z == 0) && (x == 0) && (y == 0))
     {
-      _errorDownloadingRoot = true;
+      _errorDownloadingRootGrid = true;
     }
   }
 
