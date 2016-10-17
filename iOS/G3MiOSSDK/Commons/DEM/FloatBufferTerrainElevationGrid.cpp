@@ -53,8 +53,8 @@ double FloatBufferTerrainElevationGrid::getValueInBufferAt(int index) const {
 
 Vector3D FloatBufferTerrainElevationGrid::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
-  float minHeight = mu->maxFloat();
-  float maxHeight = mu->minFloat();
+  double minHeight = mu->maxDouble();
+  double maxHeight = mu->minDouble();
   double sumHeight = 0.0;
 
   for (size_t i = 0; i < _bufferSize; i++) {
@@ -72,10 +72,10 @@ Vector3D FloatBufferTerrainElevationGrid::getMinMaxAverageElevations() const {
     sumHeight += height;
   }
 
-  if (minHeight == mu->maxFloat()) {
+  if (minHeight == mu->maxDouble()) {
     minHeight = 0;
   }
-  if (maxHeight == mu->minFloat()) {
+  if (maxHeight == mu->minDouble()) {
     maxHeight = 0;
   }
 
