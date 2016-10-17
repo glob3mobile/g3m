@@ -90,7 +90,7 @@ _readExpired(readExpired),
 _context(NULL),
 _instanceID("MapzenTerrainElevationProvider_" + IStringUtils::instance()->toString(++_idCounter)),
 _rootGrid(NULL),
-_errorDownloadingRoot(false)
+_errorDownloadingRootGrid(false)
 {
 
 }
@@ -105,31 +105,42 @@ MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
 }
 
 RenderState MapzenTerrainElevationProvider::getRenderState() {
-  if (_errorDownloadingRoot) {
+  if (_errorDownloadingRootGrid) {
     return RenderState::error("Error downloading Mapzen root grid");
   }
   return (_rootGrid == NULL) ? RenderState::busy() : RenderState::ready();
 }
 
-void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
-  _context = context;
-  IDownloader* downloader = context->getDownloader();
+void MapzenTerrainElevationProvider::requestTile(int z,
+                                                 int x,
+                                                 int y,
+                                                 const Sector& sector,
+                                                 double deltaHeight) {
+  IDownloader* downloader = _context->getDownloader();
 
-  // https://tile.mapzen.com/mapzen/terrain/v1/terrarium/{z}/{x}/{y}.png?api_key=mapzen-xxxxxxx
+  const IStringUtils* su = IStringUtils::instance();
+  const std::string path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su->toString(z) + "/" + su->toString(x) + "/" + su->toString(y) + ".png?api_key=" + _apiKey;
 
-  // MapzenTerrariumParser
-
-  downloader->requestImage(URL("https://tile.mapzen.com/mapzen/terrain/v1/terrarium/0/0/0.png?api_key=" + _apiKey),
+  downloader->requestImage(URL(path),
                            _downloadPriority,
                            _timeToCache,
                            _readExpired,
                            new MapzenTerrainElevationProvider_ImageDownloadListener(this,
-                                                                                    0, // z
-                                                                                    0, // x
-                                                                                    0, // y
-                                                                                    Sector::FULL_SPHERE,
-                                                                                    0 /* deltaHeight */),
+                                                                                    z, x, y,
+                                                                                    sector,
+                                                                                    deltaHeight),
                            true);
+}
+
+void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
+  _context = context;
+
+  // request root grid
+  requestTile(0, // z
+              0, // x
+              0, // y
+              Sector::FULL_SPHERE,
+              0 /* deltaHeight */);
 }
 
 void MapzenTerrainElevationProvider::cancel() {
@@ -152,6 +163,6 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
 void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
   ILogger::instance()->logError("Error downloading Mapzen terrarium at %i/%i/%i", z, x, y);
   if ((z == 0) && (x == 0) && (y == 0)) {
-    _errorDownloadingRoot = true;
+    _errorDownloadingRootGrid = true;
   }
 }

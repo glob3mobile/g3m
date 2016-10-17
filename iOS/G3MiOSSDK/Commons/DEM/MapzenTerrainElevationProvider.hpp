@@ -16,6 +16,7 @@
 #include <string>
 
 class FloatBufferTerrainElevationGrid;
+class Sector;
 
 
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
@@ -43,7 +44,13 @@ private:
 #endif
 
   FloatBufferTerrainElevationGrid* _rootGrid;
-  bool _errorDownloadingRoot;
+  bool _errorDownloadingRootGrid;
+
+  void requestTile(int z,
+                   int x,
+                   int y,
+                   const Sector& sector,
+                   double deltaHeight);
 
 protected:
   ~MapzenTerrainElevationProvider();

@@ -27,42 +27,42 @@ void G3MLandDemoScene::rawSelectOption(const std::string& option,
 }
 
 
-class G3MLandDemoSceneBILHandler : public BILDownloader::Handler {
-private:
-  G3MDemoModel* _model;
+//class G3MLandDemoSceneBILHandler : public BILDownloader::Handler {
+//private:
+//  G3MDemoModel* _model;
+//
+//public:
+//  G3MLandDemoSceneBILHandler(G3MDemoModel* model) :
+//  _model(model)
+//  {
+//  }
+//
+//  //  virtual ~Handler() {
+//  //  }
+//
+//  void onDownloadError(const G3MContext* context,
+//                       const URL& url) {
+//    // do nothing
+//  }
+//
+//  void onParseError(const G3MContext* context) {
+//    // do nothing
+//  }
+//
+//  void onBIL(const G3MContext* context,
+//             ShortBufferTerrainElevationGrid* result) {
+//    Mesh* mesh = result->createDebugMesh(context->getPlanet(),
+//                                         1,                    // verticalExaggeration
+//                                         Geodetic3D::zero(),   // offset
+//                                         1                     // pointSize
+//                                         );
+//    _model->getMeshRenderer()->addMesh(mesh);
+//
+//    const Geodetic3D cameraPosition(result->getSector()._center, 40000);
+//    _model->getG3MWidget()->setAnimatedCameraPosition(cameraPosition);
+//  }
+//};
 
-public:
-  G3MLandDemoSceneBILHandler(G3MDemoModel* model) :
-  _model(model)
-  {
-  }
-
-  //  virtual ~Handler() {
-  //  }
-
-  void onDownloadError(const G3MContext* context,
-                       const URL& url) {
-    // do nothing
-  }
-
-  void onParseError(const G3MContext* context) {
-    // do nothing
-  }
-
-  void onBIL(const G3MContext* context,
-             ShortBufferTerrainElevationGrid* result) {
-    Mesh* mesh = result->createDebugMesh(context->getPlanet(),
-                                         1,                    // verticalExaggeration
-                                         Geodetic3D::zero(),   // offset
-                                         1                     // pointSize
-                                         );
-    _model->getMeshRenderer()->addMesh(mesh);
-
-    const Geodetic3D cameraPosition(result->getSector()._center, 40000);
-    _model->getG3MWidget()->setAnimatedCameraPosition(cameraPosition);
-  }
-
-};
 
 void G3MLandDemoScene::rawActivate(const G3MContext* context) {
 
@@ -77,11 +77,6 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
                                                                                  TimeInterval::fromDays(0),
                                                                                  false /* readExpired */));
 
-  //  mapzen-ZB6FqMg
-  // https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg
-  // OLD -> "https://terrain-preview.mapzen.com/normal/{z}/{x}/{y}.png"
-
-
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg",
                                                           Sector::FULL_SPHERE,
@@ -92,7 +87,6 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
                                                           );
 
   getModel()->getLayerSet()->addLayer( layer );
-
 
 
   //  const double deltaHeight = -700.905;
