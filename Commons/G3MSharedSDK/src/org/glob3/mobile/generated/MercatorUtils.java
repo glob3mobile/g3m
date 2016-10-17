@@ -138,4 +138,21 @@ public class MercatorUtils
         return my;
   }
 
+  public static Sector getSector(int z, int x, int y)
+  {
+    return new Sector(new Geodetic2D(yToLatitude(y, z), xToLongitude(x, z)), new Geodetic2D(yToLatitude(y+1, z), xToLongitude(x+1, z)));
+  }
+
+  public static Angle xToLongitude(int x, int z)
+  {
+    return Angle.fromDegrees(x / IMathUtils.instance().pow(2.0, z) * 360.0 - 180);
+  }
+
+  public static Angle yToLatitude(int y, int z)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    double n = DefineConstants.PI - (2.0 * DefineConstants.PI * y) / mu.pow(2.0, z);
+    return Angle.fromRadians(mu.atan(mu.sinh(n)));
+  }
+
 }

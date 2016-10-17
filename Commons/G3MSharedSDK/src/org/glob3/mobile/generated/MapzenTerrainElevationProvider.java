@@ -85,6 +85,9 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   {
     _context = context;
   
+  //  Sector s = MercatorUtils::getSector(0, 0, 0);
+  //  ILogger::instance()->logInfo( s.description() );
+  
     // request root grid
     requestTile(0, 0, 0, Sector.FULL_SPHERE, 0); // deltaHeight -  y -  x -  z
   }
