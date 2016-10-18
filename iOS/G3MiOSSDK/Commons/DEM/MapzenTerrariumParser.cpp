@@ -92,10 +92,11 @@ void MapzenTerrariumParser::parse(const G3MContext* context,
                                   double deltaHeight,
                                   MapzenTerrariumParser::Listener* listener,
                                   bool deleteListener) {
-  context->getThreadUtils()->invokeAsyncTask(new MapzenTerrariumParser::ParserTask(image,
-                                                                                   sector,
-                                                                                   deltaHeight,
-                                                                                   listener,
-                                                                                   deleteListener),
-                                             true);
+  const IThreadUtils* threadUtils = context->getThreadUtils();
+  GAsyncTask* parserTask = new MapzenTerrariumParser::ParserTask(image,
+                                                                 sector,
+                                                                 deltaHeight,
+                                                                 listener,
+                                                                 deleteListener);
+  threadUtils->invokeAsyncTask(parserTask, true);
 }

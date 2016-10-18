@@ -8,9 +8,7 @@
 
 #include "FloatBufferTerrainElevationGrid.hpp"
 
-
 #include "ErrorHandling.hpp"
-
 
 #ifdef C_CODE
 FloatBufferTerrainElevationGrid::FloatBufferTerrainElevationGrid(const Sector& sector,

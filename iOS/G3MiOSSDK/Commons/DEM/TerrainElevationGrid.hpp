@@ -10,8 +10,8 @@
 #define TerrainElevationGrid_hpp
 
 #include "RCObject.hpp"
+
 #include "Sector.hpp"
-#include "Geodetic2D.hpp"
 #include "Vector2I.hpp"
 
 class Mesh;
