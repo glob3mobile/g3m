@@ -357,6 +357,15 @@ public:
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
   void getVerticesOfZNearPlane(IFloatBuffer* vertices) const;
+  
+  // data to compute frustum
+  FrustumData getFrustumData() const {
+    if (_dirtyFlags._frustumDataDirty) {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
+  }
 
 private:
 
@@ -454,14 +463,7 @@ private:
     }
   }
 
-  // data to compute frustum
-  FrustumData getFrustumData() const {
-    if (_dirtyFlags._frustumDataDirty) {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
-  }
+
 
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D   _getCartesianCenterOfView() const {

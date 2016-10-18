@@ -412,18 +412,30 @@ public:
 
     GPUProgramSources sourcesSphericalAtmosphere("SphericalAtmosphere",
  emptyString +  
-"attribute vec4 aPosition;\n" +
-"uniform mat4 uModelview;\n" +
+"attribute vec4 aPosition; //Position of ZNear Frame corners in world-space\n" +
+"uniform mat4 uModelview; //Model + Projection\n" +
 "uniform float uPointSize;\n" +
 "varying highp vec3 planePos;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
+"gl_Position.z = 0.0;\n" +
 "gl_PointSize = uPointSize;\n" +
 "planePos = aPosition.xyz;\n" +
 "}\n",
  emptyString +  
 "uniform highp vec3 uCameraPosition;\n" +
 "varying highp vec3 planePos;\n" +
+"const highp float earthRadius = 6.36744e6;\n" +
+"const highp float atmosphereScale = 15.0;\n" +
+"const highp float tropoHeight = 10e3 * atmosphereScale;\n" +
+"const highp float stratoHeight = 50e3 * atmosphereScale;\n" +
+"const highp float atmUndergroundOffset = 100e3;\n" +
+"const highp float minHeigth = 20000.0;\n" +
+"const highp float maxDistTropo = 2.0 * sqrt(pow(earthRadius + tropoHeight, 2.0) - pow(earthRadius, 2.0));\n" +
+"const highp float maxDistStrato = 2.0 * sqrt(pow(earthRadius + stratoHeight, 2.0) - pow(earthRadius + tropoHeight, 2.0));\n" +
+"highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+"highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);\n" +
+"highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
 "highp vec2 intersectionsWithSphere(highp vec3 o,\n" +
 "highp vec3 d,\n" +
 "highp float r){\n" +
@@ -437,39 +449,75 @@ public:
 "highp float sq = sqrt(q);\n" +
 "highp float t1 = (-b - sq) / (2.0*a);\n" +
 "highp float t2 = (-b + sq) / (2.0*a);\n" +
+"if (t1 < t2){\n" +
 "return vec2(t1,t2);\n" +
+"} else{\n" +
+"return vec2(t2, t1);\n" +
+"}\n" +
+"}\n" +
+"highp float rayLenghtInSphere(highp vec3 o,\n" +
+"highp vec3 d,\n" +
+"highp float r,\n" +
+"out highp vec3 p1,\n" +
+"out highp vec3 p2){\n" +
+"highp vec2 t = intersectionsWithSphere(o,d,r);\n" +
+"if (t.x < 0.0){\n" +
+"if (t.y < 0.0){\n" +
+"return 0.0;\n" +
+"} else{\n" +
+"t.x = 0.0;\n" +
+"}\n" +
+"}\n" +
+"if (t.x < 1.0){ //Eliminating distance to Znear plane\n" +
+"t.x = 1.0;\n" +
+"}\n" +
+"p1 = o + d * t.x;\n" +
+"p2 = o + d * t.y;\n" +
+"return length(p2-p1);\n" +
+"}\n" +
+"highp float getRayFactor(highp vec3 o, highp vec3 d){\n" +
+"highp float ld = dot(d,d);\n" +
+"highp float pdo = dot(d,o);\n" +
+"highp float dx = d.x;\n" +
+"highp float dy = d.y;\n" +
+"highp float dz = d.z;\n" +
+"highp float ox = o.x;\n" +
+"highp float oy = o.y;\n" +
+"highp float oz = o.z;\n" +
+"highp float s = (-12000. + 2.*earthRadius + ((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
+"sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0)))/ld -\n" +
+"(sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*stratoHeight +\n" +
+"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.*dx*dz*ox*oz - 2.*dy*oy*(dx*ox + dz*oz) +\n" +
+"pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*\n" +
+"log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +\n" +
+"sqrt(ld)*sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0))))/pow(ld,1.5) -\n" +
+"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.*dx*dz*ox*oz - 2.*dy*oy*(dx*ox + dz*oz) +\n" +
+"pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*\n" +
+"log(sqrt(ld)*sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0)) + pdo))/pow(ld,1.5))/\n" +
+"(2.*(earthRadius - 1.*stratoHeight));\n" +
+"return s;\n" +
 "}\n" +
 "void main() {\n" +
-"const highp float earthRadius = 6.36744e6;\n" +
-"const highp float atmThickness = 500e3;\n" +
-"const highp float atmUndergroundOffset = 100e3;\n" +
-"const highp float maxDistAtm = 2.0 * sqrt(pow(earthRadius + atmThickness, 2.0) - pow(earthRadius, 2.0));\n" +
 "highp vec3 o = planePos;\n" +
 "highp vec3 d = planePos - uCameraPosition;\n" +
 "highp vec2 interEarth = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);\n" +
 "if (interEarth.x != -1.0 || interEarth.y != -1.0){\n" +
 "discard;\n" +
 "}\n" +
-"highp vec2 interAtm = intersectionsWithSphere(o,d, earthRadius + atmThickness);\n" +
-"if (interAtm.x == -1.0 || interAtm.y == -1.0){\n" +
+"highp vec3 sp1, sp2;\n" +
+"highp float stratoLength = rayLenghtInSphere(o,d, earthRadius + stratoHeight, sp1, sp2);\n" +
+"if (stratoLength <= 0.0){\n" +
 "discard;\n" +
 "}\n" +
-"if (interAtm.x < 0.0){\n" +
-"interAtm.x = 0.0;\n" +
+"highp float f = getRayFactor(sp1, sp2 - sp1);\n" +
+"if (f > 2.5){\n" +
+"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" +
+"} else{\n" +
+"gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n" +
 "}\n" +
-"highp vec3 p1 = o + interAtm.x * d;\n" +
-"highp vec3 p2 = o + interAtm.y * d;\n" +
-"highp float dist = distance(p1,p2);\n" +
-"highp float factor = dist / maxDistAtm; //Reflection factor\n" +
-"if (factor > 1.0){\n" +
-"factor = 1.0;\n" +
-"}\n" +
-"highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
-"highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);\n" +
-"highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
-"highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, factor));\n" +
-"color = mix(color, whiteSky, smoothstep(0.85, 1.0, factor));\n" +
-"gl_FragColor = color;\n" +
+"const highp float minHeigth = 20000.0;\n" +
+"highp float camHeight = length(uCameraPosition) - earthRadius;\n" +
+"gl_FragColor = mix(gl_FragColor, blueSky, smoothstep(minHeigth, minHeigth / 2.0, camHeight));\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);
 

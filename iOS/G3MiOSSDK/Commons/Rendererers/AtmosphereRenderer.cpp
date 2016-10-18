@@ -12,6 +12,7 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Camera.hpp"
+#include "G3MWidget.hpp"
 
 void AtmosphereRenderer::start(const G3MRenderContext* rc) {
   _glState = new GLState();
@@ -54,4 +55,27 @@ void AtmosphereRenderer::updateGLState(const Camera* camera){
   
   //CamPos
   _camPosGLF->update(camera);
+}
+
+void AtmosphereRenderer::render(const G3MRenderContext* rc,
+                                GLState* glState){
+  
+  const bool belowRendererHeight = rc->getCurrentCamera()->getGeodeticPosition()._height < 9000.0;
+  
+  if (belowRendererHeight){
+    rc->getWidget()->setBackgroundColor(_blueSky);
+  } else{
+    rc->getWidget()->setBackgroundColor(_darkSpace);
+  }
+  
+//  if (_wasRenderedLastFrame || !belowRendererHeight){
+    //Rendering
+    updateGLState(rc->getCurrentCamera());
+    _glState->setParent(glState);
+    
+    _directMesh->render(rc, _glState);
+//  }
+  
+  _wasRenderedLastFrame = belowRendererHeight;
+  
 }

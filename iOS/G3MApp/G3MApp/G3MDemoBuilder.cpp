@@ -62,6 +62,8 @@ void G3MDemoBuilder::build() {
   }
   
   IG3MBuilder* builder = getG3MBuilder();
+  
+  builder->setBackgroundColor(new Color(Color::black())); //For atm. rendering
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);

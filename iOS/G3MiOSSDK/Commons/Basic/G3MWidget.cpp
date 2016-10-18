@@ -202,7 +202,8 @@ _auxCam(NULL)
                                         _storage,
                                         _gpuProgramManager,
                                         _surfaceElevationProvider,
-                                        _viewMode);
+                                        _viewMode,
+                                        this);
 
 
   //#ifdef C_CODE

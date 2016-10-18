@@ -28,8 +28,16 @@ private:
   
   void updateGLState(const Camera* camera);
   
+  Color _blueSky;
+  Color _darkSpace;
+  bool _wasRenderedLastFrame;
+  
 public:
-  AtmosphereRenderer(){
+  AtmosphereRenderer():
+  _blueSky(Color::fromRGBA(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0)),
+  _darkSpace(Color::fromRGBA(.0, .0, .0, .0)),
+  _wasRenderedLastFrame(true)
+  {
     
   }
   
@@ -47,19 +55,7 @@ public:
     
   }
   
-  void render(const G3MRenderContext* rc,
-              GLState* glState){
-//    rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
-//                            0,   // first
-//                            4,   // count
-//                            _glState,
-//                            *rc->getGPUProgramManager());
-    
-    updateGLState(rc->getCurrentCamera());
-    _glState->setParent(glState);
-    
-    _directMesh->render(rc, _glState);
-  }
+  void render(const G3MRenderContext* rc, GLState* glState);
   
 };
 
