@@ -17,6 +17,7 @@
 
 class FloatBufferTerrainElevationGrid;
 class Sector;
+class MeshRenderer;
 
 
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
@@ -33,6 +34,9 @@ private:
   private final TimeInterval _timeToCache;
 #endif
   const bool         _readExpired;
+
+  MeshRenderer* _meshRenderer;
+
 
   const std::string _instanceID;
 
@@ -58,7 +62,8 @@ public:
   MapzenTerrainElevationProvider(const std::string&  apiKey,
                                  long long           downloadPriority,
                                  const TimeInterval& timeToCache,
-                                 bool                readExpired);
+                                 bool                readExpired,
+                                 MeshRenderer*       meshRenderer);
 
   RenderState getRenderState();
 

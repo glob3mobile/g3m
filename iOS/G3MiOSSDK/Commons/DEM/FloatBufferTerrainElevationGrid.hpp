@@ -19,6 +19,8 @@ private:
 protected:
   double getValueInBufferAt(int index) const;
 
+  virtual ~FloatBufferTerrainElevationGrid();
+
 public:
 #ifdef C_CODE
   FloatBufferTerrainElevationGrid(const Sector& sector,
@@ -27,8 +29,6 @@ public:
                                   int bufferSize,
                                   double deltaHeight);
 #endif
-
-  virtual ~FloatBufferTerrainElevationGrid();
 
   Vector3D getMinMaxAverageElevations() const;
   

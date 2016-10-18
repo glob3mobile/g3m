@@ -34,7 +34,9 @@ _result(NULL)
 
 BILDownloader::ParserAsyncTask::~ParserAsyncTask() {
   delete _buffer;
-  delete _result;
+  if (_result != NULL) {
+    _result->_release();
+  }
   if (_deleteHandler) {
     delete _handler;
   }

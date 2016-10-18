@@ -20,6 +20,8 @@ private:
 protected:
   double getValueInBufferAt(int index) const;
 
+  virtual ~ShortBufferTerrainElevationGrid();
+
 public:
 #ifdef C_CODE
   ShortBufferTerrainElevationGrid(const Sector& sector,
@@ -29,8 +31,6 @@ public:
                                   double deltaHeight,
                                   short noDataValue);
 #endif
-
-  virtual ~ShortBufferTerrainElevationGrid();
 
   Vector3D getMinMaxAverageElevations() const;
 

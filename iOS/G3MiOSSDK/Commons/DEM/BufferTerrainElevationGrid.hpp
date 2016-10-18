@@ -19,13 +19,13 @@ protected:
 
   virtual double getValueInBufferAt(int index) const = 0;
 
+  virtual ~BufferTerrainElevationGrid();
+
 public:
   BufferTerrainElevationGrid(const Sector& sector,
                              const Vector2I& extent,
                              size_t bufferSize,
                              double deltaHeight);
-
-  virtual ~BufferTerrainElevationGrid();
 
   double getElevationAt(int x,
                         int y) const;
