@@ -25,17 +25,17 @@ public abstract class BufferTerrainElevationGrid extends TerrainElevationGrid
 
   protected abstract double getValueInBufferAt(int index);
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public BufferTerrainElevationGrid(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
      super(sector, extent);
      _bufferSize = bufferSize;
      _deltaHeight = deltaHeight;
   
-  }
-
-  public void dispose()
-  {
-    super.dispose();
   }
 
   public final double getElevationAt(int x, int y)

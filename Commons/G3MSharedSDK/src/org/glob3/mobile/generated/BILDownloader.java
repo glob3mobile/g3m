@@ -84,7 +84,9 @@ public class BILDownloader
       if (_buffer != null)
          _buffer.dispose();
       if (_result != null)
-         _result.dispose();
+      {
+        _result._release();
+      }
       if (_deleteHandler)
       {
         if (_handler != null)

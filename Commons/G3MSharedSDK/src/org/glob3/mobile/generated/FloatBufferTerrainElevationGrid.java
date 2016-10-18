@@ -28,7 +28,6 @@ public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   }
 
 
-
   public FloatBufferTerrainElevationGrid(Sector sector,
                                          Vector2I extent,
                                          float[] buffer,
@@ -46,6 +45,7 @@ public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
     _buffer = null;
     super.dispose();
   }
+
 
   public final Vector3D getMinMaxAverageElevations()
   {

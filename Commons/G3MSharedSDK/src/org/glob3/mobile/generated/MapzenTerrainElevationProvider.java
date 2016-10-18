@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 
 //class FloatBufferTerrainElevationGrid;
 //class Sector;
+//class MeshRenderer;
 
 
 public class MapzenTerrainElevationProvider extends TerrainElevationProvider
@@ -31,6 +32,9 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   private final long _downloadPriority;
   private final TimeInterval _timeToCache;
   private final boolean _readExpired;
+
+  private MeshRenderer _meshRenderer;
+
 
   private final String _instanceID;
 
@@ -59,12 +63,13 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   }
 
 
-  public MapzenTerrainElevationProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+  public MapzenTerrainElevationProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, MeshRenderer meshRenderer)
   {
      _apiKey = apiKey;
      _downloadPriority = downloadPriority;
      _timeToCache = timeToCache;
      _readExpired = readExpired;
+     _meshRenderer = meshRenderer;
      _context = null;
      _instanceID = "MapzenTerrainElevationProvider_" + IStringUtils.instance().toString(++_idCounter);
      _rootGrid = null;
@@ -85,11 +90,32 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   {
     _context = context;
   
-  //  Sector s = MercatorUtils::getSector(0, 0, 0);
-  //  ILogger::instance()->logInfo( s.description() );
-  
     // request root grid
     requestTile(0, 0, 0, Sector.FULL_SPHERE, 0); // deltaHeight -  y -  x -  z
+  
+    /*
+     Touched on (Tile level=9, row=331, column=271, sector=(Sector (lat=46.558860303117171497d, lon=10.546875d) - (lat=47.040182144806649944d, lon=11.25d)))
+     Touched on position (lat=46.64863034601081182d, lon=10.850429115221331244d, height=0)
+     Touched on pixels (V2I 110, 208)
+     Camera position=(lat=46.668763371822997499d, lon=10.800910848094183336d, height=135933.14638548778021) heading=3.472574 pitch=-90.000000
+    
+    
+    
+     const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
+     const int row     = numRows - tile->_row - 1;
+     */
+  
+  //  const int z = 10;
+  //  const int x = 154;
+  //  const int y = 304;
+    final int z = 9;
+    final int x = 271;
+    final int y = 180;
+    final double deltaHeight = 0;
+  
+    final Sector sector = MercatorUtils.getSector(z, x, y);
+    ILogger.instance().logInfo(sector.description());
+    requestTile(z, x, y, sector, deltaHeight);
   }
 
   public final void cancel()
@@ -109,7 +135,10 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
     }
     else
     {
-      throw new RuntimeException("Not yet done");
+      _meshRenderer.addMesh(grid.createDebugMesh(EllipsoidalPlanet.createEarth(), 1, Geodetic3D.zero(), 4)); // pointSize -  verticalExaggeration,
+  
+      grid._release();
+      //THROW_EXCEPTION("Not yet done");
     }
   }
 

@@ -30,7 +30,6 @@ public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   }
 
 
-
   public ShortBufferTerrainElevationGrid(Sector sector,
                                          Vector2I extent,
                                          short[] buffer,
@@ -50,6 +49,7 @@ public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
     _buffer = null;
     super.dispose();
   }
+
 
   public final Vector3D getMinMaxAverageElevations()
   {
