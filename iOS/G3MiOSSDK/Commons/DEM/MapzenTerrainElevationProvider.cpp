@@ -99,9 +99,10 @@ public:
                                                                                    _z, _x, _y),
                                  true);
 
-//    FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
-//    _provider->onGrid(_z, _x, _y,
-//                      grid);
+    // synchronous
+    // FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
+    // _provider->onGrid(_z, _x, _y,
+    //                   grid);
   }
 
   void onError(const URL& url) {
@@ -185,31 +186,16 @@ void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
               Sector::FULL_SPHERE,
               0 /* deltaHeight */);
 
-  /*
-   Touched on (Tile level=9, row=331, column=271, sector=(Sector (lat=46.558860303117171497d, lon=10.546875d) - (lat=47.040182144806649944d, lon=11.25d)))
-   Touched on position (lat=46.64863034601081182d, lon=10.850429115221331244d, height=0)
-   Touched on pixels (V2I 110, 208)
-   Camera position=(lat=46.668763371822997499d, lon=10.800910848094183336d, height=135933.14638548778021) heading=3.472574 pitch=-90.000000
-   
-   
-   
-   const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
-   const int row     = numRows - tile->_row - 1;
-   */
-
-//  const int z = 10;
-//  const int x = 154;
-//  const int y = 304;
-  const int z = 9;
-  const int x = 271;
-  const int y = 180;
-  const double deltaHeight = 0;
-
-  const Sector sector = MercatorUtils::getSector(z, x, y);
-  ILogger::instance()->logInfo( sector.description() );
-  requestTile(z, x, y,
-              sector,
-              deltaHeight);
+//  const int z = 9;
+//  const int x = 271;
+//  const int y = 180;
+//  const double deltaHeight = 0;
+//
+//  const Sector sector = MercatorUtils::getSector(z, x, y);
+//  ILogger::instance()->logInfo( sector.description() );
+//  requestTile(z, x, y,
+//              sector,
+//              deltaHeight);
 }
 
 void MapzenTerrainElevationProvider::cancel() {
@@ -225,14 +211,14 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
     _rootGrid = grid;
   }
   else {
-    _meshRenderer->addMesh(  grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
-                                                   1, // verticalExaggeration,
-                                                   Geodetic3D::zero(),
-                                                   4 // pointSize
-                                                   )  );
-
-    grid->_release();
-    //THROW_EXCEPTION("Not yet done");
+//    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
+//                                                  1, // verticalExaggeration,
+//                                                  Geodetic3D::zero(),
+//                                                  4 // pointSize
+//                                                  ) );
+//
+//     grid->_release();
+    THROW_EXCEPTION("Not yet done");
   }
 }
 

@@ -90,9 +90,9 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
   getModel()->getLayerSet()->addLayer( layer );
 
 //  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(58.813741715707806179, -125.859375, 50000));
-  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.668763371822997499,
-                                                                                 10.800910848094183336,
-                                                                                 135933.14638548778021));
+//  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.668763371822997499,
+//                                                                                 10.800910848094183336,
+//                                                                                 135933.14638548778021));
 
   //  const double deltaHeight = -700.905;
   //  const short  noDataValue = -32768;

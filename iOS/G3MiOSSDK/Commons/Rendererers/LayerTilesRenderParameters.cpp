@@ -12,7 +12,6 @@
  return ( topSectorSplitsByLatitude, topSectorSplitsByLongitude )
  */
 const Vector2S LayerTilesRenderParameters::calculateTopSectorSplitsParametersWGS84(const Sector& topSector) {
-//  IMathUtils* math = IMathUtils::instance();
   const double maxTile = 90;
   double sLat;
   double sLon;
@@ -29,8 +28,6 @@ const Vector2S LayerTilesRenderParameters::calculateTopSectorSplitsParametersWGS
   
   const double tileDeltaLat = topSector._deltaLatitude.div(sLat)._degrees;
   const double factorLat = tileDeltaLat / maxTile;
-//  double factor = math->max(factorLat, 1L);
-//  return Vector2I((int) math->round(sLat * factor), (int) math->round(sLon * factor));
 
   const double factor = (factorLat < 1) ? 1 : factorLat;
   return Vector2S((short) ((sLat * factor) + 0.5),
