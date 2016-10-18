@@ -16,9 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class FloatBufferTerrainElevationGrid;
 //class IImage;
-//class Sector;
 
 
 public class MapzenTerrariumParser
@@ -26,6 +26,67 @@ public class MapzenTerrariumParser
   private MapzenTerrariumParser()
   {
   }
+
+
+
+  public abstract static class Listener
+  {
+    public void dispose()
+    {
+
+    }
+
+    public abstract void onGrid(FloatBufferTerrainElevationGrid grid);
+  }
+
+  private static class ParserTask extends GAsyncTask
+  {
+    private final IImage _image;
+    private final Sector _sector ;
+    private final double _deltaHeight;
+    private MapzenTerrariumParser.Listener _listener;
+    private final boolean _deleteListener;
+
+    private FloatBufferTerrainElevationGrid _result;
+
+    public ParserTask(IImage image, Sector sector, double deltaHeight, MapzenTerrariumParser.Listener listener, boolean deleteListener)
+    {
+       _image = image;
+       _sector = new Sector(sector);
+       _deltaHeight = deltaHeight;
+       _listener = listener;
+       _deleteListener = deleteListener;
+       _result = null;
+    
+    }
+
+    public void dispose()
+    {
+      if (_result != null)
+      {
+        _result._release();
+      }
+      if (_deleteListener)
+      {
+        if (_listener != null)
+           _listener.dispose();
+      }
+      super.dispose();
+    }
+
+    public final void runInBackground(G3MContext context)
+    {
+      _result = MapzenTerrariumParser.parse(_image, _sector, _deltaHeight);
+    }
+
+    public final void onPostExecute(G3MContext context)
+    {
+      _listener.onGrid(_result);
+      _result = null; // moved ownership to _listener
+    }
+
+  }
+
 
   public static FloatBufferTerrainElevationGrid parse(IImage image, Sector sector, double deltaHeight)
   {
@@ -55,6 +116,9 @@ public class MapzenTerrariumParser
     return new FloatBufferTerrainElevationGrid(sector, new Vector2I(width, height), buffer, bufferSize, deltaHeight);
   }
 
-
+  public static void parse(G3MContext context, IImage image, Sector sector, double deltaHeight, MapzenTerrariumParser.Listener listener, boolean deleteListener)
+  {
+    context.getThreadUtils().invokeAsyncTask(new MapzenTerrariumParser.ParserTask(image, sector, deltaHeight, listener, deleteListener), true);
+  }
 
 }

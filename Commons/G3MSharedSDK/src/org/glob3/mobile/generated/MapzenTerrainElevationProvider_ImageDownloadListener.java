@@ -1,6 +1,7 @@
 package org.glob3.mobile.generated; 
 public class MapzenTerrainElevationProvider_ImageDownloadListener extends IImageDownloadListener
 {
+  private final G3MContext _context;
   private MapzenTerrainElevationProvider _provider;
   private final int _z;
   private final int _x;
@@ -8,8 +9,9 @@ public class MapzenTerrainElevationProvider_ImageDownloadListener extends IImage
   private final Sector _sector ;
   private final double _deltaHeight;
 
-  public MapzenTerrainElevationProvider_ImageDownloadListener(MapzenTerrainElevationProvider provider, int z, int x, int y, Sector sector, double deltaHeight)
+  public MapzenTerrainElevationProvider_ImageDownloadListener(G3MContext context, MapzenTerrainElevationProvider provider, int z, int x, int y, Sector sector, double deltaHeight)
   {
+     _context = context;
      _provider = provider;
      _z = z;
      _x = x;
@@ -27,8 +29,11 @@ public class MapzenTerrainElevationProvider_ImageDownloadListener extends IImage
 
   public final void onDownload(URL url, IImage image, boolean expired)
   {
-    FloatBufferTerrainElevationGrid grid = MapzenTerrariumParser.parse(image, _sector, _deltaHeight);
-    _provider.onGrid(_z, _x, _y, grid);
+    MapzenTerrariumParser.parse(_context, image, _sector, _deltaHeight, new MapzenTerrainElevationProvider_ParserListener(_provider, _z, _x, _y), true);
+
+//    FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
+//    _provider->onGrid(_z, _x, _y,
+//                      grid);
   }
 
   public final void onError(URL url)
