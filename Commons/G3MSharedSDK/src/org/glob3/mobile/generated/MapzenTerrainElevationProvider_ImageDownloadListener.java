@@ -31,9 +31,10 @@ public class MapzenTerrainElevationProvider_ImageDownloadListener extends IImage
   {
     MapzenTerrariumParser.parse(_context, image, _sector, _deltaHeight, new MapzenTerrainElevationProvider_ParserListener(_provider, _z, _x, _y), true);
 
-//    FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
-//    _provider->onGrid(_z, _x, _y,
-//                      grid);
+    // synchronous
+    // FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
+    // _provider->onGrid(_z, _x, _y,
+    //                   grid);
   }
 
   public final void onError(URL url)
