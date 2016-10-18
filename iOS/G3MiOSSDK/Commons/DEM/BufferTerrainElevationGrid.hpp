@@ -21,16 +21,16 @@ protected:
 
   virtual ~BufferTerrainElevationGrid();
 
-public:
   BufferTerrainElevationGrid(const Sector& sector,
                              const Vector2I& extent,
                              size_t bufferSize,
                              double deltaHeight);
 
+public:
+
   double getElevationAt(int x,
                         int y) const;
-  
-  
+
 };
 
 #endif

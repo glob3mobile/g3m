@@ -29,6 +29,5 @@ _deltaHeight(deltaHeight)
 double BufferTerrainElevationGrid::getElevationAt(int x,
                                                   int y) const {
   const int index = ((_extent._y-1-y) * _extent._x) + x;
-
   return getValueInBufferAt( index ) + _deltaHeight;
 }
