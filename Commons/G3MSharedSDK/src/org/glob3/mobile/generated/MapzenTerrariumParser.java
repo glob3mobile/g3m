@@ -118,7 +118,9 @@ public class MapzenTerrariumParser
 
   public static void parse(G3MContext context, IImage image, Sector sector, double deltaHeight, MapzenTerrariumParser.Listener listener, boolean deleteListener)
   {
-    context.getThreadUtils().invokeAsyncTask(new MapzenTerrariumParser.ParserTask(image, sector, deltaHeight, listener, deleteListener), true);
+    final IThreadUtils threadUtils = context.getThreadUtils();
+    GAsyncTask parserTask = new MapzenTerrariumParser.ParserTask(image, sector, deltaHeight, listener, deleteListener);
+    threadUtils.invokeAsyncTask(parserTask, true);
   }
 
 }
