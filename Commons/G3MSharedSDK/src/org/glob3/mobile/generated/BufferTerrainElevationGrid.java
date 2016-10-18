@@ -30,7 +30,7 @@ public abstract class BufferTerrainElevationGrid extends TerrainElevationGrid
     super.dispose();
   }
 
-  public BufferTerrainElevationGrid(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
+  protected BufferTerrainElevationGrid(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
      super(sector, extent);
      _bufferSize = bufferSize;
@@ -38,12 +38,11 @@ public abstract class BufferTerrainElevationGrid extends TerrainElevationGrid
   
   }
 
+
   public final double getElevationAt(int x, int y)
   {
     final int index = ((_extent._y-1-y) * _extent._x) + x;
-  
     return getValueInBufferAt(index) + _deltaHeight;
   }
-
 
 }
