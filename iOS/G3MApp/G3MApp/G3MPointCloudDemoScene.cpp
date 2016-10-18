@@ -25,8 +25,10 @@
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/IThreadUtils.hpp>
 #include <G3MiOSSDK/G3MContext.hpp>
+#include <G3MiOSSDK/GAsyncTask.hpp>
 
 #include "G3MDemoModel.hpp"
+
 
 
 class G3MPointCloudDemoScene_ParserAsyncTask : public GAsyncTask {

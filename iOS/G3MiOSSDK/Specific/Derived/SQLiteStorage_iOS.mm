@@ -17,6 +17,7 @@
 #include "URL.hpp"
 #include "TimeInterval.hpp"
 #import "NSString_CppAdditions.h"
+#include "GTask.hpp"
 
 
 NSString* SQLiteStorage_iOS::getDBPath() const {

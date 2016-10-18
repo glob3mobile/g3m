@@ -17,6 +17,7 @@
 #include "SceneJSShapesParser.hpp"
 #include "SGShape.hpp"
 #include "G3MEventContext.hpp"
+#include "GAsyncTask.hpp"
 
 
 class TransparentShapeWrapper : public OrderedRenderable {

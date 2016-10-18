@@ -17,6 +17,7 @@
 #include "IThreadUtils.hpp"
 #include "RCObject.hpp"
 #include "MarksFilter.hpp"
+#include "GAsyncTask.hpp"
 
 #include <vector>
 #include <string>

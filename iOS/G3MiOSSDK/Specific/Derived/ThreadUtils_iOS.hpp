@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__ThreadUtils_iOS__
 
 #include "IThreadUtils.hpp"
+#include "GTask.hpp"
+
 
 //#include <mach/mach_host.h>
 //

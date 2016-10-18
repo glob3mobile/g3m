@@ -8,7 +8,10 @@
 
 #include "IThreadUtils.hpp"
 
+#include "GTask.hpp"
 #include "G3MContext.hpp"
+#include "GAsyncTask.hpp"
+
 
 void IThreadUtils::initialize(const G3MContext* context) {
   _context = context;

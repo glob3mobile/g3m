@@ -11,9 +11,49 @@
 #include "MutableColor255.hpp"
 #include "IImage.hpp"
 #include "FloatBufferTerrainElevationGrid.hpp"
+#include "G3MContext.hpp"
+#include "IThreadUtils.hpp"
 
 
-FloatBufferTerrainElevationGrid* MapzenTerrariumParser::parse(IImage* image,
+MapzenTerrariumParser::ParserTask::ParserTask(const IImage* image,
+                                              const Sector& sector,
+                                              const double  deltaHeight,
+                                              MapzenTerrariumParser::Listener* listener,
+                                              bool deleteListener) :
+_image(image),
+_sector(sector),
+_deltaHeight(deltaHeight),
+_listener(listener),
+_deleteListener(deleteListener),
+_result(NULL)
+{
+
+}
+
+MapzenTerrariumParser::ParserTask::~ParserTask()
+{
+  if (_result != NULL) {
+    _result->_release();
+  }
+  if (_deleteListener) {
+    delete _listener;
+  }
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+void MapzenTerrariumParser::ParserTask::runInBackground(const G3MContext* context) {
+  _result = MapzenTerrariumParser::parse(_image, _sector, _deltaHeight);
+}
+
+void MapzenTerrariumParser::ParserTask::onPostExecute(const G3MContext* context) {
+  _listener->onGrid(_result);
+  _result = NULL; // moved ownership to _listener
+}
+
+
+FloatBufferTerrainElevationGrid* MapzenTerrariumParser::parse(const IImage* image,
                                                               const Sector& sector,
                                                               double deltaHeight) {
   MutableColor255 pixel((unsigned char) 0,
@@ -44,4 +84,18 @@ FloatBufferTerrainElevationGrid* MapzenTerrariumParser::parse(IImage* image,
                                              buffer,
                                              bufferSize,
                                              deltaHeight);
+}
+
+void MapzenTerrariumParser::parse(const G3MContext* context,
+                                  const IImage* image,
+                                  const Sector& sector,
+                                  double deltaHeight,
+                                  MapzenTerrariumParser::Listener* listener,
+                                  bool deleteListener) {
+  context->getThreadUtils()->invokeAsyncTask(new MapzenTerrariumParser::ParserTask(image,
+                                                                                   sector,
+                                                                                   deltaHeight,
+                                                                                   listener,
+                                                                                   deleteListener),
+                                             true);
 }

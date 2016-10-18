@@ -34,6 +34,7 @@
 #include "G3MEventContext.hpp"
 #include "PlanetRenderContext.hpp"
 #include "TerrainElevationProvider.hpp"
+#include "GTask.hpp"
 
 
 class VisibleSectorListenerEntry {

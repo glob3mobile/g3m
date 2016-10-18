@@ -22,6 +22,7 @@ class GEORasterSymbolizer;
 #include "Sector.hpp"
 #include "IImageListener.hpp"
 #include <list>
+#include "GAsyncTask.hpp"
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:

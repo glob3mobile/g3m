@@ -23,6 +23,7 @@
 #include "IShortBuffer.hpp"
 #include "IndexedMesh.hpp"
 #include "IFactory.hpp"
+#include "GAsyncTask.hpp"
 
 
 void MeshRenderer::clearMeshes() {

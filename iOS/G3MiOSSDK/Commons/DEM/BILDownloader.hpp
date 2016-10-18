@@ -13,6 +13,7 @@
 #include "Sector.hpp"
 #include "Vector2I.hpp"
 #include "IBufferDownloadListener.hpp"
+#include "GAsyncTask.hpp"
 
 class G3MContext;
 class URL;

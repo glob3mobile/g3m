@@ -25,7 +25,40 @@
 int MapzenTerrainElevationProvider::_idCounter = 0;
 
 
+class MapzenTerrainElevationProvider_ParserListener : public MapzenTerrariumParser::Listener {
+private:
+  MapzenTerrainElevationProvider* _provider;
+  const int _z;
+  const int _x;
+  const int _y;
+
+public:
+
+  MapzenTerrainElevationProvider_ParserListener(MapzenTerrainElevationProvider* provider,
+                                                int z, int x, int y) :
+  _provider(provider),
+  _z(z), _x(x), _y(y)
+  {
+    _provider->_retain();
+  }
+
+  virtual ~MapzenTerrainElevationProvider_ParserListener() {
+    _provider->_release();
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  void onGrid(FloatBufferTerrainElevationGrid* grid) {
+    _provider->onGrid(_z, _x, _y,
+                      grid);
+  }
+
+};
+
+
 class MapzenTerrainElevationProvider_ImageDownloadListener : public IImageDownloadListener {
+  const G3MContext*               _context;
   MapzenTerrainElevationProvider* _provider;
   const int _z;
   const int _x;
@@ -34,10 +67,12 @@ class MapzenTerrainElevationProvider_ImageDownloadListener : public IImageDownlo
   const double _deltaHeight;
 
 public:
-  MapzenTerrainElevationProvider_ImageDownloadListener(MapzenTerrainElevationProvider* provider,
+  MapzenTerrainElevationProvider_ImageDownloadListener(const G3MContext* context,
+                                                       MapzenTerrainElevationProvider* provider,
                                                        int z, int x, int y,
                                                        const Sector& sector,
                                                        double deltaHeight) :
+  _context(context),
   _provider(provider),
   _z(z), _x(x), _y(y),
   _sector(sector),
@@ -56,9 +91,17 @@ public:
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
-    FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
-    _provider->onGrid(_z, _x, _y,
-                      grid);
+    MapzenTerrariumParser::parse(_context,
+                                 image,
+                                 _sector,
+                                 _deltaHeight,
+                                 new MapzenTerrainElevationProvider_ParserListener(_provider,
+                                                                                   _z, _x, _y),
+                                 true);
+
+//    FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
+//    _provider->onGrid(_z, _x, _y,
+//                      grid);
   }
 
   void onError(const URL& url) {
@@ -124,7 +167,8 @@ void MapzenTerrainElevationProvider::requestTile(int z, int x, int y,
                            _downloadPriority,
                            _timeToCache,
                            _readExpired,
-                           new MapzenTerrainElevationProvider_ImageDownloadListener(this,
+                           new MapzenTerrainElevationProvider_ImageDownloadListener(_context,
+                                                                                    this,
                                                                                     z, x, y,
                                                                                     sector,
                                                                                     deltaHeight),

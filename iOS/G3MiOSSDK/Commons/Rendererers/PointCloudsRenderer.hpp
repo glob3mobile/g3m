@@ -16,6 +16,7 @@
 #include "TimeInterval.hpp"
 #include "Vector3D.hpp"
 #include "Box.hpp"
+#include "GAsyncTask.hpp"
 
 class IDownloader;
 class Sector;
