@@ -22,49 +22,59 @@ protected:
 
   class Node {
   private:
+    std::vector<Node*>* getChildren(PyramidTerrainElevationProvider* pyramidTerrainElevationProvider);
+
+  public:
     const Node*  _parent;
     const size_t _childID;
     const Sector _sector;
+    const int    _z;
+    const int    _x;
+    const int    _y;
 
-  public:
-    Node(const Node* parent,
-         const size_t childID,
-         const Sector& sector);
+    TerrainElevationGrid* _grid;
+    bool _stickyGrid;
+
+    std::vector<Node*>* _children;
+
+    Node(const Node*   parent,
+         const size_t  childID,
+         const Sector& sector,
+         const int     z,
+         const int     x,
+         const int     y);
 
     ~Node();
 
-    bool insertGrid(TerrainElevationGrid* grid,
+    bool insertGrid(int z, int x, int y,
+                    TerrainElevationGrid* grid,
                     const bool            sticky,
-                    const int             gridWidth,
-                    const int             gridHeight);
+                    PyramidTerrainElevationProvider* pyramidTerrainElevationProvider);
 
   };
 
 
-  void insertGrid(TerrainElevationGrid* grid,
+  void insertGrid(int z, int x, int y,
+                  TerrainElevationGrid* grid,
                   const bool sticky);
 
-
 private:
-  const size_t       _rootNodesCount;
-  std::vector<Node*> _rootNodes;
+  const size_t        _rootNodesCount;
+  std::vector<Node*>* _rootNodes;
 
-  const int _gridWidth;
-  const int _gridHeight;
+
+  std::vector<Node*>* getRootNodes();
 
 protected:
-  virtual Node* createNode(const Node* parent,
-                           size_t childID) = 0;
+  virtual Node* createNode(const Node*  parent,
+                           const size_t childID) = 0;
 
-  PyramidTerrainElevationProvider(const size_t rootNodesCount,
-                                  const int    gridWidth,
-                                  const int    gridHeight);
+  PyramidTerrainElevationProvider(const size_t rootNodesCount);
 
   virtual ~PyramidTerrainElevationProvider();
-
-
+  
 public:
-
+  
 };
 
 #endif

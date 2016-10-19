@@ -15,11 +15,10 @@ class MercatorPyramidTerrainElevationProvider : public PyramidTerrainElevationPr
 protected:
   MercatorPyramidTerrainElevationProvider::Node*
   createNode(const MercatorPyramidTerrainElevationProvider::Node* parent,
-             size_t childID);
+             const size_t childID);
 
 public:
-  MercatorPyramidTerrainElevationProvider(const int gridWidth,
-                                          const int gridHeight);
+  MercatorPyramidTerrainElevationProvider();
 
 };
 

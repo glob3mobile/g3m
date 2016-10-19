@@ -54,10 +54,10 @@ private:
                    const PlanetRenderContext* prc,
                    const GLState*             glState);
 
-  inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
-                             const Angle& upperLat, const Angle& upperLon,
+  inline Tile* createSubTile(const Sector& sector,
                              const int level,
-                             const int row, const int column,
+                             const int row,
+                             const int column,
                              bool setParent);
 
   Tile(const Tile& that);

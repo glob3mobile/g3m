@@ -127,7 +127,7 @@ MapzenTerrainElevationProvider::MapzenTerrainElevationProvider(const std::string
                                                                const TimeInterval& timeToCache,
                                                                bool                readExpired,
                                                                MeshRenderer*       meshRenderer) :
-MercatorPyramidTerrainElevationProvider(256, 256),
+MercatorPyramidTerrainElevationProvider(),
 _apiKey(apiKey),
 _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
@@ -212,7 +212,8 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
     }
     _rootGrid = grid;
     const bool sticky = true;
-    insertGrid(grid, sticky);
+    insertGrid(z, x, y,
+               grid, sticky);
   }
   else {
     //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),

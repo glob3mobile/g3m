@@ -411,15 +411,15 @@ void Tile::render(const G3MRenderContext*    rc,
   tilesStatistics->computeTileProcessed(this, visible, rendered);
 }
 
-Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
-                          const Angle& upperLat, const Angle& upperLon,
+Tile* Tile::createSubTile(const Sector& sector,
                           const int level,
-                          const int row, const int column,
+                          const int row,
+                          const int column,
                           bool setParent) {
   Tile* parent = setParent ? this : NULL;
   return new Tile(_texturizer,
                   parent,
-                  Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+                  sector,
                   _mercator,
                   level,
                   row, column,
@@ -449,40 +449,40 @@ std::vector<Tile*>* Tile::createSubTiles(bool setParent) {
 
   const Sector* renderedSector = _planetRenderer->getRenderedSector();
 
-  Sector s1(Geodetic2D(lower._latitude, lower._longitude), Geodetic2D(splitLatitude, splitLongitude));
-  if (renderedSector == NULL || renderedSector->touchesWith(s1)) {
-    subTiles->push_back( createSubTile(lower._latitude, lower._longitude,
-                                       splitLatitude, splitLongitude,
+  const Sector s0(Geodetic2D(lower._latitude, lower._longitude),
+                  Geodetic2D(splitLatitude,   splitLongitude));
+  if (renderedSector == NULL || renderedSector->touchesWith(s0)) {
+    subTiles->push_back( createSubTile(s0,
                                        nextLevel,
                                        row2,
                                        column2,
                                        setParent) );
   }
 
-  Sector s2(Geodetic2D(lower._latitude, splitLongitude), Geodetic2D(splitLatitude, upper._longitude));
-  if (renderedSector == NULL || renderedSector->touchesWith(s2)) {
-    subTiles->push_back( createSubTile(lower._latitude, splitLongitude,
-                                       splitLatitude, upper._longitude,
+  const Sector s1(Geodetic2D(lower._latitude, splitLongitude),
+                  Geodetic2D(splitLatitude,   upper._longitude));
+  if (renderedSector == NULL || renderedSector->touchesWith(s1)) {
+    subTiles->push_back( createSubTile(s1,
                                        nextLevel,
                                        row2,
                                        column2 + 1,
                                        setParent) );
   }
 
-  Sector s3(Geodetic2D(splitLatitude, lower._longitude), Geodetic2D(upper._latitude, splitLongitude));
-  if (renderedSector == NULL || renderedSector->touchesWith(s3)) {
-    subTiles->push_back( createSubTile(splitLatitude, lower._longitude,
-                                       upper._latitude, splitLongitude,
+  const Sector s2(Geodetic2D(splitLatitude,   lower._longitude),
+                  Geodetic2D(upper._latitude, splitLongitude));
+  if (renderedSector == NULL || renderedSector->touchesWith(s2)) {
+    subTiles->push_back( createSubTile(s2,
                                        nextLevel,
                                        row2 + 1,
                                        column2,
                                        setParent) );
   }
 
-  Sector s4(Geodetic2D(splitLatitude, splitLongitude), Geodetic2D(upper._latitude, upper._longitude));
-  if (renderedSector == NULL || renderedSector->touchesWith(s4)) {
-    subTiles->push_back( createSubTile(splitLatitude, splitLongitude,
-                                       upper._latitude, upper._longitude,
+  const Sector s3(Geodetic2D(splitLatitude,   splitLongitude),
+                  Geodetic2D(upper._latitude, upper._longitude));
+  if (renderedSector == NULL || renderedSector->touchesWith(s3)) {
+    subTiles->push_back( createSubTile(s3,
                                        nextLevel,
                                        row2 + 1,
                                        column2 + 1,
