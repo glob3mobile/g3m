@@ -14,6 +14,8 @@
 #include <vector>
 #include "Sector.hpp"
 
+class TerrainElevationGrid;
+
 
 class PyramidTerrainElevationProvider : public TerrainElevationProvider {
 protected:
@@ -25,33 +27,44 @@ protected:
     const Sector _sector;
 
   public:
-    Node(const PyramidTerrainElevationProvider::Node* parent,
+    Node(const Node* parent,
          const size_t childID,
          const Sector& sector);
 
     ~Node();
+
+    bool insertGrid(TerrainElevationGrid* grid,
+                    const bool            sticky,
+                    const int             gridWidth,
+                    const int             gridHeight);
+
   };
 
 
-private:
-  std::vector<PyramidTerrainElevationProvider::Node*> _rootNodes;
+  void insertGrid(TerrainElevationGrid* grid,
+                  const bool sticky);
 
-  const int _nodeWidth;
-  const int _nodeHeight;
+
+private:
+  const size_t       _rootNodesCount;
+  std::vector<Node*> _rootNodes;
+
+  const int _gridWidth;
+  const int _gridHeight;
 
 protected:
-  virtual PyramidTerrainElevationProvider::Node* createNode(const PyramidTerrainElevationProvider::Node* parent,
-                                                            size_t childID) = 0;
+  virtual Node* createNode(const Node* parent,
+                           size_t childID) = 0;
 
   PyramidTerrainElevationProvider(const size_t rootNodesCount,
-                                  const int    nodeWidth,
-                                  const int    nodeHeight);
+                                  const int    gridWidth,
+                                  const int    gridHeight);
 
   virtual ~PyramidTerrainElevationProvider();
-  
-  
+
+
 public:
-  
+
 };
 
 #endif

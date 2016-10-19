@@ -13,11 +13,11 @@
 #include "ErrorHandling.hpp"
 
 
-MercatorPyramidTerrainElevationProvider::MercatorPyramidTerrainElevationProvider(const int nodeWidth,
-                                                                                 const int nodeHeight) :
+MercatorPyramidTerrainElevationProvider::MercatorPyramidTerrainElevationProvider(const int gridWidth,
+                                                                                 const int gridHeight) :
 PyramidTerrainElevationProvider(1,
-                                nodeWidth,
-                                nodeHeight)
+                                gridWidth,
+                                gridHeight)
 {
 }
 

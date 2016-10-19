@@ -211,8 +211,8 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
       _rootGrid->_release();
     }
     _rootGrid = grid;
-//    _pyramid->insertGrid(grid);
-#error Diego at work!
+    const bool sticky = true;
+    insertGrid(grid, sticky);
   }
   else {
     //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
@@ -237,11 +237,11 @@ long long MapzenTerrainElevationProvider::subscribe(const Sector&             se
                                                     const Vector2I&           extent,
                                                     TerrainElevationListener* listener) {
   //  return _pyramid->subscribe(sector, extent, listener);
-#error Diego at work!
+  THROW_EXCEPTION("Not yet done");
 }
 
 void MapzenTerrainElevationProvider::unsubscribe(const long long subscriptionID,
                                                  const bool deleteListener) {
   //  _pyramid->unsubscribe(subscriptionID, deleteListener);
-#error Diego at work!
+  THROW_EXCEPTION("Not yet done");
 }
