@@ -12,23 +12,17 @@ varying highp vec3 planePos;
 const highp float earthRadius = 6.36744e6;
 
 const highp float atmosphereScale = 15.0;
-const highp float tropoHeight = 10e3 * atmosphereScale;
 const highp float stratoHeight = 50e3 * atmosphereScale;
-
-//const highp float atmThickness = 50e3;
 const highp float atmUndergroundOffset = 100e3;
 
 //Height at which the effect is replaced by a blue background
-const highp float minHeigth = 20000.0;
-
-//Max distance on atmosphere (as in: http://www.mathopenref.com/chord.html )
-const highp float maxDistTropo = 2.0 * sqrt(pow(earthRadius + tropoHeight, 2.0) - pow(earthRadius, 2.0));
-const highp float maxDistStrato = 2.0 * sqrt(pow(earthRadius + stratoHeight, 2.0) - pow(earthRadius + tropoHeight, 2.0));
+const highp float minHeigth = 35000.0;
 
 //Multicolor gradient
 highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
 highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);
 highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
+highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));
 
 
 highp vec2 intersectionsWithSphere(highp vec3 o,
@@ -71,10 +65,6 @@ highp float rayLenghtInSphere(highp vec3 o,
     }
   }
   
-  if (t.x < 1.0){ //Eliminating distance to Znear plane
-    t.x = 1.0;
-  }
-  
   p1 = o + d * t.x;
   p2 = o + d * t.y;
   
@@ -83,6 +73,11 @@ highp float rayLenghtInSphere(highp vec3 o,
 }
 
 highp float getRayFactor(highp vec3 o, highp vec3 d){
+  
+  d /= 1000.0;
+  o /= 1000.0;
+  highp float er = earthRadius / 1000.0;
+  highp float sh = (stratoHeight + earthRadius) / 1000.0;
   
   highp float ld = dot(d,d);
   highp float pdo = dot(d,o);
@@ -95,25 +90,22 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
   highp float oy = o.y;
   highp float oz = o.z;
   
-  highp float s = (-12000. + 2.*earthRadius + ((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
-                                               sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0)))/ld -
-                   (sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*stratoHeight +
-                   ((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.*dx*dz*ox*oz - 2.*dy*oy*(dx*ox + dz*oz) +
-                     pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*
-                    log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
-                        sqrt(ld)*sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0))))/pow(ld,1.5) -
-                   ((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.*dx*dz*ox*oz - 2.*dy*oy*(dx*ox + dz*oz) +
-                     pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*
-                    log(sqrt(ld)*sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0)) + pdo))/pow(ld,1.5))/
-  (2.*(earthRadius - 1.*stratoHeight));
-  
-  //highp float maxLength = 2.0 * sqrt(pow(earthRadius + stratoHeight, 2.0) - pow(earthRadius, 2.0));
+  highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
+    sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0)))/ld -
+   (sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*sh +
+   ((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
+     pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*
+    log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
+        sqrt(ld)*sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0))))/pow(ld,1.5) -
+   ((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
+     pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*
+    log(sqrt(ld)*sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0)) + pdo))/pow(ld,1.5))/
+  (2.*(er - 1.*sh));
   
   return s;
 }
 
 void main() {
-  
   
   //Ray [O + tD = X]
   highp vec3 o = planePos;
@@ -132,24 +124,16 @@ void main() {
     discard;
   }
 
-  highp float f = getRayFactor(sp1, sp2 - sp1);
-//  if (f <= 0.0 || f >= 1.0){
-//    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-//  } else{
-  if (f > 2.5){
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  } else{
-    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-  }
-//    gl_FragColor = vec4(f / 10.0, 0.0, 0.1, 1.0);
-//  }
+  //Calculating color
+  highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
   
-  
+  highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));
+  color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));
+  gl_FragColor = color;
+
   //Calculating camera Height (for precision problems)
   //Below a certain threshold float precision is not enough for calculations
-  const highp float minHeigth = 20000.0;
   highp float camHeight = length(uCameraPosition) - earthRadius;
-  gl_FragColor = mix(gl_FragColor, blueSky, smoothstep(minHeigth, minHeigth / 2.0, camHeight));
-  
+  gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));
 }
 

@@ -427,15 +427,13 @@ public:
 "varying highp vec3 planePos;\n" +
 "const highp float earthRadius = 6.36744e6;\n" +
 "const highp float atmosphereScale = 15.0;\n" +
-"const highp float tropoHeight = 10e3 * atmosphereScale;\n" +
 "const highp float stratoHeight = 50e3 * atmosphereScale;\n" +
 "const highp float atmUndergroundOffset = 100e3;\n" +
-"const highp float minHeigth = 20000.0;\n" +
-"const highp float maxDistTropo = 2.0 * sqrt(pow(earthRadius + tropoHeight, 2.0) - pow(earthRadius, 2.0));\n" +
-"const highp float maxDistStrato = 2.0 * sqrt(pow(earthRadius + stratoHeight, 2.0) - pow(earthRadius + tropoHeight, 2.0));\n" +
+"const highp float minHeigth = 35000.0;\n" +
 "highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
 "highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);\n" +
 "highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
+"highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));\n" +
 "highp vec2 intersectionsWithSphere(highp vec3 o,\n" +
 "highp vec3 d,\n" +
 "highp float r){\n" +
@@ -468,14 +466,15 @@ public:
 "t.x = 0.0;\n" +
 "}\n" +
 "}\n" +
-"if (t.x < 1.0){ //Eliminating distance to Znear plane\n" +
-"t.x = 1.0;\n" +
-"}\n" +
 "p1 = o + d * t.x;\n" +
 "p2 = o + d * t.y;\n" +
 "return length(p2-p1);\n" +
 "}\n" +
 "highp float getRayFactor(highp vec3 o, highp vec3 d){\n" +
+"d /= 1000.0;\n" +
+"o /= 1000.0;\n" +
+"highp float er = earthRadius / 1000.0;\n" +
+"highp float sh = (stratoHeight + earthRadius) / 1000.0;\n" +
 "highp float ld = dot(d,d);\n" +
 "highp float pdo = dot(d,o);\n" +
 "highp float dx = d.x;\n" +
@@ -484,17 +483,17 @@ public:
 "highp float ox = o.x;\n" +
 "highp float oy = o.y;\n" +
 "highp float oz = o.z;\n" +
-"highp float s = (-12000. + 2.*earthRadius + ((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
+"highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
 "sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0)))/ld -\n" +
-"(sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*stratoHeight +\n" +
-"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.*dx*dz*ox*oz - 2.*dy*oy*(dx*ox + dz*oz) +\n" +
+"(sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*sh +\n" +
+"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
 "pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*\n" +
 "log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +\n" +
 "sqrt(ld)*sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0))))/pow(ld,1.5) -\n" +
-"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.*dx*dz*ox*oz - 2.*dy*oy*(dx*ox + dz*oz) +\n" +
+"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
 "pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*\n" +
 "log(sqrt(ld)*sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0)) + pdo))/pow(ld,1.5))/\n" +
-"(2.*(earthRadius - 1.*stratoHeight));\n" +
+"(2.*(er - 1.*sh));\n" +
 "return s;\n" +
 "}\n" +
 "void main() {\n" +
@@ -509,15 +508,12 @@ public:
 "if (stratoLength <= 0.0){\n" +
 "discard;\n" +
 "}\n" +
-"highp float f = getRayFactor(sp1, sp2 - sp1);\n" +
-"if (f > 2.5){\n" +
-"gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n" +
-"} else{\n" +
-"gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n" +
-"}\n" +
-"const highp float minHeigth = 20000.0;\n" +
+"highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;\n" +
+"highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));\n" +
+"color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));\n" +
+"gl_FragColor = color;\n" +
 "highp float camHeight = length(uCameraPosition) - earthRadius;\n" +
-"gl_FragColor = mix(gl_FragColor, blueSky, smoothstep(minHeigth, minHeigth / 2.0, camHeight));\n" +
+"gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);
 

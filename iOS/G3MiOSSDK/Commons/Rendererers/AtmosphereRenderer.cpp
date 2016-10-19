@@ -39,6 +39,10 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
   //CamPos
   _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera());
   _glState->addGLFeature(_camPosGLF, false);
+  
+  
+  const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
+  _overPresicionThreshold = camHeigth < _minHeight * 1.2;
 }
 
 void AtmosphereRenderer::updateGLState(const Camera* camera){
@@ -60,22 +64,26 @@ void AtmosphereRenderer::updateGLState(const Camera* camera){
 void AtmosphereRenderer::render(const G3MRenderContext* rc,
                                 GLState* glState){
   
-  const bool belowRendererHeight = rc->getCurrentCamera()->getGeodeticPosition()._height < 9000.0;
-  
-  if (belowRendererHeight){
-    rc->getWidget()->setBackgroundColor(_blueSky);
-  } else{
-    rc->getWidget()->setBackgroundColor(_darkSpace);
-  }
-  
-//  if (_wasRenderedLastFrame || !belowRendererHeight){
-    //Rendering
+  //Rendering
+  const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
+  if (camHeigth > _minHeight){
     updateGLState(rc->getCurrentCamera());
     _glState->setParent(glState);
     
     _directMesh->render(rc, _glState);
-//  }
+  }
   
-  _wasRenderedLastFrame = belowRendererHeight;
+  const bool nowIsOverPresicionThreshold =  camHeigth < _minHeight * 1.2;
+  
+  if (_overPresicionThreshold != nowIsOverPresicionThreshold){
+    //Changing background color
+    _overPresicionThreshold = nowIsOverPresicionThreshold;
+    
+    if (_overPresicionThreshold){
+      rc->getWidget()->setBackgroundColor(_blueSky);
+    } else{
+      rc->getWidget()->setBackgroundColor(_darkSpace);
+    }
+  }
   
 }

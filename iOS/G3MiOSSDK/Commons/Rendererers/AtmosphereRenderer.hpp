@@ -30,13 +30,15 @@ private:
   
   Color _blueSky;
   Color _darkSpace;
-  bool _wasRenderedLastFrame;
+  bool _overPresicionThreshold;
+  const double _minHeight;
   
 public:
   AtmosphereRenderer():
-  _blueSky(Color::fromRGBA(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0)),
+  _blueSky(Color::fromRGBA((32.0/2.0 + 128) / 256.0, (173.0/2.0 + 128) / 256.0, (249.0/ 2.0 + 128) / 256.0, 1.0)),
   _darkSpace(Color::fromRGBA(.0, .0, .0, .0)),
-  _wasRenderedLastFrame(true)
+  _overPresicionThreshold(true),
+  _minHeight(8000.0)
   {
     
   }
