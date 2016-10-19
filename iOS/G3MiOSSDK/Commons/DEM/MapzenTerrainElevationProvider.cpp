@@ -213,6 +213,7 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
       _rootGrid->_release();
     }
     _rootGrid = grid;
+    _pyramid->insertGrid(grid);
   }
   else {
 //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
