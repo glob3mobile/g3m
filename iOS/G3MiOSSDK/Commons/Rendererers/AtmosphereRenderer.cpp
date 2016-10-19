@@ -41,9 +41,14 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
   _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera());
   _glState->addGLFeature(_camPosGLF, false);
   
-  
+  //Computing background color
   const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
   _overPresicionThreshold = camHeigth < _minHeight * 1.2;
+  if (_overPresicionThreshold){
+    rc->getWidget()->setBackgroundColor(_blueSky);
+  } else{
+    rc->getWidget()->setBackgroundColor(_darkSpace);
+  }
 }
 
 void AtmosphereRenderer::updateGLState(const Camera* camera){
