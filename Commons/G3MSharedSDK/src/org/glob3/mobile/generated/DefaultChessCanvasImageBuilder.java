@@ -37,22 +37,25 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
     canvas.setFillColor(_backgroundColor);
     canvas.fillRectangle(0, 0, width, height);
   
-    canvas.setFillColor(_boxColor);
-  
-    final float xInterval = (float) width / _splits;
-    final float yInterval = (float) height / _splits;
-  
-    for (int col = 0; col < _splits; col += 2)
+    if (!_boxColor.isFullTransparent())
     {
-      final float x = col * xInterval;
-      final float x2 = (col + 1) * xInterval;
-      for (int row = 0; row < _splits; row += 2)
-      {
-        final float y = row * yInterval;
-        final float y2 = (row + 1) * yInterval;
+      canvas.setFillColor(_boxColor);
   
-        canvas.fillRoundedRectangle(x + 2, y + 2, xInterval - 4, yInterval - 4, 4);
-        canvas.fillRoundedRectangle(x2 + 2, y2 + 2, xInterval - 4, yInterval - 4, 4);
+      final float xInterval = (float) width / _splits;
+      final float yInterval = (float) height / _splits;
+  
+      for (int col = 0; col < _splits; col += 2)
+      {
+        final float x = col * xInterval;
+        final float x2 = (col + 1) * xInterval;
+        for (int row = 0; row < _splits; row += 2)
+        {
+          final float y = row * yInterval;
+          final float y2 = (row + 1) * yInterval;
+  
+          canvas.fillRoundedRectangle(x + 2, y + 2, xInterval - 4, yInterval - 4, 4);
+          canvas.fillRoundedRectangle(x2 + 2, y2 + 2, xInterval - 4, yInterval - 4, 4);
+        }
       }
     }
   }
