@@ -12,7 +12,7 @@
 #include "TerrainElevationGrid.hpp"
 
 
-PyramidTerrainElevationProvider::Node::Node(const Node*   parent,
+PyramidTerrainElevationProvider::Node::Node(const PyramidTerrainElevationProvider::Node* parent,
                                             const size_t  childID,
                                             const Sector& sector,
                                             const int     z,

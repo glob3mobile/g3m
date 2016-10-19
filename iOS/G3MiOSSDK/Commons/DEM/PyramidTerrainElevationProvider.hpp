@@ -37,7 +37,7 @@ protected:
 
     std::vector<Node*>* _children;
 
-    Node(const Node*   parent,
+    Node(const PyramidTerrainElevationProvider::Node* parent,
          const size_t  childID,
          const Sector& sector,
          const int     z,
