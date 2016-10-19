@@ -80,13 +80,13 @@ public:
 
   void onDownloadError(int z, int x, int y);
 
-  long long subscribe(const Sector&   sector,
-                      const Vector2I& resolution,
+  long long subscribe(const Sector&             sector,
+                      const Vector2I&           extent,
                       TerrainElevationListener* listener);
 
-  void unsubscribe(long long subscriptionID,
-                   bool deleteListener);
-  
+  void unsubscribe(const long long subscriptionID,
+                   const bool deleteListener);
+
 };
 
 #endif

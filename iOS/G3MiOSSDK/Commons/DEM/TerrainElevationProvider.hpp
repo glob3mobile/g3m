@@ -34,12 +34,12 @@ public:
 
   virtual void cancel() = 0;
 
-  virtual long long subscribe(const Sector&   sector,
-                              const Vector2I& resolution,
+  virtual long long subscribe(const Sector&             sector,
+                              const Vector2I&           extent,
                               TerrainElevationListener* listener) = 0;
 
-  virtual void unsubscribe(long long subscriptionID,
-                           bool deleteListener) = 0;
+  virtual void unsubscribe(const long long subscriptionID,
+                           const bool deleteListener) = 0;
 
 };
 

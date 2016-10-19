@@ -18,7 +18,8 @@ protected:
              size_t childID);
 
 public:
-  MercatorTerrainElevationPyramid();
+  MercatorTerrainElevationPyramid(const int nodeWidth,
+                                  const int nodeHeight);
 
 };
 

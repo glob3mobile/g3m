@@ -35,12 +35,16 @@ protected:
 private:
   std::vector<TerrainElevationPyramid::Node*> _rootNodes;
 
+  const int _nodeWidth;
+  const int _nodeHeight;
 
 protected:
   virtual TerrainElevationPyramid::Node* createNode(const TerrainElevationPyramid::Node* parent,
                                                     size_t childID) = 0;
 
-  TerrainElevationPyramid(const size_t rootNodesCount);
+  TerrainElevationPyramid(const size_t rootNodesCount,
+                          const int    nodeWidth,
+                          const int    nodeHeight);
 
   virtual ~TerrainElevationPyramid();
 

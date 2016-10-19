@@ -23,7 +23,11 @@ TerrainElevationPyramid::Node::~Node() {
 
 }
 
-TerrainElevationPyramid::TerrainElevationPyramid(const size_t rootNodesCount)
+TerrainElevationPyramid::TerrainElevationPyramid(const size_t rootNodesCount,
+                                                 const int    nodeWidth,
+                                                 const int    nodeHeight) :
+_nodeWidth(nodeWidth),
+_nodeHeight(nodeHeight)
 {
   for (size_t i = 0; i < rootNodesCount; i++) {
     Node* rootNode = createNode(NULL, i);

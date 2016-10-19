@@ -137,7 +137,7 @@ _context(NULL),
 _instanceID("MapzenTerrainElevationProvider_" + IStringUtils::instance()->toString(++_idCounter)),
 _rootGrid(NULL),
 _errorDownloadingRootGrid(false),
-_pyramid(new MercatorTerrainElevationPyramid())
+_pyramid(new MercatorTerrainElevationPyramid(256, 256))
 {
 
 }
@@ -148,6 +148,7 @@ MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
   }
 
   delete _pyramid;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -190,16 +191,16 @@ void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
               Sector::FULL_SPHERE,
               0 /* deltaHeight */);
 
-//  const int z = 9;
-//  const int x = 271;
-//  const int y = 180;
-//  const double deltaHeight = 0;
-//
-//  const Sector sector = MercatorUtils::getSector(z, x, y);
-//  ILogger::instance()->logInfo( sector.description() );
-//  requestTile(z, x, y,
-//              sector,
-//              deltaHeight);
+  //  const int z = 9;
+  //  const int x = 271;
+  //  const int y = 180;
+  //  const double deltaHeight = 0;
+  //
+  //  const Sector sector = MercatorUtils::getSector(z, x, y);
+  //  ILogger::instance()->logInfo( sector.description() );
+  //  requestTile(z, x, y,
+  //              sector,
+  //              deltaHeight);
 }
 
 void MapzenTerrainElevationProvider::cancel() {
@@ -216,13 +217,13 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
     _pyramid->insertGrid(grid);
   }
   else {
-//    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
-//                                                  1, // verticalExaggeration,
-//                                                  Geodetic3D::zero(),
-//                                                  4 // pointSize
-//                                                  ) );
-//
-//     grid->_release();
+    //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
+    //                                                  1, // verticalExaggeration,
+    //                                                  Geodetic3D::zero(),
+    //                                                  4 // pointSize
+    //                                                  ) );
+    //
+    //     grid->_release();
     THROW_EXCEPTION("Not yet done");
   }
 }
@@ -234,13 +235,13 @@ void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
   }
 }
 
-long long MapzenTerrainElevationProvider::subscribe(const Sector&   sector,
-                                                    const Vector2I& resolution,
+long long MapzenTerrainElevationProvider::subscribe(const Sector&             sector,
+                                                    const Vector2I&           extent,
                                                     TerrainElevationListener* listener) {
-#error Diego at work!
+  return _pyramid->subscribe(sector, extent, listener);
 }
 
-void MapzenTerrainElevationProvider::unsubscribe(long long subscriptionID,
-                                                 bool deleteListener) {
-#error Diego at work!
+void MapzenTerrainElevationProvider::unsubscribe(const long long subscriptionID,
+                                                 const bool deleteListener) {
+  _pyramid->unsubscribe(subscriptionID, deleteListener);
 }
