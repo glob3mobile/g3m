@@ -19,19 +19,12 @@ package org.glob3.mobile.generated;
 
 public abstract class MercatorPyramidTerrainElevationProvider extends PyramidTerrainElevationProvider
 {
-  protected final MercatorPyramidTerrainElevationProvider.Node createNode(MercatorPyramidTerrainElevationProvider.Node parent, int childID)
-  {
-    if (parent == null)
-    {
-      // creating root node
-      return new Node(null, childID, Sector.FULL_SPHERE); // parent
-    }
-    throw new RuntimeException("Man at work!");
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MercatorPyramidTerrainElevationProvider::Node createNode(MercatorPyramidTerrainElevationProvider::Node parent, int childID);
 
-  public MercatorPyramidTerrainElevationProvider(int gridWidth, int gridHeight)
+  public MercatorPyramidTerrainElevationProvider()
   {
-     super(1, gridWidth, gridHeight);
+     super(1);
   }
 
 }

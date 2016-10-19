@@ -97,10 +97,10 @@ public class Tile
     }
   }
 
-  private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
+  private Tile createSubTile(Sector sector, int level, int row, int column, boolean setParent)
   {
     Tile parent = setParent ? this : null;
-    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer);
+    return new Tile(_texturizer, parent, sector, _mercator, level, row, column, _planetRenderer);
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -551,28 +551,28 @@ public class Tile
   
     final Sector renderedSector = _planetRenderer.getRenderedSector();
   
-    Sector s1 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
+    final Sector s0 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
+    if (renderedSector == null || renderedSector.touchesWith(s0))
+    {
+      subTiles.add(createSubTile(s0, nextLevel, row2, column2, setParent));
+    }
+  
+    final Sector s1 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s1))
     {
-      subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+      subTiles.add(createSubTile(s1, nextLevel, row2, column2 + 1, setParent));
     }
   
-    Sector s2 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
+    final Sector s2 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s2))
     {
-      subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
+      subTiles.add(createSubTile(s2, nextLevel, row2 + 1, column2, setParent));
     }
   
-    Sector s3 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
+    final Sector s3 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s3))
     {
-      subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
-    }
-  
-    Sector s4 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
-    if (renderedSector == null || renderedSector.touchesWith(s4))
-    {
-      subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
+      subTiles.add(createSubTile(s3, nextLevel, row2 + 1, column2 + 1, setParent));
     }
   
     subTiles.trimToSize();

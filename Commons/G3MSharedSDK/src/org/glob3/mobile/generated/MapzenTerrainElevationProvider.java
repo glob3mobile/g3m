@@ -67,7 +67,7 @@ public abstract class MapzenTerrainElevationProvider extends MercatorPyramidTerr
 
   public MapzenTerrainElevationProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, MeshRenderer meshRenderer)
   {
-     super(256, 256);
+     super();
      _apiKey = apiKey;
      _downloadPriority = downloadPriority;
      _timeToCache = timeToCache;
@@ -123,7 +123,7 @@ public abstract class MapzenTerrainElevationProvider extends MercatorPyramidTerr
       }
       _rootGrid = grid;
       final boolean sticky = true;
-      insertGrid(grid, sticky);
+      insertGrid(z, x, y, grid, sticky);
     }
     else
     {
