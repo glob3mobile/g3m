@@ -17,9 +17,9 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferTerrainElevationGrid.hpp"
-#include "MercatorUtils.hpp"
-#include "MeshRenderer.hpp"
-#include "EllipsoidalPlanet.hpp"
+//#include "MercatorUtils.hpp"
+//#include "MeshRenderer.hpp"
+//#include "EllipsoidalPlanet.hpp"
 
 
 int MapzenTerrainElevationProvider::_idCounter = 0;
@@ -227,4 +227,15 @@ void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
   if ((z == 0) && (x == 0) && (y == 0)) {
     _errorDownloadingRootGrid = true;
   }
+}
+
+long long MapzenTerrainElevationProvider::subscribe(const Sector&   sector,
+                                                    const Vector2I& resolution,
+                                                    TerrainElevationProvider::Listener* listener,
+                                                    bool deleteListener) {
+#error Diego at work!
+}
+
+void MapzenTerrainElevationProvider::unsubscribe(long long subscriptionID) {
+#error Diego at work!
 }

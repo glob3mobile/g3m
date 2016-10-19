@@ -75,6 +75,13 @@ public:
               FloatBufferTerrainElevationGrid* grid);
 
   void onDownloadError(int z, int x, int y);
+
+  long long subscribe(const Sector&   sector,
+                      const Vector2I& resolution,
+                      TerrainElevationProvider::Listener* listener,
+                      bool deleteListener);
+
+  void unsubscribe(long long subscriptionID);
   
 };
 
