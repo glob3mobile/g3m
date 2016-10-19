@@ -1,15 +1,15 @@
 //
-//  TerrainElevationPyramid.cpp
+//  PyramidTerrainElevationProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/19/16.
 //
 //
 
-#include "TerrainElevationPyramid.hpp"
+#include "PyramidTerrainElevationProvider.hpp"
 
 
-TerrainElevationPyramid::Node::Node(const TerrainElevationPyramid::Node* parent,
+PyramidTerrainElevationProvider::Node::Node(const PyramidTerrainElevationProvider::Node* parent,
                                     const size_t childID,
                                     const Sector& sector) :
 _parent(parent),
@@ -19,11 +19,11 @@ _sector(sector)
 
 }
 
-TerrainElevationPyramid::Node::~Node() {
+PyramidTerrainElevationProvider::Node::~Node() {
 
 }
 
-TerrainElevationPyramid::TerrainElevationPyramid(const size_t rootNodesCount,
+PyramidTerrainElevationProvider::PyramidTerrainElevationProvider(const size_t rootNodesCount,
                                                  const int    nodeWidth,
                                                  const int    nodeHeight) :
 _nodeWidth(nodeWidth),
@@ -35,10 +35,13 @@ _nodeHeight(nodeHeight)
   }
 }
 
-TerrainElevationPyramid::~TerrainElevationPyramid() {
+PyramidTerrainElevationProvider::~PyramidTerrainElevationProvider() {
   const size_t size = _rootNodes.size();
   for (size_t i = 0; i < size; i++) {
     Node* rootNode = _rootNodes[i];
     delete rootNode;
   }
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }

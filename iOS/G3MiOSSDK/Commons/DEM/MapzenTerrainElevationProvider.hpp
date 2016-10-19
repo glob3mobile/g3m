@@ -9,7 +9,7 @@
 #ifndef MapzenTerrainElevationProvider_hpp
 #define MapzenTerrainElevationProvider_hpp
 
-#include "TerrainElevationProvider.hpp"
+#include "MercatorPyramidTerrainElevationProvider.hpp"
 
 #include "TimeInterval.hpp"
 #include "DownloadPriority.hpp"
@@ -18,10 +18,9 @@
 class FloatBufferTerrainElevationGrid;
 class Sector;
 class MeshRenderer;
-class MercatorTerrainElevationPyramid;
 
 
-class MapzenTerrainElevationProvider : public TerrainElevationProvider {
+class MapzenTerrainElevationProvider : public MercatorPyramidTerrainElevationProvider {
 private:
   static int _idCounter;
 
@@ -47,8 +46,6 @@ private:
 #ifdef JAVA_CODE
   private G3MContext _context;
 #endif
-
-  MercatorTerrainElevationPyramid* _pyramid;
 
 
   FloatBufferTerrainElevationGrid* _rootGrid;

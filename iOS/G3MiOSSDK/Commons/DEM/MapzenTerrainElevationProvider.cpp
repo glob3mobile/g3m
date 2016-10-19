@@ -17,7 +17,6 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferTerrainElevationGrid.hpp"
-#include "MercatorTerrainElevationPyramid.hpp"
 //#include "MercatorUtils.hpp"
 //#include "MeshRenderer.hpp"
 //#include "EllipsoidalPlanet.hpp"
@@ -128,6 +127,7 @@ MapzenTerrainElevationProvider::MapzenTerrainElevationProvider(const std::string
                                                                const TimeInterval& timeToCache,
                                                                bool                readExpired,
                                                                MeshRenderer*       meshRenderer) :
+MercatorPyramidTerrainElevationProvider(256, 256),
 _apiKey(apiKey),
 _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
@@ -136,8 +136,7 @@ _meshRenderer(meshRenderer),
 _context(NULL),
 _instanceID("MapzenTerrainElevationProvider_" + IStringUtils::instance()->toString(++_idCounter)),
 _rootGrid(NULL),
-_errorDownloadingRootGrid(false),
-_pyramid(new MercatorTerrainElevationPyramid(256, 256))
+_errorDownloadingRootGrid(false)
 {
 
 }
@@ -146,8 +145,6 @@ MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
   if (_rootGrid != NULL) {
     _rootGrid->_release();
   }
-
-  delete _pyramid;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -214,7 +211,8 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
       _rootGrid->_release();
     }
     _rootGrid = grid;
-    _pyramid->insertGrid(grid);
+//    _pyramid->insertGrid(grid);
+#error Diego at work!
   }
   else {
     //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
@@ -238,10 +236,12 @@ void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
 long long MapzenTerrainElevationProvider::subscribe(const Sector&             sector,
                                                     const Vector2I&           extent,
                                                     TerrainElevationListener* listener) {
-  return _pyramid->subscribe(sector, extent, listener);
+  //  return _pyramid->subscribe(sector, extent, listener);
+#error Diego at work!
 }
 
 void MapzenTerrainElevationProvider::unsubscribe(const long long subscriptionID,
                                                  const bool deleteListener) {
-  _pyramid->unsubscribe(subscriptionID, deleteListener);
+  //  _pyramid->unsubscribe(subscriptionID, deleteListener);
+#error Diego at work!
 }
