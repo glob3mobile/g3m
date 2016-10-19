@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class Sector;
 //class Vector2I;
-//class TerrainElevationGrid;
+//class TerrainElevationListener;
 
 
 public abstract class TerrainElevationProvider extends RCObject
@@ -32,23 +32,14 @@ public abstract class TerrainElevationProvider extends RCObject
   }
 
 
-  public interface Listener
-  {
-    void dispose();
-
-    void onGrid(TerrainElevationGrid grid);
-
-  }
-
-
   public abstract RenderState getRenderState();
 
   public abstract void initialize(G3MContext context);
 
   public abstract void cancel();
 
-  public abstract long subscribe(Sector sector, Vector2I resolution, TerrainElevationProvider.Listener listener, boolean deleteListener);
+  public abstract long subscribe(Sector sector, Vector2I resolution, TerrainElevationListener listener);
 
-  public abstract void unsubscribe(long subscriptionID);
+  public abstract void unsubscribe(long subscriptionID, boolean deleteListener);
 
 }

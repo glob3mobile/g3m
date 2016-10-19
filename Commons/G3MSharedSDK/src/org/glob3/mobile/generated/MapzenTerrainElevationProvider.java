@@ -21,9 +21,10 @@ package org.glob3.mobile.generated;
 //class FloatBufferTerrainElevationGrid;
 //class Sector;
 //class MeshRenderer;
+//class MercatorTerrainElevationPyramid;
 
 
-public abstract class MapzenTerrainElevationProvider extends TerrainElevationProvider
+public class MapzenTerrainElevationProvider extends TerrainElevationProvider
 {
   private static int _idCounter = 0;
 
@@ -39,6 +40,9 @@ public abstract class MapzenTerrainElevationProvider extends TerrainElevationPro
   private final String _instanceID;
 
   private G3MContext _context;
+
+  private MercatorTerrainElevationPyramid _pyramid;
+
 
   private FloatBufferTerrainElevationGrid _rootGrid;
   private boolean _errorDownloadingRootGrid;
@@ -59,6 +63,9 @@ public abstract class MapzenTerrainElevationProvider extends TerrainElevationPro
     {
       _rootGrid._release();
     }
+  
+    if (_pyramid != null)
+       _pyramid.dispose();
     super.dispose();
   }
 
@@ -74,6 +81,7 @@ public abstract class MapzenTerrainElevationProvider extends TerrainElevationPro
      _instanceID = "MapzenTerrainElevationProvider_" + IStringUtils.instance().toString(++_idCounter);
      _rootGrid = null;
      _errorDownloadingRootGrid = false;
+     _pyramid = new MercatorTerrainElevationPyramid();
   
   }
 
@@ -140,6 +148,18 @@ public abstract class MapzenTerrainElevationProvider extends TerrainElevationPro
     {
       _errorDownloadingRootGrid = true;
     }
+  }
+
+  public final long subscribe(Sector sector, Vector2I resolution, TerrainElevationListener listener)
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#error Diego at work!
+  }
+
+  public final void unsubscribe(long subscriptionID, boolean deleteListener)
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#error Diego at work!
   }
 
 }
