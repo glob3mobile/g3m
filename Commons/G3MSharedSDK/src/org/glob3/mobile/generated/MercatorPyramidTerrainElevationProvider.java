@@ -29,9 +29,9 @@ public abstract class MercatorPyramidTerrainElevationProvider extends PyramidTer
     throw new RuntimeException("Man at work!");
   }
 
-  public MercatorPyramidTerrainElevationProvider(int nodeWidth, int nodeHeight)
+  public MercatorPyramidTerrainElevationProvider(int gridWidth, int gridHeight)
   {
-     super(1, nodeWidth, nodeHeight);
+     super(1, gridWidth, gridHeight);
   }
 
 }

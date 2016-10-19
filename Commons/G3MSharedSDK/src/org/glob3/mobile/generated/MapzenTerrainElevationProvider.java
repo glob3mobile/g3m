@@ -122,9 +122,8 @@ public abstract class MapzenTerrainElevationProvider extends MercatorPyramidTerr
         _rootGrid._release();
       }
       _rootGrid = grid;
-  //    _pyramid->insertGrid(grid);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error Diego at work!
+      final boolean sticky = true;
+      insertGrid(grid, sticky);
     }
     else
     {
@@ -151,15 +150,13 @@ public abstract class MapzenTerrainElevationProvider extends MercatorPyramidTerr
   public final long subscribe(Sector sector, Vector2I extent, TerrainElevationListener listener)
   {
     //  return _pyramid->subscribe(sector, extent, listener);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error Diego at work!
+    throw new RuntimeException("Not yet done");
   }
 
   public final void unsubscribe(long subscriptionID, boolean deleteListener)
   {
     //  _pyramid->unsubscribe(subscriptionID, deleteListener);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error Diego at work!
+    throw new RuntimeException("Not yet done");
   }
 
 }
