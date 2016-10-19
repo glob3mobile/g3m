@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  TerrainElevationPyramid.cpp
+//  PyramidTerrainElevationProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/19/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TerrainElevationPyramid.hpp
+//  PyramidTerrainElevationProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/19/16.
@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class TerrainElevationPyramid
+public abstract class PyramidTerrainElevationProvider extends TerrainElevationProvider
 {
 
   protected static class Node
@@ -28,7 +28,7 @@ public abstract class TerrainElevationPyramid
     private final int _childID;
     private final Sector _sector ;
 
-    public Node(TerrainElevationPyramid.Node parent, int childID, Sector sector)
+    public Node(PyramidTerrainElevationProvider.Node parent, int childID, Sector sector)
     {
        _parent = parent;
        _childID = childID;
@@ -43,13 +43,17 @@ public abstract class TerrainElevationPyramid
   }
 
 
-  private java.util.ArrayList<TerrainElevationPyramid.Node> _rootNodes = new java.util.ArrayList<TerrainElevationPyramid.Node>();
+  private java.util.ArrayList<PyramidTerrainElevationProvider.Node> _rootNodes = new java.util.ArrayList<PyramidTerrainElevationProvider.Node>();
 
+  private final int _nodeWidth;
+  private final int _nodeHeight;
 
-  protected abstract TerrainElevationPyramid.Node createNode(TerrainElevationPyramid.Node parent, int childID);
+  protected abstract PyramidTerrainElevationProvider.Node createNode(PyramidTerrainElevationProvider.Node parent, int childID);
 
-  protected TerrainElevationPyramid(int rootNodesCount)
+  protected PyramidTerrainElevationProvider(int rootNodesCount, int nodeWidth, int nodeHeight)
   {
+     _nodeWidth = nodeWidth;
+     _nodeHeight = nodeHeight;
     for (int i = 0; i < rootNodesCount; i++)
     {
       Node rootNode = createNode(null, i);
@@ -66,6 +70,7 @@ public abstract class TerrainElevationPyramid
       if (rootNode != null)
          rootNode.dispose();
     }
+    super.dispose();
   }
 
 

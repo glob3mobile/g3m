@@ -38,7 +38,7 @@ public abstract class TerrainElevationProvider extends RCObject
 
   public abstract void cancel();
 
-  public abstract long subscribe(Sector sector, Vector2I resolution, TerrainElevationListener listener);
+  public abstract long subscribe(Sector sector, Vector2I extent, TerrainElevationListener listener);
 
   public abstract void unsubscribe(long subscriptionID, boolean deleteListener);
 

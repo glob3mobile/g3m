@@ -21,10 +21,9 @@ package org.glob3.mobile.generated;
 //class FloatBufferTerrainElevationGrid;
 //class Sector;
 //class MeshRenderer;
-//class MercatorTerrainElevationPyramid;
 
 
-public class MapzenTerrainElevationProvider extends TerrainElevationProvider
+public abstract class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevationProvider
 {
   private static int _idCounter = 0;
 
@@ -40,8 +39,6 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
   private final String _instanceID;
 
   private G3MContext _context;
-
-  private MercatorTerrainElevationPyramid _pyramid;
 
 
   private FloatBufferTerrainElevationGrid _rootGrid;
@@ -64,14 +61,13 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
       _rootGrid._release();
     }
   
-    if (_pyramid != null)
-       _pyramid.dispose();
     super.dispose();
   }
 
 
   public MapzenTerrainElevationProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, MeshRenderer meshRenderer)
   {
+     super(256, 256);
      _apiKey = apiKey;
      _downloadPriority = downloadPriority;
      _timeToCache = timeToCache;
@@ -81,7 +77,6 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
      _instanceID = "MapzenTerrainElevationProvider_" + IStringUtils.instance().toString(++_idCounter);
      _rootGrid = null;
      _errorDownloadingRootGrid = false;
-     _pyramid = new MercatorTerrainElevationPyramid();
   
   }
 
@@ -101,16 +96,16 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
     // request root grid
     requestTile(0, 0, 0, Sector.FULL_SPHERE, 0); // deltaHeight -  y -  x -  z
   
-  //  const int z = 9;
-  //  const int x = 271;
-  //  const int y = 180;
-  //  const double deltaHeight = 0;
-  //
-  //  const Sector sector = MercatorUtils::getSector(z, x, y);
-  //  ILogger::instance()->logInfo( sector.description() );
-  //  requestTile(z, x, y,
-  //              sector,
-  //              deltaHeight);
+    //  const int z = 9;
+    //  const int x = 271;
+    //  const int y = 180;
+    //  const double deltaHeight = 0;
+    //
+    //  const Sector sector = MercatorUtils::getSector(z, x, y);
+    //  ILogger::instance()->logInfo( sector.description() );
+    //  requestTile(z, x, y,
+    //              sector,
+    //              deltaHeight);
   }
 
   public final void cancel()
@@ -127,16 +122,19 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
         _rootGrid._release();
       }
       _rootGrid = grid;
+  //    _pyramid->insertGrid(grid);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#error Diego at work!
     }
     else
     {
-  //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
-  //                                                  1, // verticalExaggeration,
-  //                                                  Geodetic3D::zero(),
-  //                                                  4 // pointSize
-  //                                                  ) );
-  //
-  //     grid->_release();
+      //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
+      //                                                  1, // verticalExaggeration,
+      //                                                  Geodetic3D::zero(),
+      //                                                  4 // pointSize
+      //                                                  ) );
+      //
+      //     grid->_release();
       throw new RuntimeException("Not yet done");
     }
   }
@@ -150,14 +148,16 @@ public class MapzenTerrainElevationProvider extends TerrainElevationProvider
     }
   }
 
-  public final long subscribe(Sector sector, Vector2I resolution, TerrainElevationListener listener)
+  public final long subscribe(Sector sector, Vector2I extent, TerrainElevationListener listener)
   {
+    //  return _pyramid->subscribe(sector, extent, listener);
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#error Diego at work!
   }
 
   public final void unsubscribe(long subscriptionID, boolean deleteListener)
   {
+    //  _pyramid->unsubscribe(subscriptionID, deleteListener);
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#error Diego at work!
   }
