@@ -74,6 +74,8 @@ highp float rayLenghtInSphere(highp vec3 o,
 
 highp float getRayFactor(highp vec3 o, highp vec3 d){
   
+  //Ray density calculations explained in: https://github.com/amazingsmash/AtmosphericShaders
+  
   d /= 1000.0;
   o /= 1000.0;
   highp float er = earthRadius / 1000.0;
