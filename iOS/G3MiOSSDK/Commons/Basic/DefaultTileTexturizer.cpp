@@ -612,12 +612,12 @@ class DTT_IImageBuilderListener: public IImageBuilderListener {
 
 private:
 
-  DefaultTileTexturizer* _defaultTileTesturizer;
+  DefaultTileTexturizer* _defaultTileTexturizer;
 
 public:
 
-  DTT_IImageBuilderListener(DefaultTileTexturizer* defaultTileTesturizer) :
-  _defaultTileTesturizer(defaultTileTesturizer)
+  DTT_IImageBuilderListener(DefaultTileTexturizer* defaultTileTexturizer) :
+  _defaultTileTexturizer(defaultTileTexturizer)
   {
   }
 
@@ -626,17 +626,17 @@ public:
 
   void imageCreated(const IImage* image,
                     const std::string& imageName) {
-    _defaultTileTesturizer->setDefaultBackgroundImage(image);
-    _defaultTileTesturizer->setDefaultBackgroundImageName(imageName);
-    _defaultTileTesturizer->setDefaultBackgroundImageLoaded(true);
+    _defaultTileTexturizer->setDefaultBackgroundImage(image);
+    _defaultTileTexturizer->setDefaultBackgroundImageName(imageName);
+    _defaultTileTexturizer->setDefaultBackgroundImageLoaded(true);
     ILogger::instance()->logInfo("Default Background Image loaded...");
 
   }
 
   void onError(const std::string& error) {
     ILogger::instance()->logError(error);
-    _defaultTileTesturizer->_errors.push_back("Can't download background image default");
-    _defaultTileTesturizer->_errors.push_back(error);
+    _defaultTileTexturizer->_errors.push_back("Can't download background image default");
+    _defaultTileTexturizer->_errors.push_back(error);
 
   }
 };

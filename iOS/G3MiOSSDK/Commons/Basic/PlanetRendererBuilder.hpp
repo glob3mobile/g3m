@@ -91,7 +91,7 @@ private:
   
   IImageBuilder* _defaultTileBackgroundImage = NULL;
   
-  IImageBuilder* getDefaultTileBackgroundImageBuilder() const;
+  IImageBuilder* getDefaultTileBackgroundImageBuilder();
   
   TileLODTester* createDefaultTileLODTester() const;
 
