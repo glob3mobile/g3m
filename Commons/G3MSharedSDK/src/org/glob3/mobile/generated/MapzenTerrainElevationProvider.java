@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 
 
-public class MapzenTerrainElevationProvider extends TerrainElevationProvider
+public abstract class MapzenTerrainElevationProvider extends TerrainElevationProvider
 {
   private static int _idCounter = 0;
 
