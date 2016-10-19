@@ -15,7 +15,7 @@ class RenderState;
 class G3MContext;
 class Sector;
 class Vector2I;
-class TerrainElevationGrid;
+class TerrainElevationListener;
 
 
 class TerrainElevationProvider : public RCObject {
@@ -28,20 +28,6 @@ protected:
 
 public:
 
-  class Listener {
-  public:
-#ifdef C_CODE
-    virtual ~Listener() { }
-#endif
-#ifdef JAVA_CODE
-    void dispose();
-#endif
-
-    virtual void onGrid(const TerrainElevationGrid* grid) = 0;
-
-  };
-
-
   virtual RenderState getRenderState() = 0;
 
   virtual void initialize(const G3MContext* context) = 0;
@@ -50,10 +36,10 @@ public:
 
   virtual long long subscribe(const Sector&   sector,
                               const Vector2I& resolution,
-                              TerrainElevationProvider::Listener* listener,
-                              bool deleteListener) = 0;
+                              TerrainElevationListener* listener) = 0;
 
-  virtual void unsubscribe(long long subscriptionID) = 0;
+  virtual void unsubscribe(long long subscriptionID,
+                           bool deleteListener) = 0;
 
 };
 

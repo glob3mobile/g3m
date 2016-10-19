@@ -17,6 +17,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferTerrainElevationGrid.hpp"
+#include "MercatorTerrainElevationPyramid.hpp"
 //#include "MercatorUtils.hpp"
 //#include "MeshRenderer.hpp"
 //#include "EllipsoidalPlanet.hpp"
@@ -135,7 +136,8 @@ _meshRenderer(meshRenderer),
 _context(NULL),
 _instanceID("MapzenTerrainElevationProvider_" + IStringUtils::instance()->toString(++_idCounter)),
 _rootGrid(NULL),
-_errorDownloadingRootGrid(false)
+_errorDownloadingRootGrid(false),
+_pyramid(new MercatorTerrainElevationPyramid())
 {
 
 }
@@ -144,6 +146,8 @@ MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
   if (_rootGrid != NULL) {
     _rootGrid->_release();
   }
+
+  delete _pyramid;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -231,11 +235,11 @@ void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
 
 long long MapzenTerrainElevationProvider::subscribe(const Sector&   sector,
                                                     const Vector2I& resolution,
-                                                    TerrainElevationProvider::Listener* listener,
-                                                    bool deleteListener) {
+                                                    TerrainElevationListener* listener) {
 #error Diego at work!
 }
 
-void MapzenTerrainElevationProvider::unsubscribe(long long subscriptionID) {
+void MapzenTerrainElevationProvider::unsubscribe(long long subscriptionID,
+                                                 bool deleteListener) {
 #error Diego at work!
 }

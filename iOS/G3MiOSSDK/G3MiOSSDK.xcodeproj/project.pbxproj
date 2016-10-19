@@ -321,6 +321,12 @@
 		CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC9172E95370058CA9D /* CompositeElevationData.hpp */; };
 		CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */; };
 		CF9AEBC2159B3FEB004C3558 /* PlanetTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */; };
+		CF9B45F01DB797BE009ABF32 /* TerrainElevationPyramid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9B45EE1DB797BE009ABF32 /* TerrainElevationPyramid.cpp */; };
+		CF9B45F31DB797F4009ABF32 /* MercatorTerrainElevationPyramid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9B45F11DB797F4009ABF32 /* MercatorTerrainElevationPyramid.cpp */; };
+		CF9B45F61DB79EE3009ABF32 /* TerrainElevationListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9B45F41DB79EE3009ABF32 /* TerrainElevationListener.cpp */; };
+		CF9B45F71DB79FB1009ABF32 /* MercatorTerrainElevationPyramid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9B45F21DB797F4009ABF32 /* MercatorTerrainElevationPyramid.hpp */; };
+		CF9B45F81DB79FB1009ABF32 /* TerrainElevationListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9B45F51DB79EE3009ABF32 /* TerrainElevationListener.hpp */; };
+		CF9B45F91DB79FB1009ABF32 /* TerrainElevationPyramid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9B45EF1DB797BE009ABF32 /* TerrainElevationPyramid.hpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
 		CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9EDC621978357D00F7351E /* GEOVectorTileImageProvider.cpp */; };
@@ -797,6 +803,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF9B45F71DB79FB1009ABF32 /* MercatorTerrainElevationPyramid.hpp in CopyFiles */,
+				CF9B45F81DB79FB1009ABF32 /* TerrainElevationListener.hpp in CopyFiles */,
+				CF9B45F91DB79FB1009ABF32 /* TerrainElevationPyramid.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CF491C701DB62F4500476900 /* GAsyncTask.hpp in CopyFiles */,
 				CF0672351DB52C2400126E40 /* MapzenTerrariumParser.hpp in CopyFiles */,
@@ -1630,6 +1639,12 @@
 		CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
 		CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = PlanetTileTessellator.hpp; path = Commons/Basic/PlanetTileTessellator.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = PlanetTileTessellator.cpp; path = Commons/Basic/PlanetTileTessellator.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF9B45EE1DB797BE009ABF32 /* TerrainElevationPyramid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainElevationPyramid.cpp; path = Commons/DEM/TerrainElevationPyramid.cpp; sourceTree = "<group>"; };
+		CF9B45EF1DB797BE009ABF32 /* TerrainElevationPyramid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainElevationPyramid.hpp; path = Commons/DEM/TerrainElevationPyramid.hpp; sourceTree = "<group>"; };
+		CF9B45F11DB797F4009ABF32 /* MercatorTerrainElevationPyramid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorTerrainElevationPyramid.cpp; path = Commons/DEM/MercatorTerrainElevationPyramid.cpp; sourceTree = "<group>"; };
+		CF9B45F21DB797F4009ABF32 /* MercatorTerrainElevationPyramid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MercatorTerrainElevationPyramid.hpp; path = Commons/DEM/MercatorTerrainElevationPyramid.hpp; sourceTree = "<group>"; };
+		CF9B45F41DB79EE3009ABF32 /* TerrainElevationListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainElevationListener.cpp; path = Commons/DEM/TerrainElevationListener.cpp; sourceTree = "<group>"; };
+		CF9B45F51DB79EE3009ABF32 /* TerrainElevationListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainElevationListener.hpp; path = Commons/DEM/TerrainElevationListener.hpp; sourceTree = "<group>"; };
 		CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CachedDownloader.cpp; path = Commons/Interfaces/CachedDownloader.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
 		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
@@ -2701,12 +2716,18 @@
 				CFC35E681DAFBBF200929BE6 /* MapzenTerrainElevationProvider.hpp */,
 				CF66EB7F1DB5252900EFF718 /* MapzenTerrariumParser.cpp */,
 				CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */,
+				CF9B45F11DB797F4009ABF32 /* MercatorTerrainElevationPyramid.cpp */,
+				CF9B45F21DB797F4009ABF32 /* MercatorTerrainElevationPyramid.hpp */,
 				CF7338171DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.cpp */,
 				CF7338181DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.hpp */,
 				CF7338111DA56EA700C406D1 /* TerrainElevationGrid.cpp */,
 				CF7338121DA56EA700C406D1 /* TerrainElevationGrid.hpp */,
+				CF9B45F41DB79EE3009ABF32 /* TerrainElevationListener.cpp */,
+				CF9B45F51DB79EE3009ABF32 /* TerrainElevationListener.hpp */,
 				CFC35E641DAFBA6000929BE6 /* TerrainElevationProvider.cpp */,
 				CFC35E651DAFBA6000929BE6 /* TerrainElevationProvider.hpp */,
+				CF9B45EE1DB797BE009ABF32 /* TerrainElevationPyramid.cpp */,
+				CF9B45EF1DB797BE009ABF32 /* TerrainElevationPyramid.hpp */,
 			);
 			name = DEM;
 			sourceTree = "<group>";
@@ -3195,6 +3216,7 @@
 				CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */,
 				CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
+				CF9B45F61DB79EE3009ABF32 /* TerrainElevationListener.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
@@ -3322,6 +3344,7 @@
 				CFD41F601875E59800889B7C /* DownloaderImageBuilder.cpp in Sources */,
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
 				CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */,
+				CF9B45F01DB797BE009ABF32 /* TerrainElevationPyramid.cpp in Sources */,
 				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
@@ -3449,6 +3472,7 @@
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
 				CF3623401B97AFA400824932 /* CircleImageBuilder.cpp in Sources */,
 				D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */,
+				CF9B45F31DB797F4009ABF32 /* MercatorTerrainElevationPyramid.cpp in Sources */,
 				D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */,
 				CFAC9E9F18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp in Sources */,
 				CFCBA3C51907086C00FD2A2F /* TileImageContribution.cpp in Sources */,

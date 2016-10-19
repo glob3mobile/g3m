@@ -18,6 +18,7 @@
 class FloatBufferTerrainElevationGrid;
 class Sector;
 class MeshRenderer;
+class MercatorTerrainElevationPyramid;
 
 
 class MapzenTerrainElevationProvider : public TerrainElevationProvider {
@@ -46,6 +47,9 @@ private:
 #ifdef JAVA_CODE
   private G3MContext _context;
 #endif
+
+  MercatorTerrainElevationPyramid* _pyramid;
+
 
   FloatBufferTerrainElevationGrid* _rootGrid;
   bool _errorDownloadingRootGrid;
@@ -78,10 +82,10 @@ public:
 
   long long subscribe(const Sector&   sector,
                       const Vector2I& resolution,
-                      TerrainElevationProvider::Listener* listener,
-                      bool deleteListener);
+                      TerrainElevationListener* listener);
 
-  void unsubscribe(long long subscriptionID);
+  void unsubscribe(long long subscriptionID,
+                   bool deleteListener);
   
 };
 
