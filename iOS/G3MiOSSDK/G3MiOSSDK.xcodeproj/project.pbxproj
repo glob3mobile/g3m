@@ -3096,7 +3096,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd /Users/josemiguelsn/Desktop/igo_git/g3m/tools/ShadersProcessor/\njava -jar Built_161110.jar";
+			shellScript = "#cd /Users/josemiguelsn/Desktop/igo_git/g3m/tools/ShadersProcessor/\ncd ../../tools/ShadersProcessor/\njava -jar Built_161110.jar";
 		};
 /* End PBXShellScriptBuildPhase section */
 

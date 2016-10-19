@@ -13,6 +13,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Camera.hpp"
 #include "G3MWidget.hpp"
+#include "PlanetRenderer.hpp"
 
 void AtmosphereRenderer::start(const G3MRenderContext* rc) {
   _glState = new GLState();
@@ -63,6 +64,12 @@ void AtmosphereRenderer::updateGLState(const Camera* camera){
 
 void AtmosphereRenderer::render(const G3MRenderContext* rc,
                                 GLState* glState){
+  
+  const Sector* rSector = rc->getWidget()->getPlanetRenderer()->getRenderedSector();
+  if (rc->getPlanet()->getType().compare("Flat") == 0 ||
+      (rSector != NULL && !rSector->fullContains(Sector::fullSphere()))){
+    return;
+  }
   
   //Rendering
   const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
