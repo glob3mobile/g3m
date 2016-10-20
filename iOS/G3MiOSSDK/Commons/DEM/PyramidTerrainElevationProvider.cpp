@@ -108,6 +108,7 @@ PyramidTerrainElevationProvider::~PyramidTerrainElevationProvider() {
       Node* rootNode = _rootNodes->at(i);
       delete rootNode;
     }
+    delete _rootNodes;
   }
 #ifdef JAVA_CODE
   super.dispose();

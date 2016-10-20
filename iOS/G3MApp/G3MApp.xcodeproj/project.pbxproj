@@ -10,7 +10,7 @@
 		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
-		CF371AD31DA3EBCA006F2BC6 /* G3MLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3MLandDemoScene.cpp */; };
+		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
 		CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */; };
@@ -143,8 +143,8 @@
 		CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		CF162FE11AB739C800673D44 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		CF371AD11DA3EBCA006F2BC6 /* G3MLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MLandDemoScene.cpp; sourceTree = "<group>"; };
-		CF371AD21DA3EBCA006F2BC6 /* G3MLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MLandDemoScene.hpp; sourceTree = "<group>"; };
+		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioDEMDemoScene.hpp; sourceTree = "<group>"; };
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
@@ -335,6 +335,8 @@
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */,
+				CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */,
 				CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */,
 				CFE3B3D4183AD04A0078C796 /* G3M3DModelDemoScene.hpp */,
 				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
@@ -363,8 +365,6 @@
 				CF483EC41A2E5D5100B70D7E /* G3MHUDDemoScene.hpp */,
 				CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */,
 				CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */,
-				CF371AD11DA3EBCA006F2BC6 /* G3MLandDemoScene.cpp */,
-				CF371AD21DA3EBCA006F2BC6 /* G3MLandDemoScene.hpp */,
 				CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */,
 				CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */,
 				CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */,
@@ -738,7 +738,7 @@
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
 				D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */,
 				CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */,
-				CF371AD31DA3EBCA006F2BC6 /* G3MLandDemoScene.cpp in Sources */,
+				CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */,
 				CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

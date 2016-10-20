@@ -1,11 +1,11 @@
 //
-//  G3MLandDemoScene.cpp
+//  G3M3DLandDemoScene.cpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 10/4/16.
 //
 
-#include "G3MLandDemoScene.hpp"
+#include "G3M3DLandDemoScene.hpp"
 
 #include "G3MDemoModel.hpp"
 
@@ -21,18 +21,18 @@
 #include <G3MiOSSDK/MapzenTerrainElevationProvider.hpp>
 
 
-void G3MLandDemoScene::rawSelectOption(const std::string& option,
+void G3M3DLandDemoScene::rawSelectOption(const std::string& option,
                                        int optionIndex) {
   // no options
 }
 
 
-//class G3MLandDemoSceneBILHandler : public BILDownloader::Handler {
+//class G3M3DLandDemoSceneBILHandler : public BILDownloader::Handler {
 //private:
 //  G3MDemoModel* _model;
 //
 //public:
-//  G3MLandDemoSceneBILHandler(G3MDemoModel* model) :
+//  G3M3DLandDemoSceneBILHandler(G3MDemoModel* model) :
 //  _model(model)
 //  {
 //  }
@@ -64,7 +64,7 @@ void G3MLandDemoScene::rawSelectOption(const std::string& option,
 //};
 
 
-void G3MLandDemoScene::rawActivate(const G3MContext* context) {
+void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
   //  planetRenderer->setShowStatistics(true);
@@ -106,7 +106,7 @@ void G3MLandDemoScene::rawActivate(const G3MContext* context) {
   //                         Vector2I(2516, 1335),
   //                         deltaHeight,
   //                         noDataValue,
-  //                         new G3MLandDemoSceneBILHandler(getModel()),
+  //                         new G3M3DLandDemoSceneBILHandler(getModel()),
   //                         true);
 }
 

@@ -44,7 +44,7 @@
 #include "G3MVectorStreaming1DemoScene.hpp"
 #include "G3MVectorStreaming2DemoScene.hpp"
 #include "G3MStereoDemoScene.hpp"
-#include "G3MLandDemoScene.hpp"
+#include "G3M3DLandDemoScene.hpp"
 
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
@@ -71,7 +71,7 @@ _vectorStreamingRenderer(vectorStreamingRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
-  _scenes.push_back( new G3MLandDemoScene(this) );
+  _scenes.push_back( new G3M3DLandDemoScene(this) );
 
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
