@@ -210,15 +210,15 @@ void MapzenDEMProvider::onGrid(int z,
                                int x,
                                int y,
                                FloatBufferDEMGrid* grid) {
-  bool sticky = false;
+  bool stickyGrid = false;
 
   if ((z == 0) && (x == 0) && (y == 0)) {
     _rootGridDownloaded = true;
-    sticky = true;
+    stickyGrid = true;
   }
 
   insertGrid(z, x, y,
-             grid, sticky);
+             grid, stickyGrid);
 }
 
 void MapzenDEMProvider::onDownloadError(int z,

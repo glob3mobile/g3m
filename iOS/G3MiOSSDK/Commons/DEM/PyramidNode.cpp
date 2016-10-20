@@ -14,11 +14,11 @@
 
 
 PyramidNode::PyramidNode(const PyramidNode* parent,
-                         const size_t  childID,
-                         const Sector& sector,
-                         const int     z,
-                         const int     x,
-                         const int     y) :
+                         const size_t       childID,
+                         const Sector&      sector,
+                         const int          z,
+                         const int          x,
+                         const int          y) :
 _parent(parent),
 _childID(childID),
 _sector(sector),
@@ -36,7 +36,8 @@ PyramidNode::~PyramidNode() {
   }
 
   if (_children != NULL) {
-    for (size_t i = 0; i < _children->size(); i++) {
+    const size_t size = _children->size();
+    for (size_t i = 0; i < size; i++) {
       PyramidNode* child = _children->at(i);
       delete child;
     }
@@ -55,12 +56,11 @@ std::vector<PyramidNode*>* PyramidNode::getChildren(PyramidDEMProvider* pyramidD
   return _children;
 }
 
-
 bool PyramidNode::insertGrid(int z,
                              int x,
                              int y,
                              DEMGrid* grid,
-                             const bool sticky,
+                             const bool stickyGrid,
                              PyramidDEMProvider* pyramidDEMProvider) {
   if (z < _z) {
     THROW_EXCEPTION("Logic error!");
@@ -68,18 +68,18 @@ bool PyramidNode::insertGrid(int z,
   else if (z == _z) {
     if ((x == _x) && (y == _y)) {
       _grid = grid;
-      _stickyGrid = sticky;
+      _stickyGrid = stickyGrid;
       return true;
     }
     return false;
   }
 
   std::vector<PyramidNode*>* children = getChildren(pyramidDEMProvider);
-  for (size_t i = 0; i < children->size(); i++) {
+  const size_t size = children->size();
+  for (size_t i = 0; i < size; i++) {
     PyramidNode* child = children->at(i);
     if (child->insertGrid(z, x, y,
-                          grid,
-                          sticky,
+                          grid, stickyGrid,
                           pyramidDEMProvider)) {
       return true;
     }

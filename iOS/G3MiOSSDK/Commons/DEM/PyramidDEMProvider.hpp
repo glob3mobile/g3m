@@ -13,6 +13,9 @@
 
 #include <vector>
 
+#include "Sector.hpp"
+#include "Vector2I.hpp"
+
 class DEMGrid;
 class PyramidNode;
 
@@ -26,13 +29,33 @@ private:
   std::vector<PyramidNode*>* getRootNodes();
 
 
+  class Subscription {
+  private:
+    const Sector     _sector;
+    const Vector2I   _extent;
+    const Geodetic2D _resolution;
+
+    DEMListener* _listener;
+    const bool   _deleteListener;
+
+  public:
+    Subscription(const Sector&   sector,
+                 const Vector2I& extent,
+                 DEMListener*    listener,
+                 const bool      deleteListener);
+
+    ~Subscription();
+
+  };
+
+
 protected:
 
   void insertGrid(int z,
                   int x,
                   int y,
                   DEMGrid* grid,
-                  const bool sticky);
+                  const bool stickyGrid);
 
   PyramidDEMProvider(const double deltaHeight,
                      const size_t rootNodesCount);
@@ -47,10 +70,10 @@ public:
 
   long long subscribe(const Sector&   sector,
                       const Vector2I& extent,
-                      DEMListener*    listener);
+                      DEMListener*    listener,
+                      const bool      deleteListener);
 
-  void unsubscribe(const long long subscriptionID,
-                   const bool      deleteListener);
+  void unsubscribe(const long long subscriptionID);
   
 };
 

@@ -36,10 +36,10 @@ public:
 
   virtual long long subscribe(const Sector&   sector,
                               const Vector2I& extent,
-                              DEMListener*    listener) = 0;
+                              DEMListener*    listener,
+                              const bool      deleteListener) = 0;
 
-  virtual void unsubscribe(const long long subscriptionID,
-                           const bool      deleteListener) = 0;
+  virtual void unsubscribe(const long long subscriptionID) = 0;
   
 };
 

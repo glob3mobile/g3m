@@ -20,6 +20,11 @@ class PyramidNode {
 private:
   std::vector<PyramidNode*>* getChildren(PyramidDEMProvider* pyramidDEMProvider);
 
+  DEMGrid* _grid;
+  bool _stickyGrid;
+
+  std::vector<PyramidNode*>* _children;
+
 public:
   const PyramidNode* _parent;
   const size_t _childID;
@@ -28,17 +33,12 @@ public:
   const int    _x;
   const int    _y;
 
-  DEMGrid* _grid;
-  bool _stickyGrid;
-
-  std::vector<PyramidNode*>* _children;
-
   PyramidNode(const PyramidNode* parent,
-              const size_t  childID,
-              const Sector& sector,
-              const int     z,
-              const int     x,
-              const int     y);
+              const size_t       childID,
+              const Sector&      sector,
+              const int          z,
+              const int          x,
+              const int          y);
 
   ~PyramidNode();
 
@@ -46,7 +46,7 @@ public:
                   int x,
                   int y,
                   DEMGrid* grid,
-                  const bool sticky,
+                  const bool stickyGrid,
                   PyramidDEMProvider* pyramidDEMProvider);
 
 };

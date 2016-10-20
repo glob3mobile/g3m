@@ -48,12 +48,12 @@ void PyramidDEMProvider::insertGrid(int z,
                                     int x,
                                     int y,
                                     DEMGrid* grid,
-                                    const bool sticky) {
+                                    const bool stickyGrid) {
   std::vector<PyramidNode*>* rootNodes = getRootNodes();
   for (size_t i = 0; i < _rootNodesCount; i++) {
     PyramidNode* rootNode = rootNodes->at(i);
     if (rootNode->insertGrid(z, x, y,
-                             grid, sticky,
+                             grid, stickyGrid,
                              this)) {
       return;
     }
@@ -61,13 +61,33 @@ void PyramidDEMProvider::insertGrid(int z,
   THROW_EXCEPTION("can't insert grid");
 }
 
+PyramidDEMProvider::Subscription::Subscription(const Sector&   sector,
+                                               const Vector2I& extent,
+                                               DEMListener*    listener,
+                                               const bool      deleteListener) :
+_sector(sector),
+_extent(extent),
+_resolution(sector._deltaLatitude.div(extent._y),
+            sector._deltaLongitude.div(extent._x)),
+_listener(listener),
+_deleteListener(deleteListener)
+{
+}
+
+PyramidDEMProvider::Subscription::~Subscription() {
+  if (_deleteListener) {
+    delete _listener;
+  }
+}
+
 long long PyramidDEMProvider::subscribe(const Sector&   sector,
                                         const Vector2I& extent,
-                                        DEMListener*    listener) {
+                                        DEMListener*    listener,
+                                        const bool      deleteListener) {
+//  Subscription* subscription = new Subscription(sector, extent, listener, deleteListener);
   THROW_EXCEPTION("Not yet done");
 }
 
-void PyramidDEMProvider::unsubscribe(const long long subscriptionID,
-                                     const bool      deleteListener) {
+void PyramidDEMProvider::unsubscribe(const long long subscriptionID) {
   THROW_EXCEPTION("Not yet done");
 }
