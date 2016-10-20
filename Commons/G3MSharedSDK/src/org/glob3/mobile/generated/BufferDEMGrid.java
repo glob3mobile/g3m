@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  BufferTerrainElevationGrid.cpp
+//  BufferDEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  BufferTerrainElevationGrid.hpp
+//  BufferDEMGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class BufferTerrainElevationGrid extends TerrainElevationGrid
+public abstract class BufferDEMGrid extends DEMGrid
 {
   protected final int _bufferSize;
   protected final double _deltaHeight;
@@ -30,7 +30,7 @@ public abstract class BufferTerrainElevationGrid extends TerrainElevationGrid
     super.dispose();
   }
 
-  protected BufferTerrainElevationGrid(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
+  protected BufferDEMGrid(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
      super(sector, extent);
      _bufferSize = bufferSize;

@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  TerrainElevationGrid.cpp
+//  DEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TerrainElevationGrid.hpp
+//  DEMGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -22,13 +22,13 @@ package org.glob3.mobile.generated;
 //class Geodetic3D;
 
 
-public abstract class TerrainElevationGrid extends RCObject
+public abstract class DEMGrid extends RCObject
 {
   protected final Sector _sector ;
   protected final Vector2I _extent;
   protected final Geodetic2D _resolution ;
 
-  protected TerrainElevationGrid(Sector sector, Vector2I extent)
+  protected DEMGrid(Sector sector, Vector2I extent)
   {
      _sector = new Sector(sector);
      _extent = extent;

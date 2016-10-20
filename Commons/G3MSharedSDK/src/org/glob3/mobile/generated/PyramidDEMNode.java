@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  PyramidTerrainElevationNode.cpp
+//  PyramidDEMNode.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/20/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  PyramidTerrainElevationNode.hpp
+//  PyramidDEMNode.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/20/16.
@@ -17,39 +17,39 @@ package org.glob3.mobile.generated;
 
 
 
-//class PyramidTerrainElevationProvider;
-//class TerrainElevationGrid;
+//class PyramidDEMProvider;
+//class DEMGrid;
 
 
-public class PyramidTerrainElevationNode
+public class PyramidDEMNode
 {
-  private java.util.ArrayList<PyramidTerrainElevationNode> getChildren(PyramidTerrainElevationProvider pyramidTerrainElevationProvider)
+  private java.util.ArrayList<PyramidDEMNode> getChildren(PyramidDEMProvider pyramidDEMProvider)
   {
     if (_children == null)
     {
-      _children = new java.util.ArrayList<PyramidTerrainElevationNode>();
+      _children = new java.util.ArrayList<PyramidDEMNode>();
       for (int i = 0; i < 4; i++)
       {
-        PyramidTerrainElevationNode child = pyramidTerrainElevationProvider.createNode(this, i);
+        PyramidDEMNode child = pyramidDEMProvider.createNode(this, i);
         _children.add(child);
       }
     }
     return _children;
   }
 
-  public final PyramidTerrainElevationNode _parent;
+  public final PyramidDEMNode _parent;
   public final int _childID;
   public final Sector _sector ;
   public final int _z;
   public final int _x;
   public final int _y;
 
-  public TerrainElevationGrid _grid;
+  public DEMGrid _grid;
   public boolean _stickyGrid;
 
-  public java.util.ArrayList<PyramidTerrainElevationNode> _children;
+  public java.util.ArrayList<PyramidDEMNode> _children;
 
-  public PyramidTerrainElevationNode(PyramidTerrainElevationNode parent, int childID, Sector sector, int z, int x, int y)
+  public PyramidDEMNode(PyramidDEMNode parent, int childID, Sector sector, int z, int x, int y)
   {
      _parent = parent;
      _childID = childID;
@@ -74,7 +74,7 @@ public class PyramidTerrainElevationNode
     {
       for (int i = 0; i < _children.size(); i++)
       {
-        PyramidTerrainElevationNode child = _children.get(i);
+        PyramidDEMNode child = _children.get(i);
         if (child != null)
            child.dispose();
       }
@@ -82,7 +82,7 @@ public class PyramidTerrainElevationNode
     }
   }
 
-  public final boolean insertGrid(int z, int x, int y, TerrainElevationGrid grid, boolean sticky, PyramidTerrainElevationProvider pyramidTerrainElevationProvider)
+  public final boolean insertGrid(int z, int x, int y, DEMGrid grid, boolean sticky, PyramidDEMProvider pyramidDEMProvider)
   {
     if (z < _z)
     {
@@ -99,11 +99,11 @@ public class PyramidTerrainElevationNode
       return false;
     }
   
-    java.util.ArrayList<PyramidTerrainElevationNode> children = getChildren(pyramidTerrainElevationProvider);
+    java.util.ArrayList<PyramidDEMNode> children = getChildren(pyramidDEMProvider);
     for (int i = 0; i < children.size(); i++)
     {
-      PyramidTerrainElevationNode child = children.get(i);
-      if (child.insertGrid(z, x, y, grid, sticky, pyramidTerrainElevationProvider))
+      PyramidDEMNode child = children.get(i);
+      if (child.insertGrid(z, x, y, grid, sticky, pyramidDEMProvider))
       {
         return true;
       }

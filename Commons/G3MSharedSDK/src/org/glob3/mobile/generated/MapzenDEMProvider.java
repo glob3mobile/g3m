@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  MapzenTerrainElevationProvider.cpp
+//  MapzenDEMProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/13/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MapzenTerrainElevationProvider.hpp
+//  MapzenDEMProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/13/16.
@@ -18,12 +18,12 @@ package org.glob3.mobile.generated;
 
 
 
-//class FloatBufferTerrainElevationGrid;
+//class FloatBufferDEMGrid;
 //class Sector;
 //class MeshRenderer;
 
 
-public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevationProvider
+public class MapzenDEMProvider extends MercatorPyramidDEMProvider
 {
   private static int _idCounter = 0;
 
@@ -41,7 +41,7 @@ public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevat
   private G3MContext _context;
 
 
-  private FloatBufferTerrainElevationGrid _rootGrid;
+  private FloatBufferDEMGrid _rootGrid;
   private boolean _errorDownloadingRootGrid;
 
   private void requestTile(int z, int x, int y, Sector sector, double deltaHeight)
@@ -51,7 +51,7 @@ public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevat
     final IStringUtils su = IStringUtils.instance();
     final String path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su.toString(z) + "/" + su.toString(x) + "/" + su.toString(y) + ".png?api_key=" + _apiKey;
   
-    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenTerrainElevationProvider_ImageDownloadListener(_context, this, z, x, y, sector, deltaHeight), true);
+    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenDEMProvider_ImageDownloadListener(_context, this, z, x, y, sector, deltaHeight), true);
   }
 
   public void dispose()
@@ -65,7 +65,7 @@ public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevat
   }
 
 
-  public MapzenTerrainElevationProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, MeshRenderer meshRenderer)
+  public MapzenDEMProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, MeshRenderer meshRenderer)
   {
      super();
      _apiKey = apiKey;
@@ -74,7 +74,7 @@ public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevat
      _readExpired = readExpired;
      _meshRenderer = meshRenderer;
      _context = null;
-     _instanceID = "MapzenTerrainElevationProvider_" + IStringUtils.instance().toString(++_idCounter);
+     _instanceID = "MapzenDEMProvider_" + IStringUtils.instance().toString(++_idCounter);
      _rootGrid = null;
      _errorDownloadingRootGrid = false;
   
@@ -113,7 +113,7 @@ public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevat
     _context.getDownloader().cancelRequestsTagged(_instanceID);
   }
 
-  public final void onGrid(int z, int x, int y, FloatBufferTerrainElevationGrid grid)
+  public final void onGrid(int z, int x, int y, FloatBufferDEMGrid grid)
   {
     if ((z == 0) && (x == 0) && (y == 0))
     {
@@ -147,7 +147,7 @@ public class MapzenTerrainElevationProvider extends MercatorPyramidTerrainElevat
     }
   }
 
-  public final long subscribe(Sector sector, Vector2I extent, TerrainElevationListener listener)
+  public final long subscribe(Sector sector, Vector2I extent, DEMListener listener)
   {
     //  return _pyramid->subscribe(sector, extent, listener);
     throw new RuntimeException("Not yet done");

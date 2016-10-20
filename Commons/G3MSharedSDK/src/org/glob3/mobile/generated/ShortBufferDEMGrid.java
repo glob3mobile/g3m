@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  ShortBufferTerrainElevationGrid.cpp
+//  ShortBufferDEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  ShortBufferTerrainElevationGrid.hpp
+//  ShortBufferDEMGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
+public class ShortBufferDEMGrid extends BufferDEMGrid
 {
   private short[] _buffer;
   private final short _noDataValue;
@@ -30,12 +30,12 @@ public class ShortBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   }
 
 
-  public ShortBufferTerrainElevationGrid(Sector sector,
-                                         Vector2I extent,
-                                         short[] buffer,
-                                         int bufferSize,
-                                         double deltaHeight,
-                                         short noDataValue) {
+  public ShortBufferDEMGrid(Sector sector,
+                            Vector2I extent,
+                            short[] buffer,
+                            int bufferSize,
+                            double deltaHeight,
+                            short noDataValue) {
     super(sector, extent, bufferSize, deltaHeight);
     _buffer = buffer;
     _noDataValue = noDataValue;

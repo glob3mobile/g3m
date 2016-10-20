@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class FloatBufferTerrainElevationGrid;
+//class FloatBufferDEMGrid;
 //class IImage;
 
 
@@ -36,7 +36,7 @@ public class MapzenTerrariumParser
 
     }
 
-    public abstract void onGrid(FloatBufferTerrainElevationGrid grid);
+    public abstract void onGrid(FloatBufferDEMGrid grid);
   }
 
   private static class ParserTask extends GAsyncTask
@@ -47,7 +47,7 @@ public class MapzenTerrariumParser
     private MapzenTerrariumParser.Listener _listener;
     private final boolean _deleteListener;
 
-    private FloatBufferTerrainElevationGrid _result;
+    private FloatBufferDEMGrid _result;
 
     public ParserTask(IImage image, Sector sector, double deltaHeight, MapzenTerrariumParser.Listener listener, boolean deleteListener)
     {
@@ -88,7 +88,7 @@ public class MapzenTerrariumParser
   }
 
 
-  public static FloatBufferTerrainElevationGrid parse(IImage image, Sector sector, double deltaHeight)
+  public static FloatBufferDEMGrid parse(IImage image, Sector sector, double deltaHeight)
   {
     MutableColor255 pixel = new MutableColor255((byte) 0, (byte) 0, (byte) 0, (byte) 0);
   
@@ -113,7 +113,7 @@ public class MapzenTerrariumParser
     if (image != null)
        image.dispose();
   
-    return new FloatBufferTerrainElevationGrid(sector, new Vector2I(width, height), buffer, bufferSize, deltaHeight);
+    return new FloatBufferDEMGrid(sector, new Vector2I(width, height), buffer, bufferSize, deltaHeight);
   }
 
   public static void parse(G3MContext context, IImage image, Sector sector, double deltaHeight, MapzenTerrariumParser.Listener listener, boolean deleteListener)

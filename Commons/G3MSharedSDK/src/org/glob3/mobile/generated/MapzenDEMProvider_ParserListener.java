@@ -6,15 +6,15 @@ package org.glob3.mobile.generated;
 
 
 
-public class MapzenTerrainElevationProvider_ParserListener extends MapzenTerrariumParser.Listener
+public class MapzenDEMProvider_ParserListener extends MapzenTerrariumParser.Listener
 {
-  private MapzenTerrainElevationProvider _provider;
+  private MapzenDEMProvider _provider;
   private final int _z;
   private final int _x;
   private final int _y;
 
 
-  public MapzenTerrainElevationProvider_ParserListener(MapzenTerrainElevationProvider provider, int z, int x, int y)
+  public MapzenDEMProvider_ParserListener(MapzenDEMProvider provider, int z, int x, int y)
   {
      _provider = provider;
      _z = z;
@@ -29,7 +29,7 @@ public class MapzenTerrainElevationProvider_ParserListener extends MapzenTerrari
     super.dispose();
   }
 
-  public final void onGrid(FloatBufferTerrainElevationGrid grid)
+  public final void onGrid(FloatBufferDEMGrid grid)
   {
     _provider.onGrid(_z, _x, _y, grid);
   }

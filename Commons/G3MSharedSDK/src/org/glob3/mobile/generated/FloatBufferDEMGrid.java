@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  FloatBufferTerrainElevationGrid.cpp
+//  FloatBufferDEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/16/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  FloatBufferTerrainElevationGrid.hpp
+//  FloatBufferDEMGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/16/16.
@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
+public class FloatBufferDEMGrid extends BufferDEMGrid
 {
   private float[] _buffer;
 
@@ -28,11 +28,11 @@ public class FloatBufferTerrainElevationGrid extends BufferTerrainElevationGrid
   }
 
 
-  public FloatBufferTerrainElevationGrid(Sector sector,
-                                         Vector2I extent,
-                                         float[] buffer,
-                                         int bufferSize,
-                                         double deltaHeight) {
+  public FloatBufferDEMGrid(Sector sector,
+                            Vector2I extent,
+                            float[] buffer,
+                            int bufferSize,
+                            double deltaHeight) {
     super(sector, extent, bufferSize, deltaHeight);
     _buffer = buffer;
     if (_bufferSize != (_extent._x * _extent._y)) {

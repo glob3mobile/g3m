@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class URL;
 //class TimeInterval;
-//class ShortBufferTerrainElevationGrid;
+//class ShortBufferDEMGrid;
 //class IByteBuffer;
 
 
@@ -43,7 +43,7 @@ public class BILDownloader
 
     public abstract void onParseError(G3MContext context);
 
-    public abstract void onBIL(G3MContext context, ShortBufferTerrainElevationGrid result);
+    public abstract void onBIL(G3MContext context, ShortBufferDEMGrid result);
   }
 
   public static void request(G3MContext context, URL url, long priority, TimeInterval timeToCache, boolean readExpired, Sector sector, Vector2I extent, double deltaHeight, short noDataValue, BILDownloader.Handler handler, boolean deleteHandler)
@@ -65,7 +65,7 @@ public class BILDownloader
     private final short _noDataValue;
     private final double _deltaHeight;
 
-    private ShortBufferTerrainElevationGrid _result;
+    private ShortBufferDEMGrid _result;
 
     public ParserAsyncTask(IByteBuffer buffer, Sector sector, Vector2I extent, short noDataValue, double deltaHeight, BILDownloader.Handler handler, boolean deleteHandler)
     {

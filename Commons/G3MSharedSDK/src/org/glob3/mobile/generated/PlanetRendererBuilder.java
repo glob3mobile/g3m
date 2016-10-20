@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //class VisibleSectorListener;
 //class ElevationDataProvider;
-//class TerrainElevationProvider;
+//class DEMProvider;
 //class Sector;
 //class ChangedRendererInfoListener;
 //class IImageBuilder;
@@ -52,7 +52,7 @@ public class PlanetRendererBuilder
   private long _tileTextureDownloadPriority;
 
   private ElevationDataProvider _elevationDataProvider;
-  private TerrainElevationProvider _terrainElevationProvider;
+  private DEMProvider _demProvider;
   private float _verticalExaggeration;
 
 
@@ -204,9 +204,9 @@ public class PlanetRendererBuilder
   {
     return _elevationDataProvider;
   }
-  private TerrainElevationProvider getTerrainElevationProvider()
+  private DEMProvider getDEMProvider()
   {
-    return _terrainElevationProvider;
+    return _demProvider;
   }
 
   private float getVerticalExaggeration()
@@ -295,7 +295,7 @@ public class PlanetRendererBuilder
      _stabilizationMilliSeconds = null;
      _tileTextureDownloadPriority = DownloadPriority.HIGHER;
      _elevationDataProvider = null;
-     _terrainElevationProvider = null;
+     _demProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
      _renderTileMeshes = true;
@@ -326,9 +326,9 @@ public class PlanetRendererBuilder
        _tileTessellator.dispose();
     if (_elevationDataProvider != null)
        _elevationDataProvider.dispose();
-    if (_terrainElevationProvider != null)
+    if (_demProvider != null)
     {
-      _terrainElevationProvider._release();
+      _demProvider._release();
     }
   
     if (_renderedSector != null)
@@ -345,7 +345,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getTerrainElevationProvider(), getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getDEMProvider(), getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileTextureDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -362,7 +362,7 @@ public class PlanetRendererBuilder
     _stabilizationMilliSeconds = null;
   
     _elevationDataProvider = null;
-    _terrainElevationProvider = null;
+    _demProvider = null;
   
     if (_renderedSector != null)
        _renderedSector.dispose();
@@ -439,13 +439,13 @@ public class PlanetRendererBuilder
     _elevationDataProvider = elevationDataProvider;
   }
 
-  public final void setTerrainElevationProvider(TerrainElevationProvider terrainElevationProvider)
+  public final void setDEMProvider(DEMProvider demProvider)
   {
-    if (_terrainElevationProvider != null)
+    if (_demProvider != null)
     {
-      throw new RuntimeException("LOGIC ERROR: _terrainElevationProvider already initialized");
+      throw new RuntimeException("LOGIC ERROR: _demProvider already initialized");
     }
-    _terrainElevationProvider = terrainElevationProvider;
+    _demProvider = demProvider;
   }
 
   public final void setVerticalExaggeration(float verticalExaggeration)

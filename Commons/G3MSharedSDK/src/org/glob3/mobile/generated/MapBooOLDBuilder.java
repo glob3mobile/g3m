@@ -71,7 +71,7 @@ public abstract class MapBooOLDBuilder
   
   
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, null, true, null, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileTextureDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester()); // terrainElevationProvider -  elevationDataProvider
+    PlanetRenderer result = new PlanetRenderer(tessellator, null, true, null, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileTextureDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener, getTileLODTester(), getTileVisibilityTester()); // demProvider -  elevationDataProvider
   
     if (_enableNotifications)
     {

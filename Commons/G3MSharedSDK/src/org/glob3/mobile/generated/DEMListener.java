@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  TerrainElevationListener.cpp
+//  DEMListener.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/19/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TerrainElevationListener.hpp
+//  DEMListener.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/19/16.
@@ -16,13 +16,13 @@ package org.glob3.mobile.generated;
 //
 
 
-//class TerrainElevationGrid;
+//class DEMGrid;
 
 
-public interface TerrainElevationListener
+public interface DEMListener
 {
   void dispose();
 
-  void onGrid(TerrainElevationGrid grid);
+  void onGrid(DEMGrid grid);
 
 }

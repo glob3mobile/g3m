@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  TerrainElevationProvider.cpp
+//  DEMProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/13/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TerrainElevationProvider.hpp
+//  DEMProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/13/16.
@@ -21,10 +21,10 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class Sector;
 //class Vector2I;
-//class TerrainElevationListener;
+//class DEMListener;
 
 
-public abstract class TerrainElevationProvider extends RCObject
+public abstract class DEMProvider extends RCObject
 {
   public void dispose()
   {
@@ -38,7 +38,7 @@ public abstract class TerrainElevationProvider extends RCObject
 
   public abstract void cancel();
 
-  public abstract long subscribe(Sector sector, Vector2I extent, TerrainElevationListener listener);
+  public abstract long subscribe(Sector sector, Vector2I extent, DEMListener listener);
 
   public abstract void unsubscribe(long subscriptionID, boolean deleteListener);
 

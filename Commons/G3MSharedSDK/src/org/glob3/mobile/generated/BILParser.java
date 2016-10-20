@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class IByteBuffer;
 //class Sector;
 //class Vector2I;
-//class ShortBufferTerrainElevationGrid;
+//class ShortBufferDEMGrid;
 
 public class BILParser
 {
@@ -65,11 +65,11 @@ public class BILParser
     return new ShortBufferElevationData(sector, extent, shortBuffer, size, deltaHeight);
   }
 
-  public static ShortBufferTerrainElevationGrid parseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, short noDataValue)
+  public static ShortBufferDEMGrid parseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, short noDataValue)
   {
      return parseBIL16(sector, extent, buffer, noDataValue, 0);
   }
-  public static ShortBufferTerrainElevationGrid parseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, short noDataValue, double deltaHeight)
+  public static ShortBufferDEMGrid parseBIL16(Sector sector, Vector2I extent, IByteBuffer buffer, short noDataValue, double deltaHeight)
   {
     final int size = extent._x * extent._y;
   
@@ -97,7 +97,7 @@ public class BILParser
       shortBuffer[i] = height;
     }
   
-    return new ShortBufferTerrainElevationGrid(sector, extent, shortBuffer, size, deltaHeight, noDataValue);
+    return new ShortBufferDEMGrid(sector, extent, shortBuffer, size, deltaHeight, noDataValue);
   }
 
 }
