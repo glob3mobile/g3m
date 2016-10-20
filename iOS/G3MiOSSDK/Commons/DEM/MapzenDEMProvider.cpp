@@ -139,17 +139,13 @@ _timeToCache(timeToCache),
 _readExpired(readExpired),
 _context(NULL),
 _instanceID("MapzenDEMProvider_" + IStringUtils::instance()->toString(++_idCounter)),
-_rootGrid(NULL),
+_rootGridDownloaded(false),
 _errorDownloadingRootGrid(false)
 {
 
 }
 
 MapzenDEMProvider::~MapzenDEMProvider() {
-  if (_rootGrid != NULL) {
-    _rootGrid->_release();
-  }
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -159,7 +155,7 @@ RenderState MapzenDEMProvider::getRenderState() {
   if (_errorDownloadingRootGrid) {
     return RenderState::error("Error downloading Mapzen root grid");
   }
-  return (_rootGrid == NULL) ? RenderState::busy() : RenderState::ready();
+  return (!_rootGridDownloaded) ? RenderState::busy() : RenderState::ready();
 }
 
 void MapzenDEMProvider::requestTile(int z,
@@ -214,25 +210,15 @@ void MapzenDEMProvider::onGrid(int z,
                                int x,
                                int y,
                                FloatBufferDEMGrid* grid) {
+  bool sticky = false;
+
   if ((z == 0) && (x == 0) && (y == 0)) {
-    if (_rootGrid != NULL) {
-      _rootGrid->_release();
-    }
-    _rootGrid = grid;
-    const bool sticky = true;
-    insertGrid(z, x, y,
-               grid, sticky);
+    _rootGridDownloaded = true;
+    sticky = true;
   }
-  else {
-    //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
-    //                                                  1, // verticalExaggeration,
-    //                                                  Geodetic3D::zero(),
-    //                                                  4 // pointSize
-    //                                                  ) );
-    //
-    //     grid->_release();
-    THROW_EXCEPTION("Not yet done");
-  }
+
+  insertGrid(z, x, y,
+             grid, sticky);
 }
 
 void MapzenDEMProvider::onDownloadError(int z,

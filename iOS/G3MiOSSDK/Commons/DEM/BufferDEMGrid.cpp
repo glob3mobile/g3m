@@ -9,12 +9,6 @@
 #include "BufferDEMGrid.hpp"
 
 
-BufferDEMGrid::~BufferDEMGrid() {
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-}
-
 BufferDEMGrid::BufferDEMGrid(const Sector& sector,
                              const Vector2I& extent,
                              size_t bufferSize,
@@ -24,6 +18,12 @@ _bufferSize(bufferSize),
 _deltaHeight(deltaHeight)
 {
 
+}
+
+BufferDEMGrid::~BufferDEMGrid() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 double BufferDEMGrid::getElevationAt(int x, int y) const {

@@ -45,7 +45,7 @@ private:
 #endif
 
 
-  FloatBufferDEMGrid* _rootGrid;
+  bool _rootGridDownloaded;
   bool _errorDownloadingRootGrid;
 
   void requestTile(int z,

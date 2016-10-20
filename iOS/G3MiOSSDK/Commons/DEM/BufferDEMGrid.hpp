@@ -14,17 +14,19 @@
 
 class BufferDEMGrid : public DEMGrid {
 protected:
+  
   const size_t _bufferSize;
   const double _deltaHeight;
-
-  virtual double getValueInBufferAt(int index) const = 0;
-
-  virtual ~BufferDEMGrid();
 
   BufferDEMGrid(const Sector& sector,
                 const Vector2I& extent,
                 size_t bufferSize,
                 double deltaHeight);
+
+  virtual ~BufferDEMGrid();
+
+  virtual double getValueInBufferAt(int index) const = 0;
+
 
 public:
 
