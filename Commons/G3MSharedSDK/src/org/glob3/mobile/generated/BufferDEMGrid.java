@@ -20,15 +20,9 @@ package org.glob3.mobile.generated;
 
 public abstract class BufferDEMGrid extends DEMGrid
 {
+
   protected final int _bufferSize;
   protected final double _deltaHeight;
-
-  protected abstract double getValueInBufferAt(int index);
-
-  public void dispose()
-  {
-    super.dispose();
-  }
 
   protected BufferDEMGrid(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
@@ -37,6 +31,14 @@ public abstract class BufferDEMGrid extends DEMGrid
      _deltaHeight = deltaHeight;
   
   }
+
+  public void dispose()
+  {
+    super.dispose();
+  }
+
+  protected abstract double getValueInBufferAt(int index);
+
 
 
   public final double getElevationAt(int x, int y)

@@ -38,7 +38,7 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
   private G3MContext _context;
 
 
-  private FloatBufferDEMGrid _rootGrid;
+  private boolean _rootGridDownloaded;
   private boolean _errorDownloadingRootGrid;
 
   private void requestTile(int z, int x, int y, Sector sector, double deltaHeight)
@@ -53,11 +53,6 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
 
   public void dispose()
   {
-    if (_rootGrid != null)
-    {
-      _rootGrid._release();
-    }
-  
     super.dispose();
   }
 
@@ -71,7 +66,7 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
      _readExpired = readExpired;
      _context = null;
      _instanceID = "MapzenDEMProvider_" + IStringUtils.instance().toString(++_idCounter);
-     _rootGrid = null;
+     _rootGridDownloaded = false;
      _errorDownloadingRootGrid = false;
   
   }
@@ -82,7 +77,7 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
     {
       return RenderState.error("Error downloading Mapzen root grid");
     }
-    return (_rootGrid == null) ? RenderState.busy() : RenderState.ready();
+    return (!_rootGridDownloaded) ? RenderState.busy() : RenderState.ready();
   }
 
   public final void initialize(G3MContext context)
@@ -111,27 +106,15 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
 
   public final void onGrid(int z, int x, int y, FloatBufferDEMGrid grid)
   {
+    boolean sticky = false;
+  
     if ((z == 0) && (x == 0) && (y == 0))
     {
-      if (_rootGrid != null)
-      {
-        _rootGrid._release();
-      }
-      _rootGrid = grid;
-      final boolean sticky = true;
-      insertGrid(z, x, y, grid, sticky);
+      _rootGridDownloaded = true;
+      sticky = true;
     }
-    else
-    {
-      //    _meshRenderer->addMesh( grid->createDebugMesh(EllipsoidalPlanet::createEarth(),
-      //                                                  1, // verticalExaggeration,
-      //                                                  Geodetic3D::zero(),
-      //                                                  4 // pointSize
-      //                                                  ) );
-      //
-      //     grid->_release();
-      throw new RuntimeException("Not yet done");
-    }
+  
+    insertGrid(z, x, y, grid, sticky);
   }
 
   public final void onDownloadError(int z, int x, int y)
