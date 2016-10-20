@@ -42,8 +42,7 @@ public:
 
   const Geodetic2D getResolution() const;
 
-  virtual double getElevationAt(int x,
-                                int y) const = 0;
+  virtual double getElevationAt(int x, int y) const = 0;
 
   virtual Vector3D getMinMaxAverageElevations() const = 0;
 

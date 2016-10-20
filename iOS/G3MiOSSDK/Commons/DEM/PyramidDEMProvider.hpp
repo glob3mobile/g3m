@@ -27,7 +27,7 @@ protected:
                   const bool sticky);
 
 private:
-  const size_t                               _rootNodesCount;
+  const size_t                  _rootNodesCount;
   std::vector<PyramidDEMNode*>* _rootNodes;
 
 

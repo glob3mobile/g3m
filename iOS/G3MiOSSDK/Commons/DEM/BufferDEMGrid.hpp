@@ -28,8 +28,7 @@ protected:
 
 public:
 
-  double getElevationAt(int x,
-                        int y) const;
+  double getElevationAt(int x, int y) const;
 
 };
 

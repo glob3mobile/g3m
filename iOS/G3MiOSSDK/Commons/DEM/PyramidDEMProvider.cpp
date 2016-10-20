@@ -29,7 +29,6 @@ std::vector<PyramidDEMNode*>* PyramidDEMProvider::getRootNodes() {
   return _rootNodes;
 }
 
-
 PyramidDEMProvider::~PyramidDEMProvider() {
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodesCount; i++) {
