@@ -14,16 +14,16 @@
 #include <vector>
 
 class DEMGrid;
-class DEMPyramidNode;
+class PyramidNode;
 
 
 class PyramidDEMProvider : public DEMProvider {
 private:
 
-  const size_t                  _rootNodesCount;
-  std::vector<DEMPyramidNode*>* _rootNodes;
+  const size_t               _rootNodesCount;
+  std::vector<PyramidNode*>* _rootNodes;
 
-  std::vector<DEMPyramidNode*>* getRootNodes();
+  std::vector<PyramidNode*>* getRootNodes();
 
 
 protected:
@@ -42,8 +42,8 @@ protected:
 
 public:
 
-  virtual DEMPyramidNode* createNode(const DEMPyramidNode*  parent,
-                                     const size_t childID) = 0;
+  virtual PyramidNode* createNode(const PyramidNode*  parent,
+                                  const size_t childID) = 0;
 
   long long subscribe(const Sector&   sector,
                       const Vector2I& extent,
@@ -51,7 +51,7 @@ public:
 
   void unsubscribe(const long long subscriptionID,
                    const bool      deleteListener);
-
+  
 };
 
 #endif
