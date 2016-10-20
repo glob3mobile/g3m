@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  PyramidDEMNode.cpp
+//  DEMPyramidNode.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/20/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  PyramidDEMNode.hpp
+//  DEMPyramidNode.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/20/16.
@@ -21,23 +21,23 @@ package org.glob3.mobile.generated;
 //class DEMGrid;
 
 
-public class PyramidDEMNode
+public class DEMPyramidNode
 {
-  private java.util.ArrayList<PyramidDEMNode> getChildren(PyramidDEMProvider pyramidDEMProvider)
+  private java.util.ArrayList<DEMPyramidNode> getChildren(PyramidDEMProvider pyramidDEMProvider)
   {
     if (_children == null)
     {
-      _children = new java.util.ArrayList<PyramidDEMNode>();
+      _children = new java.util.ArrayList<DEMPyramidNode>();
       for (int i = 0; i < 4; i++)
       {
-        PyramidDEMNode child = pyramidDEMProvider.createNode(this, i);
+        DEMPyramidNode child = pyramidDEMProvider.createNode(this, i);
         _children.add(child);
       }
     }
     return _children;
   }
 
-  public final PyramidDEMNode _parent;
+  public final DEMPyramidNode _parent;
   public final int _childID;
   public final Sector _sector ;
   public final int _z;
@@ -47,9 +47,9 @@ public class PyramidDEMNode
   public DEMGrid _grid;
   public boolean _stickyGrid;
 
-  public java.util.ArrayList<PyramidDEMNode> _children;
+  public java.util.ArrayList<DEMPyramidNode> _children;
 
-  public PyramidDEMNode(PyramidDEMNode parent, int childID, Sector sector, int z, int x, int y)
+  public DEMPyramidNode(DEMPyramidNode parent, int childID, Sector sector, int z, int x, int y)
   {
      _parent = parent;
      _childID = childID;
@@ -74,7 +74,7 @@ public class PyramidDEMNode
     {
       for (int i = 0; i < _children.size(); i++)
       {
-        PyramidDEMNode child = _children.get(i);
+        DEMPyramidNode child = _children.get(i);
         if (child != null)
            child.dispose();
       }
@@ -99,10 +99,10 @@ public class PyramidDEMNode
       return false;
     }
   
-    java.util.ArrayList<PyramidDEMNode> children = getChildren(pyramidDEMProvider);
+    java.util.ArrayList<DEMPyramidNode> children = getChildren(pyramidDEMProvider);
     for (int i = 0; i < children.size(); i++)
     {
-      PyramidDEMNode child = children.get(i);
+      DEMPyramidNode child = children.get(i);
       if (child.insertGrid(z, x, y, grid, sticky, pyramidDEMProvider))
       {
         return true;

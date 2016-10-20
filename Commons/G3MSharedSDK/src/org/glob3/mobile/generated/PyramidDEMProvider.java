@@ -19,23 +19,23 @@ package org.glob3.mobile.generated;
 
 
 //class DEMGrid;
-//class PyramidDEMNode;
+//class DEMPyramidNode;
 
 
 public abstract class PyramidDEMProvider extends DEMProvider
 {
 
   private final int _rootNodesCount;
-  private java.util.ArrayList<PyramidDEMNode> _rootNodes;
+  private java.util.ArrayList<DEMPyramidNode> _rootNodes;
 
-  private java.util.ArrayList<PyramidDEMNode> getRootNodes()
+  private java.util.ArrayList<DEMPyramidNode> getRootNodes()
   {
     if (_rootNodes == null)
     {
-      _rootNodes = new java.util.ArrayList<PyramidDEMNode>();
+      _rootNodes = new java.util.ArrayList<DEMPyramidNode>();
       for (int i = 0; i < _rootNodesCount; i++)
       {
-        PyramidDEMNode rootNode = createNode(null, i);
+        DEMPyramidNode rootNode = createNode(null, i);
         _rootNodes.add(rootNode);
       }
     }
@@ -46,10 +46,10 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
   protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean sticky)
   {
-    java.util.ArrayList<PyramidDEMNode> rootNodes = getRootNodes();
+    java.util.ArrayList<DEMPyramidNode> rootNodes = getRootNodes();
     for (int i = 0; i < _rootNodesCount; i++)
     {
-      PyramidDEMNode rootNode = rootNodes.get(i);
+      DEMPyramidNode rootNode = rootNodes.get(i);
       if (rootNode.insertGrid(z, x, y, grid, sticky, this))
       {
         return;
@@ -71,7 +71,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
     {
       for (int i = 0; i < _rootNodesCount; i++)
       {
-        PyramidDEMNode rootNode = _rootNodes.get(i);
+        DEMPyramidNode rootNode = _rootNodes.get(i);
         if (rootNode != null)
            rootNode.dispose();
       }
@@ -82,7 +82,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
 
 
-  public abstract PyramidDEMNode createNode(PyramidDEMNode parent, int childID);
+  public abstract DEMPyramidNode createNode(DEMPyramidNode parent, int childID);
 
   public final long subscribe(Sector sector, Vector2I extent, DEMListener listener)
   {
