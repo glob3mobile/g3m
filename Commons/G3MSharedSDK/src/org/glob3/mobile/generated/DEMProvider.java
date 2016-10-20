@@ -26,8 +26,11 @@ package org.glob3.mobile.generated;
 
 public abstract class DEMProvider extends RCObject
 {
-  protected DEMProvider()
+  protected final double _deltaHeight;
+
+  protected DEMProvider(double deltaHeight)
   {
+     _deltaHeight = deltaHeight;
   }
 
   public void dispose()

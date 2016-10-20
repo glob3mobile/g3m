@@ -58,8 +58,9 @@ public abstract class PyramidDEMProvider extends DEMProvider
     throw new RuntimeException("can't insert grid");
   }
 
-  protected PyramidDEMProvider(int rootNodesCount)
+  protected PyramidDEMProvider(double deltaHeight, int rootNodesCount)
   {
+     super(deltaHeight);
      _rootNodesCount = rootNodesCount;
      _rootNodes = null;
   }

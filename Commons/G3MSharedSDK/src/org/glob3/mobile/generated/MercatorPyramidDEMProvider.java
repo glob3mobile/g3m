@@ -20,9 +20,9 @@ package org.glob3.mobile.generated;
 public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
 {
 
-  protected MercatorPyramidDEMProvider()
+  protected MercatorPyramidDEMProvider(double deltaHeight)
   {
-     super(1);
+     super(deltaHeight, 1);
   }
 
   public void dispose()

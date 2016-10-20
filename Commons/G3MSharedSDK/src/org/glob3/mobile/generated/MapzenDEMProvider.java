@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class MapzenDEMProvider extends MercatorPyramidDEMProvider
 {
-  private static int _idCounter = 0;
+  private static int _instanceCounter = 0;
 
   private final String _apiKey;
 
@@ -41,14 +41,14 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
   private boolean _rootGridDownloaded;
   private boolean _errorDownloadingRootGrid;
 
-  private void requestTile(int z, int x, int y, Sector sector, double deltaHeight)
+  private void requestTile(int z, int x, int y, Sector sector)
   {
     IDownloader downloader = _context.getDownloader();
   
     final IStringUtils su = IStringUtils.instance();
     final String path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su.toString(z) + "/" + su.toString(x) + "/" + su.toString(y) + ".png?api_key=" + _apiKey;
   
-    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenDEMProvider_ImageDownloadListener(_context, this, z, x, y, sector, deltaHeight), true);
+    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenDEMProvider_ImageDownloadListener(_context, this, z, x, y, sector, _deltaHeight), true);
   }
 
   public void dispose()
@@ -57,15 +57,15 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
   }
 
 
-  public MapzenDEMProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+  public MapzenDEMProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, double deltaHeight)
   {
-     super();
+     super(deltaHeight);
      _apiKey = apiKey;
      _downloadPriority = downloadPriority;
      _timeToCache = timeToCache;
      _readExpired = readExpired;
      _context = null;
-     _instanceID = "MapzenDEMProvider_" + IStringUtils.instance().toString(++_idCounter);
+     _instanceID = "MapzenDEMProvider_" + IStringUtils.instance().toString(++_instanceCounter);
      _rootGridDownloaded = false;
      _errorDownloadingRootGrid = false;
   
@@ -85,18 +85,16 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
     _context = context;
   
     // request root grid
-    requestTile(0, 0, 0, Sector.FULL_SPHERE, 0); // deltaHeight -  y -  x -  z
+    requestTile(0, 0, 0, Sector.FULL_SPHERE); // y -  x -  z
   
     //  const int z = 9;
     //  const int x = 271;
     //  const int y = 180;
-    //  const double deltaHeight = 0;
     //
     //  const Sector sector = MercatorUtils::getSector(z, x, y);
     //  ILogger::instance()->logInfo( sector.description() );
     //  requestTile(z, x, y,
-    //              sector,
-    //              deltaHeight);
+    //              sector);
   }
 
   public final void cancel()
