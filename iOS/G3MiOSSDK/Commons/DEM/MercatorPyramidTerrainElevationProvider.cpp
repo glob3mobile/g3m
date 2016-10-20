@@ -12,6 +12,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "MercatorUtils.hpp"
+#include "PyramidTerrainElevationNode.hpp"
 
 
 MercatorPyramidTerrainElevationProvider::MercatorPyramidTerrainElevationProvider() :
@@ -19,17 +20,17 @@ PyramidTerrainElevationProvider(1)
 {
 }
 
-MercatorPyramidTerrainElevationProvider::Node* MercatorPyramidTerrainElevationProvider::createNode(const MercatorPyramidTerrainElevationProvider::Node* parent,
-                                                                                                   const size_t childID) {
+PyramidTerrainElevationNode* MercatorPyramidTerrainElevationProvider::createNode(const PyramidTerrainElevationNode* parent,
+                                                                                 const size_t childID) {
   if (parent == NULL) {
     // creating root node
-    return new Node(NULL, // parent
-                    childID,
-                    Sector::FULL_SPHERE,
-                    0, // z
-                    0, // x
-                    0  // y
-                    );
+    return new PyramidTerrainElevationNode(NULL, // parent
+                                           childID,
+                                           Sector::FULL_SPHERE,
+                                           0,    // z
+                                           0,    // x
+                                           0     // y
+                                           );
   }
 
   const int nextZ = parent->_z + 1;
@@ -45,42 +46,42 @@ MercatorPyramidTerrainElevationProvider::Node* MercatorPyramidTerrainElevationPr
     const Sector s0(Geodetic2D(lower._latitude, lower._longitude),
                     Geodetic2D(  splitLatitude, splitLongitude  ));
 
-    return new Node(parent,
-                    childID,
-                    s0,
-                    nextZ,
-                    x2,
-                    y2 + 1);
+    return new PyramidTerrainElevationNode(parent,
+                                           childID,
+                                           s0,
+                                           nextZ,
+                                           x2,
+                                           y2 + 1);
   }
   else if (childID == 1) {
     const Sector s1(Geodetic2D(lower._latitude, splitLongitude),
                     Geodetic2D(splitLatitude,   upper._longitude));
-    return new Node(parent,
-                    childID,
-                    s1,
-                    nextZ,
-                    x2 + 1,
-                    y2 + 1);
+    return new PyramidTerrainElevationNode(parent,
+                                           childID,
+                                           s1,
+                                           nextZ,
+                                           x2 + 1,
+                                           y2 + 1);
   }
   else if (childID == 2) {
     const Sector s2(Geodetic2D(splitLatitude,   lower._longitude),
                     Geodetic2D(upper._latitude, splitLongitude));
-    return new Node(parent,
-                    childID,
-                    s2,
-                    nextZ,
-                    x2,
-                    y2);
+    return new PyramidTerrainElevationNode(parent,
+                                           childID,
+                                           s2,
+                                           nextZ,
+                                           x2,
+                                           y2);
   }
   else if (childID == 3) {
     const Sector s3(Geodetic2D(splitLatitude,   splitLongitude),
                     Geodetic2D(upper._latitude, upper._longitude));
-    return new Node(parent,
-                    childID,
-                    s3,
-                    nextZ,
-                    x2 + 1,
-                    y2);
+    return new PyramidTerrainElevationNode(parent,
+                                           childID,
+                                           s3,
+                                           nextZ,
+                                           x2 + 1,
+                                           y2);
   }
   else {
     THROW_EXCEPTION("Man, isn't it a QuadTree?");

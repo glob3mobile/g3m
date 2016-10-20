@@ -13,12 +13,13 @@
 
 class MercatorPyramidTerrainElevationProvider : public PyramidTerrainElevationProvider {
 protected:
-  MercatorPyramidTerrainElevationProvider::Node* createNode(const MercatorPyramidTerrainElevationProvider::Node* parent,
-                                                            const size_t childID);
 
 public:
   MercatorPyramidTerrainElevationProvider();
-  
+
+  PyramidTerrainElevationNode* createNode(const PyramidTerrainElevationNode* parent,
+                                          const size_t childID);
+
 };
 
 #endif

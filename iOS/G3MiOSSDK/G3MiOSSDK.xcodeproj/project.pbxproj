@@ -312,6 +312,7 @@
 		CF8CED3A1DA6C4420058748E /* ShortBufferTerrainElevationGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7338181DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.hpp */; };
 		CF8CED3B1DA6C4420058748E /* BILDownloader.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8CED361DA6C26A0058748E /* BILDownloader.hpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
+		CF8F8C671DB8D9FC00F8396E /* PyramidTerrainElevationNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8F8C651DB8D9FC00F8396E /* PyramidTerrainElevationNode.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
@@ -1626,6 +1627,8 @@
 		CF8CED361DA6C26A0058748E /* BILDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BILDownloader.hpp; path = Commons/DEM/BILDownloader.hpp; sourceTree = "<group>"; };
 		CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
+		CF8F8C651DB8D9FC00F8396E /* PyramidTerrainElevationNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PyramidTerrainElevationNode.cpp; path = Commons/DEM/PyramidTerrainElevationNode.cpp; sourceTree = "<group>"; };
+		CF8F8C661DB8D9FC00F8396E /* PyramidTerrainElevationNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PyramidTerrainElevationNode.hpp; path = Commons/DEM/PyramidTerrainElevationNode.hpp; sourceTree = "<group>"; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
 		CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimeInterval.cpp; path = Commons/Basic/TimeInterval.cpp; sourceTree = "<group>"; };
@@ -2718,6 +2721,8 @@
 				CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */,
 				CF9B45FA1DB7B613009ABF32 /* MercatorPyramidTerrainElevationProvider.cpp */,
 				CF9B45FB1DB7B613009ABF32 /* MercatorPyramidTerrainElevationProvider.hpp */,
+				CF8F8C651DB8D9FC00F8396E /* PyramidTerrainElevationNode.cpp */,
+				CF8F8C661DB8D9FC00F8396E /* PyramidTerrainElevationNode.hpp */,
 				CF9B45FD1DB7B648009ABF32 /* PyramidTerrainElevationProvider.cpp */,
 				CF9B45FE1DB7B648009ABF32 /* PyramidTerrainElevationProvider.hpp */,
 				CF7338171DA57A7600C406D1 /* ShortBufferTerrainElevationGrid.cpp */,
@@ -3499,6 +3504,7 @@
 				4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */,
 				349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */,
 				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
+				CF8F8C671DB8D9FC00F8396E /* PyramidTerrainElevationNode.cpp in Sources */,
 				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
 				CFCBA3BE1906F3C200FD2A2F /* RasterLayer.cpp in Sources */,
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,
