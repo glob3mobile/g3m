@@ -252,7 +252,7 @@ long long MapzenDEMProvider::subscribe(const Sector&   sector,
 }
 
 void MapzenDEMProvider::unsubscribe(const long long subscriptionID,
-                                    const bool deleteListener) {
+                                    const bool      deleteListener) {
   //  _pyramid->unsubscribe(subscriptionID, deleteListener);
   THROW_EXCEPTION("Not yet done");
 }

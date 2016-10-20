@@ -18,6 +18,14 @@ class PyramidDEMNode;
 
 
 class PyramidDEMProvider : public DEMProvider {
+private:
+
+  const size_t                  _rootNodesCount;
+  std::vector<PyramidDEMNode*>* _rootNodes;
+
+  std::vector<PyramidDEMNode*>* getRootNodes();
+
+
 protected:
 
   void insertGrid(int z,
@@ -26,22 +34,16 @@ protected:
                   DEMGrid* grid,
                   const bool sticky);
 
-private:
-  const size_t                  _rootNodesCount;
-  std::vector<PyramidDEMNode*>* _rootNodes;
-
-
-  std::vector<PyramidDEMNode*>* getRootNodes();
-
-protected:
   PyramidDEMProvider(const size_t rootNodesCount);
 
   virtual ~PyramidDEMProvider();
 
+
 public:
+
   virtual PyramidDEMNode* createNode(const PyramidDEMNode*  parent,
                                      const size_t childID) = 0;
-
+  
 };
 
 #endif

@@ -20,11 +20,9 @@ class DEMListener;
 
 class DEMProvider : public RCObject {
 protected:
-  virtual ~DEMProvider() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-  }
+  DEMProvider();
+
+  virtual ~DEMProvider();
 
 public:
 
@@ -39,7 +37,7 @@ public:
                               DEMListener*    listener) = 0;
 
   virtual void unsubscribe(const long long subscriptionID,
-                           const bool deleteListener) = 0;
+                           const bool      deleteListener) = 0;
   
 };
 

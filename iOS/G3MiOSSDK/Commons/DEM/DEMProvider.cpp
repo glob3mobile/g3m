@@ -7,3 +7,12 @@
 //
 
 #include "DEMProvider.hpp"
+
+DEMProvider::DEMProvider() {
+}
+
+DEMProvider::~DEMProvider() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}

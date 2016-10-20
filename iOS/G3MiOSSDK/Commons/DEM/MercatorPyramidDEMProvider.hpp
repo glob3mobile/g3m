@@ -14,8 +14,11 @@
 class MercatorPyramidDEMProvider : public PyramidDEMProvider {
 protected:
 
-public:
   MercatorPyramidDEMProvider();
+
+  virtual ~MercatorPyramidDEMProvider();
+
+public:
 
   PyramidDEMNode* createNode(const PyramidDEMNode* parent,
                              const size_t childID);

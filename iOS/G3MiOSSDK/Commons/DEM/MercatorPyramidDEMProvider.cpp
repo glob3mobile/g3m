@@ -20,6 +20,13 @@ PyramidDEMProvider(1)
 {
 }
 
+MercatorPyramidDEMProvider::~MercatorPyramidDEMProvider() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+
 PyramidDEMNode* MercatorPyramidDEMProvider::createNode(const PyramidDEMNode* parent,
                                                        const size_t childID) {
   if (parent == NULL) {

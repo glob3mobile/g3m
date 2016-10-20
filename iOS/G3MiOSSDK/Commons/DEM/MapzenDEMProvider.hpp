@@ -84,8 +84,8 @@ public:
                       DEMListener*    listener);
 
   void unsubscribe(const long long subscriptionID,
-                   const bool deleteListener);
-  
+                   const bool      deleteListener);
+
 };
 
 #endif
