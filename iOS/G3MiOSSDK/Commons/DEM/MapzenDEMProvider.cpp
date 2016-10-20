@@ -17,7 +17,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferDEMGrid.hpp"
-//#include "MercatorUtils.hpp"
+#include "MercatorUtils.hpp"
 //#include "MeshRenderer.hpp"
 //#include "EllipsoidalPlanet.hpp"
 
@@ -189,14 +189,19 @@ void MapzenDEMProvider::initialize(const G3MContext* context) {
               0, // y
               Sector::FULL_SPHERE);
 
-  //  const int z = 9;
-  //  const int x = 271;
-  //  const int y = 180;
-  //
-  //  const Sector sector = MercatorUtils::getSector(z, x, y);
-  //  ILogger::instance()->logInfo( sector.description() );
-  //  requestTile(z, x, y,
-  //              sector);
+  
+
+//    const int z = 9;
+//    const int x = 271;
+//    const int y = 180;
+  const int z = 1;
+  const int x = 0;
+  const int y = 0;
+
+  const Sector sector = MercatorUtils::getSector(z, x, y);
+  ILogger::instance()->logInfo( sector.description() );
+  requestTile(z, x, y,
+              sector);
 }
 
 void MapzenDEMProvider::cancel() {
