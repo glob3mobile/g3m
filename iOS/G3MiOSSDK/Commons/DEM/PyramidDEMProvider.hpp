@@ -44,7 +44,14 @@ public:
 
   virtual PyramidDEMNode* createNode(const PyramidDEMNode*  parent,
                                      const size_t childID) = 0;
-  
+
+  long long subscribe(const Sector&   sector,
+                      const Vector2I& extent,
+                      DEMListener*    listener);
+
+  void unsubscribe(const long long subscriptionID,
+                   const bool      deleteListener);
+
 };
 
 #endif

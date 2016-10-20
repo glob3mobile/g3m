@@ -60,3 +60,14 @@ void PyramidDEMProvider::insertGrid(int z,
   }
   THROW_EXCEPTION("can't insert grid");
 }
+
+long long PyramidDEMProvider::subscribe(const Sector&   sector,
+                                        const Vector2I& extent,
+                                        DEMListener*    listener) {
+  THROW_EXCEPTION("Not yet done");
+}
+
+void PyramidDEMProvider::unsubscribe(const long long subscriptionID,
+                                     const bool      deleteListener) {
+  THROW_EXCEPTION("Not yet done");
+}

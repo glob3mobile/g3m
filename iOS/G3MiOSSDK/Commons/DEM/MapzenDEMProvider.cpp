@@ -17,7 +17,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferDEMGrid.hpp"
-#include "MercatorUtils.hpp"
+//#include "MercatorUtils.hpp"
 //#include "MeshRenderer.hpp"
 //#include "EllipsoidalPlanet.hpp"
 
@@ -189,19 +189,17 @@ void MapzenDEMProvider::initialize(const G3MContext* context) {
               0, // y
               Sector::FULL_SPHERE);
 
-  
-
-//    const int z = 9;
-//    const int x = 271;
-//    const int y = 180;
-  const int z = 1;
-  const int x = 0;
-  const int y = 0;
-
-  const Sector sector = MercatorUtils::getSector(z, x, y);
-  ILogger::instance()->logInfo( sector.description() );
-  requestTile(z, x, y,
-              sector);
+  ////    const int z = 9;
+  ////    const int x = 271;
+  ////    const int y = 180;
+  //  const int z = 1;
+  //  const int x = 0;
+  //  const int y = 0;
+  //
+  //  const Sector sector = MercatorUtils::getSector(z, x, y);
+  //  ILogger::instance()->logInfo( sector.description() );
+  //  requestTile(z, x, y,
+  //              sector);
 }
 
 void MapzenDEMProvider::cancel() {
@@ -230,17 +228,4 @@ void MapzenDEMProvider::onDownloadError(int z,
   if ((z == 0) && (x == 0) && (y == 0)) {
     _errorDownloadingRootGrid = true;
   }
-}
-
-long long MapzenDEMProvider::subscribe(const Sector&   sector,
-                                       const Vector2I& extent,
-                                       DEMListener*    listener) {
-  //  return _pyramid->subscribe(sector, extent, listener);
-  THROW_EXCEPTION("Not yet done");
-}
-
-void MapzenDEMProvider::unsubscribe(const long long subscriptionID,
-                                    const bool      deleteListener) {
-  //  _pyramid->unsubscribe(subscriptionID, deleteListener);
-  THROW_EXCEPTION("Not yet done");
 }

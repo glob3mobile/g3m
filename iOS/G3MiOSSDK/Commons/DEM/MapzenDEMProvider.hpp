@@ -79,13 +79,6 @@ public:
                        int x,
                        int y);
 
-  long long subscribe(const Sector&   sector,
-                      const Vector2I& extent,
-                      DEMListener*    listener);
-
-  void unsubscribe(const long long subscriptionID,
-                   const bool      deleteListener);
-
 };
 
 #endif
