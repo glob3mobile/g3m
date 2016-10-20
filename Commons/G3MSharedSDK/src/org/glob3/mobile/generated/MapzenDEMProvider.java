@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 
 //class FloatBufferDEMGrid;
 //class Sector;
-//class MeshRenderer;
 
 
 public class MapzenDEMProvider extends MercatorPyramidDEMProvider
@@ -32,8 +31,6 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
   private final long _downloadPriority;
   private final TimeInterval _timeToCache;
   private final boolean _readExpired;
-
-  private MeshRenderer _meshRenderer;
 
 
   private final String _instanceID;
@@ -65,14 +62,13 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
   }
 
 
-  public MapzenDEMProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, MeshRenderer meshRenderer)
+  public MapzenDEMProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
      super();
      _apiKey = apiKey;
      _downloadPriority = downloadPriority;
      _timeToCache = timeToCache;
      _readExpired = readExpired;
-     _meshRenderer = meshRenderer;
      _context = null;
      _instanceID = "MapzenDEMProvider_" + IStringUtils.instance().toString(++_idCounter);
      _rootGrid = null;
