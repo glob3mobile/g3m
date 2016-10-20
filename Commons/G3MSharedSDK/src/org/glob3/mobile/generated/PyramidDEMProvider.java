@@ -47,7 +47,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
   private static class Subscription
   {
     private final Sector _sector ;
-    private final Vector2I _extent = new Vector2I();
+    private final Vector2I _extent;
     private final Geodetic2D _resolution ;
 
     private DEMListener _listener;
@@ -56,7 +56,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
     public Subscription(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
     {
        _sector = new Sector(sector);
-       _extent = new Vector2I(extent);
+       _extent = extent;
        _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
        _listener = listener;
        _deleteListener = deleteListener;
