@@ -25,23 +25,8 @@ package org.glob3.mobile.generated;
 public abstract class PyramidDEMProvider extends DEMProvider
 {
 
-  protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean sticky)
-  {
-    java.util.ArrayList<PyramidDEMNode> rootNodes = getRootNodes();
-    for (int i = 0; i < _rootNodesCount; i++)
-    {
-      PyramidDEMNode rootNode = rootNodes.get(i);
-      if (rootNode.insertGrid(z, x, y, grid, sticky, this))
-      {
-        return;
-      }
-    }
-    throw new RuntimeException("can't insert grid");
-  }
-
   private final int _rootNodesCount;
   private java.util.ArrayList<PyramidDEMNode> _rootNodes;
-
 
   private java.util.ArrayList<PyramidDEMNode> getRootNodes()
   {
@@ -55,6 +40,22 @@ public abstract class PyramidDEMProvider extends DEMProvider
       }
     }
     return _rootNodes;
+  }
+
+
+
+  protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean sticky)
+  {
+    java.util.ArrayList<PyramidDEMNode> rootNodes = getRootNodes();
+    for (int i = 0; i < _rootNodesCount; i++)
+    {
+      PyramidDEMNode rootNode = rootNodes.get(i);
+      if (rootNode.insertGrid(z, x, y, grid, sticky, this))
+      {
+        return;
+      }
+    }
+    throw new RuntimeException("can't insert grid");
   }
 
   protected PyramidDEMProvider(int rootNodesCount)
@@ -77,6 +78,8 @@ public abstract class PyramidDEMProvider extends DEMProvider
     }
     super.dispose();
   }
+
+
 
   public abstract PyramidDEMNode createNode(PyramidDEMNode parent, int childID);
 

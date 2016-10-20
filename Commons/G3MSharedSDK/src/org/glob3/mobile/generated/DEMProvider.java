@@ -26,6 +26,10 @@ package org.glob3.mobile.generated;
 
 public abstract class DEMProvider extends RCObject
 {
+  protected DEMProvider()
+  {
+  }
+
   public void dispose()
   {
     super.dispose();

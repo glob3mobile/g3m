@@ -20,10 +20,16 @@ package org.glob3.mobile.generated;
 public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
 {
 
-  public MercatorPyramidDEMProvider()
+  protected MercatorPyramidDEMProvider()
   {
      super(1);
   }
+
+  public void dispose()
+  {
+    super.dispose();
+  }
+
 
   public final PyramidDEMNode createNode(PyramidDEMNode parent, int childID)
   {
