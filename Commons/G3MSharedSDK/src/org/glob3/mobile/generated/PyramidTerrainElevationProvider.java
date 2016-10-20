@@ -167,6 +167,7 @@ public abstract class PyramidTerrainElevationProvider extends TerrainElevationPr
         if (rootNode != null)
            rootNode.dispose();
       }
+      _rootNodes = null;
     }
     super.dispose();
   }
