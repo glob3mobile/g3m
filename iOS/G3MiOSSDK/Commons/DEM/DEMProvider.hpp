@@ -20,7 +20,9 @@ class DEMListener;
 
 class DEMProvider : public RCObject {
 protected:
-  DEMProvider();
+  const double _deltaHeight;
+
+  DEMProvider(const double deltaHeight);
 
   virtual ~DEMProvider();
 

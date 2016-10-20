@@ -12,7 +12,9 @@
 #include "PyramidDEMNode.hpp"
 
 
-PyramidDEMProvider::PyramidDEMProvider(const size_t rootNodesCount) :
+PyramidDEMProvider::PyramidDEMProvider(const double deltaHeight,
+                                       const size_t rootNodesCount) :
+DEMProvider(deltaHeight),
 _rootNodesCount(rootNodesCount),
 _rootNodes(NULL)
 {

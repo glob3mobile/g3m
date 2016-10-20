@@ -51,8 +51,7 @@ private:
   void requestTile(int z,
                    int x,
                    int y,
-                   const Sector& sector,
-                   double deltaHeight);
+                   const Sector& sector);
 
 protected:
   ~MapzenDEMProvider();
@@ -62,7 +61,8 @@ public:
   MapzenDEMProvider(const std::string&  apiKey,
                     long long           downloadPriority,
                     const TimeInterval& timeToCache,
-                    bool                readExpired);
+                    bool                readExpired,
+                    const double        deltaHeight);
 
   RenderState getRenderState();
 

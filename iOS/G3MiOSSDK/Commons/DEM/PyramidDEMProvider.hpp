@@ -34,7 +34,8 @@ protected:
                   DEMGrid* grid,
                   const bool sticky);
 
-  PyramidDEMProvider(const size_t rootNodesCount);
+  PyramidDEMProvider(const double deltaHeight,
+                     const size_t rootNodesCount);
 
   virtual ~PyramidDEMProvider();
 

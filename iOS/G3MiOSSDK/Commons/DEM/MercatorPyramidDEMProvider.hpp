@@ -14,7 +14,7 @@
 class MercatorPyramidDEMProvider : public PyramidDEMProvider {
 protected:
 
-  MercatorPyramidDEMProvider();
+  MercatorPyramidDEMProvider(const double deltaHeight);
 
   virtual ~MercatorPyramidDEMProvider();
 

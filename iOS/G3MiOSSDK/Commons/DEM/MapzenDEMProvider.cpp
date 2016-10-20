@@ -131,8 +131,9 @@ public:
 MapzenDEMProvider::MapzenDEMProvider(const std::string&  apiKey,
                                      long long           downloadPriority,
                                      const TimeInterval& timeToCache,
-                                     bool                readExpired) :
-MercatorPyramidDEMProvider(),
+                                     bool                readExpired,
+                                     const double        deltaHeight) :
+MercatorPyramidDEMProvider(deltaHeight),
 _apiKey(apiKey),
 _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
@@ -161,8 +162,7 @@ RenderState MapzenDEMProvider::getRenderState() {
 void MapzenDEMProvider::requestTile(int z,
                                     int x,
                                     int y,
-                                    const Sector& sector,
-                                    double deltaHeight) {
+                                    const Sector& sector) {
   IDownloader* downloader = _context->getDownloader();
 
   const IStringUtils* su = IStringUtils::instance();
@@ -176,7 +176,7 @@ void MapzenDEMProvider::requestTile(int z,
                                                                        this,
                                                                        z, x, y,
                                                                        sector,
-                                                                       deltaHeight),
+                                                                       _deltaHeight),
                            true);
 }
 
@@ -187,19 +187,16 @@ void MapzenDEMProvider::initialize(const G3MContext* context) {
   requestTile(0, // z
               0, // x
               0, // y
-              Sector::FULL_SPHERE,
-              0 /* deltaHeight */);
+              Sector::FULL_SPHERE);
 
   //  const int z = 9;
   //  const int x = 271;
   //  const int y = 180;
-  //  const double deltaHeight = 0;
   //
   //  const Sector sector = MercatorUtils::getSector(z, x, y);
   //  ILogger::instance()->logInfo( sector.description() );
   //  requestTile(z, x, y,
-  //              sector,
-  //              deltaHeight);
+  //              sector);
 }
 
 void MapzenDEMProvider::cancel() {

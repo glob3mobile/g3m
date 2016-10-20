@@ -15,8 +15,8 @@
 #include "PyramidDEMNode.hpp"
 
 
-MercatorPyramidDEMProvider::MercatorPyramidDEMProvider() :
-PyramidDEMProvider(1)
+MercatorPyramidDEMProvider::MercatorPyramidDEMProvider(const double deltaHeight) :
+PyramidDEMProvider(deltaHeight, 1)
 {
 }
 

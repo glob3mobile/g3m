@@ -8,7 +8,9 @@
 
 #include "DEMProvider.hpp"
 
-DEMProvider::DEMProvider() {
+DEMProvider::DEMProvider(const double deltaHeight) :
+_deltaHeight(deltaHeight)
+{
 }
 
 DEMProvider::~DEMProvider() {

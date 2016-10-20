@@ -22,7 +22,7 @@
 
 
 void G3M3DLandDemoScene::rawSelectOption(const std::string& option,
-                                       int optionIndex) {
+                                         int optionIndex) {
   // no options
 }
 
@@ -71,11 +71,13 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setIncrementalTileQuality(true);
 
 #warning Diego at work!
+
   planetRenderer->setVerticalExaggeration(100);
-  planetRenderer->setDEMProvider(new MapzenDEMProvider("mapzen-ZB6FqMg",
-                                                                                 DownloadPriority::HIGHER,
-                                                                                 TimeInterval::fromDays(0),
-                                                                                 false /* readExpired */));
+  planetRenderer->setDEMProvider( new MapzenDEMProvider("mapzen-ZB6FqMg",
+                                                        DownloadPriority::HIGHER,
+                                                        TimeInterval::fromDays(0),
+                                                        false, /* readExpired */
+                                                        0      /* deltaHeight */) );
 
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg",
@@ -88,10 +90,10 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   getModel()->getLayerSet()->addLayer( layer );
 
-//  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(58.813741715707806179, -125.859375, 50000));
-//  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.668763371822997499,
-//                                                                                 10.800910848094183336,
-//                                                                                 135933.14638548778021));
+  //  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(58.813741715707806179, -125.859375, 50000));
+  //  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.668763371822997499,
+  //                                                                                 10.800910848094183336,
+  //                                                                                 135933.14638548778021));
 
   //  const double deltaHeight = -700.905;
   //  const short  noDataValue = -32768;
