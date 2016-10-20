@@ -84,4 +84,14 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
   public abstract PyramidDEMNode createNode(PyramidDEMNode parent, int childID);
 
+  public final long subscribe(Sector sector, Vector2I extent, DEMListener listener)
+  {
+    throw new RuntimeException("Not yet done");
+  }
+
+  public final void unsubscribe(long subscriptionID, boolean deleteListener)
+  {
+    throw new RuntimeException("Not yet done");
+  }
+
 }

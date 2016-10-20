@@ -1,4 +1,5 @@
 package org.glob3.mobile.generated; 
+///#include "MercatorUtils.hpp"
 ///#include "MeshRenderer.hpp"
 ///#include "EllipsoidalPlanet.hpp"
 
