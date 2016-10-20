@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class DEMGrid;
 //class PyramidNode;
 
@@ -43,14 +44,44 @@ public abstract class PyramidDEMProvider extends DEMProvider
   }
 
 
+  private static class Subscription
+  {
+    private final Sector _sector ;
+    private final Vector2I _extent = new Vector2I();
+    private final Geodetic2D _resolution ;
 
-  protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean sticky)
+    private DEMListener _listener;
+    private final boolean _deleteListener;
+
+    public Subscription(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
+    {
+       _sector = new Sector(sector);
+       _extent = new Vector2I(extent);
+       _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
+       _listener = listener;
+       _deleteListener = deleteListener;
+    }
+
+    public void dispose()
+    {
+      if (_deleteListener)
+      {
+        if (_listener != null)
+           _listener.dispose();
+      }
+    }
+
+  }
+
+
+
+  protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean stickyGrid)
   {
     java.util.ArrayList<PyramidNode> rootNodes = getRootNodes();
     for (int i = 0; i < _rootNodesCount; i++)
     {
       PyramidNode rootNode = rootNodes.get(i);
-      if (rootNode.insertGrid(z, x, y, grid, sticky, this))
+      if (rootNode.insertGrid(z, x, y, grid, stickyGrid, this))
       {
         return;
       }
@@ -84,12 +115,13 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
   public abstract PyramidNode createNode(PyramidNode parent, int childID);
 
-  public final long subscribe(Sector sector, Vector2I extent, DEMListener listener)
+  public final long subscribe(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
   {
+  //  Subscription* subscription = new Subscription(sector, extent, listener, deleteListener);
     throw new RuntimeException("Not yet done");
   }
 
-  public final void unsubscribe(long subscriptionID, boolean deleteListener)
+  public final void unsubscribe(long subscriptionID)
   {
     throw new RuntimeException("Not yet done");
   }

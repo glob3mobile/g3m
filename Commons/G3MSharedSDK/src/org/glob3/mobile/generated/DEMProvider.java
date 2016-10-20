@@ -45,8 +45,8 @@ public abstract class DEMProvider extends RCObject
 
   public abstract void cancel();
 
-  public abstract long subscribe(Sector sector, Vector2I extent, DEMListener listener);
+  public abstract long subscribe(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener);
 
-  public abstract void unsubscribe(long subscriptionID, boolean deleteListener);
+  public abstract void unsubscribe(long subscriptionID);
 
 }

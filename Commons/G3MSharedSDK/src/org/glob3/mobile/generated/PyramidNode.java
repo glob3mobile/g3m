@@ -37,17 +37,17 @@ public class PyramidNode
     return _children;
   }
 
+  private DEMGrid _grid;
+  private boolean _stickyGrid;
+
+  private java.util.ArrayList<PyramidNode> _children;
+
   public final PyramidNode _parent;
   public final int _childID;
   public final Sector _sector ;
   public final int _z;
   public final int _x;
   public final int _y;
-
-  public DEMGrid _grid;
-  public boolean _stickyGrid;
-
-  public java.util.ArrayList<PyramidNode> _children;
 
   public PyramidNode(PyramidNode parent, int childID, Sector sector, int z, int x, int y)
   {
@@ -72,7 +72,8 @@ public class PyramidNode
   
     if (_children != null)
     {
-      for (int i = 0; i < _children.size(); i++)
+      final int size = _children.size();
+      for (int i = 0; i < size; i++)
       {
         PyramidNode child = _children.get(i);
         if (child != null)
@@ -82,7 +83,7 @@ public class PyramidNode
     }
   }
 
-  public final boolean insertGrid(int z, int x, int y, DEMGrid grid, boolean sticky, PyramidDEMProvider pyramidDEMProvider)
+  public final boolean insertGrid(int z, int x, int y, DEMGrid grid, boolean stickyGrid, PyramidDEMProvider pyramidDEMProvider)
   {
     if (z < _z)
     {
@@ -93,17 +94,18 @@ public class PyramidNode
       if ((x == _x) && (y == _y))
       {
         _grid = grid;
-        _stickyGrid = sticky;
+        _stickyGrid = stickyGrid;
         return true;
       }
       return false;
     }
   
     java.util.ArrayList<PyramidNode> children = getChildren(pyramidDEMProvider);
-    for (int i = 0; i < children.size(); i++)
+    final int size = children.size();
+    for (int i = 0; i < size; i++)
     {
       PyramidNode child = children.get(i);
-      if (child.insertGrid(z, x, y, grid, sticky, pyramidDEMProvider))
+      if (child.insertGrid(z, x, y, grid, stickyGrid, pyramidDEMProvider))
       {
         return true;
       }
