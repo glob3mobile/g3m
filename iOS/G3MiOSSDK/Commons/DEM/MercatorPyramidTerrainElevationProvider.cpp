@@ -19,9 +19,8 @@ PyramidTerrainElevationProvider(1)
 {
 }
 
-MercatorPyramidTerrainElevationProvider::Node*
-MercatorPyramidTerrainElevationProvider::createNode(const Node* parent,
-                                                    const size_t childID) {
+MercatorPyramidTerrainElevationProvider::Node* MercatorPyramidTerrainElevationProvider::createNode(const MercatorPyramidTerrainElevationProvider::Node* parent,
+                                                                                                   const size_t childID) {
   if (parent == NULL) {
     // creating root node
     return new Node(NULL, // parent
