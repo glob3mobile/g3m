@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class DEMGrid;
 //class PyramidNode;
 
@@ -41,36 +40,6 @@ public abstract class PyramidDEMProvider extends DEMProvider
       }
     }
     return _rootNodes;
-  }
-
-
-  private static class Subscription
-  {
-    private final Sector _sector ;
-    private final Vector2I _extent;
-    private final Geodetic2D _resolution ;
-
-    private DEMListener _listener;
-    private final boolean _deleteListener;
-
-    public Subscription(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
-    {
-       _sector = new Sector(sector);
-       _extent = extent;
-       _resolution = new Geodetic2D(sector._deltaLatitude.div(extent._y), sector._deltaLongitude.div(extent._x));
-       _listener = listener;
-       _deleteListener = deleteListener;
-    }
-
-    public void dispose()
-    {
-      if (_deleteListener)
-      {
-        if (_listener != null)
-           _listener.dispose();
-      }
-    }
-
   }
 
 
@@ -117,13 +86,63 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
   public final long subscribe(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
   {
-  //  Subscription* subscription = new Subscription(sector, extent, listener, deleteListener);
-    throw new RuntimeException("Not yet done");
+    DEMSubscription subscription = new DEMSubscription(sector, extent, listener, deleteListener);
+  
+    boolean holdSubscription = false;
+    java.util.ArrayList<PyramidNode> rootNodes = getRootNodes();
+    for (int i = 0; i < _rootNodesCount; i++)
+    {
+      PyramidNode rootNode = rootNodes.get(i);
+      if (rootNode.addSubscription(subscription))
+      {
+        holdSubscription = true;
+      }
+    }
+  
+    if (holdSubscription)
+    {
+      return subscription._id;
+    }
+  
+    if (subscription != null)
+       subscription.dispose();
+    return -1;
   }
 
   public final void unsubscribe(long subscriptionID)
   {
-    throw new RuntimeException("Not yet done");
+    if (subscriptionID < 0)
+    {
+      return;
+    }
+  
+    if (_rootNodes != null)
+    {
+      DEMSubscription subscription = null;
+  
+      for (int i = 0; i < _rootNodesCount; i++)
+      {
+        PyramidNode rootNode = _rootNodes.get(i);
+        DEMSubscription removedSubscription = rootNode.removeSubscription(subscriptionID);
+        if (removedSubscription != null)
+        {
+          if (subscription == null)
+          {
+            subscription = removedSubscription;
+          }
+          else
+          {
+            if (subscription != removedSubscription)
+            {
+              throw new RuntimeException("Logic error!");
+            }
+          }
+        }
+      }
+  
+      if (subscription != null)
+         subscription.dispose();
+    }
   }
 
 }
