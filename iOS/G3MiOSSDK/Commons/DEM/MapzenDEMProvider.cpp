@@ -22,7 +22,7 @@
 //#include "EllipsoidalPlanet.hpp"
 
 
-int MapzenDEMProvider::_idCounter = 0;
+int MapzenDEMProvider::_instanceCounter = 0;
 
 
 class MapzenDEMProvider_ParserListener : public MapzenTerrariumParser::Listener {
@@ -138,7 +138,7 @@ _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
 _context(NULL),
-_instanceID("MapzenDEMProvider_" + IStringUtils::instance()->toString(++_idCounter)),
+_instanceID("MapzenDEMProvider_" + IStringUtils::instance()->toString(++_instanceCounter)),
 _rootGridDownloaded(false),
 _errorDownloadingRootGrid(false)
 {

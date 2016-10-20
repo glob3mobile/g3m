@@ -21,7 +21,7 @@ class Sector;
 
 class MapzenDEMProvider : public MercatorPyramidDEMProvider {
 private:
-  static int _idCounter;
+  static int _instanceCounter;
 
   const std::string _apiKey;
 
