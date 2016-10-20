@@ -28,7 +28,7 @@
 #include "GradualSplitsTileLODTester.hpp"
 
 #include "ElevationDataProvider.hpp"
-#include "TerrainElevationProvider.hpp"
+#include "DEMProvider.hpp"
 
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
@@ -44,7 +44,7 @@ _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
 _tileTextureDownloadPriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
-_terrainElevationProvider(NULL),
+_demProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
 _renderTileMeshes(true),
@@ -69,8 +69,8 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
 
   delete _tileTessellator;
   delete _elevationDataProvider;
-  if (_terrainElevationProvider != NULL) {
-    _terrainElevationProvider->_release();
+  if (_demProvider != NULL) {
+    _demProvider->_release();
   }
 
   delete _renderedSector;
@@ -260,11 +260,11 @@ void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elev
   _elevationDataProvider = elevationDataProvider;
 }
 
-void PlanetRendererBuilder::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider) {
-  if (_terrainElevationProvider != NULL) {
-    THROW_EXCEPTION("LOGIC ERROR: _terrainElevationProvider already initialized");
+void PlanetRendererBuilder::setDEMProvider(DEMProvider* demProvider) {
+  if (_demProvider != NULL) {
+    THROW_EXCEPTION("LOGIC ERROR: _demProvider already initialized");
   }
-  _terrainElevationProvider = terrainElevationProvider;
+  _demProvider = demProvider;
 }
 
 void PlanetRendererBuilder::setVerticalExaggeration(float verticalExaggeration) {
@@ -278,8 +278,8 @@ ElevationDataProvider* PlanetRendererBuilder::getElevationDataProvider() {
   return _elevationDataProvider;
 }
 
-TerrainElevationProvider* PlanetRendererBuilder::getTerrainElevationProvider() {
-  return _terrainElevationProvider;
+DEMProvider* PlanetRendererBuilder::getDEMProvider() {
+  return _demProvider;
 }
 
 float PlanetRendererBuilder::getVerticalExaggeration() {
@@ -332,7 +332,7 @@ PlanetRenderer* PlanetRendererBuilder::create() {
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
                                                       true,
-                                                      getTerrainElevationProvider(),
+                                                      getDEMProvider(),
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
                                                       layerSet,
@@ -362,7 +362,7 @@ PlanetRenderer* PlanetRendererBuilder::create() {
   _stabilizationMilliSeconds = NULL;
 
   _elevationDataProvider = NULL;
-  _terrainElevationProvider = NULL;
+  _demProvider = NULL;
 
   delete _renderedSector;
   _renderedSector = NULL;

@@ -11,7 +11,7 @@
 
 #include "GAsyncTask.hpp"
 
-class FloatBufferTerrainElevationGrid;
+class FloatBufferDEMGrid;
 class IImage;
 #include "Sector.hpp"
 
@@ -30,7 +30,7 @@ public:
 
     }
 
-    virtual void onGrid(FloatBufferTerrainElevationGrid* grid) = 0;
+    virtual void onGrid(FloatBufferDEMGrid* grid) = 0;
   };
 
 private:
@@ -42,7 +42,7 @@ private:
     MapzenTerrariumParser::Listener* _listener;
     const bool _deleteListener;
 
-    FloatBufferTerrainElevationGrid* _result;
+    FloatBufferDEMGrid* _result;
 
   public:
     ParserTask(const IImage* image,
@@ -56,14 +56,14 @@ private:
     void runInBackground(const G3MContext* context);
 
     void onPostExecute(const G3MContext* context);
-    
+
   };
 
 
 public:
-  static FloatBufferTerrainElevationGrid* parse(const IImage* image,
-                                                const Sector& sector,
-                                                double deltaHeight);
+  static FloatBufferDEMGrid* parse(const IImage* image,
+                                   const Sector& sector,
+                                   double deltaHeight);
 
   static void parse(const G3MContext* context,
                     const IImage* image,

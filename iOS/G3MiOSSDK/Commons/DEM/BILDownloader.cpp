@@ -11,16 +11,16 @@
 #include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "BILParser.hpp"
-#include "ShortBufferTerrainElevationGrid.hpp"
+#include "ShortBufferDEMGrid.hpp"
 
 
 BILDownloader::ParserAsyncTask::ParserAsyncTask(IByteBuffer*            buffer,
-                               const Sector&           sector,
-                               const Vector2I&         extent,
-                               const short             noDataValue,
-                               const double            deltaHeight,
-                               BILDownloader::Handler* handler,
-                               const bool              deleteHandler) :
+                                                const Sector&           sector,
+                                                const Vector2I&         extent,
+                                                const short             noDataValue,
+                                                const double            deltaHeight,
+                                                BILDownloader::Handler* handler,
+                                                const bool              deleteHandler) :
 _buffer(buffer),
 _sector(sector),
 _extent(extent),

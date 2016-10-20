@@ -83,7 +83,9 @@ public:
 
   static double latitudeToMeters(const Angle& latitude);
 
-  static Sector getSector(int z, int x, int y);
+  static Sector getSector(int z,
+                          int x,
+                          int y);
 
   static Angle xToLongitude(int x, int z);
 

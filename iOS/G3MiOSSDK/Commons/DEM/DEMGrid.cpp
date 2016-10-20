@@ -1,12 +1,12 @@
 //
-//  TerrainElevationGrid.cpp
+//  DEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
 //
 //
 
-#include "TerrainElevationGrid.hpp"
+#include "DEMGrid.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
@@ -14,8 +14,8 @@
 #include "GLConstants.hpp"
 
 
-TerrainElevationGrid::TerrainElevationGrid(const Sector&   sector,
-                                           const Vector2I& extent) :
+DEMGrid::DEMGrid(const Sector&   sector,
+                 const Vector2I& extent) :
 _sector(sector),
 _extent(extent),
 _resolution(sector._deltaLatitude.div(extent._y),
@@ -23,28 +23,28 @@ _resolution(sector._deltaLatitude.div(extent._y),
 {
 }
 
-TerrainElevationGrid::~TerrainElevationGrid() {
+DEMGrid::~DEMGrid() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-const Sector TerrainElevationGrid::getSector() const {
+const Sector DEMGrid::getSector() const {
   return _sector;
 }
 
-const Vector2I TerrainElevationGrid::getExtent() const {
+const Vector2I DEMGrid::getExtent() const {
   return _extent;
 }
 
-const Geodetic2D TerrainElevationGrid::getResolution() const {
+const Geodetic2D DEMGrid::getResolution() const {
   return _resolution;
 }
 
-Mesh* TerrainElevationGrid::createDebugMesh(const Planet* planet,
-                                            float verticalExaggeration,
-                                            const Geodetic3D& offset,
-                                            float pointSize) const {
+Mesh* DEMGrid::createDebugMesh(const Planet* planet,
+                               float verticalExaggeration,
+                               const Geodetic3D& offset,
+                               float pointSize) const {
 
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations();
   const double minElevation     = minMaxAverageElevations._x;
@@ -91,7 +91,7 @@ Mesh* TerrainElevationGrid::createDebugMesh(const Planet* planet,
                                 0,                    // colorsIntensity
                                 false                 // depthTest
                                 );
-  
+
   delete vertices;
   
   return result;

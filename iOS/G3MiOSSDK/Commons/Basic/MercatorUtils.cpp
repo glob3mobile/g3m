@@ -62,7 +62,9 @@ double MercatorUtils::latitudeToMeters(const Angle& latitude) {
 		return my;
 }
 
-Sector MercatorUtils::getSector(int z, int x, int y) {
+Sector MercatorUtils::getSector(int z,
+                                int x,
+                                int y) {
   return Sector( Geodetic2D(yToLatitude(  y, z), xToLongitude(  x, z)),
                  Geodetic2D(yToLatitude(y+1, z), xToLongitude(x+1, z)) );
 }

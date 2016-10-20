@@ -15,10 +15,10 @@
 #include <G3MiOSSDK/BILDownloader.hpp>
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/ShortBufferTerrainElevationGrid.hpp>
+#include <G3MiOSSDK/ShortBufferDEMGrid.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/MapzenTerrainElevationProvider.hpp>
+#include <G3MiOSSDK/MapzenDEMProvider.hpp>
 
 
 void G3M3DLandDemoScene::rawSelectOption(const std::string& option,
@@ -50,7 +50,7 @@ void G3M3DLandDemoScene::rawSelectOption(const std::string& option,
 //  }
 //
 //  void onBIL(const G3MContext* context,
-//             ShortBufferTerrainElevationGrid* result) {
+//             ShortBufferDEMGrid* result) {
 //    Mesh* mesh = result->createDebugMesh(context->getPlanet(),
 //                                         1,                    // verticalExaggeration
 //                                         Geodetic3D::zero(),   // offset
@@ -72,7 +72,7 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
 #warning Diego at work!
   planetRenderer->setVerticalExaggeration(100);
-  planetRenderer->setTerrainElevationProvider(new MapzenTerrainElevationProvider("mapzen-ZB6FqMg",
+  planetRenderer->setDEMProvider(new MapzenDEMProvider("mapzen-ZB6FqMg",
                                                                                  DownloadPriority::HIGHER,
                                                                                  TimeInterval::fromDays(0),
                                                                                  false /* readExpired */,

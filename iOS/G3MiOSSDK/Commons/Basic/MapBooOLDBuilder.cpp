@@ -530,7 +530,7 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               NULL, // elevationDataProvider
                                               true,
-                                              NULL, // terrainElevationProvider
+                                              NULL, // demProvider
                                               verticalExaggeration,
                                               texturizer,
                                               _layerSet,

@@ -1,22 +1,22 @@
 //
-//  FloatBufferTerrainElevationGrid.cpp
+//  FloatBufferDEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/16/16.
 //
 //
 
-#include "FloatBufferTerrainElevationGrid.hpp"
+#include "FloatBufferDEMGrid.hpp"
 
 #include "ErrorHandling.hpp"
 
 #ifdef C_CODE
-FloatBufferTerrainElevationGrid::FloatBufferTerrainElevationGrid(const Sector& sector,
-                                                                 const Vector2I& extent,
-                                                                 float* buffer,
-                                                                 int bufferSize,
-                                                                 double deltaHeight) :
-BufferTerrainElevationGrid(sector, extent, bufferSize, deltaHeight),
+FloatBufferDEMGrid::FloatBufferDEMGrid(const Sector& sector,
+                                       const Vector2I& extent,
+                                       float* buffer,
+                                       int bufferSize,
+                                       double deltaHeight) :
+BufferDEMGrid(sector, extent, bufferSize, deltaHeight),
 _buffer(buffer)
 {
   if (_bufferSize != (_extent._x * _extent._y)) {
@@ -25,11 +25,11 @@ _buffer(buffer)
 }
 #endif
 #ifdef JAVA_CODE
-public FloatBufferTerrainElevationGrid(Sector sector,
-                                       Vector2I extent,
-                                       float[] buffer,
-                                       int bufferSize,
-                                       double deltaHeight) {
+public FloatBufferDEMGrid(Sector sector,
+                          Vector2I extent,
+                          float[] buffer,
+                          int bufferSize,
+                          double deltaHeight) {
   super(sector, extent, bufferSize, deltaHeight);
   _buffer = buffer;
   if (_bufferSize != (_extent._x * _extent._y)) {
@@ -38,18 +38,18 @@ public FloatBufferTerrainElevationGrid(Sector sector,
 }
 #endif
 
-FloatBufferTerrainElevationGrid::~FloatBufferTerrainElevationGrid() {
+FloatBufferDEMGrid::~FloatBufferDEMGrid() {
   delete [] _buffer;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-double FloatBufferTerrainElevationGrid::getValueInBufferAt(int index) const {
+double FloatBufferDEMGrid::getValueInBufferAt(int index) const {
   return _buffer[index];
 }
 
-Vector3D FloatBufferTerrainElevationGrid::getMinMaxAverageElevations() const {
+Vector3D FloatBufferDEMGrid::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
   double minHeight = mu->maxDouble();
   double maxHeight = mu->minDouble();

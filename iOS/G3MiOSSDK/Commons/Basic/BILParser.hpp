@@ -13,7 +13,7 @@ class ShortBufferElevationData;
 class IByteBuffer;
 class Sector;
 class Vector2I;
-class ShortBufferTerrainElevationGrid;
+class ShortBufferDEMGrid;
 
 class BILParser {
 private:
@@ -26,12 +26,12 @@ public:
                                                  const IByteBuffer* buffer,
                                                  const double       deltaHeight = 0);
 
-  static ShortBufferTerrainElevationGrid* parseBIL16(const Sector&      sector,
-                                                     const Vector2I&    extent,
-                                                     const IByteBuffer* buffer,
-                                                     const short        noDataValue,
-                                                     const double       deltaHeight = 0);
-  
+  static ShortBufferDEMGrid* parseBIL16(const Sector&      sector,
+                                        const Vector2I&    extent,
+                                        const IByteBuffer* buffer,
+                                        const short        noDataValue,
+                                        const double       deltaHeight = 0);
+
 };
 
 #endif

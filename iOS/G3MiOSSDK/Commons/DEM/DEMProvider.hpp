@@ -1,13 +1,13 @@
 //
-//  TerrainElevationProvider.hpp
+//  DEMProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/13/16.
 //
 //
 
-#ifndef TerrainElevationProvider_hpp
-#define TerrainElevationProvider_hpp
+#ifndef DEMProvider_hpp
+#define DEMProvider_hpp
 
 #include "RCObject.hpp"
 
@@ -15,12 +15,12 @@ class RenderState;
 class G3MContext;
 class Sector;
 class Vector2I;
-class TerrainElevationListener;
+class DEMListener;
 
 
-class TerrainElevationProvider : public RCObject {
+class DEMProvider : public RCObject {
 protected:
-  virtual ~TerrainElevationProvider() {
+  virtual ~DEMProvider() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
@@ -36,11 +36,11 @@ public:
 
   virtual long long subscribe(const Sector&             sector,
                               const Vector2I&           extent,
-                              TerrainElevationListener* listener) = 0;
+                              DEMListener* listener) = 0;
 
   virtual void unsubscribe(const long long subscriptionID,
                            const bool deleteListener) = 0;
-
+  
 };
 
 #endif

@@ -33,7 +33,7 @@
 #include "TileVisibilityTester.hpp"
 #include "G3MEventContext.hpp"
 #include "PlanetRenderContext.hpp"
-#include "TerrainElevationProvider.hpp"
+#include "DEMProvider.hpp"
 #include "GTask.hpp"
 
 
@@ -114,7 +114,7 @@ public:
 PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                ElevationDataProvider*       elevationDataProvider,
                                bool                         ownsElevationDataProvider,
-                               TerrainElevationProvider*    terrainElevationProvider,
+                               DEMProvider*                 demProvider,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
                                LayerSet*                    layerSet,
@@ -131,7 +131,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
-_terrainElevationProvider(terrainElevationProvider),
+_demProvider(demProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _layerSet(layerSet),
@@ -227,9 +227,9 @@ PlanetRenderer::~PlanetRenderer() {
   if (_ownsElevationDataProvider) {
     delete _elevationDataProvider;
   }
-  if (_terrainElevationProvider != NULL) {
-    _terrainElevationProvider->cancel();
-    _terrainElevationProvider->_release();
+  if (_demProvider != NULL) {
+    _demProvider->cancel();
+    _demProvider->_release();
   }
   delete _texturizer;
   delete _tilesRenderParameters;
@@ -439,8 +439,8 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
-  if (_terrainElevationProvider != NULL) {
-    _terrainElevationProvider->initialize(context);
+  if (_demProvider != NULL) {
+    _demProvider->initialize(context);
   }
 }
 
@@ -469,10 +469,10 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     }
   }
 
-  if (_terrainElevationProvider != NULL) {
-    const RenderState terrainElevationProviderRenderState = _terrainElevationProvider->getRenderState();
-    if (terrainElevationProviderRenderState._type != RENDER_READY) {
-      return terrainElevationProviderRenderState;
+  if (_demProvider != NULL) {
+    const RenderState demProviderRenderState = _demProvider->getRenderState();
+    if (demProviderRenderState._type != RENDER_READY) {
+      return demProviderRenderState;
     }
   }
 
@@ -867,19 +867,19 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
   return false;
 }
 
-void PlanetRenderer::setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider) {
-  if (_terrainElevationProvider != terrainElevationProvider) {
-    if (_terrainElevationProvider != NULL) {
-      _terrainElevationProvider->cancel();
-      _terrainElevationProvider->_release();
+void PlanetRenderer::setDEMProvider(DEMProvider* demProvider) {
+  if (_demProvider != demProvider) {
+    if (_demProvider != NULL) {
+      _demProvider->cancel();
+      _demProvider->_release();
     }
 
-    _terrainElevationProvider = terrainElevationProvider;
+    _demProvider = demProvider;
 
-    if (_terrainElevationProvider != NULL) {
-      //_terrainElevationProvider->setChangedListener(this);
+    if (_demProvider != NULL) {
+      //_demProvider->setChangedListener(this);
       if (_context != NULL) {
-        _terrainElevationProvider->initialize(_context); // initializing TerrainElevationProvider in case it wasn't
+        _demProvider->initialize(_context); // initializing DEMProvider in case it wasn't
       }
     }
 

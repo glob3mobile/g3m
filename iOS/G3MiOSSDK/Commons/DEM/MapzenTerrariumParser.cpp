@@ -10,7 +10,7 @@
 
 #include "MutableColor255.hpp"
 #include "IImage.hpp"
-#include "FloatBufferTerrainElevationGrid.hpp"
+#include "FloatBufferDEMGrid.hpp"
 #include "G3MContext.hpp"
 #include "IThreadUtils.hpp"
 
@@ -53,9 +53,9 @@ void MapzenTerrariumParser::ParserTask::onPostExecute(const G3MContext* context)
 }
 
 
-FloatBufferTerrainElevationGrid* MapzenTerrariumParser::parse(const IImage* image,
-                                                              const Sector& sector,
-                                                              double deltaHeight) {
+FloatBufferDEMGrid* MapzenTerrariumParser::parse(const IImage* image,
+                                                 const Sector& sector,
+                                                 double deltaHeight) {
   MutableColor255 pixel((unsigned char) 0,
                         (unsigned char) 0,
                         (unsigned char) 0,
@@ -79,11 +79,11 @@ FloatBufferTerrainElevationGrid* MapzenTerrariumParser::parse(const IImage* imag
 
   delete image;
 
-  return new FloatBufferTerrainElevationGrid(sector,
-                                             Vector2I(width, height),
-                                             buffer,
-                                             bufferSize,
-                                             deltaHeight);
+  return new FloatBufferDEMGrid(sector,
+                                Vector2I(width, height),
+                                buffer,
+                                bufferSize,
+                                deltaHeight);
 }
 
 void MapzenTerrariumParser::parse(const G3MContext* context,

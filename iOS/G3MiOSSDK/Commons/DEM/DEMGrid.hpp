@@ -1,13 +1,13 @@
 //
-//  TerrainElevationGrid.hpp
+//  DEMGrid.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
 //
 //
 
-#ifndef TerrainElevationGrid_hpp
-#define TerrainElevationGrid_hpp
+#ifndef DEMGrid_hpp
+#define DEMGrid_hpp
 
 #include "RCObject.hpp"
 
@@ -18,7 +18,7 @@ class Mesh;
 class Geodetic3D;
 
 
-class TerrainElevationGrid : public RCObject {
+class DEMGrid : public RCObject {
 protected:
   const Sector     _sector;
 #ifdef C_CODE
@@ -29,10 +29,10 @@ protected:
 #endif
   const Geodetic2D _resolution;
 
-  TerrainElevationGrid(const Sector&   sector,
-                       const Vector2I& extent);
+  DEMGrid(const Sector&   sector,
+          const Vector2I& extent);
 
-  virtual ~TerrainElevationGrid();
+  virtual ~DEMGrid();
 
 public:
 

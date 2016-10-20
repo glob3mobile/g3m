@@ -18,7 +18,7 @@
 class G3MContext;
 class URL;
 class TimeInterval;
-class ShortBufferTerrainElevationGrid;
+class ShortBufferDEMGrid;
 class IByteBuffer;
 
 
@@ -41,7 +41,7 @@ public:
     virtual void onParseError(const G3MContext* context) = 0;
 
     virtual void onBIL(const G3MContext* context,
-                       ShortBufferTerrainElevationGrid* result) = 0;
+                       ShortBufferDEMGrid* result) = 0;
   };
 
   static void request(const G3MContext*       context,
@@ -73,7 +73,7 @@ public:
     const short             _noDataValue;
     const double            _deltaHeight;
 
-    ShortBufferTerrainElevationGrid* _result;
+    ShortBufferDEMGrid* _result;
 
   public:
     ParserAsyncTask(IByteBuffer*            buffer,
@@ -112,11 +112,11 @@ public:
 
   public:
     BufferDownloadListener(const Sector&           sector,
-                                         const Vector2I&         extent,
-                                         const short             noDataValue,
-                                         const double            deltaHeight,
-                                         BILDownloader::Handler* handler,
-                                         const bool              deleteHandler,
+                           const Vector2I&         extent,
+                           const short             noDataValue,
+                           const double            deltaHeight,
+                           BILDownloader::Handler* handler,
+                           const bool              deleteHandler,
                            const G3MContext*       context);
 
 
@@ -135,9 +135,9 @@ public:
                             bool expired);
 
   };
-
-
-
+  
+  
+  
 };
 
 #endif

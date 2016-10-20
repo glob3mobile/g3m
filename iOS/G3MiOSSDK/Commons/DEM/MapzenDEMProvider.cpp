@@ -1,12 +1,12 @@
 //
-//  MapzenTerrainElevationProvider.cpp
+//  MapzenDEMProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/13/16.
 //
 //
 
-#include "MapzenTerrainElevationProvider.hpp"
+#include "MapzenDEMProvider.hpp"
 
 #include "RenderState.hpp"
 #include "G3MContext.hpp"
@@ -16,40 +16,44 @@
 #include "MapzenTerrariumParser.hpp"
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
-#include "FloatBufferTerrainElevationGrid.hpp"
+#include "FloatBufferDEMGrid.hpp"
 //#include "MercatorUtils.hpp"
 //#include "MeshRenderer.hpp"
 //#include "EllipsoidalPlanet.hpp"
 
 
-int MapzenTerrainElevationProvider::_idCounter = 0;
+int MapzenDEMProvider::_idCounter = 0;
 
 
-class MapzenTerrainElevationProvider_ParserListener : public MapzenTerrariumParser::Listener {
+class MapzenDEMProvider_ParserListener : public MapzenTerrariumParser::Listener {
 private:
-  MapzenTerrainElevationProvider* _provider;
+  MapzenDEMProvider* _provider;
   const int _z;
   const int _x;
   const int _y;
 
 public:
 
-  MapzenTerrainElevationProvider_ParserListener(MapzenTerrainElevationProvider* provider,
-                                                int z, int x, int y) :
+  MapzenDEMProvider_ParserListener(MapzenDEMProvider* provider,
+                                   int z,
+                                   int x,
+                                   int y) :
   _provider(provider),
-  _z(z), _x(x), _y(y)
+  _z(z),
+  _x(x),
+  _y(y)
   {
     _provider->_retain();
   }
 
-  virtual ~MapzenTerrainElevationProvider_ParserListener() {
+  virtual ~MapzenDEMProvider_ParserListener() {
     _provider->_release();
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
-  void onGrid(FloatBufferTerrainElevationGrid* grid) {
+  void onGrid(FloatBufferDEMGrid* grid) {
     _provider->onGrid(_z, _x, _y,
                       grid);
   }
@@ -57,9 +61,9 @@ public:
 };
 
 
-class MapzenTerrainElevationProvider_ImageDownloadListener : public IImageDownloadListener {
+class MapzenDEMProvider_ImageDownloadListener : public IImageDownloadListener {
   const G3MContext*               _context;
-  MapzenTerrainElevationProvider* _provider;
+  MapzenDEMProvider* _provider;
   const int _z;
   const int _x;
   const int _y;
@@ -67,11 +71,13 @@ class MapzenTerrainElevationProvider_ImageDownloadListener : public IImageDownlo
   const double _deltaHeight;
 
 public:
-  MapzenTerrainElevationProvider_ImageDownloadListener(const G3MContext* context,
-                                                       MapzenTerrainElevationProvider* provider,
-                                                       int z, int x, int y,
-                                                       const Sector& sector,
-                                                       double deltaHeight) :
+  MapzenDEMProvider_ImageDownloadListener(const G3MContext* context,
+                                          MapzenDEMProvider* provider,
+                                          int z,
+                                          int x,
+                                          int y,
+                                          const Sector& sector,
+                                          double deltaHeight) :
   _context(context),
   _provider(provider),
   _z(z), _x(x), _y(y),
@@ -81,7 +87,7 @@ public:
     _provider->_retain();
   }
 
-  virtual ~MapzenTerrainElevationProvider_ImageDownloadListener() {
+  virtual ~MapzenDEMProvider_ImageDownloadListener() {
     _provider->_release();
 #ifdef JAVA_CODE
     super.dispose();
@@ -95,12 +101,12 @@ public:
                                  image,
                                  _sector,
                                  _deltaHeight,
-                                 new MapzenTerrainElevationProvider_ParserListener(_provider,
-                                                                                   _z, _x, _y),
+                                 new MapzenDEMProvider_ParserListener(_provider,
+                                                                      _z, _x, _y),
                                  true);
 
     // synchronous
-    // FloatBufferTerrainElevationGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
+    // FloatBufferDEMGrid* grid = MapzenTerrariumParser::parse(image, _sector, _deltaHeight);
     // _provider->onGrid(_z, _x, _y,
     //                   grid);
   }
@@ -122,26 +128,26 @@ public:
 };
 
 
-MapzenTerrainElevationProvider::MapzenTerrainElevationProvider(const std::string&  apiKey,
-                                                               long long           downloadPriority,
-                                                               const TimeInterval& timeToCache,
-                                                               bool                readExpired,
-                                                               MeshRenderer*       meshRenderer) :
-MercatorPyramidTerrainElevationProvider(),
+MapzenDEMProvider::MapzenDEMProvider(const std::string&  apiKey,
+                                     long long           downloadPriority,
+                                     const TimeInterval& timeToCache,
+                                     bool                readExpired,
+                                     MeshRenderer*       meshRenderer) :
+MercatorPyramidDEMProvider(),
 _apiKey(apiKey),
 _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
 _meshRenderer(meshRenderer),
 _context(NULL),
-_instanceID("MapzenTerrainElevationProvider_" + IStringUtils::instance()->toString(++_idCounter)),
+_instanceID("MapzenDEMProvider_" + IStringUtils::instance()->toString(++_idCounter)),
 _rootGrid(NULL),
 _errorDownloadingRootGrid(false)
 {
 
 }
 
-MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
+MapzenDEMProvider::~MapzenDEMProvider() {
   if (_rootGrid != NULL) {
     _rootGrid->_release();
   }
@@ -151,16 +157,18 @@ MapzenTerrainElevationProvider::~MapzenTerrainElevationProvider() {
 #endif
 }
 
-RenderState MapzenTerrainElevationProvider::getRenderState() {
+RenderState MapzenDEMProvider::getRenderState() {
   if (_errorDownloadingRootGrid) {
     return RenderState::error("Error downloading Mapzen root grid");
   }
   return (_rootGrid == NULL) ? RenderState::busy() : RenderState::ready();
 }
 
-void MapzenTerrainElevationProvider::requestTile(int z, int x, int y,
-                                                 const Sector& sector,
-                                                 double deltaHeight) {
+void MapzenDEMProvider::requestTile(int z,
+                                    int x,
+                                    int y,
+                                    const Sector& sector,
+                                    double deltaHeight) {
   IDownloader* downloader = _context->getDownloader();
 
   const IStringUtils* su = IStringUtils::instance();
@@ -170,15 +178,15 @@ void MapzenTerrainElevationProvider::requestTile(int z, int x, int y,
                            _downloadPriority,
                            _timeToCache,
                            _readExpired,
-                           new MapzenTerrainElevationProvider_ImageDownloadListener(_context,
-                                                                                    this,
-                                                                                    z, x, y,
-                                                                                    sector,
-                                                                                    deltaHeight),
+                           new MapzenDEMProvider_ImageDownloadListener(_context,
+                                                                       this,
+                                                                       z, x, y,
+                                                                       sector,
+                                                                       deltaHeight),
                            true);
 }
 
-void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
+void MapzenDEMProvider::initialize(const G3MContext* context) {
   _context = context;
 
   // request root grid
@@ -200,12 +208,14 @@ void MapzenTerrainElevationProvider::initialize(const G3MContext* context) {
   //              deltaHeight);
 }
 
-void MapzenTerrainElevationProvider::cancel() {
+void MapzenDEMProvider::cancel() {
   _context->getDownloader()->cancelRequestsTagged(_instanceID);
 }
 
-void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
-                                            FloatBufferTerrainElevationGrid* grid) {
+void MapzenDEMProvider::onGrid(int z,
+                               int x,
+                               int y,
+                               FloatBufferDEMGrid* grid) {
   if ((z == 0) && (x == 0) && (y == 0)) {
     if (_rootGrid != NULL) {
       _rootGrid->_release();
@@ -227,22 +237,24 @@ void MapzenTerrainElevationProvider::onGrid(int z, int x, int y,
   }
 }
 
-void MapzenTerrainElevationProvider::onDownloadError(int z, int x, int y) {
+void MapzenDEMProvider::onDownloadError(int z,
+                                        int x,
+                                        int y) {
   ILogger::instance()->logError("Error downloading Mapzen terrarium at %i/%i/%i", z, x, y);
   if ((z == 0) && (x == 0) && (y == 0)) {
     _errorDownloadingRootGrid = true;
   }
 }
 
-long long MapzenTerrainElevationProvider::subscribe(const Sector&             sector,
-                                                    const Vector2I&           extent,
-                                                    TerrainElevationListener* listener) {
+long long MapzenDEMProvider::subscribe(const Sector&   sector,
+                                       const Vector2I& extent,
+                                       DEMListener*    listener) {
   //  return _pyramid->subscribe(sector, extent, listener);
   THROW_EXCEPTION("Not yet done");
 }
 
-void MapzenTerrainElevationProvider::unsubscribe(const long long subscriptionID,
-                                                 const bool deleteListener) {
+void MapzenDEMProvider::unsubscribe(const long long subscriptionID,
+                                    const bool deleteListener) {
   //  _pyramid->unsubscribe(subscriptionID, deleteListener);
   THROW_EXCEPTION("Not yet done");
 }

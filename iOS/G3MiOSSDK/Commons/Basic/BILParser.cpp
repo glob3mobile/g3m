@@ -13,7 +13,7 @@
 #include "IShortBuffer.hpp"
 #include "ShortBufferElevationData.hpp"
 #include "Vector2I.hpp"
-#include "ShortBufferTerrainElevationGrid.hpp"
+#include "ShortBufferDEMGrid.hpp"
 
 
 
@@ -54,11 +54,11 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
                                       deltaHeight);
 }
 
-ShortBufferTerrainElevationGrid* BILParser::parseBIL16(const Sector&      sector,
-                                                       const Vector2I&    extent,
-                                                       const IByteBuffer* buffer,
-                                                       const short        noDataValue,
-                                                       const double       deltaHeight) {
+ShortBufferDEMGrid* BILParser::parseBIL16(const Sector&      sector,
+                                          const Vector2I&    extent,
+                                          const IByteBuffer* buffer,
+                                          const short        noDataValue,
+                                          const double       deltaHeight) {
   const int size = extent._x * extent._y;
 
   const int expectedSizeInBytes = size * 2;
@@ -84,10 +84,10 @@ ShortBufferTerrainElevationGrid* BILParser::parseBIL16(const Sector&      sector
     shortBuffer[i] = height;
   }
 
-  return new ShortBufferTerrainElevationGrid(sector,
-                                             extent,
-                                             shortBuffer,
-                                             size,
-                                             deltaHeight,
-                                             noDataValue);
+  return new ShortBufferDEMGrid(sector,
+                                extent,
+                                shortBuffer,
+                                size,
+                                deltaHeight,
+                                noDataValue);
 }

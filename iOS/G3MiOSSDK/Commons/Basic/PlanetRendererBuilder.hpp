@@ -22,7 +22,7 @@ class TileVisibilityTester;
 class LayerSet;
 class VisibleSectorListener;
 class ElevationDataProvider;
-class TerrainElevationProvider;
+class DEMProvider;
 class Sector;
 class ChangedRendererInfoListener;
 class IImageBuilder;
@@ -49,7 +49,7 @@ private:
   long long _tileTextureDownloadPriority;
 
   ElevationDataProvider*    _elevationDataProvider;
-  TerrainElevationProvider* _terrainElevationProvider;
+  DEMProvider* _demProvider;
   float _verticalExaggeration;
 
   TileTessellator* getTileTessellator();
@@ -71,7 +71,7 @@ private:
   TileTessellator* createTileTessellator();
 
   ElevationDataProvider*    getElevationDataProvider();
-  TerrainElevationProvider* getTerrainElevationProvider();
+  DEMProvider* getDEMProvider();
 
   float getVerticalExaggeration();
 
@@ -118,7 +118,7 @@ public:
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
 
-  void setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider);
+  void setDEMProvider(DEMProvider* demProvider);
 
   void setVerticalExaggeration(float verticalExaggeration);
 

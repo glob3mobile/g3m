@@ -31,7 +31,7 @@ class Layer;
 class LayerTilesRenderParameters;
 class Layer;
 class TerrainTouchListener;
-class TerrainElevationProvider;
+class DEMProvider;
 
 
 class TilesStatistics {
@@ -190,18 +190,18 @@ public:
 
 class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
-  TileTessellator*          _tessellator;
-  ElevationDataProvider*    _elevationDataProvider;
-  bool                      _ownsElevationDataProvider;
-  TerrainElevationProvider* _terrainElevationProvider;
-  TileTexturizer*           _texturizer;
-  LayerSet*                 _layerSet;
-  TilesRenderParameters*    _tilesRenderParameters;
-  bool                      _showStatistics;
-  const bool                _logTilesPetitions;
-  ITileVisitor*             _tileVisitor = NULL;
-  TileLODTester*            _tileLODTester;
-  TileVisibilityTester*     _tileVisibilityTester;
+  TileTessellator*       _tessellator;
+  ElevationDataProvider* _elevationDataProvider;
+  bool                   _ownsElevationDataProvider;
+  DEMProvider*           _demProvider;
+  TileTexturizer*        _texturizer;
+  LayerSet*              _layerSet;
+  TilesRenderParameters* _tilesRenderParameters;
+  bool                   _showStatistics;
+  const bool             _logTilesPetitions;
+  ITileVisitor*          _tileVisitor = NULL;
+  TileLODTester*         _tileLODTester;
+  TileVisibilityTester*  _tileVisibilityTester;
 
   PlanetRenderContext*  _prc;
 
@@ -235,11 +235,11 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
-  
+
   void visitTilesTouchesWith(const Sector& sector,
                              const int topLevel,
                              const int maxLevel);
-  
+
   void visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
@@ -273,7 +273,7 @@ private:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
-  
+
   TouchEventType _touchEventTypeOfTerrainTouchListener;
 
 
@@ -284,7 +284,7 @@ public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
                  bool                         ownsElevationDataProvider,
-                 TerrainElevationProvider*    terrainElevationProvider,
+                 DEMProvider*                 demProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  LayerSet*                    layerSet,
@@ -438,7 +438,7 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
-  void setTerrainElevationProvider(TerrainElevationProvider* terrainElevationProvider);
+  void setDEMProvider(DEMProvider* demProvider);
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
@@ -447,8 +447,8 @@ public:
     return _elevationDataProvider;
   }
 
-  TerrainElevationProvider* getTerrainElevationProvider() const {
-    return _terrainElevationProvider;
+  DEMProvider* getDEMProvider() const {
+    return _demProvider;
   }
 
   void setRenderTileMeshes(bool renderTileMeshes) {
@@ -458,7 +458,7 @@ public:
   bool getRenderTileMeshes() const {
     return _renderTileMeshes;
   }
-  
+
   void changedInfo(const std::vector<const Info*>& info) {
     if (_changedInfoListener != NULL) {
       _changedInfoListener->changedRendererInfo(_rendererID, info);
@@ -468,12 +468,12 @@ public:
   float getVerticalExaggeration() const {
     return _verticalExaggeration;
   }
-  
+
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererID);
-
+  
   void onTileHasChangedMesh(const Tile* tile) const;
-
+  
 };
 
 #endif

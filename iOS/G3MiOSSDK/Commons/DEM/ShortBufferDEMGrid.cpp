@@ -1,24 +1,24 @@
 //
-//  ShortBufferTerrainElevationGrid.cpp
+//  ShortBufferDEMGrid.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/5/16.
 //
 //
 
-#include "ShortBufferTerrainElevationGrid.hpp"
+#include "ShortBufferDEMGrid.hpp"
 
 #include "ErrorHandling.hpp"
 
 
 #ifdef C_CODE
-ShortBufferTerrainElevationGrid::ShortBufferTerrainElevationGrid(const Sector& sector,
-                                                                 const Vector2I& extent,
-                                                                 short* buffer,
-                                                                 int bufferSize,
-                                                                 double deltaHeight,
-                                                                 short noDataValue) :
-BufferTerrainElevationGrid(sector, extent, bufferSize, deltaHeight),
+ShortBufferDEMGrid::ShortBufferDEMGrid(const Sector& sector,
+                                       const Vector2I& extent,
+                                       short* buffer,
+                                       int bufferSize,
+                                       double deltaHeight,
+                                       short noDataValue) :
+BufferDEMGrid(sector, extent, bufferSize, deltaHeight),
 _buffer(buffer),
 _noDataValue(noDataValue)
 {
@@ -28,12 +28,12 @@ _noDataValue(noDataValue)
 }
 #endif
 #ifdef JAVA_CODE
-public ShortBufferTerrainElevationGrid(Sector sector,
-                                       Vector2I extent,
-                                       short[] buffer,
-                                       int bufferSize,
-                                       double deltaHeight,
-                                       short noDataValue) {
+public ShortBufferDEMGrid(Sector sector,
+                          Vector2I extent,
+                          short[] buffer,
+                          int bufferSize,
+                          double deltaHeight,
+                          short noDataValue) {
   super(sector, extent, bufferSize, deltaHeight);
   _buffer = buffer;
   _noDataValue = noDataValue;
@@ -43,19 +43,19 @@ public ShortBufferTerrainElevationGrid(Sector sector,
 }
 #endif
 
-ShortBufferTerrainElevationGrid::~ShortBufferTerrainElevationGrid() {
+ShortBufferDEMGrid::~ShortBufferDEMGrid() {
   delete [] _buffer;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-double ShortBufferTerrainElevationGrid::getValueInBufferAt(int index) const {
+double ShortBufferDEMGrid::getValueInBufferAt(int index) const {
   const short value = _buffer[index];
   return (value == _noDataValue) ? NAND : value;
 }
 
-Vector3D ShortBufferTerrainElevationGrid::getMinMaxAverageElevations() const {
+Vector3D ShortBufferDEMGrid::getMinMaxAverageElevations() const {
   const IMathUtils* mu = IMathUtils::instance();
   short minHeight = mu->maxInt16();
   short maxHeight = mu->minInt16();
