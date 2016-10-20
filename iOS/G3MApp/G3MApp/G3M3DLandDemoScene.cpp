@@ -75,8 +75,7 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setDEMProvider(new MapzenDEMProvider("mapzen-ZB6FqMg",
                                                                                  DownloadPriority::HIGHER,
                                                                                  TimeInterval::fromDays(0),
-                                                                                 false /* readExpired */,
-                                                                                 getModel()->getMeshRenderer()));
+                                                                                 false /* readExpired */));
 
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg",

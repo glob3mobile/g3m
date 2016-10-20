@@ -17,7 +17,6 @@
 
 class FloatBufferDEMGrid;
 class Sector;
-class MeshRenderer;
 
 
 class MapzenDEMProvider : public MercatorPyramidDEMProvider {
@@ -34,8 +33,6 @@ private:
   private final TimeInterval _timeToCache;
 #endif
   const bool         _readExpired;
-
-  MeshRenderer* _meshRenderer;
 
 
   const std::string _instanceID;
@@ -65,8 +62,7 @@ public:
   MapzenDEMProvider(const std::string&  apiKey,
                     long long           downloadPriority,
                     const TimeInterval& timeToCache,
-                    bool                readExpired,
-                    MeshRenderer*       meshRenderer);
+                    bool                readExpired);
 
   RenderState getRenderState();
 

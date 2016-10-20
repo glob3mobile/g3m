@@ -131,14 +131,12 @@ public:
 MapzenDEMProvider::MapzenDEMProvider(const std::string&  apiKey,
                                      long long           downloadPriority,
                                      const TimeInterval& timeToCache,
-                                     bool                readExpired,
-                                     MeshRenderer*       meshRenderer) :
+                                     bool                readExpired) :
 MercatorPyramidDEMProvider(),
 _apiKey(apiKey),
 _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
-_meshRenderer(meshRenderer),
 _context(NULL),
 _instanceID("MapzenDEMProvider_" + IStringUtils::instance()->toString(++_idCounter)),
 _rootGrid(NULL),
