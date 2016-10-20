@@ -19,12 +19,18 @@ package org.glob3.mobile.generated;
 
 public abstract class MercatorPyramidTerrainElevationProvider extends PyramidTerrainElevationProvider
 {
-  protected final MercatorPyramidTerrainElevationProvider.Node createNode(MercatorPyramidTerrainElevationProvider.Node parent, int childID)
+
+  public MercatorPyramidTerrainElevationProvider()
+  {
+     super(1);
+  }
+
+  public final PyramidTerrainElevationNode createNode(PyramidTerrainElevationNode parent, int childID)
   {
     if (parent == null)
     {
       // creating root node
-      return new Node(null, childID, Sector.FULL_SPHERE, 0, 0, 0); // y -  x -  z -  parent
+      return new PyramidTerrainElevationNode(null, childID, Sector.FULL_SPHERE, 0, 0, 0); // y -  x -  z -  parent
     }
   
     final int nextZ = parent._z + 1;
@@ -40,32 +46,27 @@ public abstract class MercatorPyramidTerrainElevationProvider extends PyramidTer
     {
       final Sector s0 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
   
-      return new Node(parent, childID, s0, nextZ, x2, y2 + 1);
+      return new PyramidTerrainElevationNode(parent, childID, s0, nextZ, x2, y2 + 1);
     }
     else if (childID == 1)
     {
       final Sector s1 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
-      return new Node(parent, childID, s1, nextZ, x2 + 1, y2 + 1);
+      return new PyramidTerrainElevationNode(parent, childID, s1, nextZ, x2 + 1, y2 + 1);
     }
     else if (childID == 2)
     {
       final Sector s2 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
-      return new Node(parent, childID, s2, nextZ, x2, y2);
+      return new PyramidTerrainElevationNode(parent, childID, s2, nextZ, x2, y2);
     }
     else if (childID == 3)
     {
       final Sector s3 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
-      return new Node(parent, childID, s3, nextZ, x2 + 1, y2);
+      return new PyramidTerrainElevationNode(parent, childID, s3, nextZ, x2 + 1, y2);
     }
     else
     {
       throw new RuntimeException("Man, isn't it a QuadTree?");
     }
-  }
-
-  public MercatorPyramidTerrainElevationProvider()
-  {
-     super(1);
   }
 
 }
