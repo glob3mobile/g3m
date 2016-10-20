@@ -10,6 +10,7 @@
 
 #include "ErrorHandling.hpp"
 #include "PyramidNode.hpp"
+#include "DEMSubscription.hpp"
 
 
 PyramidDEMProvider::PyramidDEMProvider(const double deltaHeight,
@@ -61,33 +62,52 @@ void PyramidDEMProvider::insertGrid(int z,
   THROW_EXCEPTION("can't insert grid");
 }
 
-PyramidDEMProvider::Subscription::Subscription(const Sector&   sector,
-                                               const Vector2I& extent,
-                                               DEMListener*    listener,
-                                               const bool      deleteListener) :
-_sector(sector),
-_extent(extent),
-_resolution(sector._deltaLatitude.div(extent._y),
-            sector._deltaLongitude.div(extent._x)),
-_listener(listener),
-_deleteListener(deleteListener)
-{
-}
-
-PyramidDEMProvider::Subscription::~Subscription() {
-  if (_deleteListener) {
-    delete _listener;
-  }
-}
-
 long long PyramidDEMProvider::subscribe(const Sector&   sector,
                                         const Vector2I& extent,
                                         DEMListener*    listener,
                                         const bool      deleteListener) {
-//  Subscription* subscription = new Subscription(sector, extent, listener, deleteListener);
-  THROW_EXCEPTION("Not yet done");
+  DEMSubscription* subscription = new DEMSubscription(sector, extent, listener, deleteListener);
+
+  bool holdSubscription = false;
+  std::vector<PyramidNode*>* rootNodes = getRootNodes();
+  for (size_t i = 0; i < _rootNodesCount; i++) {
+    PyramidNode* rootNode = rootNodes->at(i);
+    if (rootNode->addSubscription(subscription)) {
+      holdSubscription = true;
+    }
+  }
+
+  if (holdSubscription) {
+    return subscription->_id;
+  }
+
+  delete subscription;
+  return -1;
 }
 
 void PyramidDEMProvider::unsubscribe(const long long subscriptionID) {
-  THROW_EXCEPTION("Not yet done");
+  if (subscriptionID < 0) {
+    return;
+  }
+
+  if (_rootNodes != NULL) {
+    DEMSubscription* subscription = NULL;
+
+    for (size_t i = 0; i < _rootNodesCount; i++) {
+      PyramidNode* rootNode = _rootNodes->at(i);
+      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
+      if (removedSubscription != NULL) {
+        if (subscription == NULL) {
+          subscription = removedSubscription;
+        }
+        else {
+          if (subscription != removedSubscription) {
+            THROW_EXCEPTION("Logic error!");
+          }
+        }
+      }
+    }
+
+    delete subscription;
+  }
 }

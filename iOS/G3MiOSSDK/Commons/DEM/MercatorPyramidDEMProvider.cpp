@@ -50,45 +50,28 @@ PyramidNode* MercatorPyramidDEMProvider::createNode(const PyramidNode* parent,
   const Angle splitLatitude  = MercatorUtils::calculateSplitLatitude(lower._latitude, upper._latitude);
 
   if (childID == 0) {
-    const Sector s0(Geodetic2D(lower._latitude, lower._longitude),
-                    Geodetic2D(  splitLatitude, splitLongitude  ));
-
-    return new PyramidNode(parent,
-                           childID,
-                           s0,
-                           nextZ,
-                           x2,
-                           y2 + 1);
+    const Sector sector(Geodetic2D(lower._latitude, lower._longitude),
+                        Geodetic2D(  splitLatitude,   splitLongitude));
+    return new PyramidNode(parent, childID, sector,
+                           nextZ, x2, y2 + 1);
   }
   else if (childID == 1) {
-    const Sector s1(Geodetic2D(lower._latitude, splitLongitude),
-                    Geodetic2D(splitLatitude,   upper._longitude));
-    return new PyramidNode(parent,
-                           childID,
-                           s1,
-                           nextZ,
-                           x2 + 1,
-                           y2 + 1);
+    const Sector sector(Geodetic2D(lower._latitude,   splitLongitude),
+                        Geodetic2D(  splitLatitude, upper._longitude));
+    return new PyramidNode(parent, childID, sector,
+                           nextZ, x2 + 1, y2 + 1);
   }
   else if (childID == 2) {
-    const Sector s2(Geodetic2D(splitLatitude,   lower._longitude),
-                    Geodetic2D(upper._latitude, splitLongitude));
-    return new PyramidNode(parent,
-                           childID,
-                           s2,
-                           nextZ,
-                           x2,
-                           y2);
+    const Sector sector(Geodetic2D(  splitLatitude, lower._longitude),
+                        Geodetic2D(upper._latitude,   splitLongitude));
+    return new PyramidNode(parent, childID, sector,
+                           nextZ, x2, y2);
   }
   else if (childID == 3) {
-    const Sector s3(Geodetic2D(splitLatitude,   splitLongitude),
-                    Geodetic2D(upper._latitude, upper._longitude));
-    return new PyramidNode(parent,
-                           childID,
-                           s3,
-                           nextZ,
-                           x2 + 1,
-                           y2);
+    const Sector sector(Geodetic2D(  splitLatitude,   splitLongitude),
+                        Geodetic2D(upper._latitude, upper._longitude));
+    return new PyramidNode(parent, childID, sector,
+                           nextZ, x2 + 1, y2);
   }
   else {
     THROW_EXCEPTION("Man, isn't it a QuadTree?");

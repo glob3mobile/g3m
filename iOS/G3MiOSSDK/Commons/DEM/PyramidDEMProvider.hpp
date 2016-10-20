@@ -13,9 +13,6 @@
 
 #include <vector>
 
-#include "Sector.hpp"
-#include "Vector2I.hpp"
-
 class DEMGrid;
 class PyramidNode;
 
@@ -27,31 +24,6 @@ private:
   std::vector<PyramidNode*>* _rootNodes;
 
   std::vector<PyramidNode*>* getRootNodes();
-
-
-  class Subscription {
-  private:
-    const Sector     _sector;
-#ifdef C_CODE
-    const Vector2I   _extent;
-#endif
-#ifdef JAVA_CODE
-    private final Vector2I _extent;
-#endif
-    const Geodetic2D _resolution;
-
-    DEMListener* _listener;
-    const bool   _deleteListener;
-
-  public:
-    Subscription(const Sector&   sector,
-                 const Vector2I& extent,
-                 DEMListener*    listener,
-                 const bool      deleteListener);
-
-    ~Subscription();
-
-  };
 
 
 protected:

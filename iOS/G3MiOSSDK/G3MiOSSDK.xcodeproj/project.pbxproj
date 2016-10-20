@@ -495,6 +495,8 @@
 		CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF9643F190885210044F06D /* CompositeTileImageProvider.cpp */; };
 		CFF964421908870F0044F06D /* CompositeTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF96440190885210044F06D /* CompositeTileImageProvider.hpp */; };
 		CFF964431908870F0044F06D /* ChessboardTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF9643C19082C570044F06D /* ChessboardTileImageProvider.hpp */; };
+		CFF99FF81DB929D0008E4F14 /* DEMSubscription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF99FF61DB929D0008E4F14 /* DEMSubscription.cpp */; };
+		CFF99FF91DB92AA9008E4F14 /* DEMSubscription.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF99FF71DB929D0008E4F14 /* DEMSubscription.hpp */; };
 		CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */; };
 		CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
@@ -805,6 +807,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFF99FF91DB92AA9008E4F14 /* DEMSubscription.hpp in CopyFiles */,
 				CF0F414F1DB91634004B1000 /* PyramidNode.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CF9B46001DB7B703009ABF32 /* MercatorPyramidDEMProvider.hpp in CopyFiles */,
@@ -1843,6 +1846,8 @@
 		CFF9643C19082C570044F06D /* ChessboardTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChessboardTileImageProvider.hpp; path = Commons/Basic/ChessboardTileImageProvider.hpp; sourceTree = "<group>"; };
 		CFF9643F190885210044F06D /* CompositeTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeTileImageProvider.cpp; path = Commons/Basic/CompositeTileImageProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFF96440190885210044F06D /* CompositeTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeTileImageProvider.hpp; path = Commons/Basic/CompositeTileImageProvider.hpp; sourceTree = "<group>"; };
+		CFF99FF61DB929D0008E4F14 /* DEMSubscription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DEMSubscription.cpp; path = Commons/DEM/DEMSubscription.cpp; sourceTree = "<group>"; };
+		CFF99FF71DB929D0008E4F14 /* DEMSubscription.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DEMSubscription.hpp; path = Commons/DEM/DEMSubscription.hpp; sourceTree = "<group>"; };
 		CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ITextUtils.cpp; path = Commons/Interfaces/ITextUtils.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITextUtils.hpp; path = Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; };
 		CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = TextUtils_iOS.mm; path = Specific/Derived/TextUtils_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2721,6 +2726,8 @@
 				CF9B45F51DB79EE3009ABF32 /* DEMListener.hpp */,
 				CFC35E641DAFBA6000929BE6 /* DEMProvider.cpp */,
 				CFC35E651DAFBA6000929BE6 /* DEMProvider.hpp */,
+				CFF99FF61DB929D0008E4F14 /* DEMSubscription.cpp */,
+				CFF99FF71DB929D0008E4F14 /* DEMSubscription.hpp */,
 				CF9FDBC71DB3B6F5009D972A /* FloatBufferDEMGrid.cpp */,
 				CF9FDBC81DB3B6F5009D972A /* FloatBufferDEMGrid.hpp */,
 				CFC35E671DAFBBF200929BE6 /* MapzenDEMProvider.cpp */,
@@ -3177,6 +3184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */,
+				CFF99FF81DB929D0008E4F14 /* DEMSubscription.cpp in Sources */,
 				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
