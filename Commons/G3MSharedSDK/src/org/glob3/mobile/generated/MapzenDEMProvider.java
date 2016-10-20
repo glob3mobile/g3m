@@ -87,14 +87,18 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
     // request root grid
     requestTile(0, 0, 0, Sector.FULL_SPHERE); // y -  x -  z
   
-    //  const int z = 9;
-    //  const int x = 271;
-    //  const int y = 180;
-    //
-    //  const Sector sector = MercatorUtils::getSector(z, x, y);
-    //  ILogger::instance()->logInfo( sector.description() );
-    //  requestTile(z, x, y,
-    //              sector);
+  
+  
+  //    const int z = 9;
+  //    const int x = 271;
+  //    const int y = 180;
+    final int z = 1;
+    final int x = 0;
+    final int y = 0;
+  
+    final Sector sector = MercatorUtils.getSector(z, x, y);
+    ILogger.instance().logInfo(sector.description());
+    requestTile(z, x, y, sector);
   }
 
   public final void cancel()
