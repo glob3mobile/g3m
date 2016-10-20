@@ -32,7 +32,12 @@ private:
   class Subscription {
   private:
     const Sector     _sector;
+#ifdef C_CODE
     const Vector2I   _extent;
+#endif
+#ifdef JAVA_CODE
+    private final Vector2I _extent;
+#endif
     const Geodetic2D _resolution;
 
     DEMListener* _listener;
