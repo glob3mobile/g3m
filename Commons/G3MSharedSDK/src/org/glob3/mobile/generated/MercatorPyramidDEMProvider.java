@@ -31,12 +31,12 @@ public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
   }
 
 
-  public final DEMPyramidNode createNode(DEMPyramidNode parent, int childID)
+  public final PyramidNode createNode(PyramidNode parent, int childID)
   {
     if (parent == null)
     {
       // creating root node
-      return new DEMPyramidNode(null, childID, Sector.FULL_SPHERE, 0, 0, 0); // y -  x -  z -  parent
+      return new PyramidNode(null, childID, Sector.FULL_SPHERE, 0, 0, 0); // y -  x -  z -  parent
     }
   
     final int nextZ = parent._z + 1;
@@ -52,22 +52,22 @@ public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
     {
       final Sector s0 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
   
-      return new DEMPyramidNode(parent, childID, s0, nextZ, x2, y2 + 1);
+      return new PyramidNode(parent, childID, s0, nextZ, x2, y2 + 1);
     }
     else if (childID == 1)
     {
       final Sector s1 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
-      return new DEMPyramidNode(parent, childID, s1, nextZ, x2 + 1, y2 + 1);
+      return new PyramidNode(parent, childID, s1, nextZ, x2 + 1, y2 + 1);
     }
     else if (childID == 2)
     {
       final Sector s2 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
-      return new DEMPyramidNode(parent, childID, s2, nextZ, x2, y2);
+      return new PyramidNode(parent, childID, s2, nextZ, x2, y2);
     }
     else if (childID == 3)
     {
       final Sector s3 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
-      return new DEMPyramidNode(parent, childID, s3, nextZ, x2 + 1, y2);
+      return new PyramidNode(parent, childID, s3, nextZ, x2 + 1, y2);
     }
     else
     {
