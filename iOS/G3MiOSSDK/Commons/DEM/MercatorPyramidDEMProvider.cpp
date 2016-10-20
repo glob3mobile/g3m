@@ -12,7 +12,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "MercatorUtils.hpp"
-#include "PyramidDEMNode.hpp"
+#include "DEMPyramidNode.hpp"
 
 
 MercatorPyramidDEMProvider::MercatorPyramidDEMProvider(const double deltaHeight) :
@@ -27,11 +27,11 @@ MercatorPyramidDEMProvider::~MercatorPyramidDEMProvider() {
 }
 
 
-PyramidDEMNode* MercatorPyramidDEMProvider::createNode(const PyramidDEMNode* parent,
+DEMPyramidNode* MercatorPyramidDEMProvider::createNode(const DEMPyramidNode* parent,
                                                        const size_t childID) {
   if (parent == NULL) {
     // creating root node
-    return new PyramidDEMNode(NULL, // parent
+    return new DEMPyramidNode(NULL, // parent
                               childID,
                               Sector::FULL_SPHERE,
                               0,    // z
@@ -53,7 +53,7 @@ PyramidDEMNode* MercatorPyramidDEMProvider::createNode(const PyramidDEMNode* par
     const Sector s0(Geodetic2D(lower._latitude, lower._longitude),
                     Geodetic2D(  splitLatitude, splitLongitude  ));
 
-    return new PyramidDEMNode(parent,
+    return new DEMPyramidNode(parent,
                               childID,
                               s0,
                               nextZ,
@@ -63,7 +63,7 @@ PyramidDEMNode* MercatorPyramidDEMProvider::createNode(const PyramidDEMNode* par
   else if (childID == 1) {
     const Sector s1(Geodetic2D(lower._latitude, splitLongitude),
                     Geodetic2D(splitLatitude,   upper._longitude));
-    return new PyramidDEMNode(parent,
+    return new DEMPyramidNode(parent,
                               childID,
                               s1,
                               nextZ,
@@ -73,7 +73,7 @@ PyramidDEMNode* MercatorPyramidDEMProvider::createNode(const PyramidDEMNode* par
   else if (childID == 2) {
     const Sector s2(Geodetic2D(splitLatitude,   lower._longitude),
                     Geodetic2D(upper._latitude, splitLongitude));
-    return new PyramidDEMNode(parent,
+    return new DEMPyramidNode(parent,
                               childID,
                               s2,
                               nextZ,
@@ -83,7 +83,7 @@ PyramidDEMNode* MercatorPyramidDEMProvider::createNode(const PyramidDEMNode* par
   else if (childID == 3) {
     const Sector s3(Geodetic2D(splitLatitude,   splitLongitude),
                     Geodetic2D(upper._latitude, upper._longitude));
-    return new PyramidDEMNode(parent,
+    return new DEMPyramidNode(parent,
                               childID,
                               s3,
                               nextZ,

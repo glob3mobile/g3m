@@ -1,13 +1,13 @@
 //
-//  PyramidDEMNode.hpp
+//  DEMPyramidNode.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/20/16.
 //
 //
 
-#ifndef PyramidDEMNode_hpp
-#define PyramidDEMNode_hpp
+#ifndef DEMPyramidNode_hpp
+#define DEMPyramidNode_hpp
 
 #include <vector>
 #include "Sector.hpp"
@@ -16,12 +16,12 @@ class PyramidDEMProvider;
 class DEMGrid;
 
 
-class PyramidDEMNode {
+class DEMPyramidNode {
 private:
-  std::vector<PyramidDEMNode*>* getChildren(PyramidDEMProvider* pyramidDEMProvider);
+  std::vector<DEMPyramidNode*>* getChildren(PyramidDEMProvider* pyramidDEMProvider);
 
 public:
-  const PyramidDEMNode* _parent;
+  const DEMPyramidNode* _parent;
   const size_t _childID;
   const Sector _sector;
   const int    _z;
@@ -31,16 +31,16 @@ public:
   DEMGrid* _grid;
   bool _stickyGrid;
 
-  std::vector<PyramidDEMNode*>* _children;
+  std::vector<DEMPyramidNode*>* _children;
 
-  PyramidDEMNode(const PyramidDEMNode* parent,
+  DEMPyramidNode(const DEMPyramidNode* parent,
                  const size_t  childID,
                  const Sector& sector,
                  const int     z,
                  const int     x,
                  const int     y);
 
-  ~PyramidDEMNode();
+  ~DEMPyramidNode();
 
   bool insertGrid(int z,
                   int x,

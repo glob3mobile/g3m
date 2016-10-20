@@ -9,7 +9,7 @@
 #include "PyramidDEMProvider.hpp"
 
 #include "ErrorHandling.hpp"
-#include "PyramidDEMNode.hpp"
+#include "DEMPyramidNode.hpp"
 
 
 PyramidDEMProvider::PyramidDEMProvider(const double deltaHeight,
@@ -20,11 +20,11 @@ _rootNodes(NULL)
 {
 }
 
-std::vector<PyramidDEMNode*>* PyramidDEMProvider::getRootNodes() {
+std::vector<DEMPyramidNode*>* PyramidDEMProvider::getRootNodes() {
   if (_rootNodes == NULL) {
-    _rootNodes = new std::vector<PyramidDEMNode*>();
+    _rootNodes = new std::vector<DEMPyramidNode*>();
     for (size_t i = 0; i < _rootNodesCount; i++) {
-      PyramidDEMNode* rootNode = createNode(NULL, i);
+      DEMPyramidNode* rootNode = createNode(NULL, i);
       _rootNodes->push_back(rootNode);
     }
   }
@@ -34,7 +34,7 @@ std::vector<PyramidDEMNode*>* PyramidDEMProvider::getRootNodes() {
 PyramidDEMProvider::~PyramidDEMProvider() {
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodesCount; i++) {
-      PyramidDEMNode* rootNode = _rootNodes->at(i);
+      DEMPyramidNode* rootNode = _rootNodes->at(i);
       delete rootNode;
     }
     delete _rootNodes;
@@ -49,9 +49,9 @@ void PyramidDEMProvider::insertGrid(int z,
                                     int y,
                                     DEMGrid* grid,
                                     const bool sticky) {
-  std::vector<PyramidDEMNode*>* rootNodes = getRootNodes();
+  std::vector<DEMPyramidNode*>* rootNodes = getRootNodes();
   for (size_t i = 0; i < _rootNodesCount; i++) {
-    PyramidDEMNode* rootNode = rootNodes->at(i);
+    DEMPyramidNode* rootNode = rootNodes->at(i);
     if (rootNode->insertGrid(z, x, y,
                              grid, sticky,
                              this)) {

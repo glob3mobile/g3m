@@ -85,6 +85,7 @@
 		CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0A8181163303E800036277 /* MutableVector2I.cpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
+		CF0F414F1DB91634004B1000 /* DEMPyramidNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8F8C661DB8D9FC00F8396E /* DEMPyramidNode.hpp */; };
 		CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF11E8C4164D653000935052 /* SGLayerNode.cpp */; };
 		CF1575961864B5620059312A /* HUDPosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1575941864B5620059312A /* HUDPosition.cpp */; };
 		CF1575971864B8C70059312A /* HUDPosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1575951864B5620059312A /* HUDPosition.hpp */; };
@@ -312,8 +313,7 @@
 		CF8CED3A1DA6C4420058748E /* ShortBufferDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7338181DA57A7600C406D1 /* ShortBufferDEMGrid.hpp */; };
 		CF8CED3B1DA6C4420058748E /* BILDownloader.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8CED361DA6C26A0058748E /* BILDownloader.hpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
-		CF8F8C671DB8D9FC00F8396E /* PyramidDEMNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8F8C651DB8D9FC00F8396E /* PyramidDEMNode.cpp */; };
-		CF8F8C681DB8DF3C00F8396E /* PyramidDEMNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8F8C661DB8D9FC00F8396E /* PyramidDEMNode.hpp */; };
+		CF8F8C671DB8D9FC00F8396E /* DEMPyramidNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8F8C651DB8D9FC00F8396E /* DEMPyramidNode.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
@@ -805,7 +805,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				CF8F8C681DB8DF3C00F8396E /* PyramidDEMNode.hpp in CopyFiles */,
+				CF0F414F1DB91634004B1000 /* DEMPyramidNode.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CF9B46001DB7B703009ABF32 /* MercatorPyramidDEMProvider.hpp in CopyFiles */,
 				CF9B46011DB7B703009ABF32 /* PyramidDEMProvider.hpp in CopyFiles */,
@@ -1629,8 +1629,8 @@
 		CF8CED361DA6C26A0058748E /* BILDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BILDownloader.hpp; path = Commons/DEM/BILDownloader.hpp; sourceTree = "<group>"; };
 		CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
-		CF8F8C651DB8D9FC00F8396E /* PyramidDEMNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = PyramidDEMNode.cpp; path = Commons/DEM/PyramidDEMNode.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CF8F8C661DB8D9FC00F8396E /* PyramidDEMNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = PyramidDEMNode.hpp; path = Commons/DEM/PyramidDEMNode.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF8F8C651DB8D9FC00F8396E /* DEMPyramidNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = DEMPyramidNode.cpp; path = Commons/DEM/DEMPyramidNode.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF8F8C661DB8D9FC00F8396E /* DEMPyramidNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = DEMPyramidNode.hpp; path = Commons/DEM/DEMPyramidNode.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
 		CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimeInterval.cpp; path = Commons/Basic/TimeInterval.cpp; sourceTree = "<group>"; };
@@ -1737,7 +1737,7 @@
 		CFC35E641DAFBA6000929BE6 /* DEMProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = DEMProvider.cpp; path = Commons/DEM/DEMProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC35E651DAFBA6000929BE6 /* DEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = DEMProvider.hpp; path = Commons/DEM/DEMProvider.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC35E671DAFBBF200929BE6 /* MapzenDEMProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapzenDEMProvider.cpp; path = Commons/DEM/MapzenDEMProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFC35E681DAFBBF200929BE6 /* MapzenDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MapzenDEMProvider.hpp; path = Commons/DEM/MapzenDEMProvider.hpp; sourceTree = "<group>"; };
+		CFC35E681DAFBBF200929BE6 /* MapzenDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MapzenDEMProvider.hpp; path = Commons/DEM/MapzenDEMProvider.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
 		CFC3F8F817510DA700986630 /* MapBooOLDBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapBooOLDBuilder.cpp; path = Commons/Basic/MapBooOLDBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2721,6 +2721,8 @@
 				CF9B45F51DB79EE3009ABF32 /* DEMListener.hpp */,
 				CFC35E641DAFBA6000929BE6 /* DEMProvider.cpp */,
 				CFC35E651DAFBA6000929BE6 /* DEMProvider.hpp */,
+				CF8F8C651DB8D9FC00F8396E /* DEMPyramidNode.cpp */,
+				CF8F8C661DB8D9FC00F8396E /* DEMPyramidNode.hpp */,
 				CF9FDBC71DB3B6F5009D972A /* FloatBufferDEMGrid.cpp */,
 				CF9FDBC81DB3B6F5009D972A /* FloatBufferDEMGrid.hpp */,
 				CFC35E671DAFBBF200929BE6 /* MapzenDEMProvider.cpp */,
@@ -2729,8 +2731,6 @@
 				CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */,
 				CF9B45FA1DB7B613009ABF32 /* MercatorPyramidDEMProvider.cpp */,
 				CF9B45FB1DB7B613009ABF32 /* MercatorPyramidDEMProvider.hpp */,
-				CF8F8C651DB8D9FC00F8396E /* PyramidDEMNode.cpp */,
-				CF8F8C661DB8D9FC00F8396E /* PyramidDEMNode.hpp */,
 				CF9B45FD1DB7B648009ABF32 /* PyramidDEMProvider.cpp */,
 				CF9B45FE1DB7B648009ABF32 /* PyramidDEMProvider.hpp */,
 				CF7338171DA57A7600C406D1 /* ShortBufferDEMGrid.cpp */,
@@ -3506,7 +3506,7 @@
 				4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */,
 				349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */,
 				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
-				CF8F8C671DB8D9FC00F8396E /* PyramidDEMNode.cpp in Sources */,
+				CF8F8C671DB8D9FC00F8396E /* DEMPyramidNode.cpp in Sources */,
 				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
 				CFCBA3BE1906F3C200FD2A2F /* RasterLayer.cpp in Sources */,
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,

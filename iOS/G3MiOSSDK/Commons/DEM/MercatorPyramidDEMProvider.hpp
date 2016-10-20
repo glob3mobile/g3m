@@ -20,7 +20,7 @@ protected:
 
 public:
 
-  PyramidDEMNode* createNode(const PyramidDEMNode* parent,
+  DEMPyramidNode* createNode(const DEMPyramidNode* parent,
                              const size_t childID);
 
 };

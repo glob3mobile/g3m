@@ -1,19 +1,19 @@
 //
-//  PyramidDEMNode.cpp
+//  DEMPyramidNode.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/20/16.
 //
 //
 
-#include "PyramidDEMNode.hpp"
+#include "DEMPyramidNode.hpp"
 
 #include "PyramidDEMProvider.hpp"
 #include "DEMGrid.hpp"
 #include "ErrorHandling.hpp"
 
 
-PyramidDEMNode::PyramidDEMNode(const PyramidDEMNode* parent,
+DEMPyramidNode::DEMPyramidNode(const DEMPyramidNode* parent,
                                const size_t  childID,
                                const Sector& sector,
                                const int     z,
@@ -30,25 +30,25 @@ _children(NULL)
 
 }
 
-PyramidDEMNode::~PyramidDEMNode() {
+DEMPyramidNode::~DEMPyramidNode() {
   if (_grid != NULL) {
     _grid->_release();
   }
 
   if (_children != NULL) {
     for (size_t i = 0; i < _children->size(); i++) {
-      PyramidDEMNode* child = _children->at(i);
+      DEMPyramidNode* child = _children->at(i);
       delete child;
     }
     delete _children;
   }
 }
 
-std::vector<PyramidDEMNode*>* PyramidDEMNode::getChildren(PyramidDEMProvider* pyramidDEMProvider) {
+std::vector<DEMPyramidNode*>* DEMPyramidNode::getChildren(PyramidDEMProvider* pyramidDEMProvider) {
   if (_children == NULL) {
-    _children = new std::vector<PyramidDEMNode*>();
+    _children = new std::vector<DEMPyramidNode*>();
     for (size_t i = 0; i < 4; i++) {
-      PyramidDEMNode* child = pyramidDEMProvider->createNode(this, i);
+      DEMPyramidNode* child = pyramidDEMProvider->createNode(this, i);
       _children->push_back(child);
     }
   }
@@ -56,7 +56,7 @@ std::vector<PyramidDEMNode*>* PyramidDEMNode::getChildren(PyramidDEMProvider* py
 }
 
 
-bool PyramidDEMNode::insertGrid(int z,
+bool DEMPyramidNode::insertGrid(int z,
                                 int x,
                                 int y,
                                 DEMGrid* grid,
@@ -74,9 +74,9 @@ bool PyramidDEMNode::insertGrid(int z,
     return false;
   }
 
-  std::vector<PyramidDEMNode*>* children = getChildren(pyramidDEMProvider);
+  std::vector<DEMPyramidNode*>* children = getChildren(pyramidDEMProvider);
   for (size_t i = 0; i < children->size(); i++) {
-    PyramidDEMNode* child = children->at(i);
+    DEMPyramidNode* child = children->at(i);
     if (child->insertGrid(z, x, y,
                           grid,
                           sticky,
