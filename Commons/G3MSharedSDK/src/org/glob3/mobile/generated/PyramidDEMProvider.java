@@ -43,8 +43,6 @@ public abstract class PyramidDEMProvider extends DEMProvider
   }
 
 
-  protected final Vector2I _tileExtent;
-
 
   protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean stickyGrid)
   {
@@ -84,6 +82,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
   }
 
 
+  protected final Vector2I _tileExtent;
 
   public abstract PyramidNode createNode(PyramidNode parent, int childID);
 
@@ -102,13 +101,15 @@ public abstract class PyramidDEMProvider extends DEMProvider
       }
     }
   
+    subscription._release();
+  
     if (holdSubscription)
     {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO: fire event!
       return subscription._id;
     }
   
-    if (subscription != null)
-       subscription.dispose();
     return -1;
   }
 
@@ -119,33 +120,28 @@ public abstract class PyramidDEMProvider extends DEMProvider
       return;
     }
   
-    if (_rootNodes != null)
-    {
-      DEMSubscription subscription = null;
-  
-      for (int i = 0; i < _rootNodesCount; i++)
-      {
-        PyramidNode rootNode = _rootNodes.get(i);
-        DEMSubscription removedSubscription = rootNode.removeSubscription(subscriptionID);
-        if (removedSubscription != null)
-        {
-          if (subscription == null)
-          {
-            subscription = removedSubscription;
-          }
-          else
-          {
-            if (subscription != removedSubscription)
-            {
-              throw new RuntimeException("Logic error!");
-            }
-          }
-        }
-      }
-  
-      if (subscription != null)
-         subscription.dispose();
-    }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+  //  if (_rootNodes != NULL) {
+  //    DEMSubscription* subscription = NULL;
+  //
+  //    for (size_t i = 0; i < _rootNodesCount; i++) {
+  //      PyramidNode* rootNode = _rootNodes->at(i);
+  //      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
+  //      if (removedSubscription != NULL) {
+  //        if (subscription == NULL) {
+  //          subscription = removedSubscription;
+  //        }
+  //        else {
+  //          if (subscription != removedSubscription) {
+  //            THROW_EXCEPTION("Logic error!");
+  //          }
+  //        }
+  //      }
+  //    }
+  //
+  //    delete subscription;
+  //  }
   }
 
 }

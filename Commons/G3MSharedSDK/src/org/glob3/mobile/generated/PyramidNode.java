@@ -47,6 +47,10 @@ public class PyramidNode
   private final int _childID;
   private PyramidDEMProvider _pyramidDEMProvider;
 
+  private java.util.ArrayList<DEMSubscription> _subscriptions;
+
+  private final Geodetic2D _resolution ;
+
   public final Sector _sector ;
   public final int _z;
   public final int _x;
@@ -57,6 +61,7 @@ public class PyramidNode
      _parent = parent;
      _childID = childID;
      _sector = new Sector(sector);
+     _resolution = new Geodetic2D(sector._deltaLatitude.div(pyramidDEMProvider._tileExtent._y), sector._deltaLongitude.div(pyramidDEMProvider._tileExtent._x));
      _z = z;
      _x = x;
      _y = y;
@@ -64,6 +69,7 @@ public class PyramidNode
      _grid = null;
      _stickyGrid = false;
      _children = null;
+     _subscriptions = null;
   
   }
 
@@ -84,6 +90,17 @@ public class PyramidNode
            child.dispose();
       }
       _children = null;
+    }
+  
+    if (_subscriptions != null)
+    {
+      final int size = _subscriptions.size();
+      for (int i = 0; i < size; i++)
+      {
+        DEMSubscription subscription = _subscriptions.get(i);
+        subscription._release();
+      }
+      _subscriptions = null;
     }
   }
 
@@ -124,8 +141,29 @@ public class PyramidNode
       return false;
     }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error Diego at work!
+    if (!subscription._resolution._latitude.greaterThan(_resolution._latitude) && !subscription._resolution._longitude.greaterThan(_resolution._longitude))
+    {
+      if (_subscriptions == null)
+      {
+        _subscriptions = new java.util.ArrayList<DEMSubscription>();
+      }
+      subscription._retain();
+      _subscriptions.add(subscription);
+      return true;
+    }
+  
+    boolean addedSubscription = false;
+    java.util.ArrayList<PyramidNode> children = getChildren();
+    final int size = children.size();
+    for (int i = 0; i < size; i++)
+    {
+      PyramidNode child = children.get(i);
+      if (child.addSubscription(subscription))
+      {
+        addedSubscription = true;
+      }
+    }
+    return addedSubscription;
   }
 
 }
