@@ -13,10 +13,12 @@
 #include "DEMSubscription.hpp"
 
 
-PyramidDEMProvider::PyramidDEMProvider(const double deltaHeight,
-                                       const size_t rootNodesCount) :
+PyramidDEMProvider::PyramidDEMProvider(const double    deltaHeight,
+                                       const size_t    rootNodesCount,
+                                       const Vector2I& tileExtent) :
 DEMProvider(deltaHeight),
 _rootNodesCount(rootNodesCount),
+_tileExtent(tileExtent),
 _rootNodes(NULL)
 {
 }
@@ -54,8 +56,7 @@ void PyramidDEMProvider::insertGrid(int z,
   for (size_t i = 0; i < _rootNodesCount; i++) {
     PyramidNode* rootNode = rootNodes->at(i);
     if (rootNode->insertGrid(z, x, y,
-                             grid, stickyGrid,
-                             this)) {
+                             grid, stickyGrid)) {
       return;
     }
   }

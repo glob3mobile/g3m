@@ -12,6 +12,7 @@
 #include "DEMProvider.hpp"
 
 #include <vector>
+#include "Vector2I.hpp"
 
 class DEMGrid;
 class PyramidNode;
@@ -27,6 +28,13 @@ private:
 
 
 protected:
+#ifdef C_CODE
+  const Vector2I   _tileExtent;
+#endif
+#ifdef JAVA_CODE
+  protected final Vector2I _tileExtent;
+#endif
+
 
   void insertGrid(int z,
                   int x,
@@ -34,8 +42,9 @@ protected:
                   DEMGrid* grid,
                   const bool stickyGrid);
 
-  PyramidDEMProvider(const double deltaHeight,
-                     const size_t rootNodesCount);
+  PyramidDEMProvider(const double    deltaHeight,
+                     const size_t    rootNodesCount,
+                     const Vector2I& tileExtent);
 
   virtual ~PyramidDEMProvider();
 

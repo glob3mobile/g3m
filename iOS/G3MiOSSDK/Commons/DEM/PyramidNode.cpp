@@ -11,18 +11,21 @@
 #include "PyramidDEMProvider.hpp"
 #include "DEMGrid.hpp"
 #include "ErrorHandling.hpp"
+#include "DEMSubscription.hpp"
 
 
-PyramidNode::PyramidNode(const PyramidNode* parent,
-                         const size_t       childID,
-                         const Sector&      sector,
-                         const int          z,
-                         const int          x,
-                         const int          y) :
+PyramidNode::PyramidNode(const PyramidNode*  parent,
+                         const size_t        childID,
+                         const Sector&       sector,
+                         const int           z,
+                         const int           x,
+                         const int           y,
+                         PyramidDEMProvider* pyramidDEMProvider) :
 _parent(parent),
 _childID(childID),
 _sector(sector),
 _z(z), _x(x), _y(y),
+_pyramidDEMProvider(pyramidDEMProvider),
 _grid(NULL),
 _stickyGrid(false),
 _children(NULL)
@@ -45,11 +48,11 @@ PyramidNode::~PyramidNode() {
   }
 }
 
-std::vector<PyramidNode*>* PyramidNode::getChildren(PyramidDEMProvider* pyramidDEMProvider) {
+std::vector<PyramidNode*>* PyramidNode::getChildren() {
   if (_children == NULL) {
     _children = new std::vector<PyramidNode*>();
     for (size_t i = 0; i < 4; i++) {
-      PyramidNode* child = pyramidDEMProvider->createNode(this, i);
+      PyramidNode* child = _pyramidDEMProvider->createNode(this, i);
       _children->push_back(child);
     }
   }
@@ -60,8 +63,7 @@ bool PyramidNode::insertGrid(int z,
                              int x,
                              int y,
                              DEMGrid* grid,
-                             const bool stickyGrid,
-                             PyramidDEMProvider* pyramidDEMProvider) {
+                             const bool stickyGrid) {
   if (z < _z) {
     THROW_EXCEPTION("Logic error!");
   }
@@ -74,15 +76,22 @@ bool PyramidNode::insertGrid(int z,
     return false;
   }
 
-  std::vector<PyramidNode*>* children = getChildren(pyramidDEMProvider);
+  std::vector<PyramidNode*>* children = getChildren();
   const size_t size = children->size();
   for (size_t i = 0; i < size; i++) {
     PyramidNode* child = children->at(i);
     if (child->insertGrid(z, x, y,
-                          grid, stickyGrid,
-                          pyramidDEMProvider)) {
+                          grid, stickyGrid)) {
       return true;
     }
   }
   return false;
+}
+
+bool PyramidNode::addSubscription(DEMSubscription* subscription) {
+  if (!subscription->_sector.touchesWith(_sector)) {
+    return false;
+  }
+
+#error Diego at work!
 }

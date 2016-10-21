@@ -14,31 +14,35 @@
 
 class PyramidDEMProvider;
 class DEMGrid;
+class DEMSubscription;
 
 
 class PyramidNode {
 private:
-  std::vector<PyramidNode*>* getChildren(PyramidDEMProvider* pyramidDEMProvider);
+  std::vector<PyramidNode*>* getChildren();
 
   DEMGrid* _grid;
   bool _stickyGrid;
 
   std::vector<PyramidNode*>* _children;
 
+  const PyramidNode*  _parent;
+  const size_t        _childID;
+  PyramidDEMProvider* _pyramidDEMProvider;
+
 public:
-  const PyramidNode* _parent;
-  const size_t _childID;
   const Sector _sector;
   const int    _z;
   const int    _x;
   const int    _y;
 
-  PyramidNode(const PyramidNode* parent,
-              const size_t       childID,
-              const Sector&      sector,
-              const int          z,
-              const int          x,
-              const int          y);
+  PyramidNode(const PyramidNode*  parent,
+              const size_t        childID,
+              const Sector&       sector,
+              const int           z,
+              const int           x,
+              const int           y,
+              PyramidDEMProvider* pyramidDEMProvider);
 
   ~PyramidNode();
 
@@ -46,9 +50,10 @@ public:
                   int x,
                   int y,
                   DEMGrid* grid,
-                  const bool stickyGrid,
-                  PyramidDEMProvider* pyramidDEMProvider);
+                  const bool stickyGrid);
 
+  bool addSubscription(DEMSubscription* subscription);
+  
 };
 
 #endif

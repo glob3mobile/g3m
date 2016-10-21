@@ -18,7 +18,6 @@ class DEMSubscription {
 private:
   static long long _instanceCounter;
 
-  const Sector     _sector;
 #ifdef C_CODE
   const Vector2I   _extent;
 #endif
@@ -32,14 +31,15 @@ private:
 
 public:
   const long long _id;
+  const Sector    _sector;
 
   DEMSubscription(const Sector&   sector,
-               const Vector2I& extent,
-               DEMListener*    listener,
-               const bool      deleteListener);
+                  const Vector2I& extent,
+                  DEMListener*    listener,
+                  const bool      deleteListener);
 
   ~DEMSubscription();
-
+  
 };
 
 #endif
