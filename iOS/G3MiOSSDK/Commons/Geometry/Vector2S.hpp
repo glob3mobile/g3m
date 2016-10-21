@@ -23,7 +23,11 @@ public:
   bool isEquals(const Vector2S& that) const {
     return ((_x == that._x) && (_y == that._y));
   }
-  
+
+  double squaredLength() const {
+    return _x * _x + _y * _y ;
+  }
+
   
 };
 

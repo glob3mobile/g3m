@@ -105,8 +105,8 @@ bool PyramidNode::addSubscription(DEMSubscription* subscription) {
     return false;
   }
 
-  if (!subscription->_resolution._latitude.greaterThan(_resolution._latitude) &&
-      !subscription->_resolution._longitude.greaterThan(_resolution._longitude)) {
+  if (!_resolution._latitude.greaterThan( subscription->_resolution._latitude ) &&
+      !_resolution._longitude.greaterThan( subscription->_resolution._longitude ) ) {
     if (_subscriptions == NULL) {
       _subscriptions = new std::vector<DEMSubscription*>();
     }
