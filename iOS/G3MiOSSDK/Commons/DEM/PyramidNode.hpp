@@ -30,6 +30,10 @@ private:
   const size_t        _childID;
   PyramidDEMProvider* _pyramidDEMProvider;
 
+  std::vector<DEMSubscription*>* _subscriptions;
+
+  const Geodetic2D _resolution;
+
 public:
   const Sector _sector;
   const int    _z;

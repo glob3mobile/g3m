@@ -28,13 +28,6 @@ private:
 
 
 protected:
-#ifdef C_CODE
-  const Vector2I   _tileExtent;
-#endif
-#ifdef JAVA_CODE
-  protected final Vector2I _tileExtent;
-#endif
-
 
   void insertGrid(int z,
                   int x,
@@ -50,6 +43,12 @@ protected:
 
 
 public:
+#ifdef C_CODE
+  const Vector2I   _tileExtent;
+#endif
+#ifdef JAVA_CODE
+  protected final Vector2I _tileExtent;
+#endif
 
   virtual PyramidNode* createNode(const PyramidNode*  parent,
                                   const size_t childID) = 0;

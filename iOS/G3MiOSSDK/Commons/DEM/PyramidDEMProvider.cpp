@@ -78,11 +78,13 @@ long long PyramidDEMProvider::subscribe(const Sector&   sector,
     }
   }
 
+  subscription->_release();
+
   if (holdSubscription) {
+#warning TODO: fire event!
     return subscription->_id;
   }
 
-  delete subscription;
   return -1;
 }
 
@@ -91,24 +93,25 @@ void PyramidDEMProvider::unsubscribe(const long long subscriptionID) {
     return;
   }
 
-  if (_rootNodes != NULL) {
-    DEMSubscription* subscription = NULL;
-
-    for (size_t i = 0; i < _rootNodesCount; i++) {
-      PyramidNode* rootNode = _rootNodes->at(i);
-      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
-      if (removedSubscription != NULL) {
-        if (subscription == NULL) {
-          subscription = removedSubscription;
-        }
-        else {
-          if (subscription != removedSubscription) {
-            THROW_EXCEPTION("Logic error!");
-          }
-        }
-      }
-    }
-
-    delete subscription;
-  }
+#warning Diego at work!
+//  if (_rootNodes != NULL) {
+//    DEMSubscription* subscription = NULL;
+//
+//    for (size_t i = 0; i < _rootNodesCount; i++) {
+//      PyramidNode* rootNode = _rootNodes->at(i);
+//      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
+//      if (removedSubscription != NULL) {
+//        if (subscription == NULL) {
+//          subscription = removedSubscription;
+//        }
+//        else {
+//          if (subscription != removedSubscription) {
+//            THROW_EXCEPTION("Logic error!");
+//          }
+//        }
+//      }
+//    }
+//
+//    delete subscription;
+//  }
 }
