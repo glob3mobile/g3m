@@ -23,7 +23,6 @@ public class DEMSubscription
 {
   private static long _instanceCounter = 0;
 
-  private final Sector _sector ;
   private final Vector2I _extent;
   private final Geodetic2D _resolution ;
 
@@ -31,6 +30,7 @@ public class DEMSubscription
   private final boolean _deleteListener;
 
   public final long _id;
+  public final Sector _sector ;
 
   public DEMSubscription(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
   {

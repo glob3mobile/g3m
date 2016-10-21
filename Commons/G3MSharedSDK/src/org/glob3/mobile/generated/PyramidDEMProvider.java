@@ -43,6 +43,8 @@ public abstract class PyramidDEMProvider extends DEMProvider
   }
 
 
+  protected final Vector2I _tileExtent;
+
 
   protected final void insertGrid(int z, int x, int y, DEMGrid grid, boolean stickyGrid)
   {
@@ -50,7 +52,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
     for (int i = 0; i < _rootNodesCount; i++)
     {
       PyramidNode rootNode = rootNodes.get(i);
-      if (rootNode.insertGrid(z, x, y, grid, stickyGrid, this))
+      if (rootNode.insertGrid(z, x, y, grid, stickyGrid))
       {
         return;
       }
@@ -58,10 +60,11 @@ public abstract class PyramidDEMProvider extends DEMProvider
     throw new RuntimeException("can't insert grid");
   }
 
-  protected PyramidDEMProvider(double deltaHeight, int rootNodesCount)
+  protected PyramidDEMProvider(double deltaHeight, int rootNodesCount, Vector2I tileExtent)
   {
      super(deltaHeight);
      _rootNodesCount = rootNodesCount;
+     _tileExtent = tileExtent;
      _rootNodes = null;
   }
 

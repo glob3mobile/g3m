@@ -531,7 +531,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private long _pointsCount;
 
     private int _neededLevel;
-    private int _neededPoints;
+    private long _neededPoints;
     private int _preloadedLevel;
     private int _currentLoadedLevel;
     private int _loadingLevel;

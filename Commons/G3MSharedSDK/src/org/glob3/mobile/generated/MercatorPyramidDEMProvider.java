@@ -20,9 +20,9 @@ package org.glob3.mobile.generated;
 public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
 {
 
-  protected MercatorPyramidDEMProvider(double deltaHeight)
+  protected MercatorPyramidDEMProvider(double deltaHeight, Vector2I tileExtent)
   {
-     super(deltaHeight, 1);
+     super(deltaHeight, 1, tileExtent);
   }
 
   public void dispose()
@@ -36,7 +36,7 @@ public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
     if (parent == null)
     {
       // creating root node
-      return new PyramidNode(null, childID, Sector.FULL_SPHERE, 0, 0, 0); // y -  x -  z -  parent
+      return new PyramidNode(null, childID, Sector.FULL_SPHERE, 0, 0, 0, this); // z, x, y -  parent
     }
   
     final int nextZ = parent._z + 1;
@@ -51,22 +51,22 @@ public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
     if (childID == 0)
     {
       final Sector sector = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
-      return new PyramidNode(parent, childID, sector, nextZ, x2, y2 + 1);
+      return new PyramidNode(parent, childID, sector, nextZ, x2, y2 + 1, this);
     }
     else if (childID == 1)
     {
       final Sector sector = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
-      return new PyramidNode(parent, childID, sector, nextZ, x2 + 1, y2 + 1);
+      return new PyramidNode(parent, childID, sector, nextZ, x2 + 1, y2 + 1, this);
     }
     else if (childID == 2)
     {
       final Sector sector = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
-      return new PyramidNode(parent, childID, sector, nextZ, x2, y2);
+      return new PyramidNode(parent, childID, sector, nextZ, x2, y2, this);
     }
     else if (childID == 3)
     {
       final Sector sector = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
-      return new PyramidNode(parent, childID, sector, nextZ, x2 + 1, y2);
+      return new PyramidNode(parent, childID, sector, nextZ, x2 + 1, y2, this);
     }
     else
     {

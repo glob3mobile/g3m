@@ -19,18 +19,19 @@ package org.glob3.mobile.generated;
 
 //class PyramidDEMProvider;
 //class DEMGrid;
+//class DEMSubscription;
 
 
 public class PyramidNode
 {
-  private java.util.ArrayList<PyramidNode> getChildren(PyramidDEMProvider pyramidDEMProvider)
+  private java.util.ArrayList<PyramidNode> getChildren()
   {
     if (_children == null)
     {
       _children = new java.util.ArrayList<PyramidNode>();
       for (int i = 0; i < 4; i++)
       {
-        PyramidNode child = pyramidDEMProvider.createNode(this, i);
+        PyramidNode child = _pyramidDEMProvider.createNode(this, i);
         _children.add(child);
       }
     }
@@ -42,14 +43,16 @@ public class PyramidNode
 
   private java.util.ArrayList<PyramidNode> _children;
 
-  public final PyramidNode _parent;
-  public final int _childID;
+  private final PyramidNode _parent;
+  private final int _childID;
+  private PyramidDEMProvider _pyramidDEMProvider;
+
   public final Sector _sector ;
   public final int _z;
   public final int _x;
   public final int _y;
 
-  public PyramidNode(PyramidNode parent, int childID, Sector sector, int z, int x, int y)
+  public PyramidNode(PyramidNode parent, int childID, Sector sector, int z, int x, int y, PyramidDEMProvider pyramidDEMProvider)
   {
      _parent = parent;
      _childID = childID;
@@ -57,6 +60,7 @@ public class PyramidNode
      _z = z;
      _x = x;
      _y = y;
+     _pyramidDEMProvider = pyramidDEMProvider;
      _grid = null;
      _stickyGrid = false;
      _children = null;
@@ -83,7 +87,7 @@ public class PyramidNode
     }
   }
 
-  public final boolean insertGrid(int z, int x, int y, DEMGrid grid, boolean stickyGrid, PyramidDEMProvider pyramidDEMProvider)
+  public final boolean insertGrid(int z, int x, int y, DEMGrid grid, boolean stickyGrid)
   {
     if (z < _z)
     {
@@ -100,17 +104,28 @@ public class PyramidNode
       return false;
     }
   
-    java.util.ArrayList<PyramidNode> children = getChildren(pyramidDEMProvider);
+    java.util.ArrayList<PyramidNode> children = getChildren();
     final int size = children.size();
     for (int i = 0; i < size; i++)
     {
       PyramidNode child = children.get(i);
-      if (child.insertGrid(z, x, y, grid, stickyGrid, pyramidDEMProvider))
+      if (child.insertGrid(z, x, y, grid, stickyGrid))
       {
         return true;
       }
     }
     return false;
+  }
+
+  public final boolean addSubscription(DEMSubscription subscription)
+  {
+    if (!subscription._sector.touchesWith(_sector))
+    {
+      return false;
+    }
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#error Diego at work!
   }
 
 }
