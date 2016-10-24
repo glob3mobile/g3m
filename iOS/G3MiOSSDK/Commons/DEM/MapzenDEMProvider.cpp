@@ -134,7 +134,7 @@ MapzenDEMProvider::MapzenDEMProvider(const std::string&  apiKey,
                                      bool                readExpired,
                                      const double        deltaHeight) :
 MercatorPyramidDEMProvider(deltaHeight,
-                           Vector2S(256, 256)),
+                           Vector2S((short)256, (short)256)),
 _apiKey(apiKey),
 _downloadPriority(downloadPriority),
 _timeToCache(timeToCache),

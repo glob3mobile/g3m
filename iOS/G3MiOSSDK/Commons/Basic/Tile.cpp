@@ -166,7 +166,7 @@ void Tile::setTextureSolved(bool textureSolved) {
 
 
 void Tile::TerrainListener::onGrid(const DEMGrid* grid) {
-  THROW_EXCEPTION("Not yet done!")
+  THROW_EXCEPTION("Not yet done!");
 }
 
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,

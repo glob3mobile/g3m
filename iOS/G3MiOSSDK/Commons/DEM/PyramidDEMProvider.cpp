@@ -93,10 +93,10 @@ DEMSubscription* PyramidDEMProvider::subscribe(const Sector&   sector,
 }
 
 void PyramidDEMProvider::unsubscribe(DEMSubscription* subscription) {
-  THROW_EXCEPTION("Not yet done!");
   if (subscription == NULL) {
     return;
   }
+  THROW_EXCEPTION("Not yet done!");
 
 #warning Diego at work!
   //  if (_rootNodes != NULL) {

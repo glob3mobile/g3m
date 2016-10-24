@@ -104,6 +104,9 @@ private:
     {
     }
 
+    ~TerrainListener() {
+    }
+
     void onGrid(const DEMGrid* grid);
 
   };
