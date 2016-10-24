@@ -115,11 +115,11 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
   public final void unsubscribe(DEMSubscription subscription)
   {
-    throw new RuntimeException("Not yet done!");
     if (subscription == null)
     {
       return;
     }
+    throw new RuntimeException("Not yet done!");
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!

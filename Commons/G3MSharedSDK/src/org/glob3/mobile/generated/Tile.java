@@ -200,9 +200,13 @@ public class Tile
        _tile = tile;
     }
 
+    public void dispose()
+    {
+    }
+
     public final void onGrid(DEMGrid grid)
     {
-      throw new RuntimeException("Not yet done!")
+      throw new RuntimeException("Not yet done!");
     }
 
   }
@@ -824,9 +828,12 @@ public class Tile
     DEMProvider demProvider = prc._demProvider;
     if (demProvider != null)
     {
-      final Vector2S tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
+      if (_demSubscription == null)
+      {
+        final Vector2S tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
   
-      _demSubscription = demProvider.subscribe(_sector, tileMeshResolution, new TerrainListener(this), true);
+        _demSubscription = demProvider.subscribe(_sector, tileMeshResolution, new TerrainListener(this), true);
+      }
     }
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)

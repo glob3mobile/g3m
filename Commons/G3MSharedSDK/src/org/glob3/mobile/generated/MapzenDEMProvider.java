@@ -59,7 +59,7 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
 
   public MapzenDEMProvider(String apiKey, long downloadPriority, TimeInterval timeToCache, boolean readExpired, double deltaHeight)
   {
-     super(deltaHeight, new Vector2S(256, 256));
+     super(deltaHeight, new Vector2S((short)256, (short)256));
      _apiKey = apiKey;
      _downloadPriority = downloadPriority;
      _timeToCache = timeToCache;
