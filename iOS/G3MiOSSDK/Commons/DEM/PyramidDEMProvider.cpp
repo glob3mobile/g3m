@@ -15,7 +15,7 @@
 
 PyramidDEMProvider::PyramidDEMProvider(const double    deltaHeight,
                                        const size_t    rootNodesCount,
-                                       const Vector2I& tileExtent) :
+                                       const Vector2S& tileExtent) :
 DEMProvider(deltaHeight),
 _rootNodesCount(rootNodesCount),
 _tileExtent(tileExtent),
@@ -63,11 +63,12 @@ void PyramidDEMProvider::insertGrid(int z,
   THROW_EXCEPTION("can't insert grid");
 }
 
-long long PyramidDEMProvider::subscribe(const Sector&   sector,
-                                        const Vector2I& extent,
-                                        DEMListener*    listener,
-                                        const bool      deleteListener) {
-  DEMSubscription* subscription = new DEMSubscription(sector,
+DEMSubscription* PyramidDEMProvider::subscribe(const Sector&   sector,
+                                               const Vector2S& extent,
+                                               DEMListener*    listener,
+                                               const bool      deleteListener) {
+  DEMSubscription* subscription = new DEMSubscription(this,
+                                                      sector,
                                                       extent,
                                                       listener,
                                                       deleteListener);
@@ -81,41 +82,41 @@ long long PyramidDEMProvider::subscribe(const Sector&   sector,
     }
   }
 
-  const long long subscriptionID = subscription->_id;
   subscription->_release();
 
   if (holdSubscription) {
 #warning TODO: fire event!
-    return subscriptionID;
+    return subscription;
   }
 
-  return -1;
+  return NULL;
 }
 
-void PyramidDEMProvider::unsubscribe(const long long subscriptionID) {
-  if (subscriptionID < 0) {
+void PyramidDEMProvider::unsubscribe(DEMSubscription* subscription) {
+  THROW_EXCEPTION("Not yet done!");
+  if (subscription == NULL) {
     return;
   }
 
 #warning Diego at work!
-//  if (_rootNodes != NULL) {
-//    DEMSubscription* subscription = NULL;
-//
-//    for (size_t i = 0; i < _rootNodesCount; i++) {
-//      PyramidNode* rootNode = _rootNodes->at(i);
-//      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
-//      if (removedSubscription != NULL) {
-//        if (subscription == NULL) {
-//          subscription = removedSubscription;
-//        }
-//        else {
-//          if (subscription != removedSubscription) {
-//            THROW_EXCEPTION("Logic error!");
-//          }
-//        }
-//      }
-//    }
-//
-//    delete subscription;
-//  }
+  //  if (_rootNodes != NULL) {
+  //    DEMSubscription* subscription = NULL;
+  //
+  //    for (size_t i = 0; i < _rootNodesCount; i++) {
+  //      PyramidNode* rootNode = _rootNodes->at(i);
+  //      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
+  //      if (removedSubscription != NULL) {
+  //        if (subscription == NULL) {
+  //          subscription = removedSubscription;
+  //        }
+  //        else {
+  //          if (subscription != removedSubscription) {
+  //            THROW_EXCEPTION("Logic error!");
+  //          }
+  //        }
+  //      }
+  //    }
+  //
+  //    delete subscription;
+  //  }
 }

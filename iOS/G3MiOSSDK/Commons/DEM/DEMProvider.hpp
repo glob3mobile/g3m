@@ -14,8 +14,9 @@
 class RenderState;
 class G3MContext;
 class Sector;
-class Vector2I;
+class Vector2S;
 class DEMListener;
+class DEMSubscription;
 
 
 class DEMProvider : public RCObject {
@@ -34,12 +35,12 @@ public:
 
   virtual void cancel() = 0;
 
-  virtual long long subscribe(const Sector&   sector,
-                              const Vector2I& extent,
-                              DEMListener*    listener,
-                              const bool      deleteListener) = 0;
+  virtual DEMSubscription* subscribe(const Sector&   sector,
+                                     const Vector2S& extent,
+                                     DEMListener*    listener,
+                                     const bool      deleteListener) = 0;
 
-  virtual void unsubscribe(const long long subscriptionID) = 0;
+  virtual void unsubscribe(DEMSubscription* subscription) = 0;
   
 };
 

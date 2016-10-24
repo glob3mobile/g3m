@@ -16,7 +16,7 @@
 
 
 MercatorPyramidDEMProvider::MercatorPyramidDEMProvider(const double deltaHeight,
-                                                       const Vector2I& tileExtent) :
+                                                       const Vector2S& tileExtent) :
 PyramidDEMProvider(deltaHeight, 1, tileExtent)
 {
 }

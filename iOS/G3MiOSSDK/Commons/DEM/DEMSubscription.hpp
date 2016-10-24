@@ -12,19 +12,20 @@
 #include "RCObject.hpp"
 
 #include "Sector.hpp"
-#include "Vector2I.hpp"
+#include "Vector2S.hpp"
+class DEMProvider;
 class DEMListener;
 
 
 class DEMSubscription : public RCObject {
 private:
-  static long long _instanceCounter;
+  DEMProvider* _demProvider;
 
 #ifdef C_CODE
-  const Vector2I   _extent;
+  const Vector2S   _extent;
 #endif
 #ifdef JAVA_CODE
-  private final Vector2I _extent;
+  private final Vector2S _extent;
 #endif
 
   DEMListener* _listener;
@@ -34,14 +35,16 @@ protected:
   ~DEMSubscription();
 
 public:
-  const long long  _id;
   const Sector     _sector;
   const Geodetic2D _resolution;
 
-  DEMSubscription(const Sector&   sector,
-                  const Vector2I& extent,
+  DEMSubscription(DEMProvider*    demProvider,
+                  const Sector&   sector,
+                  const Vector2S& extent,
                   DEMListener*    listener,
                   const bool      deleteListener);
+
+  void cancel();
 
 };
 

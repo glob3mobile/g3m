@@ -12,7 +12,7 @@
 #include "DEMProvider.hpp"
 
 #include <vector>
-#include "Vector2I.hpp"
+#include "Vector2S.hpp"
 
 class DEMGrid;
 class PyramidNode;
@@ -37,28 +37,28 @@ protected:
 
   PyramidDEMProvider(const double    deltaHeight,
                      const size_t    rootNodesCount,
-                     const Vector2I& tileExtent);
+                     const Vector2S& tileExtent);
 
   virtual ~PyramidDEMProvider();
 
 
 public:
 #ifdef C_CODE
-  const Vector2I   _tileExtent;
+  const Vector2S   _tileExtent;
 #endif
 #ifdef JAVA_CODE
-  protected final Vector2I _tileExtent;
+  protected final Vector2S _tileExtent;
 #endif
 
   virtual PyramidNode* createNode(const PyramidNode*  parent,
                                   const size_t childID) = 0;
 
-  long long subscribe(const Sector&   sector,
-                      const Vector2I& extent,
-                      DEMListener*    listener,
-                      const bool      deleteListener);
+  DEMSubscription* subscribe(const Sector&   sector,
+                             const Vector2S& extent,
+                             DEMListener*    listener,
+                             const bool      deleteListener);
 
-  void unsubscribe(const long long subscriptionID);
+  void unsubscribe(DEMSubscription* subscription);
   
 };
 

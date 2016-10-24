@@ -24,6 +24,7 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "DecimatedSubviewElevationData.hpp"
 #include "DEMProvider.hpp"
+#include "DEMSubscription.hpp"
 
 
 std::string Tile::createTileID(int level,
@@ -72,7 +73,7 @@ _texturizerData(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
-_demSubscriptionID(-1),
+_demSubscription(NULL),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
@@ -100,6 +101,12 @@ Tile::~Tile() {
   if (_elevationDataRequest != NULL) {
     _elevationDataRequest->cancelRequest(); //The listener will auto delete
     delete _elevationDataRequest;
+  }
+
+  if (_demSubscription != NULL) {
+    _demSubscription->cancel();
+    _demSubscription->_release();
+    _demSubscription = NULL;
   }
 
   delete _tessellatorData;
@@ -157,6 +164,11 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
+
+void Tile::TerrainListener::onGrid(const DEMGrid* grid) {
+  THROW_EXCEPTION("Not yet done!")
+}
+
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const PlanetRenderContext* prc) {
 
@@ -169,14 +181,14 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
   }
 
   DEMProvider* demProvider = prc->_demProvider;
-//  if (demProvider != NULL) {
-//    const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
-//
-//    _demSubscriptionID = demProvider->subscribe(_sector,
-//                                                tileMeshResolution.asVector2I(),
-//                                                new TerrainListener(),
-//                                                true);
-//  }
+  if (demProvider != NULL) {
+    const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+
+    _demSubscription = demProvider->subscribe(_sector,
+                                              tileMeshResolution,
+                                              new TerrainListener(this),
+                                              true);
+  }
 
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;
@@ -311,6 +323,12 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
     if (_elevationDataRequest != NULL) {
       _elevationDataRequest->cancelRequest();
     }
+  }
+
+  if (_demSubscription != NULL) {
+    _demSubscription->cancel();
+    _demSubscription->_release();
+    _demSubscription = NULL;
   }
 }
 

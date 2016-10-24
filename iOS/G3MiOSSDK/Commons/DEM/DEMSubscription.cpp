@@ -10,14 +10,15 @@
 
 #include "DEMListener.hpp"
 
+#include "DEMProvider.hpp"
 
-long long DEMSubscription::_instanceCounter = 0;
 
-DEMSubscription::DEMSubscription(const Sector&   sector,
-                                 const Vector2I& extent,
+DEMSubscription::DEMSubscription(DEMProvider*    demProvider,
+                                 const Sector&   sector,
+                                 const Vector2S& extent,
                                  DEMListener*    listener,
                                  const bool      deleteListener) :
-_id(++_instanceCounter),
+_demProvider(demProvider),
 _sector(sector),
 _extent(extent),
 _resolution(sector._deltaLatitude.div(extent._y),
@@ -25,13 +26,27 @@ _resolution(sector._deltaLatitude.div(extent._y),
 _listener(listener),
 _deleteListener(deleteListener)
 {
+  _demProvider->_retain();
 }
 
 DEMSubscription::~DEMSubscription() {
   if (_deleteListener) {
     delete _listener;
   }
+
+  if (_demProvider != NULL) {
+    _demProvider->_release();
+  }
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
+
+void DEMSubscription::cancel() {
+  if (_demProvider != NULL) {
+    _demProvider->unsubscribe(this);
+    _demProvider->_release();
+    _demProvider = NULL;
+  }
 }

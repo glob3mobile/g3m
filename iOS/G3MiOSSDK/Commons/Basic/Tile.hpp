@@ -23,6 +23,7 @@ class PlanetRenderer;
 class TileData;
 class TilesStatistics;
 class Geodetic3D;
+class DEMSubscription;
 
 
 class Tile {
@@ -35,7 +36,7 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
-  long long _demSubscriptionID;
+  DEMSubscription* _demSubscription;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
@@ -95,6 +96,15 @@ private:
 
 
   class TerrainListener : public DEMListener {
+  private:
+    Tile* _tile;
+  public:
+    TerrainListener(Tile* tile) :
+    _tile(tile)
+    {
+    }
+
+    void onGrid(const DEMGrid* grid);
 
   };
 
