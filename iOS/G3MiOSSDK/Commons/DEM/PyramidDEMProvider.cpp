@@ -67,7 +67,10 @@ long long PyramidDEMProvider::subscribe(const Sector&   sector,
                                         const Vector2I& extent,
                                         DEMListener*    listener,
                                         const bool      deleteListener) {
-  DEMSubscription* subscription = new DEMSubscription(sector, extent, listener, deleteListener);
+  DEMSubscription* subscription = new DEMSubscription(sector,
+                                                      extent,
+                                                      listener,
+                                                      deleteListener);
 
   bool holdSubscription = false;
   std::vector<PyramidNode*>* rootNodes = getRootNodes();
@@ -78,11 +81,12 @@ long long PyramidDEMProvider::subscribe(const Sector&   sector,
     }
   }
 
+  const long long subscriptionID = subscription->_id;
   subscription->_release();
 
   if (holdSubscription) {
 #warning TODO: fire event!
-    return subscription->_id;
+    return subscriptionID;
   }
 
   return -1;
