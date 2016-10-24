@@ -101,13 +101,14 @@ public abstract class PyramidDEMProvider extends DEMProvider
       }
     }
   
+    final long subscriptionID = subscription._id;
     subscription._release();
   
     if (holdSubscription)
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: fire event!
-      return subscription._id;
+      return subscriptionID;
     }
   
     return -1;

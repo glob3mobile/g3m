@@ -39,5 +39,10 @@ public class Vector2S
     return ((_x == that._x) && (_y == that._y));
   }
 
+  public final double squaredLength()
+  {
+    return _x * _x + _y * _y;
+  }
+
 
 }
