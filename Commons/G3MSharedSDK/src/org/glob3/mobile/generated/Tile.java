@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class TileData;
 //class TilesStatistics;
 //class Geodetic3D;
+//class DEMSubscription;
 
 
 public class Tile
@@ -37,7 +38,7 @@ public class Tile
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
   private TileElevationDataRequest _elevationDataRequest;
-  private long _demSubscriptionID;
+  private DEMSubscription _demSubscription;
 
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
@@ -191,8 +192,18 @@ public class Tile
 
 
 
-  private abstract static class TerrainListener implements DEMListener
+  private static class TerrainListener implements DEMListener
   {
+    private Tile _tile;
+    public TerrainListener(Tile tile)
+    {
+       _tile = tile;
+    }
+
+    public final void onGrid(DEMGrid grid)
+    {
+      throw new RuntimeException("Not yet done!")
+    }
 
   }
 
@@ -225,7 +236,7 @@ public class Tile
      _elevationData = null;
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
-     _demSubscriptionID = -1;
+     _demSubscription = null;
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
@@ -260,6 +271,13 @@ public class Tile
       _elevationDataRequest.cancelRequest(); //The listener will auto delete
       if (_elevationDataRequest != null)
          _elevationDataRequest.dispose();
+    }
+  
+    if (_demSubscription != null)
+    {
+      _demSubscription.cancel();
+      _demSubscription._release();
+      _demSubscription = null;
     }
   
     if (_tessellatorData != null)
@@ -514,6 +532,13 @@ public class Tile
       {
         _elevationDataRequest.cancelRequest();
       }
+    }
+  
+    if (_demSubscription != null)
+    {
+      _demSubscription.cancel();
+      _demSubscription._release();
+      _demSubscription = null;
     }
   }
 
@@ -797,14 +822,12 @@ public class Tile
     }
   
     DEMProvider demProvider = prc._demProvider;
-  //  if (demProvider != NULL) {
-  //    const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
-  //
-  //    _demSubscriptionID = demProvider->subscribe(_sector,
-  //                                                tileMeshResolution.asVector2I(),
-  //                                                new TerrainListener(),
-  //                                                true);
-  //  }
+    if (demProvider != null)
+    {
+      final Vector2S tileMeshResolution = prc._layerTilesRenderParameters._tileMeshResolution;
+  
+      _demSubscription = demProvider.subscribe(_sector, tileMeshResolution, new TerrainListener(this), true);
+    }
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {

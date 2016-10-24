@@ -20,8 +20,9 @@ package org.glob3.mobile.generated;
 //class RenderState;
 //class G3MContext;
 //class Sector;
-//class Vector2I;
+//class Vector2S;
 //class DEMListener;
+//class DEMSubscription;
 
 
 public abstract class DEMProvider extends RCObject
@@ -45,8 +46,8 @@ public abstract class DEMProvider extends RCObject
 
   public abstract void cancel();
 
-  public abstract long subscribe(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener);
+  public abstract DEMSubscription subscribe(Sector sector, Vector2S extent, DEMListener listener, boolean deleteListener);
 
-  public abstract void unsubscribe(long subscriptionID);
+  public abstract void unsubscribe(DEMSubscription subscription);
 
 }

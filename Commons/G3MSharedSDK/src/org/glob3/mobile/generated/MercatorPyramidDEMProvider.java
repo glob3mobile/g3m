@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
 {
 
-  protected MercatorPyramidDEMProvider(double deltaHeight, Vector2I tileExtent)
+  protected MercatorPyramidDEMProvider(double deltaHeight, Vector2S tileExtent)
   {
      super(deltaHeight, 1, tileExtent);
   }

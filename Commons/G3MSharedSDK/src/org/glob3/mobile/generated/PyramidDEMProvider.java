@@ -58,7 +58,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
     throw new RuntimeException("can't insert grid");
   }
 
-  protected PyramidDEMProvider(double deltaHeight, int rootNodesCount, Vector2I tileExtent)
+  protected PyramidDEMProvider(double deltaHeight, int rootNodesCount, Vector2S tileExtent)
   {
      super(deltaHeight);
      _rootNodesCount = rootNodesCount;
@@ -82,13 +82,13 @@ public abstract class PyramidDEMProvider extends DEMProvider
   }
 
 
-  protected final Vector2I _tileExtent;
+  protected final Vector2S _tileExtent;
 
   public abstract PyramidNode createNode(PyramidNode parent, int childID);
 
-  public final long subscribe(Sector sector, Vector2I extent, DEMListener listener, boolean deleteListener)
+  public final DEMSubscription subscribe(Sector sector, Vector2S extent, DEMListener listener, boolean deleteListener)
   {
-    DEMSubscription subscription = new DEMSubscription(sector, extent, listener, deleteListener);
+    DEMSubscription subscription = new DEMSubscription(this, sector, extent, listener, deleteListener);
   
     boolean holdSubscription = false;
     java.util.ArrayList<PyramidNode> rootNodes = getRootNodes();
@@ -101,48 +101,48 @@ public abstract class PyramidDEMProvider extends DEMProvider
       }
     }
   
-    final long subscriptionID = subscription._id;
     subscription._release();
   
     if (holdSubscription)
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: fire event!
-      return subscriptionID;
+      return subscription;
     }
   
-    return -1;
+    return null;
   }
 
-  public final void unsubscribe(long subscriptionID)
+  public final void unsubscribe(DEMSubscription subscription)
   {
-    if (subscriptionID < 0)
+    throw new RuntimeException("Not yet done!");
+    if (subscription == null)
     {
       return;
     }
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-  //  if (_rootNodes != NULL) {
-  //    DEMSubscription* subscription = NULL;
-  //
-  //    for (size_t i = 0; i < _rootNodesCount; i++) {
-  //      PyramidNode* rootNode = _rootNodes->at(i);
-  //      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
-  //      if (removedSubscription != NULL) {
-  //        if (subscription == NULL) {
-  //          subscription = removedSubscription;
-  //        }
-  //        else {
-  //          if (subscription != removedSubscription) {
-  //            THROW_EXCEPTION("Logic error!");
-  //          }
-  //        }
-  //      }
-  //    }
-  //
-  //    delete subscription;
-  //  }
+    //  if (_rootNodes != NULL) {
+    //    DEMSubscription* subscription = NULL;
+    //
+    //    for (size_t i = 0; i < _rootNodesCount; i++) {
+    //      PyramidNode* rootNode = _rootNodes->at(i);
+    //      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
+    //      if (removedSubscription != NULL) {
+    //        if (subscription == NULL) {
+    //          subscription = removedSubscription;
+    //        }
+    //        else {
+    //          if (subscription != removedSubscription) {
+    //            THROW_EXCEPTION("Logic error!");
+    //          }
+    //        }
+    //      }
+    //    }
+    //
+    //    delete subscription;
+    //  }
   }
 
 }
