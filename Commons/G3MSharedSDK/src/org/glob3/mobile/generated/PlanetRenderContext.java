@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class TilesRenderParameters;
 //class ITimer;
 //class ElevationDataProvider;
+//class DEMProvider;
 //class TileTessellator;
 //class LayerSet;
 
@@ -35,6 +36,7 @@ public class PlanetRenderContext
   public TileTexturizer _texturizer;
   public ITimer _lastSplitTimer;
   public ElevationDataProvider _elevationDataProvider;
+  public DEMProvider _demProvider;
   public TileTessellator _tessellator;
   public LayerSet _layerSet;
   public long _tileTextureDownloadPriority;

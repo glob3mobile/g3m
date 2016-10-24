@@ -504,6 +504,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _prc._tilesRenderParameters = _tilesRenderParameters;
     _prc._lastSplitTimer = _lastSplitTimer;
     _prc._elevationDataProvider = _elevationDataProvider;
+    _prc._demProvider = _demProvider;
     _prc._tessellator = _tessellator;
     _prc._layerSet = _layerSet;
     _prc._tileTextureDownloadPriority = _tileTextureDownloadPriority;
@@ -712,6 +713,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _prc._tilesRenderParameters = _tilesRenderParameters;
       _prc._lastSplitTimer = _lastSplitTimer;
       _prc._elevationDataProvider = _elevationDataProvider;
+      _prc._demProvider = _demProvider;
       _prc._tessellator = _tessellator;
       _prc._layerSet = _layerSet;
       _prc._tileTextureDownloadPriority = _tileTextureDownloadPriority;

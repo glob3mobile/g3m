@@ -37,6 +37,7 @@ public class Tile
   private Mesh _debugMesh;
   private Mesh _texturizedMesh;
   private TileElevationDataRequest _elevationDataRequest;
+  private long _demSubscriptionID;
 
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
@@ -188,6 +189,14 @@ public class Tile
   private TileData[] _data;
   private int _dataSize;
 
+
+
+  private abstract static class TerrainListener implements DEMListener
+  {
+
+  }
+
+
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -216,6 +225,7 @@ public class Tile
      _elevationData = null;
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
+     _demSubscriptionID = -1;
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
@@ -785,6 +795,16 @@ public class Tile
     {
       initializeElevationData(rc, prc);
     }
+  
+    DEMProvider demProvider = prc._demProvider;
+  //  if (demProvider != NULL) {
+  //    const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+  //
+  //    _demSubscriptionID = demProvider->subscribe(_sector,
+  //                                                tileMeshResolution.asVector2I(),
+  //                                                new TerrainListener(),
+  //                                                true);
+  //  }
   
     if ((_tessellatorMesh == null) || _mustActualizeMeshDueToNewElevationData)
     {
