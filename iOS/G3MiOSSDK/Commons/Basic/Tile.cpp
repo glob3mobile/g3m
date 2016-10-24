@@ -182,12 +182,14 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
   DEMProvider* demProvider = prc->_demProvider;
   if (demProvider != NULL) {
-    const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+    if (_demSubscription == NULL) {
+      const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
 
-    _demSubscription = demProvider->subscribe(_sector,
-                                              tileMeshResolution,
-                                              new TerrainListener(this),
-                                              true);
+      _demSubscription = demProvider->subscribe(_sector,
+                                                tileMeshResolution,
+                                                new TerrainListener(this),
+                                                true);
+    }
   }
 
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
