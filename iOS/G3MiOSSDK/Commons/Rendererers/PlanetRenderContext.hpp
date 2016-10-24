@@ -17,6 +17,7 @@ class TileTexturizer;
 class TilesRenderParameters;
 class ITimer;
 class ElevationDataProvider;
+class DEMProvider;
 class TileTessellator;
 class LayerSet;
 
@@ -28,6 +29,7 @@ public:
   TileTexturizer*        _texturizer;
   ITimer*                _lastSplitTimer;
   ElevationDataProvider* _elevationDataProvider;
+  DEMProvider*           _demProvider;
   TileTessellator*       _tessellator;
   LayerSet*              _layerSet;
   long long              _tileTextureDownloadPriority;

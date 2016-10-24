@@ -329,6 +329,7 @@
 		CF9B45FF1DB7B648009ABF32 /* PyramidDEMProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9B45FD1DB7B648009ABF32 /* PyramidDEMProvider.cpp */; };
 		CF9B46001DB7B703009ABF32 /* MercatorPyramidDEMProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9B45FB1DB7B613009ABF32 /* MercatorPyramidDEMProvider.hpp */; };
 		CF9B46011DB7B703009ABF32 /* PyramidDEMProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9B45FE1DB7B648009ABF32 /* PyramidDEMProvider.hpp */; };
+		CF9C8DE81DBE273C00C50B2B /* Future.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9C8DE61DBE273C00C50B2B /* Future.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
 		CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9EDC621978357D00F7351E /* GEOVectorTileImageProvider.cpp */; };
@@ -1653,6 +1654,8 @@
 		CF9B45FB1DB7B613009ABF32 /* MercatorPyramidDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MercatorPyramidDEMProvider.hpp; path = Commons/DEM/MercatorPyramidDEMProvider.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF9B45FD1DB7B648009ABF32 /* PyramidDEMProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = PyramidDEMProvider.cpp; path = Commons/DEM/PyramidDEMProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF9B45FE1DB7B648009ABF32 /* PyramidDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = PyramidDEMProvider.hpp; path = Commons/DEM/PyramidDEMProvider.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF9C8DE61DBE273C00C50B2B /* Future.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Future.cpp; path = Commons/Basic/Future.cpp; sourceTree = "<group>"; };
+		CF9C8DE71DBE273C00C50B2B /* Future.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Future.hpp; path = Commons/Basic/Future.hpp; sourceTree = "<group>"; };
 		CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CachedDownloader.cpp; path = Commons/Interfaces/CachedDownloader.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
 		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
@@ -2396,6 +2399,8 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF236E251CB3EE2D002D4D77 /* ViewMode.cpp */,
 				CF236E261CB3EE2D002D4D77 /* ViewMode.hpp */,
+				CF9C8DE61DBE273C00C50B2B /* Future.cpp */,
+				CF9C8DE71DBE273C00C50B2B /* Future.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3539,6 +3544,7 @@
 				CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */,
 				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
+				CF9C8DE81DBE273C00C50B2B /* Future.cpp in Sources */,
 				CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */,
 				CF516E931C63EF5D002F19E3 /* PlanetRenderContext.cpp in Sources */,
 				CF236E271CB3EE2D002D4D77 /* ViewMode.cpp in Sources */,

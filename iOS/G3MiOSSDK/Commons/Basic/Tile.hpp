@@ -11,6 +11,7 @@
 #include <vector>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
+#include "DEMListener.hpp"
 
 class TileTexturizer;
 class TileElevationDataRequest;
@@ -34,6 +35,7 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
+  long long _demSubscriptionID;
 
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
@@ -89,6 +91,13 @@ private:
 
   mutable TileData** _data;
   mutable size_t     _dataSize;
+
+
+
+  class TerrainListener : public DEMListener {
+
+  };
+
 
 public:
   const Sector      _sector;

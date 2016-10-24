@@ -23,6 +23,7 @@
 #include "MercatorUtils.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "DecimatedSubviewElevationData.hpp"
+#include "DEMProvider.hpp"
 
 
 std::string Tile::createTileID(int level,
@@ -71,6 +72,7 @@ _texturizerData(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
+_demSubscriptionID(-1),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
@@ -160,9 +162,21 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
 
   ElevationDataProvider* elevationDataProvider = prc->_elevationDataProvider;
 
-  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
+  if ((_elevationData == NULL) &&
+      (elevationDataProvider != NULL) &&
+      (elevationDataProvider->isEnabled())) {
     initializeElevationData(rc, prc);
   }
+
+  DEMProvider* demProvider = prc->_demProvider;
+//  if (demProvider != NULL) {
+//    const Vector2S tileMeshResolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
+//
+//    _demSubscriptionID = demProvider->subscribe(_sector,
+//                                                tileMeshResolution.asVector2I(),
+//                                                new TerrainListener(),
+//                                                true);
+//  }
 
   if ( (_tessellatorMesh == NULL) || _mustActualizeMeshDueToNewElevationData ) {
     _mustActualizeMeshDueToNewElevationData = false;

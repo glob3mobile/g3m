@@ -497,6 +497,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     _prc->_tilesRenderParameters       = _tilesRenderParameters;
     _prc->_lastSplitTimer              = _lastSplitTimer;
     _prc->_elevationDataProvider       = _elevationDataProvider;
+    _prc->_demProvider                 = _demProvider;
     _prc->_tessellator                 = _tessellator;
     _prc->_layerSet                    = _layerSet;
     _prc->_tileTextureDownloadPriority = _tileTextureDownloadPriority;
@@ -661,6 +662,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   _prc->_tilesRenderParameters       = _tilesRenderParameters;
   _prc->_lastSplitTimer              = _lastSplitTimer;
   _prc->_elevationDataProvider       = _elevationDataProvider;
+  _prc->_demProvider                 = _demProvider;
   _prc->_tessellator                 = _tessellator;
   _prc->_layerSet                    = _layerSet;
   _prc->_tileTextureDownloadPriority = _tileTextureDownloadPriority;
