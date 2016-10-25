@@ -17,9 +17,6 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferDEMGrid.hpp"
-//#include "MercatorUtils.hpp"
-//#include "MeshRenderer.hpp"
-//#include "EllipsoidalPlanet.hpp"
 
 
 int MapzenDEMProvider::_instanceCounter = 0;
@@ -33,7 +30,6 @@ private:
   const int _y;
 
 public:
-
   MapzenDEMProvider_ParserListener(MapzenDEMProvider* provider,
                                    int z,
                                    int x,
@@ -57,7 +53,6 @@ public:
     _provider->onGrid(_z, _x, _y,
                       grid);
   }
-
 };
 
 
@@ -124,7 +119,6 @@ public:
                           bool expired) {
     // do nothing
   }
-
 };
 
 
@@ -144,7 +138,6 @@ _instanceID("MapzenDEMProvider_" + IStringUtils::instance()->toString(++_instanc
 _rootGridDownloaded(false),
 _errorDownloadingRootGrid(false)
 {
-
 }
 
 MapzenDEMProvider::~MapzenDEMProvider() {
@@ -189,18 +182,6 @@ void MapzenDEMProvider::initialize(const G3MContext* context) {
               0, // x
               0, // y
               Sector::FULL_SPHERE);
-
-  ////    const int z = 9;
-  ////    const int x = 271;
-  ////    const int y = 180;
-  //  const int z = 1;
-  //  const int x = 0;
-  //  const int y = 0;
-  //
-  //  const Sector sector = MercatorUtils::getSector(z, x, y);
-  //  ILogger::instance()->logInfo( sector.description() );
-  //  requestTile(z, x, y,
-  //              sector);
 }
 
 void MapzenDEMProvider::cancel() {
