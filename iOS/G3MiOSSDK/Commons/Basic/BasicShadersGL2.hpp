@@ -415,16 +415,18 @@ public:
 "attribute vec4 aPosition; //Position of ZNear Frame corners in world-space\n" +
 "uniform mat4 uModelview; //Model + Projection\n" +
 "uniform float uPointSize;\n" +
-"varying highp vec3 planePos;\n" +
+"uniform highp vec3 uCameraPosition;\n" +
+"varying highp vec3 rayDirection;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_Position.z = 0.0;\n" +
 "gl_PointSize = uPointSize;\n" +
-"planePos = aPosition.xyz;\n" +
+"highp vec3 planePos = aPosition.xyz;\n" +
+"rayDirection = planePos - uCameraPosition;\n" +
 "}\n",
  emptyString +  
 "uniform highp vec3 uCameraPosition;\n" +
-"varying highp vec3 planePos;\n" +
+"varying highp vec3 rayDirection;\n" +
 "const highp float earthRadius = 6.36744e6;\n" +
 "const highp float atmosphereScale = 15.0;\n" +
 "const highp float stratoHeight = 50e3 * atmosphereScale;\n" +
@@ -439,8 +441,8 @@ public:
 "highp float r){\n" +
 "highp float a = dot(d,d);\n" +
 "highp float b = 2.0 * dot(o,d);\n" +
-"highp float c = dot(o,o) - pow(r, 2.0);\n" +
-"highp float q = pow(b,2.0) - 4.0 * a * c;\n" +
+"highp float c = dot(o,o) - (r*r);\n" +
+"highp float q = (b*b) - 4.0 * a * c;\n" +
 "if (q < 0.0){\n" +
 "return vec2(-1.0, -1.0); //No idea how to write NAN in GLSL\n" +
 "}\n" +
@@ -483,28 +485,35 @@ public:
 "highp float ox = o.x;\n" +
 "highp float oy = o.y;\n" +
 "highp float oz = o.z;\n" +
+"highp float dox2 = (dx + ox) * (dx + ox);\n" +
+"highp float doy2 = (dy + oy) * (dy + oy);\n" +
+"highp float doz2 = (dz + oz) * (dz + oz);\n" +
+"highp float ox2 = ox * ox;\n" +
+"highp float oy2 = oy * oy;\n" +
+"highp float oz2 = oz * oz;\n" +
+"highp float dx2 = dx * dx;\n" +
+"highp float dy2 = dy * dy;\n" +
+"highp float dz2 = dz * dz;\n" +
 "highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
-"sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0)))/ld -\n" +
-"(sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*sh +\n" +
-"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
-"pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*\n" +
+"sqrt(dox2 + doy2 + doz2))/ld -\n" +
+"(sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +\n" +
+"((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
+"dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*\n" +
 "log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +\n" +
-"sqrt(ld)*sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0))))/pow(ld,1.5) -\n" +
-"((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
-"pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*\n" +
-"log(sqrt(ld)*sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0)) + pdo))/pow(ld,1.5))/\n" +
+"sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -\n" +
+"((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
+"dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*\n" +
+"log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/\n" +
 "(2.*(er - 1.*sh));\n" +
 "return s;\n" +
 "}\n" +
 "void main() {\n" +
-"highp vec3 o = planePos;\n" +
-"highp vec3 d = planePos - uCameraPosition;\n" +
-"highp vec2 interEarth = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);\n" +
+"highp vec2 interEarth = intersectionsWithSphere(uCameraPosition, rayDirection, earthRadius - atmUndergroundOffset);\n" +
 "if (interEarth.x != -1.0 || interEarth.y != -1.0){\n" +
 "discard;\n" +
 "}\n" +
 "highp vec3 sp1, sp2;\n" +
-"highp float stratoLength = rayLenghtInSphere(o,d, earthRadius + stratoHeight, sp1, sp2);\n" +
+"highp float stratoLength = rayLenghtInSphere(uCameraPosition, rayDirection, earthRadius + stratoHeight, sp1, sp2);\n" +
 "if (stratoLength <= 0.0){\n" +
 "discard;\n" +
 "}\n" +

@@ -850,7 +850,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
@@ -863,6 +863,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -880,7 +881,7 @@
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
@@ -893,6 +894,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

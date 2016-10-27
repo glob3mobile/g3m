@@ -9,12 +9,16 @@ uniform mat4 uModelview; //Model + Projection
 
 uniform float uPointSize;
 
-varying highp vec3 planePos;
+uniform highp vec3 uCameraPosition;
+varying highp vec3 rayDirection;
 
 void main() {
   gl_Position = uModelview * aPosition;
   gl_Position.z = 0.0;
   
   gl_PointSize = uPointSize;
-  planePos = aPosition.xyz;
+  highp vec3 planePos = aPosition.xyz;
+  
+  //Ray [O + tD = X]
+  rayDirection = planePos - uCameraPosition;
 }

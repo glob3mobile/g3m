@@ -5,8 +5,7 @@
 //
 
 uniform highp vec3 uCameraPosition;
-
-varying highp vec3 planePos;
+varying highp vec3 rayDirection;
 
 //ATM parameters
 const highp float earthRadius = 6.36744e6;
@@ -32,9 +31,9 @@ highp vec2 intersectionsWithSphere(highp vec3 o,
   
   highp float a = dot(d,d);
   highp float b = 2.0 * dot(o,d);
-  highp float c = dot(o,o) - pow(r, 2.0);
+  highp float c = dot(o,o) - (r*r);
   
-  highp float q = pow(b,2.0) - 4.0 * a * c;
+  highp float q = (b*b) - 4.0 * a * c;
   if (q < 0.0){
     return vec2(-1.0, -1.0); //No idea how to write NAN in GLSL
   }
@@ -76,6 +75,7 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
   
   //Ray density calculations explained in: https://github.com/amazingsmash/AtmosphericShaders
   
+  //Scaling the scene down to improve floating point calculations
   d /= 1000.0;
   o /= 1000.0;
   highp float er = earthRadius / 1000.0;
@@ -91,17 +91,29 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
   highp float ox = o.x;
   highp float oy = o.y;
   highp float oz = o.z;
+
+  highp float dox2 = (dx + ox) * (dx + ox);
+  highp float doy2 = (dy + oy) * (dy + oy);
+  highp float doz2 = (dz + oz) * (dz + oz);
+  
+  highp float ox2 = ox * ox;
+  highp float oy2 = oy * oy;
+  highp float oz2 = oz * oz;
+  
+  highp float dx2 = dx * dx;
+  highp float dy2 = dy * dy;
+  highp float dz2 = dz * dz;
   
   highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
-    sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0)))/ld -
-   (sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0))*pdo)/ld - 2.*sh +
-   ((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-     pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*
+    sqrt(dox2 + doy2 + doz2))/ld -
+   (sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +
+   ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
+     dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
     log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
-        sqrt(ld)*sqrt(pow(dx + ox,2.0) + pow(dy + oy,2.0) + pow(dz + oz,2.0))))/pow(ld,1.5) -
-   ((pow(dz,2.0)*(pow(ox,2.0) + pow(oy,2.0)) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-     pow(dy,2.0)*(pow(ox,2.0) + pow(oz,2.0)) + pow(dx,2.0)*(pow(oy,2.0) + pow(oz,2.0)))*
-    log(sqrt(ld)*sqrt(pow(ox,2.0) + pow(oy,2.0) + pow(oz,2.0)) + pdo))/pow(ld,1.5))/
+        sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -
+   ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
+     dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
+    log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/
   (2.*(er - 1.*sh));
   
   return s;
@@ -110,21 +122,22 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
 void main() {
   
   //Ray [O + tD = X]
-  highp vec3 o = planePos;
-  highp vec3 d = planePos - uCameraPosition;
   
   //Discarding pixels on Earth
-  highp vec2 interEarth = intersectionsWithSphere(o,d, earthRadius - atmUndergroundOffset);
+  highp vec2 interEarth = intersectionsWithSphere(uCameraPosition, rayDirection, earthRadius - atmUndergroundOffset);
   if (interEarth.x != -1.0 || interEarth.y != -1.0){
     discard;
   }
   
   //Ray length in stratosphere
   highp vec3 sp1, sp2;
-  highp float stratoLength = rayLenghtInSphere(o,d, earthRadius + stratoHeight, sp1, sp2);
+  highp float stratoLength = rayLenghtInSphere(uCameraPosition, rayDirection, earthRadius + stratoHeight, sp1, sp2);
   if (stratoLength <= 0.0){
     discard;
   }
+  
+//  gl_FragColor = blueSky;
+//  return;
 
   //Calculating color
   highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
