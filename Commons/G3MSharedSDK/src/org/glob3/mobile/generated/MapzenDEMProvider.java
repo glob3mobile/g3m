@@ -68,7 +68,6 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
      _instanceID = "MapzenDEMProvider_" + IStringUtils.instance().toString(++_instanceCounter);
      _rootGridDownloaded = false;
      _errorDownloadingRootGrid = false;
-  
   }
 
   public final RenderState getRenderState()
@@ -86,18 +85,6 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
   
     // request root grid
     requestTile(0, 0, 0, Sector.FULL_SPHERE); // y -  x -  z
-  
-    ////    const int z = 9;
-    ////    const int x = 271;
-    ////    const int y = 180;
-    //  const int z = 1;
-    //  const int x = 0;
-    //  const int y = 0;
-    //
-    //  const Sector sector = MercatorUtils::getSector(z, x, y);
-    //  ILogger::instance()->logInfo( sector.description() );
-    //  requestTile(z, x, y,
-    //              sector);
   }
 
   public final void cancel()

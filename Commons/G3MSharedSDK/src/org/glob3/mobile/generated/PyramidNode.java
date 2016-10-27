@@ -134,11 +134,11 @@ public class PyramidNode
     return false;
   }
 
-  public final boolean addSubscription(DEMSubscription subscription)
+  public final void addSubscription(DEMSubscription subscription)
   {
     if (!subscription._sector.touchesWith(_sector))
     {
-      return false;
+      return;
     }
   
     if (!_resolution._latitude.greaterThan(subscription._resolution._latitude) && !_resolution._longitude.greaterThan(subscription._resolution._longitude))
@@ -149,21 +149,49 @@ public class PyramidNode
       }
       subscription._retain();
       _subscriptions.add(subscription);
-      return true;
+      return;
     }
   
-    boolean addedSubscription = false;
     java.util.ArrayList<PyramidNode> children = getChildren();
     final int size = children.size();
     for (int i = 0; i < size; i++)
     {
       PyramidNode child = children.get(i);
-      if (child.addSubscription(subscription))
+      child.addSubscription(subscription);
+    }
+  }
+
+  public final void removeSubscription(DEMSubscription subscription)
+  {
+    if (_subscriptions != null)
+    {
+      final int subscriptionsSize = _subscriptions.size();
+      for (int i = 0; i < subscriptionsSize; i++)
       {
-        addedSubscription = true;
+        if (_subscriptions.get(i) == subscription)
+        {
+          subscription._release();
+          _subscriptions.remove(i);
+          break;
+        }
+      }
+      if (_subscriptions.isEmpty())
+      {
+        _subscriptions = null;
+        _subscriptions = null;
       }
     }
-    return addedSubscription;
+  
+    if (_children != null)
+    {
+      final int size = _children.size();
+      for (int i = 0; i < size; i++)
+      {
+        PyramidNode child = _children.get(i);
+        child.removeSubscription(subscription);
+      }
+    }
+  
   }
 
 }

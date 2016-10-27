@@ -51,5 +51,4 @@ public class MapzenDEMProvider_ImageDownloadListener extends IImageDownloadListe
   {
     // do nothing
   }
-
 }

@@ -206,15 +206,18 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
     final int childrenSize = _children.size();
-    ChildrenResult childrenResult = new ChildrenResult(this, childrenSize, context, listener, deleteListener);
-    for (int i = 0; i < childrenSize; i++)
+    if (childrenSize > 0)
     {
-      IImageBuilder child = _children.get(i);
+      ChildrenResult childrenResult = new ChildrenResult(this, childrenSize, context, listener, deleteListener);
+      for (int i = 0; i < childrenSize; i++)
+      {
+        IImageBuilder child = _children.get(i);
   
-      child.build(context, new LayoutImageBuilderChildListener(childrenResult, i), true);
+        child.build(context, new LayoutImageBuilderChildListener(childrenResult, i), true);
+      }
+  
+      childrenResult._release();
     }
-  
-    childrenResult._release();
   }
 
 }

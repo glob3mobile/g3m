@@ -1,18 +1,10 @@
 package org.glob3.mobile.generated; 
-///#include "MercatorUtils.hpp"
-///#include "MeshRenderer.hpp"
-///#include "EllipsoidalPlanet.hpp"
-
-
-
-
 public class MapzenDEMProvider_ParserListener extends MapzenTerrariumParser.Listener
 {
   private MapzenDEMProvider _provider;
   private final int _z;
   private final int _x;
   private final int _y;
-
 
   public MapzenDEMProvider_ParserListener(MapzenDEMProvider provider, int z, int x, int y)
   {
@@ -33,5 +25,4 @@ public class MapzenDEMProvider_ParserListener extends MapzenTerrariumParser.List
   {
     _provider.onGrid(_z, _x, _y, grid);
   }
-
 }

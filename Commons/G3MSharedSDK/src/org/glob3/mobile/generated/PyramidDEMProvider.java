@@ -90,27 +90,21 @@ public abstract class PyramidDEMProvider extends DEMProvider
   {
     DEMSubscription subscription = new DEMSubscription(this, sector, extent, listener, deleteListener);
   
-    boolean holdSubscription = false;
     java.util.ArrayList<PyramidNode> rootNodes = getRootNodes();
     for (int i = 0; i < _rootNodesCount; i++)
     {
       PyramidNode rootNode = rootNodes.get(i);
-      if (rootNode.addSubscription(subscription))
-      {
-        holdSubscription = true;
-      }
+      rootNode.addSubscription(subscription);
     }
   
-    subscription._release();
+  //  const bool released = subscription->_release();
+  //  if (released) {
+  //    return NULL;
+  //  }
   
-    if (holdSubscription)
-    {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: fire event!
-      return subscription;
-    }
-  
-    return null;
+    return subscription;
   }
 
   public final void unsubscribe(DEMSubscription subscription)
@@ -119,30 +113,17 @@ public abstract class PyramidDEMProvider extends DEMProvider
     {
       return;
     }
-    throw new RuntimeException("Not yet done!");
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-    //  if (_rootNodes != NULL) {
-    //    DEMSubscription* subscription = NULL;
-    //
-    //    for (size_t i = 0; i < _rootNodesCount; i++) {
-    //      PyramidNode* rootNode = _rootNodes->at(i);
-    //      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
-    //      if (removedSubscription != NULL) {
-    //        if (subscription == NULL) {
-    //          subscription = removedSubscription;
-    //        }
-    //        else {
-    //          if (subscription != removedSubscription) {
-    //            THROW_EXCEPTION("Logic error!");
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    delete subscription;
-    //  }
+    if (_rootNodes != null)
+    {
+      for (int i = 0; i < _rootNodesCount; i++)
+      {
+        PyramidNode rootNode = _rootNodes.get(i);
+        rootNode.removeSubscription(subscription);
+      }
+    }
   }
 
 }
