@@ -135,9 +135,6 @@ void main() {
   if (stratoLength <= 0.0){
     discard;
   }
-  
-//  gl_FragColor = blueSky;
-//  return;
 
   //Calculating color
   highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
