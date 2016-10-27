@@ -18,10 +18,10 @@ const highp float atmUndergroundOffset = 100e3;
 const highp float minHeigth = 35000.0;
 
 //Multicolor gradient
-highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
-highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);
-highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
-highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));
+const highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
+const highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);
+const highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
+const highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));
 
 
 bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,
