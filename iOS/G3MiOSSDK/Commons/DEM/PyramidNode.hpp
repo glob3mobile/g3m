@@ -56,7 +56,9 @@ public:
                   DEMGrid* grid,
                   const bool stickyGrid);
 
-  bool addSubscription(DEMSubscription* subscription);
+  void addSubscription(DEMSubscription* subscription);
+
+  void removeSubscription(DEMSubscription* subscription);
   
 };
 

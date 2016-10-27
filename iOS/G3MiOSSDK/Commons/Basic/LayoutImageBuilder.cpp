@@ -27,20 +27,22 @@ void LayoutImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,
                                bool deleteListener) {
   const size_t childrenSize = _children.size();
-  ChildrenResult* childrenResult = new ChildrenResult(this,
-                                                      childrenSize,
-                                                      context,
-                                                      listener,
-                                                      deleteListener);
-  for (int i = 0; i < childrenSize; i++) {
-    IImageBuilder* child = _children[i];
+  if (childrenSize > 0) {
+    ChildrenResult* childrenResult = new ChildrenResult(this,
+                                                        childrenSize,
+                                                        context,
+                                                        listener,
+                                                        deleteListener);
+    for (int i = 0; i < childrenSize; i++) {
+      IImageBuilder* child = _children[i];
 
-    child->build(context,
-                 new LayoutImageBuilderChildListener(childrenResult, i),
-                 true);
+      child->build(context,
+                   new LayoutImageBuilderChildListener(childrenResult, i),
+                   true);
+    }
+
+    childrenResult->_release();
   }
-
-  childrenResult->_release();
 }
 
 void LayoutImageBuilder::ChildrenResult::childImageCreated(const IImage*      image,

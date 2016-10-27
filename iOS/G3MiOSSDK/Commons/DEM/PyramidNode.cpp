@@ -100,9 +100,9 @@ bool PyramidNode::insertGrid(int z,
   return false;
 }
 
-bool PyramidNode::addSubscription(DEMSubscription* subscription) {
+void PyramidNode::addSubscription(DEMSubscription* subscription) {
   if (!subscription->_sector.touchesWith(_sector)) {
-    return false;
+    return;
   }
 
   if (!_resolution._latitude.greaterThan( subscription->_resolution._latitude ) &&
@@ -112,17 +112,44 @@ bool PyramidNode::addSubscription(DEMSubscription* subscription) {
     }
     subscription->_retain();
     _subscriptions->push_back(subscription);
-    return true;
+    return;
   }
 
-  bool addedSubscription = false;
   std::vector<PyramidNode*>* children = getChildren();
   const size_t size = children->size();
   for (size_t i = 0; i < size; i++) {
     PyramidNode* child = children->at(i);
-    if (child->addSubscription(subscription)) {
-      addedSubscription = true;
+    child->addSubscription(subscription);
+  }
+}
+
+void PyramidNode::removeSubscription(DEMSubscription* subscription) {
+  if (_subscriptions != NULL) {
+    const size_t subscriptionsSize = _subscriptions->size();
+    for (size_t i = 0; i < subscriptionsSize; i++) {
+      if (_subscriptions->at(i) == subscription) {
+        subscription->_release();
+#ifdef C_CODE
+        _subscriptions->erase(_subscriptions->begin() + i);
+#endif
+#ifdef JAVA_CODE
+        _subscriptions.remove(i);
+#endif
+        break;
+      }
+    }
+    if (_subscriptions->empty()) {
+      delete _subscriptions;
+      _subscriptions = NULL;
     }
   }
-  return addedSubscription;
+
+  if (_children != NULL) {
+    const size_t size = _children->size();
+    for (size_t i = 0; i < size; i++) {
+      PyramidNode* child = _children->at(i);
+      child->removeSubscription(subscription);
+    }
+  }
+
 }

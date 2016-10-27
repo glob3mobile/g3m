@@ -73,50 +73,31 @@ DEMSubscription* PyramidDEMProvider::subscribe(const Sector&   sector,
                                                       listener,
                                                       deleteListener);
 
-  bool holdSubscription = false;
   std::vector<PyramidNode*>* rootNodes = getRootNodes();
   for (size_t i = 0; i < _rootNodesCount; i++) {
     PyramidNode* rootNode = rootNodes->at(i);
-    if (rootNode->addSubscription(subscription)) {
-      holdSubscription = true;
-    }
+    rootNode->addSubscription(subscription);
   }
 
-  subscription->_release();
+//  const bool released = subscription->_release();
+//  if (released) {
+//    return NULL;
+//  }
 
-  if (holdSubscription) {
 #warning TODO: fire event!
-    return subscription;
-  }
-
-  return NULL;
+  return subscription;
 }
 
 void PyramidDEMProvider::unsubscribe(DEMSubscription* subscription) {
   if (subscription == NULL) {
     return;
   }
-  THROW_EXCEPTION("Not yet done!");
 
 #warning Diego at work!
-  //  if (_rootNodes != NULL) {
-  //    DEMSubscription* subscription = NULL;
-  //
-  //    for (size_t i = 0; i < _rootNodesCount; i++) {
-  //      PyramidNode* rootNode = _rootNodes->at(i);
-  //      DEMSubscription* removedSubscription = rootNode->removeSubscription(subscriptionID);
-  //      if (removedSubscription != NULL) {
-  //        if (subscription == NULL) {
-  //          subscription = removedSubscription;
-  //        }
-  //        else {
-  //          if (subscription != removedSubscription) {
-  //            THROW_EXCEPTION("Logic error!");
-  //          }
-  //        }
-  //      }
-  //    }
-  //
-  //    delete subscription;
-  //  }
+  if (_rootNodes != NULL) {
+    for (size_t i = 0; i < _rootNodesCount; i++) {
+      PyramidNode* rootNode = _rootNodes->at(i);
+      rootNode->removeSubscription(subscription);
+    }
+  }
 }
