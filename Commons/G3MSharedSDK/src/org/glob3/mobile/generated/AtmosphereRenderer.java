@@ -18,6 +18,13 @@ package org.glob3.mobile.generated;
 
 
 
+
+//class Mesh;
+//class IFloatBuffer;
+//class CameraPositionGLFeature;
+//class Camera;
+
+
 public class AtmosphereRenderer extends DefaultRenderer
 {
   private GLState _glState;
@@ -53,11 +60,11 @@ public class AtmosphereRenderer extends DefaultRenderer
 
   public AtmosphereRenderer()
   {
-     _blueSky = new Color(Color.fromRGBA((32.0/2.0 + 128) / 256.0, (173.0/2.0 + 128) / 256.0, (249.0/ 2.0 + 128) / 256.0, 1.0));
-     _darkSpace = new Color(Color.fromRGBA(.0, .0, .0, .0));
+     _blueSky = new Color(Color.fromRGBA((32.0f / 2.0f + 128.0f) / 256.0f, (173.0f / 2.0f + 128.0f) / 256.0f, (249.0f / 2.0f + 128.0f) / 256.0f, 1.0f));
+     _darkSpace = new Color(Color.fromRGBA(0.0f, 0.0f, 0.0f, 0.0f));
      _overPresicionThreshold = true;
      _minHeight = 8000.0;
-
+  
   }
 
   public final void start(G3MRenderContext rc)
@@ -65,10 +72,10 @@ public class AtmosphereRenderer extends DefaultRenderer
     _glState = new GLState();
   
     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    fbb.add(0.0,0.0,0.0);
-    fbb.add(0.0,0.0,0.0);
-    fbb.add(0.0,0.0,0.0);
-    fbb.add(0.0,0.0,0.0);
+    fbb.add(0.0, 0.0, 0.0);
+    fbb.add(0.0, 0.0, 0.0);
+    fbb.add(0.0, 0.0, 0.0);
+    fbb.add(0.0, 0.0, 0.0);
   
     _vertices = fbb.create();
   
@@ -125,7 +132,7 @@ public class AtmosphereRenderer extends DefaultRenderer
       _directMesh.render(rc, _glState);
     }
   
-    final boolean nowIsOverPresicionThreshold = camHeigth < _minHeight * 1.2;
+    final boolean nowIsOverPresicionThreshold = (camHeigth < _minHeight * 1.2);
   
     if (_overPresicionThreshold != nowIsOverPresicionThreshold)
     {

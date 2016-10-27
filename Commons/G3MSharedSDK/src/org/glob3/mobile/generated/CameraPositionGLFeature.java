@@ -13,8 +13,8 @@ public class CameraPositionGLFeature extends GLFeature
   public CameraPositionGLFeature(Camera cam)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_CAM_POSITION);
-    Vector3D p = cam.getCartesianPosition();
-    _camPos = new GPUUniformValueVec3FloatMutable(p._x, p._y, p._z);
+    final Vector3D p = cam.getCartesianPosition();
+    _camPos = new GPUUniformValueVec3FloatMutable((float) p._x, (float) p._y, (float) p._z);
     _values.addUniformValue(GPUUniformKey.CAMERA_POSITION, _camPos, false);
   }
 
@@ -27,7 +27,7 @@ public class CameraPositionGLFeature extends GLFeature
 
   public final void update(Camera cam)
   {
-    Vector3D p = cam.getCartesianPosition();
-    _camPos.changeValue(p._x, p._y, p._z);
+    final Vector3D p = cam.getCartesianPosition();
+    _camPos.changeValue((float) p._x, (float) p._y, (float) p._z);
   }
 }
