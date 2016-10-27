@@ -35,6 +35,7 @@ DEMSubscription::~DEMSubscription() {
   }
 
   if (_demProvider != NULL) {
+    _demProvider->unsubscribe(this);
     _demProvider->_release();
   }
 

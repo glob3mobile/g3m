@@ -89,15 +89,12 @@ DEMSubscription* PyramidDEMProvider::subscribe(const Sector&   sector,
 }
 
 void PyramidDEMProvider::unsubscribe(DEMSubscription* subscription) {
-  if (subscription == NULL) {
-    return;
-  }
-
-#warning Diego at work!
-  if (_rootNodes != NULL) {
-    for (size_t i = 0; i < _rootNodesCount; i++) {
-      PyramidNode* rootNode = _rootNodes->at(i);
-      rootNode->removeSubscription(subscription);
+  if (subscription != NULL) {
+    if (_rootNodes != NULL) {
+      for (size_t i = 0; i < _rootNodesCount; i++) {
+        PyramidNode* rootNode = _rootNodes->at(i);
+        rootNode->removeSubscription(subscription);
+      }
     }
   }
 }
