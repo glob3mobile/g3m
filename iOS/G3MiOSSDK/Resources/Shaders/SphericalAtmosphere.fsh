@@ -24,51 +24,37 @@ highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
 highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));
 
 
-highp vec2 intersectionsWithSphere(highp vec3 o,
-                                   highp vec3 d,
-                                   highp float r){
+bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,
+                                 out highp vec3 p1,
+                                 out highp vec3 p2){
   //http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
   
   highp float a = dot(d,d);
   highp float b = 2.0 * dot(o,d);
+  highp float r = earthRadius - atmUndergroundOffset; //Earth radius
   highp float c = dot(o,o) - (r*r);
   
-  highp float q = (b*b) - 4.0 * a * c;
-  if (q < 0.0){
-    return vec2(-1.0, -1.0); //No idea how to write NAN in GLSL
-  }
+  highp float q1 = (b*b) - 4.0 * a * c;
   
-  highp float sq = sqrt(q);
-  highp float t1 = (-b - sq) / (2.0*a);
-  highp float t2 = (-b + sq) / (2.0*a);
+  r = earthRadius + stratoHeight; //Atm. radius
+  c = dot(o,o) - (r*r);
   
-  if (t1 < t2){
-    return vec2(t1,t2);
-  } else{
-    return vec2(t2, t1);
-  }
-}
-
-highp float rayLenghtInSphere(highp vec3 o,
-                              highp vec3 d,
-                              highp float r,
-                              out highp vec3 p1,
-                              out highp vec3 p2){
-  highp vec2 t = intersectionsWithSphere(o,d,r);
+  highp float q2 = (b*b) - 4.0 * a * c;
+  bool valid = (q1 < 0.0) && (q2 > 0.0);
   
-  if (t.x < 0.0){
-    if (t.y < 0.0){
-      return 0.0;
-    } else{
-      t.x = 0.0;
+  if (valid){
+    highp float sq = sqrt(q2);
+    highp float t1 = (-b - sq) / (2.0*a);
+    highp float t2 = (-b + sq) / (2.0*a);
+    
+    if (t1 < 0.0 && t2 < 0.0){
+      return false;
     }
+    
+    p1 = o + d * max(min(t1,t2), 0.0);
+    p2 = o + d * max(t1,t2);
   }
-  
-  p1 = o + d * t.x;
-  p2 = o + d * t.y;
-  
-  return length(p2-p1);
-  
+  return valid;
 }
 
 highp float getRayFactor(highp vec3 o, highp vec3 d){
@@ -122,30 +108,22 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
 void main() {
   
   //Ray [O + tD = X]
-  
-  //Discarding pixels on Earth
-  highp vec2 interEarth = intersectionsWithSphere(uCameraPosition, rayDirection, earthRadius - atmUndergroundOffset);
-  if (interEarth.x != -1.0 || interEarth.y != -1.0){
-    discard;
-  }
-  
-  //Ray length in stratosphere
   highp vec3 sp1, sp2;
-  highp float stratoLength = rayLenghtInSphere(uCameraPosition, rayDirection, earthRadius + stratoHeight, sp1, sp2);
-  if (stratoLength <= 0.0){
-    discard;
-  }
-
-  //Calculating color
-  highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
+  bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);
+  if (!valid){
+    gl_FragColor = darkSpace;
+  } else{
+    //Calculating color
+    highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
   
-  highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));
-  color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));
-  gl_FragColor = color;
+    highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));
+    color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));
+    gl_FragColor = color;
 
-  //Calculating camera Height (for precision problems)
-  //Below a certain threshold float precision is not enough for calculations
-  highp float camHeight = length(uCameraPosition) - earthRadius;
-  gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));
+    //Calculating camera Height (for precision problems)
+    //Below a certain threshold float precision is not enough for calculations
+    highp float camHeight = length(uCameraPosition) - earthRadius;
+    gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));
+  }
 }
 

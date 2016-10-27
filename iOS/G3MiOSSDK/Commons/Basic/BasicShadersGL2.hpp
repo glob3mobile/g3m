@@ -436,41 +436,29 @@ public:
 "highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);\n" +
 "highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
 "highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));\n" +
-"highp vec2 intersectionsWithSphere(highp vec3 o,\n" +
-"highp vec3 d,\n" +
-"highp float r){\n" +
-"highp float a = dot(d,d);\n" +
-"highp float b = 2.0 * dot(o,d);\n" +
-"highp float c = dot(o,o) - (r*r);\n" +
-"highp float q = (b*b) - 4.0 * a * c;\n" +
-"if (q < 0.0){\n" +
-"return vec2(-1.0, -1.0); //No idea how to write NAN in GLSL\n" +
-"}\n" +
-"highp float sq = sqrt(q);\n" +
-"highp float t1 = (-b - sq) / (2.0*a);\n" +
-"highp float t2 = (-b + sq) / (2.0*a);\n" +
-"if (t1 < t2){\n" +
-"return vec2(t1,t2);\n" +
-"} else{\n" +
-"return vec2(t2, t1);\n" +
-"}\n" +
-"}\n" +
-"highp float rayLenghtInSphere(highp vec3 o,\n" +
-"highp vec3 d,\n" +
-"highp float r,\n" +
+"bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,\n" +
 "out highp vec3 p1,\n" +
 "out highp vec3 p2){\n" +
-"highp vec2 t = intersectionsWithSphere(o,d,r);\n" +
-"if (t.x < 0.0){\n" +
-"if (t.y < 0.0){\n" +
-"return 0.0;\n" +
-"} else{\n" +
-"t.x = 0.0;\n" +
+"highp float a = dot(d,d);\n" +
+"highp float b = 2.0 * dot(o,d);\n" +
+"highp float r = earthRadius - atmUndergroundOffset; //Earth radius\n" +
+"highp float c = dot(o,o) - (r*r);\n" +
+"highp float q1 = (b*b) - 4.0 * a * c;\n" +
+"r = earthRadius + stratoHeight; //Atm. radius\n" +
+"c = dot(o,o) - (r*r);\n" +
+"highp float q2 = (b*b) - 4.0 * a * c;\n" +
+"bool valid = (q1 < 0.0) && (q2 > 0.0);\n" +
+"if (valid){\n" +
+"highp float sq = sqrt(q2);\n" +
+"highp float t1 = (-b - sq) / (2.0*a);\n" +
+"highp float t2 = (-b + sq) / (2.0*a);\n" +
+"if (t1 < 0.0 && t2 < 0.0){\n" +
+"return false;\n" +
 "}\n" +
+"p1 = o + d * max(min(t1,t2), 0.0);\n" +
+"p2 = o + d * max(t1,t2);\n" +
 "}\n" +
-"p1 = o + d * t.x;\n" +
-"p2 = o + d * t.y;\n" +
-"return length(p2-p1);\n" +
+"return valid;\n" +
 "}\n" +
 "highp float getRayFactor(highp vec3 o, highp vec3 d){\n" +
 "d /= 1000.0;\n" +
@@ -508,21 +496,18 @@ public:
 "return s;\n" +
 "}\n" +
 "void main() {\n" +
-"highp vec2 interEarth = intersectionsWithSphere(uCameraPosition, rayDirection, earthRadius - atmUndergroundOffset);\n" +
-"if (interEarth.x != -1.0 || interEarth.y != -1.0){\n" +
-"discard;\n" +
-"}\n" +
 "highp vec3 sp1, sp2;\n" +
-"highp float stratoLength = rayLenghtInSphere(uCameraPosition, rayDirection, earthRadius + stratoHeight, sp1, sp2);\n" +
-"if (stratoLength <= 0.0){\n" +
-"discard;\n" +
-"}\n" +
+"bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);\n" +
+"if (!valid){\n" +
+"gl_FragColor = darkSpace;\n" +
+"} else{\n" +
 "highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;\n" +
 "highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));\n" +
 "color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));\n" +
 "gl_FragColor = color;\n" +
 "highp float camHeight = length(uCameraPosition) - earthRadius;\n" +
 "gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));\n" +
+"}\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);
 
