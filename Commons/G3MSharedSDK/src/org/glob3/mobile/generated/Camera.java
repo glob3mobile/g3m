@@ -644,6 +644,40 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
+  public final void getVerticesOfZNearPlane(IFloatBuffer vertices)
+  {
+  
+    Plane zNearPlane = getFrustumInModelCoordinates().getNearPlane();
+  
+    Vector3D pos = getCartesianPosition();
+    Vector3D vd = getViewDirection();
+  
+  //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
+  //  float zOffset = zRange * 1e-6;
+  //  if (zOffset < 1.0f){
+  //    zOffset = 1.0f;
+  //  }
+  
+    Vector3D c = zNearPlane.intersectionWithRay(pos, vd); //.add(vd.times(zOffset / vd.length()));
+    Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
+    Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 2.0);
+  
+    vertices.putVector3D(0, c.sub(up).sub(right));
+    vertices.putVector3D(1, c.add(up).sub(right));
+    vertices.putVector3D(2, c.sub(up).add(right));
+    vertices.putVector3D(3, c.add(right).add(up));
+  }
+
+  // data to compute frustum
+  public final FrustumData getFrustumData()
+  {
+    if (_dirtyFlags._frustumDataDirty)
+    {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
+  }
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -745,16 +779,7 @@ public class Camera
     }
   }
 
-  // data to compute frustum
-  private FrustumData getFrustumData()
-  {
-    if (_dirtyFlags._frustumDataDirty)
-    {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
-  }
+
 
   // intersection of view direction with globe in(x,y,z)
   private MutableVector3D _getCartesianCenterOfView()

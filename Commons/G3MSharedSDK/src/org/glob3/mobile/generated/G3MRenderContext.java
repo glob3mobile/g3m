@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class TexturesHandler;
 //class ITimer;
 //class GPUProgramManager;
+//class G3MWidget;
 
 
 
@@ -37,11 +38,12 @@ public class G3MRenderContext extends G3MContext
   private TexturesHandler _texturesHandler;
   private ITimer _frameStartTimer;
   private GPUProgramManager _gpuProgramManager;
+  private G3MWidget _widget;
 
 
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
-  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider, ViewMode viewMode)
+  public G3MRenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage, GPUProgramManager gpuProgramManager, SurfaceElevationProvider surfaceElevationProvider, ViewMode viewMode, G3MWidget widget)
   {
      super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider, viewMode);
      _frameTasksExecutor = frameTasksExecutor;
@@ -52,6 +54,7 @@ public class G3MRenderContext extends G3MContext
      _frameStartTimer = frameStartTimer;
      _orderedRenderables = null;
      _gpuProgramManager = gpuProgramManager;
+     _widget = widget;
 
   }
 
@@ -96,6 +99,11 @@ public class G3MRenderContext extends G3MContext
   public final GPUProgramManager getGPUProgramManager()
   {
     return _gpuProgramManager;
+  }
+
+  public final G3MWidget getWidget()
+  {
+    return _widget;
   }
 
   public void dispose()

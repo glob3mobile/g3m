@@ -25,6 +25,14 @@ public abstract class IFloatBuffer implements IBuffer
 
   public abstract void put(int i, float value);
 
+  public final void putVector3D(int i, Vector3D v)
+  {
+    i = i *3;
+    put(i, v._x);
+    put(i+1, v._y);
+    put(i+2, v._z);
+  }
+
   public abstract void rawPut(int i, float value);
 
   public abstract void rawAdd(int i, float value);

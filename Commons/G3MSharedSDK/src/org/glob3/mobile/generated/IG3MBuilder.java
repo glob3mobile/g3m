@@ -396,6 +396,10 @@ public abstract class IG3MBuilder
     if (getRenderers().size() > 0)
     {
       mainRenderer = new CompositeRenderer();
+  
+      //TODO: Decide how to create atmosphere
+      ((CompositeRenderer) mainRenderer).addRenderer(new AtmosphereRenderer());
+  
       if (!containsPlanetRenderer(getRenderers()))
       {
         ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create());
