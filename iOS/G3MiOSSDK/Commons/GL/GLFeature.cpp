@@ -55,8 +55,10 @@ GLFeature(NO_GROUP, GLF_CAM_POSITION){
 }
 
 void CameraPositionGLFeature::update(const Camera* cam){
-  Vector3D p = cam->getCartesianPosition();
-  _camPos->changeValue(p._x, p._y, p._z);
+  const Vector3D p = cam->getCartesianPosition();
+  _camPos->changeValue((float) p._x,
+                       (float) p._y,
+                       (float) p._z);
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
