@@ -118,12 +118,11 @@ void main() {
   
     highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));
     color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));
-    gl_FragColor = color;
 
     //Calculating camera Height (for precision problems)
     //Below a certain threshold float precision is not enough for calculations
     highp float camHeight = length(uCameraPosition) - earthRadius;
-    gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));
+    gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));
   }
 }
 
