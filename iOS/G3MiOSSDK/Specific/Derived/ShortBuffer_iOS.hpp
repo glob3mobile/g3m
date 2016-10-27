@@ -39,7 +39,7 @@ private:
   static GLuint  _boundIBO;
 
 public:
-  ShortBuffer_iOS(size_t size) :
+  ShortBuffer_iOS(const size_t size) :
   _size(size),
   _timestamp(0),
   _indexBuffer(-1),
@@ -62,7 +62,7 @@ public:
 
   ~ShortBuffer_iOS();
 
-  size_t size() const {
+  const size_t size() const {
     return _size;
   }
 
@@ -70,7 +70,7 @@ public:
     return _timestamp;
   }
 
-  short get(size_t i) const {
+  short get(const size_t i) const {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }
@@ -78,7 +78,7 @@ public:
     return _values[i];
   }
 
-  void put(size_t i, short value) {
+  void put(const size_t i, short value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }
@@ -89,7 +89,7 @@ public:
     }
   }
 
-  void rawPut(size_t i, short value) {
+  void rawPut(const size_t i, short value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }

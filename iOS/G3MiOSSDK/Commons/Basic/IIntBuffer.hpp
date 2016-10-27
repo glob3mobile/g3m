@@ -17,11 +17,13 @@ public:
   virtual ~IIntBuffer() {
   }
 
-  virtual int get(size_t i) const = 0;
+  virtual int get(const size_t i) const = 0;
 
-  virtual void put(size_t i, int value) = 0;
+  virtual void put(const size_t i,
+                   int value) = 0;
 
-  virtual void rawPut(size_t i, int value) = 0;
+  virtual void rawPut(const size_t i,
+                      int value) = 0;
 
 };
 
