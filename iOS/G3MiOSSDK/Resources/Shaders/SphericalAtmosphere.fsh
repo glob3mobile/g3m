@@ -91,19 +91,17 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
   highp float dy2 = dy * dy;
   highp float dz2 = dz * dz;
 
-  highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
-                    sqrt(dox2 + doy2 + doz2))/ld -
-                   (sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +
-                   ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-                     dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
-                    log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
-                        sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -
-                   ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-                     dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
-                    log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/
-  (2.*(er - 1.*sh));
-
-  return s;
+  return ((((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
+            sqrt(dox2 + doy2 + doz2))/ld -
+           (sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +
+           ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
+             dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
+            log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
+                sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -
+           ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
+             dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
+            log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/
+          (2.*(er - 1.*sh)));
 }
 
 void main() {

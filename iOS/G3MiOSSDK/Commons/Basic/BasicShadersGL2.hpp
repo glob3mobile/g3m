@@ -482,7 +482,7 @@ public:
 "highp float dx2 = dx * dx;\n" +
 "highp float dy2 = dy * dy;\n" +
 "highp float dz2 = dz * dz;\n" +
-"highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
+"return ((((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
 "sqrt(dox2 + doy2 + doz2))/ld -\n" +
 "(sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +\n" +
 "((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
@@ -492,8 +492,7 @@ public:
 "((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
 "dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*\n" +
 "log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/\n" +
-"(2.*(er - 1.*sh));\n" +
-"return s;\n" +
+"(2.*(er - 1.*sh)));\n" +
 "}\n" +
 "void main() {\n" +
 "highp vec3 sp1, sp2;\n" +
