@@ -164,6 +164,13 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
+Tile::TerrainListener::TerrainListener(Tile* tile) :
+_tile(tile)
+{
+}
+
+Tile::TerrainListener::~TerrainListener() {
+}
 
 void Tile::TerrainListener::onGrid(const DEMGrid* grid) {
   THROW_EXCEPTION("Not yet done!");

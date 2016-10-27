@@ -99,13 +99,9 @@ private:
   private:
     Tile* _tile;
   public:
-    TerrainListener(Tile* tile) :
-    _tile(tile)
-    {
-    }
+    TerrainListener(Tile* tile);
 
-    ~TerrainListener() {
-    }
+    ~TerrainListener();
 
     void onGrid(const DEMGrid* grid);
 

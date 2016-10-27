@@ -82,7 +82,7 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   // https://mapzen.com/blog/elevation/
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg",
                                                           Sector::FULL_SPHERE,
-                                                          true,                      // isTransparent
+                                                          false,                     // isTransparent
                                                           2,                         // firstLevel
                                                           15,                        // maxLevel
                                                           TimeInterval::fromDays(30) // timeToCache
