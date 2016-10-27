@@ -15,10 +15,10 @@ varying highp vec3 rayDirection;
 void main() {
   gl_Position = uModelview * aPosition;
   gl_Position.z = 0.0;
-  
+
   gl_PointSize = uPointSize;
   highp vec3 planePos = aPosition.xyz;
-  
+
   //Ray [O + tD = X]
   rayDirection = planePos - uCameraPosition;
 }

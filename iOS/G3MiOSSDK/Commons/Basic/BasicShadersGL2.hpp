@@ -448,7 +448,7 @@ public:
 "c = dot(o,o) - (r*r);\n" +
 "highp float q2 = (b*b) - 4.0 * a * c;\n" +
 "bool valid = (q1 < 0.0) && (q2 > 0.0);\n" +
-"if (valid){\n" +
+"if (valid) {\n" +
 "highp float sq = sqrt(q2);\n" +
 "highp float t1 = (-b - sq) / (2.0*a);\n" +
 "highp float t2 = (-b + sq) / (2.0*a);\n" +
@@ -498,15 +498,15 @@ public:
 "void main() {\n" +
 "highp vec3 sp1, sp2;\n" +
 "bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);\n" +
-"if (!valid){\n" +
-"gl_FragColor = darkSpace;\n" +
-"} else{\n" +
+"if (valid){\n" +
 "highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;\n" +
 "highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));\n" +
 "color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));\n" +
-"gl_FragColor = color;\n" +
 "highp float camHeight = length(uCameraPosition) - earthRadius;\n" +
-"gl_FragColor = mix(gl_FragColor, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));\n" +
+"gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));\n" +
+"}\n" +
+"else {\n" +
+"gl_FragColor = darkSpace;\n" +
 "}\n" +
 "}\n");
     this->add(sourcesSphericalAtmosphere);

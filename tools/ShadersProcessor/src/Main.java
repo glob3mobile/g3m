@@ -20,7 +20,7 @@ public class Main {
                                              + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
                                              + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
                                              + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
-            + "  }\n" + "\n" + "};\n" + "#endif\n";
+                                             + "  }\n" + "\n" + "};\n" + "#endif\n";
 
    private static String _addProgramSource = "    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
                                              + "    this->add(sourcesShader_Name);\n\n";
@@ -93,7 +93,7 @@ public class Main {
 
       final File folder = new File(path);
 
-      final ArrayList<Shader> shaders = new ArrayList<Shader>();
+      final ArrayList<Shader> shaders = new ArrayList<>();
 
       for (final File fileEntry : folder.listFiles()) {
          if (fileEntry.isDirectory()) {
@@ -174,7 +174,7 @@ public class Main {
    }
 
 
-   public static void main(final String[] args) throws IOException {
+   public static void main(final String[] args) {
 
       String pwd = "";
       File pwdFile = new File(System.getProperty("user.dir"));
@@ -194,7 +194,7 @@ public class Main {
       }
 
       final String sdkProjectPath = pwd;
-      final String shadersFolder = sdkProjectPath + "/Resources/Shaders";
+      //      final String shadersFolder = sdkProjectPath + "/Resources/Shaders";
       //      final String shadersFolder = sdkProjectPath + "/Resources/Shaders";
       //      final String filePath = sdkProjectPath + "/Commons/Basic/BasicShadersGL2.hpp";
       //
