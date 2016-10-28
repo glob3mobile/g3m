@@ -109,19 +109,15 @@ public abstract class PyramidDEMProvider extends DEMProvider
 
   public final void unsubscribe(DEMSubscription subscription)
   {
-    if (subscription == null)
+    if (subscription != null)
     {
-      return;
-    }
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-    if (_rootNodes != null)
-    {
-      for (int i = 0; i < _rootNodesCount; i++)
+      if (_rootNodes != null)
       {
-        PyramidNode rootNode = _rootNodes.get(i);
-        rootNode.removeSubscription(subscription);
+        for (int i = 0; i < _rootNodesCount; i++)
+        {
+          PyramidNode rootNode = _rootNodes.get(i);
+          rootNode.removeSubscription(subscription);
+        }
       }
     }
   }

@@ -40,6 +40,7 @@ public class DEMSubscription extends RCObject
   
     if (_demProvider != null)
     {
+      _demProvider.unsubscribe(this);
       _demProvider._release();
     }
   
