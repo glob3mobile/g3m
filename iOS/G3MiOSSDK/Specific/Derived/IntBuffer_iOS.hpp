@@ -24,7 +24,7 @@ private:
   static long long _nextID;
 
 public:
-  IntBuffer_iOS(size_t size) :
+  IntBuffer_iOS(const size_t size) :
   _size(size),
   _timestamp(0),
   _id(_nextID++)
@@ -44,7 +44,7 @@ public:
     delete [] _values;
   }
   
-  size_t size() const {
+  const size_t size() const {
     return _size;
   }
   
@@ -52,7 +52,7 @@ public:
     return _timestamp;
   }
   
-  int get(size_t i) const {
+  int get(const size_t i) const {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }
@@ -60,7 +60,7 @@ public:
     return _values[i];
   }
   
-  void put(size_t i, int value) {
+  void put(const size_t i, int value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }
@@ -71,7 +71,7 @@ public:
     }
   }
   
-  void rawPut(size_t i, int value) {
+  void rawPut(const size_t i, int value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }

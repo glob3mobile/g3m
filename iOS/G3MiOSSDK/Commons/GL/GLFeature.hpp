@@ -33,7 +33,8 @@ enum GLFeatureID{
   GLF_DIRECTION_LIGTH,
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE
+  GLF_BLENDING_MODE,
+  GLF_CAMERA_POSITION
 };
 
 class GLFeature: public RCObject {
@@ -118,6 +119,31 @@ public:
   
   void changeExtent(int viewportWidth,
                     int viewportHeight);
+};
+
+/////////////////////////////////////////////////////////
+
+class CameraPositionGLFeature: public GLFeature {
+private:
+  ~CameraPositionGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  GPUUniformValueVec3FloatMutable* _camPos;
+  
+public:
+  CameraPositionGLFeature(const Camera* cam);
+  
+  void applyOnGlobalGLState(GLGlobalState* state)  const {
+    //Used for atmospheric blending
+    state->enableBlend();
+    state->setBlendFactors(GLBlendFactor::srcAlpha(),
+                           GLBlendFactor::oneMinusSrcAlpha());
+  }
+  
+  void update(const Camera* cam);
 };
 
 /////////////////////////////////////////////////////////

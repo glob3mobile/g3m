@@ -39,7 +39,7 @@ private:
   mutable int       _vertexBufferTimestamp;
 
 public:
-  FloatBuffer_iOS(size_t size) :
+  FloatBuffer_iOS(const size_t size) :
   _size(size),
   _timestamp(0),
   _values(new float[size]),
@@ -107,7 +107,7 @@ public:
 
   virtual ~FloatBuffer_iOS();
 
-  size_t size() const {
+  const size_t size() const {
     return _size;
   }
 
@@ -115,14 +115,14 @@ public:
     return _timestamp;
   }
 
-  float get(size_t i) const {
+  float get(const size_t i) const {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }
     return _values[i];
   }
 
-  void put(size_t i,
+  void put(const size_t i,
            float value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
@@ -134,7 +134,7 @@ public:
     }
   }
 
-  void rawPut(size_t i,
+  void rawPut(const size_t i,
               float value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
@@ -142,7 +142,7 @@ public:
     _values[i] = value;
   }
 
-  void rawAdd(size_t i, float value) {
+  void rawAdd(const size_t i, float value) {
     if (i >= _size) {
       THROW_EXCEPTION("Buffer Overflow");
     }
@@ -163,10 +163,10 @@ public:
     _boundVertexBuffer = -1;
   }
 
-  void rawPut(size_t i,
+  void rawPut(const size_t i,
               const IFloatBuffer* srcBuffer,
-              size_t srcFromIndex,
-              size_t srcToIndex);
+              const size_t srcFromIndex,
+              const size_t srcToIndex);
 
 };
 

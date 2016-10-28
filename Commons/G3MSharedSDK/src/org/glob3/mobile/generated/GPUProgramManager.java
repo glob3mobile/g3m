@@ -76,6 +76,8 @@ public class GPUProgramManager
   
     final boolean is2D = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.POSITION_2D);
   
+    final boolean hasCamPos = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.CAMERA_POSITION);
+  
   //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
   
   
@@ -157,7 +159,14 @@ public class GPUProgramManager
   
     if (!flatColor && !texture && !color)
     {
-      return compileProgramWithName(gl, "NoColorMesh");
+      if (hasCamPos)
+      {
+        return compileProgramWithName(gl, "SphericalAtmosphere");
+      }
+      else
+      {
+        return compileProgramWithName(gl, "NoColorMesh");
+      }
     }
   
     return null;

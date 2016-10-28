@@ -57,6 +57,8 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   
   const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
   
+  const bool hasCamPos = GPUVariable::hasUniform(uniformsCode, CAMERA_POSITION);
+  
 //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
 
   
@@ -122,7 +124,11 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   }
 
   if (!flatColor && !texture && !color) {
-    return compileProgramWithName(gl, "NoColorMesh");
+    if (hasCamPos){
+      return compileProgramWithName(gl, "SphericalAtmosphere");
+    } else{
+      return compileProgramWithName(gl, "NoColorMesh");
+    }
   }
 
   return NULL;
