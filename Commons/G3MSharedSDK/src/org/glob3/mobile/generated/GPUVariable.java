@@ -110,6 +110,11 @@ public class GPUVariable
       return GPUUniformKey.BILLBOARD_ANCHOR;
     }
   
+    if (name.compareTo("uCameraPosition") == 0)
+    {
+      return GPUUniformKey.CAMERA_POSITION;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)

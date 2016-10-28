@@ -202,7 +202,8 @@ _auxCam(NULL)
                                         _storage,
                                         _gpuProgramManager,
                                         _surfaceElevationProvider,
-                                        _viewMode);
+                                        _viewMode,
+                                        this);
 
 
   //#ifdef C_CODE
@@ -949,6 +950,10 @@ void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
   delete _backgroundColor;
 
   _backgroundColor = new Color(backgroundColor);
+}
+
+Color G3MWidget::getBackgroundColor() const {
+  return *_backgroundColor;
 }
 
 PlanetRenderer* G3MWidget::getPlanetRenderer() {

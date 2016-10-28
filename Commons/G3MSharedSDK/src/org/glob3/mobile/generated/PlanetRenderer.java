@@ -590,6 +590,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           ILogger.instance().logInfo("Touched on position %s", position.description());
           ILogger.instance().logInfo("Touched on pixels %s", normalizedPixel.description());
           ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
+          ILogger.instance().logInfo("Camera zNear=%f zFar=%f", _lastCamera.getFrustumData()._znear, _lastCamera.getFrustumData()._zfar);
   
           if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
           {

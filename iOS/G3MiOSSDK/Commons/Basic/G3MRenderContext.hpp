@@ -18,6 +18,7 @@ class Camera;
 class TexturesHandler;
 class ITimer;
 class GPUProgramManager;
+class G3MWidget;
 
 #include <vector>
 
@@ -36,6 +37,7 @@ private:
   TexturesHandler*    _texturesHandler;
   ITimer*             _frameStartTimer;
   GPUProgramManager*  _gpuProgramManager;
+  G3MWidget*          _widget;
 
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
@@ -59,7 +61,8 @@ public:
                    IStorage*                 storage,
                    GPUProgramManager*        gpuProgramManager,
                    SurfaceElevationProvider* surfaceElevationProvider,
-                   ViewMode                  viewMode) :
+                   ViewMode                  viewMode,
+                   G3MWidget*                widget) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -79,7 +82,8 @@ public:
   _texturesHandler(texturesHandler),
   _frameStartTimer(frameStartTimer),
   _orderedRenderables(NULL),
-  _gpuProgramManager(gpuProgramManager)
+  _gpuProgramManager(gpuProgramManager),
+  _widget(widget)
   {
 
   }
@@ -112,6 +116,10 @@ public:
 
   GPUProgramManager* getGPUProgramManager() const {
     return _gpuProgramManager;
+  }
+  
+  G3MWidget* getWidget() const {
+    return _widget;
   }
 
   virtual ~G3MRenderContext();

@@ -492,6 +492,8 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */; };
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
+		D8299B971DA7D5A0000923F9 /* AtmosphereRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8299B951DA7D5A0000923F9 /* AtmosphereRenderer.cpp */; };
+		D8299B991DA7D73D000923F9 /* AtmosphereRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8299B961DA7D5A0000923F9 /* AtmosphereRenderer.hpp */; };
 		D8378F9E1BFB32B900E6557E /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */; };
 		D8378F9F1BFB32B900E6557E /* IDeviceLocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F9B1BFB32B900E6557E /* IDeviceLocation.cpp */; };
 		D8378FA21BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */; };
@@ -779,6 +781,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8299B991DA7D73D000923F9 /* AtmosphereRenderer.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CFE737B81D9AED8D009FFB78 /* MarksFilter.hpp in CopyFiles */,
 				CF6FA7CA1D7D785400A4320A /* Trail.hpp in CopyFiles */,
@@ -1825,6 +1828,8 @@
 		D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimedCacheTileLODTester.hpp; path = Commons/Rendererers/TimedCacheTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxFrameTimeTileLODTester.cpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.cpp; sourceTree = "<group>"; };
 		D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MaxFrameTimeTileLODTester.hpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8299B951DA7D5A0000923F9 /* AtmosphereRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AtmosphereRenderer.cpp; path = Commons/Rendererers/AtmosphereRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8299B961DA7D5A0000923F9 /* AtmosphereRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AtmosphereRenderer.hpp; path = Commons/Rendererers/AtmosphereRenderer.hpp; sourceTree = "<group>"; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceAttitude.cpp; path = Commons/Interfaces/IDeviceAttitude.cpp; sourceTree = "<group>"; };
@@ -1908,6 +1913,8 @@
 		D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgramFactory.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLTextureId_iOS.hpp; path = Specific/GL/GLTextureId_iOS.hpp; sourceTree = "<group>"; };
 		D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
+		D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; lineEnding = 0; path = SphericalAtmosphere.fsh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		D8B50F831DABCBDA00FA96FA /* SphericalAtmosphere.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SphericalAtmosphere.vsh; sourceTree = "<group>"; };
 		D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D8B749A9175E040800046B96 /* Ellipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ellipsoid.cpp; path = Commons/Geometry/Ellipsoid.cpp; sourceTree = "<group>"; };
@@ -2636,6 +2643,8 @@
 				CFECA7791B6AB9B200A0A44E /* VectorStreamingRenderer.cpp */,
 				CFECA77A1B6AB9B200A0A44E /* VectorStreamingRenderer.hpp */,
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
+				D8299B951DA7D5A0000923F9 /* AtmosphereRenderer.cpp */,
+				D8299B961DA7D5A0000923F9 /* AtmosphereRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2987,6 +2996,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */,
+				D8B50F831DABCBDA00FA96FA /* SphericalAtmosphere.vsh */,
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */,
 				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,
@@ -3034,6 +3045,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8EEF3C21577924D003FEB5E /* Build configuration list for PBXNativeTarget "G3MiOSSDK" */;
 			buildPhases = (
+				D855FD3A1DACF93800C31D4F /* ShellScript */,
 				D8EEF3B11577924D003FEB5E /* Sources */,
 				D8EEF3B21577924D003FEB5E /* Frameworks */,
 				E780A4FC16D3ADBE000F0395 /* CopyFiles */,
@@ -3071,6 +3083,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D855FD3A1DACF93800C31D4F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#cd /Users/josemiguelsn/Desktop/igo_git/g3m/tools/ShadersProcessor/\ncd ../../tools/ShadersProcessor/\njava -jar Built_161110.jar";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D8EEF3B11577924D003FEB5E /* Sources */ = {
@@ -3182,6 +3210,7 @@
 				CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */,
 				CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */,
 				CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */,
+				D8299B971DA7D5A0000923F9 /* AtmosphereRenderer.cpp in Sources */,
 				D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */,
 				CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */,
 				A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */,

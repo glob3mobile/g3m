@@ -27,11 +27,11 @@ public:
   /**
    Answer the size (the count of elements) of the buffer
    **/
-  virtual size_t size() const = 0;
-  
+  virtual const size_t size() const = 0;
+
   /**
    Answer the timestamp of the buffer.
-   
+
    This number will be different each time the buffer changes its contents.
    It provides a fast method to check if the Buffer has changed.
    **/
