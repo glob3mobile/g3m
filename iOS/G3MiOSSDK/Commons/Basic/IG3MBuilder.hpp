@@ -68,6 +68,7 @@ private:
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
   InfoDisplay*                      _infoDisplay;
+  bool                              _atmosphere;
 
   GL*                               getGL();
   ICameraActivityListener*          getCameraActivityListener();
@@ -117,6 +118,8 @@ public:
 
   IDownloader*                      getDownloader();
   IThreadUtils*                     getThreadUtils();
+
+  void setAtmosphere(const bool atmosphere);
 
   void setGL(GL* gl);
 

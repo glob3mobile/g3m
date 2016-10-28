@@ -64,7 +64,8 @@ _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
 _shownSector(NULL),
-_infoDisplay(NULL)
+_infoDisplay(NULL),
+_atmosphere(false)
 {
 }
 
@@ -237,10 +238,9 @@ Renderer* IG3MBuilder::getHUDRenderer() const {
  * @return _backgroundColor: Color*
  */
 Color* IG3MBuilder::getBackgroundColor() {
-  if (!_backgroundColor) {
-    _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+  if (_backgroundColor == NULL) {
+    _backgroundColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
   }
-
   return _backgroundColor;
 }
 
@@ -487,15 +487,10 @@ void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
  * @param backgroundColor - cannot be NULL.
  */
 void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
-  if (_backgroundColor) {
-    ILogger::instance()->logError("LOGIC ERROR: backgroundColor already initialized");
-    return;
+  if (backgroundColor != _backgroundColor) {
+    delete _backgroundColor;
+    _backgroundColor = backgroundColor;
   }
-  if (!backgroundColor) {
-    ILogger::instance()->logError("LOGIC ERROR: backgroundColor cannot be NULL");
-    return;
-  }
-  _backgroundColor = backgroundColor;
 }
 
 /**
@@ -669,6 +664,11 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
   _userData = userData;
 }
 
+void IG3MBuilder::setAtmosphere(const bool atmosphere) {
+  _atmosphere = atmosphere;
+  setBackgroundColor( _atmosphere ? Color::newFromRGBA(0, 0, 0, 1) : NULL );
+}
+
 /**
  * Creates the generic widget using all the parameters previously set.
  *
@@ -682,14 +682,14 @@ G3MWidget* IG3MBuilder::create() {
 
 #warning HUDRenderer doesn't work when this code is uncommented
   InfoDisplay* infoDisplay = NULL;
-//  InfoDisplay* infoDisplay = getInfoDisplay();
-//  if (infoDisplay == NULL) {
-//    Default_HUDRenderer* hud = new Default_HUDRenderer();
-//
-//    infoDisplay = new DefaultInfoDisplay(hud);
-//
-//    addRenderer(hud);
-//  }
+  //  InfoDisplay* infoDisplay = getInfoDisplay();
+  //  if (infoDisplay == NULL) {
+  //    Default_HUDRenderer* hud = new Default_HUDRenderer();
+  //
+  //    infoDisplay = new DefaultInfoDisplay(hud);
+  //
+  //    addRenderer(hud);
+  //  }
 
   /*
    * If any renderers were set or added, the main renderer will be a composite renderer.
@@ -699,17 +699,22 @@ G3MWidget* IG3MBuilder::create() {
    */
   Renderer* mainRenderer = NULL;
   if (getRenderers()->size() > 0) {
-    mainRenderer = new CompositeRenderer();
-    
-    //TODO: Decide how to create atmosphere
-    ((CompositeRenderer *) mainRenderer)->addRenderer(new AtmosphereRenderer());
-    
+    CompositeRenderer* composite = new CompositeRenderer();
+
+    if (_atmosphere) {
+      // has be here, before the PlanetRenderer
+      composite->addRenderer(new AtmosphereRenderer());
+    }
+
     if (!containsPlanetRenderer(*getRenderers())) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getPlanetRendererBuilder()->create());
+      composite->addRenderer(getPlanetRendererBuilder()->create());
     }
+
     for (unsigned int i = 0; i < getRenderers()->size(); i++) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()->at(i));
+      composite->addRenderer(getRenderers()->at(i));
     }
+
+    mainRenderer = composite;
   }
   else {
     mainRenderer = getPlanetRendererBuilder()->create();
