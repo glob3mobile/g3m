@@ -433,8 +433,11 @@ public:
 "const highp float atmUndergroundOffset = 100e3;\n" +
 "const highp float minHeigth = 35000.0;\n" +
 "const highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
-"const highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);\n" +
-"const highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);\n" +
+"const highp vec4 blueSky = vec4(135.0 / 255.0,\n" +
+"206.0 / 255.0,\n" +
+"235.0 / 255.0,\n" +
+"1.0);\n" +
+"const highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 1.0);\n" +
 "const highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));\n" +
 "bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,\n" +
 "out highp vec3 p1,\n" +

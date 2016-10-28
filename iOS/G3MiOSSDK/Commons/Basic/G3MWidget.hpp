@@ -221,6 +221,7 @@ public:
   }
 
   void setBackgroundColor(const Color& backgroundColor);
+  Color getBackgroundColor() const;
 
   PlanetRenderer* getPlanetRenderer();
 

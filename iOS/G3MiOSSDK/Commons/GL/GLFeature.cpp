@@ -46,7 +46,7 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
 }
 
 CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam):
-GLFeature(NO_GROUP, GLF_CAM_POSITION){
+GLFeature(NO_GROUP, GLF_CAMERA_POSITION){
   const Vector3D p = cam->getCartesianPosition();
   _camPos = new GPUUniformValueVec3FloatMutable((float) p._x,
                                                 (float) p._y,

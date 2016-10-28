@@ -20,40 +20,36 @@ class IFloatBuffer;
 class CameraPositionGLFeature;
 class Camera;
 
-
 class AtmosphereRenderer : public DefaultRenderer {
 private:
-  GLState* _glState;
+  const Color  _blueSky;
+  const Color  _darkSpace;
+  const double _minHeight;
 
-  Mesh* _directMesh;
-
-  IFloatBuffer* _vertices;
+  GLState*                 _glState;
+  Mesh*                    _directMesh;
+  IFloatBuffer*            _vertices;
   CameraPositionGLFeature* _camPosGLF;
+  Color*                   _previousBackgroundColor;
+  bool                     _overPresicionThreshold;
 
   void updateGLState(const Camera* camera);
-
-  Color _blueSky;
-  Color _darkSpace;
-  bool _overPresicionThreshold;
-  const double _minHeight;
 
 public:
   AtmosphereRenderer();
 
+  ~AtmosphereRenderer();
+
   void start(const G3MRenderContext* rc);
 
-  void removeAllTrails(bool deleteTrails = true);
-
-  ~AtmosphereRenderer();
+  void stop(const G3MRenderContext* rc);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
   }
 
   void render(const G3MRenderContext* rc, GLState* glState);
-
+  
 };
 
-
-#endif /* AtmosphereRenderer_hpp */
+#endif

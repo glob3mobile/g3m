@@ -18,56 +18,77 @@
 
 
 AtmosphereRenderer::AtmosphereRenderer() :
-_blueSky(Color::fromRGBA(( 32.0f / 2.0f + 128.0f) / 256.0f,
-                         (173.0f / 2.0f + 128.0f) / 256.0f,
-                         (249.0f / 2.0f + 128.0f) / 256.0f,
-                         1.0f)),
-_darkSpace(Color::fromRGBA(0.0f, 0.0f, 0.0f, 0.0f)),
+//_blueSky(Color::fromRGBA(( 32.0f / 2.0f + 128.0f) / 256.0f,
+//                         (173.0f / 2.0f + 128.0f) / 256.0f,
+//                         (249.0f / 2.0f + 128.0f) / 256.0f,
+//                         1.0f)),
+_blueSky(Color::fromRGBA255(135, 206, 235, 255)),
+_darkSpace(Color::black()),
+_minHeight(8000.0),
+_previousBackgroundColor(NULL),
 _overPresicionThreshold(true),
-_minHeight(8000.0)
+_glState(NULL),
+_directMesh(NULL),
+_vertices(NULL),
+_camPosGLF(NULL)
 {
-
 }
 
 AtmosphereRenderer::~AtmosphereRenderer(){
+  delete _previousBackgroundColor;
   delete _directMesh;
   _glState->_release();
 }
 
 void AtmosphereRenderer::start(const G3MRenderContext* rc) {
-  _glState = new GLState();
+  if (_glState == NULL) {
+    _glState = new GLState();
 
-  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  fbb->add(0.0, 0.0, 0.0);
-  fbb->add(0.0, 0.0, 0.0);
-  fbb->add(0.0, 0.0, 0.0);
-  fbb->add(0.0, 0.0, 0.0);
+    FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+    fbb->add(0.0, 0.0, 0.0);
+    fbb->add(0.0, 0.0, 0.0);
+    fbb->add(0.0, 0.0, 0.0);
+    fbb->add(0.0, 0.0, 0.0);
 
-  _vertices = fbb->create();
+    _vertices = fbb->create();
 
-  _directMesh = new DirectMesh(GLPrimitive::triangleStrip(),
-                               true,
-                               fbb->getCenter(),
-                               _vertices,
-                               10.0f,
-                               10.0f,
-                               NULL, //new Color(Color::green()),
-                               NULL,
-                               0.0f,
-                               false);
+    _directMesh = new DirectMesh(GLPrimitive::triangleStrip(),
+                                 true,
+                                 fbb->getCenter(),
+                                 _vertices,
+                                 10.0f,
+                                 10.0f,
+                                 NULL,
+                                 NULL,
+                                 0.0f,
+                                 false);
 
-  //CamPos
-  _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera());
-  _glState->addGLFeature(_camPosGLF, false);
+    delete fbb; fbb = NULL;
+
+    //CamPos
+    _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera());
+    _glState->addGLFeature(_camPosGLF, false);
+  }
+
+  delete _previousBackgroundColor;
+  _previousBackgroundColor = new Color(rc->getWidget()->getBackgroundColor());
 
   //Computing background color
   const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
-  _overPresicionThreshold = camHeigth < _minHeight * 1.2;
+  _overPresicionThreshold = (camHeigth < _minHeight * 1.2);
   if (_overPresicionThreshold){
     rc->getWidget()->setBackgroundColor(_blueSky);
   }
   else {
     rc->getWidget()->setBackgroundColor(_darkSpace);
+  }
+}
+
+void AtmosphereRenderer::stop(const G3MRenderContext* rc) {
+  if (_previousBackgroundColor != NULL) {
+    rc->getWidget()->setBackgroundColor(*_previousBackgroundColor);
+    delete _previousBackgroundColor;
+    _previousBackgroundColor = NULL;
   }
 }
 
@@ -92,7 +113,7 @@ void AtmosphereRenderer::render(const G3MRenderContext* rc,
 
   const Sector* rSector = rc->getWidget()->getPlanetRenderer()->getRenderedSector();
   if (rc->getPlanet()->getType().compare("Flat") == 0 ||
-      (rSector != NULL && !rSector->fullContains(Sector::fullSphere()))){
+      (rSector != NULL && !rSector->fullContains(Sector::fullSphere()))) {
     return;
   }
 
@@ -111,11 +132,11 @@ void AtmosphereRenderer::render(const G3MRenderContext* rc,
     //Changing background color
     _overPresicionThreshold = nowIsOverPresicionThreshold;
 
-    if (_overPresicionThreshold){
+    if (_overPresicionThreshold) {
       rc->getWidget()->setBackgroundColor(_blueSky);
-    } else{
+    }
+    else {
       rc->getWidget()->setBackgroundColor(_darkSpace);
     }
   }
-
 }

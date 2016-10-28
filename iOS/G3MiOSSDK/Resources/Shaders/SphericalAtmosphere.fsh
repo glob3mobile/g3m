@@ -19,8 +19,13 @@ const highp float minHeigth = 35000.0;
 
 //Multicolor gradient
 const highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
-const highp vec4 blueSky = vec4(32.0 / 256.0, 173.0 / 256.0, 249.0 / 256.0, 1.0);
-const highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
+//const highp vec4 blueSky = vec4(32.0 / 255.0, 173.0 / 255.0, 249.0 / 255.0, 1.0);
+//const highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
+const highp vec4 blueSky = vec4(135.0 / 255.0,
+                                206.0 / 255.0,
+                                235.0 / 255.0,
+                                1.0);
+const highp vec4 darkSpace = vec4(0.0, 0.0, 0.0, 1.0);
 const highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));
 
 
