@@ -602,6 +602,10 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _backgroundColor = new Color(backgroundColor);
   }
+  public final Color getBackgroundColor()
+  {
+    return _backgroundColor;
+  }
 
   public final PlanetRenderer getPlanetRenderer()
   {

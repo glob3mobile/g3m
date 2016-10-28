@@ -36,7 +36,7 @@ public enum GLFeatureID
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
   GLF_BLENDING_MODE,
-  GLF_CAM_POSITION;
+  GLF_CAMERA_POSITION;
 
    public int getValue()
    {

@@ -24,15 +24,18 @@ package org.glob3.mobile.generated;
 //class CameraPositionGLFeature;
 //class Camera;
 
-
 public class AtmosphereRenderer extends DefaultRenderer
 {
+  private final Color _blueSky ;
+  private final Color _darkSpace ;
+  private final double _minHeight;
+
   private GLState _glState;
-
   private Mesh _directMesh;
-
   private IFloatBuffer _vertices;
   private CameraPositionGLFeature _camPosGLF;
+  private Color _previousBackgroundColor;
+  private boolean _overPresicionThreshold;
 
   private void updateGLState(Camera camera)
   {
@@ -53,41 +56,64 @@ public class AtmosphereRenderer extends DefaultRenderer
     _camPosGLF.update(camera);
   }
 
-  private Color _blueSky ;
-  private Color _darkSpace ;
-  private boolean _overPresicionThreshold;
-  private final double _minHeight;
-
   public AtmosphereRenderer()
+  //_blueSky(Color::fromRGBA(( 32.0f / 2.0f + 128.0f) / 256.0f,
+  //                         (173.0f / 2.0f + 128.0f) / 256.0f,
+  //                         (249.0f / 2.0f + 128.0f) / 256.0f,
+  //                         1.0f)),
   {
-     _blueSky = new Color(Color.fromRGBA((32.0f / 2.0f + 128.0f) / 256.0f, (173.0f / 2.0f + 128.0f) / 256.0f, (249.0f / 2.0f + 128.0f) / 256.0f, 1.0f));
-     _darkSpace = new Color(Color.fromRGBA(0.0f, 0.0f, 0.0f, 0.0f));
-     _overPresicionThreshold = true;
+     _blueSky = new Color(Color.fromRGBA255(135, 206, 235, 255));
+     _darkSpace = new Color(Color.black());
      _minHeight = 8000.0;
-  
+     _previousBackgroundColor = null;
+     _overPresicionThreshold = true;
+     _glState = null;
+     _directMesh = null;
+     _vertices = null;
+     _camPosGLF = null;
+  }
+
+  public void dispose()
+  {
+    if (_previousBackgroundColor != null)
+       _previousBackgroundColor.dispose();
+    if (_directMesh != null)
+       _directMesh.dispose();
+    _glState._release();
   }
 
   public final void start(G3MRenderContext rc)
   {
-    _glState = new GLState();
+    if (_glState == null)
+    {
+      _glState = new GLState();
   
-    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    fbb.add(0.0, 0.0, 0.0);
-    fbb.add(0.0, 0.0, 0.0);
-    fbb.add(0.0, 0.0, 0.0);
-    fbb.add(0.0, 0.0, 0.0);
+      FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+      fbb.add(0.0, 0.0, 0.0);
+      fbb.add(0.0, 0.0, 0.0);
+      fbb.add(0.0, 0.0, 0.0);
+      fbb.add(0.0, 0.0, 0.0);
   
-    _vertices = fbb.create();
+      _vertices = fbb.create();
   
-    _directMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, fbb.getCenter(), _vertices, 10.0f, 10.0f, null, null, 0.0f, false); //new Color(Color::green()),
+      _directMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, fbb.getCenter(), _vertices, 10.0f, 10.0f, null, null, 0.0f, false);
   
-    //CamPos
-    _camPosGLF = new CameraPositionGLFeature(rc.getCurrentCamera());
-    _glState.addGLFeature(_camPosGLF, false);
+      if (fbb != null)
+         fbb.dispose();
+      fbb = null;
+  
+      //CamPos
+      _camPosGLF = new CameraPositionGLFeature(rc.getCurrentCamera());
+      _glState.addGLFeature(_camPosGLF, false);
+    }
+  
+    if (_previousBackgroundColor != null)
+       _previousBackgroundColor.dispose();
+    _previousBackgroundColor = new Color(rc.getWidget().getBackgroundColor());
   
     //Computing background color
     final double camHeigth = rc.getCurrentCamera().getGeodeticPosition()._height;
-    _overPresicionThreshold = camHeigth < _minHeight * 1.2;
+    _overPresicionThreshold = (camHeigth < _minHeight * 1.2);
     if (_overPresicionThreshold)
     {
       rc.getWidget().setBackgroundColor(_blueSky);
@@ -98,19 +124,19 @@ public class AtmosphereRenderer extends DefaultRenderer
     }
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void removeAllTrails(boolean deleteTrails);
-
-  public void dispose()
+  public final void stop(G3MRenderContext rc)
   {
-    if (_directMesh != null)
-       _directMesh.dispose();
-    _glState._release();
+    if (_previousBackgroundColor != null)
+    {
+      rc.getWidget().setBackgroundColor(_previousBackgroundColor);
+      if (_previousBackgroundColor != null)
+         _previousBackgroundColor.dispose();
+      _previousBackgroundColor = null;
+    }
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -148,7 +174,6 @@ public class AtmosphereRenderer extends DefaultRenderer
         rc.getWidget().setBackgroundColor(_darkSpace);
       }
     }
-  
   }
 
 }
