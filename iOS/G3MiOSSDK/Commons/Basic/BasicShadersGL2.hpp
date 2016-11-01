@@ -441,7 +441,7 @@ public:
 "const highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));\n" +
 "bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,\n" +
 "out highp vec3 p1,\n" +
-"out highp vec3 p2){\n" +
+"out highp vec3 p2) {\n" +
 "highp float a = dot(d,d);\n" +
 "highp float b = 2.0 * dot(o,d);\n" +
 "highp float r = earthRadius - atmUndergroundOffset; //Earth radius\n" +
@@ -455,7 +455,7 @@ public:
 "highp float sq = sqrt(q2);\n" +
 "highp float t1 = (-b - sq) / (2.0*a);\n" +
 "highp float t2 = (-b + sq) / (2.0*a);\n" +
-"if (t1 < 0.0 && t2 < 0.0){\n" +
+"if (t1 < 0.0 && t2 < 0.0) {\n" +
 "return false;\n" +
 "}\n" +
 "p1 = o + d * max(min(t1,t2), 0.0);\n" +
@@ -463,7 +463,7 @@ public:
 "}\n" +
 "return valid;\n" +
 "}\n" +
-"highp float getRayFactor(highp vec3 o, highp vec3 d){\n" +
+"highp float getRayFactor(highp vec3 o, highp vec3 d) {\n" +
 "d /= 1000.0;\n" +
 "o /= 1000.0;\n" +
 "highp float er = earthRadius / 1000.0;\n" +
@@ -500,7 +500,7 @@ public:
 "void main() {\n" +
 "highp vec3 sp1, sp2;\n" +
 "bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);\n" +
-"if (valid){\n" +
+"if (valid) {\n" +
 "highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;\n" +
 "highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));\n" +
 "color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));\n" +

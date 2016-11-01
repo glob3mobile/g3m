@@ -50,7 +50,8 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
     
     //Reorienting as Heading = 0 is East on iOS
     rotationMatrix.copyValueOfMultiplication(_reorientationMatrix, rotationMatrix);
-  } else{
+  }
+  else {
     rotationMatrix.setValid(false);
   }
 }

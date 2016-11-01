@@ -26,7 +26,7 @@ public:
                    float value) = 0;
 
   void putVector3D(const size_t i,
-                   const Vector3D& v){
+                   const Vector3D& v) {
     const size_t i3 = i*3;
     put(i3    , (float) v._x);
     put(i3 + 1, (float) v._y);

@@ -57,9 +57,9 @@ double MercatorUtils::latitudeToMeters(const Angle& latitude) {
   const IMathUtils* mu = IMathUtils::instance();
 
   double my = mu->log( mu->tan( (90 + latitude._degrees) * PI / 360.0 ) ) / (PI / 180.0);
-		my = my * _originShift / 180.0;
+  my = my * _originShift / 180.0;
 
-		return my;
+  return my;
 }
 
 Sector MercatorUtils::getSector(int z,

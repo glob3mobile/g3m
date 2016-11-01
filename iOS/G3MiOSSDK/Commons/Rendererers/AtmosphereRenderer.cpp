@@ -34,7 +34,7 @@ _camPosGLF(NULL)
 {
 }
 
-AtmosphereRenderer::~AtmosphereRenderer(){
+AtmosphereRenderer::~AtmosphereRenderer() {
   delete _previousBackgroundColor;
   delete _directMesh;
   _glState->_release();
@@ -76,7 +76,7 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
   //Computing background color
   const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
   _overPresicionThreshold = (camHeigth < _minHeight * 1.2);
-  if (_overPresicionThreshold){
+  if (_overPresicionThreshold) {
     rc->getWidget()->setBackgroundColor(_blueSky);
   }
   else {
@@ -92,7 +92,7 @@ void AtmosphereRenderer::stop(const G3MRenderContext* rc) {
   }
 }
 
-void AtmosphereRenderer::updateGLState(const Camera* camera){
+void AtmosphereRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(camera), true);
@@ -109,7 +109,7 @@ void AtmosphereRenderer::updateGLState(const Camera* camera){
 }
 
 void AtmosphereRenderer::render(const G3MRenderContext* rc,
-                                GLState* glState){
+                                GLState* glState) {
 
   const Sector* rSector = rc->getWidget()->getPlanetRenderer()->getRenderedSector();
   if (rc->getPlanet()->getType().compare("Flat") == 0 ||
@@ -119,7 +119,7 @@ void AtmosphereRenderer::render(const G3MRenderContext* rc,
 
   //Rendering
   const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
-  if (camHeigth > _minHeight){
+  if (camHeigth > _minHeight) {
     updateGLState(rc->getCurrentCamera());
     _glState->setParent(glState);
 
@@ -128,7 +128,7 @@ void AtmosphereRenderer::render(const G3MRenderContext* rc,
 
   const bool nowIsOverPresicionThreshold = (camHeigth < _minHeight * 1.2);
 
-  if (_overPresicionThreshold != nowIsOverPresicionThreshold){
+  if (_overPresicionThreshold != nowIsOverPresicionThreshold) {
     //Changing background color
     _overPresicionThreshold = nowIsOverPresicionThreshold;
 

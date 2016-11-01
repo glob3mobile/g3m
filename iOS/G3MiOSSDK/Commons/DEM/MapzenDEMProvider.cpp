@@ -171,7 +171,8 @@ void MapzenDEMProvider::requestTile(int z,
                                                                        z, x, y,
                                                                        sector,
                                                                        _deltaHeight),
-                           true);
+                           true,
+                           _instanceID);
 }
 
 void MapzenDEMProvider::initialize(const G3MContext* context) {

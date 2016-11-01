@@ -30,7 +30,8 @@ DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler() {
 void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const{
   if (nextCamera->hasValidViewDirection()) {
     nextCamera->setGeodeticPosition(pos);
-  } else{
+  }
+  else {
     ILogger::instance()->logWarning("Trying to set position of unvalid camera. ViewDirection: %s",
                                     nextCamera->getViewDirection().description().c_str());
   }

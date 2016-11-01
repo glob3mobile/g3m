@@ -31,7 +31,7 @@ const highp vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.
 
 bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,
                                  out highp vec3 p1,
-                                 out highp vec3 p2){
+                                 out highp vec3 p2) {
   // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 
   highp float a = dot(d,d);
@@ -52,7 +52,7 @@ bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,
     highp float t1 = (-b - sq) / (2.0*a);
     highp float t2 = (-b + sq) / (2.0*a);
 
-    if (t1 < 0.0 && t2 < 0.0){
+    if (t1 < 0.0 && t2 < 0.0) {
       return false;
     }
 
@@ -63,7 +63,7 @@ bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,
   return valid;
 }
 
-highp float getRayFactor(highp vec3 o, highp vec3 d){
+highp float getRayFactor(highp vec3 o, highp vec3 d) {
 
   // Ray density calculations explained in: https://github.com/amazingsmash/AtmosphericShaders
 
@@ -113,7 +113,7 @@ void main() {
   //Ray [O + tD = X]
   highp vec3 sp1, sp2;
   bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);
-  if (valid){
+  if (valid) {
     //Calculating color
     highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
 

@@ -31,6 +31,7 @@ _pyramidDEMProvider(pyramidDEMProvider),
 _grid(NULL),
 _stickyGrid(false),
 _children(NULL),
+_childrenSize(0),
 _subscriptions(NULL)
 {
 
@@ -42,8 +43,7 @@ PyramidNode::~PyramidNode() {
   }
 
   if (_children != NULL) {
-    const size_t size = _children->size();
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < _childrenSize; i++) {
       PyramidNode* child = _children->at(i);
       delete child;
     }
@@ -51,8 +51,8 @@ PyramidNode::~PyramidNode() {
   }
 
   if (_subscriptions != NULL) {
-    const size_t size = _subscriptions->size();
-    for (size_t i = 0; i < size; i++) {
+    const size_t subscriptionsSize = _subscriptions->size();
+    for (size_t i = 0; i < subscriptionsSize; i++) {
       DEMSubscription* subscription = _subscriptions->at(i);
       subscription->_release();
     }
@@ -63,7 +63,8 @@ PyramidNode::~PyramidNode() {
 std::vector<PyramidNode*>* PyramidNode::getChildren() {
   if (_children == NULL) {
     _children = new std::vector<PyramidNode*>();
-    for (size_t i = 0; i < 4; i++) {
+    _childrenSize = 4;
+    for (size_t i = 0; i < _childrenSize; i++) {
       PyramidNode* child = _pyramidDEMProvider->createNode(this, i);
       _children->push_back(child);
     }
@@ -89,8 +90,7 @@ bool PyramidNode::insertGrid(int z,
   }
 
   std::vector<PyramidNode*>* children = getChildren();
-  const size_t size = children->size();
-  for (size_t i = 0; i < size; i++) {
+  for (size_t i = 0; i < _childrenSize; i++) {
     PyramidNode* child = children->at(i);
     if (child->insertGrid(z, x, y,
                           grid, stickyGrid)) {
@@ -101,25 +101,23 @@ bool PyramidNode::insertGrid(int z,
 }
 
 void PyramidNode::addSubscription(DEMSubscription* subscription) {
-  if (!subscription->_sector.touchesWith(_sector)) {
-    return;
-  }
-
-  if (!_resolution._latitude.greaterThan( subscription->_resolution._latitude ) &&
-      !_resolution._longitude.greaterThan( subscription->_resolution._longitude ) ) {
-    if (_subscriptions == NULL) {
-      _subscriptions = new std::vector<DEMSubscription*>();
+  if (subscription->_sector.touchesWith(_sector)) {
+    const bool notEnoughResolution = (_resolution._latitude.greaterThan ( subscription->_resolution._latitude  ) ||
+                                      _resolution._longitude.greaterThan( subscription->_resolution._longitude ) );
+    if (notEnoughResolution) {
+      std::vector<PyramidNode*>* children = getChildren();
+      for (size_t i = 0; i < _childrenSize; i++) {
+        PyramidNode* child = children->at(i);
+        child->addSubscription(subscription);
+      }
     }
-    subscription->_retain();
-    _subscriptions->push_back(subscription);
-    return;
-  }
-
-  std::vector<PyramidNode*>* children = getChildren();
-  const size_t size = children->size();
-  for (size_t i = 0; i < size; i++) {
-    PyramidNode* child = children->at(i);
-    child->addSubscription(subscription);
+    else {
+      if (_subscriptions == NULL) {
+        _subscriptions = new std::vector<DEMSubscription*>();
+      }
+      subscription->_retain();
+      _subscriptions->push_back(subscription);
+    }
   }
 }
 
@@ -145,11 +143,10 @@ void PyramidNode::removeSubscription(DEMSubscription* subscription) {
   }
 
   if (_children != NULL) {
-    const size_t size = _children->size();
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < _childrenSize; i++) {
       PyramidNode* child = _children->at(i);
       child->removeSubscription(subscription);
     }
   }
-
+  
 }

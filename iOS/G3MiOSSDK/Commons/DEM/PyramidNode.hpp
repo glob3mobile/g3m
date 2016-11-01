@@ -25,6 +25,7 @@ private:
   bool _stickyGrid;
 
   std::vector<PyramidNode*>* _children;
+  size_t                     _childrenSize;
 
   const PyramidNode*  _parent;
   const size_t        _childID;

@@ -423,8 +423,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 
   //TEX COORDINATES////////////////////////////////////////////////////////////////
 
-  if (mercator) { //Mercator
-
+  if (mercator) {
     const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
     const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);
     const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
@@ -435,8 +434,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       for (int i = 0; i < meshResolution._x; i++) {
         const double u = (double) i / (meshResolution._x - 1);
 
-        Angle lat = Angle::linearInterpolation( meshSector._lower._latitude,  meshSector._upper._latitude,  1.0 - v );
-        Angle lon = Angle::linearInterpolation( meshSector._lower._longitude, meshSector._upper._longitude,       u );
+        const Angle lat = Angle::linearInterpolation( meshSector._lower._latitude,  meshSector._upper._latitude,  1.0 - v );
+        const Angle lon = Angle::linearInterpolation( meshSector._lower._longitude, meshSector._upper._longitude,       u );
 
         //U
         const double m_u = tileSector.getUCoordinate(lon);
@@ -448,9 +447,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         textCoords.add((float)m_u, (float)m_v);
       }
     }
-
-  } else{ //No mercator
-
+  }
+  else {
     for (int j = 0; j < meshResolution._y; j++) {
       const double v = (double) j / (meshResolution._y - 1);
       for (int i = 0; i < meshResolution._x; i++) {
@@ -458,7 +456,6 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         textCoords.add((float)u, (float)v);
       }
     }
-
   }
 
   //INDEX///////////////////////////////////////////////////////////////

@@ -520,7 +520,7 @@ void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
   
 //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
 //  float zOffset = zRange * 1e-6;
-//  if (zOffset < 1.0f){
+//  if (zOffset < 1.0f) {
 //    zOffset = 1.0f;
 //  }
   
