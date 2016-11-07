@@ -14,9 +14,6 @@
 #include "Sector.hpp"
 #include "Vector2I.hpp"
 
-class Mesh;
-class Geodetic3D;
-
 
 class DEMGrid : public RCObject {
 protected:
@@ -45,11 +42,6 @@ public:
   virtual double getElevationAt(int x, int y) const = 0;
 
   virtual Vector3D getMinMaxAverageElevations() const = 0;
-
-  Mesh* createDebugMesh(const Planet* planet,
-                        float verticalExaggeration,
-                        const Geodetic3D& offset,
-                        float pointSize) const;
   
 };
 

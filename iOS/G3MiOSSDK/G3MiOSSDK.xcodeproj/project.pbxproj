@@ -271,6 +271,8 @@
 		CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */; };
 		CF75C3A716EA62B800F7EE9F /* GoogleMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */; };
 		CF792A071C51620800FDE7C9 /* TileData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF792A051C51620800FDE7C9 /* TileData.cpp */; };
+		CF7947BF1DD0EBA100376172 /* DEMGridUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7947BD1DD0EBA100376172 /* DEMGridUtils.cpp */; };
+		CF7947C01DD0ED2500376172 /* DEMGridUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7947BE1DD0EBA100376172 /* DEMGridUtils.hpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */; };
 		CF7B07B617F5DBDC00FE363D /* HUDImageRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7B07B017F5D8D400FE363D /* HUDImageRenderer.hpp */; };
@@ -813,6 +815,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF7947C01DD0ED2500376172 /* DEMGridUtils.hpp in CopyFiles */,
 				CFE11EC81DD0B94700355A89 /* AltitudeMode.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CFF99FF91DB92AA9008E4F14 /* DEMSubscription.hpp in CopyFiles */,
@@ -1589,6 +1592,8 @@
 		CF75C3A516EA621D00F7EE9F /* GoogleMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GoogleMapsLayer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF792A051C51620800FDE7C9 /* TileData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileData.cpp; path = Commons/Rendererers/TileData.cpp; sourceTree = "<group>"; };
 		CF792A061C51620800FDE7C9 /* TileData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileData.hpp; path = Commons/Rendererers/TileData.hpp; sourceTree = "<group>"; };
+		CF7947BD1DD0EBA100376172 /* DEMGridUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DEMGridUtils.cpp; path = Commons/DEM/DEMGridUtils.cpp; sourceTree = "<group>"; };
+		CF7947BE1DD0EBA100376172 /* DEMGridUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DEMGridUtils.hpp; path = Commons/DEM/DEMGridUtils.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7B07AF17F5D8D400FE363D /* HUDImageRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = HUDImageRenderer.cpp; path = Commons/Rendererers/HUDImageRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2744,6 +2749,8 @@
 				CF7338151DA5799E00C406D1 /* BufferDEMGrid.hpp */,
 				CF7338111DA56EA700C406D1 /* DEMGrid.cpp */,
 				CF7338121DA56EA700C406D1 /* DEMGrid.hpp */,
+				CF7947BD1DD0EBA100376172 /* DEMGridUtils.cpp */,
+				CF7947BE1DD0EBA100376172 /* DEMGridUtils.hpp */,
 				CF9B45F41DB79EE3009ABF32 /* DEMListener.cpp */,
 				CF9B45F51DB79EE3009ABF32 /* DEMListener.hpp */,
 				CFC35E641DAFBA6000929BE6 /* DEMProvider.cpp */,
@@ -3264,6 +3271,7 @@
 				CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */,
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
+				CF7947BF1DD0EBA100376172 /* DEMGridUtils.cpp in Sources */,
 				CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */,
 				D8B78E271C120CF800DDE2B9 /* ProjectedCornersDistanceTileLODTester.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,

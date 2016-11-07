@@ -12,6 +12,7 @@
 #include "DEMGrid.hpp"
 #include "ErrorHandling.hpp"
 #include "DEMSubscription.hpp"
+#include "DEMGridUtils.hpp"
 
 
 PyramidNode::PyramidNode(const PyramidNode*  parent,
@@ -121,8 +122,9 @@ void PyramidNode::addSubscription(const DEMGrid* grid,
       subscription->_retain();
       _subscriptions->push_back(subscription);
       if (bestGrid != NULL) {
-        //subscription->onGrid( DEMGridUtils::gridFor(bestGrid, subscription) );
-#warning Diego at work!
+        subscription->onGrid( DEMGridUtils::bestGridFor(bestGrid,
+                                                        subscription->_sector,
+                                                        subscription->_extent) );
       }
     }
   }

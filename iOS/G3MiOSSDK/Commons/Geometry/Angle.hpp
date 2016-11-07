@@ -77,7 +77,8 @@ public:
 
   static Angle nan();
 
-  static Angle midAngle(const Angle& angle1, const Angle& angle2) {
+  static Angle midAngle(const Angle& angle1,
+                        const Angle& angle2) {
     return Angle::fromRadians((angle1._radians + angle2._radians) / 2);
   }
 

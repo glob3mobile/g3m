@@ -22,13 +22,6 @@ class DEMSubscription : public RCObject {
 private:
   DEMProvider* _demProvider;
 
-#ifdef C_CODE
-  const Vector2S   _extent;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2S _extent;
-#endif
-
   DEMListener* _listener;
   const bool   _deleteListener;
 
@@ -37,6 +30,12 @@ protected:
 
 public:
   const Sector     _sector;
+#ifdef C_CODE
+  const Vector2S   _extent;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2S _extent;
+#endif
   const Geodetic2D _resolution;
 
   DEMSubscription(DEMProvider*    demProvider,
