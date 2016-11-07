@@ -23,6 +23,7 @@
 #include "G3MRenderContext.hpp"
 #include "GLConstants.hpp"
 #include "TimeInterval.hpp"
+#include "IImage.hpp"
 
 
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {

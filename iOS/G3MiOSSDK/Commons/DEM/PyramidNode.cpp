@@ -155,5 +155,5 @@ void PyramidNode::removeSubscription(DEMSubscription* subscription) {
       child->removeSubscription(subscription);
     }
   }
-  
+
 }
