@@ -10,13 +10,64 @@
 
 #include "Effects.hpp"
 
+#include "IMathUtils.hpp"
+#include "TimeInterval.hpp"
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
+#include "ITimer.hpp"
+
+
+double Effect::sigmoid(double x) {
+  x = 12.0*x - 6.0;
+  return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * x)));
+}
+
+EffectWithDuration::EffectWithDuration(const TimeInterval& duration,
+                                       const bool linearTiming) :
+_durationMS(duration._milliseconds),
+_linearTiming(linearTiming),
+_started(0)
+{
+
+}
+
+
+double EffectWithDuration::percentDone(const TimeInterval& when) const {
+  const long long elapsed = when._milliseconds - _started;
+
+  const double percent = (double) elapsed / _durationMS;
+  if (percent > 1) return 1;
+  if (percent < 0) return 0;
+  return percent;
+}
+
+void EffectWithDuration::start(const G3MRenderContext* rc,
+                               const TimeInterval& when) {
+  _started = when._milliseconds;
+}
+
+
+bool EffectWithForce::isDone(const G3MRenderContext* rc,
+                             const TimeInterval& when) {
+  return (IMathUtils::instance()->abs(_force) < 0.005);
+}
+
+
 
 void EffectsScheduler::initialize(const G3MContext* context) {
   _factory = context->getFactory();
   _timer = _factory->createTimer();
 }
+
+EffectsScheduler::~EffectsScheduler() {
+  delete _timer;
+
+  for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
+    EffectRun* effectRun = _effectsRuns[i];
+    delete effectRun;
+  }
+}
+
 
 void EffectsScheduler::cancelAllEffects() {
   const TimeInterval now = _timer->now();

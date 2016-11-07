@@ -20,6 +20,7 @@
 #include "Vector2F.hpp"
 #include "G3MEventContext.hpp"
 #include "MarksFilter.hpp"
+#include "G3MRenderContext.hpp"
 
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,

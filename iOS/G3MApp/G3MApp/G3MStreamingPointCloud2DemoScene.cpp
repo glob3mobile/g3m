@@ -15,6 +15,7 @@
 #include <G3MiOSSDK/DownloadPriority.hpp>
 #include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
 
 #include "G3MDemoModel.hpp"
 

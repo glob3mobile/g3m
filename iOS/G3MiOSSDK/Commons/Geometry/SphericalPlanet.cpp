@@ -10,6 +10,9 @@
 #include "CameraEffects.hpp"
 #include "Camera.hpp"
 #include "Sector.hpp"
+#include "IMathUtils.hpp"
+#include "Geodetic3D.hpp"
+#include "TimeInterval.hpp"
 
 
 const Planet* SphericalPlanet::createEarth() {
@@ -138,8 +141,7 @@ Vector3D SphericalPlanet::scaleToGeocentricSurface(const Vector3D& position) con
 }
 
 
-Geodetic2D SphericalPlanet::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
-{
+Geodetic2D SphericalPlanet::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const {
   const Vector3D v0 = toCartesian(P0);
   const Vector3D v1 = toCartesian(P1);
   const Vector3D normal = v0.cross(v1).normalized();
@@ -284,16 +286,14 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Angle& lat
 }
 
 
-void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
-{
+void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const {
   _origin.copyFrom(origin);
   _initialPoint.copyFrom(closestIntersection(origin, initialRay));
   _validSingleDrag = false;
 }
 
 
-MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
-{
+MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const {
   // check if initialPoint is valid
   if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
 
@@ -329,8 +329,7 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
 }
 
 
-Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
-{
+Effect* SphericalPlanet::createEffectFromLastSingleDrag() const {
   if (!_validSingleDrag || _lastDragAxis.isNan()) return NULL;
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
@@ -339,8 +338,7 @@ Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
 void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
                                       const Vector3D& centerRay,
                                       const Vector3D& initialRay0,
-                                      const Vector3D& initialRay1) const
-{
+                                      const Vector3D& initialRay1) const {
   _origin.copyFrom(origin);
   _centerRay.copyFrom(centerRay);
   _initialPoint0.copyFrom(closestIntersection(origin, initialRay0));
@@ -358,8 +356,7 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
 
 
 MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                             const Vector3D& finalRay1) const
-{
+                                             const Vector3D& finalRay1) const {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
     return MutableMatrix44D::invalid();
@@ -483,11 +480,9 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   return matrix;
 }
 
-
 Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
                                                const Vector3D& centerRay,
-                                               const Vector3D& tapRay) const
-{
+                                               const Vector3D& tapRay) const {
   const Vector3D initialPoint = closestIntersection(origin, tapRay);
   if (initialPoint.isNan()) return NULL;
 
@@ -508,16 +503,14 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
 }
 
 
-double SphericalPlanet::distanceToHorizon(const Vector3D& position) const
-{
+double SphericalPlanet::distanceToHorizon(const Vector3D& position) const {
   double R = _sphere._radius;
   double D = position.length();
   return sqrt(D*D - R*R);
 }
 
 
-MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const
-{
+MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const {
   const Vector3D P0 = toCartesian(origin);
   const Vector3D P1 = toCartesian(destination);
   const Vector3D axis = P0.cross(P1);
@@ -535,8 +528,6 @@ void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
 
 }
 
-
-
 Geodetic3D SphericalPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
   const Vector3D asw = toCartesian(rendereSector.getSW());
   const Vector3D ane = toCartesian(rendereSector.getNE());
@@ -544,4 +535,56 @@ Geodetic3D SphericalPlanet::getDefaultCameraPosition(const Sector& rendereSector
 
   return Geodetic3D(rendereSector._center,
                     height);
+}
+
+Vector3D SphericalPlanet::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
+  return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+}
+
+Vector3D SphericalPlanet::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
+  return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+}
+
+Vector3D SphericalPlanet::toCartesian(const Geodetic3D& geodetic) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     geodetic._height);
+}
+
+Vector3D SphericalPlanet::toCartesian(const Geodetic2D& geodetic) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     0.0);
+}
+
+Vector3D SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                      const double height) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     height);
+}
+
+void SphericalPlanet::toCartesian(const Geodetic3D& geodetic,
+                                  MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              geodetic._height,
+              result);
+}
+
+void SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                  MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              0,
+              result);
+}
+
+void SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                  const double height,
+                                  MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              height,
+              result);
 }

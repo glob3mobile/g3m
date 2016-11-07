@@ -13,6 +13,8 @@
 #include "Geodetic2D.hpp"
 #include "GEOVectorTileImageProvider.hpp"
 #include <cstdlib>
+#include "ILogger.hpp"
+
 
 class GenericQuadTree_Node;
 

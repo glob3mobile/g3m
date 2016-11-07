@@ -10,7 +10,10 @@
 
 
 #include "CameraEventHandler.hpp"
-#include "Camera.hpp"
+
+#include "MutableVector3D.hpp"
+#include "MutableVector2I.hpp"
+#include "MutableMatrix44D.hpp"
 
 
 class CameraDoubleDragHandler: public CameraEventHandler {

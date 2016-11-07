@@ -16,6 +16,7 @@
 #include "FrameTasksExecutor.hpp"
 #include "Sector.hpp"
 #include "Vector2S.hpp"
+#include "IStringBuilder.hpp"
 
 
 CompositeTileImageProvider::~CompositeTileImageProvider() {

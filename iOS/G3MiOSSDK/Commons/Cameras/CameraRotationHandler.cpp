@@ -10,8 +10,8 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
-
-
+#include "Planet.hpp"
+ 
 
 bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
                                          const TouchEvent* touchEvent, 

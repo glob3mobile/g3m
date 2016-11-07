@@ -16,6 +16,7 @@
 #include "ErrorHandling.hpp"
 #include "GLConstants.hpp"
 #include "MutableMatrix44D.hpp"
+#include "ILogger.hpp"
 
 
 CoordinateSystem CoordinateSystem::global() {

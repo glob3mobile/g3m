@@ -9,6 +9,7 @@
 
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
+#include "IMathUtils.hpp"
 
 #include <math.h>
 

@@ -8,18 +8,17 @@
 #ifndef G3MiOSSDK_Vector2D
 #define G3MiOSSDK_Vector2D
 
-#include "IMathUtils.hpp"
+#include <string>
 
-#include "Angle.hpp"
-
+class Angle;
 class MutableVector2D;
+
 
 class Vector2D {
 private:
-  
-  
+
   Vector2D& operator=(const Vector2D& v);
-  
+
 public:
   const double _x;
   const double _y;
@@ -27,78 +26,69 @@ public:
   static Vector2D zero() {
     return Vector2D(0, 0);
   }
-  
+
   Vector2D(const double x,
            const double y): _x(x), _y(y) {
-    
+
   }
-  
+
   Vector2D(const Vector2D &v): _x(v._x), _y(v._y) {
-    
+
   }
-  
-  double length() const {
-    return IMathUtils::instance()->sqrt(squaredLength());
-  }
-  
-  Angle orientation() const { return Angle::fromRadians(IMathUtils::instance()->atan2(_y, _x)); }
-  
+
+  double length() const;
+
+  Angle orientation() const;
+
   double squaredLength() const {
     return _x * _x + _y * _y ;
   }
-  
+
   Vector2D add(const Vector2D& v) const {
     return Vector2D(_x + v._x,
                     _y + v._y);
   }
-  
+
   Vector2D sub(const Vector2D& v) const {
     return Vector2D(_x - v._x,
                     _y - v._y);
   }
-  
+
   Vector2D times(const Vector2D& v) const {
     return Vector2D(_x * v._x,
                     _y * v._y);
   }
-  
+
   Vector2D times(const double magnitude) const {
     return Vector2D(_x * magnitude,
                     _y * magnitude);
   }
-  
+
   Vector2D div(const Vector2D& v) const {
     return Vector2D(_x / v._x,
                     _y / v._y);
   }
-  
+
   Vector2D div(const double v) const {
     return Vector2D(_x / v,
                     _y / v);
   }
-  
-  Angle angle() const {
-    double a = IMathUtils::instance()->atan2(_y, _x);
-    return Angle::fromRadians(a);
-  }
 
-  static Vector2D nan() {
-    return Vector2D(NAND, NAND);
-  }
-  
+  Angle angle() const;
+
+  static Vector2D nan();
+
   double maxAxis() const {
     return (_x >= _y) ? _x : _y;
   }
-  
+
   double minAxis() const {
     return (_x <= _y) ? _x : _y;
   }
-  
+
   MutableVector2D asMutableVector2D() const;
-  
+
   bool isNan() const {
-//    return IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y);
-    
     if (_x != _x) {
       return true;
     }
@@ -107,7 +97,7 @@ public:
     }
     return false;
   }
-  
+
   const std::string description() const;
 #ifdef JAVA_CODE
   @Override
@@ -115,14 +105,14 @@ public:
     return description();
   }
 #endif
-  
+
   static Vector2D intersectionOfTwoLines(const Vector2D& p1, const Vector2D& r1,
                                          const Vector2D& p2, const Vector2D& r2);
-  
+
   double dot(const Vector2D& v) const {
     return _x * v._x + _y * v._y;
   }
-
+  
 };
 
 

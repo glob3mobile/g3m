@@ -8,6 +8,8 @@
 #include "Plane.hpp"
 
 #include "MutableMatrix44D.hpp"
+#include "IMathUtils.hpp"
+#include "Angle.hpp"
 
 
 Plane Plane::transformedByTranspose(const MutableMatrix44D& M) const {
@@ -102,25 +104,25 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   const double k4 =  (-(a*b*d1_2*x) + c*d2_2*(-(c*y) + b*z) + a_2*b*(b*y + c*z))/(d1_2*d2_2);
   const double k5 =  -(-(c*d1_2*x) + 2*a*b*c*y - a*b_2*z + a*c_2*z)/(d1_2*d2);
   const double k6 =  (b*(a*x + b*y + c*z))/d2_2;
-  
+
   const double k7 =  -((-(a*c*d1_2*x) + b*d2_2*(c*y - b*z) + a_2*c*(b*y + c*z))/(d1_2*d2_2));
   const double k8 =  (-(b*d1_2*x) + a*b_2*y - a*c_2*y + 2*a*b*c*z)/(d1_2*d2);
   const double k9 =  -((c*(a*x + b*y + c*z))/d2_2);
 
-/*
- 
-  const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
-  const double k2 = (b*z*d2 - c*y*d2) / d2_2;
-  const double k3 = (a_2*x + a*b*y + a*c*z) / d2_2;
+  /*
 
-  const double k4 = ((a_2*b_2*y) + (c_2*y*d2_2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
-  const double k5 = ((c*x*d1_2*d2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
-  const double k6 = ((b_2*y*d1_2) + (a*b*x*d1_2) + (b*c*z*d1_2)) / (d1_2 * d2_2);
+   const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
+   const double k2 = (b*z*d2 - c*y*d2) / d2_2;
+   const double k3 = (a_2*x + a*b*y + a*c*z) / d2_2;
 
-  const double k7 = ((a_2*c_2*z) + (b_2*z*d2_2) + (a_2*b*c*y) - (a*c*x*d1_2) - (b*c*y*d2_2)) / (d1_2 * d2_2);
-  const double k8 = ((-b*x*d1_2*d2) + (a*b_2*y*d2) + (a*c_2*y*d2)) / (d1_2 * d2_2);
-  const double k9 = ((c_2*z*d1_2) + (a*c*x*d1_2) + (b*c*y*d1_2)) / (d1_2 * d2_2);
-*/
+   const double k4 = ((a_2*b_2*y) + (c_2*y*d2_2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
+   const double k5 = ((c*x*d1_2*d2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
+   const double k6 = ((b_2*y*d1_2) + (a*b*x*d1_2) + (b*c*z*d1_2)) / (d1_2 * d2_2);
+
+   const double k7 = ((a_2*c_2*z) + (b_2*z*d2_2) + (a_2*b*c*y) - (a*c*x*d1_2) - (b*c*y*d2_2)) / (d1_2 * d2_2);
+   const double k8 = ((-b*x*d1_2*d2) + (a*b_2*y*d2) + (a*c_2*y*d2)) / (d1_2 * d2_2);
+   const double k9 = ((c_2*z*d1_2) + (a*c*x*d1_2) + (b*c*y*d1_2)) / (d1_2 * d2_2);
+   */
 
 
   //Calculating S's
@@ -157,20 +159,20 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   //*********
   /*
    //Check code
-  Angle res = Angle::fromRadians(solution);
-  Vector3D nv = vector.rotateAroundAxis(axis, res);
-  if (!isVectorParallel(nv)) {
+   Angle res = Angle::fromRadians(solution);
+   Vector3D nv = vector.rotateAroundAxis(axis, res);
+   if (!isVectorParallel(nv)) {
 
-    ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
-                                  vector.description().c_str(),
-                                  axis.description().c_str(),
-                                  res.description().c_str(),
-                                  _normal.dot(nv));
-  }
-*/
-   
+   ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
+   vector.description().c_str(),
+   axis.description().c_str(),
+   res.description().c_str(),
+   _normal.dot(nv));
+   }
+   */
 
-   //**********
+
+  //**********
 
   return Angle::fromRadians(solution);
 

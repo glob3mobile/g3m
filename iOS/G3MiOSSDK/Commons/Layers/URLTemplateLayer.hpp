@@ -13,6 +13,7 @@
 
 #include "Sector.hpp"
 class IStringUtils;
+class IMathUtils;
 
 
 class URLTemplateLayer : public RasterLayer {

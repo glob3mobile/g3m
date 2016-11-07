@@ -16,6 +16,7 @@
 class Interpolator;
 class Mesh;
 class Geodetic3D;
+class Vector2I;
 
 
 class ElevationData {

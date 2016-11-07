@@ -7,6 +7,7 @@
 
 #include "Frustum.hpp"
 #include "Box.hpp"
+#include "BoundingVolume.hpp"
 
 
 Frustum::Frustum (const FrustumData& data):
@@ -118,7 +119,6 @@ bool Frustum::touchesWithBox(const Box* that) const {
 #endif
 }
 
-
 BoundingVolume* Frustum::computeBoundingVolume() const {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
@@ -156,5 +156,13 @@ BoundingVolume* Frustum::computeBoundingVolume() const {
   if (_rbf._z<minz) minz=_rbf._z;     if (_rbf._z>maxz) maxz=_rbf._z;
 
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+}
+
+Frustum::~Frustum() {
+  if (_boundingVolume) delete _boundingVolume;
+}
+
+Frustum* Frustum::transformedBy_P(const MutableMatrix44D& matrix) const {
+  return new Frustum(this, matrix, matrix.inversed());
 }
 

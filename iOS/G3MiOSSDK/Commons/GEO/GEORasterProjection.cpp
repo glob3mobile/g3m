@@ -8,6 +8,8 @@
 
 #include "GEORasterProjection.hpp"
 #include "MercatorUtils.hpp"
+#include "Vector2D.hpp"
+
 
 GEORasterProjection::GEORasterProjection(const Sector& sector,
                                          bool mercator,

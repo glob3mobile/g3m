@@ -15,6 +15,8 @@
 #include "Color.hpp"
 #include "Sphere.hpp"
 #include "Vector2F.hpp"
+#include "G3MRenderContext.hpp"
+
 
 Box::~Box() {
   delete _mesh;

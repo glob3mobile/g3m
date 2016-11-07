@@ -12,6 +12,7 @@
 #include "ShortBufferBuilder.hpp"
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
+#include "G3MRenderContext.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 

@@ -12,7 +12,7 @@
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
-
+#include <G3MiOSSDK/Geodetic3D.hpp>
 #include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 

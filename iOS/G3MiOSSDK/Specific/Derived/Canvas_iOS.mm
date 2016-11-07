@@ -15,6 +15,7 @@
 #include "IDeviceInfo.hpp"
 #include "Image_iOS.hpp"
 #include "IFactory.hpp"
+#include "ILogger.hpp"
 
 #import <UIKit/UIKit.h>
 

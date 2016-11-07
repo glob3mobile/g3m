@@ -12,7 +12,9 @@
 
 #include <string>
 
-//class Shape;
+#include "Geodetic3D.hpp"
+#include "AltitudeMode.hpp"
+
 class SGShape;
 class IByteBuffer;
 class JSONBaseObject;
@@ -26,7 +28,7 @@ class SGTranslateNode;
 class SGLayerNode;
 class Color;
 class SceneJSParserStatistics;
-#include "Geodetic3D.hpp"
+
 
 class SceneJSShapesParser {
 private:

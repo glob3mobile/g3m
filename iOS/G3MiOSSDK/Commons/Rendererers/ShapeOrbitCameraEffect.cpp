@@ -10,6 +10,11 @@
 
 #include "Shape.hpp"
 #include "Camera.hpp"
+#include "G3MRenderContext.hpp"
+#include "IMathUtils.hpp"
+#include "Shape.hpp"
+#include "Geodetic3D.hpp"
+
 
 void ShapeOrbitCameraEffect::doStep(const G3MRenderContext* rc,
                                     const TimeInterval& when) {

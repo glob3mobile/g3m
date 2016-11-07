@@ -7,7 +7,8 @@
 //
 
 #include "CameraEffects.hpp"
-#include "G3MContext.hpp"
+
+#include "G3MRenderContext.hpp"
 #include "Camera.hpp"
 
 

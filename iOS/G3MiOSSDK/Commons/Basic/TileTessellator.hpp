@@ -22,7 +22,7 @@ class Vector2S;
 class Vector2F;
 class Angle;
 
-class TileTessellatorMeshData{
+class TileTessellatorMeshData {
 public:
   double _minHeight;
   double _maxHeight;

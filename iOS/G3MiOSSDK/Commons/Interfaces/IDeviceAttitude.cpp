@@ -8,6 +8,8 @@
 
 #include "IDeviceAttitude.hpp"
 
+#include "ILogger.hpp"
+
 IDeviceAttitude* IDeviceAttitude::_instance;
 
 

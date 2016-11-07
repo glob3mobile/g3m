@@ -7,12 +7,97 @@
 
 #include "MutableMatrix44D.hpp"
 
+#include "Matrix44D.hpp"
 #include "Frustum.hpp"
 #include "MutableVector3D.hpp"
 #include "Vector2D.hpp"
 #include "IFloatBuffer.hpp"
 #include "Vector3F.hpp"
 #include "Vector2F.hpp"
+#include "IStringBuilder.hpp"
+#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
+#include "IMathUtils.hpp"
+#include "ILogger.hpp"
+
+
+MutableMatrix44D::MutableMatrix44D(const MutableMatrix44D &m):
+_isValid(m._isValid)
+{
+  _m00 = m._m00;
+  _m01 = m._m01;
+  _m02 = m._m02;
+  _m03 = m._m03;
+
+  _m10 = m._m10;
+  _m11 = m._m11;
+  _m12 = m._m12;
+  _m13 = m._m13;
+
+  _m20 = m._m20;
+  _m21 = m._m21;
+  _m22 = m._m22;
+  _m23 = m._m23;
+
+  _m30 = m._m30;
+  _m31 = m._m31;
+  _m32 = m._m32;
+  _m33 = m._m33;
+
+  _matrix44D = m._matrix44D;
+  if (_matrix44D != NULL) {
+    _matrix44D->_retain();
+  }
+}
+
+MutableMatrix44D::MutableMatrix44D(const Matrix44D &m):
+_isValid(true),
+_matrix44D(NULL)
+{
+  _m00 = m._m00;
+  _m01 = m._m01;
+  _m02 = m._m02;
+  _m03 = m._m03;
+
+  _m10 = m._m10;
+  _m11 = m._m11;
+  _m12 = m._m12;
+  _m13 = m._m13;
+
+  _m20 = m._m20;
+  _m21 = m._m21;
+  _m22 = m._m22;
+  _m23 = m._m23;
+
+  _m30 = m._m30;
+  _m31 = m._m31;
+  _m32 = m._m32;
+  _m33 = m._m33;
+}
+
+Matrix44D* MutableMatrix44D::asMatrix44D() const {
+  if (_matrix44D == NULL) {
+    _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
+                               _m01, _m11, _m21, _m31,
+                               _m02, _m12, _m22, _m32,
+                               _m03, _m13, _m23, _m33);
+  }
+  return _matrix44D;
+}
+
+std::string MutableMatrix44D::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("MUTABLE MATRIX 44D: ");
+  float* f = asMatrix44D()->getColumnMajorFloatArray();
+  for (int i = 0; i < 16; i++) {
+    isb->addDouble(f[i]);
+    if (i < 15) isb->addString(", ");
+  }
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
 
 
 MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
@@ -490,9 +575,17 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
   if (_matrix44D != NULL) {
     _matrix44D->_release();
   }
-  
+
   _matrix44D = m._matrix44D;
   if (_matrix44D != NULL) {
     _matrix44D->_retain();
   }
+}
+
+MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Geodetic2D& position) {
+  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+}
+
+MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Geodetic3D& position) {
+  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
 }

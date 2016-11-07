@@ -9,6 +9,8 @@
 #include "MutableVector2F.hpp"
 
 #include "Vector2F.hpp"
+#include "IMathUtils.hpp"
+
 
 MutableVector2F::MutableVector2F(const Vector2F& that) :
 _x(that._x),

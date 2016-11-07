@@ -8,28 +8,22 @@
 #ifndef G3MiOSSDK_MutableMatrix44D
 #define G3MiOSSDK_MutableMatrix44D
 
-class FrustumData;
+#include <string>
+
+class Matrix44D;
 class Vector3D;
 class Vector2D;
 class Vector3F;
 class Vector2F;
+class ILogger;
 class MutableVector3D;
-//class IFloatBuffer;
-
-#include "Angle.hpp"
-
-#include "ILogger.hpp"
-#include "Geodetic2D.hpp"
-#include "Geodetic3D.hpp"
-#include "IStringBuilder.hpp"
-
-#include <string>
-
-#include "Matrix44D.hpp"
+class FrustumData;
+class Geodetic2D;
+class Geodetic3D;
+class Angle;
 
 
 class MutableMatrix44D {
-  
 private:
   //_m23 -> row 2, column 3
   double _m00;
@@ -48,23 +42,23 @@ private:
   double _m31;
   double _m32;
   double _m33;
-  
+
   mutable Matrix44D* _matrix44D;
-  
+
   bool _isValid;
-  
-  
+
+
   MutableMatrix44D(bool isValid):
   _isValid(isValid),
   _matrix44D(NULL)
   {
   }
-  
+
   MutableMatrix44D& operator=(const MutableMatrix44D& that);
-  
-  
+
+
 public:
-  
+
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
                    double m01, double m11, double m21, double m31,
@@ -77,25 +71,23 @@ public:
     _m01  = m01;
     _m02  = m02;
     _m03  = m03;
-    
+
     _m10  = m10;
     _m11  = m11;
     _m12  = m12;
     _m13  = m13;
-    
+
     _m20  = m20;
     _m21  = m21;
     _m22  = m22;
     _m23  = m23;
-    
+
     _m30  = m30;
     _m31  = m31;
     _m32  = m32;
     _m33  = m33;
-    
-    _matrix44D = NULL;
   }
-  
+
   MutableMatrix44D():
   _isValid(true),
   _matrix44D(NULL)
@@ -104,92 +96,31 @@ public:
     _m01 = 0.0;
     _m02 = 0.0;
     _m03 = 0.0;
-    
+
     _m10 = 0.0;
     _m11 = 0.0;
     _m12 = 0.0;
     _m13 = 0.0;
-    
+
     _m20 = 0.0;
     _m21 = 0.0;
     _m22 = 0.0;
     _m23 = 0.0;
-    
+
     _m30 = 0.0;
     _m31 = 0.0;
     _m32 = 0.0;
     _m33 = 0.0;
   }
-  
-  MutableMatrix44D(const MutableMatrix44D &m):
-  _isValid(m._isValid)
-  {
-    _m00 = m._m00;
-    _m01 = m._m01;
-    _m02 = m._m02;
-    _m03 = m._m03;
-    
-    _m10 = m._m10;
-    _m11 = m._m11;
-    _m12 = m._m12;
-    _m13 = m._m13;
-    
-    _m20 = m._m20;
-    _m21 = m._m21;
-    _m22 = m._m22;
-    _m23 = m._m23;
-    
-    _m30 = m._m30;
-    _m31 = m._m31;
-    _m32 = m._m32;
-    _m33 = m._m33;
-    
-    _matrix44D = m._matrix44D;
-    if (_matrix44D != NULL) {
-      _matrix44D->_retain();
-    }
-    
-  }
-  
-  explicit MutableMatrix44D(const Matrix44D &m):
-  _isValid(true)
-  {
-    _m00 = m._m00;
-    _m01 = m._m01;
-    _m02 = m._m02;
-    _m03 = m._m03;
-    
-    _m10 = m._m10;
-    _m11 = m._m11;
-    _m12 = m._m12;
-    _m13 = m._m13;
-    
-    _m20 = m._m20;
-    _m21 = m._m21;
-    _m22 = m._m22;
-    _m23 = m._m23;
-    
-    _m30 = m._m30;
-    _m31 = m._m31;
-    _m32 = m._m32;
-    _m33 = m._m33;
-    
-    _matrix44D = NULL;
-    
-  }
-  
-  Matrix44D* asMatrix44D() const {
-    if (_matrix44D == NULL) {
-      _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
-                                 _m01, _m11, _m21, _m31,
-                                 _m02, _m12, _m22, _m32,
-                                 _m03, _m13, _m23, _m33);
-    }
-    return _matrix44D;
-  }
-  
+
+  MutableMatrix44D(const MutableMatrix44D &m);
+
+  explicit MutableMatrix44D(const Matrix44D &m);
+
+  Matrix44D* asMatrix44D() const;
+
   void copyValue(const MutableMatrix44D &m);
-  
+
   bool isEquals(const MutableMatrix44D& m) const {
     return (
             (_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) &&
@@ -198,61 +129,51 @@ public:
             (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33)
             );
   }
-  
+
   ~MutableMatrix44D();
-  
+
   static MutableMatrix44D identity() {
     return MutableMatrix44D(1, 0, 0, 0,
                             0, 1, 0, 0,
                             0, 0, 1, 0,
                             0, 0, 0, 1);
   }
-  
+
   bool isIdentity() const {
     static const MutableMatrix44D identity = MutableMatrix44D::identity();
     return isEquals(identity);
   }
-  
+
   static MutableMatrix44D invalid() {
     return MutableMatrix44D(false);
   }
-  
+
   bool isValid() const {
     return _isValid;
   }
-  
-  std::string description() const {
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    isb->addString("MUTABLE MATRIX 44D: ");
-    float* f = asMatrix44D()->getColumnMajorFloatArray();
-    for (int i = 0; i < 16; i++) {
-      isb->addDouble(f[i]);
-      if (i < 15) isb->addString(", ");
-    }
-    const std::string s = isb->getString();
-    delete isb;
-    return s;
-  }
+
+  std::string description() const;
+
 #ifdef JAVA_CODE
   @Override
   public String toString() {
     return description();
   }
 #endif
-  
+
   void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
-  
+
   //
   //OPERATIONS
-  
+
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
-  
+
   MutableMatrix44D inversed() const;
-  
+
   MutableMatrix44D transposed() const;
-  
+
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
-  
+
   double get0() const { return _m00; }
   double get1() const { return _m10; }
   double get2() const { return _m20; }
@@ -269,7 +190,7 @@ public:
   double get13() const { return _m13; }
   double get14() const { return _m23; }
   double get15() const { return _m33; }
-  
+
   /*
    //Returns values from 0..15 in column mayor order
    double get(int i) const {
@@ -311,54 +232,54 @@ public:
    return 0;
    }
    }*/
-  
+
   void print(const std::string& name, const ILogger* log) const;
-  
+
   Vector3D unproject(const Vector3D& pixel3D,
                      const int vpLeft,
                      const int vpTop,
                      const int vpWidth,
                      const int vpHeight) const;
-  
+
   Vector2D project(const Vector3D& point,
                    const int vpLeft,
                    const int vpTop,
                    const int vpWidth,
                    const int vpHeight) const;
-  
+
   Vector2F project(const Vector3F& point,
                    const int vpLeft,
                    const int vpTop,
                    const int vpWidth,
                    const int vpHeight) const;
-  
+
   static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
-  
+
   static MutableMatrix44D createTranslationMatrix(double x,
                                                   double y,
                                                   double z);
-  
+
   static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                const Vector3D& axis);
-  
+
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,
                                                       const Vector3D& point);
-  
+
   static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
                                             const MutableVector3D& center,
                                             const MutableVector3D& up);
-  
+
   static MutableMatrix44D createProjectionMatrix(double left, double right,
                                                  double bottom, double top,
                                                  double znear, double zfar);
-  
+
   static MutableMatrix44D createProjectionMatrix(const FrustumData& data);
-  
+
   static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
                                                              double bottom, double top,
                                                              double znear, double zfar);
-  
+
   static MutableMatrix44D createScaleMatrix(double scaleX,
                                             double scaleY,
                                             double scaleZ) {
@@ -366,26 +287,21 @@ public:
                             0, scaleY, 0, 0,
                             0, 0, scaleZ, 0,
                             0, 0, 0, 1);
-    
   }
-  
-  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
-    return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
-  }
-  
-  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
-    return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
-  }
-  
+
+  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position);
+
+  static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position);
+
   static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
-  
+
   static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
                                                        const Angle& longitude);
-  
+
   void setValue(double m00, double m10, double m20, double m30,
-                  double m01, double m11, double m21, double m31,
-                  double m02, double m12, double m22, double m32,
-                  double m03, double m13, double m23, double m33) {
+                double m01, double m11, double m21, double m31,
+                double m02, double m12, double m22, double m32,
+                double m03, double m13, double m23, double m33) {
     _m00=m00; _m01=m01; _m02=m02; _m03=m03;
     _m10=m10; _m11=m11; _m12=m12; _m13=m13;
     _m20=m20; _m21=m21; _m22=m22; _m23=m23;

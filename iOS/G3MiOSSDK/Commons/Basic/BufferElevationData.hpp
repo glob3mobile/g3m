@@ -11,6 +11,7 @@
 
 #include "ElevationData.hpp"
 
+
 class BufferElevationData : public ElevationData {
 protected:
   const size_t _bufferSize;

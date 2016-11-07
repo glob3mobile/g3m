@@ -76,7 +76,8 @@ DEMSubscription* PyramidDEMProvider::subscribe(const Sector&   sector,
   std::vector<PyramidNode*>* rootNodes = getRootNodes();
   for (size_t i = 0; i < _rootNodesCount; i++) {
     PyramidNode* rootNode = rootNodes->at(i);
-    rootNode->addSubscription(subscription);
+    rootNode->addSubscription(NULL, // grid
+                              subscription);
   }
 
 //  const bool released = subscription->_release();

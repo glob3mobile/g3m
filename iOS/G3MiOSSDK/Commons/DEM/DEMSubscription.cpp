@@ -44,6 +44,10 @@ DEMSubscription::~DEMSubscription() {
 #endif
 }
 
+void DEMSubscription::onGrid(const DEMGrid* grid) {
+  _listener->onGrid(grid);
+}
+
 void DEMSubscription::cancel() {
   if (_demProvider != NULL) {
     _demProvider->unsubscribe(this);

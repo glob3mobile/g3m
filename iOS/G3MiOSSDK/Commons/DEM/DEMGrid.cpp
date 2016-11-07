@@ -12,6 +12,8 @@
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
+#include "ILogger.hpp"
+#include "IMathUtils.hpp"
 
 
 DEMGrid::DEMGrid(const Sector&   sector,

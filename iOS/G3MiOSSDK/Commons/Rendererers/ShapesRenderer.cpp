@@ -18,6 +18,9 @@
 #include "SGShape.hpp"
 #include "G3MEventContext.hpp"
 #include "GAsyncTask.hpp"
+#include "G3MRenderContext.hpp"
+#include "GLState.hpp"
+#include "Planet.hpp"
 
 
 class TransparentShapeWrapper : public OrderedRenderable {
@@ -46,6 +49,31 @@ public:
     _shape->render(rc, _parentGLState, _renderNotReadyShapes);
   }
 };
+
+ShapesRenderer::ShapesRenderer(bool renderNotReadyShapes) :
+_renderNotReadyShapes(renderNotReadyShapes),
+_glState(new GLState()),
+_glStateTransparent(new GLState()),
+_lastCamera(NULL)
+{
+  _context = NULL;
+}
+
+ShapesRenderer::~ShapesRenderer() {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    delete shape;
+  }
+
+  _glState->_release();
+  _glStateTransparent->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
 
 RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
   if (!_renderNotReadyShapes) {

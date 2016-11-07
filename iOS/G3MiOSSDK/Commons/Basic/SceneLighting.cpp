@@ -12,10 +12,11 @@
 #include "Vector3D.hpp"
 #include "G3MContext.hpp"
 #include "Camera.hpp"
-
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "MeshRenderer.hpp"
+#include "G3MRenderContext.hpp"
+
 
 void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Vector3D lightDir(1, 0,0);

@@ -14,8 +14,9 @@
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
-
+#include "IMathUtils.hpp"
 #include "BilinearInterpolator.hpp"
+
 
 ElevationData::ElevationData(const Sector& sector,
                              const Vector2I& extent) :

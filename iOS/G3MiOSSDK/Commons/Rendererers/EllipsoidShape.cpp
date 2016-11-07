@@ -25,6 +25,35 @@
 #include "TextureIDReference.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "G3MRenderContext.hpp"
+#include "TimeInterval.hpp"
+
+EllipsoidShape::EllipsoidShape(Geodetic3D* position,
+                               AltitudeMode altitudeMode,
+                               const Vector3D& radius,
+                               short resolution,
+                               float borderWidth,
+                               bool texturedInside,
+                               bool mercator,
+                               const Color& surfaceColor,
+                               Color* borderColor,
+                               bool withNormals) :
+AbstractMeshShape(position, altitudeMode),
+_ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+_textureURL(URL("", false)),
+_resolution(resolution < 3 ? 3 : resolution),
+_borderWidth(borderWidth),
+_texturedInside(texturedInside),
+_mercator(mercator),
+_surfaceColor(new Color(surfaceColor)),
+_borderColor(borderColor),
+_textureRequested(false),
+_textureImage(NULL),
+_withNormals(withNormals),
+_texID(NULL)
+{
+
+}
 
 
 EllipsoidShape::~EllipsoidShape() {

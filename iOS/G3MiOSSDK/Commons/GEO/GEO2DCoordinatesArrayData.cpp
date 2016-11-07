@@ -11,6 +11,8 @@
 #include "Geodetic2D.hpp"
 #include "GEO2DCoordinatesData.hpp"
 #include "Sector.hpp"
+#include "IMathUtils.hpp"
+
 
 GEO2DCoordinatesArrayData::GEO2DCoordinatesArrayData(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :
 _sector(NULL)
@@ -29,7 +31,6 @@ _sector(NULL)
     }
   }
 }
-
 
 GEO2DCoordinatesArrayData::~GEO2DCoordinatesArrayData() {
   if (_coordinatesArray != NULL) {

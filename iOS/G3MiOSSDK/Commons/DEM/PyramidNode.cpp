@@ -100,15 +100,18 @@ bool PyramidNode::insertGrid(int z,
   return false;
 }
 
-void PyramidNode::addSubscription(DEMSubscription* subscription) {
+void PyramidNode::addSubscription(const DEMGrid* grid,
+                                  DEMSubscription* subscription) {
   if (subscription->_sector.touchesWith(_sector)) {
+    const DEMGrid* bestGrid = (_grid == NULL) ? grid : _grid;
+
     const bool notEnoughResolution = (_resolution._latitude.greaterThan ( subscription->_resolution._latitude  ) ||
                                       _resolution._longitude.greaterThan( subscription->_resolution._longitude ) );
     if (notEnoughResolution) {
       std::vector<PyramidNode*>* children = getChildren();
       for (size_t i = 0; i < _childrenSize; i++) {
         PyramidNode* child = children->at(i);
-        child->addSubscription(subscription);
+        child->addSubscription(bestGrid, subscription);
       }
     }
     else {
@@ -117,6 +120,10 @@ void PyramidNode::addSubscription(DEMSubscription* subscription) {
       }
       subscription->_retain();
       _subscriptions->push_back(subscription);
+      if (bestGrid != NULL) {
+        //subscription->onGrid( DEMGridUtils::gridFor(bestGrid, subscription) );
+#warning Diego at work!
+      }
     }
   }
 }

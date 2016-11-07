@@ -9,7 +9,6 @@
 #ifndef __G3MiOSSDK__Vector2F__
 #define __G3MiOSSDK__Vector2F__
 
-#include "IMathUtils.hpp"
 class Vector2I;
 
 class Vector2F {
@@ -22,9 +21,7 @@ public:
     return Vector2F(0, 0);
   }
 
-  static Vector2F nan() {
-    return Vector2F(NANF, NANF);
-  }
+  static Vector2F nan();
 
   const float _x;
   const float _y;
@@ -58,9 +55,7 @@ public:
                     _y + v._y);
   }
 
-  bool isNan() const {
-    return ISNAN(_x) || ISNAN(_y);
-  }
+  bool isNan() const;
 
   Vector2F sub(const Vector2F& v) const {
     return Vector2F(_x - v._x,
@@ -76,9 +71,7 @@ public:
     return Vector2F(_x / v, _y / v);
   }
 
-  double length() const {
-    return IMathUtils::instance()->sqrt(squaredLength());
-  }
+  double length() const;
 
   double squaredLength() const {
     return _x * _x + _y * _y ;

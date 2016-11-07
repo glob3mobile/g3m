@@ -11,6 +11,8 @@
 #include "Vector3D.hpp"
 #include "EllipsoidalPlanet.hpp"
 #include "IMathUtils.hpp"
+#include "Geodetic2D.hpp"
+
 
 std::vector<Geodetic3D*> LayoutUtils::splitOverCircle(const EllipsoidalPlanet* EllipsoidalPlanet,
                                                       const Geodetic3D& center,

@@ -17,6 +17,8 @@
 #include "MutableVector3D.hpp"
 #include "TimeInterval.hpp"
 
+class Camera;
+
 
 class ShapeDistance {
 public:
@@ -143,30 +145,9 @@ private:
 
 public:
 
-  ShapesRenderer(bool renderNotReadyShapes=true) :
-  _renderNotReadyShapes(renderNotReadyShapes),
-  _glState(new GLState()),
-  _glStateTransparent(new GLState()),
-  _lastCamera(NULL)
-  {
-    _context = NULL;
-  }
+  ShapesRenderer(bool renderNotReadyShapes=true);
 
-  ~ShapesRenderer() {
-    const size_t shapesCount = _shapes.size();
-    for (size_t i = 0; i < shapesCount; i++) {
-      Shape* shape = _shapes[i];
-      delete shape;
-    }
-
-    _glState->_release();
-    _glStateTransparent->_release();
-
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-
-  }
+  ~ShapesRenderer();
 
   void addShape(Shape* shape) {
     _shapes.push_back(shape);

@@ -9,9 +9,10 @@
 #define G3MiOSSDK_Sector
 
 #include "Geodetic2D.hpp"
-#include "Vector3D.hpp"
-#include "Vector2D.hpp"
-#include "Vector2F.hpp"
+
+class Vector3D;
+class Vector2D;
+class Vector2F;
 class G3MRenderContext;
 class Planet;
 class ICanvas;
@@ -22,9 +23,6 @@ class Color;
 
 class Sector {
 private:
-
-
-
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
@@ -55,9 +53,7 @@ public:
 
   Sector(const Sector& sector);
 
-  bool isNan() const {
-    return ISNAN(_lower._latitude._degrees);
-  }
+  bool isNan() const;
 
   bool hasNoArea() const {
     return _deltaLatitude._radians == 0 || _deltaLongitude._radians == 0;
@@ -121,21 +117,13 @@ public:
   const Angle getInnerPointLatitude(double v) const;
 
 
-  const Vector2D getUVCoordinates(const Geodetic2D& point) const {
-    return getUVCoordinates(point._latitude, point._longitude);
-  }
+  const Vector2D getUVCoordinates(const Geodetic2D& point) const;
 
   Vector2D getUVCoordinates(const Angle& latitude,
-                            const Angle& longitude) const {
-    return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
-                    (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
-  }
+                            const Angle& longitude) const;
 
   Vector2F getUVCoordinatesF(const Angle& latitude,
-                             const Angle& longitude) const {
-    return Vector2F((float) ((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians),
-                    (float) ((_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians));
-  }
+                             const Angle& longitude) const;
 
   double getUCoordinate(const Angle& longitude) const {
     return (longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians;
@@ -144,7 +132,6 @@ public:
   double getVCoordinate(const Angle& latitude) const {
     return (_upper._latitude._radians - latitude._radians)   / _deltaLatitude._radians;
   }
-
 
   bool isBackOriented(const G3MRenderContext* rc,
                       double minHeight,
@@ -225,13 +212,7 @@ public:
             (_lower._latitude._degrees <= -89.9));
   }
 
-  double getDeltaRadiusInRadians() const {
-    if (_deltaRadiusInRadians < 0) {
-      _deltaRadiusInRadians = IMathUtils::instance()->sqrt((_deltaLatitude._radians  * _deltaLatitude._radians) +
-                                                           (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
-    }
-    return _deltaRadiusInRadians;
-  }
+  double getDeltaRadiusInRadians() const;
 
   const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;
 
@@ -242,7 +223,6 @@ public:
   const GEORasterSymbol* createGEOSymbol(const Color& c) const;
 
   Geodetic2D getClosesInnerPoint(const Geodetic2D& g) const;
-
 
 #ifdef JAVA_CODE
   @Override
@@ -286,7 +266,7 @@ public:
     return true;
   }
 #endif
-
+  
 };
 
 #endif

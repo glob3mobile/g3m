@@ -11,6 +11,8 @@
 #include "IShortBuffer.hpp"
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
+#include "IMathUtils.hpp"
+
 
 const short ShortBufferElevationData::NO_DATA_VALUE = -32768;
 

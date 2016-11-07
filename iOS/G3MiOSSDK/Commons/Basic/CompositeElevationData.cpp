@@ -9,6 +9,8 @@
 #include "CompositeElevationData.hpp"
 #include "Vector3D.hpp"
 #include "IStringBuilder.hpp"
+#include "IMathUtils.hpp"
+
 
 double CompositeElevationData::getElevationAt(int x,
                                               int y) const {

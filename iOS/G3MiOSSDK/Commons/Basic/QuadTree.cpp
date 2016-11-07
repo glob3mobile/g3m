@@ -8,6 +8,8 @@
 
 #include "QuadTree.hpp"
 
+#include "ILogger.hpp"
+
 
 QuadTree_Node::~QuadTree_Node() {
   const size_t elementsSize = _elements.size();

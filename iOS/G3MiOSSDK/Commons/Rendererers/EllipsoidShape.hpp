@@ -88,24 +88,7 @@ public:
                  bool mercator,
                  const Color& surfaceColor,
                  Color* borderColor = NULL,
-                 bool withNormals = true) :
-  AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
-  _textureURL(URL("", false)),
-  _resolution(resolution < 3 ? 3 : resolution),
-  _borderWidth(borderWidth),
-  _texturedInside(texturedInside),
-  _mercator(mercator),
-  _surfaceColor(new Color(surfaceColor)),
-  _borderColor(borderColor),
-  _textureRequested(false),
-  _textureImage(NULL),
-  _withNormals(withNormals),
-  _texID(NULL)
-  {
-
-  }
+                 bool withNormals = true);
 
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,

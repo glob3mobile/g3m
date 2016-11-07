@@ -8,17 +8,14 @@
 #ifndef G3MiOSSDK_BoundingVolume
 #define G3MiOSSDK_BoundingVolume
 
-#include "G3MRenderContext.hpp"
-#include "Vector2I.hpp"
-
-class Vector2D;
-class Vector3D;
-
-class Frustum;
-class Box;
-class Sphere;
+class G3MRenderContext;
 class GLState;
 class Color;
+class Box;
+class Sphere;
+class Frustum;
+class Vector3D;
+
 
 class BoundingVolume {
 public:
@@ -27,10 +24,6 @@ public:
   }
 
   virtual double projectedArea(const G3MRenderContext* rc) const = 0;
-  //virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
-
-  //virtual Vector3D intersectionWithRay(const Vector3D& origin,
-  //                                     const Vector3D& direction) const = 0;
 
   virtual void render(const G3MRenderContext* rc,
                       const GLState* parentState,

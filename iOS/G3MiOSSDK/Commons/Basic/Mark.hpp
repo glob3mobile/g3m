@@ -22,6 +22,7 @@
 #include "GTask.hpp"
 #include "PeriodicalTask.hpp"
 #include "IImageBuilderListener.hpp"
+#include "AltitudeMode.hpp"
 
 class IImage;
 class IFloatBuffer;

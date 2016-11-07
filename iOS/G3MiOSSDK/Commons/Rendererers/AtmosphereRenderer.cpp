@@ -15,6 +15,8 @@
 #include "Camera.hpp"
 #include "G3MWidget.hpp"
 #include "PlanetRenderer.hpp"
+#include "Planet.hpp"
+#include "Geodetic3D.hpp"
 
 
 AtmosphereRenderer::AtmosphereRenderer() :

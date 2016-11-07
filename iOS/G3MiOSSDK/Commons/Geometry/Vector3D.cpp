@@ -6,13 +6,27 @@
 //
 
 #include "Vector3D.hpp"
+
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
-
+#include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
+#include "MutableMatrix44D.hpp"
+
 
 Vector3D Vector3D::zero = Vector3D(0,0,0);
 
+Vector3D Vector3D::nan() {
+  return Vector3D(NAND,
+                  NAND,
+                  NAND);
+}
+
+bool Vector3D::isNan() const {
+  return (ISNAN(_x) ||
+          ISNAN(_y) ||
+          ISNAN(_z));
+}
 
 Vector3D Vector3D::normalized() const {
   if (isNan()) {
@@ -221,4 +235,17 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
   return Vector3D(_x - v.x(),
                   _y - v.y(),
                   _z - v.z());
+}
+
+double Vector3D::length() const {
+  return IMathUtils::instance()->sqrt(squaredLength());
+}
+
+bool Vector3D::isPerpendicularTo(const Vector3D& v) const {
+  return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+}
+
+Angle Vector3D::angleBetween(const Vector3D& a,
+                             const Vector3D& b) {
+  return Angle::fromRadians(angleInRadiansBetween(a, b));
 }

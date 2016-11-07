@@ -13,6 +13,7 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "RectangleF.hpp"
+#include "IMathUtils.hpp"
 
 
 void IImageUtils::createShallowCopy(const IImage* image,

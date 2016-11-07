@@ -24,6 +24,11 @@
 #include "SimpleTextureMapping.hpp"
 #include "MultiTextureMapping.hpp"
 #include "TextureIDReference.hpp"
+#include "G3MRenderContext.hpp"
+#include "ILogger.hpp"
+#include "GLConstants.hpp"
+#include "IImage.hpp"
+
 
 class HUDQuadWidget_ImageBuilderListener : public IImageBuilderListener {
 private:

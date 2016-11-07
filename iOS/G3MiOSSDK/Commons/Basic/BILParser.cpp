@@ -14,6 +14,7 @@
 #include "ShortBufferElevationData.hpp"
 #include "Vector2I.hpp"
 #include "ShortBufferDEMGrid.hpp"
+#include "IMathUtils.hpp"
 
 
 

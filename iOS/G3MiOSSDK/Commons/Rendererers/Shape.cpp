@@ -15,6 +15,11 @@
 #include "ShapeFullPositionEffect.hpp"
 #include "Camera.hpp"
 #include "ErrorHandling.hpp"
+#include "GLState.hpp"
+#include "TimeInterval.hpp"
+#include "G3MContext.hpp"
+#include "G3MRenderContext.hpp"
+
 
 class ShapePendingEffect {
 public:
@@ -34,6 +39,28 @@ public:
   }
 };
 
+Shape::Shape(Geodetic3D* position,
+             AltitudeMode altitudeMode) :
+_position( position ),
+_altitudeMode(altitudeMode),
+_heading( new Angle(Angle::zero()) ),
+_pitch( new Angle(Angle::zero()) ),
+_roll( new Angle(Angle::zero()) ),
+_scaleX(1),
+_scaleY(1),
+_scaleZ(1),
+_translationX(0),
+_translationY(0),
+_translationZ(0),
+_transformMatrix(NULL),
+_enable(true),
+_surfaceElevation(0),
+_glState(new GLState()),
+_surfaceElevationProvider(NULL)
+{
+
+}
+
 
 Shape::~Shape() {
   const size_t pendingEffectsCount = _pendingEffects.size();
@@ -41,13 +68,13 @@ Shape::~Shape() {
     ShapePendingEffect* pendingEffect = _pendingEffects[i];
     delete pendingEffect;
   }
-  
+
   delete _position;
-  
+
   delete _heading;
   delete _pitch;
   delete _roll;
-  
+
   delete _transformMatrix;
 
   _glState->_release();
@@ -58,6 +85,24 @@ Shape::~Shape() {
     }
   }
 }
+
+const Geodetic3D Shape::getPosition() const {
+  return *_position;
+}
+
+void Shape::setAnimatedPosition(const Geodetic3D& position,
+                                bool linearInterpolation) {
+  setAnimatedPosition(TimeInterval::fromSeconds(3),
+                      position,
+                      linearInterpolation);
+}
+
+void Shape::setTranslation(const Vector3D& translation) {
+  setTranslation(translation._x,
+                 translation._y,
+                 translation._z);
+}
+
 
 void Shape::cleanTransformMatrix() {
   delete _transformMatrix;
@@ -115,7 +160,7 @@ void Shape::render(const G3MRenderContext* rc,
       }
       _pendingEffects.clear();
     }
-    
+
     getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
     _glState->setParent(parentGLState);
     rawRender(rc, _glState, renderNotReadyShapes);
@@ -181,8 +226,8 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
 }
 
 void Shape::elevationChanged(const Geodetic2D& position,
-                      double rawElevation,
-                      double verticalExaggeration) {
+                             double rawElevation,
+                             double verticalExaggeration) {
 
   if (ISNAN(rawElevation)) {
     _surfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
@@ -194,14 +239,6 @@ void Shape::elevationChanged(const Geodetic2D& position,
   delete _transformMatrix;
   _transformMatrix = NULL;
 }
-
-//void Shape::setPosition(Geodetic3D* position,
-//                        AltitudeMode altitudeMode) {
-//  delete _position;
-//  _position = position;
-//  _altitudeMode = altitudeMode;
-//  cleanTransformMatrix();
-//}
 
 void Shape::setPosition(const Geodetic3D& position) {
   if (_altitudeMode == RELATIVE_TO_GROUND) {
@@ -216,4 +253,50 @@ void Shape::setPosition(const Geodetic3D& position) {
   _position = position;
 #endif
   cleanTransformMatrix();
+}
+
+void Shape::setScale(const Vector3D& scale) {
+  setScale(scale._x,
+           scale._y,
+           scale._z);
+}
+
+Vector3D Shape::getScale() const {
+  return Vector3D(_scaleX,
+                  _scaleY,
+                  _scaleZ);
+}
+
+void Shape::setAnimatedScale(double scaleX,
+                             double scaleY,
+                             double scaleZ) {
+  setAnimatedScale(TimeInterval::fromSeconds(1),
+                   scaleX,
+                   scaleY,
+                   scaleZ);
+}
+
+void Shape::setAnimatedScale(const Vector3D& scale) {
+  setAnimatedScale(scale._x,
+                   scale._y,
+                   scale._z);
+}
+
+void Shape::setAnimatedScale(const TimeInterval& duration,
+                             const Vector3D& scale) {
+  setAnimatedScale(duration,
+                   scale._x,
+                   scale._y,
+                   scale._z);
+}
+
+void Shape::initialize(const G3MContext* context) {
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    _surfaceElevationProvider = context->getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != NULL) {
+      _surfaceElevationProvider->addListener(_position->_latitude,
+                                             _position->_longitude,
+                                             this);
+    }
+  }
 }

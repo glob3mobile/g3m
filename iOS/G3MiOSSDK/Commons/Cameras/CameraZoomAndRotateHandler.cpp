@@ -13,6 +13,7 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
+#include "Planet.hpp"
 
 
 bool CameraZoomAndRotateHandler::onTouchEvent(const G3MEventContext *eventContext,

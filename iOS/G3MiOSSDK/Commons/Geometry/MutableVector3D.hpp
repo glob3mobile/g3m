@@ -8,21 +8,16 @@
 #ifndef G3MiOSSDK_MutableVector3D
 #define G3MiOSSDK_MutableVector3D
 
-#include "IMathUtils.hpp"
+class Vector3D;
+class Angle;
+class MutableMatrix44D;
 
-#include "MutableMatrix44D.hpp"
-
-#include <stdio.h>
-#include "Vector3D.hpp"
-//class Vector3D;
 
 class MutableVector3D {
 private:
   double _x;
   double _y;
   double _z;
-
-//  MutableVector3D& operator=(const MutableVector3D& that);
 
 
 public:
@@ -50,12 +45,7 @@ public:
   {
   }
 
-  explicit MutableVector3D(const Vector3D &v) :
-  _x(v._x),
-  _y(v._y),
-  _z(v._z)
-  {
-  }
+  explicit MutableVector3D(const Vector3D &v);
 
   void set(const double x,
            const double y,
@@ -71,36 +61,24 @@ public:
     _z = that._z;
   }
 
-  void copyFrom(const Vector3D& that) {
-    _x = that._x;
-    _y = that._y;
-    _z = that._z;
-  }
+  void copyFrom(const Vector3D& that);
 
   MutableVector3D normalized() const;
   void normalize();
 
-  static MutableVector3D nan() {
-    return MutableVector3D(NAND, NAND, NAND);
-  }
+  static MutableVector3D nan();
 
   bool equalTo(const MutableVector3D& v) const {
     return (v._x == _x && v._y == _y && v._z == _z);
   }
 
-  bool isNan() const {
-    return (ISNAN(_x) ||
-            ISNAN(_y) ||
-            ISNAN(_z));
-  }
+  bool isNan() const;
 
   bool isZero() const {
     return (_x == 0) && (_y == 0) && (_z == 0);
   }
 
-  double length() const {
-    return IMathUtils::instance()->sqrt(squaredLength());
-  }
+  double length() const;
 
   double squaredLength() const {
     return _x * _x + _y * _y + _z * _z;
@@ -122,11 +100,7 @@ public:
     _z += that._z;
   }
 
-  void addInPlace(const Vector3D& that) {
-    _x += that._x;
-    _y += that._y;
-    _z += that._z;
-  }
+  void addInPlace(const Vector3D& that);
 
   MutableVector3D sub(const MutableVector3D& v) const {
     return MutableVector3D(_x - v._x,
@@ -134,11 +108,7 @@ public:
                            _z - v._z);
   }
 
-  Vector3D sub(const Vector3D& v) const {
-    return Vector3D(_x - v._x,
-                    _y - v._y,
-                    _z - v._z);
-  }
+  Vector3D sub(const Vector3D& v) const;
 
   MutableVector3D times(const MutableVector3D& v) const {
     return MutableVector3D(_x * v._x,
@@ -146,11 +116,7 @@ public:
                            _z * v._z);
   }
 
-  MutableVector3D times(const Vector3D& v) const {
-    return MutableVector3D(_x * v._x,
-                           _y * v._y,
-                           _z * v._z);
-  }
+  MutableVector3D times(const Vector3D& v) const;
 
   MutableVector3D times(const double magnitude) const {
     return MutableVector3D(_x * magnitude,
@@ -194,22 +160,12 @@ public:
   }
 
   MutableVector3D transformedBy(const MutableMatrix44D &m,
-                                const double homogeneus) const {
-    return MutableVector3D(_x * m.get0() + _y * m.get4() + _z * m.get8() + homogeneus * m.get12(),
-                           _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(),
-                           _x * m.get2() + _y * m.get6() + _z * m.get10() + homogeneus * m.get14());
-  }
+                                const double homogeneus) const;
 
-  Vector3D asVector3D() const {
-    return Vector3D(_x, _y, _z);
-  }
+  Vector3D asVector3D() const;
 
   void putSub(const MutableVector3D& a,
-              const Vector3D& b) {
-    _x = a._x - b._x;
-    _y = a._y - b._y;
-    _z = a._z - b._z;
-  }
+              const Vector3D& b);
 
   static double normalizedDot(const MutableVector3D& a,
                               const MutableVector3D& b);
@@ -220,12 +176,7 @@ public:
   MutableVector3D rotateAroundAxis(const MutableVector3D& axis,
                                    const Angle& theta) const;
 
-  const double squaredDistanceTo(const Vector3D& that) const {
-    const double dx = _x - that._x;
-    const double dy = _y - that._y;
-    const double dz = _z - that._z;
-    return (dx * dx) + (dy * dy) + (dz * dz);
-  }
+  const double squaredDistanceTo(const Vector3D& that) const;
 
   const double squaredDistanceTo(const MutableVector3D& that) const {
     const double dx = _x - that._x;
@@ -233,7 +184,7 @@ public:
     const double dz = _z - that._z;
     return (dx * dx) + (dy * dy) + (dz * dz);
   }
-
+  
 };
 
 

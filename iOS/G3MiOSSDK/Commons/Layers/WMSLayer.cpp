@@ -14,6 +14,8 @@
 #include "RenderState.hpp"
 #include "TimeInterval.hpp"
 #include "IStringBuilder.hpp"
+#include "IMathUtils.hpp"
+#include "Vector2D.hpp"
 
 
 WMSLayer* WMSLayer::newMercator(const std::string&        mapLayer,

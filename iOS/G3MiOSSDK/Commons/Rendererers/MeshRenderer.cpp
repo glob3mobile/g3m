@@ -24,6 +24,8 @@
 #include "IndexedMesh.hpp"
 #include "IFactory.hpp"
 #include "GAsyncTask.hpp"
+#include "G3MRenderContext.hpp"
+#include "BoundingVolume.hpp"
 
 
 void MeshRenderer::clearMeshes() {

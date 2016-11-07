@@ -40,6 +40,10 @@
 #include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
 #include "InitialCameraPositionProvider.hpp"
+#include "G3MRenderContext.hpp"
+#include "Planet.hpp"
+#include "ErrorHandling.hpp"
+#include "GLState.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,

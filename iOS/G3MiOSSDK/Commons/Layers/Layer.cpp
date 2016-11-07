@@ -11,6 +11,8 @@
 #include "LayerSet.hpp"
 #include "LayerTouchEventListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "ILogger.hpp"
+
 
 Layer::Layer(float           transparency,
              const LayerCondition* condition,

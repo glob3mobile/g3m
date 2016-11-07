@@ -27,11 +27,10 @@
 #include "CompositeMesh.hpp"
 #include "PlanetRenderContext.hpp"
 #include "LayerTilesRenderParameters.hpp"
-
 #include "NormalsUtils.hpp"
-
 #include "Sphere.hpp"
 #include "Vector2S.hpp"
+#include "G3MRenderContext.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):

@@ -12,6 +12,9 @@
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/SGShape.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/TimeInterval.hpp>
+#include <G3MiOSSDK/Color.hpp>
 
 #include "G3MDemoModel.hpp"
 

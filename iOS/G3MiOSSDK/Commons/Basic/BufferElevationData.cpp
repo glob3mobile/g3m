@@ -8,7 +8,6 @@
 
 #include "BufferElevationData.hpp"
 
-//#include "Vector2I.hpp"
 
 BufferElevationData::BufferElevationData(const Sector& sector,
                                          const Vector2I& extent,

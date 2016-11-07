@@ -7,3 +7,16 @@
 //
 
 #include "Vector3F.hpp"
+
+#include "IMathUtils.hpp"
+
+
+double Vector3F::length() const {
+  return IMathUtils::instance()->sqrt(squaredLength());
+}
+
+bool Vector3F::isNan() const {
+  return (ISNAN(_x) ||
+          ISNAN(_y) ||
+          ISNAN(_z));
+}

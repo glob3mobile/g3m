@@ -17,6 +17,8 @@
 #include "CompositeTileImageProvider.hpp"
 #include "Color.hpp"
 #include "Info.hpp"
+#include "ILogger.hpp"
+
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {

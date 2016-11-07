@@ -22,6 +22,7 @@
 #include "Color.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "G3MRenderContext.hpp"
+#include "TimeInterval.hpp"
 
 
 const TextureIDReference* QuadShape::getTextureID(const G3MRenderContext* rc) {

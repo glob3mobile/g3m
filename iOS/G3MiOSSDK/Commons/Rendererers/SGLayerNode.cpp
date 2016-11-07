@@ -20,6 +20,7 @@
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
 #include "DownloadPriority.hpp"
+#include "TimeInterval.hpp"
 
 //#define TEXTURES_DOWNLOAD_PRIORITY 1000000
 

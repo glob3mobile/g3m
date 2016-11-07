@@ -17,6 +17,10 @@
 #include <G3MiOSSDK/GFont.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
 #include <G3MiOSSDK/IImageDownloadListener.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/IImage.hpp>
+#include <G3MiOSSDK/Color.hpp>
+#include <G3MiOSSDK/G3MContext.hpp>
 
 #include "G3MDemoModel.hpp"
 

@@ -16,6 +16,7 @@
 #include "TimeInterval.hpp"
 #include "RenderState.hpp"
 #include "URL.hpp"
+#include "IMathUtils.hpp"
 
 
 /*

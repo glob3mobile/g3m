@@ -25,6 +25,7 @@
 #include <G3MiOSSDK/GTask.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PeriodicalTask.hpp>
+#include <G3MiOSSDK/IMathUtils.hpp>
 
 #include "G3MDemoModel.hpp"
 

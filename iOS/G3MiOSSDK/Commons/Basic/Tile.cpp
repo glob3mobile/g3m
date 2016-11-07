@@ -25,6 +25,11 @@
 #include "DecimatedSubviewElevationData.hpp"
 #include "DEMProvider.hpp"
 #include "DEMSubscription.hpp"
+#include "IStringBuilder.hpp"
+#include "ErrorHandling.hpp"
+#include "IMathUtils.hpp"
+#include "Geodetic3D.hpp"
+#include "ITimer.hpp"
 
 
 std::string Tile::createTileID(int level,

@@ -15,6 +15,7 @@
 #include "Vector2S.hpp"
 class DEMProvider;
 class DEMListener;
+class DEMGrid;
 
 
 class DEMSubscription : public RCObject {
@@ -43,6 +44,8 @@ public:
                   const Vector2S& extent,
                   DEMListener*    listener,
                   const bool      deleteListener);
+
+  void onGrid(const DEMGrid* grid);
 
   void cancel();
 

@@ -2,23 +2,21 @@
 //  GLState.hpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 17/05/13.
-//
-//  Created by Agustin Trujillo Pino on 27/10/12.
-//
 
 #ifndef __G3MiOSSDK__GLState__
 #define __G3MiOSSDK__GLState__
 
-#include "GLGlobalState.hpp"
-#include "GPUProgram.hpp"
-#include "GPUProgramManager.hpp"
-
-#include "GLFeatureGroup.hpp"
-#include "GLFeature.hpp"
-#include "GPUVariableValueSet.hpp"
-
 #include "RCObject.hpp"
+
+#include "GLFeature.hpp"
+
+class GLFeatureSet;
+class GPUVariableValueSet;
+class GLGlobalState;
+class GPUProgram;
+class GL;
+class GPUProgramManager;
+
 
 class GLState: public RCObject {
 private:
@@ -63,8 +61,6 @@ public:
   int getTimestamp() const { return _timestamp; }
 
   GLFeatureSet* getAccumulatedFeatures() const;
-//  GLFeatureSet* createAccumulatedFeatures() const;
-
 
   void setParent(const GLState* p) const;
 

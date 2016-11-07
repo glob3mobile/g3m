@@ -11,6 +11,11 @@
 #include "IDeviceAttitude.hpp"
 #include "IDeviceLocation.hpp"
 #include "IFactory.hpp"
+#include "G3MRenderContext.hpp"
+#include "ILogger.hpp"
+#include "Planet.hpp"
+#include "ErrorHandling.hpp"
+
 
 DeviceAttitudeCameraHandler::DeviceAttitudeCameraHandler(bool updateLocation,
                                                          ILocationModifier* locationModifier):

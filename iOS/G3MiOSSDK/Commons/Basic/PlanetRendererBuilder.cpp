@@ -26,9 +26,9 @@
 #include "TimedCacheTileVisibilityTester.hpp"
 #include "OrTileLODTester.hpp"
 #include "GradualSplitsTileLODTester.hpp"
-
 #include "ElevationDataProvider.hpp"
 #include "DEMProvider.hpp"
+#include "ErrorHandling.hpp"
 
 
 PlanetRendererBuilder::PlanetRendererBuilder() :

@@ -11,6 +11,8 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
+#include "Planet.hpp"
+
 
 bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,

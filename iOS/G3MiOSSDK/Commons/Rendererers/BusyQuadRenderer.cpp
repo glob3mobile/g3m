@@ -15,16 +15,15 @@
 #include "TexturesHandler.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "TexturedMesh.hpp"
-
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "ShortBufferBuilder.hpp"
-
 #include "GLConstants.hpp"
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
 #include "G3MEventContext.hpp"
 #include "DirectMesh.hpp"
+#include "G3MRenderContext.hpp"
 
 
 

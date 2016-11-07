@@ -11,6 +11,8 @@
 #include "Vector2I.hpp"
 #include "CompositeElevationData.hpp"
 #include "SubviewElevationData.hpp"
+#include "IMathUtils.hpp"
+
 
 void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvider* edp) {
   _providers.push_back(edp);

@@ -24,6 +24,8 @@
 #include "G3MContext.hpp"
 #include "RenderState.hpp"
 #include "Info.hpp"
+#include "IMathUtils.hpp"
+
 
 BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const std::string&    key,

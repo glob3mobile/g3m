@@ -20,6 +20,9 @@
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
+#include "G3MRenderContext.hpp"
+#include "ITimer.hpp"
+
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,

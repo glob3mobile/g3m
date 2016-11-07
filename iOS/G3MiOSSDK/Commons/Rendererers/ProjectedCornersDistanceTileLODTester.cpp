@@ -12,6 +12,9 @@
 #include "G3MContext.hpp"
 #include "Camera.hpp"
 #include "PlanetRenderContext.hpp"
+#include "G3MRenderContext.hpp"
+#include "Planet.hpp"
+#include "IMathUtils.hpp"
 
 
 ProjectedCornersDistanceTileLODTester::ProjectedCornersDistanceTileLODTester()

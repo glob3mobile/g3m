@@ -16,9 +16,11 @@
 class TileImageContribution;
 class IDownloader;
 class IBufferDownloadListener;
+class IMathUtils;
 class IStringUtils;
 class GEORasterSymbolizer;
 class TiledVectorLayerTileImageProvider;
+
 
 class TiledVectorLayer : public VectorLayer {
 private:

@@ -2,14 +2,14 @@
 //  GLState.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 17/05/13.
-//
-//
 
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 
 #include <vector>
+
+#include "GPUProgramManager.hpp"
+
 
 GLState::~GLState() {
   delete _features;

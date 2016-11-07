@@ -9,10 +9,13 @@
 #ifndef __G3MiOSSDK__Sphere__
 #define __G3MiOSSDK__Sphere__
 
-#include "Vector3D.hpp"
 #include "BoundingVolume.hpp"
-#include "Mesh.hpp"
-#include "Color.hpp"
+
+#include <vector>
+
+#include "Vector3D.hpp"
+
+class Mesh;
 
 
 class Sphere : public BoundingVolume {
@@ -61,7 +64,6 @@ public:
   }
 
   double projectedArea(const G3MRenderContext* rc) const;
-//  Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
   void render(const G3MRenderContext* rc,
               const GLState* parentState,

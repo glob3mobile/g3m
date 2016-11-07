@@ -24,6 +24,8 @@
 #include "ErrorHandling.hpp"
 #include "Effects.hpp"
 #include "IImageBuilder.hpp"
+#include "G3MRenderContext.hpp"
+#include "Planet.hpp"
 
 
 class MarkEffectTarget : public EffectTarget {

@@ -13,7 +13,7 @@
 #include "Geodetic3D.hpp"
 #include "Plane.hpp"
 #include "MutableVector3D.hpp"
-
+#include "MutableMatrix44D.hpp"
 
 
 MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
@@ -21,7 +21,6 @@ MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& positio
                                        position._longitude,
                                        position._height);
 }
-
 
 CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
 

@@ -18,6 +18,7 @@
 #include "IDownloader.hpp"
 #include "MercatorUtils.hpp"
 #include "GEORasterSymbolizer.hpp"
+#include "IMathUtils.hpp"
 
 
 TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,

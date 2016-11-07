@@ -20,6 +20,10 @@
 #include "TexturedMesh.hpp"
 #include "HUDPosition.hpp"
 #include "RenderState.hpp"
+#include "G3MRenderContext.hpp"
+#include "GLConstants.hpp"
+#include "TimeInterval.hpp"
+
 
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:

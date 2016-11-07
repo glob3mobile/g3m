@@ -84,9 +84,7 @@ private:
       _widget->prepareWidget(image, imageName);
     }
 
-    void onError(const std::string& error) {
-      ILogger::instance()->logError(error);
-    }
+    void onError(const std::string& error);
   };
 
   void prepareWidget(const IImage*      image,
@@ -100,10 +98,7 @@ public:
   void init(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc,
-              GLState* glState
-//              float x,
-//              float y
-              );
+              GLState* glState);
 
   void setAndClampScreenPos(float x,
                             float y,
@@ -136,9 +131,6 @@ public:
 class NonOverlappingMark {
 private:
   float _springLengthInPixels;
-
-//  MutableVector2F _widgetScreenPosition;
-//  MutableVector2F _anchorScreenPosition;
 
   mutable Vector3D* _cartesianPos;
   Geodetic3D _geoPosition;
@@ -224,7 +216,6 @@ public:
 
   void resetWidgetPositionVelocityAndForce() {
     _widget->resetPosition();
-//    _widgetScreenPosition.put(NANF, NANF);
     _speed.set(0, 0);
     _force.set(0, 0);
   }

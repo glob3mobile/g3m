@@ -11,10 +11,9 @@
 
 
 #include "Effects.hpp"
+
 #include "Vector3D.hpp"
-
-class Angle;
-
+#include "Angle.hpp"
 
 
 class RotateWithAxisEffect : public EffectWithForce {
@@ -120,7 +119,7 @@ public:
             const TimeInterval& when);
 
   void cancel(const TimeInterval& when) {}
-
+  
 };
 
 

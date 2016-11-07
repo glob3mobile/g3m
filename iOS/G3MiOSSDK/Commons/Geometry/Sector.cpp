@@ -7,12 +7,15 @@
 
 #include "Sector.hpp"
 
+#include "Vector3D.hpp"
+#include "Vector2D.hpp"
 #include "Planet.hpp"
 #include "GEORasterProjection.hpp"
 #include "ICanvas.hpp"
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEOLineRasterSymbol.hpp"
 #include "IStringBuilder.hpp"
+#include "IMathUtils.hpp"
 
 
 const Sector Sector::FULL_SPHERE = Sector::fromDegrees(-90, -180, 90, 180);
@@ -59,6 +62,10 @@ Sector Sector::fullSphere() {
   return FULL_SPHERE;
 }
 
+bool Sector::isNan() const {
+  return ISNAN(_lower._latitude._degrees);
+}
+
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
   return (latitude.isBetween(_lower._latitude, _upper._latitude) &&
@@ -102,6 +109,22 @@ const Angle Sector::getInnerPointLongitude(double u) const {
 
 const Angle Sector::getInnerPointLatitude(double v) const {
   return Angle::linearInterpolation( _lower._latitude, _upper._latitude,  1.0 - v);
+}
+
+const Vector2D Sector::getUVCoordinates(const Geodetic2D& point) const {
+  return getUVCoordinates(point._latitude, point._longitude);
+}
+
+Vector2D Sector::getUVCoordinates(const Angle& latitude,
+                                  const Angle& longitude) const {
+  return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
+                  (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
+}
+
+Vector2F Sector::getUVCoordinatesF(const Angle& latitude,
+                                   const Angle& longitude) const {
+  return Vector2F((float) ((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians),
+                  (float) ((_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians));
 }
 
 Sector::~Sector() {
@@ -342,6 +365,14 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const {
       lon = _lower._longitude._degrees;
     }
   }
-  
+
   return Geodetic2D::fromDegrees(lat, lon);
+}
+
+double Sector::getDeltaRadiusInRadians() const {
+  if (_deltaRadiusInRadians < 0) {
+    _deltaRadiusInRadians = IMathUtils::instance()->sqrt((_deltaLatitude._radians  * _deltaLatitude._radians) +
+                                                         (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
+  }
+  return _deltaRadiusInRadians;
 }

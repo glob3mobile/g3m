@@ -12,7 +12,62 @@
 #include "CameraEffects.hpp"
 #include "Camera.hpp"
 #include "Sector.hpp"
+#include "Geodetic3D.hpp"
+#include "IMathUtils.hpp"
+#include "TimeInterval.hpp"
 
+
+
+Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
+  return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+}
+
+Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
+  return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+}
+
+Vector3D EllipsoidalPlanet::toCartesian(const Geodetic3D& geodetic) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     geodetic._height);
+}
+
+Vector3D EllipsoidalPlanet::toCartesian(const Geodetic2D& geodetic) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     0.0);
+}
+
+Vector3D EllipsoidalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                        const double height) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     height);
+}
+
+void EllipsoidalPlanet::toCartesian(const Geodetic3D& geodetic,
+                                    MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              geodetic._height,
+              result);
+}
+
+void EllipsoidalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                    MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              0,
+              result);
+}
+void EllipsoidalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                    const double height,
+                                    MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              height,
+              result);
+}
 
 const Planet* EllipsoidalPlanet::createEarth() {
   return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero,
@@ -574,14 +629,14 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
 
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                                 Camera* nextCamera) const {
-  
+
 }
 
 Geodetic3D EllipsoidalPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
   const Vector3D asw = toCartesian(rendereSector.getSW());
   const Vector3D ane = toCartesian(rendereSector.getNE());
   const double height = asw.sub(ane).length() * 1.9;
-
+  
   return Geodetic3D(rendereSector._center,
                     height);
 }

@@ -11,6 +11,8 @@
 #include "IFloatBuffer.hpp"
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
+#include "IMathUtils.hpp"
+
 
 const float FloatBufferElevationData::NO_DATA_VALUE = NANF;
 

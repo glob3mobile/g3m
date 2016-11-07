@@ -105,22 +105,10 @@ public:
   { }
 
   void start(const G3MRenderContext* rc,
-             const TimeInterval& when) {
-    _lastMS = when.milliseconds();
-  }
+             const TimeInterval& when);
 
   void doStep(const G3MRenderContext* rc,
-              const TimeInterval& when) {
-    EffectNeverEnding::doStep(rc, when);
-
-    const long long now = when.milliseconds();
-    const long long ellapsed = now - _lastMS;
-    _lastMS = now;
-
-    const double deltaDegrees = (360.0 / 1200.0) * ellapsed;
-
-    _renderer->incDegrees(deltaDegrees);
-  }
+              const TimeInterval& when);
 
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) { }

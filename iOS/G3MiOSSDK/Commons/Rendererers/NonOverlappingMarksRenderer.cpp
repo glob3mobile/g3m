@@ -35,6 +35,7 @@
 #include "TouchEvent.hpp"
 #include "RectangleF.hpp"
 #include "IDeviceInfo.hpp"
+#include "G3MRenderContext.hpp"
 
 
 MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
@@ -50,6 +51,10 @@ _halfWidth(0),
 _vertices(NULL),
 _textureMapping(NULL)
 {
+}
+
+void MarkWidget::WidgetImageListener::onError(const std::string& error) {
+  ILogger::instance()->logError(error);
 }
 
 MarkWidget::~MarkWidget() {

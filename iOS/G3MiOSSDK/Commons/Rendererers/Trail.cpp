@@ -19,6 +19,10 @@
 #include "IFloatBuffer.hpp"
 #include "MutableMatrix44D.hpp"
 #include "GLConstants.hpp"
+#include "IMathUtils.hpp"
+#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
+
 
 const int Trail::SEGMENT_ALPHA_STATUS_UNKNOWN       = 1;
 const int Trail::SEGMENT_ALPHA_STATUS_FULL_HIDDEN   = 2;

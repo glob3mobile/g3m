@@ -12,6 +12,9 @@
 #include "IFloatBuffer.hpp"
 #include "Vector3D.hpp"
 #include "Vector2I.hpp"
+#include "ILogger.hpp"
+#include "IMathUtils.hpp"
+
 
 SubviewElevationData::SubviewElevationData(const ElevationData* elevationData,
                                            const Sector& sector,

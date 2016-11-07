@@ -23,6 +23,8 @@ class Sector;
 class Frustum;
 class DirectMesh;
 class ByteBufferIterator;
+class ITimer;
+
 
 class PointCloudsRenderer : public DefaultRenderer {
 public:

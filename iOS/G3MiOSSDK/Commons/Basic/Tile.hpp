@@ -9,12 +9,15 @@
 #define G3MiOSSDK_Tile
 
 #include <vector>
+
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
 #include "DEMListener.hpp"
 
 class TileTexturizer;
+class Mesh;
 class TileElevationDataRequest;
+class DEMSubscription;
 class GLState;
 class ITexturizerData;
 class PlanetTileTessellatorData;
@@ -23,7 +26,7 @@ class PlanetRenderer;
 class TileData;
 class TilesStatistics;
 class Geodetic3D;
-class DEMSubscription;
+class Vector2I;
 
 
 class Tile {

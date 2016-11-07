@@ -9,6 +9,8 @@
 #include "ShortBufferDEMGrid.hpp"
 
 #include "ErrorHandling.hpp"
+#include "IMathUtils.hpp"
+#include "Vector3D.hpp"
 
 
 #ifdef C_CODE

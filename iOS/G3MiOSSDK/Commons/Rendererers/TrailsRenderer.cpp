@@ -11,6 +11,7 @@
 #include "GLState.hpp"
 #include "Camera.hpp"
 #include "Trail.hpp"
+#include "G3MRenderContext.hpp"
 
 
 TrailsRenderer::TrailsRenderer():

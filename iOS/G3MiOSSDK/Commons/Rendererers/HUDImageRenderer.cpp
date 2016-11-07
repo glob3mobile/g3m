@@ -26,7 +26,9 @@
 #include "SimpleTextureMapping.hpp"
 #include "IFactory.hpp"
 #include "G3MEventContext.hpp"
-
+#include "G3MRenderContext.hpp"
+#include "GLFeature.hpp"
+#include "GLState.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 

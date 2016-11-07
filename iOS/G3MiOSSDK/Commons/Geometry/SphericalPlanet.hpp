@@ -69,13 +69,9 @@ public:
   Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                  const Angle& longitude) const;
 
-  Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
-  }
+  Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const;
 
-  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
-  }
+  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const;
 
   void geodeticSurfaceNormal(const Angle& latitude,
                              const Angle& longitude,
@@ -92,24 +88,12 @@ public:
                        const Angle& longitude,
                        const double height) const;
 
-  Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       geodetic._height);
-  }
+  Vector3D toCartesian(const Geodetic3D& geodetic) const;
 
-  Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       0.0);
-  }
+  Vector3D toCartesian(const Geodetic2D& geodetic) const;
 
   Vector3D toCartesian(const Geodetic2D& geodetic,
-                       const double height) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       height);
-  }
+                       const double height) const;
 
   void toCartesian(const Angle& latitude,
                    const Angle& longitude,
@@ -117,28 +101,12 @@ public:
                    MutableVector3D& result) const;
 
   void toCartesian(const Geodetic3D& geodetic,
-                   MutableVector3D& result) const {
-    toCartesian(geodetic._latitude,
-                geodetic._longitude,
-                geodetic._height,
-                result);
-  }
-
+                   MutableVector3D& result) const;
   void toCartesian(const Geodetic2D& geodetic,
-                   MutableVector3D& result) const {
-    toCartesian(geodetic._latitude,
-                geodetic._longitude,
-                0,
-                result);
-  }
+                   MutableVector3D& result) const;
   void toCartesian(const Geodetic2D& geodetic,
                    const double height,
-                   MutableVector3D& result) const {
-    toCartesian(geodetic._latitude,
-                geodetic._longitude,
-                height,
-                result);
-  }
+                   MutableVector3D& result) const;
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
 

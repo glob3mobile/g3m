@@ -9,6 +9,9 @@
 #include "SimpleCameraConstrainer.hpp"
 
 #include "Camera.hpp"
+#include "Planet.hpp"
+#include "Geodetic3D.hpp"
+
 
 bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
                                              const Camera* previousCamera,

@@ -8,14 +8,11 @@
 #ifndef G3MiOSSDK_Vector3D
 #define G3MiOSSDK_Vector3D
 
-#include "IMathUtils.hpp"
+#include <string>
 
-//#include "MutableMatrix44D.hpp"
-
-#include "Angle.hpp"
-
-class MutableMatrix44D;
 class MutableVector3D;
+class Angle;
+class MutableMatrix44D;
 
 
 class Vector3D {
@@ -34,27 +31,27 @@ public:
   
   Vector3D(const double x,
            const double y,
-           const double z): _x(x), _y(y), _z(z) {
+           const double z) :
+  _x(x),
+  _y(y),
+  _z(z)
+  {
     
   }
   
   ~Vector3D() {
   }
   
-  Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
+  Vector3D(const Vector3D &v) :
+  _x(v._x),
+  _y(v._y),
+  _z(v._z)
+  {
     
   }
   
-  static Vector3D nan() {
-    return Vector3D(NAND,
-                    NAND,
-                    NAND);
-  }
+  static Vector3D nan();
   
-//  static Vector3D zero() {
-//    return Vector3D(0, 0, 0);
-//  }
-
   static Vector3D upX() {
     return Vector3D(1,0,0);
   }
@@ -79,11 +76,7 @@ public:
     return Vector3D(0,0,-1);
   }
 
-  bool isNan() const {
-    return (ISNAN(_x) ||
-            ISNAN(_y) ||
-            ISNAN(_z));
-  }
+  bool isNan() const;
 
   bool isEquals(const Vector3D& v) const {
     return (v._x == _x &&
@@ -97,9 +90,7 @@ public:
   
   Vector3D normalized() const;
   
-  double length() const {
-    return IMathUtils::instance()->sqrt(squaredLength());
-  }
+  double length() const;
   
   double squaredLength() const {
     return _x * _x + _y * _y + _z * _z;
@@ -109,9 +100,7 @@ public:
     return _x * v._x + _y * v._y + _z * v._z;
   }
 
-  bool isPerpendicularTo(const Vector3D& v) const {
-    return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
-  }
+  bool isPerpendicularTo(const Vector3D& v) const;
   
   Vector3D add(const Vector3D& v) const {
     return Vector3D(_x + v._x,
@@ -186,9 +175,7 @@ public:
                                       const MutableVector3D& b);
 
   static Angle angleBetween(const Vector3D& a,
-                            const Vector3D& b) {
-    return Angle::fromRadians(angleInRadiansBetween(a, b));
-  }
+                            const Vector3D& b);
 
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
