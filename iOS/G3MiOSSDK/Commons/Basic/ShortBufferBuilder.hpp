@@ -82,7 +82,7 @@ public:
 
   IShortBuffer* create() const;
 
-  std::string description() const;
+  const std::string description() const;
 
 #ifdef JAVA_CODE
   @Override

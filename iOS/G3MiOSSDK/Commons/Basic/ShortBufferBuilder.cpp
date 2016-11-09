@@ -30,7 +30,7 @@ IShortBuffer* ShortBufferBuilder::create() const {
 #endif
 }
 
-std::string ShortBufferBuilder::description() const {
+const std::string ShortBufferBuilder::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("ShortBufferBuilder: ");
   for (int i = 0; i < (int)_values.size(); i++) {

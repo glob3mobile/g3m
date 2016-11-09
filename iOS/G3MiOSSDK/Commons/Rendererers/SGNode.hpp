@@ -83,7 +83,7 @@ public:
 
   virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) {}
 
-  virtual std::string description() {
+  virtual const std::string description() {
     return "SGNode";
   };
 };

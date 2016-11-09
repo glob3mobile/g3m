@@ -41,7 +41,8 @@ public:
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
-  virtual std::string description() const = 0;
+  virtual const std::string description() const = 0;
+
 #ifdef JAVA_CODE
   @Override
   public String toString() {
@@ -155,7 +156,7 @@ public:
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Boolean: ");
     isb->addBool(_value);
@@ -200,7 +201,7 @@ public:
     return (_x == v2->_x) && (_y == v2->_y);
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec2Float: x:");
     isb->addDouble(_x);
@@ -277,7 +278,7 @@ public:
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
@@ -354,7 +355,7 @@ public:
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
@@ -408,7 +409,7 @@ private:
   }
 
 public:
-  
+
   GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
@@ -451,7 +452,7 @@ public:
     return false;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
     std::string s = isb->getString();
@@ -494,7 +495,7 @@ public:
     return _value == v2->_value;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Float: ");
     isb->addDouble(_value);
@@ -567,7 +568,7 @@ public:
     return _value == ((GPUUniformValueInt*)v)->_value;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Integer: ");
     isb->addInt(_value);

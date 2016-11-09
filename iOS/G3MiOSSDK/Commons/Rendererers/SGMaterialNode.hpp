@@ -82,7 +82,7 @@ public:
 
   }
 
-  std::string description() {
+  const std::string description() {
     return "SGMaterialNode";
   }
 

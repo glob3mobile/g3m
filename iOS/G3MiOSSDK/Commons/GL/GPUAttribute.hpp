@@ -68,7 +68,7 @@ public:
 
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEquals(const GPUAttributeValue* v) const = 0;
-  virtual std::string description() const = 0;
+  virtual const std::string description() const = 0;
 #ifdef JAVA_CODE
   @Override
   public String toString() {
@@ -223,7 +223,7 @@ public:
     return new GPUAttributeValueDisabled();
   }
 
-  std::string description() const {
+  std::string const description() const {
     return "Attribute Disabled.";
   }
 
@@ -285,7 +285,7 @@ public:
     return equal;
   }
 
-  std::string description() const {
+  const std::string description() const {
 
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Attribute Value Float.");

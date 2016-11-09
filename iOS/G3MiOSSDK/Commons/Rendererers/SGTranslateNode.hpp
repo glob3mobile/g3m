@@ -46,7 +46,7 @@ public:
     return _glState;
   }
 
-  std::string description() {
+  const std::string description() {
     return "SGTranslateNode";
   }
 

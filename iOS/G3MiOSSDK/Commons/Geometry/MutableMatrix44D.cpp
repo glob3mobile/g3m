@@ -85,7 +85,7 @@ Matrix44D* MutableMatrix44D::asMatrix44D() const {
   return _matrix44D;
 }
 
-std::string MutableMatrix44D::description() const {
+const std::string MutableMatrix44D::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("MUTABLE MATRIX 44D: ");
   float* f = asMatrix44D()->getColumnMajorFloatArray();

@@ -152,7 +152,7 @@ public:
     return _isValid;
   }
 
-  std::string description() const;
+  const std::string description() const;
 
 #ifdef JAVA_CODE
   @Override

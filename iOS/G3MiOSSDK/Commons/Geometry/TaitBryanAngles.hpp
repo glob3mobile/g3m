@@ -23,7 +23,7 @@ public:
 
   static TaitBryanAngles fromDegrees(double heading, double pitch, double roll);
 
-  std::string description() const;
+  const std::string description() const;
 };
 
 #endif
