@@ -45,7 +45,7 @@ private:
   inline double toBBOXLatitude (const Angle& latitude)  const;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "WMS";
   }
 

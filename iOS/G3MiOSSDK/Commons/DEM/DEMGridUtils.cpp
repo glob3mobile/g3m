@@ -17,6 +17,7 @@
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 #include "Geodetic3D.hpp"
+#include "ErrorHandling.hpp"
 
 
 Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
@@ -99,5 +100,5 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
     return NULL;
   }
 
-#error Diego at work!
+  THROW_EXCEPTION("Diego at work!");
 }

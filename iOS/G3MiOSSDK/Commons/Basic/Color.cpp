@@ -223,7 +223,7 @@ Color Color::wheelStep(int wheelSize,
                                             _alpha);
 }
 
-const std::string Color::toID() const {
+const std::string Color::id() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addFloat(_red);
   isb->addString("/");

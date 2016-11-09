@@ -31,7 +31,7 @@ public:
   void computeVertex();
   int getVerticesCount() const;
   
-  std::string asLogString() const;
+  const std::string asLogString() const;
   void log() const;
 };
 

@@ -55,7 +55,7 @@ public:
                   const LayerCondition*     condition          = NULL,
                   std::vector<const Info*>* layerInfo          = new std::vector<const Info*>());
 
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "ChessboardLayer";
   }
 

@@ -135,7 +135,7 @@ void TilesStatistics::clear() {
   }
 }
 
-std::string TilesStatistics::asLogString(const int m[], const int nMax) {
+const std::string TilesStatistics::asLogString(const int m[], const int nMax) {
   bool first = true;
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   for(int i = 0; i < nMax; i++) {

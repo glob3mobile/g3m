@@ -26,8 +26,8 @@ void CircleImageBuilder::buildOnCanvas(const G3MContext* context,
   canvas->fillEllipse(1, 1, _radius*2, _radius*2);
 }
 
-std::string CircleImageBuilder::getImageName(const G3MContext* context) const {
+const std::string CircleImageBuilder::getImageName(const G3MContext* context) const {
   const IStringUtils* su = context->getStringUtils();
 
-  return "_CircleImage_" + _color.toID() + "_" + su->toString(_radius);
+  return "_CircleImage_" + _color.id() + "_" + su->toString(_radius);
 }

@@ -33,9 +33,9 @@
 #include "Vector2D.hpp"
 
 
-std::string Tile::createTileID(int level,
-                               int row,
-                               int column) {
+const std::string Tile::createTileID(int level,
+                                     int row,
+                                     int column) {
 #ifdef C_CODE
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addInt(level);
@@ -43,7 +43,7 @@ std::string Tile::createTileID(int level,
   isb->addInt(row);
   isb->addString("/");
   isb->addInt(column);
-  std::string s = isb->getString();
+  const std::string s = isb->getString();
   delete isb;
   return s;
 #endif
@@ -736,7 +736,7 @@ void Tile::setData(TileData* data) const {
 #endif
     }
   }
-  
+
   TileData* current = _data[id];
   if (current != data) {
     delete current;

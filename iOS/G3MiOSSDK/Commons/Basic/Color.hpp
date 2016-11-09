@@ -211,7 +211,7 @@ public:
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
 
-  const std::string toID() const;
+  const std::string id() const;
 
   const std::string description() const;
 #ifdef JAVA_CODE

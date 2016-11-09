@@ -22,12 +22,12 @@ const std::string LabelImageBuilder::getImageName() const {
   return (_text                        + "/" +
           _font.description()          + "/" +
           su->toString(_margin)        + "/" +
-          _color.toID()                + "/" +
-          _shadowColor.toID()          + "/" +
+          _color.id()                  + "/" +
+          _shadowColor.id()            + "/" +
           su->toString(_shadowBlur)    + "/" +
           su->toString(_shadowOffsetX) + "/" +
           su->toString(_shadowOffsetY) + "/" +
-          _backgroundColor.toID()      + "/" +
+          _backgroundColor.id()        + "/" +
           su->toString(_cornerRadius));
 }
 

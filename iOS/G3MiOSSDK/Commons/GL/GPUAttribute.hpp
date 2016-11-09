@@ -223,7 +223,7 @@ public:
     return new GPUAttributeValueDisabled();
   }
 
-  std::string const description() const {
+  const std::string description() const {
     return "Attribute Disabled.";
   }
 
@@ -300,7 +300,7 @@ public:
     isb->addString(" Normalized:");
     isb->addBool(_normalized);
 
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }

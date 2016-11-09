@@ -104,7 +104,7 @@ public:
   ~URL() {
   }
 
-//  std::string getPath() const {
+//  const std::string getPath() const {
 //    return _path;
 //  }
 
@@ -132,7 +132,7 @@ public:
   }
 #endif
 
-  const static std::string escape(const std::string& path);
+  static const std::string escape(const std::string& path);
 
 #ifdef C_CODE
   bool operator<(const URL& that) const {

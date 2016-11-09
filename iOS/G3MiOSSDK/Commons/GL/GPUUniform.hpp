@@ -160,7 +160,7 @@ public:
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Boolean: ");
     isb->addBool(_value);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -207,7 +207,7 @@ public:
     isb->addDouble(_x);
     isb->addString("y:");
     isb->addDouble(_y);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -286,7 +286,7 @@ public:
     isb->addDouble(_y);
     isb->addString("z:");
     isb->addDouble(_z);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -365,7 +365,7 @@ public:
     isb->addDouble(_z);
     isb->addString("w:");
     isb->addDouble(_w);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -455,7 +455,7 @@ public:
   const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -499,7 +499,7 @@ public:
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Float: ");
     isb->addDouble(_value);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -572,7 +572,7 @@ public:
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Integer: ");
     isb->addInt(_value);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }

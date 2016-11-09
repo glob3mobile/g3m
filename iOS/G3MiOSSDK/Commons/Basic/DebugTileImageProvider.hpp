@@ -59,12 +59,12 @@ private:
   const bool _showSectorLabels;
   const bool _showTileBounds;
   
-  std::string getIDLabel(const Tile* tile) const;
+  const std::string getIDLabel(const Tile* tile) const;
   
-  std::string getSectorLabel1(const Sector& sector) const;
-  std::string getSectorLabel2(const Sector& sector) const;
-  std::string getSectorLabel3(const Sector& sector) const;
-  std::string getSectorLabel4(const Sector& sector) const;
+  const std::string getSectorLabel1(const Sector& sector) const;
+  const std::string getSectorLabel2(const Sector& sector) const;
+  const std::string getSectorLabel3(const Sector& sector) const;
+  const std::string getSectorLabel4(const Sector& sector) const;
 
 protected:
   virtual ~DebugTileImageProvider() {

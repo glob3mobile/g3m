@@ -62,13 +62,13 @@ void DefaultChessCanvasImageBuilder::buildOnCanvas(const G3MContext* context,
   }
 }
 
-std::string DefaultChessCanvasImageBuilder::getImageName(const G3MContext* context) const {
+const std::string DefaultChessCanvasImageBuilder::getImageName(const G3MContext* context) const {
   const IStringUtils* su = context->getStringUtils();
 
   return "_DefaultChessCanvasImage_" +
           su->toString(_width) +
           "_" + su->toString(_height) +
-          "_" + _backgroundColor.toID() +
-          "_" + _boxColor.toID() +
+          "_" + _backgroundColor.id() +
+          "_" + _boxColor.id() +
           "_" + su->toString(_splits);
 }

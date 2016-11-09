@@ -75,7 +75,7 @@ protected:
   }
 
 
-  std::string getImageName(const G3MContext* context) const {
+  const std::string getImageName(const G3MContext* context) const {
     const IStringUtils* su = context->getStringUtils();
 
     return "_AltimeterCanvasImage_" + su->toString(_width) + "_" + su->toString(_height) + "_" + su->toString(_altitude);

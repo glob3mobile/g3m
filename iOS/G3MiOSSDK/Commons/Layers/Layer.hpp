@@ -53,7 +53,7 @@ protected:
         const LayerCondition* condition,
         std::vector<const Info*>* layerInfo);
 
-  virtual std::string getLayerType() const = 0;
+  virtual const std::string getLayerType() const = 0;
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
 

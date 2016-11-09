@@ -235,7 +235,7 @@ JSONObject* JSONObject::deepCopy() const {
 
   size_t keysCount = keys.size();
   for (size_t i = 0; i < keysCount; i++) {
-    std::string key = keys[i];
+    const std::string key = keys[i];
     result->put(key, JSONBaseObject::deepCopy( get(key) ) );
   }
 
@@ -252,7 +252,7 @@ void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
     if (i != 0) {
       visitor->visitObjectInBetweenChildren(this);
     }
-    std::string key = keys[i];
+    const std::string key = keys[i];
     visitor->visitObjectBeforeChild(this, key);
     const JSONBaseObject* child = get(key);
     if(child != NULL) {

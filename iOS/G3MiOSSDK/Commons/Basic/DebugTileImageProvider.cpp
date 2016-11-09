@@ -92,7 +92,7 @@ _showTileBounds(true)
 }
 
 
-std::string DebugTileImageProvider::getIDLabel(const Tile* tile) const {
+const std::string DebugTileImageProvider::getIDLabel(const Tile* tile) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
   isb->addInt( tile->_level );
@@ -108,19 +108,19 @@ std::string DebugTileImageProvider::getIDLabel(const Tile* tile) const {
   return s;
 }
 
-std::string DebugTileImageProvider::getSectorLabel1(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel1(const Sector& sector) const {
   return "Lower lat: " + sector._lower._latitude.description();
 }
 
-std::string DebugTileImageProvider::getSectorLabel2(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel2(const Sector& sector) const {
   return "Lower lon: " + sector._lower._longitude.description();
 }
 
-std::string DebugTileImageProvider::getSectorLabel3(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel3(const Sector& sector) const {
   return "Upper lat: " + sector._upper._latitude.description();
 }
 
-std::string DebugTileImageProvider::getSectorLabel4(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel4(const Sector& sector) const {
   return "Upper lon: " + sector._upper._longitude.description();
 }
 

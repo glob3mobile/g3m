@@ -89,9 +89,9 @@ private:
 
   const PlanetRenderer* _planetRenderer;
 
-  static std::string createTileID(int level,
-                                  int row,
-                                  int column);
+  static const std::string createTileID(int level,
+                                        int row,
+                                        int column);
 
   mutable TileData** _data;
   mutable size_t     _dataSize;
@@ -221,16 +221,16 @@ public:
                                           const Vector2I& size) const;
 
   TileData* getData(int id) const;
-  
+
   void setData(TileData* data) const;
-  
+
   void clearDataWithID(int id) const;
 
   const TileTessellatorMeshData* getTessellatorMeshData() const;
 
   Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                            const PlanetRenderContext* prc);
-
+  
   bool hasSubtiles() const {
     return (_subtiles != NULL);
   }

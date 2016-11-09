@@ -49,7 +49,7 @@ const std::string Image_iOS::description() const {
   isb->addString(", _image=(");
   isb->addString( [[_image description] cStringUsingEncoding:NSUTF8StringEncoding] );
   isb->addString(")");
-  std::string s = isb->getString();
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }

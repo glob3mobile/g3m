@@ -34,7 +34,7 @@ private:
   const Sector _dataSector;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "URLTemplate";
   }
 

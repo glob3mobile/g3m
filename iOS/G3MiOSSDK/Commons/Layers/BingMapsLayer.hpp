@@ -15,23 +15,23 @@ class IByteBuffer;
 
 class BingMapType {
 public:
-  static std::string Aerial() {
+  static const std::string Aerial() {
     return "Aerial";
   }
 
-  static std::string AerialWithLabels() {
+  static const std::string AerialWithLabels() {
     return "AerialWithLabels";
   }
 
-  static std::string Road() {
+  static const std::string Road() {
     return "Road";
   }
 
-  static std::string OrdnanceSurvey() {
+  static const std::string OrdnanceSurvey() {
     return "OrdnanceSurvey";
   }
 
-  static std::string CollinsBart() {
+  static const std::string CollinsBart() {
     return "CollinsBart";
   }
 };
@@ -69,15 +69,15 @@ private:
                                       const int row);
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "BingMaps";
   }
 
-  std::string getBrandLogoUri() const {
+  const std::string getBrandLogoUri() const {
     return _brandLogoUri;
   }
 
-  std::string getCopyright() const {
+  const std::string getCopyright() const {
     return _copyright;
   }
 

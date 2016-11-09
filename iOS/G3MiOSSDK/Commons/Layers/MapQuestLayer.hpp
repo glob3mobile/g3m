@@ -53,7 +53,7 @@ private:
 
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "MapQuest";
   }
 

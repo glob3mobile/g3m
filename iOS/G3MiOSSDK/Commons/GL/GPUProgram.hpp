@@ -87,7 +87,7 @@ public:
                                    const std::string& vertexSource,
                                    const std::string& fragmentSource);
 
-  std::string getName() const { return _name;}
+  const std::string getName() const { return _name;}
   
   int getProgramID() const { return _programID;}
   

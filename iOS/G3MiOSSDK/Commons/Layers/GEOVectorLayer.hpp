@@ -43,7 +43,7 @@ public:
 
   const Sector getDataSector() const;
 
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "GEOVectorLayer";
   }
 

@@ -63,7 +63,7 @@ private:
   const URL createURL(const Tile* tile) const;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "TiledVectorLayer";
   }
 

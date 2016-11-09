@@ -19,12 +19,12 @@ private:
 
   JSONGenerator();
 
-  std::string getString();
+  const std::string getString();
 
 public:
   virtual ~JSONGenerator();
 
-  static std::string generate(const JSONBaseObject* value);
+  static const std::string generate(const JSONBaseObject* value);
 
   void visitDouble (const JSONDouble*  value);
   void visitFloat  (const JSONFloat*   value);

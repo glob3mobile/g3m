@@ -43,7 +43,7 @@ protected:
   virtual void buildOnCanvas(const G3MContext* context,
                              ICanvas* canvas) = 0;
 
-  virtual std::string getImageName(const G3MContext* context) const = 0;
+  virtual const std::string getImageName(const G3MContext* context) const = 0;
 
 public:
   void build(const G3MContext* context,

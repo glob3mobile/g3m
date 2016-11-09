@@ -106,7 +106,7 @@ const std::string MapBooOLD_MultiImage_Level::description() const {
 const std::string MapBooOLD_MultiImage::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("[MultiImage averageColor=");
-  isb->addString(_averageColor.toID());
+  isb->addString(_averageColor.id());
   isb->addString(", _levels=[");
   const size_t levelsSize = _levels.size();
   for (size_t i = 0; i < levelsSize; i++) {

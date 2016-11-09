@@ -137,7 +137,7 @@ public:
     return visibleSector;
   }
 
-  static std::string asLogString(const int m[], const int nMax);
+  static const std::string asLogString(const int m[], const int nMax);
 
   void log(const ILogger* logger) const;
 
