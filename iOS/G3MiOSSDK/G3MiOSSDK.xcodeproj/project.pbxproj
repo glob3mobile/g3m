@@ -201,6 +201,9 @@
 		CF547B4B196C4921002DBBDD /* GEOVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */; };
 		CF55133C1A8E6A6000097906 /* StaticImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */; };
 		CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */; };
+		CF59344F1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59344E1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp */; };
+		CF5934511DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5934501DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp */; };
+		CF5934531DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5934521DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
 		CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C1193178C76F2000ED715 /* BoundingArea.cpp */; };
@@ -1501,6 +1504,9 @@
 		CF547B49196C45C9002DBBDD /* GEOVectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEOVectorLayer.hpp; sourceTree = "<group>"; };
 		CF55133A1A8E6A6000097906 /* StaticImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StaticImageBuilder.cpp; path = Commons/Basic/StaticImageBuilder.cpp; sourceTree = "<group>"; };
 		CF55133B1A8E6A6000097906 /* StaticImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StaticImageBuilder.hpp; path = Commons/Basic/StaticImageBuilder.hpp; sourceTree = "<group>"; };
+		CF59344E1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferBuilderFromCartesian2D.cpp; path = Commons/Basic/FloatBufferBuilderFromCartesian2D.cpp; sourceTree = "<group>"; };
+		CF5934501DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferBuilderFromCartesian3D.cpp; path = Commons/Basic/FloatBufferBuilderFromCartesian3D.cpp; sourceTree = "<group>"; };
+		CF5934521DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferBuilderFromColor.cpp; path = Commons/Basic/FloatBufferBuilderFromColor.cpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
 		CF5A8A301656B67F00508C38 /* BoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoxShape.cpp; path = Commons/Rendererers/BoxShape.cpp; sourceTree = "<group>"; };
 		CF5A8A311656B67F00508C38 /* BoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BoxShape.hpp; path = Commons/Rendererers/BoxShape.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2230,8 +2236,8 @@
 				CF4FAAC21695C66F009734CA /* ByteBufferBuilder.hpp */,
 				CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */,
 				CF7EDA0416948302002C760A /* ByteBufferIterator.hpp */,
-				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CFE11EC91DD0BBEE00355A89 /* CameraGoToPositionEffect.cpp */,
+				D8EB78831637F6B500C4EB57 /* CameraGoToPositionEffect.hpp */,
 				CF6D723917184D620043C74B /* CanvasElement.cpp */,
 				CF6D723A17184D620043C74B /* CanvasElement.hpp */,
 				CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */,
@@ -2283,9 +2289,12 @@
 				CF7FF502184CE3FE003A7E76 /* ErrorHandling.hpp */,
 				CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */,
 				CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */,
+				CF59344E1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp */,
 				D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */,
 				D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */,
+				CF5934501DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp */,
 				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
+				CF5934521DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp */,
 				CFD3D8A016CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp */,
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
 				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
@@ -3407,6 +3416,7 @@
 				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
 				CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */,
+				CF5934531DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp in Sources */,
 				CF9FDBC91DB3B6F5009D972A /* FloatBufferDEMGrid.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,
 				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
@@ -3468,6 +3478,7 @@
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
 				CF67D9CB1C5AB44500873661 /* TimedCacheTileVisibilityTester.cpp in Sources */,
 				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
+				CF5934511DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp in Sources */,
 				CFE50D241C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp in Sources */,
 				CFD15C4416E78C7D004DC360 /* OSMLayer.cpp in Sources */,
 				CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */,
@@ -3536,6 +3547,7 @@
 				CFC3F8FA17510DA800986630 /* MapBooOLDBuilder.cpp in Sources */,
 				CFC3F8FE175110FE00986630 /* MapBooOLDBuilder_iOS.mm in Sources */,
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
+				CF59344F1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp in Sources */,
 				CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,

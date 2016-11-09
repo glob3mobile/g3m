@@ -9,9 +9,10 @@
 #define G3MiOSSDK_FloatBufferBuilderFromColor
 
 #include "FloatBufferBuilder.hpp"
-#include "Color.hpp"
 
-class FloatBufferBuilderFromColor: public FloatBufferBuilder {
+class Color;
+
+class FloatBufferBuilderFromColor : public FloatBufferBuilder {
 public:
   void add(float r, float g, float b, float a) {
     _values.push_back(r);
@@ -27,12 +28,7 @@ public:
     _values.push_back( a );
   }
 
-  void add(const Color& c) {
-    _values.push_back(c._red);
-    _values.push_back(c._green);
-    _values.push_back(c._blue);
-    _values.push_back(c._alpha);
-  }
+  void add(const Color& color);
   
 };
 

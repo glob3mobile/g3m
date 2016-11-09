@@ -10,8 +10,9 @@
 #define __G3MiOSSDK__ByteBufferBuilder__
 
 #include <vector>
-#include "ILogger.hpp"
+
 class IByteBuffer;
+
 
 class ByteBufferBuilder {
 private:

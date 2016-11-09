@@ -16,6 +16,8 @@
 #include "GLConstants.hpp"
 #include "IMathUtils.hpp"
 #include "BilinearInterpolator.hpp"
+#include "Geodetic3D.hpp"
+#include "Vector2D.hpp"
 
 
 ElevationData::ElevationData(const Sector& sector,

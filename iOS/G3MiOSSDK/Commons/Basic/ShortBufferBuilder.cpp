@@ -10,6 +10,8 @@
 
 #include "IFactory.hpp"
 #include "IShortBuffer.hpp"
+#include "IStringBuilder.hpp"
+
 
 IShortBuffer* ShortBufferBuilder::create() const {
 #ifdef C_CODE
@@ -24,7 +26,25 @@ IShortBuffer* ShortBufferBuilder::create() const {
   return result;
 #endif
 #ifdef JAVA_CODE
-  //return IFactory.instance().createShortBuffer( _values.toArray() );
   return IFactory.instance().createShortBuffer( _values._array, _values._size );
 #endif
+}
+
+std::string ShortBufferBuilder::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("ShortBufferBuilder: ");
+  for (int i = 0; i < (int)_values.size(); i++) {
+
+#ifdef C_CODE
+    short v = _values[i];
+#endif
+#ifdef JAVA_CODE
+    short v = _values.get(i);
+#endif
+    isb->addInt(v);
+    isb->addString(", ");
+  }
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

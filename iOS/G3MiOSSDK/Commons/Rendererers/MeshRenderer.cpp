@@ -26,6 +26,7 @@
 #include "GAsyncTask.hpp"
 #include "G3MRenderContext.hpp"
 #include "BoundingVolume.hpp"
+#include "Geodetic3D.hpp"
 
 
 void MeshRenderer::clearMeshes() {

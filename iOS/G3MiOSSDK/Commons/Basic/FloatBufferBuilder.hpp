@@ -10,10 +10,11 @@
 #define __G3MiOSSDK__FloatBufferBuilder__
 
 #include <vector>
-#include "Vector2D.hpp"
-#include "Vector3D.hpp"
 
+class Vector2D;
+class Vector3D;
 class IFloatBuffer;
+
 
 class FloatBufferBuilder {
 private:
@@ -36,8 +37,8 @@ protected:
 
     public FloatArrayList() {
       this(1024);
-//      _array = IFactory.instance().getThreadLocalFloatArray();
-//      _size = 0;
+      //      _array = IFactory.instance().getThreadLocalFloatArray();
+      //      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -96,25 +97,10 @@ public:
     return _values.size();
   }
 
-  Vector2D getVector2D(int i) const {
-    int pos = i * 2;
-#ifdef C_CODE
-    return Vector2D(_values[pos], _values[pos + 1]);
-#endif
-#ifdef JAVA_CODE
-    return new Vector2D(_values.get(pos), _values.get(pos + 1));
-#endif
-  }
+  Vector2D getVector2D(int i) const;
+  
+  Vector3D getVector3D(int i) const;
 
-  Vector3D getVector3D(int i) const {
-    int pos = i * 3;
-#ifdef C_CODE
-    return Vector3D(_values[pos], _values[pos + 1], _values[pos+2]);
-#endif
-#ifdef JAVA_CODE
-    return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
-#endif
-  }
 };
 
 #endif

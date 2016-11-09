@@ -8,11 +8,10 @@
 #ifndef G3MiOSSDK_FloatBufferBuilderFromCartesian3D
 #define G3MiOSSDK_FloatBufferBuilderFromCartesian3D
 
-#include "Vector3D.hpp"
 #include "FloatBufferBuilder.hpp"
 
 
-class FloatBufferBuilderFromCartesian3D: public FloatBufferBuilder {
+class FloatBufferBuilderFromCartesian3D : public FloatBufferBuilder {
 private:
   const CenterStrategy _centerStrategy;
   float _cx;
@@ -26,47 +25,18 @@ private:
   }
 
   FloatBufferBuilderFromCartesian3D(CenterStrategy centerStrategy,
-                                    const Vector3D& center):
-  _centerStrategy(centerStrategy)
-  {
-    setCenter(center._x, center._y, center._z);
-  }
+                                    const Vector3D& center);
 
 public:
 
 
-  static FloatBufferBuilderFromCartesian3D* builderWithoutCenter() {
-#ifdef C_CODE
-    return new FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
-#endif
-#ifdef JAVA_CODE
-    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.zero);
-#endif
-  }
+  static FloatBufferBuilderFromCartesian3D* builderWithoutCenter();
 
-  static FloatBufferBuilderFromCartesian3D* builderWithFirstVertexAsCenter() {
-#ifdef C_CODE
-    return new FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
-#endif
-#ifdef JAVA_CODE
-    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.zero);
-#endif
-  }
+  static FloatBufferBuilderFromCartesian3D* builderWithFirstVertexAsCenter();
 
-  static FloatBufferBuilderFromCartesian3D* builderWithGivenCenter(const Vector3D& center) {
-#ifdef C_CODE
-    return new FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
-#endif
-#ifdef JAVA_CODE
-    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.GIVEN_CENTER, center);
-#endif
-  }
+  static FloatBufferBuilderFromCartesian3D* builderWithGivenCenter(const Vector3D& center);
 
-  void add(const Vector3D& vector) {
-    add(vector._x,
-        vector._y,
-        vector._z);
-  }
+  void add(const Vector3D& vector);
 
   void add(double x, double y, double z) {
     if (_centerStrategy ==
@@ -130,9 +100,7 @@ public:
     }
   }
 
-  Vector3D getCenter() {
-    return Vector3D(_cx, _cy, _cz);
-  }
+  Vector3D getCenter();
 
 };
 

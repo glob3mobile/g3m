@@ -17,9 +17,9 @@ class MutableMatrix44D;
 
 class Vector3D {
 private:
-  
+
   Vector3D& operator=(const Vector3D& that);
-  
+
 public:
 
   static Vector3D zero;
@@ -27,8 +27,8 @@ public:
   const double _x;
   const double _y;
   const double _z;
-  
-  
+
+
   Vector3D(const double x,
            const double y,
            const double z) :
@@ -36,22 +36,20 @@ public:
   _y(y),
   _z(z)
   {
-    
   }
-  
+
   ~Vector3D() {
   }
-  
+
   Vector3D(const Vector3D &v) :
   _x(v._x),
   _y(v._y),
   _z(v._z)
   {
-    
   }
-  
+
   static Vector3D nan();
-  
+
   static Vector3D upX() {
     return Vector3D(1,0,0);
   }
@@ -59,7 +57,7 @@ public:
   static Vector3D downX() {
     return Vector3D(-1,0,0);
   }
-  
+
   static Vector3D upY() {
     return Vector3D(0,1,0);
   }
@@ -87,21 +85,21 @@ public:
   bool isZero() const {
     return (_x == 0) && (_y == 0) && (_z == 0);
   }
-  
+
   Vector3D normalized() const;
-  
+
   double length() const;
-  
+
   double squaredLength() const {
     return _x * _x + _y * _y + _z * _z;
   }
-  
+
   double dot(const Vector3D& v) const {
     return _x * v._x + _y * v._y + _z * v._z;
   }
 
   bool isPerpendicularTo(const Vector3D& v) const;
-  
+
   Vector3D add(const Vector3D& v) const {
     return Vector3D(_x + v._x,
                     _y + v._y,
@@ -133,31 +131,31 @@ public:
                     _y * v._y,
                     _z * v._z);
   }
-  
+
   Vector3D times(const double magnitude) const {
     return Vector3D(_x * magnitude,
                     _y * magnitude,
                     _z * magnitude);
   }
-  
+
   Vector3D div(const Vector3D& v) const {
     return Vector3D(_x / v._x,
                     _y / v._y,
                     _z / v._z);
   }
-  
+
   Vector3D div(const double v) const {
     return Vector3D(_x / v,
                     _y / v,
                     _z / v);
   }
-  
+
   Vector3D cross(const Vector3D& other) const {
     return Vector3D(_y * other._z - _z * other._y,
                     _z * other._x - _x * other._z,
                     _x * other._y - _y * other._x);
   }
-  
+
   Angle angleBetween(const Vector3D& other) const;
   double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
@@ -181,16 +179,16 @@ public:
                             const Angle& theta) const;
 
   Vector3D transformedBy(const MutableMatrix44D& m, const double homogeneus) const;
-  
+
   MutableVector3D asMutableVector3D() const;
-  
+
   double maxAxis() const;
   double minAxis() const;
-  
+
   double axisAverage() const;
-  
+
   Vector3D projectionInPlane(const Vector3D& normal) const;
-  
+
   const std::string description() const;
 #ifdef JAVA_CODE
   @Override
@@ -205,7 +203,7 @@ public:
   const double squaredDistanceTo(const Vector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
-
+  
 };
 
 

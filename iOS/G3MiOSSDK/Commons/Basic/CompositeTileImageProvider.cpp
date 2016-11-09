@@ -240,18 +240,18 @@ void CompositeTileImageProvider::Composer::mixResult() {
   ICanvas* canvas = IFactory::instance()->createCanvas(false);
 
   canvas->initialize(_width, _height);
-  
+
   IStringBuilder* imageID = IStringBuilder::newStringBuilder();
-  
+
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
 
-    
+
     imageID->addString(result->_imageID);
     imageID->addString("|");
 
     const IImage* image = result->_image;
-    
+
     const float alpha = result->_contribution->_alpha;
 
     if (result->_contribution->isFullCoverage()) {
@@ -260,30 +260,30 @@ void CompositeTileImageProvider::Composer::mixResult() {
       } else {
         imageID->addFloat(alpha);
         imageID->addString("|");
-        
+
         canvas->drawImage(image, 0, 0, _width, _height, alpha);
       }
     }
     else {
       const Sector* imageSector = result->_contribution->getSector();
       const Sector visibleContributionSector = imageSector->intersection(_tileSector);
-      
+
       imageID->addString(visibleContributionSector.id());
       imageID->addString("|");
 
       const RectangleF* srcRect = RectangleF::calculateInnerRectangleFromSector(image->getWidth(), image->getHeight(),
                                                                                 *imageSector,
                                                                                 visibleContributionSector);
-      
+
       const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(_width, _height,
-                                                                                _tileSector,
-                                                                                visibleContributionSector);
-      
+                                                                                 _tileSector,
+                                                                                 visibleContributionSector);
+
       //We add "destRect->id()" to "imageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
-      
+
       imageID->addString(destRect->id());
       imageID->addString("|");
-      
+
       canvas->drawImage(image,
                         //SRC RECT
                         srcRect->_x, srcRect->_y,
@@ -292,13 +292,13 @@ void CompositeTileImageProvider::Composer::mixResult() {
                         destRect->_x, destRect->_y,
                         destRect->_width, destRect->_height,
                         alpha);
-      
+
       delete destRect;
       delete srcRect;
     }
   }
   _imageID = imageID->getString();
-  
+
   delete imageID;
 
   canvas->createImage(new ComposerImageListener(this), true);

@@ -27,6 +27,8 @@
 #include "G3MRenderContext.hpp"
 #include "TimeInterval.hpp"
 #include "IImage.hpp"
+#include "EllipsoidalPlanet.hpp"
+
 
 EllipsoidShape::EllipsoidShape(Geodetic3D* position,
                                AltitudeMode altitudeMode,

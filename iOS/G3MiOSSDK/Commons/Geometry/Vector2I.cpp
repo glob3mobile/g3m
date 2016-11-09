@@ -13,6 +13,7 @@
 #include "Angle.hpp"
 #include "MutableVector2I.hpp"
 #include "IStringBuilder.hpp"
+#include "Vector2S.hpp"
 
 
 Vector2I Vector2I::div(double v) const {
@@ -30,6 +31,10 @@ Angle Vector2I::orientation() const {
 }
 
 bool Vector2I::isEquals(const Vector2I& that) const {
+  return ((_x == that._x) && (_y == that._y));
+}
+
+bool Vector2I::isEquals(const Vector2S& that) const {
   return ((_x == that._x) && (_y == that._y));
 }
 

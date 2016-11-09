@@ -8,15 +8,15 @@
 
 #include "DEMGridUtils.hpp"
 
-
 #include "Vector3D.hpp"
 #include "DEMGrid.hpp"
 #include "ILogger.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
+#include "IMathUtils.hpp"
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
-#include "IMathUtils.hpp"
+#include "Geodetic3D.hpp"
 
 
 Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
@@ -85,5 +85,19 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
   if (grid == NULL) {
     return NULL;
   }
+
+  const Sector   gridSector = grid->getSector();
+  const Vector2I gridExtent = grid->getExtent();
+
+  if (gridSector.isEquals(sector) &&
+      gridExtent.isEquals(extent)) {
+    grid->_retain();
+    return grid;
+  }
+
+  if (!gridSector.touchesWith(sector)) {
+    return NULL;
+  }
+
 #error Diego at work!
 }

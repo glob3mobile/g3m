@@ -30,6 +30,7 @@
 #include "IMathUtils.hpp"
 #include "Geodetic3D.hpp"
 #include "ITimer.hpp"
+#include "Vector2D.hpp"
 
 
 std::string Tile::createTileID(int level,

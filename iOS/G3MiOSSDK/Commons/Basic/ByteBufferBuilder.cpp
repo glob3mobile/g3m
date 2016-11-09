@@ -11,6 +11,8 @@
 #include "IFactory.hpp"
 #include "IByteBuffer.hpp"
 #include "IMathUtils.hpp"
+#include "ILogger.hpp"
+
 
 IByteBuffer* ByteBufferBuilder::create() const {
   const size_t size = _values.size();

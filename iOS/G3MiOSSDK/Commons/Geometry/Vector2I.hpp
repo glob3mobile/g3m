@@ -13,7 +13,7 @@
 
 class Angle;
 class MutableVector2I;
-
+class Vector2S;
 
 class Vector2I {
 public:
@@ -73,6 +73,8 @@ public:
 #endif
 
   bool isEquals(const Vector2I& that) const;
+
+  bool isEquals(const Vector2S& that) const;
 };
 
 #endif

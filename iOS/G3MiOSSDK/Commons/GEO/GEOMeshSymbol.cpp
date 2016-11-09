@@ -14,8 +14,9 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "Color.hpp"
-
+#include "Geodetic2D.hpp"
 #include "MeshRenderer.hpp"
+
 
 Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinates,
                                       const Color& lineColor,
