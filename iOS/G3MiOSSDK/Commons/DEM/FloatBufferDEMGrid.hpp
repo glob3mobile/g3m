@@ -23,7 +23,8 @@ protected:
 
 public:
 #ifdef C_CODE
-  FloatBufferDEMGrid(const Sector& sector,
+  FloatBufferDEMGrid(const Projection* projection,
+                     const Sector& sector,
                      const Vector2I& extent,
                      float* buffer,
                      int bufferSize,

@@ -14,13 +14,14 @@
 
 
 #ifdef C_CODE
-ShortBufferDEMGrid::ShortBufferDEMGrid(const Sector& sector,
+ShortBufferDEMGrid::ShortBufferDEMGrid(const Projection* projection,
+                                       const Sector& sector,
                                        const Vector2I& extent,
                                        short* buffer,
                                        int bufferSize,
                                        double deltaHeight,
                                        short noDataValue) :
-BufferDEMGrid(sector, extent, bufferSize, deltaHeight),
+BufferDEMGrid(projection, sector, extent, bufferSize, deltaHeight),
 _buffer(buffer),
 _noDataValue(noDataValue)
 {

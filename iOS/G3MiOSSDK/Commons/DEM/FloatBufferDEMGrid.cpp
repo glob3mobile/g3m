@@ -14,12 +14,13 @@
 
 
 #ifdef C_CODE
-FloatBufferDEMGrid::FloatBufferDEMGrid(const Sector& sector,
+FloatBufferDEMGrid::FloatBufferDEMGrid(const Projection* projection,
+                                       const Sector& sector,
                                        const Vector2I& extent,
                                        float* buffer,
                                        int bufferSize,
                                        double deltaHeight) :
-BufferDEMGrid(sector, extent, bufferSize, deltaHeight),
+BufferDEMGrid(projection, sector, extent, bufferSize, deltaHeight),
 _buffer(buffer)
 {
   if (_bufferSize != (_extent._x * _extent._y)) {

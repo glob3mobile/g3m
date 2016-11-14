@@ -18,7 +18,8 @@ protected:
   const size_t _bufferSize;
   const double _deltaHeight;
 
-  BufferDEMGrid(const Sector& sector,
+  BufferDEMGrid(const Projection* projection,
+                const Sector& sector,
                 const Vector2I& extent,
                 size_t bufferSize,
                 double deltaHeight);

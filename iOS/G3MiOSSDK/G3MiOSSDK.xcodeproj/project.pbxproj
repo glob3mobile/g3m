@@ -258,6 +258,12 @@
 		CF7338161DA5799E00C406D1 /* BufferDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338141DA5799E00C406D1 /* BufferDEMGrid.cpp */; };
 		CF7338191DA57A7600C406D1 /* ShortBufferDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338171DA57A7600C406D1 /* ShortBufferDEMGrid.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
+		CF74A8811DDA010B000767A3 /* Projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF74A87F1DDA010B000767A3 /* Projection.cpp */; };
+		CF74A8841DDA02DC000767A3 /* WebMercatorProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF74A8821DDA02DC000767A3 /* WebMercatorProjection.cpp */; };
+		CF74A8871DDA0626000767A3 /* WGS84Projetion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF74A8851DDA0626000767A3 /* WGS84Projetion.cpp */; };
+		CF74A8881DDA069D000767A3 /* Projection.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF74A8801DDA010B000767A3 /* Projection.hpp */; };
+		CF74A8891DDA069D000767A3 /* WebMercatorProjection.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF74A8831DDA02DC000767A3 /* WebMercatorProjection.hpp */; };
+		CF74A88A1DDA069D000767A3 /* WGS84Projetion.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF74A8861DDA0626000767A3 /* WGS84Projetion.hpp */; };
 		CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */; };
 		CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */; };
 		CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */; };
@@ -818,6 +824,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF74A8881DDA069D000767A3 /* Projection.hpp in CopyFiles */,
+				CF74A8891DDA069D000767A3 /* WebMercatorProjection.hpp in CopyFiles */,
+				CF74A88A1DDA069D000767A3 /* WGS84Projetion.hpp in CopyFiles */,
 				CF7947C01DD0ED2500376172 /* DEMGridUtils.hpp in CopyFiles */,
 				CFE11EC81DD0B94700355A89 /* AltitudeMode.hpp in CopyFiles */,
 				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
@@ -1582,6 +1591,12 @@
 		CF7338181DA57A7600C406D1 /* ShortBufferDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferDEMGrid.hpp; path = Commons/DEM/ShortBufferDEMGrid.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
+		CF74A87F1DDA010B000767A3 /* Projection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Projection.cpp; path = Commons/Basic/Projection.cpp; sourceTree = "<group>"; };
+		CF74A8801DDA010B000767A3 /* Projection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Projection.hpp; path = Commons/Basic/Projection.hpp; sourceTree = "<group>"; };
+		CF74A8821DDA02DC000767A3 /* WebMercatorProjection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WebMercatorProjection.cpp; path = Commons/Basic/WebMercatorProjection.cpp; sourceTree = "<group>"; };
+		CF74A8831DDA02DC000767A3 /* WebMercatorProjection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WebMercatorProjection.hpp; path = Commons/Basic/WebMercatorProjection.hpp; sourceTree = "<group>"; };
+		CF74A8851DDA0626000767A3 /* WGS84Projetion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WGS84Projetion.cpp; path = Commons/Basic/WGS84Projetion.cpp; sourceTree = "<group>"; };
+		CF74A8861DDA0626000767A3 /* WGS84Projetion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WGS84Projetion.hpp; path = Commons/Basic/WGS84Projetion.hpp; sourceTree = "<group>"; };
 		CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrTileLODTester.cpp; path = Commons/Rendererers/OrTileLODTester.cpp; sourceTree = "<group>"; };
 		CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrTileLODTester.hpp; path = Commons/Rendererers/OrTileLODTester.hpp; sourceTree = "<group>"; };
 		CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapBoo.cpp; path = Commons/Basic/MapBoo.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2291,10 +2306,10 @@
 				CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */,
 				CF59344E1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp */,
 				D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */,
-				D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */,
 				CF5934501DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp */,
-				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
+				D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */,
 				CF5934521DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp */,
+				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
 				CFD3D8A016CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp */,
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
 				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
@@ -2373,6 +2388,8 @@
 				E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */,
 				CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */,
 				CF9AEBC0159B3FDD004C3558 /* PlanetTileTessellator.hpp */,
+				CF74A87F1DDA010B000767A3 /* Projection.cpp */,
+				CF74A8801DDA010B000767A3 /* Projection.hpp */,
 				CF2DF7D0178DEA8900FF5FF0 /* QuadTree.cpp */,
 				CF2DF7D1178DEA8900FF5FF0 /* QuadTree.hpp */,
 				CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */,
@@ -2427,6 +2444,10 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF236E251CB3EE2D002D4D77 /* ViewMode.cpp */,
 				CF236E261CB3EE2D002D4D77 /* ViewMode.hpp */,
+				CF74A8821DDA02DC000767A3 /* WebMercatorProjection.cpp */,
+				CF74A8831DDA02DC000767A3 /* WebMercatorProjection.hpp */,
+				CF74A8851DDA0626000767A3 /* WGS84Projetion.cpp */,
+				CF74A8861DDA0626000767A3 /* WGS84Projetion.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3445,6 +3466,7 @@
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
 				E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */,
 				CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */,
+				CF74A8811DDA010B000767A3 /* Projection.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
 				CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
@@ -3473,6 +3495,7 @@
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
 				CF7338131DA56EA700C406D1 /* DEMGrid.cpp in Sources */,
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
+				CF74A8841DDA02DC000767A3 /* WebMercatorProjection.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
@@ -3523,6 +3546,7 @@
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
 				CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
+				CF74A8871DDA0626000767A3 /* WGS84Projetion.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
 				CF1751D11BA617BB006286C6 /* StackLayoutImageBuilder.cpp in Sources */,

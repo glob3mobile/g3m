@@ -9,11 +9,12 @@
 #include "BufferDEMGrid.hpp"
 
 
-BufferDEMGrid::BufferDEMGrid(const Sector& sector,
+BufferDEMGrid::BufferDEMGrid(const Projection* projection,
+                             const Sector& sector,
                              const Vector2I& extent,
                              size_t bufferSize,
                              double deltaHeight) :
-DEMGrid(sector, extent),
+DEMGrid(projection, sector, extent),
 _bufferSize(bufferSize),
 _deltaHeight(deltaHeight)
 {

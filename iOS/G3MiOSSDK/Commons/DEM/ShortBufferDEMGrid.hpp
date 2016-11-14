@@ -24,7 +24,8 @@ protected:
 
 public:
 #ifdef C_CODE
-  ShortBufferDEMGrid(const Sector& sector,
+  ShortBufferDEMGrid(const Projection* projection,
+                     const Sector& sector,
                      const Vector2I& extent,
                      short* buffer,
                      int bufferSize,

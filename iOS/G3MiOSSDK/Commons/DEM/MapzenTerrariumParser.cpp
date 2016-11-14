@@ -13,6 +13,7 @@
 #include "FloatBufferDEMGrid.hpp"
 #include "G3MContext.hpp"
 #include "IThreadUtils.hpp"
+#include "WebMercatorProjection.hpp"
 
 
 MapzenTerrariumParser::ParserTask::ParserTask(const IImage* image,
@@ -79,7 +80,8 @@ FloatBufferDEMGrid* MapzenTerrariumParser::parse(const IImage* image,
 
   delete image;
 
-  return new FloatBufferDEMGrid(sector,
+  return new FloatBufferDEMGrid(WebMercatorProjection::instance(),
+                                sector,
                                 Vector2I(width, height),
                                 buffer,
                                 bufferSize,

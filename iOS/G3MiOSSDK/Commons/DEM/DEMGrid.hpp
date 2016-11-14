@@ -14,9 +14,13 @@
 #include "Sector.hpp"
 #include "Vector2I.hpp"
 
+class Projection;
+
 
 class DEMGrid : public RCObject {
 protected:
+  const Projection* _projection;
+
   const Sector     _sector;
 #ifdef C_CODE
   const Vector2I   _extent;
@@ -26,8 +30,9 @@ protected:
 #endif
   const Geodetic2D _resolution;
 
-  DEMGrid(const Sector&   sector,
-          const Vector2I& extent);
+  DEMGrid(const Projection* projection,
+          const Sector&     sector,
+          const Vector2I&   extent);
 
   virtual ~DEMGrid();
 
