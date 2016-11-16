@@ -122,9 +122,12 @@ void PyramidNode::addSubscription(const DEMGrid* grid,
       subscription->_retain();
       _subscriptions->push_back(subscription);
       if (bestGrid != NULL) {
-        subscription->onGrid( DEMGridUtils::bestGridFor(bestGrid,
-                                                        subscription->_sector,
-                                                        subscription->_extent) );
+        const DEMGrid* selectedGrid = DEMGridUtils::bestGridFor(bestGrid,
+                                                                subscription->_sector,
+                                                                subscription->_extent);
+        if (selectedGrid != NULL) {
+          subscription->onGrid(selectedGrid);
+        }
       }
     }
   }

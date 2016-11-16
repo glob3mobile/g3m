@@ -28,6 +28,9 @@ public:
 
   const std::string getEPSG() const;
 
+  double getU(const Angle& longitude) const;
+  double getV(const Angle& latitude) const;
+  
 };
 
 #endif

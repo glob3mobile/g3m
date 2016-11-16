@@ -15,6 +15,12 @@ class WebMercatorProjection : public Projection {
 private:
   static WebMercatorProjection* INSTANCE;
 
+  static const double _upperLimitRadians;
+  static const double _lowerLimitRadians;
+
+  //  static const double _upperLimitDegrees;
+  //  static const double _lowerLimitDegrees;
+
 
 protected:
   virtual ~WebMercatorProjection();
@@ -27,6 +33,9 @@ public:
   static WebMercatorProjection* instance();
 
   const std::string getEPSG() const;
+
+  double getU(const Angle& longitude) const;
+  double getV(const Angle& latitude) const;
   
 };
 

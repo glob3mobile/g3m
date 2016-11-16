@@ -18,6 +18,7 @@
 #include "GLConstants.hpp"
 #include "Geodetic3D.hpp"
 //#include "ErrorHandling.hpp"
+#include "RectangleF.hpp"
 
 
 Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
@@ -100,6 +101,16 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
     return NULL;
   }
 
+  const RectangleF* section = RectangleF::calculateInnerRectangleFromSector(gridExtent._x,
+                                                                            gridExtent._y,
+                                                                            gridSector,
+                                                                            sector);
+
+  ILogger::instance()->logInfo("%s", section->description().c_str());
+
+  delete section;
+
+  //THROW_EXCEPTION("Diego at work!");
 #error Diego at work!
-  //  THROW_EXCEPTION("Diego at work!");
+  return NULL;
 }
