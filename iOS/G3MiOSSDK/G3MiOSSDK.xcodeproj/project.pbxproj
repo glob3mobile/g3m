@@ -173,6 +173,10 @@
 		CF423A2917F7A0F300F50525 /* ErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */; };
 		CF423A2A17F7A0F300F50525 /* HUDErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */; };
 		CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2B17F8874E00F50525 /* RenderState.cpp */; };
+		CF44A0701DDE0B0000E5B270 /* DecoratorDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF44A06E1DDE0B0000E5B270 /* DecoratorDEMGrid.cpp */; };
+		CF44A0731DDE139600E5B270 /* SubsetDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF44A0711DDE139600E5B270 /* SubsetDEMGrid.cpp */; };
+		CF44A0741DDE18FF00E5B270 /* DecoratorDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF44A06F1DDE0B0000E5B270 /* DecoratorDEMGrid.hpp */; };
+		CF44A0751DDE18FF00E5B270 /* SubsetDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */; };
@@ -824,6 +828,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF44A0741DDE18FF00E5B270 /* DecoratorDEMGrid.hpp in CopyFiles */,
+				CF44A0751DDE18FF00E5B270 /* SubsetDEMGrid.hpp in CopyFiles */,
 				CF74A8881DDA069D000767A3 /* Projection.hpp in CopyFiles */,
 				CF74A8891DDA069D000767A3 /* WebMercatorProjection.hpp in CopyFiles */,
 				CF74A88A1DDA069D000767A3 /* WGS84Projetion.hpp in CopyFiles */,
@@ -1476,6 +1482,10 @@
 		CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDErrorRenderer.hpp; path = Commons/Rendererers/HUDErrorRenderer.hpp; sourceTree = "<group>"; };
 		CF423A2B17F8874E00F50525 /* RenderState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderState.cpp; path = Commons/Rendererers/RenderState.cpp; sourceTree = "<group>"; };
 		CF423A2C17F8874E00F50525 /* RenderState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RenderState.hpp; path = Commons/Rendererers/RenderState.hpp; sourceTree = "<group>"; };
+		CF44A06E1DDE0B0000E5B270 /* DecoratorDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DecoratorDEMGrid.cpp; path = Commons/DEM/DecoratorDEMGrid.cpp; sourceTree = "<group>"; };
+		CF44A06F1DDE0B0000E5B270 /* DecoratorDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DecoratorDEMGrid.hpp; path = Commons/DEM/DecoratorDEMGrid.hpp; sourceTree = "<group>"; };
+		CF44A0711DDE139600E5B270 /* SubsetDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SubsetDEMGrid.cpp; path = Commons/DEM/SubsetDEMGrid.cpp; sourceTree = "<group>"; };
+		CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SubsetDEMGrid.hpp; path = Commons/DEM/SubsetDEMGrid.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
@@ -2777,6 +2787,8 @@
 				CF8CED361DA6C26A0058748E /* BILDownloader.hpp */,
 				CF7338141DA5799E00C406D1 /* BufferDEMGrid.cpp */,
 				CF7338151DA5799E00C406D1 /* BufferDEMGrid.hpp */,
+				CF44A06E1DDE0B0000E5B270 /* DecoratorDEMGrid.cpp */,
+				CF44A06F1DDE0B0000E5B270 /* DecoratorDEMGrid.hpp */,
 				CF7338111DA56EA700C406D1 /* DEMGrid.cpp */,
 				CF7338121DA56EA700C406D1 /* DEMGrid.hpp */,
 				CF7947BD1DD0EBA100376172 /* DEMGridUtils.cpp */,
@@ -2801,6 +2813,8 @@
 				CF8F8C661DB8D9FC00F8396E /* PyramidNode.hpp */,
 				CF7338171DA57A7600C406D1 /* ShortBufferDEMGrid.cpp */,
 				CF7338181DA57A7600C406D1 /* ShortBufferDEMGrid.hpp */,
+				CF44A0711DDE139600E5B270 /* SubsetDEMGrid.cpp */,
+				CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */,
 			);
 			name = DEM;
 			sourceTree = "<group>";
@@ -3366,6 +3380,7 @@
 				CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */,
 				CFBA88EB186CCA89003A4473 /* HUDRelativeSize.cpp in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
+				CF44A0731DDE139600E5B270 /* SubsetDEMGrid.cpp in Sources */,
 				D8378FA81BFB337200E6557E /* DeviceLocation_iOS.mm in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
@@ -3499,6 +3514,7 @@
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
+				CF44A0701DDE0B0000E5B270 /* DecoratorDEMGrid.cpp in Sources */,
 				CF67D9CB1C5AB44500873661 /* TimedCacheTileVisibilityTester.cpp in Sources */,
 				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
 				CF5934511DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp in Sources */,

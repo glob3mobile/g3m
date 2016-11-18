@@ -10,7 +10,6 @@
 
 #include "ErrorHandling.hpp"
 #include "IMathUtils.hpp"
-#include "Vector3D.hpp"
 
 
 #ifdef C_CODE
@@ -51,37 +50,4 @@ FloatBufferDEMGrid::~FloatBufferDEMGrid() {
 
 double FloatBufferDEMGrid::getValueInBufferAt(int index) const {
   return _buffer[index];
-}
-
-Vector3D FloatBufferDEMGrid::getMinMaxAverageElevations() const {
-  const IMathUtils* mu = IMathUtils::instance();
-  double minHeight = mu->maxDouble();
-  double maxHeight = mu->minDouble();
-  double sumHeight = 0.0;
-
-  for (size_t i = 0; i < _bufferSize; i++) {
-    double height = _buffer[i];
-    if (ISNAN(height)) {
-      continue;
-    }
-    height += _deltaHeight;
-    if (height < minHeight) {
-      minHeight = height;
-    }
-    if (height > maxHeight) {
-      maxHeight = height;
-    }
-    sumHeight += height;
-  }
-
-  if (minHeight == mu->maxDouble()) {
-    minHeight = 0;
-  }
-  if (maxHeight == mu->minDouble()) {
-    maxHeight = 0;
-  }
-
-  return Vector3D(minHeight,
-                  maxHeight,
-                  sumHeight / (_extent._x * _extent._y));
 }

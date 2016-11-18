@@ -19,8 +19,6 @@ class Projection;
 
 class DEMGrid : public RCObject {
 protected:
-  const Projection* _projection;
-
   const Sector     _sector;
 #ifdef C_CODE
   const Vector2I   _extent;
@@ -30,9 +28,8 @@ protected:
 #endif
   const Geodetic2D _resolution;
 
-  DEMGrid(const Projection* projection,
-          const Sector&     sector,
-          const Vector2I&   extent);
+  DEMGrid(const Sector&   sector,
+          const Vector2I& extent);
 
   virtual ~DEMGrid();
 
@@ -44,9 +41,9 @@ public:
 
   const Geodetic2D getResolution() const;
 
-  virtual double getElevationAt(int x, int y) const = 0;
+  virtual const Projection* getProjection() const = 0;
 
-  virtual Vector3D getMinMaxAverageElevations() const = 0;
+  virtual double getElevationAt(int x, int y) const = 0;
   
 };
 

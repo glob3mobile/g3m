@@ -21,12 +21,10 @@ private:
   //  static const double _upperLimitDegrees;
   //  static const double _lowerLimitDegrees;
 
+  WebMercatorProjection();
 
 protected:
   virtual ~WebMercatorProjection();
-
-  WebMercatorProjection();
-
 
 public:
 

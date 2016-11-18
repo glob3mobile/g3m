@@ -127,7 +127,7 @@ RectangleF* RectangleF::calculateInnerRectangleFromSector(int wholeSectorWidth,
   const double heightFactor = (upperUV._y - lowerUV._y);
 
   //Test factors:
-  const double deltaWidthFactor = (widthFactor - widthFactor2);
+  const double deltaWidthFactor  = (widthFactor  - widthFactor2);
   const double deltaHeightFactor = (heightFactor - heightFactor2);
 
   if ( deltaWidthFactor < -0.00001 || deltaWidthFactor > 0.00001 || deltaHeightFactor < -0.00001 || deltaHeightFactor  > 0.00001) {

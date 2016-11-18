@@ -33,8 +33,6 @@ public:
                      short noDataValue);
 #endif
 
-  Vector3D getMinMaxAverageElevations() const;
-
 };
 
 #endif

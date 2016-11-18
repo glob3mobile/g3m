@@ -35,7 +35,13 @@ public:
   MutableVector2D(const MutableVector2D &v): _x(v.x()), _y(v.y()) {
     
   }
-  
+
+  void set(const double x,
+           const double y) {
+    _x = x;
+    _y = y;
+  }
+
   static MutableVector2D nan() {
     return MutableVector2D(NAND, NAND);
   }

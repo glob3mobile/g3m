@@ -15,12 +15,10 @@ class WGS84Projetion : public Projection {
 private:
   static WGS84Projetion* INSTANCE;
 
+  WGS84Projetion();
 
 protected:
   virtual ~WGS84Projetion();
-
-  WGS84Projetion();
-
 
 public:
 

@@ -14,7 +14,9 @@
 
 class BufferDEMGrid : public DEMGrid {
 protected:
-  
+
+  const Projection* _projection;
+
   const size_t _bufferSize;
   const double _deltaHeight;
 
@@ -31,8 +33,10 @@ protected:
 
 public:
 
-  double getElevationAt(int x, int y) const;
+  const Projection* getProjection() const;
 
+  double getElevationAt(int x, int y) const;
+  
 };
 
 #endif

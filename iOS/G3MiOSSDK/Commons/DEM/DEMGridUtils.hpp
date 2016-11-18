@@ -15,6 +15,7 @@ class Planet;
 class Geodetic3D;
 class Sector;
 class Vector2S;
+class Vector3D;
 
 
 class DEMGridUtils {
@@ -22,6 +23,8 @@ private:
   DEMGridUtils() {}
 
 public:
+
+  static const Vector3D getMinMaxAverageElevations(const DEMGrid* grid);
 
   static Mesh* createDebugMesh(const DEMGrid* grid,
                                const Planet* planet,

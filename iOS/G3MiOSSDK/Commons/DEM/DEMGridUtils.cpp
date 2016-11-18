@@ -17,8 +17,41 @@
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 #include "Geodetic3D.hpp"
-//#include "ErrorHandling.hpp"
-#include "RectangleF.hpp"
+#include "SubsetDEMGrid.hpp"
+#include "Vector2S.hpp"
+//#include "DecimatedDEMGrid.hpp"
+//#include "InterpolatedDEMGrid.hpp"
+#include "ErrorHandling.hpp"
+
+
+const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
+  const IMathUtils* mu = IMathUtils::instance();
+  double minHeight = mu->maxDouble();
+  double maxHeight = mu->minDouble();
+  double sumHeight = 0.0;
+
+  const int width  = grid->getExtent()._x;
+  const int height = grid->getExtent()._y;
+
+  for (size_t x = 0; x < width; x++) {
+    for (size_t y = 0; y < height; y++) {
+      const double height = grid->getElevationAt(x, y);
+      if (!ISNAN(height)) {
+        if (height < minHeight) {
+          minHeight = height;
+        }
+        if (height > maxHeight) {
+          maxHeight = height;
+        }
+        sumHeight += height;
+      }
+    }
+  }
+
+  return Vector3D(minHeight,
+                  maxHeight,
+                  sumHeight / (width * height));
+}
 
 
 Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
@@ -27,7 +60,7 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
                                     const Geodetic3D& offset,
                                     float pointSize) {
 
-  const Vector3D minMaxAverageElevations = grid->getMinMaxAverageElevations();
+  const Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
   const double minElevation     = minMaxAverageElevations._x;
   const double maxElevation     = minMaxAverageElevations._y;
   const double averageElevation = minMaxAverageElevations._z;
@@ -101,16 +134,18 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
     return NULL;
   }
 
-  const RectangleF* section = RectangleF::calculateInnerRectangleFromSector(gridExtent._x,
-                                                                            gridExtent._y,
-                                                                            gridSector,
-                                                                            sector);
-
-  ILogger::instance()->logInfo("%s", section->description().c_str());
-
-  delete section;
-
-  //THROW_EXCEPTION("Diego at work!");
-#error Diego at work!
+  const DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
+  const Vector2I subsetGridExtent = subsetGrid->getExtent();
+  if (subsetGridExtent.isEquals(extent)) {
+    return subsetGrid;
+  }
+  //  else if ((subsetGridExtent._x > extent._x) ||
+  //           (subsetGridExtent._y > extent._y)) {
+  //    return new DecimatedDEMGrid(subsetGrid, extent);
+  //  }
+  //  else {
+  //    return new InterpolatedDEMGrid(subsetGrid, extent);
+  //  }
+  THROW_EXCEPTION("Diego at work!");
   return NULL;
 }
