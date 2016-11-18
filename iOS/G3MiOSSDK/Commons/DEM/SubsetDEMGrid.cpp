@@ -12,8 +12,7 @@
 #include "Projection.hpp"
 #include "Vector2D.hpp"
 #include "IMathUtils.hpp"
-
-#include "ILogger.hpp"
+//#include "ILogger.hpp"
 
 
 const SubsetDEMGrid* SubsetDEMGrid::create(const DEMGrid* grid,
@@ -22,19 +21,19 @@ const SubsetDEMGrid* SubsetDEMGrid::create(const DEMGrid* grid,
   const Vector2D lowerUV = projection->getUV(sector._lower);
   const Vector2D upperUV = projection->getUV(sector._upper);
 
-  ILogger::instance()->logInfo("%s -> %s | %s",
-                               lowerUV.description().c_str(),
-                               upperUV.description().c_str(),
-                               upperUV.sub(lowerUV).description().c_str());
+//  ILogger::instance()->logInfo("%s -> %s | %s",
+//                               lowerUV.description().c_str(),
+//                               upperUV.description().c_str(),
+//                               upperUV.sub(lowerUV).description().c_str());
 
   const Vector2I gridExtent =  grid->getExtent();
 
   const IMathUtils* mu = IMathUtils::instance();
 
   const int offsetX = (int) mu->round(lowerUV._x * gridExtent._x);
-  const int offsetY = (int) mu->round(lowerUV._y * gridExtent._y);
+  const int offsetY = (int) mu->round(upperUV._y * gridExtent._y);
   const int width   = (int) (mu->round(upperUV._x * gridExtent._x) - offsetX);
-  const int height  = (int) (mu->round(upperUV._y * gridExtent._y) - offsetY);
+  const int height  = (int) (mu->round(lowerUV._y * gridExtent._y) - offsetY);
 
   return new SubsetDEMGrid(grid,
                            sector,

@@ -19,7 +19,7 @@
 #include "Geodetic3D.hpp"
 #include "SubsetDEMGrid.hpp"
 #include "Vector2S.hpp"
-//#include "DecimatedDEMGrid.hpp"
+#include "DecimatedDEMGrid.hpp"
 //#include "InterpolatedDEMGrid.hpp"
 #include "ErrorHandling.hpp"
 
@@ -139,10 +139,10 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
   if (subsetGridExtent.isEquals(extent)) {
     return subsetGrid;
   }
-  //  else if ((subsetGridExtent._x > extent._x) ||
-  //           (subsetGridExtent._y > extent._y)) {
-  //    return new DecimatedDEMGrid(subsetGrid, extent);
-  //  }
+  else if ((subsetGridExtent._x > extent._x) ||
+           (subsetGridExtent._y > extent._y)) {
+    return DecimatedDEMGrid::create(subsetGrid, extent);
+  }
   //  else {
   //    return new InterpolatedDEMGrid(subsetGrid, extent);
   //  }

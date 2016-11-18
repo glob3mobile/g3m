@@ -258,6 +258,7 @@
 		CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
 		CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
+		CF71F4FA1DDF34A40055C4D7 /* DecimatedDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF71F4F81DDF34A40055C4D7 /* DecimatedDEMGrid.cpp */; };
 		CF7338131DA56EA700C406D1 /* DEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338111DA56EA700C406D1 /* DEMGrid.cpp */; };
 		CF7338161DA5799E00C406D1 /* BufferDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338141DA5799E00C406D1 /* BufferDEMGrid.cpp */; };
 		CF7338191DA57A7600C406D1 /* ShortBufferDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7338171DA57A7600C406D1 /* ShortBufferDEMGrid.cpp */; };
@@ -1593,6 +1594,8 @@
 		CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshMaterial.hpp; path = Commons/Mesh/G3MMeshMaterial.hpp; sourceTree = "<group>"; };
 		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
 		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
+		CF71F4F81DDF34A40055C4D7 /* DecimatedDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DecimatedDEMGrid.cpp; path = Commons/DEM/DecimatedDEMGrid.cpp; sourceTree = "<group>"; };
+		CF71F4F91DDF34A40055C4D7 /* DecimatedDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DecimatedDEMGrid.hpp; path = Commons/DEM/DecimatedDEMGrid.hpp; sourceTree = "<group>"; };
 		CF7338111DA56EA700C406D1 /* DEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = DEMGrid.cpp; path = Commons/DEM/DEMGrid.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7338121DA56EA700C406D1 /* DEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = DEMGrid.hpp; path = Commons/DEM/DEMGrid.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF7338141DA5799E00C406D1 /* BufferDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferDEMGrid.cpp; path = Commons/DEM/BufferDEMGrid.cpp; sourceTree = "<group>"; };
@@ -2815,6 +2818,8 @@
 				CF7338181DA57A7600C406D1 /* ShortBufferDEMGrid.hpp */,
 				CF44A0711DDE139600E5B270 /* SubsetDEMGrid.cpp */,
 				CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */,
+				CF71F4F81DDF34A40055C4D7 /* DecimatedDEMGrid.cpp */,
+				CF71F4F91DDF34A40055C4D7 /* DecimatedDEMGrid.hpp */,
 			);
 			name = DEM;
 			sourceTree = "<group>";
@@ -3372,6 +3377,7 @@
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
 				CFB57DAD1860EB9600D5B094 /* HUDQuadWidget.cpp in Sources */,
 				CF31578E1DD0921400133123 /* RectangleF.cpp in Sources */,
+				CF71F4FA1DDF34A40055C4D7 /* DecimatedDEMGrid.cpp in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
 				CF66EB811DB5252900EFF718 /* MapzenTerrariumParser.cpp in Sources */,
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
