@@ -35,9 +35,9 @@ public class DEMGridUtils
   public static Vector3D getMinMaxAverageElevations(DEMGrid grid)
   {
     final IMathUtils mu = IMathUtils.instance();
-    double minHeight = mu.maxDouble();
-    double maxHeight = mu.minDouble();
-    double sumHeight = 0.0;
+    double minElevation = mu.maxDouble();
+    double maxElevation = mu.minDouble();
+    double sumElevation = 0.0;
   
     final int width = grid.getExtent()._x;
     final int height = grid.getExtent()._y;
@@ -46,23 +46,23 @@ public class DEMGridUtils
     {
       for (int y = 0; y < height; y++)
       {
-        final double height = grid.getElevationAt(x, y);
-        if (!(height != height))
+        final double elevation = grid.getElevationAt(x, y);
+        if (!(elevation != elevation))
         {
-          if (height < minHeight)
+          if (elevation < minElevation)
           {
-            minHeight = height;
+            minElevation = elevation;
           }
-          if (height > maxHeight)
+          if (elevation > maxElevation)
           {
-            maxHeight = height;
+            maxElevation = elevation;
           }
-          sumHeight += height;
+          sumElevation += elevation;
         }
       }
     }
   
-    return new Vector3D(minHeight, maxHeight, sumHeight / (width * height));
+    return new Vector3D(minElevation, maxElevation, sumElevation / (width * height));
   }
 
   public static Mesh createDebugMesh(DEMGrid grid, Planet planet, float verticalExaggeration, Geodetic3D offset, float pointSize)

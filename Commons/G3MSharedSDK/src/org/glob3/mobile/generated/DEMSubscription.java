@@ -47,7 +47,7 @@ public class DEMSubscription extends RCObject
   }
 
   public final Sector _sector ;
-  private final Vector2S _extent;
+  public final Vector2S _extent;
   public final Geodetic2D _resolution ;
 
   public DEMSubscription(DEMProvider demProvider, Sector sector, Vector2S extent, DEMListener listener, boolean deleteListener)
