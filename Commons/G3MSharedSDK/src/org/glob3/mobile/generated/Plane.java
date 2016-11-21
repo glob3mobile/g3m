@@ -183,20 +183,20 @@ public class Plane
     final double k8 = (-(b *d1_2 *x) + a *b_2 *y - a *c_2 *y + 2 *a *b *c *z)/(d1_2 *d2);
     final double k9 = -((c*(a *x + b *y + c *z))/d2_2);
   
-  /*
+    /*
   
-    const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
-    const double k2 = (b*z*d2 - c*y*d2) / d2_2;
-    const double k3 = (a_2*x + a*b*y + a*c*z) / d2_2;
+     const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
+     const double k2 = (b*z*d2 - c*y*d2) / d2_2;
+     const double k3 = (a_2*x + a*b*y + a*c*z) / d2_2;
   
-    const double k4 = ((a_2*b_2*y) + (c_2*y*d2_2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
-    const double k5 = ((c*x*d1_2*d2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
-    const double k6 = ((b_2*y*d1_2) + (a*b*x*d1_2) + (b*c*z*d1_2)) / (d1_2 * d2_2);
+     const double k4 = ((a_2*b_2*y) + (c_2*y*d2_2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
+     const double k5 = ((c*x*d1_2*d2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
+     const double k6 = ((b_2*y*d1_2) + (a*b*x*d1_2) + (b*c*z*d1_2)) / (d1_2 * d2_2);
   
-    const double k7 = ((a_2*c_2*z) + (b_2*z*d2_2) + (a_2*b*c*y) - (a*c*x*d1_2) - (b*c*y*d2_2)) / (d1_2 * d2_2);
-    const double k8 = ((-b*x*d1_2*d2) + (a*b_2*y*d2) + (a*c_2*y*d2)) / (d1_2 * d2_2);
-    const double k9 = ((c_2*z*d1_2) + (a*c*x*d1_2) + (b*c*y*d1_2)) / (d1_2 * d2_2);
-  */
+     const double k7 = ((a_2*c_2*z) + (b_2*z*d2_2) + (a_2*b*c*y) - (a*c*x*d1_2) - (b*c*y*d2_2)) / (d1_2 * d2_2);
+     const double k8 = ((-b*x*d1_2*d2) + (a*b_2*y*d2) + (a*c_2*y*d2)) / (d1_2 * d2_2);
+     const double k9 = ((c_2*z*d1_2) + (a*c*x*d1_2) + (b*c*y*d1_2)) / (d1_2 * d2_2);
+     */
   
   
     //Calculating S's
@@ -227,7 +227,7 @@ public class Plane
       solution = secondSolution;
     }
   
-    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001) //if valid solution (can't compare with 0)
+    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001)
     {
       solution = -solution;
     }
@@ -235,20 +235,20 @@ public class Plane
     //*********
     /*
      //Check code
-    Angle res = Angle::fromRadians(solution);
-    Vector3D nv = vector.rotateAroundAxis(axis, res);
-    if (!isVectorParallel(nv)) {
+     Angle res = Angle::fromRadians(solution);
+     Vector3D nv = vector.rotateAroundAxis(axis, res);
+     if (!isVectorParallel(nv)) {
   
-      ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
-                                    vector.description().c_str(),
-                                    axis.description().c_str(),
-                                    res.description().c_str(),
-                                    _normal.dot(nv));
-    }
-  */
+     ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
+     vector.description().c_str(),
+     axis.description().c_str(),
+     res.description().c_str(),
+     _normal.dot(nv));
+     }
+     */
   
   
-     //**********
+    //**********
   
     return Angle.fromRadians(solution);
   
@@ -258,6 +258,5 @@ public class Plane
   {
     return _normal;
   }
-
 
 }

@@ -94,7 +94,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
     for (int i = 0; i < _rootNodesCount; i++)
     {
       PyramidNode rootNode = rootNodes.get(i);
-      rootNode.addSubscription(subscription);
+      rootNode.addSubscription(null, subscription); // grid
     }
   
   //  const bool released = subscription->_release();

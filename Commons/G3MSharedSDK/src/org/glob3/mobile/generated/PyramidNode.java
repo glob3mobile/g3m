@@ -29,7 +29,8 @@ public class PyramidNode
     if (_children == null)
     {
       _children = new java.util.ArrayList<PyramidNode>();
-      for (int i = 0; i < 4; i++)
+      _childrenSize = 4;
+      for (int i = 0; i < _childrenSize; i++)
       {
         PyramidNode child = _pyramidDEMProvider.createNode(this, i);
         _children.add(child);
@@ -42,6 +43,7 @@ public class PyramidNode
   private boolean _stickyGrid;
 
   private java.util.ArrayList<PyramidNode> _children;
+  private int _childrenSize;
 
   private final PyramidNode _parent;
   private final int _childID;
@@ -69,6 +71,7 @@ public class PyramidNode
      _grid = null;
      _stickyGrid = false;
      _children = null;
+     _childrenSize = 0;
      _subscriptions = null;
   
   }
@@ -82,8 +85,7 @@ public class PyramidNode
   
     if (_children != null)
     {
-      final int size = _children.size();
-      for (int i = 0; i < size; i++)
+      for (int i = 0; i < _childrenSize; i++)
       {
         PyramidNode child = _children.get(i);
         if (child != null)
@@ -94,8 +96,8 @@ public class PyramidNode
   
     if (_subscriptions != null)
     {
-      final int size = _subscriptions.size();
-      for (int i = 0; i < size; i++)
+      final int subscriptionsSize = _subscriptions.size();
+      for (int i = 0; i < subscriptionsSize; i++)
       {
         DEMSubscription subscription = _subscriptions.get(i);
         subscription._release();
@@ -122,8 +124,7 @@ public class PyramidNode
     }
   
     java.util.ArrayList<PyramidNode> children = getChildren();
-    final int size = children.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _childrenSize; i++)
     {
       PyramidNode child = children.get(i);
       if (child.insertGrid(z, x, y, grid, stickyGrid))
@@ -134,30 +135,39 @@ public class PyramidNode
     return false;
   }
 
-  public final void addSubscription(DEMSubscription subscription)
+  public final void addSubscription(DEMGrid grid, DEMSubscription subscription)
   {
-    if (!subscription._sector.touchesWith(_sector))
+    if (subscription._sector.touchesWith(_sector))
     {
-      return;
-    }
+      final DEMGrid bestGrid = (_grid == null) ? grid : _grid;
   
-    if (!_resolution._latitude.greaterThan(subscription._resolution._latitude) && !_resolution._longitude.greaterThan(subscription._resolution._longitude))
-    {
-      if (_subscriptions == null)
+      final boolean notEnoughResolution = (_resolution._latitude.greaterThan(subscription._resolution._latitude) || _resolution._longitude.greaterThan(subscription._resolution._longitude));
+      if (notEnoughResolution)
       {
-        _subscriptions = new java.util.ArrayList<DEMSubscription>();
+        java.util.ArrayList<PyramidNode> children = getChildren();
+        for (int i = 0; i < _childrenSize; i++)
+        {
+          PyramidNode child = children.get(i);
+          child.addSubscription(bestGrid, subscription);
+        }
       }
-      subscription._retain();
-      _subscriptions.add(subscription);
-      return;
-    }
-  
-    java.util.ArrayList<PyramidNode> children = getChildren();
-    final int size = children.size();
-    for (int i = 0; i < size; i++)
-    {
-      PyramidNode child = children.get(i);
-      child.addSubscription(subscription);
+      else
+      {
+        if (_subscriptions == null)
+        {
+          _subscriptions = new java.util.ArrayList<DEMSubscription>();
+        }
+        subscription._retain();
+        _subscriptions.add(subscription);
+        if (bestGrid != null)
+        {
+          final DEMGrid selectedGrid = DEMGridUtils.bestGridFor(bestGrid, subscription._sector, subscription._extent);
+          if (selectedGrid != null)
+          {
+            subscription.onGrid(selectedGrid);
+          }
+        }
+      }
     }
   }
 
@@ -184,8 +194,7 @@ public class PyramidNode
   
     if (_children != null)
     {
-      final int size = _children.size();
-      for (int i = 0; i < size; i++)
+      for (int i = 0; i < _childrenSize; i++)
       {
         PyramidNode child = _children.get(i);
         child.removeSubscription(subscription);

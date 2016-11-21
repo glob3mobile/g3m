@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class Interpolator;
 //class Mesh;
 //class Geodetic3D;
+//class Vector2I;
 
 
 public abstract class ElevationData

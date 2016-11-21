@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class DirectMesh;
 //class ByteBufferIterator;
+//class ITimer;
+
 
 public class PointCloudsRenderer extends DefaultRenderer
 {

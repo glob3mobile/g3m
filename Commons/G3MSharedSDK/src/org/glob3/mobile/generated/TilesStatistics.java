@@ -62,13 +62,13 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-
+  
     final IMathUtils mu = IMathUtils.instance();
     _visibleLowerLatitudeDegrees = mu.maxDouble();
     _visibleLowerLongitudeDegrees = mu.maxDouble();
     _visibleUpperLatitudeDegrees = mu.minDouble();
     _visibleUpperLongitudeDegrees = mu.minDouble();
-
+  
     for (int i = 0; i < _maxLOD; i++)
     {
       _tilesProcessedByLevel[i] = 0;
@@ -180,7 +180,7 @@ public class TilesStatistics
         isb.addInt(counter);
       }
     }
-
+  
     String s = isb.getString();
     if (isb != null)
        isb.dispose();
@@ -191,6 +191,5 @@ public class TilesStatistics
   {
     logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
   }
-
 
 }

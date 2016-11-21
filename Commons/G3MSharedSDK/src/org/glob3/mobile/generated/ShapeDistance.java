@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class Camera;
+
 
 public class ShapeDistance
 {

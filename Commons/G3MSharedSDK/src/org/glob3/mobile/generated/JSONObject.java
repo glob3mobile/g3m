@@ -225,7 +225,7 @@ public class JSONObject extends JSONBaseObject
     int keysCount = keys.size();
     for (int i = 0; i < keysCount; i++)
     {
-      String key = keys.get(i);
+      final String key = keys.get(i);
       result.put(key, JSONBaseObject.deepCopy(get(key)));
     }
   
@@ -245,7 +245,7 @@ public class JSONObject extends JSONBaseObject
       {
         visitor.visitObjectInBetweenChildren(this);
       }
-      String key = keys.get(i);
+      final String key = keys.get(i);
       visitor.visitObjectBeforeChild(this, key);
       final JSONBaseObject child = get(key);
       if(child != null)

@@ -47,42 +47,7 @@ public class FloatBufferDEMGrid extends BufferDEMGrid
   }
 
 
-  public final Vector3D getMinMaxAverageElevations()
-  {
-    final IMathUtils mu = IMathUtils.instance();
-    double minHeight = mu.maxDouble();
-    double maxHeight = mu.minDouble();
-    double sumHeight = 0.0;
-  
-    for (int i = 0; i < _bufferSize; i++)
-    {
-      double height = _buffer[i];
-      if ((height != height))
-      {
-        continue;
-      }
-      height += _deltaHeight;
-      if (height < minHeight)
-      {
-        minHeight = height;
-      }
-      if (height > maxHeight)
-      {
-        maxHeight = height;
-      }
-      sumHeight += height;
-    }
-  
-    if (minHeight == mu.maxDouble())
-    {
-      minHeight = 0;
-    }
-    if (maxHeight == mu.minDouble())
-    {
-      maxHeight = 0;
-    }
-  
-    return new Vector3D(minHeight, maxHeight, sumHeight / (_extent._x * _extent._y));
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Vector3D getMinMaxAverageElevations();
 
 }

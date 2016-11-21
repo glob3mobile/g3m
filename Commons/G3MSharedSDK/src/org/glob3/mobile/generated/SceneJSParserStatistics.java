@@ -87,7 +87,7 @@ public class SceneJSParserStatistics
     statsSB.addString("; Vert/Nod=");
     statsSB.addFloat((float) getVerticesCount() / getNodesCount());
   
-    String stats = statsSB.getString();
+    final String stats = statsSB.getString();
     if (statsSB != null)
        statsSB.dispose();
   

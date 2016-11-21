@@ -133,9 +133,9 @@ public class MercatorUtils
     final IMathUtils mu = IMathUtils.instance();
   
     double my = mu.log(mu.tan((90 + latitude._degrees) * DefineConstants.PI / 360.0)) / (DefineConstants.PI / 180.0);
-        my = my * _originShift / 180.0;
+    my = my * _originShift / 180.0;
   
-        return my;
+    return my;
   }
 
   public static Sector getSector(int z, int x, int y)

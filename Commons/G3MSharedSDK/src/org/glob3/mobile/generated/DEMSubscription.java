@@ -19,13 +19,12 @@ package org.glob3.mobile.generated;
 
 //class DEMProvider;
 //class DEMListener;
+//class DEMGrid;
 
 
 public class DEMSubscription extends RCObject
 {
   private DEMProvider _demProvider;
-
-  private final Vector2S _extent;
 
   private DEMListener _listener;
   private final boolean _deleteListener;
@@ -48,6 +47,7 @@ public class DEMSubscription extends RCObject
   }
 
   public final Sector _sector ;
+  private final Vector2S _extent;
   public final Geodetic2D _resolution ;
 
   public DEMSubscription(DEMProvider demProvider, Sector sector, Vector2S extent, DEMListener listener, boolean deleteListener)
@@ -59,6 +59,11 @@ public class DEMSubscription extends RCObject
      _listener = listener;
      _deleteListener = deleteListener;
     _demProvider._retain();
+  }
+
+  public final void onGrid(DEMGrid grid)
+  {
+    _listener.onGrid(grid);
   }
 
   public final void cancel()

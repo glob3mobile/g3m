@@ -163,9 +163,8 @@ public class PlanetTileTessellator extends TileTessellator
   
     //TEX COORDINATES////////////////////////////////////////////////////////////////
   
-    if (mercator) //Mercator
+    if (mercator)
     {
-  
       final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(tileSector._lower._latitude);
       final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(tileSector._upper._latitude);
       final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
@@ -178,8 +177,8 @@ public class PlanetTileTessellator extends TileTessellator
         {
           final double u = (double) i / (meshResolution._x - 1);
   
-          Angle lat = Angle.linearInterpolation(meshSector._lower._latitude, meshSector._upper._latitude, 1.0 - v);
-          Angle lon = Angle.linearInterpolation(meshSector._lower._longitude, meshSector._upper._longitude, u);
+          final Angle lat = Angle.linearInterpolation(meshSector._lower._latitude, meshSector._upper._latitude, 1.0 - v);
+          final Angle lon = Angle.linearInterpolation(meshSector._lower._longitude, meshSector._upper._longitude, u);
   
           //U
           final double m_u = tileSector.getUCoordinate(lon);
@@ -191,11 +190,9 @@ public class PlanetTileTessellator extends TileTessellator
           textCoords.add((float)m_u, (float)m_v);
         }
       }
-  
-    } //No mercator
+    }
     else
     {
-  
       for (int j = 0; j < meshResolution._y; j++)
       {
         final double v = (double) j / (meshResolution._y - 1);
@@ -205,7 +202,6 @@ public class PlanetTileTessellator extends TileTessellator
           textCoords.add((float)u, (float)v);
         }
       }
-  
     }
   
     //INDEX///////////////////////////////////////////////////////////////

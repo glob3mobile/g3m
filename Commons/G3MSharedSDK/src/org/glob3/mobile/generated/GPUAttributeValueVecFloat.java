@@ -58,7 +58,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     isb.addString(" Normalized:");
     isb.addBool(_normalized);
 
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

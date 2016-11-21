@@ -17,14 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class MutableMatrix44D;
-
-
-
-
-
 //class ShapePendingEffect;
-//class GPUProgramState;
+//class GLState;
+
 
 public abstract class Shape implements SurfaceElevationListener, EffectTarget
 {
@@ -42,8 +39,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private double _translationX;
   private double _translationY;
   private double _translationZ;
-
-//  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D getTransformMatrix(Planet planet)
@@ -116,7 +111,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _surfaceElevation = 0;
      _glState = new GLState();
      _surfaceElevationProvider = null;
-
+  
   }
 
   public void dispose()
@@ -173,18 +168,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return _roll;
   }
 
-//  void setPosition(Geodetic3D* position,
-//                   AltitudeMode altitudeMode);
-
-
-  //void Shape::setPosition(Geodetic3D* position,
-  //                        AltitudeMode altitudeMode) {
-  //  delete _position;
-  //  _position = position;
-  //  _altitudeMode = altitudeMode;
-  //  cleanTransformMatrix();
-  //}
-  
   public final void setPosition(Geodetic3D position)
   {
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)

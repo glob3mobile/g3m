@@ -33,7 +33,7 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
     isb.addDouble(_x);
     isb.addString("y:");
     isb.addDouble(_y);
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

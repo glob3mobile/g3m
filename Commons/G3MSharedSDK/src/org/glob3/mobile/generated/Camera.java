@@ -177,7 +177,7 @@ public class Camera
 
   public final Vector3D getCartesianPosition()
   {
-     return _position.asVector3D();
+    return _position.asVector3D();
   }
   public final void getCartesianPositionMutable(MutableVector3D result)
   {
@@ -186,15 +186,15 @@ public class Camera
 
   public final Vector3D getNormalizedPosition()
   {
-     return _normalizedPosition.asVector3D();
+    return _normalizedPosition.asVector3D();
   }
   public final Vector3D getCenter()
   {
-     return _center.asVector3D();
+    return _center.asVector3D();
   }
   public final Vector3D getUp()
   {
-     return _up.asVector3D();
+    return _up.asVector3D();
   }
   public final void getUpMutable(MutableVector3D result)
   {
@@ -203,17 +203,15 @@ public class Camera
 
   public final Geodetic3D getGeodeticCenterOfView()
   {
-     return _getGeodeticCenterOfView();
+    return _getGeodeticCenterOfView();
   }
   public final Vector3D getXYZCenterOfView()
   {
-     return _getCartesianCenterOfView().asVector3D();
+    return _getCartesianCenterOfView().asVector3D();
   }
   public final Vector3D getViewDirection()
   {
-    // return _center.sub(_position).asVector3D();
-
-    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    // perform the substraction inline to avoid a temporary MutableVector3D instance
     return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
@@ -227,7 +225,6 @@ public class Camera
   {
     result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
-
 
   public final void dragCamera(Vector3D p0, Vector3D p1)
   {
@@ -652,11 +649,11 @@ public class Camera
     Vector3D pos = getCartesianPosition();
     Vector3D vd = getViewDirection();
   
-  //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
-  //  float zOffset = zRange * 1e-6;
-  //  if (zOffset < 1.0f){
-  //    zOffset = 1.0f;
-  //  }
+    //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
+    //  float zOffset = zRange * 1e-6;
+    //  if (zOffset < 1.0f) {
+    //    zOffset = 1.0f;
+    //  }
   
     Vector3D c = zNearPlane.intersectionWithRay(pos, vd); //.add(vd.times(zOffset / vd.length()));
     Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
@@ -668,7 +665,6 @@ public class Camera
     vertices.putVector3D(3, c.add(right).add(up));
   }
 
-  // data to compute frustum
   public final FrustumData getFrustumData()
   {
     if (_dirtyFlags._frustumDataDirty)
@@ -714,7 +710,6 @@ public class Camera
   private MutableVector3D _ray0 = new MutableVector3D();
   private MutableVector3D _ray1 = new MutableVector3D();
 
-  //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _viewPortWidth;
@@ -787,7 +782,6 @@ public class Camera
     if (_dirtyFlags._cartesianCenterOfViewDirty)
     {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
       _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
@@ -891,7 +885,6 @@ public class Camera
     if (_dirtyFlags._modelViewMatrixDirty)
     {
       _dirtyFlags._modelViewMatrixDirty = false;
-      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
       _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;

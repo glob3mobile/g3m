@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  FloatBufferBuilderFromCartesian3D.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 11/9/16.
+//
+//
+
+//
 //  FloatBufferBuilderFromCartesian3D.hpp
 //  G3MiOSSDK
 //

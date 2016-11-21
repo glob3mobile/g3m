@@ -14,17 +14,16 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
 //class Vector3D;
+//class Angle;
+//class MutableMatrix44D;
+
 
 public class MutableVector3D
 {
   private double _x;
   private double _y;
   private double _z;
-
-//  MutableVector3D& operator=(const MutableVector3D& that);
 
 
 
@@ -84,10 +83,10 @@ public class MutableVector3D
   }
   public final void normalize()
   {
-      final double d = length();
-      _x /= d;
-      _y /= d;
-      _z /= d;
+    final double d = length();
+    _x /= d;
+    _y /= d;
+    _z /= d;
   }
 
   public static MutableVector3D nan()
@@ -204,8 +203,8 @@ public class MutableVector3D
     final double v = axis.y();
     final double w = axis.z();
   
-  //  const double cosTheta = theta.cosinus();
-  //  const double sinTheta = theta.sinus();
+    //  const double cosTheta = theta.cosinus();
+    //  const double sinTheta = theta.sinus();
     final double cosTheta = java.lang.Math.cos(theta._radians);
     final double sinTheta = java.lang.Math.sin(theta._radians);
   

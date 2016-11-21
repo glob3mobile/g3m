@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class Vector3F
 {
 
@@ -50,7 +49,6 @@ public class Vector3F
   public void dispose()
   {
   }
-
 
   public final float dot(Vector3F v)
   {

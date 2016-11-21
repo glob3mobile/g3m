@@ -51,42 +51,4 @@ public class ShortBufferDEMGrid extends BufferDEMGrid
   }
 
 
-  public final Vector3D getMinMaxAverageElevations()
-  {
-    final IMathUtils mu = IMathUtils.instance();
-    short minHeight = mu.maxInt16();
-    short maxHeight = mu.minInt16();
-    double sumHeight = 0.0;
-  
-    for (int i = 0; i < _bufferSize; i++)
-    {
-      short height = _buffer[i];
-      if (height == _noDataValue)
-      {
-        continue;
-      }
-      height += _deltaHeight;
-      if (height < minHeight)
-      {
-        minHeight = height;
-      }
-      if (height > maxHeight)
-      {
-        maxHeight = height;
-      }
-      sumHeight += height;
-    }
-  
-    if (minHeight == mu.maxInt16())
-    {
-      minHeight = 0;
-    }
-    if (maxHeight == mu.minInt16())
-    {
-      maxHeight = 0;
-    }
-  
-    return new Vector3D(minHeight, maxHeight, sumHeight / (_extent._x * _extent._y));
-  }
-
 }

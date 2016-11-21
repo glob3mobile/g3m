@@ -19,9 +19,11 @@ package org.glob3.mobile.generated;
 //class TileImageContribution;
 //class IDownloader;
 //class IBufferDownloadListener;
+//class IMathUtils;
 //class IStringUtils;
 //class GEORasterSymbolizer;
 //class TiledVectorLayerTileImageProvider;
+
 
 public class TiledVectorLayer extends VectorLayer
 {

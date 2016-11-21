@@ -3,9 +3,6 @@ public class NonOverlappingMark
 {
   private float _springLengthInPixels;
 
-//  MutableVector2F _widgetScreenPosition;
-//  MutableVector2F _anchorScreenPosition;
-
   private Vector3D _cartesianPos;
   private Geodetic3D _geoPosition ;
 
@@ -300,7 +297,6 @@ public class NonOverlappingMark
   public final void resetWidgetPositionVelocityAndForce()
   {
     _widget.resetPosition();
-//    _widgetScreenPosition.put(NANF, NANF);
     _speed.set(0, 0);
     _force.set(0, 0);
   }

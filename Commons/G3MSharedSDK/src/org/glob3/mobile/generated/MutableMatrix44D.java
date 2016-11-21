@@ -14,22 +14,22 @@ package org.glob3.mobile.generated;
 //
 
 
-//class FrustumData;
+
+//class Matrix44D;
 //class Vector3D;
 //class Vector2D;
 //class Vector3F;
 //class Vector2F;
+//class ILogger;
 //class MutableVector3D;
-//class IFloatBuffer;
-
-
-
-
+//class FrustumData;
+//class Geodetic2D;
+//class Geodetic3D;
+//class Angle;
 
 
 public class MutableMatrix44D
 {
-
   //_m23 -> row 2, column 3
   private double _m00;
   private double _m01;
@@ -121,8 +121,6 @@ public class MutableMatrix44D
     _m31 = m31;
     _m32 = m32;
     _m33 = m33;
-
-    _matrix44D = null;
   }
 
   public MutableMatrix44D()
@@ -157,55 +155,52 @@ public class MutableMatrix44D
     _m01 = m._m01;
     _m02 = m._m02;
     _m03 = m._m03;
-
+  
     _m10 = m._m10;
     _m11 = m._m11;
     _m12 = m._m12;
     _m13 = m._m13;
-
+  
     _m20 = m._m20;
     _m21 = m._m21;
     _m22 = m._m22;
     _m23 = m._m23;
-
+  
     _m30 = m._m30;
     _m31 = m._m31;
     _m32 = m._m32;
     _m33 = m._m33;
-
+  
     _matrix44D = m._matrix44D;
     if (_matrix44D != null)
     {
       _matrix44D._retain();
     }
-
   }
 
   public MutableMatrix44D(Matrix44D m)
   {
      _isValid = true;
+     _matrix44D = null;
     _m00 = m._m00;
     _m01 = m._m01;
     _m02 = m._m02;
     _m03 = m._m03;
-
+  
     _m10 = m._m10;
     _m11 = m._m11;
     _m12 = m._m12;
     _m13 = m._m13;
-
+  
     _m20 = m._m20;
     _m21 = m._m21;
     _m22 = m._m22;
     _m23 = m._m23;
-
+  
     _m30 = m._m30;
     _m31 = m._m31;
     _m32 = m._m32;
     _m33 = m._m33;
-
-    _matrix44D = null;
-
   }
 
   public final Matrix44D asMatrix44D()
@@ -312,6 +307,7 @@ public class MutableMatrix44D
        isb.dispose();
     return s;
   }
+
   @Override
   public String toString() {
     return description();
@@ -780,17 +776,16 @@ public class MutableMatrix44D
   public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ)
   {
     return new MutableMatrix44D(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
-
   }
 
   public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
   {
-    return MutableMatrix44D.createGeodeticRotationMatrix(position._latitude, position._longitude);
+    return createGeodeticRotationMatrix(position._latitude, position._longitude);
   }
 
   public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
   {
-    return MutableMatrix44D.createGeodeticRotationMatrix(position._latitude, position._longitude);
+    return createGeodeticRotationMatrix(position._latitude, position._longitude);
   }
 
   public static MutableMatrix44D createScaleMatrix(Vector3D scale)

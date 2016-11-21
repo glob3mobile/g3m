@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class Shape;
+
 //class SGShape;
 //class IByteBuffer;
 //class JSONBaseObject;
@@ -32,6 +32,7 @@ package org.glob3.mobile.generated;
 //class SGLayerNode;
 //class Color;
 //class SceneJSParserStatistics;
+
 
 public class SceneJSShapesParser
 {

@@ -19,8 +19,23 @@ package org.glob3.mobile.generated;
 
 
 
-//class ILogger;
-//class GPUProgramState;
+//class Vector3D;
+//class Vector2I;
+//class Vector2F;
+//class Vector3F;
+//class Geodetic3D;
+//class Angle;
+//class Geodetic2D;
+//class Matrix44D;
+//class Sphere;
+//class Sector;
+//class CoordinateSystem;
+//class TaitBryanAngles;
+//class MutableVector2I;
+//class FrustumData;
+//class IFloatBuffer;
+//class Planet;
+
 
 public class CameraDirtyFlags
 {

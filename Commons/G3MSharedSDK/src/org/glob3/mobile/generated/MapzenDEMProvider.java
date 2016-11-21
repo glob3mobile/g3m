@@ -48,7 +48,7 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
     final IStringUtils su = IStringUtils.instance();
     final String path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su.toString(z) + "/" + su.toString(x) + "/" + su.toString(y) + ".png?api_key=" + _apiKey;
   
-    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenDEMProvider_ImageDownloadListener(_context, this, z, x, y, sector, _deltaHeight), true);
+    downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenDEMProvider_ImageDownloadListener(_context, this, z, x, y, sector, _deltaHeight), true, _instanceID);
   }
 
   public void dispose()

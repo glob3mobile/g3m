@@ -63,10 +63,10 @@ public class MarksRenderer extends DefaultRenderer
     if (_billboardTexCoords == null)
     {
       FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-      texCoor.add(1,1);
-      texCoor.add(1,0);
-      texCoor.add(0,1);
-      texCoor.add(0,0);
+      texCoor.add(1, 1);
+      texCoor.add(1, 0);
+      texCoor.add(0, 1);
+      texCoor.add(0, 0);
       _billboardTexCoords = texCoor.create();
     }
     return _billboardTexCoords;

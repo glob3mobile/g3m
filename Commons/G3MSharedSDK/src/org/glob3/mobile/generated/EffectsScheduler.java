@@ -93,7 +93,7 @@ public class EffectsScheduler
   {
     if (_timer != null)
        _timer.dispose();
-
+  
     for (int i = 0; i < _effectsRuns.size(); i++)
     {
       EffectRun effectRun = _effectsRuns.get(i);

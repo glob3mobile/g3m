@@ -42,7 +42,6 @@ public class TaitBryanAngles
 
   public final String description()
   {
-  
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(TaitBryanAngles Heading= ");
     isb.addDouble(_heading._degrees);
@@ -55,6 +54,5 @@ public class TaitBryanAngles
     if (isb != null)
        isb.dispose();
     return s;
-  
   }
 }

@@ -48,6 +48,12 @@ public class MutableVector2D
 
   }
 
+  public final void set(double x, double y)
+  {
+    _x = x;
+    _y = y;
+  }
+
   public static MutableVector2D nan()
   {
     return new MutableVector2D(java.lang.Double.NaN, java.lang.Double.NaN);

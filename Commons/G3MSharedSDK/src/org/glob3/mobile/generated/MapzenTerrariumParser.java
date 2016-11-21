@@ -113,7 +113,7 @@ public class MapzenTerrariumParser
     if (image != null)
        image.dispose();
   
-    return new FloatBufferDEMGrid(sector, new Vector2I(width, height), buffer, bufferSize, deltaHeight);
+    return new FloatBufferDEMGrid(WebMercatorProjection.instance(), sector, new Vector2I(width, height), buffer, bufferSize, deltaHeight);
   }
 
   public static void parse(G3MContext context, IImage image, Sector sector, double deltaHeight, MapzenTerrariumParser.Listener listener, boolean deleteListener)

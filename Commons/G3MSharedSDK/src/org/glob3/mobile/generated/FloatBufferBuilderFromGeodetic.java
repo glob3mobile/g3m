@@ -13,6 +13,11 @@ package org.glob3.mobile.generated;
 
 
 
+//class Planet;
+//class Geodetic2D;
+//class Geodetic3D;
+//class Angle;
+
 
 public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 {
@@ -126,4 +131,5 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
     return new Vector3D(_cx, _cy, _cz);
   }
+
 }

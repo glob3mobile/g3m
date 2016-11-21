@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class IStringUtils;
+//class IMathUtils;
 
 
 public class URLTemplateLayer extends RasterLayer

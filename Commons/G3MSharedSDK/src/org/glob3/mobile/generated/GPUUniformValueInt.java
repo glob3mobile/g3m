@@ -28,7 +28,7 @@ public class GPUUniformValueInt extends GPUUniformValue
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("Uniform Value Integer: ");
     isb.addInt(_value);
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

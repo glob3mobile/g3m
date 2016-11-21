@@ -17,7 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
+//class Vector2D;
+//class Vector3D;
 //class IFloatBuffer;
+
 
 public class FloatBufferBuilder
 {
@@ -49,8 +52,8 @@ public class FloatBufferBuilder
 
     public FloatArrayList() {
       this(1024);
-//      _array = IFactory.instance().getThreadLocalFloatArray();
-//      _size = 0;
+      //      _array = IFactory.instance().getThreadLocalFloatArray();
+      //      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -125,4 +128,5 @@ public class FloatBufferBuilder
     int pos = i * 3;
     return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
   }
+
 }

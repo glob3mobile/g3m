@@ -416,7 +416,7 @@ public class Color
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
 
-  public final String toID()
+  public final String id()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addFloat(_red);

@@ -97,7 +97,7 @@ public class URL
   {
   }
 
-//  std::string getPath() const {
+//  const std::string getPath() const {
 //    return _path;
 //  }
 

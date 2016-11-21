@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class BufferElevationData extends ElevationData
 {
   protected final int _bufferSize;
@@ -24,9 +25,6 @@ public abstract class BufferElevationData extends ElevationData
 
   protected abstract double getValueInBufferAt(int index);
 
-
-  ///#include "Vector2I.hpp"
-  
   public BufferElevationData(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
      super(sector, extent);

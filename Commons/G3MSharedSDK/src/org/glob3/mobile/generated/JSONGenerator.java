@@ -46,7 +46,7 @@ public class JSONGenerator extends JSONVisitor
     JSONGenerator generator = new JSONGenerator();
     value.acceptVisitor(generator);
   
-    String result = generator.getString();
+    final String result = generator.getString();
   
     if (generator != null)
        generator.dispose();

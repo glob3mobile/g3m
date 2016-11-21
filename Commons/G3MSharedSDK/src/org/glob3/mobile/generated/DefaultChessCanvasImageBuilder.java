@@ -64,7 +64,7 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
   {
     final IStringUtils su = context.getStringUtils();
   
-    return "_DefaultChessCanvasImage_" + su.toString(_width) + "_" + su.toString(_height) + "_" + _backgroundColor.toID() + "_" + _boxColor.toID() + "_" + su.toString(_splits);
+    return "_DefaultChessCanvasImage_" + su.toString(_width) + "_" + su.toString(_height) + "_" + _backgroundColor.id() + "_" + _boxColor.id() + "_" + su.toString(_splits);
   }
 
   public DefaultChessCanvasImageBuilder(int width, int height, Color backgroundColor, Color boxColor, int splits)

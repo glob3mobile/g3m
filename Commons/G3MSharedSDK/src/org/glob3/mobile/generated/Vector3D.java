@@ -15,11 +15,9 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "MutableMatrix44D.hpp"
-
-
-//class MutableMatrix44D;
 //class MutableVector3D;
+//class Angle;
+//class MutableMatrix44D;
 
 
 public class Vector3D
@@ -41,7 +39,6 @@ public class Vector3D
      _x = x;
      _y = y;
      _z = z;
-
   }
 
   public void dispose()
@@ -53,17 +50,12 @@ public class Vector3D
      _x = v._x;
      _y = v._y;
      _z = v._z;
-
   }
 
   public static Vector3D nan()
   {
     return new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
   }
-
-//  static Vector3D zero() {
-//    return Vector3D(0, 0, 0);
-//  }
 
   public static Vector3D upX()
   {

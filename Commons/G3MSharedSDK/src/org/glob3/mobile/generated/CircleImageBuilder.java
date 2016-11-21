@@ -38,7 +38,7 @@ public class CircleImageBuilder extends CanvasImageBuilder
   {
     final IStringUtils su = context.getStringUtils();
   
-    return "_CircleImage_" + _color.toID() + "_" + su.toString(_radius);
+    return "_CircleImage_" + _color.id() + "_" + su.toString(_radius);
   }
 
   public CircleImageBuilder(Color color, int radius)

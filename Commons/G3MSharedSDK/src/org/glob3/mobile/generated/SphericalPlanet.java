@@ -177,7 +177,6 @@ public class SphericalPlanet extends Planet
   {
     toCartesian(geodetic._latitude, geodetic._longitude, geodetic._height, result);
   }
-
   public final void toCartesian(Geodetic2D geodetic, MutableVector3D result)
   {
     toCartesian(geodetic._latitude, geodetic._longitude, 0, result);

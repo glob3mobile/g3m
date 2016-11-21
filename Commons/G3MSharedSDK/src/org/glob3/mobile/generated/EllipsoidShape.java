@@ -262,7 +262,7 @@ public class EllipsoidShape extends AbstractMeshShape
      this(position, altitudeMode, radius, resolution, borderWidth, texturedInside, mercator, surfaceColor, null, true);
   }
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor, boolean withNormals)
-//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+  //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   {
      super(position, altitudeMode);
      _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
@@ -277,7 +277,7 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureImage = null;
      _withNormals = withNormals;
      _texID = null;
-
+  
   }
 
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Planet planet, URL textureURL, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator)

@@ -18,6 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
+
+//class Mesh;
+
+
 public class Sphere extends BoundingVolume
 {
 
@@ -177,7 +181,6 @@ public class Sphere extends BoundingVolume
   {
     return rc.getCurrentCamera().getProjectedSphereArea(this);
   }
-//  Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
   public final void render(G3MRenderContext rc, GLState parentState, Color color)
   {

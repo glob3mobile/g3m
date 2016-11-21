@@ -40,6 +40,7 @@ public abstract class GPUUniformValue extends RCObject
   public abstract boolean isEquals(GPUUniformValue v);
 
   public abstract String description();
+
   @Override
   public String toString() {
     return description();

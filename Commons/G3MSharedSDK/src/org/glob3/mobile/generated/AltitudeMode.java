@@ -1,20 +1,19 @@
 package org.glob3.mobile.generated; 
 //
-//  Geodetic3D.cpp
+//  AltitudeMode.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 31/05/12.
+//  Created by Diego Gomez Deck on 11/7/16.
+//
 //
 
 //
-//  Geodetic3D.hpp
+//  AltitudeMode.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 31/05/12.
+//  Created by Diego Gomez Deck on 11/7/16.
 //
-
-
-//class Geodetic2D;
+//
 
 
 //Altitude modes taken from KML standard (with the exception of relative to sea floor)

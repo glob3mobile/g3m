@@ -97,7 +97,7 @@ public class BILParser
       shortBuffer[i] = height;
     }
   
-    return new ShortBufferDEMGrid(sector, extent, shortBuffer, size, deltaHeight, noDataValue);
+    return new ShortBufferDEMGrid(WGS84Projetion.instance(), sector, extent, shortBuffer, size, deltaHeight, noDataValue);
   }
 
 }

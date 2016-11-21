@@ -138,8 +138,6 @@ public class MarkWidget
   {
     rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager()); // count -  first
   }
-//              float x,
-//              float y
 
   public final void setAndClampScreenPos(float x, float y, int viewportWidth, int viewportHeight, float margin)
   {

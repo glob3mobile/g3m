@@ -14,6 +14,10 @@ package org.glob3.mobile.generated;
 //
 
 
+
+//class Vector3D;
+//class Vector2D;
+//class Vector2F;
 //class G3MRenderContext;
 //class Planet;
 //class ICanvas;
@@ -24,9 +28,6 @@ package org.glob3.mobile.generated;
 
 public class Sector
 {
-
-
-
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
@@ -176,14 +177,6 @@ public class Sector
     //   page 79
   
     // Exit with no intersection if separated along an axis
-    //  if (_upper._latitude.lowerThan(that._lower._latitude) ||
-    //      _lower._latitude.greaterThan(that._upper._latitude)) {
-    //    return false;
-    //  }
-    //  if (_upper._longitude.lowerThan(that._lower._longitude) ||
-    //      _lower._longitude.greaterThan(that._upper._longitude)) {
-    //    return false;
-    //  }
     if ((_upper._latitude._radians < that._lower._latitude._radians) || (_lower._latitude._radians > that._upper._latitude._radians))
     {
       return false;
@@ -266,7 +259,6 @@ public class Sector
   {
     return (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians;
   }
-
 
   public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
   {
@@ -558,7 +550,6 @@ public class Sector
   
     return Geodetic2D.fromDegrees(lat, lon);
   }
-
 
   @Override
   public int hashCode() {

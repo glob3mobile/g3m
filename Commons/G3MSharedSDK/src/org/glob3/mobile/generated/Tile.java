@@ -15,8 +15,11 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class TileTexturizer;
+//class Mesh;
 //class TileElevationDataRequest;
+//class DEMSubscription;
 //class GLState;
 //class ITexturizerData;
 //class PlanetTileTessellatorData;
@@ -25,7 +28,7 @@ package org.glob3.mobile.generated;
 //class TileData;
 //class TilesStatistics;
 //class Geodetic3D;
-//class DEMSubscription;
+//class Vector2I;
 
 
 public class Tile
