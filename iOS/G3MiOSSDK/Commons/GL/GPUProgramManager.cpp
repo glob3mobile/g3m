@@ -127,9 +127,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     if (hasCamPos) {
       return compileProgramWithName(gl, "SphericalAtmosphere");
     }
-    else {
-      return compileProgramWithName(gl, "NoColorMesh");
-    }
+    return compileProgramWithName(gl, "NoColorMesh");
   }
 
   return NULL;
