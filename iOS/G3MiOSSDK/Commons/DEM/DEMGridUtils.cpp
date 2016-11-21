@@ -20,8 +20,7 @@
 #include "SubsetDEMGrid.hpp"
 #include "Vector2S.hpp"
 #include "DecimatedDEMGrid.hpp"
-//#include "InterpolatedDEMGrid.hpp"
-#include "ErrorHandling.hpp"
+#include "InterpolatedDEMGrid.hpp"
 
 
 const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
@@ -143,9 +142,7 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
            (subsetGridExtent._y > extent._y)) {
     return DecimatedDEMGrid::create(subsetGrid, extent);
   }
-  //  else {
-  //    return new InterpolatedDEMGrid(subsetGrid, extent);
-  //  }
-  THROW_EXCEPTION("Diego at work!");
-  return NULL;
+  else {
+    return InterpolatedDEMGrid::create(subsetGrid, extent);
+  }
 }
