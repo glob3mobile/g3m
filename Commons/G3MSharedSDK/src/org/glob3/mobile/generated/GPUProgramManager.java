@@ -163,10 +163,7 @@ public class GPUProgramManager
       {
         return compileProgramWithName(gl, "SphericalAtmosphere");
       }
-      else
-      {
-        return compileProgramWithName(gl, "NoColorMesh");
-      }
+      return compileProgramWithName(gl, "NoColorMesh");
     }
   
     return null;
