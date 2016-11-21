@@ -28,12 +28,13 @@ _buffer(buffer)
 }
 #endif
 #ifdef JAVA_CODE
-public FloatBufferDEMGrid(Sector sector,
+public FloatBufferDEMGrid(Projection projection,
+                          Sector sector,
                           Vector2I extent,
                           float[] buffer,
                           int bufferSize,
                           double deltaHeight) {
-  super(sector, extent, bufferSize, deltaHeight);
+  super(projection, sector, extent, bufferSize, deltaHeight);
   _buffer = buffer;
   if (_bufferSize != (_extent._x * _extent._y)) {
     throw new RuntimeException("Invalid bufferSize");

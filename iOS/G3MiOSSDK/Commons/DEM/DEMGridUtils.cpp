@@ -25,31 +25,31 @@
 
 const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
   const IMathUtils* mu = IMathUtils::instance();
-  double minHeight = mu->maxDouble();
-  double maxHeight = mu->minDouble();
-  double sumHeight = 0.0;
+  double minElevation = mu->maxDouble();
+  double maxElevation = mu->minDouble();
+  double sumElevation = 0.0;
 
   const int width  = grid->getExtent()._x;
   const int height = grid->getExtent()._y;
 
   for (size_t x = 0; x < width; x++) {
     for (size_t y = 0; y < height; y++) {
-      const double height = grid->getElevationAt(x, y);
-      if (!ISNAN(height)) {
-        if (height < minHeight) {
-          minHeight = height;
+      const double elevation = grid->getElevationAt(x, y);
+      if (!ISNAN(elevation)) {
+        if (elevation < minElevation) {
+          minElevation = elevation;
         }
-        if (height > maxHeight) {
-          maxHeight = height;
+        if (elevation > maxElevation) {
+          maxElevation = elevation;
         }
-        sumHeight += height;
+        sumElevation += elevation;
       }
     }
   }
 
-  return Vector3D(minHeight,
-                  maxHeight,
-                  sumHeight / (width * height));
+  return Vector3D(minElevation,
+                  maxElevation,
+                  sumElevation / (width * height));
 }
 
 

@@ -30,13 +30,14 @@ _noDataValue(noDataValue)
 }
 #endif
 #ifdef JAVA_CODE
-public ShortBufferDEMGrid(Sector sector,
+public ShortBufferDEMGrid(Projection projection,
+                          Sector sector,
                           Vector2I extent,
                           short[] buffer,
                           int bufferSize,
                           double deltaHeight,
                           short noDataValue) {
-  super(sector, extent, bufferSize, deltaHeight);
+  super(projection, sector, extent, bufferSize, deltaHeight);
   _buffer = buffer;
   _noDataValue = noDataValue;
   if (_bufferSize != (_extent._x * _extent._y)) {
