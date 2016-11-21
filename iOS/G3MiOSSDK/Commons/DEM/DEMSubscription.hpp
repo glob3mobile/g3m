@@ -34,7 +34,7 @@ public:
   const Vector2S   _extent;
 #endif
 #ifdef JAVA_CODE
-  private final Vector2S _extent;
+  public final Vector2S _extent;
 #endif
   const Geodetic2D _resolution;
 
