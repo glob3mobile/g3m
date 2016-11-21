@@ -626,13 +626,19 @@ void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
 
-  _billboardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
+  _billboardGLF = new BillboardGLFeature(Vector3D::zero,
                                          _textureWidth,
                                          _textureHeight,
                                          _anchorU, _anchorV);
 
   _glState->addGLFeature(_billboardGLF,
                          false);
+  
+  
+  //Position is passed as an eye-space translation
+  Vector3D position = *getCartesianPosition(planet);
+  MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(position);
+  _glState->addGLFeature(new ModelTransformGLFeature(translationMatrix.asMatrix44D()), false);
 
   if (_textureId != NULL) {
 

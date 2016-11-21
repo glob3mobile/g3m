@@ -130,10 +130,6 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return MODEL;
   }
 
-  if (name.compare("uBillboardPosition") == 0) {
-    return BILLBOARD_POSITION;
-  }
-
   if (name.compare("uRotationCenterTexCoord") == 0) {
     return ROTATION_CENTER_TEXTURE_COORDS;
   }
