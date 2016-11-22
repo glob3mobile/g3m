@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated;
+package org.glob3.mobile.generated; 
 public class SingleBILElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
 {
   private SingleBILElevationDataProvider _singleBILElevationDataProvider;
