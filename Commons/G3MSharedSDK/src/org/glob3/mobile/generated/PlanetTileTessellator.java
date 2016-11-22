@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class PlanetTileTessellator extends TileTessellator
 {
   private final boolean _skirted;

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  LayerTilesRenderParameters.cpp
 //  G3MiOSSDK

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class BingMapsLayer extends RasterLayer
 {
   private final String _imagerySet;

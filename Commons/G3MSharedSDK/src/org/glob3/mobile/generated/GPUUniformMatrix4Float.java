@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniformMatrix4Float extends GPUUniform
 {
   public GPUUniformMatrix4Float(String name, IGLUniformID id)

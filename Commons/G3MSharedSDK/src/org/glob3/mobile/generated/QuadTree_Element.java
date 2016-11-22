@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class QuadTree_Element
 {
   public final Sector _sector ;

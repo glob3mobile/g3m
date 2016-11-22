@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ProceduralLayer.cpp
 //  G3MiOSSDK

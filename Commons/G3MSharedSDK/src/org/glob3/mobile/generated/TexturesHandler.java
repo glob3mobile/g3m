@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class TexturesHandler
 {
   private java.util.ArrayList<TextureHolder> _textureHolders = new java.util.ArrayList<TextureHolder>();

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class IStorage
 {
   protected G3MContext _context;

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class HUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFactory
 {
   private final java.util.ArrayList<Info> _info = new java.util.ArrayList<Info>();

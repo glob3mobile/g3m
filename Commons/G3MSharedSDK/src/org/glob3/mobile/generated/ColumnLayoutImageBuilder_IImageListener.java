@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class ColumnLayoutImageBuilder_IImageListener extends IImageListener
 {
   private IImageBuilderListener _listener;

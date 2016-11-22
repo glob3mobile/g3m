@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadListener
 {
   private MeshRenderer _meshRenderer;

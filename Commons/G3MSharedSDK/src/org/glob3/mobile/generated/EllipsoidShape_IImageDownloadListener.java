@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class EllipsoidShape_IImageDownloadListener extends IImageDownloadListener
 {
   private EllipsoidShape _ellipsoidShape;

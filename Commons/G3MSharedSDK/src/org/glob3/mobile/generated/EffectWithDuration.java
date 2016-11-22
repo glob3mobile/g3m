@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class EffectWithDuration extends Effect
 {
   private long _started;

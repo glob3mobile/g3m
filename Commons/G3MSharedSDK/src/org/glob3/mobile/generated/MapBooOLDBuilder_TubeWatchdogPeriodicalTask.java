@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapBooOLDBuilder_TubeWatchdogPeriodicalTask extends GTask
 {
   private MapBooOLDBuilder _builder;

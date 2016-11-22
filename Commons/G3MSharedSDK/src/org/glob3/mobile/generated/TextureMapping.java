@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  TextureMapping.cpp
 //  G3MiOSSDK

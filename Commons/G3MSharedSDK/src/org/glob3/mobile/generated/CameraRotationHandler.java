@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CameraRotationHandler.cpp
 //  G3MiOSSDK

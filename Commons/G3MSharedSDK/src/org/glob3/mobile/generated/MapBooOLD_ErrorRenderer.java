@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapBooOLD_ErrorRenderer extends DefaultRenderer
 {
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();

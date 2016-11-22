@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapBooOLDBuilder_DummyListener extends IBufferDownloadListener
 {
   public MapBooOLDBuilder_DummyListener()

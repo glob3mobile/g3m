@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BusyQuadRenderer.cpp
 //  G3MiOSSDK

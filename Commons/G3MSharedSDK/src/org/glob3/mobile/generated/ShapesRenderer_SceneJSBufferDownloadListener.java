@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class ShapesRenderer_SceneJSBufferDownloadListener extends IBufferDownloadListener
 {
   private ShapesRenderer _shapesRenderer;

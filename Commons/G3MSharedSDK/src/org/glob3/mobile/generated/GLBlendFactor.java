@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLBlendFactor
 {
   private static int _srcAlpha = 0;

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class RenderedSectorCameraConstrainer implements ICameraConstrainer
 {
   private final double _maxHeight;

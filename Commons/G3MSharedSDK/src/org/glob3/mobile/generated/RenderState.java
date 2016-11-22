@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class RenderState
 {
   private static final RenderState READY = new RenderState(RenderState_Type.RENDER_READY);

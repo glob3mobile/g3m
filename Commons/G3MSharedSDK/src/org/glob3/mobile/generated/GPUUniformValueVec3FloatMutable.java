@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniformValueVec3FloatMutable extends GPUUniformValueVec3Float
 {
   public void dispose()

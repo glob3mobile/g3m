@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  OSMLayer.cpp
 //  G3MiOSSDK

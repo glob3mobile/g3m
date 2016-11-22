@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  DecimatedSubviewElevationData.cpp
 //  G3MiOSSDK

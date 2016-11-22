@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GEORenderer_ObjectSymbolizerPair
 {
   public final GEOObject _geoObject;

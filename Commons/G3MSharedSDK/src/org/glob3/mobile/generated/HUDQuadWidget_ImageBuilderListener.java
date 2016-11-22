@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class HUDQuadWidget_ImageBuilderListener implements IImageBuilderListener
 {
   private HUDQuadWidget _quadWidget;
