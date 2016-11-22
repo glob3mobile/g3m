@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class LazyTextureMapping extends TextureMapping
 {
   private LazyTextureMappingInitializer _initializer;

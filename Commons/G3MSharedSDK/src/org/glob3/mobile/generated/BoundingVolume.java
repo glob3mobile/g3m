@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BoundingVolume.hpp
 //  G3MiOSSDK

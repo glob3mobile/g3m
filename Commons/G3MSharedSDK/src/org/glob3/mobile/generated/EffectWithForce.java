@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class EffectWithForce extends Effect
 {
   private double _force;

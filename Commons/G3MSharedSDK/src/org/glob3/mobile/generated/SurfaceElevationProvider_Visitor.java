@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class SurfaceElevationProvider_Visitor extends GenericQuadTreeVisitor
 {
   private final ElevationData _elevationData;

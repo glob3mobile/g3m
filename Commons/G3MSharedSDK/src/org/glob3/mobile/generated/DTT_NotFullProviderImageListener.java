@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DTT_NotFullProviderImageListener extends IImageListener
 {
   private DTT_TileTextureBuilder _builder;

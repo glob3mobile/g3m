@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapzenDEMProvider_ParserListener extends MapzenTerrariumParser.Listener
 {
   private MapzenDEMProvider _provider;

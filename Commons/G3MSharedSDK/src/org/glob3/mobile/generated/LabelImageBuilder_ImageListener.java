@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class LabelImageBuilder_ImageListener extends IImageListener
 {
   private IImageBuilderListener _listener;

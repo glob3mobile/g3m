@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ShapeFullPositionEffect.cpp
 //  G3MiOSSDK

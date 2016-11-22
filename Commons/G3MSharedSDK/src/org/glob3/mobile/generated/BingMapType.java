@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BingMapsLayer.cpp
 //  G3MiOSSDK

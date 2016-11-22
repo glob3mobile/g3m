@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DoubleTapRotationEffect extends EffectWithDuration
 {
   private final Vector3D _axis ;

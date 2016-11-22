@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DefaultInfoDisplay implements InfoDisplay
 {
   private Default_HUDRenderer _defaultHUDRenderer;

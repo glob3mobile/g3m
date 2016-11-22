@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONFloat.cpp
 //  G3MiOSSDK

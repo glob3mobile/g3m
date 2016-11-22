@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLTextureParameterValue
 {
   private static int _nearest = 0;

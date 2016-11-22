@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class CanvasImageBuilder_ImageListener extends IImageListener
 {
   private final String _imageName;

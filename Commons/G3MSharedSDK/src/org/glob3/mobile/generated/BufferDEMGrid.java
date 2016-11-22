@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BufferDEMGrid.cpp
 //  G3MiOSSDK

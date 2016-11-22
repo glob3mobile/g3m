@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapzenDEMProvider_ImageDownloadListener extends IImageDownloadListener
 {
   private final G3MContext _context;

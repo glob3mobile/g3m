@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapBooOLD_CameraPosition
 {
   private final Geodetic3D _position ;

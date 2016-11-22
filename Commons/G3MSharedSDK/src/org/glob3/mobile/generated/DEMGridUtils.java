@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  DEMGridUtils.cpp
 //  G3MiOSSDK

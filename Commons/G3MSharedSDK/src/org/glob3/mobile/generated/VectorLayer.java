@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  VectorLayer.cpp
 //  G3MiOSSDK

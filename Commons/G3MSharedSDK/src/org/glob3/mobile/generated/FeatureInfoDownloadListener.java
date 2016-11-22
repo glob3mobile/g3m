@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class FeatureInfoDownloadListener extends IBufferDownloadListener
 {
   private MapBooOLDApplicationChangeListener _applicationListener;

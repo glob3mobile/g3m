@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class StackLayoutImageBuilder_IImageListener extends IImageListener
 {
   private IImageBuilderListener _listener;

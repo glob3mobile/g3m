@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class HUDErrorRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFactory
 {
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
