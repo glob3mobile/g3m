@@ -26,12 +26,12 @@ find TEMP/JAVA -iname "*.java" -exec sed -i.temp '1s/^/package org.glob3.mobile.
 rm TEMP/JAVA/*.temp
 
 
-echo - Merging Java sources...
+echo - Merging generated Java sources...
 rm Commons/G3MSharedSDK/src/org/glob3/mobile/generated/*.java
 mv TEMP/JAVA/*.java Commons/G3MSharedSDK/src/org/glob3/mobile/generated/
 
 
-echo - Cleaning...
+echo - Cleaning up...
 rm -rf TEMP
 
 
