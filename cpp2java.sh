@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo - Converting...
+echo - Converting C++ sources to Java...
+echo
 
 
 rm -rf TEMP
