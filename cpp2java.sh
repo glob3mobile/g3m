@@ -30,6 +30,7 @@ echo - Merging Java sources...
 rm Commons/G3MSharedSDK/src/org/glob3/mobile/generated/*.java
 mv TEMP/JAVA/*.java Commons/G3MSharedSDK/src/org/glob3/mobile/generated/
 
+
 echo - Cleaning...
 rm -rf TEMP
 
