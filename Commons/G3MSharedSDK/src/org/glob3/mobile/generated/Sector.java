@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Sector.cpp
 //  G3MiOSSDK

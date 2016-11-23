@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONNumber.hpp
 //  G3MiOSSDK

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IStringBuilder.cpp
 //  G3MiOSSDK

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GEORenderer_GEOObjectParserAsyncTask extends GAsyncTask
 {
   public final URL _url;

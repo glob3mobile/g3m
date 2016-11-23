@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class Matrix44DMultiplicationHolder extends Matrix44DProvider
 {
   private final Matrix44D[] _matrices;

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */

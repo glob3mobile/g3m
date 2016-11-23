@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MutableVector2I.cpp
 //  G3MiOSSDK

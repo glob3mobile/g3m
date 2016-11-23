@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class IDeviceAttitude
 {
   private static IDeviceAttitude _instance;

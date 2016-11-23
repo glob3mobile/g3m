@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class ImageSaverDownloadListener extends IImageDownloadListener
 {
   private CachedDownloader _downloader;

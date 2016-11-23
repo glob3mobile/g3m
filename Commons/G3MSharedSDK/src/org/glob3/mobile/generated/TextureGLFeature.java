@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class TextureGLFeature extends GLColorGroupFeature
 {
   private IGLTextureId _texID = null;

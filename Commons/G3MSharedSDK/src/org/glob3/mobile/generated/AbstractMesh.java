@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  AbstractMesh.cpp
 //  G3MiOSSDK

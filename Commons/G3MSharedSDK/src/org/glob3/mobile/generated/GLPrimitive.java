@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLPrimitive
 {
   private static int _triangles = 0;

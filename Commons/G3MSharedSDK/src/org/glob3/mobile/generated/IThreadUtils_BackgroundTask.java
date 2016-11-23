@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class IThreadUtils_BackgroundTask extends GTask
 {
   private GAsyncTask _task;

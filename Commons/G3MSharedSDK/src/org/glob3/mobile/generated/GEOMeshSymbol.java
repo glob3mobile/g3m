@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GEOMeshSymbol.cpp
 //  G3MiOSSDK

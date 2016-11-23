@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class LeveledTexturedMesh extends Mesh
 {
   private final Mesh _mesh;

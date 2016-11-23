@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLTextureParameter
 {
   private static int _minFilter = 0;

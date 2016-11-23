@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
 {
   private final Sector _sector ;

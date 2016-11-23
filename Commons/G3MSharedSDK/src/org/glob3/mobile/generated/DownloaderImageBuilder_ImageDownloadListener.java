@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownloadListener
 {
   private IImageBuilderListener _listener;

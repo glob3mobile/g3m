@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MapBooOLD_HUDRendererInfoDisplay implements InfoDisplay
 {
   private MapBooOLD_HUDRenderer _mapBooHUDRenderer;

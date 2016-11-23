@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class ColorGLFeature extends GLColorGroupFeature
 {
   public void dispose()
