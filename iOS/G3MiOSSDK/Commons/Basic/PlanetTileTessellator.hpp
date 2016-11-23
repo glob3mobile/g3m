@@ -149,6 +149,7 @@ public:
                        const PlanetRenderContext* prc,
                        Tile* tile,
                        const ElevationData* elevationData,
+                       const DEMGrid* grid,
                        TileTessellatorMeshData& data) const;
 
   Mesh* createTileDebugMesh(const G3MRenderContext* rc,

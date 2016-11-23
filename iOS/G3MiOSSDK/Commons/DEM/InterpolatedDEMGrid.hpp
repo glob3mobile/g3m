@@ -19,8 +19,8 @@ private:
                       const Vector2I& extent);
 
 public:
-  static const InterpolatedDEMGrid* create(const DEMGrid*  grid,
-                                           const Vector2S& extent);
+  static InterpolatedDEMGrid* create(const DEMGrid*  grid,
+                                     const Vector2S& extent);
 
   double getElevationAt(int x, int y) const;
 

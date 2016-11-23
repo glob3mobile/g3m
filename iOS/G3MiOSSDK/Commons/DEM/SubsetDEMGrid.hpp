@@ -29,11 +29,11 @@ protected:
 
 public:
 
-  static const SubsetDEMGrid* create(const DEMGrid* grid,
-                                     const Sector&  sector);
+  static SubsetDEMGrid* create(const DEMGrid* grid,
+                               const Sector&  sector);
 
   double getElevationAt(int x, int y) const;
-  
+
 };
 
 #endif

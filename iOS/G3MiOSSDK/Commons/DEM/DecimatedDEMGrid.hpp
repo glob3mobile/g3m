@@ -22,8 +22,8 @@ private:
                            double x1, double y1) const;
 
 public:
-  static const DecimatedDEMGrid* create(const DEMGrid*  grid,
-                                        const Vector2S& extent);
+  static DecimatedDEMGrid* create(const DEMGrid*  grid,
+                                  const Vector2S& extent);
 
   double getElevationAt(int x, int y) const;
 

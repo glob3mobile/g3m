@@ -112,6 +112,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             const PlanetRenderContext* prc,
                                             Tile* tile,
                                             const ElevationData* elevationData,
+                                            const DEMGrid* grid,
                                             TileTessellatorMeshData& data) const {
 
   const Sector tileSector = tile->_sector;

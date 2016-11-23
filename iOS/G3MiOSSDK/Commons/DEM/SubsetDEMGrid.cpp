@@ -15,8 +15,8 @@
 //#include "ILogger.hpp"
 
 
-const SubsetDEMGrid* SubsetDEMGrid::create(const DEMGrid* grid,
-                                           const Sector&  sector) {
+SubsetDEMGrid* SubsetDEMGrid::create(const DEMGrid* grid,
+                                     const Sector&  sector) {
   const Projection* projection = grid->getProjection();
   const Vector2D lowerUV = projection->getUV(sector._lower);
   const Vector2D upperUV = projection->getUV(sector._upper);

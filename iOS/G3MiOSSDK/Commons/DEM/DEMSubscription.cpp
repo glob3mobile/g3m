@@ -44,7 +44,7 @@ DEMSubscription::~DEMSubscription() {
 #endif
 }
 
-void DEMSubscription::onGrid(const DEMGrid* grid) {
+void DEMSubscription::onGrid(DEMGrid* grid) {
   _listener->onGrid(grid);
 }
 

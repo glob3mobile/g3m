@@ -44,7 +44,7 @@ public:
                   DEMListener*    listener,
                   const bool      deleteListener);
 
-  void onGrid(const DEMGrid* grid);
+  void onGrid(DEMGrid* grid);
 
   void cancel();
 

@@ -113,9 +113,9 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
   return result;
 }
 
-const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
-                                         const Sector&   sector,
-                                         const Vector2S& extent) {
+DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
+                                   const Sector&   sector,
+                                   const Vector2S& extent) {
   if (grid == NULL) {
     return NULL;
   }
@@ -133,7 +133,7 @@ const DEMGrid* DEMGridUtils::bestGridFor(const DEMGrid*  grid,
     return NULL;
   }
 
-  const DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
+  DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
   const Vector2I subsetGridExtent = subsetGrid->getExtent();
   if (subsetGridExtent.isEquals(extent)) {
     return subsetGrid;

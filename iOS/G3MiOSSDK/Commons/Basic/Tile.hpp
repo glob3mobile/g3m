@@ -83,6 +83,7 @@ private:
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
   bool                   _mustActualizeMeshDueToNewElevationData;
+  DEMGrid*               _grid;
   ElevationDataProvider* _lastElevationDataProvider;
   int _lastTileMeshResolutionX;
   int _lastTileMeshResolutionY;
@@ -106,7 +107,7 @@ private:
 
     ~TerrainListener();
 
-    void onGrid(const DEMGrid* grid);
+    void onGrid(DEMGrid* grid);
 
   };
 
@@ -205,6 +206,8 @@ public:
   ElevationData* getElevationData() const {
     return _elevationData;
   }
+
+  void onGrid(DEMGrid* grid);
 
   void setElevationData(ElevationData* ed, int level);
 

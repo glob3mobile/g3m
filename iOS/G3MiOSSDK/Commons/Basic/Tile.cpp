@@ -31,6 +31,7 @@
 #include "Geodetic3D.hpp"
 #include "ITimer.hpp"
 #include "Vector2D.hpp"
+#include "DEMGrid.hpp"
 
 
 const std::string Tile::createTileID(int level,
@@ -79,6 +80,7 @@ _texturizerData(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
+_grid(NULL),
 _demSubscription(NULL),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
@@ -103,6 +105,10 @@ Tile::~Tile() {
   delete _texturizedMesh;
 
   delete _elevationData;
+
+  if (_grid != NULL) {
+    _grid->_release();
+  }
 
   if (_elevationDataRequest != NULL) {
     _elevationDataRequest->cancelRequest(); //The listener will auto delete
@@ -178,8 +184,8 @@ _tile(tile)
 Tile::TerrainListener::~TerrainListener() {
 }
 
-void Tile::TerrainListener::onGrid(const DEMGrid* grid) {
-  THROW_EXCEPTION("Not yet done!");
+void Tile::TerrainListener::onGrid(DEMGrid* grid) {
+  _tile->onGrid(grid);
 }
 
 Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
@@ -215,32 +221,32 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       _debugMesh = NULL;
     }
 
-    if (elevationDataProvider == NULL) {
-      // no elevation data provider, just create a simple mesh without elevation
-      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
-                                                           prc,
-                                                           this,
-                                                           NULL,
-                                                           _tileTessellatorMeshData);
+//    if (elevationDataProvider == NULL) {
+//      // no elevation data provider, just create a simple mesh without elevation
+//      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+//                                                           prc,
+//                                                           this,
+//                                                           NULL,
+//                                                           _tileTessellatorMeshData);
+//    }
+//    else {
+    Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+                                                              prc,
+                                                              this,
+                                                              _elevationData,
+                                                              _grid,
+                                                              _tileTessellatorMeshData);
+
+    MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
+    if (meshHolder == NULL) {
+      meshHolder = new MeshHolder(tessellatorMesh);
+      _tessellatorMesh = meshHolder;
     }
     else {
-      Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
-                                                                prc,
-                                                                this,
-                                                                _elevationData,
-                                                                _tileTessellatorMeshData);
-
-      MeshHolder* meshHolder = (MeshHolder*) _tessellatorMesh;
-      if (meshHolder == NULL) {
-        meshHolder = new MeshHolder(tessellatorMesh);
-        _tessellatorMesh = meshHolder;
-      }
-      else {
-        meshHolder->setMesh(tessellatorMesh);
-      }
-
-      //      computeTileCorners(rc->getPlanet());
+      meshHolder->setMesh(tessellatorMesh);
     }
+
+//    }
 
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
@@ -580,6 +586,16 @@ const std::string Tile::description() const {
 }
 
 #pragma mark ElevationData methods
+
+void Tile::onGrid(DEMGrid* grid) {
+  if (grid != _grid) {
+    if (_grid != NULL) {
+      _grid->_release();
+    }
+    _grid = grid;
+    _mustActualizeMeshDueToNewElevationData = true;
+  }
+}
 
 void Tile::setElevationData(ElevationData* ed, int level) {
   if (_elevationDataLevel < level) {

@@ -21,7 +21,7 @@ public:
   void dispose();
 #endif
 
-  virtual void onGrid(const DEMGrid* grid) = 0;
+  virtual void onGrid(DEMGrid* grid) = 0;
 
 };
 

@@ -101,10 +101,10 @@ bool PyramidNode::insertGrid(int z,
   return false;
 }
 
-void PyramidNode::addSubscription(const DEMGrid* grid,
+void PyramidNode::addSubscription(DEMGrid* grid,
                                   DEMSubscription* subscription) {
   if (subscription->_sector.touchesWith(_sector)) {
-    const DEMGrid* bestGrid = (_grid == NULL) ? grid : _grid;
+    DEMGrid* bestGrid = (_grid == NULL) ? grid : _grid;
 
     const bool notEnoughResolution = (_resolution._latitude.greaterThan ( subscription->_resolution._latitude  ) ||
                                       _resolution._longitude.greaterThan( subscription->_resolution._longitude ) );
@@ -122,9 +122,9 @@ void PyramidNode::addSubscription(const DEMGrid* grid,
       subscription->_retain();
       _subscriptions->push_back(subscription);
       if (bestGrid != NULL) {
-        const DEMGrid* selectedGrid = DEMGridUtils::bestGridFor(bestGrid,
-                                                                subscription->_sector,
-                                                                subscription->_extent);
+        DEMGrid* selectedGrid = DEMGridUtils::bestGridFor(bestGrid,
+                                                          subscription->_sector,
+                                                          subscription->_extent);
         if (selectedGrid != NULL) {
           subscription->onGrid(selectedGrid);
         }

@@ -32,9 +32,9 @@ public:
                                const Geodetic3D& offset,
                                float pointSize);
 
-  static const DEMGrid* bestGridFor(const DEMGrid*  grid,
-                                    const Sector&   sector,
-                                    const Vector2S& extent);
+  static DEMGrid* bestGridFor(DEMGrid*        grid,
+                              const Sector&   sector,
+                              const Vector2S& extent);
 
 };
 

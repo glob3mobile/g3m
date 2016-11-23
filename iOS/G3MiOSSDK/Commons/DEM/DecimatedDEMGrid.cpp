@@ -12,8 +12,8 @@
 #include "IMathUtils.hpp"
 
 
-const DecimatedDEMGrid* DecimatedDEMGrid::create(const DEMGrid*  grid,
-                                                 const Vector2S& extent) {
+DecimatedDEMGrid* DecimatedDEMGrid::create(const DEMGrid*  grid,
+                                           const Vector2S& extent) {
   return new DecimatedDEMGrid(grid,
                               grid->getSector(),
                               Vector2I(extent._x, extent._y));

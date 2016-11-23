@@ -14,8 +14,8 @@
 #include "ErrorHandling.hpp"
 
 
-const InterpolatedDEMGrid* InterpolatedDEMGrid::create(const DEMGrid*  grid,
-                                                       const Vector2S& extent) {
+InterpolatedDEMGrid* InterpolatedDEMGrid::create(const DEMGrid*  grid,
+                                                 const Vector2S& extent) {
   return new InterpolatedDEMGrid(grid,
                                  grid->getSector(),
                                  Vector2I(extent._x, extent._y));
@@ -30,6 +30,6 @@ DecoratorDEMGrid(grid, sector, extent)
 }
 
 double InterpolatedDEMGrid::getElevationAt(int x, int y) const {
-//#error Diego at work!
+  //#error Diego at work!
   THROW_EXCEPTION("Diego at work!");
 }
