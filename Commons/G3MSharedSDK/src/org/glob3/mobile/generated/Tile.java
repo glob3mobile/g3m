@@ -179,6 +179,7 @@ public class Tile
   private int _elevationDataLevel;
   private ElevationData _elevationData;
   private boolean _mustActualizeMeshDueToNewElevationData;
+  private DEMGrid _grid;
   private ElevationDataProvider _lastElevationDataProvider;
   private int _lastTileMeshResolutionX;
   private int _lastTileMeshResolutionY;
@@ -209,7 +210,7 @@ public class Tile
 
     public final void onGrid(DEMGrid grid)
     {
-      throw new RuntimeException("Not yet done!");
+      _tile.onGrid(grid);
     }
 
   }
@@ -243,6 +244,7 @@ public class Tile
      _elevationData = null;
      _elevationDataLevel = -1;
      _elevationDataRequest = null;
+     _grid = null;
      _demSubscription = null;
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
@@ -272,6 +274,11 @@ public class Tile
   
     if (_elevationData != null)
        _elevationData.dispose();
+  
+    if (_grid != null)
+    {
+      _grid._release();
+    }
   
     if (_elevationDataRequest != null)
     {
@@ -632,6 +639,19 @@ public class Tile
     return _elevationData;
   }
 
+  public final void onGrid(DEMGrid grid)
+  {
+    if (grid != _grid)
+    {
+      if (_grid != null)
+      {
+        _grid._release();
+      }
+      _grid = grid;
+      _mustActualizeMeshDueToNewElevationData = true;
+    }
+  }
+
   public final void setElevationData(ElevationData ed, int level)
   {
     if (_elevationDataLevel < level)
@@ -852,28 +872,29 @@ public class Tile
         _debugMesh = null;
       }
   
-      if (elevationDataProvider == null)
+  //    if (elevationDataProvider == NULL) {
+  //      // no elevation data provider, just create a simple mesh without elevation
+  //      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+  //                                                           prc,
+  //                                                           this,
+  //                                                           NULL,
+  //                                                           _tileTessellatorMeshData);
+  //    }
+  //    else {
+      Mesh tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, _elevationData, _grid, _tileTessellatorMeshData);
+  
+      MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
+      if (meshHolder == null)
       {
-        // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, null, _tileTessellatorMeshData);
+        meshHolder = new MeshHolder(tessellatorMesh);
+        _tessellatorMesh = meshHolder;
       }
       else
       {
-        Mesh tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, _elevationData, _tileTessellatorMeshData);
-  
-        MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-        if (meshHolder == null)
-        {
-          meshHolder = new MeshHolder(tessellatorMesh);
-          _tessellatorMesh = meshHolder;
-        }
-        else
-        {
-          meshHolder.setMesh(tessellatorMesh);
-        }
-  
-        //      computeTileCorners(rc->getPlanet());
+        meshHolder.setMesh(tessellatorMesh);
       }
+  
+  //    }
   
       //Notifying when the tile is first created and every time the elevation data changes
       _planetRenderer.sectorElevationChanged(_elevationData);

@@ -136,7 +136,7 @@ public class DEMGridUtils
       return null;
     }
   
-    final DEMGrid subsetGrid = SubsetDEMGrid.create(grid, sector);
+    DEMGrid subsetGrid = SubsetDEMGrid.create(grid, sector);
     final Vector2I subsetGridExtent = subsetGrid.getExtent();
     if (subsetGridExtent.isEquals(extent))
     {

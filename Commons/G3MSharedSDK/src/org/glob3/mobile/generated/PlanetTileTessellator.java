@@ -396,7 +396,7 @@ public class PlanetTileTessellator extends TileTessellator
   }
 
 
-  public final Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, TileTessellatorMeshData data)
+  public final Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, DEMGrid grid, TileTessellatorMeshData data)
   {
   
     final Sector tileSector = tile._sector;

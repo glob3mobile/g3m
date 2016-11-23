@@ -27,6 +27,8 @@ package org.glob3.mobile.generated;
 //class Vector2S;
 //class Vector2F;
 //class Angle;
+//class DEMGrid;
+
 
 public class TileTessellatorMeshData
 {

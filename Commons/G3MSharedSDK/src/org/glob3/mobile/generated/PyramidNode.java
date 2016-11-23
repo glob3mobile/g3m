@@ -139,7 +139,7 @@ public class PyramidNode
   {
     if (subscription._sector.touchesWith(_sector))
     {
-      final DEMGrid bestGrid = (_grid == null) ? grid : _grid;
+      DEMGrid bestGrid = (_grid == null) ? grid : _grid;
   
       final boolean notEnoughResolution = (_resolution._latitude.greaterThan(subscription._resolution._latitude) || _resolution._longitude.greaterThan(subscription._resolution._longitude));
       if (notEnoughResolution)
@@ -161,7 +161,7 @@ public class PyramidNode
         _subscriptions.add(subscription);
         if (bestGrid != null)
         {
-          final DEMGrid selectedGrid = DEMGridUtils.bestGridFor(bestGrid, subscription._sector, subscription._extent);
+          DEMGrid selectedGrid = DEMGridUtils.bestGridFor(bestGrid, subscription._sector, subscription._extent);
           if (selectedGrid != null)
           {
             subscription.onGrid(selectedGrid);

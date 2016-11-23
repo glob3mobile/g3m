@@ -33,7 +33,7 @@ public class InterpolatedDEMGrid extends DecoratorDEMGrid
 
   public final double getElevationAt(int x, int y)
   {
-  ///#error Diego at work!
+    ///#error Diego at work!
     throw new RuntimeException("Diego at work!");
   }
 
