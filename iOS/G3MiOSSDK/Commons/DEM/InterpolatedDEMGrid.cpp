@@ -29,7 +29,10 @@ double InterpolatedDEMGrid::bilinearInterpolation(double valueSW,
   const double alphaNE = u         * (1.0 - v);
   const double alphaNW = (1.0 - u) * (1.0 - v);
 
-  return (alphaSW * valueSW) + (alphaSE * valueSE) + (alphaNE * valueNE) + (alphaNW * valueNW);
+  return ((alphaSW * valueSW) +
+          (alphaSE * valueSE) +
+          (alphaNE * valueNE) +
+          (alphaNW * valueNW));
 }
 
 InterpolatedDEMGrid* InterpolatedDEMGrid::create(const DEMGrid*  grid,
@@ -42,9 +45,7 @@ InterpolatedDEMGrid* InterpolatedDEMGrid::create(const DEMGrid*  grid,
 InterpolatedDEMGrid::InterpolatedDEMGrid(const DEMGrid*  grid,
                                          const Sector&   sector,
                                          const Vector2I& extent) :
-DecoratorDEMGrid(grid, sector, extent),
-_ratioX( (double) _extent._x / grid->getExtent()._x ),
-_ratioY( (double) _extent._y / grid->getExtent()._y )
+DecoratorDEMGrid(grid, sector, extent)
 {
 
 }
@@ -52,7 +53,6 @@ _ratioY( (double) _extent._y / grid->getExtent()._y )
 double InterpolatedDEMGrid::getElevationAt(int x, int y) const {
   const double u = (double) x / _extent._x;
   const double v = (double) y / _extent._y;
-//  const double v = 1.0 - ((double) y / _extent._y);
 
   return getElevationAt(_grid, u, v);
 }
@@ -66,7 +66,6 @@ double InterpolatedDEMGrid::getElevationAt(const DEMGrid* grid,
 
   const double dX = u * (grid->getExtent()._x - 1);
   const double dY = v * (grid->getExtent()._y - 1);
-//  const double dY = (1.0 - v) * (grid->getExtent()._y - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;

@@ -14,10 +14,6 @@
 
 class InterpolatedDEMGrid : public DecoratorDEMGrid {
 private:
-  const double _ratioX;
-  const double _ratioY;
-
-
   InterpolatedDEMGrid(const DEMGrid*  grid,
                       const Sector&   sector,
                       const Vector2I& extent);

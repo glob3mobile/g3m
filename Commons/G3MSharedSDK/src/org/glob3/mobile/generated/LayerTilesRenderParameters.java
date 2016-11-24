@@ -74,7 +74,8 @@ public class LayerTilesRenderParameters
 
   public static Vector2S defaultTileMeshResolution()
   {
-    return new Vector2S((short)16, (short)16);
+    //return Vector2S((short)16, (short)16);
+    return new Vector2S((short)32, (short)32);
   }
 
   public static Vector2S defaultTileTextureResolution ()

@@ -401,7 +401,7 @@ public class PlanetTileTessellator extends TileTessellator
   
     if (grid != null)
     {
-      return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), 100, Geodetic3D.zero(), 15); // pointSize -  offset -  verticalExaggeration
+      return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
     }
   
     final Sector tileSector = tile._sector;

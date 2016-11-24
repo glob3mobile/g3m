@@ -32,6 +32,10 @@ public class DEMGridUtils
   }
 
 
+
+  ///#include "ILogger.hpp"
+  
+  
   public static Vector3D getMinMaxAverageElevations(DEMGrid grid)
   {
     final IMathUtils mu = IMathUtils.instance();
@@ -67,14 +71,21 @@ public class DEMGridUtils
 
   public static Mesh createDebugMesh(DEMGrid grid, Planet planet, float verticalExaggeration, Geodetic3D offset, float pointSize)
   {
-  ///#error PROJECTION U/V
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
     final double minElevation = minMaxAverageElevations._x;
     final double maxElevation = minMaxAverageElevations._y;
-    final double averageElevation = minMaxAverageElevations._z;
-    final double deltaElevation = maxElevation - minElevation;
+  //  const double averageElevation = minMaxAverageElevations._z;
+  //  const double deltaElevation   = maxElevation - minElevation;
+  //
+  //  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
+  //                               averageElevation, minElevation, maxElevation, deltaElevation);
   
-    ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
+    return createDebugMesh(grid, planet, verticalExaggeration, offset, minElevation, maxElevation, pointSize);
+  }
+
+  public static Mesh createDebugMesh(DEMGrid grid, Planet planet, float verticalExaggeration, Geodetic3D offset, double minElevation, double maxElevation, float pointSize)
+  {
+    final double deltaElevation = maxElevation - minElevation;
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
@@ -138,7 +149,6 @@ public class DEMGridUtils
     }
   
     DEMGrid subsetGrid = SubsetDEMGrid.create(grid, sector);
-  //  return subsetGrid;
     final Vector2I subsetGridExtent = subsetGrid.getExtent();
     if (subsetGridExtent.isEquals(extent))
     {
@@ -150,8 +160,7 @@ public class DEMGridUtils
     }
     else
     {
-  //    return InterpolatedDEMGrid::create(subsetGrid, extent);
-      return subsetGrid;
+      return InterpolatedDEMGrid.create(subsetGrid, extent);
     }
   }
 
