@@ -10,7 +10,7 @@
 
 #include "Vector3D.hpp"
 #include "DEMGrid.hpp"
-#include "ILogger.hpp"
+//#include "ILogger.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "IMathUtils.hpp"
@@ -53,21 +53,14 @@ const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
                   sumElevation / (width * height));
 }
 
-
 Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
                                     const Planet* planet,
                                     float verticalExaggeration,
                                     const Geodetic3D& offset,
+                                    const double minElevation,
+                                    const double maxElevation,
                                     float pointSize) {
-//#error PROJECTION U/V
-  const Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
-  const double minElevation     = minMaxAverageElevations._x;
-  const double maxElevation     = minMaxAverageElevations._y;
-  const double averageElevation = minMaxAverageElevations._z;
-  const double deltaElevation   = maxElevation - minElevation;
-
-  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
-                               averageElevation, minElevation, maxElevation, deltaElevation);
+  const double deltaElevation = maxElevation - minElevation;
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
@@ -115,6 +108,30 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
   return result;
 }
 
+
+Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
+                                    const Planet* planet,
+                                    float verticalExaggeration,
+                                    const Geodetic3D& offset,
+                                    float pointSize) {
+  const Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
+  const double minElevation     = minMaxAverageElevations._x;
+  const double maxElevation     = minMaxAverageElevations._y;
+//  const double averageElevation = minMaxAverageElevations._z;
+//  const double deltaElevation   = maxElevation - minElevation;
+//
+//  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
+//                               averageElevation, minElevation, maxElevation, deltaElevation);
+
+  return createDebugMesh(grid,
+                         planet,
+                         verticalExaggeration,
+                         offset,
+                         minElevation,
+                         maxElevation,
+                         pointSize);
+}
+
 DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
                                    const Sector&   sector,
                                    const Vector2S& extent) {
@@ -136,17 +153,14 @@ DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
   }
 
   DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
-//  return subsetGrid;
   const Vector2I subsetGridExtent = subsetGrid->getExtent();
   if (subsetGridExtent.isEquals(extent)) {
     return subsetGrid;
   }
-  else if ((subsetGridExtent._x > extent._x) ||
-           (subsetGridExtent._y > extent._y)) {
+  else if ((subsetGridExtent._x > extent._x) || (subsetGridExtent._y > extent._y)) {
     return DecimatedDEMGrid::create(subsetGrid, extent);
   }
   else {
-//    return InterpolatedDEMGrid::create(subsetGrid, extent);
-    return subsetGrid;
+    return InterpolatedDEMGrid::create(subsetGrid, extent);
   }
 }

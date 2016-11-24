@@ -14,16 +14,36 @@
 
 class InterpolatedDEMGrid : public DecoratorDEMGrid {
 private:
+  const double _ratioX;
+  const double _ratioY;
+
+
   InterpolatedDEMGrid(const DEMGrid*  grid,
                       const Sector&   sector,
                       const Vector2I& extent);
+
+  static double getElevationAt(const DEMGrid* grid,
+                               double u,
+                               double v);
+
+  static double bilinearInterpolation(double valueSW,
+                                      double valueSE,
+                                      double valueNE,
+                                      double valueNW,
+                                      double u,
+                                      double v);
+
+  static double linearInterpolation(double from,
+                                    double to,
+                                    double alpha);
+
 
 public:
   static InterpolatedDEMGrid* create(const DEMGrid*  grid,
                                      const Vector2S& extent);
 
   double getElevationAt(int x, int y) const;
-
+  
 };
 
 #endif

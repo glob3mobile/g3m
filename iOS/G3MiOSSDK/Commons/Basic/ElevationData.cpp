@@ -181,10 +181,10 @@ Interpolator* ElevationData::getInterpolator() const {
   return _interpolator;
 }
 
-double ElevationData::getElevationAt(const Angle& latitude,
-                                     const Angle& longitude) const {
+double ElevationData::getElevationAt(const Angle& latitude2,
+                                     const Angle& longitude2) const {
 
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  const Vector2D uv = _sector.getUVCoordinates(latitude2, longitude2);
   const double u = uv._x;
   const double v = uv._y;
 

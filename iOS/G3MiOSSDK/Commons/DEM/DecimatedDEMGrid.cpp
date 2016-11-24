@@ -51,10 +51,10 @@ double DecimatedDEMGrid::getElevationBoxAt(double x0, double y0,
   const int parentHeight = _grid->getExtent()._y;
   const int parentWidth  = _grid->getExtent()._x;
 
-  if ((floorY0 < 0) || (ceilY1 >= parentHeight)) {
+  if ((floorY0 < 0) || (ceilY1 > parentHeight)) {
     return 0;
   }
-  if ((floorX0 < 0) || (ceilX1 >= parentWidth)) {
+  if ((floorX0 < 0) || (ceilX1 > parentWidth)) {
     return 0;
   }
 

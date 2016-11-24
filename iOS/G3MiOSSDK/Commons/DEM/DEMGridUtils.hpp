@@ -32,6 +32,14 @@ public:
                                const Geodetic3D& offset,
                                float pointSize);
 
+  static Mesh* createDebugMesh(const DEMGrid* grid,
+                               const Planet* planet,
+                               float verticalExaggeration,
+                               const Geodetic3D& offset,
+                               const double minElevation,
+                               const double maxElevation,
+                               float pointSize);
+
   static DEMGrid* bestGridFor(DEMGrid*        grid,
                               const Sector&   sector,
                               const Vector2S& extent);

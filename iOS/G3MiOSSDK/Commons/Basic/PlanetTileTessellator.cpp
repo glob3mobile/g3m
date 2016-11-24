@@ -121,8 +121,10 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
   if (grid != NULL) {
     return DEMGridUtils::createDebugMesh(grid,
                                          rc->getPlanet(),
-                                         100,                // verticalExaggeration
+                                         prc->_verticalExaggeration,
                                          Geodetic3D::zero(), // offset
+                                         -11000,             // minElevation
+                                         9000,               // maxElevation
                                          15                  // pointSize
                                          );
   }
