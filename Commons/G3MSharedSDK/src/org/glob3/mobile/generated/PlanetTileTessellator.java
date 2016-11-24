@@ -399,6 +399,11 @@ public class PlanetTileTessellator extends TileTessellator
   public final Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, DEMGrid grid, TileTessellatorMeshData data)
   {
   
+    if (grid != null)
+    {
+      return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), 100, Geodetic3D.zero(), 15); // pointSize -  offset -  verticalExaggeration
+    }
+  
     final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2S meshResolution = calculateResolution(prc, tile, meshSector);

@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //class Vector2D;
 //class MutableVector2D;
+//class Sector;
 
 
 public abstract class Projection extends RCObject
@@ -62,5 +63,11 @@ public abstract class Projection extends RCObject
   {
     result.set(getU(position._longitude), getV(position._latitude));
   }
+
+  public abstract Angle getInnerPointLongitude(double u);
+  public abstract Angle getInnerPointLatitude(double v);
+
+  public abstract Angle getInnerPointLongitude(Sector sector, double u);
+  public abstract Angle getInnerPointLatitude(Sector sector, double v);
 
 }

@@ -62,6 +62,16 @@ public class SubsetDEMGrid extends DecoratorDEMGrid
     final int width = (int)(mu.round(upperUV._x * gridExtent._x) - offsetX);
     final int height = (int)(mu.round(lowerUV._y * gridExtent._y) - offsetY);
   
+  //  const int offsetX = (int)  mu->round(lowerUV._x * gridExtent._x);
+  //  const int offsetY = (int)  mu->round((1.0 - lowerUV._y) * gridExtent._y);
+  //  const int width   = (int) (mu->round(upperUV._x * gridExtent._x) - offsetX);
+  //  const int height  = (int) (mu->round((1.0 - upperUV._y) * gridExtent._y) - offsetY);
+  
+  //  const int offsetX = (int)  mu->round(lowerUV._x * gridExtent._x);
+  //  const int offsetY = (int)  mu->round(lowerUV._y * gridExtent._y);
+  //  const int width   = (int) (mu->round(upperUV._x * gridExtent._x) - offsetX);
+  //  const int height  = (int) (mu->round(upperUV._y * gridExtent._y) - offsetY);
+  
     return new SubsetDEMGrid(grid, sector, new Vector2I(width, height), offsetX, offsetY);
   }
 

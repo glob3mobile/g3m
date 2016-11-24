@@ -80,4 +80,30 @@ public class WebMercatorProjection extends Projection
     return 0.5 - (mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4);
   }
 
+  public final Angle getInnerPointLongitude(double u)
+  {
+    return Angle.fromRadians(IMathUtils.instance().linearInterpolation(-DefineConstants.PI, DefineConstants.PI, u));
+  }
+  public final Angle getInnerPointLatitude(double v)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final double exp = mu.exp(-2 * DefineConstants.PI * (1.0 - v - 0.5));
+    final double atan = mu.atan(exp);
+    return Angle.fromRadians((DefineConstants.PI / 2) - 2 * atan);
+  }
+
+  public final Angle getInnerPointLongitude(Sector sector, double u)
+  {
+    return Angle.linearInterpolation(sector._lower._longitude, sector._upper._longitude, u);
+  }
+  public final Angle getInnerPointLatitude(Sector sector, double v)
+  {
+    final double lowerV = getU(sector._lower._latitude);
+    final double upperV = getU(sector._upper._latitude);
+    final double sV = lowerV + ((upperV - lowerV) * v);
+  
+    return getInnerPointLatitude(sV);
+  }
+
 }

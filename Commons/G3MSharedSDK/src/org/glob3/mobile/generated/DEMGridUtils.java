@@ -67,7 +67,7 @@ public class DEMGridUtils
 
   public static Mesh createDebugMesh(DEMGrid grid, Planet planet, float verticalExaggeration, Geodetic3D offset, float pointSize)
   {
-  
+  ///#error PROJECTION U/V
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
     final double minElevation = minMaxAverageElevations._x;
     final double maxElevation = minMaxAverageElevations._y;
@@ -79,13 +79,14 @@ public class DEMGridUtils
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
+    final Projection projection = grid.getProjection();
     final Vector2I extent = grid.getExtent();
     final Sector sector = grid.getSector();
   
     for (int x = 0; x < extent._x; x++)
     {
       final double u = (double) x / (extent._x - 1);
-      final Angle longitude = sector.getInnerPointLongitude(u).add(offset._longitude);
+      final Angle longitude = projection.getInnerPointLongitude(sector, u).add(offset._longitude);
   
       for (int y = 0; y < extent._y; y++)
       {
@@ -96,7 +97,7 @@ public class DEMGridUtils
         }
   
         final double v = 1.0 - ((double) y / (extent._y - 1));
-        final Angle latitude = sector.getInnerPointLatitude(v).add(offset._latitude);
+        final Angle latitude = projection.getInnerPointLatitude(sector, v).add(offset._latitude);
   
         final double height = (elevation + offset._height) * verticalExaggeration;
   
@@ -107,7 +108,7 @@ public class DEMGridUtils
       }
     }
   
-    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, pointSize, null, colors.create(), 0, false); // depthTest -  colorsIntensity -  flatColor -  lineWidth
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, pointSize, null, colors.create(), 0, true); // depthTest -  colorsIntensity -  flatColor -  lineWidth
   
     if (vertices != null)
        vertices.dispose();
@@ -137,6 +138,7 @@ public class DEMGridUtils
     }
   
     DEMGrid subsetGrid = SubsetDEMGrid.create(grid, sector);
+  //  return subsetGrid;
     final Vector2I subsetGridExtent = subsetGrid.getExtent();
     if (subsetGridExtent.isEquals(extent))
     {
@@ -148,7 +150,8 @@ public class DEMGridUtils
     }
     else
     {
-      return InterpolatedDEMGrid.create(subsetGrid, extent);
+  //    return InterpolatedDEMGrid::create(subsetGrid, extent);
+      return subsetGrid;
     }
   }
 

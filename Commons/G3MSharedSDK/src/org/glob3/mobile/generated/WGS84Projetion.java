@@ -55,4 +55,23 @@ public class WGS84Projetion extends Projection
     return (DefineConstants.HALF_PI - latitude._radians) / DefineConstants.PI;
   }
 
+  public final Angle getInnerPointLongitude(double u)
+  {
+    return Angle.fromRadians(IMathUtils.instance().linearInterpolation(-DefineConstants.PI, DefineConstants.PI, u));
+  }
+  public final Angle getInnerPointLatitude(double v)
+  {
+    return Angle.fromRadians(IMathUtils.instance().linearInterpolation(-DefineConstants.HALF_PI, DefineConstants.HALF_PI, 1.0 - v));
+  }
+
+  public final Angle getInnerPointLongitude(Sector sector, double u)
+  {
+    return Angle.linearInterpolation(sector._lower._longitude, sector._upper._longitude, u);
+  }
+  public final Angle getInnerPointLatitude(Sector sector, double v)
+  {
+    return Angle.linearInterpolation(sector._lower._latitude, sector._upper._latitude, 1.0 - v);
+  }
+
+
 }
