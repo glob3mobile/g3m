@@ -12,6 +12,7 @@
 
 #include "Angle.hpp"
 #include "IMathUtils.hpp"
+#include "Sector.hpp"
 
 
 WGS84Projetion* WGS84Projetion::INSTANCE = NULL;
@@ -44,4 +45,26 @@ double WGS84Projetion::getU(const Angle& longitude) const {
 
 double WGS84Projetion::getV(const Angle& latitude) const {
   return (HALF_PI - latitude._radians) / PI;
+}
+
+const Angle WGS84Projetion::getInnerPointLongitude(double u) const {
+  return Angle::fromRadians(IMathUtils::instance()->linearInterpolation(-PI, PI, u));
+}
+
+const Angle WGS84Projetion::getInnerPointLatitude(double v) const {
+  return Angle::fromRadians(IMathUtils::instance()->linearInterpolation(-HALF_PI, HALF_PI, 1.0 - v));
+}
+
+const Angle WGS84Projetion::getInnerPointLongitude(const Sector& sector,
+                                                   double u) const {
+  return Angle::linearInterpolation(sector._lower._longitude,
+                                    sector._upper._longitude,
+                                    u);
+}
+
+const Angle WGS84Projetion::getInnerPointLatitude(const Sector& sector,
+                                                  double v) const {
+  return Angle::linearInterpolation(sector._lower._latitude,
+                                    sector._upper._latitude,
+                                    1.0 - v);
 }

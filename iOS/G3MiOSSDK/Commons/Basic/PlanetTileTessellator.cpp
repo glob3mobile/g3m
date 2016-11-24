@@ -32,6 +32,9 @@
 #include "Vector2S.hpp"
 #include "G3MRenderContext.hpp"
 
+#include "DEMGridUtils.hpp"
+#include "Geodetic3D.hpp"
+
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
 _skirted(skirted),
@@ -114,6 +117,15 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             const ElevationData* elevationData,
                                             const DEMGrid* grid,
                                             TileTessellatorMeshData& data) const {
+
+  if (grid != NULL) {
+    return DEMGridUtils::createDebugMesh(grid,
+                                         rc->getPlanet(),
+                                         100,                // verticalExaggeration
+                                         Geodetic3D::zero(), // offset
+                                         15                  // pointSize
+                                         );
+  }
 
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);

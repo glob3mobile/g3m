@@ -21,6 +21,7 @@
 #include "Vector2S.hpp"
 #include "DecimatedDEMGrid.hpp"
 #include "InterpolatedDEMGrid.hpp"
+#include "Projection.hpp"
 
 
 const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
@@ -58,7 +59,7 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
                                     float verticalExaggeration,
                                     const Geodetic3D& offset,
                                     float pointSize) {
-
+//#error PROJECTION U/V
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
   const double minElevation     = minMaxAverageElevations._x;
   const double maxElevation     = minMaxAverageElevations._y;
@@ -71,12 +72,13 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
 
+  const Projection* projection = grid->getProjection();
   const Vector2I extent = grid->getExtent();
   const Sector   sector = grid->getSector();
 
   for (int x = 0; x < extent._x; x++) {
     const double u = (double) x / (extent._x  - 1);
-    const Angle longitude = sector.getInnerPointLongitude(u).add(offset._longitude);
+    const Angle longitude = projection->getInnerPointLongitude(sector, u).add(offset._longitude);
 
     for (int y = 0; y < extent._y; y++) {
       const double elevation = grid->getElevationAt(x, y);
@@ -85,7 +87,7 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
       }
 
       const double v = 1.0 - ( (double) y / (extent._y - 1) );
-      const Angle latitude = sector.getInnerPointLatitude(v).add(offset._latitude);
+      const Angle latitude = projection->getInnerPointLatitude(sector, v).add(offset._latitude);
 
       const double height = (elevation + offset._height) * verticalExaggeration;
 
@@ -105,7 +107,7 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
                                 NULL,                 // flatColor
                                 colors.create(),
                                 0,                    // colorsIntensity
-                                false                 // depthTest
+                                true                  // depthTest
                                 );
 
   delete vertices;
@@ -134,6 +136,7 @@ DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
   }
 
   DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
+//  return subsetGrid;
   const Vector2I subsetGridExtent = subsetGrid->getExtent();
   if (subsetGridExtent.isEquals(extent)) {
     return subsetGrid;
@@ -143,6 +146,7 @@ DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
     return DecimatedDEMGrid::create(subsetGrid, extent);
   }
   else {
-    return InterpolatedDEMGrid::create(subsetGrid, extent);
+//    return InterpolatedDEMGrid::create(subsetGrid, extent);
+    return subsetGrid;
   }
 }

@@ -17,6 +17,7 @@ class Angle;
 class Geodetic2D;
 class Vector2D;
 class MutableVector2D;
+class Sector;
 
 
 class Projection : public RCObject {
@@ -46,6 +47,14 @@ public:
   virtual void getUV(const Geodetic2D& position,
                      MutableVector2D& result) const;
 
+  virtual const Angle getInnerPointLongitude(double u) const = 0;
+  virtual const Angle getInnerPointLatitude(double v) const = 0;
+
+  virtual const Angle getInnerPointLongitude(const Sector& sector,
+                                             double u) const = 0;
+  virtual const Angle getInnerPointLatitude(const Sector& sector,
+                                            double v) const = 0;
+  
 };
 
 #endif

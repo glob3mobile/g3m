@@ -9,6 +9,8 @@
 #include "MercatorUtils.hpp"
 
 #include "IMathUtils.hpp"
+#include "Sector.hpp"
+
 
 const Angle MercatorUtils::_upperLimit = Angle::fromDegrees(85.0511287798);
 const Angle MercatorUtils::_lowerLimit = Angle::fromDegrees(-85.0511287798);

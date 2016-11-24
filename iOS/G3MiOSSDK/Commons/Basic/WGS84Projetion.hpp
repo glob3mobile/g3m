@@ -28,7 +28,16 @@ public:
 
   double getU(const Angle& longitude) const;
   double getV(const Angle& latitude) const;
-  
+
+  const Angle getInnerPointLongitude(double u) const;
+  const Angle getInnerPointLatitude(double v) const;
+
+  const Angle getInnerPointLongitude(const Sector& sector,
+                                     double u) const;
+  const Angle getInnerPointLatitude(const Sector& sector,
+                                    double v) const;
+
+
 };
 
 #endif

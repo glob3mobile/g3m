@@ -12,6 +12,7 @@
 
 #include "Angle.hpp"
 #include "IMathUtils.hpp"
+#include "Sector.hpp"
 
 
 WebMercatorProjection* WebMercatorProjection::INSTANCE = NULL;
@@ -62,4 +63,32 @@ double WebMercatorProjection::getV(const Angle& latitude) const {
   const double pi4 = PI * 4;
   const double latSin = SIN(latitudeRadians);
   return 0.5 - ( mu->log( (1.0 + latSin) / (1.0 - latSin) ) / pi4 );
+}
+
+const Angle WebMercatorProjection::getInnerPointLongitude(double u) const {
+  return Angle::fromRadians(IMathUtils::instance()->linearInterpolation(-PI, PI, u));
+}
+
+const Angle WebMercatorProjection::getInnerPointLatitude(double v) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const double exp = mu->exp(-2 * PI * (1.0 - v - 0.5));
+  const double atan = mu->atan(exp);
+  return Angle::fromRadians((PI / 2) - 2 * atan);
+}
+
+const Angle WebMercatorProjection::getInnerPointLongitude(const Sector& sector,
+                                                          double u) const {
+  return Angle::linearInterpolation(sector._lower._longitude,
+                                    sector._upper._longitude,
+                                    u);
+}
+
+const Angle WebMercatorProjection::getInnerPointLatitude(const Sector& sector,
+                                                         double v) const {
+  const double lowerV = getU(sector._lower._latitude);
+  const double upperV = getU(sector._upper._latitude);
+  const double sV = lowerV + ((upperV - lowerV) * v);
+
+  return getInnerPointLatitude(sV);
 }

@@ -10,7 +10,8 @@
 #define __G3MiOSSDK__MercatorUtils__
 
 #include "Angle.hpp"
-#include "Sector.hpp"
+
+class Sector;
 
 
 class MercatorUtils {
