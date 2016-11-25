@@ -32,10 +32,6 @@ public class DEMGridUtils
   }
 
 
-
-  ///#include "ILogger.hpp"
-  
-  
   public static Vector3D getMinMaxAverageElevations(DEMGrid grid)
   {
     final IMathUtils mu = IMathUtils.instance();
@@ -74,11 +70,6 @@ public class DEMGridUtils
     final Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
     final double minElevation = minMaxAverageElevations._x;
     final double maxElevation = minMaxAverageElevations._y;
-  //  const double averageElevation = minMaxAverageElevations._z;
-  //  const double deltaElevation   = maxElevation - minElevation;
-  //
-  //  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
-  //                               averageElevation, minElevation, maxElevation, deltaElevation);
   
     return createDebugMesh(grid, planet, verticalExaggeration, offset, minElevation, maxElevation, pointSize);
   }

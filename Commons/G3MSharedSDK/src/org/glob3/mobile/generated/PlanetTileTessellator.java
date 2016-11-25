@@ -366,7 +366,6 @@ public class PlanetTileTessellator extends TileTessellator
 
   private static double skirtDepthForSector(Planet planet, Sector sector)
   {
-  
     final Vector3D se = planet.toCartesian(sector.getSE());
     final Vector3D nw = planet.toCartesian(sector.getNW());
     final double diagonalLength = nw.sub(se).length();
@@ -394,7 +393,6 @@ public class PlanetTileTessellator extends TileTessellator
     Sector sector = getRenderedSectorForTile(tile);
     return calculateResolution(prc, tile, sector);
   }
-
 
   public final Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, DEMGrid grid, TileTessellatorMeshData data)
   {
@@ -504,7 +502,6 @@ public class PlanetTileTessellator extends TileTessellator
     final Color levelColor = Color.blue().wheelStep(5, tile._level % 5);
     final float gridLineWidth = tile.isElevationDataSolved() || (tile.getElevationData() == null) ? 1.0f : 3.0f;
   
-  
     IndexedMesh border = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesBorder.create(), true, 2.0f, 1.0f, Color.newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f), null, 1.0f, false, null, true, 1.0f, 1.0f);
   
     IndexedMesh grid = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesGrid.create(), true, gridLineWidth, 1.0f, new Color(levelColor), null, 1.0f, false, null, true, 1.0f, 1.0f);
@@ -521,7 +518,6 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
   {
-  
     PlanetTileTessellatorData data = (PlanetTileTessellatorData) tile.getTessellatorData();
     if (data == null || data._textCoords == null)
     {
