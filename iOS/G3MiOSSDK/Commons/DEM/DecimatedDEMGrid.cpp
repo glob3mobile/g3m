@@ -79,21 +79,18 @@ double DecimatedDEMGrid::getElevationBoxAt(double x0, double y0,
       const double elevation = _grid->getElevationAt((int) mu->min(x, maxX),
                                                      yy);
 
-      if (ISNAN(elevation)) {
-        //return NAND;
-        continue;
-      }
+      if (!ISNAN(elevation)) {
+        double size = ysize;
+        if (x < x0) {
+          size *= (1.0 - (x0-x));
+        }
+        if (x > x1) {
+          size *= (1.0 - (x-x1));
+        }
 
-      double size = ysize;
-      if (x < x0) {
-        size *= (1.0 - (x0-x));
+        elevationSum += elevation * size;
+        area += size;
       }
-      if (x > x1) {
-        size *= (1.0 - (x-x1));
-      }
-
-      elevationSum += elevation * size;
-      area += size;
     }
   }
   
