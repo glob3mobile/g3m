@@ -80,10 +80,6 @@ public class LeveledTexturedMesh extends Mesh
 
   public void dispose()
   {
-  ///#ifdef JAVA_CODE
-  //  synchronized (this) {
-  ///#endif
-  
     if (_ownedMesh)
     {
       if (_mesh != null)
@@ -100,14 +96,9 @@ public class LeveledTexturedMesh extends Mesh
       }
   
       _mappings = null;
-  //    _mappings = NULL;
     }
   
     _glState._release();
-  
-  ///#ifdef JAVA_CODE
-  //  }
-  ///#endif
   
     super.dispose();
   }
