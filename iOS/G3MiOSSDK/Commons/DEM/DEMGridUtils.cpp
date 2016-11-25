@@ -114,8 +114,8 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
                                     const Geodetic3D& offset,
                                     float pointSize) {
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
-  const double minElevation     = minMaxAverageElevations._x;
-  const double maxElevation     = minMaxAverageElevations._y;
+  const double minElevation = minMaxAverageElevations._x;
+  const double maxElevation = minMaxAverageElevations._y;
 
   return createDebugMesh(grid,
                          planet,
