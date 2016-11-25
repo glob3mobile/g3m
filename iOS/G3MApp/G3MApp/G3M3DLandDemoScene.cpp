@@ -67,12 +67,12 @@ void G3M3DLandDemoScene::rawSelectOption(const std::string& option,
 void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
-  //  planetRenderer->setShowStatistics(true);
-  planetRenderer->setIncrementalTileQuality(true);
+  planetRenderer->setShowStatistics(true);
+//  planetRenderer->setIncrementalTileQuality(true);
 
 #warning Diego at work!
 
-  planetRenderer->setVerticalExaggeration(50);
+//  planetRenderer->setVerticalExaggeration(50);
   planetRenderer->setDEMProvider( new MapzenDEMProvider("mapzen-ZB6FqMg",
                                                         DownloadPriority::HIGHER,
                                                         TimeInterval::fromDays(0),

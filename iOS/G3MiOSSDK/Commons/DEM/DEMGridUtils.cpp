@@ -33,8 +33,8 @@ const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
   const int width  = grid->getExtent()._x;
   const int height = grid->getExtent()._y;
 
-  for (size_t x = 0; x < width; x++) {
-    for (size_t y = 0; y < height; y++) {
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
       const double elevation = grid->getElevationAt(x, y);
       if (!ISNAN(elevation)) {
         if (elevation < minElevation) {
@@ -152,6 +152,7 @@ DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
     return NULL;
   }
 
+  grid->_retain();
   DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
   const Vector2I subsetGridExtent = subsetGrid->getExtent();
   if (subsetGridExtent.isEquals(extent)) {
