@@ -72,7 +72,7 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
 #warning Diego at work!
 
-  planetRenderer->setVerticalExaggeration(100);
+  planetRenderer->setVerticalExaggeration(50);
   planetRenderer->setDEMProvider( new MapzenDEMProvider("mapzen-ZB6FqMg",
                                                         DownloadPriority::HIGHER,
                                                         TimeInterval::fromDays(0),

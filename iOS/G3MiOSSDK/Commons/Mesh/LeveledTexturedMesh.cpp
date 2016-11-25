@@ -85,10 +85,6 @@ void LazyTextureMapping::releaseGLTextureID() {
 }
 
 LeveledTexturedMesh::~LeveledTexturedMesh() {
-//#ifdef JAVA_CODE
-//  synchronized (this) {
-//#endif
-
   if (_ownedMesh) {
     delete _mesh;
   }
@@ -100,14 +96,9 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
     }
 
     delete _mappings;
-//    _mappings = NULL;
   }
 
   _glState->_release();
-
-//#ifdef JAVA_CODE
-//  }
-//#endif
 
 #ifdef JAVA_CODE
   super.dispose();
