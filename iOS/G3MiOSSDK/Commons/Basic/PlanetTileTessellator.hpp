@@ -144,7 +144,6 @@ public:
                                  const PlanetRenderContext* prc,
                                  const Tile* tile) const;
 
-
   Mesh* createTileMesh(const G3MRenderContext* rc,
                        const PlanetRenderContext* prc,
                        Tile* tile,

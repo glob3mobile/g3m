@@ -101,7 +101,6 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
 }
 
 double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector) {
-
   const Vector3D se = planet->toCartesian(sector.getSE());
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double diagonalLength = nw.sub(se).length();
@@ -109,7 +108,6 @@ double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Se
   //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
   return sideLength / 20.0;
 }
-
 
 Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             const PlanetRenderContext* prc,
@@ -242,7 +240,6 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2S& rawResolution,
                                                       const Tile* tile) const {
-
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
   if (data == NULL || data->_textCoords == NULL) {
     ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
@@ -305,7 +302,6 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
 
   const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
   const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 1.0f : 3.0f;
-
 
   IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),
                                         vertices->getCenter(),
