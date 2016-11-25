@@ -10,7 +10,6 @@
 
 #include "Vector3D.hpp"
 #include "DEMGrid.hpp"
-//#include "ILogger.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "IMathUtils.hpp"
@@ -117,11 +116,6 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
   const Vector3D minMaxAverageElevations = getMinMaxAverageElevations(grid);
   const double minElevation     = minMaxAverageElevations._x;
   const double maxElevation     = minMaxAverageElevations._y;
-//  const double averageElevation = minMaxAverageElevations._z;
-//  const double deltaElevation   = maxElevation - minElevation;
-//
-//  ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
-//                               averageElevation, minElevation, maxElevation, deltaElevation);
 
   return createDebugMesh(grid,
                          planet,
