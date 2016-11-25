@@ -28,7 +28,7 @@ public abstract class DecoratorDEMGrid extends DEMGrid
   {
      super(sector, extent);
      _grid = grid;
-    _grid._retain();
+  //  _grid->_retain();
   }
 
   public void dispose()
