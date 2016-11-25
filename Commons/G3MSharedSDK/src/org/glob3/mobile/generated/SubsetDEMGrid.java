@@ -38,20 +38,11 @@ public class SubsetDEMGrid extends DecoratorDEMGrid
   }
 
 
-
-  ///#include "ILogger.hpp"
-  
-  
   public static SubsetDEMGrid create(DEMGrid grid, Sector sector)
   {
     final Projection projection = grid.getProjection();
     final Vector2D lowerUV = projection.getUV(sector._lower);
     final Vector2D upperUV = projection.getUV(sector._upper);
-  
-  //  ILogger::instance()->logInfo("%s -> %s | %s",
-  //                               lowerUV.description().c_str(),
-  //                               upperUV.description().c_str(),
-  //                               upperUV.sub(lowerUV).description().c_str());
   
     final Vector2I gridExtent = grid.getExtent();
   
@@ -61,16 +52,6 @@ public class SubsetDEMGrid extends DecoratorDEMGrid
     final int offsetY = (int) mu.round(upperUV._y * gridExtent._y);
     final int width = (int)(mu.round(upperUV._x * gridExtent._x) - offsetX);
     final int height = (int)(mu.round(lowerUV._y * gridExtent._y) - offsetY);
-  
-  //  const int offsetX = (int)  mu->round(lowerUV._x * gridExtent._x);
-  //  const int offsetY = (int)  mu->round((1.0 - lowerUV._y) * gridExtent._y);
-  //  const int width   = (int) (mu->round(upperUV._x * gridExtent._x) - offsetX);
-  //  const int height  = (int) (mu->round((1.0 - upperUV._y) * gridExtent._y) - offsetY);
-  
-  //  const int offsetX = (int)  mu->round(lowerUV._x * gridExtent._x);
-  //  const int offsetY = (int)  mu->round(lowerUV._y * gridExtent._y);
-  //  const int width   = (int) (mu->round(upperUV._x * gridExtent._x) - offsetX);
-  //  const int height  = (int) (mu->round(upperUV._y * gridExtent._y) - offsetY);
   
     return new SubsetDEMGrid(grid, sector, new Vector2I(width, height), offsetX, offsetY);
   }
