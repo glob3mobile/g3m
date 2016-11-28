@@ -50,7 +50,7 @@ public abstract class BufferDEMGrid extends DEMGrid
     return _projection;
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevation(int x, int y)
   {
     final int index = ((_extent._y-1-y) * _extent._x) + x;
     return getValueInBufferAt(index) + _deltaHeight;

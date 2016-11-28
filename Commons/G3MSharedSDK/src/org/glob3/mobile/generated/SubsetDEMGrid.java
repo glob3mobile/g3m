@@ -56,9 +56,9 @@ public class SubsetDEMGrid extends DecoratorDEMGrid
     return new SubsetDEMGrid(grid, sector, new Vector2I(width, height), offsetX, offsetY);
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevation(int x, int y)
   {
-    return _grid.getElevationAt(_offsetX + x, _offsetY + y);
+    return _grid.getElevation(_offsetX + x, _offsetY + y);
   }
 
 }

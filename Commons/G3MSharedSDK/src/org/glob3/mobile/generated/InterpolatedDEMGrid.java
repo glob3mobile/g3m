@@ -48,28 +48,28 @@ public class InterpolatedDEMGrid extends DecoratorDEMGrid
       if (y == dY)
       {
         // exact on grid point
-        return grid.getElevationAt(x, y);
+        return grid.getElevation(x, y);
       }
   
       // linear on Y
-      final double heightY = grid.getElevationAt(x, y);
-      final double heightNextY = grid.getElevationAt(x, nextY);
+      final double heightY = grid.getElevation(x, y);
+      final double heightNextY = grid.getElevation(x, nextY);
       return linearInterpolation(heightY, heightNextY, alphaY);
     }
   
     if (y == dY)
     {
       // linear on X
-      final double heightX = grid.getElevationAt(x, y);
-      final double heightNextX = grid.getElevationAt(nextX, y);
+      final double heightX = grid.getElevation(x, y);
+      final double heightNextX = grid.getElevation(nextX, y);
       return linearInterpolation(heightX, heightNextX, alphaX);
     }
   
     // bilinear
-    final double valueNW = grid.getElevationAt(x, y);
-    final double valueNE = grid.getElevationAt(nextX, y);
-    final double valueSE = grid.getElevationAt(nextX, nextY);
-    final double valueSW = grid.getElevationAt(x, nextY);
+    final double valueNW = grid.getElevation(x, y);
+    final double valueNE = grid.getElevation(nextX, y);
+    final double valueSE = grid.getElevation(nextX, nextY);
+    final double valueSW = grid.getElevation(x, nextY);
     return bilinearInterpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
   }
 
@@ -94,7 +94,7 @@ public class InterpolatedDEMGrid extends DecoratorDEMGrid
     return new InterpolatedDEMGrid(grid, grid.getSector(), new Vector2I(extent._x, extent._y));
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevation(int x, int y)
   {
     final double u = (double) x / _extent._x;
     final double v = (double) y / _extent._y;

@@ -46,7 +46,7 @@ public class DEMGridUtils
     {
       for (int y = 0; y < height; y++)
       {
-        final double elevation = grid.getElevationAt(x, y);
+        final double elevation = grid.getElevation(x, y);
         if (!(elevation != elevation))
         {
           if (elevation < minElevation)
@@ -92,21 +92,19 @@ public class DEMGridUtils
   
       for (int y = 0; y < extent._y; y++)
       {
-        final double elevation = grid.getElevationAt(x, y);
-        if ((elevation != elevation))
+        final double elevation = grid.getElevation(x, y);
+        if (!(elevation != elevation))
         {
-          continue;
+          final double v = 1.0 - ((double) y / (extent._y - 1));
+          final Angle latitude = projection.getInnerPointLatitude(sector, v).add(offset._latitude);
+  
+          final double height = (elevation + offset._height) * verticalExaggeration;
+  
+          vertices.add(latitude, longitude, height);
+  
+          final float gray = (float)((elevation - minElevation) / deltaElevation);
+          colors.add(gray, gray, gray, 1);
         }
-  
-        final double v = 1.0 - ((double) y / (extent._y - 1));
-        final Angle latitude = projection.getInnerPointLatitude(sector, v).add(offset._latitude);
-  
-        final double height = (elevation + offset._height) * verticalExaggeration;
-  
-        vertices.add(latitude, longitude, height);
-  
-        final float gray = (float)((elevation - minElevation) / deltaElevation);
-        colors.add(gray, gray, gray, 1);
       }
     }
   

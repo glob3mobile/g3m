@@ -68,7 +68,7 @@ public class DecimatedDEMGrid extends DecoratorDEMGrid
   
       for (double x = floorX0; x <= ceilX1; x++)
       {
-        final double elevation = _grid.getElevationAt((int) mu.min(x, maxX), yy);
+        final double elevation = _grid.getElevation((int) mu.min(x, maxX), yy);
   
         if (!(elevation != elevation))
         {
@@ -96,7 +96,7 @@ public class DecimatedDEMGrid extends DecoratorDEMGrid
     return new DecimatedDEMGrid(grid, grid.getSector(), new Vector2I(extent._x, extent._y));
   }
 
-  public final double getElevationAt(int x, int y)
+  public final double getElevation(int x, int y)
   {
     final double ratioX = (double) _extent._x / _grid.getExtent()._x;
     final double ratioY = (double) _extent._y / _grid.getExtent()._y;

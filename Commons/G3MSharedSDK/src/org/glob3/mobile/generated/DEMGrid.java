@@ -57,6 +57,6 @@ public abstract class DEMGrid extends RCObject
 
   public abstract Projection getProjection();
 
-  public abstract double getElevationAt(int x, int y);
+  public abstract double getElevation(int x, int y);
 
 }
