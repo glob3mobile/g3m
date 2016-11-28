@@ -35,7 +35,7 @@ const Projection* BufferDEMGrid::getProjection() const {
   return _projection;
 }
 
-double BufferDEMGrid::getElevationAt(int x, int y) const {
+double BufferDEMGrid::getElevation(int x, int y) const {
   const int index = ((_extent._y-1-y) * _extent._x) + x;
   return getValueInBufferAt( index ) + _deltaHeight;
 }

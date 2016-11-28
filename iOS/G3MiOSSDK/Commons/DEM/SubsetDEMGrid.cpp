@@ -54,7 +54,7 @@ SubsetDEMGrid::~SubsetDEMGrid() {
 #endif
 }
 
-double SubsetDEMGrid::getElevationAt(int x, int y) const {
-  return _grid->getElevationAt(_offsetX + x,
-                               _offsetY + y);
+double SubsetDEMGrid::getElevation(int x, int y) const {
+  return _grid->getElevation(_offsetX + x,
+                             _offsetY + y);
 }

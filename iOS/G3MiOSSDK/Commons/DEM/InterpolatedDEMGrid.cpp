@@ -50,7 +50,7 @@ DecoratorDEMGrid(grid, sector, extent)
 
 }
 
-double InterpolatedDEMGrid::getElevationAt(int x, int y) const {
+double InterpolatedDEMGrid::getElevation(int x, int y) const {
   const double u = (double) x / _extent._x;
   const double v = (double) y / _extent._y;
 
@@ -77,26 +77,26 @@ double InterpolatedDEMGrid::getElevationAt(const DEMGrid* grid,
   if (x == dX) {
     if (y == dY) {
       // exact on grid point
-      return grid->getElevationAt(x, y);
+      return grid->getElevation(x, y);
     }
 
     // linear on Y
-    const double heightY     = grid->getElevationAt(x,     y);
-    const double heightNextY = grid->getElevationAt(x, nextY);
+    const double heightY     = grid->getElevation(x,     y);
+    const double heightNextY = grid->getElevation(x, nextY);
     return linearInterpolation(heightY, heightNextY, alphaY);
   }
 
   if (y == dY) {
     // linear on X
-    const double heightX     = grid->getElevationAt(    x, y);
-    const double heightNextX = grid->getElevationAt(nextX, y);
+    const double heightX     = grid->getElevation(    x, y);
+    const double heightNextX = grid->getElevation(nextX, y);
     return linearInterpolation(heightX, heightNextX, alphaX);
   }
 
   // bilinear
-  const double valueNW = grid->getElevationAt(    x,     y);
-  const double valueNE = grid->getElevationAt(nextX,     y);
-  const double valueSE = grid->getElevationAt(nextX, nextY);
-  const double valueSW = grid->getElevationAt(    x, nextY);
+  const double valueNW = grid->getElevation(    x,     y);
+  const double valueNE = grid->getElevation(nextX,     y);
+  const double valueSE = grid->getElevation(nextX, nextY);
+  const double valueSW = grid->getElevation(    x, nextY);
   return bilinearInterpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
 }

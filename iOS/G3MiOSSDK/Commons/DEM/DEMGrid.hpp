@@ -43,7 +43,7 @@ public:
 
   virtual const Projection* getProjection() const = 0;
 
-  virtual double getElevationAt(int x, int y) const = 0;
+  virtual double getElevation(int x, int y) const = 0;
   
 };
 

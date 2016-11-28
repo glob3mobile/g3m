@@ -35,7 +35,7 @@ public:
 
   const Projection* getProjection() const;
 
-  double getElevationAt(int x, int y) const;
+  double getElevation(int x, int y) const;
   
 };
 

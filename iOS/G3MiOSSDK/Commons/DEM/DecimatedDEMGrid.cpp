@@ -26,7 +26,7 @@ DecoratorDEMGrid(grid, sector, extent)
 {
 }
 
-double DecimatedDEMGrid::getElevationAt(int x, int y) const {
+double DecimatedDEMGrid::getElevation(int x, int y) const {
   const double ratioX = (double) _extent._x / _grid->getExtent()._x;
   const double ratioY = (double) _extent._y / _grid->getExtent()._y;
 
@@ -76,8 +76,8 @@ double DecimatedDEMGrid::getElevationBoxAt(double x0, double y0,
     const int yy = (int) mu->min(y, maxY);
 
     for (double x = floorX0; x <= ceilX1; x++) {
-      const double elevation = _grid->getElevationAt((int) mu->min(x, maxX),
-                                                     yy);
+      const double elevation = _grid->getElevation((int) mu->min(x, maxX),
+                                                   yy);
 
       if (!ISNAN(elevation)) {
         double size = ysize;

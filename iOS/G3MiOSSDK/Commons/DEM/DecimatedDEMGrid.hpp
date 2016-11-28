@@ -25,7 +25,7 @@ public:
   static DecimatedDEMGrid* create(const DEMGrid*  grid,
                                   const Vector2S& extent);
 
-  double getElevationAt(int x, int y) const;
+  double getElevation(int x, int y) const;
 
 };
 

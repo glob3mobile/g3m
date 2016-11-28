@@ -34,7 +34,7 @@ const Vector3D DEMGridUtils::getMinMaxAverageElevations(const DEMGrid* grid) {
 
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
-      const double elevation = grid->getElevationAt(x, y);
+      const double elevation = grid->getElevation(x, y);
       if (!ISNAN(elevation)) {
         if (elevation < minElevation) {
           minElevation = elevation;
@@ -73,20 +73,18 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
     const Angle longitude = projection->getInnerPointLongitude(sector, u).add(offset._longitude);
 
     for (int y = 0; y < extent._y; y++) {
-      const double elevation = grid->getElevationAt(x, y);
-      if (ISNAN(elevation)) {
-        continue;
+      const double elevation = grid->getElevation(x, y);
+      if (!ISNAN(elevation)) {
+        const double v = 1.0 - ( (double) y / (extent._y - 1) );
+        const Angle latitude = projection->getInnerPointLatitude(sector, v).add(offset._latitude);
+
+        const double height = (elevation + offset._height) * verticalExaggeration;
+
+        vertices->add(latitude, longitude, height);
+
+        const float gray = (float) ((elevation - minElevation) / deltaElevation);
+        colors.add(gray, gray, gray, 1);
       }
-
-      const double v = 1.0 - ( (double) y / (extent._y - 1) );
-      const Angle latitude = projection->getInnerPointLatitude(sector, v).add(offset._latitude);
-
-      const double height = (elevation + offset._height) * verticalExaggeration;
-
-      vertices->add(latitude, longitude, height);
-
-      const float gray = (float) ((elevation - minElevation) / deltaElevation);
-      colors.add(gray, gray, gray, 1);
     }
   }
 
