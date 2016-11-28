@@ -28,10 +28,10 @@ public:
                        const std::string& error) = 0;
 
   virtual void onMessage(IWebSocket* ws,
-                          const std::string& message) = 0;
+                         const std::string& message) = 0;
 
   virtual void onClose(IWebSocket* ws) = 0;
-  
+
 };
 
 #endif
