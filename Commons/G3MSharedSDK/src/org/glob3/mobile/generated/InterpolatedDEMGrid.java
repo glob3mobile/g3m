@@ -33,8 +33,9 @@ public class InterpolatedDEMGrid extends DecoratorDEMGrid
       return java.lang.Double.NaN;
     }
   
-    final double dX = u * (grid.getExtent()._x - 1);
-    final double dY = v * (grid.getExtent()._y - 1);
+    final Vector2I gridExtent = grid.getExtent();
+    final double dX = u * (gridExtent._x - 1);
+    final double dY = v * (gridExtent._y - 1);
   
     final int x = (int) dX;
     final int y = (int) dY;

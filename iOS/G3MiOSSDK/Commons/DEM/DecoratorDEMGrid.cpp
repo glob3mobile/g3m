@@ -15,7 +15,7 @@ DecoratorDEMGrid::DecoratorDEMGrid(const DEMGrid*  grid,
 DEMGrid(sector, extent),
 _grid(grid)
 {
-//  _grid->_retain();
+  _grid->_retain();
 }
 
 DecoratorDEMGrid::~DecoratorDEMGrid() {

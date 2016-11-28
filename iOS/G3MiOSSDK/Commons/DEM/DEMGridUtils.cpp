@@ -144,16 +144,19 @@ DEMGrid* DEMGridUtils::bestGridFor(DEMGrid*        grid,
     return NULL;
   }
 
-  grid->_retain();
   DEMGrid* subsetGrid = SubsetDEMGrid::create(grid, sector);
   const Vector2I subsetGridExtent = subsetGrid->getExtent();
   if (subsetGridExtent.isEquals(extent)) {
     return subsetGrid;
   }
   else if ((subsetGridExtent._x > extent._x) || (subsetGridExtent._y > extent._y)) {
-    return DecimatedDEMGrid::create(subsetGrid, extent);
+    DEMGrid* decimatedGrid = DecimatedDEMGrid::create(subsetGrid, extent);
+    subsetGrid->_release(); // moved ownership to decimatedGrid
+    return decimatedGrid;
   }
   else {
-    return InterpolatedDEMGrid::create(subsetGrid, extent);
+    DEMGrid* interpolatedGrid = InterpolatedDEMGrid::create(subsetGrid, extent);
+    subsetGrid->_release(); // moved ownership to interpolatedGrid
+    return interpolatedGrid;
   }
 }
