@@ -872,15 +872,15 @@ public class Tile
         _debugMesh = null;
       }
   
-      //    if (elevationDataProvider == NULL) {
-      //      // no elevation data provider, just create a simple mesh without elevation
-      //      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
-      //                                                           prc,
-      //                                                           this,
-      //                                                           NULL,
-      //                                                           _tileTessellatorMeshData);
-      //    }
-      //    else {
+  //    if (elevationDataProvider == NULL) {
+  //      // no elevation data provider, just create a simple mesh without elevation
+  //      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+  //                                                           prc,
+  //                                                           this,
+  //                                                           NULL,
+  //                                                           _tileTessellatorMeshData);
+  //    }
+  //    else {
       Mesh tessellatorMesh = prc._tessellator.createTileMesh(rc, prc, this, _elevationData, _grid, _tileTessellatorMeshData);
   
       MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
@@ -893,8 +893,7 @@ public class Tile
       {
         meshHolder.setMesh(tessellatorMesh);
       }
-  
-      //    }
+  //    }
   
       //Notifying when the tile is first created and every time the elevation data changes
       _planetRenderer.sectorElevationChanged(_elevationData);
