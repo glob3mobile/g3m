@@ -221,15 +221,15 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       _debugMesh = NULL;
     }
 
-//    if (elevationDataProvider == NULL) {
-//      // no elevation data provider, just create a simple mesh without elevation
-//      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
-//                                                           prc,
-//                                                           this,
-//                                                           NULL,
-//                                                           _tileTessellatorMeshData);
-//    }
-//    else {
+    //    if (elevationDataProvider == NULL) {
+    //      // no elevation data provider, just create a simple mesh without elevation
+    //      _tessellatorMesh = prc->_tessellator->createTileMesh(rc,
+    //                                                           prc,
+    //                                                           this,
+    //                                                           NULL,
+    //                                                           _tileTessellatorMeshData);
+    //    }
+    //    else {
     Mesh* tessellatorMesh = prc->_tessellator->createTileMesh(rc,
                                                               prc,
                                                               this,
@@ -246,7 +246,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
       meshHolder->setMesh(tessellatorMesh);
     }
 
-//    }
+    //    }
 
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
@@ -772,7 +772,7 @@ TileData* Tile::getData(int id) const {
   return (id >= _dataSize) ? NULL : _data[id];
 }
 
-const TileTessellatorMeshData* Tile::getTessellatorMeshData() const {
+const TileTessellatorMeshData* Tile::getTileTessellatorMeshData() const {
 #warning ask JM
   return &_tileTessellatorMeshData;
 }

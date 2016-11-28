@@ -229,7 +229,7 @@ public:
 
   void clearDataWithID(int id) const;
 
-  const TileTessellatorMeshData* getTessellatorMeshData() const;
+  const TileTessellatorMeshData* getTileTessellatorMeshData() const;
 
   Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                            const PlanetRenderContext* prc);

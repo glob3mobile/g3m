@@ -83,7 +83,7 @@ private:
                                const ElevationData* elevationData,
                                float verticalExaggeration,
                                FloatBufferBuilderFromGeodetic* vertices,
-                               TileTessellatorMeshData& data) const;
+                               TileTessellatorMeshData& tileTessellatorMeshData) const;
 
   double createSurface(const Sector& tileSector,
                        const Sector& meshSector,
@@ -94,7 +94,7 @@ private:
                        FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords,
-                       TileTessellatorMeshData& data) const;
+                       TileTessellatorMeshData& tileTessellatorMeshData) const;
 
   void createEastSkirt(const Planet* planet,
                        const Sector& tileSector,
@@ -149,7 +149,7 @@ public:
                        Tile* tile,
                        const ElevationData* elevationData,
                        const DEMGrid* grid,
-                       TileTessellatorMeshData& data) const;
+                       TileTessellatorMeshData& tileTessellatorMeshData) const;
 
   Mesh* createTileDebugMesh(const G3MRenderContext* rc,
                             const PlanetRenderContext* prc,

@@ -32,7 +32,7 @@ ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODT
                                                                                                const G3MRenderContext* rc) const {
   PvtData* data = (PvtData*) tile->getData(ProjectedCornersDistanceTLTDataID);
   if (data == NULL) {
-    const double mediumHeight = tile->getTessellatorMeshData()->_averageHeight;
+    const double mediumHeight = tile->getTileTessellatorMeshData()->_averageHeight;
     data = new PvtData(tile, mediumHeight, rc->getPlanet());
     tile->setData(data);
   }

@@ -29,6 +29,14 @@ public:
   double _minHeight;
   double _maxHeight;
   double _averageHeight;
+
+  TileTessellatorMeshData() :
+  _minHeight(0),
+  _maxHeight(0),
+  _averageHeight(0)
+  {
+
+  }
 };
 
 
@@ -42,7 +50,7 @@ public:
                                Tile* tile,
                                const ElevationData* elevationData,
                                const DEMGrid* grid,
-                               TileTessellatorMeshData& data) const = 0;
+                               TileTessellatorMeshData& tileTessellatorMeshData) const = 0;
 
   virtual Vector2S getTileMeshResolution(const G3MRenderContext* rc,
                                          const PlanetRenderContext* prc,
