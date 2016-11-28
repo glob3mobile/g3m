@@ -60,12 +60,14 @@ double InterpolatedDEMGrid::getElevation(int x, int y) const {
 double InterpolatedDEMGrid::getElevationAt(const DEMGrid* grid,
                                            double u,
                                            double v) {
-  if ((u < 0) || (u > 1) || (v < 0) || (v > 1)) {
+  if ((u < 0) || (u > 1) ||
+      (v < 0) || (v > 1)) {
     return NAND;
   }
 
-  const double dX = u * (grid->getExtent()._x - 1);
-  const double dY = v * (grid->getExtent()._y - 1);
+  const Vector2I gridExtent = grid->getExtent();
+  const double dX = u * (gridExtent._x - 1);
+  const double dY = v * (gridExtent._y - 1);
 
   const int x = (int) dX;
   const int y = (int) dY;
