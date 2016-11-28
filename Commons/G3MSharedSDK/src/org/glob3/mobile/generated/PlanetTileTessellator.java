@@ -94,7 +94,7 @@ public class PlanetTileTessellator extends TileTessellator
   }
 
 
-  private double createSurfaceVertices(Vector2S meshResolution, Sector meshSector, ElevationData elevationData, float verticalExaggeration, FloatBufferBuilderFromGeodetic vertices, TileTessellatorMeshData data)
+  private double createSurfaceVertices(Vector2S meshResolution, Sector meshSector, ElevationData elevationData, float verticalExaggeration, FloatBufferBuilderFromGeodetic vertices, TileTessellatorMeshData tileTessellatorMeshData)
   {
   
     final IMathUtils mu = IMathUtils.instance();
@@ -147,18 +147,18 @@ public class PlanetTileTessellator extends TileTessellator
       maxElevation = 0;
     }
   
-    data._minHeight = minElevation;
-    data._maxHeight = maxElevation;
-    data._averageHeight = averageElevation / (meshResolution._x * meshResolution._y);
+    tileTessellatorMeshData._minHeight = minElevation;
+    tileTessellatorMeshData._maxHeight = maxElevation;
+    tileTessellatorMeshData._averageHeight = averageElevation / (meshResolution._x * meshResolution._y);
   
     return minElevation;
   }
 
-  private double createSurface(Sector tileSector, Sector meshSector, Vector2S meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData data)
+  private double createSurface(Sector tileSector, Sector meshSector, Vector2S meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData tileTessellatorMeshData)
   {
   
     //VERTICES///////////////////////////////////////////////////////////////
-    final double minElevation = createSurfaceVertices(new Vector2S(meshResolution._x, meshResolution._y), meshSector, elevationData, verticalExaggeration, vertices, data);
+    final double minElevation = createSurfaceVertices(new Vector2S(meshResolution._x, meshResolution._y), meshSector, elevationData, verticalExaggeration, vertices, tileTessellatorMeshData);
   
   
     //TEX COORDINATES////////////////////////////////////////////////////////////////
@@ -394,11 +394,16 @@ public class PlanetTileTessellator extends TileTessellator
     return calculateResolution(prc, tile, sector);
   }
 
-  public final Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, DEMGrid grid, TileTessellatorMeshData data)
+  public final Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, DEMGrid grid, TileTessellatorMeshData tileTessellatorMeshData)
   {
   
     if (grid != null)
     {
+      final Vector3D minMaxAverageElevations = DEMGridUtils.getMinMaxAverageElevations(grid);
+      tileTessellatorMeshData._minHeight = minMaxAverageElevations._x;
+      tileTessellatorMeshData._maxHeight = minMaxAverageElevations._y;
+      tileTessellatorMeshData._averageHeight = minMaxAverageElevations._z;
+  
       return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
     }
   
@@ -412,7 +417,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-    final double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, prc._verticalExaggeration, tile._mercator, vertices, indices, textCoords, data);
+    final double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, prc._verticalExaggeration, tile._mercator, vertices, indices, textCoords, tileTessellatorMeshData);
   
     if (_skirted)
     {
@@ -456,8 +461,8 @@ public class PlanetTileTessellator extends TileTessellator
     final Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(rc.getPlanet());
-    TileTessellatorMeshData data = new TileTessellatorMeshData();
-    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, data);
+    TileTessellatorMeshData tileTessellatorMeshData = new TileTessellatorMeshData();
+    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, tileTessellatorMeshData);
   
     //INDEX OF BORDER///////////////////////////////////////////////////////////////
     ShortBufferBuilder indicesBorder = new ShortBufferBuilder();

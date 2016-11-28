@@ -110,7 +110,7 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
     PvtData data = (PvtData) tile.getData(DefineConstants.ProjectedCornersDistanceTLTDataID);
     if (data == null)
     {
-      final double mediumHeight = tile.getTessellatorMeshData()._averageHeight;
+      final double mediumHeight = tile.getTileTessellatorMeshData()._averageHeight;
       data = new PvtData(tile, mediumHeight, rc.getPlanet());
       tile.setData(data);
     }

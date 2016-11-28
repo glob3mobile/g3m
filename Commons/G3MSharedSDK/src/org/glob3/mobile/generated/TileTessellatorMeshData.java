@@ -35,4 +35,12 @@ public class TileTessellatorMeshData
   public double _minHeight;
   public double _maxHeight;
   public double _averageHeight;
+
+  public TileTessellatorMeshData()
+  {
+     _minHeight = 0;
+     _maxHeight = 0;
+     _averageHeight = 0;
+
+  }
 }
