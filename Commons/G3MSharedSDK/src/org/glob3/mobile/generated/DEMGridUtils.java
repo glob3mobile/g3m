@@ -137,7 +137,6 @@ public class DEMGridUtils
       return null;
     }
   
-    grid._retain();
     DEMGrid subsetGrid = SubsetDEMGrid.create(grid, sector);
     final Vector2I subsetGridExtent = subsetGrid.getExtent();
     if (subsetGridExtent.isEquals(extent))
@@ -146,11 +145,15 @@ public class DEMGridUtils
     }
     else if ((subsetGridExtent._x > extent._x) || (subsetGridExtent._y > extent._y))
     {
-      return DecimatedDEMGrid.create(subsetGrid, extent);
+      DEMGrid decimatedGrid = DecimatedDEMGrid.create(subsetGrid, extent);
+      subsetGrid._release(); // moved ownership to decimatedGrid
+      return decimatedGrid;
     }
     else
     {
-      return InterpolatedDEMGrid.create(subsetGrid, extent);
+      DEMGrid interpolatedGrid = InterpolatedDEMGrid.create(subsetGrid, extent);
+      subsetGrid._release(); // moved ownership to interpolatedGrid
+      return interpolatedGrid;
     }
   }
 
