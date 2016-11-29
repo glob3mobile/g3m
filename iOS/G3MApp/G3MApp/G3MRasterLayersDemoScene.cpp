@@ -21,6 +21,7 @@
 #include <G3MiOSSDK/TimeInterval.hpp>
 #include <G3MiOSSDK/MercatorTiledLayer.hpp>
 #include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
 
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
@@ -187,6 +188,11 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
 
 
 void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
+#warning Diego at work!
+  PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
+  planetRenderer->setShowStatistics(true);
+  //  planetRenderer->setIncrementalTileQuality(true);
+
   createLayerSet( getModel()->getLayerSet() );
 }
 
