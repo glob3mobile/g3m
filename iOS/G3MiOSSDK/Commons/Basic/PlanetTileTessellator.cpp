@@ -60,7 +60,7 @@ Vector2S PlanetTileTessellator::getTileMeshResolution(const G3MRenderContext* rc
 Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* prc,
                                                     const Tile* tile,
                                                     const Sector& renderedSector) const {
-  Sector sector = tile->_sector;
+  const Sector   sector     = tile->_sector;
   const Vector2S resolution = prc->_layerTilesRenderParameters->_tileMeshResolution;
 
   const double latRatio = sector._deltaLatitude._degrees  / renderedSector._deltaLatitude._degrees;
@@ -78,26 +78,7 @@ Vector2S PlanetTileTessellator::calculateResolution(const PlanetRenderContext* p
     resY = 2;
   }
 
-  const Vector2S meshRes = Vector2S(resX, resY);
-  return meshRes;
-
-
-  //  return rawResolution;
-
-  //  /* testing for dynamic latitude-resolution */
-  //  const double cos = sector._center._latitude.cosinus();
-  //
-  //  int resolutionY = (int) (rawResolution._y * cos);
-  //  if (resolutionY < 8) {
-  //    resolutionY = 8;
-  //  }
-  //
-  //  int resolutionX = (int) (rawResolution._x * cos);
-  //  if (resolutionX < 8) {
-  //    resolutionX = 8;
-  //  }
-  //
-  //  return Vector2I(resolutionX, resolutionY);
+  return Vector2S(resX, resY);
 }
 
 double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector) {

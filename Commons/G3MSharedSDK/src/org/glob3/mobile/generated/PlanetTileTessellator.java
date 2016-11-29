@@ -6,7 +6,7 @@ public class PlanetTileTessellator extends TileTessellator
 
   private Vector2S calculateResolution(PlanetRenderContext prc, Tile tile, Sector renderedSector)
   {
-    Sector sector = tile._sector;
+    final Sector sector = tile._sector;
     final Vector2S resolution = prc._layerTilesRenderParameters._tileMeshResolution;
   
     final double latRatio = sector._deltaLatitude._degrees / renderedSector._deltaLatitude._degrees;
@@ -26,26 +26,7 @@ public class PlanetTileTessellator extends TileTessellator
       resY = 2;
     }
   
-    final Vector2S meshRes = new Vector2S(resX, resY);
-    return meshRes;
-  
-  
-    //  return rawResolution;
-  
-    //  /* testing for dynamic latitude-resolution */
-    //  const double cos = sector._center._latitude.cosinus();
-    //
-    //  int resolutionY = (int) (rawResolution._y * cos);
-    //  if (resolutionY < 8) {
-    //    resolutionY = 8;
-    //  }
-    //
-    //  int resolutionX = (int) (rawResolution._x * cos);
-    //  if (resolutionX < 8) {
-    //    resolutionX = 8;
-    //  }
-    //
-    //  return Vector2I(resolutionX, resolutionY);
+    return new Vector2S(resX, resY);
   }
 
   private boolean needsEastSkirt(Sector tileSector)

@@ -57,20 +57,18 @@ public class DeviceAttitude_Android
 
    @Override
    public void startTrackingDeviceOrientation() {
-      if (_tracking) {
-         return;
-      }
+      if (!_tracking) {
+         _tracking = true;
 
-      _tracking = true;
+         if (!_sensorManager.registerListener(this, _sensorManager.getDefaultSensor(TYPE_MAGNETIC_FIELD), SENSOR_DELAY_GAME)) {
+            ILogger.instance().logError("TYPE_MAGNETIC_FIELD sensor not supported.");
+            _tracking = false;
+         }
 
-      if (!_sensorManager.registerListener(this, _sensorManager.getDefaultSensor(TYPE_MAGNETIC_FIELD), SENSOR_DELAY_GAME)) {
-         ILogger.instance().logError("TYPE_MAGNETIC_FIELD sensor not supported.");
-         _tracking = false;
-      }
-
-      if (!_sensorManager.registerListener(this, _sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), SENSOR_DELAY_GAME)) {
-         ILogger.instance().logError("TYPE_ACCELEROMETER sensor not supported.");
-         _tracking = false;
+         if (!_sensorManager.registerListener(this, _sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), SENSOR_DELAY_GAME)) {
+            ILogger.instance().logError("TYPE_ACCELEROMETER sensor not supported.");
+            _tracking = false;
+         }
       }
    }
 
