@@ -37,6 +37,8 @@ private:
     const Vector3D _southWestPoint;
     const Vector3D _southEastPoint;
 
+    const int    _tileLevel;
+    const double _mediumHeight;
 
   public:
     PvtData(const Tile* tile,
