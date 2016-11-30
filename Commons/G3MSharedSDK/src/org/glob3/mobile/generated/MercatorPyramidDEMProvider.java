@@ -50,7 +50,7 @@ public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
   
     if (childID == 0)
     {
-      final Sector sector = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
+      final Sector sector = new Sector(lower, new Geodetic2D(splitLatitude, splitLongitude));
       return new PyramidNode(parent, childID, sector, nextZ, x2, y2 + 1, this);
     }
     else if (childID == 1)
@@ -65,7 +65,7 @@ public abstract class MercatorPyramidDEMProvider extends PyramidDEMProvider
     }
     else if (childID == 3)
     {
-      final Sector sector = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
+      final Sector sector = new Sector(new Geodetic2D(splitLatitude, splitLongitude), upper);
       return new PyramidNode(parent, childID, sector, nextZ, x2 + 1, y2, this);
     }
     else

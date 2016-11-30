@@ -24,17 +24,8 @@ public class WebMercatorProjection extends Projection
   private static final double _upperLimitRadians = Angle.fromDegrees(85.0511287798)._radians;
   private static final double _lowerLimitRadians = Angle.fromDegrees(-85.0511287798)._radians;
 
-  //  static const double _upperLimitDegrees;
-  //  static const double _lowerLimitDegrees;
-
-
-  //const double WebMercatorProjection::_upperLimitDegrees = 85.0511287798;
-  //const double WebMercatorProjection::_lowerLimitDegrees = -85.0511287798;
-  
-  
   private WebMercatorProjection()
   {
-  
   }
 
   public void dispose()

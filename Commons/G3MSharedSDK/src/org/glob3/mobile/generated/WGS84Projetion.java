@@ -23,7 +23,6 @@ public class WGS84Projetion extends Projection
 
   private WGS84Projetion()
   {
-  
   }
 
   public void dispose()
@@ -72,6 +71,5 @@ public class WGS84Projetion extends Projection
   {
     return Angle.linearInterpolation(sector._lower._latitude, sector._upper._latitude, 1.0 - v);
   }
-
 
 }
