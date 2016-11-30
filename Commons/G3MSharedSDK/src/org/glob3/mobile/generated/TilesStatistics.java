@@ -37,11 +37,11 @@ public class TilesStatistics
   private int _tilesVisible;
   private int _tilesRendered;
 
-  private static final int _maxLOD = 128;
+  private static final int MAX_LEVEL = 64;
 
-  private int[] _tilesProcessedByLevel = new int[_maxLOD];
-  private int[] _tilesVisibleByLevel = new int[_maxLOD];
-  private int[] _tilesRenderedByLevel = new int[_maxLOD];
+  private int[] _tilesProcessedByLevel = new int[MAX_LEVEL];
+  private int[] _tilesVisibleByLevel = new int[MAX_LEVEL];
+  private int[] _tilesRenderedByLevel = new int[MAX_LEVEL];
 
   private double _visibleLowerLatitudeDegrees;
   private double _visibleLowerLongitudeDegrees;
@@ -77,7 +77,7 @@ public class TilesStatistics
     _visibleUpperLatitudeDegrees = mu.minDouble();
     _visibleUpperLongitudeDegrees = mu.minDouble();
   
-    for (int i = 0; i < _maxLOD; i++)
+    for (int i = 0; i < MAX_LEVEL; i++)
     {
       _tilesProcessedByLevel[i] = 0;
       _tilesVisibleByLevel[i] = 0;
@@ -208,15 +208,15 @@ public class TilesStatistics
     _statisticsSB.addString("Tiles processed:");
     _statisticsSB.addLong(_tilesProcessed);
     _statisticsSB.addString(" (");
-    _statisticsSB.addString(asLogString(_tilesProcessedByLevel, _maxLOD));
+    _statisticsSB.addString(asLogString(_tilesProcessedByLevel, MAX_LEVEL));
     _statisticsSB.addString("), visible:");
     _statisticsSB.addLong(_tilesVisible);
     _statisticsSB.addString(" (");
-    _statisticsSB.addString(asLogString(_tilesVisibleByLevel, _maxLOD));
+    _statisticsSB.addString(asLogString(_tilesVisibleByLevel, MAX_LEVEL));
     _statisticsSB.addString("), rendered:");
     _statisticsSB.addLong(_tilesRendered);
     _statisticsSB.addString(" (");
-    _statisticsSB.addString(asLogString(_tilesRenderedByLevel, _maxLOD));
+    _statisticsSB.addString(asLogString(_tilesRenderedByLevel, MAX_LEVEL));
     _statisticsSB.addString(").");
   
     if (!_statisticsSB.contentEqualsTo(_previousStatistics))
