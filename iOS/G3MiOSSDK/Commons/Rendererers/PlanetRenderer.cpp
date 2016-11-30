@@ -159,11 +159,44 @@ const std::string TilesStatistics::asLogString(const int m[], const int nMax) {
   return s;
 }
 
+TilesStatistics::TilesStatistics() :
+_previousLog(""),
+_isb(NULL)
+{
+  clear();
+}
+
+TilesStatistics::~TilesStatistics() {
+  delete _isb;
+}
+
+
 void TilesStatistics::log(const ILogger* logger) const {
-  logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
-                  _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
-                  _tilesVisible,   asLogString(_tilesVisibleByLevel,   _maxLOD).c_str(),
-                  _tilesRendered,  asLogString(_tilesRenderedByLevel,  _maxLOD).c_str());
+  if (_isb == NULL) {
+    _isb = IStringBuilder::newStringBuilder();
+  }
+  else {
+    _isb->clear();
+  }
+  _isb->addString("Tiles processed:");
+  _isb->addLong(_tilesProcessed);
+  _isb->addString(" (");
+  _isb->addString(asLogString(_tilesProcessedByLevel, _maxLOD));
+  _isb->addString("), visible:");
+  _isb->addLong(_tilesVisible);
+  _isb->addString(" (");
+  _isb->addString(asLogString(_tilesVisibleByLevel,   _maxLOD));
+  _isb->addString("), rendered:");
+  _isb->addLong(_tilesRendered);
+  _isb->addString(" (");
+  _isb->addString(asLogString(_tilesRenderedByLevel,  _maxLOD));
+  _isb->addString(").");
+
+  if (!_isb->contentEqualsTo(_previousLog)) {
+    const std::string log = _isb->getString();
+    _previousLog = log;
+    logger->logInfo(log);
+  }
 }
 
 

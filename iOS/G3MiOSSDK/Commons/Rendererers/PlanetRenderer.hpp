@@ -32,6 +32,7 @@ class LayerTilesRenderParameters;
 class Layer;
 class TerrainTouchListener;
 class DEMProvider;
+class IStringBuilder;
 
 
 class TilesStatistics {
@@ -51,15 +52,14 @@ private:
   double _visibleUpperLatitudeDegrees;
   double _visibleUpperLongitudeDegrees;
 
+  mutable std::string _previousLog;
+  mutable IStringBuilder* _isb;
+
 public:
 
-  TilesStatistics()
-  {
-    clear();
-  }
+  TilesStatistics();
 
-  ~TilesStatistics() {
-  }
+  ~TilesStatistics();
 
   void clear();
 
