@@ -19,7 +19,6 @@ WGS84Projetion* WGS84Projetion::INSTANCE = NULL;
 
 
 WGS84Projetion::WGS84Projetion() {
-
 }
 
 WGS84Projetion::~WGS84Projetion() {

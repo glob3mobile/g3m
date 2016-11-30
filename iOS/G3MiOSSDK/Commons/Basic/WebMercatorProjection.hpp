@@ -18,9 +18,6 @@ private:
   static const double _upperLimitRadians;
   static const double _lowerLimitRadians;
 
-  //  static const double _upperLimitDegrees;
-  //  static const double _lowerLimitDegrees;
-
   WebMercatorProjection();
 
 protected:
@@ -42,7 +39,7 @@ public:
                                      double u) const;
   const Angle getInnerPointLatitude(const Sector& sector,
                                     double v) const;
-
+  
 };
 
 #endif

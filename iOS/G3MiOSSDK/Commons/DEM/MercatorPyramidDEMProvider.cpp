@@ -27,7 +27,6 @@ MercatorPyramidDEMProvider::~MercatorPyramidDEMProvider() {
 #endif
 }
 
-
 PyramidNode* MercatorPyramidDEMProvider::createNode(const PyramidNode* parent,
                                                     const size_t childID) {
   if (parent == NULL) {
@@ -49,8 +48,8 @@ PyramidNode* MercatorPyramidDEMProvider::createNode(const PyramidNode* parent,
   const Angle splitLatitude  = MercatorUtils::calculateSplitLatitude(lower._latitude, upper._latitude);
 
   if (childID == 0) {
-    const Sector sector(Geodetic2D(lower._latitude, lower._longitude),
-                        Geodetic2D(  splitLatitude,   splitLongitude));
+    const Sector sector(lower,
+                        Geodetic2D(splitLatitude, splitLongitude));
     return new PyramidNode(parent, childID, sector,
                            nextZ, x2, y2 + 1,
                            this);
@@ -70,8 +69,8 @@ PyramidNode* MercatorPyramidDEMProvider::createNode(const PyramidNode* parent,
                            this);
   }
   else if (childID == 3) {
-    const Sector sector(Geodetic2D(  splitLatitude,   splitLongitude),
-                        Geodetic2D(upper._latitude, upper._longitude));
+    const Sector sector(Geodetic2D(splitLatitude, splitLongitude),
+                        upper);
     return new PyramidNode(parent, childID, sector,
                            nextZ, x2 + 1, y2,
                            this);

@@ -36,8 +36,7 @@ public:
                                      double u) const;
   const Angle getInnerPointLatitude(const Sector& sector,
                                     double v) const;
-
-
+  
 };
 
 #endif

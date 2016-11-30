@@ -20,12 +20,8 @@ WebMercatorProjection* WebMercatorProjection::INSTANCE = NULL;
 const double WebMercatorProjection::_upperLimitRadians = Angle::fromDegrees(85.0511287798)._radians;
 const double WebMercatorProjection::_lowerLimitRadians = Angle::fromDegrees(-85.0511287798)._radians;
 
-//const double WebMercatorProjection::_upperLimitDegrees = 85.0511287798;
-//const double WebMercatorProjection::_lowerLimitDegrees = -85.0511287798;
-
 
 WebMercatorProjection::WebMercatorProjection() {
-
 }
 
 WebMercatorProjection::~WebMercatorProjection() {
