@@ -128,7 +128,7 @@ void TilesStatistics::clear() {
   _visibleUpperLatitudeDegrees  = mu->minDouble();
   _visibleUpperLongitudeDegrees = mu->minDouble();
 
-  for (int i = 0; i < _maxLOD; i++) {
+  for (int i = 0; i < MAX_LEVEL; i++) {
     _tilesProcessedByLevel[i] = 0;
     _tilesVisibleByLevel[i]   = 0;
     _tilesRenderedByLevel[i]  = 0;
@@ -170,7 +170,6 @@ TilesStatistics::~TilesStatistics() {
   delete _statisticsSB;
 }
 
-
 void TilesStatistics::log(const ILogger* logger) const {
   if (_statisticsSB == NULL) {
     _statisticsSB = IStringBuilder::newStringBuilder();
@@ -181,15 +180,15 @@ void TilesStatistics::log(const ILogger* logger) const {
   _statisticsSB->addString("Tiles processed:");
   _statisticsSB->addLong(_tilesProcessed);
   _statisticsSB->addString(" (");
-  _statisticsSB->addString(asLogString(_tilesProcessedByLevel, _maxLOD));
+  _statisticsSB->addString(asLogString(_tilesProcessedByLevel, MAX_LEVEL));
   _statisticsSB->addString("), visible:");
   _statisticsSB->addLong(_tilesVisible);
   _statisticsSB->addString(" (");
-  _statisticsSB->addString(asLogString(_tilesVisibleByLevel,   _maxLOD));
+  _statisticsSB->addString(asLogString(_tilesVisibleByLevel,   MAX_LEVEL));
   _statisticsSB->addString("), rendered:");
   _statisticsSB->addLong(_tilesRendered);
   _statisticsSB->addString(" (");
-  _statisticsSB->addString(asLogString(_tilesRenderedByLevel,  _maxLOD));
+  _statisticsSB->addString(asLogString(_tilesRenderedByLevel,  MAX_LEVEL));
   _statisticsSB->addString(").");
 
   if (!_statisticsSB->contentEqualsTo(_previousStatistics)) {
@@ -197,7 +196,6 @@ void TilesStatistics::log(const ILogger* logger) const {
     logger->logInfo(_previousStatistics);
   }
 }
-
 
 
 PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,

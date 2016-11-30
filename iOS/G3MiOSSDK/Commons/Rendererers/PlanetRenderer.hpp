@@ -41,11 +41,11 @@ private:
   long _tilesVisible;
   long _tilesRendered;
 
-  static const int _maxLOD = 128;
+  static const int MAX_LEVEL = 64;
 
-  int _tilesProcessedByLevel[_maxLOD];
-  int _tilesVisibleByLevel[_maxLOD];
-  int _tilesRenderedByLevel[_maxLOD];
+  int _tilesProcessedByLevel[MAX_LEVEL];
+  int _tilesVisibleByLevel[MAX_LEVEL];
+  int _tilesRenderedByLevel[MAX_LEVEL];
 
   double _visibleLowerLatitudeDegrees;
   double _visibleLowerLongitudeDegrees;
