@@ -160,42 +160,41 @@ const std::string TilesStatistics::asLogString(const int m[], const int nMax) {
 }
 
 TilesStatistics::TilesStatistics() :
-_previousLog(""),
-_isb(NULL)
+_previousStatistics(""),
+_statisticsSB(NULL)
 {
   clear();
 }
 
 TilesStatistics::~TilesStatistics() {
-  delete _isb;
+  delete _statisticsSB;
 }
 
 
 void TilesStatistics::log(const ILogger* logger) const {
-  if (_isb == NULL) {
-    _isb = IStringBuilder::newStringBuilder();
+  if (_statisticsSB == NULL) {
+    _statisticsSB = IStringBuilder::newStringBuilder();
   }
   else {
-    _isb->clear();
+    _statisticsSB->clear();
   }
-  _isb->addString("Tiles processed:");
-  _isb->addLong(_tilesProcessed);
-  _isb->addString(" (");
-  _isb->addString(asLogString(_tilesProcessedByLevel, _maxLOD));
-  _isb->addString("), visible:");
-  _isb->addLong(_tilesVisible);
-  _isb->addString(" (");
-  _isb->addString(asLogString(_tilesVisibleByLevel,   _maxLOD));
-  _isb->addString("), rendered:");
-  _isb->addLong(_tilesRendered);
-  _isb->addString(" (");
-  _isb->addString(asLogString(_tilesRenderedByLevel,  _maxLOD));
-  _isb->addString(").");
+  _statisticsSB->addString("Tiles processed:");
+  _statisticsSB->addLong(_tilesProcessed);
+  _statisticsSB->addString(" (");
+  _statisticsSB->addString(asLogString(_tilesProcessedByLevel, _maxLOD));
+  _statisticsSB->addString("), visible:");
+  _statisticsSB->addLong(_tilesVisible);
+  _statisticsSB->addString(" (");
+  _statisticsSB->addString(asLogString(_tilesVisibleByLevel,   _maxLOD));
+  _statisticsSB->addString("), rendered:");
+  _statisticsSB->addLong(_tilesRendered);
+  _statisticsSB->addString(" (");
+  _statisticsSB->addString(asLogString(_tilesRenderedByLevel,  _maxLOD));
+  _statisticsSB->addString(").");
 
-  if (!_isb->contentEqualsTo(_previousLog)) {
-    const std::string log = _isb->getString();
-    _previousLog = log;
-    logger->logInfo(log);
+  if (!_statisticsSB->contentEqualsTo(_previousStatistics)) {
+    _previousStatistics = _statisticsSB->getString();
+    logger->logInfo(_previousStatistics);
   }
 }
 

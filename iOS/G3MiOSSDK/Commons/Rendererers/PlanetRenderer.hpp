@@ -52,8 +52,8 @@ private:
   double _visibleUpperLatitudeDegrees;
   double _visibleUpperLongitudeDegrees;
 
-  mutable std::string _previousLog;
-  mutable IStringBuilder* _isb;
+  mutable std::string     _previousStatistics;
+  mutable IStringBuilder* _statisticsSB;
 
 public:
 

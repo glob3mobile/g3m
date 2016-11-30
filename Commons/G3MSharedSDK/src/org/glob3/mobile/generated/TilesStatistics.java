@@ -28,6 +28,7 @@ package org.glob3.mobile.generated;
 //class Layer;
 //class TerrainTouchListener;
 //class DEMProvider;
+//class IStringBuilder;
 
 
 public class TilesStatistics
@@ -47,14 +48,21 @@ public class TilesStatistics
   private double _visibleUpperLatitudeDegrees;
   private double _visibleUpperLongitudeDegrees;
 
+  private String _previousLog;
+  private IStringBuilder _isb;
+
 
   public TilesStatistics()
   {
+     _previousLog = "";
+     _isb = null;
     clear();
   }
 
   public void dispose()
   {
+    if (_isb != null)
+       _isb.dispose();
   }
 
   public final void clear()
@@ -189,7 +197,34 @@ public class TilesStatistics
 
   public final void log(ILogger logger)
   {
-    logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
+    if (_isb == null)
+    {
+      _isb = IStringBuilder.newStringBuilder();
+    }
+    else
+    {
+      _isb.clear();
+    }
+    _isb.addString("Tiles processed:");
+    _isb.addLong(_tilesProcessed);
+    _isb.addString(" (");
+    _isb.addString(asLogString(_tilesProcessedByLevel, _maxLOD));
+    _isb.addString("), visible:");
+    _isb.addLong(_tilesVisible);
+    _isb.addString(" (");
+    _isb.addString(asLogString(_tilesVisibleByLevel, _maxLOD));
+    _isb.addString("), rendered:");
+    _isb.addLong(_tilesRendered);
+    _isb.addString(" (");
+    _isb.addString(asLogString(_tilesRenderedByLevel, _maxLOD));
+    _isb.addString(").");
+  
+    if (!_isb.contentEqualsTo(_previousLog))
+    {
+      final String log = _isb.getString();
+      _previousLog = log;
+      logger.logInfo(log);
+    }
   }
 
 }
