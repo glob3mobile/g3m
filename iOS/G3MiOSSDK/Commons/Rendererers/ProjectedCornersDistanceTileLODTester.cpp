@@ -109,9 +109,9 @@ bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* came
     return false;
   }
 
-  if (_tileLevel == 4) {
-    printf("break on me");
-  }
-  
+//  if (_tileLevel == 4) {
+//    printf("break on me");
+//  }
+
   return true;
 }
