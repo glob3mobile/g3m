@@ -48,21 +48,21 @@ public class TilesStatistics
   private double _visibleUpperLatitudeDegrees;
   private double _visibleUpperLongitudeDegrees;
 
-  private String _previousLog;
-  private IStringBuilder _isb;
+  private String _previousStatistics;
+  private IStringBuilder _statisticsSB;
 
 
   public TilesStatistics()
   {
-     _previousLog = "";
-     _isb = null;
+     _previousStatistics = "";
+     _statisticsSB = null;
     clear();
   }
 
   public void dispose()
   {
-    if (_isb != null)
-       _isb.dispose();
+    if (_statisticsSB != null)
+       _statisticsSB.dispose();
   }
 
   public final void clear()
@@ -197,33 +197,32 @@ public class TilesStatistics
 
   public final void log(ILogger logger)
   {
-    if (_isb == null)
+    if (_statisticsSB == null)
     {
-      _isb = IStringBuilder.newStringBuilder();
+      _statisticsSB = IStringBuilder.newStringBuilder();
     }
     else
     {
-      _isb.clear();
+      _statisticsSB.clear();
     }
-    _isb.addString("Tiles processed:");
-    _isb.addLong(_tilesProcessed);
-    _isb.addString(" (");
-    _isb.addString(asLogString(_tilesProcessedByLevel, _maxLOD));
-    _isb.addString("), visible:");
-    _isb.addLong(_tilesVisible);
-    _isb.addString(" (");
-    _isb.addString(asLogString(_tilesVisibleByLevel, _maxLOD));
-    _isb.addString("), rendered:");
-    _isb.addLong(_tilesRendered);
-    _isb.addString(" (");
-    _isb.addString(asLogString(_tilesRenderedByLevel, _maxLOD));
-    _isb.addString(").");
+    _statisticsSB.addString("Tiles processed:");
+    _statisticsSB.addLong(_tilesProcessed);
+    _statisticsSB.addString(" (");
+    _statisticsSB.addString(asLogString(_tilesProcessedByLevel, _maxLOD));
+    _statisticsSB.addString("), visible:");
+    _statisticsSB.addLong(_tilesVisible);
+    _statisticsSB.addString(" (");
+    _statisticsSB.addString(asLogString(_tilesVisibleByLevel, _maxLOD));
+    _statisticsSB.addString("), rendered:");
+    _statisticsSB.addLong(_tilesRendered);
+    _statisticsSB.addString(" (");
+    _statisticsSB.addString(asLogString(_tilesRenderedByLevel, _maxLOD));
+    _statisticsSB.addString(").");
   
-    if (!_isb.contentEqualsTo(_previousLog))
+    if (!_statisticsSB.contentEqualsTo(_previousStatistics))
     {
-      final String log = _isb.getString();
-      _previousLog = log;
-      logger.logInfo(log);
+      _previousStatistics = _statisticsSB.getString();
+      logger.logInfo(_previousStatistics);
     }
   }
 
