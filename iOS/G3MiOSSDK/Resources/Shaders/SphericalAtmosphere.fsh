@@ -61,14 +61,20 @@ bool intersectionsWithAtmosphere(highp vec3 o, highp vec3 d,
 highp float getRayFactor(highp vec3 o, highp vec3 d){
 
   // Ray density calculations explained in: https://github.com/amazingsmash/AtmosphericShaders
+  
+  
+  highp float rl = length(d); //Original Length of the Ray
+  d = normalize(d); //Integrating from 0 to LD
+  
+  highp float scaleFactor = 1.0;
+  
+  o /= scaleFactor;
+  d /= scaleFactor;
 
-  // Scaling the scene down to improve floating point calculations
-  d /= 1000.0;
-  o /= 1000.0;
-  highp float er = earthRadius / 1000.0;
-  highp float sh = (stratoHeight + earthRadius) / 1000.0;
+  highp float er = earthRadius / scaleFactor;
+  highp float sh = (stratoHeight + earthRadius) / scaleFactor;
+  rl /= scaleFactor;
 
-  highp float ld = dot(d,d);
   highp float pdo = dot(d,o);
 
   highp float dx = d.x;
@@ -90,18 +96,15 @@ highp float getRayFactor(highp vec3 o, highp vec3 d){
   highp float dx2 = dx * dx;
   highp float dy2 = dy * dy;
   highp float dz2 = dz * dz;
-
-  highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
-                    sqrt(dox2 + doy2 + doz2))/ld -
-                   (sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +
-                   ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-                     dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
-                    log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
-                        sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -
-                   ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-                     dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
-                    log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/
-  (2.*(er - 1.*sh));
+  
+  highp float ol2 = ox2 + oy2 + oz2;
+  highp float rl2 = rl*rl;
+  
+  highp float maxRayLength = sqrt((sh*sh)-(er*er));
+  highp float er2 = er*er;
+  highp float sh2 = sh*sh;
+  
+  highp float s = (-((sqrt(ol2)*pdo)/(dx2 + dy2 + dz2)) + (pdo/(dx2 + dy2 + dz2) + rl)*sqrt(ol2 + 2.0*pdo*rl + (dx2 + dy2 + dz2)*rl2) - 2.*rl*sh - ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) + dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*log(sqrt(dx2 + dy2 + dz2)*sqrt(ol2) + pdo))/pow(dx2 + dy2 + dz2,1.5) + ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) + dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*log(pdo + (dx2 + dy2 + dz2)*rl + sqrt(dx2 + dy2 + dz2)*sqrt(ol2 + 2.0*(dx*ox + dy*oy + dz*oz)*rl + (dx2 + dy2 + dz2)*rl2)))/pow(dx2 + dy2 + dz2,1.5))/(2.*(-1.*maxRayLength*sh + er2*(-0.5*log(-maxRayLength + sh) + 0.5*log(maxRayLength + sh))));
 
   return s;
 }
@@ -112,10 +115,29 @@ void main() {
   bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);
   if (valid){
     //Calculating color
-    highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
+    highp float f = getRayFactor(sp1, sp2 - sp1);
+    
+//    highp vec3 scatteringRatios = normalize(vec3(pow(640.0,4.0), pow(530.0,4.0), pow(450.0,4.0)));
+//    
+//    highp float r = f;
+//    gl_FragColor = vec4(r/scatteringRatios.x,
+//                        r/scatteringRatios.y,
+//                        r/scatteringRatios.z,
+//                        1.0);
+//    
+//    gl_FragColor = clamp(gl_FragColor, 0.0, 1.0);
+    
+//    if (f > 0.5){
+//      gl_FragColor = blueSky;
+//    } else{
+//      gl_FragColor = darkSpace;
+//    }
 
     highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));
-    color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));
+    color = mix(color, whiteSky, smoothstep(0.8, 1.0, f));
+    gl_FragColor = color;
+    
+    //highp vec4 color = blueSky * 2.0 * f;
 
     //Calculating camera Height (for precision problems)
     //Below a certain threshold float precision is not enough for calculations

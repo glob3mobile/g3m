@@ -461,11 +461,14 @@ public:
 "return valid;\n" +
 "}\n" +
 "highp float getRayFactor(highp vec3 o, highp vec3 d){\n" +
-"d /= 1000.0;\n" +
-"o /= 1000.0;\n" +
-"highp float er = earthRadius / 1000.0;\n" +
-"highp float sh = (stratoHeight + earthRadius) / 1000.0;\n" +
-"highp float ld = dot(d,d);\n" +
+"highp float rl = length(d); //Original Length of the Ray\n" +
+"d = normalize(d); //Integrating from 0 to LD\n" +
+"highp float scaleFactor = 1.0;\n" +
+"o /= scaleFactor;\n" +
+"d /= scaleFactor;\n" +
+"highp float er = earthRadius / scaleFactor;\n" +
+"highp float sh = (stratoHeight + earthRadius) / scaleFactor;\n" +
+"rl /= scaleFactor;\n" +
 "highp float pdo = dot(d,o);\n" +
 "highp float dx = d.x;\n" +
 "highp float dy = d.y;\n" +
@@ -482,26 +485,22 @@ public:
 "highp float dx2 = dx * dx;\n" +
 "highp float dy2 = dy * dy;\n" +
 "highp float dz2 = dz * dz;\n" +
-"highp float s = (((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*\n" +
-"sqrt(dox2 + doy2 + doz2))/ld -\n" +
-"(sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +\n" +
-"((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
-"dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*\n" +
-"log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +\n" +
-"sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -\n" +
-"((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +\n" +
-"dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*\n" +
-"log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/\n" +
-"(2.*(er - 1.*sh));\n" +
+"highp float ol2 = ox2 + oy2 + oz2;\n" +
+"highp float rl2 = rl*rl;\n" +
+"highp float maxRayLength = sqrt((sh*sh)-(er*er));\n" +
+"highp float er2 = er*er;\n" +
+"highp float sh2 = sh*sh;\n" +
+"highp float s = (-((sqrt(ol2)*pdo)/(dx2 + dy2 + dz2)) + (pdo/(dx2 + dy2 + dz2) + rl)*sqrt(ol2 + 2.0*pdo*rl + (dx2 + dy2 + dz2)*rl2) - 2.*rl*sh - ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) + dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*log(sqrt(dx2 + dy2 + dz2)*sqrt(ol2) + pdo))/pow(dx2 + dy2 + dz2,1.5) + ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) + dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*log(pdo + (dx2 + dy2 + dz2)*rl + sqrt(dx2 + dy2 + dz2)*sqrt(ol2 + 2.0*(dx*ox + dy*oy + dz*oz)*rl + (dx2 + dy2 + dz2)*rl2)))/pow(dx2 + dy2 + dz2,1.5))/(2.*(-1.*maxRayLength*sh + er2*(-0.5*log(-maxRayLength + sh) + 0.5*log(maxRayLength + sh))));\n" +
 "return s;\n" +
 "}\n" +
 "void main() {\n" +
 "highp vec3 sp1, sp2;\n" +
 "bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);\n" +
 "if (valid){\n" +
-"highp float f = getRayFactor(sp1, sp2 - sp1) * 1.3;\n" +
+"highp float f = getRayFactor(sp1, sp2 - sp1);\n" +
 "highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));\n" +
-"color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));\n" +
+"color = mix(color, whiteSky, smoothstep(0.8, 1.0, f));\n" +
+"gl_FragColor = color;\n" +
 "highp float camHeight = length(uCameraPosition) - earthRadius;\n" +
 "gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));\n" +
 "}\n" +
