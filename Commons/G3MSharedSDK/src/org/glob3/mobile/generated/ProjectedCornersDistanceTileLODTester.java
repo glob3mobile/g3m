@@ -50,6 +50,8 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
     private final Vector3D _southWestPoint ;
     private final Vector3D _southEastPoint ;
 
+    private final int _tileLevel;
+    private final double _mediumHeight;
 
     public PvtData(Tile tile, double mediumHeight, Planet planet)
     {
@@ -58,6 +60,8 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
        _northEastPoint = new Vector3D(planet.toCartesian(tile._sector.getNE(), mediumHeight));
        _southWestPoint = new Vector3D(planet.toCartesian(tile._sector.getSW(), mediumHeight));
        _southEastPoint = new Vector3D(planet.toCartesian(tile._sector.getSE(), mediumHeight));
+       _tileLevel = tile._level;
+       _mediumHeight = mediumHeight;
       final Vector3D normalNW = planet.centricSurfaceNormal(_northWestPoint);
       final Vector3D normalNE = planet.centricSurfaceNormal(_northEastPoint);
       final Vector3D normalSW = planet.centricSurfaceNormal(_southWestPoint);
@@ -99,6 +103,10 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
       {
         return false;
       }
+    
+    //  if (_tileLevel == 4) {
+    //    printf("break on me");
+    //  }
     
       return true;
     }

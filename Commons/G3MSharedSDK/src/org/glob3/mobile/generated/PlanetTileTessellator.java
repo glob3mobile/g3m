@@ -383,7 +383,8 @@ public class PlanetTileTessellator extends TileTessellator
       final Vector3D minMaxAverageElevations = DEMGridUtils.getMinMaxAverageElevations(grid);
       tileTessellatorMeshData._minHeight = minMaxAverageElevations._x;
       tileTessellatorMeshData._maxHeight = minMaxAverageElevations._y;
-      tileTessellatorMeshData._averageHeight = minMaxAverageElevations._z;
+  //    tileTessellatorMeshData._averageHeight = minMaxAverageElevations._z;
+      tileTessellatorMeshData._averageHeight = 0;
   
       return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
     }
