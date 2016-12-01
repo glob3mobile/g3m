@@ -119,10 +119,7 @@ public class GeoBSONConverter {
                @Override
                public boolean accept(final File dir,
                                      final String name) {
-                  if (name.toLowerCase().endsWith(".shp")) {
-                     return true;
-                  }
-                  return false;
+                  return name.toLowerCase().endsWith(".shp");
                }
             });
             for (final File file : files) {

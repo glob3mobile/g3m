@@ -146,7 +146,7 @@ public class CommandLine {
    public static class ExecResult {
       public enum ExecResultType {
          ERROR,
-         OUTPUT;
+         OUTPUT
       }
 
       final ExecResultType _type;
@@ -191,7 +191,7 @@ public class CommandLine {
 
       public enum streamGobblerType {
          ERROR,
-         OUTPUT;
+         OUTPUT
       }
 
       final BufferedReader    _br;

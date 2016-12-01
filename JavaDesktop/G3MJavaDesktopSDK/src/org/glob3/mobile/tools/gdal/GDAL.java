@@ -98,7 +98,7 @@ public class GDAL {
 
 
    public static boolean isInitialized() {
-      return (_gdal == null) ? false : true;
+      return _gdal != null;
    }
 
 

@@ -12,67 +12,67 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public interface Downloader_WebGL_Handler {
 
-   public void init(final URL url,
-                    final IBufferDownloadListener bufferListener,
+   void init(final URL url,
+             final IBufferDownloadListener bufferListener,
+             final boolean deleteListener,
+             final long priority,
+             final long requestID,
+             final String tag);
+
+
+   void init(final URL url,
+             final IImageDownloadListener imageListener,
+             final boolean deleteListener,
+             final long priority,
+             final long requestID,
+             final String tag);
+
+
+   boolean isRequestingImage();
+
+
+   void addListener(final IBufferDownloadListener listener,
                     final boolean deleteListener,
                     final long priority,
                     final long requestID,
                     final String tag);
 
 
-   public void init(final URL url,
-                    final IImageDownloadListener imageListener,
+   void addListener(final IImageDownloadListener listener,
                     final boolean deleteListener,
                     final long priority,
                     final long requestID,
                     final String tag);
 
 
-   public boolean isRequestingImage();
+   long getPriority();
 
 
-   public void addListener(final IBufferDownloadListener listener,
-                           final boolean deleteListener,
-                           final long priority,
-                           final long requestID,
-                           final String tag);
+   boolean cancelListenerForRequestId(final long requestID);
 
 
-   public void addListener(final IImageDownloadListener listener,
-                           final boolean deleteListener,
-                           final long priority,
-                           final long requestID,
-                           final String tag);
+   boolean removeListenerForRequestId(final long requestID);
 
 
-   public long getPriority();
+   boolean hasListener();
 
 
-   public boolean cancelListenerForRequestId(final long requestID);
+   void runWithDownloader(final IDownloader downloader);
 
 
-   public boolean removeListenerForRequestId(final long requestID);
+   void removeFromDownloaderDownloadingHandlers();
 
 
-   public boolean hasListener();
+   void processResponse(final int statusCode,
+                        final JavaScriptObject data);
 
 
-   public void runWithDownloader(final IDownloader downloader);
+   void jsRequest(String url);
 
 
-   public void removeFromDownloaderDownloadingHandlers();
+   boolean removeListenersTagged(String tag);
 
 
-   public void processResponse(final int statusCode,
-                               final JavaScriptObject data);
-
-
-   public void jsRequest(String url);
-
-
-   public boolean removeListenersTagged(String tag);
-
-
-   public void cancelListenersTagged(String tag);
+   void cancelListenersTagged(String tag);
 
 }

@@ -268,21 +268,15 @@ public class JBson2BJson {
    private static class Utils {
 
       public static boolean checkFileIsJson(final File fJson) {
-         if (fJson.exists() && fJson.isFile()
-             && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"))) {
-            return true;
-         }
+         return fJson.exists() && fJson.isFile()
+                 && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"));
 
-         return false;
       }
 
 
       public static boolean checkFileIsBson(final File fBson) {
-         if (fBson.exists() && fBson.isFile() && fBson.getName().toLowerCase().endsWith(".bson")) {
-            return true;
-         }
+         return fBson.exists() && fBson.isFile() && fBson.getName().toLowerCase().endsWith(".bson");
 
-         return false;
       }
    }
 }

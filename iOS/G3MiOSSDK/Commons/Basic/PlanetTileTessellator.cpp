@@ -227,8 +227,8 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2S& rawResolution,
                                                       const Tile* tile) const {
-  PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
-  if (data == NULL || data->_textCoords == NULL) {
+  PlanetTileTessellatorData* data = tile->getTessellatorData();
+  if ((data == NULL) || (data->_textCoords == NULL)) {
     ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
     return NULL;
   }

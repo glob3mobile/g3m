@@ -439,10 +439,7 @@ public class G3MNetCDFActivity
          // in other case you MUST to manage this boolean.
          @Override
          public boolean isDone(final G3MContext context) {
-            if (_isDone) {
-               return true;
-            }
-            return false;
+            return _isDone;
          }
          //            return true;
          //         }
@@ -562,10 +559,7 @@ public class G3MNetCDFActivity
 
          @Override
          public boolean isDone(final G3MContext context) {
-            if (_isDone) {
-               return true;
-            }
-            return false;
+            return _isDone;
          }
 
       };
@@ -670,10 +664,7 @@ public class G3MNetCDFActivity
 
          @Override
          public boolean isDone(final G3MContext context) {
-            if (_isDone) {
-               return true;
-            }
-            return false;
+            return _isDone;
          }
 
       };
