@@ -323,9 +323,9 @@ public class GPUProgram
   public final GPUAttributeVec1Float getGPUAttributeVec1Float(String name)
   {
     GPUAttributeVec1Float a = (GPUAttributeVec1Float)getGPUAttribute(name);
-    if (a!= null && a._size == 1 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 1) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec1Float)a;
+      return a;
     }
     return null;
   
@@ -333,9 +333,9 @@ public class GPUProgram
   public final GPUAttributeVec2Float getGPUAttributeVec2Float(String name)
   {
     GPUAttributeVec2Float a = (GPUAttributeVec2Float)getGPUAttribute(name);
-    if (a!= null && a._size == 2 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 2) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec2Float)a;
+      return a;
     }
     return null;
   
@@ -343,9 +343,9 @@ public class GPUProgram
   public final GPUAttributeVec3Float getGPUAttributeVec3Float(String name)
   {
     GPUAttributeVec3Float a = (GPUAttributeVec3Float)getGPUAttribute(name);
-    if (a!= null && a._size == 3 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 3) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec3Float)a;
+      return a;
     }
     return null;
   
@@ -353,9 +353,9 @@ public class GPUProgram
   public final GPUAttributeVec4Float getGPUAttributeVec4Float(String name)
   {
     GPUAttributeVec4Float a = (GPUAttributeVec4Float)getGPUAttribute(name);
-    if (a!= null && a._size == 4 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 4) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec4Float)a;
+      return a;
     }
     return null;
   

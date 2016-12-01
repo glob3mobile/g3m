@@ -505,8 +505,8 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
   {
-    PlanetTileTessellatorData data = (PlanetTileTessellatorData) tile.getTessellatorData();
-    if (data == null || data._textCoords == null)
+    PlanetTileTessellatorData data = tile.getTessellatorData();
+    if ((data == null) || (data._textCoords == null))
     {
       ILogger.instance().logError("Logic error on PlanetTileTessellator::createTextCoord");
       return null;
