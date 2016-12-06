@@ -81,7 +81,7 @@ public class PlanetTileTessellator extends TileTessellator
     final IMathUtils mu = IMathUtils.instance();
     double minElevation = mu.maxDouble();
     double maxElevation = mu.minDouble();
-    double averageElevation = 0;
+    double sumElevation = 0;
   
     for (int j = 0; j < meshResolution._y; j++)
     {
@@ -112,7 +112,7 @@ public class PlanetTileTessellator extends TileTessellator
           }
   
           //AVERAGE
-          averageElevation += elevation;
+          sumElevation += elevation;
         }
   
         vertices.add(position, elevation);
@@ -130,7 +130,7 @@ public class PlanetTileTessellator extends TileTessellator
   
     tileTessellatorMeshData._minHeight = minElevation;
     tileTessellatorMeshData._maxHeight = maxElevation;
-    tileTessellatorMeshData._averageHeight = averageElevation / (meshResolution._x * meshResolution._y);
+    tileTessellatorMeshData._averageHeight = sumElevation / (meshResolution._x * meshResolution._y);
   
     return minElevation;
   }

@@ -51,6 +51,8 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
     private final Vector3D _southEastPoint ;
 
     private final int _tileLevel;
+    private final int _tileRow;
+    private final int _tileColumn;
     private final double _mediumHeight;
 
     public PvtData(Tile tile, double mediumHeight, Planet planet)
@@ -61,6 +63,8 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
        _southWestPoint = new Vector3D(planet.toCartesian(tile._sector.getSW(), mediumHeight));
        _southEastPoint = new Vector3D(planet.toCartesian(tile._sector.getSE(), mediumHeight));
        _tileLevel = tile._level;
+       _tileRow = tile._row;
+       _tileColumn = tile._column;
        _mediumHeight = mediumHeight;
       final Vector3D normalNW = planet.centricSurfaceNormal(_northWestPoint);
       final Vector3D normalNE = planet.centricSurfaceNormal(_northEastPoint);
@@ -71,10 +75,20 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
       _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
       _eastArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNE, normalSE);
       _westArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalSW);
+    
+      if (_tileLevel == 4 && _tileRow == 9 && (_tileColumn == 4 || _tileColumn == 5))
+      {
+        System.out.print("break on me\n");
+      }
     }
 
     public final boolean evaluate(Camera camera, double texHeightSquared, double texWidthSquared)
     {
+    
+      if (_tileLevel == 4 && _tileRow == 9 && (_tileColumn == 4 || _tileColumn == 5))
+      {
+        System.out.print("break on me\n");
+      }
     
       final double distanceInPixelsNorth = camera.getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
       final double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
@@ -103,10 +117,6 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
       {
         return false;
       }
-    
-    //  if (_tileLevel == 4) {
-    //    printf("break on me");
-    //  }
     
       return true;
     }
