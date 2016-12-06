@@ -76,19 +76,21 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
       _eastArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNE, normalSE);
       _westArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalSW);
     
-      if (_tileLevel == 4 && _tileRow == 9 && (_tileColumn == 4 || _tileColumn == 5))
-      {
-        System.out.print("break on me\n");
-      }
+    //  if (_tileLevel == 4 &&
+    //      _tileRow == 9 &&
+    //      (_tileColumn == 4 || _tileColumn == 5)) {
+    //    printf("break on me\n");
+    //  }
     }
 
     public final boolean evaluate(Camera camera, double texHeightSquared, double texWidthSquared)
     {
     
-      if (_tileLevel == 4 && _tileRow == 9 && (_tileColumn == 4 || _tileColumn == 5))
-      {
-        System.out.print("break on me\n");
-      }
+    //  if (_tileLevel == 4 &&
+    //      _tileRow == 9 &&
+    //      (_tileColumn == 4 || _tileColumn == 5)) {
+    //    printf("break on me\n");
+    //  }
     
       final double distanceInPixelsNorth = camera.getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
       final double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
