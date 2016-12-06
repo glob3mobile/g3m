@@ -351,7 +351,7 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();
   double maxElevation = mu->minDouble();
-  double averageElevation = 0;
+  double sumElevation = 0;
 
   for (int j = 0; j < meshResolution._y; j++) {
     const double v = (double) j / (meshResolution._y - 1);
@@ -377,7 +377,7 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
         }
 
         //AVERAGE
-        averageElevation += elevation;
+        sumElevation += elevation;
       }
 
       vertices->add( position, elevation );
@@ -393,7 +393,7 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
 
   tileTessellatorMeshData._minHeight = minElevation;
   tileTessellatorMeshData._maxHeight = maxElevation;
-  tileTessellatorMeshData._averageHeight = averageElevation / (meshResolution._x * meshResolution._y);
+  tileTessellatorMeshData._averageHeight = sumElevation / (meshResolution._x * meshResolution._y);
 
   return minElevation;
 }

@@ -38,6 +38,8 @@ private:
     const Vector3D _southEastPoint;
 
     const int    _tileLevel;
+    const int    _tileRow;
+    const int    _tileColumn;
     const double _mediumHeight;
 
   public:

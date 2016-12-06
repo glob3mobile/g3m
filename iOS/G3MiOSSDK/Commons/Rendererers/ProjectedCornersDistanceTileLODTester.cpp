@@ -68,6 +68,8 @@ _northEastPoint( planet->toCartesian( tile->_sector.getNE(), mediumHeight ) ),
 _southWestPoint( planet->toCartesian( tile->_sector.getSW(), mediumHeight ) ),
 _southEastPoint( planet->toCartesian( tile->_sector.getSE(), mediumHeight ) ),
 _tileLevel(tile->_level),
+_tileRow(tile->_row),
+_tileColumn(tile->_column),
 _mediumHeight(mediumHeight)
 {
   const Vector3D normalNW = planet->centricSurfaceNormal(_northWestPoint);
@@ -79,12 +81,24 @@ _mediumHeight(mediumHeight)
   _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
   _eastArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNE, normalSE);
   _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
+
+  if (_tileLevel == 4 &&
+      _tileRow == 9 &&
+      (_tileColumn == 4 || _tileColumn == 5)) {
+    printf("break on me\n");
+  }
 }
 
 bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* camera,
                                                               double texHeightSquared,
                                                               double texWidthSquared) {
-  
+
+  if (_tileLevel == 4 &&
+      _tileRow == 9 &&
+      (_tileColumn == 4 || _tileColumn == 5)) {
+    printf("break on me\n");
+  }
+
   const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
   const double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
   if (distanceInPixelsSquaredArcNorth > texWidthSquared) {
@@ -108,10 +122,6 @@ bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* came
   if (distanceInPixelsSquaredArcEast > texHeightSquared) {
     return false;
   }
-
-//  if (_tileLevel == 4) {
-//    printf("break on me");
-//  }
 
   return true;
 }

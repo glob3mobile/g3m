@@ -15,14 +15,12 @@ AbstractMeshShape::~AbstractMeshShape() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 void AbstractMeshShape::cleanMesh() {
   delete _mesh;
   _mesh = NULL;
 }
-
 
 Mesh* AbstractMeshShape::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
