@@ -82,22 +82,22 @@ _mediumHeight(mediumHeight)
   _eastArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNE, normalSE);
   _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
 
-  if (_tileLevel == 4 &&
-      _tileRow == 9 &&
-      (_tileColumn == 4 || _tileColumn == 5)) {
-    printf("break on me\n");
-  }
+//  if (_tileLevel == 4 &&
+//      _tileRow == 9 &&
+//      (_tileColumn == 4 || _tileColumn == 5)) {
+//    printf("break on me\n");
+//  }
 }
 
 bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* camera,
                                                               double texHeightSquared,
                                                               double texWidthSquared) {
 
-  if (_tileLevel == 4 &&
-      _tileRow == 9 &&
-      (_tileColumn == 4 || _tileColumn == 5)) {
-    printf("break on me\n");
-  }
+//  if (_tileLevel == 4 &&
+//      _tileRow == 9 &&
+//      (_tileColumn == 4 || _tileColumn == 5)) {
+//    printf("break on me\n");
+//  }
 
   const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
   const double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
