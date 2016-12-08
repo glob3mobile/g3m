@@ -48,13 +48,15 @@ public abstract class AbstractMesh extends Mesh
       return null;
     }
   
-    double minX = 1e12;
-    double minY = 1e12;
-    double minZ = 1e12;
+    final IMathUtils mu = IMathUtils.instance();
   
-    double maxX = -1e12;
-    double maxY = -1e12;
-    double maxZ = -1e12;
+    double minX = mu.maxDouble();
+    double minY = mu.maxDouble();
+    double minZ = mu.maxDouble();
+  
+    double maxX = mu.minDouble();
+    double maxY = mu.minDouble();
+    double maxZ = mu.minDouble();
   
     for (int i = 0; i < vertexCount; i++)
     {
@@ -65,19 +67,30 @@ public abstract class AbstractMesh extends Mesh
       final double z = _vertices.get(i3 + 2) + _center._z;
   
       if (x < minX)
+      {
          minX = x;
-      if (x > maxX)
-         maxX = x;
-  
+      }
       if (y < minY)
+      {
          minY = y;
-      if (y > maxY)
-         maxY = y;
-  
+      }
       if (z < minZ)
+      {
          minZ = z;
+      }
+  
+      if (x > maxX)
+      {
+         maxX = x;
+      }
+      if (y > maxY)
+      {
+         maxY = y;
+      }
       if (z > maxZ)
+      {
          maxZ = z;
+      }
     }
   
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
