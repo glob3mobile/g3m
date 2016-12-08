@@ -104,19 +104,19 @@ bool ProjectedCornersDistanceTileLODTester::PvtData::evaluate(const Camera* came
   if (distanceInPixelsSquaredArcNorth > texWidthSquared) {
     return false;
   }
-  
+
   const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
   const double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
   if (distanceInPixelsSquaredArcSouth > texWidthSquared) {
     return false;
   }
-  
+
   const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
   const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
   if (distanceInPixelsSquaredArcWest > texHeightSquared) {
     return false;
   }
-  
+
   const double distanceInPixelsEast  = camera->getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
   const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
   if (distanceInPixelsSquaredArcEast > texHeightSquared) {

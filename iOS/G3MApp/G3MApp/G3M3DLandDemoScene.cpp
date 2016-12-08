@@ -19,6 +19,7 @@
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/MapzenDEMProvider.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
 
 
 void G3M3DLandDemoScene::rawSelectOption(const std::string& option,
@@ -68,11 +69,9 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
   planetRenderer->setShowStatistics(true);
-//  planetRenderer->setIncrementalTileQuality(false);
+  planetRenderer->setIncrementalTileQuality(true);
 
-#warning Diego at work!
-
-  planetRenderer->setVerticalExaggeration(50);
+  planetRenderer->setVerticalExaggeration(1);
   planetRenderer->setDEMProvider( new MapzenDEMProvider("mapzen-ZB6FqMg",
                                                         DownloadPriority::HIGHER,
                                                         TimeInterval::fromDays(0),
@@ -90,10 +89,10 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   getModel()->getLayerSet()->addLayer( layer );
 
-  //  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(58.813741715707806179, -125.859375, 50000));
-  //  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.668763371822997499,
-  //                                                                                 10.800910848094183336,
-  //                                                                                 135933.14638548778021));
+#warning Diego at work!
+  getModel()->getG3MWidget()->setCameraPosition( Geodetic3D::fromDegrees(-31.952754850831528444,
+                                                                         -70.640222465417764397,
+                                                                         3821842.2834936883301) );
 
   //  const double deltaHeight = -700.905;
   //  const short  noDataValue = -32768;
@@ -110,4 +109,3 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   //                         new G3M3DLandDemoSceneBILHandler(getModel()),
   //                         true);
 }
-

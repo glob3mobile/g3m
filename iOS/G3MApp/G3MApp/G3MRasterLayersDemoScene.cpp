@@ -191,7 +191,7 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
 #warning Diego at work!
   PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
   planetRenderer->setShowStatistics(true);
-  //  planetRenderer->setIncrementalTileQuality(true);
+  planetRenderer->setIncrementalTileQuality(true);
 
   createLayerSet( getModel()->getLayerSet() );
 }

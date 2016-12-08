@@ -28,7 +28,7 @@ AbstractMesh::~AbstractMesh() {
     delete _colors;
     delete _normals;
   }
-  
+
   //Always deleting flatColor
   delete _flatColor;
 
@@ -90,13 +90,15 @@ BoundingVolume* AbstractMesh::computeBoundingVolume() const {
     return NULL;
   }
 
-  double minX = 1e12;
-  double minY = 1e12;
-  double minZ = 1e12;
+  const IMathUtils* mu = IMathUtils::instance();
 
-  double maxX = -1e12;
-  double maxY = -1e12;
-  double maxZ = -1e12;
+  double minX = mu->maxDouble();
+  double minY = mu->maxDouble();
+  double minZ = mu->maxDouble();
+
+  double maxX = mu->minDouble();
+  double maxY = mu->minDouble();
+  double maxZ = mu->minDouble();
 
   for (int i=0; i < vertexCount; i++) {
     const int i3 = i * 3;
@@ -105,14 +107,13 @@ BoundingVolume* AbstractMesh::computeBoundingVolume() const {
     const double y = _vertices->get(i3 + 1) + _center._y;
     const double z = _vertices->get(i3 + 2) + _center._z;
 
-    if (x < minX) minX = x;
-    if (x > maxX) maxX = x;
+    if (x < minX) { minX = x; }
+    if (y < minY) { minY = y; }
+    if (z < minZ) { minZ = z; }
 
-    if (y < minY) minY = y;
-    if (y > maxY) maxY = y;
-
-    if (z < minZ) minZ = z;
-    if (z > maxZ) maxZ = z;
+    if (x > maxX) { maxX = x; }
+    if (y > maxY) { maxY = y; }
+    if (z > maxZ) { maxZ = z; }
   }
 
   return new Box(Vector3D(minX, minY, minZ),
@@ -263,7 +264,7 @@ Mesh* AbstractMesh::createNormalsMesh() const {
   CompositeMesh* compositeMesh = new CompositeMesh();
   compositeMesh->addMesh(verticesMesh);
   compositeMesh->addMesh(normalsMesh);
-
+  
   return compositeMesh;
   
 }
