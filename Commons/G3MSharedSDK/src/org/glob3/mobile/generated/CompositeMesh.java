@@ -31,7 +31,7 @@ public class CompositeMesh extends Mesh
       return null;
     }
   
-    BoundingVolume result = _children.get(0).getBoundingVolume();
+    BoundingVolume result = _children.get(0).getBoundingVolume().copy();
     for (int i = 1; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);

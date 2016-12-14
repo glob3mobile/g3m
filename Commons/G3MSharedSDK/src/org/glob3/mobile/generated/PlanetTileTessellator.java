@@ -383,7 +383,7 @@ public class PlanetTileTessellator extends TileTessellator
       final Vector3D minMaxAverageElevations = DEMGridUtils.getMinMaxAverageElevations(grid);
       tileTessellatorMeshData._minHeight = minMaxAverageElevations._x;
       tileTessellatorMeshData._maxHeight = minMaxAverageElevations._y;
-  //    tileTessellatorMeshData._averageHeight = minMaxAverageElevations._z;
+      // tileTessellatorMeshData._averageHeight = minMaxAverageElevations._z;
       tileTessellatorMeshData._averageHeight = 0;
   
       return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
@@ -433,6 +433,23 @@ public class PlanetTileTessellator extends TileTessellator
   
     if (vertices != null)
        vertices.dispose();
+  
+  //  if (grid != NULL) {
+  //    CompositeMesh* compositeMesh = new CompositeMesh();
+  //    compositeMesh->addMesh(result);
+  //
+  //    Mesh* pointsMesh = DEMGridUtils::createDebugMesh(grid,
+  //                                                     rc->getPlanet(),
+  //                                                     prc->_verticalExaggeration,
+  //                                                     Geodetic3D::zero(), // offset
+  //                                                     -11000,             // minElevation
+  //                                                     9000,               // maxElevation
+  //                                                     15                  // pointSize
+  //                                                     );
+  //    compositeMesh->addMesh(pointsMesh);
+  //
+  //    return compositeMesh;
+  //  }
   
     return result;
   }

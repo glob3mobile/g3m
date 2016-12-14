@@ -359,4 +359,10 @@ public class Sphere extends BoundingVolume
     return new Sphere(this);
   }
 
+  public final Sphere copy()
+  {
+    return new Sphere(this);
+  }
+
+
 }

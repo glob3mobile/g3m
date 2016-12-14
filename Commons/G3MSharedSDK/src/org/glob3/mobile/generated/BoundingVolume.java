@@ -45,4 +45,6 @@ public abstract class BoundingVolume
 
   public abstract Sphere createSphere();
 
+  public abstract BoundingVolume copy();
+
 }
