@@ -249,3 +249,7 @@ bool Sphere::fullContainedInSphere(const Sphere* that) const {
 Sphere* Sphere::createSphere() const {
   return new Sphere(*this);
 }
+
+Sphere* Sphere::copy() const {
+  return new Sphere(*this);
+}

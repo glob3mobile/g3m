@@ -101,6 +101,9 @@ public:
 
   Sphere* createSphere() const;
 
+  Sphere* copy() const;
+
+
 };
 
 #endif

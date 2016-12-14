@@ -341,3 +341,7 @@ const std::string Box::description() const {
   delete isb;
   return s;
 }
+
+Box* Box::copy() const {
+  return new Box(*this);
+}

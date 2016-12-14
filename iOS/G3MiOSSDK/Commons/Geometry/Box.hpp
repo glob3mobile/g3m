@@ -78,7 +78,7 @@ public:
 
   BoundingVolume* mergedWith(const BoundingVolume* that) const {
     if (that == NULL) {
-      return NULL;
+      return new Box(*this);
     }
     return that->mergedWithBox(this);
   }
@@ -119,6 +119,8 @@ public:
 #endif
 
   const std::string description() const;
+
+  Box* copy() const;
 
 };
 

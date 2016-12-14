@@ -46,7 +46,9 @@ public:
   virtual BoundingVolume* mergedWithSphere(const Sphere* that) const = 0;
 
   virtual Sphere* createSphere() const = 0;
-  
+
+  virtual BoundingVolume* copy() const = 0;
+
 };
 
 #endif
