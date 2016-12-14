@@ -590,7 +590,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = G3M;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
