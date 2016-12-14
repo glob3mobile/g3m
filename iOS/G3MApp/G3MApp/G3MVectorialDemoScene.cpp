@@ -63,7 +63,7 @@ private:
 
     const JSONString* s = properties->getAsString("ROAD_NAME2");
     if (s != NULL) {
-      return GEO2DLineRasterStyle(Color::blue(),
+      return GEO2DLineRasterStyle(Color::BLUE,
                                   8,
                                   CAP_ROUND,
                                   JOIN_ROUND,

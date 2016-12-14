@@ -114,18 +114,18 @@ public:
     const double area = (15000.0 * clusterPercent);
     const int radius = 12 + mu->round((float) mu->sqrt(area / PI));
 
-    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(),
+    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::WHITE,
                                                                              radius),
                                                       new LabelImageBuilder(label,
                                                                             GFont::sansSerif(labelFontSize, true),
-                                                                            2.0f,                 // margin
-                                                                            Color::black(),       // color
-                                                                            Color::white(),       // shadowColor
-                                                                            5.0f,                 // shadowBlur
-                                                                            0.0f,                 // shadowOffsetX
-                                                                            0.0f,                 // shadowOffsetY
-                                                                            Color::transparent(), // backgroundColor
-                                                                            4.0f                  // cornerRadius
+                                                                            2.0f,               // margin
+                                                                            Color::BLACK,       // color
+                                                                            Color::WHITE,       // shadowColor
+                                                                            5.0f,               // shadowBlur
+                                                                            0.0f,               // shadowOffsetX
+                                                                            0.0f,               // shadowOffsetY
+                                                                            Color::TRANSPARENT, // backgroundColor
+                                                                            4.0f                // cornerRadius
                                                                             )
                                                       ),
                           position,

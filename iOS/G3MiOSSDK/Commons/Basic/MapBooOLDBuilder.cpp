@@ -825,14 +825,14 @@ Layer* MapBooOLDBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) c
 
 Color MapBooOLDBuilder::parseColor(const JSONString* jsonColor) const {
   if (jsonColor == NULL) {
-    return Color::black();
+    return Color::BLACK;
   }
 
   const Color* color = Color::parse(jsonColor->value());
   if (color == NULL) {
     ILogger::instance()->logError("Invalid format in attribute 'color' (%s)",
                                   jsonColor->value().c_str());
-    return Color::black();
+    return Color::BLACK;
   }
 
   Color result(*color);
@@ -1595,7 +1595,7 @@ const MapBooOLD_Scene* MapBooOLDBuilder::getApplicationCurrentScene() {
 
 Color MapBooOLDBuilder::getCurrentBackgroundColor() {
   const MapBooOLD_Scene* scene = getApplicationCurrentScene();
-  return (scene == NULL) ? Color::black() : scene->getBackgroundColor();
+  return (scene == NULL) ? Color::BLACK : scene->getBackgroundColor();
 }
 
 MarksRenderer* MapBooOLDBuilder::getMarksRenderer() {
@@ -1651,7 +1651,7 @@ G3MWidget* MapBooOLDBuilder::create() {
                                  createBusyRenderer(),
                                  createErrorRenderer(),
                                  hudRenderer,
-                                 Color::black(),
+                                 Color::BLACK,
                                  false,      // logFPS
                                  false,      // logDownloaderStatistics
                                  initializationTask,
@@ -2029,7 +2029,7 @@ void MapBooOLDBuilder::setApplicationScenes(const std::vector<MapBooOLD_Scene*>&
 
 SceneLighting* MapBooOLDBuilder::createSceneLighting() {
   return new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
-                                      Color::yellow());
+                                      Color::YELLOW);
 }
 
 void MapBooOLDBuilder::setApplicationTubeOpened(bool open) {
@@ -2177,11 +2177,11 @@ void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               Left,
                               Bottom,
                               Left,
-                              Color::white(),
+                              Color::WHITE,
                               11,
                               2,
-                              Color::transparent(),
-                              Color::black(),
+                              Color::TRANSPARENT,
+                              Color::BLACK,
                               5);
 }
 

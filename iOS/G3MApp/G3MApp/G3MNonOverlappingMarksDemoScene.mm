@@ -75,10 +75,10 @@ public:
         LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,
                                                                 GFont::sansSerif(14),
                                                                 4,
-                                                                Color::black(),
-                                                                Color::transparent(),
+                                                                Color::BLACK,
+                                                                Color::TRANSPARENT,
                                                                 0,0,0,
-                                                                Color::white(),
+                                                                Color::WHITE,
                                                                 4);
 
         NonOverlappingMark* mark;
@@ -90,13 +90,13 @@ public:
         else {
           ColumnLayoutImageBuilder* columnBuilder = new ColumnLayoutImageBuilder(new DownloaderImageBuilder(URL(thumbnail)),
                                                                                  titleBuilder,
-                                                                                 0,                     // margin
-                                                                                 0,                     // borderWidth,
-                                                                                 Color::transparent(),  // borderColor
-                                                                                 0,                     // padding
-                                                                                 Color::transparent(),  // backgroundColor
-                                                                                 0,                     // cornerRadius
-                                                                                 2                      // childrenSeparation
+                                                                                 0,                   // margin
+                                                                                 0,                   // borderWidth,
+                                                                                 Color::TRANSPARENT,  // borderColor
+                                                                                 0,                   // padding
+                                                                                 Color::TRANSPARENT,  // backgroundColor
+                                                                                 0,                   // cornerRadius
+                                                                                 2                    // childrenSeparation
                                                                                  );
 
           mark = new NonOverlappingMark(columnBuilder,

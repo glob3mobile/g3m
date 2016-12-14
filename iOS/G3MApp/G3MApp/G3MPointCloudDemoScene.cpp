@@ -97,9 +97,9 @@ public:
       }
       const double averageHeight = totalHeight / (size / 3.0);
 
-      const Color fromColor = Color::red();
-      const Color middleColor = Color::green();
-      const Color toColor = Color::blue();
+      const Color fromColor   = Color::RED;
+      const Color middleColor = Color::GREEN;
+      const Color toColor     = Color::BLUE;
 
       for (size_t i = 0; i < size; i = i + 3) {
         const double latDegrees = pointsJson->getAsNumber(i + 1, 0);

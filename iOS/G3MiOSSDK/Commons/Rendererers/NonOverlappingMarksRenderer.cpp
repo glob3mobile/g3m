@@ -342,7 +342,7 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
   if (_springGLState == NULL) {
     _springGLState = new GLState();
 
-    _springGLState->addGLFeature(new FlatColorGLFeature(Color::black()), false);
+    _springGLState->addGLFeature(new FlatColorGLFeature(Color::BLACK), false);
 
     _springVertices = rc->getFactory()->createFloatBuffer(2 * 2);
     _springVertices->rawPut(0,  sp._x);

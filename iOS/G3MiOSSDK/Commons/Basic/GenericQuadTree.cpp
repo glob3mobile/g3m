@@ -362,7 +362,7 @@ void GenericQuadTree_Node::symbolize(GEOVectorLayer* geoVectorLayer) const {
     float dashLengths[] = {};
     int dashCount = 0;
 
-    Color c = Color::red().wheelStep(12, _depth);
+    Color c = Color::RED.wheelStep(12, _depth);
 
     GEO2DLineRasterStyle ls(c, //const Color&     color,
                             (float)1.0, //const float      width,

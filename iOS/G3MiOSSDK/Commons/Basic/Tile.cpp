@@ -33,6 +33,9 @@
 #include "Vector2D.hpp"
 #include "DEMGrid.hpp"
 
+//#include "BoundingVolume.hpp"
+//#include "Color.hpp"
+
 
 const std::string Tile::createTileID(int level,
                                      int row,
@@ -291,6 +294,10 @@ void Tile::rawRender(const G3MRenderContext*    rc,
   if (tessellatorMesh == NULL) {
     return;
   }
+
+//  tessellatorMesh->getBoundingVolume()->render(rc,
+//                                               glState,
+//                                               Color::white());
 
   if (prc->_texturizer == NULL) {
     tessellatorMesh->render(rc, glState);

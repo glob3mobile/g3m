@@ -38,7 +38,7 @@ ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
     _canvasHeight = _height;
   }
   else {
-    _canvas->setFillColor(Color::transparent());
+    _canvas->setFillColor(Color::TRANSPARENT);
     _canvas->fillRectangle(0, 0, _width, _height);
   }
 

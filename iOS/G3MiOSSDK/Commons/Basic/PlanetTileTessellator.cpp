@@ -304,7 +304,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
 
   }
 
-  const Color levelColor = Color::blue().wheelStep(5, tile->_level % 5);
+  const Color levelColor = Color::BLUE.wheelStep(5, tile->_level % 5);
   const float gridLineWidth = tile->isElevationDataSolved() || (tile->getElevationData() == NULL) ? 1.0f : 3.0f;
 
   IndexedMesh* border = new IndexedMesh(GLPrimitive::lineStrip(),

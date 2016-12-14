@@ -314,8 +314,8 @@ void PlanetRendererBuilder::setDefaultTileBackgroundImage(IImageBuilder* default
 
 IImageBuilder* PlanetRendererBuilder::getDefaultTileBackgroundImageBuilder() {
   if (_defaultTileBackgroundImage == NULL) {
-    // _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::black(), Color::white(), 4);
-    _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::white(), Color::transparent(), 4);
+    // _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::BLACK, Color::WHITE, 4);
+    _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::WHITE, Color::TRANSPARENT, 4);
   }
   return _defaultTileBackgroundImage;
 }

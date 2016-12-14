@@ -720,7 +720,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                                                 float pointSize) {
   const size_t firstPointsVerticesBufferSize = _firstPointsVerticesBuffer->size();
 
-  const Color baseColor = Color::magenta();
+  const Color baseColor = Color::MAGENTA;
   const int wheelSize = 2147483647;
   const IMathUtils* mu = IMathUtils::instance();
 

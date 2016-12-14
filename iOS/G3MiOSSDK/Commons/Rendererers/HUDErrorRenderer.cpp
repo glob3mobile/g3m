@@ -42,7 +42,7 @@ public:
 void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                            int width,
                                            int height) {
-  canvas->setFillColor(Color::black());
+  canvas->setFillColor(Color::BLACK);
   canvas->fillRectangle(0, 0,
                         width, height);
   ICanvasUtils::drawStringsOn(_errors,
@@ -52,11 +52,11 @@ void HUDErrorRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               Center,
                               Middle,
                               Center,
-                              Color::white(),
+                              Color::WHITE,
                               40,
                               5,
                               Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
-                              Color::transparent(),
+                              Color::TRANSPARENT,
                               16);
 }
 

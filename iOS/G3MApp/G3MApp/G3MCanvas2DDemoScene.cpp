@@ -76,7 +76,7 @@ public:
     canvas->setFillColor(Color::fromRGBA(1, 1, 0, 0.5));
     canvas->fillRectangle(0, 0, width, height);
     canvas->setLineWidth(4);
-    canvas->setLineColor(Color::black());
+    canvas->setLineColor(Color::BLACK);
     canvas->strokeRectangle(0, 0, width, height);
 
     const int steps = 8;
@@ -91,7 +91,7 @@ public:
     }
 
     canvas->setFont(GFont::monospaced());
-    canvas->setFillColor(Color::black());
+    canvas->setFillColor(Color::BLACK);
 //    canvas->fillText("0,0", 0, 0);
 //    canvas->fillText("w,h", width, height);
 

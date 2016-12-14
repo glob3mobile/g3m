@@ -27,11 +27,11 @@ void DefaultHUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                               Left,
                               Bottom,
                               Left,
-                              Color::white(),
+                              Color::WHITE,
                               16,
                               10,
-                              Color::transparent(),
-                              Color::black(),
+                              Color::TRANSPARENT,
+                              Color::BLACK,
                               5);
 }
 

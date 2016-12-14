@@ -42,8 +42,8 @@ public:
                             const Color& color,
                             const int maxFontSize        = 18,
                             const int minFontSize        = 2,
-                            const Color& backgroundColor = Color::transparent(),
-                            const Color& shadowColor     = Color::black(),
+                            const Color& backgroundColor = Color::TRANSPARENT,
+                            const Color& shadowColor     = Color::BLACK,
                             const int padding            = 16,
                             const int cornerRadius       = 8);
 

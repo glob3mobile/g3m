@@ -25,7 +25,7 @@ private:
 public:
 
   ChessboardLayer(const std::vector<const LayerTilesRenderParameters*> parametersVector,
-                  const Color&                                         backgroundColor = Color::white(),
+                  const Color&                                         backgroundColor = Color::WHITE,
                   const Color&                                         boxColor        = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
                   const int                                            splits          = 8,
                   const Sector&                                        dataSector      = Sector::fullSphere(),
@@ -47,7 +47,7 @@ public:
                   const int                 mercatorMaxLevel   = 18,
                   const int                 wgs84firstLevel    = 0,
                   const int                 wgs84maxLevel      = 18,
-                  const Color&              backgroundColor    = Color::white(),
+                  const Color&              backgroundColor    = Color::WHITE,
                   const Color&              boxColor           = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
                   const int                 splits             = 8,
                   const Sector&             dataSector         = Sector::fullSphere(),

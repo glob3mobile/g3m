@@ -84,7 +84,7 @@ _showTileBounds(showTileBounds)
 
 DebugTileImageProvider::DebugTileImageProvider() :
 _font(GFont::monospaced(15)),
-_color(Color::yellow()),
+_color(Color::YELLOW),
 _showIDLabel(true),
 _showSectorLabels(true),
 _showTileBounds(true)
@@ -149,7 +149,7 @@ void DebugTileImageProvider::create(const Tile* tile,
   }
   
   if (_showIDLabel || _showSectorLabels) {
-    canvas->setShadow(Color::black(), 2, 1, -1);
+    canvas->setShadow(Color::BLACK, 2, 1, -1);
     ColumnCanvasElement col;
     if (_showIDLabel) {
       col.add( new TextCanvasElement(getIDLabel(tile), _font, _color) );

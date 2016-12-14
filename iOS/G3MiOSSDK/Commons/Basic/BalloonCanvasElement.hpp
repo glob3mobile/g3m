@@ -24,7 +24,7 @@ private:
 
 public:
   BalloonCanvasElement(CanvasElement* child,
-                       const Color& color = Color::white(),
+                       const Color& color = Color::WHITE,
                        float margin = 5,
                        float radius = 10,
                        float arrowLength = 5,

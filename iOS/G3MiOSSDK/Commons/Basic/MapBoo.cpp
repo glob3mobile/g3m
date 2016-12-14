@@ -654,12 +654,12 @@ IImageBuilder* MapBoo::MBCircleShape::createImageBuilder() const {
 LabelImageBuilder* MapBoo::MBVectorSymbology::createLabelImageBuilder(const std::string& label) const {
   return new LabelImageBuilder(label,
                                GFont::sansSerif(18, true),
-                               2.0f,            // margin
-                               Color::white(),  // color
-                               Color::black(),  // shadowColor
-                               2.0f,            // shadowBlur
-                               0.0f,            // shadowOffsetX
-                               0.0f             // shadowOffsetY
+                               2.0f,          // margin
+                               Color::WHITE,  // color
+                               Color::BLACK,  // shadowColor
+                               2.0f,          // shadowBlur
+                               0.0f,          // shadowOffsetX
+                               0.0f           // shadowOffsetY
                                );
 }
 
@@ -712,17 +712,17 @@ Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer
   // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
   float labelFontSize = 18.0f;
 
-  Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::white(), 32),
+  Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::WHITE, 32),
                                                     new LabelImageBuilder(label,
                                                                           GFont::sansSerif(labelFontSize, true),
-                                                                          2.0f,                 // margin
-                                                                          Color::black(),       // color
-                                                                          Color::transparent(), // shadowColor
-                                                                          5.0f,                 // shadowBlur
-                                                                          0.0f,                 // shadowOffsetX
-                                                                          0.0f,                 // shadowOffsetY
-                                                                          Color::white(),       // backgroundColor
-                                                                          4.0f                  // cornerRadius
+                                                                          2.0f,               // margin
+                                                                          Color::BLACK,       // color
+                                                                          Color::TRANSPARENT, // shadowColor
+                                                                          5.0f,               // shadowBlur
+                                                                          0.0f,               // shadowOffsetX
+                                                                          0.0f,               // shadowOffsetY
+                                                                          Color::WHITE,       // backgroundColor
+                                                                          4.0f                // cornerRadius
                                                                           )
                                                     ),
                         position,

@@ -25,7 +25,7 @@ AtmosphereRenderer::AtmosphereRenderer() :
 //                         (249.0f / 2.0f + 128.0f) / 256.0f,
 //                         1.0f)),
 _blueSky(Color::fromRGBA255(135, 206, 235, 255)),
-_darkSpace(Color::black()),
+_darkSpace(Color::BLACK),
 _minHeight(8000.0),
 _previousBackgroundColor(NULL),
 _overPresicionThreshold(true),

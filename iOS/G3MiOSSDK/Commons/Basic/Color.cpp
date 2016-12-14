@@ -11,6 +11,25 @@
 #include "IStringUtils.hpp"
 #include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
+#include "Angle.hpp"
+
+const Color Color::TRANSPARENT = Color::fromRGBA(0, 0, 0, 0);
+const Color Color::BLACK       = Color::fromRGBA(0, 0, 0, 1);
+const Color Color::GRAY        = Color::fromRGBA(0.5f, 0.5f, 0.5f, 1);
+const Color Color::DARK_GRAY   = Color::fromRGBA(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1);
+const Color Color::LIGHT_GRAY  = Color::fromRGBA(2.0f / 3.0f, 2.0f / 3.0f, 2.0f / 3.0f, 1);
+const Color Color::WHITE       = Color::fromRGBA(1, 1, 1, 1);
+const Color Color::YELLOW      = Color::fromRGBA(1, 1, 0, 1);
+const Color Color::CYAN        = Color::fromRGBA(0, 1, 1, 1);
+const Color Color::MAGENTA     = Color::fromRGBA(1, 0, 1, 1);
+const Color Color::RED         = Color::fromRGBA(1, 0, 0, 1);
+const Color Color::GREEN       = Color::fromRGBA(0, 1, 0, 1);
+const Color Color::BLUE        = Color::fromRGBA(0, 0, 1, 1);
+
+
+Angle Color::getHue() const {
+  return Angle::fromRadians( getHueInRadians() );
+}
 
 
 Color Color::interpolateColor(const Color& from,

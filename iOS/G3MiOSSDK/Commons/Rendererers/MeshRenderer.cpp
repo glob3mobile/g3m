@@ -386,9 +386,9 @@ private:
           IFloatBuffer* colors = NULL;
           const JSONArray* jsonColors = jsonObject->getAsArray("colors");
           if (jsonColors == NULL) {
-            const Color fromColor   = Color::red();
-            const Color middleColor = Color::green();
-            const Color toColor     = Color::blue();
+            const Color fromColor   = Color::RED;
+            const Color middleColor = Color::GREEN;
+            const Color toColor     = Color::BLUE;
             FloatBufferBuilderFromColor colorsBuilder;
 
             for (int i = 0; i < size*3; i += 3) {

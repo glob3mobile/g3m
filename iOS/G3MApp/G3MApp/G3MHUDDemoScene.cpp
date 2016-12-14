@@ -44,7 +44,7 @@ protected:
     canvas->setFillColor(Color::fromRGBA(0, 0, 0, 0.5));
     canvas->fillRectangle(0, 0, width, height);
 
-    canvas->setFillColor(Color::white());
+    canvas->setFillColor(Color::WHITE);
 
 
     const IStringUtils* su = context->getStringUtils();
@@ -69,7 +69,7 @@ protected:
       }
     }
 
-    canvas->setLineColor(Color::white());
+    canvas->setLineColor(Color::WHITE);
     canvas->setLineWidth(8);
     canvas->strokeRectangle(0, 0, width, height);
   }
@@ -204,12 +204,12 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
                                                           GFont::monospaced(38), // font
                                                           6,                     // margin
-                                                          Color::yellow(),       // color
-                                                          Color::black(),        // shadowColor
+                                                          Color::YELLOW,         // color
+                                                          Color::BLACK,          // shadowColor
                                                           3,                     // shadowBlur
                                                           1,                     // shadowOffsetX
                                                           -1,                    // shadowOffsetY
-                                                          Color::red(),          // backgroundColor
+                                                          Color::RED,            // backgroundColor
                                                           4,                     // cornerRadius
                                                           true                   // mutable
                                                           );

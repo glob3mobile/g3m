@@ -26,8 +26,8 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
   if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
-                                                      Color::yellow(),
-                                                      Color::white()),
+                                                      Color::YELLOW,
+                                                      Color::WHITE),
                           false);
   }
   /* //Add this to obtain a rotating "sun"
@@ -110,7 +110,7 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
                                         vertices->create(),
                                         (float)3.0,
                                         (float)1.0,
-                                        new Color(Color::red()));
+                                        new Color(Color::RED));
       _meshRenderer->addMesh(mesh);
     }
   }

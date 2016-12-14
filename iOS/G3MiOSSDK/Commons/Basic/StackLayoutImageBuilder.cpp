@@ -17,9 +17,9 @@ StackLayoutImageBuilder::StackLayoutImageBuilder(const std::vector<IImageBuilder
 LayoutImageBuilder(children,
                    0,
                    0,
-                   Color::transparent(),
+                   Color::TRANSPARENT,
                    0,
-                   Color::transparent(),
+                   Color::TRANSPARENT,
                    0,
                    0)
 {
@@ -32,9 +32,9 @@ LayoutImageBuilder(child0,
                    child1,
                    0,
                    0,
-                   Color::transparent(),
+                   Color::TRANSPARENT,
                    0,
-                   Color::transparent(),
+                   Color::TRANSPARENT,
                    0,
                    0)
 {

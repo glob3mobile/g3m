@@ -227,7 +227,7 @@ Mesh* AbstractMesh::createNormalsMesh() const {
                                             _vertices,
                                             (float)1.0,
                                             (float)2.0,
-                                            new Color(Color::red()),
+                                            new Color(Color::RED),
                                             NULL,
                                             (float)1.0,
                                             false,
@@ -257,7 +257,7 @@ Mesh* AbstractMesh::createNormalsMesh() const {
                                            fbb->create(),
                                            (float)2.0,
                                            (float)1.0,
-                                           new Color(Color::blue()));
+                                           new Color(Color::BLUE));
 
   delete fbb;
 
