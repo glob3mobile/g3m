@@ -11,7 +11,7 @@ public class FixedFocusSceneLighting extends SceneLighting
     if (f == null)
     {
       glState.clearGLFeatureGroup(GLFeatureGroupName.LIGHTING_GROUP);
-      glState.addGLFeature(new DirectionLightGLFeature(lightDir, Color.yellow(), Color.white()), false);
+      glState.addGLFeature(new DirectionLightGLFeature(lightDir, Color.YELLOW, Color.WHITE), false);
     }
     /* //Add this to obtain a rotating "sun"
      else {

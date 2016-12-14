@@ -106,9 +106,9 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
           final JSONArray jsonColors = jsonObject.getAsArray("colors");
           if (jsonColors == null)
           {
-            final Color fromColor = Color.red();
-            final Color middleColor = Color.green();
-            final Color toColor = Color.blue();
+            final Color fromColor = Color.RED;
+            final Color middleColor = Color.GREEN;
+            final Color toColor = Color.BLUE;
             FloatBufferBuilderFromColor colorsBuilder = new FloatBufferBuilderFromColor();
 
             for (int i = 0; i < size *3; i += 3)

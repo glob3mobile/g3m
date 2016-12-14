@@ -16,6 +16,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class Angle;
+
+
 public class Color
 {
 
@@ -197,66 +200,80 @@ public class Color
     return middle.mixedWith(to, (d - 0.5f) * 2);
   }
 
+
+
+  public static final Color TRANSPARENT = Color.fromRGBA(0, 0, 0, 0);
+  public static final Color BLACK = Color.fromRGBA(0, 0, 0, 1);
+  public static final Color GRAY = Color.fromRGBA(0.5f, 0.5f, 0.5f, 1);
+  public static final Color DARK_GRAY = Color.fromRGBA(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1);
+  public static final Color LIGHT_GRAY = Color.fromRGBA(2.0f / 3.0f, 2.0f / 3.0f, 2.0f / 3.0f, 1);
+  public static final Color WHITE = Color.fromRGBA(1, 1, 1, 1);
+  public static final Color YELLOW = Color.fromRGBA(1, 1, 0, 1);
+  public static final Color CYAN = Color.fromRGBA(0, 1, 1, 1);
+  public static final Color MAGENTA = Color.fromRGBA(1, 0, 1, 1);
+  public static final Color RED = Color.fromRGBA(1, 0, 0, 1);
+  public static final Color GREEN = Color.fromRGBA(0, 1, 0, 1);
+  public static final Color BLUE = Color.fromRGBA(0, 0, 1, 1);
+
+
   public static Color transparent()
   {
-    return Color.fromRGBA(0, 0, 0, 0);
+    return TRANSPARENT;
   }
 
   public static Color black()
   {
-    return Color.fromRGBA(0, 0, 0, 1);
+    return BLACK;
   }
 
   public static Color gray()
   {
-    return Color.fromRGBA(0.5f, 0.5f, 0.5f, 1);
+    return GRAY;
   }
 
   public static Color darkGray()
   {
-    final float oneThird = 1.0f / 3.0f;
-    return Color.fromRGBA(oneThird, oneThird, oneThird, 1);
+    return DARK_GRAY;
   }
 
   public static Color lightGray()
   {
-    final float twoThirds = 2.0f / 3.0f;
-    return Color.fromRGBA(twoThirds, twoThirds, twoThirds, 1);
+    return LIGHT_GRAY;
   }
 
   public static Color white()
   {
-    return Color.fromRGBA(1, 1, 1, 1);
+    return WHITE;
   }
 
   public static Color yellow()
   {
-    return Color.fromRGBA(1, 1, 0, 1);
+    return YELLOW;
   }
 
   public static Color cyan()
   {
-    return Color.fromRGBA(0, 1, 1, 1);
+    return CYAN;
   }
 
   public static Color magenta()
   {
-    return Color.fromRGBA(1, 0, 1, 1);
+    return MAGENTA;
   }
 
   public static Color red()
   {
-    return Color.fromRGBA(1, 0, 0, 1);
+    return RED;
   }
 
   public static Color green()
   {
-    return Color.fromRGBA(0, 1, 0, 1);
+    return GREEN;
   }
 
   public static Color blue()
   {
-    return Color.fromRGBA(0, 0, 1, 1);
+    return BLUE;
   }
 
   public final Color mixedWith(Color that, float factor)

@@ -131,7 +131,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   protected final Mesh createNormalsMesh()
   {
   
-    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, (float)1.0, (float)2.0, new Color(Color.red()), null, (float)1.0, false, null);
+    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, (float)1.0, (float)2.0, new Color(Color.RED), null, (float)1.0, false, null);
   
     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
@@ -162,7 +162,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   
   
   
-    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, normalsVer, (float)2.0, (float)1.0, new Color(Color.blue()));
+    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, normalsVer, (float)2.0, (float)1.0, new Color(Color.BLUE));
   
     CompositeMesh compositeMesh = new CompositeMesh();
     compositeMesh.addMesh(verticesMesh);

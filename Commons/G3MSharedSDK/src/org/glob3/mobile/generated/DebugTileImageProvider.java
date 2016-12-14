@@ -121,7 +121,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   public DebugTileImageProvider()
   {
      _font = GFont.monospaced(15);
-     _color = new Color(Color.yellow());
+     _color = new Color(Color.YELLOW);
      _showIDLabel = true;
      _showSectorLabels = true;
      _showTileBounds = true;
@@ -164,7 +164,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   
     if (_showIDLabel || _showSectorLabels)
     {
-      canvas.setShadow(Color.black(), 2, 1, -1);
+      canvas.setShadow(Color.BLACK, 2, 1, -1);
       ColumnCanvasElement col = new ColumnCanvasElement();
       if (_showIDLabel)
       {

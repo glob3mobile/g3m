@@ -391,7 +391,7 @@ public class GenericQuadTree_Node
       float[] dashLengths = {};
       int dashCount = 0;
   
-      Color c = Color.red().wheelStep(12, _depth);
+      Color c = Color.RED.wheelStep(12, _depth);
   
       GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
   

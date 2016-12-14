@@ -1043,7 +1043,7 @@ public abstract class IG3MBuilder
   {
     if (_sceneLighting == null)
     {
-      _sceneLighting = new CameraFocusSceneLighting(Color.fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0), Color.white());
+      _sceneLighting = new CameraFocusSceneLighting(Color.fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0), Color.WHITE);
     }
     return _sceneLighting;
   }

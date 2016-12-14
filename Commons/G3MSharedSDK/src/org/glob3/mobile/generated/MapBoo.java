@@ -310,7 +310,7 @@ public class MapBoo
     }
     private LabelImageBuilder createLabelImageBuilder(String label)
     {
-      return new LabelImageBuilder(label, GFont.sansSerif(18, true), 2.0f, Color.white(), Color.black(), 2.0f, 0.0f, 0.0f); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+      return new LabelImageBuilder(label, GFont.sansSerif(18, true), 2.0f, Color.WHITE, Color.BLACK, 2.0f, 0.0f, 0.0f); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
     }
 
     public void dispose()
@@ -384,7 +384,7 @@ public class MapBoo
       // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
       float labelFontSize = 18.0f;
     
-      Mark mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color.white(), 32), new LabelImageBuilder(label, GFont.sansSerif(labelFontSize, true), 2.0f, Color.black(), Color.transparent(), 5.0f, 0.0f, 0.0f, Color.white(), 4.0f)), position, AltitudeMode.ABSOLUTE, 0); // minDistanceToCamera -  cornerRadius -  backgroundColor -  shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+      Mark mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color.WHITE, 32), new LabelImageBuilder(label, GFont.sansSerif(labelFontSize, true), 2.0f, Color.BLACK, Color.TRANSPARENT, 5.0f, 0.0f, 0.0f, Color.WHITE, 4.0f)), position, AltitudeMode.ABSOLUTE, 0); // minDistanceToCamera -  cornerRadius -  backgroundColor -  shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
     
       return mark;
     }

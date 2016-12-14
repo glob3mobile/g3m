@@ -369,7 +369,7 @@ public abstract class MapBooOLDBuilder
   private Color getCurrentBackgroundColor()
   {
     final MapBooOLD_Scene scene = getApplicationCurrentScene();
-    return (scene == null) ? Color.black() : scene.getBackgroundColor();
+    return (scene == null) ? Color.BLACK : scene.getBackgroundColor();
   }
 
 //  const std::string parseSceneID(const JSONObject* jsonObject) const;
@@ -396,14 +396,14 @@ public abstract class MapBooOLDBuilder
   {
     if (jsonColor == null)
     {
-      return Color.black();
+      return Color.BLACK;
     }
   
     final Color color = Color.parse(jsonColor.value());
     if (color == null)
     {
       ILogger.instance().logError("Invalid format in attribute 'color' (%s)", jsonColor.value());
-      return Color.black();
+      return Color.BLACK;
     }
   
     Color result = new Color(color);
@@ -1116,7 +1116,7 @@ public abstract class MapBooOLDBuilder
     InfoDisplay infoDisplay = new MapBooOLD_HUDRendererInfoDisplay(hudRenderer);
     infoDisplay.showDisplay();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay, ViewMode.MONO); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.BLACK, false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay, ViewMode.MONO); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -1147,7 +1147,7 @@ public abstract class MapBooOLDBuilder
 
   protected final SceneLighting createSceneLighting()
   {
-    return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
+    return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.YELLOW);
   }
 
   protected final URL createApplicationPollURL()

@@ -19,7 +19,7 @@ protected:
   Vector2F* calculateExtent(ICanvas* canvas);
 
 public:
-  ColumnCanvasElement(const Color& color = Color::TRANSPARENT,
+  ColumnCanvasElement(const Color& color = Color::transparent(),
                       float margin = 0,
                       float padding = 0,
                       float cornerRadius = 0,

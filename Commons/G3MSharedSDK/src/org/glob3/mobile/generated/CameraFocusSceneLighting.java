@@ -74,7 +74,7 @@ public class CameraFocusSceneLighting extends SceneLighting
         vertices.add(camera.getCartesianPosition());
         vertices.add(camera.getCartesianPosition().add(lightDir.times(1000).asVector3D()));
   
-        DirectMesh mesh = new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), (float)3.0, (float)1.0, new Color(Color.red()));
+        DirectMesh mesh = new DirectMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), (float)3.0, (float)1.0, new Color(Color.RED));
         _meshRenderer.addMesh(mesh);
       }
     }

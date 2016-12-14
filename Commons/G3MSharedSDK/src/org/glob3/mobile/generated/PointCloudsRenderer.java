@@ -562,7 +562,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       final int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer.size();
     
-      final Color baseColor = Color.magenta();
+      final Color baseColor = Color.MAGENTA;
       final int wheelSize = 2147483647;
       final IMathUtils mu = IMathUtils.instance();
     

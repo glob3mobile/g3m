@@ -69,6 +69,10 @@ public class Tile
       return;
     }
   
+  //  tessellatorMesh->getBoundingVolume()->render(rc,
+  //                                               glState,
+  //                                               Color::white());
+  
     if (prc._texturizer == null)
     {
       tessellatorMesh.render(rc, glState);
@@ -186,6 +190,11 @@ public class Tile
 
   private final PlanetRenderer _planetRenderer;
 
+
+  ///#include "BoundingVolume.hpp"
+  ///#include "Color.hpp"
+  
+  
   private static String createTileID(int level, int row, int column)
   {
     return level + "/" + row + "/" + column;
