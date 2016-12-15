@@ -14,7 +14,7 @@
 class StringUtils_iOS : public IStringUtils {
 public:
   std::string createString(unsigned char data[],
-                           int            length) const;
+                           size_t        length) const;
 
   std::vector<std::string> splitLines(const std::string& string) const;
 
@@ -27,17 +27,17 @@ public:
 
   int indexOf(const std::string& string,
               const std::string& search,
-              int fromIndex) const;
+              size_t fromIndex) const;
 
   int indexOf(const std::string& string,
               const std::string& search,
-              int fromIndex,
-              int endIndex) const;
+              size_t fromIndex,
+              size_t endIndex) const;
 
 
   std::string substring(const std::string& string,
-                        int beginIndex,
-                        int endIndex) const;
+                        size_t beginIndex,
+                        size_t endIndex) const;
 
   std::string rtrim(const std::string& string) const;
 
@@ -52,11 +52,11 @@ public:
   long long parseHexInt(const std::string& str) const;
 
   int indexOfFirstNonBlank(const std::string& string,
-                           int fromIndex) const;
+                           size_t fromIndex) const;
 
   int indexOfFirstNonChar(const std::string& string,
                           const std::string& chars,
-                          int fromIndex) const;
+                          size_t fromIndex) const;
 
   std::string toString(int value) const;
 

@@ -13,7 +13,7 @@
 #import "NSString_CppAdditions.h"
 
 std::string StringUtils_iOS::createString(unsigned char* data,
-                                          int            length) const {
+                                          size_t         length) const {
   unsigned char* cStr = new unsigned char[length + 1];
   memcpy(cStr, data, length * sizeof(unsigned char));
   cStr[length] = 0;
@@ -43,7 +43,7 @@ bool StringUtils_iOS::beginsWith(const std::string& string,
 
 int StringUtils_iOS::indexOf(const std::string& string,
                              const std::string& search) const {
-  const int pos = string.find(search);
+  const size_t pos = string.find(search);
   if (pos == std::string::npos) {
     return -1;
   }
@@ -52,8 +52,8 @@ int StringUtils_iOS::indexOf(const std::string& string,
 
 int StringUtils_iOS::indexOf(const std::string& string,
                              const std::string& search,
-                             int fromIndex) const {
-  const int pos = string.find(search, fromIndex);
+                             size_t fromIndex) const {
+  const size_t pos = string.find(search, fromIndex);
   if (pos == std::string::npos) {
     return -1;
   }
@@ -62,9 +62,9 @@ int StringUtils_iOS::indexOf(const std::string& string,
 
 int StringUtils_iOS::indexOf(const std::string& string,
                              const std::string& search,
-                             int fromIndex,
-                             int endIndex) const {
-  const int pos = string.find(search, fromIndex);
+                             size_t fromIndex,
+                             size_t endIndex) const {
+  const size_t pos = string.find(search, fromIndex);
   if ((pos == std::string::npos) ||
       (pos > endIndex)) {
     return -1;
@@ -73,8 +73,8 @@ int StringUtils_iOS::indexOf(const std::string& string,
 }
 
 std::string StringUtils_iOS::substring(const std::string& string,
-                                       int beginIndex,
-                                       int endIndex) const {
+                                       size_t beginIndex,
+                                       size_t endIndex) const {
   return string.substr(beginIndex, endIndex - beginIndex);
 }
 
@@ -128,9 +128,9 @@ long long StringUtils_iOS::parseHexInt(const std::string& str) const {
 }
 
 int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
-                                          int fromIndex) const {
-  const int stringLen = string.length();
-  for (int i = fromIndex ; i < stringLen; i++) {
+                                          size_t fromIndex) const {
+  const size_t stringLen = string.length();
+  for (size_t i = fromIndex ; i < stringLen; i++) {
     if (!std::isspace( string[i] )) {
       return i;
     }
@@ -140,9 +140,9 @@ int StringUtils_iOS::indexOfFirstNonBlank(const std::string& string,
 
 int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
                                          const std::string& chars,
-                                         int fromIndex) const {
-  const int stringLen = string.length();
-  for (int i = fromIndex ; i < stringLen; i++) {
+                                         size_t fromIndex) const {
+  const size_t stringLen = string.length();
+  for (size_t i = fromIndex ; i < stringLen; i++) {
     if (chars.find(string[i]) != std::string::npos) {
       return i;
     }

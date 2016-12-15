@@ -39,7 +39,7 @@ public:
   }
 
   virtual std::string createString(unsigned char data[],
-                                   int           length) const = 0;
+                                   size_t        length) const = 0;
 
   virtual std::vector<std::string> splitLines(const std::string& string) const = 0;
 
@@ -57,22 +57,22 @@ public:
 
   virtual int indexOf(const std::string& string,
                       const std::string& search,
-                      int fromIndex) const = 0;
+                      size_t fromIndex) const = 0;
 
   virtual int indexOf(const std::string& string,
                       const std::string& search,
-                      int fromIndex,
-                      int endIndex) const = 0;
+                      size_t fromIndex,
+                      size_t endIndex) const = 0;
 
   virtual int indexOfFirstNonBlank(const std::string& string,
-                                   int fromIndex) const = 0;
+                                   size_t fromIndex) const = 0;
 
   //  virtual int indexOfFirstBlank(const std::string& string,
   //                                int fromIndex) const = 0;
 
   virtual int indexOfFirstNonChar(const std::string& string,
                                   const std::string& chars,
-                                  int fromIndex) const = 0;
+                                  size_t fromIndex) const = 0;
 
   /*
    Returns a new string that is a substring of this string. The substring begins at the
@@ -80,18 +80,18 @@ public:
    of the substring is endIndex-beginIndex.
    */
   virtual std::string substring(const std::string& string,
-                                int beginIndex,
-                                int endIndex) const = 0;
+                                size_t beginIndex,
+                                size_t endIndex) const = 0;
 
   virtual std::string substring(const std::string& string,
-                                int beginIndex) const;
+                                size_t beginIndex) const;
 
   virtual std::string replaceAll(const std::string& originalString,
                                  const std::string& searchString,
                                  const std::string& replaceString) const = 0;
 
   virtual std::string left(const std::string& string,
-                           int endIndex) const {
+                           size_t endIndex) const {
     return substring(string, 0, endIndex);
   }
 

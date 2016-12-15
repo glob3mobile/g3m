@@ -50,8 +50,8 @@ void Canvas_iOS::_initialize(int width, int height) {
 
   CGFloat devicePixelRatio = _retina ? IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() : 1;
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   width  * devicePixelRatio,
-                                   height * devicePixelRatio,
+                                   (size_t) (width  * devicePixelRatio),
+                                   (size_t) (height * devicePixelRatio),
                                    8,          // bits per component
                                    0,          // bytes per row
                                    colorSpace,
