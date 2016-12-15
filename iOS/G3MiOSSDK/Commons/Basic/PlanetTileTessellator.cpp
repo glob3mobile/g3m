@@ -383,17 +383,14 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
 
         elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;
 
-        //MIN
         if (elevation < minElevation) {
           minElevation = elevation;
         }
 
-        //MAX
         if (elevation > maxElevation) {
           maxElevation = elevation;
         }
 
-        //AVERAGE
         sumElevation += elevation;
       }
 
