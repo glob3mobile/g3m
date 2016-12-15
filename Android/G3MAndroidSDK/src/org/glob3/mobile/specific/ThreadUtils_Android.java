@@ -15,8 +15,8 @@ import org.glob3.mobile.generated.IThreadUtils;
 
 
 public final class ThreadUtils_Android
-         extends
-            IThreadUtils {
+   extends
+      IThreadUtils {
 
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
@@ -96,7 +96,7 @@ public final class ThreadUtils_Android
    }
 
 
-   private final void drainQueues() {
+   private void drainQueues() {
       for (final Runnable runnable : _backgroundQueue) {
          _backgroundExecutor.execute(runnable);
       }
@@ -119,5 +119,6 @@ public final class ThreadUtils_Android
    public void onDestroy(final G3MContext context) {
       onPause(context);
    }
+
 
 }

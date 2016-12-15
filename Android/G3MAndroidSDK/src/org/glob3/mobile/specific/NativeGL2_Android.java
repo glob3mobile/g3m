@@ -47,7 +47,7 @@ public final class NativeGL2_Android
    }
 
 
-   private final void checkOpenGLThread() {
+   private void checkOpenGLThread() {
       if (_openGLThread != null) {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
