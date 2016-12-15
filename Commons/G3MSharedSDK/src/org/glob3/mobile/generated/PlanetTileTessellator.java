@@ -99,19 +99,16 @@ public class PlanetTileTessellator extends TileTessellator
   
           elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
   
-          //MIN
           if (elevation < minElevation)
           {
             minElevation = elevation;
           }
   
-          //MAX
           if (elevation > maxElevation)
           {
             maxElevation = elevation;
           }
   
-          //AVERAGE
           sumElevation += elevation;
         }
   

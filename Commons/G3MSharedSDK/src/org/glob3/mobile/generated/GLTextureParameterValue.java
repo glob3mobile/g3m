@@ -49,7 +49,6 @@ public class GLTextureParameterValue
     _nearestMipmapLinear = ngl.TextureParameterValue_NearestMipmapLinear();
     _linearMipmapNearest = ngl.TextureParameterValue_LinearMipmapNearest();
     _linearMipmapLinear = ngl.TextureParameterValue_LinearMipmapLinear();
-
     _clampToEdge = ngl.TextureParameterValue_ClampToEdge();
   }
 }
