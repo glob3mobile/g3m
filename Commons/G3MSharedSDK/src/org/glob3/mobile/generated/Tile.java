@@ -178,7 +178,7 @@ public class Tile
   }
 
   private ITexturizerData _texturizerData;
-  private PlanetTileTessellatorData _tessellatorData;
+  private PlanetTileTessellatorData _planetTileTessellatorData;
 
   private int _elevationDataLevel;
   private ElevationData _elevationData;
@@ -259,7 +259,7 @@ public class Tile
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
      _planetRenderer = planetRenderer;
-     _tessellatorData = null;
+     _planetTileTessellatorData = null;
      _id = createTileID(level, row, column);
      _data = null;
      _dataSize = 0;
@@ -303,8 +303,8 @@ public class Tile
       _demSubscription = null;
     }
   
-    if (_tessellatorData != null)
-       _tessellatorData.dispose();
+    if (_planetTileTessellatorData != null)
+       _planetTileTessellatorData.dispose();
   
     for (int i = 0; i < _dataSize; i++)
     {
@@ -471,18 +471,18 @@ public class Tile
     }
   }
 
-  public final PlanetTileTessellatorData getTessellatorData()
+  public final PlanetTileTessellatorData getPlanetTileTessellatorData()
   {
-    return _tessellatorData;
+    return _planetTileTessellatorData;
   }
 
-  public final void setTessellatorData(PlanetTileTessellatorData tessellatorData)
+  public final void setPlanetTileTessellatorData(PlanetTileTessellatorData planetTileTessellatorData)
   {
-    if (tessellatorData != _tessellatorData)
+    if (planetTileTessellatorData != _planetTileTessellatorData)
     {
-      if (_tessellatorData != null)
-         _tessellatorData.dispose();
-      _tessellatorData = tessellatorData;
+      if (_planetTileTessellatorData != null)
+         _planetTileTessellatorData.dispose();
+      _planetTileTessellatorData = planetTileTessellatorData;
     }
   }
 

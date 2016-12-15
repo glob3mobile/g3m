@@ -89,7 +89,7 @@ _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _planetRenderer(planetRenderer),
-_tessellatorData(NULL),
+_planetTileTessellatorData(NULL),
 _id( createTileID(level, row, column) ),
 _data(NULL),
 _dataSize(0)
@@ -124,7 +124,7 @@ Tile::~Tile() {
     _demSubscription = NULL;
   }
 
-  delete _tessellatorData;
+  delete _planetTileTessellatorData;
 
   for (size_t i = 0; i < _dataSize; i++) {
     TileData* data = _data[i];
@@ -711,10 +711,10 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
 
 }
 
-void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
-  if (tessellatorData != _tessellatorData) {
-    delete _tessellatorData;
-    _tessellatorData = tessellatorData;
+void Tile::setPlanetTileTessellatorData(PlanetTileTessellatorData* planetTileTessellatorData) {
+  if (planetTileTessellatorData != _planetTileTessellatorData) {
+    delete _planetTileTessellatorData;
+    _planetTileTessellatorData = planetTileTessellatorData;
   }
 }
 

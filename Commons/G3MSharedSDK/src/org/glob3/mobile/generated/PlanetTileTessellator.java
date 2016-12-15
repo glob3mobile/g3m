@@ -418,7 +418,7 @@ public class PlanetTileTessellator extends TileTessellator
     }
   
     //Storing textCoords in Tile
-    tile.setTessellatorData(new PlanetTileTessellatorData(textCoords));
+    tile.setPlanetTileTessellatorData(new PlanetTileTessellatorData(textCoords));
   
     IFloatBuffer verticesB = vertices.create();
     IShortBuffer indicesB = indices.create();
@@ -519,7 +519,7 @@ public class PlanetTileTessellator extends TileTessellator
 
   public final IFloatBuffer createTextCoords(Vector2S rawResolution, Tile tile)
   {
-    PlanetTileTessellatorData data = tile.getTessellatorData();
+    PlanetTileTessellatorData data = tile.getPlanetTileTessellatorData();
     if ((data == null) || (data._textCoords == null))
     {
       ILogger.instance().logError("Logic error on PlanetTileTessellator::createTextCoord");

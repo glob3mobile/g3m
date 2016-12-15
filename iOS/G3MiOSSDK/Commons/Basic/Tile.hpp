@@ -78,7 +78,7 @@ private:
   void deleteTexturizedMesh(TileTexturizer* texturizer);
 
   ITexturizerData* _texturizerData;
-  PlanetTileTessellatorData* _tessellatorData;
+  PlanetTileTessellatorData* _planetTileTessellatorData;
 
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
@@ -175,11 +175,11 @@ public:
 
   void setTexturizerData(ITexturizerData* texturizerData);
 
-  PlanetTileTessellatorData* getTessellatorData() const {
-    return _tessellatorData;
+  PlanetTileTessellatorData* getPlanetTileTessellatorData() const {
+    return _planetTileTessellatorData;
   }
 
-  void setTessellatorData(PlanetTileTessellatorData* tessellatorData);
+  void setPlanetTileTessellatorData(PlanetTileTessellatorData* tessellatorData);
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 

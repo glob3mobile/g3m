@@ -186,7 +186,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
   }
 
   //Storing textCoords in Tile
-  tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
+  tile->setPlanetTileTessellatorData(new PlanetTileTessellatorData(textCoords));
 
   IFloatBuffer* verticesB = vertices->create();
   IShortBuffer* indicesB  = indices.create();
@@ -244,7 +244,7 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2S& rawResolution,
                                                       const Tile* tile) const {
-  PlanetTileTessellatorData* data = tile->getTessellatorData();
+  PlanetTileTessellatorData* data = tile->getPlanetTileTessellatorData();
   if ((data == NULL) || (data->_textCoords == NULL)) {
     ILogger::instance()->logError("Logic error on PlanetTileTessellator::createTextCoord");
     return NULL;
