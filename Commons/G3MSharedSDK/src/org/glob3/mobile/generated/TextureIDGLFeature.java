@@ -8,9 +8,6 @@ public class TextureIDGLFeature extends PriorityGLFeature
     super.dispose();
   }
 
-
-  //////////////////////////////////////////
-  
   public TextureIDGLFeature(IGLTextureID texID)
   {
      super(GLFeatureGroupName.COLOR_GROUP, GLFeatureID.GLF_TEXTURE_ID, 4);

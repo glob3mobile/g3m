@@ -62,10 +62,10 @@ public:
                           bool autoDelete) const {
     [ _backgroundQueue addOperationWithBlock:
      ^{
-     task->run(_context);
-     if (autoDelete) {
-     delete task;
-     }
+        task->run(_context);
+        if (autoDelete) {
+          delete task;
+        }
      }
      ];
   }

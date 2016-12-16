@@ -29,11 +29,10 @@ public class GL
   private final INativeGL _nativeGL;
 
 
-  /////////////////////////////////////////////////
   //CURRENT GL STATUS
   private GLGlobalState _currentGLGlobalState;
   private GPUProgram _currentGPUProgram;
-  /////////////////////////////////////////////////
+
 
   private final java.util.LinkedList<IGLTextureID> _texturesIDBag = new java.util.LinkedList<IGLTextureID>();
   private int _texturesIDAllocationCounter;

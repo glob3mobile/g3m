@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated;
-/////////////////////
-
-
 public class GPUUniformValueMatrix4 extends GPUUniformValue
 {
   private Matrix44DProvider _provider;

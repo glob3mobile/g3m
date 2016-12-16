@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated;
-/////////////////////////////////////////////////////////
-
 public class CameraPositionGLFeature extends GLFeature
 {
   public void dispose()

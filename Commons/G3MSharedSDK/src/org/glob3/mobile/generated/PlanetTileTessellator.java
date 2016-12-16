@@ -135,11 +135,11 @@ public class PlanetTileTessellator extends TileTessellator
   private double createSurface(Sector tileSector, Sector meshSector, Vector2S meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData tileTessellatorMeshData)
   {
   
-    //VERTICES///////////////////////////////////////////////////////////////
+    //VERTICES
     final double minElevation = createSurfaceVertices(new Vector2S(meshResolution._x, meshResolution._y), meshSector, elevationData, verticalExaggeration, vertices, tileTessellatorMeshData);
   
   
-    //TEX COORDINATES////////////////////////////////////////////////////////////////
+    //TEX COORDINATES
   
     if (mercator)
     {
@@ -182,7 +182,7 @@ public class PlanetTileTessellator extends TileTessellator
       }
     }
   
-    //INDEX///////////////////////////////////////////////////////////////
+    //INDEX
     for (short j = 0; j < (meshResolution._y-1); j++)
     {
       final short jTimesResolution = (short)(j *meshResolution._x);
@@ -204,7 +204,7 @@ public class PlanetTileTessellator extends TileTessellator
   private void createEastSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
   {
   
-    //VERTICES///////////////////////////////////////////////////////////////
+    //VERTICES
     final short firstSkirtVertex = (short)(vertices.size() / 3);
   
     final short southEastCorner = (short)((meshResolution._x * meshResolution._y) - 1);
@@ -220,11 +220,11 @@ public class PlanetTileTessellator extends TileTessellator
       final Geodetic2D g = meshSector.getInnerPoint(x, y);
       vertices.add(g, skirtHeight);
   
-      //TEXTURE COORDS/////////////////////////////
+      //TEXTURE COORDS
       Vector2D uv = textCoords.getVector2D(surfaceIndex);
       textCoords.add(uv);
   
-      //INDEX///////////////////////////////////////////////////////////////
+      //INDEX
       indices.add(surfaceIndex);
       indices.add(skirtIndex);
   
@@ -240,7 +240,7 @@ public class PlanetTileTessellator extends TileTessellator
   private void createNorthSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
   {
   
-    //VERTICES///////////////////////////////////////////////////////////////
+    //VERTICES
     final short firstSkirtVertex = (short)(vertices.size() / 3);
     final short northEastCorner = (short)(meshResolution._x - 1);
   
@@ -256,11 +256,11 @@ public class PlanetTileTessellator extends TileTessellator
       final Geodetic2D g = meshSector.getInnerPoint(x, y);
       vertices.add(g, skirtHeight);
   
-      //TEXTURE COORDS/////////////////////////////
+      //TEXTURE COORDS
       Vector2D uv = textCoords.getVector2D(surfaceIndex);
       textCoords.add(uv);
   
-      //INDEX///////////////////////////////////////////////////////////////
+      //INDEX
       indices.add(surfaceIndex);
       indices.add(skirtIndex);
   
@@ -275,7 +275,7 @@ public class PlanetTileTessellator extends TileTessellator
   private void createWestSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
   {
   
-    //VERTICES///////////////////////////////////////////////////////////////
+    //VERTICES
     final short firstSkirtVertex = (short)(vertices.size() / 3);
   
     final short northWestCorner = (short)0;
@@ -292,11 +292,11 @@ public class PlanetTileTessellator extends TileTessellator
       final Geodetic2D g = meshSector.getInnerPoint(x, y);
       vertices.add(g, skirtHeight);
   
-      //TEXTURE COORDS/////////////////////////////
+      //TEXTURE COORDS
       Vector2D uv = textCoords.getVector2D(surfaceIndex);
       textCoords.add(uv);
   
-      //INDEX///////////////////////////////////////////////////////////////
+      //INDEX
       indices.add(surfaceIndex);
       indices.add(skirtIndex);
   
@@ -311,7 +311,7 @@ public class PlanetTileTessellator extends TileTessellator
   private void createSouthSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2S meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
   {
   
-    //VERTICES///////////////////////////////////////////////////////////////
+    //VERTICES
     final short firstSkirtVertex = (short)(vertices.size() / 3);
   
     final short southWestCorner = (short)(meshResolution._x * (meshResolution._y-1));
@@ -328,11 +328,11 @@ public class PlanetTileTessellator extends TileTessellator
       final Geodetic2D g = meshSector.getInnerPoint(x, y);
       vertices.add(g, skirtHeight);
   
-      //TEXTURE COORDS/////////////////////////////
+      //TEXTURE COORDS
       Vector2D uv = textCoords.getVector2D(surfaceIndex);
       textCoords.add((float)uv._x, (float)uv._y);
   
-      //INDEX///////////////////////////////////////////////////////////////
+      //INDEX
       indices.add(surfaceIndex);
       indices.add(skirtIndex++);
       surfaceIndex += 1;
@@ -460,7 +460,7 @@ public class PlanetTileTessellator extends TileTessellator
     TileTessellatorMeshData tileTessellatorMeshData = new TileTessellatorMeshData();
     createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, tileTessellatorMeshData);
   
-    //INDEX OF BORDER///////////////////////////////////////////////////////////////
+    //INDEX OF BORDER
     ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
     for (short j = 0; j < meshResolution._x; j++)
     {

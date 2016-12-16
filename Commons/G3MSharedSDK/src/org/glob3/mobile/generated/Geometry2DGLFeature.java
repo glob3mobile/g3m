@@ -1,8 +1,4 @@
 package org.glob3.mobile.generated;
-///////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 public class Geometry2DGLFeature extends GLFeature
 {
   //Position + cull + depth + polygonoffset + linewidth
@@ -18,8 +14,6 @@ public class Geometry2DGLFeature extends GLFeature
   private GPUUniformValueVec2FloatMutable _translation;
 
 
-
-  ///////////////////////////////
   public Geometry2DGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride, float lineWidth, boolean needsPointSize, float pointSize, Vector2F translation)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_GEOMETRY);
