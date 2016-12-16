@@ -387,8 +387,7 @@ public final class Downloader_Android_Handler {
 
       @Override
       public void dispose() {
-         // TODO Auto-generated method stub
-
+         super.dispose();
       }
    }
 

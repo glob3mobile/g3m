@@ -2,8 +2,8 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ShortBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.GPUAttribute;
@@ -724,83 +724,80 @@ public final class NativeGL2_Android
    public GPUUniform getActiveUniform(final GPUProgram program,
                                       final int i) {
       checkOpenGLThread();
+
       final int[] maxLength = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), GLES20.GL_ACTIVE_UNIFORM_MAX_LENGTH, maxLength, 0);
 
-      final int bufsize = maxLength[0] + 1;
+      final int bufferSize = maxLength[0] + 1;
 
-      final byte[] name = new byte[bufsize];
+      final byte[] nameBuffer = new byte[bufferSize];
       final int[] length = new int[1];
       final int[] size = new int[1];
       final int[] type = new int[1];
 
-      GLES20.glGetActiveUniform(program.getProgramID(), i, bufsize, length, 0, size, 0, type, 0, name, 0);
+      GLES20.glGetActiveUniform(program.getProgramID(), i, bufferSize, length, 0, size, 0, type, 0, nameBuffer, 0);
 
-      String nameStr = new String(name);
-      nameStr = nameStr.substring(0, length[0]);
-      final int id = GLES20.glGetUniformLocation(program.getProgramID(), nameStr);
+      final String name = new String(nameBuffer, 0, length[0], UTF_8);
 
-      //ILogger.instance().logInfo("Uniform Name: %s - %d", nameStr, id);
+      final int id = GLES20.glGetUniformLocation(program.getProgramID(), name);
+
+      // ILogger.instance().logInfo("Uniform Name: %s - %d", name, id);
+
       switch (type[0]) {
          case GLES20.GL_FLOAT_MAT4:
-            return new GPUUniformMatrix4Float(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformMatrix4Float(name, new GLUniformID_Android(id));
          case GLES20.GL_FLOAT_VEC4:
-            return new GPUUniformVec4Float(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformVec4Float(name, new GLUniformID_Android(id));
          case GLES20.GL_FLOAT:
-            return new GPUUniformFloat(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformFloat(name, new GLUniformID_Android(id));
          case GLES20.GL_FLOAT_VEC2:
-            return new GPUUniformVec2Float(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformVec2Float(name, new GLUniformID_Android(id));
          case GLES20.GL_FLOAT_VEC3:
-            return new GPUUniformVec3Float(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformVec3Float(name, new GLUniformID_Android(id));
          case GLES20.GL_BOOL:
-            return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformBool(name, new GLUniformID_Android(id));
          case GLES20.GL_SAMPLER_2D:
-            return new GPUUniformSampler2D(nameStr, new GLUniformID_Android(id));
+            return new GPUUniformSampler2D(name, new GLUniformID_Android(id));
          default:
             return null;
       }
    }
 
 
+   private static final Charset UTF_8 = Charset.forName("UTF-8");
+
+
    @Override
    public GPUAttribute getActiveAttribute(final GPUProgram program,
                                           final int i) {
       checkOpenGLThread();
+
       final int[] maxLength = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), GLES20.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, maxLength, 0);
 
-      final int bufsize = maxLength[0];
-
-      final byte[] name = new byte[maxLength[0]];
+      final int bufferSize = maxLength[0];
+      final byte[] nameBuffer = new byte[bufferSize];
       final int[] length = new int[1];
       final int[] size = new int[1];
       final int[] type = new int[1];
 
-      GLES20.glGetActiveAttrib(program.getProgramID(), i, bufsize, length, 0, size, 0, type, 0, name, 0);
+      GLES20.glGetActiveAttrib(program.getProgramID(), i, bufferSize, length, 0, size, 0, type, 0, nameBuffer, 0);
 
-      try {
-         String nameStr = new String(name, "UTF-8");
-         nameStr = nameStr.substring(0, length[0]);
-         final int id = GLES20.glGetAttribLocation(program.getProgramID(), nameStr);
+      final String name = new String(nameBuffer, 0, length[0], UTF_8);
 
-         //ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr, id);
+      final int id = GLES20.glGetAttribLocation(program.getProgramID(), name);
 
-         switch (type[0]) {
-            case GLES20.GL_FLOAT_VEC3:
-               return new GPUAttributeVec3Float(nameStr, id);
-            case GLES20.GL_FLOAT_VEC4:
-               return new GPUAttributeVec4Float(nameStr, id);
-            case GLES20.GL_FLOAT_VEC2:
-               return new GPUAttributeVec2Float(nameStr, id);
-            default:
-               return null;
-         }
+      // ILogger.instance().logInfo("Attribute Name: %s - %d", name, id);
 
-      }
-      catch (final UnsupportedEncodingException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-         return null;
+      switch (type[0]) {
+         case GLES20.GL_FLOAT_VEC3:
+            return new GPUAttributeVec3Float(name, id);
+         case GLES20.GL_FLOAT_VEC4:
+            return new GPUAttributeVec4Float(name, id);
+         case GLES20.GL_FLOAT_VEC2:
+            return new GPUAttributeVec2Float(name, id);
+         default:
+            return null;
       }
    }
 

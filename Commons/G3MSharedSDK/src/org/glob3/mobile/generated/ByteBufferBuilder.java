@@ -94,7 +94,7 @@ public class ByteBufferBuilder
   public final void addStringZeroTerminated(String str)
   {
     try {
-      byte[] bytesArray = str.getBytes("UTF-8");
+      final byte[] bytesArray = str.getBytes("UTF-8");
   
       final int size = bytesArray.length;
       for (int i = 0; i < size; i++) {
@@ -104,10 +104,7 @@ public class ByteBufferBuilder
       _values.add((byte) 0);
     }
     catch (final java.io.UnsupportedEncodingException e) {
-      if (ILogger.instance() != null) {
-        ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
-      }
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 

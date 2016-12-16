@@ -31,8 +31,7 @@ public class IImageDownloadListenerTileCache
 
    @Override
    public void onCancel(final URL pUrl) {
-      // TODO Auto-generated method stub
-
+      super.dispose();
    }
 
 
