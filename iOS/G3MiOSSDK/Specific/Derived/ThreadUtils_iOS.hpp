@@ -13,17 +13,17 @@
 #include "GTask.hpp"
 
 
-//#include <mach/mach_host.h>
-//
-//int countCores() {
-//  host_basic_info_data_t hostInfo;
-//  mach_msg_type_number_t infoCount;
-//
-//  infoCount = HOST_BASIC_INFO_COUNT;
-//  host_info( mach_host_self(), HOST_BASIC_INFO, (host_info_t)&hostInfo, &infoCount ) ;
-//
-//  return hostInfo.max_cpus ;
-//}
+#include <mach/mach_host.h>
+
+int countCores() {
+  host_basic_info_data_t hostInfo;
+  mach_msg_type_number_t infoCount;
+
+  infoCount = HOST_BASIC_INFO_COUNT;
+  host_info( mach_host_self(), HOST_BASIC_INFO, (host_info_t)&hostInfo, &infoCount ) ;
+
+  return hostInfo.max_cpus ;
+}
 
 class ThreadUtils_iOS : public IThreadUtils {
 private:
@@ -34,11 +34,12 @@ public:
   ThreadUtils_iOS() {
     _backgroundQueue = [[NSOperationQueue alloc] init];
 
-//    int maxThreads = countCores();
-////    if (maxThreads > 1) {
-////      maxThreads--;
-////    }
-    [_backgroundQueue setMaxConcurrentOperationCount: 1];
+    int maxThreads = countCores();
+    if (maxThreads > 1) {
+      maxThreads--;
+    }
+    [_backgroundQueue setMaxConcurrentOperationCount: maxThreads];
+//    [_backgroundQueue setMaxConcurrentOperationCount: 1];
     [_backgroundQueue setName: @"com.glob3.backgroundqueue"];
   }
 
@@ -61,11 +62,11 @@ public:
                           bool autoDelete) const {
     [ _backgroundQueue addOperationWithBlock:
      ^{
-        task->run(_context);
-        if (autoDelete) {
-          delete task;
-        }
-      }
+     task->run(_context);
+     if (autoDelete) {
+     delete task;
+     }
+     }
      ];
   }
 
@@ -77,7 +78,7 @@ public:
 
   void onDestroy(const G3MContext* context) {
   }
-  
+
 };
 
 #endif

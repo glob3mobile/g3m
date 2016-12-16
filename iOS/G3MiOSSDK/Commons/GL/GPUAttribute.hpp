@@ -198,7 +198,6 @@ public:
   }
 };
 
-///////////
 
 class GPUAttributeValueDisabled : public GPUAttributeValue {
 private:
@@ -356,9 +355,9 @@ private:
 public:
   GPUAttributeVec2Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 2) {}
 };
-////////
 
-///////////
+
+
 class GPUAttributeValueVec3Float: public GPUAttributeValueVecFloat {
 private:
   ~GPUAttributeValueVec3Float() {
@@ -383,9 +382,9 @@ private:
 public:
   GPUAttributeVec3Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 3) {}
 };
-////////
 
-///////////
+
+
 class GPUAttributeValueVec4Float: public GPUAttributeValueVecFloat {
 private:
   ~GPUAttributeValueVec4Float() {
@@ -410,6 +409,6 @@ private:
 public:
   GPUAttributeVec4Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 4) {}
 };
-////////
+
 
 #endif

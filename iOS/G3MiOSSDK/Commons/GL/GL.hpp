@@ -33,12 +33,11 @@ private:
   INativeGL* const _nativeGL;
 
 
-  /////////////////////////////////////////////////
   //CURRENT GL STATUS
   GLGlobalState* _currentGLGlobalState;
   GPUProgram*    _currentGPUProgram;
-  /////////////////////////////////////////////////
 
+  
   std::list<const IGLTextureID*> _texturesIDBag;
   long                           _texturesIDAllocationCounter;
 

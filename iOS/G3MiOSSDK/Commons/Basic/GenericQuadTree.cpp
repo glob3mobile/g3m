@@ -420,7 +420,6 @@ void GenericQuadTree_Node::getSectors(std::vector<Sector*>& sectors) const {
 
 }
 
-///////////////////////////////
 #pragma mark TREE
 
 GenericQuadTree::~GenericQuadTree() {
@@ -490,7 +489,6 @@ void GenericQuadTree::symbolize(GEOVectorLayer* geoVectorLayer) const {
   }
 }
 
-///////////////////////////////////////////////////////////////////////
 
 #pragma mark TESTER
 

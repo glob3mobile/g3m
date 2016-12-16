@@ -121,7 +121,7 @@ public:
                     int viewportHeight);
 };
 
-/////////////////////////////////////////////////////////
+
 
 class CameraPositionGLFeature: public GLFeature {
 private:
@@ -146,7 +146,7 @@ public:
   void update(const Camera* cam);
 };
 
-/////////////////////////////////////////////////////////
+
 
 
 class GeometryGLFeature: public GLFeature {
@@ -184,7 +184,7 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const ;
 
 };
-///////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -218,7 +218,7 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const ;
 
 };
-///////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 class GLCameraGroupFeature: public GLFeature {
@@ -329,7 +329,7 @@ public:
   {
   }
 };
-///////////////////////////////////////////////////////////////////////////////////////////
+
 
 class PriorityGLFeature: public GLFeature {
 protected:

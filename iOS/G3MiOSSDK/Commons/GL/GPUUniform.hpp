@@ -322,7 +322,7 @@ public:
 #endif
   }
 };
-////////////////////////////////////////////////////////////
+
 
 class GPUUniformValueVec4Float : public GPUUniformValue {
 private:
@@ -383,7 +383,6 @@ public:
   }
 };
 
-/////////////////////
 
 
 class GPUUniformValueMatrix4:public GPUUniformValue{

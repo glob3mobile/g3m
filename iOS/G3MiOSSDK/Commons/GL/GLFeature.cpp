@@ -155,7 +155,7 @@ GeometryGLFeature::~GeometryGLFeature() {
 #endif
 }
 
-///////////////////////////////
+
 Geometry2DGLFeature::Geometry2DGLFeature(IFloatBuffer* buffer,
                                          int arrayElementSize,
                                          int index,
@@ -191,7 +191,7 @@ Geometry2DGLFeature::~Geometry2DGLFeature() {
 #endif
 }
 
-/////////////////////////////////
+
 
 void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                          int arrayElementSize,
@@ -373,7 +373,7 @@ GLColorGroupFeature(GLF_FLATCOLOR, 2, blend, sFactor, dFactor)
 
 
 
-//////////////////////////////////////////
+
 
 TextureIDGLFeature::TextureIDGLFeature(const IGLTextureID* texID) :
 PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_ID, 4),
