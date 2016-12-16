@@ -28,7 +28,7 @@ _blueSky(Color::fromRGBA255(135, 206, 235, 255)),
 _darkSpace(Color::BLACK),
 _minHeight(8000.0),
 _previousBackgroundColor(NULL),
-_overPresicionThreshold(true),
+_overPrecisionThreshold(true),
 _glState(NULL),
 _directMesh(NULL),
 _vertices(NULL),
@@ -77,8 +77,8 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
 
   //Computing background color
   const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
-  _overPresicionThreshold = (camHeigth < _minHeight * 1.2);
-  if (_overPresicionThreshold) {
+  _overPrecisionThreshold = (camHeigth < _minHeight * 1.2);
+  if (_overPrecisionThreshold) {
     rc->getWidget()->setBackgroundColor(_blueSky);
   }
   else {
@@ -128,13 +128,13 @@ void AtmosphereRenderer::render(const G3MRenderContext* rc,
     _directMesh->render(rc, _glState);
   }
 
-  const bool nowIsOverPresicionThreshold = (camHeigth < _minHeight * 1.2);
+  const bool nowIsOverPrecisionThreshold = (camHeigth < _minHeight * 1.2);
 
-  if (_overPresicionThreshold != nowIsOverPresicionThreshold) {
+  if (_overPrecisionThreshold != nowIsOverPrecisionThreshold) {
     //Changing background color
-    _overPresicionThreshold = nowIsOverPresicionThreshold;
+    _overPrecisionThreshold = nowIsOverPrecisionThreshold;
 
-    if (_overPresicionThreshold) {
+    if (_overPrecisionThreshold) {
       rc->getWidget()->setBackgroundColor(_blueSky);
     }
     else {

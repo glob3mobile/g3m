@@ -424,7 +424,6 @@ private:
                                  _pointSize,
                                  NULL, // flatColor,
                                  colors,
-                                 1,
                                  true);
 
           delete verticesBuilder;
@@ -484,7 +483,6 @@ private:
                                 1, // pointSize
                                 _color, // flatColor
                                 NULL, // colors,
-                                1, //  colorsIntensity,
                                 true, // depthTest,
                                 normals
                                 );

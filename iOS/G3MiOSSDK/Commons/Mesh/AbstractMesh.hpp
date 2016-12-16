@@ -27,7 +27,6 @@ protected:
   const IFloatBuffer*     _vertices;
   const Color*            _flatColor;
   const IFloatBuffer*     _colors;
-  const float             _colorsIntensity;
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
@@ -48,7 +47,6 @@ protected:
                float pointSize,
                const Color* flatColor,
                const IFloatBuffer* colors,
-               const float colorsIntensity,
                bool depthTest,
                const IFloatBuffer* normals,
                bool polygonOffsetFill,

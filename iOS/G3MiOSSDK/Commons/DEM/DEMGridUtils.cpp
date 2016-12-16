@@ -96,7 +96,6 @@ Mesh* DEMGridUtils::createDebugMesh(const DEMGrid* grid,
                                 pointSize,
                                 NULL,                 // flatColor
                                 colors.create(),
-                                0,                    // colorsIntensity
                                 true                  // depthTest
                                 );
 

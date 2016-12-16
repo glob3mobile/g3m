@@ -47,7 +47,6 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
                             1,
                             color,
                             NULL,
-                            1,
                             true,
                             normals->create());
 

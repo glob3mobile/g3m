@@ -31,7 +31,6 @@ public:
              float pointSize,
              const Color* flatColor = NULL,
              const IFloatBuffer* colors = NULL,
-             const float colorsIntensity = 0.0f,
              bool depthTest = true,
              const IFloatBuffer* normals = NULL,
              bool polygonOffsetFill = false,

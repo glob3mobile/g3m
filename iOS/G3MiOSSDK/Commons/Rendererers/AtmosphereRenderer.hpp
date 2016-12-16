@@ -31,7 +31,7 @@ private:
   IFloatBuffer*            _vertices;
   CameraPositionGLFeature* _camPosGLF;
   Color*                   _previousBackgroundColor;
-  bool                     _overPresicionThreshold;
+  bool                     _overPrecisionThreshold;
 
   void updateGLState(const Camera* camera);
 

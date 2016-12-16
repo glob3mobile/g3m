@@ -238,7 +238,6 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
                                 1,
                                 surfaceColor,
                                 NULL,
-                                1,
                                 true,
                                 normals->create());
 

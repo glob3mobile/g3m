@@ -129,7 +129,6 @@ public:
                              pointSize,
                              NULL, // flatColor
                              colors.create(),
-                             1, // colorsIntensity
                              false);
 
       delete vertices;
