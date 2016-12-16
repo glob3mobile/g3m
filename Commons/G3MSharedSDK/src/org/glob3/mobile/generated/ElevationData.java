@@ -133,8 +133,7 @@ public abstract class ElevationData
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
-                                  //GLPrimitive::lineStrip(),
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), false);
   
     if (vertices != null)
        vertices.dispose();
@@ -190,7 +189,7 @@ public abstract class ElevationData
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), false);
   
     if (vertices != null)
        vertices.dispose();

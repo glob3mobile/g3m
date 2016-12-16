@@ -138,7 +138,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
             colors = colorsBuilder.create();
           }
 
-          _mesh = new DirectMesh(GLPrimitive.points(), true, verticesBuilder.getCenter(), verticesBuilder.create(), 1, _pointSize, null, colors, 1, true); // flatColor, -  lineWidth
+          _mesh = new DirectMesh(GLPrimitive.points(), true, verticesBuilder.getCenter(), verticesBuilder.create(), 1, _pointSize, null, colors, true); // flatColor, -  lineWidth
 
           if (verticesBuilder != null)
              verticesBuilder.dispose();
@@ -195,7 +195,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
           indices.put(i, (short) jsonIndices.getAsNumber(i, 0));
         }
 
-        _mesh = new IndexedMesh(GLPrimitive.triangles(), vertices.getCenter(), vertices.create(), true, indices, true, 1, 1, _color, null, 1, true, normals); // depthTest, -  colorsIntensity, -  colors, -  flatColor -  pointSize -  lineWidth
+        _mesh = new IndexedMesh(GLPrimitive.triangles(), vertices.getCenter(), vertices.create(), true, indices, true, 1, 1, _color, null, true, normals); // depthTest, -  colors, -  flatColor -  pointSize -  lineWidth
 
         if (vertices != null)
            vertices.dispose();

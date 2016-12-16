@@ -106,7 +106,6 @@ public class PointCloudActivity
                   pointSize, //
                   flatColor, //
                   colors.create(), //
-                  1, //
                   false);
       }
 

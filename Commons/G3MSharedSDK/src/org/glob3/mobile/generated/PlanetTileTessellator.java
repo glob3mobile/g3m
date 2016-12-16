@@ -503,9 +503,9 @@ public class PlanetTileTessellator extends TileTessellator
     final Color levelColor = Color.BLUE.wheelStep(5, tile._level % 5);
     final float gridLineWidth = tile.isElevationDataSolved() || (tile.getElevationData() == null) ? 1.0f : 3.0f;
   
-    IndexedMesh border = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesBorder.create(), true, 2.0f, 1.0f, Color.newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f), null, 1.0f, false, null, true, 1.0f, 1.0f);
+    IndexedMesh border = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesBorder.create(), true, 2.0f, 1.0f, Color.newFromRGBA(1.0f, 0.0f, 0.0f, 1.0f), null, false, null, true, 1.0f, 1.0f);
   
-    IndexedMesh grid = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesGrid.create(), true, gridLineWidth, 1.0f, new Color(levelColor), null, 1.0f, false, null, true, 1.0f, 1.0f);
+    IndexedMesh grid = new IndexedMesh(GLPrimitive.lineStrip(), vertices.getCenter(), vertices.create(), true, indicesGrid.create(), true, gridLineWidth, 1.0f, new Color(levelColor), null, false, null, true, 1.0f, 1.0f);
   
     if (vertices != null)
        vertices.dispose();

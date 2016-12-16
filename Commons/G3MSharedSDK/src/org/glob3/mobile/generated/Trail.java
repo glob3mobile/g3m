@@ -163,7 +163,7 @@ public class Trail
       if (bearings != null)
          bearings.dispose();
     
-      Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
+      Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, true); // depthTest -  colors
     
       if (vertices != null)
          vertices.dispose();

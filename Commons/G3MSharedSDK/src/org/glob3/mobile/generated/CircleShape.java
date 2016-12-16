@@ -55,7 +55,7 @@ public class CircleShape extends AbstractMeshShape
         normals.add(0.0, 0.0, 1.0);
       }
   
-      Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color, null, 1, true, normals.create());
+      Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color, null, true, normals.create());
   
       if (normals != null)
          normals.dispose();

@@ -35,7 +35,7 @@ public class AtmosphereRenderer extends DefaultRenderer
   private IFloatBuffer _vertices;
   private CameraPositionGLFeature _camPosGLF;
   private Color _previousBackgroundColor;
-  private boolean _overPresicionThreshold;
+  private boolean _overPrecisionThreshold;
 
   private void updateGLState(Camera camera)
   {
@@ -66,7 +66,7 @@ public class AtmosphereRenderer extends DefaultRenderer
      _darkSpace = new Color(Color.BLACK);
      _minHeight = 8000.0;
      _previousBackgroundColor = null;
-     _overPresicionThreshold = true;
+     _overPrecisionThreshold = true;
      _glState = null;
      _directMesh = null;
      _vertices = null;
@@ -96,7 +96,7 @@ public class AtmosphereRenderer extends DefaultRenderer
   
       _vertices = fbb.create();
   
-      _directMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, fbb.getCenter(), _vertices, 10.0f, 10.0f, null, null, 0.0f, false);
+      _directMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, fbb.getCenter(), _vertices, 10.0f, 10.0f, null, null, false);
   
       if (fbb != null)
          fbb.dispose();
@@ -113,8 +113,8 @@ public class AtmosphereRenderer extends DefaultRenderer
   
     //Computing background color
     final double camHeigth = rc.getCurrentCamera().getGeodeticPosition()._height;
-    _overPresicionThreshold = (camHeigth < _minHeight * 1.2);
-    if (_overPresicionThreshold)
+    _overPrecisionThreshold = (camHeigth < _minHeight * 1.2);
+    if (_overPrecisionThreshold)
     {
       rc.getWidget().setBackgroundColor(_blueSky);
     }
@@ -158,14 +158,14 @@ public class AtmosphereRenderer extends DefaultRenderer
       _directMesh.render(rc, _glState);
     }
   
-    final boolean nowIsOverPresicionThreshold = (camHeigth < _minHeight * 1.2);
+    final boolean nowIsOverPrecisionThreshold = (camHeigth < _minHeight * 1.2);
   
-    if (_overPresicionThreshold != nowIsOverPresicionThreshold)
+    if (_overPrecisionThreshold != nowIsOverPrecisionThreshold)
     {
       //Changing background color
-      _overPresicionThreshold = nowIsOverPresicionThreshold;
+      _overPrecisionThreshold = nowIsOverPrecisionThreshold;
   
-      if (_overPresicionThreshold)
+      if (_overPrecisionThreshold)
       {
         rc.getWidget().setBackgroundColor(_blueSky);
       }

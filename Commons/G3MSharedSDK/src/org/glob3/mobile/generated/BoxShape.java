@@ -163,7 +163,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    Mesh result = new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor, null, 1, true, normals.create());
+    Mesh result = new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor, null, true, normals.create());
   
     if (vertices != null)
        vertices.dispose();

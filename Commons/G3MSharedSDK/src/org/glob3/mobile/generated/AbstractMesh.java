@@ -32,7 +32,6 @@ public abstract class AbstractMesh extends Mesh
   protected final IFloatBuffer _vertices;
   protected final Color _flatColor;
   protected final IFloatBuffer _colors;
-  protected final float _colorsIntensity;
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
@@ -100,14 +99,13 @@ public abstract class AbstractMesh extends Mesh
   protected final float _polygonOffsetFactor;
   protected final float _polygonOffsetUnits;
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
      _primitive = primitive;
      _owner = owner;
      _vertices = vertices;
      _flatColor = flatColor;
      _colors = colors;
-     _colorsIntensity = colorsIntensity;
      _boundingVolume = null;
      _center = new Vector3D(center);
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
@@ -167,7 +165,7 @@ public abstract class AbstractMesh extends Mesh
   protected final Mesh createNormalsMesh()
   {
   
-    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, (float)1.0, (float)2.0, new Color(Color.RED), null, (float)1.0, false, null);
+    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, (float)1.0, (float)2.0, new Color(Color.RED), null, false, null);
   
     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   

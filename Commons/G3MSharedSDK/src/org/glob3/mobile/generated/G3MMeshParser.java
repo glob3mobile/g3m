@@ -156,11 +156,11 @@ public class G3MMeshParser
     Mesh mesh;
     if (indices == null)
     {
-      mesh = new DirectMesh(toGLPrimitive(primitive), true, new Vector3D(centerX, centerY, centerZ), vertices, lineWidth, pointSize, material._color, colors, 0, depthTest, normals); // colorsIntensity -  flatColor -  owner
+      mesh = new DirectMesh(toGLPrimitive(primitive), true, new Vector3D(centerX, centerY, centerZ), vertices, lineWidth, pointSize, material._color, colors, depthTest, normals); // flatColor -  owner
     }
     else
     {
-      mesh = new IndexedMesh(toGLPrimitive(primitive), new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, material._color, colors, 0, depthTest, normals); // colorsIntensity -  flatColor
+      mesh = new IndexedMesh(toGLPrimitive(primitive), new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, material._color, colors, depthTest, normals); // flatColor
     }
     return mesh;
   }

@@ -90,7 +90,7 @@ public class QuadShape extends AbstractMeshShape
       normals.add(0.0, 0.0, 1.0);
       normals.add(0.0, 0.0, 1.0);
   
-      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, (float)1.0, true, normals.create());
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, true, normals.create());
   
       if (normals != null)
          normals.dispose();

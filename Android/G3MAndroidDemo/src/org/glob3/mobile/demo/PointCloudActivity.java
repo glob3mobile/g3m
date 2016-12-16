@@ -56,8 +56,7 @@ public class PointCloudActivity
          final JSONObject object = objectBase.asObject();
          final JSONArray pointsJson = object.getAsArray("points");
 
-         final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(
-                  _builder.getPlanet());
+         final FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_builder.getPlanet());
 
          final FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
@@ -108,7 +107,6 @@ public class PointCloudActivity
                   pointSize, //
                   flatColor, //
                   colors.create(), //
-                  1, //
                   false);
       }
 

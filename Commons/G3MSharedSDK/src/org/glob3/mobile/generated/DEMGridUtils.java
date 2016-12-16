@@ -108,7 +108,7 @@ public class DEMGridUtils
       }
     }
   
-    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, pointSize, null, colors.create(), 0, true); // depthTest -  colorsIntensity -  flatColor -  lineWidth
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, pointSize, null, colors.create(), true); // depthTest -  flatColor -  lineWidth
   
     if (vertices != null)
        vertices.dispose();
