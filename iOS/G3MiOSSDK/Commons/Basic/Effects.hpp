@@ -196,11 +196,6 @@ private:
 
   std::vector<EffectRun*> _effectsRuns;
   ITimer*                 _timer;
-#ifdef C_CODE
-  const IFactory*         _factory;
-#else
-  IFactory*         _factory;
-#endif
 
   void processFinishedEffects(const G3MRenderContext* rc,
                               const TimeInterval& when);

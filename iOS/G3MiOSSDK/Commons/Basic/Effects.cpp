@@ -55,8 +55,7 @@ bool EffectWithForce::isDone(const G3MRenderContext* rc,
 
 
 void EffectsScheduler::initialize(const G3MContext* context) {
-  _factory = context->getFactory();
-  _timer = _factory->createTimer();
+  _timer = context->getFactory()->createTimer();
 }
 
 EffectsScheduler::~EffectsScheduler() {

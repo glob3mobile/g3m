@@ -152,7 +152,6 @@ public:
 class GeometryGLFeature: public GLFeature {
 private:
   //Position + cull + depth + polygonoffset + linewidth
-  GPUAttributeValueVec4Float* _position;
 
   const bool  _depthTestEnabled;
   const bool  _cullFace;
@@ -192,7 +191,6 @@ public:
 class Geometry2DGLFeature: public GLFeature {
 private:
   //Position + cull + depth + polygonoffset + linewidth
-  GPUAttributeValueVec2Float* _position;
 
   const float _lineWidth;
 

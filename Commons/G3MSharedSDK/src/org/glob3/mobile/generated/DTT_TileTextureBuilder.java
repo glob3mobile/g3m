@@ -13,8 +13,6 @@ public class DTT_TileTextureBuilder extends RCObject
   private FrameTasksExecutor _frameTasksExecutor;
   private final IImage _backgroundTileImage;
   private final String _backgroundTileImageName;
-  private final boolean _ownedTexCoords;
-  private final boolean _transparent;
   private final boolean _generateMipmap;
 
 
@@ -82,12 +80,10 @@ public class DTT_TileTextureBuilder extends RCObject
      _frameTasksExecutor = frameTasksExecutor;
      _backgroundTileImage = backgroundTileImage;
      _backgroundTileImageName = backgroundTileImageName;
-     _ownedTexCoords = true;
-     _transparent = false;
      _generateMipmap = true;
     _tileImageProvider._retain();
 
-    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, _ownedTexCoords, _transparent, _generateMipmap);
+    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, true, false, _generateMipmap); // transparent, -  ownedTexCoords,
   }
 
   public final LeveledTexturedMesh getTexturedMesh()

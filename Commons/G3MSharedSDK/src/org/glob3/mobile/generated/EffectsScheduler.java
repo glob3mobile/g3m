@@ -26,7 +26,6 @@ public class EffectsScheduler
 
   private java.util.ArrayList<EffectRun> _effectsRuns = new java.util.ArrayList<EffectRun>();
   private ITimer _timer;
-  private IFactory _factory;
 
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
@@ -85,8 +84,7 @@ public class EffectsScheduler
 
   public final void initialize(G3MContext context)
   {
-    _factory = context.getFactory();
-    _timer = _factory.createTimer();
+    _timer = context.getFactory().createTimer();
   }
 
   public void dispose()

@@ -168,8 +168,6 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   const IImage* _backgroundTileImage;
   const std::string _backgroundTileImageName;
-  const bool _ownedTexCoords;
-  const bool _transparent;
   const bool _generateMipmap;
 
 
@@ -264,8 +262,6 @@ public:
   _frameTasksExecutor(frameTasksExecutor),
   _backgroundTileImage(backgroundTileImage),
   _backgroundTileImageName(backgroundTileImageName),
-  _ownedTexCoords(true),
-  _transparent(false),
   _generateMipmap(true)
 
   {
@@ -278,8 +274,8 @@ public:
                                _texturesHandler,
                                backgroundTileImage,
                                backgroundTileImageName,
-                               _ownedTexCoords,
-                               _transparent,
+                               true,  // ownedTexCoords,
+                               false, // transparent,
                                _generateMipmap);
   }
 
