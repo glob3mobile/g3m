@@ -19,6 +19,7 @@ import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import android.graphics.Bitmap;
@@ -47,12 +48,20 @@ public final class Downloader_Android_Handler {
    private boolean                                           _hasImageListeners;
 
 
+   private final TimeInterval                                _connectTimeout;
+   private final TimeInterval                                _readTimeout;
+
+
    Downloader_Android_Handler(final URL url,
                               final IBufferDownloadListener listener,
                               final boolean deleteListener,
                               final long priority,
                               final long requestID,
-                              final String tag) {
+                              final String tag,
+                              final TimeInterval connectTimeout,
+                              final TimeInterval readTimeout) {
+      _connectTimeout = connectTimeout;
+      _readTimeout = readTimeout;
       _priority = priority;
       _g3mURL = url;
       _hasImageListeners = false;
@@ -81,7 +90,11 @@ public final class Downloader_Android_Handler {
                               final boolean deleteListener,
                               final long priority,
                               final long requestID,
-                              final String tag) {
+                              final String tag,
+                              final TimeInterval connectTimeout,
+                              final TimeInterval readTimeout) {
+      _connectTimeout = connectTimeout;
+      _readTimeout = readTimeout;
       _priority = priority;
       _g3mURL = url;
       _hasImageListeners = true;
@@ -242,20 +255,15 @@ public final class Downloader_Android_Handler {
             fileIS.close();
          }
          else {
-            //            final long s = SystemClock.currentThreadTimeMillis();
-            //            ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod started.");
-
             connection = (HttpURLConnection) _javaURL.openConnection();
-            // connection.setConnectTimeout((int) downloader.getConnectTimeout().milliseconds());
-            //connection.setReadTimeout((int) downloader.getReadTimeout().milliseconds());
-            // connection.setUseCaches(false);
+            connection.setConnectTimeout((int) _connectTimeout.milliseconds());
+            connection.setReadTimeout((int) _readTimeout.milliseconds());
+            connection.setUseCaches(false);
             connection.connect();
             statusCode = connection.getResponseCode();
 
             if (statusCode == 200) {
                data = getData(connection.getInputStream(), connection.getContentLength());
-               //               final long e = SystemClock.currentThreadTimeMillis();
-               //               ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod: " + (e - s) + " miliseconds");
             }
          }
       }

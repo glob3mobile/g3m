@@ -3,11 +3,8 @@
 package org.glob3.mobile.specific;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import android.content.Context;
+import android.util.Log;
 
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MContext;
@@ -17,46 +14,43 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
-import android.content.Context;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 
 public final class Downloader_Android
    extends
       IDownloader {
 
-   final static String                                      TAG             = "Downloader_Android";
+   final static String                                   TAG                  = "Downloader_Android";
 
-   private final int                                        _maxConcurrentOperationCount;
-   private int                                              _requestIDCounter;
-   private long                                             _requestsCounter;
-   private long                                             _cancelsCounter;
-   private final ArrayList<Downloader_Android_WorkerThread> _workers;
-   private final Map<String, Downloader_Android_Handler>    _downloadingHandlers;
-   private final Map<String, Downloader_Android_Handler>    _queuedHandlers;
-   private final TimeInterval                               _connectTimeout;
-   private final TimeInterval                               _readTimeout;
-   private final Context                                    _appContext;
+   private final int                                     _maxConcurrentOperationCount;
+   private int                                           _requestIDCounter    = 1;
+   private long                                          _requestsCounter     = 0;
+   private long                                          _cancelsCounter      = 0;
+   private final List<Downloader_Android_WorkerThread>   _workers;
+   private final Map<String, Downloader_Android_Handler> _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
+   private final Map<String, Downloader_Android_Handler> _queuedHandlers      = new HashMap<String, Downloader_Android_Handler>();
+   private final TimeInterval                            _connectTimeout;
+   private final TimeInterval                            _readTimeout;
+   private final Context                                 _appContext;
 
-   private boolean                                          _started;
-   private final Object                                     _startStopMutex = new Object();
+   private boolean                                       _started             = false;
+   private final Object                                  _startStopMutex      = new Object();
 
-   private G3MContext                                       _context;
+   private G3MContext                                    _context;
 
 
    Downloader_Android(final int maxConcurrentOperationCount,
                       final TimeInterval connectTimeout,
                       final TimeInterval readTimeout,
                       final Context appContext) {
-      _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _appContext = appContext;
-      _requestIDCounter = 1;
-      _requestsCounter = 0;
-      _cancelsCounter = 0;
-      // TODO String or Url as key??
-      _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
-      _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
 
       _connectTimeout = connectTimeout;
@@ -72,7 +66,6 @@ public final class Downloader_Android
                final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this, i);
                _workers.add(da);
             }
-
 
             for (final Downloader_Android_WorkerThread worker : _workers) {
                worker.initialize(_context);
@@ -132,20 +125,19 @@ public final class Downloader_Android
                              final IBufferDownloadListener listener,
                              final boolean deleteListener,
                              final String tag) {
-      Downloader_Android_Handler handler = null;
       long requestID;
 
       synchronized (this) {
          _requestsCounter++;
          requestID = _requestIDCounter++;
          final String path = url._path;
-         handler = _downloadingHandlers.get(path);
-
+         Downloader_Android_Handler handler = _downloadingHandlers.get(path);
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag, _connectTimeout,
+                        _readTimeout);
                _queuedHandlers.put(path, handler);
             }
             else {
@@ -171,19 +163,19 @@ public final class Downloader_Android
                             final IImageDownloadListener listener,
                             final boolean deleteListener,
                             final String tag) {
-      Downloader_Android_Handler handler = null;
       long requestID;
 
       synchronized (this) {
          _requestsCounter++;
          requestID = _requestIDCounter++;
          final String path = url._path;
-         handler = _downloadingHandlers.get(path);
+         Downloader_Android_Handler handler = _downloadingHandlers.get(path);
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag, _connectTimeout,
+                        _readTimeout);
                _queuedHandlers.put(path, handler);
             }
             else {
@@ -344,14 +336,14 @@ public final class Downloader_Android
    }
 
 
-   public TimeInterval getConnectTimeout() {
-      return _connectTimeout;
-   }
-
-
-   public TimeInterval getReadTimeout() {
-      return _readTimeout;
-   }
+   //   public TimeInterval getConnectTimeout() {
+   //      return _connectTimeout;
+   //   }
+   //
+   //
+   //   public TimeInterval getReadTimeout() {
+   //      return _readTimeout;
+   //   }
 
 
    @Override
