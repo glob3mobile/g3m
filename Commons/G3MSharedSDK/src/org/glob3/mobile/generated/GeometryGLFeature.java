@@ -5,7 +5,6 @@ package org.glob3.mobile.generated;
 public class GeometryGLFeature extends GLFeature
 {
   //Position + cull + depth + polygonoffset + linewidth
-  private GPUAttributeValueVec4Float _position;
 
   private final boolean _depthTestEnabled;
   private final boolean _cullFace;
@@ -32,8 +31,8 @@ public class GeometryGLFeature extends GLFeature
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _lineWidth = lineWidth;
-    _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
-    _values.addAttributeValue(GPUAttributeKey.POSITION, _position, false);
+    GPUAttributeValueVec4Float position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
+    _values.addAttributeValue(GPUAttributeKey.POSITION, position, false);
   
     if (needsPointSize)
     {
