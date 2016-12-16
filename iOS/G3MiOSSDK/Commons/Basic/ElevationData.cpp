@@ -102,7 +102,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
                                 pointSize,
                                 flatColor,
                                 colors.create(),
-                                0,
                                 false);
 
   delete vertices;
@@ -158,7 +157,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   Color* flatColor = NULL;
 
   Mesh* result = new DirectMesh(GLPrimitive::points(),
-                                //GLPrimitive::lineStrip(),
                                 true,
                                 vertices->getCenter(),
                                 vertices->create(),
@@ -166,7 +164,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
                                 pointSize,
                                 flatColor,
                                 colors.create(),
-                                0,
                                 false);
 
   delete vertices;

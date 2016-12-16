@@ -90,7 +90,6 @@ Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color
                                   (float)1.0,
                                   NULL,
                                   colors.create(),
-                                  (float)1.0,
                                   false,
                                   NULL);
 

@@ -62,7 +62,6 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
                                  10.0f,
                                  NULL,
                                  NULL,
-                                 0.0f,
                                  false);
 
     delete fbb; fbb = NULL;

@@ -191,7 +191,6 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const {
                                             (float)2.0,
                                             new Color(Color::RED),
                                             NULL,
-                                            (float)1.0,
                                             false,
                                             NULL);
 
