@@ -112,8 +112,8 @@ public class AtmosphereRenderer extends DefaultRenderer
     _previousBackgroundColor = new Color(rc.getWidget().getBackgroundColor());
   
     //Computing background color
-    final double camHeigth = rc.getCurrentCamera().getGeodeticPosition()._height;
-    _overPrecisionThreshold = (camHeigth < _minHeight * 1.2);
+    final double camHeight = rc.getCurrentCamera().getGeodeticPosition()._height;
+    _overPrecisionThreshold = (camHeight < _minHeight * 1.2);
     if (_overPrecisionThreshold)
     {
       rc.getWidget().setBackgroundColor(_blueSky);

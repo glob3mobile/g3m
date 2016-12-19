@@ -23,10 +23,10 @@ public class BusyMeshEffect extends EffectNeverEnding
     super.doStep(rc, when);
   
     final long now = when.milliseconds();
-    final long ellapsed = now - _lastMS;
+    final long elapsed = now - _lastMS;
     _lastMS = now;
   
-    final double deltaDegrees = (360.0 / 1200.0) * ellapsed;
+    final double deltaDegrees = (360.0 / 1200.0) * elapsed;
   
     _renderer.incDegrees(deltaDegrees);
   }

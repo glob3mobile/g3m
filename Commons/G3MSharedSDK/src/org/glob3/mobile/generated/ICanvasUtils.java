@@ -49,7 +49,6 @@ public class ICanvasUtils
         {
           allFit = false;
           fontSize--;
-          continue;
         }
       }
     }

@@ -75,8 +75,7 @@ public class MercatorTiledLayer extends RasterLayer
     {
       final String thisSubdomain = _subdomains.get(i);
       final String thatSubdomain = t._subdomains.get(i);
-      if (thisSubdomain != thatSubdomain)
-      {
+      if (!thisSubdomain.equals(thatSubdomain)) {
         return false;
       }
     }

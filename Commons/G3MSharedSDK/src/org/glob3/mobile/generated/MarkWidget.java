@@ -5,7 +5,6 @@ public class MarkWidget
   private Geometry2DGLFeature _geo2Dfeature;
   private ViewportExtentGLFeature _viewportExtentGLFeature;
   private IImage _image;
-  private String _imageName;
   private IImageBuilder _imageBuilder;
   private TexturesHandler _texHandler;
 
@@ -45,7 +44,6 @@ public class MarkWidget
   private void prepareWidget(IImage image, String imageName)
   {
     _image = image;
-    _imageName = imageName;
   
     _halfWidth = (float) image.getWidth() / 2.0f;
     _halfHeight = (float) image.getHeight() / 2.0f;
@@ -75,7 +73,7 @@ public class MarkWidget
     texCoords.add(0.0f, 0.0f); // vertex 3
     texCoords.add(1.0f, 0.0f); // vertex 4
   
-    final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
+    final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), imageName, false);
   
     // #warning TODO: share unit texCoords
     if (_textureMapping != null)
