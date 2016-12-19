@@ -2,13 +2,8 @@
 
 package org.glob3.mobile.specific;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -21,8 +16,13 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 
 public final class SQLiteStorage_Android
@@ -39,7 +39,7 @@ public final class SQLiteStorage_Android
    private SQLiteDatabase                _writeDB;
    private SQLiteDatabase                _readDB;
 
-   private final BitmapFactory.Options   _options;
+   private final BitmapFactory.Options   _bitmapFactoryOptions;
 
 
    private class MySQLiteOpenHelper
@@ -104,8 +104,8 @@ public final class SQLiteStorage_Android
       _writeDB = _dbHelper.getWritableDatabase();
       _readDB = _dbHelper.getReadableDatabase();
 
-      _options = new BitmapFactory.Options();
-      _options.inTempStorage = new byte[128 * 1024];
+      _bitmapFactoryOptions = new BitmapFactory.Options();
+      _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
    }
 
 
@@ -251,7 +251,7 @@ public final class SQLiteStorage_Android
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
             // final long start = System.currentTimeMillis();
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _bitmapFactoryOptions);
             // ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
             if (bitmap == null) {
