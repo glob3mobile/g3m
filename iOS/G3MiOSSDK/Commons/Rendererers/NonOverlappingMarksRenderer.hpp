@@ -55,7 +55,6 @@ private:
 #ifdef JAVA_CODE
   private IImage _image;
 #endif
-  std::string _imageName;
   IImageBuilder* _imageBuilder;
   TexturesHandler* _texHandler;
 

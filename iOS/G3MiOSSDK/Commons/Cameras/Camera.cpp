@@ -659,7 +659,7 @@ const Vector3D Camera::getUp() const {
 }
 
 const Vector3D Camera::getViewDirection() const {
-  // perform the substraction inline to avoid a temporary MutableVector3D instance
+  // perform the subtraction inline to avoid a temporary MutableVector3D instance
   return Vector3D(_center.x() - _position.x(),
                   _center.y() - _position.y(),
                   _center.z() - _position.z());

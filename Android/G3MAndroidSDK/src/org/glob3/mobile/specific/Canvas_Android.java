@@ -2,19 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static android.graphics.Paint.FILTER_BITMAP_FLAG;
-import static android.graphics.Paint.LINEAR_TEXT_FLAG;
-
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector2F;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
@@ -26,34 +13,45 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
+import org.glob3.mobile.generated.GFont;
+import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
+import org.glob3.mobile.generated.Vector2F;
+
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static android.graphics.Paint.FILTER_BITMAP_FLAG;
+import static android.graphics.Paint.LINEAR_TEXT_FLAG;
+
 
 public final class Canvas_Android
    extends
       ICanvas {
 
-   private static final int PAINT_FLAGS      = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
+   private static final int PAINT_FLAGS = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
 
-   private Bitmap           _bitmap          = null;
-   private Canvas           _canvas          = null;
+   private Bitmap           _bitmap     = null;
+   private Canvas           _canvas     = null;
    private final Paint      _fillPaint;
    private final Paint      _strokePaint;
-   private Typeface         _currentTypeface = null;
 
-   private Path             _path            = null;
+   private Path             _path       = null;
 
-   private final RectF      _rectF           = new RectF();                                            // RectF instance for reuse (and avoid garbage)
-   private final Rect       _rect            = new Rect();                                             // Rect instance for reuse (and avoid garbage)
+   private final RectF      _rectF      = new RectF();                                            // RectF instance for reuse (and avoid garbage)
+   private final Rect       _rect       = new Rect();                                             // Rect instance for reuse (and avoid garbage)
 
 
    Canvas_Android(final boolean retina) {
       super(retina);
-      _fillPaint = new Paint(PAINT_FLAGS);
 
+      _fillPaint = new Paint(PAINT_FLAGS);
       _fillPaint.setAntiAlias(true);
       _fillPaint.setStyle(Paint.Style.FILL);
 
       _strokePaint = new Paint(PAINT_FLAGS);
-
       _strokePaint.setAntiAlias(true);
       _strokePaint.setStyle(Paint.Style.STROKE);
    }
@@ -77,14 +75,13 @@ public final class Canvas_Android
 
    @Override
    protected void _setFont(final GFont font) {
-      _currentTypeface = createTypeface(font);
-
+      final Typeface typeface = createTypeface(font);
       final float fontSize = font.getSize();
 
-      _fillPaint.setTypeface(_currentTypeface);
+      _fillPaint.setTypeface(typeface);
       _fillPaint.setTextSize(fontSize);
 
-      _strokePaint.setTypeface(_currentTypeface);
+      _strokePaint.setTypeface(typeface);
       _strokePaint.setTextSize(fontSize);
    }
 

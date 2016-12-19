@@ -44,7 +44,6 @@ void ICanvasUtils::drawStringsOn(const std::vector<std::string>& strings,
       if (extent._x > maxWidth) {
         allFit = false;
         fontSize--;
-        continue;
       }
     }
   }

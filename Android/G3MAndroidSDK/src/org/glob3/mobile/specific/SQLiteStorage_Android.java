@@ -2,8 +2,13 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -16,21 +21,16 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 
 public final class SQLiteStorage_Android
-         extends
-            IStorage {
+   extends
+      IStorage {
 
-   private static final String[]         COLUMNS       = new String[] { "contents", "expiration" };
-   private static final String           SELECTION     = "name = ?";
+   private static final String[]         COLUMNS   = new String[] { "contents", "expiration" };
+   private static final String           SELECTION = "name = ?";
 
    private final String                  _databaseName;
    private final android.content.Context _androidContext;
@@ -40,12 +40,11 @@ public final class SQLiteStorage_Android
    private SQLiteDatabase                _readDB;
 
    private final BitmapFactory.Options   _options;
-   private final byte[]                  _temp_storage = new byte[128 * 1024];
 
 
    private class MySQLiteOpenHelper
-            extends
-               SQLiteOpenHelper {
+      extends
+         SQLiteOpenHelper {
 
       public MySQLiteOpenHelper(final android.content.Context context,
                                 final String name) {
@@ -106,7 +105,7 @@ public final class SQLiteStorage_Android
       _readDB = _dbHelper.getReadableDatabase();
 
       _options = new BitmapFactory.Options();
-      _options.inTempStorage = _temp_storage;
+      _options.inTempStorage = new byte[128 * 1024];
    }
 
 
@@ -165,7 +164,7 @@ public final class SQLiteStorage_Android
       boolean expired = false;
       final String name = url._path;
 
-      final Cursor cursor = _readDB.query( // 
+      final Cursor cursor = _readDB.query( //
                "buffer2", //
                COLUMNS, //
                SELECTION, //

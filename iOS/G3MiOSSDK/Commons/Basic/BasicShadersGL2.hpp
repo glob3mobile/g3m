@@ -431,7 +431,7 @@ public:
 "const highp float atmosphereScale = 15.0;\n" +
 "const highp float stratoHeight = 50e3 * atmosphereScale;\n" +
 "const highp float atmUndergroundOffset = 100e3;\n" +
-"const highp float minHeigth = 35000.0;\n" +
+"const highp float minHeight = 35000.0;\n" +
 "const highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);\n" +
 "const highp vec4 blueSky = vec4(135.0 / 255.0,\n" +
 "206.0 / 255.0,\n" +
@@ -505,7 +505,7 @@ public:
 "highp vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));\n" +
 "color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));\n" +
 "highp float camHeight = length(uCameraPosition) - earthRadius;\n" +
-"gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));\n" +
+"gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeight, minHeight / 4.0, camHeight));\n" +
 "}\n" +
 "else {\n" +
 "gl_FragColor = darkSpace;\n" +

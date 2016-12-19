@@ -150,7 +150,7 @@ RenderState MapzenDEMProvider::getRenderState() {
   if (_errorDownloadingRootGrid) {
     return RenderState::error("Error downloading Mapzen root grid");
   }
-  return (!_rootGridDownloaded) ? RenderState::busy() : RenderState::ready();
+  return _rootGridDownloaded ? RenderState::ready() : RenderState::busy();
 }
 
 void MapzenDEMProvider::requestTile(int z,

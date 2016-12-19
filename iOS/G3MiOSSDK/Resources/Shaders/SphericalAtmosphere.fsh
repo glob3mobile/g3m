@@ -15,7 +15,7 @@ const highp float stratoHeight = 50e3 * atmosphereScale;
 const highp float atmUndergroundOffset = 100e3;
 
 //Height at which the effect is replaced by a blue background
-const highp float minHeigth = 35000.0;
+const highp float minHeight = 35000.0;
 
 //Multicolor gradient
 const highp vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
@@ -123,7 +123,7 @@ void main() {
     //Calculating camera Height (for precision problems)
     //Below a certain threshold float precision is not enough for calculations
     highp float camHeight = length(uCameraPosition) - earthRadius;
-    gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeigth, minHeigth / 4.0, camHeight));
+    gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeight, minHeight / 4.0, camHeight));
   }
   else {
     gl_FragColor = darkSpace;

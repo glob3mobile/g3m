@@ -176,10 +176,10 @@ void BusyMeshEffect::doStep(const G3MRenderContext* rc,
   EffectNeverEnding::doStep(rc, when);
 
   const long long now = when.milliseconds();
-  const long long ellapsed = now - _lastMS;
+  const long long elapsed = now - _lastMS;
   _lastMS = now;
 
-  const double deltaDegrees = (360.0 / 1200.0) * ellapsed;
+  const double deltaDegrees = (360.0 / 1200.0) * elapsed;
 
   _renderer->incDegrees(deltaDegrees);
 }
