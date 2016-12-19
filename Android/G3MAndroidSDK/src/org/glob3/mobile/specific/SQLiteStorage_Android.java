@@ -193,8 +193,6 @@ public final class SQLiteStorage_Android
                          final IImage image,
                          final TimeInterval timeToExpires,
                          final boolean saveInBackground) {
-      //final ITimer timer = IFactory.instance().createTimer();
-
       final Image_Android image_android = (Image_Android) image;
       final Bitmap bitmap = image_android.getBitmap();
 
@@ -250,9 +248,7 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
-            // final long start = System.currentTimeMillis();
             final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _bitmapFactoryOptions);
-            // ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
 
             if (bitmap == null) {
                ILogger.instance().logError("Can't create bitmap from content of storage");
