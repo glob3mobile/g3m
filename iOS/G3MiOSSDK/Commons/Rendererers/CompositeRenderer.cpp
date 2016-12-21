@@ -50,7 +50,8 @@ void CompositeRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 bool CompositeRenderer::onTouchEvent(const G3MEventContext* ec,
                                      const TouchEvent* touchEvent) {
   // the events are processed bottom to top
-  for (int i = _renderersSize - 1; i >= 0; i--) {
+  for (size_t j = 0; j < _renderersSize; j++) {
+    const size_t i = _renderersSize - 1 - j;
     Renderer* renderer = _renderers[i]->getRenderer();
     if (renderer->isEnable()) {
       if (renderer->onTouchEvent(ec, touchEvent)) {
@@ -65,7 +66,8 @@ void CompositeRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                               int width, int height)
 {
   // the events are processed bottom to top
-  for (int i = _renderersSize - 1; i >= 0; i--) {
+  for (size_t j = 0; j < _renderersSize; j++) {
+    const size_t i = _renderersSize - 1 - j;
     _renderers[i]->getRenderer()->onResizeViewportEvent(ec, width, height);
   }
 }

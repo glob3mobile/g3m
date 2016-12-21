@@ -15,7 +15,7 @@
 
 #include <mach/mach_host.h>
 
-int countCores() {
+static int countCores() {
   host_basic_info_data_t hostInfo;
   mach_msg_type_number_t infoCount;
 

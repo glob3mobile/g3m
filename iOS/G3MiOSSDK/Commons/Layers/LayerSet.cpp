@@ -34,7 +34,9 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile) const {
 
-  for (int i = _layers.size()-1; i >= 0; i--) {
+  const size_t size = _layers.size();
+  for (size_t j = 0; j < size; j++) {
+    const size_t i = size - 1 - j;
     Layer* layer = _layers[i];
     if (layer->isAvailable(tile)) {
       LayerTouchEvent tte(position, tile->_sector, layer);
