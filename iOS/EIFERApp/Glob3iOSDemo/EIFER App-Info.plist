@@ -59,6 +59,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Please allow me to access the camera for AR mode.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>G3M: Please allow me to get the device location.</string>
 </dict>
