@@ -276,8 +276,10 @@ public class LayerSet implements ChangedInfoListener
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
   {
   
-    for (int i = _layers.size()-1; i >= 0; i--)
+    final int size = _layers.size();
+    for (int j = 0; j < size; j++)
     {
+      final int i = size - 1 - j;
       Layer layer = _layers.get(i);
       if (layer.isAvailable(tile))
       {

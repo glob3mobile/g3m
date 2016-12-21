@@ -150,8 +150,9 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     // the events are processed bottom to top
-    for (int i = _renderersSize - 1; i >= 0; i--)
+    for (int j = 0; j < _renderersSize; j++)
     {
+      final int i = _renderersSize - 1 - j;
       Renderer renderer = _renderers.get(i).getRenderer();
       if (renderer.isEnable())
       {
@@ -167,8 +168,9 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     // the events are processed bottom to top
-    for (int i = _renderersSize - 1; i >= 0; i--)
+    for (int j = 0; j < _renderersSize; j++)
     {
+      final int i = _renderersSize - 1 - j;
       _renderers.get(i).getRenderer().onResizeViewportEvent(ec, width, height);
     }
   }
