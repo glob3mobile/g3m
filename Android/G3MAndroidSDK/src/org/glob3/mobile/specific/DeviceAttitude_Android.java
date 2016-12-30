@@ -25,10 +25,10 @@ import android.view.WindowManager;
 
 
 public class DeviceAttitude_Android
-   extends
-      IDeviceAttitude
-   implements
-      SensorEventListener {
+         extends
+            IDeviceAttitude
+         implements
+            SensorEventListener {
 
    private final SensorManager _sensorManager;
    private final Display       _display;
@@ -51,6 +51,7 @@ public class DeviceAttitude_Android
 
 
    public DeviceAttitude_Android(final Context context) {
+      // this(context, 0.09f);  for shitty devices
       this(context, 0.1f);
    }
 
