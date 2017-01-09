@@ -21,6 +21,8 @@
 #include <G3MiOSSDK/JSONArray.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
 
+#import <G3MiOSSDK/NSString_CppAdditions.h>
+
 #include "G3MDemoModel.hpp"
 
 
@@ -37,8 +39,7 @@ public:
                    const Vector2F& touchedPixel) {
     const std::string url = mark->getID();
 
-    NSString* urlObjC = [NSString stringWithCString: url.c_str()
-                                           encoding: NSUTF8StringEncoding];
+    NSString* urlObjC = [NSString stringWithCppString: url];
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlObjC]];
 

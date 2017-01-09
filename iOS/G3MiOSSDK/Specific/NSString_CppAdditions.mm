@@ -24,7 +24,6 @@
   return [self cStringUsingEncoding: NSUTF8StringEncoding];
 }
 
-
 - (NSString*) urlEncode
 {
   return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(

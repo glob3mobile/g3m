@@ -18,8 +18,10 @@
 #include "G3MDemoModel.hpp"
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
+
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
+
 
 @implementation G3MViewController
 
@@ -70,8 +72,7 @@ public:
   id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
   [tracker send:[[GAIDictionaryBuilder createEventWithCategory: @"DemoScene"
-                                                        action: [NSString stringWithCString: scene->getName().c_str()
-                                                                                   encoding: NSUTF8StringEncoding]
+                                                        action: [NSString stringWithCppString: scene->getName()]
                                                          label: nil
                                                          value: nil] build]];
 
@@ -89,10 +90,8 @@ public:
   id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
   [tracker send:[[GAIDictionaryBuilder createEventWithCategory: @"DemoSceneOption"
-                                                        action: [NSString stringWithCString: scene->getName().c_str()
-                                                                                   encoding: NSUTF8StringEncoding]
-                                                         label: [NSString stringWithCString: option.c_str()
-                                                                                   encoding: NSUTF8StringEncoding]
+                                                        action: [NSString stringWithCppString: scene->getName()]
+                                                         label: [NSString stringWithCppString: option]
                                                          value: nil] build]];
 
   [self.optionSelector setTitle: [NSString stringWithCppString: option]
