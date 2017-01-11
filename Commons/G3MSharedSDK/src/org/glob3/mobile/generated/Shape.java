@@ -49,7 +49,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 //  const Planet* _planet;
 
   private MutableMatrix44D _transformMatrix;
-  private MutableMatrix44D getTransformMatrix(Planet planet)
+  protected MutableMatrix44D getTransformMatrix(Planet planet)
   {
     if (_transformMatrix == null)
     {

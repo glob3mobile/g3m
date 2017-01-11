@@ -23,6 +23,8 @@ public abstract class AbstractMeshShape extends Shape
 {
   private Mesh _mesh;
 
+  private Sphere boundingSphere = null;
+
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
   protected final Mesh getMesh(G3MRenderContext rc)
@@ -32,6 +34,28 @@ public abstract class AbstractMeshShape extends Shape
       _mesh = createMesh(rc);
     }
     return _mesh;
+  }
+
+
+  protected boolean touchesFrustum(G3MRenderContext rc) {
+    Sphere bound = (Sphere) getBoundingSphere(rc);
+    Vector3D centerInModelCoordinates = bound._center.transformedBy(
+            getTransformMatrix(rc.getPlanet()), 1.0f);
+
+    // bounding sphere in model coordinates
+    Sphere bsInModelCoordinates = new Sphere(centerInModelCoordinates,
+            bound._radius);
+
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+
+    return bsInModelCoordinates.touchesFrustum(frustum);
+  }
+
+  private BoundingVolume getBoundingSphere(G3MRenderContext rc) {
+    if (boundingSphere == null) {
+      boundingSphere = getMesh(rc).getBoundingVolume().createSphere();
+    }
+    return boundingSphere;
   }
 
   protected final void cleanMesh()
@@ -65,7 +89,7 @@ public abstract class AbstractMeshShape extends Shape
   public final void rawRender(G3MRenderContext rc, GLState parentState, boolean renderNotReadyShapes)
   {
     Mesh mesh = getMesh(rc);
-    if (mesh != null)
+    if (mesh != null && touchesFrustum(rc))
     {
       mesh.render(rc, parentState);
     }

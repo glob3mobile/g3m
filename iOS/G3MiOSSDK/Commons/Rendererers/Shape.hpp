@@ -50,7 +50,6 @@ private:
 //  const Planet* _planet;
 
   mutable MutableMatrix44D* _transformMatrix;
-  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
   
   std::vector<ShapePendingEffect*> _pendingEffects;
 
@@ -63,6 +62,7 @@ private:
   
 protected:
   virtual void cleanTransformMatrix();
+  MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
 
   
 public:

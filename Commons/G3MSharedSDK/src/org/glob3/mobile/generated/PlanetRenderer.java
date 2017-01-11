@@ -102,11 +102,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   
     sortTiles(_firstLevelTiles);
-  
-    context.getLogger().logInfo("Created %d first level tiles", _firstLevelTiles.size());
+
+    if (context != null) {
+      context.getLogger().logInfo("Created %d first level tiles", _firstLevelTiles.size());
+    }
     if (_firstLevelTiles.size() > 64)
     {
-      context.getLogger().logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
+      if (context != null) {
+        context.getLogger().logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
+      }
     }
   
     _firstLevelTilesJustCreated = true;

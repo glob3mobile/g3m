@@ -10,15 +10,20 @@
 #define __G3MiOSSDK__AbstractMeshShape__
 
 #include "Shape.hpp"
+#include "Sphere.hpp"
 
 class Mesh;
 
 class AbstractMeshShape : public Shape {
 private:
   Mesh* _mesh;
+  Sphere* boundingSphere = NULL;
+
+  BoundingVolume* getBoundingSphere(const G3MRenderContext* rc);
 
 protected:
   virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
+  bool touchesFrustum(const G3MRenderContext* rc);
 
   Mesh* getMesh(const G3MRenderContext* rc);
 

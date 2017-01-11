@@ -8,6 +8,7 @@
 
 #include "AbstractMeshShape.hpp"
 #include "Mesh.hpp"
+#include "Camera.hpp"
 
 AbstractMeshShape::~AbstractMeshShape() {
   delete _mesh;
@@ -17,6 +18,29 @@ AbstractMeshShape::~AbstractMeshShape() {
 #endif
 
 }
+
+bool AbstractMeshShape::touchesFrustum(const G3MRenderContext* rc) {
+  Sphere* bound = (Sphere*) getBoundingSphere(rc);
+  
+  Vector3D centerInModelCoordinates = bound->_center.transformedBy(getTransformMatrix(rc->getPlanet()), 1.0);
+  
+  // bounding sphere in model coordinates
+  Sphere* bsInModelCoordinates = new Sphere(centerInModelCoordinates,
+                                           bound->_radius);
+  
+  const Frustum* frustum = rc->getCurrentCamera()->getFrustumInModelCoordinates();
+  
+  return bsInModelCoordinates->touchesFrustum(frustum);
+}
+
+
+BoundingVolume* AbstractMeshShape::getBoundingSphere(const G3MRenderContext* rc) {
+  if (boundingSphere == NULL) {
+    boundingSphere = getMesh(rc)->getBoundingVolume()->createSphere();
+  }
+  return boundingSphere;
+}
+
 
 void AbstractMeshShape::cleanMesh() {
   delete _mesh;
