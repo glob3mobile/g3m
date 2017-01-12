@@ -66,11 +66,11 @@ TileData(ProjectedCornersDistanceTLTDataID),
 _northWestPoint( planet->toCartesian( tile->_sector.getNW(), mediumHeight ) ),
 _northEastPoint( planet->toCartesian( tile->_sector.getNE(), mediumHeight ) ),
 _southWestPoint( planet->toCartesian( tile->_sector.getSW(), mediumHeight ) ),
-_southEastPoint( planet->toCartesian( tile->_sector.getSE(), mediumHeight ) ),
-_tileLevel(tile->_level),
-_tileRow(tile->_row),
-_tileColumn(tile->_column),
-_mediumHeight(mediumHeight)
+_southEastPoint( planet->toCartesian( tile->_sector.getSE(), mediumHeight ) )
+//_tileLevel(tile->_level),
+//_tileRow(tile->_row),
+//_tileColumn(tile->_column),
+//_mediumHeight(mediumHeight)
 {
   const Vector3D normalNW = planet->centricSurfaceNormal(_northWestPoint);
   const Vector3D normalNE = planet->centricSurfaceNormal(_northEastPoint);

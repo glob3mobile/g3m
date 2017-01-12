@@ -112,36 +112,30 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
-  _g3mWidget->setViewMode(MONO);
+  getG3MWidget()->setViewMode(MONO);
+  getG3MWidget()->cancelAllEffects();
+  getG3MWidget()->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
+  getG3MWidget()->setRenderedSector( Sector::fullSphere() );
+  getG3MWidget()->removeAllPeriodicalTasks();
 
-  _g3mWidget->cancelAllEffects();
+  getLayerSet()->removeAllLayers(true);
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setShowStatistics(false);
   planetRenderer->setIncrementalTileQuality(false);
-
   // reset DEM
   planetRenderer->setVerticalExaggeration(1);
   planetRenderer->setElevationDataProvider(NULL, true);
   planetRenderer->setDEMProvider(NULL);
 
-  _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
-
-  _g3mWidget->setRenderedSector( Sector::fullSphere() );
-
-  getG3MWidget()->removeAllPeriodicalTasks();
-
   getMarksRenderer()->removeAllMarks();
   getMarksRenderer()->setRenderInReverse(false);
-
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
   getPointCloudsRenderer()->removeAllPointClouds();
   getHUDRenderer()->removeAllWidgets();
-
   getNonOverlappingMarksRenderer()->removeAllMarks();
   getNonOverlappingMarksRenderer()->removeAllListeners();
-
   getVectorStreamingRenderer()->removeAllVectorSets();
 
   _layerSet->removeAllLayers(true);

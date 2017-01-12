@@ -71,7 +71,7 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setShowStatistics(true);
   planetRenderer->setIncrementalTileQuality(true);
 
-  planetRenderer->setVerticalExaggeration(1);
+  planetRenderer->setVerticalExaggeration(30);
   planetRenderer->setDEMProvider( new MapzenDEMProvider("mapzen-ZB6FqMg",
                                                         DownloadPriority::HIGHER,
                                                         TimeInterval::fromDays(0),

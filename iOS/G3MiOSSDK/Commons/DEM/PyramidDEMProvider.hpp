@@ -41,13 +41,12 @@ protected:
 
   virtual ~PyramidDEMProvider();
 
-
 public:
 #ifdef C_CODE
   const Vector2S   _tileExtent;
 #endif
 #ifdef JAVA_CODE
-  protected final Vector2S _tileExtent;
+  public final Vector2S _tileExtent;
 #endif
 
   virtual PyramidNode* createNode(const PyramidNode*  parent,
