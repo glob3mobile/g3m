@@ -50,22 +50,22 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
     private final Vector3D _southWestPoint ;
     private final Vector3D _southEastPoint ;
 
-    private final int _tileLevel;
-    private final int _tileRow;
-    private final int _tileColumn;
-    private final double _mediumHeight;
+//    const int    _tileLevel;
+//    const int    _tileRow;
+//    const int    _tileColumn;
+//    const double _mediumHeight;
 
     public PvtData(Tile tile, double mediumHeight, Planet planet)
+    //_tileLevel(tile->_level),
+    //_tileRow(tile->_row),
+    //_tileColumn(tile->_column),
+    //_mediumHeight(mediumHeight)
     {
        super(DefineConstants.ProjectedCornersDistanceTLTDataID);
        _northWestPoint = new Vector3D(planet.toCartesian(tile._sector.getNW(), mediumHeight));
        _northEastPoint = new Vector3D(planet.toCartesian(tile._sector.getNE(), mediumHeight));
        _southWestPoint = new Vector3D(planet.toCartesian(tile._sector.getSW(), mediumHeight));
        _southEastPoint = new Vector3D(planet.toCartesian(tile._sector.getSE(), mediumHeight));
-       _tileLevel = tile._level;
-       _tileRow = tile._row;
-       _tileColumn = tile._column;
-       _mediumHeight = mediumHeight;
       final Vector3D normalNW = planet.centricSurfaceNormal(_northWestPoint);
       final Vector3D normalNE = planet.centricSurfaceNormal(_northEastPoint);
       final Vector3D normalSW = planet.centricSurfaceNormal(_southWestPoint);

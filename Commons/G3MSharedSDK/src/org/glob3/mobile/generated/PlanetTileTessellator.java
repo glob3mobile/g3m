@@ -431,23 +431,6 @@ public class PlanetTileTessellator extends TileTessellator
     if (vertices != null)
        vertices.dispose();
   
-  //  if (grid != NULL) {
-  //    CompositeMesh* compositeMesh = new CompositeMesh();
-  //    compositeMesh->addMesh(result);
-  //
-  //    Mesh* pointsMesh = DEMGridUtils::createDebugMesh(grid,
-  //                                                     rc->getPlanet(),
-  //                                                     prc->_verticalExaggeration,
-  //                                                     Geodetic3D::zero(), // offset
-  //                                                     -11000,             // minElevation
-  //                                                     9000,               // maxElevation
-  //                                                     15                  // pointSize
-  //                                                     );
-  //    compositeMesh->addMesh(pointsMesh);
-  //
-  //    return compositeMesh;
-  //  }
-  
     return result;
   }
 

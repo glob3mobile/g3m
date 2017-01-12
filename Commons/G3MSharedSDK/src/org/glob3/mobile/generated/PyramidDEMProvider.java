@@ -81,8 +81,7 @@ public abstract class PyramidDEMProvider extends DEMProvider
     super.dispose();
   }
 
-
-  protected final Vector2S _tileExtent;
+  public final Vector2S _tileExtent;
 
   public abstract PyramidNode createNode(PyramidNode parent, int childID);
 
