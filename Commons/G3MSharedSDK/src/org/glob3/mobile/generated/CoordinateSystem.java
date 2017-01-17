@@ -58,7 +58,6 @@ public class CoordinateSystem
     //TODO CHECK CONSISTENCY
     if (!checkConsistency(x, y, z))
     {
-      ILogger.instance().logError("Inconsistent CoordinateSystem created.");
       throw new RuntimeException("Inconsistent CoordinateSystem created.");
     }
   }
@@ -74,14 +73,12 @@ public class CoordinateSystem
      _origin = new Vector3D(origin);
     if (!checkConsistency(_x, _y, _z))
     {
-      ILogger.instance().logError("Inconsistent CoordinateSystem created.");
       throw new RuntimeException("Inconsistent CoordinateSystem created.");
     }
   }
 
   public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
   {
-  
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
@@ -242,6 +239,28 @@ public class CoordinateSystem
   public final boolean isConsistent()
   {
     return checkConsistency(_x, _y, _z);
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("CoordinateSystem x: ");
+    isb.addString(_x.description());
+    isb.addString(", y: ");
+    isb.addString(_y.description());
+    isb.addString(", z: ");
+    isb.addString(_z.description());
+    isb.addString(", origin: ");
+    isb.addString(_origin.description());
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  @Override
+  public String toString() {
+    return description();
   }
 
 }

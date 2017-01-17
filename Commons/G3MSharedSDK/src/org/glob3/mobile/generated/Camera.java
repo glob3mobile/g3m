@@ -389,14 +389,17 @@ public class Camera
 
   public final void setGeodeticPosition(Geodetic3D g3d)
   {
-    final Angle heading = getHeading();
-    final Angle pitch = getPitch();
+  //  const Angle heading = getHeading();
+  //  const Angle pitch = getPitch();
+    final TaitBryanAngles angles = getHeadingPitchRoll();
     setPitch(Angle.fromDegrees(-90));
-    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
+    final MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
     if (dragMatrix.isValid())
-       applyTransform(dragMatrix);
-    setHeading(heading);
-    setPitch(pitch);
+    {
+      applyTransform(dragMatrix);
+    }
+    setHeading(angles._heading);
+    setPitch(angles._pitch);
   }
 
   public final void setGeodeticPositionStablePitch(Geodetic3D g3d)
