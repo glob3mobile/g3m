@@ -222,3 +222,13 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
                   _y - v.y(),
                   _z - v.z());
 }
+
+
+bool Vector3D::isPerpendicularTo(const Vector3D& v) const {
+  return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
+//  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
+//  if (!(d < 0.001)) {
+//    ILogger::instance()->logError("****>>> %d", d);
+//  }
+//  return d < 0.001;
+}

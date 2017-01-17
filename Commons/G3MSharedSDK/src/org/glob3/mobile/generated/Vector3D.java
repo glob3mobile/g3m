@@ -141,7 +141,12 @@ public class Vector3D
 
   public final boolean isPerpendicularTo(Vector3D v)
   {
-    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
+  //  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
+  //  if (!(d < 0.001)) {
+  //    ILogger::instance()->logError("****>>> %d", d);
+  //  }
+  //  return d < 0.001;
   }
 
   public final Vector3D add(Vector3D v)

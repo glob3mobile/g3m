@@ -177,16 +177,13 @@ void Camera::setPitch(const Angle& angle) {
 }
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
-//  const Angle heading = getHeading();
-//  const Angle pitch = getPitch();
   const TaitBryanAngles angles = getHeadingPitchRoll();
   setPitch(Angle::fromDegrees(-90));
   const MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) {
     applyTransform(dragMatrix);
   }
-  setHeading(angles._heading);
-  setPitch(angles._pitch);
+  setHeadingPitchRoll(angles._heading, angles._pitch, angles._roll);
 }
 
 void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
