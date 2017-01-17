@@ -29,7 +29,8 @@ public class CoordinateSystem
     {
       return false;
     }
-    return areOrtogonal(x, y, z);
+    return true;
+  //  return areOrtogonal(x, y, z);
   }
 
   private static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
@@ -55,7 +56,6 @@ public class CoordinateSystem
      _y = new Vector3D(y.normalized());
      _z = new Vector3D(z.normalized());
      _origin = new Vector3D(origin);
-    //TODO CHECK CONSISTENCY
     if (!checkConsistency(x, y, z))
     {
       throw new RuntimeException("Inconsistent CoordinateSystem created.");

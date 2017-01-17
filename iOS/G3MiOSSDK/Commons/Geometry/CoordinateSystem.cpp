@@ -34,7 +34,6 @@ _y(y.normalized()),
 _z(z.normalized()),
 _origin(origin)
 {
-  //TODO CHECK CONSISTENCY
   if (!checkConsistency(x, y, z)) {
     THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
@@ -60,7 +59,8 @@ bool CoordinateSystem::checkConsistency(const Vector3D& x,
   if (x.isNan() || y.isNan() || z.isNan()) {
     return false;
   }
-  return areOrtogonal(x, y, z);
+  return true;
+//  return areOrtogonal(x, y, z);
 }
 
 

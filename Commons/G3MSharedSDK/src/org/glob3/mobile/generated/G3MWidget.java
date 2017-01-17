@@ -1102,7 +1102,8 @@ public class G3MWidget implements ChangedRendererInfoListener
         Vector3D camPos = _currentCamera.getCartesianPosition();
         Vector3D camCenter = _currentCamera.getCenter();
         Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        final double eyesSeparation = 200; // 0.03;
+        //const double eyesSeparation = 200;// 0.03;
+        final double eyesSeparation = 0.1;
         Vector3D up = _currentCamera.getUp();
   
         final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
