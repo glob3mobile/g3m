@@ -2,12 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import static android.content.Context.SENSOR_SERVICE;
-import static android.content.Context.WINDOW_SERVICE;
-import static android.hardware.Sensor.TYPE_ACCELEROMETER;
-import static android.hardware.Sensor.TYPE_MAGNETIC_FIELD;
-import static android.hardware.SensorManager.SENSOR_DELAY_GAME;
-import static android.hardware.SensorManager.getRotationMatrix;
 
 import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.ILogger;
@@ -25,53 +19,66 @@ import android.view.WindowManager;
 
 
 public class DeviceAttitude_Android
-         extends
-            IDeviceAttitude
-         implements
-            SensorEventListener {
+   extends
+      IDeviceAttitude
+   implements
+      SensorEventListener {
 
    private final SensorManager _sensorManager;
-   private final Display       _display;
-   private final float         _lowPassFilterRatio;
+   private final Display       _defaultDisplay;
+   //   private final float         _lowPassFilterRatio;
 
-   private float[]             _lastMagFields;
-   private float[]             _lastAccels;
-   private final float[]       _rotationMatrix    = new float[16];
-   private final float[]       _inclinationMatrix = new float[16];
+   //   private float[]             _magnetometerReading  = null;
+   //   private float[]             _accelerometerReading = null;
 
-   private boolean             _tracking          = false;
+   //   private final float[]       _rotationVectorReading = new float[3];
+   private final float[]       _rotationMatrix = new float[16];
+
+   private boolean             _tracking       = false;
 
 
-   public DeviceAttitude_Android(final Context context,
-                                 final float lowPassFilterRatio) {
-      _sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
-      _display = ((WindowManager) context.getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-      _lowPassFilterRatio = lowPassFilterRatio;
-   }
-
+   //   public DeviceAttitude_Android(final Context context,
+   //                                 final float lowPassFilterRatio) {
+   //      _sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+   //      _defaultDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+   //      _lowPassFilterRatio = lowPassFilterRatio;
+   //   }
+   //   public DeviceAttitude_Android(final Context context) {
+   //      // this(context, 0.09f); // for shitty devices
+   //      this(context, 0.1f);
+   //   }
 
    public DeviceAttitude_Android(final Context context) {
-      // this(context, 0.09f);  for shitty devices
-      this(context, 0.1f);
+      _sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+      _defaultDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
    }
 
 
    @Override
    public void startTrackingDeviceOrientation() {
-      if (_tracking) {
-         return;
-      }
+      if (!_tracking) {
+         _tracking = true;
 
-      _tracking = true;
+         _sensorManager.unregisterListener(this);
 
-      if (!_sensorManager.registerListener(this, _sensorManager.getDefaultSensor(TYPE_MAGNETIC_FIELD), SENSOR_DELAY_GAME)) {
-         ILogger.instance().logError("TYPE_MAGNETIC_FIELD sensor not supported.");
-         _tracking = false;
-      }
+         //         final Sensor accelerometerSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+         //         if (!_sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST)) {
+         //            ILogger.instance().logError("TYPE_ACCELEROMETER sensor not supported.");
+         //            _tracking = false;
+         //         }
+         //
+         //         final Sensor magneticSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+         //         if (!_sensorManager.registerListener(this, magneticSensor, SensorManager.SENSOR_DELAY_FASTEST)) {
+         //            ILogger.instance().logError("TYPE_MAGNETIC_FIELD sensor not supported.");
+         //            // _tracking = false;
+         //         }
 
-      if (!_sensorManager.registerListener(this, _sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), SENSOR_DELAY_GAME)) {
-         ILogger.instance().logError("TYPE_ACCELEROMETER sensor not supported.");
-         _tracking = false;
+         final Sensor rotationVectorSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+         if (!_sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_FASTEST)) {
+            ILogger.instance().logError("TYPE_ROTATION_VECTOR sensor not supported.");
+            _tracking = false;
+         }
+
       }
    }
 
@@ -91,41 +98,51 @@ public class DeviceAttitude_Android
    }
 
 
-   private float[] lowPass(final float[] input,
-                           final float[] output) {
-      if ((output == null) || (_lowPassFilterRatio >= 1.0)) {
-         return input;
-      }
-      for (int i = 0; i < input.length; i++) {
-         output[i] = output[i] + (_lowPassFilterRatio * (input[i] - output[i]));
-      }
-      return output;
-   }
-
-
    @Override
    public void copyValueOfRotationMatrix(final MutableMatrix44D rotationMatrix) {
-      if ((_lastAccels == null) || (_lastMagFields == null)) {
-         rotationMatrix.setValid(false);
-      }
-      else {
-         if (getRotationMatrix(_rotationMatrix, _inclinationMatrix, _lastAccels, _lastMagFields)) {
-            rotationMatrix.setValue( //
-                     _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
-                     _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
-                     _rotationMatrix[2], _rotationMatrix[6], _rotationMatrix[10], _rotationMatrix[14], //
-                     _rotationMatrix[3], _rotationMatrix[7], _rotationMatrix[11], _rotationMatrix[15]);
-         }
-         else {
-            rotationMatrix.setValid(false);
-         }
-      }
+      //      rotationMatrix.setValid(false);
+      //      if (_accelerometerReading != null) {
+      //         if (_magnetometerReading != null) {
+      //            if (SensorManager.getRotationMatrix(_rotationMatrix, null, _accelerometerReading, _magnetometerReading)) {
+      //               rotationMatrix.setValue( //
+      //                        _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
+      //                        _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
+      //                        _rotationMatrix[2], _rotationMatrix[6], _rotationMatrix[10], _rotationMatrix[14], //
+      //                        _rotationMatrix[3], _rotationMatrix[7], _rotationMatrix[11], _rotationMatrix[15]);
+      //            }
+      //         }
+      //         else {
+      //            final double gx = _accelerometerReading[0] / 9.81f;
+      //            final double gy = _accelerometerReading[1] / 9.81f;
+      //            final double gz = _accelerometerReading[2] / 9.81f;
+      //
+      //            // http://theccontinuum.com/2012/09/24/arduino-imu-pitch-roll-from-accelerometer/
+      //            final float pitch = (float) -Math.atan(gy / Math.sqrt((gx * gx) + (gz * gz)));
+      //            final float roll = (float) -Math.atan(gx / Math.sqrt((gy * gy) + (gz * gz)));
+      //            final float azimuth = 0; // Impossible to guess
+      //
+      //            final float[] mAccMagOrientation = { azimuth, pitch, roll };
+      //            if (SensorManager.getRotationMatrix(_rotationMatrix, null, _accelerometerReading, mAccMagOrientation)) {
+      //               rotationMatrix.setValue( //
+      //                        _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
+      //                        _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
+      //                        _rotationMatrix[2], _rotationMatrix[6], _rotationMatrix[10], _rotationMatrix[14], //
+      //                        _rotationMatrix[3], _rotationMatrix[7], _rotationMatrix[11], _rotationMatrix[15]);
+      //            }
+      //         }
+      //      }
+
+      rotationMatrix.setValue( //
+               _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
+               _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
+               _rotationMatrix[2], _rotationMatrix[6], _rotationMatrix[10], _rotationMatrix[14], //
+               _rotationMatrix[3], _rotationMatrix[7], _rotationMatrix[11], _rotationMatrix[15]);
    }
 
 
    @Override
    public InterfaceOrientation getCurrentInterfaceOrientation() {
-      switch (_display.getRotation()) {
+      switch (_defaultDisplay.getRotation()) {
          case Surface.ROTATION_0:
             return InterfaceOrientation.PORTRAIT;
          case Surface.ROTATION_90:
@@ -143,22 +160,43 @@ public class DeviceAttitude_Android
    @Override
    public void onAccuracyChanged(final Sensor sensor,
                                  final int accuracy) {
-      ILogger.instance().logInfo("Sensor " + sensor.getName() + " changed accuracy to " + accuracy);
+      ILogger.instance().logInfo("Sensor \"" + sensor.getName() + "\" changed accuracy to: " + accuracy);
    }
+
+
+   //   private static float[] lowPass(final float[] current,
+   //                                  final float[] previous,
+   //                                  final float lowPassFilterRatio) {
+   //      if ((previous == null) || (lowPassFilterRatio >= 1.0)) {
+   //         return current.clone();
+   //      }
+   //      final int length = current.length;
+   //      for (int i = 0; i < length; i++) {
+   //         previous[i] = previous[i] + (lowPassFilterRatio * (current[i] - previous[i]));
+   //         // previous[i] = (current[i] * lowPassFilterRatio) + (previous[i] * (1.0f - lowPassFilterRatio));
+   //      }
+   //      return previous;
+   //   }
 
 
    @Override
    public void onSensorChanged(final SensorEvent event) {
       switch (event.sensor.getType()) {
-         case TYPE_ACCELEROMETER:
-            _lastAccels = lowPass(event.values.clone(), _lastAccels);
-            break;
-         case TYPE_MAGNETIC_FIELD:
-            _lastMagFields = lowPass(event.values.clone(), _lastMagFields);
+      //         case Sensor.TYPE_ACCELEROMETER:
+      //            _accelerometerReading = lowPass(event.values, _accelerometerReading, _lowPassFilterRatio);
+      //            break;
+      //         case Sensor.TYPE_MAGNETIC_FIELD:
+      //            _magnetometerReading = lowPass(event.values, _magnetometerReading, _lowPassFilterRatio);
+      //            break;
+         case Sensor.TYPE_ROTATION_VECTOR:
+            //            System.arraycopy(event.values, 0, _rotationVectorReading, 0, _rotationVectorReading.length);
+            SensorManager.getRotationMatrixFromVector(_rotationMatrix, event.values);
             break;
          default:
             return;
       }
+
+
    }
 
 }
