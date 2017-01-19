@@ -302,6 +302,7 @@
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */; };
+		CF9227D51E31154300B79A87 /* MutableQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9227D31E31154300B79A87 /* MutableQuaternion.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
@@ -1585,6 +1586,8 @@
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
 		CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimeInterval.cpp; path = Commons/Basic/TimeInterval.cpp; sourceTree = "<group>"; };
 		CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ITexturizerData.hpp; path = Commons/Basic/ITexturizerData.hpp; sourceTree = "<group>"; };
+		CF9227D31E31154300B79A87 /* MutableQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableQuaternion.cpp; path = Commons/Geometry/MutableQuaternion.cpp; sourceTree = "<group>"; };
+		CF9227D41E31154300B79A87 /* MutableQuaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableQuaternion.hpp; path = Commons/Geometry/MutableQuaternion.hpp; sourceTree = "<group>"; };
 		CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ShortBufferBuilder.cpp; path = Commons/Basic/ShortBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
@@ -2411,6 +2414,8 @@
 				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
 				D8D1541F1C7329AE00E54742 /* Vector2S.cpp */,
 				D8D154201C7329AE00E54742 /* Vector2S.hpp */,
+				CF9227D31E31154300B79A87 /* MutableQuaternion.cpp */,
+				CF9227D41E31154300B79A87 /* MutableQuaternion.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -3269,6 +3274,7 @@
 				E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */,
 				E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */,
 				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
+				CF9227D51E31154300B79A87 /* MutableQuaternion.cpp in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
 				CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,

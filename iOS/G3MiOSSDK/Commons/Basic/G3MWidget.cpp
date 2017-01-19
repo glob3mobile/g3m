@@ -572,25 +572,24 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     
     //For 3D scenes we create the "eyes" cameras
     if (renderStateType == RENDER_READY) {
-      Vector3D camPos = _currentCamera->getCartesianPosition();
-      Vector3D camCenter = _currentCamera->getCenter();
-      Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      //const double eyesSeparation = 200;// 0.03;
-      const double eyesSeparation = 0.1;
-      Vector3D up = _currentCamera->getUp();
+      const Vector3D camPos = _currentCamera->getCartesianPosition();
+      const Vector3D camCenter = _currentCamera->getCenter();
+      const Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+      const double halfEyesSeparation = 0.07 / 2.0;
+      const Vector3D up = _currentCamera->getUp();
       
       const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
-      const Angle vFOV = _currentCamera->getVerticalFOV();
+      const Angle vFOV   = _currentCamera->getVerticalFOV();
       
-      Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
-      Vector3D leftEyeCenter   = camCenter.add(eyesDirection.times(-eyesSeparation));
+      const Vector3D leftEyePosition = camPos.add(eyesDirection.times(-halfEyesSeparation));
+      const Vector3D leftEyeCenter   = camCenter.add(eyesDirection.times(-halfEyesSeparation));
       _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(),
                                    leftEyeCenter.asMutableVector3D(),
                                    up.asMutableVector3D());
       _leftEyeCam->setFOV(vFOV, hFOV_2);
 
-      Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
-      Vector3D rightEyeCenter   = camCenter.add(eyesDirection.times(eyesSeparation));
+      const Vector3D rightEyePosition = camPos.add(eyesDirection.times(halfEyesSeparation));
+      const Vector3D rightEyeCenter   = camCenter.add(eyesDirection.times(halfEyesSeparation));
       
       _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(),
                                     rightEyeCenter.asMutableVector3D(),

@@ -1099,23 +1099,22 @@ public class G3MWidget implements ChangedRendererInfoListener
       //For 3D scenes we create the "eyes" cameras
       if (renderStateType == RenderState_Type.RENDER_READY)
       {
-        Vector3D camPos = _currentCamera.getCartesianPosition();
-        Vector3D camCenter = _currentCamera.getCenter();
-        Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        //const double eyesSeparation = 200;// 0.03;
-        final double eyesSeparation = 0.1;
-        Vector3D up = _currentCamera.getUp();
+        final Vector3D camPos = _currentCamera.getCartesianPosition();
+        final Vector3D camCenter = _currentCamera.getCenter();
+        final Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
+        final double halfEyesSeparation = 0.07 / 2.0;
+        final Vector3D up = _currentCamera.getUp();
   
         final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
         final Angle vFOV = _currentCamera.getVerticalFOV();
   
-        Vector3D leftEyePosition = camPos.add(eyesDirection.times(-eyesSeparation));
-        Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-eyesSeparation));
+        final Vector3D leftEyePosition = camPos.add(eyesDirection.times(-halfEyesSeparation));
+        final Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-halfEyesSeparation));
         _leftEyeCam.setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
         _leftEyeCam.setFOV(vFOV, hFOV_2);
   
-        Vector3D rightEyePosition = camPos.add(eyesDirection.times(eyesSeparation));
-        Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(eyesSeparation));
+        final Vector3D rightEyePosition = camPos.add(eyesDirection.times(halfEyesSeparation));
+        final Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(halfEyesSeparation));
   
         _rightEyeCam.setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
         _rightEyeCam.setFOV(vFOV, hFOV_2);
