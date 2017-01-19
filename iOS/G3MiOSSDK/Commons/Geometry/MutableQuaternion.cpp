@@ -106,7 +106,6 @@ void MutableQuaternion::multiplyBy(const MutableQuaternion& that,
   }
 }
 
-
 void MutableQuaternion::slerp(const MutableQuaternion& that,
                               MutableQuaternion& output,
                               float t) const {
