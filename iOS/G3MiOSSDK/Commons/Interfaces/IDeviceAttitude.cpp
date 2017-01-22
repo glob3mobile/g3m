@@ -47,22 +47,22 @@ CoordinateSystem IDeviceAttitude::getCameraCoordinateSystemForInterfaceOrientati
     _camCSPortrait = new CoordinateSystem(Vector3D(1,0,0), //X
                                           Vector3D(0,0,-1), //Y -> View Direction
                                           Vector3D(0,1,0), //Z -> Up
-                                          Vector3D::zero);
+                                          Vector3D::ZERO);
     
     _camCSPortraitUD = new CoordinateSystem(Vector3D(1,0,0), //X
                                             Vector3D(0,0,-1), //Y -> View Direction
                                             Vector3D(0,-1,0), //Z -> Up
-                                            Vector3D::zero);
+                                            Vector3D::ZERO);
     
     _camCSLL = new CoordinateSystem(Vector3D(0,1,0), //X
                                     Vector3D(0,0,-1), //Y -> View Direction
                                     Vector3D(-1,0,0), //Z -> Up
-                                    Vector3D::zero);
+                                    Vector3D::ZERO);
     
     _camCSLR = new CoordinateSystem(Vector3D(0,1,0), //X
                                     Vector3D(0,0,-1), //Y -> View Direction
                                     Vector3D(1,0,0), //Z -> Up
-                                    Vector3D::zero);
+                                    Vector3D::ZERO);
   }
   
   switch (orientation) {

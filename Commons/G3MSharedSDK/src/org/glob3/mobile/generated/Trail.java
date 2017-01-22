@@ -126,7 +126,7 @@ public class Trail
     
       double lastAlpha = 0;
     
-      final Vector3D rotationAxis = Vector3D.downZ();
+      final Vector3D rotationAxis = Vector3D.DOWN_Z;
       for (int i = 0; i < positionsSize; i++)
       {
         final Position position = _positions.get(i);

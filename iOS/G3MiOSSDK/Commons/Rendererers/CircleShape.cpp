@@ -41,7 +41,7 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
     Mesh* result = new DirectMesh(GLPrimitive::triangleFan(),
                             true,
-                            Vector3D::zero,
+                            Vector3D::ZERO,
                             vertices->create(),
                             1,
                             1,
@@ -60,7 +60,7 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
   Mesh* result = new DirectMesh(GLPrimitive::triangleFan(),
                           true,
-                          Vector3D::zero,
+                          Vector3D::ZERO,
                           vertices->create(),
                           1,
                           1,

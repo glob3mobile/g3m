@@ -19,10 +19,10 @@
 
 
 CoordinateSystem CoordinateSystem::global() {
-  return CoordinateSystem(Vector3D::upX(),
-                          Vector3D::upY(),
-                          Vector3D::upZ(),
-                          Vector3D::zero);
+  return CoordinateSystem(Vector3D::UP_X,
+                          Vector3D::UP_Y,
+                          Vector3D::UP_Z,
+                          Vector3D::ZERO);
 }
 
 CoordinateSystem::CoordinateSystem(const Vector3D& x,
@@ -193,7 +193,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
   bool isHeadingZero = heading.isZero();
 
   MutableMatrix44D hm = isHeadingZero ? MutableMatrix44D::invalid() :
-  MutableMatrix44D::createGeneralRotationMatrix(heading, w, Vector3D::zero);
+  MutableMatrix44D::createGeneralRotationMatrix(heading, w, Vector3D::ZERO);
 
   const Vector3D up = isHeadingZero ? u : u.transformedBy(hm, 1.0);
   const Vector3D vp = isHeadingZero ? v : v.transformedBy(hm, 1.0);
@@ -203,7 +203,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
   bool isPitchZero = pitch.isZero();
 
   MutableMatrix44D pm = isPitchZero?  MutableMatrix44D::invalid() :\
-  MutableMatrix44D::createGeneralRotationMatrix(pitch, up, Vector3D::zero);
+  MutableMatrix44D::createGeneralRotationMatrix(pitch, up, Vector3D::ZERO);
 
   const Vector3D upp = up;
   const Vector3D vpp = isPitchZero? vp : vp.transformedBy(pm, 1.0);
@@ -213,7 +213,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
   bool isRollZero = roll.isZero();
 
   MutableMatrix44D rm = isRollZero? MutableMatrix44D::invalid() :
-  MutableMatrix44D::createGeneralRotationMatrix(roll, vpp, Vector3D::zero);
+  MutableMatrix44D::createGeneralRotationMatrix(roll, vpp, Vector3D::ZERO);
 
   const Vector3D uppp = isRollZero? upp : upp.transformedBy(rm, 1.0);
   const Vector3D vppp = vpp;

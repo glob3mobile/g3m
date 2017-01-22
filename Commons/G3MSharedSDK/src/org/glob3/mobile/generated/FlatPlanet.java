@@ -357,7 +357,7 @@ public class FlatPlanet extends Planet
 
   public final Vector3D getNorth()
   {
-    return Vector3D.upY();
+    return Vector3D.UP_Y;
   }
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)

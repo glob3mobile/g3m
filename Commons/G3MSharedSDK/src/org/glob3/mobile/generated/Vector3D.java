@@ -15,11 +15,9 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "MutableMatrix44D.hpp"
-
-
 //class MutableMatrix44D;
 //class MutableVector3D;
+//class Angle;
 
 
 public class Vector3D
@@ -29,7 +27,14 @@ public class Vector3D
 //  Vector3D operator =(Vector3D that);
 
 
-  public static Vector3D zero = new Vector3D(0,0,0);
+  public static Vector3D ZERO = new Vector3D(0,0,0);
+  public static Vector3D NANV = new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+  public static Vector3D UP_X = new Vector3D(1,0,0);
+  public static Vector3D DOWN_X = new Vector3D(-1,0,0);
+  public static Vector3D UP_Y = new Vector3D(0,1,0);
+  public static Vector3D DOWN_Y = new Vector3D(0,-1,0);
+  public static Vector3D UP_Z = new Vector3D(0,0,1);
+  public static Vector3D DOWN_Z = new Vector3D(0,0,-1);
 
   public final double _x;
   public final double _y;
@@ -41,7 +46,6 @@ public class Vector3D
      _x = x;
      _y = y;
      _z = z;
-
   }
 
   public void dispose()
@@ -53,46 +57,6 @@ public class Vector3D
      _x = v._x;
      _y = v._y;
      _z = v._z;
-
-  }
-
-  public static Vector3D nan()
-  {
-    return new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
-  }
-
-//  static Vector3D zero() {
-//    return Vector3D(0, 0, 0);
-//  }
-
-  public static Vector3D upX()
-  {
-    return new Vector3D(1, 0, 0);
-  }
-
-  public static Vector3D downX()
-  {
-    return new Vector3D(-1, 0, 0);
-  }
-
-  public static Vector3D upY()
-  {
-    return new Vector3D(0, 1, 0);
-  }
-
-  public static Vector3D downY()
-  {
-    return new Vector3D(0, -1, 0);
-  }
-
-  public static Vector3D upZ()
-  {
-    return new Vector3D(0, 0, 1);
-  }
-
-  public static Vector3D downZ()
-  {
-    return new Vector3D(0, 0, -1);
   }
 
   public final boolean isNan()
@@ -114,11 +78,11 @@ public class Vector3D
   {
     if (isNan())
     {
-      return nan();
+      return NANV;
     }
     if (isZero())
     {
-      return zero;
+      return ZERO;
     }
     final double d = length();
     return new Vector3D(_x / d, _y / d, _z / d);

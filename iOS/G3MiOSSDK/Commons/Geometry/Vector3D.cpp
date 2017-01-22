@@ -6,23 +6,39 @@
 //
 
 #include "Vector3D.hpp"
+
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
-
 #include "IStringBuilder.hpp"
 
-Vector3D Vector3D::zero = Vector3D(0,0,0);
+Vector3D Vector3D::ZERO   = Vector3D(0,0,0);
+Vector3D Vector3D::NANV   = Vector3D(NAND, NAND, NAND);
+Vector3D Vector3D::UP_X   = Vector3D(1,0,0);
+Vector3D Vector3D::DOWN_X = Vector3D(-1,0,0);
+Vector3D Vector3D::UP_Y   = Vector3D(0,1,0);
+Vector3D Vector3D::DOWN_Y = Vector3D(0,-1,0);
+Vector3D Vector3D::UP_Z   = Vector3D(0,0,1);
+Vector3D Vector3D::DOWN_Z = Vector3D(0,0,-1);
 
+bool Vector3D::isNan() const {
+  return (ISNAN(_x) ||
+          ISNAN(_y) ||
+          ISNAN(_z));
+}
 
 Vector3D Vector3D::normalized() const {
   if (isNan()) {
-    return nan();
+    return NANV;
   }
   if (isZero()) {
-    return zero;
+    return ZERO;
   }
   const double d = length();
   return Vector3D(_x / d, _y / d, _z / d);
+}
+
+double Vector3D::length() const {
+  return IMathUtils::instance()->sqrt(squaredLength());
 }
 
 double Vector3D::angleInRadiansBetween(const Vector3D& other) const {
@@ -231,4 +247,9 @@ bool Vector3D::isPerpendicularTo(const Vector3D& v) const {
 //    ILogger::instance()->logError("****>>> %d", d);
 //  }
 //  return d < 0.001;
+}
+
+Angle Vector3D::angleBetween(const Vector3D& a,
+                          const Vector3D& b) {
+  return Angle::fromRadians(angleInRadiansBetween(a, b));
 }

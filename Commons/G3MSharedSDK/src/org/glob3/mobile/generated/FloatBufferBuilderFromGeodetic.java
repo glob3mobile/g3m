@@ -58,12 +58,12 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public static FloatBufferBuilderFromGeodetic builderWithoutCenter(Planet planet)
   {
-    return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.zero);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.ZERO);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(Planet planet)
   {
-    return new FloatBufferBuilderFromGeodetic(CenterStrategy.FIRST_VERTEX, planet, Vector3D.zero);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.FIRST_VERTEX, planet, Vector3D.ZERO);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Vector3D center)

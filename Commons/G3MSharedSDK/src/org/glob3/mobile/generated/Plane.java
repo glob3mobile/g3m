@@ -106,7 +106,7 @@ public class Plane
   
     if (den == 0)
     {
-      return Vector3D.nan();
+      return Vector3D.NANV;
     }
   
     final double num = A * x1 + B * y1 + C * z1 + _d;
@@ -119,10 +119,10 @@ public class Plane
   public static Vector3D intersectionXYPlaneWithRay(Vector3D origin, Vector3D direction)
   {
     if (direction._z == 0)
-       return Vector3D.nan();
+       return Vector3D.NANV;
     final double t = -origin._z / direction._z;
     if (t<0)
-       return Vector3D.nan();
+       return Vector3D.NANV;
     Vector3D point = origin.add(direction.times(t));
     return point;
   }

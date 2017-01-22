@@ -647,7 +647,7 @@ public class MutableMatrix44D
   
     if (out3 == 0.0)
     {
-      return Vector3D.nan();
+      return Vector3D.NANV;
     }
   
     final double objx = out0 / out3;
@@ -805,8 +805,8 @@ public class MutableMatrix44D
     final MutableMatrix44D changeReferenceCoordinatesSystem = new MutableMatrix44D(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
   
     // orbit reference system to geodetic position
-    final MutableMatrix44D longitudeRotation = MutableMatrix44D.createRotationMatrix(longitude, Vector3D.upY());
-    final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
+    final MutableMatrix44D longitudeRotation = MutableMatrix44D.createRotationMatrix(longitude, Vector3D.UP_Y);
+    final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.DOWN_X);
   
     return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
   }

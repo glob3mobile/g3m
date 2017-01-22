@@ -47,7 +47,7 @@ public class CoordinateSystem
 
   public static CoordinateSystem global()
   {
-    return new CoordinateSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
+    return new CoordinateSystem(Vector3D.UP_X, Vector3D.UP_Y, Vector3D.UP_Z, Vector3D.ZERO);
   }
 
   public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
@@ -123,7 +123,7 @@ public class CoordinateSystem
     //Heading rotation
     boolean isHeadingZero = heading.isZero();
   
-    MutableMatrix44D hm = isHeadingZero ? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(heading, w, Vector3D.zero);
+    MutableMatrix44D hm = isHeadingZero ? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(heading, w, Vector3D.ZERO);
   
     final Vector3D up = isHeadingZero ? u : u.transformedBy(hm, 1.0);
     final Vector3D vp = isHeadingZero ? v : v.transformedBy(hm, 1.0);
@@ -132,7 +132,7 @@ public class CoordinateSystem
     //Pitch rotation
     boolean isPitchZero = pitch.isZero();
   
-    MutableMatrix44D pm = isPitchZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(pitch, up, Vector3D.zero);
+    MutableMatrix44D pm = isPitchZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(pitch, up, Vector3D.ZERO);
   
     final Vector3D upp = up;
     final Vector3D vpp = isPitchZero? vp : vp.transformedBy(pm, 1.0);
@@ -141,7 +141,7 @@ public class CoordinateSystem
     //Roll rotation
     boolean isRollZero = roll.isZero();
   
-    MutableMatrix44D rm = isRollZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(roll, vpp, Vector3D.zero);
+    MutableMatrix44D rm = isRollZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(roll, vpp, Vector3D.ZERO);
   
     final Vector3D uppp = isRollZero? upp : upp.transformedBy(rm, 1.0);
     final Vector3D vppp = vpp;

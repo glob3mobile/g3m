@@ -64,13 +64,13 @@ public abstract class IDeviceAttitude
   
     if (_camCSLL == null)
     {
-      _camCSPortrait = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,1,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+      _camCSPortrait = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,1,0), Vector3D.ZERO); //Z -> Up - Y -> View Direction - X
   
-      _camCSPortraitUD = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,-1,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+      _camCSPortraitUD = new CoordinateSystem(new Vector3D(1,0,0), new Vector3D(0,0,-1), new Vector3D(0,-1,0), Vector3D.ZERO); //Z -> Up - Y -> View Direction - X
   
-      _camCSLL = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(-1,0,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+      _camCSLL = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(-1,0,0), Vector3D.ZERO); //Z -> Up - Y -> View Direction - X
   
-      _camCSLR = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(1,0,0), Vector3D.zero); //Z -> Up - Y -> View Direction - X
+      _camCSLR = new CoordinateSystem(new Vector3D(0,1,0), new Vector3D(0,0,-1), new Vector3D(1,0,0), Vector3D.ZERO); //Z -> Up - Y -> View Direction - X
     }
   
     switch (orientation)

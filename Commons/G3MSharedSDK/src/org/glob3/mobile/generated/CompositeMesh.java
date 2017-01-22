@@ -91,7 +91,7 @@ public class CompositeMesh extends Mesh
       }
       acumIndex += childSize;
     }
-    return Vector3D.nan();
+    return Vector3D.NANV;
   }
 
   public final BoundingVolume getBoundingVolume()

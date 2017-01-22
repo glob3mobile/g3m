@@ -90,7 +90,7 @@ public:
                  Color* borderColor = NULL,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(URL("", false)),
   _resolution(resolution < 3 ? 3 : resolution),
@@ -118,7 +118,7 @@ public:
                  bool mercator,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),

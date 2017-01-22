@@ -9,12 +9,9 @@
 #define G3MiOSSDK_MutableVector3D
 
 #include "IMathUtils.hpp"
-
 #include "MutableMatrix44D.hpp"
-
-#include <stdio.h>
 #include "Vector3D.hpp"
-//class Vector3D;
+
 
 class MutableVector3D {
 private:

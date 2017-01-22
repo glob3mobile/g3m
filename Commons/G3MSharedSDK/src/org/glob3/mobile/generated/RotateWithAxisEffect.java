@@ -18,9 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Angle;
-
-
 
 public class RotateWithAxisEffect extends EffectWithForce
 {

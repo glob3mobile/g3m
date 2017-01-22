@@ -12,9 +12,7 @@
 
 #include "Effects.hpp"
 #include "Vector3D.hpp"
-
-class Angle;
-
+#include "Angle.hpp"
 
 
 class RotateWithAxisEffect : public EffectWithForce {

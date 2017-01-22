@@ -37,19 +37,19 @@ public:
 
   static FloatBufferBuilderFromCartesian3D* builderWithoutCenter() {
 #ifdef C_CODE
-    return new FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
+    return new FloatBufferBuilderFromCartesian3D(NO_CENTER, Vector3D::ZERO);
 #endif
 #ifdef JAVA_CODE
-    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.zero);
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.ZERO);
 #endif
   }
 
   static FloatBufferBuilderFromCartesian3D* builderWithFirstVertexAsCenter() {
 #ifdef C_CODE
-    return new FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
+    return new FloatBufferBuilderFromCartesian3D(FIRST_VERTEX, Vector3D::ZERO);
 #endif
 #ifdef JAVA_CODE
-    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.zero);
+    return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.ZERO);
 #endif
   }
 

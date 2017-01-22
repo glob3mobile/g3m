@@ -214,7 +214,7 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin,
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  return Vector3D::nan();  
+  return Vector3D::NANV;
 }
 
 

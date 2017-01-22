@@ -8,6 +8,8 @@
 
 #include "Ellipsoid.hpp"
 
+#include "IMathUtils.hpp"
+
 
 std::vector<double> Ellipsoid::intersectionsDistances(double originX,
                                                       double originY,

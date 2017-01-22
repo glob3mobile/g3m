@@ -267,7 +267,7 @@ public class Box extends BoundingVolume
          return inter;
     }
   
-    return Vector3D.nan();
+    return Vector3D.NANV;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState, Color color)

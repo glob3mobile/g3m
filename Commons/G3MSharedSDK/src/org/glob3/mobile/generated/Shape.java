@@ -43,8 +43,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private double _translationY;
   private double _translationZ;
 
-//  const Planet* _planet;
-
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D getTransformMatrix(Planet planet)
   {
@@ -77,23 +75,20 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final MutableMatrix44D createTransformMatrix(Planet planet)
   {
-  
-    double altitude = _position._height;
-    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
-    {
-      altitude += _surfaceElevation;
-    }
-  
-    Geodetic3D positionWithSurfaceElevation = new Geodetic3D(_position._latitude, _position._longitude, altitude);
-  
-    final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(positionWithSurfaceElevation);
-  
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.upY());
+    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.DOWN_Z);
+    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.UP_X);
+    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.UP_Y);
     final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
     final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
+  
+  
+    double height = _position._height;
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      height += _surfaceElevation;
+    }
+    final MutableMatrix44D geodeticTransform = planet.createGeodeticTransformMatrix(_position._latitude, _position._longitude, height);
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -173,18 +168,6 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return _roll;
   }
 
-//  void setPosition(Geodetic3D* position,
-//                   AltitudeMode altitudeMode);
-
-
-  //void Shape::setPosition(Geodetic3D* position,
-  //                        AltitudeMode altitudeMode) {
-  //  delete _position;
-  //  _position = position;
-  //  _altitudeMode = altitudeMode;
-  //  cleanTransformMatrix();
-  //}
-  
   public final void setPosition(Geodetic3D position)
   {
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
@@ -192,9 +175,21 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
       throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
     }
   
-    if (_position != null)
-       _position.dispose();
     _position = position;
+    cleanTransformMatrix();
+  }
+
+  public final void setFullPosition(Geodetic3D position, Angle heading, Angle pitch, Angle roll)
+  {
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+    }
+  
+    _position = position;
+    _heading = heading;
+    _pitch = pitch;
+    _roll = roll;
     cleanTransformMatrix();
   }
 
@@ -245,15 +240,21 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _heading = heading;
     cleanTransformMatrix();
   }
-
   public final void setPitch(Angle pitch)
   {
     _pitch = pitch;
     cleanTransformMatrix();
   }
-
   public final void setRoll(Angle roll)
   {
+    _roll = roll;
+    cleanTransformMatrix();
+  }
+
+  public final void setHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
+  {
+    _heading = heading;
+    _pitch = pitch;
     _roll = roll;
     cleanTransformMatrix();
   }

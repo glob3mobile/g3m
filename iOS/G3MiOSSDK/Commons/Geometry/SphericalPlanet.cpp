@@ -13,7 +13,7 @@
 
 
 const Planet* SphericalPlanet::createEarth() {
-  return new SphericalPlanet(Sphere(Vector3D::zero,
+  return new SphericalPlanet(Sphere(Vector3D::ZERO,
                                     6378137.0));
 }
 

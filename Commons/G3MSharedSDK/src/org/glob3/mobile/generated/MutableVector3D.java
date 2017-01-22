@@ -16,8 +16,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Vector3D;
-
 public class MutableVector3D
 {
   private double _x;
