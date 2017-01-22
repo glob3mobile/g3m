@@ -14,12 +14,9 @@ package org.glob3.mobile.generated;
 //
 
 
-<<<<<<< HEAD
 //class Vector3D;
 //class Angle;
 //class MutableMatrix44D;
-=======
->>>>>>> purgatory
 
 
 public class MutableVector3D

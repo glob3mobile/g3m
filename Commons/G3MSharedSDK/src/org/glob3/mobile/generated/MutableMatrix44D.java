@@ -121,6 +121,8 @@ public class MutableMatrix44D
     _m31 = m31;
     _m32 = m32;
     _m33 = m33;
+
+    _matrix44D = null;
   }
 
   public MutableMatrix44D()
@@ -148,6 +150,7 @@ public class MutableMatrix44D
     _m33 = 0.0;
   }
 
+  //<<<<<<< HEAD
   public MutableMatrix44D(MutableMatrix44D m)
   {
      _isValid = m._isValid;

@@ -15,15 +15,9 @@ package org.glob3.mobile.generated;
 
 
 
-<<<<<<< HEAD
 //class MutableVector3D;
 //class Angle;
 //class MutableMatrix44D;
-=======
-//class MutableMatrix44D;
-//class MutableVector3D;
-//class Angle;
->>>>>>> purgatory
 
 
 public class Vector3D
@@ -46,7 +40,6 @@ public class Vector3D
   public final double _y;
   public final double _z;
 
-
   public Vector3D(double x, double y, double z)
   {
      _x = x;
@@ -63,44 +56,6 @@ public class Vector3D
      _x = v._x;
      _y = v._y;
      _z = v._z;
-<<<<<<< HEAD
-  }
-
-  public static Vector3D nan()
-  {
-    return new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
-  }
-
-  public static Vector3D upX()
-  {
-    return new Vector3D(1, 0, 0);
-  }
-
-  public static Vector3D downX()
-  {
-    return new Vector3D(-1, 0, 0);
-  }
-
-  public static Vector3D upY()
-  {
-    return new Vector3D(0, 1, 0);
-  }
-
-  public static Vector3D downY()
-  {
-    return new Vector3D(0, -1, 0);
-  }
-
-  public static Vector3D upZ()
-  {
-    return new Vector3D(0, 0, 1);
-  }
-
-  public static Vector3D downZ()
-  {
-    return new Vector3D(0, 0, -1);
-=======
->>>>>>> purgatory
   }
 
   public final boolean isNan()
@@ -150,11 +105,11 @@ public class Vector3D
   public final boolean isPerpendicularTo(Vector3D v)
   {
     return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
-  //  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
-  //  if (!(d < 0.001)) {
-  //    ILogger::instance()->logError("****>>> %d", d);
-  //  }
-  //  return d < 0.001;
+    //  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
+    //  if (!(d < 0.001)) {
+    //    ILogger::instance()->logError("****>>> %d", d);
+    //  }
+    //  return d < 0.001;
   }
 
   public final Vector3D add(Vector3D v)

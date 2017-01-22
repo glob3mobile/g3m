@@ -38,7 +38,6 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
   }
 
 
-
   public static FloatBufferBuilderFromCartesian3D builderWithoutCenter()
   {
     return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.ZERO);
