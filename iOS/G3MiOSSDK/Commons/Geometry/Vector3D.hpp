@@ -22,20 +22,25 @@ private:
 
 public:
 
-  static Vector3D zero;
+  static const Vector3D ZERO;
+  static const Vector3D NANV;
+  static const Vector3D UP_X;
+  static const Vector3D DOWN_X;
+  static const Vector3D UP_Y;
+  static const Vector3D DOWN_Y;
+  static const Vector3D UP_Z;
+  static const Vector3D DOWN_Z;
 
   const double _x;
   const double _y;
   const double _z;
-
 
   Vector3D(const double x,
            const double y,
            const double z) :
   _x(x),
   _y(y),
-  _z(z)
-  {
+  _z(z) {
   }
 
   ~Vector3D() {
@@ -46,32 +51,6 @@ public:
   _y(v._y),
   _z(v._z)
   {
-  }
-
-  static Vector3D nan();
-
-  static Vector3D upX() {
-    return Vector3D(1,0,0);
-  }
-
-  static Vector3D downX() {
-    return Vector3D(-1,0,0);
-  }
-
-  static Vector3D upY() {
-    return Vector3D(0,1,0);
-  }
-
-  static Vector3D downY() {
-    return Vector3D(0,-1,0);
-  }
-
-  static Vector3D upZ() {
-    return Vector3D(0,0,1);
-  }
-
-  static Vector3D downZ() {
-    return Vector3D(0,0,-1);
   }
 
   bool isNan() const;
@@ -86,7 +65,7 @@ public:
     return (_x == 0) && (_y == 0) && (_z == 0);
   }
 
-  Vector3D normalized() const;
+  const Vector3D normalized() const;
 
   double length() const;
 

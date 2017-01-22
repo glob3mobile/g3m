@@ -379,7 +379,7 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D,
   const double out3 = m._m30 * in0 + m._m31 * in1 + m._m32 * in2 + m._m33 * in3;
 
   if (out3 == 0.0) {
-    return Vector3D::nan();
+    return Vector3D::NANV;
   }
 
   const double objx = out0 / out3;
@@ -481,7 +481,8 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
 }
 
 MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,
-                                                               const Vector3D& axis, const Vector3D& point) {
+                                                               const Vector3D& axis,
+                                                               const Vector3D& point) {
   const MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
   const MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(angle, axis);
   const MutableMatrix44D T2 = MutableMatrix44D::createTranslationMatrix(point);
@@ -533,8 +534,8 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
                                                           0, 0, 0, 1);
 
   // orbit reference system to geodetic position
-  const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(longitude, Vector3D::upY());
-  const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(latitude,  Vector3D::downX());
+  const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(longitude, Vector3D::UP_Y);
+  const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(latitude,  Vector3D::DOWN_X);
 
   return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
 }

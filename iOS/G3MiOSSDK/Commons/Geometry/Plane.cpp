@@ -35,7 +35,7 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
   const double den = A * (x1 -x2) + B * (y1 - y2) + C * (z1 - z2);
 
   if (den == 0) {
-    return Vector3D::nan();
+    return Vector3D::NANV;
   }
 
   const double num = A * x1 + B * y1 + C * z1 + _d;
@@ -49,9 +49,9 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
 Vector3D Plane::intersectionXYPlaneWithRay(const Vector3D& origin,
                                            const Vector3D& direction)
 {
-  if (direction._z == 0) return Vector3D::nan();
+  if (direction._z == 0) return Vector3D::NANV;
   const double t = -origin._z / direction._z;
-  if (t<0) return Vector3D::nan();
+  if (t<0) return Vector3D::NANV;
   Vector3D point = origin.add(direction.times(t));
   return point;
 }

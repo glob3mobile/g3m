@@ -17,44 +17,58 @@
 #include "GLConstants.hpp"
 #include "MutableMatrix44D.hpp"
 #include "ILogger.hpp"
+#include "IStringBuilder.hpp"
 
 
 CoordinateSystem CoordinateSystem::global() {
-  return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
+  return CoordinateSystem(Vector3D::UP_X,
+                          Vector3D::UP_Y,
+                          Vector3D::UP_Z,
+                          Vector3D::ZERO);
 }
 
-CoordinateSystem::CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin):
-_x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
+CoordinateSystem::CoordinateSystem(const Vector3D& x,
+                                   const Vector3D& y,
+                                   const Vector3D& z,
+                                   const Vector3D& origin):
+_x(x.normalized()),
+_y(y.normalized()),
+_z(z.normalized()),
+_origin(origin)
 {
-  //TODO CHECK CONSISTENCY
   if (!checkConsistency(x, y, z)) {
-    ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
     THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
 //For camera
-CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin) :
-  _x(viewDirection.cross(up).normalized()),
-  _y(viewDirection.normalized()),
-  _z(up.normalized()),
-  _origin(origin)
+CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection,
+                                   const Vector3D& up,
+                                   const Vector3D& origin) :
+_x(viewDirection.cross(up).normalized()),
+_y(viewDirection.normalized()),
+_z(up.normalized()),
+_origin(origin)
 {
   if (!checkConsistency(_x, _y, _z)) {
-    ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
     THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
-bool CoordinateSystem::checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
+bool CoordinateSystem::checkConsistency(const Vector3D& x,
+                                        const Vector3D& y,
+                                        const Vector3D& z) {
   if (x.isNan() || y.isNan() || z.isNan()) {
     return false;
   }
-  return areOrtogonal(x, y, z);
+  return true;
+//  return areOrtogonal(x, y, z);
 }
 
 
-bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
+bool CoordinateSystem::areOrtogonal(const Vector3D& x,
+                                    const Vector3D& y,
+                                    const Vector3D& z) {
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
 }
 
@@ -62,8 +76,10 @@ CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const
   return CoordinateSystem(_x, _y, _z, newOrigin);
 }
 
-Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const {
-
+Mesh* CoordinateSystem::createMesh(double size,
+                                   const Color& xColor,
+                                   const Color& yColor,
+                                   const Color& zColor) const {
   FloatBufferBuilderFromColor colors;
 
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(_origin);
@@ -163,7 +179,9 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& a
   return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
 }
 
-CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const {
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
+                                                        const Angle& pitch,
+                                                        const Angle& roll) const {
 
   //Check out Agustin Trujillo's review of this topic
   //This implementation is purposely explicit on every step
@@ -176,7 +194,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, co
   bool isHeadingZero = heading.isZero();
 
   MutableMatrix44D hm = isHeadingZero ? MutableMatrix44D::invalid() :
-  MutableMatrix44D::createGeneralRotationMatrix(heading, w, Vector3D::zero);
+  MutableMatrix44D::createGeneralRotationMatrix(heading, w, Vector3D::ZERO);
 
   const Vector3D up = isHeadingZero ? u : u.transformedBy(hm, 1.0);
   const Vector3D vp = isHeadingZero ? v : v.transformedBy(hm, 1.0);
@@ -186,7 +204,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, co
   bool isPitchZero = pitch.isZero();
 
   MutableMatrix44D pm = isPitchZero?  MutableMatrix44D::invalid() :\
-  MutableMatrix44D::createGeneralRotationMatrix(pitch, up, Vector3D::zero);
+  MutableMatrix44D::createGeneralRotationMatrix(pitch, up, Vector3D::ZERO);
 
   const Vector3D upp = up;
   const Vector3D vpp = isPitchZero? vp : vp.transformedBy(pm, 1.0);
@@ -196,7 +214,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, co
   bool isRollZero = roll.isZero();
 
   MutableMatrix44D rm = isRollZero? MutableMatrix44D::invalid() :
-  MutableMatrix44D::createGeneralRotationMatrix(roll, vpp, Vector3D::zero);
+  MutableMatrix44D::createGeneralRotationMatrix(roll, vpp, Vector3D::ZERO);
 
   const Vector3D uppp = isRollZero? upp : upp.transformedBy(rm, 1.0);
   const Vector3D vppp = vpp;
@@ -205,30 +223,26 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, co
   return CoordinateSystem(uppp, vppp, wppp, _origin);
 }
 
-
 bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 
-
 CoordinateSystem CoordinateSystem::applyRotation(const MutableMatrix44D& m) const{
-  
+
   return CoordinateSystem(_x.transformedBy(m, 1.0),
                           _y.transformedBy(m, 1.0),
                           _z.transformedBy(m, 1.0),
                           _origin);//.transformedBy(m, 1.0));
 }
 
-
 MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
-  
+
   return MutableMatrix44D(_x._x, _x._y, _x._z, 0,
                           _y._x, _y._y, _y._z, 0,
                           _z._x, _z._y, _z._z, 0,
                           0,0,0,1);
-  
-}
 
+}
 
 void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
   m.setValue(_x._x, _x._y, _x._z, 0,
@@ -239,4 +253,19 @@ void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
 
 bool CoordinateSystem::isConsistent() const{
   return checkConsistency(_x, _y, _z);
+}
+
+const std::string CoordinateSystem::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("CoordinateSystem x: ");
+  isb->addString(_x.description());
+  isb->addString(", y: ");
+  isb->addString(_y.description());
+  isb->addString(", z: ");
+  isb->addString(_z.description());
+  isb->addString(", origin: ");
+  isb->addString(_origin.description());
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

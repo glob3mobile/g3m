@@ -18,7 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> purgatory
 
 public class RotateWithAxisEffect extends EffectWithForce
 {

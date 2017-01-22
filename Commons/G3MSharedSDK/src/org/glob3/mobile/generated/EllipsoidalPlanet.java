@@ -41,7 +41,7 @@ public class EllipsoidalPlanet extends Planet
 
   public static Planet createEarth()
   {
-    return new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, new Vector3D(6378137.0, 6378137.0, 6356752.314245)));
+    return new EllipsoidalPlanet(new Ellipsoid(Vector3D.ZERO, new Vector3D(6378137.0, 6378137.0, 6356752.314245)));
   }
 
   public EllipsoidalPlanet(Ellipsoid ellipsoid)
@@ -656,7 +656,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D getNorth()
   {
-    return Vector3D.upZ();
+    return Vector3D.UP_Z;
   }
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)

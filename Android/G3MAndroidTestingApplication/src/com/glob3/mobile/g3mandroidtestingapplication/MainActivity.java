@@ -45,7 +45,8 @@ public class MainActivity
       //_g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 1634079));
 
       // Buenos Aires, there we go!
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(39.933619, 116.393339, 35000), TimeInterval.fromMinutes(1));
+      //      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(39.933619, 116.393339, 35000), TimeInterval.fromMinutes(1));
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(39.933619, 116.393339, 35000));
    }
 
 

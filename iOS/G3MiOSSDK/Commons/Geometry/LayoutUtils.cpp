@@ -25,7 +25,7 @@ std::vector<Geodetic3D*> LayoutUtils::splitOverCircle(const EllipsoidalPlanet* E
   const double deltaInRadians      = (PI * 2.0) / splits;
   const Vector3D cartesianCenter   = EllipsoidalPlanet->toCartesian(center);
   const Vector3D normal            = EllipsoidalPlanet->geodeticSurfaceNormal(center);
-  const Vector3D northInPlane      = Vector3D::upZ().projectionInPlane(normal).normalized().times(radiusInMeters);
+  const Vector3D northInPlane      = Vector3D::UP_Z.projectionInPlane(normal).normalized().times(radiusInMeters);
   
   for (int i = 0; i < splits; i++) {
     const double angleInRadians = startAngleInRadians + (deltaInRadians * i);

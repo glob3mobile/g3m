@@ -87,6 +87,7 @@ tools/externals/poly2tri-java/bin/
 # Android-Studio
 *.iml
 *.idea
+local.properties
 
 # Gradle
 build

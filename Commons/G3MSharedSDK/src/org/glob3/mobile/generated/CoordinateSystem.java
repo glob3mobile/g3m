@@ -29,7 +29,8 @@ public class CoordinateSystem
     {
       return false;
     }
-    return areOrtogonal(x, y, z);
+    return true;
+  //  return areOrtogonal(x, y, z);
   }
 
   private static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
@@ -46,7 +47,7 @@ public class CoordinateSystem
 
   public static CoordinateSystem global()
   {
-    return new CoordinateSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
+    return new CoordinateSystem(Vector3D.UP_X, Vector3D.UP_Y, Vector3D.UP_Z, Vector3D.ZERO);
   }
 
   public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
@@ -55,10 +56,8 @@ public class CoordinateSystem
      _y = new Vector3D(y.normalized());
      _z = new Vector3D(z.normalized());
      _origin = new Vector3D(origin);
-    //TODO CHECK CONSISTENCY
     if (!checkConsistency(x, y, z))
     {
-      ILogger.instance().logError("Inconsistent CoordinateSystem created.");
       throw new RuntimeException("Inconsistent CoordinateSystem created.");
     }
   }
@@ -74,14 +73,12 @@ public class CoordinateSystem
      _origin = new Vector3D(origin);
     if (!checkConsistency(_x, _y, _z))
     {
-      ILogger.instance().logError("Inconsistent CoordinateSystem created.");
       throw new RuntimeException("Inconsistent CoordinateSystem created.");
     }
   }
 
   public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
   {
-  
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
@@ -126,7 +123,7 @@ public class CoordinateSystem
     //Heading rotation
     boolean isHeadingZero = heading.isZero();
   
-    MutableMatrix44D hm = isHeadingZero ? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(heading, w, Vector3D.zero);
+    MutableMatrix44D hm = isHeadingZero ? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(heading, w, Vector3D.ZERO);
   
     final Vector3D up = isHeadingZero ? u : u.transformedBy(hm, 1.0);
     final Vector3D vp = isHeadingZero ? v : v.transformedBy(hm, 1.0);
@@ -135,7 +132,7 @@ public class CoordinateSystem
     //Pitch rotation
     boolean isPitchZero = pitch.isZero();
   
-    MutableMatrix44D pm = isPitchZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(pitch, up, Vector3D.zero);
+    MutableMatrix44D pm = isPitchZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(pitch, up, Vector3D.ZERO);
   
     final Vector3D upp = up;
     final Vector3D vpp = isPitchZero? vp : vp.transformedBy(pm, 1.0);
@@ -144,7 +141,7 @@ public class CoordinateSystem
     //Roll rotation
     boolean isRollZero = roll.isZero();
   
-    MutableMatrix44D rm = isRollZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(roll, vpp, Vector3D.zero);
+    MutableMatrix44D rm = isRollZero? MutableMatrix44D.invalid() : MutableMatrix44D.createGeneralRotationMatrix(roll, vpp, Vector3D.ZERO);
   
     final Vector3D uppp = isRollZero? upp : upp.transformedBy(rm, 1.0);
     final Vector3D vppp = vpp;
@@ -242,6 +239,28 @@ public class CoordinateSystem
   public final boolean isConsistent()
   {
     return checkConsistency(_x, _y, _z);
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("CoordinateSystem x: ");
+    isb.addString(_x.description());
+    isb.addString(", y: ");
+    isb.addString(_y.description());
+    isb.addString(", z: ");
+    isb.addString(_z.description());
+    isb.addString(", origin: ");
+    isb.addString(_origin.description());
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  @Override
+  public String toString() {
+    return description();
   }
 
 }

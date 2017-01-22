@@ -77,7 +77,7 @@ FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithoutCe
 #else
                                             CenterStrategy.NO_CENTER,
 #endif
-                                            planet, Vector3D::zero);
+                                            planet, Vector3D::ZERO);
 }
 
 FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(const Planet* planet) {
@@ -87,7 +87,7 @@ FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithFirst
 #else
                                             CenterStrategy.FIRST_VERTEX,
 #endif
-                                            planet, Vector3D::zero);
+                                            planet, Vector3D::ZERO);
 }
 
 void FloatBufferBuilderFromGeodetic::add(const Geodetic3D& position) {

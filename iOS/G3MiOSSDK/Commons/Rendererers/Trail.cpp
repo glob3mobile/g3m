@@ -249,7 +249,7 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
   double lastAlpha = 0;
 
-  const Vector3D rotationAxis = Vector3D::downZ();
+  const Vector3D rotationAxis = Vector3D::DOWN_Z;
   for (size_t i = 0; i < positionsSize; i++) {
     const Position* position = _positions[i];
 

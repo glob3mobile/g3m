@@ -86,6 +86,8 @@ public:
     _m31  = m31;
     _m32  = m32;
     _m33  = m33;
+
+    _matrix44D = NULL;
   }
 
   MutableMatrix44D():
@@ -113,6 +115,7 @@ public:
     _m33 = 0.0;
   }
 
+  //<<<<<<< HEAD
   MutableMatrix44D(const MutableMatrix44D &m);
 
   explicit MutableMatrix44D(const Matrix44D &m);

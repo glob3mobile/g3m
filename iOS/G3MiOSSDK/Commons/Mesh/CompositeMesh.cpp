@@ -60,7 +60,7 @@ const Vector3D CompositeMesh::getVertex(size_t index) const {
     }
     acumIndex += childSize;
   }
-  return Vector3D::nan();
+  return Vector3D::NANV;
 }
 
 BoundingVolume* CompositeMesh::calculateBoundingVolume() const {

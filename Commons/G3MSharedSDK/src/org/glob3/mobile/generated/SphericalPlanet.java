@@ -38,7 +38,7 @@ public class SphericalPlanet extends Planet
 
   public static Planet createEarth()
   {
-    return new SphericalPlanet(new Sphere(Vector3D.zero, 6378137.0));
+    return new SphericalPlanet(new Sphere(Vector3D.ZERO, 6378137.0));
   }
 
   public SphericalPlanet(Sphere sphere)
@@ -622,7 +622,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D getNorth()
   {
-    return Vector3D.upZ();
+    return Vector3D.UP_Z;
   }
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)

@@ -70,7 +70,7 @@ void EllipsoidalPlanet::toCartesian(const Geodetic2D& geodetic,
 }
 
 const Planet* EllipsoidalPlanet::createEarth() {
-  return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero,
+  return new EllipsoidalPlanet(Ellipsoid(Vector3D::ZERO,
                                          Vector3D(6378137.0, 6378137.0, 6356752.314245)));
 }
 

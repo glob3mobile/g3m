@@ -29,7 +29,6 @@ private:
 
 public:
 
-
   static FloatBufferBuilderFromCartesian3D* builderWithoutCenter();
 
   static FloatBufferBuilderFromCartesian3D* builderWithFirstVertexAsCenter();
@@ -101,7 +100,7 @@ public:
   }
 
   Vector3D getCenter();
-
+  
 };
 
 #endif

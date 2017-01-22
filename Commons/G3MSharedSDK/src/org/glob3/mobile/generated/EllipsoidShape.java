@@ -195,10 +195,15 @@ public class EllipsoidShape extends AbstractMeshShape
       }
     }
   
+<<<<<<< HEAD
     final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.zero, _ellipsoid._radii));
     final Sector sector = new Sector(Sector.FULL_SPHERE);
+=======
+    final EllipsoidalPlanet ellipsoid = new EllipsoidalPlanet(new Ellipsoid(Vector3D.ZERO, _ellipsoid._radii));
+    final Sector sector = new Sector(Sector.fullSphere());
+>>>>>>> purgatory
   
-    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.zero);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(ellipsoid, Vector3D.ZERO);
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
   
     FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
@@ -265,7 +270,7 @@ public class EllipsoidShape extends AbstractMeshShape
   //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   {
      super(position, altitudeMode);
-     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+     _ellipsoid = new Ellipsoid(Vector3D.ZERO, radius);
      _textureURL = new URL(new URL("", false));
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
@@ -288,7 +293,7 @@ public class EllipsoidShape extends AbstractMeshShape
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   {
      super(position, altitudeMode);
-     _ellipsoid = new Ellipsoid(Vector3D.zero, radius);
+     _ellipsoid = new Ellipsoid(Vector3D.ZERO, radius);
      _textureURL = new URL(textureURL);
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;

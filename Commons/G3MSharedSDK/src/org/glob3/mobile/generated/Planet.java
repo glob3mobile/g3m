@@ -89,12 +89,12 @@ public abstract class Planet
   {
     if (pos.isNan() || ray.isNan())
     {
-      return Vector3D.nan();
+      return Vector3D.NANV;
     }
     java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
     if (distances.isEmpty())
     {
-      return Vector3D.nan();
+      return Vector3D.NANV;
     }
     return pos.add(ray.times(distances.get(0)));
   }

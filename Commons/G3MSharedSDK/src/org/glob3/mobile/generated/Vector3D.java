@@ -15,9 +15,15 @@ package org.glob3.mobile.generated;
 
 
 
+<<<<<<< HEAD
 //class MutableVector3D;
 //class Angle;
 //class MutableMatrix44D;
+=======
+//class MutableMatrix44D;
+//class MutableVector3D;
+//class Angle;
+>>>>>>> purgatory
 
 
 public class Vector3D
@@ -27,7 +33,14 @@ public class Vector3D
 //  Vector3D operator =(Vector3D that);
 
 
-  public static Vector3D zero = new Vector3D(0,0,0);
+  public static final Vector3D ZERO = new Vector3D(0,0,0);
+  public static final Vector3D NANV = new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+  public static final Vector3D UP_X = new Vector3D(1,0,0);
+  public static final Vector3D DOWN_X = new Vector3D(-1,0,0);
+  public static final Vector3D UP_Y = new Vector3D(0,1,0);
+  public static final Vector3D DOWN_Y = new Vector3D(0,-1,0);
+  public static final Vector3D UP_Z = new Vector3D(0,0,1);
+  public static final Vector3D DOWN_Z = new Vector3D(0,0,-1);
 
   public final double _x;
   public final double _y;
@@ -50,6 +63,7 @@ public class Vector3D
      _x = v._x;
      _y = v._y;
      _z = v._z;
+<<<<<<< HEAD
   }
 
   public static Vector3D nan()
@@ -85,6 +99,8 @@ public class Vector3D
   public static Vector3D downZ()
   {
     return new Vector3D(0, 0, -1);
+=======
+>>>>>>> purgatory
   }
 
   public final boolean isNan()
@@ -106,14 +122,14 @@ public class Vector3D
   {
     if (isNan())
     {
-      return nan();
+      return NANV;
     }
     if (isZero())
     {
-      return zero;
+      return ZERO;
     }
     final double d = length();
-    return new Vector3D(_x / d, _y / d, _z / d);
+    return (d == 1) ? this : new Vector3D(_x / d, _y / d, _z / d);
   }
 
   public final double length()
@@ -133,7 +149,12 @@ public class Vector3D
 
   public final boolean isPerpendicularTo(Vector3D v)
   {
-    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
+  //  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
+  //  if (!(d < 0.001)) {
+  //    ILogger::instance()->logError("****>>> %d", d);
+  //  }
+  //  return d < 0.001;
   }
 
   public final Vector3D add(Vector3D v)

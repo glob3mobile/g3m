@@ -41,7 +41,7 @@ EllipsoidShape::EllipsoidShape(Geodetic3D* position,
                                Color* borderColor,
                                bool withNormals) :
 AbstractMeshShape(position, altitudeMode),
-_ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+_ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
 _textureURL(URL("", false)),
 _resolution(resolution < 3 ? 3 : resolution),
@@ -257,11 +257,11 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::ZERO,
                                               _ellipsoid->_radii));
   const Sector sector(Sector::FULL_SPHERE);
 
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::ZERO);
   FloatBufferBuilderFromCartesian2D texCoords;
 
   FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();

@@ -110,24 +110,21 @@ void Shape::cleanTransformMatrix() {
 }
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
-
-  double altitude = _position->_height;
-  if (_altitudeMode == RELATIVE_TO_GROUND) {
-    altitude += _surfaceElevation;
-  }
-
-  Geodetic3D positionWithSurfaceElevation(_position->_latitude,
-                                          _position->_longitude,
-                                          altitude);
-
-  const MutableMatrix44D geodeticTransform   = (_position == NULL) ? MutableMatrix44D::identity() : planet->createGeodeticTransformMatrix(positionWithSurfaceElevation);
-
-  const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
-  const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
-  const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::upY());
+  const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::DOWN_Z);
+  const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::UP_X);
+  const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::UP_Y);
   const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
   const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
   const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(rollRotation ).multiply(translation).multiply(scale);
+
+
+  double height = _position->_height;
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    height += _surfaceElevation;
+  }
+  const MutableMatrix44D geodeticTransform = planet->createGeodeticTransformMatrix(_position->_latitude,
+                                                                                   _position->_longitude,
+                                                                                   height);
 
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
 }
@@ -245,12 +242,91 @@ void Shape::setPosition(const Geodetic3D& position) {
     THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
   }
 
-  delete _position;
 #ifdef C_CODE
+  delete _position;
   _position = new Geodetic3D(position);
 #endif
 #ifdef JAVA_CODE
   _position = position;
+#endif
+  cleanTransformMatrix();
+}
+
+void Shape::setHeading(const Angle& heading) {
+#ifdef C_CODE
+  delete _heading;
+  _heading = new Angle(heading);
+#endif
+#ifdef JAVA_CODE
+  _heading = heading;
+#endif
+  cleanTransformMatrix();
+}
+
+void Shape::setPitch(const Angle& pitch) {
+#ifdef C_CODE
+  delete _pitch;
+  _pitch = new Angle(pitch);
+#endif
+#ifdef JAVA_CODE
+  _pitch = pitch;
+#endif
+  cleanTransformMatrix();
+}
+
+void Shape::setRoll(const Angle& roll) {
+#ifdef C_CODE
+  delete _roll;
+  _roll = new Angle(roll);
+#endif
+#ifdef JAVA_CODE
+  _roll = roll;
+#endif
+  cleanTransformMatrix();
+}
+
+void Shape::setHeadingPitchRoll(const Angle& heading,
+                                const Angle& pitch,
+                                const Angle& roll) {
+#ifdef C_CODE
+  delete _heading;
+  _heading = new Angle(heading);
+  delete _pitch;
+  _pitch = new Angle(pitch);
+  delete _roll;
+  _roll = new Angle(roll);
+#endif
+#ifdef JAVA_CODE
+  _heading = heading;
+  _pitch = pitch;
+  _roll = roll;
+#endif
+  cleanTransformMatrix();
+}
+
+void Shape::setFullPosition(const Geodetic3D& position,
+                            const Angle&      heading,
+                            const Angle&      pitch,
+                            const Angle&      roll) {
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+  }
+
+#ifdef C_CODE
+  delete _position;
+  _position = new Geodetic3D(position);
+  delete _heading;
+  _heading = new Angle(heading);
+  delete _pitch;
+  _pitch = new Angle(pitch);
+  delete _roll;
+  _roll = new Angle(roll);
+#endif
+#ifdef JAVA_CODE
+  _position = position;
+  _heading = heading;
+  _pitch = pitch;
+  _roll = roll;
 #endif
   cleanTransformMatrix();
 }

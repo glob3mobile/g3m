@@ -78,6 +78,11 @@ public:
 
   void setPosition(const Geodetic3D& position);
 
+  void setFullPosition(const Geodetic3D& position,
+                       const Angle&      heading,
+                       const Angle&      pitch,
+                       const Angle&      roll);
+
   void addShapeEffect(Effect* effect);
 
   void setAnimatedPosition(const TimeInterval& duration,
@@ -96,38 +101,13 @@ public:
   void setAnimatedPosition(const Geodetic3D& position,
                            bool linearInterpolation=false);
 
-  void setHeading(const Angle& heading) {
-#ifdef C_CODE
-    delete _heading;
-    _heading = new Angle(heading);
-#endif
-#ifdef JAVA_CODE
-    _heading = heading;
-#endif
-    cleanTransformMatrix();
-  }
+  void setHeading(const Angle& heading);
+  void setPitch(const Angle& pitch);
+  void setRoll(const Angle& roll);
 
-  void setPitch(const Angle& pitch) {
-#ifdef C_CODE
-    delete _pitch;
-    _pitch = new Angle(pitch);
-#endif
-#ifdef JAVA_CODE
-    _pitch = pitch;
-#endif
-    cleanTransformMatrix();
-  }
-
-  void setRoll(const Angle& roll) {
-#ifdef C_CODE
-    delete _roll;
-    _roll = new Angle(roll);
-#endif
-#ifdef JAVA_CODE
-    _roll = roll;
-#endif
-    cleanTransformMatrix();
-  }
+  void setHeadingPitchRoll(const Angle& heading,
+                           const Angle& pitch,
+                           const Angle& roll);
 
   void setScale(double scale) {
     setScale(scale, scale, scale);

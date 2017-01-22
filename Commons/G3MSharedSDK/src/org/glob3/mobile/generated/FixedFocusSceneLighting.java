@@ -23,7 +23,7 @@ public class FixedFocusSceneLighting extends SceneLighting
   
      MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle),
      Vector3D::upZ(),
-     Vector3D::zero);
+     Vector3D::ZERO);
   
      f->setLightDirection(lightDir.transformedBy(m, 1.0));
   
