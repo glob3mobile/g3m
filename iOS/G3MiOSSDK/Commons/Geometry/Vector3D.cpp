@@ -26,7 +26,7 @@ bool Vector3D::isNan() const {
           ISNAN(_z));
 }
 
-Vector3D Vector3D::normalized() const {
+const Vector3D Vector3D::normalized() const {
   if (isNan()) {
     return NANV;
   }
@@ -34,7 +34,7 @@ Vector3D Vector3D::normalized() const {
     return ZERO;
   }
   const double d = length();
-  return Vector3D(_x / d, _y / d, _z / d);
+  return (d == 1) ? *this : Vector3D(_x / d, _y / d, _z / d);
 }
 
 double Vector3D::length() const {

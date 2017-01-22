@@ -66,7 +66,7 @@ public:
     return (_x == 0) && (_y == 0) && (_z == 0);
   }
 
-  Vector3D normalized() const;
+  const Vector3D normalized() const;
 
   double length() const;
 

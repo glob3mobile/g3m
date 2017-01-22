@@ -85,7 +85,7 @@ public class Vector3D
       return ZERO;
     }
     final double d = length();
-    return new Vector3D(_x / d, _y / d, _z / d);
+    return (d == 1) ? this : new Vector3D(_x / d, _y / d, _z / d);
   }
 
   public final double length()
