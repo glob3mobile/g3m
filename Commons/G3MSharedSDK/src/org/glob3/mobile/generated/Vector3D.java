@@ -27,14 +27,14 @@ public class Vector3D
 //  Vector3D operator =(Vector3D that);
 
 
-  public static Vector3D ZERO = new Vector3D(0,0,0);
-  public static Vector3D NANV = new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
-  public static Vector3D UP_X = new Vector3D(1,0,0);
-  public static Vector3D DOWN_X = new Vector3D(-1,0,0);
-  public static Vector3D UP_Y = new Vector3D(0,1,0);
-  public static Vector3D DOWN_Y = new Vector3D(0,-1,0);
-  public static Vector3D UP_Z = new Vector3D(0,0,1);
-  public static Vector3D DOWN_Z = new Vector3D(0,0,-1);
+  public static final Vector3D ZERO = new Vector3D(0,0,0);
+  public static final Vector3D NANV = new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+  public static final Vector3D UP_X = new Vector3D(1,0,0);
+  public static final Vector3D DOWN_X = new Vector3D(-1,0,0);
+  public static final Vector3D UP_Y = new Vector3D(0,1,0);
+  public static final Vector3D DOWN_Y = new Vector3D(0,-1,0);
+  public static final Vector3D UP_Z = new Vector3D(0,0,1);
+  public static final Vector3D DOWN_Z = new Vector3D(0,0,-1);
 
   public final double _x;
   public final double _y;

@@ -11,14 +11,14 @@
 #include "Angle.hpp"
 #include "IStringBuilder.hpp"
 
-Vector3D Vector3D::ZERO   = Vector3D(0,0,0);
-Vector3D Vector3D::NANV   = Vector3D(NAND, NAND, NAND);
-Vector3D Vector3D::UP_X   = Vector3D(1,0,0);
-Vector3D Vector3D::DOWN_X = Vector3D(-1,0,0);
-Vector3D Vector3D::UP_Y   = Vector3D(0,1,0);
-Vector3D Vector3D::DOWN_Y = Vector3D(0,-1,0);
-Vector3D Vector3D::UP_Z   = Vector3D(0,0,1);
-Vector3D Vector3D::DOWN_Z = Vector3D(0,0,-1);
+const Vector3D Vector3D::ZERO   = Vector3D(0,0,0);
+const Vector3D Vector3D::NANV   = Vector3D(NAND, NAND, NAND);
+const Vector3D Vector3D::UP_X   = Vector3D(1,0,0);
+const Vector3D Vector3D::DOWN_X = Vector3D(-1,0,0);
+const Vector3D Vector3D::UP_Y   = Vector3D(0,1,0);
+const Vector3D Vector3D::DOWN_Y = Vector3D(0,-1,0);
+const Vector3D Vector3D::UP_Z   = Vector3D(0,0,1);
+const Vector3D Vector3D::DOWN_Z = Vector3D(0,0,-1);
 
 bool Vector3D::isNan() const {
   return (ISNAN(_x) ||

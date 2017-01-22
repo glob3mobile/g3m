@@ -22,14 +22,14 @@ private:
 
 public:
 
-  static Vector3D ZERO;
-  static Vector3D NANV;
-  static Vector3D UP_X;
-  static Vector3D DOWN_X;
-  static Vector3D UP_Y;
-  static Vector3D DOWN_Y;
-  static Vector3D UP_Z;
-  static Vector3D DOWN_Z;
+  static const Vector3D ZERO;
+  static const Vector3D NANV;
+  static const Vector3D UP_X;
+  static const Vector3D DOWN_X;
+  static const Vector3D UP_Y;
+  static const Vector3D DOWN_Y;
+  static const Vector3D UP_Z;
+  static const Vector3D DOWN_Z;
 
   const double _x;
   const double _y;
