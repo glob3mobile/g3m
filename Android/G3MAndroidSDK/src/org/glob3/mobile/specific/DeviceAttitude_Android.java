@@ -34,6 +34,7 @@ public class DeviceAttitude_Android
    private static final float      OUTLIER_THRESHOLD             = 0.85f;
    private static final float      OUTLIER_PANIC_THRESHOLD       = 0.75f;
    private static final float      INDIRECT_INTERPOLATION_WEIGHT = 0.01f;
+   //private static final float      DIRECT_INTERPOLATION_WEIGHT   = 0.005f;
    private static final int        PANIC_THRESHOLD               = 60;
 
 
@@ -220,6 +221,7 @@ public class DeviceAttitude_Android
             // The weight should be quite low, so the rotation vector corrects the gyro only slowly, and the output keeps responsive.
             _quaternionGyroscope.slerp(_quaternionRotationVector, _interpolatedQuaternion,
                      (float) (INDIRECT_INTERPOLATION_WEIGHT * gyroscopeRotationVelocity));
+            // _quaternionGyroscope.slerp(_quaternionRotationVector, _interpolatedQuaternion, DIRECT_INTERPOLATION_WEIGHT);
 
             // Use the interpolated value between gyro and rotationVector
             setOrientationQuaternionAndMatrix(_interpolatedQuaternion);
