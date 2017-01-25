@@ -12,19 +12,20 @@ public class CameraContext
 
   public void dispose()
   {
-
   }
 
   public final Gesture getCurrentGesture()
   {
-     return _currentGesture;
+    return _currentGesture;
   }
+
   public final void setCurrentGesture(Gesture gesture)
   {
-     _currentGesture = gesture;
+    _currentGesture = gesture;
   }
+
   public final Camera getNextCamera()
   {
-     return _nextCamera;
+    return _nextCamera;
   }
 }
