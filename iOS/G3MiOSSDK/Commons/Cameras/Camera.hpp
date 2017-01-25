@@ -262,11 +262,11 @@ public:
 
   void getLookAtParamsInto(MutableVector3D& position,
                            MutableVector3D& center,
-                           MutableVector3D& up);
+                           MutableVector3D& up) const;
 
-  void getModelViewMatrixInto(MutableMatrix44D& matrix);
+  void getModelViewMatrixInto(MutableMatrix44D& matrix) const;
 
-  void getViewPortInto(MutableVector2I& viewport);
+  void getViewPortInto(MutableVector2I& viewport) const;
 
   static void pixel2RayInto(const MutableVector3D& position,
                             const Vector2F& pixel,

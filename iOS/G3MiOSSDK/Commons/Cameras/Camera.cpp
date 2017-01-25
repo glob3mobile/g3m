@@ -547,7 +547,7 @@ void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
   vertices->putVector3D(3, c.add(right).add(up));
 }
 
-void Camera::getViewPortInto(MutableVector2I& viewport) {
+void Camera::getViewPortInto(MutableVector2I& viewport) const {
   viewport.set(_viewPortWidth, _viewPortHeight);
 }
 
@@ -672,13 +672,13 @@ bool Camera::hasValidViewDirection() const {
 
 void Camera::getLookAtParamsInto(MutableVector3D& position,
                                  MutableVector3D& center,
-                                 MutableVector3D& up) {
+                                 MutableVector3D& up) const {
   position.copyFrom(_position);
   center.copyFrom(_center);
   up.copyFrom(_up);
 }
 
-void Camera::getModelViewMatrixInto(MutableMatrix44D& matrix) {
+void Camera::getModelViewMatrixInto(MutableMatrix44D& matrix) const {
   matrix.copyValue(getModelViewMatrix());
 }
 

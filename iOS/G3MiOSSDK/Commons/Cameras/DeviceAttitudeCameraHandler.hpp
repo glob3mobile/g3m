@@ -17,7 +17,7 @@
 class MeshRenderer;
 
 
-class HeightOffsetLocationModifier: public ILocationModifier{
+class HeightOffsetLocationModifier: public ILocationModifier {
   double _offsetInMeters;
 
 public:
@@ -32,7 +32,7 @@ public:
   
 };
 
-class DeviceAttitudeCameraHandler: public CameraEventHandler{
+class DeviceAttitudeCameraHandler: public CameraEventHandler {
   
 private:
   mutable MutableMatrix44D _localRM;
@@ -79,4 +79,5 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__DeviceAttitudeCameraHandler__) */
+#endif
+
