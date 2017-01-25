@@ -31,7 +31,7 @@ public final class Downloader_Android_Handler {
 
    private static final int                                  DEFAULT_BUFFER_SIZE = 32 * 1024;
 
-   private static BitmapFactory.Options                      _bitmapFactoryOptions;
+   private static final BitmapFactory.Options                _bitmapFactoryOptions;
    static {
       _bitmapFactoryOptions = new BitmapFactory.Options();
       _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];

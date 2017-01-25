@@ -11,17 +11,13 @@
 #include <vector>
 
 #include "ProtoRenderer.hpp"
-#include "RenderState.hpp"
-#include "G3MContext.hpp"
-#include "Effects.hpp"
-
-
-#include "Effects.hpp"
+//#include "RenderState.hpp"
+//#include "G3MContext.hpp"
+//#include "Effects.hpp"
+//#include "Effects.hpp"
 
 class RenderState;
 class CameraEventHandler;
-
-
 class ILogger;
 class Camera;
 class Vector3D;
@@ -75,9 +71,7 @@ public:
 
   void removeAllHandlers(bool deleteHandlers);
 
-  void addHandler(CameraEventHandler* handler) {
-    _handlers.push_back(handler);
-  }
+  void addHandler(CameraEventHandler* handler);
 
   void setProcessTouchEvents(bool processTouchEvents) {
     _processTouchEvents = processTouchEvents;
@@ -97,9 +91,7 @@ public:
     
   }
 
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void start(const G3MRenderContext* rc) {
 

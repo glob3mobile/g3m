@@ -13,6 +13,8 @@
 #include "G3MRenderContext.hpp"
 #include "ILogger.hpp"
 
+#include "RenderState.hpp"
+
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
@@ -90,4 +92,12 @@ void CameraRenderer::removeHandler(CameraEventHandler* handler) {
 #endif
   
   ILogger::instance()->logError("Could not remove camera handler.");
+}
+
+void CameraRenderer::addHandler(CameraEventHandler* handler) {
+  _handlers.push_back(handler);
+}
+
+RenderState CameraRenderer::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
 }
