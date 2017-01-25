@@ -96,7 +96,7 @@ public class MercatorUtils
     final IMathUtils mu = IMathUtils.instance();
     final double pi4 = DefineConstants.PI * 4;
   
-    final double latSin = java.lang.Math.sin(latitude._radians);
+    final double latSin = Math.sin(latitude._radians);
     return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
   }
 

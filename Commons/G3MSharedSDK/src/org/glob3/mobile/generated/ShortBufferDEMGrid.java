@@ -26,7 +26,7 @@ public class ShortBufferDEMGrid extends BufferDEMGrid
   protected final double getValueInBufferAt(int index)
   {
     final short value = _buffer[index];
-    return (value == _noDataValue) ? java.lang.Double.NaN : value;
+    return (value == _noDataValue) ? Double.NaN : value;
   }
 
 

@@ -152,7 +152,7 @@ bool Sector::isBackOriented(const G3MRenderContext* rc,
   const double angleInRadians = IMathUtils::instance()->acos(dot);
 #endif
 #ifdef JAVA_CODE
-  final double angleInRadians = java.lang.Math.acos(dot);
+  final double angleInRadians = Math.acos(dot);
 #endif
 
   return ( (angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians );

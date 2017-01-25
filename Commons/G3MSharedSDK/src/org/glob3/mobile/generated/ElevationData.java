@@ -213,7 +213,7 @@ public abstract class ElevationData
   
     if (u < 0 || u > 1 || v < 0 || v > 1)
     {
-      return java.lang.Double.NaN;
+      return Double.NaN;
     }
   
     final double dX = u * (_width - 1);
@@ -240,13 +240,13 @@ public abstract class ElevationData
         final double heightY = getElevationAt(x, y);
         if ((heightY != heightY))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         final double heightNextY = getElevationAt(x, nextY);
         if ((heightNextY != heightNextY))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         //result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
@@ -261,12 +261,12 @@ public abstract class ElevationData
         final double heightX = getElevationAt(x, y);
         if ((heightX != heightX))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double heightNextX = getElevationAt(nextX, y);
         if ((heightNextX != heightNextX))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         result = IMathUtils.instance().linearInterpolation(heightX, heightNextX, alphaX);
@@ -277,22 +277,22 @@ public abstract class ElevationData
         final double valueNW = getElevationAt(x, y);
         if ((valueNW != valueNW))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double valueNE = getElevationAt(nextX, y);
         if ((valueNE != valueNE))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double valueSE = getElevationAt(nextX, nextY);
         if ((valueSE != valueSE))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double valueSW = getElevationAt(x, nextY);
         if ((valueSW != valueSW))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);

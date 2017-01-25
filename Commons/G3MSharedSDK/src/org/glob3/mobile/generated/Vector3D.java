@@ -28,7 +28,7 @@ public class Vector3D
 
 
   public static final Vector3D ZERO = new Vector3D(0,0,0);
-  public static final Vector3D NANV = new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+  public static final Vector3D NANV = new Vector3D(Double.NaN, Double.NaN, Double.NaN);
   public static final Vector3D UP_X = new Vector3D(1,0,0);
   public static final Vector3D DOWN_X = new Vector3D(-1,0,0);
   public static final Vector3D UP_Y = new Vector3D(0,1,0);
@@ -250,8 +250,8 @@ public class Vector3D
     final double v = axis._y;
     final double w = axis._z;
   
-    final double cosTheta = java.lang.Math.cos(theta._radians);
-    final double sinTheta = java.lang.Math.sin(theta._radians);
+    final double cosTheta = Math.cos(theta._radians);
+    final double sinTheta = Math.sin(theta._radians);
   
     final double ms = axis.squaredLength();
     final double m = IMathUtils.instance().sqrt(ms);

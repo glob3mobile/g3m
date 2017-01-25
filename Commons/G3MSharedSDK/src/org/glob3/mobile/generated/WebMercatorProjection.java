@@ -67,7 +67,7 @@ public class WebMercatorProjection extends Projection
   
     final IMathUtils mu = IMathUtils.instance();
     final double pi4 = DefineConstants.PI * 4;
-    final double latSin = java.lang.Math.sin(latitudeRadians);
+    final double latSin = Math.sin(latitudeRadians);
     return 0.5 - (mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4);
   }
 

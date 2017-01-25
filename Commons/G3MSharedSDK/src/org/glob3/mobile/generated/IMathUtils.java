@@ -16,11 +16,11 @@ package org.glob3.mobile.generated;
 
 
 
-//#define SIN(x) java.lang.Math.sin(x)
-//#define COS(x) java.lang.Math.cos(x)
-//#define TAN(x) java.lang.Math.tan(x)
-//#define NAND java.lang.Double.NaN
-//#define NANF java.lang.Float.NaN
+//#define SIN(x) Math.sin(x)
+//#define COS(x) Math.cos(x)
+//#define TAN(x) Math.tan(x)
+//#define NAND Double.NaN
+//#define NANF Float.NaN
 
 
 //#define PI 3.14159265358979323846264338327950288

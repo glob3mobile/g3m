@@ -38,7 +38,7 @@ public class Sector
 
   //Special instances
   public static final Sector FULL_SPHERE = Sector.fromDegrees(-90, -180, 90, 180);
-  public static final Sector NAN_SECTOR = Sector.fromDegrees(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+  public static final Sector NAN_SECTOR = Sector.fromDegrees(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
 
 
   public final Geodetic2D _lower ;
@@ -274,7 +274,7 @@ public class Sector
        return false;
   
     final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
-    final double angleInRadians = java.lang.Math.acos(dot);
+    final double angleInRadians = Math.acos(dot);
   
     return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
   }
