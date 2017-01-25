@@ -6,20 +6,18 @@
 //
 //
 
-#include <math.h>
-
 #include "CameraZoomAndRotateHandler.hpp"
 
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
 #include "Planet.hpp"
+#include "Camera.hpp"
 
 
 bool CameraZoomAndRotateHandler::onTouchEvent(const G3MEventContext *eventContext,
                                               const TouchEvent* touchEvent,
-                                              CameraContext *cameraContext)
-{
+                                              CameraContext *cameraContext) {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
 
@@ -42,8 +40,7 @@ bool CameraZoomAndRotateHandler::onTouchEvent(const G3MEventContext *eventContex
 
 void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
                                         const TouchEvent& touchEvent,
-                                        CameraContext *cameraContext)
-{
+                                        CameraContext *cameraContext) {
   Camera *camera = cameraContext->getNextCamera();
   camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   cameraContext->setCurrentGesture(DoubleDrag);
@@ -172,8 +169,7 @@ void CameraZoomAndRotateHandler::render(const G3MRenderContext* rc,
 
 
 
-void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrentPixels)
-{
+void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrentPixels) {
   const double MIN_CAMERA_HEIGHT = 30;
 
   // compute angle params
@@ -213,7 +209,6 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, const Vector2F& difCurrent
   camera->moveForward(desp*dist);
 }
 
-void CameraZoomAndRotateHandler::rotate()
-{
+void CameraZoomAndRotateHandler::rotate() {
   printf ("rotating....\n");
 }

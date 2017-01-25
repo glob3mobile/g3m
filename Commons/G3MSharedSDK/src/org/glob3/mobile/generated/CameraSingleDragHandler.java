@@ -21,6 +21,14 @@ package org.glob3.mobile.generated;
 
 public class CameraSingleDragHandler extends CameraEventHandler
 {
+  private final boolean _useInertia;
+
+  private MutableVector3D _cameraPosition = new MutableVector3D();
+  private MutableVector3D _cameraCenter = new MutableVector3D();
+  private MutableVector3D _cameraUp = new MutableVector3D();
+  private MutableVector2I _cameraViewPort = new MutableVector2I();
+  private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
+  private MutableVector3D _finalRay = new MutableVector3D();
 
   public CameraSingleDragHandler(boolean useInertia)
   {
@@ -29,10 +37,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
-  super.dispose();
-
+    super.dispose();
   }
-
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -85,7 +91,6 @@ public class CameraSingleDragHandler extends CameraEventHandler
   //  }
   }
 
-  public final boolean _useInertia;
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     Camera camera = cameraContext.getNextCamera();
@@ -153,11 +158,4 @@ public class CameraSingleDragHandler extends CameraEventHandler
     // update gesture
     cameraContext.setCurrentGesture(Gesture.None);
   }
-
-  private MutableVector3D _cameraPosition = new MutableVector3D();
-  private MutableVector3D _cameraCenter = new MutableVector3D();
-  private MutableVector3D _cameraUp = new MutableVector3D();
-  private MutableVector2I _cameraViewPort = new MutableVector2I();
-  private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
-  private MutableVector3D _finalRay = new MutableVector3D();
 }

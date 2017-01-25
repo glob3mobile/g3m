@@ -55,9 +55,6 @@ public abstract class IMathUtils
   {
   }
 
-//  virtual double NanD() const = 0;
-//  virtual float  NanF() const = 0;
-
   public abstract double sin(double v);
   public abstract float sin(float v);
 

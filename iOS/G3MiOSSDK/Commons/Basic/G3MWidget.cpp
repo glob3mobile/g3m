@@ -26,7 +26,6 @@
 #include "CameraRenderer.hpp"
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
-#include <math.h>
 #include "GInitializationTask.hpp"
 #include "ITextUtils.hpp"
 #include "TouchEvent.hpp"

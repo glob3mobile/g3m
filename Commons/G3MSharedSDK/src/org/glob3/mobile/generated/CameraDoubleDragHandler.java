@@ -20,6 +20,12 @@ package org.glob3.mobile.generated;
 
 public class CameraDoubleDragHandler extends CameraEventHandler
 {
+  private MutableVector3D _cameraPosition = new MutableVector3D();
+  private MutableVector3D _cameraCenter = new MutableVector3D();
+  private MutableVector3D _cameraUp = new MutableVector3D();
+  private MutableVector2I _cameraViewPort = new MutableVector2I();
+  private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
+
 
   public CameraDoubleDragHandler()
   {
@@ -27,8 +33,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
-  super.dispose();
-
+    super.dispose();
   }
 
 
@@ -142,11 +147,5 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   {
     cameraContext.setCurrentGesture(Gesture.None);
   }
-
-  public MutableVector3D _cameraPosition = new MutableVector3D();
-  public MutableVector3D _cameraCenter = new MutableVector3D();
-  public MutableVector3D _cameraUp = new MutableVector3D();
-  public MutableVector2I _cameraViewPort = new MutableVector2I();
-  public MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
 
 }

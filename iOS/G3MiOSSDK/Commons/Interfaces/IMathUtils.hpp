@@ -59,9 +59,6 @@ public:
   virtual ~IMathUtils() {
   }
 
-//  virtual double NanD() const = 0;
-//  virtual float  NanF() const = 0;
-
   virtual double sin(double v) const = 0;
   virtual float  sin(float v)  const = 0;
 

@@ -7,20 +7,30 @@
 
 
 #include "CameraSingleDragHandler.hpp"
-#include "MutableVector2D.hpp"
+
+#include "Camera.hpp"
 #include "TouchEvent.hpp"
-#include "CameraRenderer.hpp"
-#include "GL.hpp"
-#include "IDeviceInfo.hpp"
-#include "IFactory.hpp"
 #include "G3MEventContext.hpp"
 #include "Planet.hpp"
+#include "IFactory.hpp"
+#include "IDeviceInfo.hpp"
+
+
+CameraSingleDragHandler::CameraSingleDragHandler(bool useInertia) :
+_useInertia(useInertia)
+{
+}
+
+CameraSingleDragHandler::~CameraSingleDragHandler() {
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
 
 
 bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
-                                           CameraContext *cameraContext) 
-{
+                                           CameraContext *cameraContext) {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()>1) return false;

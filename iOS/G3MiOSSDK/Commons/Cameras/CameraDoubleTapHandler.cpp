@@ -7,11 +7,14 @@
 
 
 #include "CameraDoubleTapHandler.hpp"
+
 #include "MutableVector2D.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
 #include "Planet.hpp"
+#include "Camera.hpp"
+#include "Effects.hpp"
 
 
 bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
