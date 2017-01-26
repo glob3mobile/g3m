@@ -110,13 +110,16 @@ void Shape::cleanTransformMatrix() {
 }
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
-  const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::DOWN_Z);
-  const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::UP_X);
-  const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::UP_Y);
-  const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-  const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
-  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(rollRotation ).multiply(translation).multiply(scale);
+  const MutableMatrix44D heading  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::DOWN_Z);
+  const MutableMatrix44D pitch    = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::UP_X);
+  const MutableMatrix44D roll     = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::UP_Y);
+  const MutableMatrix44D rotation = heading.multiply(pitch).multiply(roll);
 
+  const MutableMatrix44D scale = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
+
+  const MutableMatrix44D localTransform = rotation.multiply(translation).multiply(scale);
 
   double height = _position->_height;
   if (_altitudeMode == RELATIVE_TO_GROUND) {

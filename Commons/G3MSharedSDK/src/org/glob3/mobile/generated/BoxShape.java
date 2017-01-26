@@ -33,10 +33,10 @@ public class BoxShape extends AbstractMeshShape
 
   private float _borderWidth;
 
-  private boolean _useNormals;
+  private final boolean _useNormals;
 
-  private Color _surfaceColor;
-  private Color _borderColor;
+  private final Color _surfaceColor;
+  private final Color _borderColor;
 
   private Mesh createBorderMesh(G3MRenderContext rc)
   {
@@ -231,7 +231,7 @@ public class BoxShape extends AbstractMeshShape
     if (_borderColor != null)
        _borderColor.dispose();
 
-  super.dispose();
+    super.dispose();
   }
 
   public final void setExtent(Vector3D extent)

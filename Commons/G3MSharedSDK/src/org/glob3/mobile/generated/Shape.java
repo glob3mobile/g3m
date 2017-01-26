@@ -68,17 +68,18 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _transformMatrix = null;
   }
 
-
-
-  public final MutableMatrix44D createTransformMatrix(Planet planet)
+  protected final MutableMatrix44D createTransformMatrix(Planet planet)
   {
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.DOWN_Z);
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.UP_X);
-    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.UP_Y);
-    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
+    final MutableMatrix44D heading = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.DOWN_Z);
+    final MutableMatrix44D pitch = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.UP_X);
+    final MutableMatrix44D roll = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.UP_Y);
+    final MutableMatrix44D rotation = heading.multiply(pitch).multiply(roll);
   
+    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+  
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
+  
+    final MutableMatrix44D localTransform = rotation.multiply(translation).multiply(scale);
   
     double height = _position._height;
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
@@ -89,6 +90,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
+
 
   public Shape(Geodetic3D position, AltitudeMode altitudeMode)
   {

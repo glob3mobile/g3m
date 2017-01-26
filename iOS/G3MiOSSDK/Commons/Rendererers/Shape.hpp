@@ -52,10 +52,9 @@ private:
 protected:
   virtual void cleanTransformMatrix();
 
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
 
 public:
-
-  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
 
   Shape(Geodetic3D* position,
         AltitudeMode altitudeMode);
