@@ -115,7 +115,6 @@ public:
     _m33 = 0.0;
   }
 
-  //<<<<<<< HEAD
   MutableMatrix44D(const MutableMatrix44D &m);
 
   explicit MutableMatrix44D(const Matrix44D &m);
@@ -166,16 +165,11 @@ public:
 
   void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
 
-  //
-  //OPERATIONS
-
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
 
   MutableMatrix44D inversed() const;
 
   MutableMatrix44D transposed() const;
-
-  //METHODS TO EXTRACT VALUES FROM THE MATRIX
 
   double get0() const { return _m00; }
   double get1() const { return _m10; }
@@ -193,48 +187,6 @@ public:
   double get13() const { return _m13; }
   double get14() const { return _m23; }
   double get15() const { return _m33; }
-
-  /*
-   //Returns values from 0..15 in column mayor order
-   double get(int i) const {
-   switch (i) {
-   case 0:
-   return _m00;
-   case 1:
-   return _m10;
-   case 2:
-   return _m20;
-   case 3:
-   return _m30;
-   case 4:
-   return _m01;
-   case 5:
-   return _m11;
-   case 6:
-   return _m21;
-   case 7:
-   return _m31;
-   case 8:
-   return _m02;
-   case 9:
-   return _m12;
-   case 10:
-   return _m22;
-   case 11:
-   return _m32;
-   case 12:
-   return _m03;
-   case 13:
-   return _m13;
-   case 14:
-   return _m23;
-   case 15:
-   return _m33;
-   default:
-   ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
-   return 0;
-   }
-   }*/
 
   void print(const std::string& name, const ILogger* log) const;
 
@@ -311,7 +263,7 @@ public:
     _m30=m30; _m31=m31; _m32=m32; _m33=m33;
     _isValid = true;
   }
-  
+
   void setValid(bool v) {
     _isValid = v;
   }
