@@ -27,9 +27,6 @@ private:
 
   MutableVector2F _initialPixel0, _initialPixel1;  //Initial pixels at start of gesture
 
-  double _initialFingerSeparation;
-  double _initialFingerInclination;
-
   MutableVector3D _cameraPosition;
   MutableVector3D _cameraCenter;
   MutableVector3D _cameraUp;

@@ -35,8 +35,8 @@ public class BoxShape extends AbstractMeshShape
 
   private final boolean _useNormals;
 
-  private final Color _surfaceColor;
-  private final Color _borderColor;
+  private Color _surfaceColor;
+  private Color _borderColor;
 
   private Mesh createBorderMesh(G3MRenderContext rc)
   {

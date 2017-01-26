@@ -42,8 +42,8 @@ private:
 
   const bool _useNormals;
 
-  const Color* _surfaceColor;
-  const Color* _borderColor;
+  Color* _surfaceColor;
+  Color* _borderColor;
 
   Mesh* createBorderMesh(const G3MRenderContext* rc);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc);

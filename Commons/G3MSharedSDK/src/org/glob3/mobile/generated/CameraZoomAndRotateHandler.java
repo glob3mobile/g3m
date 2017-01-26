@@ -32,9 +32,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   private MutableVector2F _initialPixel0 = new MutableVector2F(); //Initial pixels at start of gesture
   private MutableVector2F _initialPixel1 = new MutableVector2F();
 
-  private double _initialFingerSeparation;
-  private double _initialFingerInclination;
-
   private MutableVector3D _cameraPosition = new MutableVector3D();
   private MutableVector3D _cameraCenter = new MutableVector3D();
   private MutableVector3D _cameraUp = new MutableVector3D();
