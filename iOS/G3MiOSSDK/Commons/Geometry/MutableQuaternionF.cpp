@@ -85,8 +85,8 @@ float MutableQuaternionF::dot(const MutableQuaternionF& that) const {
   return (_x * that._x) + (_y * that._y) + (_z * that._z) + (_w * that._w);
 }
 
-void MutableQuaternionF::multiplyBy(const MutableQuaternionF& that,
-                                    MutableQuaternionF& output) const {
+void MutableQuaternionF::times(const MutableQuaternionF& that,
+                               MutableQuaternionF& output) const {
   if (&that == &output) {
     if (_temp == NULL) {
       _temp = new MutableQuaternionF();

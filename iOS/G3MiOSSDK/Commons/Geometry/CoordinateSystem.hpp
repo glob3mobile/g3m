@@ -20,7 +20,7 @@ private:
   
   static bool checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z);
   
-  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+//  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
 public:
 

@@ -336,7 +336,7 @@
 		CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */; };
 		CF9227D51E31154300B79A87 /* MutableQuaternionF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9227D31E31154300B79A87 /* MutableQuaternionF.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
-		CF92FCF11E3B913400A439D3 /* QuaternionF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92FCEF1E3B913400A439D3 /* QuaternionF.cpp */; };
+		CF92FCF11E3B913400A439D3 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
 		CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */; };
@@ -1695,8 +1695,8 @@
 		CF9227D41E31154300B79A87 /* MutableQuaternionF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableQuaternionF.hpp; path = Commons/Geometry/MutableQuaternionF.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ShortBufferBuilder.cpp; path = Commons/Basic/ShortBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
-		CF92FCEF1E3B913400A439D3 /* QuaternionF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuaternionF.cpp; path = Commons/Geometry/QuaternionF.cpp; sourceTree = "<group>"; };
-		CF92FCF01E3B913400A439D3 /* QuaternionF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = QuaternionF.hpp; path = Commons/Geometry/QuaternionF.hpp; sourceTree = "<group>"; };
+		CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = Commons/Geometry/Quaternion.cpp; sourceTree = "<group>"; };
+		CF92FCF01E3B913400A439D3 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Commons/Geometry/Quaternion.hpp; sourceTree = "<group>"; };
 		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineStringGeometry.hpp; path = Commons/GEO/GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrderedRenderable.cpp; path = Commons/Basic/OrderedRenderable.cpp; sourceTree = "<group>"; };
@@ -2511,8 +2511,8 @@
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				CF9227D31E31154300B79A87 /* MutableQuaternionF.cpp */,
 				CF9227D41E31154300B79A87 /* MutableQuaternionF.hpp */,
-				CF92FCEF1E3B913400A439D3 /* QuaternionF.cpp */,
-				CF92FCF01E3B913400A439D3 /* QuaternionF.hpp */,
+				CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */,
+				CF92FCF01E3B913400A439D3 /* Quaternion.hpp */,
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
 				CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */,
@@ -3667,7 +3667,7 @@
 				CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */,
 				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
-				CF92FCF11E3B913400A439D3 /* QuaternionF.cpp in Sources */,
+				CF92FCF11E3B913400A439D3 /* Quaternion.cpp in Sources */,
 				CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */,
 				CF516E931C63EF5D002F19E3 /* PlanetRenderContext.cpp in Sources */,
 				CF236E271CB3EE2D002D4D77 /* ViewMode.cpp in Sources */,

@@ -66,11 +66,11 @@ bool CoordinateSystem::checkConsistency(const Vector3D& x,
 }
 
 
-bool CoordinateSystem::areOrtogonal(const Vector3D& x,
-                                    const Vector3D& y,
-                                    const Vector3D& z) {
-  return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
-}
+//bool CoordinateSystem::areOrtogonal(const Vector3D& x,
+//                                    const Vector3D& y,
+//                                    const Vector3D& z) {
+//  return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
+//}
 
 CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const {
   return CoordinateSystem(_x, _y, _z, newOrigin);

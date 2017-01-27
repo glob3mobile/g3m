@@ -198,7 +198,7 @@ public class DeviceAttitude_Android
          _deltaQuaternion.setW((float) -cosThetaOverTwo);
 
          // Move current gyro orientation
-         _deltaQuaternion.multiplyBy(_quaternionGyroscope, _quaternionGyroscope);
+         _deltaQuaternion.times(_quaternionGyroscope, _quaternionGyroscope);
 
          // Calculate dot-product to calculate whether the two orientation sensors have diverged
          // (if the dot-product is closer to 0 than to 1), because it should be close to 1 if both are the same.

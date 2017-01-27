@@ -103,7 +103,7 @@ public class MutableQuaternionF
     return (_x * that._x) + (_y * that._y) + (_z * that._z) + (_w * that._w);
   }
 
-  public final void multiplyBy(MutableQuaternionF that, MutableQuaternionF output)
+  public final void times(MutableQuaternionF that, MutableQuaternionF output)
   {
     if (that == output)
     {

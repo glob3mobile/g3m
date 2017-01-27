@@ -40,8 +40,8 @@ public:
 
   float dot(const MutableQuaternionF& that) const;
 
-  void multiplyBy(const MutableQuaternionF& that,
-                  MutableQuaternionF& output) const;
+  void times(const MutableQuaternionF& that,
+             MutableQuaternionF& output) const;
 
   void slerp(const MutableQuaternionF& that,
              MutableQuaternionF& output,

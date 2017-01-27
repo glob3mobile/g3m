@@ -33,10 +33,7 @@ public class CoordinateSystem
   //  return areOrtogonal(x, y, z);
   }
 
-  private static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
-  {
-    return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
-  }
+//  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
 
   public final Vector3D _x ;
@@ -150,6 +147,13 @@ public class CoordinateSystem
     return new CoordinateSystem(uppp, vppp, wppp, _origin);
   }
 
+
+  //bool CoordinateSystem::areOrtogonal(const Vector3D& x,
+  //                                    const Vector3D& y,
+  //                                    const Vector3D& z) {
+  //  return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
+  //}
+  
   public final CoordinateSystem changeOrigin(Vector3D newOrigin)
   {
     return new CoordinateSystem(_x, _y, _z, newOrigin);
