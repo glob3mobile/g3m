@@ -1,19 +1,19 @@
 //
-//  MutableQuaternion.cpp
+//  MutableQuaternionF.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 1/19/17.
 //
 //
 
-#include "MutableQuaternion.hpp"
+#include "MutableQuaternionF.hpp"
 
 #include <stddef.h>
 
 #include "IMathUtils.hpp"
 
 
-MutableQuaternion::MutableQuaternion() :
+MutableQuaternionF::MutableQuaternionF() :
 _x(0.0f),
 _y(0.0f),
 _z(0.0f),
@@ -22,7 +22,7 @@ _temp(NULL)
 {
 }
 
-MutableQuaternion::MutableQuaternion(float x, float y, float z, float w) :
+MutableQuaternionF::MutableQuaternionF(float x, float y, float z, float w) :
 _x(x),
 _y(y),
 _z(z),
@@ -31,65 +31,65 @@ _temp(NULL)
 {
 }
 
-MutableQuaternion::~MutableQuaternion() {
+MutableQuaternionF::~MutableQuaternionF() {
   delete _temp;
 }
 
-void MutableQuaternion::setXYZW(float x, float y, float z, float w) {
+void MutableQuaternionF::setXYZW(float x, float y, float z, float w) {
   _x = x;
   _y = y;
   _z = z;
   _w = w;
 }
 
-void MutableQuaternion::setX(float x) {
+void MutableQuaternionF::setX(float x) {
   _x = x;
 }
 
-void MutableQuaternion::setY(float y) {
+void MutableQuaternionF::setY(float y) {
   _y = y;
 }
 
-void MutableQuaternion::setZ(float z) {
+void MutableQuaternionF::setZ(float z) {
   _z = z;
 }
 
-void MutableQuaternion::setW(float w) {
+void MutableQuaternionF::setW(float w) {
   _w = w;
 }
 
-float MutableQuaternion::getX() const {
+float MutableQuaternionF::getX() const {
   return _x;
 }
 
-float MutableQuaternion::getY() const {
+float MutableQuaternionF::getY() const {
   return _y;
 }
 
-float MutableQuaternion::getZ() const {
+float MutableQuaternionF::getZ() const {
   return _z;
 }
 
-float MutableQuaternion::getW() const {
+float MutableQuaternionF::getW() const {
   return _w;
 }
 
-void MutableQuaternion::copyFrom(const MutableQuaternion& that) {
+void MutableQuaternionF::copyFrom(const MutableQuaternionF& that) {
   _x = that._x;
   _y = that._y;
   _z = that._z;
   _w = that._w;
 }
 
-float MutableQuaternion::dot(const MutableQuaternion& that) const {
+float MutableQuaternionF::dot(const MutableQuaternionF& that) const {
   return (_x * that._x) + (_y * that._y) + (_z * that._z) + (_w * that._w);
 }
 
-void MutableQuaternion::multiplyBy(const MutableQuaternion& that,
-                                   MutableQuaternion& output) const {
+void MutableQuaternionF::multiplyBy(const MutableQuaternionF& that,
+                                    MutableQuaternionF& output) const {
   if (&that == &output) {
     if (_temp == NULL) {
-      _temp = new MutableQuaternion();
+      _temp = new MutableQuaternionF();
     }
     _temp->copyFrom(that);
 
@@ -106,11 +106,11 @@ void MutableQuaternion::multiplyBy(const MutableQuaternion& that,
   }
 }
 
-void MutableQuaternion::slerp(const MutableQuaternion& that,
-                              MutableQuaternion& output,
-                              float t) const {
+void MutableQuaternionF::slerp(const MutableQuaternionF& that,
+                               MutableQuaternionF& output,
+                               float t) const {
   if (_temp == NULL) {
-    _temp = new MutableQuaternion();
+    _temp = new MutableQuaternionF();
   }
 
   float cosHalftheta = dot(that);
@@ -146,5 +146,5 @@ void MutableQuaternion::slerp(const MutableQuaternion& that,
     output._y = (float) ((_y * ratioA) + (_temp->_y * ratioB));
     output._z = (float) ((_z * ratioA) + (_temp->_z * ratioB));
   }
-
+  
 }

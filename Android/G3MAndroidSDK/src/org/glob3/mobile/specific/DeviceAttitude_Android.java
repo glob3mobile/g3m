@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.InterfaceOrientation;
 import org.glob3.mobile.generated.MutableMatrix44D;
-import org.glob3.mobile.generated.MutableQuaternion;
+import org.glob3.mobile.generated.MutableQuaternionF;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -29,31 +29,31 @@ public class DeviceAttitude_Android
       SensorEventListener {
 
 
-   private static final float      NS2S                          = 1.0f / 1000000000.0f;
-   private static final double     EPSILON                       = 0.1;
-   private static final float      OUTLIER_THRESHOLD             = 0.85f;
-   private static final float      OUTLIER_PANIC_THRESHOLD       = 0.75f;
-   private static final float      INDIRECT_INTERPOLATION_WEIGHT = 0.01f;
+   private static final float       NS2S                          = 1.0f / 1000000000.0f;
+   private static final double      EPSILON                       = 0.1;
+   private static final float       OUTLIER_THRESHOLD             = 0.85f;
+   private static final float       OUTLIER_PANIC_THRESHOLD       = 0.75f;
+   private static final float       INDIRECT_INTERPOLATION_WEIGHT = 0.01f;
    //private static final float      DIRECT_INTERPOLATION_WEIGHT   = 0.005f;
-   private static final int        PANIC_THRESHOLD               = 60;
+   private static final int         PANIC_THRESHOLD               = 60;
 
 
-   private final SensorManager     _sensorManager;
-   private final Display           _defaultDisplay;
-   private boolean                 _tracking                     = false;
-   private final float[]           _rotationMatrix               = new float[16];
+   private final SensorManager      _sensorManager;
+   private final Display            _defaultDisplay;
+   private boolean                  _tracking                     = false;
+   private final float[]            _rotationMatrix               = new float[16];
 
-   private final float[]           _tmpQuaternion                = new float[4];
-   private final MutableQuaternion _quaternionRotationVector     = new MutableQuaternion();
-   private boolean                 _positionInitialised          = false;
-   private final MutableQuaternion _quaternionGyroscope          = new MutableQuaternion();
-   private long                    _timestamp;
-   private final MutableQuaternion _deltaQuaternion              = new MutableQuaternion();
-   private int                     _panicCounter;
-   private final MutableQuaternion _interpolatedQuaternion       = new MutableQuaternion();
-   private final MutableQuaternion _correctedQuaternion          = new MutableQuaternion();
-   private final MutableQuaternion _currentOrientationQuaternion = new MutableQuaternion();
-   private final float[]           _tmpArray                     = new float[4];
+   private final float[]            _tmpQuaternion                = new float[4];
+   private final MutableQuaternionF _quaternionRotationVector     = new MutableQuaternionF();
+   private boolean                  _positionInitialised          = false;
+   private final MutableQuaternionF _quaternionGyroscope          = new MutableQuaternionF();
+   private long                     _timestamp;
+   private final MutableQuaternionF _deltaQuaternion              = new MutableQuaternionF();
+   private int                      _panicCounter;
+   private final MutableQuaternionF _interpolatedQuaternion       = new MutableQuaternionF();
+   private final MutableQuaternionF _correctedQuaternion          = new MutableQuaternionF();
+   private final MutableQuaternionF _currentOrientationQuaternion = new MutableQuaternionF();
+   private final float[]            _tmpArray                     = new float[4];
 
 
    public DeviceAttitude_Android(final Context context) {
@@ -258,7 +258,7 @@ public class DeviceAttitude_Android
    }
 
 
-   private void setOrientationQuaternionAndMatrix(final MutableQuaternion quaternion) {
+   private void setOrientationQuaternionAndMatrix(final MutableQuaternionF quaternion) {
       _correctedQuaternion.copyFrom(quaternion);
       // We inverted w in the deltaQuaternion, because currentOrientationQuaternion required it.
       // Before converting it back to matrix representation, we need to revert this process
