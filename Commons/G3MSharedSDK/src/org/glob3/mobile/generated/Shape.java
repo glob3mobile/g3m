@@ -304,6 +304,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final void setLocalTransform(MutableMatrix44D localTransform)
   {
     _localTransform.copyValue(localTransform);
+    cleanTransformMatrix();
   }
 
   public final Vector3D getScale()

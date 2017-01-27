@@ -110,6 +110,7 @@ void Shape::cleanTransformMatrix() {
 
 void Shape::setLocalTransform(const MutableMatrix44D& localTransform) {
   _localTransform.copyValue(localTransform);
+  cleanTransformMatrix();
 }
 
 MutableMatrix44D Shape::getLocalTransform() const {
