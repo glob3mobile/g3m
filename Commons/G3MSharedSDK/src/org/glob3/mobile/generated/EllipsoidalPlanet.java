@@ -388,7 +388,6 @@ public class EllipsoidalPlanet extends Planet
   {
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(latitude, longitude, height));
     final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(latitude, longitude);
-  
     return translation.multiply(rotation);
   }
 

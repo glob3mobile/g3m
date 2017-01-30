@@ -10,7 +10,7 @@
 #define QuaternionF_hpp
 
 class MutableMatrix44D;
-
+class TaitBryanAngles;
 
 class Quaternion {
 public:
@@ -40,7 +40,9 @@ public:
   Quaternion inversed() const;
 
   void toRotationMatrix(MutableMatrix44D& result) const;
-  
+
+  TaitBryanAngles toTaitBryanAngles() const;
+
 };
 
 #endif

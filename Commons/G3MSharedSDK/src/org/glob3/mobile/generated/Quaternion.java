@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class MutableMatrix44D;
-
+//class TaitBryanAngles;
 
 public class Quaternion
 {
@@ -48,10 +48,15 @@ public class Quaternion
 
   public final Quaternion times(Quaternion that)
   {
-    final double w = (_w * that._w) - (_x * that._x) - (_y * that._y) - (_z * that._z);
-    final double x = ((_w * that._x) + (_x * that._w) + (_y * that._z)) - (_z * that._y);
-    final double y = ((_w * that._y) + (_y * that._w) + (_z * that._x)) - (_x * that._z);
-    final double z = ((_w * that._z) + (_z * that._w) + (_x * that._y)) - (_y * that._x);
+    //  const double x = (_w * that._x) + (_x * that._w) + (_y * that._z) - (_z * that._y);
+    //  const double y = (_w * that._y) + (_y * that._w) + (_z * that._x) - (_x * that._z);
+    //  const double z = (_w * that._z) + (_z * that._w) + (_x * that._y) - (_y * that._x);
+    //  const double w = (_w * that._w) - (_x * that._x) - (_y * that._y) - (_z * that._z);
+  
+    final double x = (that._w * _x) + (that._x * _w) + (that._z * _y) - (that._y * _z);
+    final double y = (that._w * _y) + (that._y * _w) + (that._x * _z) - (that._z * _x);
+    final double z = (that._w * _z) + (that._z * _w) + (that._y * _x) - (that._x * _y);
+    final double w = (that._w * _w) - (that._x * _x) - (that._y * _y) - (that._z * _z);
   
     return new Quaternion(x, y, z, w);
   }
@@ -139,10 +144,52 @@ public class Quaternion
     final double m33 = 1.0;
   
     result.setValue(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
-  //  result.setValue(m00, m01, m02, m03,
-  //                  m10, m11, m12, m13,
-  //                  m20, m21, m22, m23,
-  //                  m30, m31, m32, m33);
+    //  result.setValue(m00, m01, m02, m03,
+    //                  m10, m11, m12, m13,
+    //                  m20, m21, m22, m23,
+    //                  m30, m31, m32, m33);
+  }
+
+  public final TaitBryanAngles toTaitBryanAngles()
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final double ysqr = _y * _y;
+  
+    final double t0 = 2.0 * ((_w * _x) + (_y * _z));
+    final double t1 = 1.0 - 2.0 * ((_x * _x) + ysqr);
+    final double roll = mu.atan2(t0, t1);
+  
+    double t2 = 2.0 * ((_w * _y) - (_z * _x));
+    t2 = t2 > 1.0 ? 1.0 : t2;
+    t2 = t2 < -1.0 ? -1.0 : t2;
+    final double pitch = mu.asin(t2);
+  
+    final double t3 = 2.0 * ((_w * _z) + (_x *_y));
+    final double t4 = 1.0 - 2.0 * (ysqr + (_z * _z));
+    final double yaw = mu.atan2(t3, t4);
+  
+    return TaitBryanAngles.fromRadians(yaw, pitch, roll);
+  
+    //  double heading;
+    //  double pitch;
+    //  double roll;
+    //
+    //  const double test = _z * _y + _x * _w;
+    //  if (mu->abs(test) < 0.4999) {
+    //    heading = mu->asin(2.0 * test);
+    //    pitch   = mu->atan2(2.0 * _y * _w - 2.0 * _z * _x,
+    //                        1.0 - 2.0 * _y * _y - 2.0 * _x * _x);
+    //    roll    = mu->atan2(2.0 * _z * _w - 2.0 * _y * _x,
+    //                        1.0 - 2.0 * _z * _z - 2.0 * _x * _x);
+    //  }
+    //  else {
+    //    heading = mu->copySign(1.5707963267948966, test);
+    //    pitch   = mu->copySign(2.0, test) * mu->atan2(_z, _w);
+    //    roll    = 0.0;
+    //  }
+    //
+    //  return TaitBryanAngles::fromRadians(heading, pitch, roll);
   }
 
 }

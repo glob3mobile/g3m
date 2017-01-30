@@ -10,6 +10,7 @@
 
 #include "IMathUtils.hpp"
 #include "MutableMatrix44D.hpp"
+#include "TaitBryanAngles.hpp"
 
 
 const Quaternion Quaternion::NANQD = Quaternion(NANF, NANF, NANF, NANF);
@@ -34,10 +35,15 @@ double Quaternion::dot(const Quaternion& that) const {
 }
 
 Quaternion Quaternion::times(const Quaternion& that) const {
-  const double w = (_w * that._w) - (_x * that._x) - (_y * that._y) - (_z * that._z);
-  const double x = ((_w * that._x) + (_x * that._w) + (_y * that._z)) - (_z * that._y);
-  const double y = ((_w * that._y) + (_y * that._w) + (_z * that._x)) - (_x * that._z);
-  const double z = ((_w * that._z) + (_z * that._w) + (_x * that._y)) - (_y * that._x);
+  //  const double x = (_w * that._x) + (_x * that._w) + (_y * that._z) - (_z * that._y);
+  //  const double y = (_w * that._y) + (_y * that._w) + (_z * that._x) - (_x * that._z);
+  //  const double z = (_w * that._z) + (_z * that._w) + (_x * that._y) - (_y * that._x);
+  //  const double w = (_w * that._w) - (_x * that._x) - (_y * that._y) - (_z * that._z);
+
+  const double x = (that._w * _x) + (that._x * _w) + (that._z * _y) - (that._y * _z);
+  const double y = (that._w * _y) + (that._y * _w) + (that._x * _z) - (that._z * _x);
+  const double z = (that._w * _z) + (that._z * _w) + (that._y * _x) - (that._x * _y);
+  const double w = (that._w * _w) - (that._x * _x) - (that._y * _y) - (that._z * _z);
 
   return Quaternion(x, y, z, w);
 }
@@ -124,8 +130,49 @@ void Quaternion::toRotationMatrix(MutableMatrix44D& result) const {
                   m01, m11, m21, m31,
                   m02, m12, m22, m32,
                   m03, m13, m23, m33);
-//  result.setValue(m00, m01, m02, m03,
-//                  m10, m11, m12, m13,
-//                  m20, m21, m22, m23,
-//                  m30, m31, m32, m33);
+  //  result.setValue(m00, m01, m02, m03,
+  //                  m10, m11, m12, m13,
+  //                  m20, m21, m22, m23,
+  //                  m30, m31, m32, m33);
+}
+
+TaitBryanAngles Quaternion::toTaitBryanAngles() const {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const double ysqr = _y * _y;
+
+  const double t0 = 2.0 * ((_w * _x) + (_y * _z));
+  const double t1 = 1.0 - 2.0 * ((_x * _x) + ysqr);
+  const double roll = mu->atan2(t0, t1);
+
+  double t2 = 2.0 * ((_w * _y) - (_z * _x));
+  t2 = t2 > 1.0 ? 1.0 : t2;
+  t2 = t2 < -1.0 ? -1.0 : t2;
+  const double pitch = mu->asin(t2);
+
+  const double t3 = 2.0 * ((_w * _z) + (_x *_y));
+  const double t4 = 1.0 - 2.0 * (ysqr + (_z * _z));
+  const double yaw = mu->atan2(t3, t4);
+
+  return TaitBryanAngles::fromRadians(yaw, pitch, roll);
+
+  //  double heading;
+  //  double pitch;
+  //  double roll;
+  //
+  //  const double test = _z * _y + _x * _w;
+  //  if (mu->abs(test) < 0.4999) {
+  //    heading = mu->asin(2.0 * test);
+  //    pitch   = mu->atan2(2.0 * _y * _w - 2.0 * _z * _x,
+  //                        1.0 - 2.0 * _y * _y - 2.0 * _x * _x);
+  //    roll    = mu->atan2(2.0 * _z * _w - 2.0 * _y * _x,
+  //                        1.0 - 2.0 * _z * _z - 2.0 * _x * _x);
+  //  }
+  //  else {
+  //    heading = mu->copySign(1.5707963267948966, test);
+  //    pitch   = mu->copySign(2.0, test) * mu->atan2(_z, _w);
+  //    roll    = 0.0;
+  //  }
+  //
+  //  return TaitBryanAngles::fromRadians(heading, pitch, roll);
 }
