@@ -11,18 +11,9 @@
 #include <vector>
 
 #include "ProtoRenderer.hpp"
-#include "RenderState.hpp"
-#include "G3MContext.hpp"
-#include "Effects.hpp"
-
-
-#include "Effects.hpp"
 
 class RenderState;
 class CameraEventHandler;
-
-
-class ILogger;
 class Camera;
 class Vector3D;
 class TouchEvent;
@@ -36,26 +27,35 @@ enum Gesture {
   DoubleDrag
 };
 
+
 class CameraContext {
 private:
   Gesture _currentGesture;
   Camera* _nextCamera;
 
 public:
-  CameraContext(Gesture gesture, Camera* nextCamera):
+  CameraContext(Gesture gesture,
+                Camera* nextCamera):
   _currentGesture(gesture),
   _nextCamera(nextCamera)
-  {}
-
-  ~CameraContext() {
-
+  {
   }
 
-  const Gesture getCurrentGesture() const { return _currentGesture; }
-  void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
-  Camera* getNextCamera() { return _nextCamera; }
-};
+  ~CameraContext() {
+  }
 
+  const Gesture getCurrentGesture() const {
+    return _currentGesture;
+  }
+
+  void setCurrentGesture(const Gesture& gesture) {
+    _currentGesture = gesture;
+  }
+
+  Camera* getNextCamera() {
+    return _nextCamera;
+  }
+};
 
 
 class CameraRenderer: public ProtoRenderer {
@@ -75,18 +75,17 @@ public:
 
   void removeAllHandlers(bool deleteHandlers);
 
-  void addHandler(CameraEventHandler* handler) {
-    _handlers.push_back(handler);
-  }
+  void addHandler(CameraEventHandler* handler);
 
   void setProcessTouchEvents(bool processTouchEvents) {
     _processTouchEvents = processTouchEvents;
   }
 
-  void render(const G3MRenderContext* rc, GLState* glState);
-  
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+
   void initialize(const G3MContext* context) {
-    
+
   }
 
   bool onTouchEvent(const G3MEventContext* ec,
@@ -94,12 +93,10 @@ public:
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-    
+
   }
 
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void start(const G3MRenderContext* rc) {
 
@@ -118,11 +115,11 @@ public:
   }
 
   void onDestroy(const G3MContext* context) {
-    
+
   }
   
   void removeHandler(CameraEventHandler* handler);
-};
 
+};
 
 #endif

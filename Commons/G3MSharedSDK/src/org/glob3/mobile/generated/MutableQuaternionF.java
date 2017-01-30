@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated;
 //
-//  MutableQuaternion.cpp
+//  MutableQuaternionF.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 1/19/17.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MutableQuaternion.hpp
+//  MutableQuaternionF.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 1/19/17.
@@ -16,16 +16,16 @@ package org.glob3.mobile.generated;
 //
 
 
-public class MutableQuaternion
+public class MutableQuaternionF
 {
   private float _x;
   private float _y;
   private float _z;
   private float _w;
 
-  private MutableQuaternion _temp;
+  private MutableQuaternionF _temp;
 
-  public MutableQuaternion()
+  public MutableQuaternionF()
   {
      _x = 0.0f;
      _y = 0.0f;
@@ -34,7 +34,7 @@ public class MutableQuaternion
      _temp = null;
   }
 
-  public MutableQuaternion(float x, float y, float z, float w)
+  public MutableQuaternionF(float x, float y, float z, float w)
   {
      _x = x;
      _y = y;
@@ -90,7 +90,7 @@ public class MutableQuaternion
     return _w;
   }
 
-  public final void copyFrom(MutableQuaternion that)
+  public final void copyFrom(MutableQuaternionF that)
   {
     _x = that._x;
     _y = that._y;
@@ -98,18 +98,18 @@ public class MutableQuaternion
     _w = that._w;
   }
 
-  public final float dot(MutableQuaternion that)
+  public final float dot(MutableQuaternionF that)
   {
     return (_x * that._x) + (_y * that._y) + (_z * that._z) + (_w * that._w);
   }
 
-  public final void multiplyBy(MutableQuaternion that, MutableQuaternion output)
+  public final void times(MutableQuaternionF that, MutableQuaternionF output)
   {
     if (that == output)
     {
       if (_temp == null)
       {
-        _temp = new MutableQuaternion();
+        _temp = new MutableQuaternionF();
       }
       _temp.copyFrom(that);
   
@@ -127,11 +127,11 @@ public class MutableQuaternion
     }
   }
 
-  public final void slerp(MutableQuaternion that, MutableQuaternion output, float t)
+  public final void slerp(MutableQuaternionF that, MutableQuaternionF output, float t)
   {
     if (_temp == null)
     {
-      _temp = new MutableQuaternion();
+      _temp = new MutableQuaternionF();
     }
   
     float cosHalftheta = dot(that);

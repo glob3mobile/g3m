@@ -3,8 +3,12 @@
 package org.glob3.mobile.specific;
 
 
-import android.content.Context;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MContext;
@@ -14,12 +18,8 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import android.content.Context;
+import android.util.Log;
 
 
 public final class Downloader_Android
@@ -125,7 +125,7 @@ public final class Downloader_Android
                              final IBufferDownloadListener listener,
                              final boolean deleteListener,
                              final String tag) {
-      long requestID;
+      final long requestID;
 
       synchronized (this) {
          _requestsCounter++;
@@ -163,7 +163,7 @@ public final class Downloader_Android
                             final IImageDownloadListener listener,
                             final boolean deleteListener,
                             final String tag) {
-      long requestID;
+      final long requestID;
 
       synchronized (this) {
          _requestsCounter++;

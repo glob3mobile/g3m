@@ -30,7 +30,7 @@ public class InterpolatedDEMGrid extends DecoratorDEMGrid
   {
     if ((u < 0) || (u > 1) || (v < 0) || (v > 1))
     {
-      return java.lang.Double.NaN;
+      return Double.NaN;
     }
   
     final Vector2I gridExtent = grid.getExtent();

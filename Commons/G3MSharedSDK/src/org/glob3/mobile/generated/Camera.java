@@ -21,8 +21,8 @@ public class Camera
      _geodeticPosition = null;
      _angle2Horizon = -99;
      _normalizedPosition = new MutableVector3D(0, 0, 0);
-     _tanHalfVerticalFOV = java.lang.Double.NaN;
-     _tanHalfHorizontalFOV = java.lang.Double.NaN;
+     _tanHalfVerticalFOV = Double.NaN;
+     _tanHalfHorizontalFOV = Double.NaN;
      _timestamp = timestamp;
      _viewPortWidth = -1;
      _viewPortHeight = -1;
@@ -482,9 +482,7 @@ public class Camera
   {
     setCartesianPosition(_position.transformedBy(M, 1.0));
     setCenter(_center.transformedBy(M, 1.0));
-  
     setUp(_up.transformedBy(M, 0.0));
-  
     //_dirtyFlags.setAllDirty();
   }
 

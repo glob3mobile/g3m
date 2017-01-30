@@ -21,6 +21,14 @@ package org.glob3.mobile.generated;
 
 public class CameraSingleDragHandler extends CameraEventHandler
 {
+  private final boolean _useInertia;
+
+  private MutableVector3D _cameraPosition = new MutableVector3D();
+  private MutableVector3D _cameraCenter = new MutableVector3D();
+  private MutableVector3D _cameraUp = new MutableVector3D();
+  private MutableVector2I _cameraViewPort = new MutableVector2I();
+  private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
+  private MutableVector3D _finalRay = new MutableVector3D();
 
   public CameraSingleDragHandler(boolean useInertia)
   {
@@ -29,18 +37,19 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public void dispose()
   {
-  super.dispose();
-
+    super.dispose();
   }
-
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    // only one finger needed
-    if (touchEvent.getTouchCount()!=1)
-       return false;
-    if (touchEvent.getTapCount()>1)
-       return false;
+    if (touchEvent.getTouchCount() != 1)
+    {
+      return false;
+    }
+    if (touchEvent.getTapCount() > 1)
+    {
+      return false;
+    }
   
     switch (touchEvent.getType())
     {
@@ -61,34 +70,33 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
-  //  // TEMP TO DRAW A POINT WHERE USER PRESS
-  //  if (false) {
-  //    if (cameraContext->getCurrentGesture() == Drag) {
-  //      GL* gl = rc->getGL();
-  //      float vertices[] = { 0,0,0};
-  //      int indices[] = {0};
-  //      gl->enableVerticesPosition();
-  //      gl->disableTexture2D();
-  //      gl->disableTextures();
-  //      gl->vertexPointer(3, 0, vertices);
-  //      gl->color((float) 0, (float) 1, (float) 0, 1);
-  //      gl->pointSize(60);
-  //      gl->pushMatrix();
-  //      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  //      gl->multMatrixf(T);
-  //      gl->drawPoints(1, indices);
-  //      gl->popMatrix();
-  //
-  //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-  //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
-  //    }
-  //  }
+    //  // TEMP TO DRAW A POINT WHERE USER PRESS
+    //  if (false) {
+    //    if (cameraContext->getCurrentGesture() == Drag) {
+    //      GL* gl = rc->getGL();
+    //      float vertices[] = { 0,0,0};
+    //      int indices[] = {0};
+    //      gl->enableVerticesPosition();
+    //      gl->disableTexture2D();
+    //      gl->disableTextures();
+    //      gl->vertexPointer(3, 0, vertices);
+    //      gl->color((float) 0, (float) 1, (float) 0, 1);
+    //      gl->pointSize(60);
+    //      gl->pushMatrix();
+    //      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
+    //      gl->multMatrixf(T);
+    //      gl->drawPoints(1, indices);
+    //      gl->popMatrix();
+    //
+    //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+    //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
+    //    }
+    //  }
   }
 
-  public final boolean _useInertia;
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    Camera camera = cameraContext.getNextCamera();
+    final Camera camera = cameraContext.getNextCamera();
     camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
     camera.getModelViewMatrixInto(_cameraModelViewMatrix);
     camera.getViewPortInto(_cameraViewPort);
@@ -105,20 +113,26 @@ public class CameraSingleDragHandler extends CameraEventHandler
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
-    if (cameraContext.getCurrentGesture()!=Gesture.Drag)
-       return;
+    if (cameraContext.getCurrentGesture() != Gesture.Drag)
+    {
+      return;
+    }
   
     //check finalRay
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
     Camera.pixel2RayInto(_cameraPosition, pixel, _cameraViewPort, _cameraModelViewMatrix, _finalRay);
     if (_finalRay.isNan())
-       return;
+    {
+      return;
+    }
   
     // compute transformation matrix
     final Planet planet = eventContext.getPlanet();
-    MutableMatrix44D matrix = planet.singleDrag(_finalRay.asVector3D());
+    final MutableMatrix44D matrix = planet.singleDrag(_finalRay.asVector3D());
     if (!matrix.isValid())
-       return;
+    {
+      return;
+    }
   
     // apply transformation
     cameraContext.getNextCamera().setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0), _cameraCenter.transformedBy(matrix, 1.0), _cameraUp.transformedBy(matrix, 0.0));
@@ -150,14 +164,6 @@ public class CameraSingleDragHandler extends CameraEventHandler
       }
     }
   
-    // update gesture
     cameraContext.setCurrentGesture(Gesture.None);
   }
-
-  private MutableVector3D _cameraPosition = new MutableVector3D();
-  private MutableVector3D _cameraCenter = new MutableVector3D();
-  private MutableVector3D _cameraUp = new MutableVector3D();
-  private MutableVector2I _cameraViewPort = new MutableVector2I();
-  private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
-  private MutableVector3D _finalRay = new MutableVector3D();
 }

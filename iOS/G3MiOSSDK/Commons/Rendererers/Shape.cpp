@@ -58,9 +58,8 @@ _surfaceElevation(0),
 _glState(new GLState()),
 _surfaceElevationProvider(NULL)
 {
-
+  _localTransform.setValid(false);
 }
-
 
 Shape::~Shape() {
   const size_t pendingEffectsCount = _pendingEffects.size();
@@ -109,24 +108,40 @@ void Shape::cleanTransformMatrix() {
   _transformMatrix = NULL;
 }
 
-MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
-  const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::DOWN_Z);
-  const MutableMatrix44D pitchRotation   = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::UP_X);
-  const MutableMatrix44D rollRotation    = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::UP_Y);
-  const MutableMatrix44D scale           = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-  const MutableMatrix44D translation     = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
-  const MutableMatrix44D localTransform  = headingRotation.multiply(pitchRotation).multiply(rollRotation ).multiply(translation).multiply(scale);
+void Shape::setLocalTransform(const MutableMatrix44D& localTransform) {
+  _localTransform.copyValue(localTransform);
+  cleanTransformMatrix();
+}
 
+MutableMatrix44D Shape::getLocalTransform() const {
+  if (_localTransform.isValid()) {
+    return _localTransform;
+  }
+
+  const MutableMatrix44D headingM  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::DOWN_Z);
+  const MutableMatrix44D pitchM    = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::UP_X);
+  const MutableMatrix44D rollM     = MutableMatrix44D::createRotationMatrix(*_roll,    Vector3D::UP_Y);
+  const MutableMatrix44D rotationM = headingM.multiply(pitchM).multiply(rollM);
+
+  const MutableMatrix44D scaleM = MutableMatrix44D::createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+
+  const MutableMatrix44D translationM = MutableMatrix44D::createTranslationMatrix(_translationX, _translationY, _translationZ);
+
+  return rotationM.multiply(translationM).multiply(scaleM);
+}
+
+MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) const {
+  const MutableMatrix44D localTransformM = getLocalTransform();
 
   double height = _position->_height;
   if (_altitudeMode == RELATIVE_TO_GROUND) {
     height += _surfaceElevation;
   }
-  const MutableMatrix44D geodeticTransform = planet->createGeodeticTransformMatrix(_position->_latitude,
-                                                                                   _position->_longitude,
-                                                                                   height);
+  const MutableMatrix44D geodeticTransformM = planet->createGeodeticTransformMatrix(_position->_latitude,
+                                                                                    _position->_longitude,
+                                                                                    height);
 
-  return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
+  return new MutableMatrix44D( geodeticTransformM.multiply(localTransformM) );
 }
 
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {

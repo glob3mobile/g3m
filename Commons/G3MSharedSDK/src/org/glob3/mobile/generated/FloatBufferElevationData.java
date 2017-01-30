@@ -28,13 +28,13 @@ public class FloatBufferElevationData extends BufferElevationData
     final float value = _buffer.get(index);
     if (value == NO_DATA_VALUE)
     {
-      return java.lang.Double.NaN;
+      return Double.NaN;
     }
     return value;
   }
 
 
-  public static final float NO_DATA_VALUE = java.lang.Float.NaN;
+  public static final float NO_DATA_VALUE = Float.NaN;
 
   public FloatBufferElevationData(Sector sector, Vector2I extent, IFloatBuffer buffer, double deltaHeight)
   {

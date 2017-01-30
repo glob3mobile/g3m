@@ -9,30 +9,27 @@
 #define G3MiOSSDK_CameraDoubleTapHandler
 
 #include "CameraEventHandler.hpp"
-#include "Camera.hpp"
-#include "Effects.hpp"
 
 
 class CameraDoubleTapHandler: public CameraEventHandler {
-  
+
 public:
-  
+
   ~CameraDoubleTapHandler() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
-  
+
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
-  
+
   void render(const G3MRenderContext* rc,
               CameraContext *cameraContext) {
-    
+
   }
-  
+
   void onDown(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext);
@@ -42,7 +39,7 @@ public:
   void onUp(const G3MEventContext *eventContext,
             const TouchEvent& touchEvent,
             CameraContext *cameraContext) {}
-  
+
 };
 
 

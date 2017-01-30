@@ -11,19 +11,26 @@
 
 #include "Angle.hpp"
 
-class TaitBryanAngles{
+class TaitBryanAngles {
 public:
   const Angle _heading;
   const Angle _pitch;
   const Angle _roll;
 
-  TaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll);
+  TaitBryanAngles(const Angle& heading,
+                  const Angle& pitch,
+                  const Angle& roll);
 
-  static TaitBryanAngles fromRadians(double heading, double pitch, double roll);
+  static TaitBryanAngles fromRadians(double heading,
+                                     double pitch,
+                                     double roll);
 
-  static TaitBryanAngles fromDegrees(double heading, double pitch, double roll);
+  static TaitBryanAngles fromDegrees(double heading,
+                                     double pitch,
+                                     double roll);
 
   const std::string description() const;
+
 };
 
 #endif

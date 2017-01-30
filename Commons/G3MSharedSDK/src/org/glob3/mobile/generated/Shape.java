@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class MutableMatrix44D;
+
 //class ShapePendingEffect;
 //class GLState;
 
@@ -39,6 +39,8 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private double _translationX;
   private double _translationY;
   private double _translationZ;
+
+  private MutableMatrix44D _localTransform = new MutableMatrix44D();
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D getTransformMatrix(Planet planet)
@@ -61,6 +63,25 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   private SurfaceElevationProvider _surfaceElevationProvider;
   private double _surfaceElevation;
 
+  private MutableMatrix44D getLocalTransform()
+  {
+    if (_localTransform.isValid())
+    {
+      return _localTransform;
+    }
+  
+    final MutableMatrix44D headingM = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.DOWN_Z);
+    final MutableMatrix44D pitchM = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.UP_X);
+    final MutableMatrix44D rollM = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.UP_Y);
+    final MutableMatrix44D rotationM = headingM.multiply(pitchM).multiply(rollM);
+  
+    final MutableMatrix44D scaleM = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+  
+    final MutableMatrix44D translationM = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
+  
+    return rotationM.multiply(translationM).multiply(scaleM);
+  }
+
   protected void cleanTransformMatrix()
   {
     if (_transformMatrix != null)
@@ -68,27 +89,20 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _transformMatrix = null;
   }
 
-
-
-  public final MutableMatrix44D createTransformMatrix(Planet planet)
+  protected final MutableMatrix44D createTransformMatrix(Planet planet)
   {
-    final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.DOWN_Z);
-    final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.UP_X);
-    final MutableMatrix44D rollRotation = MutableMatrix44D.createRotationMatrix(_roll, Vector3D.UP_Y);
-    final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_translationX, _translationY, _translationZ);
-    final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translation).multiply(scale);
-  
+    final MutableMatrix44D localTransformM = getLocalTransform();
   
     double height = _position._height;
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
       height += _surfaceElevation;
     }
-    final MutableMatrix44D geodeticTransform = planet.createGeodeticTransformMatrix(_position._latitude, _position._longitude, height);
+    final MutableMatrix44D geodeticTransformM = planet.createGeodeticTransformMatrix(_position._latitude, _position._longitude, height);
   
-    return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
+    return new MutableMatrix44D(geodeticTransformM.multiply(localTransformM));
   }
+
 
   public Shape(Geodetic3D position, AltitudeMode altitudeMode)
   {
@@ -108,7 +122,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _surfaceElevation = 0;
      _glState = new GLState();
      _surfaceElevationProvider = null;
-  
+    _localTransform.setValid(false);
   }
 
   public void dispose()
@@ -285,6 +299,12 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final void setScale(Vector3D scale)
   {
     setScale(scale._x, scale._y, scale._z);
+  }
+
+  public final void setLocalTransform(MutableMatrix44D localTransform)
+  {
+    _localTransform.copyValue(localTransform);
+    cleanTransformMatrix();
   }
 
   public final Vector3D getScale()

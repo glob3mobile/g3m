@@ -51,15 +51,13 @@ public class CameraRenderer implements ProtoRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-  
-    // create the CameraContext
     if (_cameraContext == null)
     {
       _cameraContext = new CameraContext(Gesture.None, rc.getNextCamera());
     }
   
     // render camera object
-  //  rc->getCurrentCamera()->render(rc, parentState);
+    //rc->getCurrentCamera()->render(rc, parentState);
   
     final int handlersSize = _handlers.size();
     for (int i = 0; i < handlersSize; i++)
@@ -143,4 +141,5 @@ public class CameraRenderer implements ProtoRenderer
   
     ILogger.instance().logError("Could not remove camera handler.");
   }
+
 }

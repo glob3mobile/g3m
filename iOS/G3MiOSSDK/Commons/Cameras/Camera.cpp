@@ -299,9 +299,7 @@ const Vector2F Camera::point2Pixel(const Vector3F& point) const {
 void Camera::applyTransform(const MutableMatrix44D& M) {
   setCartesianPosition( _position.transformedBy(M, 1.0) );
   setCenter( _center.transformedBy(M, 1.0) );
-
-  setUp(  _up.transformedBy(M, 0.0) );
-
+  setUp( _up.transformedBy(M, 0.0) );
   //_dirtyFlags.setAllDirty();
 }
 
@@ -547,7 +545,7 @@ void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
   vertices->putVector3D(3, c.add(right).add(up));
 }
 
-void Camera::getViewPortInto(MutableVector2I& viewport) {
+void Camera::getViewPortInto(MutableVector2I& viewport) const {
   viewport.set(_viewPortWidth, _viewPortHeight);
 }
 
@@ -672,13 +670,13 @@ bool Camera::hasValidViewDirection() const {
 
 void Camera::getLookAtParamsInto(MutableVector3D& position,
                                  MutableVector3D& center,
-                                 MutableVector3D& up) {
+                                 MutableVector3D& up) const {
   position.copyFrom(_position);
   center.copyFrom(_center);
   up.copyFrom(_up);
 }
 
-void Camera::getModelViewMatrixInto(MutableMatrix44D& matrix) {
+void Camera::getModelViewMatrixInto(MutableMatrix44D& matrix) const {
   matrix.copyValue(getModelViewMatrix());
 }
 

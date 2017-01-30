@@ -150,7 +150,6 @@ public class MutableMatrix44D
     _m33 = 0.0;
   }
 
-  //<<<<<<< HEAD
   public MutableMatrix44D(MutableMatrix44D m)
   {
      _isValid = m._isValid;
@@ -389,9 +388,6 @@ public class MutableMatrix44D
     }
   }
 
-  //
-  //OPERATIONS
-
   public final MutableMatrix44D multiply(MutableMatrix44D that)
   {
   
@@ -496,8 +492,6 @@ public class MutableMatrix44D
     return new MutableMatrix44D(_m00, _m01, _m02, _m03, _m10, _m11, _m12, _m13, _m20, _m21, _m22, _m23, _m30, _m31, _m32, _m33);
   }
 
-  //METHODS TO EXTRACT VALUES FROM THE MATRIX
-
   public final double get0()
   {
      return _m00;
@@ -562,48 +556,6 @@ public class MutableMatrix44D
   {
      return _m33;
   }
-
-  /*
-   //Returns values from 0..15 in column mayor order
-   double get(int i) const {
-   switch (i) {
-   case 0:
-   return _m00;
-   case 1:
-   return _m10;
-   case 2:
-   return _m20;
-   case 3:
-   return _m30;
-   case 4:
-   return _m01;
-   case 5:
-   return _m11;
-   case 6:
-   return _m21;
-   case 7:
-   return _m31;
-   case 8:
-   return _m02;
-   case 9:
-   return _m12;
-   case 10:
-   return _m22;
-   case 11:
-   return _m32;
-   case 12:
-   return _m03;
-   case 13:
-   return _m13;
-   case 14:
-   return _m23;
-   case 15:
-   return _m33;
-   default:
-   ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
-   return 0;
-   }
-   }*/
 
   public final void print(String name, ILogger log)
   {
@@ -726,8 +678,8 @@ public class MutableMatrix44D
   {
     final Vector3D a = axis.normalized();
   
-    final double c = java.lang.Math.cos(angle._radians);
-    final double s = java.lang.Math.sin(angle._radians);
+    final double c = Math.cos(angle._radians);
+    final double s = Math.sin(angle._radians);
   
     return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
   }

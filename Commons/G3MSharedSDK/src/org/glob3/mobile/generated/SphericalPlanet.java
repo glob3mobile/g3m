@@ -74,9 +74,9 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-    final double cosLatitude = java.lang.Math.cos(latitude._radians);
+    final double cosLatitude = Math.cos(latitude._radians);
   
-    return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
+    return new Vector3D(cosLatitude * Math.cos(longitude._radians), cosLatitude * Math.sin(longitude._radians), Math.sin(latitude._radians));
   }
 
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
@@ -91,9 +91,9 @@ public class SphericalPlanet extends Planet
 
   public final void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result)
   {
-    final double cosLatitude = java.lang.Math.cos(latitude._radians);
+    final double cosLatitude = Math.cos(latitude._radians);
   
-    result.set(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
+    result.set(cosLatitude * Math.cos(longitude._radians), cosLatitude * Math.sin(longitude._radians), Math.sin(latitude._radians));
   }
 
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)

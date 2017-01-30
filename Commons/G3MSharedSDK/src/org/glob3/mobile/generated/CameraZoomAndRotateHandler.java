@@ -7,7 +7,6 @@ package org.glob3.mobile.generated;
 //
 //
 
-
 //
 //  CameraZoomAndRotateHandler.hpp
 //  G3MiOSSDK
@@ -15,6 +14,8 @@ package org.glob3.mobile.generated;
 //  Created by Agustin Trujillo on 26/06/13.
 //
 //
+
+
 
 
 
@@ -27,6 +28,13 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
 
   private MutableVector3D _centralGlobePoint = new MutableVector3D();
   private MutableVector3D _centralGlobeNormal = new MutableVector3D();
+
+  private MutableVector2F _initialPixel0 = new MutableVector2F(); //Initial pixels at start of gesture
+  private MutableVector2F _initialPixel1 = new MutableVector2F();
+
+  private MutableVector3D _cameraPosition = new MutableVector3D();
+  private MutableVector3D _cameraCenter = new MutableVector3D();
+  private MutableVector3D _cameraUp = new MutableVector3D();
 
   private void zoom(Camera camera, Vector2F difCurrentPixels)
   {
@@ -83,8 +91,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
 
   public void dispose()
   {
-  super.dispose();
-
+    super.dispose();
   }
 
 
@@ -231,15 +238,5 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
     //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
-
-  public MutableVector2F _initialPixel0 = new MutableVector2F(); //Initial pixels at start of gesture
-  public MutableVector2F _initialPixel1 = new MutableVector2F();
-
-  public double _initialFingerSeparation;
-  public double _initialFingerInclination;
-
-  public MutableVector3D _cameraPosition = new MutableVector3D();
-  public MutableVector3D _cameraCenter = new MutableVector3D();
-  public MutableVector3D _cameraUp = new MutableVector3D();
 
 }

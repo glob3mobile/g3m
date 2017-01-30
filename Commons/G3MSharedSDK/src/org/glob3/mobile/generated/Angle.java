@@ -93,7 +93,7 @@ public class Angle
 
   public static Angle nan()
   {
-    return Angle.fromDegrees(java.lang.Double.NaN);
+    return Angle.fromDegrees(Double.NaN);
   }
 
   public static Angle midAngle(Angle angle1, Angle angle2)
@@ -161,7 +161,7 @@ public class Angle
 
   public final double tangent()
   {
-    return java.lang.Math.tan(_radians);
+    return Math.tan(_radians);
   }
 
   public final boolean closeTo(Angle other)

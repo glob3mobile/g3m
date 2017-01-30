@@ -66,7 +66,7 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
   
         if ((height != height))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         double size = ysize;

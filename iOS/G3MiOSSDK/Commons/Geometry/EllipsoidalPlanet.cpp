@@ -371,7 +371,6 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Angle& l
                                                                   const double height) const {
   const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(latitude, longitude, height) );
   const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( latitude, longitude );
-
   return translation.multiply(rotation);
 }
 

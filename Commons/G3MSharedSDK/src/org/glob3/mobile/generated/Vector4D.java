@@ -52,7 +52,7 @@ public class Vector4D
 
   public static Vector4D nan()
   {
-    return new Vector4D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+    return new Vector4D(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
   }
 
   public static Vector4D zero()

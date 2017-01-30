@@ -15,27 +15,30 @@
 #include "Effects.hpp"
 #include "AltitudeMode.hpp"
 
-class MutableMatrix44D;
+#include "MutableMatrix44D.hpp"
+
 class ShapePendingEffect;
 class GLState;
 
 
 class Shape : public SurfaceElevationListener, EffectTarget {
 private:
-  Geodetic3D* _position;
+  Geodetic3D*  _position;
   AltitudeMode _altitudeMode;
 
-  Angle*      _heading;
-  Angle*      _pitch;
-  Angle*      _roll;
+  Angle* _heading;
+  Angle* _pitch;
+  Angle* _roll;
 
-  double      _scaleX;
-  double      _scaleY;
-  double      _scaleZ;
+  double _scaleX;
+  double _scaleY;
+  double _scaleZ;
 
-  double      _translationX;
-  double      _translationY;
-  double      _translationZ;
+  double _translationX;
+  double _translationY;
+  double _translationZ;
+
+  MutableMatrix44D _localTransform;
 
   mutable MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
@@ -49,13 +52,14 @@ private:
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _surfaceElevation;
 
+  MutableMatrix44D getLocalTransform() const;
+
 protected:
   virtual void cleanTransformMatrix();
 
+  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
 
 public:
-
-  MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
 
   Shape(Geodetic3D* position,
         AltitudeMode altitudeMode);
@@ -134,6 +138,8 @@ public:
   }
 
   void setScale(const Vector3D& scale);
+
+  void setLocalTransform(const MutableMatrix44D& localTransform);
 
   Vector3D getScale() const;
 

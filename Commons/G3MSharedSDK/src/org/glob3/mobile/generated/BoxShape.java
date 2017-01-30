@@ -33,7 +33,7 @@ public class BoxShape extends AbstractMeshShape
 
   private float _borderWidth;
 
-  private boolean _useNormals;
+  private final boolean _useNormals;
 
   private Color _surfaceColor;
   private Color _borderColor;
@@ -231,7 +231,7 @@ public class BoxShape extends AbstractMeshShape
     if (_borderColor != null)
        _borderColor.dispose();
 
-  super.dispose();
+    super.dispose();
   }
 
   public final void setExtent(Vector3D extent)

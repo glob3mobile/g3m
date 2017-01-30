@@ -35,7 +35,7 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
        */
     
       final double angleInRadians = Vector3D.angleInRadiansBetween(a, b);
-      final double halfAngleSin = java.lang.Math.sin(angleInRadians / 2);
+      final double halfAngleSin = Math.sin(angleInRadians / 2);
       final double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
       return (arcSegmentRatio * arcSegmentRatio);
     }

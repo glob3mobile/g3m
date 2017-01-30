@@ -93,8 +93,8 @@ public class MarkWidget
      _viewportExtentGLFeature = null;
      _geo2Dfeature = null;
      _glState = null;
-     _x = java.lang.Float.NaN;
-     _y = java.lang.Float.NaN;
+     _x = Float.NaN;
+     _y = Float.NaN;
      _halfHeight = 0F;
      _halfWidth = 0F;
      _vertices = null;
@@ -176,8 +176,8 @@ public class MarkWidget
     {
       _geo2Dfeature.setTranslation(0, 0);
     }
-    _x = java.lang.Float.NaN;
-    _y = java.lang.Float.NaN;
+    _x = Float.NaN;
+    _y = Float.NaN;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

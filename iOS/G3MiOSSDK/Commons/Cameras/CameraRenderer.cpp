@@ -6,12 +6,14 @@
 //
 
 #include "CameraRenderer.hpp"
-#include "Camera.hpp"
+
 #include "CameraEventHandler.hpp"
-#include "TouchEvent.hpp"
-#include "G3MEventContext.hpp"
 #include "G3MRenderContext.hpp"
+#include "TouchEvent.hpp"
+#include "Camera.hpp"
+#include "G3MEventContext.hpp"
 #include "ILogger.hpp"
+#include "RenderState.hpp"
 
 
 CameraRenderer::~CameraRenderer() {
@@ -34,15 +36,14 @@ void CameraRenderer::removeAllHandlers(bool deleteHandlers) {
   _handlers.clear();
 }
 
-void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-
-  // create the CameraContext
+void CameraRenderer::render(const G3MRenderContext* rc,
+                            GLState* glState) {
   if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
   }
 
   // render camera object
-//  rc->getCurrentCamera()->render(rc, parentState);
+  //rc->getCurrentCamera()->render(rc, parentState);
 
   const size_t handlersSize = _handlers.size();
   for (size_t i = 0; i < handlersSize; i++) {
@@ -73,7 +74,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 void CameraRenderer::removeHandler(CameraEventHandler* handler) {
-  
+
 #ifdef C_CODE
   size_t size = _handlers.size();
   for (size_t i = 0; i < size; i++) {
@@ -88,6 +89,14 @@ void CameraRenderer::removeHandler(CameraEventHandler* handler) {
     return;
   }
 #endif
-  
+
   ILogger::instance()->logError("Could not remove camera handler.");
+}
+
+void CameraRenderer::addHandler(CameraEventHandler* handler) {
+  _handlers.push_back(handler);
+}
+
+RenderState CameraRenderer::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
 }

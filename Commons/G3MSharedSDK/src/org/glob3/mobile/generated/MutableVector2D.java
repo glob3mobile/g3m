@@ -56,7 +56,7 @@ public class MutableVector2D
 
   public static MutableVector2D nan()
   {
-    return new MutableVector2D(java.lang.Double.NaN, java.lang.Double.NaN);
+    return new MutableVector2D(Double.NaN, Double.NaN);
   }
 
   public final boolean isEquals(double x, double y)

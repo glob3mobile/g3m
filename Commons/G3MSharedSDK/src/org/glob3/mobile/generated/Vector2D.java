@@ -100,7 +100,7 @@ public class Vector2D
 
   public static Vector2D nan()
   {
-    return new Vector2D(java.lang.Double.NaN, java.lang.Double.NaN);
+    return new Vector2D(Double.NaN, Double.NaN);
   }
 
   public final double maxAxis()

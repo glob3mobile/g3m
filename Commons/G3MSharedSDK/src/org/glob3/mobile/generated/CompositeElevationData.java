@@ -96,7 +96,7 @@ public class CompositeElevationData extends ElevationData
       }
     }
   
-    return java.lang.Double.NaN;
+    return Double.NaN;
   }
 
   public final String description(boolean detailed)

@@ -22,7 +22,6 @@ public final class MathUtils_Android
 
    @Override
    public float sin(final float v) {
-      //      return FloatMath.sin(v);
       return (float) Math.sin(v);
    }
 
@@ -47,7 +46,6 @@ public final class MathUtils_Android
 
    @Override
    public float cos(final float v) {
-      //      return FloatMath.cos(v);
       return (float) Math.cos(v);
    }
 
@@ -140,7 +138,6 @@ public final class MathUtils_Android
 
    @Override
    public float sqrt(final float v) {
-      //      return FloatMath.sqrt(v);
       return (float) Math.sqrt(v);
    }
 

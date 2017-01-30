@@ -2,6 +2,13 @@
 
 package org.glob3.mobile.specific;
 
+import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
+
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
@@ -43,13 +50,6 @@ import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
-import android.opengl.GLSurfaceView;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.MotionEvent;
-
 
 public final class G3MWidget_Android
    extends
@@ -58,10 +58,9 @@ public final class G3MWidget_Android
       OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
-   private ES2Renderer                _es2renderer;
+   private final ES2Renderer          _es2renderer;
 
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
-   private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
    private Thread                     _openGLThread         = null;
 
@@ -118,10 +117,11 @@ public final class G3MWidget_Android
       // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
       // setDebugFlags(DEBUG_CHECK_GL_ERROR);
 
+      final OnDoubleTapListener doubleTapListener;
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener
          _gestureDetector = new GestureDetector(context, this);
-         _doubleTapListener = new OnDoubleTapListener() {
+         doubleTapListener = new OnDoubleTapListener() {
 
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e) {
@@ -137,7 +137,6 @@ public final class G3MWidget_Android
 
             @Override
             public boolean onDoubleTap(final MotionEvent event) {
-
                final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
 
                queueEvent(new Runnable() {
@@ -150,11 +149,11 @@ public final class G3MWidget_Android
                return true;
             }
          };
-         _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+         _gestureDetector.setOnDoubleTapListener(doubleTapListener);
       }
       else {
          _gestureDetector = null;
-         _doubleTapListener = null;
+         doubleTapListener = null;
       }
    }
 
