@@ -299,9 +299,7 @@ const Vector2F Camera::point2Pixel(const Vector3F& point) const {
 void Camera::applyTransform(const MutableMatrix44D& M) {
   setCartesianPosition( _position.transformedBy(M, 1.0) );
   setCenter( _center.transformedBy(M, 1.0) );
-
-  setUp(  _up.transformedBy(M, 0.0) );
-
+  setUp( _up.transformedBy(M, 0.0) );
   //_dirtyFlags.setAllDirty();
 }
 

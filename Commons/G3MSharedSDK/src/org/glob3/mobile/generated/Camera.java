@@ -482,9 +482,7 @@ public class Camera
   {
     setCartesianPosition(_position.transformedBy(M, 1.0));
     setCenter(_center.transformedBy(M, 1.0));
-  
     setUp(_up.transformedBy(M, 0.0));
-  
     //_dirtyFlags.setAllDirty();
   }
 
