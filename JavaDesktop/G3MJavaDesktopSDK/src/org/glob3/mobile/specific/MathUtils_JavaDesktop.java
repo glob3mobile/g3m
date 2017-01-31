@@ -381,4 +381,12 @@ public class MathUtils_JavaDesktop
    public double nextRandomDouble() {
       return _random.nextDouble();
    }
+
+
+   @Override
+   public double copySign(final double a,
+                          final double b) {
+      return Math.copySign(a, b);
+   }
+
 }

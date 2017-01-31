@@ -270,6 +270,8 @@ public:
     return (b == 0) ? a : gcd(b, a % b);
   }
 
+  virtual double copySign(double a, double b) const = 0;
+
 };
 
 #endif

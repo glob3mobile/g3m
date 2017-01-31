@@ -289,4 +289,6 @@ public abstract class IMathUtils
     return (b == 0) ? a : gcd(b, a % b);
   }
 
+  public abstract double copySign(double a, double b);
+
 }

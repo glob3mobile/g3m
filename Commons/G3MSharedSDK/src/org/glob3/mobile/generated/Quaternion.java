@@ -150,46 +150,77 @@ public class Quaternion
     //                  m30, m31, m32, m33);
   }
 
-  public final TaitBryanAngles toTaitBryanAngles()
-  {
-    final IMathUtils mu = IMathUtils.instance();
-  
-    final double ysqr = _y * _y;
-  
-    final double t0 = 2.0 * ((_w * _x) + (_y * _z));
-    final double t1 = 1.0 - 2.0 * ((_x * _x) + ysqr);
-    final double roll = mu.atan2(t0, t1);
-  
-    double t2 = 2.0 * ((_w * _y) - (_z * _x));
-    t2 = t2 > 1.0 ? 1.0 : t2;
-    t2 = t2 < -1.0 ? -1.0 : t2;
-    final double pitch = mu.asin(t2);
-  
-    final double t3 = 2.0 * ((_w * _z) + (_x *_y));
-    final double t4 = 1.0 - 2.0 * (ysqr + (_z * _z));
-    final double yaw = mu.atan2(t3, t4);
-  
-    return TaitBryanAngles.fromRadians(yaw, pitch, roll);
-  
-    //  double heading;
-    //  double pitch;
-    //  double roll;
-    //
-    //  const double test = _z * _y + _x * _w;
-    //  if (mu->abs(test) < 0.4999) {
-    //    heading = mu->asin(2.0 * test);
-    //    pitch   = mu->atan2(2.0 * _y * _w - 2.0 * _z * _x,
-    //                        1.0 - 2.0 * _y * _y - 2.0 * _x * _x);
-    //    roll    = mu->atan2(2.0 * _z * _w - 2.0 * _y * _x,
-    //                        1.0 - 2.0 * _z * _z - 2.0 * _x * _x);
-    //  }
-    //  else {
-    //    heading = mu->copySign(1.5707963267948966, test);
-    //    pitch   = mu->copySign(2.0, test) * mu->atan2(_z, _w);
-    //    roll    = 0.0;
-    //  }
-    //
-    //  return TaitBryanAngles::fromRadians(heading, pitch, roll);
-  }
+  //  TaitBryanAngles toTaitBryanAngles() const;
 
 }
+//TaitBryanAngles Quaternion::toTaitBryanAngles() const {
+//  const IMathUtils* mu = IMathUtils::instance();
+//
+//  //  const double ysqr = _y * _y;
+//  //
+//  //  const double t0 = 2.0 * ((_w * _x) + (_y * _z));
+//  //  const double t1 = 1.0 - 2.0 * ((_x * _x) + ysqr);
+//  //  const double roll = mu->atan2(t0, t1);
+//  //
+//  //  double t2 = 2.0 * ((_w * _y) - (_z * _x));
+//  //  t2 = t2 > 1.0 ? 1.0 : t2;
+//  //  t2 = t2 < -1.0 ? -1.0 : t2;
+//  //  const double pitch = mu->asin(t2);
+//  //
+//  //  const double t3 = 2.0 * ((_w * _z) + (_x *_y));
+//  //  const double t4 = 1.0 - 2.0 * (ysqr + (_z * _z));
+//  //  const double yaw = mu->atan2(t3, t4);
+//  //
+//  //  return TaitBryanAngles::fromRadians(yaw, pitch, roll);
+//
+//  double heading;
+//  double pitch;
+//  double roll;
+//
+//  const double test = _z * _y + _x * _w;
+//  if (mu->abs(test) < 0.4999) {
+//    heading = mu->asin(2.0 * test);
+//    pitch   = mu->atan2(2.0 * _y * _w - 2.0 * _z * _x,
+//                        1.0 - 2.0 * _y * _y - 2.0 * _x * _x);
+//    roll    = mu->atan2(2.0 * _z * _w - 2.0 * _y * _x,
+//                        1.0 - 2.0 * _z * _z - 2.0 * _x * _x);
+//  }
+//  else {
+//    heading = mu->copySign(1.5707963267948966, test);
+//    pitch   = mu->copySign(2.0, test) * mu->atan2(_z, _w);
+//    roll    = 0.0;
+//  }
+//
+//  return TaitBryanAngles::fromRadians(heading, pitch, roll);
+//
+//  //  double heading;
+//  //  double pitch;
+//  //  double roll;
+//  //
+//  //  const double sqw = _w * _w;
+//  //  const double sqx = _x * _x;
+//  //  const double sqy = _y * _y;
+//  //  const double sqz = _z * _z;
+//  //  const double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+//  //  const double test = (_x * _y) + (_z * _w);
+//  //  if (test > 0.499*unit) { // singularity at north pole
+//  //    heading = 2 * mu->atan2(_x,_w);
+//  //    pitch   = HALF_PI;
+//  //    roll    = 0;
+//  //  }
+//  //  else if (test < -0.499*unit) { // singularity at south pole
+//  //    heading = -2 * mu->atan2(_x,_w);
+//  //    pitch   = -HALF_PI;
+//  //    roll    = 0;
+//  //  }
+//  //  else {
+//  //    heading = mu->atan2(2*_y*_w-2*_x*_z,
+//  //                        sqx - sqy - sqz + sqw);
+//  //    pitch   = mu->asin(2*test/unit);
+//  //    roll    = mu->atan2(2*_x*_w-2*_y*_z,
+//  //                        -sqx + sqy - sqz + sqw);
+//  //  }
+//  //
+//  //  return TaitBryanAngles::fromRadians(heading, pitch, roll);
+//
+//}
