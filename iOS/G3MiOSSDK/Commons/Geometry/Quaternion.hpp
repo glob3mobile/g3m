@@ -42,7 +42,7 @@ public:
   void toRotationMatrix(MutableMatrix44D& result) const;
 
   //  TaitBryanAngles toTaitBryanAngles() const;
-  
+
 };
 
 #endif

@@ -265,7 +265,3 @@ Mesh* AbstractMesh::createNormalsMesh() const {
   return compositeMesh;
   
 }
-
-
-
-
