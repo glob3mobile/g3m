@@ -29,6 +29,96 @@ public abstract class AbstractMesh extends Mesh
   private MutableMatrix44D _transformMatrix;
   private ModelTransformGLFeature _transformGLFeature;
   private MutableMatrix44D _userTransformMatrix;
+  private MutableMatrix44D getTransformMatrix()
+  {
+    if (_transformMatrix == null)
+    {
+      _transformMatrix = createTransformMatrix();
+    }
+    return _transformMatrix;
+  }
+  private MutableMatrix44D createTransformMatrix()
+  {
+    if (_center.isNan() || _center.isZero())
+    {
+      return new MutableMatrix44D(_userTransformMatrix);
+    }
+  
+    final MutableMatrix44D centerM = MutableMatrix44D.createTranslationMatrix(_center);
+    if (_userTransformMatrix == null)
+    {
+      return new MutableMatrix44D(centerM);
+    }
+  
+    MutableMatrix44D result = new MutableMatrix44D();
+    result.copyValueOfMultiplication(centerM, _userTransformMatrix);
+  
+    return result;
+  }
+
+  private void createGLState()
+  {
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); // needsPointSize -  culledFace -  cullFace -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+  
+    if (_normals != null)
+    {
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
+    }
+  
+    _glState.addGLFeature(_transformGLFeature, true);
+  
+    if ((_flatColor != null) && (_colors == null))
+    {
+      _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+  
+      return;
+    }
+  
+    if (_colors != null)
+    {
+      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
+    }
+  
+  }
+
+  private boolean _showNormals;
+  private Mesh _normalsMesh;
+  private Mesh createNormalsMesh()
+  {
+    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, 1.0f, 2.0f, new Color(Color.RED), null, false, null);
+  
+    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+  
+    BoundingVolume volume = getBoundingVolume();
+    Sphere sphere = volume.createSphere();
+    double normalsSize = sphere.getRadius() / 100.0;
+    if (sphere != null)
+       sphere.dispose();
+  
+    final int size = _vertices.size();
+    for (int i = 0; i < size; i+=3)
+    {
+      final Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
+      final Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
+  
+      final Vector3D v_n = v.add(n.normalized().times(normalsSize));
+  
+      fbb.add(v);
+      fbb.add(v_n);
+    }
+  
+    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, fbb.create(), 2.0f, 1.0f, new Color(Color.BLUE));
+  
+    if (fbb != null)
+       fbb.dispose();
+  
+    CompositeMesh compositeMesh = new CompositeMesh();
+    compositeMesh.addMesh(verticesMesh);
+    compositeMesh.addMesh(normalsMesh);
+  
+    return compositeMesh;
+  
+  }
 
   protected final int _primitive;
   protected final boolean _owner;
@@ -43,6 +133,8 @@ public abstract class AbstractMesh extends Mesh
   protected final boolean _polygonOffsetFill;
   protected final float _polygonOffsetFactor;
   protected final float _polygonOffsetUnits;
+
+  protected GLState _glState;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()
@@ -133,100 +225,7 @@ public abstract class AbstractMesh extends Mesh
     createGLState();
   }
 
-  protected final MutableMatrix44D getTransformMatrix()
-  {
-    if (_transformMatrix == null)
-    {
-      _transformMatrix = createTransformMatrix();
-    }
-    return _transformMatrix;
-  }
-  protected final MutableMatrix44D createTransformMatrix()
-  {
-    if (_center.isNan() || _center.isZero())
-    {
-      return new MutableMatrix44D(_userTransformMatrix);
-    }
-  
-    final MutableMatrix44D centerM = MutableMatrix44D.createTranslationMatrix(_center);
-    if (_userTransformMatrix == null)
-    {
-      return new MutableMatrix44D(centerM);
-    }
-  
-    MutableMatrix44D result = new MutableMatrix44D();
-    result.copyValueOfMultiplication(centerM, _userTransformMatrix);
-  
-    return result;
-  }
-
   protected abstract void rawRender(G3MRenderContext rc);
-
-  protected GLState _glState;
-
-  protected final void createGLState()
-  {
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); // needsPointSize -  culledFace -  cullFace -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
-  
-    if (_normals != null)
-    {
-      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
-    }
-  
-    _glState.addGLFeature(_transformGLFeature, true);
-  
-    if ((_flatColor != null) && (_colors == null))
-    {
-      _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
-  
-      return;
-    }
-  
-    if (_colors != null)
-    {
-      _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
-    }
-  
-  }
-
-  protected boolean _showNormals;
-  protected Mesh _normalsMesh;
-  protected final Mesh createNormalsMesh()
-  {
-    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, 1.0f, 2.0f, new Color(Color.RED), null, false, null);
-  
-    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-  
-    BoundingVolume volume = getBoundingVolume();
-    Sphere sphere = volume.createSphere();
-    double normalsSize = sphere.getRadius() / 100.0;
-    if (sphere != null)
-       sphere.dispose();
-  
-    final int size = _vertices.size();
-    for (int i = 0; i < size; i+=3)
-    {
-      final Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
-      final Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
-  
-      final Vector3D v_n = v.add(n.normalized().times(normalsSize));
-  
-      fbb.add(v);
-      fbb.add(v_n);
-    }
-  
-    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, fbb.create(), 2.0f, 1.0f, new Color(Color.BLUE));
-  
-    if (fbb != null)
-       fbb.dispose();
-  
-    CompositeMesh compositeMesh = new CompositeMesh();
-    compositeMesh.addMesh(verticesMesh);
-    compositeMesh.addMesh(normalsMesh);
-  
-    return compositeMesh;
-  
-  }
 
   public void dispose()
   {

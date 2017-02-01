@@ -24,6 +24,14 @@ private:
   MutableMatrix44D*        _transformMatrix;
   ModelTransformGLFeature* _transformGLFeature;
   MutableMatrix44D*        _userTransformMatrix;
+  MutableMatrix44D* getTransformMatrix();
+  MutableMatrix44D* createTransformMatrix() const;
+
+  void createGLState();
+
+  mutable bool _showNormals;
+  mutable Mesh* _normalsMesh;
+  Mesh* createNormalsMesh() const;
 
 protected:
   const int           _primitive;
@@ -39,6 +47,8 @@ protected:
   const bool          _polygonOffsetFill;
   const float         _polygonOffsetFactor;
   const float         _polygonOffsetUnits;
+
+  GLState* _glState;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
@@ -57,18 +67,7 @@ protected:
                float polygonOffsetFactor,
                float polygonOffsetUnits);
 
-  MutableMatrix44D* getTransformMatrix();
-  MutableMatrix44D* createTransformMatrix() const;
-
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
-
-  GLState* _glState;
-
-  void createGLState();
-
-  mutable bool _showNormals;
-  mutable Mesh* _normalsMesh;
-  Mesh* createNormalsMesh() const;
 
 public:
   ~AbstractMesh();
