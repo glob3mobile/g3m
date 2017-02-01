@@ -115,15 +115,15 @@ void AbstractMesh::setUserTransformMatrix(MutableMatrix44D* userTransformMatrix)
   if (userTransformMatrix != _userTransformMatrix) {
     delete _userTransformMatrix;
     _userTransformMatrix = userTransformMatrix;
-
-    delete _transformMatrix;
-    _transformMatrix = NULL;
-
-    delete _boundingVolume;
-    _boundingVolume = NULL;
-
-    _transformGLFeature->setMatrix(getTransformMatrix()->asMatrix44D());
   }
+
+  delete _transformMatrix;
+  _transformMatrix = NULL;
+
+  delete _boundingVolume;
+  _boundingVolume = NULL;
+
+  _transformGLFeature->setMatrix(getTransformMatrix()->asMatrix44D());
 }
 
 BoundingVolume* AbstractMesh::computeBoundingVolume() const {

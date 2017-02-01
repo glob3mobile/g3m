@@ -30,6 +30,9 @@ package org.glob3.mobile.generated;
 
 public class MutableMatrix44D
 {
+  private static MutableMatrix44D TEMP1 = new MutableMatrix44D();
+  private static MutableMatrix44D TEMP2 = new MutableMatrix44D();
+
   //_m23 -> row 2, column 3
   private double _m00;
   private double _m01;
@@ -689,6 +692,16 @@ public class MutableMatrix44D
     return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
   }
 
+  public static void createRotationMatrix(Angle angle, Vector3D axis, MutableMatrix44D result)
+  {
+    final Vector3D a = axis.normalized();
+  
+    final double c = Math.cos(angle._radians);
+    final double s = Math.sin(angle._radians);
+  
+    result.setValue(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
+  }
+
   public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
   {
     final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
@@ -738,6 +751,12 @@ public class MutableMatrix44D
     return new MutableMatrix44D(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
   }
 
+  public static MutableMatrix44D createScaleMatrix(Vector3D scale)
+  {
+    return new MutableMatrix44D(scale._x, 0, 0, 0, 0, scale._y, 0, 0, 0, 0, scale._z, 0, 0, 0, 0, 1);
+  
+  }
+
   public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
   {
     return createGeodeticRotationMatrix(position._latitude, position._longitude);
@@ -746,12 +765,6 @@ public class MutableMatrix44D
   public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
   {
     return createGeodeticRotationMatrix(position._latitude, position._longitude);
-  }
-
-  public static MutableMatrix44D createScaleMatrix(Vector3D scale)
-  {
-    return new MutableMatrix44D(scale._x, 0, 0, 0, 0, scale._y, 0, 0, 0, 0, scale._z, 0, 0, 0, 0, 1);
-  
   }
 
   public static MutableMatrix44D createGeodeticRotationMatrix(Angle latitude, Angle longitude)
@@ -764,6 +777,24 @@ public class MutableMatrix44D
     final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.DOWN_X);
   
     return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+  }
+
+  public static void createRawGeodeticRotationMatrix(Geodetic2D position, MutableMatrix44D result)
+  {
+    createRawGeodeticRotationMatrix(position._latitude, position._longitude, result);
+  }
+
+  public static void createRawGeodeticRotationMatrix(Geodetic3D position, MutableMatrix44D result)
+  {
+    createRawGeodeticRotationMatrix(position._latitude, position._longitude, result);
+  }
+
+  public static void createRawGeodeticRotationMatrix(Angle latitude, Angle longitude, MutableMatrix44D result)
+  {
+    createRotationMatrix(latitude, Vector3D.DOWN_Y, TEMP1); // latitudeRotation
+    createRotationMatrix(longitude, Vector3D.UP_Z, TEMP2); // longitudeRotation
+  
+    result.copyValueOfMultiplication(TEMP2, TEMP1);
   }
 
   public final void setValue(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)

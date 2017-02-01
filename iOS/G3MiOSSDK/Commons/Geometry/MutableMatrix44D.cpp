@@ -21,6 +21,10 @@
 #include "ILogger.hpp"
 
 
+MutableMatrix44D MutableMatrix44D::TEMP1;
+MutableMatrix44D MutableMatrix44D::TEMP2;
+
+
 MutableMatrix44D::MutableMatrix44D(const MutableMatrix44D &m):
 _isValid(m._isValid)
 {
@@ -480,6 +484,20 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                           0, 0, 0, 1);
 }
 
+void MutableMatrix44D::createRotationMatrix(const Angle& angle,
+                                            const Vector3D& axis,
+                                            MutableMatrix44D& result) {
+  const Vector3D a = axis.normalized();
+
+  const double c = COS(angle._radians);
+  const double s = SIN(angle._radians);
+
+  result.setValue(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0,
+                  a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0,
+                  a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0,
+                  0, 0, 0, 1);
+}
+
 MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,
                                                                const Vector3D& axis,
                                                                const Vector3D& point) {
@@ -540,8 +558,6 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
   return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
 }
 
-
-
 void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
   //  if (isEquals(m)) {
   //    return;
@@ -584,9 +600,34 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
 }
 
 MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Geodetic2D& position) {
-  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude,
+                                                        position._longitude);
 }
 
 MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Geodetic3D& position) {
-  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude,
+                                                        position._longitude);
+}
+
+void MutableMatrix44D::createRawGeodeticRotationMatrix(const Geodetic2D& position,
+                                                       MutableMatrix44D& result) {
+  createRawGeodeticRotationMatrix(position._latitude,
+                                  position._longitude,
+                                  result);
+}
+
+void MutableMatrix44D::createRawGeodeticRotationMatrix(const Geodetic3D& position,
+                                                       MutableMatrix44D& result) {
+  createRawGeodeticRotationMatrix(position._latitude,
+                                  position._longitude,
+                                  result);
+}
+
+void MutableMatrix44D::createRawGeodeticRotationMatrix(const Angle& latitude,
+                                                       const Angle& longitude,
+                                                       MutableMatrix44D& result) {
+  createRotationMatrix(latitude,  Vector3D::DOWN_Y, TEMP1); // latitudeRotation
+  createRotationMatrix(longitude, Vector3D::UP_Z,   TEMP2); // longitudeRotation
+
+  result.copyValueOfMultiplication(TEMP2, TEMP1);
 }

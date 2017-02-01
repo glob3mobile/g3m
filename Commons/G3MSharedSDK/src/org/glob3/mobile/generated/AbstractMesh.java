@@ -336,17 +336,17 @@ public abstract class AbstractMesh extends Mesh
       if (_userTransformMatrix != null)
          _userTransformMatrix.dispose();
       _userTransformMatrix = userTransformMatrix;
-  
-      if (_transformMatrix != null)
-         _transformMatrix.dispose();
-      _transformMatrix = null;
-  
-      if (_boundingVolume != null)
-         _boundingVolume.dispose();
-      _boundingVolume = null;
-  
-      _transformGLFeature.setMatrix(getTransformMatrix().asMatrix44D());
     }
+  
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    _transformMatrix = null;
+  
+    if (_boundingVolume != null)
+       _boundingVolume.dispose();
+    _boundingVolume = null;
+  
+    _transformGLFeature.setMatrix(getTransformMatrix().asMatrix44D());
   }
 
 }

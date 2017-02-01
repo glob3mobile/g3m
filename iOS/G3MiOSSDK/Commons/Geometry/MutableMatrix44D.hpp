@@ -25,6 +25,9 @@ class Angle;
 
 class MutableMatrix44D {
 private:
+  static MutableMatrix44D TEMP1;
+  static MutableMatrix44D TEMP2;
+
   //_m23 -> row 2, column 3
   double _m00;
   double _m01;
@@ -224,6 +227,10 @@ public:
   static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                const Vector3D& axis);
 
+  static void createRotationMatrix(const Angle& angle,
+                                   const Vector3D& axis,
+                                   MutableMatrix44D& result);
+
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,
                                                       const Vector3D& point);
@@ -251,14 +258,24 @@ public:
                             0, 0, 0, 1);
   }
 
+  static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
+
   static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position);
 
   static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position);
 
-  static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
-
   static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
                                                        const Angle& longitude);
+
+  static void createRawGeodeticRotationMatrix(const Geodetic2D& position,
+                                              MutableMatrix44D& result);
+
+  static void createRawGeodeticRotationMatrix(const Geodetic3D& position,
+                                              MutableMatrix44D& result);
+
+  static void createRawGeodeticRotationMatrix(const Angle& latitude,
+                                              const Angle& longitude,
+                                              MutableMatrix44D& result);
 
   void setValue(double m00, double m10, double m20, double m30,
                 double m01, double m11, double m21, double m31,
