@@ -2,13 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import android.opengl.GLSurfaceView;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.MotionEvent;
-
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
@@ -49,6 +42,13 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
+
+import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
@@ -122,7 +122,6 @@ public final class G3MWidget_Android
          //Double Tap Listener
          _gestureDetector = new GestureDetector(context, this);
          doubleTapListener = new OnDoubleTapListener() {
-
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e) {
                return false;
@@ -131,6 +130,15 @@ public final class G3MWidget_Android
 
             @Override
             public boolean onDoubleTapEvent(final MotionEvent event) {
+               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
+
+               queueEvent(new Runnable() {
+                  @Override
+                  public void run() {
+                     _g3mWidget.onTouchEvent(te);
+                  }
+               });
+
                return true;
             }
 
