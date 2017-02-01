@@ -76,7 +76,7 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     for (size_t i = 0; i < meshesCount; i++) {
       Mesh* mesh = _meshes[i];
       const BoundingVolume* boundingVolume = mesh->getBoundingVolume();
-      if ( (boundingVolume != NULL) && boundingVolume->touchesFrustum(frustum) ) {
+      if ( (boundingVolume == NULL) || boundingVolume->touchesFrustum(frustum) ) {
         mesh->render(rc, _glState);
       }
     }

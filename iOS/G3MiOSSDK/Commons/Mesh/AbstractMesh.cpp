@@ -12,15 +12,13 @@
 #include "Color.hpp"
 #include "GL.hpp"
 #include "Box.hpp"
-
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "CompositeMesh.hpp"
 #include "Sphere.hpp"
-
 #include "Camera.hpp"
-
 #include "GLFeature.hpp"
+
 
 AbstractMesh::~AbstractMesh() {
   if (_owner) {
@@ -29,11 +27,14 @@ AbstractMesh::~AbstractMesh() {
     delete _normals;
   }
 
-  //Always deleting flatColor
   delete _flatColor;
 
   delete _boundingVolume;
-  delete _translationMatrix;
+
+  delete _transformMatrix;
+  delete _userTransformMatrix;
+
+  _transformGLFeature->_release();
 
   _glState->_release();
 
@@ -64,9 +65,6 @@ _flatColor(flatColor),
 _colors(colors),
 _boundingVolume(NULL),
 _center(center),
-_translationMatrix(( center.isNan() || center.isZero() )
-                   ? NULL
-                   : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
@@ -76,12 +74,63 @@ _normalsMesh(NULL),
 _showNormals(false),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_polygonOffsetFill(polygonOffsetFill)
+_polygonOffsetFill(polygonOffsetFill),
+_transformMatrix(NULL),
+_userTransformMatrix( MutableMatrix44D::newIdentity() )
 {
+  _transformGLFeature = new ModelTransformGLFeature(getTransformMatrix()->asMatrix44D());
+
   createGLState();
 }
 
+MutableMatrix44D* AbstractMesh::createTransformMatrix() const {
+  if (_center.isNan() || _center.isZero()) {
+    return new MutableMatrix44D(*_userTransformMatrix);
+  }
+
+  const MutableMatrix44D centerM = MutableMatrix44D::createTranslationMatrix(_center);
+  if (_userTransformMatrix == NULL) {
+    return new MutableMatrix44D(centerM);
+  }
+
+  MutableMatrix44D* result = new MutableMatrix44D();
+  result->copyValueOfMultiplication(centerM,
+                                    *_userTransformMatrix);
+
+  return result;
+}
+
+MutableMatrix44D* AbstractMesh::getTransformMatrix() {
+  if (_transformMatrix == NULL) {
+    _transformMatrix = createTransformMatrix();
+  }
+  return _transformMatrix;
+}
+
+void AbstractMesh::setUserTransformMatrix(MutableMatrix44D* userTransformMatrix) {
+  if (userTransformMatrix == NULL) {
+    THROW_EXCEPTION("userTransformMatrix is NULL");
+  }
+
+  if (userTransformMatrix != _userTransformMatrix) {
+    delete _userTransformMatrix;
+    _userTransformMatrix = userTransformMatrix;
+
+    delete _transformMatrix;
+    _transformMatrix = NULL;
+
+    delete _boundingVolume;
+    _boundingVolume = NULL;
+
+    _transformGLFeature->setMatrix(getTransformMatrix()->asMatrix44D());
+  }
+}
+
 BoundingVolume* AbstractMesh::computeBoundingVolume() const {
+  if (!_userTransformMatrix->isIdentity()) {
+    return NULL;
+  }
+
   const size_t vertexCount = getVertexCount();
 
   if (vertexCount == 0) {
@@ -144,17 +193,20 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 }
 
 void AbstractMesh::createGLState() {
-
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
-                                               3,            //Our buffer contains elements of 3
-                                               0,            //Index 0
-                                               false,        //Not normalized
-                                               0,            //Stride 0
-                                               _depthTest,   //Depth test
-                                               false, 0,     //Cull and culled face
-                                               _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits,  //Polygon Offset
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
+                                               3,                    // Our buffer contains elements of 3
+                                               0,                    // Index 0
+                                               false,                // Not normalized
+                                               0,                    // Stride 0
+                                               _depthTest,
+                                               false,                // cullFace
+                                               0,                    // culledFace
+                                               _polygonOffsetFill,
+                                               _polygonOffsetFactor,
+                                               _polygonOffsetUnits,
                                                _lineWidth,
-                                               true, _pointSize),
+                                               true,                 // needsPointSize
+                                               _pointSize),
                          false);
 
   if (_normals != NULL) {
@@ -162,19 +214,14 @@ void AbstractMesh::createGLState() {
                            false);
   }
 
-  if (_translationMatrix != NULL) {
-    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
-  }
+  _glState->addGLFeature(_transformGLFeature, true);
 
-  if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
-
+  if ((_flatColor != NULL) && (_colors == NULL)) {
     _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                   _flatColor->isTransparent(),
-                                                  GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                                                  GLBlendFactor::srcAlpha(),
+                                                  GLBlendFactor::oneMinusSrcAlpha()),
                            false);
-
-
-
 
     return;
   }
@@ -185,9 +232,10 @@ void AbstractMesh::createGLState() {
                                               0,            // Index 0
                                               false,        // Not normalized
                                               0,            // Stride 0
-                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                                              true,
+                                              GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha()),
                            false);
-
   }
 
 }
@@ -197,14 +245,13 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
   _glState->setParent(parentGLState);
   rawRender(rc);
 
-  //RENDERING NORMALS
   if (_normals != NULL) {
     if (_showNormals) {
       if (_normalsMesh == NULL) {
-        //_normalsMesh = createNormalsMesh();
+        _normalsMesh = createNormalsMesh();
       }
       if (_normalsMesh != NULL) {
-        //_normalsMesh->render(rc, parentGLState);
+        _normalsMesh->render(rc, parentGLState);
       }
     }
     else {
@@ -218,13 +265,12 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
 
 
 Mesh* AbstractMesh::createNormalsMesh() const {
-
   DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
                                             false,
                                             _center,
                                             _vertices,
-                                            (float)1.0,
-                                            (float)2.0,
+                                            1.0f,
+                                            2.0f,
                                             new Color(Color::RED),
                                             NULL,
                                             false,
@@ -252,8 +298,8 @@ Mesh* AbstractMesh::createNormalsMesh() const {
                                            true,
                                            _center,
                                            fbb->create(),
-                                           (float)2.0,
-                                           (float)1.0,
+                                           2.0f,
+                                           1.0f,
                                            new Color(Color::BLUE));
 
   delete fbb;

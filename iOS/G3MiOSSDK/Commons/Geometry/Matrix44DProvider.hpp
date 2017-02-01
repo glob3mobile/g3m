@@ -47,7 +47,9 @@ private:
   }
 
 public:
-  Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
+  Matrix44DHolder(const Matrix44D* matrix) :
+  _matrix(matrix)
+  {
     if (matrix == NULL) {
       THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
     }

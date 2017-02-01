@@ -277,6 +277,11 @@ public class MutableMatrix44D
     return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   }
 
+  public static MutableMatrix44D newIdentity()
+  {
+    return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+
   public final boolean isIdentity()
   {
     final MutableMatrix44D identity = MutableMatrix44D.identity();

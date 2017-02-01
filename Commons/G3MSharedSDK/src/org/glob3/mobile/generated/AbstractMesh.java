@@ -21,14 +21,18 @@ package org.glob3.mobile.generated;
 
 //class IFloatBuffer;
 //class Color;
+//class ModelTransformGLFeature;
 
 
 public abstract class AbstractMesh extends Mesh
 {
+  private MutableMatrix44D _transformMatrix;
+  private ModelTransformGLFeature _transformGLFeature;
+  private MutableMatrix44D _userTransformMatrix;
+
   protected final int _primitive;
   protected final boolean _owner;
   protected final Vector3D _center ;
-  protected final MutableMatrix44D _translationMatrix;
   protected final IFloatBuffer _vertices;
   protected final Color _flatColor;
   protected final IFloatBuffer _colors;
@@ -36,10 +40,18 @@ public abstract class AbstractMesh extends Mesh
   protected final float _pointSize;
   protected final boolean _depthTest;
   protected final IFloatBuffer _normals;
+  protected final boolean _polygonOffsetFill;
+  protected final float _polygonOffsetFactor;
+  protected final float _polygonOffsetUnits;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()
   {
+    if (!_userTransformMatrix.isIdentity())
+    {
+      return null;
+    }
+  
     final int vertexCount = getVertexCount();
   
     if (vertexCount == 0)
@@ -95,10 +107,6 @@ public abstract class AbstractMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected final boolean _polygonOffsetFill;
-  protected final float _polygonOffsetFactor;
-  protected final float _polygonOffsetUnits;
-
   protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
      _primitive = primitive;
@@ -108,7 +116,6 @@ public abstract class AbstractMesh extends Mesh
      _colors = colors;
      _boundingVolume = null;
      _center = new Vector3D(center);
-     _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _lineWidth = lineWidth;
      _pointSize = pointSize;
      _depthTest = depthTest;
@@ -119,7 +126,38 @@ public abstract class AbstractMesh extends Mesh
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _polygonOffsetFill = polygonOffsetFill;
+     _transformMatrix = null;
+     _userTransformMatrix = MutableMatrix44D.newIdentity();
+    _transformGLFeature = new ModelTransformGLFeature(getTransformMatrix().asMatrix44D());
+  
     createGLState();
+  }
+
+  protected final MutableMatrix44D getTransformMatrix()
+  {
+    if (_transformMatrix == null)
+    {
+      _transformMatrix = createTransformMatrix();
+    }
+    return _transformMatrix;
+  }
+  protected final MutableMatrix44D createTransformMatrix()
+  {
+    if (_center.isNan() || _center.isZero())
+    {
+      return new MutableMatrix44D(_userTransformMatrix);
+    }
+  
+    final MutableMatrix44D centerM = MutableMatrix44D.createTranslationMatrix(_center);
+    if (_userTransformMatrix == null)
+    {
+      return new MutableMatrix44D(centerM);
+    }
+  
+    MutableMatrix44D result = new MutableMatrix44D();
+    result.copyValueOfMultiplication(centerM, _userTransformMatrix);
+  
+    return result;
   }
 
   protected abstract void rawRender(G3MRenderContext rc);
@@ -128,26 +166,18 @@ public abstract class AbstractMesh extends Mesh
 
   protected final void createGLState()
   {
-  
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); //Polygon Offset - Cull and culled face - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); // needsPointSize -  culledFace -  cullFace -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {
       _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
     }
   
-    if (_translationMatrix != null)
-    {
-      _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
-    }
+    _glState.addGLFeature(_transformGLFeature, true);
   
-    if (_flatColor != null && _colors == null) //FlatColorMesh Shader
+    if ((_flatColor != null) && (_colors == null))
     {
-  
       _glState.addGLFeature(new FlatColorGLFeature(_flatColor, _flatColor.isTransparent(), GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
-  
-  
-  
   
       return;
     }
@@ -155,7 +185,6 @@ public abstract class AbstractMesh extends Mesh
     if (_colors != null)
     {
       _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
-  
     }
   
   }
@@ -164,8 +193,7 @@ public abstract class AbstractMesh extends Mesh
   protected Mesh _normalsMesh;
   protected final Mesh createNormalsMesh()
   {
-  
-    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, (float)1.0, (float)2.0, new Color(Color.RED), null, false, null);
+    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, 1.0f, 2.0f, new Color(Color.RED), null, false, null);
   
     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
@@ -187,7 +215,7 @@ public abstract class AbstractMesh extends Mesh
       fbb.add(v_n);
     }
   
-    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, fbb.create(), (float)2.0, (float)1.0, new Color(Color.BLUE));
+    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, fbb.create(), 2.0f, 1.0f, new Color(Color.BLUE));
   
     if (fbb != null)
        fbb.dispose();
@@ -212,14 +240,18 @@ public abstract class AbstractMesh extends Mesh
          _normals.dispose();
     }
   
-    //Always deleting flatColor
     if (_flatColor != null)
        _flatColor.dispose();
   
     if (_boundingVolume != null)
        _boundingVolume.dispose();
-    if (_translationMatrix != null)
-       _translationMatrix.dispose();
+  
+    if (_transformMatrix != null)
+       _transformMatrix.dispose();
+    if (_userTransformMatrix != null)
+       _userTransformMatrix.dispose();
+  
+    _transformGLFeature._release();
   
     _glState._release();
   
@@ -263,18 +295,17 @@ public abstract class AbstractMesh extends Mesh
     _glState.setParent(parentGLState);
     rawRender(rc);
   
-    //RENDERING NORMALS
     if (_normals != null)
     {
       if (_showNormals)
       {
         if (_normalsMesh == null)
         {
-          //_normalsMesh = createNormalsMesh();
+          _normalsMesh = createNormalsMesh();
         }
         if (_normalsMesh != null)
         {
-          //_normalsMesh->render(rc, parentGLState);
+          _normalsMesh.render(rc, parentGLState);
         }
       }
       else
@@ -292,6 +323,31 @@ public abstract class AbstractMesh extends Mesh
   public final void showNormals(boolean v)
   {
     _showNormals = v;
+  }
+
+  public final void setUserTransformMatrix(MutableMatrix44D userTransformMatrix)
+  {
+    if (userTransformMatrix == null)
+    {
+      throw new RuntimeException("userTransformMatrix is NULL");
+    }
+  
+    if (userTransformMatrix != _userTransformMatrix)
+    {
+      if (_userTransformMatrix != null)
+         _userTransformMatrix.dispose();
+      _userTransformMatrix = userTransformMatrix;
+  
+      if (_transformMatrix != null)
+         _transformMatrix.dispose();
+      _transformMatrix = null;
+  
+      if (_boundingVolume != null)
+         _boundingVolume.dispose();
+      _boundingVolume = null;
+  
+      _transformGLFeature.setMatrix(getTransformMatrix().asMatrix44D());
+    }
   }
 
 }

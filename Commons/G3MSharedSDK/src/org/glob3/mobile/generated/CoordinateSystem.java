@@ -94,7 +94,7 @@ public class CoordinateSystem
     colors.add(zColor);
     colors.add(zColor);
   
-    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), (float)5.0, (float)1.0, null, colors.create(), false, null);
+    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), 5.0f, 1.0f, null, colors.create(), false, null);
   
     if (fbb != null)
        fbb.dispose();

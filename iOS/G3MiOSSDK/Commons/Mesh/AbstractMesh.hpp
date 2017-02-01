@@ -16,28 +16,32 @@
 
 class IFloatBuffer;
 class Color;
+class ModelTransformGLFeature;
 
 
 class AbstractMesh : public Mesh {
+private:
+  MutableMatrix44D*        _transformMatrix;
+  ModelTransformGLFeature* _transformGLFeature;
+  MutableMatrix44D*        _userTransformMatrix;
+
 protected:
-  const int               _primitive;
-  const bool              _owner;
-  const Vector3D          _center;
-  const MutableMatrix44D* _translationMatrix;
-  const IFloatBuffer*     _vertices;
-  const Color*            _flatColor;
-  const IFloatBuffer*     _colors;
-  const float             _lineWidth;
-  const float             _pointSize;
-  const bool              _depthTest;
-  const IFloatBuffer*     _normals;
+  const int           _primitive;
+  const bool          _owner;
+  const Vector3D      _center;
+  const IFloatBuffer* _vertices;
+  const Color*        _flatColor;
+  const IFloatBuffer* _colors;
+  const float         _lineWidth;
+  const float         _pointSize;
+  const bool          _depthTest;
+  const IFloatBuffer* _normals;
+  const bool          _polygonOffsetFill;
+  const float         _polygonOffsetFactor;
+  const float         _polygonOffsetUnits;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
-
-  const bool _polygonOffsetFill;
-  const float _polygonOffsetFactor;
-  const float _polygonOffsetUnits;
 
   AbstractMesh(const int primitive,
                bool owner,
@@ -52,6 +56,9 @@ protected:
                bool polygonOffsetFill,
                float polygonOffsetFactor,
                float polygonOffsetUnits);
+
+  MutableMatrix44D* getTransformMatrix();
+  MutableMatrix44D* createTransformMatrix() const;
 
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 
@@ -80,6 +87,8 @@ public:
   void showNormals(bool v) const {
     _showNormals = v;
   }
+
+  void setUserTransformMatrix(MutableMatrix44D* userTransformMatrix);
   
 };
 
