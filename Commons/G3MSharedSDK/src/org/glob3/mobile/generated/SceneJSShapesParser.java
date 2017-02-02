@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SceneJSShapesParser.cpp
 //  G3MiOSSDK
@@ -44,7 +44,7 @@ public class SceneJSShapesParser
      _rootShape = null;
     _statistics = new SceneJSParserStatistics();
     pvtParse(jsonObject, isTransparent, position, altitudeMode);
-  
+
     _statistics.log();
     if (_statistics != null)
        _statistics.dispose();
@@ -58,30 +58,30 @@ public class SceneJSShapesParser
   private void pvtParse(JSONBaseObject json, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     //  _rootShape = toShape(jsonRootObject);
-  
+
     SGNode node = toNode(json);
-  
+
     if (node != null)
     {
       _rootShape = new SGShape(node, _uriPrefix, isTransparent, position, altitudeMode);
     }
-  
+
     if (json != null)
        json.dispose();
   }
 
   private SGNode toNode(JSONBaseObject jsonBaseObject)
   {
-  
+
     if (jsonBaseObject == null)
     {
       return null;
     }
-  
+
     final JSONObject jsonObject = jsonBaseObject.asObject();
-  
+
     SGNode result = null;
-  
+
     if (jsonObject != null)
     {
       final JSONString jsType = jsonObject.getAsString("type");
@@ -121,14 +121,14 @@ public class SceneJSShapesParser
         }
       }
     }
-  
+
     return result;
   }
 
   private int parseChildren(JSONObject jsonObject, SGNode node)
   {
     int processedKeys = 0;
-  
+
     final JSONArray jsNodes = jsonObject.getAsArray("nodes");
     if (jsNodes != null)
     {
@@ -147,7 +147,7 @@ public class SceneJSShapesParser
       }
       processedKeys++;
     }
-  
+
     return processedKeys;
   }
 
@@ -159,52 +159,52 @@ public class SceneJSShapesParser
       //    for (int i = 0; i < keys.size(); i++) {
       //      printf("%s\n", keys.at(i).c_str());
       //    }
-  
+
       ILogger.instance().logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
     }
   }
 
   private SGNode createNode(JSONObject jsonObject)
   {
-  
+
     int processedKeys = 1; // "type" is already processed
-  
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     SGNode node = new SGNode(id, sId);
-  
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
   private SGRotateNode createRotateNode(JSONObject jsonObject)
   {
     int processedKeys = 1; // "type" is already processed
-  
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final JSONNumber jsX = jsonObject.getAsNumber("x");
     double x = 0.0;
     if (jsX != null)
@@ -212,7 +212,7 @@ public class SceneJSShapesParser
       x = jsX.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsY = jsonObject.getAsNumber("y");
     double y = 0.0;
     if (jsY != null)
@@ -220,7 +220,7 @@ public class SceneJSShapesParser
       y = jsY.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsZ = jsonObject.getAsNumber("z");
     double z = 0.0;
     if (jsZ != null)
@@ -228,7 +228,7 @@ public class SceneJSShapesParser
       z = jsZ.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsAngle = jsonObject.getAsNumber("angle");
     double angle = 0;
     if (jsAngle != null)
@@ -236,31 +236,31 @@ public class SceneJSShapesParser
       angle = jsAngle.value();
       processedKeys++;
     }
-  
+
     SGRotateNode node = new SGRotateNode(id, sId, x, y, z, angle);
-  
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
   private SGTranslateNode createTranslateNode(JSONObject jsonObject)
   {
     int processedKeys = 1; // "type" is already processed
-  
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final JSONNumber jsX = jsonObject.getAsNumber("x");
     double x = 0.0;
     if (jsX != null)
@@ -268,7 +268,7 @@ public class SceneJSShapesParser
       x = jsX.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsY = jsonObject.getAsNumber("y");
     double y = 0.0;
     if (jsY != null)
@@ -276,7 +276,7 @@ public class SceneJSShapesParser
       y = jsY.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsZ = jsonObject.getAsNumber("z");
     double z = 0.0;
     if (jsZ != null)
@@ -284,31 +284,31 @@ public class SceneJSShapesParser
       z = jsZ.value();
       processedKeys++;
     }
-  
+
     SGTranslateNode node = new SGTranslateNode(id, sId, x, y, z);
-  
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
   private SGMaterialNode createMaterialNode(JSONObject jsonObject)
   {
     int processedKeys = 1; // "type" is already processed
-  
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final JSONObject jsBaseColor = jsonObject.getAsObject("baseColor");
     Color baseColor;
     if (jsBaseColor == null)
@@ -320,7 +320,7 @@ public class SceneJSShapesParser
       baseColor = parseColor(jsBaseColor);
       processedKeys++;
     }
-  
+
     final JSONObject jsSpecularColor = jsonObject.getAsObject("specularColor");
     Color specularColor;
     if (jsSpecularColor == null)
@@ -332,7 +332,7 @@ public class SceneJSShapesParser
       specularColor = parseColor(jsSpecularColor);
       processedKeys++;
     }
-  
+
     final JSONNumber jsShine = jsonObject.getAsNumber("shine");
     double shine = 10;
     if (jsShine != null)
@@ -340,7 +340,7 @@ public class SceneJSShapesParser
       shine = jsShine.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
     double specular = 1.0;
     if (jsSpecular != null)
@@ -348,7 +348,7 @@ public class SceneJSShapesParser
       specular = jsSpecular.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsAlpha = jsonObject.getAsNumber("alpha");
     double alpha = 1.0;
     if (jsAlpha != null)
@@ -356,7 +356,7 @@ public class SceneJSShapesParser
       alpha = jsAlpha.value();
       processedKeys++;
     }
-  
+
     final JSONNumber jsEmit = jsonObject.getAsNumber("emit");
     double emit = 0.0;
     if (jsEmit != null)
@@ -364,35 +364,41 @@ public class SceneJSShapesParser
       emit = jsEmit.value();
       processedKeys++;
     }
-  
+
     SGMaterialNode node = new SGMaterialNode(id, sId, baseColor, specularColor, specular, shine, alpha, emit);
-  
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
   private SGTextureNode createTextureNode(JSONObject jsonObject)
   {
     int processedKeys = 1; // "type" is already processed
-  
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
-    SGTextureNode node = new SGTextureNode(id, sId);
-  
+
+    final String sEffect = jsonObject.getAsString("effect", "");
+    if (sEffect.compareTo("") != 0) {
+       processedKeys++;
+    }
+    final boolean envMapEffect = sEffect != null && "environmentMap".compareTo(sEffect) == 0;
+
+    SGTextureNode node = new SGTextureNode(id, sId, envMapEffect);
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     final JSONArray jsLayers = jsonObject.getAsArray("layers");
     if (jsLayers != null)
     {
@@ -405,37 +411,42 @@ public class SceneJSShapesParser
           node.addLayer(createLayerNode(jsLayer));
         }
       }
-  
+
       processedKeys++;
     }
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
   private SGGeometryNode createGeometryNode(JSONObject jsonObject)
   {
     int processedKeys = 1; // "type" is already processed
-  
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
-  
+
+    final String normalsMode = jsonObject.getAsString("normals", "");
+    if (normalsMode.compareTo("") != 0) {
+      processedKeys++;
+    }
+    final boolean genNormals = normalsMode != null && "generate".equalsIgnoreCase(normalsMode);
+
     final JSONString jsPrimitive = jsonObject.getAsString("primitive");
     int primitive = GLPrimitive.triangles(); // triangles is the default
     if (jsPrimitive != null)
     {
       final String strPrimitive = jsPrimitive.value();
-  
+
       if (strPrimitive.compareTo("points") == 0)
       {
         primitive = GLPrimitive.points();
@@ -466,7 +477,7 @@ public class SceneJSShapesParser
       }
       processedKeys++;
     }
-  
+
     final JSONArray jsPositions = jsonObject.getAsArray("positions");
     if (jsPositions == null)
     {
@@ -481,7 +492,7 @@ public class SceneJSShapesParser
       vertices.put(i, (float) jsPositions.getAsNumber(i).value());
       _statistics.computeVertex();
     }
-  
+
     final JSONArray jsColors = jsonObject.getAsArray("colors");
     IFloatBuffer colors = null;
     if (jsColors != null)
@@ -495,7 +506,7 @@ public class SceneJSShapesParser
       }
       processedKeys++;
     }
-  
+
     final JSONArray jsUV = jsonObject.getAsArray("uv");
     IFloatBuffer uv = null;
     if (jsUV != null)
@@ -515,7 +526,7 @@ public class SceneJSShapesParser
       }
       processedKeys++;
     }
-  
+
     final JSONArray jsNormals = jsonObject.getAsArray("normals");
     IFloatBuffer normals = null;
     //TODO: WORKING JM
@@ -530,7 +541,7 @@ public class SceneJSShapesParser
       }
       processedKeys++;
     }
-  
+
     final JSONArray jsIndices = jsonObject.getAsArray("indices");
     if (jsIndices == null)
     {
@@ -550,55 +561,59 @@ public class SceneJSShapesParser
       indices.rawPut(i, (short) indice);
     }
     processedKeys++;
-  
+
+    if (genNormals && primitive == GLPrimitive.triangles()) {
+      normals = NormalsUtils.createTriangleSmoothNormals(vertices, indices);
+    }
+
     if (indicesOutOfRange > 0)
     {
       ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
     }
-  
+
     SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
-  
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
   private SGLayerNode createLayerNode(JSONObject jsonObject)
   {
     int processedKeys = 0; // Layer has not "type"
-  
-  
+
+
     final String id = jsonObject.getAsString("id", "");
     if (id.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String sId = jsonObject.getAsString("sid", "");
     if (sId.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String uri = jsonObject.getAsString("uri", "");
     if (uri.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String applyTo = jsonObject.getAsString("applyTo", "");
     if (applyTo.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String blendMode = jsonObject.getAsString("blendMode", "");
     if (blendMode.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
     boolean flipY = true;
     if (jsFlipY != null)
@@ -606,37 +621,37 @@ public class SceneJSShapesParser
       flipY = jsFlipY.value();
       processedKeys++;
     }
-  
+
     final String magFilter = jsonObject.getAsString("magFilter", "");
     if (magFilter.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String minFilter = jsonObject.getAsString("minFilter", "");
     if (minFilter.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String wrapS = jsonObject.getAsString("wrapS", "");
     if (wrapS.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     final String wrapT = jsonObject.getAsString("wrapT", "");
     if (wrapT.compareTo("") != 0)
     {
       processedKeys++;
     }
-  
+
     SGLayerNode node = new SGLayerNode(id, sId, uri, applyTo, blendMode, flipY, magFilter, minFilter, wrapS, wrapT);
-  
+
     processedKeys += parseChildren(jsonObject, node);
-  
+
     checkProcessedKeys(jsonObject, processedKeys);
-  
+
     return node;
   }
 
@@ -646,7 +661,7 @@ public class SceneJSShapesParser
     final float g = (float) jsColor.getAsNumber("g", 0.0);
     final float b = (float) jsColor.getAsNumber("b", 0.0);
     final float a = (float) jsColor.getAsNumber("a", 1.0);
-  
+
     return Color.newFromRGBA(r, g, b, a);
   }
 
@@ -661,21 +676,21 @@ public class SceneJSShapesParser
   public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
-  
+
     return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
   }
 
   public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
-  
+
     return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
   }
 
   public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
-  
+
     return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
   }
 
