@@ -10,6 +10,15 @@
 #include "IStringBuilder.hpp"
 #include "IMathUtils.hpp"
 
+Angle Angle::fromDegrees(double degrees) {
+  return Angle(degrees,
+               TO_RADIANS(degrees));
+}
+
+Angle Angle::fromRadians(double radians) {
+  return Angle(TO_DEGREES(radians), radians);
+}
+
 Angle Angle::fromDegreesMinutes(double degrees,
                                 double minutes) {
   const IMathUtils* mu = IMathUtils::instance();
@@ -48,6 +57,25 @@ bool Angle::closeTo(const Angle& other) const {
   return (IMathUtils::instance()->abs(_degrees - other._degrees) < THRESHOLD);
 }
 
+Angle Angle::add(const Angle& a) const {
+  const double r = _radians + a._radians;
+  return Angle(TO_DEGREES(r), r);
+}
+
+Angle Angle::sub(const Angle& a) const {
+  const double r = _radians - a._radians;
+  return Angle(TO_DEGREES(r), r);
+}
+
+Angle Angle::times(double k) const {
+  const double r = k * _radians;
+  return Angle(TO_DEGREES(r), r);
+}
+
+Angle Angle::div(double k) const {
+  const double r = _radians / k;
+  return Angle(TO_DEGREES(r), r);
+}
 
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {
@@ -67,13 +95,22 @@ bool Angle::isBetween(const Angle& min,
   return (_radians >= min._radians) && (_radians <= max._radians);
 }
 
-
 Angle Angle::distanceTo(const Angle& other) const {
   double dif = IMathUtils::instance()->abs(_degrees - other._degrees);
   if (dif > 180) dif = 360 - dif;
   return Angle::fromDegrees(dif);
 }
 
+Angle Angle::normalized() const {
+  double degrees = _degrees;
+  while (degrees < 0) {
+    degrees += 360;
+  }
+  while (degrees >= 360) {
+    degrees -= 360;
+  }
+  return Angle(degrees, TO_RADIANS(degrees));
+}
 
 Angle Angle::nearestAngleInInterval(const Angle& min,
                                     const Angle& max) const {

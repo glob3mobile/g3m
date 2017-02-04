@@ -72,12 +72,7 @@ public:
   static double bearingInDegrees(const Angle& fromLatitude,
                                  const Angle& fromLongitude,
                                  const Angle& toLatitude,
-                                 const Angle& toLongitude) {
-    return TO_DEGREES(bearingInRadians(fromLatitude,
-                                       fromLongitude,
-                                       toLatitude,
-                                       toLongitude));
-  }
+                                 const Angle& toLongitude);
 
   /**
    * Returns the (initial) bearing from this point to the supplied point

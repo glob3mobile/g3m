@@ -67,10 +67,20 @@ double Geodetic2D::bearingInRadians(const Angle& fromLatitude,
   const double radians = mu->atan2(y, x);
   return radians;
 
-//  const double pi2 = PI*2;
-//  return mu->mod(radians + pi2, pi2);
+  //  const double pi2 = PI*2;
+  //  return mu->mod(radians + pi2, pi2);
 
-//  const double r1 = mu->mod(radians, pi2);
-//  const double r2 = mu->mod(radians + pi2, pi2);
-//  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
+  //  const double r1 = mu->mod(radians, pi2);
+  //  const double r2 = mu->mod(radians + pi2, pi2);
+  //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
+}
+
+double Geodetic2D::bearingInDegrees(const Angle& fromLatitude,
+                                    const Angle& fromLongitude,
+                                    const Angle& toLatitude,
+                                    const Angle& toLongitude) {
+  return TO_DEGREES(bearingInRadians(fromLatitude,
+                                     fromLongitude,
+                                     toLatitude,
+                                     toLongitude));
 }

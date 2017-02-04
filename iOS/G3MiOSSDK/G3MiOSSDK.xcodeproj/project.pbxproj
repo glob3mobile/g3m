@@ -192,6 +192,7 @@
 		CF491C6F1DB62E2B00476900 /* GAsyncTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF491C6D1DB62E2B00476900 /* GAsyncTask.cpp */; };
 		CF491C701DB62F4500476900 /* GAsyncTask.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF491C6E1DB62E2B00476900 /* GAsyncTask.hpp */; };
 		CF494C9B17FF0A5D00D16D33 /* TerrainTouchListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */; };
+		CF49512D1E46316B00D10A70 /* MutableAngle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF49512B1E46316B00D10A70 /* MutableAngle.cpp */; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
 		CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4F78451804AD4B00550409 /* IDeviceInfo.cpp */; };
 		CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */; };
@@ -1507,6 +1508,8 @@
 		CF491C6D1DB62E2B00476900 /* GAsyncTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GAsyncTask.cpp; path = Commons/Basic/GAsyncTask.cpp; sourceTree = "<group>"; };
 		CF491C6E1DB62E2B00476900 /* GAsyncTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GAsyncTask.hpp; path = Commons/Basic/GAsyncTask.hpp; sourceTree = "<group>"; };
 		CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchListener.hpp; path = Commons/Rendererers/TerrainTouchListener.hpp; sourceTree = "<group>"; };
+		CF49512B1E46316B00D10A70 /* MutableAngle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableAngle.cpp; path = Commons/Geometry/MutableAngle.cpp; sourceTree = "<group>"; };
+		CF49512C1E46316B00D10A70 /* MutableAngle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableAngle.hpp; path = Commons/Geometry/MutableAngle.hpp; sourceTree = "<group>"; };
 		CF4CA475164C669D009BB7EB /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGNode.cpp; path = Commons/Rendererers/SGNode.cpp; sourceTree = "<group>"; };
 		CF4CA476164C669D009BB7EB /* SGNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGNode.hpp; path = Commons/Rendererers/SGNode.hpp; sourceTree = "<group>"; };
 		CF4F78451804AD4B00550409 /* IDeviceInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDeviceInfo.cpp; path = Commons/Interfaces/IDeviceInfo.cpp; sourceTree = "<group>"; };
@@ -2516,7 +2519,6 @@
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
 				CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */,
-				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
 				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
 				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
@@ -2558,6 +2560,8 @@
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */,
 				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
+				CF49512B1E46316B00D10A70 /* MutableAngle.cpp */,
+				CF49512C1E46316B00D10A70 /* MutableAngle.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -3561,6 +3565,7 @@
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,
 				CF8AE0081702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp in Sources */,
 				CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */,
+				CF49512D1E46316B00D10A70 /* MutableAngle.cpp in Sources */,
 				CF8AE0091702049F00FE9F56 /* GEOStyle.cpp in Sources */,
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,

@@ -11,6 +11,9 @@
 
 class MutableMatrix44D;
 class TaitBryanAngles;
+class MutableVector3D;
+class MutableAngle;
+
 
 class Quaternion {
 public:
@@ -41,6 +44,9 @@ public:
 
   void toRotationMatrix(MutableMatrix44D& result) const;
 
+  void toAxisAngle(MutableVector3D& axis,
+                   MutableAngle& angle) const;
+  
 };
 
 #endif

@@ -12,10 +12,6 @@
 
 #include <string>
 
-#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
-#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
-
-
 class Angle {
 private:
   Angle(const double degrees,
@@ -37,10 +33,7 @@ public:
   {
   }
 
-  static Angle fromDegrees(double degrees) {
-    return Angle(degrees,
-                 TO_RADIANS(degrees));
-  }
+  static Angle fromDegrees(double degrees);
 
   static Angle fromDegreesMinutes(double degrees,
                                   double minutes);
@@ -49,9 +42,7 @@ public:
                                          double minutes,
                                          double seconds);
 
-  static Angle fromRadians(double radians) {
-    return Angle(TO_DEGREES(radians), radians);
-  }
+  static Angle fromRadians(double radians);
 
   static Angle min(const Angle& a1,
                    const Angle& a2) {
@@ -116,25 +107,13 @@ public:
 
   bool closeTo(const Angle& other) const;
 
-  Angle add(const Angle& a) const {
-    const double r = _radians + a._radians;
-    return Angle(TO_DEGREES(r), r);
-  }
+  Angle add(const Angle& a) const;
 
-  Angle sub(const Angle& a) const {
-    const double r = _radians - a._radians;
-    return Angle(TO_DEGREES(r), r);
-  }
+  Angle sub(const Angle& a) const;
 
-  Angle times(double k) const {
-    const double r = k * _radians;
-    return Angle(TO_DEGREES(r), r);
-  }
+  Angle times(double k) const;
 
-  Angle div(double k) const {
-    const double r = _radians / k;
-    return Angle(TO_DEGREES(r), r);
-  }
+  Angle div(double k) const;
 
   double div(const Angle& k) const {
     return _radians / k._radians;
@@ -158,16 +137,7 @@ public:
 
   Angle distanceTo(const Angle& other) const;
 
-  Angle normalized() const {
-    double degrees = _degrees;
-    while (degrees < 0) {
-      degrees += 360;
-    }
-    while (degrees >= 360) {
-      degrees -= 360;
-    }
-    return Angle(degrees, TO_RADIANS(degrees));
-  }
+  Angle normalized() const;
 
   bool isZero() const {
     return (_degrees == 0);
