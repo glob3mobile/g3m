@@ -10,7 +10,7 @@
 
 #include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
-
+#include "Angle.hpp"
 
 MutableAngle MutableAngle::fromDegrees(double degrees) {
   return MutableAngle(degrees,
@@ -38,4 +38,8 @@ const std::string MutableAngle::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+Angle MutableAngle::asAngle() const {
+  return Angle::fromRadians(_radians);
 }

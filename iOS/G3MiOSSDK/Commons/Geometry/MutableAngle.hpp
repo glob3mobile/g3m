@@ -11,6 +11,8 @@
 
 #include <string>
 
+class Angle;
+
 
 class MutableAngle {
 private:
@@ -49,6 +51,8 @@ public:
     return description();
   }
 #endif
+
+  Angle asAngle() const;
 
 };
 

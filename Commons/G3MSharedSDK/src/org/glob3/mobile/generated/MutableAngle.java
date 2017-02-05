@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class Angle;
+
 
 public class MutableAngle
 {
@@ -74,6 +76,11 @@ public class MutableAngle
   @Override
   public String toString() {
     return description();
+  }
+
+  public final Angle asAngle()
+  {
+    return Angle.fromRadians(_radians);
   }
 
 }
