@@ -230,9 +230,11 @@ public class CoordinateSystem
 
   public final MutableMatrix44D getRotationMatrix()
   {
-  
-    return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0,0,0,1);
-  
+    return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0, 0, 0, 1);
+  //  return MutableMatrix44D(_x._x, _y._x, _z._x, 0,
+  //                          _x._y, _y._y, _z._y, 0,
+  //                          _x._z, _y._z, _z._z, 0,
+  //                              0,     0,     0, 1);
   }
 
   public final void copyValueOfRotationMatrix(MutableMatrix44D m)
