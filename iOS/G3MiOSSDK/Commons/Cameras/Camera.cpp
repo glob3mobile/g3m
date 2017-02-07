@@ -462,11 +462,11 @@ void Camera::setFOV(const Angle& vertical,
   }
 }
 
-Angle Camera::getHorizontalFOV() const{
+Angle Camera::getHorizontalFOV() const {
   return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFOV) * 2);
 }
 
-Angle Camera::getVerticalFOV() const{
+Angle Camera::getVerticalFOV() const {
   return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFOV) * 2);
 }
 
@@ -487,7 +487,7 @@ CoordinateSystem Camera::getLocalCoordinateSystem() const {
 }
 
 CoordinateSystem Camera::getCameraCoordinateSystem() const {
-  return CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
+  return CoordinateSystem::fromCamera(*this);
 }
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {

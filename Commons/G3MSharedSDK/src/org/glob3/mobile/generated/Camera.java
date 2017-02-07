@@ -537,7 +537,7 @@ public class Camera
   }
   public final CoordinateSystem getCameraCoordinateSystem()
   {
-    return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
+    return CoordinateSystem.fromCamera(this);
   }
   public final TaitBryanAngles getHeadingPitchRoll()
   {
