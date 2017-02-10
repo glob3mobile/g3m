@@ -125,7 +125,7 @@ public:
   static Color yellow() {
     return YELLOW;
   }
-  
+
   static Color cyan() {
     return CYAN;
   }
@@ -133,7 +133,7 @@ public:
   static Color magenta() {
     return MAGENTA;
   }
-  
+
   static Color red() {
     return RED;
   }
@@ -220,7 +220,7 @@ public:
   Color twiceLighter() const {
     return adjustSaturationBrightness(-0.06f, 0.16f);
   }
-  
+
   Color muchLighter() const {
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
@@ -234,7 +234,7 @@ public:
     return description();
   }
 #endif
-
+  
 };
 
 #endif

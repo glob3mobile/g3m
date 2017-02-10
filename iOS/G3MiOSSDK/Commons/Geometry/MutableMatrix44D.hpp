@@ -177,6 +177,8 @@ public:
 
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
 
+  void multiplyInPlace(const MutableMatrix44D& that);
+
   MutableMatrix44D inversed() const;
 
   MutableMatrix44D transposed() const;
@@ -287,7 +289,7 @@ public:
     _m30=m30; _m31=m31; _m32=m32; _m33=m33;
     _isValid = true;
   }
-
+  
   void setValid(bool v) {
     _isValid = v;
   }
