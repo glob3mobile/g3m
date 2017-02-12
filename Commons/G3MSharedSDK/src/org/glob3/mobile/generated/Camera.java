@@ -246,14 +246,19 @@ public class Camera
   {
     applyTransform(MutableMatrix44D.createRotationMatrix(delta, axis));
   }
-  public final void moveForward(double d)
+  public final void moveForward(double distance)
   {
     final Vector3D view = getViewDirection().normalized();
-    applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
+    applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(distance)));
   }
   public final void translateCamera(Vector3D desp)
   {
     applyTransform(MutableMatrix44D.createTranslationMatrix(desp));
+  }
+
+  public final void move(Vector3D direction, double distance)
+  {
+    applyTransform(MutableMatrix44D.createTranslationMatrix(direction.times(distance)));
   }
 
   public final void pivotOnCenter(Angle a)

@@ -326,9 +326,14 @@ void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }
 
-void Camera::moveForward(double d) {
+void Camera::moveForward(double distance) {
   const Vector3D view = getViewDirection().normalized();
-  applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(d)));
+  applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(distance)));
+}
+
+void Camera::move(const Vector3D& direction,
+                  double distance) {
+  applyTransform(MutableMatrix44D::createTranslationMatrix(direction.times(distance)));
 }
 
 void Camera::pivotOnCenter(const Angle& a) {
