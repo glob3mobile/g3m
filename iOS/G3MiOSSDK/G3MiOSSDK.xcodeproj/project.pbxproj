@@ -253,6 +253,15 @@
 		CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */; };
 		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
 		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
+		CF6D96B81E51F26000875823 /* FrustumPolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D96B61E51F26000875823 /* FrustumPolicy.cpp */; };
+		CF6D96B91E51F40100875823 /* FrustumPolicy.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D96B71E51F26000875823 /* FrustumPolicy.hpp */; };
+		CF6D96BA1E51F40100875823 /* DecimatedDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF71F4F91DDF34A40055C4D7 /* DecimatedDEMGrid.hpp */; };
+		CF6D96BB1E51F40100875823 /* InterpolatedDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF03D4EC1DDF682900766A7C /* InterpolatedDEMGrid.hpp */; };
+		CF6D96BC1E51F40100875823 /* MutableQuaternionF.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9227D41E31154300B79A87 /* MutableQuaternionF.hpp */; };
+		CF6D96BD1E51F40100875823 /* Quaternion.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92FCF01E3B913400A439D3 /* Quaternion.hpp */; };
+		CF6D96BE1E51F40100875823 /* MutableAngle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF49512C1E46316B00D10A70 /* MutableAngle.hpp */; };
+		CF6D96C11E51FDDF00875823 /* DynamicFrustumPolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D96BF1E51FDDF00875823 /* DynamicFrustumPolicy.cpp */; };
+		CF6D96C21E51FE0600875823 /* DynamicFrustumPolicy.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D96C01E51FDDF00875823 /* DynamicFrustumPolicy.hpp */; };
 		CF6FA7C91D7D761800A4320A /* Trail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FA7C71D7D761800A4320A /* Trail.cpp */; };
 		CF6FA7CA1D7D785400A4320A /* Trail.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FA7C81D7D761800A4320A /* Trail.hpp */; };
 		CF6FE3ED1899812800C05775 /* G3MMeshParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */; };
@@ -833,6 +842,14 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF6D96C21E51FE0600875823 /* DynamicFrustumPolicy.hpp in CopyFiles */,
+				CF6D96B91E51F40100875823 /* FrustumPolicy.hpp in CopyFiles */,
+				CF6D96BA1E51F40100875823 /* DecimatedDEMGrid.hpp in CopyFiles */,
+				CF6D96BB1E51F40100875823 /* InterpolatedDEMGrid.hpp in CopyFiles */,
+				CF6D96BC1E51F40100875823 /* MutableQuaternionF.hpp in CopyFiles */,
+				CF6D96BD1E51F40100875823 /* Quaternion.hpp in CopyFiles */,
+				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
+				CF6D96BE1E51F40100875823 /* MutableAngle.hpp in CopyFiles */,
 				CF44A0741DDE18FF00E5B270 /* DecoratorDEMGrid.hpp in CopyFiles */,
 				CF44A0751DDE18FF00E5B270 /* SubsetDEMGrid.hpp in CopyFiles */,
 				CF74A8881DDA069D000767A3 /* Projection.hpp in CopyFiles */,
@@ -840,7 +857,6 @@
 				CF74A88A1DDA069D000767A3 /* WGS84Projetion.hpp in CopyFiles */,
 				CF7947C01DD0ED2500376172 /* DEMGridUtils.hpp in CopyFiles */,
 				CFE11EC81DD0B94700355A89 /* AltitudeMode.hpp in CopyFiles */,
-				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CFF99FF91DB92AA9008E4F14 /* DEMSubscription.hpp in CopyFiles */,
 				CF0F414F1DB91634004B1000 /* PyramidNode.hpp in CopyFiles */,
 				D8299B991DA7D73D000923F9 /* AtmosphereRenderer.hpp in CopyFiles */,
@@ -1594,6 +1610,10 @@
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
 		CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnCanvasElement.cpp; path = Commons/Basic/ColumnCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnCanvasElement.hpp; path = Commons/Basic/ColumnCanvasElement.hpp; sourceTree = "<group>"; };
+		CF6D96B61E51F26000875823 /* FrustumPolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrustumPolicy.cpp; path = Commons/Cameras/FrustumPolicy.cpp; sourceTree = "<group>"; };
+		CF6D96B71E51F26000875823 /* FrustumPolicy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrustumPolicy.hpp; path = Commons/Cameras/FrustumPolicy.hpp; sourceTree = "<group>"; };
+		CF6D96BF1E51FDDF00875823 /* DynamicFrustumPolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicFrustumPolicy.cpp; path = Commons/Cameras/DynamicFrustumPolicy.cpp; sourceTree = "<group>"; };
+		CF6D96C01E51FDDF00875823 /* DynamicFrustumPolicy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DynamicFrustumPolicy.hpp; path = Commons/Cameras/DynamicFrustumPolicy.hpp; sourceTree = "<group>"; };
 		CF6FA7C71D7D761800A4320A /* Trail.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Trail.cpp; path = Commons/Rendererers/Trail.cpp; sourceTree = "<group>"; };
 		CF6FA7C81D7D761800A4320A /* Trail.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Trail.hpp; path = Commons/Rendererers/Trail.hpp; sourceTree = "<group>"; };
 		CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MMeshParser.cpp; path = Commons/Mesh/G3MMeshParser.cpp; sourceTree = "<group>"; };
@@ -2661,16 +2681,14 @@
 		CC596F1B15C46CD7008FC230 /* Cameras */ = {
 			isa = PBXGroup;
 			children = (
-				D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */,
-				D8378FA11BFB331300E6557E /* DeviceAttitudeCameraHandler.hpp */,
-				D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */,
-				D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */,
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
 				FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
+				FBC23099179730FF009343FC /* CameraEffects.cpp */,
+				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
 				385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */,
 				385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */,
@@ -2680,14 +2698,20 @@
 				CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */,
 				FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */,
 				FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */,
+				D8378FA01BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp */,
+				D8378FA11BFB331300E6557E /* DeviceAttitudeCameraHandler.hpp */,
+				CF6D96BF1E51FDDF00875823 /* DynamicFrustumPolicy.cpp */,
+				CF6D96C01E51FDDF00875823 /* DynamicFrustumPolicy.hpp */,
+				CF6D96B61E51F26000875823 /* FrustumPolicy.cpp */,
+				CF6D96B71E51F26000875823 /* FrustumPolicy.hpp */,
 				CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */,
 				CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */,
-				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
-				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
-				FBC23099179730FF009343FC /* CameraEffects.cpp */,
-				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
 				D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */,
 				D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */,
+				D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */,
+				D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */,
+				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
+				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -3321,6 +3345,7 @@
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
 				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
 				CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */,
+				CF6D96B81E51F26000875823 /* FrustumPolicy.cpp in Sources */,
 				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
 				44E3C42B19B53B4100857275 /* Info.cpp in Sources */,
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
@@ -3642,6 +3667,7 @@
 				E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */,
 				CF6CCE3619254B3500AA3ED7 /* ChessboardLayer.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
+				CF6D96C11E51FDDF00875823 /* DynamicFrustumPolicy.cpp in Sources */,
 				FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */,
 				CFE60469190442FE00E6C78B /* TextureMapping.cpp in Sources */,
 				4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */,

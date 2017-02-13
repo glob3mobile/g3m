@@ -43,6 +43,7 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class ErrorRenderer;
 //class InfoDisplay;
+//class FrustumPolicy;
 
 
 public abstract class IG3MBuilder
@@ -71,6 +72,7 @@ public abstract class IG3MBuilder
   private Sector _shownSector;
   private InfoDisplay _infoDisplay;
   private boolean _atmosphere;
+  private FrustumPolicy _frustumPolicy;
 
 
   /**
@@ -307,6 +309,15 @@ public abstract class IG3MBuilder
     return _infoDisplay;
   }
 
+  private FrustumPolicy getFrustumPolicy()
+  {
+    if (_frustumPolicy == null)
+    {
+      _frustumPolicy = new DynamicFrustumPolicy();
+    }
+    return _frustumPolicy;
+  }
+
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
     if (_initializationTask != null)
@@ -425,7 +436,7 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO, getFrustumPolicy());
   
     g3mWidget.setUserData(getUserData());
   
@@ -454,6 +465,8 @@ public abstract class IG3MBuilder
     if (_shownSector != null)
        _shownSector.dispose();
     _shownSector = null;
+  
+    _frustumPolicy = null;
   
     return g3mWidget;
   }
@@ -489,6 +502,7 @@ public abstract class IG3MBuilder
      _shownSector = null;
      _infoDisplay = null;
      _atmosphere = false;
+     _frustumPolicy = null;
   }
 
   public void dispose()
@@ -550,6 +564,8 @@ public abstract class IG3MBuilder
        _planetRendererBuilder.dispose();
     if (_shownSector != null)
        _shownSector.dispose();
+    if (_frustumPolicy != null)
+       _frustumPolicy.dispose();
   }
 
 
@@ -998,6 +1014,16 @@ public abstract class IG3MBuilder
   public final void setInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
     pvtSetInitializationTask(initializationTask, autoDeleteInitializationTask);
+  }
+
+  public final void setFrustumPolicy(FrustumPolicy frustumPolicy)
+  {
+    if (frustumPolicy != _frustumPolicy)
+    {
+      if (_frustumPolicy != null)
+         _frustumPolicy.dispose();
+      _frustumPolicy = frustumPolicy;
+    }
   }
 
 

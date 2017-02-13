@@ -2,8 +2,9 @@ package org.glob3.mobile.generated;
 public class Camera
 {
 
-  public Camera(long timestamp)
+  public Camera(long timestamp, FrustumPolicy frustumPolicy)
   {
+     _frustumPolicy = frustumPolicy;
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
      _center = new MutableVector3D(0, 0, 0);
@@ -42,6 +43,8 @@ public class Camera
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
+    if (_frustumPolicy != null)
+       _frustumPolicy.dispose();
   }
 
   public final void copyFrom(Camera that, boolean ignoreTimestamp)
@@ -678,6 +681,13 @@ public class Camera
     return _frustumData;
   }
 
+  public final Planet getPlanet()
+  {
+    return _planet;
+  }
+
+
+  private final FrustumPolicy _frustumPolicy;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Camera(Camera that);
@@ -818,17 +828,9 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-    final double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
-  
-    double zFar = _planet.distanceToHorizon(_position.asVector3D());
-  
-    final double goalRatio = 1000;
-    final double ratio = zFar / zNear;
-    if (ratio < goalRatio)
-    {
-      zNear = zFar / goalRatio;
-    }
+    final Vector2D zNearAndZFar = _frustumPolicy.calculateFrustumZNearAndZFar(this);
+    final double zNear = zNearAndZFar._x;
+    final double zFar = zNearAndZFar._y;
   
     if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {

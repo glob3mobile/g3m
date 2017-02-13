@@ -37,6 +37,7 @@ class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
 class InfoDisplay;
+class FrustumPolicy;
 
 
 class IG3MBuilder {
@@ -69,6 +70,7 @@ private:
   Sector*                           _shownSector;
   InfoDisplay*                      _infoDisplay;
   bool                              _atmosphere;
+  FrustumPolicy*                    _frustumPolicy;
 
   GL*                               getGL();
   ICameraActivityListener*          getCameraActivityListener();
@@ -92,6 +94,8 @@ private:
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
   InfoDisplay*                      getInfoDisplay() const;
+
+  FrustumPolicy*                    getFrustumPolicy();
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
@@ -166,6 +170,8 @@ public:
     pvtSetInitializationTask(initializationTask,
                              autoDeleteInitializationTask);
   }
+
+  void setFrustumPolicy(FrustumPolicy* frustumPolicy);
 
   const Planet* getPlanet();
   PlanetRendererBuilder* getPlanetRendererBuilder();

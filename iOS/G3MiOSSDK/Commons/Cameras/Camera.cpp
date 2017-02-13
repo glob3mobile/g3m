@@ -22,7 +22,7 @@
 #include "Sphere.hpp"
 #include "Sector.hpp"
 #include "IFloatBuffer.hpp"
-
+#include "FrustumPolicy.hpp"
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
@@ -44,6 +44,7 @@ Camera::~Camera() {
   delete _frustumInModelCoordinates;
   delete _geodeticCenterOfView;
   delete _geodeticPosition;
+  delete _frustumPolicy;
 }
 
 void Camera::copyFrom(const Camera &that,
@@ -119,7 +120,9 @@ void Camera::copyFrom(const Camera &that,
 
 }
 
-Camera::Camera(long long timestamp) :
+Camera::Camera(long long timestamp,
+               const FrustumPolicy* frustumPolicy) :
+_frustumPolicy(frustumPolicy),
 _planet(NULL),
 _position(0, 0, 0),
 _center(0, 0, 0),
@@ -391,16 +394,9 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
-  const double height = getGeodeticPosition()._height;
-  double zNear = height * 0.1;
-
-  double zFar = _planet->distanceToHorizon(_position.asVector3D());
-
-  const double goalRatio = 1000;
-  const double ratio = zFar / zNear;
-  if (ratio < goalRatio) {
-    zNear = zFar / goalRatio;
-  }
+  const Vector2D zNearAndZFar = _frustumPolicy->calculateFrustumZNearAndZFar(*this);
+  const double zNear = zNearAndZFar._x;
+  const double zFar  = zNearAndZFar._y;
 
   if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
     const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;

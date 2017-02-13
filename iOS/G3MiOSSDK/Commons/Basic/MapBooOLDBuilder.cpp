@@ -57,6 +57,7 @@
 #include "LevelTileCondition.hpp"
 #include "Info.hpp"
 #include "InitialCameraPositionProvider.hpp"
+#include "DynamicFrustumPolicy.hpp"
 
 
 const std::string MapBooOLD_CameraPosition::description() const {
@@ -1661,7 +1662,8 @@ G3MWidget* MapBooOLDBuilder::create() {
                                  createSceneLighting(),
                                  icpp,
                                  infoDisplay,
-                                 MONO);
+                                 MONO,
+                                 new DynamicFrustumPolicy());
   delete cameraConstraints;
   delete periodicalTasks;
 

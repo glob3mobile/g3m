@@ -22,10 +22,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider, infoDisplay, viewMode);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider, infoDisplay, viewMode, frustumPolicy);
   }
 
   public void dispose()
@@ -114,6 +114,8 @@ public class G3MWidget implements ChangedRendererInfoListener
        _leftEyeCam.dispose();
     if (_auxCam != null)
        _auxCam.dispose();
+    if (_frustumPolicy != null)
+       _frustumPolicy.dispose();
   }
 
   public final void render(int width, int height)
@@ -727,8 +729,10 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private java.util.ArrayList<ICameraConstrainer> _cameraConstrainers = new java.util.ArrayList<ICameraConstrainer>();
 
+  private final FrustumPolicy _frustumPolicy;
   private Camera _currentCamera;
   private Camera _nextCamera;
+
   private TexturesHandler _texturesHandler;
 
   private Color _backgroundColor;
@@ -789,7 +793,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   private Camera _rightEyeCam;
 
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode)
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -808,8 +812,9 @@ public class G3MWidget implements ChangedRendererInfoListener
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera(1);
-     _nextCamera = new Camera(2);
+     _frustumPolicy = frustumPolicy;
+     _currentCamera = new Camera(1, frustumPolicy.copy());
+     _nextCamera = new Camera(2, frustumPolicy.copy());
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;
@@ -1076,7 +1081,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     if (_auxCam == null)
     {
-      _auxCam = new Camera(-1);
+      _auxCam = new Camera(-1, _frustumPolicy.copy());
     }
   
     final boolean eyesUpdated = _auxCam.getTimestamp() != _currentCamera.getTimestamp();
@@ -1086,11 +1091,11 @@ public class G3MWidget implements ChangedRendererInfoListener
       //Saving central camera
       if (_rightEyeCam == null)
       {
-        _rightEyeCam = new Camera(-1);
+        _rightEyeCam = new Camera(-1, _frustumPolicy.copy());
       }
       if (_leftEyeCam == null)
       {
-        _leftEyeCam = new Camera(-1);
+        _leftEyeCam = new Camera(-1, _frustumPolicy.copy());
       }
       _auxCam.copyFrom(_currentCamera, true);
       _leftEyeCam.copyFrom(_auxCam, true);

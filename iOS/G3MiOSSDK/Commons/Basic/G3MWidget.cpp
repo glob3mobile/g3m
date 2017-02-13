@@ -43,7 +43,7 @@
 #include "Planet.hpp"
 #include "ErrorHandling.hpp"
 #include "GLState.hpp"
-
+#include "FrustumPolicy.hpp"
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -92,7 +92,8 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider,
                      InfoDisplay*                         infoDisplay,
-                     ViewMode                             viewMode):
+                     ViewMode                             viewMode,
+                     const FrustumPolicy*                 frustumPolicy):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -110,8 +111,9 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera(1)),
-_nextCamera(new Camera(2)),
+_frustumPolicy(frustumPolicy),
+_currentCamera(new Camera(1, frustumPolicy->copy())),
+_nextCamera(new Camera(2, frustumPolicy->copy())),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -240,8 +242,9 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              GPUProgramManager*                   gpuProgramManager,
                              SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider,
-                             InfoDisplay* infoDisplay,
-                             ViewMode viewMode) {
+                             InfoDisplay*                         infoDisplay,
+                             ViewMode                             viewMode,
+                             const FrustumPolicy*                 frustumPolicy) {
 
   return new G3MWidget(gl,
                        storage,
@@ -265,7 +268,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        sceneLighting,
                        initialCameraPositionProvider,
                        infoDisplay,
-                       viewMode);
+                       viewMode,
+                       frustumPolicy);
 }
 
 G3MWidget::~G3MWidget() {
@@ -320,6 +324,7 @@ G3MWidget::~G3MWidget() {
   delete _rightEyeCam;
   delete _leftEyeCam;
   delete _auxCam;
+  delete _frustumPolicy;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -556,7 +561,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
   
   if (_auxCam == NULL) {
-    _auxCam = new Camera(-1);
+    _auxCam = new Camera(-1, _frustumPolicy->copy());
   }
   
   const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
@@ -564,10 +569,10 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
     
     //Saving central camera
     if (_rightEyeCam == NULL) {
-      _rightEyeCam = new Camera(-1);
+      _rightEyeCam = new Camera(-1, _frustumPolicy->copy());
     }
     if (_leftEyeCam == NULL) {
-      _leftEyeCam = new Camera(-1);
+      _leftEyeCam = new Camera(-1, _frustumPolicy->copy());
     }
     _auxCam->copyFrom(*_currentCamera, true);
     _leftEyeCam->copyFrom(*_auxCam, true);

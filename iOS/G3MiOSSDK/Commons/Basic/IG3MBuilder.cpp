@@ -39,6 +39,7 @@
 #include "PlanetRenderer.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "AtmosphereRenderer.hpp"
+#include "DynamicFrustumPolicy.hpp"
 
 
 IG3MBuilder::IG3MBuilder() :
@@ -65,7 +66,8 @@ _userData(NULL),
 _sceneLighting(NULL),
 _shownSector(NULL),
 _infoDisplay(NULL),
-_atmosphere(false)
+_atmosphere(false),
+_frustumPolicy(NULL)
 {
 }
 
@@ -103,6 +105,7 @@ IG3MBuilder::~IG3MBuilder() {
   delete _userData;
   delete _planetRendererBuilder;
   delete _shownSector;
+  delete _frustumPolicy;
 }
 
 /**
@@ -669,6 +672,20 @@ void IG3MBuilder::setAtmosphere(const bool atmosphere) {
   setBackgroundColor( _atmosphere ? Color::newFromRGBA(0, 0, 0, 1) : NULL );
 }
 
+FrustumPolicy* IG3MBuilder::getFrustumPolicy() {
+  if (_frustumPolicy == NULL) {
+    _frustumPolicy = new DynamicFrustumPolicy();
+  }
+  return _frustumPolicy;
+}
+
+void IG3MBuilder::setFrustumPolicy(FrustumPolicy* frustumPolicy) {
+  if (frustumPolicy != _frustumPolicy) {
+    delete _frustumPolicy;
+    _frustumPolicy = frustumPolicy;
+  }
+}
+
 /**
  * Creates the generic widget using all the parameters previously set.
  *
@@ -748,7 +765,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getSceneLighting(),
                                             icpp,
                                             infoDisplay,
-                                            MONO);
+                                            MONO,
+                                            getFrustumPolicy());
 
   g3mWidget->setUserData(getUserData());
 
@@ -776,6 +794,8 @@ G3MWidget* IG3MBuilder::create() {
 
   delete _shownSector;
   _shownSector = NULL;
+
+  _frustumPolicy = NULL;
 
   return g3mWidget;
 }
