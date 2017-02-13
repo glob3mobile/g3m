@@ -78,7 +78,7 @@ public:
 
   const Vector3D getVertex(size_t i) const;
 
-  bool isTransparent(const G3MRenderContext* rc) const;
+  virtual bool isTransparent(const G3MRenderContext* rc) const;
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;

@@ -280,7 +280,7 @@ public abstract class AbstractMesh extends Mesh
     return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 
-  public final boolean isTransparent(G3MRenderContext rc)
+  public boolean isTransparent(G3MRenderContext rc)
   {
     if (_flatColor == null)
     {
