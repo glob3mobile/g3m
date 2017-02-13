@@ -326,9 +326,14 @@ void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }
 
-void Camera::moveForward(double d) {
+void Camera::moveForward(double distance) {
   const Vector3D view = getViewDirection().normalized();
-  applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(d)));
+  applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(distance)));
+}
+
+void Camera::move(const Vector3D& direction,
+                  double distance) {
+  applyTransform(MutableMatrix44D::createTranslationMatrix(direction.times(distance)));
 }
 
 void Camera::pivotOnCenter(const Angle& a) {
@@ -462,11 +467,11 @@ void Camera::setFOV(const Angle& vertical,
   }
 }
 
-Angle Camera::getHorizontalFOV() const{
+Angle Camera::getHorizontalFOV() const {
   return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfHorizontalFOV) * 2);
 }
 
-Angle Camera::getVerticalFOV() const{
+Angle Camera::getVerticalFOV() const {
   return Angle::fromRadians(IMathUtils::instance()->atan(_tanHalfVerticalFOV) * 2);
 }
 
@@ -487,7 +492,7 @@ CoordinateSystem Camera::getLocalCoordinateSystem() const {
 }
 
 CoordinateSystem Camera::getCameraCoordinateSystem() const {
-  return CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
+  return CoordinateSystem::fromCamera(*this);
 }
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {

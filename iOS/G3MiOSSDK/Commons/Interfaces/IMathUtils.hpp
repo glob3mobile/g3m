@@ -36,6 +36,9 @@
 
 #define ISNAN(x) (x != x)
 
+#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
+
 class Geodetic2D;
 class Angle;
 
@@ -269,6 +272,8 @@ public:
   virtual int gcd(int a, int b) const {
     return (b == 0) ? a : gcd(b, a % b);
   }
+
+  virtual double copySign(double a, double b) const = 0;
 
 };
 

@@ -187,8 +187,8 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const {
                                             false,
                                             _center,
                                             _vertices,
-                                            (float)1.0,
-                                            (float)2.0,
+                                            1.0f,
+                                            2.0f,
                                             new Color(Color::RED),
                                             NULL,
                                             false,
@@ -224,8 +224,8 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const {
                                            true,
                                            _center,
                                            normalsVer,
-                                           (float)2.0,
-                                           (float)1.0,
+                                           2.0f,
+                                           1.0f,
                                            new Color(Color::BLUE));
 
   CompositeMesh* compositeMesh = new CompositeMesh();

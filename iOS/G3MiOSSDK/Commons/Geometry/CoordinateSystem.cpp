@@ -8,15 +8,14 @@
 
 #include "CoordinateSystem.hpp"
 
-#include "Color.hpp"
-#include "Mesh.hpp"
-#include "DirectMesh.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
+#include "Camera.hpp"
 #include "ErrorHandling.hpp"
+#include "Angle.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "DirectMesh.hpp"
 #include "GLConstants.hpp"
-#include "MutableMatrix44D.hpp"
-#include "ILogger.hpp"
+#include "TaitBryanAngles.hpp"
 #include "IStringBuilder.hpp"
 
 
@@ -25,6 +24,25 @@ CoordinateSystem CoordinateSystem::global() {
                           Vector3D::UP_Y,
                           Vector3D::UP_Z,
                           Vector3D::ZERO);
+}
+
+CoordinateSystem CoordinateSystem::fromCamera(const Camera& camera) {
+  const Vector3D viewDirection = camera.getViewDirection();
+  const Vector3D up            = camera.getUp();
+  const Vector3D origin        = camera.getCartesianPosition();
+
+  return CoordinateSystem(viewDirection.cross(up).normalized(),
+                          viewDirection.normalized(),
+                          up.normalized(),
+                          origin);
+}
+
+CoordinateSystem::CoordinateSystem(const CoordinateSystem& that) :
+_x(that._x),
+_y(that._y),
+_z(that._z),
+_origin(that._origin)
+{
 }
 
 CoordinateSystem::CoordinateSystem(const Vector3D& x,
@@ -41,20 +59,6 @@ _origin(origin)
   }
 }
 
-//For camera
-CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection,
-                                   const Vector3D& up,
-                                   const Vector3D& origin) :
-_x(viewDirection.cross(up).normalized()),
-_y(viewDirection.normalized()),
-_z(up.normalized()),
-_origin(origin)
-{
-  if (!checkConsistency(_x, _y, _z)) {
-    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
-  }
-}
-
 bool CoordinateSystem::checkConsistency(const Vector3D& x,
                                         const Vector3D& y,
                                         const Vector3D& z) {
@@ -62,9 +66,8 @@ bool CoordinateSystem::checkConsistency(const Vector3D& x,
     return false;
   }
   return true;
-//  return areOrtogonal(x, y, z);
+  //  return areOrtogonal(x, y, z);
 }
-
 
 //bool CoordinateSystem::areOrtogonal(const Vector3D& x,
 //                                    const Vector3D& y,
@@ -102,8 +105,8 @@ Mesh* CoordinateSystem::createMesh(double size,
                                   true,
                                   fbb->getCenter(),
                                   fbb->create(),
-                                  (float)5.0,
-                                  (float)1.0,
+                                  5.0f,
+                                  1.0f,
                                   NULL,
                                   colors.create(),
                                   false,
@@ -228,7 +231,6 @@ bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
 }
 
 CoordinateSystem CoordinateSystem::applyRotation(const MutableMatrix44D& m) const{
-
   return CoordinateSystem(_x.transformedBy(m, 1.0),
                           _y.transformedBy(m, 1.0),
                           _z.transformedBy(m, 1.0),
@@ -236,12 +238,10 @@ CoordinateSystem CoordinateSystem::applyRotation(const MutableMatrix44D& m) cons
 }
 
 MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
-
   return MutableMatrix44D(_x._x, _x._y, _x._z, 0,
                           _y._x, _y._y, _y._z, 0,
                           _z._x, _z._y, _z._z, 0,
-                          0,0,0,1);
-
+                          0,     0,     0, 1);
 }
 
 void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{

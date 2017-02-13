@@ -159,8 +159,11 @@ public:
                   const Vector3D& p1);
   void rotateWithAxis(const Vector3D& axis,
                       const Angle& delta);
-  void moveForward(double d);
+  void moveForward(double distance);
   void translateCamera(const Vector3D& desp);
+
+  void move(const Vector3D& direction,
+            double distance);
 
   void pivotOnCenter(const Angle& a);
 

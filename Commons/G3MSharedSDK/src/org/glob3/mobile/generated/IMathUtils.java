@@ -28,6 +28,9 @@ package org.glob3.mobile.generated;
 
 //#define ISNAN(x) (x != x)
 
+//#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+//#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
+
 //class Geodetic2D;
 //class Angle;
 
@@ -288,5 +291,7 @@ public abstract class IMathUtils
   {
     return (b == 0) ? a : gcd(b, a % b);
   }
+
+  public abstract double copySign(double a, double b);
 
 }

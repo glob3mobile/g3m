@@ -25,6 +25,9 @@ class Angle;
 
 class MutableMatrix44D {
 private:
+  static MutableMatrix44D TEMP1;
+  static MutableMatrix44D TEMP2;
+
   //_m23 -> row 2, column 3
   double _m00;
   double _m01;
@@ -141,6 +144,13 @@ public:
                             0, 0, 0, 1);
   }
 
+  static MutableMatrix44D* newIdentity() {
+    return new MutableMatrix44D(1, 0, 0, 0,
+                                0, 1, 0, 0,
+                                0, 0, 1, 0,
+                                0, 0, 0, 1);
+  }
+
   bool isIdentity() const {
     static const MutableMatrix44D identity = MutableMatrix44D::identity();
     return isEquals(identity);
@@ -166,6 +176,8 @@ public:
   void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
 
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
+
+  void multiplyInPlace(const MutableMatrix44D& that);
 
   MutableMatrix44D inversed() const;
 
@@ -217,6 +229,10 @@ public:
   static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                const Vector3D& axis);
 
+  static void createRotationMatrix(const Angle& angle,
+                                   const Vector3D& axis,
+                                   MutableMatrix44D& result);
+
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,
                                                       const Vector3D& point);
@@ -244,14 +260,24 @@ public:
                             0, 0, 0, 1);
   }
 
+  static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
+
   static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position);
 
   static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position);
 
-  static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
-
   static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
                                                        const Angle& longitude);
+
+  static void createRawGeodeticRotationMatrix(const Geodetic2D& position,
+                                              MutableMatrix44D& result);
+
+  static void createRawGeodeticRotationMatrix(const Geodetic3D& position,
+                                              MutableMatrix44D& result);
+
+  static void createRawGeodeticRotationMatrix(const Angle& latitude,
+                                              const Angle& longitude,
+                                              MutableMatrix44D& result);
 
   void setValue(double m00, double m10, double m20, double m30,
                 double m01, double m11, double m21, double m31,
@@ -263,7 +289,7 @@ public:
     _m30=m30; _m31=m31; _m32=m32; _m33=m33;
     _isValid = true;
   }
-
+  
   void setValid(bool v) {
     _isValid = v;
   }

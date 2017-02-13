@@ -11,6 +11,8 @@
 #include "IMathUtils.hpp"
 #include "MutableMatrix44D.hpp"
 #include "TaitBryanAngles.hpp"
+#include "MutableAngle.hpp"
+#include "MutableVector3D.hpp"
 
 
 const Quaternion Quaternion::NANQD = Quaternion(NANF, NANF, NANF, NANF);
@@ -126,53 +128,25 @@ void Quaternion::toRotationMatrix(MutableMatrix44D& result) const {
   const double m32 = 0.0;
   const double m33 = 1.0;
 
-  result.setValue(m00, m10, m20, m30,
-                  m01, m11, m21, m31,
-                  m02, m12, m22, m32,
-                  m03, m13, m23, m33);
-  //  result.setValue(m00, m01, m02, m03,
-  //                  m10, m11, m12, m13,
-  //                  m20, m21, m22, m23,
-  //                  m30, m31, m32, m33);
+  //  result.setValue(m00, m10, m20, m30,
+  //                  m01, m11, m21, m31,
+  //                  m02, m12, m22, m32,
+  //                  m03, m13, m23, m33);
+  result.setValue(m00, m01, m02, m03,
+                  m10, m11, m12, m13,
+                  m20, m21, m22, m23,
+                  m30, m31, m32, m33);
 }
 
-TaitBryanAngles Quaternion::toTaitBryanAngles() const {
+void Quaternion::toAxisAngle(MutableVector3D& axis,
+                             MutableAngle& angle) const {
   const IMathUtils* mu = IMathUtils::instance();
 
-  const double ysqr = _y * _y;
+  angle.setRadians(2.0 * mu->acos(_w));
 
-  const double t0 = 2.0 * ((_w * _x) + (_y * _z));
-  const double t1 = 1.0 - 2.0 * ((_x * _x) + ysqr);
-  const double roll = mu->atan2(t0, t1);
-
-  double t2 = 2.0 * ((_w * _y) - (_z * _x));
-  t2 = t2 > 1.0 ? 1.0 : t2;
-  t2 = t2 < -1.0 ? -1.0 : t2;
-  const double pitch = mu->asin(t2);
-
-  const double t3 = 2.0 * ((_w * _z) + (_x *_y));
-  const double t4 = 1.0 - 2.0 * (ysqr + (_z * _z));
-  const double yaw = mu->atan2(t3, t4);
-
-  return TaitBryanAngles::fromRadians(yaw, pitch, roll);
-
-  //  double heading;
-  //  double pitch;
-  //  double roll;
-  //
-  //  const double test = _z * _y + _x * _w;
-  //  if (mu->abs(test) < 0.4999) {
-  //    heading = mu->asin(2.0 * test);
-  //    pitch   = mu->atan2(2.0 * _y * _w - 2.0 * _z * _x,
-  //                        1.0 - 2.0 * _y * _y - 2.0 * _x * _x);
-  //    roll    = mu->atan2(2.0 * _z * _w - 2.0 * _y * _x,
-  //                        1.0 - 2.0 * _z * _z - 2.0 * _x * _x);
-  //  }
-  //  else {
-  //    heading = mu->copySign(1.5707963267948966, test);
-  //    pitch   = mu->copySign(2.0, test) * mu->atan2(_z, _w);
-  //    roll    = 0.0;
-  //  }
-  //
-  //  return TaitBryanAngles::fromRadians(heading, pitch, roll);
+  const double sqrt = mu->sqrt(1.0 - _w * _w);
+  const double x = (sqrt > 0.0) ? _x / sqrt: 1.0;
+  const double y = (sqrt > 0.0) ? _y / sqrt: 0.0;
+  const double z = (sqrt > 0.0) ? _z / sqrt: 0.0;
+  axis.set(x, y, z);
 }

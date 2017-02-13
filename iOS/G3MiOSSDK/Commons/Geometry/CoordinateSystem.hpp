@@ -10,10 +10,12 @@
 #define __G3MiOSSDK__CoordinateSystem__
 
 #include "Vector3D.hpp"
-#include "TaitBryanAngles.hpp"
 
+class TaitBryanAngles;
 class Mesh;
 class Color;
+class Camera;
+
 
 class CoordinateSystem {
 private:
@@ -22,8 +24,8 @@ private:
   
 //  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
-public:
 
+public:
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
@@ -32,14 +34,13 @@ public:
 
   static CoordinateSystem global();
 
+  static CoordinateSystem fromCamera(const Camera& camera);
+
+  CoordinateSystem(const CoordinateSystem& that);
+
   CoordinateSystem(const Vector3D& x,
                    const Vector3D& y,
                    const Vector3D& z,
-                   const Vector3D& origin);
-
-  //For camera
-  CoordinateSystem(const Vector3D& viewDirection,
-                   const Vector3D& up,
                    const Vector3D& origin);
 
   Mesh* createMesh(double size,

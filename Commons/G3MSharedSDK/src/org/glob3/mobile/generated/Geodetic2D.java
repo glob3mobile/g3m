@@ -72,12 +72,12 @@ public class Geodetic2D
     final double radians = mu.atan2(y, x);
     return radians;
   
-  //  const double pi2 = PI*2;
-  //  return mu->mod(radians + pi2, pi2);
+    //  const double pi2 = PI*2;
+    //  return mu->mod(radians + pi2, pi2);
   
-  //  const double r1 = mu->mod(radians, pi2);
-  //  const double r2 = mu->mod(radians + pi2, pi2);
-  //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
+    //  const double r1 = mu->mod(radians, pi2);
+    //  const double r2 = mu->mod(radians + pi2, pi2);
+    //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
   }
 
   public static double bearingInDegrees(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)

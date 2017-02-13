@@ -17,8 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
+//class TaitBryanAngles;
 //class Mesh;
 //class Color;
+//class Camera;
+
 
 public class CoordinateSystem
 {
@@ -30,7 +33,7 @@ public class CoordinateSystem
       return false;
     }
     return true;
-  //  return areOrtogonal(x, y, z);
+    //  return areOrtogonal(x, y, z);
   }
 
 //  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
@@ -47,6 +50,23 @@ public class CoordinateSystem
     return new CoordinateSystem(Vector3D.UP_X, Vector3D.UP_Y, Vector3D.UP_Z, Vector3D.ZERO);
   }
 
+  public static CoordinateSystem fromCamera(Camera camera)
+  {
+    final Vector3D viewDirection = camera.getViewDirection();
+    final Vector3D up = camera.getUp();
+    final Vector3D origin = camera.getCartesianPosition();
+  
+    return new CoordinateSystem(viewDirection.cross(up).normalized(), viewDirection.normalized(), up.normalized(), origin);
+  }
+
+  public CoordinateSystem(CoordinateSystem that)
+  {
+     _x = new Vector3D(that._x);
+     _y = new Vector3D(that._y);
+     _z = new Vector3D(that._z);
+     _origin = new Vector3D(that._origin);
+  }
+
   public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
   {
      _x = new Vector3D(x.normalized());
@@ -54,21 +74,6 @@ public class CoordinateSystem
      _z = new Vector3D(z.normalized());
      _origin = new Vector3D(origin);
     if (!checkConsistency(x, y, z))
-    {
-      throw new RuntimeException("Inconsistent CoordinateSystem created.");
-    }
-  }
-
-  //For camera
-
-  //For camera
-  public CoordinateSystem(Vector3D viewDirection, Vector3D up, Vector3D origin)
-  {
-     _x = new Vector3D(viewDirection.cross(up).normalized());
-     _y = new Vector3D(viewDirection.normalized());
-     _z = new Vector3D(up.normalized());
-     _origin = new Vector3D(origin);
-    if (!checkConsistency(_x, _y, _z))
     {
       throw new RuntimeException("Inconsistent CoordinateSystem created.");
     }
@@ -94,7 +99,7 @@ public class CoordinateSystem
     colors.add(zColor);
     colors.add(zColor);
   
-    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), (float)5.0, (float)1.0, null, colors.create(), false, null);
+    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), 5.0f, 1.0f, null, colors.create(), false, null);
   
     if (fbb != null)
        fbb.dispose();
@@ -224,15 +229,12 @@ public class CoordinateSystem
 
   public final CoordinateSystem applyRotation(MutableMatrix44D m)
   {
-  
     return new CoordinateSystem(_x.transformedBy(m, 1.0), _y.transformedBy(m, 1.0), _z.transformedBy(m, 1.0), _origin); //.transformedBy(m, 1.0));
   }
 
   public final MutableMatrix44D getRotationMatrix()
   {
-  
-    return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0,0,0,1);
-  
+    return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0, 0, 0, 1);
   }
 
   public final void copyValueOfRotationMatrix(MutableMatrix44D m)

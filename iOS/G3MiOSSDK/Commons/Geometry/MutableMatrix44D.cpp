@@ -21,6 +21,10 @@
 #include "ILogger.hpp"
 
 
+MutableMatrix44D MutableMatrix44D::TEMP1;
+MutableMatrix44D MutableMatrix44D::TEMP2;
+
+
 MutableMatrix44D::MutableMatrix44D(const MutableMatrix44D &m):
 _isValid(m._isValid)
 {
@@ -209,6 +213,77 @@ void MutableMatrix44D::copyValueOfMultiplication(const MutableMatrix44D& m1, con
     _matrix44D = NULL;
   }
 }
+
+
+void MutableMatrix44D::multiplyInPlace(const MutableMatrix44D& that) {
+  if (that.isIdentity()) {
+    return;
+  }
+
+  const double that00 = that._m00;
+  const double that10 = that._m10;
+  const double that20 = that._m20;
+  const double that30 = that._m30;
+
+  const double that01 = that._m01;
+  const double that11 = that._m11;
+  const double that21 = that._m21;
+  const double that31 = that._m31;
+
+  const double that02 = that._m02;
+  const double that12 = that._m12;
+  const double that22 = that._m22;
+  const double that32 = that._m32;
+
+  const double that03 = that._m03;
+  const double that13 = that._m13;
+  const double that23 = that._m23;
+  const double that33 = that._m33;
+
+  //Rows of this X Columns of that
+  const double m00 = (_m00 * that00) + (_m01 * that10) + (_m02 * that20) + (_m03 * that30);
+  const double m01 = (_m00 * that01) + (_m01 * that11) + (_m02 * that21) + (_m03 * that31);
+  const double m02 = (_m00 * that02) + (_m01 * that12) + (_m02 * that22) + (_m03 * that32);
+  const double m03 = (_m00 * that03) + (_m01 * that13) + (_m02 * that23) + (_m03 * that33);
+
+  const double m10 = (_m10 * that00) + (_m11 * that10) + (_m12 * that20) + (_m13 * that30);
+  const double m11 = (_m10 * that01) + (_m11 * that11) + (_m12 * that21) + (_m13 * that31);
+  const double m12 = (_m10 * that02) + (_m11 * that12) + (_m12 * that22) + (_m13 * that32);
+  const double m13 = (_m10 * that03) + (_m11 * that13) + (_m12 * that23) + (_m13 * that33);
+
+  const double m20 = (_m20 * that00) + (_m21 * that10) + (_m22 * that20) + (_m23 * that30);
+  const double m21 = (_m20 * that01) + (_m21 * that11) + (_m22 * that21) + (_m23 * that31);
+  const double m22 = (_m20 * that02) + (_m21 * that12) + (_m22 * that22) + (_m23 * that32);
+  const double m23 = (_m20 * that03) + (_m21 * that13) + (_m22 * that23) + (_m23 * that33);
+
+  const double m30 = (_m30 * that00) + (_m31 * that10) + (_m32 * that20) + (_m33 * that30);
+  const double m31 = (_m30 * that01) + (_m31 * that11) + (_m32 * that21) + (_m33 * that31);
+  const double m32 = (_m30 * that02) + (_m31 * that12) + (_m32 * that22) + (_m33 * that32);
+  const double m33 = (_m30 * that03) + (_m31 * that13) + (_m32 * that23) + (_m33 * that33);
+
+  _m00  = m00;
+  _m01  = m01;
+  _m02  = m02;
+  _m03  = m03;
+
+  _m10  = m10;
+  _m11  = m11;
+  _m12  = m12;
+  _m13  = m13;
+
+  _m20  = m20;
+  _m21  = m21;
+  _m22  = m22;
+  _m23  = m23;
+
+  _m30  = m30;
+  _m31  = m31;
+  _m32  = m32;
+  _m33  = m33;
+
+  _matrix44D = NULL;
+}
+
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const {
 
@@ -480,6 +555,20 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                           0, 0, 0, 1);
 }
 
+void MutableMatrix44D::createRotationMatrix(const Angle& angle,
+                                            const Vector3D& axis,
+                                            MutableMatrix44D& result) {
+  const Vector3D a = axis.normalized();
+
+  const double c = COS(angle._radians);
+  const double s = SIN(angle._radians);
+
+  result.setValue(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0,
+                  a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0,
+                  a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0,
+                  0, 0, 0, 1);
+}
+
 MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,
                                                                const Vector3D& axis,
                                                                const Vector3D& point) {
@@ -540,8 +629,6 @@ MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& lat
   return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
 }
 
-
-
 void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
   //  if (isEquals(m)) {
   //    return;
@@ -584,9 +671,34 @@ void MutableMatrix44D::copyValue(const MutableMatrix44D &m) {
 }
 
 MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Geodetic2D& position) {
-  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude,
+                                                        position._longitude);
 }
 
 MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Geodetic3D& position) {
-  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude, position._longitude);
+  return MutableMatrix44D::createGeodeticRotationMatrix(position._latitude,
+                                                        position._longitude);
+}
+
+void MutableMatrix44D::createRawGeodeticRotationMatrix(const Geodetic2D& position,
+                                                       MutableMatrix44D& result) {
+  createRawGeodeticRotationMatrix(position._latitude,
+                                  position._longitude,
+                                  result);
+}
+
+void MutableMatrix44D::createRawGeodeticRotationMatrix(const Geodetic3D& position,
+                                                       MutableMatrix44D& result) {
+  createRawGeodeticRotationMatrix(position._latitude,
+                                  position._longitude,
+                                  result);
+}
+
+void MutableMatrix44D::createRawGeodeticRotationMatrix(const Angle& latitude,
+                                                       const Angle& longitude,
+                                                       MutableMatrix44D& result) {
+  createRotationMatrix(latitude,  Vector3D::DOWN_Y, TEMP1); // latitudeRotation
+  createRotationMatrix(longitude, Vector3D::UP_Z,   TEMP2); // longitudeRotation
+  
+  result.copyValueOfMultiplication(TEMP2, TEMP1);
 }

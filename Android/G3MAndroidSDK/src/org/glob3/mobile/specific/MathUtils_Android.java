@@ -380,4 +380,11 @@ public final class MathUtils_Android
    }
 
 
+   @Override
+   public double copySign(final double a,
+                          final double b) {
+      return Math.copySign(a, b);
+   }
+
+
 }
