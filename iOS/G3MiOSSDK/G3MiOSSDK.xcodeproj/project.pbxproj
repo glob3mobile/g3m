@@ -78,7 +78,6 @@
 		CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */; };
 		CF03D4ED1DDF682900766A7C /* InterpolatedDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF03D4EB1DDF682900766A7C /* InterpolatedDEMGrid.cpp */; };
 		CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */; };
-		CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */; };
 		CF0672351DB52C2400126E40 /* MapzenTerrariumParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66EB801DB5252900EFF718 /* MapzenTerrariumParser.hpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
@@ -158,6 +157,11 @@
 		CF3C992E17C274A500937BD3 /* NSString_CppAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3C992B17C270D800937BD3 /* NSString_CppAdditions.h */; };
 		CF3CCC6417B53A4100581468 /* GenericQuadTree.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */; };
 		CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */; };
+		CF3E266D1E5353B700A3FEC6 /* CameraEventGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E266B1E5353B700A3FEC6 /* CameraEventGesture.cpp */; };
+		CF3E26701E5353F300A3FEC6 /* CameraContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E266E1E5353F300A3FEC6 /* CameraContext.cpp */; };
+		CF3E26711E53599700A3FEC6 /* CameraEventGesture.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3E266C1E5353B700A3FEC6 /* CameraEventGesture.hpp */; };
+		CF3E26721E53599700A3FEC6 /* CameraContext.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3E266F1E5353F300A3FEC6 /* CameraContext.hpp */; };
+		CF3E26731E535A0400A3FEC6 /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */; };
 		CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */; };
 		CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */; };
 		CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D01770DD5C00D5A80C /* WebSocket_iOS.mm */; };
@@ -842,13 +846,15 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF3E26731E535A0400A3FEC6 /* MutableVector2F.hpp in CopyFiles */,
+				CF3E26711E53599700A3FEC6 /* CameraEventGesture.hpp in CopyFiles */,
+				CF3E26721E53599700A3FEC6 /* CameraContext.hpp in CopyFiles */,
 				CF6D96C21E51FE0600875823 /* DynamicFrustumPolicy.hpp in CopyFiles */,
 				CF6D96B91E51F40100875823 /* FrustumPolicy.hpp in CopyFiles */,
 				CF6D96BA1E51F40100875823 /* DecimatedDEMGrid.hpp in CopyFiles */,
 				CF6D96BB1E51F40100875823 /* InterpolatedDEMGrid.hpp in CopyFiles */,
 				CF6D96BC1E51F40100875823 /* MutableQuaternionF.hpp in CopyFiles */,
 				CF6D96BD1E51F40100875823 /* Quaternion.hpp in CopyFiles */,
-				CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */,
 				CF6D96BE1E51F40100875823 /* MutableAngle.hpp in CopyFiles */,
 				CF44A0741DDE18FF00E5B270 /* DecoratorDEMGrid.hpp in CopyFiles */,
 				CF44A0751DDE18FF00E5B270 /* SubsetDEMGrid.hpp in CopyFiles */,
@@ -1398,7 +1404,6 @@
 		CF03D4EB1DDF682900766A7C /* InterpolatedDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InterpolatedDEMGrid.cpp; path = Commons/DEM/InterpolatedDEMGrid.cpp; sourceTree = "<group>"; };
 		CF03D4EC1DDF682900766A7C /* InterpolatedDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InterpolatedDEMGrid.hpp; path = Commons/DEM/InterpolatedDEMGrid.hpp; sourceTree = "<group>"; };
 		CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2F.cpp; path = Commons/Geometry/MutableVector2F.cpp; sourceTree = "<group>"; };
-		CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2F.hpp; path = Commons/Geometry/MutableVector2F.hpp; sourceTree = "<group>"; };
 		CF0755941715B9120084CC14 /* GFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GFont.cpp; path = Commons/Basic/GFont.cpp; sourceTree = "<group>"; };
 		CF0755951715B9120084CC14 /* GFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GFont.hpp; path = Commons/Basic/GFont.hpp; sourceTree = "<group>"; };
 		CF07DD0B175D32CC00839F5D /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Color.cpp; path = Commons/Basic/Color.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1483,6 +1488,10 @@
 		CF3C992C17C2713300937BD3 /* NSString_CppAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NSString_CppAdditions.mm; path = Specific/NSString_CppAdditions.mm; sourceTree = "<group>"; };
 		CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeShape.cpp; path = Commons/Rendererers/CompositeShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeShape.hpp; path = Commons/Rendererers/CompositeShape.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF3E266B1E5353B700A3FEC6 /* CameraEventGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraEventGesture.cpp; path = Commons/Cameras/CameraEventGesture.cpp; sourceTree = "<group>"; };
+		CF3E266C1E5353B700A3FEC6 /* CameraEventGesture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraEventGesture.hpp; path = Commons/Cameras/CameraEventGesture.hpp; sourceTree = "<group>"; };
+		CF3E266E1E5353F300A3FEC6 /* CameraContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraContext.cpp; path = Commons/Cameras/CameraContext.cpp; sourceTree = "<group>"; };
+		CF3E266F1E5353F300A3FEC6 /* CameraContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraContext.hpp; path = Commons/Cameras/CameraContext.hpp; sourceTree = "<group>"; };
 		CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector4D.cpp; path = Commons/Geometry/Vector4D.cpp; sourceTree = "<group>"; };
 		CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
 		CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IWebSocketListener.hpp; path = Commons/Downloader/IWebSocketListener.hpp; sourceTree = "<group>"; };
@@ -2712,6 +2721,10 @@
 				D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */,
 				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
 				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
+				CF3E266B1E5353B700A3FEC6 /* CameraEventGesture.cpp */,
+				CF3E266C1E5353B700A3FEC6 /* CameraEventGesture.hpp */,
+				CF3E266E1E5353F300A3FEC6 /* CameraContext.cpp */,
+				CF3E266F1E5353F300A3FEC6 /* CameraContext.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -3385,6 +3398,7 @@
 				CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */,
 				CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */,
 				D874D08E18900B1600610F85 /* SingleBILElevationDataProvider.cpp in Sources */,
+				CF3E266D1E5353B700A3FEC6 /* CameraEventGesture.cpp in Sources */,
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */,
@@ -3658,6 +3672,7 @@
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */,
+				CF3E26701E5353F300A3FEC6 /* CameraContext.cpp in Sources */,
 				CF6FA7C91D7D761800A4320A /* Trail.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,

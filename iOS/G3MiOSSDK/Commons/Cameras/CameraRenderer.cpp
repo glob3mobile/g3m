@@ -7,33 +7,23 @@
 
 #include "CameraRenderer.hpp"
 
+
 #include "CameraEventHandler.hpp"
 #include "G3MRenderContext.hpp"
+#include "CameraContext.hpp"
 #include "TouchEvent.hpp"
 #include "Camera.hpp"
 #include "G3MEventContext.hpp"
-#include "ILogger.hpp"
 #include "RenderState.hpp"
+#include "ILogger.hpp"
 
 
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
-  const size_t handlersSize = _handlers.size();
-  for (size_t i = 0; i < handlersSize; i++) {
+  for (size_t i = 0; i < _handlersSize; i++) {
     CameraEventHandler* handler = _handlers[i];
     delete handler;
   }
-}
-
-void CameraRenderer::removeAllHandlers(bool deleteHandlers) {
-  if (deleteHandlers) {
-    const size_t handlersSize = _handlers.size();
-    for (size_t i = 0; i < handlersSize; i++) {
-      CameraEventHandler* handler = _handlers[i];
-      delete handler;
-    }
-  }
-  _handlers.clear();
 }
 
 void CameraRenderer::render(const G3MRenderContext* rc,
@@ -42,11 +32,9 @@ void CameraRenderer::render(const G3MRenderContext* rc,
     _cameraContext = new CameraContext(None, rc->getNextCamera());
   }
 
-  // render camera object
   //rc->getCurrentCamera()->render(rc, parentState);
 
-  const size_t handlersSize = _handlers.size();
-  for (size_t i = 0; i < handlersSize; i++) {
+  for (size_t i = 0; i < _handlersSize; i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
 }
@@ -61,8 +49,7 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
     }
 
     // pass the event to all the handlers
-    const size_t handlersSize = _handlers.size();
-    for (size_t i = 0; i < handlersSize; i++) {
+    for (size_t i = 0; i < _handlersSize; i++) {
       if (_handlers[i]->onTouchEvent(ec, touchEvent, _cameraContext)) {
         return true;
       }
@@ -73,30 +60,78 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
   return false;
 }
 
-void CameraRenderer::removeHandler(CameraEventHandler* handler) {
+RenderState CameraRenderer::getRenderState(const G3MRenderContext* rc) {
+  //  return RenderState::ready();
+  _errors.clear();
+  bool busyFlag  = false;
+  bool errorFlag = false;
 
+  for (int i = 0; i < _handlersSize; i++) {
+    CameraEventHandler* handler = _handlers[i];
+    const RenderState handlerRenderState = handler->getRenderState(rc);
+
+    const RenderState_Type childRenderStateType = handlerRenderState._type;
+
+    if (childRenderStateType == RENDER_ERROR) {
+      errorFlag = true;
+
+      const std::vector<std::string> handlerErrors = handlerRenderState.getErrors();
 #ifdef C_CODE
-  size_t size = _handlers.size();
-  for (size_t i = 0; i < size; i++) {
+      _errors.insert(_errors.end(),
+                     handlerErrors.begin(),
+                     handlerErrors.end());
+#endif
+#ifdef JAVA_CODE
+      _errors.addAll(handlerErrors);
+#endif
+    }
+    else if (childRenderStateType == RENDER_BUSY) {
+      busyFlag = true;
+    }
+  }
+
+  if (errorFlag) {
+    return RenderState::error(_errors);
+  }
+  else if (busyFlag) {
+    return RenderState::busy();
+  }
+  else {
+    return RenderState::ready();
+  }
+}
+
+void CameraRenderer::addHandler(CameraEventHandler* handler) {
+  _handlers.push_back(handler);
+  _handlersSize = _handlers.size();
+}
+
+void CameraRenderer::removeHandler(CameraEventHandler* handler) {
+#ifdef C_CODE
+  for (size_t i = 0; i < _handlersSize; i++) {
     if (_handlers[i] == handler) {
       _handlers.erase(_handlers.begin() + i);
+      _handlersSize = _handlers.size();
       return;
     }
   }
 #endif
 #ifdef JAVA_CODE
   if ( _handlers.remove(handler) ) {
+    _handlersSize = _handlers.size();
     return;
   }
 #endif
-
   ILogger::instance()->logError("Could not remove camera handler.");
 }
 
-void CameraRenderer::addHandler(CameraEventHandler* handler) {
-  _handlers.push_back(handler);
-}
-
-RenderState CameraRenderer::getRenderState(const G3MRenderContext* rc) {
-  return RenderState::ready();
+void CameraRenderer::removeAllHandlers(bool deleteHandlers) {
+  if (deleteHandlers) {
+    for (size_t i = 0; i < _handlersSize; i++) {
+      CameraEventHandler* handler = _handlers[i];
+      delete handler;
+    }
+  }
+  _handlers.clear();
+  _handlersSize = 0;
 }

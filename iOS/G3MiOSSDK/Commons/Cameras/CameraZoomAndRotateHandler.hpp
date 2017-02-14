@@ -15,6 +15,8 @@
 #include "MutableVector3D.hpp"
 #include "MutableVector2F.hpp"
 
+class Camera;
+
 
 class CameraZoomAndRotateHandler: public CameraEventHandler {
 private:
@@ -37,8 +39,8 @@ private:
 
 
 public:
-  CameraZoomAndRotateHandler()
-  {}
+  CameraZoomAndRotateHandler() {
+  }
 
   ~CameraZoomAndRotateHandler() {
 #ifdef JAVA_CODE
@@ -46,6 +48,7 @@ public:
 #endif
   }
 
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,

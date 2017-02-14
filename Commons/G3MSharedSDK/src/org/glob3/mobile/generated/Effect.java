@@ -20,8 +20,8 @@ public abstract class Effect
 
   protected static double sigmoid(double x)
   {
-    x = 12.0 *x - 6.0;
-    return (1.0 / (1.0 + IMathUtils.instance().exp(-1.0 * x)));
+    final double xx = 12.0 *x - 6.0;
+    return (1.0 / (1.0 + IMathUtils.instance().exp(-1.0 * xx)));
   }
 
   protected static double gently(double x, double lower, double upper)

@@ -15,7 +15,12 @@
 #include "ILogger.hpp"
 #include "Planet.hpp"
 #include "ErrorHandling.hpp"
+#include "RenderState.hpp"
 
+
+RenderState DeviceAttitudeCameraHandler::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
 
 DeviceAttitudeCameraHandler::DeviceAttitudeCameraHandler(bool updateLocation,
                                                          ILocationModifier* locationModifier):
@@ -41,7 +46,6 @@ void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Ge
                                     nextCamera->getViewDirection().description().c_str());
   }
 }
-
 
 void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc,
                                          CameraContext *cameraContext) {
@@ -103,5 +107,5 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc,
   //Applying to Camera CS
   CoordinateSystem finalCS = camCS.applyRotation(_camRM);
   nextCamera->setCameraCoordinateSystem(finalCS);
-
+  
 }

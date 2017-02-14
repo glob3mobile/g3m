@@ -42,6 +42,11 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     _locationModifier = null;
   }
 
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
+  }
+
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   

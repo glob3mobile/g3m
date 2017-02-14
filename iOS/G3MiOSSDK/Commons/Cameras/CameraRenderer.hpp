@@ -8,74 +8,36 @@
 #ifndef G3MiOSSDK_CameraRenderer
 #define G3MiOSSDK_CameraRenderer
 
-#include <vector>
-
 #include "ProtoRenderer.hpp"
 
-class RenderState;
+#include <vector>
+
 class CameraEventHandler;
-class Camera;
-class Vector3D;
+class CameraContext;
 class TouchEvent;
-
-
-enum Gesture {
-  None,
-  Drag,
-  Zoom,
-  Rotate,
-  DoubleDrag
-};
-
-
-class CameraContext {
-private:
-  Gesture _currentGesture;
-  Camera* _nextCamera;
-
-public:
-  CameraContext(Gesture gesture,
-                Camera* nextCamera):
-  _currentGesture(gesture),
-  _nextCamera(nextCamera)
-  {
-  }
-
-  ~CameraContext() {
-  }
-
-  const Gesture getCurrentGesture() const {
-    return _currentGesture;
-  }
-
-  void setCurrentGesture(const Gesture& gesture) {
-    _currentGesture = gesture;
-  }
-
-  Camera* getNextCamera() {
-    return _nextCamera;
-  }
-};
+class RenderState;
 
 
 class CameraRenderer: public ProtoRenderer {
 private:
   bool _processTouchEvents;
+
   std::vector<CameraEventHandler*> _handlers;
+  size_t                           _handlersSize;
+
+  std::vector<std::string> _errors;
+
   CameraContext *_cameraContext;
 
 public:
   CameraRenderer() :
   _cameraContext(NULL),
-  _processTouchEvents(true)
+  _processTouchEvents(true),
+  _handlersSize(0)
   {
   }
 
   ~CameraRenderer();
-
-  void removeAllHandlers(bool deleteHandlers);
-
-  void addHandler(CameraEventHandler* handler);
 
   void setProcessTouchEvents(bool processTouchEvents) {
     _processTouchEvents = processTouchEvents;
@@ -117,9 +79,13 @@ public:
   void onDestroy(const G3MContext* context) {
 
   }
+
+  void removeAllHandlers(bool deleteHandlers);
+
+  void addHandler(CameraEventHandler* handler);
   
   void removeHandler(CameraEventHandler* handler);
-
+  
 };
 
 #endif

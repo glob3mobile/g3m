@@ -12,7 +12,7 @@
 #include <G3MiOSSDK/Camera.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-//#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/CameraRenderer.hpp>
 //#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 
 #include "G3MDemoModel.hpp"

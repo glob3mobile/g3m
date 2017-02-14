@@ -40,6 +40,7 @@
 #include "InitialCameraPositionProvider.hpp"
 #include "AtmosphereRenderer.hpp"
 #include "DynamicFrustumPolicy.hpp"
+#include "CameraRenderer.hpp"
 
 
 IG3MBuilder::IG3MBuilder() :

@@ -18,8 +18,8 @@
 
 
 double Effect::sigmoid(double x) {
-  x = 12.0*x - 6.0;
-  return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * x)));
+  const double xx = 12.0*x - 6.0;
+  return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * xx)));
 }
 
 EffectWithDuration::EffectWithDuration(const TimeInterval& duration,

@@ -14,7 +14,13 @@
 #include "Planet.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
+#include "CameraContext.hpp"
+#include "RenderState.hpp"
 
+
+RenderState CameraSingleDragHandler::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
 
 CameraSingleDragHandler::CameraSingleDragHandler(bool useInertia) :
 _useInertia(useInertia)

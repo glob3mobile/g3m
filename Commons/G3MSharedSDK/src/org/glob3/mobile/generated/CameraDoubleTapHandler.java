@@ -26,6 +26,11 @@ public class CameraDoubleTapHandler extends CameraEventHandler
     super.dispose();
   }
 
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
+  }
+
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     // only one finger needed

@@ -42,6 +42,11 @@ public class CameraRotationHandler extends CameraEventHandler
     super.dispose();
   }
 
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
+  }
+
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     if (touchEvent.getTouchCount() != 3)
@@ -95,7 +100,7 @@ public class CameraRotationHandler extends CameraEventHandler
   {
     final Camera camera = cameraContext.getNextCamera();
     camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
-    cameraContext.setCurrentGesture(Gesture.Rotate);
+    cameraContext.setCurrentGesture(CameraEventGesture.Rotate);
   
     // middle pixel in 2D
     Vector2F pixel0 = touchEvent.getTouch(0).getPos();
@@ -111,7 +116,7 @@ public class CameraRotationHandler extends CameraEventHandler
     if (_pivotPoint.isNan())
     {
       ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");
-      cameraContext.setCurrentGesture(Gesture.None);
+      cameraContext.setCurrentGesture(CameraEventGesture.None);
     }
   
     //printf ("down 3 fingers\n");
@@ -122,7 +127,7 @@ public class CameraRotationHandler extends CameraEventHandler
     final IMathUtils mu = IMathUtils.instance();
   
     //_currentGesture = getGesture(touchEvent);
-    if (cameraContext.getCurrentGesture() != Gesture.Rotate)
+    if (cameraContext.getCurrentGesture() != CameraEventGesture.Rotate)
        return;
   
     // current middle pixel in 2D
@@ -170,7 +175,7 @@ public class CameraRotationHandler extends CameraEventHandler
 
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    cameraContext.setCurrentGesture(Gesture.None);
+    cameraContext.setCurrentGesture(CameraEventGesture.None);
     _pivotPixel = MutableVector2F.zero();
   }
 

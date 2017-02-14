@@ -51,7 +51,7 @@ protected:
   static double gently(const double x,
                        const double lower,
                        const double upper) {
-    const double uperSquared = upper * upper;
+    const double uperSquared  = upper * upper;
     const double lowerPerUper = lower * upper;
     const double tmp = uperSquared - lowerPerUper + lower - 1;
 
