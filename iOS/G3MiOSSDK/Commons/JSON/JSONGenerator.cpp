@@ -17,11 +17,11 @@
 #include "JSONInteger.hpp"
 #include "JSONLong.hpp"
 
-std::string JSONGenerator::generate(const JSONBaseObject* value) {
+const std::string JSONGenerator::generate(const JSONBaseObject* value) {
   JSONGenerator* generator = new JSONGenerator();
   value->acceptVisitor(generator);
 
-  std::string result = generator->getString();
+  const std::string result = generator->getString();
 
   delete generator;
   return result;
@@ -39,7 +39,7 @@ JSONGenerator::~JSONGenerator() {
 #endif
 }
 
-std::string JSONGenerator::getString() {
+const std::string JSONGenerator::getString() {
   return _isb->getString();
 }
 
@@ -101,7 +101,7 @@ void JSONGenerator::visitArrayInBetweenChildren(const JSONArray* value) {
 }
 
 void JSONGenerator::visitArrayBeforeChild(const JSONArray* value,
-                                          int i) {
+                                          size_t i) {
 
 }
 

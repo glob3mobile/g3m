@@ -15,8 +15,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class IndexedDBStorage_WebGL
-         extends
-            IStorage {
+   extends
+      IStorage {
 
    private JavaScriptObject _db;
 
@@ -123,6 +123,11 @@ public final class IndexedDBStorage_WebGL
                          final IImage image,
                          final TimeInterval timeToExpires,
                          final boolean saveInBackground) {
+   }
+
+
+   @Override
+   public void merge(final String databasePath) {
    }
 
 

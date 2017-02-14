@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class ICanvasUtils
 {
   public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding)
@@ -37,9 +37,10 @@ public class ICanvasUtils
     final int stringsSize = strings.size();
   
     int fontSize = maxFontSize;
-    boolean allFit = true;
+    boolean allFit = false;
     while (!allFit && (fontSize > minFontSize))
     {
+      allFit = true;
       canvas.setFont(GFont.sansSerif(fontSize));
       for (int i = 0; i < stringsSize; i++)
       {
@@ -48,11 +49,11 @@ public class ICanvasUtils
         {
           allFit = false;
           fontSize--;
-          continue;
         }
       }
     }
-    canvas.setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+  //  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+    canvas.setShadow(shadowColor, 1.0f, 0.0f, 0.0f);
   
     ColumnCanvasElement column = new ColumnCanvasElement(backgroundColor, 0, padding, cornerRadius, textAlign); // margin
     final GFont labelFont = GFont.sansSerif(fontSize);

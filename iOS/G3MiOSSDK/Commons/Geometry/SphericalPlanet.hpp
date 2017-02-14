@@ -3,20 +3,19 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_SphericalPlanet
 #define G3MiOSSDK_SphericalPlanet
 
-#include "MutableVector3D.hpp"
-#include "Geodetic3D.hpp"
 #include "Planet.hpp"
 
+#include <list>
 #include "Sphere.hpp"
-#include "Sector.hpp"
+#include "MutableVector3D.hpp"
 
-class SphericalPlanet: public Planet {
+
+class SphericalPlanet : public Planet {
 private:
 #ifdef C_CODE
   const Sphere _sphere;
@@ -38,17 +37,17 @@ private:
   mutable double          _angleBetweenInitialRays;
   mutable double          _angleBetweenInitialPoints;
   mutable bool            _validSingleDrag;
-  
+
 
 public:
+  static const Planet* createEarth();
 
   SphericalPlanet(const Sphere& sphere);
 
   ~SphericalPlanet() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
 
   Vector3D getRadii() const {
@@ -66,18 +65,17 @@ public:
   Vector3D geodeticSurfaceNormal(const MutableVector3D& position) const {
     return position.normalized().asVector3D();
   }
-  
 
   Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                  const Angle& longitude) const;
-  
-  Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
-  }
 
-  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-    return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
-  }
+  Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const;
+
+  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const;
+
+  void geodeticSurfaceNormal(const Angle& latitude,
+                             const Angle& longitude,
+                             MutableVector3D& result) const;
 
   std::vector<double> intersectionsDistances(double originX,
                                              double originY,
@@ -90,24 +88,25 @@ public:
                        const Angle& longitude,
                        const double height) const;
 
-  Vector3D toCartesian(const Geodetic3D& geodetic) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       geodetic._height);
-  }
+  Vector3D toCartesian(const Geodetic3D& geodetic) const;
 
-  Vector3D toCartesian(const Geodetic2D& geodetic) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       0.0);
-  }
+  Vector3D toCartesian(const Geodetic2D& geodetic) const;
 
   Vector3D toCartesian(const Geodetic2D& geodetic,
-                       const double height) const {
-    return toCartesian(geodetic._latitude,
-                       geodetic._longitude,
-                       height);
-  }
+                       const double height) const;
+
+  void toCartesian(const Angle& latitude,
+                   const Angle& longitude,
+                   const double height,
+                   MutableVector3D& result) const;
+
+  void toCartesian(const Geodetic3D& geodetic,
+                   MutableVector3D& result) const;
+  void toCartesian(const Geodetic2D& geodetic,
+                   MutableVector3D& result) const;
+  void toCartesian(const Geodetic2D& geodetic,
+                   const double height,
+                   MutableVector3D& result) const;
 
   Geodetic2D toGeodetic2D(const Vector3D& position) const;
 
@@ -132,21 +131,23 @@ public:
 
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
 
-  MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
-  
+  MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
+                                                 const Angle& longitude,
+                                                 const double height) const;
+
   bool isFlat() const { return false; }
 
   void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
-  
+
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
-  
+
   Effect* createEffectFromLastSingleDrag() const;
-  
+
   void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
-                               const Vector3D& initialRay0,
-                               const Vector3D& initialRay1) const;
-  
+                       const Vector3D& initialRay0,
+                       const Vector3D& initialRay1) const;
+
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1) const;
 
@@ -155,29 +156,22 @@ public:
                                 const Vector3D& tapRay) const;
 
   double distanceToHorizon(const Vector3D& position) const;
-  
+
   MutableMatrix44D drag(const Geodetic3D& origin, const Geodetic3D& destination) const;
-  
+
   Vector3D getNorth() const {
-    return Vector3D::upZ();
+    return Vector3D::UP_Z;
   }
 
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
-    const Vector3D asw = toCartesian(rendereSector.getSW());
-    const Vector3D ane = toCartesian(rendereSector.getNE());
-    const double height = asw.sub(ane).length() * 1.9;
-
-    return Geodetic3D(rendereSector._center,
-                      height);
-  }
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const;
 
   const std::string getType() const {
     return "Spherical";
   }
-
+  
 };
 
 #endif

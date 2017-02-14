@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 5/17/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MTiledVectorDemoScene.hpp"
@@ -24,6 +23,7 @@
 #include <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #include <G3MiOSSDK/TiledVectorLayer.hpp>
 #include <G3MiOSSDK/LevelTileCondition.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
 
 
 class SampleRasterSymbolizer : public GEORasterSymbolizer {
@@ -117,9 +117,9 @@ public:
     const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry, baseColor);
 
     const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
-    const int polygonsDataSize = polygonsData->size();
+    const size_t polygonsDataSize = polygonsData->size();
 
-    for (int i = 0; i < polygonsDataSize; i++) {
+    for (size_t i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = polygonsData->at(i);
       symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
                                                      lineStyle,
@@ -185,7 +185,6 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
 
@@ -195,7 +194,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
 
   model->getLayerSet()->addLayer(rasterLayer);
 
-  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+  const std::string urlTemplate = "http://aerog3m.cloudapp.net/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
 
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);

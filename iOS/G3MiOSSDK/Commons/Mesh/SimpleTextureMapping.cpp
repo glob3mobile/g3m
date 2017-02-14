@@ -9,27 +9,27 @@
 #include "SimpleTextureMapping.hpp"
 
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
 #include "GLState.hpp"
 #include "TextureIDReference.hpp"
 
-const IGLTextureId* SimpleTextureMapping::getGLTextureId() const {
-  return _glTextureId->getID();
+const IGLTextureID* SimpleTextureMapping::getGLTextureID() const {
+  return _glTextureID->getID();
 }
 
-void SimpleTextureMapping::releaseGLTextureId() {
+void SimpleTextureMapping::releaseGLTextureID() {
 
-  if (_glTextureId != NULL) {
+  if (_glTextureID != NULL) {
 #ifdef C_CODE
-    delete _glTextureId;
+    delete _glTextureID;
 #endif
 #ifdef JAVA_CODE
-    _glTextureId.dispose();
+    _glTextureID.dispose();
 #endif
-    _glTextureId = NULL;
+    _glTextureID = NULL;
   }
   else {
     ILogger::instance()->logError("Releasing invalid simple texture mapping");
@@ -41,7 +41,7 @@ SimpleTextureMapping::~SimpleTextureMapping() {
     delete _texCoords;
   }
 
-  releaseGLTextureId();
+  releaseGLTextureID();
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -54,7 +54,7 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const {
   }
   else {
     TextureGLFeature* tglf = (TextureGLFeature*) state.getGLFeature(GLF_TEXTURE);
-    if (tglf != NULL && tglf->getTextureID() == _glTextureId->getID()) {
+    if (tglf != NULL && tglf->getTextureID() == _glTextureID->getID()) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
@@ -66,14 +66,14 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const {
           (_translationU != 0) ||
           (_translationV != 0) ||
           (_rotationInRadians != 0)) {
-        state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
+        state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                                 _texCoords,
                                                 2,
                                                 0,
                                                 false,
                                                 0,
                                                 _transparent,
-                                                GLBlendFactor::srcAlpha(),
+                                                _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                                 GLBlendFactor::oneMinusSrcAlpha(),
                                                 _translationU,
                                                 _translationV,
@@ -85,15 +85,16 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const {
                            false);
       }
       else {
-        state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
+        state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                                 _texCoords,
                                                 2,
                                                 0,
                                                 false,
                                                 0,
                                                 _transparent,
-                                                GLBlendFactor::srcAlpha(),
-                                                GLBlendFactor::oneMinusSrcAlpha()),
+                                                _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                                GLBlendFactor::oneMinusSrcAlpha()
+                                                ),
                            false);
       }
     }

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SubviewElevationData.cpp
 //  G3MiOSSDK
@@ -51,11 +51,6 @@ public class SubviewElevationData extends ElevationData
   {
   
     final int index = ((_height-1-y) * _width) + x;
-  
-  //  if ( (index < 0) || (index >= _buffer->size()) ) {
-  //    printf("break point on me\n");
-  //    return IMathUtils::instance()->NanD();
-  //  }
   
     return _buffer[index];
   }

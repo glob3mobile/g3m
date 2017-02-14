@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class CameraRenderer implements ProtoRenderer
 {
   private boolean _processTouchEvents;
@@ -24,6 +24,21 @@ public class CameraRenderer implements ProtoRenderer
     }
   }
 
+  public final void removeAllHandlers(boolean deleteHandlers)
+  {
+    if (deleteHandlers)
+    {
+      final int handlersSize = _handlers.size();
+      for (int i = 0; i < handlersSize; i++)
+      {
+        CameraEventHandler handler = _handlers.get(i);
+        if (handler != null)
+           handler.dispose();
+      }
+    }
+    _handlers.clear();
+  }
+
   public final void addHandler(CameraEventHandler handler)
   {
     _handlers.add(handler);
@@ -36,15 +51,13 @@ public class CameraRenderer implements ProtoRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-  
-    // create the CameraContext
     if (_cameraContext == null)
     {
       _cameraContext = new CameraContext(Gesture.None, rc.getNextCamera());
     }
   
     // render camera object
-  //  rc->getCurrentCamera()->render(rc, parentState);
+    //rc->getCurrentCamera()->render(rc, parentState);
   
     final int handlersSize = _handlers.size();
     for (int i = 0; i < handlersSize; i++)
@@ -118,4 +131,15 @@ public class CameraRenderer implements ProtoRenderer
   {
 
   }
+
+  public final void removeHandler(CameraEventHandler handler)
+  {
+  
+    if ( _handlers.remove(handler) ) {
+      return;
+    }
+  
+    ILogger.instance().logError("Could not remove camera handler.");
+  }
+
 }

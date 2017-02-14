@@ -7,6 +7,7 @@ import org.glob3.mobile.generated.BSONParser;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.EllipsoidalPlanet;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
@@ -26,10 +27,9 @@ import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Quality;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -42,12 +42,12 @@ import android.widget.RelativeLayout;
 
 
 public class PointCloudActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private final class PointsCloudParser
-            extends
-               GAsyncTask {
+      extends
+         GAsyncTask {
 
       private final IByteBuffer _buffer;
       private DirectMesh        _mesh;
@@ -106,7 +106,6 @@ public class PointCloudActivity
                   pointSize, //
                   flatColor, //
                   colors.create(), //
-                  1, //
                   false);
       }
 
@@ -121,8 +120,8 @@ public class PointCloudActivity
    }
 
    private final class PointsCloudDownloader
-            extends
-               IBufferDownloadListener {
+      extends
+         IBufferDownloadListener {
 
       private final IThreadUtils _threadUtils;
 
@@ -185,7 +184,7 @@ public class PointCloudActivity
                      UPPER LEFT Y=46.3566926359
                      LOWER RIGHT X=7.1737468920
                      LOWER RIGHT Y=46.3427207284
-      */
+       */
 
       //      final Geodetic2D lower = new Geodetic2D( //
       //               Angle.fromDegrees(46.3427207284), //
@@ -232,7 +231,7 @@ public class PointCloudActivity
 
       _builder = new G3MBuilder_Android(this);
       //      _builder.setPlanet(Planet.createSphericalEarth());
-      _builder.setPlanet(Planet.createEarth());
+      _builder.setPlanet(EllipsoidalPlanet.createEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 
@@ -245,12 +244,12 @@ public class PointCloudActivity
 
       //      NUM COLUMNS=1784
       //               NUM ROWS=1236
-      final ElevationDataProvider dem = new SingleBilElevationDataProvider(new URL("file:///matterhorn_300.bil", false),
+      final ElevationDataProvider dem = new SingleBILElevationDataProvider(new URL("file:///matterhorn_300.bil", false),
                demSector, new Vector2I(1784, 1236), -2160);
       _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
       _builder.getPlanetRendererBuilder().setQuality(Quality.QUALITY_HIGH);
 
-      //      
+      //
       //      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
       //               Sector.fullSphere(), new Vector2I(2048, 1024), -1700);
       //      _builder.getPlanetRendererBuilder().setElevationDataProvider(dem);

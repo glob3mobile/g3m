@@ -26,11 +26,11 @@ private:
 public:
 
   SGTranslateNode(const std::string& id,
-                  const std::string& sId,
+                  const std::string& sID,
                   double x,
                   double y,
                   double z) :
-  SGNode(id, sId),
+  SGNode(id, sID),
   _x(x),
   _y(y),
   _z(z),
@@ -46,7 +46,7 @@ public:
     return _glState;
   }
 
-  std::string description() {
+  const std::string description() {
     return "SGTranslateNode";
   }
 

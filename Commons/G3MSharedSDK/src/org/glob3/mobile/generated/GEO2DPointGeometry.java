@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GEO2DPointGeometry.cpp
 //  G3MiOSSDK
@@ -51,6 +51,11 @@ public class GEO2DPointGeometry extends GEOGeometry2D
   public final GEO2DPointGeometry deepCopy()
   {
     return new GEO2DPointGeometry(_position);
+  }
+
+  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  {
+    return vectorSet.createFeatureMark(node, this);
   }
 
 }

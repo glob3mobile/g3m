@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SGMaterialNode.cpp
 //  G3MiOSSDK
@@ -31,13 +31,13 @@ public class SGMaterialNode extends SGNode
   private GLState _glState;
 
 
-  public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
+  public SGMaterialNode(String id, String sID, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
 //  _specular(specular),
 //  _shine(shine),
 //  _alpha(alpha),
 //  _emit(emit)
   {
-     super(id, sId);
+     super(id, sID);
      _baseColor = baseColor;
      _specularColor = specularColor;
      _glState = new GLState();

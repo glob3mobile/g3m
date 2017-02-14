@@ -12,9 +12,12 @@
 #include "Image_iOS.hpp"
 #include "IImageListener.hpp"
 #include "GFont.hpp"
+#include "IDeviceInfo.hpp"
+#include "Image_iOS.hpp"
+#include "IFactory.hpp"
+#include "ILogger.hpp"
 
 #import <UIKit/UIKit.h>
-#include "Image_iOS.hpp"
 
 #import "NSString_CppAdditions.h"
 
@@ -45,20 +48,34 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
+  CGFloat devicePixelRatio = _retina ? IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() : 1;
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   width,
-                                   height,
+                                   (size_t) (width  * devicePixelRatio),
+                                   (size_t) (height * devicePixelRatio),
                                    8,          // bits per component
-                                   width * 4,  // bitmap bytes per row: 4 bytes per pixel
+                                   0,          // bytes per row
                                    colorSpace,
-                                   kCGImageAlphaPremultipliedLast);
-
-  CGColorSpaceRelease( colorSpace );
+                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
   if (_context == NULL) {
     ILogger::instance()->logError("Can't create CGContext");
+    CGColorSpaceRelease( colorSpace );
     return;
   }
+
+  if (devicePixelRatio != 1) {
+    CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
+  }
+
+  CGColorSpaceRelease( colorSpace );
+
+  CGContextSetAllowsAntialiasing(_context, YES);
+  CGContextSetShouldAntialias(_context, YES);
+  CGContextSetAllowsFontSmoothing(_context, YES);
+  CGContextSetShouldSmoothFonts(_context, YES);
+  CGContextSetInterpolationQuality(_context, kCGInterpolationHigh);
+  CGContextSetShouldSubpixelPositionFonts(_context, NO);
+  CGContextSetShouldSubpixelQuantizeFonts(_context, NO);
 
   tryToSetCurrentFontToContext();
 }
@@ -161,11 +178,8 @@ void Canvas_iOS::_removeShadow() {
 
 void Canvas_iOS::_clearRect(float left, float top,
                             float width, float height) {
-  
-  
-  
   CGContextClearRect(_context, CGRectMake(left, _canvasHeight - top,
-                                                               width, -height));
+                                          width, -height));
 }
 
 void Canvas_iOS::_createImage(IImageListener* listener,
@@ -203,20 +217,20 @@ void Canvas_iOS::drawRoundedRectangle(float left, float top,
   CGRect rrect = CGRectMake(left, _canvasHeight - top,
                             width, -height);
 
-	const CGFloat minx = CGRectGetMinX(rrect);
+  const CGFloat minx = CGRectGetMinX(rrect);
   const CGFloat midx = CGRectGetMidX(rrect);
   const CGFloat maxx = CGRectGetMaxX(rrect);
-	const CGFloat miny = CGRectGetMinY(rrect);
+  const CGFloat miny = CGRectGetMinY(rrect);
   const CGFloat midy = CGRectGetMidY(rrect);
   const CGFloat maxy = CGRectGetMaxY(rrect);
 
-	CGContextMoveToPoint(_context, minx, midy);
-	CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
-	CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
-	CGContextAddArcToPoint(_context, maxx, maxy, midx, maxy, radius);
-	CGContextAddArcToPoint(_context, minx, maxy, minx, midy, radius);
-	CGContextClosePath(_context);
-	CGContextDrawPath(_context, mode);
+  CGContextMoveToPoint(_context, minx, midy);
+  CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
+  CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
+  CGContextAddArcToPoint(_context, maxx, maxy, midx, maxy, radius);
+  CGContextAddArcToPoint(_context, minx, maxy, minx, midy, radius);
+  CGContextClosePath(_context);
+  CGContextDrawPath(_context, mode);
 }
 
 void Canvas_iOS::_fillRoundedRectangle(float left, float top,
@@ -331,7 +345,8 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
 
   CGSize cgSize = [nsString sizeWithFont: _currentUIFont];
 
-  return Vector2F(cgSize.width, cgSize.height);
+  return Vector2F((float) cgSize.width,
+                  (float) cgSize.height);
 }
 
 void Canvas_iOS::_fillText(const std::string& text,
@@ -357,10 +372,10 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                destTop,
+                                _canvasHeight - (destTop + image->getHeight()),
                                 image->getWidth(),
                                 image->getHeight()),
                      cgImage);
@@ -371,16 +386,16 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float transparency) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-  
+
   CGContextSetAlpha(_context, transparency);
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                destTop,
+                                _canvasHeight - (destTop + image->getHeight()),
                                 image->getWidth(),
                                 image->getHeight()),
                      cgImage);
-  
+
   CGContextSetAlpha(_context, 1.0);
 }
 
@@ -391,7 +406,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                destTop,
+                                _canvasHeight - (destTop + destHeight),
                                 destWidth,
                                 destHeight),
                      cgImage);
@@ -400,20 +415,20 @@ void Canvas_iOS::_drawImage(const IImage* image,
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight,
                             float transparency) {
-  
+
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
   CGContextSetAlpha(_context, transparency);
 
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
-                                destTop,
+                                _canvasHeight - (destTop + destHeight),
                                 destWidth,
                                 destHeight),
                      cgImage);
-  
+
   CGContextSetAlpha(_context, 1.0);
 }
 
@@ -424,14 +439,13 @@ void Canvas_iOS::_drawImage(const IImage* image,
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
-                               //destTop,
-                               _canvasHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - (destTop + destHeight),
                                destWidth,
                                destHeight);
 
-  if ((srcLeft == 0) &&
-      (srcTop == 0) &&
-      (srcWidth == image->getWidth()) &&
+  if ((srcLeft   == 0) &&
+      (srcTop    == 0) &&
+      (srcWidth  == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
     CGContextDrawImage(_context,
                        destRect,
@@ -440,7 +454,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
   else {
     // Cropping image
     CGRect cropRect = CGRectMake(srcLeft,
-                                // _canvasHeight - (srcTop + srcHeight), // Bottom
                                  srcTop,
                                  srcWidth,
                                  srcHeight);
@@ -463,14 +476,13 @@ void Canvas_iOS::_drawImage(const IImage* image,
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
-                               //destTop,
-                               _canvasHeight - (destTop + destHeight), // Bottom
+                               _canvasHeight - (destTop + destHeight),
                                destWidth,
                                destHeight);
 
-  if ((srcLeft == 0) &&
-      (srcTop == 0) &&
-      (srcWidth == image->getWidth()) &&
+  if ((srcLeft   == 0) &&
+      (srcTop    == 0) &&
+      (srcWidth  == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
 
     CGContextSetAlpha(_context, transparency);
@@ -495,12 +507,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
     CGContextDrawImage(_context,
                        destRect,
                        cgCropImage);
-
-    //      printf("Cropping image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(), srcLeft, srcTop, srcWidth, srcHeight);
-    //      printf("Painting image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(),
-    //             destLeft, _canvasHeight - (destTop + destHeight),
-    //             destWidth,
-    //             destHeight);
 
     CGContextSetAlpha(_context, 1.0);
 
@@ -553,4 +559,25 @@ void Canvas_iOS::_moveTo(float x, float y) {
 
 void Canvas_iOS::_lineTo(float x, float y) {
   CGPathAddLineToPoint(_path, &_transform, x, y);
+}
+
+
+void Canvas_iOS::_fillEllipse(float left, float top,
+                              float width, float height) {
+  CGContextFillEllipseInRect(_context,
+                             CGRectMake(left, _canvasHeight - top,
+                                        width, -height));
+}
+
+void Canvas_iOS::_strokeEllipse(float left, float top,
+                                float width, float height) {
+  CGContextStrokeEllipseInRect(_context,
+                               CGRectMake(left, _canvasHeight - top,
+                                          width, -height));
+}
+
+void Canvas_iOS::_fillAndStrokeEllipse(float left, float top,
+                                       float width, float height) {
+  _fillEllipse(left, top, width, height);
+  _strokeEllipse(left, top, width, height);
 }

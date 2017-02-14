@@ -22,8 +22,6 @@
 class GPUUniform;
 
 class GPUUniformValue: public RCObject {
-private:
-  const int _type;
 
 protected:
   virtual ~GPUUniformValue() {
@@ -33,16 +31,18 @@ protected:
   }
 
 public:
-  GPUUniformValue(int type):_type(type)
-  {}
+  const int _type;
 
+  GPUUniformValue(int type) :
+  _type(type)
+  {
+  }
 
-
-  int getType() const { return _type;}
   virtual void setUniform(GL* gl, const IGLUniformID* id) const = 0;
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
-  virtual std::string description() const = 0;
+  virtual const std::string description() const = 0;
+
 #ifdef JAVA_CODE
   @Override
   public String toString() {
@@ -111,7 +111,7 @@ public:
   void unset();
 
   void set(const GPUUniformValue* v) {
-    if (_type == v->getType()) { //type checking
+    if (_type == v->_type) { //type checking
       if (_value == NULL || !_value->isEquals(v)) {
         _dirty = true;
         v->_retain();
@@ -122,7 +122,7 @@ public:
       }
     }
     else {
-      ILogger::instance()->logError("Attempting to set uniform " + _name + " with invalid value type.");
+      THROW_EXCEPTION("Attempting to set uniform \"" + _name + "\" with invalid value type.");
     }
   }
 
@@ -156,11 +156,11 @@ public:
     return _value == ((GPUUniformValueBool*)v)->_value;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Boolean: ");
     isb->addBool(_value);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -201,13 +201,13 @@ public:
     return (_x == v2->_x) && (_y == v2->_y);
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec2Float: x:");
     isb->addDouble(_x);
     isb->addString("y:");
     isb->addDouble(_y);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -278,7 +278,7 @@ public:
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z);
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
@@ -286,7 +286,7 @@ public:
     isb->addDouble(_y);
     isb->addString("z:");
     isb->addDouble(_z);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -322,7 +322,7 @@ public:
 #endif
   }
 };
-////////////////////////////////////////////////////////////
+
 
 class GPUUniformValueVec4Float : public GPUUniformValue {
 private:
@@ -355,7 +355,7 @@ public:
     return (_x == v2->_x) && (_y == v2->_y) && (_z == v2->_z) && (_w == v2->_w);
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Vec4Float: x:");
     isb->addDouble(_x);
@@ -365,7 +365,7 @@ public:
     isb->addDouble(_z);
     isb->addString("w:");
     isb->addDouble(_w);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -383,7 +383,6 @@ public:
   }
 };
 
-/////////////////////
 
 
 class GPUUniformValueMatrix4:public GPUUniformValue{
@@ -409,7 +408,7 @@ private:
   }
 
 public:
-  
+
   GPUUniformValueMatrix4(const Matrix44DProvider* providers[], int nMatrix):
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
@@ -452,10 +451,10 @@ public:
     return false;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Matrix44D.");
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -495,11 +494,11 @@ public:
     return _value == v2->_value;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Float: ");
     isb->addDouble(_value);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -568,11 +567,11 @@ public:
     return _value == ((GPUUniformValueInt*)v)->_value;
   }
 
-  std::string description() const {
+  const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Uniform Value Integer: ");
     isb->addInt(_value);
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }

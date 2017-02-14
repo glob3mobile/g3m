@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  DefaultChessCanvasImageBuilder.cpp
 //  G3MiOSSDK
@@ -37,28 +37,39 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
     canvas.setFillColor(_backgroundColor);
     canvas.fillRectangle(0, 0, width, height);
   
-    canvas.setFillColor(_boxColor);
-  
-    final float xInterval = (float) width / _splits;
-    final float yInterval = (float) height / _splits;
-  
-    for (int col = 0; col < _splits; col += 2)
+    if (!_boxColor.isFullTransparent())
     {
-      final float x = col * xInterval;
-      final float x2 = (col + 1) * xInterval;
-      for (int row = 0; row < _splits; row += 2)
-      {
-        final float y = row * yInterval;
-        final float y2 = (row + 1) * yInterval;
+      canvas.setFillColor(_boxColor);
   
-        canvas.fillRoundedRectangle(x + 2, y + 2, xInterval - 4, yInterval - 4, 4);
-        canvas.fillRoundedRectangle(x2 + 2, y2 + 2, xInterval - 4, yInterval - 4, 4);
+      final float xInterval = (float) width / _splits;
+      final float yInterval = (float) height / _splits;
+  
+      for (int col = 0; col < _splits; col += 2)
+      {
+        final float x = col * xInterval;
+        final float x2 = (col + 1) * xInterval;
+        for (int row = 0; row < _splits; row += 2)
+        {
+          final float y = row * yInterval;
+          final float y2 = (row + 1) * yInterval;
+  
+          canvas.fillRoundedRectangle(x + 2, y + 2, xInterval - 4, yInterval - 4, 4);
+          canvas.fillRoundedRectangle(x2 + 2, y2 + 2, xInterval - 4, yInterval - 4, 4);
+        }
       }
     }
   }
+
+  protected final String getImageName(G3MContext context)
+  {
+    final IStringUtils su = context.getStringUtils();
+  
+    return "_DefaultChessCanvasImage_" + su.toString(_width) + "_" + su.toString(_height) + "_" + _backgroundColor.id() + "_" + _boxColor.id() + "_" + su.toString(_splits);
+  }
+
   public DefaultChessCanvasImageBuilder(int width, int height, Color backgroundColor, Color boxColor, int splits)
   {
-     super(width, height);
+     super(width, height, false);
      _backgroundColor = new Color(backgroundColor);
      _boxColor = new Color(boxColor);
      _splits = splits;

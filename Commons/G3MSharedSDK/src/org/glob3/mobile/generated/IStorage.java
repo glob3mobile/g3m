@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class IStorage
 {
   protected G3MContext _context;
@@ -35,5 +35,7 @@ public abstract class IStorage
 
 
   public abstract boolean isAvailable();
+
+  public abstract void merge(String databasePath);
 
 }

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  DefaultInfoDisplay.cpp
 //  G3MiOSSDK
@@ -32,7 +32,7 @@ public class DefaultHUDInfoRenderer_ImageFactory extends HUDImageRenderer.Canvas
     {
       strings.add(_info.get(i).getText());
     }
-    ICanvasUtils.drawStringsOn(strings, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
+    ICanvasUtils.drawStringsOn(strings, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.WHITE, 16, 10, Color.TRANSPARENT, Color.BLACK, 5);
   }
 
   protected final boolean isEquals(java.util.ArrayList<Info> v1, java.util.ArrayList<Info> v2)

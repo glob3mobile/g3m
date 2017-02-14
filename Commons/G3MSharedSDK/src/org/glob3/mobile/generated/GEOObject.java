@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GEOObject.hpp
 //  G3MiOSSDK
@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class GEOVectorLayer;
 
+
+
 public abstract class GEOObject
 {
   public void dispose()
@@ -31,5 +33,7 @@ public abstract class GEOObject
   public abstract long getCoordinatesCount();
 
   public abstract GEOObject deepCopy();
+
+  public abstract long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node);
 
 }

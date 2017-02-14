@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BufferElevationData.cpp
 //  G3MiOSSDK
@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class BufferElevationData extends ElevationData
 {
   protected final int _bufferSize;
@@ -24,10 +25,7 @@ public abstract class BufferElevationData extends ElevationData
 
   protected abstract double getValueInBufferAt(int index);
 
-
-  ///#include "Vector2I.hpp"
-  
-  public BufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, int bufferSize, double deltaHeight)
+  public BufferElevationData(Sector sector, Vector2I extent, int bufferSize, double deltaHeight)
   {
      super(sector, extent);
      _bufferSize = bufferSize;
@@ -43,11 +41,6 @@ public abstract class BufferElevationData extends ElevationData
   public final double getElevationAt(int x, int y)
   {
     final int index = ((_height-1-y) * _width) + x;
-  
-  //  if ( (index < 0) || (index >= _bufferSize) ) {
-  //    printf("break point on me\n");
-  //    return IMathUtils::instance()->NanD();
-  //  }
   
     return getValueInBufferAt(index) + _deltaHeight;
   }

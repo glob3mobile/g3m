@@ -28,7 +28,7 @@ private:
 #endif
   IDownloader*       _downloader;
 
-  std::map<const std::string, long long> _requestsIdsPerTile;
+  std::map<const std::string, long long> _requestsIDsPerTile;
 
 protected:
   ~RasterLayerTileImageProvider();
@@ -46,17 +46,17 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
-              long long tileDownloadPriority,
+              const Vector2S& resolution,
+              long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
 
-  void requestFinish(const std::string& tileId);
+  void requestFinish(const std::string& tileID);
 
   void layerDeleted(const RasterLayer* layer);
 

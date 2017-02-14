@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -11,21 +10,71 @@
 
 #include "Effects.hpp"
 
-#include "Context.hpp"
+#include "IMathUtils.hpp"
+#include "TimeInterval.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
+#include "ITimer.hpp"
+
+
+double Effect::sigmoid(double x) {
+  x = 12.0*x - 6.0;
+  return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * x)));
+}
+
+EffectWithDuration::EffectWithDuration(const TimeInterval& duration,
+                                       const bool linearTiming) :
+_durationMS(duration._milliseconds),
+_linearTiming(linearTiming),
+_started(0)
+{
+
+}
+
+
+double EffectWithDuration::percentDone(const TimeInterval& when) const {
+  const long long elapsed = when._milliseconds - _started;
+
+  const double percent = (double) elapsed / _durationMS;
+  if (percent > 1) return 1;
+  if (percent < 0) return 0;
+  return percent;
+}
+
+void EffectWithDuration::start(const G3MRenderContext* rc,
+                               const TimeInterval& when) {
+  _started = when._milliseconds;
+}
+
+
+bool EffectWithForce::isDone(const G3MRenderContext* rc,
+                             const TimeInterval& when) {
+  return (IMathUtils::instance()->abs(_force) < 0.005);
+}
+
+
 
 void EffectsScheduler::initialize(const G3MContext* context) {
-  _factory = context->getFactory();
-  _timer = _factory->createTimer();
+  _timer = context->getFactory()->createTimer();
 }
+
+EffectsScheduler::~EffectsScheduler() {
+  delete _timer;
+
+  for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
+    EffectRun* effectRun = _effectsRuns[i];
+    delete effectRun;
+  }
+}
+
 
 void EffectsScheduler::cancelAllEffects() {
   const TimeInterval now = _timer->now();
 #ifdef C_CODE
-  std::vector<int> indicesToRemove;
+  std::vector<size_t> indicesToRemove;
 
-  const int size = _effectsRuns.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = _effectsRuns.size();
+  for (size_t i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
 
     if (effectRun->_started) {
@@ -36,7 +85,7 @@ void EffectsScheduler::cancelAllEffects() {
 
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-    const int indexToRemove = indicesToRemove[i];
+    const size_t indexToRemove = indicesToRemove[i];
     EffectRun* effectRun = _effectsRuns[indexToRemove];
     delete effectRun;
 
@@ -71,10 +120,10 @@ void EffectsScheduler::cancelAllEffects() {
 void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   const TimeInterval now = _timer->now();
 #ifdef C_CODE
-  std::vector<int> indicesToRemove;
+  std::vector<size_t> indicesToRemove;
 
-  const int size = _effectsRuns.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = _effectsRuns.size();
+  for (size_t i = 0; i < size; i++) {
     EffectRun* effectRun = _effectsRuns[i];
 
     if (effectRun->_target == target) {
@@ -87,7 +136,7 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
 
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-    const int indexToRemove = indicesToRemove[i];
+    const size_t indexToRemove = indicesToRemove[i];
     EffectRun* effectRun = _effectsRuns[indexToRemove];
     delete effectRun;
 
@@ -143,8 +192,8 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
     }
   }
 
-  const int removedSize = effectsToStop.size();
-  for (int i = 0; i < removedSize; i++) {
+  const size_t removedSize = effectsToStop.size();
+  for (size_t i = 0; i < removedSize; i++) {
     EffectRun* effectRun = effectsToStop[i];
     effectRun->_effect->stop(rc, when);
 
@@ -181,8 +230,8 @@ void EffectsScheduler::doOneCyle(const G3MRenderContext* rc) {
     processFinishedEffects(rc, now);
 
     // ask for _effectsRuns.size() here, as processFinishedEffects can modify the size
-    const int effectsRunsSize = _effectsRuns.size();
-    for (int i = 0; i < effectsRunsSize; i++) {
+    const size_t effectsRunsSize = _effectsRuns.size();
+    for (size_t i = 0; i < effectsRunsSize; i++) {
       EffectRun* effectRun = _effectsRuns[i];
       Effect* effect = effectRun->_effect;
       if (!effectRun->_started) {

@@ -15,6 +15,7 @@
 class DeviceInfo_iOS : public IDeviceInfo {
 private:
   float _dpi;
+  float _devicePixelRatio;
 
 public:
   DeviceInfo_iOS();
@@ -27,9 +28,7 @@ public:
     return DEVICE_iOS;
   }
 
-  float getQualityFactor() const {
-    return 1;
-  }
+  float getDevicePixelRatio() const;
 
 };
 

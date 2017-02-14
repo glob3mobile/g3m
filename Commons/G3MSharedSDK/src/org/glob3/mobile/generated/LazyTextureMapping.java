@@ -1,9 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class LazyTextureMapping extends TextureMapping
 {
   private LazyTextureMappingInitializer _initializer;
 
-  private TextureIDReference _glTextureId;
+  private TextureIDReference _glTextureID;
 
   private boolean _initialized;
 
@@ -21,12 +21,12 @@ public class LazyTextureMapping extends TextureMapping
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  LazyTextureMapping(LazyTextureMapping that);
-  private void releaseGLTextureId()
+  private void releaseGLTextureID()
   {
-    if (_glTextureId != null)
+    if (_glTextureID != null)
     {
-      _glTextureId.dispose();
-      _glTextureId = null;
+      _glTextureID.dispose();
+      _glTextureID = null;
     }
   }
 
@@ -37,7 +37,7 @@ public class LazyTextureMapping extends TextureMapping
   public LazyTextureMapping(LazyTextureMappingInitializer initializer, boolean ownedTexCoords, boolean transparent)
   {
      _initializer = initializer;
-     _glTextureId = null;
+     _glTextureID = null;
      _initialized = false;
      _texCoords = null;
      _translationU = 0F;
@@ -61,25 +61,25 @@ public class LazyTextureMapping extends TextureMapping
     }
     _texCoords = null;
 
-    releaseGLTextureId();
+    releaseGLTextureID();
 
   super.dispose();
   }
 
   public final boolean isValid()
   {
-    return _glTextureId != null;
+    return _glTextureID != null;
   }
 
-  public final void setGLTextureId(TextureIDReference glTextureId)
+  public final void setGLTextureID(TextureIDReference glTextureID)
   {
-    releaseGLTextureId();
-    _glTextureId = glTextureId;
+    releaseGLTextureID();
+    _glTextureID = glTextureID;
   }
 
-  public final TextureIDReference getGLTextureId()
+  public final TextureIDReference getGLTextureID()
   {
-    return _glTextureId;
+    return _glTextureID;
   }
 
   public final void modifyGLState(GLState state)
@@ -111,11 +111,11 @@ public class LazyTextureMapping extends TextureMapping
   
       if (_scaleU != 1 || _scaleV != 1 || _translationU != 0 || _translationV != 0)
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, 0, 0, 0), false); //BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, 0, 0, 0), false);
       }
       else
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+        state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
       }
   
     }

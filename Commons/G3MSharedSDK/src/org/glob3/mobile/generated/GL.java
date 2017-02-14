@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GL.cpp
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -13,17 +12,13 @@ package org.glob3.mobile.generated;
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 14/06/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
 
 
-//class IGLProgramId;
 //class IGLUniformID;
-
-
 //class GPUProgramManager;
 //class GPUProgramState;
 //class GLState;
@@ -34,68 +29,52 @@ public class GL
   private final INativeGL _nativeGL;
 
 
-  /////////////////////////////////////////////////
   //CURRENT GL STATUS
   private GLGlobalState _currentGLGlobalState;
   private GPUProgram _currentGPUProgram;
-  /////////////////////////////////////////////////
 
-  private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
-  private int _texturesIdAllocationCounter;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void loadModelView();
+  private final java.util.LinkedList<IGLTextureID> _texturesIDBag = new java.util.LinkedList<IGLTextureID>();
+  private int _texturesIDAllocationCounter;
 
-  private IGLTextureId getGLTextureId()
+  private IGLTextureID getGLTextureID()
   {
     //  if (_verbose) {
-    //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+    //    ILogger::instance()->logInfo("GL::getGLTextureID()");
     //  }
   
-    if (_texturesIdBag.size() == 0)
+    if (_texturesIDBag.size() == 0)
     {
       //const int bugdetSize = 256;
       final int bugdetSize = 1024;
       //const int bugdetSize = 10240;
   
-      final java.util.ArrayList<IGLTextureId> ids = _nativeGL.genTextures(bugdetSize);
+      final java.util.ArrayList<IGLTextureID> ids = _nativeGL.genTextures(bugdetSize);
       final int idsCount = ids.size();
       for (int i = 0; i < idsCount; i++)
       {
-        // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
-        _texturesIdBag.addFirst(ids.get(i));
+        // ILogger::instance()->logInfo("  = Created textureID=%s", ids[i]->description().c_str());
+        _texturesIDBag.addFirst(ids.get(i));
       }
   
-      _texturesIdAllocationCounter += idsCount;
+      _texturesIDAllocationCounter += idsCount;
   
-      ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", idsCount, _texturesIdAllocationCounter);
+      ILogger.instance().logInfo("= Created %d texturesIDs (accumulated %d).", idsCount, _texturesIDAllocationCounter);
     }
   
-    //  _texturesIdGetCounter++;
+    //  _texturesIDGetCounter++;
   
-    if (_texturesIdBag.size() == 0)
+    if (_texturesIDBag.size() == 0)
     {
-      ILogger.instance().logError("TextureIds bag exhausted");
+      ILogger.instance().logError("TextureIDs bag exhausted");
       return null;
     }
   
-    final IGLTextureId result = _texturesIdBag.getLast();
-    _texturesIdBag.removeLast();
-  
-    //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-    //         result.getGLTextureId(),
-    //         _texturesIdBag.size(),
-    //         _texturesIdGetCounter,
-    //         _texturesIdTakeCounter,
-    //         _texturesIdGetCounter - _texturesIdTakeCounter);
+    final IGLTextureID result = _texturesIDBag.getLast();
+    _texturesIDBag.removeLast();
   
     return result;
   }
-
-  //Get Locations warning of errors
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
-//  const bool _verbose;
 
   private GLGlobalState _clearScreenState; //State used to clear screen with certain color
 
@@ -108,11 +87,10 @@ public class GL
 
 
 
-  public GL(INativeGL nativeGL, boolean verbose)
-//  _verbose(verbose),
+  public GL(INativeGL nativeGL)
   {
      _nativeGL = nativeGL;
-     _texturesIdAllocationCounter = 0;
+     _texturesIDAllocationCounter = 0;
      _currentGPUProgram = null;
      _clearScreenState = null;
     //Init Constants
@@ -149,24 +127,28 @@ public class GL
     _nativeGL.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
+  //  void drawElements(int mode,
+  //                    IShortBuffer* indices, const GLGlobalState& state,
+  //                    GPUProgramManager& progManager,
+  //                    const GPUProgramState* gpuState);
 
   public final void drawElements(int mode, IShortBuffer indices, GLState state, GPUProgramManager progManager)
   {
-  
-    state.applyOnGPU(this, progManager);
-  
-    _nativeGL.drawElements(mode, indices.size(), indices);
+    drawElements(mode, indices, (int) indices.size(), state, progManager);
   }
 
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
+  public final void drawElements(int mode, IShortBuffer indices, int count, GLState state, GPUProgramManager progManager)
+  {
+    state.applyOnGPU(this, progManager);
+  
+    _nativeGL.drawElements(mode, count, indices);
+  }
+
+  //  void drawArrays(int mode,
+  //                  int first,
+  //                  int count, const GLGlobalState& state,
+  //                  GPUProgramManager& progManager,
+  //                  const GPUProgramState* gpuState);
 
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
@@ -191,20 +173,20 @@ public class GL
     return _nativeGL.getError();
   }
 
-  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
+  public final IGLTextureID uploadTexture(IImage image, int format, boolean generateMipmap)
   {
   
     //  if (_verbose) {
     //    ILogger::instance()->logInfo("GL::uploadTexture()");
     //  }
   
-    final IGLTextureId texId = getGLTextureId();
-    if (texId != null)
+    final IGLTextureID texID = getGLTextureID();
+    if (texID != null)
     {
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
-      newState.bindTexture(texId);
+      newState.bindTexture(0, texID);
   
       newState.applyChanges(this, _currentGLGlobalState);
   
@@ -236,7 +218,7 @@ public class GL
         }
         else
         {
-          ILogger.instance().logError("Can't generate bitmap. Texture dimensions are not power of two.");
+          ILogger.instance().logError("Can't generate mipmap. Texture dimensions are not power of two.");
         }
       }
     }
@@ -246,47 +228,36 @@ public class GL
       return null;
     }
   
-    return texId;
+    return texID;
   }
 
-  public final void deleteTexture(IGLTextureId textureId)
+  public final void deleteTexture(IGLTextureID textureID)
   {
-  
     //  if (_verbose) {
     //    ILogger::instance()->logInfo("GL::deleteTexture()");
     //  }
   
-    if (textureId != null)
+    if (textureID != null)
     {
-      if (_nativeGL.deleteTexture(textureId))
+      _currentGLGlobalState.onTextureDelete(textureID);
+  
+      if (_nativeGL.deleteTexture(textureID))
       {
-        _texturesIdBag.addLast(textureId);
+        _texturesIDBag.addLast(textureID);
       }
       else
       {
-        if (textureId != null)
-           textureId.dispose();
+        if (textureID != null)
+           textureID.dispose();
       }
   
-      if (_currentGLGlobalState.getBoundTexture() == textureId)
-      {
-        _currentGLGlobalState.bindTexture(null);
-      }
-  
-      //    GLState::textureHasBeenDeleted(textureId);
-  
-      //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-      //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-      //    }
-  
-      //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
+      //ILogger::instance()->logInfo("  = delete textureID=%s", texture->description().c_str());
     }
   }
 
-//  void getViewport(int v[]) {
-////    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
-//    _nativeGL->getIntegerv(GLVariable::viewport(), v);
-//  }
+  //  void getViewport(int v[]) {
+  //    _nativeGL->getIntegerv(GLVariable::viewport(), v);
+  //  }
 
   public void dispose()
   {
@@ -451,6 +422,11 @@ public class GL
   public final GLGlobalState getCurrentGLGlobalState()
   {
     return _currentGLGlobalState;
+  }
+
+  public final void viewport(int x, int y, int width, int height)
+  {
+    _nativeGL.viewport(x, y, width, height);
   }
 
 

@@ -3,37 +3,36 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_PlanetRenderer
 #define G3MiOSSDK_PlanetRenderer
 
-class Tile;
-class TileTessellator;
-class LayerSet;
-class VisibleSectorListenerEntry;
-class VisibleSectorListener;
-class ElevationDataProvider;
-class LayerTilesRenderParameters;
-class TerrainTouchListener;
-class ChangedInfoListener;
-class TileRenderingListener;
-
-#include "IStringBuilder.hpp"
-#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
-#include "Camera.hpp"
-#include "LayerSet.hpp"
-#include "ITileVisitor.hpp"
-#include "SurfaceElevationProvider.hpp"
+#include "DefaultRenderer.hpp"
 #include "ChangedListener.hpp"
+#include "ChangedInfoListener.hpp"
+#include "SurfaceElevationProvider.hpp"
 #include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
+#include "Camera.hpp"
+#include "ITileVisitor.hpp"
 
-
-
-class EllipsoidShape;
+class ITileVisitor;
+class LayerSet;
+class TilesRenderParameters;
+class TileLODTester;
+class TileVisibilityTester;
+class ITimer;
+class VisibleSectorListener;
+class VisibleSectorListenerEntry;
+class Layer;
+class LayerTilesRenderParameters;
+class Layer;
+class TerrainTouchListener;
+class DEMProvider;
+class IStringBuilder;
 
 
 class TilesStatistics {
@@ -42,77 +41,53 @@ private:
   long _tilesVisible;
   long _tilesRendered;
 
-  static const int _maxLOD = 128;
+  static const int MAX_LEVEL = 64;
 
-  int _tilesProcessedByLevel[_maxLOD];
-  int _tilesVisibleByLevel[_maxLOD];
-  int _tilesRenderedByLevel[_maxLOD];
-
-  int _buildersStartsInFrame;
+  int _tilesProcessedByLevel[MAX_LEVEL];
+  int _tilesVisibleByLevel[MAX_LEVEL];
+  int _tilesRenderedByLevel[MAX_LEVEL];
 
   double _visibleLowerLatitudeDegrees;
   double _visibleLowerLongitudeDegrees;
   double _visibleUpperLatitudeDegrees;
   double _visibleUpperLongitudeDegrees;
 
+  mutable std::string     _previousStatistics;
+  mutable IStringBuilder* _statisticsSB;
+
 public:
 
-  TilesStatistics()
-  {
-    clear();
-  }
+  TilesStatistics();
 
-  ~TilesStatistics() {
-  }
+  ~TilesStatistics();
 
-  void clear() {
-    _tilesProcessed = 0;
-    _tilesVisible = 0;
-    _tilesRendered = 0;
-    _buildersStartsInFrame = 0;
+  void clear();
 
-    const IMathUtils* mu = IMathUtils::instance();
-    _visibleLowerLatitudeDegrees  = mu->maxDouble();
-    _visibleLowerLongitudeDegrees = mu->maxDouble();
-    _visibleUpperLatitudeDegrees  = mu->minDouble();
-    _visibleUpperLongitudeDegrees = mu->minDouble();
+  void computeTileProcessed(const Tile* tile,
+                            bool visible,
+                            bool rendered) {
+    const int level = tile->_level;
 
-    for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = 0;
-      _tilesVisibleByLevel[i]   = 0;
-      _tilesRenderedByLevel[i]  = 0;
+    _tilesProcessed++;
+    _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
+
+    if (visible) {
+      _tilesVisible++;
+      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    }
+
+    if (rendered) {
+      _tilesRendered++;
+      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+      computeRenderedSector(tile);
     }
   }
 
-  int getBuildersStartsInFrame() const {
-    return _buildersStartsInFrame;
-  }
-
-  void computeBuilderStartInFrame() {
-    _buildersStartsInFrame++;
-  }
-
-  void computeTileProcessed(Tile* tile) {
-    _tilesProcessed++;
-
-    const int level = tile->_level;
-    _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
-  }
-
-  void computeVisibleTile(Tile* tile) {
-    _tilesVisible++;
-
-    const int level = tile->_level;
-    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
-  }
-
-  void computeRenderedSector(Tile* tile) {
-    const Sector sector = tile->_sector;
-
-    const double lowerLatitudeDegrees  = sector._lower._latitude._degrees;
-    const double lowerLongitudeDegrees = sector._lower._longitude._degrees;
-    const double upperLatitudeDegrees  = sector._upper._latitude._degrees;
-    const double upperLongitudeDegrees = sector._upper._longitude._degrees;
+  void computeRenderedSector(const Tile* tile) {
+    const double lowerLatitudeDegrees  = tile->_sector._lower._latitude._degrees;
+    const double lowerLongitudeDegrees = tile->_sector._lower._longitude._degrees;
+    const double upperLatitudeDegrees  = tile->_sector._upper._latitude._degrees;
+    const double upperLongitudeDegrees = tile->_sector._upper._longitude._degrees;
 
     if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees) {
       _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
@@ -141,15 +116,6 @@ public:
     }
   }
 
-  void computeTileRenderered(Tile* tile) {
-    _tilesRendered++;
-
-    const int level = tile->_level;
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-
-    computeRenderedSector(tile);
-  }
-
   Sector* updateVisibleSector(Sector* visibleSector) const {
     if ((visibleSector == NULL) ||
         (visibleSector->_lower._latitude._degrees  != _visibleLowerLatitudeDegrees)  ||
@@ -171,56 +137,29 @@ public:
     return visibleSector;
   }
 
-  static std::string asLogString(const int m[], const int nMax) {
-    bool first = true;
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    for(int i = 0; i < nMax; i++) {
-      const int level   = i;
-      const int counter = m[i];
-      if (counter != 0) {
-        if (first) {
-          first = false;
-        }
-        else {
-          isb->addString(",");
-        }
-        isb->addInt(level);
-        isb->addString(":");
-        isb->addInt(counter);
-      }
-    }
+  static const std::string asLogString(const int m[], const int nMax);
 
-    std::string s = isb->getString();
-    delete isb;
-    return s;
-  }
-
-  void log(const ILogger* logger) const {
-    logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
-                    _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
-                    _tilesVisible,   asLogString(_tilesVisibleByLevel,   _maxLOD).c_str(),
-                    _tilesRendered,  asLogString(_tilesRenderedByLevel,  _maxLOD).c_str());
-  }
-
+  void log(const ILogger* logger) const;
 
 };
 
 
 class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
-  TileTessellator*             _tessellator;
-  ElevationDataProvider*       _elevationDataProvider;
-  bool                         _ownsElevationDataProvider;
-  TileTexturizer*              _texturizer;
-  LayerSet*                    _layerSet;
-  const TilesRenderParameters* _tilesRenderParameters;
-  const bool                   _showStatistics;
-  const bool                   _logTilesPetitions;
-  ITileVisitor*                _tileVisitor = NULL;
+  TileTessellator*       _tessellator;
+  ElevationDataProvider* _elevationDataProvider;
+  bool                   _ownsElevationDataProvider;
+  DEMProvider*           _demProvider;
+  TileTexturizer*        _texturizer;
+  LayerSet*              _layerSet;
+  TilesRenderParameters* _tilesRenderParameters;
+  bool                   _showStatistics;
+  const bool             _logTilesPetitions;
+  ITileVisitor*          _tileVisitor = NULL;
+  TileLODTester*         _tileLODTester;
+  TileVisibilityTester*  _tileVisibilityTester;
 
-  TileRenderingListener*       _tileRenderingListener;
-  std::vector<const Tile*>*    _tilesStartedRendering;
-  std::vector<std::string>*    _tilesStoppedRendering;
+  PlanetRenderContext*  _prc;
 
   TilesStatistics _statistics;
 
@@ -252,18 +191,18 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
-  
+
   void visitTilesTouchesWith(const Sector& sector,
                              const int topLevel,
                              const int maxLevel);
-  
+
   void visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
                                 const int topLevel,
                                 const int maxLevel);
 
-  long long _tileDownloadPriority;
+  long long _tileTextureDownloadPriority;
 
   float _verticalExaggeration;
 
@@ -277,7 +216,7 @@ private:
   bool _renderTileMeshes;
 
   Sector* _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+
   bool _layerTilesRenderParametersDirty;
 #ifdef C_CODE
   const LayerTilesRenderParameters* _layerTilesRenderParameters;
@@ -290,7 +229,7 @@ private:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
-  
+
   TouchEventType _touchEventTypeOfTerrainTouchListener;
 
 
@@ -301,20 +240,32 @@ public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
                  bool                         ownsElevationDataProvider,
+                 DEMProvider*                 demProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  LayerSet*                    layerSet,
-                 const TilesRenderParameters* tilesRenderParameters,
+                 TilesRenderParameters*       tilesRenderParameters,
                  bool                         showStatistics,
-                 long long                    tileDownloadPriority,
+                 long long                    tileTextureDownloadPriority,
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
-                 TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
-                 TouchEventType               touchEventTypeOfTerrainTouchListener);
+                 TouchEventType               touchEventTypeOfTerrainTouchListener,
+                 TileLODTester*               tileLODTester,
+                 TileVisibilityTester*        tileVisibilityTester);
 
   ~PlanetRenderer();
+
+  bool isShowStatistics() const {
+    return _showStatistics;
+  }
+
+  void setShowStatistics(bool showStatistics) {
+    _showStatistics = showStatistics;
+  }
+
+  void setIncrementalTileQuality(bool incrementalTileQuality);
 
   void initialize(const G3MContext* context);
 
@@ -394,19 +345,19 @@ public:
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
-   * @param tileDownloadPriority: new value for download priority of textures
+   * @param tileTextureDownloadPriority: new value for download priority of textures
    */
-  void setTileDownloadPriority(long long tileDownloadPriority) {
-    _tileDownloadPriority = tileDownloadPriority;
+  void setTileTextureDownloadPriority(long long tileTextureDownloadPriority) {
+    _tileTextureDownloadPriority = tileTextureDownloadPriority;
   }
 
   /**
    * Return the current value for the download priority of textures
    *
-   * @return _tileDownloadPriority: long
+   * @return _tileTextureDownloadPriority: long
    */
-  long long getTileDownloadPriority() const {
-    return _tileDownloadPriority;
+  long long getTileTextureDownloadPriority() const {
+    return _tileTextureDownloadPriority;
   }
 
   /**
@@ -417,7 +368,7 @@ public:
   }
 
   SurfaceElevationProvider* getSurfaceElevationProvider() {
-    return (_elevationDataProvider == NULL) ? NULL : this;
+    return this;
   }
 
   PlanetRenderer* getPlanetRenderer() {
@@ -443,12 +394,17 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
+  void setDEMProvider(DEMProvider* demProvider);
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
   ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;
+  }
+
+  DEMProvider* getDEMProvider() const {
+    return _demProvider;
   }
 
   void setRenderTileMeshes(bool renderTileMeshes) {
@@ -458,20 +414,22 @@ public:
   bool getRenderTileMeshes() const {
     return _renderTileMeshes;
   }
-  
-  void changedInfo(const std::vector<const Info*> info) {
+
+  void changedInfo(const std::vector<const Info*>& info) {
     if (_changedInfoListener != NULL) {
-      _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+      _changedInfoListener->changedRendererInfo(_rendererID, info);
     }
   }
 
   float getVerticalExaggeration() const {
     return _verticalExaggeration;
   }
+
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                      const size_t rendererID);
   
-  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  void onTileHasChangedMesh(const Tile* tile) const;
   
 };
-
 
 #endif

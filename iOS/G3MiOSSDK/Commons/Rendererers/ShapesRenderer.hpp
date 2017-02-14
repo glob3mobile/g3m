@@ -10,20 +10,29 @@
 #define __G3MiOSSDK__ShapesRenderer__
 
 #include "DefaultRenderer.hpp"
-#include "Shape.hpp"
 #include <vector>
-#include "DownloadPriority.hpp"
 #include "URL.hpp"
+#include "Shape.hpp"
+#include "DownloadPriority.hpp"
+#include "MutableVector3D.hpp"
+#include "TimeInterval.hpp"
 
-struct ShapeDistance {
+class Camera;
+
+
+class ShapeDistance {
+public:
   double _distance;
   Shape* _shape;
 
-  ShapeDistance(double distance, Shape* shape):
+  ShapeDistance(double distance,
+                Shape* shape):
   _distance(distance),
   _shape(shape)
-  {}
+  {
+  }
 };
+
 
 class SGShape;
 
@@ -57,6 +66,7 @@ private:
     const bool         _readExpired;
     const std::string  _uriPrefix;
     const bool         _isTransparent;
+    const bool         _depthTest;
     Geodetic3D*        _position;
     const AltitudeMode _altitudeMode;
     ShapeLoadListener* _listener;
@@ -69,6 +79,7 @@ private:
                   bool                readExpired,
                   const std::string&  uriPrefix,
                   bool                isTransparent,
+                  bool                depthTest,
                   Geodetic3D*         position,
                   AltitudeMode        altitudeMode,
                   ShapeLoadListener*  listener,
@@ -80,6 +91,7 @@ private:
     _readExpired(readExpired),
     _uriPrefix(uriPrefix),
     _isTransparent(isTransparent),
+    _depthTest(depthTest),
     _position(position),
     _altitudeMode(altitudeMode),
     _listener(listener),
@@ -108,7 +120,7 @@ private:
   GLState* _glState;
   GLState* _glStateTransparent;
 
-  void updateGLState(const G3MRenderContext* rc);
+  void updateGLState(const Camera* camera);
 
   std::vector<LoadQueueItem*> _loadQueue;
 
@@ -116,6 +128,7 @@ private:
   
   void cleanLoadQueue();
 
+  MutableVector3D _currentCameraPosition;
 
   void requestBuffer(const URL&          url,
                      long long           priority,
@@ -123,6 +136,7 @@ private:
                      bool                readExpired,
                      const std::string&  uriPrefix,
                      bool                isTransparent,
+                     bool                depthTest,
                      Geodetic3D*         position,
                      AltitudeMode        altitudeMode,
                      ShapeLoadListener*  listener,
@@ -131,30 +145,9 @@ private:
 
 public:
 
-  ShapesRenderer(bool renderNotReadyShapes=true) :
-  _renderNotReadyShapes(renderNotReadyShapes),
-  _glState(new GLState()),
-  _glStateTransparent(new GLState()),
-  _lastCamera(NULL)
-  {
-    _context = NULL;
-  }
+  ShapesRenderer(bool renderNotReadyShapes=true);
 
-  ~ShapesRenderer() {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
-      Shape* shape = _shapes[i];
-      delete shape;
-    }
-
-    _glState->_release();
-    _glStateTransparent->_release();
-
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-
-  }
+  ~ShapesRenderer();
 
   void addShape(Shape* shape) {
     _shapes.push_back(shape);
@@ -201,6 +194,7 @@ public:
                        bool                readExpired,
                        const std::string&  uriPrefix,
                        bool                isTransparent,
+                       bool                depthTest,
                        Geodetic3D*         position,
                        AltitudeMode        altitudeMode,
                        ShapeLoadListener*  listener=NULL,
@@ -209,6 +203,7 @@ public:
   void loadJSONSceneJS(const URL&         url,
                        const std::string& uriPrefix,
                        bool               isTransparent,
+                       bool               depthTest,
                        Geodetic3D*        position,
                        AltitudeMode       altitudeMode,
                        ShapeLoadListener* listener=NULL,
@@ -219,6 +214,7 @@ public:
                     true,
                     uriPrefix,
                     isTransparent,
+                    depthTest,
                     position,
                     altitudeMode,
                     listener,
@@ -231,6 +227,7 @@ public:
                        bool                readExpired,
                        const std::string&  uriPrefix,
                        bool                isTransparent,
+                       bool                depthTest,
                        Geodetic3D*         position,
                        AltitudeMode        altitudeMode,
                        ShapeLoadListener*  listener=NULL,
@@ -239,6 +236,7 @@ public:
   void loadBSONSceneJS(const URL&         url,
                        const std::string& uriPrefix,
                        bool               isTransparent,
+                       bool               depthTest,
                        Geodetic3D*        position,
                        AltitudeMode       altitudeMode,
                        ShapeLoadListener* listener=NULL,
@@ -249,6 +247,7 @@ public:
                     true,
                     uriPrefix,
                     isTransparent,
+                    depthTest,
                     position,
                     altitudeMode,
                     listener,

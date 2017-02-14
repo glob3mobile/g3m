@@ -11,26 +11,26 @@
 #include "IFloatBuffer.hpp"
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
+#include "IMathUtils.hpp"
+
 
 const float FloatBufferElevationData::NO_DATA_VALUE = NANF;
 
 
 FloatBufferElevationData::FloatBufferElevationData(const Sector& sector,
                                                    const Vector2I& extent,
-                                                   const Sector& realSector,
-                                                   const Vector2I& realExtent,
                                                    IFloatBuffer* buffer,
                                                    double deltaHeight) :
-BufferElevationData(sector, extent, realSector, realExtent, buffer->size(), deltaHeight),
+BufferElevationData(sector, extent, buffer->size(), deltaHeight),
 _buffer(buffer)
 {
   if (_buffer->size() != (_width * _height) ) {
     ILogger::instance()->logError("Invalid buffer size");
   }
 
-  const int size = buffer->size();
+  const size_t size = buffer->size();
   _hasNoData = false;
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     if (buffer->get(i) == NO_DATA_VALUE) {
       _hasNoData = true;
       break;
@@ -44,7 +44,6 @@ FloatBufferElevationData::~FloatBufferElevationData() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 double FloatBufferElevationData::getValueInBufferAt(int index) const {
@@ -86,8 +85,8 @@ Vector3D FloatBufferElevationData::getMinMaxAverageElevations() const {
   float maxHeight = mu->minFloat();
   double sumHeight = 0.0;
 
-  const int bufferSize = _buffer->size();
-  for (int i = 0; i < bufferSize; i++) {
+  const size_t bufferSize = _buffer->size();
+  for (size_t i = 0; i < bufferSize; i++) {
     const float height = _buffer->get(i);
     if (height != NO_DATA_VALUE) {
       if (height < minHeight) {

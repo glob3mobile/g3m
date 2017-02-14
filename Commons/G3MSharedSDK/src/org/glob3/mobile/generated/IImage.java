@@ -1,12 +1,14 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IImage.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 01/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+
+
+//class MutableColor255;
 
 
 public abstract class IImage
@@ -25,5 +27,9 @@ public abstract class IImage
     return description();
   }
 
+  public abstract boolean isPremultiplied();
+
   public abstract IImage shallowCopy();
+
+  public abstract void getPixel(int x, int y, MutableColor255 pixel);
 }

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 01/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "JSONObject.hpp"
@@ -83,7 +82,7 @@ void JSONObject::put(const std::string& key,
   _entries[key] = new JSONBoolean(value);
 }
 
-int JSONObject::size() const {
+size_t JSONObject::size() const {
   return _entries.size();
 }
 
@@ -171,7 +170,7 @@ void JSONObject::putKeyAndValueDescription(const std::string& key,
   isb->addString("\"");
   isb->addString(key);
   isb->addString("\":");
-    isb->addString((get(key) == NULL) ? "null" : get(key)->description());
+  isb->addString((get(key) == NULL) ? "null" : get(key)->description());
 }
 
 const std::string JSONObject::description() const {
@@ -181,10 +180,10 @@ const std::string JSONObject::description() const {
 
   std::vector<std::string> keys = this->keys();
 
-  int keysCount = keys.size();
+  size_t keysCount = keys.size();
   if (keysCount > 0) {
     putKeyAndValueDescription(keys[0], isb);
-    for (int i = 1; i < keysCount; i++) {
+    for (size_t i = 1; i < keysCount; i++) {
       isb->addString(", ");
       putKeyAndValueDescription(keys[i], isb);
     }
@@ -197,14 +196,46 @@ const std::string JSONObject::description() const {
   return s;
 }
 
+void JSONObject::putKeyAndValueToString(const std::string& key,
+                                           IStringBuilder* isb) const {
+  isb->addString("\"");
+  isb->addString(key);
+  isb->addString("\":");
+  isb->addString((get(key) == NULL) ? "null" : get(key)->toString());
+}
+
+const std::string JSONObject::toString() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("{");
+
+  std::vector<std::string> keys = this->keys();
+
+  size_t keysCount = keys.size();
+  if (keysCount > 0) {
+    putKeyAndValueToString(keys[0], isb);
+    for (size_t i = 1; i < keysCount; i++) {
+      isb->addString(", ");
+      putKeyAndValueToString(keys[i], isb);
+    }
+  }
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+
 JSONObject* JSONObject::deepCopy() const {
   JSONObject* result = new JSONObject();
 
   std::vector<std::string> keys = this->keys();
 
-  int keysCount = keys.size();
-  for (int i = 0; i < keysCount; i++) {
-    std::string key = keys[i];
+  size_t keysCount = keys.size();
+  for (size_t i = 0; i < keysCount; i++) {
+    const std::string key = keys[i];
     result->put(key, JSONBaseObject::deepCopy( get(key) ) );
   }
 
@@ -216,16 +247,16 @@ void JSONObject::acceptVisitor(JSONVisitor* visitor) const {
 
   std::vector<std::string> keys = this->keys();
 
-  int keysCount = keys.size();
-  for (int i = 0; i < keysCount; i++) {
+  size_t keysCount = keys.size();
+  for (size_t i = 0; i < keysCount; i++) {
     if (i != 0) {
       visitor->visitObjectInBetweenChildren(this);
     }
-    std::string key = keys[i];
+    const std::string key = keys[i];
     visitor->visitObjectBeforeChild(this, key);
     const JSONBaseObject* child = get(key);
     if(child != NULL) {
-        child->acceptVisitor(visitor);
+      child->acceptVisitor(visitor);
     }
   }
 

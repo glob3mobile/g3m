@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MeshHolder.cpp
 //  G3MiOSSDK
@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "GPUProgramState.hpp"
 
 public class MeshHolder extends Mesh
 {
@@ -43,8 +42,7 @@ public class MeshHolder extends Mesh
   {
     if (_mesh != null)
        _mesh.dispose();
-  super.dispose();
-
+    super.dispose();
   }
 
   public final int getVertexCount()
@@ -75,6 +73,11 @@ public class MeshHolder extends Mesh
   public final void showNormals(boolean v)
   {
     _mesh.showNormals(v);
+  }
+
+  public final Mesh getMesh()
+  {
+    return _mesh;
   }
 
 }

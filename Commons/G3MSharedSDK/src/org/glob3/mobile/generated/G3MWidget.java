@@ -1,8 +1,8 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class G3MWidget implements ChangedRendererInfoListener
 {
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IDeviceAttitude devAttitude, IDeviceLocation devLocation)
   {
     if (ILogger.instance() == null)
     {
@@ -13,6 +13,8 @@ public class G3MWidget implements ChangedRendererInfoListener
       IMathUtils.setInstance(mathUtils);
       IJSONParser.setInstance(jsonParser);
       ITextUtils.setInstance(textUtils);
+      IDeviceAttitude.setInstance(devAttitude);
+      IDeviceLocation.setInstance(devLocation);
     }
     else
     {
@@ -20,10 +22,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider, infoDisplay);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider, infoDisplay, viewMode);
   }
 
   public void dispose()
@@ -105,6 +107,13 @@ public class G3MWidget implements ChangedRendererInfoListener
       if (_infoDisplay != null)
          _infoDisplay.dispose();
     }
+  
+    if (_rightEyeCam != null)
+       _rightEyeCam.dispose();
+    if (_leftEyeCam != null)
+       _leftEyeCam.dispose();
+    if (_auxCam != null)
+       _auxCam.dispose();
   }
 
   public final void render(int width, int height)
@@ -181,7 +190,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
     _planet.applyCameraConstrainers(_currentCamera, _nextCamera);
   
-    _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
+    _currentCamera.copyFrom(_nextCamera, false);
   
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
@@ -192,63 +201,16 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
   
-    _gl.clearScreen(_backgroundColor);
-  
-    if (_rootState == null)
+    switch (_viewMode)
     {
-      _rootState = new GLState();
-    }
-  
-    switch (renderStateType)
-    {
-      case RENDER_READY:
-        setSelectedRenderer(_mainRenderer);
-        _cameraRenderer.render(_renderContext, _rootState);
-  
-        _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
-  
-        if (_mainRenderer.isEnable())
-        {
-          _mainRenderer.render(_renderContext, _rootState);
-        }
-  
+      case MONO:
+        rawRenderMono(renderStateType);
         break;
-  
-      case RENDER_BUSY:
-        setSelectedRenderer(_busyRenderer);
-        _busyRenderer.render(_renderContext, _rootState);
+      case STEREO:
+        rawRenderStereoParallelAxis(renderStateType);
         break;
-  
       default:
-        _errorRenderer.setErrors(_rendererState.getErrors());
-        setSelectedRenderer(_errorRenderer);
-        _errorRenderer.render(_renderContext, _rootState);
-        break;
-  
-    }
-  
-    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
-    if (orderedRenderables != null)
-    {
-      final int orderedRenderablesCount = orderedRenderables.size();
-      for (int i = 0; i < orderedRenderablesCount; i++)
-      {
-        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-        orderedRenderable.render(_renderContext);
-        if (orderedRenderable != null)
-           orderedRenderable.dispose();
-      }
-    }
-  
-    if (_hudRenderer != null)
-    {
-      if (renderStateType == RenderState_Type.RENDER_READY)
-      {
-        if (_hudRenderer.isEnable())
-        {
-          _hudRenderer.render(_renderContext, _rootState);
-        }
-      }
+        throw new RuntimeException("WRONG VIEW MODE.");
     }
   
     //Removing unused programs
@@ -306,48 +268,64 @@ public class G3MWidget implements ChangedRendererInfoListener
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode);
   
-      // notify the original event
-      notifyTouchEvent(ec, touchEvent);
+    // notify the original event
+    notifyTouchEvent(ec, touchEvent);
   
-      // creates DownUp event when a Down is immediately followed by an Up
-      //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
-      if (touchEvent.getTouchCount() == 1)
+    // creates DownUp event when a Down is immediately followed by an Up
+    if (touchEvent.getTouchCount() == 1)
+    {
+      final TouchEventType eventType = touchEvent.getType();
+      if (eventType == TouchEventType.Down)
       {
-        final TouchEventType eventType = touchEvent.getType();
-        if (eventType == TouchEventType.Down)
-        {
-          _clickOnProcess = true;
-        }
-        else
-        {
-          if (eventType == TouchEventType.Up)
-          {
-            if (_clickOnProcess)
-            {
-  
-              final Touch touch = touchEvent.getTouch(0);
-              final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
-  
-              notifyTouchEvent(ec, downUpEvent);
-  
-              if (downUpEvent != null)
-                 downUpEvent.dispose();
-            }
-          }
-          _clickOnProcess = false;
-        }
+        _clickOnProcess = true;
+        final Vector2F pos = touchEvent.getTouch(0).getPos();
+        _touchDownPositionX = pos._x;
+        _touchDownPositionY = pos._y;
       }
       else
       {
-        _clickOnProcess = false;
+        if (eventType == TouchEventType.Up)
+        {
+          if (_clickOnProcess)
+          {
+            final Touch touch = touchEvent.getTouch(0);
+            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+            notifyTouchEvent(ec, downUpEvent);
+            if (downUpEvent != null)
+               downUpEvent.dispose();
+          }
+        }
+        if (_clickOnProcess)
+        {
+          if (eventType == TouchEventType.Move)
+          {
+            final Vector2F movePosition = touchEvent.getTouch(0).getPos();
+            final double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+            final float thresholdInPixels = _context.getFactory().getDeviceInfo().getPixelsInMM(1);
+            if (sd > (thresholdInPixels * thresholdInPixels))
+            {
+              _clickOnProcess = false;
+            }
+          }
+          else
+          {
+            _clickOnProcess = false;
+          }
+        }
       }
     }
+    else
+    {
+      _clickOnProcess = false;
+    }
+  
+  }
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode);
   
     _nextCamera.resizeViewport(width, height);
     _currentCamera.resizeViewport(width, height);
@@ -624,6 +602,10 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _backgroundColor = new Color(backgroundColor);
   }
+  public final Color getBackgroundColor()
+  {
+    return _backgroundColor;
+  }
 
   public final PlanetRenderer getPlanetRenderer()
   {
@@ -659,33 +641,32 @@ public class G3MWidget implements ChangedRendererInfoListener
 
 
   //void G3MWidget::notifyChangedInfo() const {
-  //
-  //  if(_hudRenderer != NULL){
+  //  if(_hudRenderer != NULL) {
   //    const RenderState_Type renderStateType = _rendererState->_type;
   //    switch (renderStateType) {
   //      case RENDER_READY:
   //      //_hudRenderer->setInfo(_mainRenderer->getInfo());
   //      break;
-  //      
+  //
   //      case RENDER_BUSY:
   //      break;
-  //      
+  //
   //      default:
   //      break;
-  //      
+  //
   //    }
   //  }
   //}
   
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
+  public final void changedRendererInfo(int rendererID, java.util.ArrayList<Info> info)
   {
     if(_infoDisplay != null)
     {
       _infoDisplay.changedInfo(info);
     }
-  //  else {
-  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-  //  }
+    //  else {
+    //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+    //  }
   }
 
   public final void removeAllPeriodicalTasks()
@@ -699,6 +680,31 @@ public class G3MWidget implements ChangedRendererInfoListener
     _periodicalTasks.clear();
   }
 
+  public final void setViewMode(ViewMode viewMode)
+  {
+    if (_viewMode != viewMode)
+    {
+      _viewMode = viewMode;
+  
+      if (_viewMode != ViewMode.STEREO)
+      {
+        if (_auxCam != null)
+           _auxCam.dispose();
+        _auxCam = null;
+        if (_leftEyeCam != null)
+           _leftEyeCam.dispose();
+        _leftEyeCam = null;
+        if (_rightEyeCam != null)
+           _rightEyeCam.dispose();
+        _rightEyeCam = null;
+      }
+  
+      _context.setViewMode(_viewMode);
+      _renderContext.setViewMode(_viewMode);
+  
+      onResizeViewportEvent(_width, _height);
+    }
+  }
 
   private IStorage _storage;
   private IDownloader _downloader;
@@ -747,7 +753,8 @@ public class G3MWidget implements ChangedRendererInfoListener
   private int _width;
   private int _height;
 
-  private final G3MContext _context;
+  private G3MContext _context;
+  private G3MRenderContext _renderContext;
 
   private boolean _paused;
   private boolean _initializationTaskWasRun;
@@ -765,13 +772,24 @@ public class G3MWidget implements ChangedRendererInfoListener
   private final InitialCameraPositionProvider _initialCameraPositionProvider;
   private boolean _initialCameraPositionHasBeenSet;
 
-  private G3MRenderContext _renderContext;
 
   private boolean _forceBusyRenderer;
 
   private InfoDisplay _infoDisplay;
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
+
+  private float _touchDownPositionX;
+  private float _touchDownPositionY;
+
+  private ViewMode _viewMode;
+
+  //For stereo vision
+  private Camera _auxCam;
+  private Camera _leftEyeCam;
+  private Camera _rightEyeCam;
+
+
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -790,8 +808,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera();
-     _nextCamera = new Camera();
+     _currentCamera = new Camera(1);
+     _nextCamera = new Camera(2);
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;
@@ -805,7 +823,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initializationTask = initializationTask;
      _autoDeleteInitializationTask = autoDeleteInitializationTask;
      _surfaceElevationProvider = mainRenderer.getSurfaceElevationProvider();
-     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider());
+     _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage, mainRenderer.getSurfaceElevationProvider(), viewMode);
      _paused = false;
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
@@ -818,6 +836,12 @@ public class G3MWidget implements ChangedRendererInfoListener
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
      _infoDisplay = infoDisplay;
+     _touchDownPositionX = 0F;
+     _touchDownPositionY = 0F;
+     _viewMode = viewMode;
+     _leftEyeCam = null;
+     _rightEyeCam = null;
+     _auxCam = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -853,16 +877,16 @@ public class G3MWidget implements ChangedRendererInfoListener
     _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, -1);
   
   
-    _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
+    _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider, _viewMode, this);
   
   
-  ///#ifdef C_CODE
-  //  delete _rendererState;
-  //  _rendererState = new RenderState( calculateRendererState() );
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  _rendererState = calculateRendererState();
-  ///#endif
+    ///#ifdef C_CODE
+    //  delete _rendererState;
+    //  _rendererState = new RenderState( calculateRendererState() );
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //  _rendererState = calculateRendererState();
+    ///#endif
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -972,6 +996,147 @@ public class G3MWidget implements ChangedRendererInfoListener
       _selectedRenderer = selectedRenderer;
       _selectedRenderer.start(_renderContext);
     }
+  }
+
+  private void rawRender(RenderState_Type renderStateType)
+  {
+  
+    if (_rootState == null)
+    {
+      _rootState = new GLState();
+    }
+  
+    switch (renderStateType)
+    {
+      case RENDER_READY:
+        setSelectedRenderer(_mainRenderer);
+        _cameraRenderer.render(_renderContext, _rootState);
+  
+        _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
+  
+        if (_mainRenderer.isEnable())
+        {
+          _mainRenderer.render(_renderContext, _rootState);
+        }
+  
+        break;
+  
+      case RENDER_BUSY:
+        setSelectedRenderer(_busyRenderer);
+        _busyRenderer.render(_renderContext, _rootState);
+        break;
+  
+      default:
+        _errorRenderer.setErrors(_rendererState.getErrors());
+        setSelectedRenderer(_errorRenderer);
+        _errorRenderer.render(_renderContext, _rootState);
+        break;
+  
+    }
+  
+    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
+    if (orderedRenderables != null)
+    {
+      final int orderedRenderablesCount = orderedRenderables.size();
+      for (int i = 0; i < orderedRenderablesCount; i++)
+      {
+        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
+        orderedRenderable.render(_renderContext);
+        if (orderedRenderable != null)
+           orderedRenderable.dispose();
+      }
+  
+      orderedRenderables.clear();
+    }
+  
+    if (_hudRenderer != null)
+    {
+      if (renderStateType == RenderState_Type.RENDER_READY)
+      {
+        if (_hudRenderer.isEnable())
+        {
+          _hudRenderer.render(_renderContext, _rootState);
+        }
+      }
+    }
+  
+  
+  }
+
+  private void rawRenderMono(RenderState_Type renderStateType)
+  {
+  
+    _gl.clearScreen(_backgroundColor);
+    _gl.viewport(0, 0, _width, _height);
+    rawRender(renderStateType);
+  }
+
+  private void rawRenderStereoParallelAxis(RenderState_Type renderStateType)
+  {
+  
+    if (_auxCam == null)
+    {
+      _auxCam = new Camera(-1);
+    }
+  
+    final boolean eyesUpdated = _auxCam.getTimestamp() != _currentCamera.getTimestamp();
+    if (eyesUpdated)
+    {
+  
+      //Saving central camera
+      if (_rightEyeCam == null)
+      {
+        _rightEyeCam = new Camera(-1);
+      }
+      if (_leftEyeCam == null)
+      {
+        _leftEyeCam = new Camera(-1);
+      }
+      _auxCam.copyFrom(_currentCamera, true);
+      _leftEyeCam.copyFrom(_auxCam, true);
+      _rightEyeCam.copyFrom(_auxCam, true);
+  
+      //For 3D scenes we create the "eyes" cameras
+      if (renderStateType == RenderState_Type.RENDER_READY)
+      {
+        final Vector3D camPos = _currentCamera.getCartesianPosition();
+        final Vector3D camCenter = _currentCamera.getCenter();
+        final Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
+        final double halfEyesSeparation = 0.07 / 2.0;
+        final Vector3D up = _currentCamera.getUp();
+  
+        final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);
+        final Angle vFOV = _currentCamera.getVerticalFOV();
+  
+        final Vector3D leftEyePosition = camPos.add(eyesDirection.times(-halfEyesSeparation));
+        final Vector3D leftEyeCenter = camCenter.add(eyesDirection.times(-halfEyesSeparation));
+        _leftEyeCam.setLookAtParams(leftEyePosition.asMutableVector3D(), leftEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+        _leftEyeCam.setFOV(vFOV, hFOV_2);
+  
+        final Vector3D rightEyePosition = camPos.add(eyesDirection.times(halfEyesSeparation));
+        final Vector3D rightEyeCenter = camCenter.add(eyesDirection.times(halfEyesSeparation));
+  
+        _rightEyeCam.setLookAtParams(rightEyePosition.asMutableVector3D(), rightEyeCenter.asMutableVector3D(), up.asMutableVector3D());
+        _rightEyeCam.setFOV(vFOV, hFOV_2);
+      }
+  
+    }
+  
+    final int halfWidth = _width / 2;
+  
+    _gl.clearScreen(_backgroundColor);
+    //Left
+    _gl.viewport(0, 0, halfWidth, _height);
+    _currentCamera.copyFrom(_leftEyeCam, true);
+    rawRender(renderStateType);
+  
+    //Right
+    _gl.viewport(halfWidth, 0, halfWidth, _height);
+    _currentCamera.copyFrom(_rightEyeCam, true);
+    rawRender(renderStateType);
+  
+    //Restoring central camera
+    _currentCamera.copyFrom(_auxCam, true);
   }
 
 }

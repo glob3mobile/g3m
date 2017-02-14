@@ -12,7 +12,9 @@
 
 #include <string>
 
-//class Shape;
+#include "Geodetic3D.hpp"
+#include "AltitudeMode.hpp"
+
 class SGShape;
 class IByteBuffer;
 class JSONBaseObject;
@@ -26,18 +28,20 @@ class SGTranslateNode;
 class SGLayerNode;
 class Color;
 class SceneJSParserStatistics;
-#include "Geodetic3D.hpp"
+
 
 class SceneJSShapesParser {
 private:
-  SGShape* _rootShape;
+  SGShape*           _rootShape;
   const std::string& _uriPrefix;
+  const bool         _depthTest;
 
   SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                      const std::string& uriPrefix,
-                      bool isTransparent,
-                      Geodetic3D* position,
-                      AltitudeMode altitudeMode);
+                      const std::string&    uriPrefix,
+                      bool                  isTransparent,
+                      bool                  depthTest,
+                      Geodetic3D*           position,
+                      AltitudeMode          altitudeMode);
 
   SGShape* getRootShape() const {
     return _rootShape;
@@ -71,28 +75,32 @@ private:
 public:
 
   static SGShape* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                          const std::string& uriPrefix,
-                                          bool isTransparent,
-                                          Geodetic3D* position,
-                                          AltitudeMode altitudeMode);
+                                          const std::string&    uriPrefix,
+                                          bool                  isTransparent,
+                                          bool                  depthTest,
+                                          Geodetic3D*           position,
+                                          AltitudeMode          altitudeMode);
 
   static SGShape* parseFromJSON(const std::string& json,
                                 const std::string& uriPrefix,
-                                bool isTransparent,
-                                Geodetic3D* position,
-                                AltitudeMode altitudeMode);
+                                bool               isTransparent,
+                                bool               depthTest,
+                                Geodetic3D*        position,
+                                AltitudeMode       altitudeMode);
 
   static SGShape* parseFromJSON(const IByteBuffer* json,
                                 const std::string& uriPrefix,
-                                bool isTransparent,
-                                Geodetic3D* position,
-                                AltitudeMode altitudeMode);
+                                bool               isTransparent,
+                                bool               depthTest,
+                                Geodetic3D*        position,
+                                AltitudeMode       altitudeMode);
 
-  static SGShape* parseFromBSON(IByteBuffer* bson,
+  static SGShape* parseFromBSON(IByteBuffer*       bson,
                                 const std::string& uriPrefix,
-                                bool isTransparent,
-                                Geodetic3D* position,
-                                AltitudeMode altitudeMode);
+                                bool               isTransparent,
+                                bool               depthTest,
+                                Geodetic3D*        position,
+                                AltitudeMode       altitudeMode);
   
 };
 

@@ -9,6 +9,7 @@ import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SphericalPlanet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.WMSLayer;
@@ -16,6 +17,7 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.specific.TileVisitorCache_Android;
+import org.glob3.mobile.specific.TileVisitorListener;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -23,8 +25,10 @@ import android.widget.LinearLayout;
 
 
 public class G3MSimpleTileCacheExampleActivity
-         extends
-            Activity {
+   extends
+      Activity
+   implements
+      TileVisitorListener {
 
    private G3MWidget_Android _widgetAndroid = null;
 
@@ -37,7 +41,7 @@ public class G3MSimpleTileCacheExampleActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(getApplicationContext());
       builder.setLogFPS(true);
 
-      final Planet planet = Planet.createSphericalEarth();
+      final Planet planet = SphericalPlanet.createEarth();
       builder.setPlanet(planet);
 
       final PlanetRendererBuilder planetRendererBuilder = builder.getPlanetRendererBuilder();
@@ -70,7 +74,8 @@ public class G3MSimpleTileCacheExampleActivity
       _widgetAndroid = builder.createWidget();
 
 
-      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext());
+      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext(),
+               G3MSimpleTileCacheExampleActivity.this);
       // Are cached the first two levels of the world
       _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
       // Sector specified cached at the indicated levels
@@ -85,6 +90,34 @@ public class G3MSimpleTileCacheExampleActivity
 
       final LinearLayout g3mLayout = (LinearLayout) findViewById(R.id.glob3);
       g3mLayout.addView(_widgetAndroid);
+
+   }
+
+
+   @Override
+   public void onTileDownloaded() {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onStartedProccess() {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onFinishedProcess() {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onPetition(final String url) {
+      // TODO Auto-generated method stub
 
    }
 

@@ -11,10 +11,11 @@
 
 class TileImageContribution;
 class Tile;
-class Vector2I;
+class Vector2S;
 class TileImageListener;
 
 #include "RCObject.hpp"
+#include <string>
 
 class FrameTasksExecutor;
 
@@ -32,14 +33,14 @@ public:
 
   virtual void create(const Tile* tile,
                       const TileImageContribution* contribution,
-                      const Vector2I& resolution,
-                      long long tileDownloadPriority,
+                      const Vector2S& resolution,
+                      long long tileTextureDownloadPriority,
                       bool logDownloadActivity,
                       TileImageListener* listener,
                       bool deleteListener,
                       FrameTasksExecutor* frameTasksExecutor) = 0;
 
-  virtual void cancel(const std::string& tileId) = 0;
+  virtual void cancel(const std::string& tileID) = 0;
 
 };
 

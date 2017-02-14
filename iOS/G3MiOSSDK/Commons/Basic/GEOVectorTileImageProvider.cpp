@@ -17,7 +17,7 @@
 #include "GEORasterProjection.hpp"
 #include "TileImageContribution.hpp"
 #include "ErrorHandling.hpp"
-
+#include "IStringBuilder.hpp"
 
 GEOVectorTileImageProvider::GEOVectorTileImageProvider(const GEOVectorLayer* layer) :
 _layer(layer)
@@ -30,7 +30,7 @@ const TileImageContribution* GEOVectorTileImageProvider::contribution(const Tile
 
 
 GEOVectorTileImageProvider::GEORasterizerFrameTask::~GEORasterizerFrameTask() {
-  _geoVectorTileImageProvider->rasterizerDeleted(_tileId);
+  _geoVectorTileImageProvider->rasterizerDeleted(_tileID);
   _geoVectorTileImageProvider->_release();
 
   if (_deleteListener) {
@@ -49,7 +49,7 @@ GEOVectorTileImageProvider::GEORasterizerFrameTask::~GEORasterizerFrameTask() {
 
 void GEOVectorTileImageProvider::GEORasterizerFrameTask::cancel() {
   _isCanceled = true;
-  _listener->imageCreationCanceled(_tileId);
+  _listener->imageCreationCanceled(_tileID);
 }
 
 bool GEOVectorTileImageProvider::GEORasterizerFrameTask::isCanceled(const G3MRenderContext* rc) {
@@ -58,7 +58,7 @@ bool GEOVectorTileImageProvider::GEORasterizerFrameTask::isCanceled(const G3MRen
 
 void GEOVectorTileImageProvider::GEORasterizerFrameTask::execute(const G3MRenderContext* rc) {
   _geoVectorTileImageProvider->rasterize(_contribution,
-                                         _tileId,
+                                         _tileID,
                                          _tileSector,
                                          _tileMercator,
                                          _tileLevel,
@@ -81,19 +81,19 @@ void GEOVectorTileImageProvider::GEORasterizerQuadTreeVisitor::endVisit(bool abo
 
 }
 
-const std::string GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::getImageId(const std::string& tileId) const {
+const std::string GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::getImageID(const std::string& tileID) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("GEOVectorTileImageProvider/");
-  isb->addString(tileId);
+  isb->addString(tileID);
   const std::string s = isb->getString();
   delete isb;
   return s;
 }
 
 void GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::imageCreated(const IImage* image) {
-  _listener->imageCreated(_tileId,
+  _listener->imageCreated(_tileID,
                           image,
-                          getImageId(_tileId),
+                          getImageID(_tileID),
                           _contribution);
   if (_deleteListener) {
     delete _listener;
@@ -101,7 +101,7 @@ void GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::imageCreated(
 }
 
 void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribution,
-                                           const std::string& tileId,
+                                           const std::string& tileID,
                                            const Sector& tileSector,
                                            bool tileMercator,
                                            int tileLevel,
@@ -109,7 +109,7 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
                                            int resolutionHeight,
                                            TileImageListener* listener,
                                            bool deleteListener) {
-  ICanvas* canvas = IFactory::instance()->createCanvas();
+  ICanvas* canvas = IFactory::instance()->createCanvas(false);
   canvas->initialize(resolutionWidth, resolutionHeight);
 
   GEORasterProjection* projection = new GEORasterProjection(tileSector,
@@ -122,7 +122,7 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
   delete projection;
 
   canvas->createImage(new GEORasterizerCanvasImageListener(contribution,
-                                                           tileId,
+                                                           tileID,
                                                            listener,
                                                            deleteListener),
                       true /* autodelete */);
@@ -132,51 +132,51 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
 
 void GEOVectorTileImageProvider::create(const Tile* tile,
                                         const TileImageContribution* contribution,
-                                        const Vector2I& resolution,
-                                        long long tileDownloadPriority,
+                                        const Vector2S& resolution,
+                                        long long tileTextureDownloadPriority,
                                         bool logDownloadActivity,
                                         TileImageListener* listener,
                                         bool deleteListener,
                                         FrameTasksExecutor* frameTasksExecutor) {
 
-  const std::string tileId = tile->_id;
+  const std::string tileID = tile->_id;
   GEORasterizerFrameTask* rasterizer = new GEORasterizerFrameTask(this,
                                                                   contribution,
-                                                                  tileId,
+                                                                  tileID,
                                                                   tile->_sector,
                                                                   tile->_mercator,
                                                                   tile->_level,
                                                                   resolution,
                                                                   listener,
                                                                   deleteListener);
-  _rasterizers[tileId] = rasterizer;
+  _rasterizers[tileID] = rasterizer;
 
   frameTasksExecutor->addPreRenderTask(rasterizer);
 }
 
-void GEOVectorTileImageProvider::cancel(const std::string& tileId) {
+void GEOVectorTileImageProvider::cancel(const std::string& tileID) {
 #ifdef C_CODE
-  if (_rasterizers.find(tileId) != _rasterizers.end()) {
-    GEORasterizerFrameTask* rasterizer = _rasterizers[tileId];
+  if (_rasterizers.find(tileID) != _rasterizers.end()) {
+    GEORasterizerFrameTask* rasterizer = _rasterizers[tileID];
     rasterizer->cancel();
   }
 #endif
 #ifdef JAVA_CODE
-  final GEORasterizerFrameTask rasterizer = _rasterizers.get(tileId);
+  final GEORasterizerFrameTask rasterizer = _rasterizers.get(tileID);
   if (rasterizer != null) {
     rasterizer.cancel();
   }
 #endif
 }
 
-void GEOVectorTileImageProvider::rasterizerDeleted(const std::string& tileId) {
+void GEOVectorTileImageProvider::rasterizerDeleted(const std::string& tileID) {
 #ifdef C_CODE
-  if (_rasterizers.find(tileId) != _rasterizers.end()) {
-    _rasterizers.erase(tileId);
+  if (_rasterizers.find(tileID) != _rasterizers.end()) {
+    _rasterizers.erase(tileID);
   }
 #endif
 #ifdef JAVA_CODE
-  _rasterizers.remove(tileId);
+  _rasterizers.remove(tileID);
 #endif
 }
 

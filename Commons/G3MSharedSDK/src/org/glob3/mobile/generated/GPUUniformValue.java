@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GPUUniform.cpp
 //  G3MiOSSDK
@@ -23,28 +23,24 @@ package org.glob3.mobile.generated;
 
 public abstract class GPUUniformValue extends RCObject
 {
-  private final int _type;
 
   public void dispose()
   {
     super.dispose();
   }
 
+  public final int _type;
+
   public GPUUniformValue(int type)
   {
      _type = type;
   }
 
-
-
-  public final int getType()
-  {
-     return _type;
-  }
   public abstract void setUniform(GL gl, IGLUniformID id);
   public abstract boolean isEquals(GPUUniformValue v);
 
   public abstract String description();
+
   @Override
   public String toString() {
     return description();

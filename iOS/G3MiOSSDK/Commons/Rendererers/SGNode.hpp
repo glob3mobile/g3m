@@ -23,7 +23,7 @@ class GPUProgramState;
 class SGNode {
 protected:
   const std::string _id;
-  const std::string _sId;
+  const std::string _sID;
   
   //  SGNode*              _parent;
   std::vector<SGNode*> _children;
@@ -44,9 +44,9 @@ protected:
 public:
   
   SGNode(const std::string& id,
-         const std::string& sId) :
+         const std::string& sID) :
   _id(id),
-  _sId(sId),
+  _sID(sID),
   _context(NULL),
   _shape(NULL)
   //  _parent(NULL)
@@ -73,17 +73,17 @@ public:
   virtual const GLState* createState(const G3MRenderContext* rc,
                                      const GLState* parentState) { return parentState;}
 
-  int getChildrenCount() const {
+  size_t getChildrenCount() const {
     return _children.size();
   }
 
-  SGNode* getChild(int i) const {
+  SGNode* getChild(size_t i) const {
     return _children[i];
   }
 
   virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) {}
 
-  virtual std::string description() {
+  virtual const std::string description() {
     return "SGNode";
   };
 };

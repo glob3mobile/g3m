@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  RasterLayerTileImageProvider.cpp
 //  G3MiOSSDK
@@ -27,11 +27,11 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   private RasterLayer _layer;
   private IDownloader _downloader;
 
-  private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
+  private final java.util.HashMap<String, Long> _requestsIDsPerTile = new java.util.HashMap<String, Long>();
 
   public void dispose()
   {
-    for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet()) {
+    for (java.util.Map.Entry<String, Long> entry : _requestsIDsPerTile.entrySet()) {
       _downloader.cancelRequest(entry.getValue());
     }
   
@@ -50,30 +50,30 @@ public class RasterLayerTileImageProvider extends TileImageProvider
     return (_layer == null) ? null : _layer.contribution(tile);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
-    final String tileId = tile._id;
+    final String tileID = tile._id;
   
-    final long requestId = _layer.requestImage(tile, _downloader, tileDownloadPriority, logDownloadActivity, new RLTIP_ImageDownloadListener(this, tileId, contribution, listener, deleteListener), true); // deleteListener
+    final long requestID = _layer.requestImage(tile, _downloader, tileTextureDownloadPriority, logDownloadActivity, new RLTIP_ImageDownloadListener(this, tileID, contribution, listener, deleteListener), true); // deleteListener
   
-    if (requestId >= 0)
+    if (requestID >= 0)
     {
-      _requestsIdsPerTile.put(tileId, requestId);
+      _requestsIDsPerTile.put(tileID, requestID);
     }
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
-    final Long requestId = _requestsIdsPerTile.remove(tileId);
-    if (requestId != null) {
-      _downloader.cancelRequest(requestId);
+    final Long requestID = _requestsIDsPerTile.remove(tileID);
+    if (requestID != null) {
+      _downloader.cancelRequest(requestID);
     }
   }
 
 
-  public final void requestFinish(String tileId)
+  public final void requestFinish(String tileID)
   {
-    _requestsIdsPerTile.remove(tileId);
+    _requestsIDsPerTile.remove(tileID);
   }
 
   public final void layerDeleted(RasterLayer layer)

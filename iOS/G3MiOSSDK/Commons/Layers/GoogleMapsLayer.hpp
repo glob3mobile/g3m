@@ -17,7 +17,7 @@ private:
   const int         _initialLevel;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "GoogleMaps";
   }
 
@@ -49,7 +49,7 @@ public:
   RenderState getRenderState();
 
   const Sector getDataSector() const {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
   
 };

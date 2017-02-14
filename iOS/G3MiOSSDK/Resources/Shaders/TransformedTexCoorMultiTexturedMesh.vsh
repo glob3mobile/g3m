@@ -22,7 +22,6 @@ void main() {
 
   //Transforming TextureCoordOut
   TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
-  //////////////////////////////
 
   TextureCoordOut2 = aTextureCoord2;
   

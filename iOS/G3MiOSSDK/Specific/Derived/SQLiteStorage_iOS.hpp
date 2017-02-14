@@ -74,6 +74,8 @@ public:
     return (_readDB != NULL) && (_writeDB != NULL);
   }
   
+  void merge(const std::string& databasePath);
+  
 };
 
 #endif

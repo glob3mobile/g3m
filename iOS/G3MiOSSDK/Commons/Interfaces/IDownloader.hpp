@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IDownloader
@@ -41,19 +40,54 @@ public:
                                   const TimeInterval& timeToCache,
                                   bool readExpired,
                                   IBufferDownloadListener* listener,
-                                  bool deleteListener) = 0;
+                                  bool deleteListener,
+                                  const std::string& tag) = 0;
 
   virtual long long requestImage(const URL& url,
                                  long long priority,
                                  const TimeInterval& timeToCache,
                                  bool readExpired,
                                  IImageDownloadListener* listener,
-                                 bool deleteListener) = 0;
+                                 bool deleteListener,
+                                 const std::string& tag) = 0;
 
-  virtual void cancelRequest(long long requestId) = 0;
+  long long requestBuffer(const URL& url,
+                          long long priority,
+                          const TimeInterval& timeToCache,
+                          bool readExpired,
+                          IBufferDownloadListener* listener,
+                          bool deleteListener) {
+    return requestBuffer(url,
+                         priority,
+                         timeToCache,
+                         readExpired,
+                         listener,
+                         deleteListener,
+                         "" /* default tag */ );
+  }
+
+  long long requestImage(const URL& url,
+                         long long priority,
+                         const TimeInterval& timeToCache,
+                         bool readExpired,
+                         IImageDownloadListener* listener,
+                         bool deleteListener) {
+    return requestImage(url,
+                        priority,
+                        timeToCache,
+                        readExpired,
+                        listener,
+                        deleteListener,
+                        "" /* default tag */ );
+  }
+
+
+  virtual bool cancelRequest(long long requestID) = 0;
+
+  virtual void cancelRequestsTagged(const std::string& tag) = 0;
 
   virtual const std::string statistics() = 0;
-
+  
 };
 
 #endif

@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/14/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MDemoBuilder.hpp"
@@ -20,6 +19,9 @@
 #include <G3MiOSSDK/GEORenderer.hpp>
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/HUDRenderer.hpp>
+#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
+#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
+#include <G3MiOSSDK/AtmosphereRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -61,7 +63,7 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
-  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  builder->setAtmosphere(true);
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
@@ -77,7 +79,6 @@ void G3MDemoBuilder::build() {
 
   PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
   builder->addRenderer(pointCloudsRenderer);
-//  builder->getPlanetRendererBuilder()->setTileRenderingListener(pointCloudsRenderer->getTileRenderingListener());
 
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,
@@ -89,6 +90,16 @@ void G3MDemoBuilder::build() {
   HUDRenderer* hudRenderer = new HUDRenderer();
   builder->setHUDRenderer(hudRenderer);
 
+  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(10);
+  builder->addRenderer(nonOverlappingMarksRenderer);
+
+  VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
+  builder->addRenderer(vectorStreamingRenderer);
+
+  //Uncomment to see render debug mesh on top of tiles
+//#warning remove setRenderDebug(true);
+//  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+
   _initialized = true;
   _model = new G3MDemoModel(_listener,
                             layerSet,
@@ -97,7 +108,9 @@ void G3MDemoBuilder::build() {
                             marksRenderer,
                             geoRenderer,
                             pointCloudsRenderer,
-                            hudRenderer);
+                            hudRenderer,
+                            nonOverlappingMarksRenderer,
+                            vectorStreamingRenderer);
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }

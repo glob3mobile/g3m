@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLFeatureNoGroup extends GLFeatureGroup
 {
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)

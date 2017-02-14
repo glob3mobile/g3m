@@ -3,13 +3,15 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 01/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IImage
 #define G3MiOSSDK_IImage
 
 #include "Vector2I.hpp"
+
+class MutableColor255;
+
 
 class IImage {
 public:
@@ -28,7 +30,12 @@ public:
   }
 #endif
 
+  virtual bool isPremultiplied() const = 0;
+
   virtual IImage* shallowCopy() const = 0;
+
+  virtual void getPixel(int x, int y,
+                        MutableColor255& pixel) const = 0;
 };
 
 #endif

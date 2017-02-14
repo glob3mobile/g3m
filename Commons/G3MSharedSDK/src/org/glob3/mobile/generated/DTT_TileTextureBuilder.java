@@ -1,31 +1,29 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DTT_TileTextureBuilder extends RCObject
 {
   private LeveledTexturedMesh _texturedMesh;
   private Tile _tile;
-  private final String _tileId;
+  private final String _tileID;
   private TileImageProvider _tileImageProvider;
   private TexturesHandler _texturesHandler;
-  private final Vector2I _tileTextureResolution;
+  private final Vector2S _tileTextureResolution;
   private final boolean _logTilesPetitions;
-  private final long _tileDownloadPriority;
+  private final long _tileTextureDownloadPriority;
   private boolean _canceled;
   private FrameTasksExecutor _frameTasksExecutor;
-  private final IImage _backGroundTileImage;
-  private final String _backGroundTileImageName;
-  private final boolean _ownedTexCoords;
-  private final boolean _transparent;
+  private final IImage _backgroundTileImage;
+  private final String _backgroundTileImageName;
   private final boolean _generateMipmap;
 
 
-  private static TextureIDReference getTopLevelTextureIdForTile(Tile tile)
+  private static TextureIDReference getTopLevelTextureIDForTile(Tile tile)
   {
     LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
 
-    return (mesh == null) ? null : mesh.getTopLevelTextureId();
+    return (mesh == null) ? null : mesh.getTopLevelTextureID();
   }
 
-  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2I tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backGroundTileImage, String backGroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
+  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2S tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backgroundTileImage, String backgroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
   {
     java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 
@@ -38,12 +36,12 @@ public class DTT_TileTextureBuilder extends RCObject
 
       if (ancestor != tile)
       {
-        final TextureIDReference glTextureId = getTopLevelTextureIdForTile(ancestor);
-        if (glTextureId != null)
+        final TextureIDReference glTextureID = getTopLevelTextureIDForTile(ancestor);
+        if (glTextureID != null)
         {
-          TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
+          TextureIDReference glTextureIDRetainedCopy = glTextureID.createCopy();
 
-          mapping.setGLTextureId(glTextureIdRetainedCopy);
+          mapping.setGLTextureID(glTextureIDRetainedCopy);
           fallbackSolved = true;
         }
       }
@@ -53,11 +51,11 @@ public class DTT_TileTextureBuilder extends RCObject
       ancestor = ancestor.getParent();
     }
 
-    if (!fallbackSolved && backGroundTileImage != null)
+    if (!fallbackSolved && backgroundTileImage != null)
     {
       LazyTextureMapping mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution, tile, tile, tessellator), true, false);
-      final TextureIDReference glTextureId = texturesHandler.getTextureIDReference(backGroundTileImage, GLFormat.rgba(), backGroundTileImageName, generateMipmap);
-      mapping.setGLTextureId(glTextureId); //Mandatory to active mapping
+      final TextureIDReference glTextureID = texturesHandler.getTextureIDReference(backgroundTileImage, GLFormat.rgba(), backgroundTileImageName, generateMipmap);
+      mapping.setGLTextureID(glTextureID); //Mandatory to active mapping
 
       mappings.add(mapping);
 
@@ -67,27 +65,25 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backGroundTileImage, String backGroundTileImageName)
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileTextureDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName)
 
   {
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
      _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
      _tile = tile;
-     _tileId = tile._id;
+     _tileID = tile._id;
      _texturedMesh = null;
      _canceled = false;
-     _tileDownloadPriority = tileDownloadPriority;
+     _tileTextureDownloadPriority = tileTextureDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
      _frameTasksExecutor = frameTasksExecutor;
-     _backGroundTileImage = backGroundTileImage;
-     _backGroundTileImageName = backGroundTileImageName;
-     _ownedTexCoords = true;
-     _transparent = false;
+     _backgroundTileImage = backgroundTileImage;
+     _backgroundTileImageName = backgroundTileImageName;
      _generateMipmap = true;
     _tileImageProvider._retain();
 
-    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backGroundTileImage, backGroundTileImageName, _ownedTexCoords, _transparent, _generateMipmap);
+    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, true, false, _generateMipmap); // transparent, -  ownedTexCoords,
   }
 
   public final LeveledTexturedMesh getTexturedMesh()
@@ -104,13 +100,13 @@ public class DTT_TileTextureBuilder extends RCObject
       {
         if (_tile != null)
         {
-          imageCreated(_backGroundTileImage.shallowCopy(), _backGroundTileImageName, TileImageContribution.fullCoverageOpaque());
+          imageCreated(_backgroundTileImage.shallowCopy(), _backgroundTileImageName, TileImageContribution.fullCoverageOpaque());
           //_tile->setTextureSolved(true);
         }
       }
       else
       {
-        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backGroundTileImage, _backGroundTileImageName), true, _frameTasksExecutor);
+        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileTextureDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backgroundTileImage, _backgroundTileImageName), true, _frameTasksExecutor);
       }
     }
   }
@@ -125,7 +121,7 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       _canceled = true;
-      _tileImageProvider.cancel(_tileId);
+      _tileImageProvider.cancel(_tileID);
     }
   }
 
@@ -140,35 +136,34 @@ public class DTT_TileTextureBuilder extends RCObject
     super.dispose();
   }
 
-  public final boolean uploadTexture(IImage image, String imageId)
+  public final boolean uploadTexture(IImage image, String imageID)
   {
 
-    final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageId, _generateMipmap);
-    if (glTextureId == null)
+    final TextureIDReference glTextureID = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageID, _generateMipmap);
+    if (glTextureID == null)
     {
       return false;
     }
 
-    if (!_texturedMesh.setGLTextureIdForLevel(0, glTextureId))
+    if (!_texturedMesh.setGLTextureIDForLevel(0, glTextureID))
     {
-      if (glTextureId != null)
-         glTextureId.dispose();
+      if (glTextureID != null)
+         glTextureID.dispose();
     }
 
     return true;
   }
 
-  public final void imageCreated(IImage image, String imageId, TileImageContribution contribution)
+  public final void imageCreated(IImage image, String imageID, TileImageContribution contribution)
   {
     if (!contribution.isFullCoverageAndOpaque())
     {
-      ILogger.instance().logWarning("Contribution isn't full covearge and opaque before to upload tuxtuer");
+      ILogger.instance().logWarning("Contribution isn't full covearge and opaque before to upload texture");
     }
 
     if (!_canceled && (_tile != null) && (_texturedMesh != null))
     {
-
-      if (uploadTexture(image, imageId))
+      if (uploadTexture(image, imageID))
       {
         _tile.setTextureSolved(true);
       }
@@ -181,8 +176,7 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final void imageCreationError(String error)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning propagate the error to the texturizer && change the render state if is necessary
+    // TODO: #warning propagate the error to the texturizer and change the render state if is necessary
     ILogger.instance().logError("%s", error);
   }
 

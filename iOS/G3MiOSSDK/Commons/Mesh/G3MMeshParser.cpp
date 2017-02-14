@@ -21,6 +21,9 @@
 #include "DirectMesh.hpp"
 #include "IndexedMesh.hpp"
 #include "Planet.hpp"
+#include "Geodetic3D.hpp"
+#include "GLConstants.hpp"
+
 
 Color* G3MMeshParser::parseColor(const JSONArray* jsonColor) {
   if (jsonColor == NULL) {
@@ -44,8 +47,8 @@ std::map<std::string, G3MMeshMaterial*> G3MMeshParser::parseMaterials(const JSON
   std::map<std::string, G3MMeshMaterial*> result;
 
   if (jsonMaterials != NULL) {
-    const int materialsSize = jsonMaterials->size();
-    for (int i = 0; i < materialsSize; i++) {
+    const size_t materialsSize = jsonMaterials->size();
+    for (size_t i = 0; i < materialsSize; i++) {
       const JSONObject* jsonMaterial = jsonMaterials->getAsObject(i);
 
       const std::string id = jsonMaterial->getAsString("id")->value();
@@ -92,9 +95,9 @@ IFloatBuffer* G3MMeshParser::parseFloatBuffer(const JSONArray* jsonArray) {
   if (jsonArray == NULL) {
     return NULL;
   }
-  const int size = jsonArray->size();
+  const size_t size = jsonArray->size();
   IFloatBuffer* result = IFactory::instance()->createFloatBuffer(size);
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     const float value = (float) jsonArray->getAsNumber(i, 0);
     result->rawPut(i, value);
   }
@@ -108,9 +111,9 @@ IFloatBuffer* G3MMeshParser::parseGeodeticFloatBuffer(const JSONArray* jsonArray
   if (jsonArray == NULL) {
     return NULL;
   }
-  const int size = jsonArray->size();
+  const size_t size = jsonArray->size();
   IFloatBuffer* result = IFactory::instance()->createFloatBuffer(size);
-  for (int i = 0; i < size; i += 3) {
+  for (size_t i = 0; i < size; i += 3) {
     const double longitudeInDegrees = jsonArray->getAsNumber(i,   0) + geodeticCenter._longitude._degrees;
     const double latitudeInDegrees  = jsonArray->getAsNumber(i+1, 0) + geodeticCenter._latitude._degrees;
     const double height             = jsonArray->getAsNumber(i+2, 0) + geodeticCenter._height;
@@ -130,9 +133,9 @@ IShortBuffer* G3MMeshParser::parseShortBuffer(const JSONArray* jsonArray) {
   if (jsonArray == NULL) {
     return NULL;
   }
-  const int size = jsonArray->size();
+  const size_t size = jsonArray->size();
   IShortBuffer* result = IFactory::instance()->createShortBuffer(size);
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     const short value = (short) jsonArray->getAsNumber(i, 0);
     result->rawPut(i, value);
   }
@@ -223,7 +226,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
 
   IFloatBuffer* normals   = parseFloatBuffer( jsonMesh->getAsArray("normals")  );
   IFloatBuffer* colors    = parseFloatBuffer( jsonMesh->getAsArray("colors")   );
-#warning TODO texCoords
+// #warning TODO texCoords
   //IFloatBuffer* texCoords = parseFloatBuffer( jsonMesh->getAsArray("texCoords") );
 
   IShortBuffer* indices   = parseShortBuffer( jsonMesh->getAsArray("indices") );
@@ -238,21 +241,20 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
                           pointSize,
                           material->_color, // flatColor
                           colors,
-                          0, // colorsIntensity
                           depthTest,
                           normals);
   }
   else {
     mesh = new IndexedMesh(toGLPrimitive(primitive),
-                           true, // owner
                            Vector3D(centerX, centerY, centerZ),
                            vertices,
+                           true,
                            indices,
+                           true,
                            lineWidth,
                            pointSize,
                            material->_color, // flatColor
                            colors,
-                           0, // colorsIntensity
                            depthTest,
                            normals);
   }
@@ -264,8 +266,8 @@ std::vector<Mesh*> G3MMeshParser::parseMeshes(std::map<std::string, G3MMeshMater
                                               const Planet* planet) {
   std::vector<Mesh*> result;
   if (jsonMeshes != NULL) {
-    const int jsonMeshesSize = jsonMeshes->size();
-    for (int i = 0; i < jsonMeshesSize; i++) {
+    const size_t jsonMeshesSize = jsonMeshes->size();
+    for (size_t i = 0; i < jsonMeshesSize; i++) {
       Mesh* mesh = parseMesh(materials,
                              jsonMeshes->getAsObject(i),
                              planet);

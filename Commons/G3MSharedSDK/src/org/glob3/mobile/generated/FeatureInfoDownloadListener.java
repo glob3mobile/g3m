@@ -1,7 +1,7 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class FeatureInfoDownloadListener extends IBufferDownloadListener
 {
-  private MapBooApplicationChangeListener _applicationListener;
+  private MapBooOLDApplicationChangeListener _applicationListener;
 
   /**
    Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
@@ -40,7 +40,7 @@ public class FeatureInfoDownloadListener extends IBufferDownloadListener
 
   }
 
-  public FeatureInfoDownloadListener(MapBooApplicationChangeListener applicationListener)
+  public FeatureInfoDownloadListener(MapBooOLDApplicationChangeListener applicationListener)
   {
      _applicationListener = applicationListener;
 

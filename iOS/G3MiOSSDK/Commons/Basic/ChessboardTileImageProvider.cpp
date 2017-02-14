@@ -17,6 +17,8 @@
 #include "Color.hpp"
 #include "IImageListener.hpp"
 #include "TileImageContribution.hpp"
+#include "Vector2S.hpp"
+
 
 class ChessboardTileImageProvider_IImageListener : public IImageListener {
 private:
@@ -75,8 +77,8 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
 
 void ChessboardTileImageProvider::create(const Tile* tile,
                                          const TileImageContribution* contribution,
-                                         const Vector2I& resolution,
-                                         long long tileDownloadPriority,
+                                         const Vector2S& resolution,
+                                         long long tileTextureDownloadPriority,
                                          bool logDownloadActivity,
                                          TileImageListener* listener,
                                          bool deleteListener,
@@ -85,7 +87,7 @@ void ChessboardTileImageProvider::create(const Tile* tile,
     const int width = resolution._x;
     const int height = resolution._y;
 
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
     canvas->initialize(width, height);
 
     canvas->setFillColor(_backgroundColor);
@@ -136,6 +138,6 @@ void ChessboardTileImageProvider::create(const Tile* tile,
   }
 }
 
-void ChessboardTileImageProvider::cancel(const std::string& tileId) {
+void ChessboardTileImageProvider::cancel(const std::string& tileID) {
   // do nothing, can't cancel
 }

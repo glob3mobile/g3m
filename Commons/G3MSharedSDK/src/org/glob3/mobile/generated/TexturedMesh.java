@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  TexturedMesh.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 12/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,11 +11,11 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 12/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
 
+//class TextureMapping;
 
 
 public class TexturedMesh extends Mesh
@@ -58,10 +57,10 @@ public class TexturedMesh extends Mesh
       if (_textureMapping != null)
          _textureMapping.dispose();
     }
-
+  
     _glState._release();
-
-  super.dispose();
+  
+    super.dispose();
   }
 
   public final BoundingVolume getBoundingVolume()

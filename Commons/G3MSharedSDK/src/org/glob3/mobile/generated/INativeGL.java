@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  INativeGL.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -13,7 +12,7 @@ package org.glob3.mobile.generated;
 //class IShortBuffer;
 //class IImage;
 //class IGLUniformID;
-//class IGLTextureId;
+//class IGLTextureID;
 //class Matrix44D;
 
 
@@ -64,10 +63,10 @@ public abstract class INativeGL
 
   public abstract void blendFunc(int sfactor, int dfactor);
 
-  public abstract void bindTexture(int target, IGLTextureId texture);
+  public abstract void bindTexture(int target, IGLTextureID texture);
 
-  /* Delete Texture from GPU, and answer if the TextureId can be reused */
-  public abstract boolean deleteTexture(IGLTextureId texture);
+  /* Delete Texture from GPU, and answer if the TextureID can be reused */
+  public abstract boolean deleteTexture(IGLTextureID texture);
 
   public abstract void enableVertexAttribArray(int location);
 
@@ -75,7 +74,7 @@ public abstract class INativeGL
 
   public abstract void pixelStorei(int pname, int param);
 
-  public abstract java.util.ArrayList<IGLTextureId> genTextures(int n);
+  public abstract java.util.ArrayList<IGLTextureID> genTextures(int n);
 
   public abstract void texParameteri(int target, int par, int v);
 
@@ -172,5 +171,7 @@ public abstract class INativeGL
   public abstract void depthMask(boolean v);
 
   public abstract void setActiveTexture(int i);
+
+  public abstract void viewport(int x, int y, int width, int height);
 
 }

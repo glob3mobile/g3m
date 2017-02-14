@@ -3,18 +3,16 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Frustum
 #define G3MiOSSDK_Frustum
 
-#include "Vector3D.hpp"
-#include "MutableMatrix44D.hpp"
 #include "Plane.hpp"
-#include "BoundingVolume.hpp"
 
+class BoundingVolume;
 class Box;
+
 
 class FrustumData {
 public:
@@ -24,7 +22,7 @@ public:
   double _top;
   double _znear;
   double _zfar;
-  
+
   FrustumData(double left,
               double right,
               double bottom,
@@ -39,7 +37,7 @@ public:
   _zfar(zfar)
   {
   }
-  
+
   FrustumData(const FrustumData& fd) :
   _left(fd._left),
   _right(fd._right),
@@ -49,7 +47,7 @@ public:
   _zfar(fd._zfar)
   {
   }
-  
+
   FrustumData():
   _left(-1),
   _right(1),
@@ -84,9 +82,9 @@ private:
 
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
-  
+
   mutable BoundingVolume*   _boundingVolume;
-  
+
   Frustum(const Frustum *that,
           const MutableMatrix44D& matrix,
           const MutableMatrix44D& inverse):
@@ -108,10 +106,10 @@ private:
   {
     //_boundingVolume = computeBoundingVolume();
   }
-  
+
   BoundingVolume* computeBoundingVolume() const;
-  
-  
+
+
 public:
   Frustum(const Frustum& that) :
   _leftPlane(that._leftPlane),
@@ -144,16 +142,16 @@ public:
   _rtf(Vector3D(zfar/znear*right, zfar/znear*top,     -zfar)),
   _lbf(Vector3D(zfar/znear*left,  zfar/znear*bottom,  -zfar)),
   _rbf(Vector3D(zfar/znear*right, zfar/znear*bottom,  -zfar)),
-  _leftPlane(Plane::fromPoints(Vector3D::zero,
+  _leftPlane(Plane::fromPoints(Vector3D::ZERO,
                                Vector3D(left, top, -znear),
                                Vector3D(left, bottom, -znear))),
-  _bottomPlane(Plane::fromPoints(Vector3D::zero,
+  _bottomPlane(Plane::fromPoints(Vector3D::ZERO,
                                  Vector3D(left, bottom, -znear),
                                  Vector3D(right, bottom, -znear))),
-  _rightPlane(Plane::fromPoints(Vector3D::zero,
+  _rightPlane(Plane::fromPoints(Vector3D::ZERO,
                                 Vector3D(right, bottom, -znear),
                                 Vector3D(right, top, -znear))),
-  _topPlane(Plane::fromPoints(Vector3D::zero,
+  _topPlane(Plane::fromPoints(Vector3D::ZERO,
                               Vector3D(right, top, -znear),
                               Vector3D(left, top, -znear))),
   _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
@@ -161,33 +159,29 @@ public:
   _boundingVolume(NULL)
   {
   }
-  
+
   Frustum (const FrustumData& data);
-  
+
   bool contains(const Vector3D& point) const;
-  
+
   bool touchesWithBox(const Box *box) const;
-  
-  Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
-    return new Frustum(this, matrix, matrix.inversed());
-  }
-  
-  ~Frustum() {
-    if (_boundingVolume) delete _boundingVolume;
-  }
-  
+
+  Frustum* transformedBy_P(const MutableMatrix44D& matrix) const;
+
+  ~Frustum();
+
   BoundingVolume* getBoundingVolume() const {
     if (_boundingVolume == NULL) _boundingVolume = computeBoundingVolume();
     return _boundingVolume;
   }
-  
+
   Plane getTopPlane() const    { return _topPlane; }
   Plane getBottomPlane() const { return _bottomPlane; }
   Plane getLeftPlane() const   { return _leftPlane; }
   Plane getRightPlane() const  { return _rightPlane; }
   Plane getNearPlane() const   { return _nearPlane; }
   Plane getFarPlane() const    { return _farPlane; }
-  
+
 };
 
 #endif

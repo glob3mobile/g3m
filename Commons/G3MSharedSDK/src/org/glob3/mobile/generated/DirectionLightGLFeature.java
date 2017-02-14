@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DirectionLightGLFeature extends GLFeature
 {
   private GPUUniformValueVec3FloatMutable _lightDirectionUniformValue;
@@ -19,7 +19,6 @@ public class DirectionLightGLFeature extends GLFeature
   
     _values.addUniformValue(GPUUniformKey.DIFFUSE_LIGHT_DIRECTION, _lightDirectionUniformValue, false);
     _values.addUniformValue(GPUUniformKey.DIFFUSE_LIGHT_COLOR, new GPUUniformValueVec3Float(diffuseLightColor), false);
-  
   }
 
   public final void applyOnGlobalGLState(GLGlobalState state)

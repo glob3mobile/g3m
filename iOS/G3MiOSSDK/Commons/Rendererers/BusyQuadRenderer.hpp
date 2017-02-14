@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_BusyQuadRenderer
@@ -13,12 +12,12 @@
 #include "ProtoRenderer.hpp"
 #include "Effects.hpp"
 #include "Vector2D.hpp"
-#include "Color.hpp"
-#include "DirectMesh.hpp"
 #include "MutableMatrix44D.hpp"
+#include "GLState.hpp"
 
-
-//***************************************************************
+class IImage;
+class Mesh;
+class Color;
 
 
 class BusyQuadRenderer : public ProtoRenderer, EffectTarget {
@@ -66,29 +65,11 @@ public:
               GLState* glState);
   
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height) {
-    const int halfWidth = width / 2;
-    const int halfHeight = height / 2;
-    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
-                                                                                    -halfHeight, halfHeight,
-                                                                                    -halfWidth, halfWidth));
-  }
-
-  virtual ~BusyQuadRenderer() {
-    //rc->getFactory()->deleteImage(_image);
-    //_image = NULL;
-    delete _image;
-    delete _quadMesh;
-    delete _backgroundColor;
-
-    _glState->_release();
-  }
+                             int width, int height);
   
-  void incDegrees(double value) {
-    _degrees += value;
-    if (_degrees>360) _degrees -= 360;
-    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
-  }
+  virtual ~BusyQuadRenderer();
+  
+  void incDegrees(double value);
   
   void start(const G3MRenderContext* rc);
   
@@ -110,14 +91,14 @@ public:
 
 //***************************************************************
 
-class BusyEffect : public EffectWithForce {
+class BusyEffect : public EffectNeverEnding {
 private:
   BusyQuadRenderer* _renderer;
 
 public:
 
   BusyEffect(BusyQuadRenderer *renderer):
-  EffectWithForce(1, 1),
+  EffectNeverEnding(),
   _renderer(renderer)
   { }
 
@@ -126,7 +107,7 @@ public:
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    EffectWithForce::doStep(rc, when);
+    EffectNeverEnding::doStep(rc, when);
     _renderer->incDegrees(3);
   }
 

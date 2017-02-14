@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CompositeMesh.cpp
 //  G3MiOSSDK
@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+
+
 public class CompositeMesh extends Mesh
 {
   private java.util.ArrayList<Mesh> _children = new java.util.ArrayList<Mesh>();
@@ -29,7 +31,7 @@ public class CompositeMesh extends Mesh
       return null;
     }
   
-    BoundingVolume result = _children.get(0).getBoundingVolume();
+    BoundingVolume result = _children.get(0).getBoundingVolume().copy();
     for (int i = 1; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
@@ -89,7 +91,7 @@ public class CompositeMesh extends Mesh
       }
       acumIndex += childSize;
     }
-    return Vector3D.nan();
+    return Vector3D.NANV;
   }
 
   public final BoundingVolume getBoundingVolume()

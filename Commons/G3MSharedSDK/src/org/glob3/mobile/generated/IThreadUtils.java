@@ -1,4 +1,27 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
+//
+//  IThreadUtils.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 30/08/12.
+//
+//
+
+//
+//  IThreadUtils.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 30/08/12.
+//
+//
+
+
+
+//class G3MContext;
+//class GTask;
+//class GAsyncTask;
+
+
 public abstract class IThreadUtils
 {
   protected G3MContext _context;

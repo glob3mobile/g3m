@@ -9,15 +9,24 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-class LayerSet;
-class GEOVectorLayer;
-class IImageBuilder;
-
+#include <vector>
 #include "TilesRenderParameters.hpp"
-#include "PlanetRenderer.hpp"
-#include "DefaultChessCanvasImageBuilder.hpp"
-#include "DownloaderImageBuilder.hpp"
+#include "TouchEvent.hpp"
+#include "TimeInterval.hpp"
 
+class TileTessellator;
+class TileTexturizer;
+class GEOVectorLayer;
+class TileLODTester;
+class TileVisibilityTester;
+class LayerSet;
+class VisibleSectorListener;
+class ElevationDataProvider;
+class DEMProvider;
+class Sector;
+class ChangedRendererInfoListener;
+class IImageBuilder;
+class PlanetRenderer;
 
 
 class PlanetRendererBuilder {
@@ -26,20 +35,21 @@ private:
   TileTessellator* _tileTessellator;
   TileTexturizer* _texturizer;
   std::vector<GEOVectorLayer*> _geoVectorLayers;
+  TileLODTester* _tileLODTester;
+  TileVisibilityTester* _tileVisibilityTester;
 
   LayerSet* _layerSet;
   TilesRenderParameters* _parameters;
   bool _showStatistics;
   bool _renderDebug;
-  bool _useTilesSplitBudget;
-  bool _forceFirstLevelTilesRenderOnStart;
   bool _incrementalTileQuality;
   Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
-  long long _tileDownloadPriority;
+  long long _tileTextureDownloadPriority;
 
-  ElevationDataProvider* _elevationDataProvider;
+  ElevationDataProvider*    _elevationDataProvider;
+  DEMProvider* _demProvider;
   float _verticalExaggeration;
 
   TileTessellator* getTileTessellator();
@@ -49,12 +59,10 @@ private:
   TilesRenderParameters* getParameters();
   bool getShowStatistics();
   bool getRenderDebug();
-  bool getUseTilesSplitBudget();
-  bool getForceFirstLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
-  long long getTileDownloadPriority();
+  long long getTileTextureDownloadPriority();
 
   bool _logTilesPetitions;
 
@@ -62,7 +70,9 @@ private:
   TilesRenderParameters* createPlanetRendererParameters();
   TileTessellator* createTileTessellator();
 
-  ElevationDataProvider* getElevationDataProvider();
+  ElevationDataProvider*    getElevationDataProvider();
+  DEMProvider* getDEMProvider();
+
   float getVerticalExaggeration();
 
   Sector* _renderedSector;
@@ -73,17 +83,20 @@ private:
 
   bool getLogTilesPetitions();
 
-  TileRenderingListener* _tileRenderingListener;
-  
   ChangedRendererInfoListener* _changedInfoListener;
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
   
-  IImageBuilder* _defaultTileBackGroundImage = NULL;
+  IImageBuilder* _defaultTileBackgroundImage = NULL;
   
-  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
+  IImageBuilder* getDefaultTileBackgroundImageBuilder();
+  
+  TileLODTester* createDefaultTileLODTester() const;
+
+  TileVisibilityTester* createDefaultTileVisibilityTester() const;
+
 
 public:
   PlanetRendererBuilder();
@@ -95,17 +108,17 @@ public:
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
-  void setUseTilesSplitBudget(const bool useTilesSplitBudget);
-  void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
-  void setTileDownloadPriority(long long tileDownloadPriority);
+  void setTileTextureDownloadPriority(long long tileTextureDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
+
+  void setDEMProvider(DEMProvider* demProvider);
 
   void setVerticalExaggeration(float verticalExaggeration);
 
@@ -119,10 +132,6 @@ public:
   void setRenderTileMeshes(bool renderTileMeshes);
 
   void setLogTilesPetitions(bool logTilesPetitions);
-
-  void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
-
-  TileRenderingListener* getTileRenderingListener();
   
   ChangedRendererInfoListener* getChangedRendererInfoListener();
   
@@ -130,7 +139,14 @@ public:
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
   
-  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
+  void setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage);
+  
+  void setTileLODTester(TileLODTester* tlt);
+  
+  TileLODTester* getTileLODTester();
+
+  TileVisibilityTester* getTileVisibilityTester();
+
 };
 
 #endif

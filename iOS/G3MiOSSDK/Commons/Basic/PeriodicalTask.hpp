@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_PeriodicalTask
@@ -49,7 +48,7 @@ public:
   }
 
   void executeIfNecessary(const G3MContext* context) {
-    long long now = getTimer()->now()._milliseconds;
+    long long now = getTimer()->nowInMilliseconds();
 
     long long interval = now - _lastExecutionMS;
 

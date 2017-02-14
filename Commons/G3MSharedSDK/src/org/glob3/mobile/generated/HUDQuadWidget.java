@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  HUDQuadWidget.cpp
 //  G3MiOSSDK
@@ -99,7 +99,11 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     }
   
     final Camera camera = rc.getCurrentCamera();
-    final int viewPortWidth = camera.getViewPortWidth();
+    int viewPortWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      viewPortWidth /= 2;
+    }
     final int viewPortHeight = camera.getViewPortHeight();
   
     final float width = _widthSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);

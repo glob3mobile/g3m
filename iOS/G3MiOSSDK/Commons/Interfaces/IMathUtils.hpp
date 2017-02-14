@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_IMathUtils
@@ -24,11 +23,11 @@
 
 #else
 
-#define SIN(x) java.lang.Math.sin(x)
-#define COS(x) java.lang.Math.cos(x)
-#define TAN(x) java.lang.Math.tan(x)
-#define NAND   java.lang.Double.NaN
-#define NANF   java.lang.Float.NaN
+#define SIN(x) Math.sin(x)
+#define COS(x) Math.cos(x)
+#define TAN(x) Math.tan(x)
+#define NAND   Double.NaN
+#define NANF   Float.NaN
 
 #endif
 
@@ -36,6 +35,12 @@
 #define HALF_PI  1.57079632679489661923132169163975144
 
 #define ISNAN(x) (x != x)
+
+#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
+
+class Geodetic2D;
+class Angle;
 
 class IMathUtils {
 private:
@@ -56,9 +61,6 @@ public:
 
   virtual ~IMathUtils() {
   }
-
-//  virtual double NanD() const = 0;
-//  virtual float  NanF() const = 0;
 
   virtual double sin(double v) const = 0;
   virtual float  sin(float v)  const = 0;
@@ -131,6 +133,11 @@ public:
     return (i1 < i2) ? i1 : i2;
   }
 
+  long long min(long long i1, long long i2) const {
+    return (i1 < i2) ? i1 : i2;
+  }
+
+
   virtual double max(double d1, double d2) const = 0;
   virtual float  max(float f1,  float f2)  const = 0;
 
@@ -155,13 +162,20 @@ public:
   virtual double ceil(double d) const = 0;
   virtual float  ceil(float f)  const = 0;
   
-  virtual double fmod(double d1, double d2) const = 0;
-  virtual float  fmod(float f1, float f2)  const = 0;
+  virtual double mod(double d1, double d2) const = 0;
+  virtual float  mod(float  f1, float  f2) const = 0;
 
   virtual double linearInterpolation(double from,
                                      double to,
                                      double alpha) const {
     return from + ((to - from) * alpha);
+  }
+
+  virtual double cosineInterpolation(double from,
+                                     double to,
+                                     double alpha) const {
+    const double alpha2 = (1.0 - cos(alpha*PI)) / 2.0;
+    return (from * (1.0 - alpha2) + to * alpha2);
   }
 
   virtual float linearInterpolation(float from,
@@ -246,6 +260,20 @@ public:
     return fracPart * denominator;
   }
 
+  /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
+  virtual double nextRandomDouble() const = 0;
+
+  Geodetic2D greatCircleIntermediatePoint(const Angle& fromLat,
+                                          const Angle& fromLon,
+                                          const Angle& toLat,
+                                          const Angle& toLon,
+                                          const double alpha) const;
+
+  virtual int gcd(int a, int b) const {
+    return (b == 0) ? a : gcd(b, a % b);
+  }
+
+  virtual double copySign(double a, double b) const = 0;
 
 };
 

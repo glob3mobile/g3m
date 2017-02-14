@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ProceduralLayer.cpp
 //  G3MiOSSDK
@@ -30,6 +30,17 @@ public abstract class ProceduralLayer extends Layer
     super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
     _selectedLayerTilesRenderParametersIndex = 0;
+  }
+
+  public void dispose()
+  {
+    for (int i = 0; i < _parametersVector.size(); i++)
+    {
+      final LayerTilesRenderParameters parameters = _parametersVector.get(i);
+      if (parameters != null)
+         parameters.dispose();
+    }
+    super.dispose();
   }
 
   public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()

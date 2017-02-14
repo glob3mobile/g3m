@@ -2,6 +2,10 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.IThreadUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -9,14 +13,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.IThreadUtils;
-
 
 public final class ThreadUtils_Android
-         extends
-            IThreadUtils {
+   extends
+      IThreadUtils {
 
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
@@ -26,16 +26,20 @@ public final class ThreadUtils_Android
    private final List<Runnable>     _rendererThreadQueue = new ArrayList<Runnable>();
 
 
-   ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
+   public ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
+      this(widgetAndroid, Math.max(1, Runtime.getRuntime().availableProcessors() / 2));
+   }
+
+
+   public ThreadUtils_Android(final G3MWidget_Android widgetAndroid,
+                              final int numBackgroundThreads) {
       if (widgetAndroid == null) {
          throw new IllegalArgumentException("widgetAndroid can't be null");
       }
       _widgetAndroid = widgetAndroid;
 
-      final int availableProcessors = Runtime.getRuntime().availableProcessors();
-      final int numThreads = Math.max(1, availableProcessors / 2);
       final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<Runnable>();
-      _backgroundExecutor = new ThreadPoolExecutor(numThreads, numThreads, 1, TimeUnit.DAYS, workQueue);
+      _backgroundExecutor = new ThreadPoolExecutor(numBackgroundThreads, numBackgroundThreads, 1, TimeUnit.DAYS, workQueue);
    }
 
 
@@ -96,7 +100,7 @@ public final class ThreadUtils_Android
    }
 
 
-   private final void drainQueues() {
+   private void drainQueues() {
       for (final Runnable runnable : _backgroundQueue) {
          _backgroundExecutor.execute(runnable);
       }
@@ -119,5 +123,6 @@ public final class ThreadUtils_Android
    public void onDestroy(final G3MContext context) {
       onPause(context);
    }
+
 
 }

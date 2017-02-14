@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  TiledVectorLayer.cpp
 //  G3MiOSSDK
@@ -19,9 +19,11 @@ package org.glob3.mobile.generated;
 //class TileImageContribution;
 //class IDownloader;
 //class IBufferDownloadListener;
+//class IMathUtils;
 //class IStringUtils;
 //class GEORasterSymbolizer;
 //class TiledVectorLayerTileImageProvider;
+
 
 public class TiledVectorLayer extends VectorLayer
 {
@@ -66,7 +68,7 @@ public class TiledVectorLayer extends VectorLayer
   
     final LayerTilesRenderParameters parameters = _parametersVector.get(_selectedLayerTilesRenderParametersIndex);
   
-    final Vector2I tileTextureResolution = parameters._tileTextureResolution;
+    final Vector2S tileTextureResolution = parameters._tileTextureResolution;
   
     final int level = tile._level;
     final int column = tile._column;
@@ -79,20 +81,20 @@ public class TiledVectorLayer extends VectorLayer
     final double west = MercatorUtils.longitudeToMeters(sector._lower._longitude);
   
     String path = _urlTemplate;
-    path = _su.replaceSubstring(path, "{width}", _su.toString(tileTextureResolution._x));
-    path = _su.replaceSubstring(path, "{height}", _su.toString(tileTextureResolution._y));
-    path = _su.replaceSubstring(path, "{x}", _su.toString(column));
-    path = _su.replaceSubstring(path, "{y}", _su.toString(row));
-    path = _su.replaceSubstring(path, "{y2}", _su.toString(tile._row));
-    path = _su.replaceSubstring(path, "{level}", _su.toString(level));
-    path = _su.replaceSubstring(path, "{lowerLatitude}", _su.toString(sector._lower._latitude._degrees));
-    path = _su.replaceSubstring(path, "{lowerLongitude}", _su.toString(sector._lower._longitude._degrees));
-    path = _su.replaceSubstring(path, "{upperLatitude}", _su.toString(sector._upper._latitude._degrees));
-    path = _su.replaceSubstring(path, "{upperLongitude}", _su.toString(sector._upper._longitude._degrees));
-    path = _su.replaceSubstring(path, "{north}", _su.toString(north));
-    path = _su.replaceSubstring(path, "{south}", _su.toString(south));
-    path = _su.replaceSubstring(path, "{west}", _su.toString(west));
-    path = _su.replaceSubstring(path, "{east}", _su.toString(east));
+    path = _su.replaceAll(path, "{width}", _su.toString(tileTextureResolution._x));
+    path = _su.replaceAll(path, "{height}", _su.toString(tileTextureResolution._y));
+    path = _su.replaceAll(path, "{x}", _su.toString(column));
+    path = _su.replaceAll(path, "{y}", _su.toString(row));
+    path = _su.replaceAll(path, "{y2}", _su.toString(tile._row));
+    path = _su.replaceAll(path, "{level}", _su.toString(level));
+    path = _su.replaceAll(path, "{lowerLatitude}", _su.toString(sector._lower._latitude._degrees));
+    path = _su.replaceAll(path, "{lowerLongitude}", _su.toString(sector._lower._longitude._degrees));
+    path = _su.replaceAll(path, "{upperLatitude}", _su.toString(sector._upper._latitude._degrees));
+    path = _su.replaceAll(path, "{upperLongitude}", _su.toString(sector._upper._longitude._degrees));
+    path = _su.replaceAll(path, "{north}", _su.toString(north));
+    path = _su.replaceAll(path, "{south}", _su.toString(south));
+    path = _su.replaceAll(path, "{west}", _su.toString(west));
+    path = _su.replaceAll(path, "{east}", _su.toString(east));
   
     return new URL(path, false);
   }

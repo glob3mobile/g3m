@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MutableVector3D.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,21 +11,19 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
-
-
 //class Vector3D;
+//class Angle;
+//class MutableMatrix44D;
+
 
 public class MutableVector3D
 {
   private double _x;
   private double _y;
   private double _z;
-
-//  MutableVector3D& operator=(const MutableVector3D& that);
 
 
 
@@ -51,7 +48,14 @@ public class MutableVector3D
      _z = v._z;
   }
 
-  public final void put(double x, double y, double z)
+  public MutableVector3D(Vector3D v)
+  {
+     _x = v._x;
+     _y = v._y;
+     _z = v._z;
+  }
+
+  public final void set(double x, double y, double z)
   {
     _x = x;
     _y = y;
@@ -79,15 +83,15 @@ public class MutableVector3D
   }
   public final void normalize()
   {
-      final double d = length();
-      _x /= d;
-      _y /= d;
-      _z /= d;
+    final double d = length();
+    _x /= d;
+    _y /= d;
+    _z /= d;
   }
 
   public static MutableVector3D nan()
   {
-    return new MutableVector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
+    return new MutableVector3D(Double.NaN, Double.NaN, Double.NaN);
   }
 
   public final boolean equalTo(MutableVector3D v)
@@ -199,10 +203,10 @@ public class MutableVector3D
     final double v = axis.y();
     final double w = axis.z();
   
-  //  const double cosTheta = theta.cosinus();
-  //  const double sinTheta = theta.sinus();
-    final double cosTheta = java.lang.Math.cos(theta._radians);
-    final double sinTheta = java.lang.Math.sin(theta._radians);
+    //  const double cosTheta = theta.cosinus();
+    //  const double sinTheta = theta.sinus();
+    final double cosTheta = Math.cos(theta._radians);
+    final double sinTheta = Math.sin(theta._radians);
   
     final double ms = axis.squaredLength();
     final double m = IMathUtils.instance().sqrt(ms);
@@ -277,13 +281,29 @@ public class MutableVector3D
     final double v = axis._y;
     final double w = axis._z;
   
-    final double cosTheta = java.lang.Math.cos(theta._radians);
-    final double sinTheta = java.lang.Math.sin(theta._radians);
+    final double cosTheta = Math.cos(theta._radians);
+    final double sinTheta = Math.sin(theta._radians);
   
     final double ms = axis.squaredLength();
     final double m = IMathUtils.instance().sqrt(ms);
   
     return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
+  }
+
+  public final double squaredDistanceTo(Vector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  public final double squaredDistanceTo(MutableVector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
   }
 
 }

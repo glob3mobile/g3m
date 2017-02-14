@@ -6,10 +6,10 @@ import org.glob3.mobile.generated.IStringBuilder;
 
 
 public final class StringBuilder_WebGL
-         extends
-            IStringBuilder {
+   extends
+      IStringBuilder {
 
-   private String _string = "";
+   private final StringBuilder _builder = new StringBuilder();
 
 
    @Override
@@ -20,49 +20,63 @@ public final class StringBuilder_WebGL
 
    @Override
    public IStringBuilder addDouble(final double d) {
-      _string += d;
+      _builder.append(d);
       return this;
    }
 
 
    @Override
    public IStringBuilder addString(final String s) {
-      _string += s;
+      _builder.append(s);
       return this;
    }
 
 
    @Override
    public IStringBuilder addBool(final boolean b) {
-      _string += b;
+      _builder.append(b);
       return this;
    }
 
 
    @Override
    public String getString() {
-      return _string;
+      return _builder.toString();
    }
 
 
    @Override
    public IStringBuilder addFloat(final float f) {
-      _string += f;
+      _builder.append(f);
       return this;
    }
 
 
    @Override
    public IStringBuilder addInt(final int i) {
-      _string += i;
+      _builder.append(i);
       return this;
    }
 
 
    @Override
    public IStringBuilder addLong(final long l) {
-      _string += l;
+      _builder.append(l);
       return this;
    }
+
+
+   @Override
+   public IStringBuilder clear() {
+      _builder.setLength(0);
+      return this;
+   }
+
+
+   @Override
+   public boolean contentEqualsTo(final String that) {
+      return getString().equals(that);
+   }
+
 
 }

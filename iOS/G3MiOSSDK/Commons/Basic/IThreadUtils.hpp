@@ -9,19 +9,11 @@
 #ifndef __G3MiOSSDK__IThreadUtils__
 #define __G3MiOSSDK__IThreadUtils__
 
-#include "GTask.hpp"
 #include <stdlib.h>
 
-
-class GAsyncTask {
-public:
-  virtual ~GAsyncTask() {
-  }
-
-  virtual void runInBackground(const G3MContext* context) = 0;
-
-  virtual void onPostExecute(const G3MContext* context) = 0;
-};
+class G3MContext;
+class GTask;
+class GAsyncTask;
 
 
 class IThreadUtils {

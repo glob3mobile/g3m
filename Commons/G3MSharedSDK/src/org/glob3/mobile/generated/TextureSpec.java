@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  TexturesHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 19/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 19/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -23,7 +21,7 @@ package org.glob3.mobile.generated;
 //class TextureHolder;
 //class GL;
 //class IFactory;
-//class IGLTextureId;
+//class IGLTextureID;
 //class TextureIDReference;
 
 public class TextureSpec

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////////////////////
-
+package org.glob3.mobile.generated;
 public class GenericQuadTree_TESTER
 {
 
@@ -300,11 +298,9 @@ public class GenericQuadTree_TESTER
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark NODE
 
-///////////////////////////////
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TREE
 
-///////////////////////////////////////////////////////////////////////
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TESTER

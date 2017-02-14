@@ -3,13 +3,12 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3M3DSymbologyDemoScene.hpp"
 
 #include <G3MiOSSDK/Sector.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
@@ -22,7 +21,7 @@
 #include <G3MiOSSDK/GEOShapeSymbol.hpp>
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -90,16 +89,15 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(16);
 
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-  MapBoxLayer* rasterLayer = new MapBoxLayer("examples.map-qogxobv1",
-                                             TimeInterval::fromDays(30),
-                                             true,
-                                             3);
+  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
+                                                 "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                                 TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(rasterLayer);
 
   GEOVectorLayer* vectorLayer = new GEOVectorLayer();

@@ -29,7 +29,7 @@ protected:
   const int    _maxLevel;
   const bool   _isTransparent;
 
-  virtual std::string getLayerType() const {
+  virtual const std::string getLayerType() const {
     return "MercatorTiled";
   }
 
@@ -63,7 +63,7 @@ public:
   virtual RenderState getRenderState();
 
   const Sector getDataSector() const {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
 
 };

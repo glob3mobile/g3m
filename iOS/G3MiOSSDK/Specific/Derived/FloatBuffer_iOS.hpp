@@ -24,9 +24,9 @@ private:
 
   static void showStatistics();
 
-  const int _size;
-  float*    _values;
-  int       _timestamp;
+  const size_t _size;
+  float*       _values;
+  int          _timestamp;
 
   //ID
   const long long _id;
@@ -36,15 +36,15 @@ private:
   static GLuint     _boundVertexBuffer;
   mutable bool      _vertexBufferCreated;
   mutable GLuint    _vertexBuffer; //VBO
-  mutable int       _vertexBufferTimeStamp;
+  mutable int       _vertexBufferTimestamp;
 
 public:
-  FloatBuffer_iOS(int size) :
+  FloatBuffer_iOS(const size_t size) :
   _size(size),
   _timestamp(0),
   _values(new float[size]),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
   _id(_nextID++)
   {
@@ -54,11 +54,6 @@ public:
 
     _newCounter++;
     showStatistics();
-
-//    if (size == 48 || size == 36) {
-//#warning DGD_At_Work;
-//      printf("break point on me\n");
-//    }
   }
 
   long long getID() const {
@@ -84,7 +79,7 @@ public:
   _size(16),
   _timestamp(0),
   _vertexBuffer(-1),
-  _vertexBufferTimeStamp(-1),
+  _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
   _id(_nextID)
   {
@@ -112,7 +107,7 @@ public:
 
   virtual ~FloatBuffer_iOS();
 
-  int size() const {
+  const size_t size() const {
     return _size;
   }
 
@@ -120,18 +115,17 @@ public:
     return _timestamp;
   }
 
-  float get(int i) const {
-    if (i < 0 || i > _size) {
-      THROW_EXCEPTION("Buffer Get error.");
+  float get(const size_t i) const {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
-
     return _values[i];
   }
 
-  void put(int i,
+  void put(const size_t i,
            float value) {
-    if (i < 0 || i > _size) {
-      THROW_EXCEPTION("Buffer Put error.");
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
 
     if (_values[i] != value) {
@@ -140,20 +134,18 @@ public:
     }
   }
 
-  void rawPut(int i,
+  void rawPut(const size_t i,
               float value) {
-    if (i < 0 || i > _size) {
-      THROW_EXCEPTION("Buffer Put error.");
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
-
     _values[i] = value;
   }
 
-  void rawAdd(int i, float value) {
-    if (i < 0 || i > _size) {
-      THROW_EXCEPTION("Buffer Put error.");
+  void rawAdd(const size_t i, float value) {
+    if (i >= _size) {
+      THROW_EXCEPTION("Buffer Overflow");
     }
-
     _values[i] = _values[i] + value;
   }
 
@@ -165,11 +157,16 @@ public:
   const std::string description() const;
   
   void bindAsVBOToGPU() const;
+  
+  static void onGPUProgramHasChanged() {
+    //APPARENTLY CHANGING PROGRAM FORCES TO REBIND THE BUFFERS
+    _boundVertexBuffer = -1;
+  }
 
-  void rawPut(int i,
+  void rawPut(const size_t i,
               const IFloatBuffer* srcBuffer,
-              int srcFromIndex,
-              int srcToIndex);
+              const size_t srcFromIndex,
+              const size_t srcToIndex);
 
 };
 

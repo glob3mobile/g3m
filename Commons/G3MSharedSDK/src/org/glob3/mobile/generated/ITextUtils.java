@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ITextUtils.cpp
 //  G3MiOSSDK
@@ -50,8 +50,8 @@ public abstract class ITextUtils
   {
     final float fontSize = 20F;
   
-    final Color color = Color.white();
-    final Color shadowColor = Color.black();
+    final Color color = Color.WHITE;
+    final Color shadowColor = Color.BLACK;
   
     createLabelImage(label, fontSize, color, shadowColor, listener, autodelete);
   }
@@ -63,8 +63,8 @@ public abstract class ITextUtils
   {
     final float fontSize = 20F;
   
-    final Color color = Color.white();
-    final Color shadowColor = Color.black();
+    final Color color = Color.WHITE;
+    final Color shadowColor = Color.BLACK;
   
     final int separation = 2;
   

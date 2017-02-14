@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GEOFeatureCollection.cpp
 //  G3MiOSSDK
@@ -107,6 +107,21 @@ public class GEOFeatureCollection extends GEOObject
   public final GEOFeatureCollection deepCopy()
   {
     return new GEOFeatureCollection(copy(_features));
+  }
+
+  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
+  {
+    long result = 0;
+    final int featuresCount = _features.size();
+    for (int i = 0; i < featuresCount; i++)
+    {
+      GEOFeature feature = _features.get(i);
+      if (feature != null)
+      {
+        result += feature.createFeatureMarks(vectorSet, node);
+      }
+    }
+    return result;
   }
 
 }

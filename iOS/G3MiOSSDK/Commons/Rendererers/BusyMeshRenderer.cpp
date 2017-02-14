@@ -3,14 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 20/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
 
 #include "BusyMeshRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "IMathUtils.hpp"
@@ -22,6 +21,9 @@
 #include "GPUProgramManager.hpp"
 #include "GPUUniform.hpp"
 #include "Camera.hpp"
+#include "G3MEventContext.hpp"
+#include "G3MRenderContext.hpp"
+#include "TimeInterval.hpp"
 
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
@@ -66,9 +68,12 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
 
   const float innerRadius = 0;
 
-//  const float r2=50;
+  //  const float r2=50;
   const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getViewPortWidth();
+  int viewPortWidth  = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
   const int viewPortHeight = camera->getViewPortHeight();
   const int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
   const float outerRadius = minSize / 15.0f;
@@ -109,17 +114,34 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
 
 
   Mesh* result = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                true,
-                                vertices->getCenter(),
-                                vertices->create(),
-                                indices.create(),
-                                1,
-                                1,
-                                NULL,
-                                colors.create());
+                                 vertices->getCenter(),
+                                 vertices->create(),
+                                 true,
+                                 indices.create(),
+                                 true,
+                                 1,
+                                 1,
+                                 NULL,
+                                 colors.create());
   delete vertices;
 
   return result;
+}
+
+void BusyMeshRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                             int width, int height) {
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  const int halfWidth  = logicWidth / 2;
+  const int halfHeight = height / 2;
+  _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+                                                                                   -halfHeight, halfHeight,
+                                                                                   -halfWidth,  halfWidth));
+
+  delete _mesh;
+  _mesh = NULL;
 }
 
 Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
@@ -132,13 +154,32 @@ Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
 void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
-  GL* gl = rc->getGL();
+  //GL* gl = rc->getGL();
   createGLState();
-  
-  gl->clearScreen(*_backgroundColor);
+
+  //gl->clearScreen(*_backgroundColor);
 
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
     mesh->render(rc, _glState);
   }
+}
+
+
+void BusyMeshEffect::start(const G3MRenderContext* rc,
+                           const TimeInterval& when) {
+  _lastMS = when.milliseconds();
+}
+
+void BusyMeshEffect::doStep(const G3MRenderContext* rc,
+                            const TimeInterval& when) {
+  EffectNeverEnding::doStep(rc, when);
+
+  const long long now = when.milliseconds();
+  const long long elapsed = now - _lastMS;
+  _lastMS = now;
+
+  const double deltaDegrees = (360.0 / 1200.0) * elapsed;
+
+  _renderer->incDegrees(deltaDegrees);
 }

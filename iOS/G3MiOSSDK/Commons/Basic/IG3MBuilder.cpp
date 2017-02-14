@@ -18,6 +18,7 @@
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
+#include "CameraZoomAndRotateHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
 #include "PlanetRendererBuilder.hpp"
 #include "BusyMeshRenderer.hpp"
@@ -33,6 +34,12 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
+#include "DefaultInfoDisplay.hpp"
+#include "EllipsoidalPlanet.hpp"
+#include "PlanetRenderer.hpp"
+#include "InitialCameraPositionProvider.hpp"
+#include "AtmosphereRenderer.hpp"
+
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -57,7 +64,8 @@ _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
 _shownSector(NULL),
-_infoDisplay(NULL)
+_infoDisplay(NULL),
+_atmosphere(false)
 {
 }
 
@@ -166,7 +174,7 @@ ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
  */
 const Planet* IG3MBuilder::getPlanet() {
   if (!_planet) {
-    _planet = Planet::createEarth();
+    _planet = EllipsoidalPlanet::createEarth();
   }
   return _planet;
 }
@@ -230,10 +238,9 @@ Renderer* IG3MBuilder::getHUDRenderer() const {
  * @return _backgroundColor: Color*
  */
 Color* IG3MBuilder::getBackgroundColor() {
-  if (!_backgroundColor) {
-    _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+  if (_backgroundColor == NULL) {
+    _backgroundColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
   }
-
   return _backgroundColor;
 }
 
@@ -480,15 +487,10 @@ void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
  * @param backgroundColor - cannot be NULL.
  */
 void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
-  if (_backgroundColor) {
-    ILogger::instance()->logError("LOGIC ERROR: backgroundColor already initialized");
-    return;
+  if (backgroundColor != _backgroundColor) {
+    delete _backgroundColor;
+    _backgroundColor = backgroundColor;
   }
-  if (!backgroundColor) {
-    ILogger::instance()->logError("LOGIC ERROR: backgroundColor cannot be NULL");
-    return;
-  }
-  _backgroundColor = backgroundColor;
 }
 
 /**
@@ -662,6 +664,11 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
   _userData = userData;
 }
 
+void IG3MBuilder::setAtmosphere(const bool atmosphere) {
+  _atmosphere = atmosphere;
+  setBackgroundColor( _atmosphere ? Color::newFromRGBA(0, 0, 0, 1) : NULL );
+}
+
 /**
  * Creates the generic widget using all the parameters previously set.
  *
@@ -673,7 +680,18 @@ G3MWidget* IG3MBuilder::create() {
   Sector shownSector = getShownSector();
   getPlanetRendererBuilder()->setRenderedSector(shownSector); //Shown sector
 
-  /**
+#warning HUDRenderer doesn't work when this code is uncommented
+  InfoDisplay* infoDisplay = NULL;
+  //  InfoDisplay* infoDisplay = getInfoDisplay();
+  //  if (infoDisplay == NULL) {
+  //    Default_HUDRenderer* hud = new Default_HUDRenderer();
+  //
+  //    infoDisplay = new DefaultInfoDisplay(hud);
+  //
+  //    addRenderer(hud);
+  //  }
+
+  /*
    * If any renderers were set or added, the main renderer will be a composite renderer.
    *    If the renderers list does not contain a planetRenderer, it will be created and added.
    *    The renderers contained in the list, will be added to the main renderer.
@@ -681,13 +699,22 @@ G3MWidget* IG3MBuilder::create() {
    */
   Renderer* mainRenderer = NULL;
   if (getRenderers()->size() > 0) {
-    mainRenderer = new CompositeRenderer();
+    CompositeRenderer* composite = new CompositeRenderer();
+
+    if (_atmosphere) {
+      // has be here, before the PlanetRenderer
+      composite->addRenderer(new AtmosphereRenderer());
+    }
+
     if (!containsPlanetRenderer(*getRenderers())) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getPlanetRendererBuilder()->create());
+      composite->addRenderer(getPlanetRendererBuilder()->create());
     }
+
     for (unsigned int i = 0; i < getRenderers()->size(); i++) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()->at(i));
+      composite->addRenderer(getRenderers()->at(i));
     }
+
+    mainRenderer = composite;
   }
   else {
     mainRenderer = getPlanetRendererBuilder()->create();
@@ -698,7 +725,7 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
+
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -720,7 +747,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            getInfoDisplay());
+                                            infoDisplay,
+                                            MONO);
 
   g3mWidget->setUserData(getUserData());
 
@@ -765,6 +793,7 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
 
@@ -818,9 +847,8 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 
 SceneLighting* IG3MBuilder::getSceneLighting() {
   if (_sceneLighting == NULL) {
-    //_sceneLighting = new DefaultSceneLighting();
-    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
-                                                  Color::yellow());
+    _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0),
+                                                  Color::WHITE);
   }
   return _sceneLighting;
 }
@@ -835,7 +863,7 @@ void IG3MBuilder::setShownSector(const Sector& sector) {
 
 Sector IG3MBuilder::getShownSector() const {
   if (_shownSector == NULL) {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
   return *_shownSector;
 }

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  FloatBufferElevationData.cpp
 //  G3MiOSSDK
@@ -28,17 +28,17 @@ public class FloatBufferElevationData extends BufferElevationData
     final float value = _buffer.get(index);
     if (value == NO_DATA_VALUE)
     {
-      return java.lang.Double.NaN;
+      return Double.NaN;
     }
     return value;
   }
 
 
-  public static final float NO_DATA_VALUE = java.lang.Float.NaN;
+  public static final float NO_DATA_VALUE = Float.NaN;
 
-  public FloatBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, IFloatBuffer buffer, double deltaHeight)
+  public FloatBufferElevationData(Sector sector, Vector2I extent, IFloatBuffer buffer, double deltaHeight)
   {
-     super(sector, extent, realSector, realExtent, buffer.size(), deltaHeight);
+     super(sector, extent, buffer.size(), deltaHeight);
      _buffer = buffer;
     if (_buffer.size() != (_width * _height))
     {
@@ -63,7 +63,6 @@ public class FloatBufferElevationData extends BufferElevationData
        _buffer.dispose();
   
     super.dispose();
-  
   }
 
   public final String description(boolean detailed)

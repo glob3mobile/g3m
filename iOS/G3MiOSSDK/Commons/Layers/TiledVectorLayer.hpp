@@ -16,9 +16,11 @@
 class TileImageContribution;
 class IDownloader;
 class IBufferDownloadListener;
+class IMathUtils;
 class IStringUtils;
 class GEORasterSymbolizer;
 class TiledVectorLayerTileImageProvider;
+
 
 class TiledVectorLayer : public VectorLayer {
 private:
@@ -61,7 +63,7 @@ private:
   const URL createURL(const Tile* tile) const;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "TiledVectorLayer";
   }
 
@@ -75,11 +77,11 @@ public:
                                        const Sector&              dataSector,
                                        const int                  firstLevel,
                                        const int                  maxLevel,
-                                       const TimeInterval&        timeToCache    = TimeInterval::fromDays(30),
-                                       const bool                 readExpired    = true,
-                                       const float                transparency   = 1,
-                                       const LayerCondition*      condition      = NULL,
-                                       std::vector<const Info*>* layerInfo = new std::vector<const Info*>());
+                                       const TimeInterval&        timeToCache  = TimeInterval::fromDays(30),
+                                       const bool                 readExpired  = true,
+                                       const float                transparency = 1,
+                                       const LayerCondition*      condition    = NULL,
+                                       std::vector<const Info*>*  layerInfo    = new std::vector<const Info*>());
 
   ~TiledVectorLayer();
 

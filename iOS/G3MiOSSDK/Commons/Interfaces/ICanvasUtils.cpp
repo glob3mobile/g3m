@@ -32,22 +32,23 @@ void ICanvasUtils::drawStringsOn(const std::vector<std::string>& strings,
   }
 
   const int maxWidth = width - (2 * padding);
-  const int stringsSize = strings.size();
+  const size_t stringsSize = strings.size();
 
   int fontSize = maxFontSize;
-  bool allFit = true;
+  bool allFit = false;
   while (!allFit && (fontSize > minFontSize)) {
+    allFit = true;
     canvas->setFont( GFont::sansSerif(fontSize) );
     for (int i = 0; i < stringsSize; i++) {
       const Vector2F extent = canvas->textExtent(strings[i]);
       if (extent._x > maxWidth) {
         allFit = false;
         fontSize--;
-        continue;
       }
     }
   }
-  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+//  canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
+  canvas->setShadow(shadowColor, 1.0f, 0.0f, 0.0f);
 
   ColumnCanvasElement column(backgroundColor,
                              0,  /* margin */

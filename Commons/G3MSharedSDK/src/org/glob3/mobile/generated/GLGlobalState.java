@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GLGlobalState.cpp
 //  G3MiOSSDK
@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -38,7 +37,7 @@ public class GLGlobalState
   private boolean _cullFace;
   private int _culledFace;
 
-  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
+  private final IGLTextureID[] _boundTextureID = new IGLTextureID[DefineConstants.MAX_N_TEXTURES];
 
   private float _lineWidth;
 
@@ -60,30 +59,8 @@ public class GLGlobalState
   private float _clearColorB;
   private float _clearColorA;
 
-  private GLGlobalState(GLGlobalState parentState)
-  {
-     _depthTest = parentState._depthTest;
-     _blend = parentState._blend;
-     _cullFace = parentState._cullFace;
-     _culledFace = parentState._culledFace;
-     _lineWidth = parentState._lineWidth;
-     _polygonOffsetFactor = parentState._polygonOffsetFactor;
-     _polygonOffsetUnits = parentState._polygonOffsetUnits;
-     _polygonOffsetFill = parentState._polygonOffsetFill;
-     _blendDFactor = parentState._blendDFactor;
-     _blendSFactor = parentState._blendSFactor;
-     _pixelStoreIAlignmentUnpack = parentState._pixelStoreIAlignmentUnpack;
-     _clearColorR = parentState._clearColorR;
-     _clearColorG = parentState._clearColorG;
-     _clearColorB = parentState._clearColorB;
-     _clearColorA = parentState._clearColorA;
-
-    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
-    {
-      _boundTextureId[i] = parentState._boundTextureId[i];
-    }
-
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLGlobalState(GLGlobalState parentState);
 
 
   public static void initializationAvailable()
@@ -95,7 +72,7 @@ public class GLGlobalState
   {
      _depthTest = false;
      _blend = false;
-     _cullFace = true;
+     _cullFace = false;
      _culledFace = GLCullFace.back();
      _lineWidth = 1F;
      _polygonOffsetFactor = 0F;
@@ -116,7 +93,7 @@ public class GLGlobalState
 
     for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
     {
-      _boundTextureId[i] = null;
+      _boundTextureID[i] = null;
     }
 
   }
@@ -126,22 +103,17 @@ public class GLGlobalState
     return new GLGlobalState();
   }
 
-  public final GLGlobalState createCopy()
-  {
-    return new GLGlobalState(this);
-  }
-
   public void dispose()
   {
   }
 
   public final void enableDepthTest()
   {
-      _depthTest = true;
+    _depthTest = true;
   }
   public final void disableDepthTest()
   {
-      _depthTest = false;
+    _depthTest = false;
   }
   public final boolean isEnabledDepthTest()
   {
@@ -150,11 +122,11 @@ public class GLGlobalState
 
   public final void enableBlend()
   {
-      _blend = true;
+    _blend = true;
   }
   public final void disableBlend()
   {
-      _blend = false;
+    _blend = false;
   }
   public final boolean isEnabledBlend()
   {
@@ -218,32 +190,26 @@ public class GLGlobalState
     _blendDFactor = dFactor;
   }
 
-  public final void bindTexture(IGLTextureId textureId)
+  public final void bindTexture(int target, IGLTextureID textureID)
   {
-    _boundTextureId[0] = textureId;
-  }
-
-  public final IGLTextureId getBoundTexture()
-  {
-    return _boundTextureId[0];
-  }
-
-  public final void bindTexture(int target, IGLTextureId textureId)
-  {
-
-
     if (target > DefineConstants.MAX_N_TEXTURES)
     {
       ILogger.instance().logError("WRONG TARGET FOR TEXTURE");
       return;
     }
 
-    _boundTextureId[target] = textureId;
+    _boundTextureID[target] = textureID;
   }
 
-  public final IGLTextureId getBoundTexture(int target)
+  public final void onTextureDelete(IGLTextureID textureID)
   {
-    return _boundTextureId[0];
+    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
+    {
+      if (_boundTextureID[i] == textureID)
+      {
+        _boundTextureID[i] = null;
+      }
+    }
   }
 
   public final void setPixelStoreIAlignmentUnpack(int p)
@@ -318,26 +284,25 @@ public class GLGlobalState
     }
   
     //Polygon Offset
-    if (_polygonOffsetFill != currentState._polygonOffsetFill)
-    {
-      currentState._polygonOffsetFill = _polygonOffsetFill;
+   // if (_polygonOffsetFill != currentState._polygonOffsetFill) {
+  //    currentState._polygonOffsetFill = _polygonOffsetFill;
       if (_polygonOffsetFill)
       {
         nativeGL.enable(GLStage.polygonOffsetFill());
   
-        if (_polygonOffsetFactor != currentState._polygonOffsetFactor || _polygonOffsetUnits != currentState._polygonOffsetUnits)
-        {
+       /* if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
+            _polygonOffsetUnits != currentState._polygonOffsetUnits) {*/
           nativeGL.polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
   
           currentState._polygonOffsetUnits = _polygonOffsetUnits;
           currentState._polygonOffsetFactor = _polygonOffsetFactor;
-        }
+     //   }
       }
       else
       {
         nativeGL.disable(GLStage.polygonOffsetFill());
       }
-    }
+  //  }
   
     //Blending Factors
     if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor)
@@ -352,14 +317,14 @@ public class GLGlobalState
     for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
     {
   
-      if (_boundTextureId[i] != null)
+      if (_boundTextureID[i] != null)
       {
-        if (currentState._boundTextureId[i] == null || !_boundTextureId[i].isEquals(currentState._boundTextureId[i]))
+        if (currentState._boundTextureID[i] == null || !_boundTextureID[i].isEquals(currentState._boundTextureID[i]))
         {
           nativeGL.setActiveTexture(i);
-          nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId[i]);
+          nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureID[i]);
   
-          currentState._boundTextureId[i] = _boundTextureId[i];
+          currentState._boundTextureID[i] = _boundTextureID[i];
         }
         //else {
         //  ILogger::instance()->logInfo("Texture already bound.\n");

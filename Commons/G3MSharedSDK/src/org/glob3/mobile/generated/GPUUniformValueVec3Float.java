@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniformValueVec3Float extends GPUUniformValue
 {
   protected float _x;
@@ -46,7 +46,7 @@ public class GPUUniformValueVec3Float extends GPUUniformValue
     isb.addDouble(_y);
     isb.addString("z:");
     isb.addDouble(_z);
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

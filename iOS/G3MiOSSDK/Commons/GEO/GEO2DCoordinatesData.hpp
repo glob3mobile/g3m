@@ -38,11 +38,11 @@ public:
 
   const Sector* getSector() const;
 
-  int size() const {
+  size_t size() const {
     return (_coordinates == NULL) ? 0 : _coordinates->size();
   }
 
-  const Geodetic2D* get(int index) const {
+  const Geodetic2D* get(size_t index) const {
     return _coordinates->at(index);
   }
 

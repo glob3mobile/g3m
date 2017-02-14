@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 28/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,17 +16,16 @@
   IBufferDownloadListener* _cppBufferListener;
   IImageDownloadListener*  _cppImageListener;
   bool                     _deleteListener;
+  std::string              _tag;
 }
 
 -(id)initWithCPPBufferListener:(IBufferDownloadListener*)cppListener
-                deleteListener:(bool)deleteListener;
+                deleteListener:(bool)deleteListener
+                           tag:(const std::string&)tag;
 
 -(id)initWithCPPImageListener:(IImageDownloadListener*)cppListener
-               deleteListener:(bool)deleteListener;
-
-
-//const URL& url,
-//const IByteBuffer& data
+               deleteListener:(bool)deleteListener
+                          tag:(const std::string&)tag;
 
 -(void) onDownloadURL:(const URL&) url
                  data:(NSData*) data;
@@ -38,6 +36,8 @@
 
 -(void) onCanceledDownloadURL:(const URL&) url
                          data:(NSData*) data;
+
+-(const std::string) tag;
 
 -(void) dealloc;
 

@@ -1,92 +1,234 @@
-<!doctype html>
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<title>Testing App</title>
-<link type="text/css" rel="stylesheet" href="style/g3mwebgldemo.css">
-<!--                                           -->
-<!-- This script loads your compiled module.   -->
-<!-- If you add any GWT meta tags, they must   -->
-<!-- be added before this line.                -->
-<!--                                           -->
-<script type="text/javascript"
-	src="org.glob3.mobile.G3MWebGLTestingApplication/org.glob3.mobile.G3MWebGLTestingApplication.nocache.js"></script>
-	
-	
-    <script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<style>
+		body {
+		  margin: 0px !important;
+		  padding: 0px !important;
+		  height: 100%;
+		  overflow: hidden;
+		}
+
+		#g3mWidgetHolder {
+		  width: 100%;
+		  height: 750px;
+		  padding:0px;
+		  margin:0px;
+		  overflow: hidden;
+		}	 
+	</style>	
+	<!--<script src="http://www.elnublo.net/wrappers/Tutorial/Tutorial.nocache.js"> </script>-->
+        <script src="http://www.elnublo.net/wrappers/Tutorial/g3mBeta.js"> </script><style></style>
+        <script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body>
-	<!-- OPTIONAL: include this if you want history support -->
-	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
-		style="position: absolute; width: 0; height: 0; border: 0"></iframe>
-
-	<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
-	<noscript>
-		<div
-			style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-			Your web browser must have JavaScript enabled in order for this
-			application to display correctly.</div>
-	</noscript>
-
-	<div id="g3mWidgetHolder">
+	<div> 
+		<div id="g3mWidgetHolder"> </div>
 	</div>
-	
-	<script type="text/javascript">
-	var _onLoadG3MListener = null;
+	<script>
+		var _onLoadG3MListener = null;
 
-    function onLoadG3M() {
-    	// the G3M objets is already loaded
-    	if (_onLoadG3MListener != null)
-    		_onLoadG3MListener();
-    }
+		function onLoadG3M() {
+			if (_onLoadG3MListener != null) _onLoadG3MListener();
 
-    function setOnLoadG3MListener(func) {
-    	_onLoadG3MListener = func;
-    }
+		}
+		function setOnLoadG3MListener(func) { _onLoadG3MListener = func; }
+		
+		window.onload = function() {
+			var interval = setInterval(function(){
+				if (window.G3M !== undefined) {
+					loadGlobe();
+					clearInterval(interval);
+				}
+			},100);
+		}
+		
+		function loadGlobe(){ 
+			builder = new G3M.G3MBuilder_WebGL();
+			builder.setDownloader(new G3M.Downloader_WebGL( 8, 10, "http://www.elnublo.net/glob3m/proxy_alloworigin.php?url="));
+			widget_gl = builder.createWidget(); 
+			G3M.assignWidgetToHolder(widget_gl.instance,"g3mWidgetHolder"); 
+		}
 	</script>
-	
-	  <script type="text/javascript">
-    // Leap.loop uses browser's requestAnimationFrame
-    var options = { enableGestures: true };
-    
-    
-    // Main Leap Loop
-    Leap.loop(options, function(frame) {
-    
-    	if (frame.hands.length > 0){
-    		var p = getCameraData();
-    		
-    		var lat = p.latitude;
-    		var lon = p.longitude;
-    		var h = p.height;
-    		
-    	
-    		if (frame.hands.length == 1){
-    			var hand = frame.hands[0];
-    			if (hand.type == "right"){
-    				lon+= 0.1;
-    			}
-    			if (hand.type == "left"){
-    				lon-= 0.1;
-    			}
+
+	<script type="text/javascript">
+          //Managing Leap Motion Gestures
+        // Leap.loop uses browser's requestAnimationFrame
+        var options = { enableGestures: true };
+
+        Gesture = {
+            NONE: 0,
+            SINGLEPINCH: 1,
+            SINGLEGRAB: 2,
+            DOUBLEPINCH: 3
+        };
+
+        var currentGesture = 0;
+        var newGestureCounter = 0;
+        function getGesture(frame){
+            var newG = Gesture.NONE;
+
+            if (frame.hands.length == 1){
+                var h = frame.hands[0];
+
+                var pinchThreshold = currentGesture == Gesture.SINGLEPINCH? 0.5 : 0.9;
+                var grabThreshold = currentGesture == Gesture.SINGLEGRAB? 0.5 : 0.9;
+
+                if (h.pinchStrength > pinchThreshold && 
+                    h.grabStrength < grabThreshold){
+                    newG = Gesture.SINGLEPINCH;
+                } else if (h.grabStrength > grabThreshold){
+                    newG = Gesture.SINGLEGRAB;
+                }
+
+
+            } else if (frame.hands.length == 2){
+                var h0 = frame.hands[0];
+                var h1 = frame.hands[1];
+                var pinchThreshold = currentGesture == Gesture.DOUBLEPINCH? 0.4 : 0.8;
+
+                if (h1.pinchStrength > pinchThreshold && h0.pinchStrength > pinchThreshold){
+                    newG = Gesture.DOUBLEPINCH;
+                }
+            }
+
+            if (newG != currentGesture){
+            	if (newGestureCounter > 3){
+	                console.log("G " + newG);
+	                iniPinchPos0 = null;
+	        		iniPinchPos1 = null;
+	        		iniGrabPos = null;
+	        		iniHeight = null;
+
+	            	currentGesture = newG;
+	            	newGestureCounter = 0;
+            	} else{
+            		newGestureCounter++;
+            		return Gesture.NONE;
+            	}
+            }
+
+            return currentGesture;
+
+        }
+
+
+        var iniPinchPos0 = null;
+        var iniPinchPos1 = null;
+        var iniGrabPos = null;
+        var iniHeight = null;
+
+        function singlePinch(frame){
+            var h = frame.hands[0];
+            var p = h.fingers[1].distal.center();
+            p = new G3M.Vector2D(p[0], p[1]);
+
+
+            if (iniPinchPos0 == null){
+                iniPinchPos0 = p;
+            }
+            var d = p.sub(iniPinchPos0);
+            var dist = d.squaredLength();
+            console.log("Pinching " + dist);
+            if (dist > 10*10){
+                var camera = widget_gl.getNextCamera(); 
+                var geoPos = camera.getGeodeticPosition();
+
+            	var speed = 0.005 * (geoPos._height / 25e6);
+
+                var newPos = G3M.Geodetic3D.fromDegrees(geoPos._latitude._degrees + d._y * speed,
+                										geoPos._longitude._degrees+ d._x * speed,
+                										geoPos._height);
+                camera.setGeodeticPosition(newPos);
+            }
+        }
+
+        function singleGrab(frame){
+            var h = frame.hands[0];
+            var p = h.palmPosition;
+            p = new G3M.Vector2D(p[0], p[1]);
+
+
+            if (iniGrabPos == null){
+                iniGrabPos = p;
+            }
+            var d = p._y - iniGrabPos._y;
+            console.log("Grabbing " + d);
+            if (Math.abs(d) > 30){
+                var camera = widget_gl.getNextCamera(); 
+                var geoPos = camera.getGeodeticPosition();
+
+
+            	var speed = d < 0? 1.01 : 0.99;
+            	speed = Math.pow(speed, (Math.abs(d)/50));
+
+                var newPos = G3M.Geodetic3D.fromDegrees(geoPos._latitude._degrees,
+                										geoPos._longitude._degrees,
+                										geoPos._height * speed );
+                camera.setGeodeticPosition(newPos);
+            }
+        }
+
+        function doublePinch(frame){
+            var h0 = frame.hands[0];
+            var h1 = frame.hands[1];
+            var p0 = h0.fingers[1].distal.center();
+            var p1 = h1.fingers[1].distal.center();
+            p0 = new G3M.Vector2D(p0[0], p0[1]);
+            p1 = new G3M.Vector2D(p1[0], p1[1]);
+
+            if (iniPinchPos0 == null){
+                iniPinchPos0 = p0;
+            }
+            if (iniPinchPos1 == null){
+                iniPinchPos1 = p1;
+            }
+
+            var camera = widget_gl.getNextCamera(); 
+            if (iniHeight == null){
+                var geoPos = camera.getGeodeticPosition();
+                iniHeight = geoPos._height;
+            }
+
+            var initDist = Math.sqrt(iniPinchPos1.sub(iniPinchPos0).squaredLength());
+            var dist = Math.sqrt(p1.sub(p0).squaredLength());
+
+            var zoom = ((initDist / dist) - 1);
+            var angle = p1.sub(p0).angle();
+
+            console.log("Double Pinch " + dist + " " + zoom + " " + angle);
+
+            
+
+            var geoPos = camera.getGeodeticPosition();
+
+            var newPos = G3M.Geodetic3D.fromDegrees(geoPos._latitude._degrees,
+            										geoPos._longitude._degrees,
+            										iniHeight * (zoom + 1) );
+            camera.setGeodeticPosition(newPos);
+
+            if (Math.abs(angle._degrees) > 40){
+            	var angleStep = angle._degrees > 0? 0.5: -0.5;
+            	camera.setRoll(camera.getRoll().add(G3M.Angle.fromDegrees(angleStep)));
     		}
-    		
-    		
-    		if (frame.hands.length == 2){
-    			h = h *  0.9;
-    			
-    			
-    		console.log(lat + " " + lon + " " + h);
-    		
-    		}
-    		
-    		setCameraLatLonHeight(lat, lon, h);
-    	}
-    	
-    });
-    
-    </script>
-	
-</body>
-</html>
+
+        }
+        
+        
+        // Main Leap Loop
+        Leap.loop(options, function(frame) {
+            var g = getGesture(frame);
+
+            switch (g){
+                case Gesture.SINGLEPINCH: {singlePinch(frame); break;}
+                case Gesture.SINGLEGRAB: {singleGrab(frame); break;}
+                case Gesture.DOUBLEPINCH: {doublePinch(frame); break;}
+            }
+        	
+        	
+        });
+        
+        </script>
+
+</body></html>

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class BingMapsLayer_MetadataBufferDownloadListener extends IBufferDownloadListener
 {
   private BingMapsLayer _bingMapsLayer;

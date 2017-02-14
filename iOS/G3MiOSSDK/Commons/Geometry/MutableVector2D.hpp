@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_MutableVector2D
@@ -36,7 +35,13 @@ public:
   MutableVector2D(const MutableVector2D &v): _x(v.x()), _y(v.y()) {
     
   }
-  
+
+  void set(const double x,
+           const double y) {
+    _x = x;
+    _y = y;
+  }
+
   static MutableVector2D nan() {
     return MutableVector2D(NAND, NAND);
   }
@@ -49,8 +54,6 @@ public:
     return ISNAN(_x) || ISNAN(_y);
   }
 
-  MutableVector2D normalized() const;
-  
   double length() const {
     return IMathUtils::instance()->sqrt(squaredLength());
   }

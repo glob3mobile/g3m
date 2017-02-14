@@ -10,6 +10,32 @@
 
 #include "SGNode.hpp"
 
+
+SGShape::SGShape(SGNode* node,
+                 const std::string& uriPrefix,
+                 bool isTransparent,
+                 Geodetic3D* position,
+                 AltitudeMode altitudeMode) :
+Shape(position, altitudeMode),
+_node(node),
+_uriPrefix(uriPrefix),
+_isTransparent(isTransparent)
+{
+  _glState = new GLState();
+  if (_isTransparent) {
+    _glState->addGLFeature(new BlendingModeGLFeature(true,
+                                                     GLBlendFactor::srcAlpha(),
+                                                     GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
+  }
+  else {
+    _glState->addGLFeature(new BlendingModeGLFeature(false,
+                                                     GLBlendFactor::srcAlpha(),
+                                                     GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
+  }
+}
+
 SGShape::~SGShape() {
   _glState->_release();
   delete _node;
@@ -28,4 +54,13 @@ void SGShape::rawRender(const G3MRenderContext* rc,
                         bool renderNotReadyShapes) {
   _glState->setParent(parentState);
   _node->render(rc, _glState, renderNotReadyShapes);
+}
+
+std::vector<double> SGShape::intersectionsDistances(const Planet* planet,
+                                                    const Vector3D& origin,
+                                                    const Vector3D& direction) const
+{
+#warning TODO
+  std::vector<double> intersections;
+  return intersections;
 }

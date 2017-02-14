@@ -4,6 +4,7 @@ package org.glob3.mobile.tools.gdal;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.ILogger;
@@ -28,8 +29,10 @@ public class GeoBSONConverter {
 
 
    private static GeoBSONConverter _geoBsonConverter = null;
-   private final JBson2BJson       _jsonParser;
-   private final GDAL              _gdalConverter;
+
+
+   // private final JBson2BJson       _jsonParser;
+   //   private final GDAL              _gdalConverter;
 
 
    public static synchronized GeoBSONConverter instance() {
@@ -44,12 +47,12 @@ public class GeoBSONConverter {
    private GeoBSONConverter() {
       initialize();
       _logger = ILogger.instance();
-      _jsonParser = JBson2BJson.instance();
-      _gdalConverter = GDAL.instance();
+      // _jsonParser = JBson2BJson.instance();
+      // _gdalConverter = GDAL.instance();
    }
 
 
-   private void initialize() {
+   static private void initialize() {
       IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
       if (IMathUtils.instance() == null) {
          IMathUtils.setInstance(new MathUtils_JavaDesktop());
@@ -65,7 +68,7 @@ public class GeoBSONConverter {
 
    public void convert(final File inputFile,
                        final File outputDir,
-                       final String outputFileName) throws GDALException, JBson2BJsonException, CommandLineException {
+                       final String outputFileName) throws GDALException, JBson2BJsonException, CommandLineException, IOException {
       convert(inputFile, outputDir, outputFileName, true);
    }
 
@@ -73,7 +76,7 @@ public class GeoBSONConverter {
    public void convert(final File inputFile,
                        final File outputDir,
                        final String outputFileName,
-                       final boolean overwrite) throws GDALException, JBson2BJsonException, CommandLineException {
+                       final boolean overwrite) throws GDALException, JBson2BJsonException, CommandLineException, IOException {
       if (inputFile.exists()) {
          if (inputFile.isFile()) {
             _logger.logInfo("----------------------------- File: " + inputFile.getName() + " -----------------------------");
@@ -116,10 +119,7 @@ public class GeoBSONConverter {
                @Override
                public boolean accept(final File dir,
                                      final String name) {
-                  if (name.toLowerCase().endsWith(".shp")) {
-                     return true;
-                  }
-                  return false;
+                  return name.toLowerCase().endsWith(".shp");
                }
             });
             for (final File file : files) {
@@ -137,23 +137,21 @@ public class GeoBSONConverter {
                           final File outputDir,
                           final String outputFileName,
                           final boolean overwrite,
-                          final boolean multiFile) throws GDALException, JBson2BJsonException {
-      final File geoJsonWaypoints = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName + "_waypoints", overwrite,
+                          final boolean multiFile) throws GDALException, JBson2BJsonException, IOException {
+      final File geoJsonWaypoints = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName + "_waypoints", overwrite,
                "waypoints");
-      final File geoJsonRoutes = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName + "_routes", overwrite,
-               "routes");
-      final File geoJsonTracks = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName + "_tracks", overwrite,
-               "tracks");
+      final File geoJsonRoutes = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName + "_routes", overwrite, "routes");
+      final File geoJsonTracks = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName + "_tracks", overwrite, "tracks");
       if (multiFile) {
-         _jsonParser.json2bson(geoJsonWaypoints, new File(outputDir, geoJsonWaypoints.getName().replace(".geojson", ".bson")),
+         JBson2BJson.json2bson(geoJsonWaypoints, new File(outputDir, geoJsonWaypoints.getName().replace(".geojson", ".bson")),
                   overwrite);
-         _jsonParser.json2bson(geoJsonRoutes, new File(outputDir, geoJsonRoutes.getName().replace(".geojson", ".bson")),
+         JBson2BJson.json2bson(geoJsonRoutes, new File(outputDir, geoJsonRoutes.getName().replace(".geojson", ".bson")),
                   overwrite);
-         _jsonParser.json2bson(geoJsonTracks, new File(outputDir, geoJsonTracks.getName().replace(".geojson", ".bson")),
+         JBson2BJson.json2bson(geoJsonTracks, new File(outputDir, geoJsonTracks.getName().replace(".geojson", ".bson")),
                   overwrite);
       }
       else {
-         _jsonParser.jsons2bson(new File(outputDir, outputFileName + ".bson"), overwrite, geoJsonWaypoints, geoJsonRoutes,
+         JBson2BJson.jsons2bson(new File(outputDir, outputFileName + ".bson"), overwrite, geoJsonWaypoints, geoJsonRoutes,
                   geoJsonTracks);
 
       }
@@ -161,71 +159,59 @@ public class GeoBSONConverter {
    }
 
 
-   private void aeronavFAAToBson(final File inputFile,
-                                 final File outputDir,
-                                 final String outputFileName,
-                                 final boolean overwrite) throws GDALException, JBson2BJsonException {
-      final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
-      _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
+   static private void aeronavFAAToBson(final File inputFile,
+                                        final File outputDir,
+                                        final String outputFileName,
+                                        final boolean overwrite) throws GDALException, JBson2BJsonException, IOException {
+      final File geoJson = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
+      JBson2BJson.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
    }
 
 
-   private void geoJsonToBson(final File inputFile,
-                              final File outputDir,
-                              String outputFileName,
-                              final boolean overwrite) throws GDALException, JBson2BJsonException {
+   static private void geoJsonToBson(final File inputFile,
+                                     final File outputDir,
+                                     String outputFileName,
+                                     final boolean overwrite) throws GDALException, JBson2BJsonException, IOException {
       if (inputFile.getParentFile().equals(outputDir)) {
          if (inputFile.getName().compareTo(outputFileName) == 0) {
             outputFileName = "generated_" + outputFileName;
          }
       }
-      final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
-      _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
+      final File geoJson = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
+      JBson2BJson.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
    }
 
 
-   private void geoRSSToBson(final File inputFile,
-                             final File outputDir,
-                             final String outputFileName,
-                             final boolean overwrite) throws GDALException, JBson2BJsonException {
-      final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
-      _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
+   static private void geoRSSToBson(final File inputFile,
+                                    final File outputDir,
+                                    final String outputFileName,
+                                    final boolean overwrite) throws GDALException, JBson2BJsonException, IOException {
+      final File geoJson = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
+      JBson2BJson.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
    }
 
 
-   /**
-    * 
-    * @param inputFile
-    * @param outputFileName
-    * @throws GDALException
-    * @throws JBson2BJsonException
-    */
-   private void shpToBson(final File inputFile,
-                          final File outputDir,
-                          final String outputFileName,
-                          final boolean overwrite) throws GDALException, JBson2BJsonException {
+   static private void shpToBson(final File inputFile,
+                                 final File outputDir,
+                                 final String outputFileName,
+                                 final boolean overwrite) throws GDALException, JBson2BJsonException, IOException {
       final String inputFileName = FileUtils.getFileNameWithoutExtension(inputFile.getName());
       if (ShpUtils.checkShpDir(inputFile.getParentFile(), inputFileName)) {
-         final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
-         _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
+         final File geoJson = GDAL.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
+         JBson2BJson.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
       }
    }
 
 
-   /**
-    * 
-    * @param inputFile
-    * @param outputFileName
-    * @throws GDALException
-    * @throws JBson2BJsonException
-    */
-   private void xyzToBson(final File inputFile,
-                          final File outputDir,
-                          final String outputFileName,
-                          final boolean overwrite) throws GDALException, JBson2BJsonException {
+   static private void xyzToBson(final File inputFile,
+                                 final File outputDir,
+                                 final String outputFileName,
+                                 final boolean overwrite) throws GDALException, JBson2BJsonException, IOException {
       if (inputFile.exists()) {
-         final File json = _gdalConverter.xyz2JSON(inputFile, outputDir, outputFileName);
-         _jsonParser.json2bson(json, new File(outputDir, json.getName().replace(".json", ".bson")), overwrite);
+         final File json = GDAL.xyz2JSON(inputFile, outputDir, outputFileName);
+         JBson2BJson.json2bson(json, new File(outputDir, json.getName().replace(".json", ".bson")), overwrite);
       }
    }
+
+
 }

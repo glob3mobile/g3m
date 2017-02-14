@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CameraEventHandler.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 07/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 

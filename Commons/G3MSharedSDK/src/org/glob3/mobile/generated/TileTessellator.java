@@ -1,17 +1,17 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class TileTessellator
 {
   public void dispose()
   {
   }
 
-  public abstract Mesh createTileMesh(Planet planet, Vector2I resolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean debug, TileTessellatorMeshData data);
+  public abstract Mesh createTileMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, ElevationData elevationData, DEMGrid grid, TileTessellatorMeshData tileTessellatorMeshData);
 
-  public abstract Vector2I getTileMeshResolution(Planet planet, Vector2I resolution, Tile tile, boolean debug);
+  public abstract Vector2S getTileMeshResolution(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);
 
-  public abstract Mesh createTileDebugMesh(Planet planet, Vector2I resolution, Tile tile);
+  public abstract Mesh createTileDebugMesh(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);
 
-  public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile);
+  public abstract IFloatBuffer createTextCoords(Vector2S resolution, Tile tile);
 
   public Vector2F getTextCoord(Tile tile, Geodetic2D position)
   {

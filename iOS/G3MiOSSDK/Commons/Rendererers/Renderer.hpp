@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Renderer
@@ -52,7 +51,8 @@ public:
   
   virtual PlanetRenderer* getPlanetRenderer() = 0;
     
-  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) = 0;
+  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                              const size_t rendererID) = 0;
   
 //  virtual void setInfo(const std::vector<std::string>& info) = 0;
   

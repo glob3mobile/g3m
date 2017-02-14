@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ITileVisitor.hpp
 //  G3MiOSSDK
@@ -8,6 +8,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Layer;
+//class Tile;
 
 public interface ITileVisitor
 {

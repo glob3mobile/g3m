@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////
-
+package org.glob3.mobile.generated;
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
   public void dispose()
@@ -52,7 +50,7 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     isb.addDouble(_z);
     isb.addString("w:");
     isb.addDouble(_w);
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

@@ -53,7 +53,7 @@ int SceneJSParserStatistics::getVerticesCount() const {
   return _verticesCount;
 }
 
-std::string SceneJSParserStatistics::asLogString() const {
+const std::string SceneJSParserStatistics::asLogString() const {
   IStringBuilder* statsSB = IStringBuilder::newStringBuilder();
   
   statsSB->addString("Nodes=");
@@ -71,7 +71,7 @@ std::string SceneJSParserStatistics::asLogString() const {
   statsSB->addString("; Vert/Nod=");
   statsSB->addFloat((float) getVerticesCount() / getNodesCount());
   
-  std::string stats = statsSB->getString();
+  const std::string stats = statsSB->getString();
   delete statsSB;
 
   return stats;

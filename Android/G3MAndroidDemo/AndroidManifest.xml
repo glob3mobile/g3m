@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.glob3.mobile.demo"
-    android:versionCode="5"
-    android:versionName="1.4" >
+    android:versionCode="9"
+    android:versionName="1.8" >
 
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="23" />
 
     <uses-feature android:glEsVersion="0x00020000" />
 
@@ -146,6 +146,8 @@
             android:hardwareAccelerated="true"
              >
         </activity>
+            <activity android:name="VectorStreamingActivity" android:process=":AB"></activity>
+            <activity android:name="PointCloudStreamimgActivity" android:process=":AC"></activity>
     </application>
 
 </manifest>

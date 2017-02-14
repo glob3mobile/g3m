@@ -26,8 +26,6 @@ public:
 
   ShortBufferElevationData(const Sector& sector,
                            const Vector2I& extent,
-                           const Sector& realSector,
-                           const Vector2I& realExtent,
                            short* buffer,
                            int bufferSize,
                            double deltaHeight);

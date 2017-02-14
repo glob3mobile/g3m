@@ -25,6 +25,7 @@ public:
   }
 
   const std::string description() const;
+  const std::string toString() const;
 
   JSONNull* deepCopy() const {
     return new JSONNull();

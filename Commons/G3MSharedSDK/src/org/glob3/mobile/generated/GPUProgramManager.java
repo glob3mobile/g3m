@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GPUProgramManager.cpp
 //  G3MiOSSDK
@@ -74,8 +74,29 @@ public class GPUProgramManager
     final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
   //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
   
+    final boolean is2D = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.POSITION_2D);
+  
+    final boolean hasCamPos = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.CAMERA_POSITION);
+  
+  //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
+  
+  
+    if (is2D)
+    {
+      if (flatColor)
+      {
+        return compileProgramWithName(gl, "FlatColor2DMesh");
+      }
+      return compileProgramWithName(gl, "Textured2DMesh");
+    }
+  
     if (billboard)
     {
+      if (transformTC)
+      {
+        return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
+      }
+  
       return compileProgramWithName(gl, "Billboard");
     }
   
@@ -138,6 +159,10 @@ public class GPUProgramManager
   
     if (!flatColor && !texture && !color)
     {
+      if (hasCamPos)
+      {
+        return compileProgramWithName(gl, "SphericalAtmosphere");
+      }
       return compileProgramWithName(gl, "NoColorMesh");
     }
   

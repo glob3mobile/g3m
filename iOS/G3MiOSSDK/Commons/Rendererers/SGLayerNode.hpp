@@ -12,7 +12,7 @@
 #include "SGNode.hpp"
 #include "URL.hpp"
 
-class IGLTextureId;
+class IGLTextureID;
 class IImage;
 class TextureIDReference;
 
@@ -31,7 +31,7 @@ private:
 
   mutable bool _initialized;
 
-  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureID(const G3MRenderContext* rc);
 
 #ifdef C_CODE
   const IImage* _downloadedImage;
@@ -42,10 +42,10 @@ private:
   void requestImage(const G3MRenderContext* rc);
 
 #ifdef C_CODE
-  const TextureIDReference* _textureId;
+  const TextureIDReference* _textureID;
 #endif
 #ifdef JAVA_CODE
-  private TextureIDReference _textureId;
+  private TextureIDReference _textureID;
 #endif
 
   URL getURL() const;
@@ -53,7 +53,7 @@ private:
 public:
 
   SGLayerNode(const std::string& id,
-              const std::string& sId,
+              const std::string& sID,
               const std::string& uri,
               const std::string& applyTo,
               const std::string& blendMode,
@@ -62,10 +62,10 @@ public:
               const std::string& minFilter,
               const std::string& wrapS,
               const std::string& wrapT) :
-  SGNode(id, sId),
+  SGNode(id, sID),
   _uri(uri),
   _downloadedImage(NULL),
-  _textureId(NULL),
+  _textureID(NULL),
   _initialized(false)
   {
   }
@@ -78,7 +78,7 @@ public:
   
   bool modifyGLState(const G3MRenderContext* rc, GLState* state);
 
-  std::string description() {
+  const std::string description() {
     return "SGLayerNode";
   }
 };

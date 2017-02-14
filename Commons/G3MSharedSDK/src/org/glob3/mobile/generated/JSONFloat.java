@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONFloat.cpp
 //  G3MiOSSDK
@@ -51,6 +51,18 @@ public class JSONFloat extends JSONNumber
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("float/");
+    isb.addFloat(_value);
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
     isb.addFloat(_value);
   
     final String s = isb.getString();

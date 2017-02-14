@@ -3,11 +3,11 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #include "Frustum.hpp"
 #include "Box.hpp"
+#include "BoundingVolume.hpp"
 
 
 Frustum::Frustum (const FrustumData& data):
@@ -19,16 +19,16 @@ _ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._t
 _rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
 _lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
 _rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
-_leftPlane(Plane::fromPoints(Vector3D::zero,
+_leftPlane(Plane::fromPoints(Vector3D::ZERO,
                              Vector3D(data._left, data._top, -data._znear),
                              Vector3D(data._left, data._bottom, -data._znear))),
-_bottomPlane(Plane::fromPoints(Vector3D::zero,
+_bottomPlane(Plane::fromPoints(Vector3D::ZERO,
                                Vector3D(data._left, data._bottom, -data._znear),
                                Vector3D(data._right, data._bottom, -data._znear))),
-_rightPlane(Plane::fromPoints(Vector3D::zero,
+_rightPlane(Plane::fromPoints(Vector3D::ZERO,
                               Vector3D(data._right, data._bottom, -data._znear),
                               Vector3D(data._right, data._top, -data._znear))),
-_topPlane(Plane::fromPoints(Vector3D::zero,
+_topPlane(Plane::fromPoints(Vector3D::ZERO,
                             Vector3D(data._right, data._top, -data._znear),
                             Vector3D(data._left, data._top, -data._znear))),
 _nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
@@ -65,6 +65,7 @@ bool Frustum::touchesWithBox(const Box* that) const {
     return false;
   }
 
+#warning This implementation could gives false positives
 #ifdef C_CODE
   // create an array with the 8 corners of the box
   const Vector3D min = that->getLower();
@@ -118,7 +119,6 @@ bool Frustum::touchesWithBox(const Box* that) const {
 #endif
 }
 
-
 BoundingVolume* Frustum::computeBoundingVolume() const {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
@@ -156,5 +156,13 @@ BoundingVolume* Frustum::computeBoundingVolume() const {
   if (_rbf._z<minz) minz=_rbf._z;     if (_rbf._z>maxz) maxz=_rbf._z;
 
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+}
+
+Frustum::~Frustum() {
+  if (_boundingVolume) delete _boundingVolume;
+}
+
+Frustum* Frustum::transformedBy_P(const MutableMatrix44D& matrix) const {
+  return new Frustum(this, matrix, matrix.inversed());
 }
 

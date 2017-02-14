@@ -1,7 +1,4 @@
-package org.glob3.mobile.generated; 
-////////
-
-///////////
+package org.glob3.mobile.generated;
 public class GPUAttributeValueVec4Float extends GPUAttributeValueVecFloat
 {
   public void dispose()

@@ -2,7 +2,6 @@
 //  Shader.vsh
 //
 //  Created by Agustin Trujillo Pino on 12/01/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 attribute vec4 Position;

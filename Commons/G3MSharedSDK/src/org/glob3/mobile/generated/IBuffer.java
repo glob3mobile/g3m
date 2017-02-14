@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IBuffer.cpp
 //  G3MiOSSDK
@@ -32,7 +32,7 @@ public interface IBuffer
 
   /**
    Answer the timestamp of the buffer.
-   
+
    This number will be different each time the buffer changes its contents.
    It provides a fast method to check if the Buffer has changed.
    **/

@@ -10,29 +10,41 @@
 #define __G3MiOSSDK__IFloatBuffer__
 
 #include "IBuffer.hpp"
+#include "Vector3D.hpp"
 
 class IFloatBuffer : public IBuffer {
 public:
 
   IFloatBuffer(): IBuffer() {}
-  
+
   virtual ~IFloatBuffer() {
   }
-  
-  virtual float get(int i) const = 0;
-  
-  virtual void put(int i, float value) = 0;
 
-  virtual void rawPut(int i, float value) = 0;
+  virtual float get(const size_t i) const = 0;
 
-  virtual void rawAdd(int i, float value) = 0;
+  virtual void put(const size_t i,
+                   float value) = 0;
 
-  virtual void rawPut(int i,
+  void putVector3D(const size_t i,
+                   const Vector3D& v) {
+    const size_t i3 = i*3;
+    put(i3    , (float) v._x);
+    put(i3 + 1, (float) v._y);
+    put(i3 + 2, (float) v._z);
+  }
+
+  virtual void rawPut(const size_t i,
+                      float value) = 0;
+
+  virtual void rawAdd(const size_t i,
+                      float value) = 0;
+
+  virtual void rawPut(const size_t i,
                       const IFloatBuffer* srcBuffer,
-                      int srcFromIndex,
-                      int count) = 0;
+                      const size_t srcFromIndex,
+                      const size_t count) = 0;
 
-  void rawPut(int i,
+  void rawPut(const size_t i,
               const IFloatBuffer* srcBuffer) {
     rawPut(i, srcBuffer, 0, srcBuffer->size());
   }

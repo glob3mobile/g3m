@@ -24,6 +24,39 @@
 #include "MercatorUtils.hpp"
 #include "TextureIDReference.hpp"
 #include "SimpleTextureMapping.hpp"
+#include "G3MRenderContext.hpp"
+#include "TimeInterval.hpp"
+#include "IImage.hpp"
+#include "EllipsoidalPlanet.hpp"
+
+
+EllipsoidShape::EllipsoidShape(Geodetic3D* position,
+                               AltitudeMode altitudeMode,
+                               const Vector3D& radius,
+                               short resolution,
+                               float borderWidth,
+                               bool texturedInside,
+                               bool mercator,
+                               const Color& surfaceColor,
+                               Color* borderColor,
+                               bool withNormals) :
+AbstractMeshShape(position, altitudeMode),
+_ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
+//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
+_textureURL(URL("", false)),
+_resolution(resolution < 3 ? 3 : resolution),
+_borderWidth(borderWidth),
+_texturedInside(texturedInside),
+_mercator(mercator),
+_surfaceColor(new Color(surfaceColor)),
+_borderColor(borderColor),
+_textureRequested(false),
+_textureImage(NULL),
+_withNormals(withNormals),
+_texID(NULL)
+{
+
+}
 
 
 EllipsoidShape::~EllipsoidShape() {
@@ -31,21 +64,21 @@ EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
   delete _borderColor;
 
-  delete _texId; //Releasing texture
+  delete _texID; //Releasing texture
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
+const TextureIDReference* EllipsoidShape::getTextureID(const G3MRenderContext* rc) {
 
-  if (_texId == NULL) {
+  if (_texID == NULL) {
     if (_textureImage == NULL) {
       return NULL;
     }
 
-    _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+    _texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                              GLFormat::rgba(),
                                                              _textureURL._path,
                                                              false);
@@ -54,15 +87,15 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
     _textureImage = NULL;
   }
 
-  if (_texId == NULL) {
+  if (_texID == NULL) {
     rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
-  if (_texId == NULL) {
+  if (_texID == NULL) {
     return NULL;
   }
 
-  return _texId->createCopy(); //The copy will be handle by the TextureMapping
+  return _texID->createCopy(); //The copy will be handle by the TextureMapping
 }
 
 
@@ -101,10 +134,11 @@ Mesh* EllipsoidShape::createBorderMesh(const G3MRenderContext* rc,
   }
 
   return new IndexedMesh(GLPrimitive::lines(),
-                         true,
                          vertices->getCenter(),
                          vertices->create(),
+                         true,
                          indices.create(),
+                         true,
                          (_borderWidth < 1) ? 1 : _borderWidth,
                          1,
                          borderColor);
@@ -144,24 +178,24 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   // create mesh
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
   Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                             true,
                              vertices->getCenter(),
                              vertices->create(),
+                             true,
                              indices.create(),
+                             true,
                              (_borderWidth < 1) ? 1 : _borderWidth,
                              1,
                              surfaceColor,
                              NULL,
-                             1,
                              true,
                              _withNormals? normals->create() : NULL);
 
-  const TextureIDReference* texId = getTextureId(rc);
-  if (texId == NULL) {
+  const TextureIDReference* texID = getTextureID(rc);
+  if (texID == NULL) {
     return im;
   }
 
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
+  TextureMapping* texMap = new SimpleTextureMapping(texID,
                                                     texCoords->create(),
                                                     true,
                                                     true);
@@ -223,11 +257,11 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::zero,
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::ZERO,
                                               _ellipsoid->_radii));
-  const Sector sector(Sector::fullSphere());
+  const Sector sector(Sector::FULL_SPHERE);
 
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::ZERO);
   FloatBufferBuilderFromCartesian2D texCoords;
 
   FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
@@ -258,17 +292,21 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
   Mesh* surfaceMesh = createSurfaceMesh(rc, vertices, &texCoords, normals);
 
+  Mesh* resultMesh;
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
     compositeMesh->addMesh(surfaceMesh);
     compositeMesh->addMesh(createBorderMesh(rc, vertices));
-    return compositeMesh;
+    resultMesh = compositeMesh;
+  }
+  else {
+    resultMesh = surfaceMesh;
   }
 
   delete vertices;
   delete normals;
 
-  return surfaceMesh;
+  return resultMesh;
 }
 
 

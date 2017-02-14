@@ -40,7 +40,7 @@ private:
 
   float _borderWidth;
 
-  bool _useNormals;
+  const bool _useNormals;
 
   Color* _surfaceColor;
   Color* _borderColor;
@@ -82,9 +82,9 @@ public:
   ~BoxShape() {
     delete _surfaceColor;
     delete _borderColor;
-    
+
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
   }
 
@@ -121,7 +121,7 @@ public:
       cleanMesh();
     }
   }
-  
+
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Vector3D& origin,
                                              const Vector3D& direction) const;

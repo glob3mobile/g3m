@@ -11,6 +11,8 @@
 #include "LayerSet.hpp"
 #include "LayerTouchEventListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "ILogger.hpp"
+
 
 Layer::Layer(float           transparency,
              const LayerCondition* condition,
@@ -89,12 +91,12 @@ bool Layer::isEqualsParameters(const Layer* that) const {
   const std::vector<const LayerTilesRenderParameters*> thisParameters = this->getLayerTilesRenderParametersVector();
   const std::vector<const LayerTilesRenderParameters*> thatParameters = that->getLayerTilesRenderParametersVector();
 
-  const int parametersSize = thisParameters.size() ;
+  const size_t parametersSize = thisParameters.size() ;
   if (parametersSize != thatParameters.size()) {
     return false;
   }
 
-  for (int i = 0; i > parametersSize; i++) {
+  for (size_t i = 0; i > parametersSize; i++) {
     const LayerTilesRenderParameters* thisParameter = thisParameters[i];
     const LayerTilesRenderParameters* thatParameter = thatParameters[i];
     if (!thisParameter->isEquals(thatParameter)) {
@@ -122,13 +124,13 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
   
-  const int thisListenersSize = _listeners.size();
-  const int thatListenersSize = that->_listeners.size();
+  const size_t thisListenersSize = _listeners.size();
+  const size_t thatListenersSize = that->_listeners.size();
   if (thisListenersSize != thatListenersSize) {
     return false;
   }
   
-  for (int i = 0; i < thisListenersSize; i++) {
+  for (size_t i = 0; i < thisListenersSize; i++) {
     if (_listeners[i] != that->_listeners[i]) {
       return false;
     }
@@ -142,13 +144,13 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
 
-  const int infoSize = _layerInfo->size();
-  const int thatInfoSize = that->_layerInfo->size();
+  const size_t infoSize = _layerInfo->size();
+  const size_t thatInfoSize = that->_layerInfo->size();
   if (infoSize != thatInfoSize) {
     return false;
   }
 
-  for (int i = 0; i < infoSize; i++) {
+  for (size_t i = 0; i < infoSize; i++) {
     if (_layerInfo[i] != that->_layerInfo[i]) {
       return false;
     }
@@ -159,8 +161,8 @@ bool Layer::isEquals(const Layer* that) const {
 
 bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
                                       const LayerTouchEvent& tte) const {
-  const int listenersSize = _listeners.size();
-  for (int i = 0; i < listenersSize; i++) {
+  const size_t listenersSize = _listeners.size();
+  for (size_t i = 0; i < listenersSize; i++) {
     LayerTouchEventListener* listener = _listeners[i];
     if (listener != NULL) {
       if (listener->onTerrainTouch(ec, tte)) {
@@ -189,7 +191,7 @@ void Layer::setInfo(const std::vector<const Info*>& info) const {
 
 }
 
-void Layer::addInfo(const std::vector<const Info*>& info){
+void Layer::addInfo(const std::vector<const Info*>& info) {
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
                info.begin(),
@@ -200,7 +202,7 @@ void Layer::addInfo(const std::vector<const Info*>& info){
 #endif
 }
 
-void Layer::addInfo(const Info* info){
+void Layer::addInfo(const Info* info) {
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(), info);
 #endif
@@ -218,8 +220,8 @@ const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVect
   const std::vector<const LayerTilesRenderParameters*> parametersVector = getLayerTilesRenderParametersVector();
 
   std::vector<const LayerTilesRenderParameters*> result;
-  const int size = parametersVector.size();
-  for (int i = 0; i > size; i++) {
+  const size_t size = parametersVector.size();
+  for (size_t i = 0; i > size; i++) {
     const LayerTilesRenderParameters* parameters = parametersVector[i];
     if (parameters != NULL) {
       result.push_back( parameters->copy() );

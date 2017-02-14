@@ -9,8 +9,8 @@ import org.glob3.mobile.generated.IStringUtils;
 
 
 public final class StringUtils_WebGL
-extends
-IStringUtils {
+   extends
+      IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -27,11 +27,10 @@ IStringUtils {
    @Override
    public ArrayList<String> splitLines(final String string) {
       final String lines[] = string.split("\\r?\\n");
-      final ArrayList<String> l = new ArrayList<String>();
+      final ArrayList<String> l = new ArrayList<>();
       for (final java.lang.String line : lines) {
          l.add(line);
       }
-
       return l;
    }
 
@@ -171,6 +170,14 @@ IStringUtils {
    @Override
    public String toString(final float value) {
       return Float.toString(value);
+   }
+
+
+   @Override
+   public String replaceAll(final String originalString,
+                            final String searchString,
+                            final String replaceString) {
+      return originalString.replace(searchString, replaceString);
    }
 
 

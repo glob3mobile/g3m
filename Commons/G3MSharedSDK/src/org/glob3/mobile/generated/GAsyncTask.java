@@ -1,21 +1,22 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
-//  IThreadUtils.cpp
+//  GAsyncTask.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 30/08/12.
+//  Created by Diego Gomez Deck on 10/18/16.
 //
 //
 
 //
-//  IThreadUtils.hpp
+//  GAsyncTask.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 30/08/12.
+//  Created by Diego Gomez Deck on 10/18/16.
 //
 //
 
 
+//class G3MContext;
 
 
 public abstract class GAsyncTask

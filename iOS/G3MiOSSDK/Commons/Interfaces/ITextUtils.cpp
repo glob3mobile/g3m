@@ -19,8 +19,8 @@ void ITextUtils::createLabelImage(const std::string& label,
                                   bool autodelete) {
   const float fontSize = 20;
 
-  const Color color       = Color::white();
-  const Color shadowColor = Color::black();
+  const Color color       = Color::WHITE;
+  const Color shadowColor = Color::BLACK;
 
   createLabelImage(label,
                    fontSize,
@@ -37,8 +37,8 @@ void ITextUtils::labelImage(const IImage* image,
                             bool autodelete) {
   const float fontSize = 20;
 
-  const Color color       = Color::white();
-  const Color shadowColor = Color::black();
+  const Color color       = Color::WHITE;
+  const Color shadowColor = Color::BLACK;
 
   const int separation = 2;
 

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public enum GPUUniformKey
 {
   UNRECOGNIZED_UNIFORM(-1),
@@ -22,7 +22,10 @@ public enum GPUUniformKey
   ROTATION_ANGLE_TEXTURE_COORDS(17),
   SAMPLER(18),
   SAMPLER2(19),
-  SAMPLER3(20);
+  SAMPLER3(20),
+  TRANSLATION_2D(21),
+  BILLBOARD_ANCHOR(22),
+  CAMERA_POSITION(23);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

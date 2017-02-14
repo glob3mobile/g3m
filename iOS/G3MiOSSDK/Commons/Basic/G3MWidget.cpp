@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "G3MWidget.hpp"
@@ -14,7 +13,7 @@
 #include "TexturesHandler.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
-#include "Context.hpp"
+#include "G3MEventContext.hpp"
 #include "ICameraConstrainer.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
@@ -27,7 +26,6 @@
 #include "CameraRenderer.hpp"
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
-#include <math.h>
 #include "GInitializationTask.hpp"
 #include "ITextUtils.hpp"
 #include "TouchEvent.hpp"
@@ -37,6 +35,15 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "IDeviceAttitude.hpp"
+#include "IDeviceLocation.hpp"
+#include "IDeviceInfo.hpp"
+#include "InitialCameraPositionProvider.hpp"
+#include "G3MRenderContext.hpp"
+#include "Planet.hpp"
+#include "ErrorHandling.hpp"
+#include "GLState.hpp"
+
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -44,7 +51,9 @@ void G3MWidget::initSingletons(ILogger*            logger,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
                                IJSONParser*        jsonParser,
-                               ITextUtils*         textUtils) {
+                               ITextUtils*         textUtils,
+                               IDeviceAttitude*    devAttitude,
+                               IDeviceLocation*    devLocation) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -53,6 +62,8 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
     ITextUtils::setInstance(textUtils);
+    IDeviceAttitude::setInstance(devAttitude);
+    IDeviceLocation::setInstance(devLocation);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -80,7 +91,8 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      GPUProgramManager*                   gpuProgramManager,
                      SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider,
-                     InfoDisplay* infoDisplay):
+                     InfoDisplay*                         infoDisplay,
+                     ViewMode                             viewMode):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -98,8 +110,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera()),
-_nextCamera(new Camera()),
+_currentCamera(new Camera(1)),
+_nextCamera(new Camera(2)),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -123,7 +135,8 @@ _context(new G3MContext(IFactory::instance(),
                         downloader,
                         _effectsScheduler,
                         storage,
-                        mainRenderer->getSurfaceElevationProvider()
+                        mainRenderer->getSurfaceElevationProvider(),
+                        viewMode
                         )),
 _paused(false),
 _initializationTaskWasRun(false),
@@ -136,7 +149,13 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_infoDisplay(infoDisplay)
+_infoDisplay(infoDisplay),
+_touchDownPositionX(0),
+_touchDownPositionY(0),
+_viewMode(viewMode),
+_leftEyeCam(NULL),
+_rightEyeCam(NULL),
+_auxCam(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -185,16 +204,18 @@ _infoDisplay(infoDisplay)
                                         IFactory::instance()->createTimer(),
                                         _storage,
                                         _gpuProgramManager,
-                                        _surfaceElevationProvider);
+                                        _surfaceElevationProvider,
+                                        _viewMode,
+                                        this);
 
 
-//#ifdef C_CODE
-//  delete _rendererState;
-//  _rendererState = new RenderState( calculateRendererState() );
-//#endif
-//#ifdef JAVA_CODE
-//  _rendererState = calculateRendererState();
-//#endif
+  //#ifdef C_CODE
+  //  delete _rendererState;
+  //  _rendererState = new RenderState( calculateRendererState() );
+  //#endif
+  //#ifdef JAVA_CODE
+  //  _rendererState = calculateRendererState();
+  //#endif
 }
 
 
@@ -219,7 +240,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              GPUProgramManager*                   gpuProgramManager,
                              SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider,
-                             InfoDisplay* infoDisplay) {
+                             InfoDisplay* infoDisplay,
+                             ViewMode viewMode) {
 
   return new G3MWidget(gl,
                        storage,
@@ -242,7 +264,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        gpuProgramManager,
                        sceneLighting,
                        initialCameraPositionProvider,
-                       infoDisplay);
+                       infoDisplay,
+                       viewMode);
 }
 
 G3MWidget::~G3MWidget() {
@@ -289,10 +312,14 @@ G3MWidget::~G3MWidget() {
     _rootState->_release();
   }
   delete _initialCameraPositionProvider;
-  
+
   if(_infoDisplay != NULL) {
     delete _infoDisplay;
   }
+  
+  delete _rightEyeCam;
+  delete _leftEyeCam;
+  delete _auxCam;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -340,7 +367,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
-  
+
   G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
@@ -351,38 +378,50 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _downloader,
                      _effectsScheduler,
                      _storage,
-                     _surfaceElevationProvider);
-  
-    // notify the original event
-    notifyTouchEvent(ec, touchEvent);
-    
-    // creates DownUp event when a Down is immediately followed by an Up
-    //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
-    if (touchEvent->getTouchCount() == 1) {
-      const TouchEventType eventType = touchEvent->getType();
-      if (eventType == Down) {
-        _clickOnProcess = true;
-      }
-      else {
-        if (eventType == Up) {
-          if (_clickOnProcess) {
-            
-            const Touch* touch = touchEvent->getTouch(0);
-            const TouchEvent* downUpEvent = TouchEvent::create(DownUp,
-                                                               new Touch(*touch));
-            
-            notifyTouchEvent(ec, downUpEvent);
-            
-            delete downUpEvent;
-          }
-        }
-        _clickOnProcess = false;
-      }
+                     _surfaceElevationProvider,
+                     _viewMode);
+
+  // notify the original event
+  notifyTouchEvent(ec, touchEvent);
+
+  // creates DownUp event when a Down is immediately followed by an Up
+  if (touchEvent->getTouchCount() == 1) {
+    const TouchEventType eventType = touchEvent->getType();
+    if (eventType == Down) {
+      _clickOnProcess = true;
+      const Vector2F pos = touchEvent->getTouch(0)->getPos();
+      _touchDownPositionX = pos._x;
+      _touchDownPositionY = pos._y;
     }
     else {
-      _clickOnProcess = false;
+      if (eventType == Up) {
+        if (_clickOnProcess) {
+          const Touch* touch = touchEvent->getTouch(0);
+          const TouchEvent* downUpEvent = TouchEvent::create(DownUp, new Touch(*touch));
+          notifyTouchEvent(ec, downUpEvent);
+          delete downUpEvent;
+        }
+      }
+      if (_clickOnProcess) {
+        if (eventType == Move) {
+          const Vector2F movePosition = touchEvent->getTouch(0)->getPos();
+          const double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+          const float thresholdInPixels = _context->getFactory()->getDeviceInfo()->getPixelsInMM(1);
+          if (sd > (thresholdInPixels * thresholdInPixels)) {
+            _clickOnProcess = false;
+          }
+        }
+        else {
+          _clickOnProcess = false;
+        }
+      }
     }
   }
+  else {
+    _clickOnProcess = false;
+  }
+
+}
 
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
@@ -396,7 +435,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                      _downloader,
                      _effectsScheduler,
                      _storage,
-                     _surfaceElevationProvider);
+                     _surfaceElevationProvider,
+                     _viewMode);
 
   _nextCamera->resizeViewport(width, height);
   _currentCamera->resizeViewport(width, height);
@@ -411,8 +451,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 
 
 void G3MWidget::resetPeriodicalTasksTimeouts() {
-  const int periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  const size_t periodicalTasksCount = _periodicalTasks.size();
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->resetTimeout();
   }
@@ -456,6 +496,136 @@ RenderState G3MWidget::calculateRendererState() {
   }
 
   return busyFlag ? RenderState::busy() : RenderState::ready();
+}
+
+void G3MWidget::rawRender(const RenderState_Type renderStateType) {
+  
+  if (_rootState == NULL) {
+    _rootState = new GLState();
+  }
+  
+  switch (renderStateType) {
+    case RENDER_READY:
+      setSelectedRenderer(_mainRenderer);
+      _cameraRenderer->render(_renderContext, _rootState);
+      
+      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
+      
+      if (_mainRenderer->isEnable()) {
+        _mainRenderer->render(_renderContext, _rootState);
+      }
+      
+      break;
+      
+    case RENDER_BUSY:
+      setSelectedRenderer(_busyRenderer);
+      _busyRenderer->render(_renderContext, _rootState);
+      break;
+      
+    default:
+      _errorRenderer->setErrors( _rendererState->getErrors() );
+      setSelectedRenderer(_errorRenderer);
+      _errorRenderer->render(_renderContext, _rootState);
+      break;
+      
+  }
+  
+  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+  if (orderedRenderables != NULL) {
+    const size_t orderedRenderablesCount = orderedRenderables->size();
+    for (size_t i = 0; i < orderedRenderablesCount; i++) {
+      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
+      orderedRenderable->render(_renderContext);
+      delete orderedRenderable;
+    }
+    
+    orderedRenderables->clear();
+  }
+  
+  if (_hudRenderer != NULL) {
+    if (renderStateType == RENDER_READY) {
+      if (_hudRenderer->isEnable()) {
+        _hudRenderer->render(_renderContext, _rootState);
+      }
+    }
+  }
+
+
+}
+
+void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
+  
+  if (_auxCam == NULL) {
+    _auxCam = new Camera(-1);
+  }
+  
+  const bool eyesUpdated = _auxCam->getTimestamp() != _currentCamera->getTimestamp();
+  if (eyesUpdated) {
+    
+    //Saving central camera
+    if (_rightEyeCam == NULL) {
+      _rightEyeCam = new Camera(-1);
+    }
+    if (_leftEyeCam == NULL) {
+      _leftEyeCam = new Camera(-1);
+    }
+    _auxCam->copyFrom(*_currentCamera, true);
+    _leftEyeCam->copyFrom(*_auxCam, true);
+    _rightEyeCam->copyFrom(*_auxCam, true);
+    
+    //For 3D scenes we create the "eyes" cameras
+    if (renderStateType == RENDER_READY) {
+      const Vector3D camPos = _currentCamera->getCartesianPosition();
+      const Vector3D camCenter = _currentCamera->getCenter();
+      const Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
+      const double halfEyesSeparation = 0.07 / 2.0;
+      const Vector3D up = _currentCamera->getUp();
+      
+      const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
+      const Angle vFOV   = _currentCamera->getVerticalFOV();
+      
+      const Vector3D leftEyePosition = camPos.add(eyesDirection.times(-halfEyesSeparation));
+      const Vector3D leftEyeCenter   = camCenter.add(eyesDirection.times(-halfEyesSeparation));
+      _leftEyeCam->setLookAtParams(leftEyePosition.asMutableVector3D(),
+                                   leftEyeCenter.asMutableVector3D(),
+                                   up.asMutableVector3D());
+      _leftEyeCam->setFOV(vFOV, hFOV_2);
+
+      const Vector3D rightEyePosition = camPos.add(eyesDirection.times(halfEyesSeparation));
+      const Vector3D rightEyeCenter   = camCenter.add(eyesDirection.times(halfEyesSeparation));
+      
+      _rightEyeCam->setLookAtParams(rightEyePosition.asMutableVector3D(),
+                                    rightEyeCenter.asMutableVector3D(),
+                                    up.asMutableVector3D());
+      _rightEyeCam->setFOV(vFOV, hFOV_2);
+    }
+    
+  }
+
+  const int halfWidth = _width / 2;
+  
+  _gl->clearScreen(*_backgroundColor);
+  //Left
+  _gl->viewport(0, 0, halfWidth, _height);
+  _currentCamera->copyFrom(*_leftEyeCam,
+                           true);
+  rawRender(renderStateType);
+  
+  //Right
+  _gl->viewport(halfWidth, 0, halfWidth, _height);
+  _currentCamera->copyFrom(*_rightEyeCam,
+                           true);
+  rawRender(renderStateType);
+
+  //Restoring central camera
+  _currentCamera->copyFrom(*_auxCam, true);
+}
+
+void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
+  
+  _gl->clearScreen(*_backgroundColor);
+  _gl->viewport(0, 0, _width, _height);
+  rawRender(renderStateType);
 }
 
 void G3MWidget::render(int width, int height) {
@@ -508,15 +678,15 @@ void G3MWidget::render(int width, int height) {
   }
 
   // Start periodical tasks
-  const int periodicalTasksCount = _periodicalTasks.size();
-  for (int i = 0; i < periodicalTasksCount; i++) {
+  const size_t periodicalTasksCount = _periodicalTasks.size();
+  for (size_t i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->executeIfNecessary(_context);
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
-  const int cameraConstrainersCount = _cameraConstrainers.size();
-  for (int i = 0; i< cameraConstrainersCount; i++) {
+  const size_t cameraConstrainersCount = _cameraConstrainers.size();
+  for (size_t i = 0; i< cameraConstrainersCount; i++) {
     ICameraConstrainer* constrainer = _cameraConstrainers[i];
     constrainer->onCameraChange(_planet,
                                 _currentCamera,
@@ -524,7 +694,8 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrainers(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
+  _currentCamera->copyFrom(*_nextCamera,
+                           false);
 
 #ifdef C_CODE
   delete _rendererState;
@@ -540,57 +711,18 @@ void G3MWidget::render(int width, int height) {
   _effectsScheduler->doOneCyle(_renderContext);
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
-
-  _gl->clearScreen(*_backgroundColor);
   
-  if (_rootState == NULL) {
-    _rootState = new GLState();
-  }
-
-  switch (renderStateType) {
-    case RENDER_READY:
-      setSelectedRenderer(_mainRenderer);
-      _cameraRenderer->render(_renderContext, _rootState);
-      
-      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
-      
-      if (_mainRenderer->isEnable()) {
-        _mainRenderer->render(_renderContext, _rootState);
-      }
-      
+  switch (_viewMode) {
+    case MONO:
+      rawRenderMono(renderStateType);
       break;
-
-    case RENDER_BUSY:
-      setSelectedRenderer(_busyRenderer);
-      _busyRenderer->render(_renderContext, _rootState);
+    case STEREO:
+      rawRenderStereoParallelAxis(renderStateType);
       break;
-
     default:
-      _errorRenderer->setErrors( _rendererState->getErrors() );
-      setSelectedRenderer(_errorRenderer);
-      _errorRenderer->render(_renderContext, _rootState);
-      break;
-      
+      THROW_EXCEPTION("WRONG VIEW MODE.");
   }
-
-  std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
-  if (orderedRenderables != NULL) {
-    const int orderedRenderablesCount = orderedRenderables->size();
-    for (int i = 0; i < orderedRenderablesCount; i++) {
-      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-      orderedRenderable->render(_renderContext);
-      delete orderedRenderable;
-    }
-  }
-
-  if (_hudRenderer != NULL) {
-    if (renderStateType == RENDER_READY) {
-      if (_hudRenderer->isEnable()) {
-        _hudRenderer->render(_renderContext, _rootState);
-      }
-    }
-  }
-
+  
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
@@ -823,6 +955,10 @@ void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
   _backgroundColor = new Color(backgroundColor);
 }
 
+Color G3MWidget::getBackgroundColor() const {
+  return *_backgroundColor;
+}
+
 PlanetRenderer* G3MWidget::getPlanetRenderer() {
   return _mainRenderer->getPlanetRenderer();
 }
@@ -836,31 +972,49 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 }
 
 //void G3MWidget::notifyChangedInfo() const {
-//
-//  if(_hudRenderer != NULL){
+//  if(_hudRenderer != NULL) {
 //    const RenderState_Type renderStateType = _rendererState->_type;
 //    switch (renderStateType) {
 //      case RENDER_READY:
 //      //_hudRenderer->setInfo(_mainRenderer->getInfo());
 //      break;
-//      
+//
 //      case RENDER_BUSY:
 //      break;
-//      
+//
 //      default:
 //      break;
-//      
+//
 //    }
 //  }
 //}
 
-void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info) {
-  if(_infoDisplay != NULL){
+void G3MWidget::changedRendererInfo(const size_t rendererID,
+                                    const std::vector<const Info*>& info) {
+  if(_infoDisplay != NULL) {
     _infoDisplay->changedInfo(info);
   }
-//  else {
-//    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
-//  }
+  //  else {
+  //    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+  //  }
 }
 
+void G3MWidget::setViewMode(ViewMode viewMode) {
+  if (_viewMode != viewMode) {
+    _viewMode = viewMode;
 
+    if (_viewMode != STEREO) {
+      delete _auxCam;
+      _auxCam = NULL;
+      delete _leftEyeCam;
+      _leftEyeCam = NULL;
+      delete _rightEyeCam;
+      _rightEyeCam = NULL;
+    }
+
+    _context->setViewMode(_viewMode);
+    _renderContext->setViewMode(_viewMode);
+
+    onResizeViewportEvent(_width, _height);
+  }
+}

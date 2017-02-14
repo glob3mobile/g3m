@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONDouble.cpp
 //  G3MiOSSDK
@@ -51,6 +51,17 @@ public class JSONDouble extends JSONNumber
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("double/");
+    isb.addDouble(_value);
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
     isb.addDouble(_value);
   
     final String s = isb.getString();

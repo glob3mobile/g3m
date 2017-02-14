@@ -3,22 +3,26 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 22/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Sector.hpp"
 
+#include "Vector3D.hpp"
+#include "Vector2D.hpp"
 #include "Planet.hpp"
 #include "GEORasterProjection.hpp"
 #include "ICanvas.hpp"
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEOLineRasterSymbol.hpp"
+#include "IStringBuilder.hpp"
+#include "IMathUtils.hpp"
+
 
 const Sector Sector::FULL_SPHERE = Sector::fromDegrees(-90, -180, 90, 180);
 const Sector Sector::NAN_SECTOR = Sector::fromDegrees(NAND, NAND, NAND, NAND);
 
 Sector::Sector(const Geodetic2D& lower,
-       const Geodetic2D& upper) :
+               const Geodetic2D& upper) :
 _lower(lower),
 _upper(upper),
 _deltaLatitude(upper._latitude.sub(lower._latitude)),
@@ -28,9 +32,9 @@ _center(Angle::midAngle(lower._latitude, upper._latitude),
 _deltaRadiusInRadians(-1.0),
 _normalizedCartesianCenter(NULL)
 {
-//    if (_deltaLatitude._degrees == 0){
-//        printf("NO AREA");
-//    }
+  //    if (_deltaLatitude._degrees == 0) {
+  //        printf("NO AREA");
+  //    }
 }
 
 Sector::Sector(const Sector& sector) :
@@ -41,21 +45,25 @@ _deltaLongitude(sector._deltaLongitude),
 _center(sector._center),
 _deltaRadiusInRadians(sector._deltaRadiusInRadians)
 {
-    if (sector._normalizedCartesianCenter == NULL) {
-        _normalizedCartesianCenter = NULL;
-    }
-    else {
-        const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
-        _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
-    }
-    
-//    if (_deltaLatitude._degrees == 0){
-//        printf("NO AREA");
-//    }
+  if (sector._normalizedCartesianCenter == NULL) {
+    _normalizedCartesianCenter = NULL;
+  }
+  else {
+    const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
+    _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
+  }
+
+  //    if (_deltaLatitude._degrees == 0) {
+  //        printf("NO AREA");
+  //    }
 }
 
 Sector Sector::fullSphere() {
   return FULL_SPHERE;
+}
+
+bool Sector::isNan() const {
+  return ISNAN(_lower._latitude._degrees);
 }
 
 bool Sector::contains(const Angle& latitude,
@@ -75,14 +83,6 @@ bool Sector::touchesWith(const Sector &that) const {
   //   page 79
 
   // Exit with no intersection if separated along an axis
-  //  if (_upper._latitude.lowerThan(that._lower._latitude) ||
-  //      _lower._latitude.greaterThan(that._upper._latitude)) {
-  //    return false;
-  //  }
-  //  if (_upper._longitude.lowerThan(that._lower._longitude) ||
-  //      _lower._longitude.greaterThan(that._upper._longitude)) {
-  //    return false;
-  //  }
   if ((_upper._latitude._radians < that._lower._latitude._radians) ||
       (_lower._latitude._radians > that._upper._latitude._radians)) {
     return false;
@@ -111,6 +111,22 @@ const Angle Sector::getInnerPointLatitude(double v) const {
   return Angle::linearInterpolation( _lower._latitude, _upper._latitude,  1.0 - v);
 }
 
+const Vector2D Sector::getUVCoordinates(const Geodetic2D& point) const {
+  return getUVCoordinates(point._latitude, point._longitude);
+}
+
+Vector2D Sector::getUVCoordinates(const Angle& latitude,
+                                  const Angle& longitude) const {
+  return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
+                  (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
+}
+
+Vector2F Sector::getUVCoordinatesF(const Angle& latitude,
+                                   const Angle& longitude) const {
+  return Vector2F((float) ((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians),
+                  (float) ((_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians));
+}
+
 Sector::~Sector() {
   delete _normalizedCartesianCenter;
 }
@@ -136,7 +152,7 @@ bool Sector::isBackOriented(const G3MRenderContext* rc,
   const double angleInRadians = IMathUtils::instance()->acos(dot);
 #endif
 #ifdef JAVA_CODE
-  final double angleInRadians = java.lang.Math.acos(dot);
+  final double angleInRadians = Math.acos(dot);
 #endif
 
   return ( (angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians );
@@ -349,6 +365,14 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const {
       lon = _lower._longitude._degrees;
     }
   }
-  
+
   return Geodetic2D::fromDegrees(lat, lon);
+}
+
+double Sector::getDeltaRadiusInRadians() const {
+  if (_deltaRadiusInRadians < 0) {
+    _deltaRadiusInRadians = IMathUtils::instance()->sqrt((_deltaLatitude._radians  * _deltaLatitude._radians) +
+                                                         (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
+  }
+  return _deltaRadiusInRadians;
 }

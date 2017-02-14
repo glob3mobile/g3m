@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniformFloat extends GPUUniform
 {
   public GPUUniformFloat(String name, IGLUniformID id)

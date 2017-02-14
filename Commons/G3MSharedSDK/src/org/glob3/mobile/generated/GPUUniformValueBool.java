@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniformValueBool extends GPUUniformValue
 {
   public void dispose()
@@ -35,7 +35,7 @@ public class GPUUniformValueBool extends GPUUniformValue
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("Uniform Value Boolean: ");
     isb.addBool(_value);
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  FlatColorMesh.cpp
 //  G3MiOSSDK
@@ -61,7 +61,7 @@ public class FlatColorMesh extends Mesh
 
     _glState._release();
 
-  super.dispose();
+    super.dispose();
 
   }
 

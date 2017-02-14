@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BoxShape.cpp
 //  G3MiOSSDK
@@ -33,7 +33,7 @@ public class BoxShape extends AbstractMeshShape
 
   private float _borderWidth;
 
-  private boolean _useNormals;
+  private final boolean _useNormals;
 
   private Color _surfaceColor;
   private Color _borderColor;
@@ -52,7 +52,7 @@ public class BoxShape extends AbstractMeshShape
     final int numIndices = 48;
     short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::ZERO);
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
@@ -69,7 +69,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color borderColor = (_borderColor != null) ? new Color(_borderColor) : new Color(_surfaceColor);
   
-    Mesh result = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth>1)? _borderWidth : 1, 1, borderColor);
+    Mesh result = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth>1)? _borderWidth : 1, 1, borderColor);
   
     if (vertices != null)
        vertices.dispose();
@@ -106,7 +106,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor);
+    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor);
   
     if (vertices != null)
        vertices.dispose();
@@ -163,7 +163,7 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    Mesh result = new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor, null, 1, true, normals.create());
+    Mesh result = new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), (_borderWidth>1)? _borderWidth : 1, 1, surfaceColor, null, true, normals.create());
   
     if (vertices != null)
        vertices.dispose();
@@ -231,7 +231,7 @@ public class BoxShape extends AbstractMeshShape
     if (_borderColor != null)
        _borderColor.dispose();
 
-  super.dispose();
+    super.dispose();
   }
 
   public final void setExtent(Vector3D extent)

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLFeatureCameraGroup extends GLFeatureGroup
 {
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
@@ -52,11 +52,14 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
       prov._release();
     }
   
-    Matrix44DProvider modelViewProvider = modelViewHolderBuilder.create();
+    if (modelViewHolderBuilder.size() > 0)
+    {
+      Matrix44DProvider modelViewProvider = modelViewHolderBuilder.create();
   
-    vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueMatrix4(modelViewProvider), false);
+      vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueMatrix4(modelViewProvider), false);
   
-    modelViewProvider._release();
+      modelViewProvider._release();
+    }
   
     modelViewHolderBuilder.dispose();
     modelTransformHolderBuilder.dispose();

@@ -9,7 +9,9 @@
 #ifndef G3MiOSSDK_ITileVisitor
 #define G3MiOSSDK_ITileVisitor
 
-#include "Tile.hpp"
+#include <vector>
+class Layer;
+class Tile;
 
 class ITileVisitor{
 public:

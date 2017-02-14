@@ -4,7 +4,6 @@ package org.glob3.mobile.tools.conversion.jbson2bjson;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -62,16 +61,18 @@ public class JBson2BJson {
    }
 
 
-   public void transform(final File firstFile,
-                         final File secondFile,
-                         final boolean overwrite) throws JBson2BJsonException {
+   public static void transform(final File firstFile,
+                                final File secondFile,
+                                final boolean overwrite) throws JBson2BJsonException, IOException {
       if ((firstFile.getName().toLowerCase().endsWith(".json") || firstFile.getName().toLowerCase().endsWith(".geojson"))
           && secondFile.getName().toLowerCase().endsWith(".bson")) {
-         JBson2BJson.instance().json2bson(firstFile, secondFile, overwrite);
+         JBson2BJson.instance();
+         JBson2BJson.json2bson(firstFile, secondFile, overwrite);
       }
       else if ((secondFile.getName().toLowerCase().endsWith(".json") || secondFile.getName().toLowerCase().endsWith(".geojson"))
                && firstFile.getName().toLowerCase().endsWith(".bson")) {
-         JBson2BJson.instance().bson2json(firstFile, secondFile, overwrite);
+         JBson2BJson.instance();
+         JBson2BJson.bson2json(firstFile, secondFile, overwrite);
       }
       else {
          throw new JBson2BJsonException("File format isn't ready: " + firstFile.getName() + " and " + secondFile.getName());
@@ -79,15 +80,9 @@ public class JBson2BJson {
    }
 
 
-   /**
-    * 
-    * @param fJson
-    * @param fBson
-    * @throws JBson2BJsonException
-    */
-   public void json2bson(final File fJson,
-                         final File fBson,
-                         final boolean overwrite) throws JBson2BJsonException {
+   static public void json2bson(final File fJson,
+                                final File fBson,
+                                final boolean overwrite) throws JBson2BJsonException, IOException {
       if (Utils.checkFileIsJson(fJson)) {
          if (overwrite && fBson.exists()) {
             if (!fBson.delete()) {
@@ -119,16 +114,9 @@ public class JBson2BJson {
    }
 
 
-   /**
-    * 
-    * @param fBson
-    * @param overwrite
-    * @param fsJson
-    * @throws JBson2BJsonException
-    */
-   public void jsons2bson(final File fBson,
-                          final boolean overwrite,
-                          final File... fsJson) throws JBson2BJsonException {
+   static public void jsons2bson(final File fBson,
+                                 final boolean overwrite,
+                                 final File... fsJson) throws JBson2BJsonException, IOException {
       if (overwrite && fBson.exists()) {
          if (!fBson.delete()) {
             throw new JBson2BJsonException("Output bson file exist and can't to delete it for overwrite", null);
@@ -169,16 +157,9 @@ public class JBson2BJson {
    }
 
 
-   /**
-    * 
-    * @param fBson
-    * @param fJson
-    * @param overwrite
-    * @throws JBson2BJsonException
-    */
-   public void bson2json(final File fBson,
-                         final File fJson,
-                         final boolean overwrite) throws JBson2BJsonException {
+   public static void bson2json(final File fBson,
+                                final File fJson,
+                                final boolean overwrite) throws JBson2BJsonException, IOException {
       if (overwrite && fJson.exists()) {
          if (!fJson.delete()) {
             throw new JBson2BJsonException("Output JSON file exist and can't to delete it for overwrite", null);
@@ -209,15 +190,11 @@ public class JBson2BJson {
    }
 
 
-   /**
-    * @param fBson
-    */
-   private JSONBaseObject readBsonFile(final File fBson) {
+   static private JSONBaseObject readBsonFile(final File fBson) throws IOException {
       JSONBaseObject jbase = null;
       if (fBson.exists()) {
-         try {
-            // create FileInputStream object
-            final FileInputStream finBson = new FileInputStream(fBson);
+         // create FileInputStream object
+         try (final FileInputStream finBson = new FileInputStream(fBson)) {
             /*
              * Create byte array large enough to hold the content of the file.
              * Use File.length to determine size of the file in bytes.
@@ -229,82 +206,43 @@ public class JBson2BJson {
              * int read(byte[] byteArray) method of java FileInputStream class.
              */
             finBson.read(fileContent);
-            finBson.close();
             final ByteBuffer_JavaDesktop bb = new ByteBuffer_JavaDesktop(fileContent);
             jbase = BSONParser.parse(bb);
          }
-         catch (final FileNotFoundException e) {
-            System.out.println("File not found" + e);
-         }
-         catch (final IOException ioe) {
-            System.out.println("Exception while reading the file " + ioe);
-         }
       }
-
       return jbase;
    }
 
 
-   /**
-    * 
-    * @param jbase
-    * @param fJson
-    */
-   private void writeJsonFile(final JSONBaseObject jbase,
-                              final File fJson) {
+   static private void writeJsonFile(final JSONBaseObject jbase,
+                                     final File fJson) throws IOException {
       if (fJson.exists() && (jbase != null)) {
-         try {
-            final FileOutputStream fout = new FileOutputStream(fJson);
+         try (final FileOutputStream fout = new FileOutputStream(fJson)) {
             fout.write(JSONGenerator.generate(jbase).getBytes());
             fout.flush();
-            fout.close();
-         }
-         catch (final FileNotFoundException e) {
-            System.out.println("File not found" + e);
-         }
-         catch (final IOException ioe) {
-            System.out.println("Exception while reading the file " + ioe);
          }
       }
    }
 
 
-   /**
-    * 
-    * @param jbase
-    * @param fBson
-    */
-   private void writeBsonFile(final JSONBaseObject jbase,
-                              final File fBson) {
+   static private void writeBsonFile(final JSONBaseObject jbase,
+                                     final File fBson) throws IOException {
       if (fBson.exists() && (jbase != null)) {
-         try {
-            final FileOutputStream fout = new FileOutputStream(fBson);
-
+         try (final FileOutputStream fout = new FileOutputStream(fBson)) {
             final ByteBuffer_JavaDesktop bb = (ByteBuffer_JavaDesktop) BSONGenerator.generate(jbase);
             fout.write(bb.getBuffer().array());
             fout.flush();
-            fout.close();
             bb.dispose();
-         }
-         catch (final FileNotFoundException e) {
-            System.out.println("File not found" + e);
-         }
-         catch (final IOException ioe) {
-            System.out.println("Exception while reading the file " + ioe);
          }
       }
    }
 
 
-   /**
-    * @param fJson
-    */
-   private JSONBaseObject readJsonFile(final File fJson) {
+   static private JSONBaseObject readJsonFile(final File fJson) throws IOException {
       JSONBaseObject jbase = null;
       if (fJson.exists()) {
-         try {
-            // create FileInputStream object
-            final FileInputStream finJson = new FileInputStream(fJson);
+         // create FileInputStream object
+         try (final FileInputStream finJson = new FileInputStream(fJson)) {
             /*
              * Create byte array large enough to hold the content of the file.
              * Use File.length to determine size of the file in bytes.
@@ -316,17 +254,11 @@ public class JBson2BJson {
              * int read(byte[] byteArray) method of java FileInputStream class.
              */
             finJson.read(fileContent);
-            finJson.close();
 
             final JSONParser_JavaDesktop jp = new JSONParser_JavaDesktop();
             jbase = jp.parse(new ByteBuffer_JavaDesktop(fileContent));
          }
-         catch (final FileNotFoundException e) {
-            System.out.println("File not found" + e);
-         }
-         catch (final IOException ioe) {
-            System.out.println("Exception while reading the file " + ioe);
-         }
+
       }
 
       return jbase;
@@ -336,21 +268,15 @@ public class JBson2BJson {
    private static class Utils {
 
       public static boolean checkFileIsJson(final File fJson) {
-         if (fJson.exists() && fJson.isFile()
-             && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"))) {
-            return true;
-         }
+         return fJson.exists() && fJson.isFile()
+                 && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"));
 
-         return false;
       }
 
 
       public static boolean checkFileIsBson(final File fBson) {
-         if (fBson.exists() && fBson.isFile() && fBson.getName().toLowerCase().endsWith(".bson")) {
-            return true;
-         }
+         return fBson.exists() && fBson.isFile() && fBson.getName().toLowerCase().endsWith(".bson");
 
-         return false;
       }
    }
 }

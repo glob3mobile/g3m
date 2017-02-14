@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GLTextureParameterValue
 {
   private static int _nearest = 0;
@@ -49,7 +49,6 @@ public class GLTextureParameterValue
     _nearestMipmapLinear = ngl.TextureParameterValue_NearestMipmapLinear();
     _linearMipmapNearest = ngl.TextureParameterValue_LinearMipmapNearest();
     _linearMipmapLinear = ngl.TextureParameterValue_LinearMipmapLinear();
-
     _clampToEdge = ngl.TextureParameterValue_ClampToEdge();
   }
 }

@@ -11,8 +11,10 @@
 
 
 #include "IDownloader.hpp"
-#include "IStorage.hpp"
-#include "URL.hpp"
+
+class IStorage;
+class IImageResult;
+
 
 class CachedDownloader : public IDownloader {
 private:
@@ -61,16 +63,20 @@ public:
                           const TimeInterval& timeToCache,
                           bool readExpired,
                           IBufferDownloadListener* listener,
-                          bool deleteListener);
+                          bool deleteListener,
+                          const std::string& tag);
 
   long long requestImage(const URL& url,
                          long long priority,
                          const TimeInterval& timeToCache,
                          bool readExpired,
                          IImageDownloadListener* listener,
-                         bool deleteListener);
+                         bool deleteListener,
+                         const std::string& tag);
 
-  void cancelRequest(long long requestId);
+  bool cancelRequest(long long requestID);
+
+  void cancelRequestsTagged(const std::string& tag);
 
   virtual ~CachedDownloader();
 

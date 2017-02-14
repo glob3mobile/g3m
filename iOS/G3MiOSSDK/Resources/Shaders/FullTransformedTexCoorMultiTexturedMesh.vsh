@@ -36,8 +36,6 @@ void main() {
 
   TextureCoordOut += uRotationCenterTexCoord;
 
-  //////////////////////////////
-
   TextureCoordOut2 = aTextureCoord2;
   
   gl_PointSize = uPointSize;

@@ -30,12 +30,12 @@ private:
     const bool                   _isError;
     const bool                   _isCanceled;
     const IImage*                _image;
-    const std::string            _imageId;
+    const std::string            _imageID;
     const TileImageContribution* _contribution;
     const std::string            _error;
 
     static const ChildResult* image(const IImage*                image,
-                                    const std::string&           imageId,
+                                    const std::string&           imageID,
                                     const TileImageContribution* contribution);
 
     static const ChildResult* error(const std::string& error);
@@ -49,7 +49,7 @@ private:
     ChildResult(const bool                   isError,
                 const bool                   isCanceled,
                 const IImage*                image,
-                const std::string&           imageId,
+                const std::string&           imageID,
                 const TileImageContribution* contribution,
                 const std::string&           error);
 
@@ -68,7 +68,7 @@ private:
     private CompositeTileImageContribution _compositeContribution;
 #endif
     std::vector<const ChildResult*>       _results;
-    const int                             _contributionsSize;
+    const size_t                          _contributionsSize;
 
     int _stepsDone;
     void stepDone();
@@ -83,14 +83,9 @@ private:
     const int _width;
     const int _height;
 
-    std::string _imageId;
+    std::string _imageID;
 
     FrameTasksExecutor* _frameTasksExecutor;
-
-    RectangleF* getInnerRectangle(int wholeSectorWidth,
-                                  int wholeSectorHeight,
-                                  const Sector& wholeSector,
-                                  const Sector& innerSector) const;
 
     const Sector _tileSector;
 
@@ -98,12 +93,12 @@ private:
     ~Composer();
 
   public:
-    const std::string _tileId;
+    const std::string _tileID;
 
     Composer(int width,
              int height,
              CompositeTileImageProvider* compositeTileImageProvider,
-             const std::string& tileId,
+             const std::string& tileID,
              const Sector& tileSector,
              TileImageListener* listener,
              bool deleteListener,
@@ -111,18 +106,18 @@ private:
              FrameTasksExecutor* frameTasksExecutor);
 
 
-    void imageCreated(const std::string&           tileId,
+    void imageCreated(const std::string&           tileID,
                       const IImage*                image,
-                      const std::string&           imageId,
+                      const std::string&           imageID,
                       const TileImageContribution* contribution,
-                      const int                    index);
+                      const size_t                 index);
 
     void imageCreationError(const std::string& error,
-                            const int          index);
+                            const size_t       index);
 
-    void imageCreationCanceled(const int index);
+    void imageCreationCanceled(const size_t index);
 
-    void cancel(const std::string& tileId);
+    void cancel(const std::string& tileID);
 
     void imageCreated(const IImage* image);
 
@@ -175,12 +170,12 @@ private:
 
   class ChildTileImageListener : public TileImageListener {
   private:
-    Composer* _composer;
-    const int _index;
+    Composer*    _composer;
+    const size_t _index;
 
   public:
     ChildTileImageListener(Composer* composer,
-                           int index) :
+                           size_t index) :
     _composer(composer),
     _index(index)
     {
@@ -194,21 +189,21 @@ private:
 #endif
     }
 
-    void imageCreated(const std::string&           tileId,
+    void imageCreated(const std::string&           tileID,
                       const IImage*                image,
-                      const std::string&           imageId,
+                      const std::string&           imageID,
                       const TileImageContribution* contribution);
 
-    void imageCreationError(const std::string& tileId,
+    void imageCreationError(const std::string& tileID,
                             const std::string& error);
 
-    void imageCreationCanceled(const std::string& tileId);
+    void imageCreationCanceled(const std::string& tileID);
 
   };
 
 
   std::vector<TileImageProvider*> _children;
-  int                             _childrenSize;
+  size_t                          _childrenSize;
 
   std::map<const std::string, Composer*> _composers;
 
@@ -230,18 +225,18 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
-              long long tileDownloadPriority,
+              const Vector2S& resolution,
+              long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
   void composerDone(Composer* composer);
   
-  void cancelChildren(const std::string& tileId,
+  void cancelChildren(const std::string& tileID,
                       const CompositeTileImageContribution* compositeContribution);
   
 };

@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Frustum.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 //
@@ -12,12 +11,13 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
+//class BoundingVolume;
 //class Box;
+
 
 public class FrustumData
 {

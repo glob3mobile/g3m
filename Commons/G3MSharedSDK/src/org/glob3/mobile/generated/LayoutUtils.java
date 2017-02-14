@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  LayoutUtils.cpp
 //  G3MiOSSDK
@@ -41,7 +41,7 @@ public class LayoutUtils
     final double deltaInRadians = (DefineConstants.PI * 2.0) / splits;
     final Vector3D cartesianCenter = EllipsoidalPlanet.toCartesian(center);
     final Vector3D normal = EllipsoidalPlanet.geodeticSurfaceNormal(center);
-    final Vector3D northInPlane = Vector3D.upZ().projectionInPlane(normal).normalized().times(radiusInMeters);
+    final Vector3D northInPlane = Vector3D.UP_Z.projectionInPlane(normal).normalized().times(radiusInMeters);
   
     for (int i = 0; i < splits; i++)
     {

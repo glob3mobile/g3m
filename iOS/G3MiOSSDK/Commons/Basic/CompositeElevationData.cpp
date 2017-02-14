@@ -9,11 +9,13 @@
 #include "CompositeElevationData.hpp"
 #include "Vector3D.hpp"
 #include "IStringBuilder.hpp"
+#include "IMathUtils.hpp"
+
 
 double CompositeElevationData::getElevationAt(int x,
                                               int y) const {
-  const int size = _data.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = _data.size();
+  for (size_t i = 0; i < size; i++) {
     const double h = _data[i]->getElevationAt(x, y);
     if (!ISNAN(h)) {
       return h;

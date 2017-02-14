@@ -54,8 +54,26 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   const bool hasTexture2 = GPUVariable::hasUniform(uniformsCode, SAMPLER2);
 //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
+  
+  const bool is2D = GPUVariable::hasAttribute(attributesCode, POSITION_2D);
+  
+  const bool hasCamPos = GPUVariable::hasUniform(uniformsCode, CAMERA_POSITION);
+  
+//  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
 
+  
+  if (is2D) {
+    if (flatColor) {
+      return compileProgramWithName(gl, "FlatColor2DMesh");
+    }
+    return compileProgramWithName(gl, "Textured2DMesh");
+  }
+  
   if (billboard) {
+    if (transformTC) {
+      return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
+    }
+    
     return compileProgramWithName(gl, "Billboard");
   }
 
@@ -106,6 +124,9 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   }
 
   if (!flatColor && !texture && !color) {
+    if (hasCamPos) {
+      return compileProgramWithName(gl, "SphericalAtmosphere");
+    }
     return compileProgramWithName(gl, "NoColorMesh");
   }
 

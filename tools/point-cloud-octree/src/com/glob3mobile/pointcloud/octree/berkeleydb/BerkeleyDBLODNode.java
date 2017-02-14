@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
-import com.glob3mobile.pointcloud.octree.Sector;
-import com.glob3mobile.pointcloud.octree.Utils;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD.BerkeleyDBTransaction;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.Utils;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.LockMode;
@@ -62,7 +62,7 @@ public class BerkeleyDBLODNode
          _id = id;
          _lodLevel = lodLevel;
          _pointsCount = points.size();
-         _points = Collections.unmodifiableList(new ArrayList<Geodetic3D>(points));
+         _points = Collections.unmodifiableList(new ArrayList<>(points));
          _format = null;
          _averagePoint = averagePoint;
       }
@@ -182,7 +182,7 @@ public class BerkeleyDBLODNode
                                    final byte[] id,
                                    final List<List<Geodetic3D>> levelsPoints) {
       final int levelsCount = levelsPoints.size();
-      final List<BerkeleyDBLODNodeLevel> levels = new ArrayList<BerkeleyDBLODNodeLevel>(levelsCount);
+      final List<BerkeleyDBLODNodeLevel> levels = new ArrayList<>(levelsCount);
       final Geodetic3D averagePoint = calculateAverage(levelsPoints);
       for (int i = 0; i < levelsCount; i++) {
          final List<Geodetic3D> levelPoints = levelsPoints.get(i);
@@ -293,7 +293,7 @@ public class BerkeleyDBLODNode
 
       _averagePoint = averagePoint;
 
-      _levels = new ArrayList<BerkeleyDBLODNode.BerkeleyDBLODNodeLevel>(_levelsCount);
+      _levels = new ArrayList<>(_levelsCount);
       for (int i = 0; i < _levelsCount; i++) {
          _levels.add(BerkeleyDBLODNodeLevel.fromDB(txn, db, format, id, i, loadPoints, _levelsPointsCount[i], _averagePoint));
       }

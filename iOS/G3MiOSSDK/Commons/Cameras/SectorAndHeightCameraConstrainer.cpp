@@ -10,6 +10,8 @@
 
 #include "PlanetRenderer.hpp"
 #include "Camera.hpp"
+#include "Geodetic3D.hpp"
+
 
 bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
                                                       const Camera* previousCamera,
@@ -24,7 +26,8 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
   const bool invalidPosition = !_sector.contains(center._latitude, center._longitude);
 
   if (invalidHeight || invalidPosition) {
-    nextCamera->copyFrom(*previousCamera);
+    nextCamera->copyFrom(*previousCamera,
+                         true);
   }
 
   return true;
@@ -57,7 +60,8 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
         }
       }
       else {
-        nextCamera->copyFrom(*previousCamera);
+        nextCamera->copyFrom(*previousCamera,
+                             true);
       }
     }
   }

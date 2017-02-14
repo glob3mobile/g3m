@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  RasterLayer.cpp
 //  G3MiOSSDK
@@ -141,7 +141,7 @@ public abstract class RasterLayer extends Layer
     return null;
   }
 
-  public final long requestImage(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IImageDownloadListener listener, boolean deleteListener)
+  public final long requestImage(Tile tile, IDownloader downloader, long tileTextureDownloadPriority, boolean logDownloadActivity, IImageDownloadListener listener, boolean deleteListener)
   {
     final Tile suitableTile = getParentTileOfSuitableLevel(tile);
   
@@ -150,7 +150,7 @@ public abstract class RasterLayer extends Layer
     {
       ILogger.instance().logInfo("Downloading %s", url._path);
     }
-    return downloader.requestImage(url, tileDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
+    return downloader.requestImage(url, tileTextureDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
   }
 
   public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)

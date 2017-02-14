@@ -3,14 +3,15 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 13/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Color
 #define G3MiOSSDK_Color
 
 #include <string>
-#include "Angle.hpp"
+
+class Angle;
+
 
 class Color {
 private:
@@ -81,54 +82,68 @@ public:
                                 const Color& to,
                                 float d);
 
+
+
+  static const Color TRANSPARENT;
+  static const Color BLACK;
+  static const Color GRAY;
+  static const Color DARK_GRAY;
+  static const Color LIGHT_GRAY;
+  static const Color WHITE;
+  static const Color YELLOW;
+  static const Color CYAN;
+  static const Color MAGENTA;
+  static const Color RED;
+  static const Color GREEN;
+  static const Color BLUE;
+
+
   static Color transparent() {
-    return Color::fromRGBA(0, 0, 0, 0);
+    return TRANSPARENT;
   }
 
   static Color black() {
-    return Color::fromRGBA(0, 0, 0, 1);
+    return BLACK;
   }
 
   static Color gray() {
-    return Color::fromRGBA(0.5f, 0.5f, 0.5f, 1);
+    return GRAY;
   }
 
   static Color darkGray() {
-    const float oneThird = 1.0f / 3.0f;
-    return Color::fromRGBA(oneThird, oneThird, oneThird, 1);
+    return DARK_GRAY;
   }
 
   static Color lightGray() {
-    const float twoThirds = 2.0f / 3.0f;
-    return Color::fromRGBA(twoThirds, twoThirds, twoThirds, 1);
+    return LIGHT_GRAY;
   }
 
   static Color white() {
-    return Color::fromRGBA(1, 1, 1, 1);
+    return WHITE;
   }
 
   static Color yellow() {
-    return Color::fromRGBA(1, 1, 0, 1);
+    return YELLOW;
   }
-  
+
   static Color cyan() {
-    return Color::fromRGBA(0, 1, 1, 1);
+    return CYAN;
   }
 
   static Color magenta() {
-    return Color::fromRGBA(1, 0, 1, 1);
+    return MAGENTA;
   }
-  
+
   static Color red() {
-    return Color::fromRGBA(1, 0, 0, 1);
+    return RED;
   }
 
   static Color green() {
-    return Color::fromRGBA(0, 1, 0, 1);
+    return GREEN;
   }
 
   static Color blue() {
-    return Color::fromRGBA(0, 0, 1, 1);
+    return BLUE;
   }
 
   Color mixedWith(const Color& that,
@@ -166,9 +181,7 @@ public:
 
   double getHueInRadians() const;
 
-  Angle getHue() const {
-    return Angle::fromRadians( getHueInRadians() );
-  }
+  Angle getHue() const;
 
   Color adjustBrightness(float brightness) const {
     const float newBrightness = getBrightness() + brightness;
@@ -207,10 +220,12 @@ public:
   Color twiceLighter() const {
     return adjustSaturationBrightness(-0.06f, 0.16f);
   }
-  
+
   Color muchLighter() const {
     return adjustSaturationBrightness(-0.24f, 0.64f);
   }
+
+  const std::string id() const;
 
   const std::string description() const;
 #ifdef JAVA_CODE
@@ -219,7 +234,7 @@ public:
     return description();
   }
 #endif
-
+  
 };
 
 #endif

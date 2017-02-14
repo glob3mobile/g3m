@@ -10,8 +10,9 @@
 #define __G3MiOSSDK__ByteBufferBuilder__
 
 #include <vector>
-#include "ILogger.hpp"
+
 class IByteBuffer;
+
 
 class ByteBufferBuilder {
 private:
@@ -83,7 +84,7 @@ public:
     _values.push_back(value);
   }
 
-  int size() const {
+  size_t size() const {
     return _values.size();
   }
 

@@ -9,8 +9,8 @@
 #include "MutableVector2I.hpp"
 #include "Vector2I.hpp"
 
- Vector2I MutableVector2I::asVector2I() const {
- return Vector2I(_x, _y);
- }
+Vector2I MutableVector2I::asVector2I() const {
+  return Vector2I(_x, _y);
+}
 
 

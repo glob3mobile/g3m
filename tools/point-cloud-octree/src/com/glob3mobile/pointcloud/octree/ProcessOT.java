@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
 
 import es.igosoftware.util.GUndeterminateProgress;
 
@@ -69,14 +71,20 @@ public class ProcessOT {
 
       //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
       //
-      //      final String sourceCloudName = "Wallonia-Belgium";
+      //      final String sourceCloudName = "Wallonia-Belgium_simplified2";
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
 
-      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
-
-      final String sourceCloudName = "minnesota";
+      //      final String sourceCloudName = "Wallonia_simplified";
+      final String sourceCloudName = "Wallonia";
       final String lodCloudName = sourceCloudName + "_LOD";
+
+
+      //      final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
+      //
+      //      final String sourceCloudName = "minnesota";
+      //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
       final long cacheSizeInBytes = 4 * 1024 * 1024 * 1024;
@@ -176,42 +184,6 @@ public class ProcessOT {
             final PersistentLOD.Statistics statistics = lodDB.getStatistics(true);
             statistics.show();
 
-            //            final Sector wholeSector = statistics.getSector();
-            //            final TileHeader rootHeader = TileHeader.deepestEnclosingTileHeader(wholeSector);
-            //
-            //            System.out.println(rootHeader);
-            //
-            //
-            //            lodDB.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
-            //               private final List<String> _nodesIDs = new ArrayList<String>((int) statistics.getNodesCount());
-            //               private long               _sumIDLengths;
-            //
-            //
-            //               @Override
-            //               public void start(final PersistentLOD.Transaction transaction) {
-            //                  _sumIDLengths = 0;
-            //               }
-            //
-            //
-            //               @Override
-            //               public void stop(final PersistentLOD.Transaction transaction) {
-            //                  System.out.println(_nodesIDs.size());
-            //
-            //                  System.out.println((_nodesIDs.size() * 3) + _sumIDLengths);
-            //               }
-            //
-            //
-            //               @Override
-            //               public boolean visit(final PersistentLOD.Transaction transaction,
-            //                                    final PersistentLOD.Node node) {
-            //                  final String nodeID = node.getID();
-            //                  //System.out.println(nodeID);
-            //                  _nodesIDs.add(nodeID);
-            //                  _sumIDLengths += nodeID.length();
-            //                  return true;
-            //               }
-            //            });
-
 
             final boolean showStatisticsForSector = false;
             if (showStatisticsForSector) {
@@ -245,7 +217,7 @@ public class ProcessOT {
                         public void informProgress(final long stepsDone,
                                                    final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\""
-                                    + progressString(stepsDone, elapsed));
+                                              + progressString(stepsDone, elapsed));
                         }
                      };
                   }
@@ -290,8 +262,8 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                              ", Min=" + _minDensity + //
-                              ", Max=" + _maxDensity);
+                                        ", Min=" + _minDensity + //
+                                        ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };
@@ -331,7 +303,7 @@ public class ProcessOT {
             final long elapsed = System.currentTimeMillis() - start;
             System.out.println("== " + elapsed + "ms");
 
-            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
+            final List<Geodetic3D> accumulatedPoints = new ArrayList<>();
             long totalPoints = 0;
             for (final PersistentLOD.NodeLevel level : node.getLevels()) {
                System.out.println(level);

@@ -1,14 +1,14 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DTT_IImageBuilderListener implements IImageBuilderListener
 {
 
 
-  private DefaultTileTexturizer _defaultTileTesturizer;
+  private DefaultTileTexturizer _defaultTileTexturizer;
 
 
-  public DTT_IImageBuilderListener(DefaultTileTexturizer defaultTileTesturizer)
+  public DTT_IImageBuilderListener(DefaultTileTexturizer defaultTileTexturizer)
   {
-     _defaultTileTesturizer = defaultTileTesturizer;
+     _defaultTileTexturizer = defaultTileTexturizer;
   }
 
   public void dispose()
@@ -17,9 +17,9 @@ public class DTT_IImageBuilderListener implements IImageBuilderListener
 
   public final void imageCreated(IImage image, String imageName)
   {
-    _defaultTileTesturizer.setDefaultBackGroundImage(image);
-    _defaultTileTesturizer.setDefaultBackGroundImageName(imageName);
-    _defaultTileTesturizer.setDefaultBackGroundImageLoaded(true);
+    _defaultTileTexturizer.setDefaultBackgroundImage(image);
+    _defaultTileTexturizer.setDefaultBackgroundImageName(imageName);
+    _defaultTileTexturizer.setDefaultBackgroundImageLoaded(true);
     ILogger.instance().logInfo("Default Background Image loaded...");
 
   }
@@ -27,8 +27,8 @@ public class DTT_IImageBuilderListener implements IImageBuilderListener
   public final void onError(String error)
   {
     ILogger.instance().logError(error);
-    _defaultTileTesturizer._errors.add("Can't download background image default");
-    _defaultTileTesturizer._errors.add(error);
+    _defaultTileTexturizer._errors.add("Can't download background image default");
+    _defaultTileTexturizer._errors.add(error);
 
   }
 }

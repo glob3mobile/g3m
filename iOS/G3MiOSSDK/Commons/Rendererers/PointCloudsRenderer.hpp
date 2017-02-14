@@ -16,12 +16,15 @@
 #include "TimeInterval.hpp"
 #include "Vector3D.hpp"
 #include "Box.hpp"
+#include "GAsyncTask.hpp"
 
 class IDownloader;
 class Sector;
 class Frustum;
 class DirectMesh;
 class ByteBufferIterator;
+class ITimer;
+
 
 class PointCloudsRenderer : public DefaultRenderer {
 public:
@@ -587,7 +590,7 @@ private:
   ITimer* _timer;
 
   std::vector<PointCloud*> _clouds;
-  int _cloudsSize;
+  size_t _cloudsSize;
   std::vector<std::string> _errors;
 
   GLState* _glState;

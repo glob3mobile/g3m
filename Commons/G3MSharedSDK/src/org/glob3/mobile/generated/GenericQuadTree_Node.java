@@ -1,7 +1,4 @@
-package org.glob3.mobile.generated; 
-///////////////////////////////////////////////////////////////////////////////////////
-
-
+package org.glob3.mobile.generated;
 public class GenericQuadTree_Node
 {
   private final int _depth;
@@ -43,27 +40,12 @@ public class GenericQuadTree_Node
   
     //Split elements by sector
     java.util.ArrayList<GenericQuadTree_Element> elementsToBeInserted = _elements;
-    _elements.clear();
     final int size = elementsToBeInserted.size();
     for (int i = 0; i < size; i++)
     {
-      this.add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
+      add(elementsToBeInserted.get(i), maxElementsPerNode, maxDepth, childAreaProportion);
     }
-  
-  
-    //  const int size = _elements.size();
-    //  for (int i = 0; i < size; i++) {
-    //    GenericQuadTree_Element* e = _elements[i];
-    //
-    //    for (int j = 0; j < 4; j++) {
-    //      GenericQuadTree_Node* child = _children[j];
-    //      if (child->add(e, maxElementsPerNode, maxDepth)) {
-    //        break;
-    //      }
-    //    }
-    //  }
-    //
-    //  _elements.clear();
+    _elements.clear();
   }
 
   private GenericQuadTree_Node getBestNodeForInsertion(GenericQuadTree_Element element, double childAreaProportion)
@@ -182,7 +164,7 @@ public class GenericQuadTree_Node
   
       //Node must create children
       splitNode(maxElementsPerNode, maxDepth, childAreaProportion); //We must split
-      return this.add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
+      return add(element, maxElementsPerNode, maxDepth, childAreaProportion); //We try it again, this time as inner node
     }
   
     //INNER NODE
@@ -406,7 +388,7 @@ public class GenericQuadTree_Node
       float[] dashLengths = {};
       int dashCount = 0;
   
-      Color c = Color.red().wheelStep(12, _depth);
+      Color c = Color.RED.wheelStep(12, _depth);
   
       GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
   

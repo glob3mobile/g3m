@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONInteger.cpp
 //  G3MiOSSDK
@@ -51,6 +51,18 @@ public class JSONInteger extends JSONNumber
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("int/");
+    isb.addInt(_value);
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
     isb.addInt(_value);
   
     final String s = isb.getString();

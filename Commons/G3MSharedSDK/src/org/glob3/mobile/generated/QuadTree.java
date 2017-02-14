@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class QuadTree
 {
   private QuadTree_Node _root;
@@ -16,7 +16,7 @@ public class QuadTree
 
   public QuadTree()
   {
-     _root = new QuadTree_Node(Sector.fullSphere());
+     _root = new QuadTree_Node(Sector.FULL_SPHERE);
      _maxElementsPerNode = 1;
      _maxDepth = 12;
   }

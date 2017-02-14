@@ -1,13 +1,22 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
+//
+//  FloatBufferBuilderFromColor.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 11/9/16.
+//
+//
+
 //
 //  FloatBufferBuilderFromColor.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 07/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
+
+//class Color;
 
 public class FloatBufferBuilderFromColor extends FloatBufferBuilder
 {
@@ -27,12 +36,12 @@ public class FloatBufferBuilderFromColor extends FloatBufferBuilder
     _values.push_back(a);
   }
 
-  public final void add(Color c)
+  public final void add(Color color)
   {
-    _values.push_back(c._red);
-    _values.push_back(c._green);
-    _values.push_back(c._blue);
-    _values.push_back(c._alpha);
+    _values.push_back(color._red);
+    _values.push_back(color._green);
+    _values.push_back(color._blue);
+    _values.push_back(color._alpha);
   }
 
 }

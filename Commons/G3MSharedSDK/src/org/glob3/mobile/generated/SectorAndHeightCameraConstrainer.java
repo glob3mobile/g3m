@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SectorAndHeightCameraConstrainer.cpp
 //  G3MiOSSDK
@@ -48,7 +48,7 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
   
     if (invalidHeight || invalidPosition)
     {
-      nextCamera.copyFrom(previousCamera);
+      nextCamera.copyFrom(previousCamera, true);
     }
   
     return true;

@@ -123,8 +123,8 @@ public:
   CompositeElevationDataProvider():_context(NULL), _currentID(0) {}
 
   ~CompositeElevationDataProvider() {
-    int size =  _providers.size();
-    for (int i = 0; i < size; i++) {
+    size_t size =  _providers.size();
+    for (size_t i = 0; i < size; i++) {
       delete _providers[i];
     }
     
@@ -145,7 +145,7 @@ public:
                                        IElevationDataListener* listener,
                                        bool autodeleteListener);
 
-  void cancelRequest(const long long requestId);
+  void cancelRequest(const long long requestID);
 
   std::vector<const Sector*> getSectors() const;
 

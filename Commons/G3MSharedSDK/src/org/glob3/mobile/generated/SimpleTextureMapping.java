@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SimpleTextureMapping.cpp
 //  G3MiOSSDK
@@ -19,24 +19,24 @@ package org.glob3.mobile.generated;
 
 //class TextureIDReference;
 //class IFloatBuffer;
-//class IGLTextureId;
+//class IGLTextureID;
 
 public class SimpleTextureMapping extends TransformableTextureMapping
 {
-  private TextureIDReference _glTextureId;
+  private TextureIDReference _glTextureID;
 
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
 
   private final boolean _transparent;
 
-  private void releaseGLTextureId()
+  private void releaseGLTextureID()
   {
   
-    if (_glTextureId != null)
+    if (_glTextureID != null)
     {
-      _glTextureId.dispose();
-      _glTextureId = null;
+      _glTextureID.dispose();
+      _glTextureID = null;
     }
     else
     {
@@ -45,19 +45,19 @@ public class SimpleTextureMapping extends TransformableTextureMapping
   }
 
 
-  public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent)
+  public SimpleTextureMapping(TextureIDReference glTextureID, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent)
   {
      super(0, 0, 1, 1, 0, 0, 0);
-     _glTextureId = glTextureId;
+     _glTextureID = glTextureID;
      _texCoords = texCoords;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
   }
 
-  public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
+  public SimpleTextureMapping(TextureIDReference glTextureID, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
      super(translationU, translationV, scaleU, scaleV, rotationAngleInRadians, rotationCenterU, rotationCenterV);
-     _glTextureId = glTextureId;
+     _glTextureID = glTextureID;
      _texCoords = texCoords;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
@@ -71,14 +71,14 @@ public class SimpleTextureMapping extends TransformableTextureMapping
          _texCoords.dispose();
     }
   
-    releaseGLTextureId();
+    releaseGLTextureID();
   
     super.dispose();
   }
 
-  public final IGLTextureId getGLTextureId()
+  public final IGLTextureID getGLTextureID()
   {
-    return _glTextureId.getID();
+    return _glTextureID.getID();
   }
 
   public final IFloatBuffer getTexCoords()
@@ -95,7 +95,7 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     else
     {
       TextureGLFeature tglf = (TextureGLFeature) state.getGLFeature(GLFeatureID.GLF_TEXTURE);
-      if (tglf != null && tglf.getTextureID() == _glTextureId.getID())
+      if (tglf != null && tglf.getTextureID() == _glTextureID.getID())
       {
         tglf.setScale(_scaleU, _scaleV);
         tglf.setTranslation(_translationU, _translationV);
@@ -106,11 +106,11 @@ public class SimpleTextureMapping extends TransformableTextureMapping
         state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
         if ((_scaleU != 1) || (_scaleV != 1) || (_translationU != 0) || (_translationV != 0) || (_rotationInRadians != 0))
         {
-          state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
+          state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
         }
         else
         {
-          state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+          state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
         }
       }
     }

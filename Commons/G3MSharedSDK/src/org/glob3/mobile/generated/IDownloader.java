@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IDownloader.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -34,11 +33,24 @@ public abstract class IDownloader
 
   public abstract void stop();
 
-  public abstract long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener);
+  public abstract long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener, String tag);
 
-  public abstract long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener);
+  public abstract long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener, String tag);
 
-  public abstract void cancelRequest(long requestId);
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
+  {
+    return requestBuffer(url, priority, timeToCache, readExpired, listener, deleteListener, ""); // default tag
+  }
+
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
+  {
+    return requestImage(url, priority, timeToCache, readExpired, listener, deleteListener, ""); // default tag
+  }
+
+
+  public abstract boolean cancelRequest(long requestID);
+
+  public abstract void cancelRequestsTagged(String tag);
 
   public abstract String statistics();
 

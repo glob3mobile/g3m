@@ -10,10 +10,10 @@
 #include "TexturesHandler.hpp"
 
 TextureIDReference::~TextureIDReference() {
-  _texHandler->releaseGLTextureId(_id);
+  _texHandler->releaseGLTextureID(_id);
 }
 
 TextureIDReference* TextureIDReference::createCopy() const {
-  _texHandler->retainGLTextureId(_id);
-  return new TextureIDReference(_id, _texHandler);
+  _texHandler->retainGLTextureID(_id);
+  return new TextureIDReference(_id, _isPremultiplied, _texHandler);
 }

@@ -21,8 +21,8 @@ private:
 
 public:
   SGTextureNode(const std::string& id,
-                const std::string& sId) :
-  SGNode(id, sId),
+                const std::string& sID) :
+  SGNode(id, sID),
   _glState(NULL)
   {
 
@@ -40,7 +40,7 @@ public:
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState);
 
-  std::string description() {
+  const std::string description() {
     return "SGTextureNode";
   }
 

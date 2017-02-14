@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  TileImageProvider.hpp
 //  G3MiOSSDK
@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class TileImageContribution;
 //class Tile;
-//class Vector2I;
+//class Vector2S;
 //class TileImageListener;
 
 
@@ -35,8 +35,8 @@ public abstract class TileImageProvider extends RCObject
 
   public abstract TileImageContribution contribution(Tile tile);
 
-  public abstract void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor);
+  public abstract void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor);
 
-  public abstract void cancel(String tileId);
+  public abstract void cancel(String tileID);
 
 }

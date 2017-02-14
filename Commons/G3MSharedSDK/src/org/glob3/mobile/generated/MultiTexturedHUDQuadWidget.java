@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MultiTexturedHUDQuadWidget.cpp
 //  G3MiOSSDK
@@ -55,24 +55,28 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false);
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false);
   
-    if (texId == null)
+    if (texID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return null;
     }
   
-    final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false);
+    final TextureIDReference texID2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false);
   
-    if (texId2 == null)
+    if (texID2 == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return null;
     }
   
     final Camera camera = rc.getCurrentCamera();
-    final int viewPortWidth = camera.getViewPortWidth();
+    int viewPortWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      viewPortWidth /= 2;
+    }
     final int viewPortHeight = camera.getViewPortHeight();
   
     final float width = _width;
@@ -97,7 +101,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
     if (vertices != null)
        vertices.dispose();
   
-    _mtMapping = new MultiTextureMapping(texId, texCoords.create(), true, true, texId2, texCoords.create(), true, true, _texCoordsTranslationU, _texCoordsTranslationV, _texCoordsScaleU, _texCoordsScaleV, _texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
+    _mtMapping = new MultiTextureMapping(texID, texCoords.create(), true, true, texID2, texCoords.create(), true, true, _texCoordsTranslationU, _texCoordsTranslationV, _texCoordsScaleU, _texCoordsScaleV, _texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
   
     return new TexturedMesh(dm, true, _mtMapping, true, true);
   }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated; 
-///////////
-
+package org.glob3.mobile.generated;
 public class GPUAttributeValueDisabled extends GPUAttributeValue
 {
   public void dispose()

@@ -26,8 +26,6 @@ public:
 
   FloatBufferElevationData(const Sector& sector,
                            const Vector2I& extent,
-                           const Sector& realSector,
-                           const Vector2I& realExtent,
                            IFloatBuffer* buffer,
                            double deltaHeight);
 

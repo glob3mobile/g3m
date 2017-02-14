@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  AbstractMeshShape.cpp
 //  G3MiOSSDK
@@ -77,7 +77,6 @@ public abstract class AbstractMeshShape extends Shape
        _mesh.dispose();
   
     super.dispose();
-  
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

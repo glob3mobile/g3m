@@ -8,7 +8,10 @@
 
 #include "IThreadUtils.hpp"
 
-#include "Context.hpp"
+#include "GTask.hpp"
+#include "G3MContext.hpp"
+#include "GAsyncTask.hpp"
+
 
 void IThreadUtils::initialize(const G3MContext* context) {
   _context = context;
@@ -30,9 +33,15 @@ public:
 
   void run(const G3MContext* context) {
     _task->onPostExecute(context);
+  }
+
+  ~IThreadUtils_RendererTask() {
     if (_autodelete) {
       delete _task;
     }
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 };
 

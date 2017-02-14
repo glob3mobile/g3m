@@ -16,6 +16,12 @@
 #include "IThreadUtils.hpp"
 #include "SceneJSShapesParser.hpp"
 #include "SGShape.hpp"
+#include "G3MEventContext.hpp"
+#include "GAsyncTask.hpp"
+#include "G3MRenderContext.hpp"
+#include "GLState.hpp"
+#include "Planet.hpp"
+
 
 class TransparentShapeWrapper : public OrderedRenderable {
 private:
@@ -44,10 +50,35 @@ public:
   }
 };
 
+ShapesRenderer::ShapesRenderer(bool renderNotReadyShapes) :
+_renderNotReadyShapes(renderNotReadyShapes),
+_glState(new GLState()),
+_glStateTransparent(new GLState()),
+_lastCamera(NULL)
+{
+  _context = NULL;
+}
+
+ShapesRenderer::~ShapesRenderer() {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
+    Shape* shape = _shapes[i];
+    delete shape;
+  }
+
+  _glState->_release();
+  _glStateTransparent->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+
 RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
   if (!_renderNotReadyShapes) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       const bool shapeReady = shape->isReadyToRender(rc);
       if (!shapeReady) {
@@ -58,56 +89,55 @@ RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
   return RenderState::ready();
 }
 
-void ShapesRenderer::updateGLState(const G3MRenderContext* rc) {
-
-  const Camera* cam = rc->getCurrentCamera();
+void ShapesRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glStateTransparent->addGLFeature(new ModelViewGLFeature(cam), true);
+    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera), true);
   }
   else {
-    f->setMatrix(cam->getModelViewMatrix44D());
+    f->setMatrix(camera->getModelViewMatrix44D());
   }
-
 }
 
 void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
-  const MutableVector3D cameraPosition = rc->getCurrentCamera()->getCartesianPositionMutable();
+  const size_t shapesCount = _shapes.size();
+  if (shapesCount > 0) {
+    _lastCamera->getCartesianPositionMutable(_currentCameraPosition);
 
-  //Setting camera matrixes
-  updateGLState(rc);
+    //Setting camera matrixes
+    updateGLState(_lastCamera);
 
-  _glState->setParent(glState);
-  _glStateTransparent->setParent(glState);
+    _glState->setParent(glState);
+    _glStateTransparent->setParent(glState);
 
 
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
-    Shape* shape = _shapes[i];
-    if (shape->isEnable()) {
-      if (shape->isTransparent(rc)) {
-        const Planet* planet = rc->getPlanet();
-        const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
-        const double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+    for (size_t i = 0; i < shapesCount; i++) {
+      Shape* shape = _shapes[i];
+      if (shape->isEnable()) {
+        if (shape->isTransparent(rc)) {
+          const Planet* planet = rc->getPlanet();
+          const Vector3D shapePosition = planet->toCartesian( shape->getPosition() );
+          const double squaredDistanceFromEye = shapePosition.sub(_currentCameraPosition).squaredLength();
 
-        rc->addOrderedRenderable(new TransparentShapeWrapper(shape,
-                                                             squaredDistanceFromEye,
-                                                             _glStateTransparent,
-                                                             _renderNotReadyShapes));
-      }
-      else {
-        shape->render(rc, _glState, _renderNotReadyShapes);
+          rc->addOrderedRenderable(new TransparentShapeWrapper(shape,
+                                                               squaredDistanceFromEye,
+                                                               _glStateTransparent,
+                                                               _renderNotReadyShapes));
+        }
+        else {
+          shape->render(rc, _glState, _renderNotReadyShapes);
+        }
       }
     }
   }
@@ -134,8 +164,8 @@ void ShapesRenderer::removeShape(Shape* shape) {
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
   if (deleteShapes) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
     }
@@ -198,7 +228,7 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
         touchEvent->getTapCount()==1 &&
         touchEvent->getType()==Down) {
       const Vector3D origin = _lastCamera->getCartesianPosition();
-      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
+      const Vector2F pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
       const Planet* planet = ec->getPlanet();
       if (!direction.isNan()) {
@@ -225,8 +255,8 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
 
 void ShapesRenderer::drainLoadQueue() {
 
-  const int loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  const size_t loadQueueSize = _loadQueue.size();
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     requestBuffer(item->_url,
                   item->_priority,
@@ -234,6 +264,7 @@ void ShapesRenderer::drainLoadQueue() {
                   item->_readExpired,
                   item->_uriPrefix,
                   item->_isTransparent,
+                  item->_depthTest,
                   item->_position,
                   item->_altitudeMode,
                   item->_listener,
@@ -247,8 +278,8 @@ void ShapesRenderer::drainLoadQueue() {
 }
 
 void ShapesRenderer::cleanLoadQueue() {
-  const int loadQueueSize = _loadQueue.size();
-  for (int i = 0; i < loadQueueSize; i++) {
+  const size_t loadQueueSize = _loadQueue.size();
+  for (size_t i = 0; i < loadQueueSize; i++) {
     LoadQueueItem* item = _loadQueue[i];
     delete item;
   }
@@ -257,8 +288,8 @@ void ShapesRenderer::cleanLoadQueue() {
 
 void ShapesRenderer::onChangedContext() {
   if (_context != NULL) {
-    const int shapesCount = _shapes.size();
-    for (int i = 0; i < shapesCount; i++) {
+    const size_t shapesCount = _shapes.size();
+    for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       shape->initialize(_context);
     }
@@ -281,6 +312,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                                      bool                readExpired,
                                      const std::string&  uriPrefix,
                                      bool                isTransparent,
+                                     bool                depthTest,
                                      Geodetic3D*         position,
                                      AltitudeMode        altitudeMode,
                                      ShapeLoadListener*  listener,
@@ -292,6 +324,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                                            readExpired,
                                            uriPrefix,
                                            isTransparent,
+                                           depthTest,
                                            position,
                                            altitudeMode,
                                            listener,
@@ -305,6 +338,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                   readExpired,
                   uriPrefix,
                   isTransparent,
+                  depthTest,
                   position,
                   altitudeMode,
                   listener,
@@ -320,6 +354,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                                      bool                readExpired,
                                      const std::string&  uriPrefix,
                                      bool                isTransparent,
+                                     bool                depthTest,
                                      Geodetic3D*         position,
                                      AltitudeMode        altitudeMode,
                                      ShapeLoadListener*  listener,
@@ -331,6 +366,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                                            readExpired,
                                            uriPrefix,
                                            isTransparent,
+                                           depthTest,
                                            position,
                                            altitudeMode,
                                            listener,
@@ -344,6 +380,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                   readExpired,
                   uriPrefix,
                   isTransparent,
+                  depthTest,
                   position,
                   altitudeMode,
                   listener,
@@ -364,6 +401,7 @@ private:
   IByteBuffer*       _buffer;
   const std::string  _uriPrefix;
   const bool         _isTransparent;
+  const bool         _depthTest;
   Geodetic3D*        _position;
   AltitudeMode       _altitudeMode;
   ShapeLoadListener* _listener;
@@ -378,6 +416,7 @@ public:
                                         IByteBuffer*       buffer,
                                         const std::string& uriPrefix,
                                         bool               isTransparent,
+                                        bool               depthTest,
                                         Geodetic3D*        position,
                                         AltitudeMode       altitudeMode,
                                         ShapeLoadListener* listener,
@@ -388,6 +427,7 @@ public:
   _buffer(buffer),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent),
+  _depthTest(depthTest),
   _position(position),
   _altitudeMode(altitudeMode),
   _listener(listener),
@@ -402,6 +442,7 @@ public:
       _sgShape = SceneJSShapesParser::parseFromBSON(_buffer,
                                                     _uriPrefix,
                                                     _isTransparent,
+                                                    _depthTest,
                                                     _position,
                                                     _altitudeMode);
     }
@@ -409,6 +450,7 @@ public:
       _sgShape = SceneJSShapesParser::parseFromJSON(_buffer,
                                                     _uriPrefix,
                                                     _isTransparent,
+                                                    _depthTest,
                                                     _position,
                                                     _altitudeMode);
     }
@@ -455,7 +497,8 @@ class ShapesRenderer_SceneJSBufferDownloadListener : public IBufferDownloadListe
 private:
   ShapesRenderer*     _shapesRenderer;
   const std::string   _uriPrefix;
-  bool                _isTransparent;
+  const bool          _isTransparent;
+  const bool          _depthTest;
   Geodetic3D*         _position;
   AltitudeMode        _altitudeMode;
   ShapeLoadListener*  _listener;
@@ -468,6 +511,7 @@ public:
   ShapesRenderer_SceneJSBufferDownloadListener(ShapesRenderer*     shapesRenderer,
                                                const std::string&  uriPrefix,
                                                bool                isTransparent,
+                                               bool                depthTest,
                                                Geodetic3D*         position,
                                                AltitudeMode        altitudeMode,
                                                ShapeLoadListener*  listener,
@@ -477,6 +521,7 @@ public:
   _shapesRenderer(shapesRenderer),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent),
+  _depthTest(depthTest),
   _position(position),
   _altitudeMode(altitudeMode),
   _listener(listener),
@@ -498,6 +543,7 @@ public:
                                                                             buffer,
                                                                             _uriPrefix,
                                                                             _isTransparent,
+                                                                            _depthTest,
                                                                             _position,
                                                                             _altitudeMode,
                                                                             _listener,
@@ -540,6 +586,7 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                                    bool                readExpired,
                                    const std::string&  uriPrefix,
                                    bool                isTransparent,
+                                   bool                depthTest,
                                    Geodetic3D*         position,
                                    AltitudeMode        altitudeMode,
                                    ShapeLoadListener*  listener,
@@ -554,6 +601,7 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                             new ShapesRenderer_SceneJSBufferDownloadListener(this,
                                                                              uriPrefix,
                                                                              isTransparent,
+                                                                             depthTest,
                                                                              position,
                                                                              altitudeMode,
                                                                              listener,
@@ -565,16 +613,16 @@ void ShapesRenderer::requestBuffer(const URL&          url,
 }
 
 void ShapesRenderer::enableAll() {
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     shape->setEnable(true);
   }
 }
 
 void ShapesRenderer::disableAll() {
-  const int shapesCount = _shapes.size();
-  for (int i = 0; i < shapesCount; i++) {
+  const size_t shapesCount = _shapes.size();
+  for (size_t i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
     shape->setEnable(false);
   }

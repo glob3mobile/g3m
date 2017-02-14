@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  PeriodicalTask.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -49,7 +48,7 @@ public class PeriodicalTask
 
   public final void executeIfNecessary(G3MContext context)
   {
-    long now = getTimer().now()._milliseconds;
+    long now = getTimer().nowInMilliseconds();
 
     long interval = now - _lastExecutionMS;
 

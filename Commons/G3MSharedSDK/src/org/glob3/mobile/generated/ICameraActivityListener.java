@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ICameraActivityListener.hpp
 //  G3MiOSSDK
@@ -9,12 +9,10 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class ICameraActivityListener
+public interface ICameraActivityListener
 {
-  public void dispose()
-  {
-  }
+  void dispose();
 
-  public abstract void touchEventHandled();
+  void touchEventHandled();
 
 }

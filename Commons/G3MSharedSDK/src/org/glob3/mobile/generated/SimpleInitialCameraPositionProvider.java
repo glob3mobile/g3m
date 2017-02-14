@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class SimpleInitialCameraPositionProvider extends InitialCameraPositionProvider
 {
 
@@ -6,6 +6,6 @@ public class SimpleInitialCameraPositionProvider extends InitialCameraPositionPr
   public final Geodetic3D getCameraPosition(Planet planet, PlanetRenderer planetRenderer)
   {
     final Sector sector = (planetRenderer == null) ? null : planetRenderer.getRenderedSector();
-    return ((sector == null) ? planet.getDefaultCameraPosition(Sector.fullSphere()) : planet.getDefaultCameraPosition(sector));
+    return ((sector == null) ? planet.getDefaultCameraPosition(Sector.FULL_SPHERE) : planet.getDefaultCameraPosition(sector));
   }
 }

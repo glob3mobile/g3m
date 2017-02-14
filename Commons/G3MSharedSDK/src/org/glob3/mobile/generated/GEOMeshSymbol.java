@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GEOMeshSymbol.cpp
 //  G3MiOSSDK
@@ -38,7 +38,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       vertices.add(coordinate._latitude, coordinate._longitude, deltaHeight);
     }
   
-    Mesh result = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+    Mesh result = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, false);
   
     if (vertices != null)
        vertices.dispose();
@@ -73,7 +73,7 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       }
     }
   
-    Mesh result = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+    Mesh result = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, lineWidth, 1, new Color(lineColor), null, false);
   
     if (vertices != null)
        vertices.dispose();

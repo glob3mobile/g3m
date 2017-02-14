@@ -24,4 +24,14 @@
   return [self cStringUsingEncoding: NSUTF8StringEncoding];
 }
 
+- (NSString*) urlEncode
+{
+  return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(
+                                                                                NULL,
+                                                                                (__bridge CFStringRef) self,
+                                                                                NULL,
+                                                                                (CFStringRef) @"% !\"#\\&'()*+,-./:;?@{|}~=$[]<>_",
+                                                                                kCFStringEncodingUTF8);
+}
+
 @end

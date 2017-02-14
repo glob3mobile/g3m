@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MutableVector2D.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
@@ -50,9 +48,15 @@ public class MutableVector2D
 
   }
 
+  public final void set(double x, double y)
+  {
+    _x = x;
+    _y = y;
+  }
+
   public static MutableVector2D nan()
   {
-    return new MutableVector2D(java.lang.Double.NaN, java.lang.Double.NaN);
+    return new MutableVector2D(Double.NaN, Double.NaN);
   }
 
   public final boolean isEquals(double x, double y)
@@ -64,9 +68,6 @@ public class MutableVector2D
   {
     return (_x != _x) || (_y != _y);
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  MutableVector2D normalized();
 
   public final double length()
   {

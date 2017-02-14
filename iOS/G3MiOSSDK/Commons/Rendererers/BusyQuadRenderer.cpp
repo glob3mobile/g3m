@@ -3,27 +3,28 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
 #include "BusyQuadRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "TexturesHandler.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "TexturedMesh.hpp"
-
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "ShortBufferBuilder.hpp"
-
 #include "GLConstants.hpp"
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
+#include "G3MEventContext.hpp"
+#include "DirectMesh.hpp"
+#include "G3MRenderContext.hpp"
+
 
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
@@ -45,18 +46,18 @@ void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
 
 bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 #ifdef C_CODE
-  const TextureIDReference* texId = NULL;
+  const TextureIDReference* texID = NULL;
 #endif
 #ifdef JAVA_CODE
-  TextureIDReference texId = null;
+  TextureIDReference texID = null;
 #endif
 
-  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+  texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                           GLFormat::rgba(),
                                                           "BusyQuadRenderer-Texture",
                                                           false);
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return false;
   }
@@ -84,7 +85,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
   delete vertices;
 
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
+  TextureMapping* texMap = new SimpleTextureMapping(texID,
                                                     texCoords.create(),
                                                     true,
                                                     false);
@@ -120,4 +121,32 @@ void BusyQuadRenderer::createGLState() {
   _glState->clearGLFeatureGroup(CAMERA_GROUP);
   _glState->addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
   _glState->addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
+}
+
+
+void BusyQuadRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                             int width, int height) {
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  const int halfWidth  = logicWidth / 2;
+  const int halfHeight = height / 2;
+  _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                                   -halfHeight, halfHeight,
+                                                                                   -halfWidth, halfWidth));
+}
+
+void BusyQuadRenderer::incDegrees(double value) {
+  _degrees += value;
+  if (_degrees>360) _degrees -= 360;
+  _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
+}
+
+BusyQuadRenderer::~BusyQuadRenderer() {
+  delete _image;
+  delete _quadMesh;
+  delete _backgroundColor;
+
+  _glState->_release();
 }

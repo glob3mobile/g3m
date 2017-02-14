@@ -3,30 +3,32 @@
 //  Prueba Opengl iPad
 //
 //  Created by Agustin Trujillo Pino on 12/01/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #import "G3MWidget_iOS.h"
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.hpp"
-#include "MathUtils_iOS.hpp"
-#include "Logger_iOS.hpp"
-#include "Factory_iOS.hpp"
-#include "StringUtils_iOS.hpp"
-#include "JSONParser_iOS.hpp"
-#include "StringBuilder_iOS.hpp"
-#include "TextUtils_iOS.hpp"
-#include "GPUProgramManager.hpp"
-#include "SceneLighting.hpp"
-#include "Planet.hpp"
-#include "Sector.hpp"
-#include "InitialCameraPositionProvider.hpp"
-#include "InfoDisplay.hpp"
+#include <vector>
+
+#import "TouchEvent.hpp"
+#import "G3MWidget.hpp"
+#import "Logger_iOS.hpp"
+#import "Factory_iOS.hpp"
+#import "StringUtils_iOS.hpp"
+#import "StringBuilder_iOS.hpp"
+#import "MathUtils_iOS.hpp"
+#import "JSONParser_iOS.hpp"
+#import "DeviceAttitude_iOS.hpp"
+#import "DeviceLocation_iOS.hpp"
+#import "TextUtils_iOS.hpp"
+#import "GL.hpp"
 
 
-@interface G3MWidget_iOS ()
+@interface G3MWidget_iOS () {
+  CGFloat _devicePixelRatio;
+}
+
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
@@ -47,61 +49,6 @@
 }
 
 
-- (void)          initWidget: (IStorage*) storage
-                  downloader: (IDownloader*) downloader
-                 threadUtils: (IThreadUtils*) threadUtils
-      cameraActivityListener: (ICameraActivityListener*) cameraActivityListener
-                      planet: (const Planet*) planet
-           cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-              cameraRenderer: (CameraRenderer*) cameraRenderer
-                mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (ProtoRenderer*) busyRenderer
-               errorRenderer: (ErrorRenderer*) errorRenderer
-                 hudRenderer: (Renderer*) hudRenderer
-             backgroundColor: (Color) backgroundColor
-                      logFPS: (bool) logFPS
-     logDownloaderStatistics: (bool) logDownloaderStatistics
-          initializationTask: (GInitializationTask*) initializationTask
-autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
-             periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-                    userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition
-                 infoDisplay: (InfoDisplay*) infoDisplay;
-{
-  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
-  GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
-
-  SceneLighting* sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA(0.3f, 0.3f, 0.3f, 1.0f),
-                                                              Color::white());
-
-  InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-    
-  _widgetVP = G3MWidget::create([_renderer getGL],
-                                storage,
-                                downloader,
-                                threadUtils,
-                                cameraActivityListener,
-                                planet,
-                                cameraConstraints,
-                                cameraRenderer,
-                                mainRenderer,
-                                busyRenderer,
-                                errorRenderer,
-                                hudRenderer,
-                                backgroundColor,
-                                logFPS,
-                                logDownloaderStatistics,
-                                initializationTask,
-                                autoDeleteInitializationTask,
-                                periodicalTasks,
-                                gpuProgramManager,
-                                sceneLighting,
-                                icpp,
-                                infoDisplay);
-
-  [self widget]->setUserData(userData);
-}
-
 - (GL*)getGL {
   return [_renderer getGL];
 }
@@ -121,11 +68,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-//    // for retina display
-//    eaglLayer.contentsScale = 2;
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
-//    }
+    _devicePixelRatio = 1;
+    // for retina display
+    UIScreen* mainScreen = [UIScreen mainScreen];
+    if ([mainScreen respondsToSelector:@selector(scale)]) {
+      _devicePixelRatio = mainScreen.scale;
+    }
+    eaglLayer.contentsScale = _devicePixelRatio;
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -178,19 +127,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
-  //  printf ("Longpress. state=%d\n", sender.state);
-  //
-  //  if (sender.state == UIGestureRecognizerStateEnded) {
-  //    NSLog(@"LONG PRESS");
-  //  }
-
   if (sender.state == 1) {
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
-                                      (int) tapPoint.y),
-                             Vector2I(0, 0),
+    Touch *touch = new Touch(Vector2F((float) (tapPoint.x * _devicePixelRatio),
+                                      (float) (tapPoint.y * _devicePixelRatio)),
+                             Vector2F::zero(),
                              1);
     pointers.push_back(touch);
 
@@ -211,9 +154,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   [super layoutSubviews];
 
   CGSize size = [self frame].size;
-  const int width  = (int) size.width;
-  const int height = (int) size.height;
+  const int width  = (int) (size.width  * _devicePixelRatio);
+  const int height = (int) (size.height * _devicePixelRatio);
   //NSLog(@"ResizeViewportEvent: %dx%d", width, height);
+
 
   G3MWidget* widget = [self widget];
   if (widget) {
@@ -299,10 +243,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [uiTouch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch* touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y),
+    Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)),
                              tapCount);
 
     pointers.push_back(touch);
@@ -318,7 +262,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void) touchesMoved: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
-  //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -329,10 +272,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [uiTouch locationInView:self];
     CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch* touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)));
 
     pointers.push_back(touch);
   }
@@ -345,9 +288,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     if ((pointers.size() == 2) &&
         (_lastTouchEvent->getTouchCount() == 2)) {
 
-      const Vector2I current0 = pointers[0]->getPrevPos();
-      const Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
-      const Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      const Vector2F current0 = pointers[0]->getPrevPos();
+      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
       delete _lastTouchEvent;
       const double dist0 = current0.sub(last0).squaredLength();
       const double dist1 = current0.sub(last1).squaredLength();
@@ -376,7 +319,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void) touchesEnded: (NSSet*) touches
             withEvent: (UIEvent*) event
 {
-  //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
 
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
@@ -390,10 +332,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [uiTouch timestamp];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch *touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
+                                      (float) (current.y * _devicePixelRatio)),
+                             Vector2F((float) (previous.x * _devicePixelRatio),
+                                      (float) (previous.y * _devicePixelRatio)));
 
     pointers.push_back(touch);
   }
@@ -415,21 +357,25 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 }
 
 - (void)initSingletons {
-  ILogger*            logger          = new Logger_iOS(InfoLevel);
-  IFactory*           factory         = new Factory_iOS();
-  const IStringUtils* stringUtils     = new StringUtils_iOS();
-  IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
-  IMathUtils*         mathUtils       = new MathUtils_iOS();
-  IJSONParser*        jsonParser      = new JSONParser_iOS();
-  ITextUtils*         textUtils       = new TextUtils_iOS();
-
+  ILogger*            logger        = new Logger_iOS(InfoLevel);
+  IFactory*           factory       = new Factory_iOS();
+  const IStringUtils* stringUtils   = new StringUtils_iOS();
+  IStringBuilder*     stringBuilder = new StringBuilder_iOS();
+  IMathUtils*         mathUtils     = new MathUtils_iOS();
+  IJSONParser*        jsonParser    = new JSONParser_iOS();
+  ITextUtils*         textUtils     = new TextUtils_iOS();
+  IDeviceAttitude*    devAttitude   = new DeviceAttitude_iOS(false);
+  IDeviceLocation*    devLocation   = new DeviceLocation_iOS();
+  
   G3MWidget::initSingletons(logger,
                             factory,
                             stringUtils,
                             stringBuilder,
                             mathUtils,
                             jsonParser,
-                            textUtils);
+                            textUtils,
+                            devAttitude,
+                            devLocation);
 }
 
 - (CameraRenderer*)getCameraRenderer {

@@ -25,7 +25,6 @@ import org.glob3.mobile.generated.Info;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
@@ -44,8 +43,8 @@ import android.widget.RelativeLayout;
 
 
 public class VectorTilesActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
 
    private G3MWidget_Android _g3mWidget;
@@ -86,15 +85,20 @@ public class VectorTilesActivity
    }
 
 
-   private LayerSet createLayerSet() {
-      final LayerSet layerSet = new LayerSet();
+   static private LayerSet createLayerSet() {
+      //   final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
 
       //      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
       //               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
+
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
+
+      //  layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
 
       //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
       //final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
@@ -105,17 +109,17 @@ public class VectorTilesActivity
       final int maxLevel = 17;
 
 
-      // SWITZERLAND      
+      // SWITZERLAND
       //      final Geodetic2D lower = new Geodetic2D( //
       //               Angle.fromDegrees(45.8176852), //
       //               Angle.fromDegrees(5.956216));
       //      final Geodetic2D upper = new Geodetic2D( //
       //               Angle.fromDegrees(47.803029), //
       //               Angle.fromDegrees(10.492264));
-      //      
+      //
 
 
-      //SCOTLAND       
+      //SCOTLAND
       final Geodetic2D lower = new Geodetic2D( //
                Angle.fromDegrees(54.7226296), //
                Angle.fromDegrees(-7.6536084));
@@ -148,8 +152,8 @@ public class VectorTilesActivity
 
 
    private static class SampleRasterSymbolizer
-            extends
-               GEORasterSymbolizer {
+      extends
+         GEORasterSymbolizer {
 
       private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
 
@@ -164,7 +168,8 @@ public class VectorTilesActivity
       }
 
 
-      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(@SuppressWarnings("unused")
+      final GEOGeometry geometry) {
          //          final JSONObject properties = geometry.getFeature().getProperties();
          //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
          final Color color = FROM_COLOR.wheelStep(7, _colorIndex);

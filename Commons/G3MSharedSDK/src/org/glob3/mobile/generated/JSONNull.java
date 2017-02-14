@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONNull.cpp
 //  G3MiOSSDK
@@ -31,6 +31,10 @@ public class JSONNull extends JSONBaseObject
   }
 
   public final String description()
+  {
+    return "null";
+  }
+  public final String toString()
   {
     return "null";
   }

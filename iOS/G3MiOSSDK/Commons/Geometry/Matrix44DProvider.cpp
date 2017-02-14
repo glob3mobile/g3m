@@ -7,6 +7,7 @@
 //
 
 #include "Matrix44DProvider.hpp"
+#include "ILogger.hpp"
 
 void Matrix44DMultiplicationHolder::pullMatrixes() const {
   for (int j = 0; j < _matricesSize; j++) {
@@ -24,7 +25,7 @@ void Matrix44DMultiplicationHolder::pullMatrixes() const {
 }
 
 Matrix44DMultiplicationHolder::Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
-                                                             int matricesSize):
+                                                             size_t matricesSize):
 _matricesSize(matricesSize),
 _modelview(NULL)
 {

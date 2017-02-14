@@ -3,14 +3,22 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "SphericalPlanet.hpp"
+
 #include "CameraEffects.hpp"
-
 #include "Camera.hpp"
+#include "Sector.hpp"
+#include "IMathUtils.hpp"
+#include "Geodetic3D.hpp"
+#include "TimeInterval.hpp"
 
+
+const Planet* SphericalPlanet::createEarth() {
+  return new SphericalPlanet(Sphere(Vector3D::ZERO,
+                                    6378137.0));
+}
 
 SphericalPlanet::SphericalPlanet(const Sphere& sphere):
 _sphere(sphere),
@@ -20,16 +28,21 @@ _radii( Vector3D(sphere._radius, sphere._radius, sphere._radius) )
 
 Vector3D SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                 const Angle& longitude) const {
-//  const double cosLatitude = latitude.cosinus();
-//
-//  return Vector3D(cosLatitude * longitude.cosinus(),
-//                  cosLatitude * longitude.sinus(),
-//                  latitude.sinus());
   const double cosLatitude = COS(latitude._radians);
 
   return Vector3D(cosLatitude * COS(longitude._radians),
                   cosLatitude * SIN(longitude._radians),
                   SIN(latitude._radians));
+}
+
+void SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
+                                            const Angle& longitude,
+                                            MutableVector3D& result) const {
+  const double cosLatitude = COS(latitude._radians);
+
+  result.set(cosLatitude * COS(longitude._radians),
+             cosLatitude * SIN(longitude._radians),
+             SIN(latitude._radians));
 }
 
 std::vector<double> SphericalPlanet::intersectionsDistances(double originX,
@@ -84,6 +97,21 @@ Vector3D SphericalPlanet::toCartesian(const Angle& latitude,
   return geodeticSurfaceNormal(latitude, longitude).times( _sphere._radius + height);
 }
 
+void SphericalPlanet::toCartesian(const Angle& latitude,
+                                  const Angle& longitude,
+                                  const double height,
+                                  MutableVector3D& result) const {
+  geodeticSurfaceNormal(latitude, longitude, result);
+  const double nX = result.x();
+  const double nY = result.y();
+  const double nZ = result.z();
+
+  const double K = _sphere._radius + height;
+  result.set(nX * K,
+             nY * K,
+             nZ * K);
+}
+
 Geodetic2D SphericalPlanet::toGeodetic2D(const Vector3D& position) const {
   const Vector3D n = geodeticSurfaceNormal(position);
 
@@ -113,8 +141,7 @@ Vector3D SphericalPlanet::scaleToGeocentricSurface(const Vector3D& position) con
 }
 
 
-Geodetic2D SphericalPlanet::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
-{
+Geodetic2D SphericalPlanet::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const {
   const Vector3D v0 = toCartesian(P0);
   const Vector3D v1 = toCartesian(P1);
   const Vector3D normal = v0.cross(v1).normalized();
@@ -135,7 +162,6 @@ std::list<Vector3D> SphericalPlanet::computeCurve(const Vector3D& start,
   const Vector3D normal = start.cross(stop).normalized();
   const double theta = start.angleBetween(stop)._radians;
 
-  //int n = max((int)(theta / granularity) - 1, 0);
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
 
   std::list<Vector3D> positions;
@@ -194,7 +220,6 @@ double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   const double medLon = g1._longitude._degrees;
 
   // this way is faster, and works properly further away from the poles
-  //double diflat = fabs(g._latitude-medLat);
   double diflat = mu->abs(g2._latitude._degrees - medLat);
   if (diflat > 180) {
     diflat = 360 - diflat;
@@ -252,26 +277,23 @@ Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector
   return result;
 }
 
-MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
-  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
-  const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
-
+MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Angle& latitude,
+                                                                const Angle& longitude,
+                                                                const double height) const {
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix( toCartesian(latitude, longitude, height) );
+  const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( latitude, longitude );
   return translation.multiply(rotation);
 }
 
 
-void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
-{
-//  _origin = origin.asMutableVector3D();
-//  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const {
   _origin.copyFrom(origin);
   _initialPoint.copyFrom(closestIntersection(origin, initialRay));
   _validSingleDrag = false;
 }
 
 
-MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
-{
+MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const {
   // check if initialPoint is valid
   if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
 
@@ -280,7 +302,6 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
-//    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
     finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
     if (finalPoint.isNan()) {
       ILogger::instance()->logWarning("SphericalPlanet::singleDrag-> finalPoint is NaN");
@@ -297,7 +318,6 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations
-//  _lastDragAxis = rotationAxis.asMutableVector3D();
   _lastDragAxis.copyFrom(rotationAxis);
   double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
@@ -309,8 +329,7 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
 }
 
 
-Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
-{
+Effect* SphericalPlanet::createEffectFromLastSingleDrag() const {
   if (!_validSingleDrag || _lastDragAxis.isNan()) return NULL;
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
@@ -319,18 +338,12 @@ Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
 void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
                                       const Vector3D& centerRay,
                                       const Vector3D& initialRay0,
-                                      const Vector3D& initialRay1) const
-{
-//  _origin = origin.asMutableVector3D();
-//  _centerRay = centerRay.asMutableVector3D();
-//  _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
-//  _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
+                                      const Vector3D& initialRay1) const {
   _origin.copyFrom(origin);
   _centerRay.copyFrom(centerRay);
   _initialPoint0.copyFrom(closestIntersection(origin, initialRay0));
   _initialPoint1.copyFrom(closestIntersection(origin, initialRay1));
   _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1)._degrees;
-//  _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
   _centerPoint.copyFrom(closestIntersection(origin, centerRay));
   _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1)._degrees;
 
@@ -338,14 +351,12 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
   Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
   Geodetic2D g  = getMidPoint(g0, g1);
-//  _initialPoint = toCartesian(g).asMutableVector3D();
   _initialPoint.copyFrom(toCartesian(g));
 }
 
 
 MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                             const Vector3D& finalRay1) const
-{
+                                             const Vector3D& finalRay1) const {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
     return MutableMatrix44D::invalid();
@@ -421,7 +432,6 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     viewDirection = viewDirection.transformedBy(rotation, 0.0);
     ray0 = ray0.transformedBy(rotation, 0.0);
     ray1 = ray1.transformedBy(rotation, 0.0);
-//    matrix.copyValue(rotation.multiply(matrix));
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
@@ -429,7 +439,6 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     MutableMatrix44D translation2 = MutableMatrix44D::createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
     positionCamera = positionCamera.transformedBy(translation2, 1.0);
-//    matrix.copyValue(translation2.multiply(matrix));
     matrix.copyValueOfMultiplication(translation2, matrix);
   }
 
@@ -452,7 +461,6 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     viewDirection = viewDirection.transformedBy(rotation, 0.0);
     ray0 = ray0.transformedBy(rotation, 0.0);
     ray1 = ray1.transformedBy(rotation, 0.0);
-//    matrix.copyValue(rotation.multiply(matrix));
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
@@ -466,18 +474,15 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
-//    matrix.copyValue(rotation.multiply(matrix));
     matrix.copyValueOfMultiplication(rotation, matrix);
   }
 
   return matrix;
 }
 
-
 Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
                                                const Vector3D& centerRay,
-                                               const Vector3D& tapRay) const
-{
+                                               const Vector3D& tapRay) const {
   const Vector3D initialPoint = closestIntersection(origin, tapRay);
   if (initialPoint.isNan()) return NULL;
 
@@ -498,16 +503,14 @@ Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
 }
 
 
-double SphericalPlanet::distanceToHorizon(const Vector3D& position) const
-{
+double SphericalPlanet::distanceToHorizon(const Vector3D& position) const {
   double R = _sphere._radius;
   double D = position.length();
   return sqrt(D*D - R*R);
 }
 
 
-MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const
-{
+MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3D& destination) const {
   const Vector3D P0 = toCartesian(origin);
   const Vector3D P1 = toCartesian(destination);
   const Vector3D axis = P0.cross(P1);
@@ -523,16 +526,65 @@ MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3
 void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                               Camera* nextCamera) const {
 
-  //  Vector3D pos = nextCamera->getCartesianPosition();
-  //  Vector3D origin = _origin.asVector3D();
-  //  double maxDist = _sphere.getRadius() * 5;
-  //
-  //  if (pos.distanceTo(origin) > maxDist) {
-  //    nextCamera->copyFromForcingMatrixCreation(*previousCamera);
-  ////    Vector3D pos2 = nextCamera->getCartesianPosition();
-  ////    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
-  //  }
-  
 }
 
+Geodetic3D SphericalPlanet::getDefaultCameraPosition(const Sector& rendereSector) const {
+  const Vector3D asw = toCartesian(rendereSector.getSW());
+  const Vector3D ane = toCartesian(rendereSector.getNE());
+  const double height = asw.sub(ane).length() * 1.9;
 
+  return Geodetic3D(rendereSector._center,
+                    height);
+}
+
+Vector3D SphericalPlanet::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
+  return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+}
+
+Vector3D SphericalPlanet::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
+  return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
+}
+
+Vector3D SphericalPlanet::toCartesian(const Geodetic3D& geodetic) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     geodetic._height);
+}
+
+Vector3D SphericalPlanet::toCartesian(const Geodetic2D& geodetic) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     0.0);
+}
+
+Vector3D SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                      const double height) const {
+  return toCartesian(geodetic._latitude,
+                     geodetic._longitude,
+                     height);
+}
+
+void SphericalPlanet::toCartesian(const Geodetic3D& geodetic,
+                                  MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              geodetic._height,
+              result);
+}
+
+void SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                  MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              0,
+              result);
+}
+
+void SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
+                                  const double height,
+                                  MutableVector3D& result) const {
+  toCartesian(geodetic._latitude,
+              geodetic._longitude,
+              height,
+              result);
+}

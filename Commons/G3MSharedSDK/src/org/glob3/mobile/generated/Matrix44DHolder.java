@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class Matrix44DHolder extends Matrix44DProvider
 {
   private Matrix44D _matrix;
@@ -15,7 +15,7 @@ public class Matrix44DHolder extends Matrix44DProvider
      _matrix = matrix;
     if (matrix == null)
     {
-      ILogger.instance().logError("Setting NULL in Matrix44D Holder");
+      throw new RuntimeException("Setting NULL in Matrix44D Holder");
     }
     _matrix._retain();
   }
@@ -24,7 +24,7 @@ public class Matrix44DHolder extends Matrix44DProvider
   {
     if (matrix == null)
     {
-      ILogger.instance().logError("Setting NULL in Matrix44D Holder");
+      throw new RuntimeException("Setting NULL in Matrix44D Holder");
     }
 
     if (matrix != _matrix)

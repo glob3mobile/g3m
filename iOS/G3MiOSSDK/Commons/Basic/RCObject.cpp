@@ -7,9 +7,11 @@
 //
 
 #include "RCObject.hpp"
+#include "ErrorHandling.hpp"
+
 
 RCObject::~RCObject() {
   if (_referenceCounter != 0) {
-    ILogger::instance()->logError("DELETING RCOBJECT WITH UNRELEASED REFERENCES!");
+    THROW_EXCEPTION("Deleted RCObject with unreleased references!");
   }
 }

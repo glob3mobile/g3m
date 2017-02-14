@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -18,6 +19,7 @@ import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import android.graphics.Bitmap;
@@ -29,7 +31,7 @@ public final class Downloader_Android_Handler {
 
    private static final int                                  DEFAULT_BUFFER_SIZE = 32 * 1024;
 
-   private static BitmapFactory.Options                      _bitmapFactoryOptions;
+   private static final BitmapFactory.Options                _bitmapFactoryOptions;
    static {
       _bitmapFactoryOptions = new BitmapFactory.Options();
       _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
@@ -46,17 +48,27 @@ public final class Downloader_Android_Handler {
    private boolean                                           _hasImageListeners;
 
 
+   private final TimeInterval                                _connectTimeout;
+   private final TimeInterval                                _readTimeout;
+
+
    Downloader_Android_Handler(final URL url,
                               final IBufferDownloadListener listener,
+                              final boolean deleteListener,
                               final long priority,
-                              final long requestId) {
+                              final long requestID,
+                              final String tag,
+                              final TimeInterval connectTimeout,
+                              final TimeInterval readTimeout) {
+      _connectTimeout = connectTimeout;
+      _readTimeout = readTimeout;
       _priority = priority;
       _g3mURL = url;
       _hasImageListeners = false;
       try {
          _javaURL = new java.net.URL(url._path);
 
-         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, requestId));
+         _listeners.add(new Downloader_Android_ListenerEntry(listener, null, deleteListener, requestID, tag));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -75,15 +87,21 @@ public final class Downloader_Android_Handler {
 
    Downloader_Android_Handler(final URL url,
                               final IImageDownloadListener listener,
+                              final boolean deleteListener,
                               final long priority,
-                              final long requestId) {
+                              final long requestID,
+                              final String tag,
+                              final TimeInterval connectTimeout,
+                              final TimeInterval readTimeout) {
+      _connectTimeout = connectTimeout;
+      _readTimeout = readTimeout;
       _priority = priority;
       _g3mURL = url;
       _hasImageListeners = true;
       try {
          _javaURL = new java.net.URL(url._path);
 
-         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, requestId));
+         _listeners.add(new Downloader_Android_ListenerEntry(null, listener, deleteListener, requestID, tag));
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
@@ -101,9 +119,12 @@ public final class Downloader_Android_Handler {
 
 
    void addListener(final IBufferDownloadListener listener,
+                    final boolean deleteListener,
                     final long priority,
-                    final long requestId) {
-      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, requestId);
+                    final long requestID,
+                    final String tag) {
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, deleteListener,
+               requestID, tag);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -116,9 +137,12 @@ public final class Downloader_Android_Handler {
 
 
    void addListener(final IImageDownloadListener listener,
+                    final boolean deleteListener,
                     final long priority,
-                    final long requestId) {
-      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, requestId);
+                    final long requestID,
+                    final String tag) {
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, deleteListener,
+               requestID, tag);
 
       synchronized (this) {
          _hasImageListeners = true;
@@ -137,10 +161,10 @@ public final class Downloader_Android_Handler {
    }
 
 
-   boolean cancelListenerForRequestId(final long requestId) {
+   boolean cancelListenerForRequestId(final long requestID) {
       synchronized (this) {
          for (final Downloader_Android_ListenerEntry entry : _listeners) {
-            if (entry._requestId == requestId) {
+            if (entry._requestID == requestID) {
                entry.cancel();
                return true;
             }
@@ -151,10 +175,23 @@ public final class Downloader_Android_Handler {
    }
 
 
-   boolean removeListenerForRequestId(final long requestId) {
+   void cancelListenersTagged(final String tag) {
+      synchronized (this) {
+         for (final Iterator<Downloader_Android_ListenerEntry> iterator = _listeners.iterator(); iterator.hasNext();) {
+            final Downloader_Android_ListenerEntry entry = iterator.next();
+            if (entry._tag.equals(tag)) {
+               entry.cancel();
+               iterator.remove();
+            }
+         }
+      }
+   }
+
+
+   boolean removeListenerForRequestId(final long requestID) {
       synchronized (this) {
          for (final Downloader_Android_ListenerEntry entry : _listeners) {
-            if (entry._requestId == requestId) {
+            if (entry._requestID == requestID) {
                entry.onCancel(_g3mURL);
                _listeners.remove(entry);
                return true;
@@ -163,6 +200,24 @@ public final class Downloader_Android_Handler {
       }
 
       return false;
+   }
+
+
+   boolean removeListenersTagged(final String tag) {
+      boolean anyRemoved = false;
+
+      synchronized (this) {
+         for (final Iterator<Downloader_Android_ListenerEntry> iterator = _listeners.iterator(); iterator.hasNext();) {
+            final Downloader_Android_ListenerEntry entry = iterator.next();
+            if (entry._tag.equals(tag)) {
+               entry.onCancel(_g3mURL);
+               iterator.remove();
+               anyRemoved = true;
+            }
+         }
+      }
+
+      return anyRemoved;
    }
 
 
@@ -188,29 +243,27 @@ public final class Downloader_Android_Handler {
             final String filePath = _g3mURL._path.replaceFirst(URL.FILE_PROTOCOL, "");
 
             final File file = new File(filePath);
-            final InputStream fileIS = file.exists() ? new FileInputStream(file) //
+            final InputStream fileIS = file.exists() //
+                                                    ? new FileInputStream(file) //
                                                     : downloader.getAppContext().getAssets().open(filePath);
 
             data = getData(fileIS, -1);
             if (data != null) {
                statusCode = 200;
             }
+
+            fileIS.close();
          }
          else {
-            //            final long s = SystemClock.currentThreadTimeMillis();
-            //            ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod started.");
-
             connection = (HttpURLConnection) _javaURL.openConnection();
-            // connection.setConnectTimeout((int) downloader.getConnectTimeout().milliseconds());
-            //connection.setReadTimeout((int) downloader.getReadTimeout().milliseconds());
-            // connection.setUseCaches(false);
+            connection.setConnectTimeout((int) _connectTimeout.milliseconds());
+            connection.setReadTimeout((int) _readTimeout.milliseconds());
+            connection.setUseCaches(false);
             connection.connect();
             statusCode = connection.getResponseCode();
 
             if (statusCode == 200) {
                data = getData(connection.getInputStream(), connection.getContentLength());
-               //               final long e = SystemClock.currentThreadTimeMillis();
-               //               ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod: " + (e - s) + " miliseconds");
             }
          }
       }
@@ -276,8 +329,8 @@ public final class Downloader_Android_Handler {
    }
 
    private class ProcessResponseGTask
-            extends
-               GTask {
+      extends
+         GTask {
 
       private final int    _statusCode;
       private final byte[] _data;
@@ -342,8 +395,7 @@ public final class Downloader_Android_Handler {
 
       @Override
       public void dispose() {
-         // TODO Auto-generated method stub
-
+         super.dispose();
       }
    }
 

@@ -12,7 +12,7 @@
 #include "TileImageProvider.hpp"
 
 #include "FrameTask.hpp"
-#include "Vector2I.hpp"
+#include "Vector2S.hpp"
 #include "QuadTree.hpp"
 #include <map>
 #include "IImageListener.hpp"
@@ -25,20 +25,20 @@ public:
   class GEORasterizerCanvasImageListener : public IImageListener {
   private:
     const TileImageContribution* _contribution;
-    const std::string            _tileId;
+    const std::string            _tileID;
 
     TileImageListener* _listener;
     bool               _deleteListener;
 
-    const std::string getImageId(const std::string& tileId) const;
+    const std::string getImageID(const std::string& tileID) const;
 
   public:
     GEORasterizerCanvasImageListener(const TileImageContribution* contribution,
-                                     const std::string& tileId,
+                                     const std::string& tileID,
                                      TileImageListener* listener,
                                      bool deleteListener) :
     _contribution(contribution),
-    _tileId(tileId),
+    _tileID(tileID),
     _listener(listener),
     _deleteListener(deleteListener)
     {
@@ -81,12 +81,12 @@ public:
 #ifdef JAVA_CODE
     private TileImageContribution _contribution;
 #endif
-    const std::string            _tileId;
+    const std::string            _tileID;
     const Sector                 _tileSector;
     const bool                   _tileMercator;
     const int                    _tileLevel;
-    const int                    _resolutionWidth;
-    const int                    _resolutionHeight;
+    const short                  _resolutionWidth;
+    const short                  _resolutionHeight;
     TileImageListener*           _listener;
     const bool                   _deleteListener;
     bool                         _isCanceled;
@@ -94,16 +94,16 @@ public:
   public:
     GEORasterizerFrameTask(GEOVectorTileImageProvider* geoVectorTileImageProvider,
                            const TileImageContribution* contribution,
-                           const std::string& tileId,
+                           const std::string& tileID,
                            const Sector& tileSector,
                            bool tileMercator,
                            int tileLevel,
-                           const Vector2I& resolution,
+                           const Vector2S& resolution,
                            TileImageListener* listener,
                            bool deleteListener) :
     _geoVectorTileImageProvider(geoVectorTileImageProvider),
     _contribution(contribution),
-    _tileId(tileId),
+    _tileID(tileID),
     _tileSector(tileSector),
     _tileMercator(tileMercator),
     _tileLevel(tileLevel),
@@ -144,19 +144,19 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
-              long long tileDownloadPriority,
+              const Vector2S& resolution,
+              long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
-  void rasterizerDeleted(const std::string& tileId);
+  void rasterizerDeleted(const std::string& tileID);
 
   void rasterize(const TileImageContribution* contribution,
-                 const std::string& tileId,
+                 const std::string& tileID,
                  const Sector& tileSector,
                  bool tileMercator,
                  int tileLevel,

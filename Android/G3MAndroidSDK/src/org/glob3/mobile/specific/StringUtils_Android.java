@@ -4,14 +4,15 @@ package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 import org.glob3.mobile.generated.IStringUtils;
 
 
 public final class StringUtils_Android
-extends
-IStringUtils {
+   extends
+      IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -28,12 +29,9 @@ IStringUtils {
    @Override
    public ArrayList<String> splitLines(final String string) {
       final String lines[] = string.split("\\r?\\n");
-      final ArrayList<String> l = new ArrayList<String>();
-      for (final java.lang.String line : lines) {
-         l.add(line);
-      }
-
-      return l;
+      final ArrayList<String> result = new ArrayList<String>(lines.length);
+      Collections.addAll(result, lines);
+      return result;
    }
 
 
@@ -172,5 +170,14 @@ IStringUtils {
    public String toString(final float value) {
       return Float.toString(value);
    }
+
+
+   @Override
+   public String replaceAll(final String originalString,
+                            final String searchString,
+                            final String replaceString) {
+      return originalString.replace(searchString, replaceString);
+   }
+
 
 }

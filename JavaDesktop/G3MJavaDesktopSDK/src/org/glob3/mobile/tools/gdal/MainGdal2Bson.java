@@ -3,6 +3,7 @@
 package org.glob3.mobile.tools.gdal;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.tools.commandline.core.CommandLineException;
@@ -10,10 +11,9 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 
 public class MainGdal2Bson {
-   /**
-    * @param args
-    */
-   public static void main(final String[] args) {
+
+
+   public static void main(final String[] args) throws IOException {
       System.out.println("GDAL Converter to Bson 0.1");
       System.out.println("----------------------------- " + args.length + "\n");
 
@@ -41,4 +41,6 @@ public class MainGdal2Bson {
          ILogger.instance().logError(e.getMessage(), e.getCause());
       }
    }
+
+
 }

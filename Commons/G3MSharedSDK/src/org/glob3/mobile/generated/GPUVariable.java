@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUVariable
 {
 
@@ -100,6 +100,21 @@ public class GPUVariable
       return GPUUniformKey.SAMPLER3;
     }
   
+    if (name.compareTo("uTranslation2D") == 0)
+    {
+      return GPUUniformKey.TRANSLATION_2D;
+    }
+  
+    if (name.compareTo("uBillboardAnchor") == 0)
+    {
+      return GPUUniformKey.BILLBOARD_ANCHOR;
+    }
+  
+    if (name.compareTo("uCameraPosition") == 0)
+    {
+      return GPUUniformKey.CAMERA_POSITION;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
@@ -133,6 +148,11 @@ public class GPUVariable
     if (name.compareTo("aNormal") == 0)
     {
       return GPUAttributeKey.NORMAL;
+    }
+  
+    if (name.compareTo("aPosition2D") == 0)
+    {
+      return GPUAttributeKey.POSITION_2D;
     }
   
     return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;

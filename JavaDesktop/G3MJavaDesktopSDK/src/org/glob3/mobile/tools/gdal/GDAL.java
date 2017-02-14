@@ -4,7 +4,6 @@ package org.glob3.mobile.tools.gdal;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -75,7 +74,8 @@ public class GDAL {
 
       StreamGobbler sb = null;
       try {
-         sb = CommandLine.getInstance().execute(cmd);
+         CommandLine.getInstance();
+         sb = CommandLine.execute(cmd);
          if ((sb.getType() == StreamGobbler.streamGobblerType.OUTPUT)
              && sb.getResult().startsWith(GDAL_HOME + GDALCommands.srsInfo + " is ")) {
             return true;
@@ -98,11 +98,11 @@ public class GDAL {
 
 
    public static boolean isInitialized() {
-      return (_gdal == null) ? false : true;
+      return _gdal != null;
    }
 
 
-   public boolean validateSRS(final File file) throws GDALException {
+   public static boolean validateSRS(final File file) throws GDALException {
       if ((file != null) && file.exists() && file.isFile()) {
 
          final String[] cmd = new String[5];
@@ -114,7 +114,8 @@ public class GDAL {
 
          StreamGobbler sb = null;
          try {
-            sb = CommandLine.getInstance().execute(cmd);
+            CommandLine.getInstance();
+            sb = CommandLine.execute(cmd);
 
             if ((sb.getType() == StreamGobbler.streamGobblerType.OUTPUT) && sb.getResult().startsWith("Validate Succeeds")) {
                return true;
@@ -137,7 +138,7 @@ public class GDAL {
    }
 
 
-   public boolean ogrInfo(final File file) throws GDALException {
+   public static boolean ogrInfo(final File file) throws GDALException {
       if ((file != null) && file.exists() && file.isFile()) {
 
          final String[] cmd = new String[3];
@@ -148,7 +149,8 @@ public class GDAL {
 
          StreamGobbler sb = null;
          try {
-            sb = CommandLine.getInstance().execute(cmd);
+            CommandLine.getInstance();
+            sb = CommandLine.execute(cmd);
             if ((sb.getType() == StreamGobbler.streamGobblerType.OUTPUT) && sb.getResult().contains("successful")) {
                return true;
             }
@@ -209,11 +211,11 @@ public class GDAL {
    //   }
 
 
-   public File vector2GeoJSON(final File inputFile,
-                              final File outputDir,
-                              final String outputFileName,
-                              final boolean overwrite,
-                              final String... options) throws GDALException {
+   public static File vector2GeoJSON(final File inputFile,
+                                     final File outputDir,
+                                     final String outputFileName,
+                                     final boolean overwrite,
+                                     final String... options) throws GDALException {
       if (FileUtils.checkFile(inputFile) && FileUtils.checkDir(outputDir)) {
          File outputFile = new File(outputDir, outputFileName + ".geojson");
          if (overwrite && outputFile.exists()) {
@@ -244,7 +246,8 @@ public class GDAL {
 
          StreamGobbler sb = null;
          try {
-            sb = CommandLine.getInstance().execute(cmd);
+            CommandLine.getInstance();
+            sb = CommandLine.execute(cmd);
             System.out.println(sb.getResult());
             return outputFile;
          }
@@ -265,9 +268,9 @@ public class GDAL {
    }
 
 
-   public File xyz2JSON(final File inputFile,
-                        final File outputDir,
-                        final String outputFileName) throws GDALException {
+   public static File xyz2JSON(final File inputFile,
+                               final File outputDir,
+                               final String outputFileName) throws GDALException {
       if (FileUtils.checkFile(inputFile) && FileUtils.checkDir(outputDir)) {
          File outputFile = new File(outputDir, outputFileName + ".json");
          int i = 1;
@@ -278,39 +281,34 @@ public class GDAL {
 
          try {
             if (outputFile.createNewFile()) {
-               final FileInputStream fstream = new FileInputStream(inputFile);
-               final BufferedWriter out = new BufferedWriter(new FileWriter(outputFile));
+               try (final BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))) {
+                  try (final BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))) {
 
-               final DataInputStream in = new DataInputStream(fstream);
-               final BufferedReader br = new BufferedReader(new InputStreamReader(in));
-               String strLine;
+                     final int factor = 10;
 
-               final int factor = 10;
-
-               out.write("{\"points\": [");
-               //Read File Line By Linel
-               boolean firstComma = true;
-               int k = 0;
-               while ((strLine = br.readLine()) != null) {
-                  // Print the content on the console
-                  System.out.println("" + strLine);
-                  if (firstComma) {
-                     out.write(strLine);
-                     firstComma = false;
-                  }
-                  else {
-                     if ((k % factor) == 0) {
-                        out.write("," + strLine);
+                     out.write("{\"points\": [");
+                     //Read File Line By Line
+                     boolean firstComma = true;
+                     int k = 0;
+                     String strLine;
+                     while ((strLine = br.readLine()) != null) {
+                        // Print the content on the console
+                        System.out.println("" + strLine);
+                        if (firstComma) {
+                           out.write(strLine);
+                           firstComma = false;
+                        }
+                        else {
+                           if ((k % factor) == 0) {
+                              out.write("," + strLine);
+                           }
+                        }
+                        k++;
                      }
+                     out.write("]}");
+
                   }
-                  k++;
                }
-               out.write("]}");
-               //Close the input stream
-               br.close();
-               in.close();
-               out.close();
-               fstream.close();
             }
             else {
                throw new GDALException("Out put file can't be created.", null);
@@ -340,14 +338,14 @@ public class GDAL {
       public final static String shp    = ".shp";
       /**
        * Aeronav FAA
-       * 
+       *
        * This driver reads text files describing aeronav information - obstacles, navaids and routes - as provided by the FAA.
        */
       public final static String faa    = ".faa";
 
       /**
        * GeoRSS : Geographically Encoded Objects for RSS feeds
-       * 
+       *
        * http://www.gdal.org/ogr/drv_georss.html
        */
       public final static String georss = ".xml";

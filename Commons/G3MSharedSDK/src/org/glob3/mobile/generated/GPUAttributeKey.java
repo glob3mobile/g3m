@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public enum GPUAttributeKey
 {
   UNRECOGNIZED_ATTRIBUTE(-1),
@@ -7,7 +7,8 @@ public enum GPUAttributeKey
   COLOR(2),
   NORMAL(3),
   TEXTURE_COORDS_2(4),
-  TEXTURE_COORDS_3(5);
+  TEXTURE_COORDS_3(5),
+  POSITION_2D(6);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUAttributeKey> mappings;

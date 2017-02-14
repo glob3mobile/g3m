@@ -2,14 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector2F;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
@@ -21,29 +13,45 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
+import org.glob3.mobile.generated.GFont;
+import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
+import org.glob3.mobile.generated.Vector2F;
+
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static android.graphics.Paint.FILTER_BITMAP_FLAG;
+import static android.graphics.Paint.LINEAR_TEXT_FLAG;
+
 
 public final class Canvas_Android
-         extends
-            ICanvas {
+   extends
+      ICanvas {
 
-   private Bitmap      _bitmap          = null;
-   private Canvas      _canvas          = null;
-   private final Paint _fillPaint;
-   private final Paint _strokePaint;
-   private Typeface    _currentTypeface = null;
+   private static final int PAINT_FLAGS = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
 
-   private Path        _path            = null;
+   private Bitmap           _bitmap     = null;
+   private Canvas           _canvas     = null;
+   private final Paint      _fillPaint;
+   private final Paint      _strokePaint;
 
-   private final RectF _rectF           = new RectF(); // RectF instance for reuse (and avoid garbage)
-   private final Rect  _rect            = new Rect(); // Rect instance for reuse (and avoid garbage)
+   private Path             _path       = null;
+
+   private final RectF      _rectF      = new RectF();                                            // RectF instance for reuse (and avoid garbage)
+   private final Rect       _rect       = new Rect();                                             // Rect instance for reuse (and avoid garbage)
 
 
-   Canvas_Android() {
-      _fillPaint = new Paint();
+   Canvas_Android(final boolean retina) {
+      super(retina);
+
+      _fillPaint = new Paint(PAINT_FLAGS);
       _fillPaint.setAntiAlias(true);
       _fillPaint.setStyle(Paint.Style.FILL);
 
-      _strokePaint = new Paint();
+      _strokePaint = new Paint(PAINT_FLAGS);
       _strokePaint.setAntiAlias(true);
       _strokePaint.setStyle(Paint.Style.STROKE);
    }
@@ -52,20 +60,29 @@ public final class Canvas_Android
    @Override
    protected void _initialize(final int width,
                               final int height) {
-      _bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      final float devicePixelRatio = _retina ? IFactory.instance().getDeviceInfo().getDevicePixelRatio() : 1;
+
+      final int scaledWidth = Math.round(width * devicePixelRatio);
+      final int scaledHeight = Math.round(height * devicePixelRatio);
+
+      _bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
       _canvas = new Canvas(_bitmap);
+      if (devicePixelRatio != 1) {
+         _canvas.scale(devicePixelRatio, devicePixelRatio);
+      }
    }
 
 
    @Override
    protected void _setFont(final GFont font) {
-      _currentTypeface = createTypeface(font);
+      final Typeface typeface = createTypeface(font);
+      final float fontSize = font.getSize();
 
-      _fillPaint.setTypeface(_currentTypeface);
-      _fillPaint.setTextSize(font.getSize());
+      _fillPaint.setTypeface(typeface);
+      _fillPaint.setTextSize(fontSize);
 
-      _strokePaint.setTypeface(_currentTypeface);
-      _strokePaint.setTextSize(font.getSize());
+      _strokePaint.setTypeface(typeface);
+      _strokePaint.setTextSize(fontSize);
    }
 
 
@@ -220,6 +237,36 @@ public final class Canvas_Android
 
 
    @Override
+   protected void _fillEllipse(final float left,
+                               final float top,
+                               final float width,
+                               final float height) {
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawOval(_rectF, _fillPaint);
+   }
+
+
+   @Override
+   protected void _strokeEllipse(final float left,
+                                 final float top,
+                                 final float width,
+                                 final float height) {
+      _rectF.set(left, top, left + width, top + height);
+      _canvas.drawOval(_rectF, _strokePaint);
+   }
+
+
+   @Override
+   protected void _fillAndStrokeEllipse(final float left,
+                                        final float top,
+                                        final float width,
+                                        final float height) {
+      _fillEllipse(left, top, width, height);
+      _strokeEllipse(left, top, width, height);
+   }
+
+
+   @Override
    protected void _fillRoundedRectangle(final float left,
                                         final float top,
                                         final float width,
@@ -257,7 +304,9 @@ public final class Canvas_Android
    protected void _fillText(final String text,
                             final float left,
                             final float top) {
-      _canvas.drawText(text, left, top, _fillPaint);
+      final Rect textBounds = _rect;
+      _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
+      _canvas.drawText(text, left, top - textBounds.top, _fillPaint);
    }
 
 
@@ -311,9 +360,10 @@ public final class Canvas_Android
                left + width, // Right
                top + height); // Bottom
 
-      final Paint paint = new Paint();
+      final Paint paint = new Paint(PAINT_FLAGS);
+
       paint.setAlpha(Math.round(255 * transparency));
-      _canvas.drawBitmap(bitmap, null, dst, null);
+      _canvas.drawBitmap(bitmap, null, dst, paint);
    }
 
 
@@ -473,7 +523,8 @@ public final class Canvas_Android
                Math.round(srcLeft + srcWidth), // Right
                Math.round(srcTop + srcHeight)); // Bottom
 
-      final Paint paint = new Paint();
+      final Paint paint = new Paint(PAINT_FLAGS);
+
       paint.setAlpha(Math.round(255 * transparency));
 
       _canvas.drawBitmap(bitmap, src, dst, paint);

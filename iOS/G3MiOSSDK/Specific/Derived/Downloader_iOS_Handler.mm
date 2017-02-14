@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 28/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import "Downloader_iOS_Handler.h"
@@ -17,19 +16,19 @@
 @implementation ListenerEntry
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
-              requestId: (long long) requestId
+              requestID: (long long) requestID
 {
   return [[ListenerEntry alloc] initWithListener: listener
-                                       requestId: requestId];
+                                       requestID: requestID];
 }
 
 -(id) initWithListener: (Downloader_iOS_Listener*) listener
-             requestId: (long long) requestId
+             requestID: (long long) requestID
 {
   self = [super init];
   if (self) {
     _listener  = listener;
-    _requestId = requestId;
+    _requestID = requestID;
     _canceled  = false;
   }
   return self;
@@ -40,15 +39,15 @@
   return _listener;
 }
 
--(long long) requestId
+-(long long) requestID
 {
-  return _requestId;
+  return _requestID;
 }
 
 -(void) cancel
 {
   if (_canceled) {
-    NSLog(@"Listener for RequestId=%lld already canceled", _requestId);
+    NSLog(@"Listener for RequestID=%lld already canceled", _requestID);
   }
   _canceled = YES;
 }
@@ -67,7 +66,7 @@
                  url: (URL*) url
             listener: (Downloader_iOS_Listener*) listener
             priority: (long long) priority
-           requestId: (long long) requestId
+           requestID: (long long) requestID
 {
   self = [super init];
   if (self) {
@@ -76,7 +75,7 @@
     _priority  = priority;
 
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
-                                                  requestId: requestId];
+                                                  requestID: requestID];
     _listeners = [NSMutableArray arrayWithObject:entry];
   }
   return self;
@@ -84,10 +83,10 @@
 
 - (void) addListener: (Downloader_iOS_Listener*) listener
             priority: (long long) priority
-           requestId: (long long) requestId
+           requestID: (long long) requestID
 {
   ListenerEntry* entry = [ListenerEntry entryWithListener: listener
-                                                requestId: requestId];
+                                                requestID: requestID];
 
   [_lock lock];
 
@@ -111,16 +110,16 @@
   return result;
 }
 
-- (bool) cancelListenerForRequestId: (long long)requestId
+- (bool) cancelListenerForRequestID: (long long)requestID
 {
   bool canceled = false;
 
   [_lock lock];
 
-  const int listenersCount = [_listeners count];
-  for (int i = 0; i < listenersCount; i++) {
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
-    if ([entry requestId] == requestId) {
+    if (entry.requestID == requestID) {
       [entry cancel];
 
       canceled = true;
@@ -133,17 +132,17 @@
   return canceled;
 }
 
-- (bool) removeListenerForRequestId: (long long)requestId
+- (bool) removeListenerForRequestID: (long long)requestID
 {
   bool removed = false;
 
   [_lock lock];
 
-  const int listenersCount = [_listeners count];
-  for (int i = 0; i < listenersCount; i++) {
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
-    if ([entry requestId] == requestId) {
-      [[entry listener] onCancel:*_url];
+    if (entry.requestID == requestID) {
+      [entry.listener onCancel:*_url];
 
       [_listeners removeObjectAtIndex: i];
 
@@ -155,6 +154,47 @@
   [_lock unlock];
 
   return removed;
+}
+
+- (void) cancelListenersTagged: (const std::string&) tag
+{
+  [_lock lock];
+
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    if (entry.listener.tag == tag) {
+      [entry cancel];
+    }
+  }
+
+  [_lock unlock];
+}
+
+- (bool) removeListenersTagged: (const std::string&) tag
+{
+  bool anyRemoved = false;
+
+  [_lock lock];
+
+  NSMutableIndexSet* indexesToDelete = [NSMutableIndexSet indexSet];
+  const size_t listenersCount = [_listeners count];
+  for (size_t i = 0; i < listenersCount; i++) {
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    if (entry.listener.tag == tag) {
+      [entry.listener onCancel:*_url];
+
+      [indexesToDelete addIndex: i];
+
+      anyRemoved = true;
+    }
+  }
+
+  [_listeners removeObjectsAtIndexes: indexesToDelete];
+
+  [_lock unlock];
+
+  return anyRemoved;
 }
 
 - (bool) hasListeners
@@ -180,15 +220,13 @@
     if (_url->isFileProtocol()) {
       const IStringUtils* su = IStringUtils::instance();
 
-      const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->_path,
-                                                                                  URL::FILE_PROTOCOL,
-                                                                                  "");
+      const std::string fileFullName = su->replaceAll(_url->_path, URL::FILE_PROTOCOL, "");
       const int dotPos = su->indexOf(fileFullName, ".");
 
       NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
-
-      NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName, dotPos + 1, fileFullName.size()) ];
-
+      NSString* fileExt  = [ NSString stringWithCppString: su->substring(fileFullName,
+                                                                         dotPos + 1,
+                                                                         fileFullName.size()) ];
       NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
                                                            ofType: fileExt];
       data = [NSData dataWithContentsOfFile:filePath];
@@ -227,16 +265,16 @@
                                       [[_nsURL absoluteString] UTF8String]);
       }
 
-      const int listenersCount = [_listeners count];
+      const size_t listenersCount = [_listeners count];
 
       const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
 
       if (dataIsValid) {
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
-          Downloader_iOS_Listener* listener = [entry listener];
+          Downloader_iOS_Listener* listener = entry.listener;
 
-          if ([entry isCanceled]) {
+          if (entry.isCanceled) {
             [listener onCanceledDownloadURL: url
                                        data: data];
 
@@ -251,11 +289,11 @@
       else {
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
-          
-          [[entry listener] onErrorURL: url];
+
+          [entry.listener onErrorURL: url];
         }
       }
-
+      
       [_listeners removeAllObjects];
       
       [_lock unlock];

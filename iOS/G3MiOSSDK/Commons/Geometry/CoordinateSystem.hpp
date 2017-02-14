@@ -10,20 +10,22 @@
 #define __G3MiOSSDK__CoordinateSystem__
 
 #include "Vector3D.hpp"
-#include "TaitBryanAngles.hpp"
 
+class TaitBryanAngles;
 class Mesh;
 class Color;
+class Camera;
+
 
 class CoordinateSystem {
 private:
   
-  bool checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+  static bool checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z);
   
-  bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+//  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+
 
 public:
-
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
@@ -32,22 +34,48 @@ public:
 
   static CoordinateSystem global();
 
-  CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin);
+  static CoordinateSystem fromCamera(const Camera& camera);
 
-  //For camera
-  CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin);
+  CoordinateSystem(const CoordinateSystem& that);
 
-  Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
+  CoordinateSystem(const Vector3D& x,
+                   const Vector3D& y,
+                   const Vector3D& z,
+                   const Vector3D& origin);
+
+  Mesh* createMesh(double size,
+                   const Color& xColor,
+                   const Color& yColor,
+                   const Color& zColor) const;
 
   CoordinateSystem applyTaitBryanAngles(const TaitBryanAngles& angles) const;
 
-  CoordinateSystem applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const;
+  CoordinateSystem applyTaitBryanAngles(const Angle& heading,
+                                        const Angle& pitch,
+                                        const Angle& roll) const;
 
   CoordinateSystem changeOrigin(const Vector3D& newOrigin) const;
 
   TaitBryanAngles getTaitBryanAngles(const CoordinateSystem& global) const;
 
   bool isEqualsTo(const CoordinateSystem& that) const;
+  
+  CoordinateSystem applyRotation(const MutableMatrix44D& m) const;
+  
+  MutableMatrix44D getRotationMatrix() const;
+  
+  void copyValueOfRotationMatrix(MutableMatrix44D& m) const;
+  
+  bool isConsistent() const;
+
+  const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

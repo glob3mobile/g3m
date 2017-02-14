@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Vector2I.cpp
 //  G3MiOSSDK
@@ -6,6 +6,7 @@ package org.glob3.mobile.generated;
 //  Created by Diego Gomez Deck on 10/19/12.
 //
 //
+
 
 //
 //  Vector2I.hpp
@@ -17,6 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
+//class Angle;
+//class MutableVector2I;
+//class Vector2S;
+
 public class Vector2I
 {
   public final int _x;
@@ -26,7 +31,6 @@ public class Vector2I
   {
      _x = x;
      _y = y;
-
   }
 
   public Vector2I(Vector2I that)
@@ -95,12 +99,18 @@ public class Vector2I
        isb.dispose();
     return s;
   }
+
   @Override
   public String toString() {
     return description();
   }
 
   public final boolean isEquals(Vector2I that)
+  {
+    return ((_x == that._x) && (_y == that._y));
+  }
+
+  public final boolean isEquals(Vector2S that)
   {
     return ((_x == that._x) && (_y == that._y));
   }

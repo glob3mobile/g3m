@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GEOVectorLayer.cpp
 //  G3MiOSSDK
@@ -96,7 +96,7 @@ public class GEOVectorLayer extends VectorLayer
   public final Sector getDataSector()
   {
     ///#error todo;
-    return Sector.fullSphere();
+    return Sector.FULL_SPHERE;
   }
 
   public final String getLayerType()

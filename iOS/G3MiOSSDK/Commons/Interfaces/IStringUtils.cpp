@@ -9,3 +9,9 @@
 #include "IStringUtils.hpp"
 
 const IStringUtils* IStringUtils::_instance = NULL;
+
+
+std::string IStringUtils::substring(const std::string& string,
+                                    size_t beginIndex) const {
+  return substring(string, beginIndex, string.size());
+}

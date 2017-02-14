@@ -23,8 +23,11 @@ public:
             Mesh* mesh) :
   AbstractMeshShape(position, altitudeMode, mesh)
   {
-
   }
+
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
+                                             const Vector3D& direction) const;
 
 };
 

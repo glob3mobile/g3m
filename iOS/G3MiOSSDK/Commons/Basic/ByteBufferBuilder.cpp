@@ -12,12 +12,13 @@
 #include "IByteBuffer.hpp"
 #include "IMathUtils.hpp"
 
+
 IByteBuffer* ByteBufferBuilder::create() const {
-  const int size = _values.size();
+  const size_t size = _values.size();
 
   IByteBuffer* result = IFactory::instance()->createByteBuffer(size);
 
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     result->rawPut(i, _values[i]);
   }
 
@@ -26,8 +27,8 @@ IByteBuffer* ByteBufferBuilder::create() const {
 
 void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
 #ifdef C_CODE
-  const int size = str.size();
-  for (int i = 0; i < size; i++) {
+  const size_t size = str.size();
+  for (size_t i = 0; i < size; i++) {
     const char c = str.at(i);
     _values.push_back(c);
   }
@@ -35,7 +36,7 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
 #endif
 #ifdef JAVA_CODE
   try {
-    byte[] bytesArray = str.getBytes("UTF-8");
+    final byte[] bytesArray = str.getBytes("UTF-8");
 
     final int size = bytesArray.length;
     for (int i = 0; i < size; i++) {
@@ -45,10 +46,7 @@ void ByteBufferBuilder::addStringZeroTerminated(const std::string& str) {
     _values.add((byte) 0);
   }
   catch (final java.io.UnsupportedEncodingException e) {
-    if (ILogger.instance() != null) {
-      ILogger.instance().logError("ByteBufferBuilder: " + e.getMessage());
-    }
-    e.printStackTrace();
+    throw new RuntimeException(e);
   }
 #endif
 }

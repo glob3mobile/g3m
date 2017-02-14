@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  PointCloudsRenderer.cpp
 //  G3MiOSSDK
@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class DirectMesh;
 //class ByteBufferIterator;
+//class ITimer;
+
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
@@ -94,7 +96,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         if (bounds.touchesFrustum(frustum))
         {
           boolean justRecalculatedProjectedArea = false;
-          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 350) < nowInMS))
+          if ((_projectedArea == -1) || ((_lastProjectedAreaTimeInMS + 500) < nowInMS))
           {
             final double currentProjectedArea = bounds.projectedArea(rc);
             if (currentProjectedArea != _projectedArea)
@@ -105,9 +107,9 @@ public class PointCloudsRenderer extends DefaultRenderer
             }
           }
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: quality factor 1
-          final double minProjectedArea = 250;
+    // #warning TODO: quality factor 1
+    //      const double minProjectedArea = 250 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+          final double minProjectedArea = 2500 * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
           if (_projectedArea >= minProjectedArea)
           {
             final long renderedCount = rawRender(pointCloud, rc, glState, frustum, _projectedArea, minHeight, maxHeight, pointSize, nowInMS, justRecalculatedProjectedArea);
@@ -228,7 +230,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2, Color.newFromRGBA(1, 1, 0, 1), null, 1, true); // colorsIntensity -  colors -  flatColor
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2 * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), Color.newFromRGBA(1, 1, 0, 1), null, true); // colors -  flatColor
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -283,9 +285,9 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void addLeafNode(PointCloudLeafNode leafNode)
     {
-      final int idLenght = _id.length();
-      final int childIndex = leafNode._id.charAt(idLenght) - '0';
-      if ((idLenght + 1) == leafNode._id.length())
+      final int idLength = _id.length();
+      final int childIndex = leafNode._id.charAt(idLength) - '0';
+      if ((idLength + 1) == leafNode._id.length())
       {
         if (_children[childIndex] != null)
         {
@@ -560,7 +562,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       final int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer.size();
     
-      final Color baseColor = Color.magenta();
+      final Color baseColor = Color.MAGENTA;
       final int wheelSize = 2147483647;
       final IMathUtils mu = IMathUtils.instance();
     
@@ -588,7 +590,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize, null, _firstPointsColorsBuffer, 1, true); // colorsIntensity -  colors -  flatColor
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), null, _firstPointsColorsBuffer, true); // colors -  flatColor
         mesh.setRenderVerticesCount(mu.min(_neededPoints, firstPointsCount));
     
         return mesh;
@@ -655,7 +657,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize, null, colors, 1, true); // colorsIntensity -  colors -  flatColor
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), null, colors, true); // colors -  flatColor
       // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
     
@@ -667,8 +669,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (justRecalculatedProjectedArea)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: quality factor 2
+    // #warning TODO: quality factor 2
         final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.09f);
         // const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.25f);
         int accummulated = 0;
@@ -1241,12 +1242,12 @@ public class PointCloudsRenderer extends DefaultRenderer
     
       if (_errorDownloadingMetadata)
       {
-        return RenderState.error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL.getPath() + "\"");
+        return RenderState.error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
       }
     
       if (_errorParsingMetadata)
       {
-        return RenderState.error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL.getPath() + "\"");
+        return RenderState.error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
       }
     
       return RenderState.ready();
@@ -1288,13 +1289,10 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       if (_rootNode != null)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: make plugable the colorization of the cloud
+    // #warning TODO: make plugable the colorization of the cloud
         final double maxHeight = (_colorPolicy == ColorPolicy.MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
     
         final long renderedCount = _rootNode.render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
-        // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
-        // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
     
         if (_lastRenderedCount != renderedCount)
         {
@@ -1407,12 +1405,6 @@ public class PointCloudsRenderer extends DefaultRenderer
   {
     if (_cloudsSize > 0)
     {
-  //    const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-  //    const float deviceQualityFactor = deviceInfo->getQualityFactor();
-  ////    const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-  ////    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
-  //    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / 256;
-  
       if (_timer == null)
       {
         _timer = rc.getFactory().createTimer();

@@ -1,8 +1,8 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class TextureHolder
 {
   public final TextureSpec _textureSpec;
-  public IGLTextureId _glTextureId;
+  public IGLTextureID _glTextureID;
 
   public int _referenceCounter;
 
@@ -10,7 +10,7 @@ public class TextureHolder
   {
      _referenceCounter = 1;
      _textureSpec = textureSpec;
-     _glTextureId = null;
+     _glTextureID = null;
 
   }
 
@@ -42,9 +42,9 @@ public class TextureHolder
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("(#");
-    isb.addString(_glTextureId.description());
+    isb.addString(_glTextureID.description());
     isb.addString(", counter=");
-    isb.addInt(_referenceCounter);
+    isb.addLong(_referenceCounter);
     isb.addString(")");
     final String s = isb.getString();
     if (isb != null)

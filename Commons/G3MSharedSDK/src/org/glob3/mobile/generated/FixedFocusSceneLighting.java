@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class FixedFocusSceneLighting extends SceneLighting
 {
 
@@ -11,7 +11,7 @@ public class FixedFocusSceneLighting extends SceneLighting
     if (f == null)
     {
       glState.clearGLFeatureGroup(GLFeatureGroupName.LIGHTING_GROUP);
-      glState.addGLFeature(new DirectionLightGLFeature(lightDir, Color.yellow(), Color.white()), false);
+      glState.addGLFeature(new DirectionLightGLFeature(lightDir, Color.YELLOW, Color.WHITE), false);
     }
     /* //Add this to obtain a rotating "sun"
      else {
@@ -23,7 +23,7 @@ public class FixedFocusSceneLighting extends SceneLighting
   
      MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle),
      Vector3D::upZ(),
-     Vector3D::zero);
+     Vector3D::ZERO);
   
      f->setLightDirection(lightDir.transformedBy(m, 1.0));
   

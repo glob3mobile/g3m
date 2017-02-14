@@ -4,12 +4,10 @@ package org.glob3.mobile.demo;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.FlatPlanet;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
-import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -21,8 +19,8 @@ import android.widget.RelativeLayout;
 
 
 public class FlatWorldActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -35,16 +33,20 @@ public class FlatWorldActivity
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      builder.setPlanet(Planet.createFlatEarth());
+      builder.setPlanet(FlatPlanet.createEarth());
 
-      final LayerSet layerSet = new LayerSet();
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
-      layerSet.addLayer(mboxTerrainLayer);
+      //      final LayerSet layerSet = new LayerSet();
+      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
+      //      layerSet.addLayer(mboxTerrainLayer);
+
+      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      layerSet.disableAllLayers();
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());
 
-      final ElevationDataProvider dem = new SingleBilElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
+      final ElevationDataProvider dem = new SingleBILElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
                Sector.fullSphere(), new Vector2I(2048, 1024), 0);
       builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
       builder.getPlanetRendererBuilder().setVerticalExaggeration(3f);

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
@@ -23,11 +25,10 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -42,8 +43,8 @@ import android.widget.RelativeLayout;
 
 
 public class SymbologyActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -65,8 +66,14 @@ public class SymbologyActivity
       final LayerSet layerSet = new LayerSet();
 
 
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 13);
-      layerSet.addLayer(mboxTerrainLayer);
+      //final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 13);
+
+
+      final BingMapsLayer bingMapsAerialLayer = new BingMapsLayer(BingMapType.Aerial(),
+               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30));
+      bingMapsAerialLayer.setTitle("Bing Aerial");
+      bingMapsAerialLayer.setEnable(true);
+      layerSet.addLayer(bingMapsAerialLayer);
 
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
@@ -88,7 +95,7 @@ public class SymbologyActivity
 
       //NROWS          13
       //NCOLS          16
-      final ElevationDataProvider dem = new SingleBilElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
+      final ElevationDataProvider dem = new SingleBILElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
                new Vector2I(16, 13), DELTA_HEIGHT);
 
       builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
@@ -195,7 +202,7 @@ public class SymbologyActivity
                                            AltitudeMode.RELATIVE_TO_GROUND, //
                                            5000, //
                                            null, //
-                                           false, // 
+                                           false, //
                                            markListener, //
                                            true);
 

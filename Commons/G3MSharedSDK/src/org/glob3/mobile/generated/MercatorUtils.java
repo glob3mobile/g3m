@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MercatorUtils.cpp
 //  G3MiOSSDK
@@ -15,6 +15,9 @@ package org.glob3.mobile.generated;
 //
 //
 
+
+
+//class Sector;
 
 
 public class MercatorUtils
@@ -89,19 +92,18 @@ public class MercatorUtils
     {
       return 1;
     }
-
+  
     final IMathUtils mu = IMathUtils.instance();
     final double pi4 = DefineConstants.PI * 4;
-
-//    const double latSin = latitude.sinus();
-    final double latSin = java.lang.Math.sin(latitude._radians);
+  
+    final double latSin = Math.sin(latitude._radians);
     return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
   }
 
   public static Angle toLatitude(double v)
   {
     final IMathUtils mu = IMathUtils.instance();
-
+  
     final double exp = mu.exp(-2 * DefineConstants.PI * (1.0 - v - 0.5));
     final double atan = mu.atan(exp);
     return Angle.fromRadians((DefineConstants.PI / 2) - 2 * atan);
@@ -113,22 +115,6 @@ public class MercatorUtils
 
     return toLatitude(middleV);
   }
-
-//  /**
-//   Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
-//   */
-//  static Vector2D toMeters(const Angle& latitude,
-//                           const Angle& longitude) {
-//    const IMathUtils* mu = IMathUtils::instance();
-//    const double pi = mu->pi();
-//
-//		const double mx = longitude._degrees * _originShift / 180.0;
-//
-//    double my = mu->log( mu->tan( (90 + latitude._degrees) * pi / 360.0 ) ) / (pi / 180.0);
-//		my = my * _originShift / 180.0;
-//
-//		return Vector2D(mx, my);
-//  }
 
   public static double longitudeToMeters(Angle longitude)
   {
@@ -145,13 +131,30 @@ public class MercatorUtils
     {
       return -20037508.342789244;
     }
-
+  
     final IMathUtils mu = IMathUtils.instance();
-
+  
     double my = mu.log(mu.tan((90 + latitude._degrees) * DefineConstants.PI / 360.0)) / (DefineConstants.PI / 180.0);
-      my = my * _originShift / 180.0;
+    my = my * _originShift / 180.0;
+  
+    return my;
+  }
 
-      return my;
+  public static Sector getSector(int z, int x, int y)
+  {
+    return new Sector(new Geodetic2D(yToLatitude(y, z), xToLongitude(x, z)), new Geodetic2D(yToLatitude(y+1, z), xToLongitude(x+1, z)));
+  }
+
+  public static Angle xToLongitude(int x, int z)
+  {
+    return Angle.fromDegrees(x / IMathUtils.instance().pow(2.0, z) * 360.0 - 180);
+  }
+
+  public static Angle yToLatitude(int y, int z)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    double n = DefineConstants.PI - (2.0 * DefineConstants.PI * y) / mu.pow(2.0, z);
+    return Angle.fromRadians(mu.atan(mu.sinh(n)));
   }
 
 }

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ShortBufferElevationData.cpp
 //  G3MiOSSDK
@@ -28,7 +28,7 @@ public class ShortBufferElevationData extends BufferElevationData
     final short value = _buffer[index];
     if (value == NO_DATA_VALUE)
     {
-      return java.lang.Double.NaN;
+      return Double.NaN;
     }
     return value;
   }
@@ -36,9 +36,9 @@ public class ShortBufferElevationData extends BufferElevationData
 
   public static final short NO_DATA_VALUE = -32768;
 
-  public ShortBufferElevationData(Sector sector, Vector2I extent, Sector realSector, Vector2I realExtent, short[] buffer, int bufferSize, double deltaHeight)
+  public ShortBufferElevationData(Sector sector, Vector2I extent, short[] buffer, int bufferSize, double deltaHeight)
   {
-     super(sector, extent, realSector, realExtent, bufferSize, deltaHeight);
+     super(sector, extent, bufferSize, deltaHeight);
      _buffer = buffer;
     if (_bufferSize != (_width * _height))
     {

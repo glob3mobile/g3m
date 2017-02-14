@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 22/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include <stdlib.h>
@@ -11,10 +10,11 @@
 #include "IndexedMesh.hpp"
 #include "GL.hpp"
 #include "IShortBuffer.hpp"
+#include "G3MRenderContext.hpp"
 
 
 IndexedMesh::~IndexedMesh() {
-  if (_owner) {
+  if (_ownsIndices) {
     delete _indices;
   }
 
@@ -25,29 +25,35 @@ IndexedMesh::~IndexedMesh() {
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
-                         bool owner,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
+                         bool ownsVertices,
                          IShortBuffer* indices,
+                         bool ownsIndices,
                          float lineWidth,
                          float pointSize,
                          const Color* flatColor,
                          IFloatBuffer* colors,
-                         const float colorsIntensity,
                          bool depthTest,
-                         IFloatBuffer* normals) :
+                         IFloatBuffer* normals,
+                         bool polygonOffsetFill,
+                         float polygonOffsetFactor,
+                         float polygonOffsetUnits) :
 AbstractMesh(primitive,
-             owner,
+             ownsVertices,
              center,
              vertices,
              lineWidth,
              pointSize,
              flatColor,
              colors,
-             colorsIntensity,
              depthTest,
-             normals),
-_indices(indices)
+             normals,
+             polygonOffsetFill,
+             polygonOffsetFactor,
+             polygonOffsetUnits),
+_indices(indices),
+_ownsIndices(ownsIndices)
 {
 
 }

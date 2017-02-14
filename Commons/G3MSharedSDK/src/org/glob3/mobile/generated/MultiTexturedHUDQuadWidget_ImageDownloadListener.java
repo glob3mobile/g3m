@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class MultiTexturedHUDQuadWidget_ImageDownloadListener extends IImageDownloadListener
 {
   private MultiTexturedHUDQuadWidget _quadWidget;

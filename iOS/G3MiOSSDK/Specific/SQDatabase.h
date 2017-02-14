@@ -3,7 +3,6 @@
 //  wikiglob3-ios
 //
 //  Created by Diego Gomez Deck on 08/03/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -32,15 +31,15 @@
 
 - (void) close;
 
-- (NSInteger) integerColumnByIndex: (NSInteger) index;
+- (NSInteger) integerColumnByIndex: (int) index;
 
-- (NSString*) stringColumnByIndex: (NSInteger) index;
+- (NSString*) stringColumnByIndex: (int) index;
 
-- (NSData*) dataColumnByIndex: (NSInteger) index;
+- (NSData*) dataColumnByIndex: (int) index;
 
-- (double) doubleColumnByIndex: (NSInteger) index;
+- (double) doubleColumnByIndex: (int) index;
 
-- (BOOL)isNullColumnByIndex: (NSInteger) index;
+- (BOOL)isNullColumnByIndex: (int) index;
 
 @end
 

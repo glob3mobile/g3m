@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CameraRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,19 +11,13 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-
-
 
 
 
 
 //class RenderState;
 //class CameraEventHandler;
-
-
-//class ILogger;
 //class Camera;
 //class Vector3D;
 //class TouchEvent;

@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MCameraDemoScene.hpp"
@@ -13,9 +12,10 @@
 #include <G3MiOSSDK/TimeInterval.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/SGShape.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-//#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -85,16 +85,16 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   //  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   //  planetRenderer->setVerticalExaggeration(0);
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
                                   "file:///",
                                   false, // isTransparent
+                                  true,  // depthTest
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(29, 58, 30.99),
                                                  Angle::fromDegreesMinutesSeconds(31, 8, 15.84),
                                                  0),
@@ -104,6 +104,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   shapesRenderer->loadBSONSceneJS(URL("file:///eifeltower.bson"),
                                   "file:///eifel/",
                                   true, // isTransparent
+                                  true,  // depthTest
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 51, 29.06),
                                                  Angle::fromDegreesMinutesSeconds(2, 17, 40.48),
                                                  0), //
@@ -112,7 +113,8 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
 
   shapesRenderer->loadBSONSceneJS(URL("file:///arcdeTriomphe.bson"),
                                   "file:///arc/",
-                                  false,
+                                  false, // isTransparent
+                                  true,  // depthTest
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 52, 25.58),
                                                  Angle::fromDegreesMinutesSeconds(2, 17, 42.12),
                                                  0),

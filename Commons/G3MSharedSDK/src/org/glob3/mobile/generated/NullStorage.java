@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  NullStorage.cpp
 //  G3MiOSSDK
@@ -12,7 +12,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 29/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -51,6 +50,11 @@ public class NullStorage extends IStorage
 
   public final void onDestroy(G3MContext context)
   {
+  }
+
+  public final void merge(String databasePath)
+  {
+
   }
 
 

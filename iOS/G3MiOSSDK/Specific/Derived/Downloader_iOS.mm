@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Downloader_iOS.hpp"
@@ -37,7 +36,7 @@ Downloader_iOS::~Downloader_iOS() {
 }
 
 Downloader_iOS::Downloader_iOS(int maxConcurrentOperationCount) :
-_requestIdCounter(1),
+_requestIDCounter(1),
 _requestsCounter(0),
 _cancelsCounter(0),
 _started(false)
@@ -60,9 +59,9 @@ _started(false)
   }
 }
 
-void Downloader_iOS::cancelRequest(long long requestId) {
-  if (requestId < 0) {
-    return;
+bool Downloader_iOS::cancelRequest(long long requestID) {
+  if (requestID < 0) {
+    return false;
   }
 
   [_lock lock];
@@ -74,11 +73,11 @@ void Downloader_iOS::cancelRequest(long long requestId) {
   [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
                                                         id obj,
                                                         BOOL *stop) {
-    NSURL*                  url     = key;
     Downloader_iOS_Handler* handler = obj;
 
-    if ( [handler removeListenerForRequestId: requestId] ) {
+    if ( [handler removeListenerForRequestID: requestID] ) {
       if ( ![handler hasListeners] ) {
+        NSURL* url = key;
         [_queuedHandlers removeObjectForKey:url];
       }
 
@@ -87,36 +86,61 @@ void Downloader_iOS::cancelRequest(long long requestId) {
     }
   } ];
 
-
   if (!found) {
     [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
                                                                id obj,
                                                                BOOL *stop) {
-      //      NSURL*                  url     = key;
       Downloader_iOS_Handler* handler = obj;
 
-      if ( [handler cancelListenerForRequestId: requestId] ) {
+      if ( [handler cancelListenerForRequestID: requestID] ) {
         *stop = YES;
         found = true;
       }
-
-
-      //      if ( [handler removeListenerForRequestId: requestId] ) {
-      //        if ( ![handler hasListeners] ) {
-      //          [handler cancel];
-      //        }
-      //
-      //        *stop = YES;
-      //        found = true;
-      //      }
     } ];
   }
 
-  //  if (!found) {
-  //    printf("break (point) on me 1\n");
-  //  }
+  [_lock unlock];
+
+  return found;
+}
+
+void Downloader_iOS::cancelRequestsTagged(const std::string& tag) {
+  if (tag == "") {
+    return;
+  }
+
+  [_lock lock];
+
+  _cancelsCounter++;
+
+  NSMutableArray* keysToDelete = [NSMutableArray array];
+
+  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
+                                                        id obj,
+                                                        BOOL *stop) {
+    Downloader_iOS_Handler* handler = obj;
+
+    if ( [handler removeListenersTagged: tag] ) {
+      if ( ![handler hasListeners] ) {
+        [keysToDelete addObject:key];
+      }
+    }
+  } ];
+
+  [_queuedHandlers removeObjectsForKeys:keysToDelete];
+  [keysToDelete removeAllObjects];
+
+
+  [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
+                                                             id obj,
+                                                             BOOL *stop) {
+    Downloader_iOS_Handler* handler = obj;
+    [handler cancelListenersTagged: tag];
+  } ];
 
   [_lock unlock];
+
+  return;
 }
 
 void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* url) {
@@ -174,10 +198,12 @@ long long Downloader_iOS::requestImage(const URL& url,
                                        const TimeInterval& timeToCache,
                                        bool readExpired, // ignored as it has meaning only in CachedDownloader
                                        IImageDownloadListener* cppListener,
-                                       bool deleteListener) {
+                                       bool deleteListener,
+                                       const std::string& tag) {
 
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPImageListener: cppListener
-                                                                                    deleteListener: deleteListener];
+                                                                                    deleteListener: deleteListener
+                                                                                               tag: tag];
 
   return request(url, priority, iosListener);
 }
@@ -187,10 +213,12 @@ long long Downloader_iOS::requestBuffer(const URL &url,
                                         const TimeInterval& timeToCache,
                                         bool readExpired,
                                         IBufferDownloadListener* cppListener,
-                                        bool deleteListener) {
+                                        bool deleteListener,
+                                        const std::string& tag) {
 
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPBufferListener: cppListener
-                                                                                     deleteListener: deleteListener];
+                                                                                     deleteListener: deleteListener
+                                                                                                tag: tag];
 
   return request(url, priority, iosListener);
 }
@@ -199,8 +227,6 @@ long long Downloader_iOS::request(const URL &url,
                                   long long priority,
                                   Downloader_iOS_Listener* iosListener) {
 
-  //printf("URL=%s\n", url._path.c_str());
-
   NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: url._path] ];
 
   if (!nsURL) {
@@ -208,23 +234,20 @@ long long Downloader_iOS::request(const URL &url,
     return -1;
   }
 
-  //NSLog(@"Downloading %@", [nsURL absoluteString]);
-
-
   Downloader_iOS_Handler* handler = nil;
 
   [_lock lock];
 
   _requestsCounter++;
 
-  const long long requestId = _requestIdCounter++;
+  const long long requestID = _requestIDCounter++;
 
   handler = [_downloadingHandlers objectForKey: nsURL];
   if (handler) {
     // the URL is being downloaded, just add the new listener.
     [handler addListener: iosListener
                 priority: priority
-               requestId: requestId];
+               requestID: requestID];
   }
   else {
     handler = [_queuedHandlers objectForKey: nsURL];
@@ -232,7 +255,7 @@ long long Downloader_iOS::request(const URL &url,
       // the URL is queued for future download, just add the new listener.
       [handler addListener: iosListener
                   priority: priority
-                 requestId: requestId];
+                 requestID: requestID];
     }
     else {
       // new handler and queue it
@@ -240,7 +263,7 @@ long long Downloader_iOS::request(const URL &url,
                                                           url: new URL(url)
                                                      listener: iosListener
                                                      priority: priority
-                                                    requestId: requestId];
+                                                    requestID: requestID];
       [_queuedHandlers setObject: handler
                           forKey: nsURL];
     }
@@ -248,7 +271,7 @@ long long Downloader_iOS::request(const URL &url,
 
   [_lock unlock];
 
-  return requestId;
+  return requestID;
 }
 
 
@@ -256,9 +279,9 @@ long long Downloader_iOS::request(const URL &url,
 const std::string Downloader_iOS::statistics() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("Downloader_iOS(downloading=");
-  isb->addInt([_downloadingHandlers count]);
+  isb->addLong([_downloadingHandlers count]);
   isb->addString(", queued=");
-  isb->addInt([_queuedHandlers count]);
+  isb->addLong([_queuedHandlers count]);
   isb->addString(", totalRequests=");
   isb->addLong(_requestsCounter);
   isb->addString(", totalCancels=");

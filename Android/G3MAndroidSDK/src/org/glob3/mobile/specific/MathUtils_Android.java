@@ -2,12 +2,17 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.Random;
+
 import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_Android
-extends
-IMathUtils {
+   extends
+      IMathUtils {
+
+   private final Random _random = new Random();
+
 
    @Override
    public double sin(final double v) {
@@ -17,7 +22,6 @@ IMathUtils {
 
    @Override
    public float sin(final float v) {
-      //      return FloatMath.sin(v);
       return (float) Math.sin(v);
    }
 
@@ -42,7 +46,6 @@ IMathUtils {
 
    @Override
    public float cos(final float v) {
-      //      return FloatMath.cos(v);
       return (float) Math.cos(v);
    }
 
@@ -135,7 +138,6 @@ IMathUtils {
 
    @Override
    public float sqrt(final float v) {
-      //      return FloatMath.sqrt(v);
       return (float) Math.sqrt(v);
    }
 
@@ -359,16 +361,29 @@ IMathUtils {
 
 
    @Override
-   public double fmod(final double d1,
-                      final double d2) {
+   public double mod(final double d1,
+                     final double d2) {
       return d1 % d2;
    }
 
 
    @Override
-   public float fmod(final float f1,
-                     final float f2) {
+   public float mod(final float f1,
+                    final float f2) {
       return f1 % f2;
+   }
+
+
+   @Override
+   public double nextRandomDouble() {
+      return _random.nextDouble();
+   }
+
+
+   @Override
+   public double copySign(final double a,
+                          final double b) {
+      return Math.copySign(a, b);
    }
 
 

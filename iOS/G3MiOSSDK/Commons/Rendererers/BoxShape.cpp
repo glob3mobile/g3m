@@ -44,7 +44,7 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
     0, 1, 1, 5, 5, 4, 4, 0
   };
 
-//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
+//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::ZERO);
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   ShortBufferBuilder indices;
 
@@ -60,10 +60,11 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   Color* borderColor = (_borderColor != NULL) ? new Color(*_borderColor) : new Color(*_surfaceColor);
 
   Mesh* result = new IndexedMesh(GLPrimitive::lines(),
-                                 true,
                                  vertices->getCenter(),
                                  vertices->create(),
+                                 true,
                                  indices.create(),
+                                 true,
                                  (_borderWidth>1)? _borderWidth : 1,
                                  1,
                                  borderColor);
@@ -114,10 +115,11 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
 
   Mesh* result = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                 true,
                                  vertices->getCenter(),
                                  vertices->create(),
+                                 true,
                                  indices.create(),
+                                 true,
                                  (_borderWidth>1)? _borderWidth : 1,
                                  1,
                                  surfaceColor);
@@ -236,7 +238,6 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
                                 1,
                                 surfaceColor,
                                 NULL,
-                                1,
                                 true,
                                 normals->create());
 

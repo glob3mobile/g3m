@@ -19,7 +19,6 @@ class IDeviceInfo {
 public:
 
   virtual ~IDeviceInfo() {
-
   }
 
   float getPixelsInMM(float millimeters) const;
@@ -28,8 +27,8 @@ public:
 
   virtual DeviceInfo_Platform getPlatform() const = 0;
 
-  virtual float getQualityFactor() const = 0;
-
+  virtual float getDevicePixelRatio() const = 0;
+  
 };
 
 #endif

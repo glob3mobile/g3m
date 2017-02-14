@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IG3MBuilder.cpp
 //  G3MiOSSDK
@@ -70,6 +70,7 @@ public abstract class IG3MBuilder
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
   private InfoDisplay _infoDisplay;
+  private boolean _atmosphere;
 
 
   /**
@@ -85,36 +86,6 @@ public abstract class IG3MBuilder
     }
   
     return _gl;
-  }
-
-  /**
-   * Returns the _downloader. If it does not exist, it will be default initializated.
-   *
-   * @return _downloader: IDownloader*
-   */
-  private IDownloader getDownloader()
-  {
-    if (_downloader == null)
-    {
-      _downloader = createDefaultDownloader();
-    }
-  
-    return _downloader;
-  }
-
-  /**
-   * Returns the _threadUtils. If it does not exist, it will be default initializated.
-   *
-   * @return _threadUtils: IThreadUtils*
-   */
-  private IThreadUtils getThreadUtils()
-  {
-    if (_threadUtils == null)
-    {
-      _threadUtils = createDefaultThreadUtils();
-    }
-  
-    return _threadUtils;
   }
 
   /**
@@ -196,9 +167,8 @@ public abstract class IG3MBuilder
   {
     if (_backgroundColor == null)
     {
-      _backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
+      _backgroundColor = Color.newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
     }
-  
     return _backgroundColor;
   }
 
@@ -306,6 +276,7 @@ public abstract class IG3MBuilder
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
     cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
@@ -327,7 +298,7 @@ public abstract class IG3MBuilder
   {
     if (_shownSector == null)
     {
-      return Sector.fullSphere();
+      return Sector.FULL_SPHERE;
     }
     return _shownSector;
   }
@@ -403,7 +374,19 @@ public abstract class IG3MBuilder
     Sector shownSector = getShownSector();
     getPlanetRendererBuilder().setRenderedSector(shownSector); //Shown sector
   
-    /**
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning HUDRenderer doesn't work when this code is uncommented
+    InfoDisplay infoDisplay = null;
+    //  InfoDisplay* infoDisplay = getInfoDisplay();
+    //  if (infoDisplay == NULL) {
+    //    Default_HUDRenderer* hud = new Default_HUDRenderer();
+    //
+    //    infoDisplay = new DefaultInfoDisplay(hud);
+    //
+    //    addRenderer(hud);
+    //  }
+  
+    /*
      * If any renderers were set or added, the main renderer will be a composite renderer.
      *    If the renderers list does not contain a planetRenderer, it will be created and added.
      *    The renderers contained in the list, will be added to the main renderer.
@@ -412,15 +395,25 @@ public abstract class IG3MBuilder
     Renderer mainRenderer = null;
     if (getRenderers().size() > 0)
     {
-      mainRenderer = new CompositeRenderer();
+      CompositeRenderer composite = new CompositeRenderer();
+  
+      if (_atmosphere)
+      {
+        // has be here, before the PlanetRenderer
+        composite.addRenderer(new AtmosphereRenderer());
+      }
+  
       if (!containsPlanetRenderer(getRenderers()))
       {
-        ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create());
+        composite.addRenderer(getPlanetRendererBuilder().create());
       }
+  
       for (int i = 0; i < getRenderers().size(); i++)
       {
-        ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i));
+        composite.addRenderer(getRenderers().get(i));
       }
+  
+      mainRenderer = composite;
     }
     else
     {
@@ -432,7 +425,7 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, getInfoDisplay());
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO);
   
     g3mWidget.setUserData(getUserData());
   
@@ -495,6 +488,7 @@ public abstract class IG3MBuilder
      _sceneLighting = null;
      _shownSector = null;
      _infoDisplay = null;
+     _atmosphere = false;
   }
 
   public void dispose()
@@ -556,6 +550,43 @@ public abstract class IG3MBuilder
        _planetRendererBuilder.dispose();
     if (_shownSector != null)
        _shownSector.dispose();
+  }
+
+
+  /**
+   * Returns the _downloader. If it does not exist, it will be default initializated.
+   *
+   * @return _downloader: IDownloader*
+   */
+  public final IDownloader getDownloader()
+  {
+    if (_downloader == null)
+    {
+      _downloader = createDefaultDownloader();
+    }
+  
+    return _downloader;
+  }
+
+  /**
+   * Returns the _threadUtils. If it does not exist, it will be default initializated.
+   *
+   * @return _threadUtils: IThreadUtils*
+   */
+  public final IThreadUtils getThreadUtils()
+  {
+    if (_threadUtils == null)
+    {
+      _threadUtils = createDefaultThreadUtils();
+    }
+  
+    return _threadUtils;
+  }
+
+  public final void setAtmosphere(boolean atmosphere)
+  {
+    _atmosphere = atmosphere;
+    setBackgroundColor(_atmosphere ? Color.newFromRGBA(0, 0, 0, 1) : null);
   }
 
 
@@ -755,17 +786,12 @@ public abstract class IG3MBuilder
    */
   public final void setBackgroundColor(Color backgroundColor)
   {
-    if (_backgroundColor != null)
+    if (backgroundColor != _backgroundColor)
     {
-      ILogger.instance().logError("LOGIC ERROR: backgroundColor already initialized");
-      return;
+      if (_backgroundColor != null)
+         _backgroundColor.dispose();
+      _backgroundColor = backgroundColor;
     }
-    if (backgroundColor == null)
-    {
-      ILogger.instance().logError("LOGIC ERROR: backgroundColor cannot be NULL");
-      return;
-    }
-    _backgroundColor = backgroundColor;
   }
 
 
@@ -965,11 +991,13 @@ public abstract class IG3MBuilder
     _userData = userData;
   }
 
-
-  public final void setInitializationTask(GInitializationTask initializationTask) {
-    pvtSetInitializationTask(initializationTask,
-                             true // parameter ignored in Java code 
-);
+  public final void setInitializationTask(GInitializationTask initializationTask)
+  {
+     setInitializationTask(initializationTask, true);
+  }
+  public final void setInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
+  {
+    pvtSetInitializationTask(initializationTask, autoDeleteInitializationTask);
   }
 
 
@@ -982,7 +1010,7 @@ public abstract class IG3MBuilder
   {
     if (_planet == null)
     {
-      _planet = Planet.createEarth();
+      _planet = EllipsoidalPlanet.createEarth();
     }
     return _planet;
   }
@@ -1015,8 +1043,7 @@ public abstract class IG3MBuilder
   {
     if (_sceneLighting == null)
     {
-      //_sceneLighting = new DefaultSceneLighting();
-      _sceneLighting = new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
+      _sceneLighting = new CameraFocusSceneLighting(Color.fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0), Color.WHITE);
     }
     return _sceneLighting;
   }

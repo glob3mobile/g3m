@@ -97,7 +97,7 @@ private:
   std::vector<Mesh*> _meshes;
   
   GLState* _glState;
-  void updateGLState(const G3MRenderContext* rc);
+  void updateGLState(const Camera* camera);
 
   std::vector<LoadQueueItem*> _loadQueue;
 

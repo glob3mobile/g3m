@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  FloatBufferBuilderFromGeodetic.cpp
 //  G3MiOSSDK
@@ -9,10 +9,14 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 06/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
+
+//class Planet;
+//class Geodetic2D;
+//class Geodetic3D;
+//class Angle;
 
 
 public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
@@ -59,12 +63,12 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public static FloatBufferBuilderFromGeodetic builderWithoutCenter(Planet planet)
   {
-    return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.zero);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.ZERO);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(Planet planet)
   {
-    return new FloatBufferBuilderFromGeodetic(CenterStrategy.FIRST_VERTEX, planet, Vector3D.zero);
+    return new FloatBufferBuilderFromGeodetic(CenterStrategy.FIRST_VERTEX, planet, Vector3D.ZERO);
   }
 
   public static FloatBufferBuilderFromGeodetic builderWithGivenCenter(Planet planet, Vector3D center)
@@ -127,4 +131,5 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
     return new Vector3D(_cx, _cy, _cz);
   }
+
 }

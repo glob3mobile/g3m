@@ -121,7 +121,7 @@ public:
   }
 
   QuadTree() :
-  _root( new QuadTree_Node(Sector::fullSphere()) ),
+  _root( new QuadTree_Node(Sector::FULL_SPHERE) ),
   _maxElementsPerNode(1),
   _maxDepth(12)
   {

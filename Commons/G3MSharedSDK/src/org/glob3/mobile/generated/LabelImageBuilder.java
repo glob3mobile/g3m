@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  LabelImageBuilder.cpp
 //  G3MiOSSDK
@@ -38,7 +38,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   private String getImageName()
   {
     final IStringUtils su = IStringUtils.instance();
-    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.description() + "/" + _shadowColor.description() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.description() + "/" + su.toString(_cornerRadius));
+    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
   }
 
 
@@ -126,7 +126,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
   
-    ICanvas canvas = context.getFactory().createCanvas();
+    ICanvas canvas = context.getFactory().createCanvas(true);
   
     canvas.setFont(_font);
   

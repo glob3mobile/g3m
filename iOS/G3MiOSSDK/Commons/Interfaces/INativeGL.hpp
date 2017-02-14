@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_INativeGL
@@ -14,7 +13,7 @@ class IFloatBuffer;
 class IShortBuffer;
 class IImage;
 class IGLUniformID;
-class IGLTextureId;
+class IGLTextureID;
 class Matrix44D;
 
 #include <vector>
@@ -92,10 +91,10 @@ public:
                          int dfactor) const = 0;
 
   virtual void bindTexture(int target,
-                           const IGLTextureId* texture) const = 0;
+                           const IGLTextureID* texture) const = 0;
 
-  /* Delete Texture from GPU, and answer if the TextureId can be reused */
-  virtual bool deleteTexture(const IGLTextureId* texture) const = 0;
+  /* Delete Texture from GPU, and answer if the TextureID can be reused */
+  virtual bool deleteTexture(const IGLTextureID* texture) const = 0;
 
   virtual void enableVertexAttribArray(int location) const = 0;
 
@@ -104,7 +103,7 @@ public:
   virtual void pixelStorei(int pname,
                            int param) const = 0;
 
-  virtual std::vector<IGLTextureId*> genTextures(int	n) const = 0;
+  virtual std::vector<IGLTextureID*> genTextures(int	n) const = 0;
 
   virtual void texParameteri(int target,
                              int par,
@@ -205,6 +204,8 @@ public:
   virtual void depthMask(bool v) const = 0;
 
   virtual void setActiveTexture(int i) const = 0;
+  
+  virtual void viewport(int x, int y, int width, int height) const = 0;
   
 };
 

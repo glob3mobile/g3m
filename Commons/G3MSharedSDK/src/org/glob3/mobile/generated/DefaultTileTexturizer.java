@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  DefaultTileTexturizer.cpp
 //  G3MiOSSDK
@@ -25,6 +25,12 @@ package org.glob3.mobile.generated;
 
 public class DefaultTileTexturizer extends TileTexturizer
 {
+
+  private IImageBuilder _defaultBackgroundImageBuilder;
+  private boolean _defaultBackgroundImageLoaded;
+  private IImage _defaultBackgroundImage;
+  private String _defaultBackgroundImageName;
+
   private LeveledTexturedMesh getMesh(Tile tile)
   {
     DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
@@ -32,19 +38,13 @@ public class DefaultTileTexturizer extends TileTexturizer
   }
 
 
-  private IImageBuilder _defaultBackGroundImageBuilder;
-  private boolean _defaultBackGroundImageLoaded;
-  private IImage _defaultBackGroundImage;
-  private String _defaultBackGroundImageName;
-
-
   public java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
 
-  public DefaultTileTexturizer(IImageBuilder defaultBackGroundImageBuilder)
+  public DefaultTileTexturizer(IImageBuilder defaultBackgroundImageBuilder)
   {
-     _defaultBackGroundImageBuilder = defaultBackGroundImageBuilder;
-     _defaultBackGroundImageLoaded = false;
+     _defaultBackgroundImageBuilder = defaultBackgroundImageBuilder;
+     _defaultBackgroundImageLoaded = false;
     ILogger.instance().logInfo("Create texturizer...");
   
   }
@@ -61,7 +61,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       return RenderState.error(_errors);
     }
-    if (!_defaultBackGroundImageLoaded)
+    if (!_defaultBackgroundImageLoaded)
     {
       return RenderState.busy();
     }
@@ -76,16 +76,16 @@ public class DefaultTileTexturizer extends TileTexturizer
   {
     ILogger.instance().logInfo("Initializing texturizer...");
   
-    _defaultBackGroundImageBuilder.build(context, new DTT_IImageBuilderListener(this), true);
+    _defaultBackgroundImageBuilder.build(context, new DTT_IImageBuilderListener(this), true);
   
     // do nothing
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
+  public final Mesh texturize(G3MRenderContext rc, PlanetRenderContext prc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
-    TileImageProvider tileImageProvider = layerSet.getTileImageProvider(rc, layerTilesRenderParameters);
+    TileImageProvider tileImageProvider = prc._layerSet.getTileImageProvider(rc, prc._layerTilesRenderParameters);
   
     if (tileImageProvider == null)
     {
@@ -97,7 +97,9 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackGroundImage, _defaultBackGroundImageName);
+      final long tileTextureDownloadPriority = prc.getTileTextureDownloadPriority(tile._level);
+  
+      builder = new DTT_TileTextureBuilder(rc, prc._layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, prc._tessellator, tileTextureDownloadPriority, prc._logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackgroundImage, _defaultBackgroundImageName);
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }
@@ -110,14 +112,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
     Mesh texturizedMesh = builder.getTexturedMesh();
   
-    if (forceFullRender)
-    {
-      builder.start();
-    }
-    else
-    {
-      rc.getFrameTasksExecutor().addPreRenderTask(new DTT_TileTextureBuilderStartTask(builder));
-    }
+    rc.getFrameTasksExecutor().addPreRenderTask(new DTT_TileTextureBuilderStartTask(builder));
   
     tile.setTexturizerDirty(false);
   
@@ -144,11 +139,6 @@ public class DefaultTileTexturizer extends TileTexturizer
     }
   }
 
-  public final boolean tileMeetsRenderCriteria(Tile tile)
-  {
-    return false;
-  }
-
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
     // do nothing
@@ -172,8 +162,8 @@ public class DefaultTileTexturizer extends TileTexturizer
       return;
     }
   
-    final TextureIDReference glTextureId = ancestorMesh.getTopLevelTextureId();
-    if (glTextureId == null)
+    final TextureIDReference glTextureID = ancestorMesh.getTopLevelTextureID();
+    if (glTextureID == null)
     {
       return;
     }
@@ -184,13 +174,13 @@ public class DefaultTileTexturizer extends TileTexturizer
       return;
     }
   
-    final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
+    final TextureIDReference glTextureIDRetainedCopy = glTextureID.createCopy();
   
     final int level = tile._level - ancestorTile._level;
-    if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
+    if (!tileMesh.setGLTextureIDForLevel(level, glTextureIDRetainedCopy))
     {
-      if (glTextureIdRetainedCopy != null)
-         glTextureIdRetainedCopy.dispose();
+      if (glTextureIDRetainedCopy != null)
+         glTextureIDRetainedCopy.dispose();
     }
   }
 
@@ -199,34 +189,34 @@ public class DefaultTileTexturizer extends TileTexturizer
     return (layerSet == null) ? false : layerSet.onTerrainTouchEvent(ec, position, tile);
   }
 
-  public final IImageBuilder getDefaultBackGroundImageBuilder()
+  public final IImageBuilder getDefaultBackgroundImageBuilder()
   {
-    return _defaultBackGroundImageBuilder;
+    return _defaultBackgroundImageBuilder;
   }
 
-  public final IImage getDefaultBackGroundImage()
+  public final IImage getDefaultBackgroundImage()
   {
-    return _defaultBackGroundImage;
+    return _defaultBackgroundImage;
   }
 
-  public final void setDefaultBackGroundImage(IImage defaultBackGroundImage)
+  public final void setDefaultBackgroundImage(IImage defaultBackgroundImage)
   {
-    _defaultBackGroundImage = defaultBackGroundImage;
+    _defaultBackgroundImage = defaultBackgroundImage;
   }
 
-  public final String getDefaultBackGroundImageName()
+  public final String getDefaultBackgroundImageName()
   {
-    return _defaultBackGroundImageName;
+    return _defaultBackgroundImageName;
   }
 
-  public final void setDefaultBackGroundImageName(String defaultBackGroundImageName)
+  public final void setDefaultBackgroundImageName(String defaultBackgroundImageName)
   {
-    _defaultBackGroundImageName = defaultBackGroundImageName;
+    _defaultBackgroundImageName = defaultBackgroundImageName;
   }
 
-  public final void setDefaultBackGroundImageLoaded(boolean defaultBackGroundImageLoaded)
+  public final void setDefaultBackgroundImageLoaded(boolean defaultBackgroundImageLoaded)
   {
-    _defaultBackGroundImageLoaded = defaultBackGroundImageLoaded;
+    _defaultBackgroundImageLoaded = defaultBackgroundImageLoaded;
   }
 
 }

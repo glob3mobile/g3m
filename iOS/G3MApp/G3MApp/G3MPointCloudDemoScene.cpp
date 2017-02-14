@@ -3,13 +3,12 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MPointCloudDemoScene.hpp"
 
 #include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
 #include <G3MiOSSDK/DownloadPriority.hpp>
@@ -25,8 +24,12 @@
 #include <G3MiOSSDK/GLConstants.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
 #include <G3MiOSSDK/IThreadUtils.hpp>
+#include <G3MiOSSDK/G3MContext.hpp>
+#include <G3MiOSSDK/GAsyncTask.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
 
 #include "G3MDemoModel.hpp"
+
 
 
 class G3MPointCloudDemoScene_ParserAsyncTask : public GAsyncTask {
@@ -67,7 +70,7 @@ public:
     const JSONBaseObject* jsonBaseObject = BSONParser::parse(_buffer);
 
     if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url._path.c_str());
     }
     else {
       const JSONObject* object = jsonBaseObject->asObject();
@@ -77,12 +80,12 @@ public:
 
       FloatBufferBuilderFromColor colors;
 
-      const int size = pointsJson->size();
+      const size_t size = pointsJson->size();
 
       double minHeight = IMathUtils::instance()->maxDouble();
       double maxHeight = IMathUtils::instance()->minDouble();
       double totalHeight = 0;
-      for (int i = 0; i < size; i = i + 3) {
+      for (size_t i = 0; i < size; i = i + 3) {
         const double height = pointsJson->get(i + 2)->asNumber()->value();
         totalHeight += height;
         if (height < minHeight) {
@@ -94,11 +97,11 @@ public:
       }
       const double averageHeight = totalHeight / (size / 3.0);
 
-      const Color fromColor = Color::red();
-      const Color middleColor = Color::green();
-      const Color toColor = Color::blue();
+      const Color fromColor   = Color::RED;
+      const Color middleColor = Color::GREEN;
+      const Color toColor     = Color::BLUE;
 
-      for (int i = 0; i < size; i = i + 3) {
+      for (size_t i = 0; i < size; i = i + 3) {
         const double latDegrees = pointsJson->getAsNumber(i + 1, 0);
         const double lonDegrees = pointsJson->getAsNumber(i, 0);
         const double height = pointsJson->get(i + 2)->asNumber()->value();
@@ -126,7 +129,6 @@ public:
                              pointSize,
                              NULL, // flatColor
                              colors.create(),
-                             1, // colorsIntensity
                              false);
 
       delete vertices;
@@ -140,7 +142,7 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_mesh == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url._path.c_str());
     }
     else {
       _scene->setPointsCloudMesh(_mesh);
@@ -175,7 +177,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -213,10 +215,9 @@ void G3MPointCloudDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
 

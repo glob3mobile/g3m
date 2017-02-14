@@ -1,8 +1,8 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUAttributeValueVecFloat extends GPUAttributeValue
 {
   private final IFloatBuffer _buffer;
-  private final int _timeStamp;
+  private final int _timestamp;
   private final long _id;
 
   public void dispose()
@@ -14,7 +14,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
   {
      super(GLType.glFloat(), attributeSize, arrayElementSize, index, stride, normalized);
      _buffer = buffer;
-     _timeStamp = buffer.timestamp();
+     _timestamp = buffer.timestamp();
      _id = buffer.getID();
   }
 
@@ -37,7 +37,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
       return false; //Is a disabled value
     }
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
-    boolean equal = ((_id == vecV._buffer.getID()) && (_timeStamp == vecV._timeStamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
+    boolean equal = ((_id == vecV._buffer.getID()) && (_timestamp == vecV._timestamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
 
     return equal;
   }
@@ -58,7 +58,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     isb.addString(" Normalized:");
     isb.addBool(_normalized);
 
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

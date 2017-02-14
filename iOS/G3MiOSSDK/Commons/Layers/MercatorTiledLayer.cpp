@@ -16,6 +16,7 @@
 #include "TimeInterval.hpp"
 #include "RenderState.hpp"
 #include "URL.hpp"
+#include "IMathUtils.hpp"
 
 
 /*
@@ -36,12 +37,12 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        std::vector<const Info*>*       layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
-            new LayerTilesRenderParameters(Sector::fullSphere(),
+            new LayerTilesRenderParameters(Sector::FULL_SPHERE,
                                            1,
                                            1,
                                            initialLevel,
                                            maxLevel,
-                                           Vector2I(256, 256),
+                                           Vector2S((short)256, (short)256),
                                            LayerTilesRenderParameters::defaultTileMeshResolution(),
                                            true),
             transparency,
@@ -74,10 +75,10 @@ const URL MercatorTiledLayer::createURL(const Tile* tile) const {
 
   isb->addString(_protocol);
 
-  const int subdomainsSize = _subdomains.size();
+  const size_t subdomainsSize = _subdomains.size();
   if (subdomainsSize > 0) {
     // select subdomain based on fixed data (instead of round-robin) to be cache friendly
-    const int subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
+    const size_t subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
 #ifdef C_CODE
     isb->addString(_subdomains[subdomainsIndex]);
 #endif
@@ -148,8 +149,8 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  const int thisSubdomainsSize = _subdomains.size();
-  const int thatSubdomainsSize = t->_subdomains.size();
+  const size_t thisSubdomainsSize = _subdomains.size();
+  const size_t thatSubdomainsSize = t->_subdomains.size();
 
   if (thisSubdomainsSize != thatSubdomainsSize) {
     return false;
@@ -159,14 +160,17 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
 #ifdef C_CODE
     const std::string thisSubdomain = _subdomains[i];
     const std::string thatSubdomain = t->_subdomains[i];
+    if (thisSubdomain != thatSubdomain) {
+      return false;
+    }
 #endif
 #ifdef JAVA_CODE
     final String thisSubdomain = _subdomains.get(i);
     final String thatSubdomain = t._subdomains.get(i);
-#endif
-    if (thisSubdomain != thatSubdomain) {
+    if (!thisSubdomain.equals(thatSubdomain)) {
       return false;
     }
+#endif
   }
 
   return true;

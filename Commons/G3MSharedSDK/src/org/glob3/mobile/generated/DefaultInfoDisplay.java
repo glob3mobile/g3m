@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DefaultInfoDisplay implements InfoDisplay
 {
   private Default_HUDRenderer _defaultHUDRenderer;
@@ -12,7 +12,6 @@ public class DefaultInfoDisplay implements InfoDisplay
   public final void changedInfo(java.util.ArrayList<Info> info)
   {
     _defaultHUDRenderer.updateInfo(info);
-
   }
 
   public final void showDisplay()

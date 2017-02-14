@@ -1,57 +1,51 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
-//  Context.cpp
+//  G3MContext.cpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 1/29/16.
+//
 //
 
 //
-//  Context.hpp
+//  G3MContext.hpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 1/29/16.
 //
-
+//
 
 
 //class IFactory;
-//class Camera;
-//class Planet;
-//class TexturesHandler;
-//class IDownloader;
-//class ILogger;
-//class GL;
-//class EffectsScheduler;
-//class ITimer;
 //class IStringUtils;
 //class IThreadUtils;
+//class ILogger;
 //class IMathUtils;
 //class IJSONParser;
+//class Planet;
+//class IDownloader;
+//class EffectsScheduler;
 //class IStorage;
-//class OrderedRenderable;
-//class GPUProgramManager;
 //class SurfaceElevationProvider;
+
 
 
 public class G3MContext
 {
-  protected final IFactory _factory;
-  protected final IStringUtils _stringUtils;
-  protected final IThreadUtils _threadUtils;
-  protected final ILogger _logger;
-  protected final IMathUtils _mathUtils;
-  protected final IJSONParser _jsonParser;
-  protected final Planet _planet;
-  protected IDownloader _downloader;
-  protected EffectsScheduler _effectsScheduler;
-  protected IStorage _storage;
+  private final IFactory _factory;
+  private final IStringUtils _stringUtils;
+  private final IThreadUtils _threadUtils;
+  private final ILogger _logger;
+  private final IMathUtils _mathUtils;
+  private final IJSONParser _jsonParser;
+  private final Planet _planet;
+  private IDownloader _downloader;
+  private EffectsScheduler _effectsScheduler;
+  private IStorage _storage;
+  private SurfaceElevationProvider _surfaceElevationProvider;
+  private ViewMode _viewMode;
 
-  protected SurfaceElevationProvider _surfaceElevationProvider;
-
-  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider)
+  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider, ViewMode viewMode)
   {
      _factory = factory;
      _stringUtils = stringUtils;
@@ -64,11 +58,11 @@ public class G3MContext
      _effectsScheduler = effectsScheduler;
      _storage = storage;
      _surfaceElevationProvider = surfaceElevationProvider;
+     _viewMode = viewMode;
   }
 
   public void dispose()
   {
-
   }
 
   public final IFactory getFactory()
@@ -124,6 +118,16 @@ public class G3MContext
   public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
     return _surfaceElevationProvider;
+  }
+
+  public final ViewMode getViewMode()
+  {
+    return _viewMode;
+  }
+
+  public final void setViewMode(ViewMode viewMode)
+  {
+    _viewMode = viewMode;
   }
 
 }

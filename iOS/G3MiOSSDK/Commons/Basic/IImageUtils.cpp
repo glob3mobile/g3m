@@ -13,6 +13,7 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "RectangleF.hpp"
+#include "IMathUtils.hpp"
 
 
 void IImageUtils::createShallowCopy(const IImage* image,
@@ -29,14 +30,14 @@ void IImageUtils::scale(int width,
                         const IImage* image,
                         IImageListener* listener,
                         bool autodelete) {
-  if (width == image->getWidth() &&
+  if (width  == image->getWidth() &&
       height == image->getHeight()) {
     createShallowCopy(image,
                       listener,
                       autodelete);
   }
   else {
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
     canvas->initialize(width, height);
 
     canvas->drawImage(image,
@@ -61,7 +62,7 @@ void IImageUtils::subImage(const IImage* image,
                       autodelete);
   }
   else {
-    ICanvas* canvas = IFactory::instance()->createCanvas();
+    ICanvas* canvas = IFactory::instance()->createCanvas(false);
 
     const IMathUtils* mu = IMathUtils::instance();
     canvas->initialize(mu->round(rect._width),
@@ -85,7 +86,7 @@ void IImageUtils::combine(int width,
                           IImageListener* listener,
                           bool autodelete) {
 
-  const int imagesSize = images.size();
+  const size_t imagesSize = images.size();
 
   if (imagesSize != sourceRects.size() || imagesSize != destRects.size()) {
     ILogger::instance()->logError("Failure at combine images.");
@@ -115,7 +116,7 @@ void IImageUtils::combine(int width,
   }
 
 
-  ICanvas* canvas = IFactory::instance()->createCanvas();
+  ICanvas* canvas = IFactory::instance()->createCanvas(false);
   canvas->initialize(width, height);
 
   for (int i = 0; i < imagesSize ; i++) {

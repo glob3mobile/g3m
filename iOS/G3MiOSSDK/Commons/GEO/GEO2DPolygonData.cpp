@@ -15,12 +15,12 @@
 GEO2DPolygonData::~GEO2DPolygonData() {
 #ifdef C_CODE
   if (_holesCoordinatesArray != NULL) {
-    const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
-    for (int j = 0; j < holesCoordinatesArraySize; j++) {
+    const size_t holesCoordinatesArraySize = _holesCoordinatesArray->size();
+    for (size_t j = 0; j < holesCoordinatesArraySize; j++) {
       const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
 
-      const int holeCoordinatesCount = holeCoordinates->size();
-      for (int i =0; i < holeCoordinatesCount; i++) {
+      const size_t holeCoordinatesCount = holeCoordinates->size();
+      for (size_t i =0; i < holeCoordinatesCount; i++) {
         const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
 
         delete holeCoordinate;
@@ -59,7 +59,7 @@ bool GEO2DPolygonData::contains(const std::vector<Geodetic2D*>* coordinates, con
     Geodetic2D* secondCoordinate = coordinates->at(index);
     
     if (!firstCoordinate->isEquals(*secondCoordinate)) {
-      if (firstCoordinate->isEquals(point)){
+      if (firstCoordinate->isEquals(point)) {
         return true;
       }
       
@@ -97,8 +97,8 @@ bool GEO2DPolygonData::contains(const std::vector<Geodetic2D*>* coordinates, con
 bool GEO2DPolygonData::contains(const Geodetic2D& point) const {
   if (getSector()->contains(point)) {
     if (_holesCoordinatesArray != NULL) {
-      const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
-      for (int j = 0; j < holesCoordinatesArraySize; j++) {
+      const size_t holesCoordinatesArraySize = _holesCoordinatesArray->size();
+      for (size_t j = 0; j < holesCoordinatesArraySize; j++) {
         const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
         if (contains(holeCoordinates, point)) {
           return false;

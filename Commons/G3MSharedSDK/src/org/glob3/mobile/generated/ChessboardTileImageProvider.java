@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ChessboardTileImageProvider.cpp
 //  G3MiOSSDK
@@ -47,14 +47,14 @@ public class ChessboardTileImageProvider extends TileImageProvider
     return TileImageContribution.fullCoverageOpaque();
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2S resolution, long tileTextureDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
     if (_image == null)
     {
       final int width = resolution._x;
       final int height = resolution._y;
   
-      ICanvas canvas = IFactory.instance().createCanvas();
+      ICanvas canvas = IFactory.instance().createCanvas(false);
       canvas.initialize(width, height);
   
       canvas.setFillColor(_backgroundColor);
@@ -96,7 +96,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
     }
   }
 
-  public final void cancel(String tileId)
+  public final void cancel(String tileID)
   {
     // do nothing, can't cancel
   }

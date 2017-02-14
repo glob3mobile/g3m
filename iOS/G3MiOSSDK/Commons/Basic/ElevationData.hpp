@@ -11,14 +11,13 @@
 
 #include <string>
 #include "Geodetic2D.hpp"
-#include "Geodetic3D.hpp"
 #include "Sector.hpp"
 
-class Vector2I;
-class Mesh;
-class Ellipsoid;
-class Vector3D;
 class Interpolator;
+class Mesh;
+class Geodetic3D;
+class Vector2I;
+
 
 class ElevationData {
 private:
@@ -79,7 +78,6 @@ public:
 
   virtual bool hasNoData() const = 0;
 
-
   double getElevationAt(const Angle& latitude,
                         const Angle& longitude) const;
 
@@ -87,30 +85,6 @@ public:
     return getElevationAt(position._latitude,
                           position._longitude);
   }
-
-  //  bool isEquivalentTo(const ElevationData* ed) {
-  //    bool equivalent = true;
-  //    const int width  = 3;
-  //    const int height = 3;
-  //    for (int x = 0; x < width; x++) {
-  //      const double u = (double) x / (width  - 1);
-  //
-  //      for (int y = 0; y < height; y++) {
-  //        const double v = 1.0 - ( (double) y / (height - 1) );
-  //
-  //        const Geodetic2D position = _sector.getInnerPoint(u, v);
-  //
-  //        const double elevation = getElevationAt(position);
-  //        const double elevation2 = ed->getElevationAt(position);
-  //
-  //        if (elevation != elevation2) {
-  //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
-  //          equivalent = false;
-  //        }
-  //      }
-  //    }
-  //    return equivalent;
-  //  }
   
 };
 

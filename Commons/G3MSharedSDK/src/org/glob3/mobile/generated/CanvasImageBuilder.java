@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CanvasImageBuilder.cpp
 //  G3MiOSSDK
@@ -33,34 +33,37 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
   
       final IFactory factory = context.getFactory();
   
-      _canvas = factory.createCanvas();
+      _canvas = factory.createCanvas(_retina);
       _canvas.initialize(_width, _height);
       _canvasWidth = _width;
       _canvasHeight = _height;
     }
     else
     {
-      _canvas.setFillColor(Color.transparent());
+      _canvas.setFillColor(Color.TRANSPARENT);
       _canvas.fillRectangle(0, 0, _width, _height);
     }
   
     return _canvas;
   }
 
-  private static long _counter = 0;
-
   protected final int _width;
   protected final int _height;
+  protected final boolean _retina;
 
-  protected CanvasImageBuilder(int width, int height)
+  protected CanvasImageBuilder(int width, int height, boolean retina)
   {
      _width = width;
      _height = height;
+     _retina = retina;
      _canvas = null;
      _canvasWidth = 0;
      _canvasHeight = 0;
   }
 
+
+  ///#include "IStringUtils.hpp"
+  
   public void dispose()
   {
     if (_canvas != null)
@@ -71,12 +74,7 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
 
   protected abstract void buildOnCanvas(G3MContext context, ICanvas canvas);
 
-  protected String getImageName(G3MContext context)
-  {
-    final IStringUtils su = context.getStringUtils();
-  
-    return "_CanvasImageBuilder_" + su.toString(_counter++);
-  }
+  protected abstract String getImageName(G3MContext context);
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {

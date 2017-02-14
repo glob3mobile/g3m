@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  JSONLong.cpp
 //  G3MiOSSDK
@@ -51,6 +51,18 @@ public class JSONLong extends JSONNumber
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     isb.addString("long/");
+    isb.addLong(_value);
+  
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  public final String toString()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
     isb.addLong(_value);
   
     final String s = isb.getString();

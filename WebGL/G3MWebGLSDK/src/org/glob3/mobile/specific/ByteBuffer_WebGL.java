@@ -9,11 +9,11 @@ import com.google.gwt.core.client.JsArrayNumber;
 
 
 public final class ByteBuffer_WebGL
-         extends
-            IByteBuffer {
+   extends
+      IByteBuffer {
 
-   private final JavaScriptObject _buffer;
-   private int                    _timestamp = 0;
+   private JavaScriptObject _buffer;
+   private int              _timestamp = 0;
 
 
    public ByteBuffer_WebGL(final JavaScriptObject data) {
@@ -26,15 +26,6 @@ public final class ByteBuffer_WebGL
    }
 
 
-   //   public ByteBuffer_WebGL(final byte[] data,
-   //                           final int length) {
-   //      _buffer = jsCreateBuffer(length);
-   //
-   //      for (int i = 0; i < length; i++) {
-   //         put(i, data[i]);
-   //      }
-   //   }
-
    public ByteBuffer_WebGL(final byte[] data,
                            final int dataLength) {
       final JsArrayNumber array = JavaScriptObject.createArray().<JsArrayNumber> cast();
@@ -43,6 +34,13 @@ public final class ByteBuffer_WebGL
          array.set(i, data[i]);
       }
       _buffer = jsCreateBuffer(array);
+   }
+
+
+   @Override
+   public void dispose() {
+      _buffer = null;
+      super.dispose();
    }
 
 
@@ -90,11 +88,9 @@ public final class ByteBuffer_WebGL
 
    @Override
    public native String getAsString() /*-{
-		var result = "";
-		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
-		for ( var i = 0; i < buffer.byteLength; i++) {
-			result += String.fromCharCode(buffer[i]);
-		}
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.buffer;
+		var array = new Uint8Array(buffer);
+		var result = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::utf8ArrayToStr(Lcom/google/gwt/core/client/JavaScriptObject;)(array);
 		return result;
    }-*/;
 
@@ -117,5 +113,47 @@ public final class ByteBuffer_WebGL
    private native JavaScriptObject jsCreateBuffer(final int size) /*-{
 		return new Int8Array(size);
    }-*/;
+
+
+   private native String utf8ArrayToStr(final JavaScriptObject array) /*-{
+		var out, i, len, c;
+		var char2, char3;
+
+		out = "";
+		len = array.length;
+		i = 0;
+		while (i < len) {
+			c = array[i++];
+			switch (c >> 4) {
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+				// 0xxxxxxx
+				out += String.fromCharCode(c);
+				break;
+			case 12:
+			case 13:
+				// 110x xxxx   10xx xxxx
+				char2 = array[i++];
+				out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+				break;
+			case 14:
+				// 1110 xxxx  10xx xxxx  10xx xxxx
+				char2 = array[i++];
+				char3 = array[i++];
+				out += String.fromCharCode(((c & 0x0F) << 12)
+						| ((char2 & 0x3F) << 6) | ((char3 & 0x3F) << 0));
+				break;
+			}
+		}
+
+		return out;
+   }-*/;
+
 
 }

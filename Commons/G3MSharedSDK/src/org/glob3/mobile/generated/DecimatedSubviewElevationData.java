@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  DecimatedSubviewElevationData.cpp
 //  G3MiOSSDK
@@ -66,7 +66,7 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
   
         if ((height != height))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         double size = ysize;
@@ -105,26 +105,26 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
     final Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector._lower);
     final Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
     final Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
-
+  
     for (int x = 0; x < _width; x++)
     {
       final double u0 = (double) x / (_width - 1);
       final double u1 = (double)(x+1) / (_width - 1);
       final double x0 = u0 * parentDeltaXY._x + parentXYAtLower._x;
       final double x1 = u1 * parentDeltaXY._x + parentXYAtLower._x;
-
+  
       for (int y = 0; y < _height; y++)
       {
         final double v0 = (double) y / (_height - 1);
         final double v1 = (double)(y+1) / (_height - 1);
         final double y0 = v0 * parentDeltaXY._y + parentXYAtLower._y;
         final double y1 = v1 * parentDeltaXY._y + parentXYAtLower._y;
-
+  
         final int index = ((_height-1-y) * _width) + x;
-
+  
         final double height = getElevationBoxAt(elevationData, x0, y0, x1, y1);
         _buffer[index] = (float) height;
-
+  
         if (!_hasNoData)
         {
           if ((height != height))
@@ -135,6 +135,5 @@ public class DecimatedSubviewElevationData extends SubviewElevationData
       }
     }
   }
-
 
 }

@@ -10,9 +10,9 @@
 #define __G3MiOSSDK__ShortBufferBuilder__
 
 #include <vector>
-#include "IStringBuilder.hpp"
 
 class IShortBuffer;
+
 
 class ShortBufferBuilder {
 private:
@@ -82,31 +82,15 @@ public:
 
   IShortBuffer* create() const;
 
-  std::string description() const {
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    isb->addString("ShortBufferBuilder: ");
-    for (int i = 0; i < (int)_values.size(); i++) {
+  const std::string description() const;
 
-#ifdef C_CODE
-      short v = _values[i];
-#endif
-#ifdef JAVA_CODE
-      short v = _values.get(i);
-#endif
-      isb->addInt(v);
-      isb->addString(", ");
-    }
-    const std::string s = isb->getString();
-    delete isb;
-    return s;
-  }
 #ifdef JAVA_CODE
   @Override
   public String toString() {
     return description();
   }
 #endif
-
+  
 };
 
 #endif

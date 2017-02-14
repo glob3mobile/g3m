@@ -17,8 +17,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class Downloader_WebGL_Handler_DefaultImpl
-         implements
-            Downloader_WebGL_Handler {
+   implements
+      Downloader_WebGL_Handler {
 
    private final static String      TAG = "Downloader_WebGL_HandlerImpl";
 
@@ -37,12 +37,14 @@ public class Downloader_WebGL_Handler_DefaultImpl
    @Override
    final public void init(final URL url,
                           final IBufferDownloadListener bufferListener,
+                          final boolean deleteListener,
                           final long priority,
-                          final long requestId) {
+                          final long requestID,
+                          final String tag) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(bufferListener, null, requestId);
+      _listeners = new ArrayList<>();
+      final ListenerEntry entry = new ListenerEntry(bufferListener, null, deleteListener, requestID, tag);
       _listeners.add(entry);
       _requestingImage = false;
    }
@@ -51,12 +53,14 @@ public class Downloader_WebGL_Handler_DefaultImpl
    @Override
    final public void init(final URL url,
                           final IImageDownloadListener imageListener,
+                          final boolean deleteListener,
                           final long priority,
-                          final long requestId) {
+                          final long requestID,
+                          final String tag) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(null, imageListener, requestId);
+      _listeners = new ArrayList<>();
+      final ListenerEntry entry = new ListenerEntry(null, imageListener, deleteListener, requestID, tag);
       _listeners.add(entry);
       _requestingImage = true;
    }
@@ -70,9 +74,11 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    final public void addListener(final IBufferDownloadListener listener,
+                                 final boolean deleteListener,
                                  final long priority,
-                                 final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
+                                 final long requestID,
+                                 final String tag) {
+      final ListenerEntry entry = new ListenerEntry(listener, null, deleteListener, requestID, tag);
 
       _listeners.add(entry);
 
@@ -84,9 +90,11 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    final public void addListener(final IImageDownloadListener listener,
+                                 final boolean deleteListener,
                                  final long priority,
-                                 final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
+                                 final long requestID,
+                                 final String tag) {
+      final ListenerEntry entry = new ListenerEntry(null, listener, deleteListener, requestID, tag);
 
       _listeners.add(entry);
 
@@ -103,7 +111,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
 
    @Override
-   final public boolean cancelListenerForRequestId(final long requestId) {
+   final public boolean cancelListenerForRequestId(final long requestID) {
       boolean canceled = false;
 
       final Iterator<ListenerEntry> iter = _listeners.iterator();
@@ -111,7 +119,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
       while (iter.hasNext() && !canceled) {
          final ListenerEntry entry = iter.next();
 
-         if (entry.getRequestId() == requestId) {
+         if (entry.getRequestId() == requestID) {
             entry.cancel();
             canceled = true;
          }
@@ -122,7 +130,19 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
 
    @Override
-   final public boolean removeListenerForRequestId(final long requestId) {
+   public void cancelListenersTagged(final String tag) {
+      final Iterator<ListenerEntry> iter = _listeners.iterator();
+      while (iter.hasNext()) {
+         final ListenerEntry entry = iter.next();
+         if (entry.getTag().equals(tag)) {
+            entry.cancel();
+         }
+      }
+   }
+
+
+   @Override
+   final public boolean removeListenerForRequestId(final long requestID) {
       boolean removed = false;
 
       final Iterator<ListenerEntry> iter = _listeners.iterator();
@@ -130,7 +150,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
       while (iter.hasNext()) {
          final ListenerEntry entry = iter.next();
 
-         if (entry.getRequestId() == requestId) {
+         if (entry.getRequestId() == requestID) {
             entry.onCancel(_url);
             iter.remove();
             removed = true;
@@ -144,6 +164,24 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
 
    @Override
+   final public boolean removeListenersTagged(final String tag) {
+      boolean anyRemoved = false;
+
+      final Iterator<ListenerEntry> iter = _listeners.iterator();
+      while (iter.hasNext()) {
+         final ListenerEntry entry = iter.next();
+         if (entry.getTag().equals(tag)) {
+            entry.onCancel(_url);
+            iter.remove();
+            anyRemoved = true;
+         }
+      }
+
+      return anyRemoved;
+   }
+
+
+   @Override
    final public boolean hasListener() {
       return !_listeners.isEmpty();
    }
@@ -151,22 +189,15 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    final public void runWithDownloader(final IDownloader downloader) {
-
-      //      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url._path);
-
       _dl = (Downloader_WebGL) downloader;
 
       jsRequest(_url._path);
-
-      //      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
 
    @Override
    final public void removeFromDownloaderDownloadingHandlers() {
-
       _dl.removeDownloadingHandlerForUrl(_url);
-
    }
 
 
@@ -199,15 +230,11 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    @Override
    public native void jsRequest(String url) /*-{
-		//		debugger;
-		//		console.log("jsRequest url=" + url);
-
 		var that = this;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
 		xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) ? "blob"
 				: "arraybuffer";
-		//xhr.setRequestHeader("Cache-Control", "max-age=31536000");
 		xhr.onload = function() {
 			if (xhr.readyState == 4) {
 				// inform downloader to remove myself, to avoid adding new Listener
@@ -215,13 +242,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
 				if (xhr.status === 200) {
 					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-					}
-					else {
+					} else {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
 					}
-				}
-				else {
-					console.log("Error Retrieving Data!");
+				} else {
 					that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
 				}
 			}
@@ -254,8 +278,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
    }-*/;
 
 
-   public void log(final LogLevel level,
-                   final String msg) {
+   public static void log(final LogLevel level,
+                          final String msg) {
       if (ILogger.instance() != null) {
          switch (level) {
             case InfoLevel:
@@ -275,5 +299,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
          GWT.log(TAG + msg);
       }
    }
+
 
 }

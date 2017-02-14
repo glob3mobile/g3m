@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 18/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_WMSLayer
@@ -46,7 +45,7 @@ private:
   inline double toBBOXLatitude (const Angle& latitude)  const;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "WMS";
   }
 
@@ -58,6 +57,72 @@ protected:
   const URL createURL(const Tile* tile) const;
 
 public:
+
+  static WMSLayer* newMercator(const std::string&        mapLayer,
+                               const URL&                mapServerURL,
+                               const WMSServerVersion    mapServerVersion,
+                               const std::string&        queryLayer,
+                               const URL&                queryServerURL,
+                               const WMSServerVersion    queryServerVersion,
+                               const Sector&             dataSector,
+                               const std::string&        format,
+                               const std::string&        style,
+                               const bool                isTransparent,
+                               const int                 firstLevel   = 2,
+                               const int                 maxLevel     = 17,
+                               const LayerCondition*     condition    = NULL,
+                               const TimeInterval&       timeToCache  = TimeInterval::fromDays(30),
+                               const bool                readExpired  = true,
+                               const float               transparency = 1,
+                               std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
+
+  static WMSLayer* newMercator(const std::string&        mapLayer,
+                               const URL&                mapServerURL,
+                               const WMSServerVersion    mapServerVersion,
+                               const Sector&             dataSector,
+                               const std::string&        format,
+                               const std::string&        style,
+                               const bool                isTransparent,
+                               const int                 firstLevel   = 2,
+                               const int                 maxLevel     = 17,
+                               const LayerCondition*     condition    = NULL,
+                               const TimeInterval&       timeToCache  = TimeInterval::fromDays(30),
+                               const bool                readExpired  = true,
+                               const float               transparency = 1,
+                               std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
+
+  static WMSLayer* newWGS84(const std::string&        mapLayer,
+                            const URL&                mapServerURL,
+                            const WMSServerVersion    mapServerVersion,
+                            const std::string&        queryLayer,
+                            const URL&                queryServerURL,
+                            const WMSServerVersion    queryServerVersion,
+                            const Sector&             dataSector,
+                            const std::string&        format,
+                            const std::string&        style,
+                            const bool                isTransparent,
+                            const int                 firstLevel   = 1,
+                            const int                 maxLevel     = 17,
+                            const LayerCondition*     condition    = NULL,
+                            const TimeInterval&       timeToCache  = TimeInterval::fromDays(30),
+                            const bool                readExpired  = true,
+                            const float               transparency = 1,
+                            std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
+
+  static WMSLayer* newWGS84(const std::string&        mapLayer,
+                            const URL&                mapServerURL,
+                            const WMSServerVersion    mapServerVersion,
+                            const Sector&             dataSector,
+                            const std::string&        format,
+                            const std::string&        style,
+                            const bool                isTransparent,
+                            const int                 firstLevel   = 1,
+                            const int                 maxLevel     = 17,
+                            const LayerCondition*     condition    = NULL,
+                            const TimeInterval&       timeToCache  = TimeInterval::fromDays(30),
+                            const bool                readExpired  = true,
+                            const float               transparency = 1,
+                            std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
 
   WMSLayer(const std::string&                mapLayer,
            const URL&                        mapServerURL,
@@ -73,9 +138,9 @@ public:
            const LayerCondition*             condition,
            const TimeInterval&               timeToCache,
            const bool                        readExpired,
-           const LayerTilesRenderParameters* parameters     = NULL,
-           const float                       transparency   = 1,
-           std::vector<const Info*>*   layerInfo      = new std::vector<const Info*>());
+           const LayerTilesRenderParameters* parameters   = NULL,
+           const float                       transparency = 1,
+           std::vector<const Info*>*         layerInfo    = new std::vector<const Info*>());
 
   WMSLayer(const std::string&                mapLayer,
            const URL&                        mapServerURL,
@@ -88,9 +153,9 @@ public:
            const LayerCondition*             condition,
            const TimeInterval&               timeToCache,
            const bool                        readExpired,
-           const LayerTilesRenderParameters* parameters     = NULL,
-           const float                       transparency   = 1,
-           std::vector<const Info*>*   layerInfo = new std::vector<const Info*>());
+           const LayerTilesRenderParameters* parameters    = NULL,
+           const float                       transparency  = 1,
+           std::vector<const Info*>*         layerInfo     = new std::vector<const Info*>());
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;

@@ -16,6 +16,6 @@ void main() {
   gl_Position = uModelview * aPosition;
 
   TextureCoordOut = aTextureCoord;
-  
+
   gl_PointSize = uPointSize;
 }

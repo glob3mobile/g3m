@@ -26,11 +26,11 @@ import android.util.Log;
 
 
 public final class SQLiteStorage_Android
-         extends
-            IStorage {
+   extends
+      IStorage {
 
-   private static final String[]         COLUMNS       = new String[] { "contents", "expiration" };
-   private static final String           SELECTION     = "name = ?";
+   private static final String[]         COLUMNS   = new String[] { "contents", "expiration" };
+   private static final String           SELECTION = "name = ?";
 
    private final String                  _databaseName;
    private final android.content.Context _androidContext;
@@ -39,13 +39,12 @@ public final class SQLiteStorage_Android
    private SQLiteDatabase                _writeDB;
    private SQLiteDatabase                _readDB;
 
-   private final BitmapFactory.Options   _options;
-   private final byte[]                  _temp_storage = new byte[128 * 1024];
+   private final BitmapFactory.Options   _bitmapFactoryOptions;
 
 
    private class MySQLiteOpenHelper
-            extends
-               SQLiteOpenHelper {
+      extends
+         SQLiteOpenHelper {
 
       public MySQLiteOpenHelper(final android.content.Context context,
                                 final String name) {
@@ -105,8 +104,8 @@ public final class SQLiteStorage_Android
       _writeDB = _dbHelper.getWritableDatabase();
       _readDB = _dbHelper.getReadableDatabase();
 
-      _options = new BitmapFactory.Options();
-      _options.inTempStorage = _temp_storage;
+      _bitmapFactoryOptions = new BitmapFactory.Options();
+      _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
    }
 
 
@@ -165,7 +164,7 @@ public final class SQLiteStorage_Android
       boolean expired = false;
       final String name = url._path;
 
-      final Cursor cursor = _readDB.query( // 
+      final Cursor cursor = _readDB.query( //
                "buffer2", //
                COLUMNS, //
                SELECTION, //
@@ -194,8 +193,6 @@ public final class SQLiteStorage_Android
                          final IImage image,
                          final TimeInterval timeToExpires,
                          final boolean saveInBackground) {
-      //final ITimer timer = IFactory.instance().createTimer();
-
       final Image_Android image_android = (Image_Android) image;
       final Bitmap bitmap = image_android.getBitmap();
 
@@ -251,9 +248,7 @@ public final class SQLiteStorage_Android
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
-            // final long start = System.currentTimeMillis();
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _options);
-            // ILogger.instance().logInfo("CACHE: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _bitmapFactoryOptions);
 
             if (bitmap == null) {
                ILogger.instance().logError("Can't create bitmap from content of storage");
@@ -308,5 +303,58 @@ public final class SQLiteStorage_Android
    public synchronized boolean isAvailable() {
       return (_readDB != null) && (_writeDB != null);
    }
+
+
+   @Override
+   public void merge(final String databasePath) {
+      final File fromDataBase = new File(databasePath);
+      if (fromDataBase.exists()) {
+         final MySQLiteOpenHelper auxDbHelper = new MySQLiteOpenHelper(_androidContext, getPath());
+
+         final SQLiteDatabase auxReadDB = auxDbHelper.getReadableDatabase();
+
+         if (auxReadDB != null) {
+            final Cursor cursor = auxReadDB.query( //
+                     "image2", //
+                     new String[] { "name", "contents", "expiration" }, //
+                     "", //
+                     new String[] {}, //
+                     null, //
+                     null, //
+                     null);
+
+            if (cursor.moveToFirst()) {
+               do {
+                  final String name = cursor.getString(0);
+                  final byte[] data = cursor.getBlob(1);
+                  final String expirationS = cursor.getString(2);
+                  long expirationInterval = Long.parseLong(expirationS);
+
+
+                  final Cursor auxCursor = _readDB.query( //
+                           "image2", //
+                           COLUMNS, //
+                           SELECTION, //
+                           new String[] { name }, //
+                           null, //
+                           null, //
+                           null);
+                  if (auxCursor.moveToFirst()) {
+                     expirationInterval = Math.max(expirationInterval, Long.parseLong(auxCursor.getString(1)));
+                  }
+                  auxCursor.close();
+
+                  rawSave("image2", name, data, TimeInterval.fromSeconds(expirationInterval));
+               }
+               while (cursor.moveToNext());
+
+
+            }
+            cursor.close();
+            auxReadDB.close();
+         }
+      }
+   }
+
 
 }

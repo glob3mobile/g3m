@@ -7,12 +7,12 @@ import org.glob3.mobile.generated.IDeviceInfo;
 
 
 public class DeviceInfo_WebGL
-         extends
-            IDeviceInfo {
+   extends
+      IDeviceInfo {
 
    @Override
    public float getDPI() {
-      return 96;
+      return 96 * getDevicePixelRatio();
    }
 
 
@@ -23,8 +23,9 @@ public class DeviceInfo_WebGL
 
 
    @Override
-   public float getQualityFactor() {
-      return 1;
-   }
+   public native float getDevicePixelRatio() /*-{
+		return $wnd.devicePixelRatio || 1;
+   }-*/;
+
 
 }

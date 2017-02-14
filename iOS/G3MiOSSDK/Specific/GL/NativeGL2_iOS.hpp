@@ -1,9 +1,8 @@
-//
+ //
 //  NativeGL_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_NativeGL_iOS
@@ -14,7 +13,7 @@
 #include "INativeGL.hpp"
 
 #include "GLUniformID_iOS.hpp"
-#include "GLTextureId_iOS.hpp"
+#include "GLTextureID_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
 #include "ShortBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
@@ -27,6 +26,12 @@ class NativeGL2_iOS: public INativeGL {
 public:
 
   void useProgram(GPUProgram* program) const {
+    
+#warning TODO: Check all the parameters that should be changed on OpenGL after a glUseProgram()
+    
+    //Must forget bound buffer
+    FloatBuffer_iOS::onGPUProgramHasChanged();
+    
     glUseProgram(program->getProgramID());
   }
 
@@ -138,19 +143,19 @@ public:
     glBlendFunc(sfactor, dfactor);
   }
 
-  void bindTexture(int target, const IGLTextureId* texture) const {
-    const int id = ((GLTextureId_iOS*) texture)->getGLTextureId();
+  void bindTexture(int target, const IGLTextureID* texture) const {
+    const int id = ((GLTextureID_iOS*) texture)->getGLTextureID();
     if (id < 0) {
-      ILogger::instance()->logError("Trying to bind invalid IGLTextureId");
+      ILogger::instance()->logError("Trying to bind invalid IGLTextureID");
     }
     else {
       glBindTexture(target, id);
     }
   }
 
-  bool deleteTexture(const IGLTextureId* texture) const {
+  bool deleteTexture(const IGLTextureID* texture) const {
     const unsigned int textures[] = {
-      ((GLTextureId_iOS*) texture)->getGLTextureId()
+      ((GLTextureID_iOS*) texture)->getGLTextureID()
     };
 
     glDeleteTextures(1, textures);
@@ -170,17 +175,17 @@ public:
     glPixelStorei(pname, param);
   }
 
-  std::vector<IGLTextureId*> genTextures(int n) const {
-    GLuint textureIds[n];
-    glGenTextures(n, textureIds);
-    std::vector<IGLTextureId*> ts;
+  std::vector<IGLTextureID*> genTextures(int n) const {
+    GLuint textureIDs[n];
+    glGenTextures(n, textureIDs);
+    std::vector<IGLTextureID*> ts;
     for(int i = 0; i < n; i++) {
-      GLuint textureId = textureIds[i];
-      if (textureId == 0) {
-        ILogger::instance()->logError("Can't create a textureId");
+      GLuint textureID = textureIDs[i];
+      if (textureID == 0) {
+        ILogger::instance()->logError("Can't create a textureID");
       }
       else {
-        ts.push_back( new GLTextureId_iOS(textureId) );
+        ts.push_back( new GLTextureID_iOS(textureID) );
       }
     }
     return ts;
@@ -569,6 +574,10 @@ public:
 
   void depthMask(bool v) const {
     glDepthMask(v);
+  }
+  
+  void viewport(int x, int y, int width, int height) const{
+    glViewport(x, y, width, height);
   }
   
 };

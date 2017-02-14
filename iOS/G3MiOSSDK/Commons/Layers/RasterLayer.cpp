@@ -10,7 +10,7 @@
 #include "TimeInterval.hpp"
 #include "RasterLayerTileImageProvider.hpp"
 #include "LayerCondition.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
 #include "URL.hpp"
 #include "LayerTilesRenderParameters.hpp"
@@ -64,7 +64,7 @@ bool RasterLayer::isEquals(const Layer* that) const {
 TileImageProvider* RasterLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                         const LayerTilesRenderParameters* layerTilesRenderParameters) const {
   if (_tileImageProvider == NULL) {
-    _tileImageProvider = new RasterLayerTileImageProvider(this, rc->getDownloader());;
+    _tileImageProvider = new RasterLayerTileImageProvider(this, rc->getDownloader());
   }
   _tileImageProvider->_retain();
   return _tileImageProvider;
@@ -79,7 +79,7 @@ const TileImageContribution* RasterLayer::contribution(const Tile* tile) const {
 
 long long RasterLayer::requestImage(const Tile* tile,
                                     IDownloader* downloader,
-                                    long long tileDownloadPriority,
+                                    long long tileTextureDownloadPriority,
                                     bool logDownloadActivity,
                                     IImageDownloadListener* listener,
                                     bool deleteListener) const {
@@ -90,7 +90,7 @@ long long RasterLayer::requestImage(const Tile* tile,
     ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
   }
   return downloader->requestImage(url,
-                                  tileDownloadPriority,
+                                  tileTextureDownloadPriority,
                                   _timeToCache,
                                   _readExpired,
                                   listener,

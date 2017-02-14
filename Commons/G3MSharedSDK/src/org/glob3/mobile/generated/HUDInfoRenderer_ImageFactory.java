@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class HUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFactory
 {
   private final java.util.ArrayList<Info> _info = new java.util.ArrayList<Info>();
@@ -14,7 +14,7 @@ public class HUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFa
     {
       strings.add(_info.get(i).getText());
     }
-    ICanvasUtils.drawStringsOn(strings, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
+    ICanvasUtils.drawStringsOn(strings, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.WHITE, 11, 2, Color.TRANSPARENT, Color.BLACK, 5);
   }
 
   protected final boolean isEquals(java.util.ArrayList<Info> v1, java.util.ArrayList<Info> v2)

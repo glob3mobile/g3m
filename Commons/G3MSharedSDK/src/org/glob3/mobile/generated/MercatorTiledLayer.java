@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MercatorTiledLayer.cpp
 //  G3MiOSSDK
@@ -75,8 +75,7 @@ public class MercatorTiledLayer extends RasterLayer
     {
       final String thisSubdomain = _subdomains.get(i);
       final String thatSubdomain = t._subdomains.get(i);
-      if (thisSubdomain != thatSubdomain)
-      {
+      if (!thisSubdomain.equals(thatSubdomain)) {
         return false;
       }
     }
@@ -167,7 +166,7 @@ public class MercatorTiledLayer extends RasterLayer
   }
   public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.FULL_SPHERE, 1, 1, initialLevel, maxLevel, new Vector2S((short)256, (short)256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
      _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
@@ -199,7 +198,7 @@ public class MercatorTiledLayer extends RasterLayer
 
   public final Sector getDataSector()
   {
-    return Sector.fullSphere();
+    return Sector.FULL_SPHERE;
   }
 
 }

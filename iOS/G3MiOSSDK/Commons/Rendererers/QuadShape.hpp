@@ -12,7 +12,7 @@
 #include "AbstractMeshShape.hpp"
 
 class IImage;
-class IGLTextureId;
+class IGLTextureID;
 class Color;
 class TextureIDReference;
 
@@ -33,7 +33,7 @@ private:
   private IImage _textureImage;
 #endif
 
-  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureID(const G3MRenderContext* rc);
 
   const bool _withNormals;
 

@@ -17,17 +17,17 @@
 #include "RectangleF.hpp"
 #include "IStringBuilder.hpp"
 #include "TileImageContribution.hpp"
-
 #include "IStringBuilder.hpp"
 #include "TextCanvasElement.hpp"
 #include "ColumnCanvasElement.hpp"
 #include "IFactory.hpp"
+#include "Vector2S.hpp"
 
-DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileId,
+DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileID,
                                                      const TileImageContribution* contribution,
                                                      TileImageListener*           listener,
                                                      bool                         deleteListener) :
-_tileId(tileId),
+_tileID(tileID),
 _contribution(contribution),
 _listener(listener),
 _deleteListener(deleteListener)
@@ -42,20 +42,20 @@ DebugTileImageProvider::ImageListener::~ImageListener() {
 #endif
 }
 
-const std::string DebugTileImageProvider::ImageListener::getImageId(const std::string& tileId) {
+const std::string DebugTileImageProvider::ImageListener::getImageID(const std::string& tileID) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("DebugTileImageProvider/");
-  isb->addString(tileId);
+  isb->addString(tileID);
   const std::string s = isb->getString();
   delete isb;
   return s;
 }
 
 void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
-  const std::string imageId = getImageId(_tileId);
-  _listener->imageCreated(_tileId,
+  const std::string imageID = getImageID(_tileID);
+  _listener->imageCreated(_tileID,
                           image,
-                          imageId,
+                          imageID,
                           _contribution);
   if (_deleteListener) {
     delete _listener;
@@ -84,7 +84,7 @@ _showTileBounds(showTileBounds)
 
 DebugTileImageProvider::DebugTileImageProvider() :
 _font(GFont::monospaced(15)),
-_color(Color::yellow()),
+_color(Color::YELLOW),
 _showIDLabel(true),
 _showSectorLabels(true),
 _showTileBounds(true)
@@ -92,7 +92,7 @@ _showTileBounds(true)
 }
 
 
-std::string DebugTileImageProvider::getIDLabel(const Tile* tile) const {
+const std::string DebugTileImageProvider::getIDLabel(const Tile* tile) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
   isb->addInt( tile->_level );
@@ -108,32 +108,32 @@ std::string DebugTileImageProvider::getIDLabel(const Tile* tile) const {
   return s;
 }
 
-std::string DebugTileImageProvider::getSectorLabel1(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel1(const Sector& sector) const {
   return "Lower lat: " + sector._lower._latitude.description();
 }
 
-std::string DebugTileImageProvider::getSectorLabel2(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel2(const Sector& sector) const {
   return "Lower lon: " + sector._lower._longitude.description();
 }
 
-std::string DebugTileImageProvider::getSectorLabel3(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel3(const Sector& sector) const {
   return "Upper lat: " + sector._upper._latitude.description();
 }
 
-std::string DebugTileImageProvider::getSectorLabel4(const Sector& sector) const {
+const std::string DebugTileImageProvider::getSectorLabel4(const Sector& sector) const {
   return "Upper lon: " + sector._upper._longitude.description();
 }
 
 void DebugTileImageProvider::create(const Tile* tile,
                                     const TileImageContribution* contribution,
-                                    const Vector2I& resolution,
-                                    long long tileDownloadPriority,
+                                    const Vector2S& resolution,
+                                    long long tileTextureDownloadPriority,
                                     bool logDownloadActivity,
                                     TileImageListener* listener,
                                     bool deleteListener,
                                     FrameTasksExecutor* frameTasksExecutor) {
-  const int width  = resolution._x;
-  const int height = resolution._y;
+  const short width  = resolution._x;
+  const short height = resolution._y;
   
   ICanvas* canvas = getCanvas(width, height);
   
@@ -149,7 +149,7 @@ void DebugTileImageProvider::create(const Tile* tile,
   }
   
   if (_showIDLabel || _showSectorLabels) {
-    canvas->setShadow(Color::black(), 2, 1, -1);
+    canvas->setShadow(Color::BLACK, 2, 1, -1);
     ColumnCanvasElement col;
     if (_showIDLabel) {
       col.add( new TextCanvasElement(getIDLabel(tile), _font, _color) );
@@ -178,6 +178,6 @@ void DebugTileImageProvider::create(const Tile* tile,
                       true);  
 }
 
-void DebugTileImageProvider::cancel(const std::string& tileId) {
+void DebugTileImageProvider::cancel(const std::string& tileID) {
   // do nothing, can't cancel
 }

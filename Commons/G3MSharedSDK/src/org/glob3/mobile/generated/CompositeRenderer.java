@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CompositeRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -152,8 +150,9 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     // the events are processed bottom to top
-    for (int i = _renderersSize - 1; i >= 0; i--)
+    for (int j = 0; j < _renderersSize; j++)
     {
+      final int i = _renderersSize - 1 - j;
       Renderer renderer = _renderers.get(i).getRenderer();
       if (renderer.isEnable())
       {
@@ -169,8 +168,9 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
     // the events are processed bottom to top
-    for (int i = _renderersSize - 1; i >= 0; i--)
+    for (int j = 0; j < _renderersSize; j++)
     {
+      final int i = _renderersSize - 1 - j;
       _renderers.get(i).getRenderer().onResizeViewportEvent(ec, width, height);
     }
   }
@@ -291,7 +291,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     return false;
   }
 
-  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererID)
   {
     if (_changedInfoListener != null)
     {
@@ -305,15 +305,15 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     }
   }
 
-  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<Info> info)
+  public final void changedRendererInfo(int rendererID, java.util.ArrayList<Info> info)
   {
-    if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize)
+    if (rendererID < _renderersSize)
     {
-      _renderers.get(rendererIdentifier).setInfo(info);
+      _renderers.get(rendererID).setInfo(info);
     }
     else
     {
-      ILogger.instance().logWarning("Child Render not found: %d", rendererIdentifier);
+      ILogger.instance().logWarning("Child Render not found: %d", rendererID);
     }
   
     if (_changedInfoListener != null)

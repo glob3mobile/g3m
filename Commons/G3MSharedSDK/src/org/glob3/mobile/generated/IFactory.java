@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IFactory.cpp
 //  G3MiOSSDK
@@ -12,24 +12,21 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
 
+//class IDeviceInfo;
 //class ITimer;
-//class IImage;
 //class IFloatBuffer;
 //class IIntBuffer;
 //class IShortBuffer;
 //class IByteBuffer;
-//class ILogger;
-//class IImageListener;
 //class ICanvas;
 //class IWebSocket;
-//class IWebSocketListener;
 //class URL;
-//class IDeviceInfo;
+//class IWebSocketListener;
+
 
 public abstract class IFactory
 {
@@ -38,6 +35,12 @@ public abstract class IFactory
   private IDeviceInfo _deviceInfo;
 
   protected abstract IDeviceInfo createDeviceInfo();
+
+  protected IFactory()
+  {
+     _deviceInfo = null;
+  
+  }
 
   public static void setInstance(IFactory factory)
   {
@@ -55,21 +58,11 @@ public abstract class IFactory
     return _instance;
   }
 
-  public IFactory()
-  {
-     _deviceInfo = null;
-
-  }
-
   public void dispose()
   {
   }
 
-//  virtual void deleteImage(const IImage* image) const = 0;
-
   public abstract ITimer createTimer();
-
-//  virtual void deleteTimer(const ITimer* timer) const = 0;
 
   public abstract IFloatBuffer createFloatBuffer(int size);
 
@@ -84,7 +77,7 @@ public abstract class IFactory
 
   public abstract IByteBuffer createByteBuffer(byte[] data, int length);
 
-  public abstract ICanvas createCanvas();
+  public abstract ICanvas createCanvas(boolean retina);
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
@@ -98,11 +91,7 @@ public abstract class IFactory
   }
 
 
-
   public abstract IShortBuffer createShortBuffer(final short[] array, final int length);
   public abstract IFloatBuffer createFloatBuffer(final float[] array, final int length);
-
-//  public abstract float[] getThreadLocalFloatArray();
-//  public abstract void    setThreadLocalFloatArray(final float[] array);
 
 }

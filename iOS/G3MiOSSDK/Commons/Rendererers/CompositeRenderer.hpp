@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_CompositeRenderer
@@ -17,9 +16,9 @@
 class CompositeRenderer: public Renderer, ChangedRendererInfoListener
 {
 private:
-  std::vector<const Info*> _info;
+  std::vector<const Info*>    _info;
   std::vector<ChildRenderer*> _renderers;
-  int                    _renderersSize;
+  size_t                      _renderersSize;
 
 #ifdef C_CODE
   const G3MContext* _context;
@@ -67,7 +66,8 @@ public:
 
   void addRenderer(Renderer* renderer);
 
-  void addRenderer(Renderer* renderer, const std::vector<const Info*> info);
+  void addRenderer(Renderer* renderer,
+                   const std::vector<const Info*>& info);
   
   void addChildRenderer(ChildRenderer* renderer);
 
@@ -89,9 +89,11 @@ public:
     return false;
   }
   
-  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                      const size_t rendererID);
   
-  void changedRendererInfo(const int rendererIdentifier, const std::vector<const Info*> info);
+  void changedRendererInfo(const size_t rendererID,
+                           const std::vector<const Info*>& info);
   
 };
 

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SceneJSParserStatistics.cpp
 //  G3MiOSSDK
@@ -87,7 +87,7 @@ public class SceneJSParserStatistics
     statsSB.addString("; Vert/Nod=");
     statsSB.addFloat((float) getVerticesCount() / getNodesCount());
   
-    String stats = statsSB.getString();
+    final String stats = statsSB.getString();
     if (statsSB != null)
        statsSB.dispose();
   

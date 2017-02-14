@@ -8,6 +8,7 @@
 
 #include "Quadric.hpp"
 
+#include "IMathUtils.hpp"
 
 // Algorithm from http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Cuadricas.pdf
 

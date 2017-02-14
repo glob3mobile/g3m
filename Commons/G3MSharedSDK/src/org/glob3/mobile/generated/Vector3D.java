@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Vector3D.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,13 +11,14 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
 
-
 //class MutableVector3D;
+//class Angle;
+//class MutableMatrix44D;
+
 
 public class Vector3D
 {
@@ -27,19 +27,24 @@ public class Vector3D
 //  Vector3D operator =(Vector3D that);
 
 
-  public static Vector3D zero = new Vector3D(0,0,0);
+  public static final Vector3D ZERO = new Vector3D(0,0,0);
+  public static final Vector3D NANV = new Vector3D(Double.NaN, Double.NaN, Double.NaN);
+  public static final Vector3D UP_X = new Vector3D(1,0,0);
+  public static final Vector3D DOWN_X = new Vector3D(-1,0,0);
+  public static final Vector3D UP_Y = new Vector3D(0,1,0);
+  public static final Vector3D DOWN_Y = new Vector3D(0,-1,0);
+  public static final Vector3D UP_Z = new Vector3D(0,0,1);
+  public static final Vector3D DOWN_Z = new Vector3D(0,0,-1);
 
   public final double _x;
   public final double _y;
   public final double _z;
-
 
   public Vector3D(double x, double y, double z)
   {
      _x = x;
      _y = y;
      _z = z;
-
   }
 
   public void dispose()
@@ -51,46 +56,6 @@ public class Vector3D
      _x = v._x;
      _y = v._y;
      _z = v._z;
-
-  }
-
-  public static Vector3D nan()
-  {
-    return new Vector3D(java.lang.Double.NaN, java.lang.Double.NaN, java.lang.Double.NaN);
-  }
-
-//  static Vector3D zero() {
-//    return Vector3D(0, 0, 0);
-//  }
-
-  public static Vector3D upX()
-  {
-    return new Vector3D(1, 0, 0);
-  }
-
-  public static Vector3D downX()
-  {
-    return new Vector3D(-1, 0, 0);
-  }
-
-  public static Vector3D upY()
-  {
-    return new Vector3D(0, 1, 0);
-  }
-
-  public static Vector3D downY()
-  {
-    return new Vector3D(0, -1, 0);
-  }
-
-  public static Vector3D upZ()
-  {
-    return new Vector3D(0, 0, 1);
-  }
-
-  public static Vector3D downZ()
-  {
-    return new Vector3D(0, 0, -1);
   }
 
   public final boolean isNan()
@@ -112,14 +77,14 @@ public class Vector3D
   {
     if (isNan())
     {
-      return nan();
+      return NANV;
     }
     if (isZero())
     {
-      return zero;
+      return ZERO;
     }
     final double d = length();
-    return new Vector3D(_x / d, _y / d, _z / d);
+    return (d == 1) ? this : new Vector3D(_x / d, _y / d, _z / d);
   }
 
   public final double length()
@@ -139,7 +104,12 @@ public class Vector3D
 
   public final boolean isPerpendicularTo(Vector3D v)
   {
-    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
+    //  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
+    //  if (!(d < 0.001)) {
+    //    ILogger::instance()->logError("****>>> %d", d);
+    //  }
+    //  return d < 0.001;
   }
 
   public final Vector3D add(Vector3D v)
@@ -280,8 +250,8 @@ public class Vector3D
     final double v = axis._y;
     final double w = axis._z;
   
-    final double cosTheta = java.lang.Math.cos(theta._radians);
-    final double sinTheta = java.lang.Math.sin(theta._radians);
+    final double cosTheta = Math.cos(theta._radians);
+    final double sinTheta = Math.sin(theta._radians);
   
     final double ms = axis.squaredLength();
     final double m = IMathUtils.instance().sqrt(ms);

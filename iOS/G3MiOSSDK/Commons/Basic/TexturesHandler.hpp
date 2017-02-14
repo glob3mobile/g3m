@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 19/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_TexturesHandler
@@ -19,7 +18,7 @@ class G3MRenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
-class IGLTextureId;
+class IGLTextureID;
 class TextureIDReference;
 
 class TextureSpec {
@@ -149,7 +148,7 @@ private:
   const bool _verbose;
   //void showHolders(const std::string& message) const;
 
-  const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
+  const IGLTextureID* getGLTextureIDIfAvailable(const TextureSpec& textureSpec);
 
 public:
 
@@ -169,8 +168,8 @@ public:
 
 
   //This two methods are supposed to be accessed only by TextureIDReference class
-  void releaseGLTextureId(const IGLTextureId* glTextureId);
-  void retainGLTextureId(const IGLTextureId* glTextureId);
+  void releaseGLTextureID(const IGLTextureID* glTextureID);
+  void retainGLTextureID(const IGLTextureID* glTextureID);
 };
 
 #endif

@@ -1,27 +1,26 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
-//  Geodetic3D.cpp
+//  AltitudeMode.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//  Created by Diego Gomez Deck on 11/7/16.
+//
 //
 
 //
-//  Geodetic3D.hpp
+//  AltitudeMode.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//  Created by Diego Gomez Deck on 11/7/16.
 //
-
+//
 
 
 //Altitude modes taken from KML standard (with the exception of relative to sea floor)
 public enum AltitudeMode
 {
-  RELATIVE_TO_GROUND, //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
-  ABSOLUTE; //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
+  RELATIVE_TO_GROUND, // Relative to elevation provided by any SurfaceElevationProvider (typically PlanetRenderer)
+  ABSOLUTE; // Relative to surface of geometrical planet definition (Ellipsoid, Sphere, Flat, ...)
 
    public int getValue()
    {

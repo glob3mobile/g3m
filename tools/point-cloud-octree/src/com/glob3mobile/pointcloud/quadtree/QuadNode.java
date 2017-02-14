@@ -3,19 +3,12 @@
 package com.glob3mobile.pointcloud.quadtree;
 
 import java.util.LinkedList;
-import java.util.List;
-
-import com.glob3mobile.pointcloud.PositionsSet;
-
-import es.igosoftware.euclid.vector.GVector2D;
-import es.igosoftware.euclid.vector.GVector3D;
 
 
 public abstract class QuadNode {
 
 
    static QuadNode create(final QuadNode parent,
-                          final PositionsSet positionsSet,
                           final int[] indexes,
                           final int maxPointsPerLeaf) {
 
@@ -26,15 +19,15 @@ public abstract class QuadNode {
       }
 
       if (indexesSize == 1) {
-         return new QuadMonoLeafNode(parent, positionsSet, indexes[0]);
+         return new QuadMonoLeafNode(parent, indexes[0]);
       }
 
       if (indexesSize <= maxPointsPerLeaf) {
-         return new QuadMultiLeafNode(parent, positionsSet, indexes);
+         return new QuadMultiLeafNode(parent, indexes);
       }
 
-      final int pivotIndex = getPivotIndex(positionsSet, indexes);
-      final GVector3D pivot = positionsSet._cartesianPoints.get(pivotIndex);
+      //final int pivotIndex = getPivotIndex(positionsSet, indexes);
+      //final GVector3D pivot = positionsSet._cartesianPoints.get(pivotIndex);
 
       throw new RuntimeException("Not yet implemented");
 
@@ -104,49 +97,50 @@ public abstract class QuadNode {
    //   }
 
 
-   private static GVector2D getAverage2D(final List<GVector3D> positions,
-                                         final int[] indexes) {
-      double sumX = 0;
-      double sumY = 0;
-
-      for (final int index : indexes) {
-         final GVector3D position = positions.get(index);
-         sumX += position._x;
-         sumY += position._y;
-      }
-
-      final int size = positions.size();
-      return new GVector2D(sumX / size, sumY / size);
-   }
-
-
-   private static int getPivotIndex(final PositionsSet positionsSet,
-                                    final int[] indexes) {
-      final GVector2D average = getAverage2D(positionsSet._cartesianPoints, indexes);
-      double nearestDistance = Double.POSITIVE_INFINITY;
-      int nearestIndex = 0;
-
-      for (final int index : indexes) {
-         final GVector3D point = positionsSet._cartesianPoints.get(index);
-         final double distance = point.asVector2().squaredDistance(average);
-         if (distance < nearestDistance) {
-            nearestDistance = distance;
-            nearestIndex = index;
-         }
-      }
-
-      return nearestIndex;
-   }
+   //   private static GVector2D getAverage2D(final List<GVector3D> positions,
+   //                                         final int[] indexes) {
+   //      double sumX = 0;
+   //      double sumY = 0;
+   //
+   //      for (final int index : indexes) {
+   //         final GVector3D position = positions.get(index);
+   //         sumX += position._x;
+   //         sumY += position._y;
+   //      }
+   //
+   //      final int size = positions.size();
+   //      return new GVector2D(sumX / size, sumY / size);
+   //   }
 
 
-   private final QuadNode     _parent;
-   private final PositionsSet _positionsSet;
+   //   private static int getPivotIndex(final PositionsSet positionsSet,
+   //                                    final int[] indexes) {
+   //      final GVector2D average = getAverage2D(positionsSet._cartesianPoints, indexes);
+   //      double nearestDistance = Double.POSITIVE_INFINITY;
+   //      int nearestIndex = 0;
+   //
+   //      for (final int index : indexes) {
+   //         final GVector3D point = positionsSet._cartesianPoints.get(index);
+   //         final double distance = point.asVector2().squaredDistance(average);
+   //         if (distance < nearestDistance) {
+   //            nearestDistance = distance;
+   //            nearestIndex = index;
+   //         }
+   //      }
+   //
+   //      return nearestIndex;
+   //   }
 
 
-   protected QuadNode(final QuadNode parent,
-                      final PositionsSet positionsSet) {
+   private final QuadNode _parent;
+
+
+   //   private final PositionsSet _positionsSet;
+
+
+   protected QuadNode(final QuadNode parent) {
       _parent = parent;
-      _positionsSet = positionsSet;
+      // _positionsSet = positionsSet;
    }
 
 
@@ -159,7 +153,7 @@ public abstract class QuadNode {
 
 
    void breadthFirstAcceptVisitor(final QuadTreeVisitor visitor) throws QuadTreeVisitor.AbortVisiting {
-      final LinkedList<QuadNode> queue = new LinkedList<QuadNode>();
+      final LinkedList<QuadNode> queue = new LinkedList<>();
       queue.addLast(this);
 
       while (!queue.isEmpty()) {

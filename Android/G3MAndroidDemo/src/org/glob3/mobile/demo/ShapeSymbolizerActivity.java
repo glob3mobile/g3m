@@ -5,14 +5,14 @@ package org.glob3.mobile.demo;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.FlatPlanet;
 import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -26,8 +26,8 @@ import android.widget.TextView;
 
 
 public class ShapeSymbolizerActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
@@ -51,16 +51,24 @@ public class ShapeSymbolizerActivity
 
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-      builder.setPlanet(Planet.createFlatEarth());
+      builder.setPlanet(FlatPlanet.createEarth());
 
       final LayerSet layerSet = new LayerSet();
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
-      layerSet.addLayer(mboxTerrainLayer);
+      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
+      //
+      //      final
+
+      final MapBoxLayer mboxOSMLayer = new MapBoxLayer("bobbysud.lff1o1c6", TimeInterval.fromDays(30), true, 2);
+      mboxOSMLayer.setTitle("Map Box");
+      mboxOSMLayer.setEnable(true);
+      layerSet.addLayer(mboxOSMLayer);
+
+
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());
 
-      final ElevationDataProvider dem = new SingleBilElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
+      final ElevationDataProvider dem = new SingleBILElevationDataProvider(new URL("file:///full-earth-2048x1024.bil", false),
                demSector, new Vector2I(2048, 1024), 0);
 
       _vectorialRenderer = builder.createGEORenderer(Symbology.USCitiesSymbolizer);
@@ -90,7 +98,7 @@ public class ShapeSymbolizerActivity
    }
 
 
-   private int toAndroidColor(final Color c) {
+   static private int toAndroidColor(final Color c) {
       return android.graphics.Color.argb(Math.round(c._alpha * 255), Math.round(c._red * 255), Math.round(c._green * 255),
                Math.round(c._blue * 255));
    }

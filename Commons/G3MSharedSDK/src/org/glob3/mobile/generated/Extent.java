@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Extent.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 16/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 

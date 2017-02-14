@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class BingMapsLayer extends RasterLayer
 {
   private final String _imagerySet;
@@ -17,7 +17,7 @@ public class BingMapsLayer extends RasterLayer
 
   private java.util.ArrayList<String> _metadataErrors = new java.util.ArrayList<String>();
 
-  private void processMetadata(String brandLogoUri, String copyright, String imageUrl, java.util.ArrayList<String> imageUrlSubdomains, int imageWidth, int imageHeight, int zoomMin, int zoomMax)
+  private void processMetadata(String brandLogoUri, String copyright, String imageUrl, java.util.ArrayList<String> imageUrlSubdomains, short imageWidth, short imageHeight, int zoomMin, int zoomMax)
   {
     _brandLogoUri = brandLogoUri;
     _copyright = copyright;
@@ -29,7 +29,7 @@ public class BingMapsLayer extends RasterLayer
   
     final IMathUtils mu = IMathUtils.instance();
   
-    setParameters(new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, mu.max(zoomMin, _initialLevel), mu.min(zoomMax, _maxLevel), new Vector2I(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+    setParameters(new LayerTilesRenderParameters(Sector.FULL_SPHERE, 1, 1, mu.max(zoomMin, _initialLevel), mu.min(zoomMax, _maxLevel), new Vector2S(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
   }
 
   private static String getQuadKey(int zoom, int column, int row)
@@ -133,9 +133,9 @@ public class BingMapsLayer extends RasterLayer
     final String quadkey = getQuadKey(level, column, row);
   
     String path = _imageUrl;
-    path = su.replaceSubstring(path, "{subdomain}", subdomain);
-    path = su.replaceSubstring(path, "{quadkey}", quadkey);
-    path = su.replaceSubstring(path, "{culture}", _culture);
+    path = su.replaceAll(path, "{subdomain}", subdomain);
+    path = su.replaceAll(path, "{quadkey}", quadkey);
+    path = su.replaceAll(path, "{culture}", _culture);
   
     return new URL(path, false);
   }
@@ -227,9 +227,6 @@ public class BingMapsLayer extends RasterLayer
     return new URL();
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  boolean isReady();
-
   public final void initialize(G3MContext context)
   {
     _metadataErrors.clear();
@@ -315,8 +312,8 @@ public class BingMapsLayer extends RasterLayer
       return;
     }
   
-    final int imageWidth = (int) meanfulResource.getAsNumber("imageWidth", 256);
-    final int imageHeight = (int) meanfulResource.getAsNumber("imageHeight", 256);
+    final short imageWidth = (short) meanfulResource.getAsNumber("imageWidth", 256);
+    final short imageHeight = (short) meanfulResource.getAsNumber("imageHeight", 256);
   
     final int zoomMin = (int) meanfulResource.getAsNumber("zoomMin", 1);
     final int zoomMax = (int) meanfulResource.getAsNumber("zoomMax", 1);
@@ -405,7 +402,7 @@ public class BingMapsLayer extends RasterLayer
 
   public final Sector getDataSector()
   {
-    return Sector.fullSphere();
+    return Sector.FULL_SPHERE;
   }
 
 }

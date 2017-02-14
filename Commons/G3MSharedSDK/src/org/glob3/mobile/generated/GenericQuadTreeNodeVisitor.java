@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GenericQuadTree.cpp
 //  G3MiOSSDK
@@ -14,6 +14,7 @@ package org.glob3.mobile.generated;
 //  Created by Jose Miguel SN on 07/08/13.
 //
 //
+
 
 
 

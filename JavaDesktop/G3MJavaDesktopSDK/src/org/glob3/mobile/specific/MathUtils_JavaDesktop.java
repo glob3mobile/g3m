@@ -2,12 +2,16 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.Random;
+
 import org.glob3.mobile.generated.IMathUtils;
 
 
 public class MathUtils_JavaDesktop
-extends
-IMathUtils {
+   extends
+      IMathUtils {
+
+   private final Random _random = new Random();
 
 
    @Override
@@ -354,15 +358,15 @@ IMathUtils {
 
 
    @Override
-   public double fmod(final double d1,
-                      final double d2) {
+   public double mod(final double d1,
+                     final double d2) {
       return d1 % d2;
    }
 
 
    @Override
-   public float fmod(final float f1,
-                     final float f2) {
+   public float mod(final float f1,
+                    final float f2) {
       return f1 % f2;
    }
 
@@ -370,6 +374,19 @@ IMathUtils {
    @Override
    public float rawIntBitsToFloat(final int value) {
       return Float.intBitsToFloat(value);
+   }
+
+
+   @Override
+   public double nextRandomDouble() {
+      return _random.nextDouble();
+   }
+
+
+   @Override
+   public double copySign(final double a,
+                          final double b) {
+      return Math.copySign(a, b);
    }
 
 }

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  QuadShape.cpp
 //  G3MiOSSDK
@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class IImage;
-//class IGLTextureId;
+//class IGLTextureID;
 //class Color;
 //class TextureIDReference;
 
@@ -33,24 +33,24 @@ public class QuadShape extends AbstractMeshShape
   private boolean _textureRequested;
   private IImage _textureImage;
 
-  private TextureIDReference getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureID(G3MRenderContext rc)
   {
     if (_textureImage == null)
     {
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
   
     _textureImage = null;
     _textureImage = null;
   
-    if (texId == null)
+    if (texID == null)
     {
       rc.getLogger().logError("Can't load texture %s", _textureURL._path);
     }
   
-    return texId;
+    return texID;
   }
 
   private final boolean _withNormals;
@@ -90,7 +90,7 @@ public class QuadShape extends AbstractMeshShape
       normals.add(0.0, 0.0, 1.0);
       normals.add(0.0, 0.0, 1.0);
   
-      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, (float)1.0, true, normals.create());
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, true, normals.create());
   
       if (normals != null)
          normals.dispose();
@@ -103,8 +103,8 @@ public class QuadShape extends AbstractMeshShape
     if (vertices != null)
        vertices.dispose();
   
-    final TextureIDReference texId = getTextureId(rc);
-    if (texId == null)
+    final TextureIDReference texID = getTextureID(rc);
+    if (texID == null)
     {
       return im;
     }
@@ -115,7 +115,7 @@ public class QuadShape extends AbstractMeshShape
     texCoords.add(0, 0);
     texCoords.add(1, 0);
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping texMap = new SimpleTextureMapping(texID, texCoords.create(), true, true);
   
     return new TexturedMesh(im, true, texMap, true, true);
   }

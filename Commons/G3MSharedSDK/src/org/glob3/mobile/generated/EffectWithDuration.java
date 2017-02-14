@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public abstract class EffectWithDuration extends Effect
 {
   private long _started;
@@ -11,13 +11,13 @@ public abstract class EffectWithDuration extends Effect
      _durationMS = duration._milliseconds;
      _linearTiming = linearTiming;
      _started = 0;
-
+  
   }
 
   protected final double percentDone(TimeInterval when)
   {
     final long elapsed = when._milliseconds - _started;
-
+  
     final double percent = (double) elapsed / _durationMS;
     if (percent > 1)
        return 1;
@@ -32,11 +32,6 @@ public abstract class EffectWithDuration extends Effect
     return _linearTiming ? percent : pace(percent);
   }
 
-
-  //  virtual void stop(const G3MRenderContext* rc,
-  //                    const TimeInterval& when) {
-  //
-  //  }
 
   public void start(G3MRenderContext rc, TimeInterval when)
   {

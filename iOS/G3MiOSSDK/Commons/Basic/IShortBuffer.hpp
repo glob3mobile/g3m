@@ -17,11 +17,13 @@ public:
   virtual ~IShortBuffer() {
   }
 
-  virtual short get(int i) const = 0;
+  virtual short get(const size_t i) const = 0;
 
-  virtual void put(int i, short value) = 0;
+  virtual void put(const size_t i,
+                   short value) = 0;
 
-  virtual void rawPut(int i, short value) = 0;
+  virtual void rawPut(const size_t i,
+                      short value) = 0;
   
 };
 

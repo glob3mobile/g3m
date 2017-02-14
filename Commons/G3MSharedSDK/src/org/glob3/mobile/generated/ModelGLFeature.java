@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class ModelGLFeature extends GLCameraGroupFeature
 {
   public void dispose()
@@ -11,8 +11,8 @@ public class ModelGLFeature extends GLCameraGroupFeature
      super(model, GLFeatureID.GLF_MODEL);
   }
 
-  public ModelGLFeature(Camera cam)
+  public ModelGLFeature(Camera camera)
   {
-     super(cam.getModelMatrix44D(), GLFeatureID.GLF_MODEL);
+     super(camera.getModelMatrix44D(), GLFeatureID.GLF_MODEL);
   }
 }

@@ -68,7 +68,7 @@ public:
 
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEquals(const GPUAttributeValue* v) const = 0;
-  virtual std::string description() const = 0;
+  virtual const std::string description() const = 0;
 #ifdef JAVA_CODE
   @Override
   public String toString() {
@@ -198,7 +198,6 @@ public:
   }
 };
 
-///////////
 
 class GPUAttributeValueDisabled : public GPUAttributeValue {
 private:
@@ -223,7 +222,7 @@ public:
     return new GPUAttributeValueDisabled();
   }
 
-  std::string description() const {
+  const std::string description() const {
     return "Attribute Disabled.";
   }
 
@@ -243,7 +242,7 @@ public:
 class GPUAttributeValueVecFloat : public GPUAttributeValue {
 private:
   const IFloatBuffer* _buffer;
-  const int _timeStamp;
+  const int _timestamp;
   const long long _id;
 
 protected:
@@ -254,10 +253,10 @@ protected:
   }
 
 public:
-  GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVecFloat(const IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
-  _timeStamp(buffer->timestamp()),
+  _timestamp(buffer->timestamp()),
   _id(buffer->getID()) {}
 
   void setAttribute(GL* gl, const int id) const {
@@ -275,17 +274,17 @@ public:
       return false;          //Is a disabled value
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
-    bool equal = ((_id      == vecV->_buffer->getID())     &&
-                  (_timeStamp     == vecV->_timeStamp)  &&
-                  (_type          == v->_type)          &&
-                  (_attributeSize == v->_attributeSize) &&
-                  (_stride        == v->_stride)        &&
-                  (_normalized    == v->_normalized) );
+    bool equal = ( (_id            == vecV->_buffer->getID()) &&
+                   (_timestamp     == vecV->_timestamp      ) &&
+                   (_type          == v->_type              ) &&
+                   (_attributeSize == v->_attributeSize     ) &&
+                   (_stride        == v->_stride            ) &&
+                   (_normalized    == v->_normalized        ) );
 
     return equal;
   }
 
-  std::string description() const {
+  const std::string description() const {
 
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("Attribute Value Float.");
@@ -300,7 +299,7 @@ public:
     isb->addString(" Normalized:");
     isb->addBool(_normalized);
 
-    std::string s = isb->getString();
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -356,9 +355,9 @@ private:
 public:
   GPUAttributeVec2Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 2) {}
 };
-////////
 
-///////////
+
+
 class GPUAttributeValueVec3Float: public GPUAttributeValueVecFloat {
 private:
   ~GPUAttributeValueVec3Float() {
@@ -368,7 +367,7 @@ private:
   }
 
 public:
-  GPUAttributeValueVec3Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVec3Float(const IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 3, arrayElementSize, index, stride, normalized) {}
 };
 
@@ -383,9 +382,9 @@ private:
 public:
   GPUAttributeVec3Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 3) {}
 };
-////////
 
-///////////
+
+
 class GPUAttributeValueVec4Float: public GPUAttributeValueVecFloat {
 private:
   ~GPUAttributeValueVec4Float() {
@@ -395,7 +394,7 @@ private:
   }
 
 public:
-  GPUAttributeValueVec4Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
+  GPUAttributeValueVec4Float(const IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 4, arrayElementSize, index, stride, normalized) {}
 };
 
@@ -410,6 +409,6 @@ private:
 public:
   GPUAttributeVec4Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 4) {}
 };
-////////
+
 
 #endif

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  HUDImageRenderer.cpp
 //  G3MiOSSDK
@@ -43,7 +43,7 @@ public class HUDImageRenderer extends DefaultRenderer
     public final void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener)
     {
     
-      ICanvas canvas = rc.getFactory().createCanvas();
+      ICanvas canvas = rc.getFactory().createCanvas(true);
       canvas.initialize(width, height);
     
       drawOn(canvas, width, height);
@@ -93,7 +93,11 @@ public class HUDImageRenderer extends DefaultRenderer
   
           final Camera camera = rc.getCurrentCamera();
   
-          final int width = camera.getViewPortWidth();
+          int width = camera.getViewPortWidth();
+          if (rc.getViewMode() == ViewMode.STEREO)
+          {
+            width /= 2;
+          }
           final int height = camera.getViewPortHeight();
   
           _imageFactory.create(rc, width, height, new HUDImageRenderer.ImageListener(this), true);
@@ -122,12 +126,12 @@ public class HUDImageRenderer extends DefaultRenderer
     final IStringUtils su = IStringUtils.instance();
     final String textureName = "HUDImageRenderer" + su.toString(_instanceID) + "/" + su.toString(_changeCounter++);
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false);
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false);
   
     _image = null;
     _image = null;
   
-    if (texId == null)
+    if (texID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return null;
@@ -135,8 +139,12 @@ public class HUDImageRenderer extends DefaultRenderer
   
   
     final Camera camera = rc.getCurrentCamera();
-  
-    final double halfWidth = camera.getViewPortWidth() / 2.0;
+    int viewPortWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      viewPortWidth /= 2;
+    }
+    final double halfWidth = viewPortWidth / 2.0;
     final double halfHeight = camera.getViewPortHeight() / 2.0;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
@@ -156,7 +164,7 @@ public class HUDImageRenderer extends DefaultRenderer
     texCoords.add(1, 0);
     texCoords.add(1, 1);
   
-    TextureMapping textureMapping = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    TextureMapping textureMapping = new SimpleTextureMapping(texID, texCoords.create(), true, true);
   
     return new TexturedMesh(mesh, true, textureMapping, true, true);
   }
@@ -195,7 +203,12 @@ public class HUDImageRenderer extends DefaultRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int halfWidth = width / 2;
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+    final int halfWidth = logicWidth / 2;
     final int halfHeight = height / 2;
     MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   

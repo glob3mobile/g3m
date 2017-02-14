@@ -21,7 +21,7 @@ class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
 class TextureIDReference;
 
-class IGLTextureId;
+class IGLTextureID;
 
 #include "URL.hpp"
 
@@ -66,13 +66,13 @@ private:
 
   bool _textureRequested;
   IImage* _textureImage;
-  const TextureIDReference* getTextureId(const G3MRenderContext* rc);
+  const TextureIDReference* getTextureID(const G3MRenderContext* rc);
 
 #ifdef C_CODE
-  const TextureIDReference* _texId;
+  const TextureIDReference* _texID;
 #endif
 #ifdef JAVA_CODE
-  TextureIDReference _texId;
+  TextureIDReference _texID;
 #endif
 
 protected:
@@ -88,24 +88,7 @@ public:
                  bool mercator,
                  const Color& surfaceColor,
                  Color* borderColor = NULL,
-                 bool withNormals = true) :
-  AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
-//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
-  _textureURL(URL("", false)),
-  _resolution(resolution < 3 ? 3 : resolution),
-  _borderWidth(borderWidth),
-  _texturedInside(texturedInside),
-  _mercator(mercator),
-  _surfaceColor(new Color(surfaceColor)),
-  _borderColor(borderColor),
-  _textureRequested(false),
-  _textureImage(NULL),
-  _withNormals(withNormals),
-  _texId(NULL)
-  {
-
-  }
+                 bool withNormals = true);
 
   EllipsoidShape(Geodetic3D* position,
                  AltitudeMode altitudeMode,
@@ -118,7 +101,7 @@ public:
                  bool mercator,
                  bool withNormals = true) :
   AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::zero, radius)),
+  _ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
   _textureURL(textureURL),
   _resolution(resolution < 3 ? 3 : resolution),
@@ -130,7 +113,7 @@ public:
   _textureRequested(false),
   _textureImage(NULL),
   _withNormals(withNormals),
-  _texId(NULL)
+  _texID(NULL)
   {
     
   }

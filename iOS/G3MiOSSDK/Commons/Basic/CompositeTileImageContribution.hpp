@@ -18,10 +18,10 @@ public:
 
   class ChildContribution {
   public:
-    const int                    _childIndex;
+    const size_t                 _childIndex;
     const TileImageContribution* _contribution;
 
-    ChildContribution(const int                    childIndex,
+    ChildContribution(const size_t                 childIndex,
                       const TileImageContribution* contribution);
 
     ~ChildContribution();
@@ -65,11 +65,11 @@ protected:
 
 public:
 
-  const int size() const {
+  const size_t size() const {
     return _contributions.size();
   }
 
-  const ChildContribution* get(int index) const {
+  const ChildContribution* get(size_t index) const {
 #ifdef C_CODE
     return _contributions[index];
 #endif

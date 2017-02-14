@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Vector2F.cpp
 //  G3MiOSSDK
@@ -31,7 +31,7 @@ public class Vector2F
 
   public static Vector2F nan()
   {
-    return new Vector2F(java.lang.Float.NaN, java.lang.Float.NaN);
+    return new Vector2F(Float.NaN, Float.NaN);
   }
 
   public final float _x;
@@ -66,6 +66,63 @@ public class Vector2F
     final double dx = _x - that._x;
     final double dy = _y - that._y;
     return (dx * dx) + (dy * dy);
+  }
+
+  public final double squaredDistanceTo(float x, float y)
+  {
+    final double dx = _x - x;
+    final double dy = _y - y;
+    return (dx * dx) + (dy * dy);
+  }
+
+
+  public final Vector2F add(Vector2F v)
+  {
+    return new Vector2F(_x + v._x, _y + v._y);
+  }
+
+  public final boolean isNan()
+  {
+    return (_x != _x) || (_y != _y);
+  }
+
+  public final Vector2F sub(Vector2F v)
+  {
+    return new Vector2F(_x - v._x, _y - v._y);
+  }
+
+  public final Vector2F times(float magnitude)
+  {
+    return new Vector2F(_x * magnitude, _y * magnitude);
+  }
+
+  public final Vector2F div(float v)
+  {
+    return new Vector2F(_x / v, _y / v);
+  }
+
+  public final double length()
+  {
+    return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+  public final double squaredLength()
+  {
+    return _x * _x + _y * _y;
+  }
+
+  public final Vector2F clampLength(float min, float max)
+  {
+    float length = (float) this.length();
+    if (length < min)
+    {
+      return times(min / length);
+    }
+    if (length > max)
+    {
+      return times(max / length);
+    }
+    return this;
   }
 
 }

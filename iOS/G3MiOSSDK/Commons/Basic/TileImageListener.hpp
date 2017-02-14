@@ -17,15 +17,15 @@ public:
   virtual ~TileImageListener() {
   }
 
-  virtual void imageCreated(const std::string&           tileId,
+  virtual void imageCreated(const std::string&           tileID,
                             const IImage*                image,
-                            const std::string&           imageId,
+                            const std::string&           imageID,
                             const TileImageContribution* contribution) = 0;
 
-  virtual void imageCreationError(const std::string& tileId,
+  virtual void imageCreationError(const std::string& tileID,
                                   const std::string& error) = 0;
 
-  virtual void imageCreationCanceled(const std::string& tileId) = 0;
+  virtual void imageCreationCanceled(const std::string& tileID) = 0;
 
 };
 

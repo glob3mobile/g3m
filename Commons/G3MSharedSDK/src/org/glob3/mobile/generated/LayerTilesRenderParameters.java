@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  LayerTilesRenderParameters.cpp
 //  G3MiOSSDK
@@ -24,9 +24,8 @@ public class LayerTilesRenderParameters
   /*
    return ( topSectorSplitsByLatitude, topSectorSplitsByLongitude )
    */
-  private static Vector2I calculateTopSectorSplitsParametersWGS84(Sector topSector)
+  private static Vector2S calculateTopSectorSplitsParametersWGS84(Sector topSector)
   {
-  //  IMathUtils* math = IMathUtils::instance();
     final double maxTile = 90;
     double sLat;
     double sLon;
@@ -45,11 +44,9 @@ public class LayerTilesRenderParameters
   
     final double tileDeltaLat = topSector._deltaLatitude.div(sLat)._degrees;
     final double factorLat = tileDeltaLat / maxTile;
-  //  double factor = math->max(factorLat, 1L);
-  //  return Vector2I((int) math->round(sLat * factor), (int) math->round(sLon * factor));
   
     final double factor = (factorLat < 1) ? 1 : factorLat;
-    return new Vector2I((int)((sLat * factor) + 0.5), (int)((sLon * factor) + 0.5));
+    return new Vector2S((short)((sLat * factor) + 0.5), (short)((sLon * factor) + 0.5));
   }
   public final Sector _topSector ;
   public final int _topSectorSplitsByLatitude;
@@ -57,11 +54,11 @@ public class LayerTilesRenderParameters
   public final int _firstLevel;
   public final int _maxLevel;
   public final int _maxLevelForPoles;
-  public final Vector2I _tileTextureResolution;
-  public final Vector2I _tileMeshResolution;
+  public final Vector2S _tileTextureResolution;
+  public final Vector2S _tileMeshResolution;
   public final boolean _mercator;
 
-  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2I tileTextureResolution, Vector2I tileMeshResolution, boolean mercator)
+  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, Vector2S tileTextureResolution, Vector2S tileMeshResolution, boolean mercator)
   {
      _topSector = new Sector(topSector);
      _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
@@ -75,25 +72,26 @@ public class LayerTilesRenderParameters
 
   }
 
-  public static Vector2I defaultTileMeshResolution()
+  public static Vector2S defaultTileMeshResolution()
   {
-    return new Vector2I(16, 16);
+    //return Vector2S((short)16, (short)16);
+    return new Vector2S((short)32, (short)32);
   }
 
-  public static Vector2I defaultTileTextureResolution ()
+  public static Vector2S defaultTileTextureResolution ()
   {
-    return new Vector2I(256, 256);
+    return new Vector2S((short)256, (short)256);
   }
 
 
   public static LayerTilesRenderParameters createDefaultWGS84(int firstLevel, int maxLevel)
   {
-    return createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
+    return createDefaultWGS84(Sector.FULL_SPHERE, firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
   {
-    final Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
+    final Vector2S splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
     final int topSectorSplitsByLatitude = splitsParameters._x;
     final int topSectorSplitsByLongitude = splitsParameters._y;
     final boolean mercator = false;
@@ -110,7 +108,7 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)
   {
-    final Sector topSector = Sector.fullSphere();
+    final Sector topSector = Sector.FULL_SPHERE;
     final int topSectorSplitsByLatitude = 1;
     final int topSectorSplitsByLongitude = 1;
     final boolean mercator = true;

@@ -16,12 +16,12 @@
 
 class HereLayer : public RasterLayer {
 private:
-  const std::string _appId;
+  const std::string _appID;
   const std::string _appCode;
   const int         _initialLevel;
 
 protected:
-  std::string getLayerType() const {
+  const std::string getLayerType() const {
     return "Here";
   }
 
@@ -34,7 +34,7 @@ protected:
 
 public:
 
-  HereLayer(const std::string&    appId,
+  HereLayer(const std::string&    appID,
             const std::string&    appCode,
             const TimeInterval&   timeToCache,
             const bool            readExpired    = true,
@@ -53,7 +53,7 @@ public:
   RenderState getRenderState();
 
   const Sector getDataSector() const {
-    return Sector::fullSphere();
+    return Sector::FULL_SPHERE;
   }
   
 };

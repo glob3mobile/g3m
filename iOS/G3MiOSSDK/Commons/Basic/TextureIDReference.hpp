@@ -9,29 +9,39 @@
 #ifndef __G3MiOSSDK__TextureIDReference__
 #define __G3MiOSSDK__TextureIDReference__
 
-class IGLTextureId;
+class IGLTextureID;
 class TexturesHandler;
 
 class TextureIDReference {
 private:
-  const IGLTextureId* _id;
-  TexturesHandler* _texHandler;
+  const IGLTextureID* _id;
+  const bool          _isPremultiplied;
+  TexturesHandler*    _texHandler;
 
 private:
   TextureIDReference(const TextureIDReference& that);
 
 public:
 
-  TextureIDReference(const IGLTextureId* id,
-                     TexturesHandler* texHandler):
-  _texHandler(texHandler), _id(id) {}
+  TextureIDReference(const IGLTextureID* id,
+                     bool                isPremultiplied,
+                     TexturesHandler*    texHandler) :
+  _id(id),
+  _isPremultiplied(isPremultiplied),
+  _texHandler(texHandler)
+  {
+  }
 
   virtual ~TextureIDReference();
 
   TextureIDReference* createCopy() const;
 
-  const IGLTextureId* getID() const {
+  const IGLTextureID* getID() const {
     return _id;
+  }
+
+  bool isPremultiplied() const {
+    return _isPremultiplied;
   }
   
 };

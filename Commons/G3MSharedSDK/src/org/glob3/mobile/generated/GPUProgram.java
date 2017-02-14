@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUProgram
 {
   private int _programID;
@@ -138,9 +138,9 @@ public class GPUProgram
   
     //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
   
-  //  if (_manager != NULL) {
-  //    _manager->compiledProgramDeleted(this->_name);
-  //  }
+    //  if (_manager != NULL) {
+    //    _manager->compiledProgramDeleted(_name);
+    //  }
   
     for (int i = 0; i < _nUniforms; i++)
     {
@@ -184,7 +184,7 @@ public class GPUProgram
       return null;
     }
   
-  //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
+    //  ILogger::instance()->logInfo("VERTEX SOURCE: \n %s", vertexSource.c_str());
   
     // compile fragment shader
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
@@ -198,7 +198,7 @@ public class GPUProgram
       return null;
     }
   
-  //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
+    //  ILogger::instance()->logInfo("FRAGMENT SOURCE: \n %s", fragmentSource.c_str());
   
     //gl->bindAttribLocation(p, 0, POSITION);
   
@@ -323,9 +323,9 @@ public class GPUProgram
   public final GPUAttributeVec1Float getGPUAttributeVec1Float(String name)
   {
     GPUAttributeVec1Float a = (GPUAttributeVec1Float)getGPUAttribute(name);
-    if (a!= null && a._size == 1 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 1) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec1Float)a;
+      return a;
     }
     return null;
   
@@ -333,9 +333,9 @@ public class GPUProgram
   public final GPUAttributeVec2Float getGPUAttributeVec2Float(String name)
   {
     GPUAttributeVec2Float a = (GPUAttributeVec2Float)getGPUAttribute(name);
-    if (a!= null && a._size == 2 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 2) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec2Float)a;
+      return a;
     }
     return null;
   
@@ -343,9 +343,9 @@ public class GPUProgram
   public final GPUAttributeVec3Float getGPUAttributeVec3Float(String name)
   {
     GPUAttributeVec3Float a = (GPUAttributeVec3Float)getGPUAttribute(name);
-    if (a!= null && a._size == 3 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 3) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec3Float)a;
+      return a;
     }
     return null;
   
@@ -353,9 +353,9 @@ public class GPUProgram
   public final GPUAttributeVec4Float getGPUAttributeVec4Float(String name)
   {
     GPUAttributeVec4Float a = (GPUAttributeVec4Float)getGPUAttribute(name);
-    if (a!= null && a._size == 4 && a._type == GLType.glFloat())
+    if ((a != null) && (a._size == 4) && (a._type == GLType.glFloat()))
     {
-      return (GPUAttributeVec4Float)a;
+      return a;
     }
     return null;
   
@@ -481,7 +481,7 @@ public class GPUProgram
     GPUUniform u = _uniforms[key];
     if (u == null)
     {
-      ILogger.instance().logError("Uniform [key=%d] not found", key);
+      ILogger.instance().logError("Uniform [key=%d] not found in program %s", key, _name);
       return;
     }
     u.set(v);
@@ -491,7 +491,7 @@ public class GPUProgram
     GPUAttribute a = _attributes[key];
     if (a == null)
     {
-      ILogger.instance().logError("Attribute [key=%d] not found", key);
+      ILogger.instance().logError("Attribute [key=%d] not found in program %s", key, _name);
       return;
     }
     a.set(v);

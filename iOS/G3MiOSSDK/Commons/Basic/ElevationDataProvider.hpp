@@ -69,7 +69,7 @@ public:
                                                IElevationDataListener* listener,
                                                bool autodeleteListener) = 0;
 
-  virtual void cancelRequest(const long long requestId) = 0;
+  virtual void cancelRequest(const long long requestID) = 0;
 
   virtual std::vector<const Sector*> getSectors() const = 0;
 

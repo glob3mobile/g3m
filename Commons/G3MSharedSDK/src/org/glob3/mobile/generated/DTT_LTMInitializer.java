@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class DTT_LTMInitializer extends LazyTextureMappingInitializer
 {
   private final Tile _tile;
@@ -10,9 +10,9 @@ public class DTT_LTMInitializer extends LazyTextureMappingInitializer
   private float _scaleV;
 
   private final TileTessellator _tessellator;
-  private final Vector2I _resolution;
+  private final Vector2S _resolution;
 
-  public DTT_LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator)
+  public DTT_LTMInitializer(Vector2S resolution, Tile tile, Tile ancestor, TileTessellator tessellator)
   {
      _resolution = resolution;
      _tile = tile;
@@ -62,7 +62,7 @@ public class DTT_LTMInitializer extends LazyTextureMappingInitializer
 
   public final IFloatBuffer createTextCoords()
   {
-    return _tessellator.createTextCoords(_resolution, _tile);
+    return _tessellator.createTextCoords(new Vector2S(_resolution._x, _resolution._y), _tile);
   }
 
 }

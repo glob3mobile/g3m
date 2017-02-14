@@ -22,7 +22,7 @@ class DebugTileImageProvider : public CanvasTileImageProvider {
 private:
   class ImageListener : public IImageListener {
   private:
-    const std::string           _tileId;
+    const std::string           _tileID;
 #ifdef C_CODE
     const TileImageContribution* _contribution;
 #endif
@@ -33,10 +33,10 @@ private:
     TileImageListener*          _listener;
     bool                        _deleteListener;
 
-    static const std::string getImageId(const std::string& tileId);
+    static const std::string getImageID(const std::string& tileID);
 
   public:
-    ImageListener(const std::string&           tileId,
+    ImageListener(const std::string&           tileID,
                   const TileImageContribution* contribution,
                   TileImageListener*           listener,
                   bool                         deleteListener);
@@ -59,12 +59,12 @@ private:
   const bool _showSectorLabels;
   const bool _showTileBounds;
   
-  std::string getIDLabel(const Tile* tile) const;
+  const std::string getIDLabel(const Tile* tile) const;
   
-  std::string getSectorLabel1(const Sector& sector) const;
-  std::string getSectorLabel2(const Sector& sector) const;
-  std::string getSectorLabel3(const Sector& sector) const;
-  std::string getSectorLabel4(const Sector& sector) const;
+  const std::string getSectorLabel1(const Sector& sector) const;
+  const std::string getSectorLabel2(const Sector& sector) const;
+  const std::string getSectorLabel3(const Sector& sector) const;
+  const std::string getSectorLabel4(const Sector& sector) const;
 
 protected:
   virtual ~DebugTileImageProvider() {
@@ -88,14 +88,14 @@ public:
 
   void create(const Tile* tile,
               const TileImageContribution* contribution,
-              const Vector2I& resolution,
-              long long tileDownloadPriority,
+              const Vector2S& resolution,
+              long long tileTextureDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const std::string& tileId);
+  void cancel(const std::string& tileID);
 
 };
 

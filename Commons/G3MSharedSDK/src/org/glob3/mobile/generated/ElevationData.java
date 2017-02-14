@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ElevationData.cpp
 //  G3MiOSSDK
@@ -17,11 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-//class Vector2I;
-//class Mesh;
-//class Ellipsoid;
-//class Vector3D;
 //class Interpolator;
+//class Mesh;
+//class Geodetic3D;
+//class Vector2I;
+
 
 public abstract class ElevationData
 {
@@ -133,8 +133,7 @@ public abstract class ElevationData
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
-                                  //GLPrimitive::lineStrip(),
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), false);
   
     if (vertices != null)
        vertices.dispose();
@@ -152,7 +151,8 @@ public abstract class ElevationData
   
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
-    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
+    final Geodetic3D center = new Geodetic3D(sector._center, averageElevation);
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, center);
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
@@ -189,7 +189,7 @@ public abstract class ElevationData
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), false);
   
     if (vertices != null)
        vertices.dispose();
@@ -204,17 +204,16 @@ public abstract class ElevationData
 
   public abstract boolean hasNoData();
 
-
-  public final double getElevationAt(Angle latitude, Angle longitude)
+  public final double getElevationAt(Angle latitude2, Angle longitude2)
   {
   
-    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+    final Vector2D uv = _sector.getUVCoordinates(latitude2, longitude2);
     final double u = uv._x;
     final double v = uv._y;
   
     if (u < 0 || u > 1 || v < 0 || v > 1)
     {
-      return java.lang.Double.NaN;
+      return Double.NaN;
     }
   
     final double dX = u * (_width - 1);
@@ -241,13 +240,13 @@ public abstract class ElevationData
         final double heightY = getElevationAt(x, y);
         if ((heightY != heightY))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         final double heightNextY = getElevationAt(x, nextY);
         if ((heightNextY != heightNextY))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         //result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
@@ -262,12 +261,12 @@ public abstract class ElevationData
         final double heightX = getElevationAt(x, y);
         if ((heightX != heightX))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double heightNextX = getElevationAt(nextX, y);
         if ((heightNextX != heightNextX))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         result = IMathUtils.instance().linearInterpolation(heightX, heightNextX, alphaX);
@@ -278,22 +277,22 @@ public abstract class ElevationData
         final double valueNW = getElevationAt(x, y);
         if ((valueNW != valueNW))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double valueNE = getElevationAt(nextX, y);
         if ((valueNE != valueNE))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double valueSE = getElevationAt(nextX, nextY);
         if ((valueSE != valueSE))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
         final double valueSW = getElevationAt(x, nextY);
         if ((valueSW != valueSW))
         {
-          return java.lang.Double.NaN;
+          return Double.NaN;
         }
   
         result = getInterpolator().interpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
@@ -307,29 +306,5 @@ public abstract class ElevationData
   {
     return getElevationAt(position._latitude, position._longitude);
   }
-
-  //  bool isEquivalentTo(const ElevationData* ed) {
-  //    bool equivalent = true;
-  //    const int width  = 3;
-  //    const int height = 3;
-  //    for (int x = 0; x < width; x++) {
-  //      const double u = (double) x / (width  - 1);
-  //
-  //      for (int y = 0; y < height; y++) {
-  //        const double v = 1.0 - ( (double) y / (height - 1) );
-  //
-  //        const Geodetic2D position = _sector.getInnerPoint(u, v);
-  //
-  //        const double elevation = getElevationAt(position);
-  //        const double elevation2 = ed->getElevationAt(position);
-  //
-  //        if (elevation != elevation2) {
-  //          printf("%s -> %f != %f\n", position.description().c_str(), elevation, elevation2);
-  //          equivalent = false;
-  //        }
-  //      }
-  //    }
-  //    return equivalent;
-  //  }
 
 }

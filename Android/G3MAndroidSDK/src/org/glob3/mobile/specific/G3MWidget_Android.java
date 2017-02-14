@@ -17,6 +17,8 @@ import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDeviceAttitude;
+import org.glob3.mobile.generated.IDeviceLocation;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -37,7 +39,8 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
 import android.opengl.GLSurfaceView;
@@ -49,16 +52,15 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-         extends
-            GLSurfaceView
-         implements
-            OnGestureListener {
+   extends
+      GLSurfaceView
+   implements
+      OnGestureListener {
 
    private G3MWidget                  _g3mWidget;
-   private ES2Renderer                _es2renderer;
+   private final ES2Renderer          _es2renderer;
 
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
-   private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
    private Thread                     _openGLThread         = null;
 
@@ -115,11 +117,11 @@ public final class G3MWidget_Android
       // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
       // setDebugFlags(DEBUG_CHECK_GL_ERROR);
 
+      final OnDoubleTapListener doubleTapListener;
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener
          _gestureDetector = new GestureDetector(context, this);
-         _doubleTapListener = new OnDoubleTapListener() {
-
+         doubleTapListener = new OnDoubleTapListener() {
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e) {
                return false;
@@ -128,14 +130,22 @@ public final class G3MWidget_Android
 
             @Override
             public boolean onDoubleTapEvent(final MotionEvent event) {
+               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
+
+               queueEvent(new Runnable() {
+                  @Override
+                  public void run() {
+                     _g3mWidget.onTouchEvent(te);
+                  }
+               });
+
                return true;
             }
 
 
             @Override
             public boolean onDoubleTap(final MotionEvent event) {
-
-               final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
 
                queueEvent(new Runnable() {
                   @Override
@@ -147,11 +157,11 @@ public final class G3MWidget_Android
                return true;
             }
          };
-         _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+         _gestureDetector.setOnDoubleTapListener(doubleTapListener);
       }
       else {
          _gestureDetector = null;
-         _doubleTapListener = null;
+         doubleTapListener = null;
       }
    }
 
@@ -164,8 +174,10 @@ public final class G3MWidget_Android
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
+      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
+      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.0f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
    }
 
 
@@ -223,7 +235,7 @@ public final class G3MWidget_Android
    public void onLongPress(final MotionEvent e) {
       final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
-      final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
+      final Touch t = new Touch(new Vector2F(pc.x, pc.y), Vector2F.zero());
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {
@@ -266,7 +278,7 @@ public final class G3MWidget_Android
    }
 
 
-   private GPUProgramManager createGPUProgramManager() {
+   static private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
 
       /*
@@ -291,7 +303,7 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      */
+       */
 
       return new GPUProgramManager(factory);
    }
@@ -324,7 +336,7 @@ public final class G3MWidget_Android
                storage, //
                downloader, //
                threadUtils, //
-               cameraActivityListener,//
+               cameraActivityListener, //
                planet, //
                cameraConstrainers, //
                cameraRenderer, //
@@ -341,7 +353,8 @@ public final class G3MWidget_Android
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay, //
+               ViewMode.MONO);
 
       _g3mWidget.setUserData(userData);
    }

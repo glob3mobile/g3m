@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CompositeElevationDataProvider.cpp
 //  G3MiOSSDK
@@ -357,9 +357,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     return _currentID;
   }
 
-  public final void cancelRequest(long requestId)
+  public final void cancelRequest(long requestID)
   {
-    final CompositeElevationDataProvider_Request req = _requests.remove(requestId);
+    final CompositeElevationDataProvider_Request req = _requests.remove(requestID);
     if (req != null) {
       req.cancel();
       req.dispose();

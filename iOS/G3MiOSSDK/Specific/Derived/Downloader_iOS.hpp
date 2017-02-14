@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Downloader_iOS
@@ -23,7 +22,7 @@ private:
   NSMutableDictionary* _downloadingHandlers; // downloads current in progress
   NSMutableDictionary* _queuedHandlers;      // queued downloads
 
-  long long _requestIdCounter;
+  long long _requestIDCounter;
 
   long long _requestsCounter;
   long long _cancelsCounter;
@@ -46,17 +45,21 @@ public:
                           const TimeInterval& timeToCache,
                           bool readExpired,
                           IBufferDownloadListener* listener,
-                          bool deleteListener);
-  
+                          bool deleteListener,
+                          const std::string& tag);
+
   long long requestImage(const URL& url,
                          long long priority,
                          const TimeInterval& timeToCache,
                          bool readExpired,
                          IImageDownloadListener* listener,
-                         bool deleteListener);
-  
-  void cancelRequest(long long requestId);
-  
+                         bool deleteListener,
+                         const std::string& tag);
+
+  bool cancelRequest(long long requestID);
+
+  void cancelRequestsTagged(const std::string& tag);
+
   Downloader_iOS_Handler* getHandlerToRun();
   
   virtual ~Downloader_iOS();

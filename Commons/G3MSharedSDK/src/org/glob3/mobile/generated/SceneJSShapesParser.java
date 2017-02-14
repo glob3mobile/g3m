@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SceneJSShapesParser.cpp
 //  G3MiOSSDK
@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class Shape;
+
 //class SGShape;
 //class IByteBuffer;
 //class JSONBaseObject;
@@ -33,14 +33,17 @@ package org.glob3.mobile.generated;
 //class Color;
 //class SceneJSParserStatistics;
 
+
 public class SceneJSShapesParser
 {
   private SGShape _rootShape;
   private final String _uriPrefix;
+  private final boolean _depthTest;
 
-  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  private SceneJSShapesParser(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
      _uriPrefix = uriPrefix;
+     _depthTest = depthTest;
      _rootShape = null;
     _statistics = new SceneJSParserStatistics();
     pvtParse(jsonObject, isTransparent, position, altitudeMode);
@@ -175,13 +178,13 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
   
-    SGNode node = new SGNode(id, sId);
+    SGNode node = new SGNode(id, sID);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -199,8 +202,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -237,7 +240,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGRotateNode node = new SGRotateNode(id, sId, x, y, z, angle);
+    SGRotateNode node = new SGRotateNode(id, sID, x, y, z, angle);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -255,8 +258,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -285,7 +288,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGTranslateNode node = new SGTranslateNode(id, sId, x, y, z);
+    SGTranslateNode node = new SGTranslateNode(id, sID, x, y, z);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -303,8 +306,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -365,7 +368,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGMaterialNode node = new SGMaterialNode(id, sId, baseColor, specularColor, specular, shine, alpha, emit);
+    SGMaterialNode node = new SGMaterialNode(id, sID, baseColor, specularColor, specular, shine, alpha, emit);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -383,13 +386,13 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
   
-    SGTextureNode node = new SGTextureNode(id, sId);
+    SGTextureNode node = new SGTextureNode(id, sID);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -423,8 +426,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -556,7 +559,7 @@ public class SceneJSShapesParser
       ILogger.instance().logError("SceneJSShapesParser: There are %d (of %d) indices out of range.", indicesOutOfRange, indicesCount);
     }
   
-    SGGeometryNode node = new SGGeometryNode(id, sId, primitive, vertices, colors, uv, normals, indices);
+    SGGeometryNode node = new SGGeometryNode(id, sID, primitive, vertices, colors, uv, normals, indices, _depthTest);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -575,8 +578,8 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    final String sId = jsonObject.getAsString("sid", "");
-    if (sId.compareTo("") != 0)
+    final String sID = jsonObject.getAsString("sid", "");
+    if (sID.compareTo("") != 0)
     {
       processedKeys++;
     }
@@ -631,7 +634,7 @@ public class SceneJSShapesParser
       processedKeys++;
     }
   
-    SGLayerNode node = new SGLayerNode(id, sId, uri, applyTo, blendMode, flipY, magFilter, minFilter, wrapS, wrapT);
+    SGLayerNode node = new SGLayerNode(id, sID, uri, applyTo, blendMode, flipY, magFilter, minFilter, wrapS, wrapT);
   
     processedKeys += parseChildren(jsonObject, node);
   
@@ -653,30 +656,30 @@ public class SceneJSShapesParser
   private SceneJSParserStatistics _statistics;
 
 
-  public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
-  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
-  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json.getAsString());
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
-  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
   
-    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, position, altitudeMode).getRootShape();
+    return new SceneJSShapesParser(jsonObject, uriPrefix, isTransparent, depthTest, position, altitudeMode).getRootShape();
   }
 
 }

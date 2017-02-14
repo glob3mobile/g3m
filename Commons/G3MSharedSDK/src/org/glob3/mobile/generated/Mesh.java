@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Mesh.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 //
@@ -12,21 +11,33 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 27/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 
 
-
 //class Vector3D;
-//class GPUProgramState;
+//class BoundingVolume;
+//class G3MRenderContext;
+//class GLState;
+
 
 public abstract class Mesh
 {
+  public static class MeshUserData
+  {
+    public void dispose()
+    {
+    }
+  }
+
   private boolean _enable;
-  public Mesh()
+
+  private MeshUserData _userData;
+
+  protected Mesh()
   {
      _enable = true;
+     _userData = null;
   }
 
   public final void setEnable(boolean enable)
@@ -41,6 +52,23 @@ public abstract class Mesh
 
   public void dispose()
   {
+    if (_userData != null)
+       _userData.dispose();
+  }
+
+  public final Mesh.MeshUserData getUserData()
+  {
+    return _userData;
+  }
+
+  public final void setUserData(MeshUserData userData)
+  {
+    if (_userData != userData)
+    {
+      if (_userData != null)
+         _userData.dispose();
+      _userData = userData;
+    }
   }
 
   public abstract int getVertexCount();

@@ -8,13 +8,13 @@
 
 #include "CanvasImageBuilder.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "Color.hpp"
 #include "IImageListener.hpp"
 #include "IImageBuilderListener.hpp"
-#include "IStringUtils.hpp"
+//#include "IStringUtils.hpp"
 
 CanvasImageBuilder::~CanvasImageBuilder() {
   delete _canvas;
@@ -32,13 +32,13 @@ ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
 
     const IFactory* factory = context->getFactory();
 
-    _canvas = factory->createCanvas();
+    _canvas = factory->createCanvas(_retina);
     _canvas->initialize(_width, _height);
     _canvasWidth = _width;
     _canvasHeight = _height;
   }
   else {
-    _canvas->setFillColor(Color::transparent());
+    _canvas->setFillColor(Color::TRANSPARENT);
     _canvas->fillRectangle(0, 0, _width, _height);
   }
 
@@ -79,13 +79,6 @@ public:
   }
 };
 
-long long CanvasImageBuilder::_counter = 0;
-
-std::string CanvasImageBuilder::getImageName(const G3MContext* context) const {
-  const IStringUtils* su = context->getStringUtils();
-
-  return "_CanvasImageBuilder_" + su->toString(_counter++);
-}
 
 void CanvasImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,

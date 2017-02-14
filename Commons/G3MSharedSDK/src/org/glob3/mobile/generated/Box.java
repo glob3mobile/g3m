@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  Box.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 17/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 //
@@ -12,7 +11,6 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 16/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -46,13 +44,21 @@ public class Box extends BoundingVolume
       indices.add(i[n]);
     }
   
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 2, 1, new Color(color));
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 2, 1, new Color(color));
   
     if (vertices != null)
        vertices.dispose();
   
     return mesh;
   }
+
+  private Box(Box that)
+  {
+     _lower = new Vector3D(that._lower);
+     _upper = new Vector3D(that._upper);
+     _mesh = null;
+  }
+
 
   public final Vector3D _lower ;
   public final Vector3D _upper ;
@@ -269,7 +275,7 @@ public class Box extends BoundingVolume
          return inter;
     }
   
-    return Vector3D.nan();
+    return Vector3D.NANV;
   }
 
   public final void render(G3MRenderContext rc, GLState parentState, Color color)
@@ -327,7 +333,7 @@ public class Box extends BoundingVolume
   {
     if (that == null)
     {
-      return null;
+      return new Box(this);
     }
     return that.mergedWithBox(this);
   }
@@ -427,6 +433,11 @@ public class Box extends BoundingVolume
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public final Box copy()
+  {
+    return new Box(this);
   }
 
 }

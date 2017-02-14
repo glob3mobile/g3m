@@ -260,18 +260,22 @@ void CachedDownloader::stop() {
   _downloader->stop();
 }
 
-void CachedDownloader::cancelRequest(long long requestId) {
-  _downloader->cancelRequest(requestId);
+bool CachedDownloader::cancelRequest(long long requestID) {
+  return _downloader->cancelRequest(requestID);
+}
+
+void CachedDownloader::cancelRequestsTagged(const std::string& tag) {
+  _downloader->cancelRequestsTagged(tag);
 }
 
 const std::string CachedDownloader::statistics() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("CachedDownloader(cache hits=");
-  isb->addInt(_cacheHitsCounter);
+  isb->addLong(_cacheHitsCounter);
   isb->addString("/");
-  isb->addInt(_requestsCounter);
+  isb->addLong(_requestsCounter);
   isb->addString(", saves=");
-  isb->addInt(_savesCounter);
+  isb->addLong(_savesCounter);
   isb->addString(", downloader=");
   isb->addString(_downloader->statistics());
   const std::string s = isb->getString();
@@ -335,7 +339,8 @@ long long CachedDownloader::requestImage(const URL& url,
                                          const TimeInterval& timeToCache,
                                          bool readExpired,
                                          IImageDownloadListener* listener,
-                                         bool deleteListener) {
+                                         bool deleteListener,
+                                         const std::string& tag) {
   _requestsCounter++;
 
   IImageResult cached = getCachedImageResult(url, timeToCache, readExpired);
@@ -367,14 +372,16 @@ long long CachedDownloader::requestImage(const URL& url,
                                                                     deleteListener,
                                                                     _storage,
                                                                     timeToCache),
-                                     true);
+                                     true,
+                                     tag);
   }
   return _downloader->requestImage(url,
                                    priority,
                                    TimeInterval::zero(),
                                    false,
                                    listener,
-                                   deleteListener);
+                                   deleteListener,
+                                   tag);
 }
 
 long long CachedDownloader::requestBuffer(const URL& url,
@@ -382,7 +389,8 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                           const TimeInterval& timeToCache,
                                           bool readExpired,
                                           IBufferDownloadListener* listener,
-                                          bool deleteListener) {
+                                          bool deleteListener,
+                                          const std::string& tag) {
 
   _requestsCounter++;
 
@@ -416,7 +424,8 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                                                       deleteListener,
                                                                       _storage,
                                                                       timeToCache),
-                                      true);
+                                      true,
+                                      tag);
   }
 
   return _downloader->requestBuffer(url,
@@ -424,5 +433,6 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                     TimeInterval::zero(),
                                     false,
                                     listener,
-                                    deleteListener);
+                                    deleteListener,
+                                    tag);
 }

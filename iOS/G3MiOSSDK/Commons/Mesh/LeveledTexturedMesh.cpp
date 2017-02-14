@@ -43,11 +43,11 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
         _scaleV != 1 ||
         _translationU != 0 ||
         _translationV != 0) {
-      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
+      state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
-                                              GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                              _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha(),
                                               _translationU,
                                               _translationV,
                                               _scaleU,
@@ -56,11 +56,12 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
                          false);
     }
     else {
-      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
+      state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
-                                              GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha()),
+                                              _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha()
+                                              ),
                          false);
     }
 
@@ -71,23 +72,19 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
 
 }
 
-void LazyTextureMapping::releaseGLTextureId() {
-  if (_glTextureId != NULL) {
+void LazyTextureMapping::releaseGLTextureID() {
+  if (_glTextureID != NULL) {
 #ifdef C_CODE
-    delete _glTextureId;
+    delete _glTextureID;
 #endif
 #ifdef JAVA_CODE
-    _glTextureId.dispose();
+    _glTextureID.dispose();
 #endif
-    _glTextureId = NULL;
+    _glTextureID = NULL;
   }
 }
 
 LeveledTexturedMesh::~LeveledTexturedMesh() {
-//#ifdef JAVA_CODE
-//  synchronized (this) {
-//#endif
-
   if (_ownedMesh) {
     delete _mesh;
   }
@@ -99,25 +96,20 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
     }
 
     delete _mappings;
-//    _mappings = NULL;
   }
 
   _glState->_release();
-
-//#ifdef JAVA_CODE
-//  }
-//#endif
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-int LeveledTexturedMesh::getVertexCount() const {
+size_t LeveledTexturedMesh::getVertexCount() const {
   return _mesh->getVertexCount();
 }
 
-const Vector3D LeveledTexturedMesh::getVertex(int i) const {
+const Vector3D LeveledTexturedMesh::getVertex(size_t i) const {
   return _mesh->getVertex(i);
 }
 
@@ -175,24 +167,24 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return (_currentLevel >= 0) ? _mappings->at(_currentLevel) : NULL;
 }
 
-const TextureIDReference* LeveledTexturedMesh::getTopLevelTextureId() const {
+const TextureIDReference* LeveledTexturedMesh::getTopLevelTextureID() const {
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
     if (_currentLevel == 0) {
-      return mapping->getGLTextureId();
+      return mapping->getGLTextureID();
     }
   }
 
   return NULL;
 }
 
-bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
-                                                 const TextureIDReference* glTextureId) {
+bool LeveledTexturedMesh::setGLTextureIDForLevel(int level,
+                                                 const TextureIDReference* glTextureID) {
 
   if (_mappings->size() > 0) {
-    if (glTextureId != NULL) {
+    if (glTextureID != NULL) {
       if ((_currentLevel < 0) || (level < _currentLevel)) {
-        _mappings->at(level)->setGLTextureId(glTextureId);
+        _mappings->at(level)->setGLTextureID(glTextureID);
         _currentLevel = -1;
         return true;
       }

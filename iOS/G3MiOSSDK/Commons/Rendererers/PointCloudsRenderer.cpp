@@ -8,7 +8,7 @@
 
 #include "PointCloudsRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "Planet.hpp"
 #include "DownloadPriority.hpp"
@@ -20,6 +20,9 @@
 #include "DirectMesh.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
+#include "G3MRenderContext.hpp"
+#include "ITimer.hpp"
+
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -329,9 +332,9 @@ PointCloudsRenderer::PointCloudInnerNode::~PointCloudInnerNode() {
 }
 
 void PointCloudsRenderer::PointCloudInnerNode::addLeafNode(PointCloudLeafNode* leafNode) {
-  const int idLenght = _id.length();
-  const int childIndex = leafNode->_id[idLenght] - '0';
-  if ((idLenght + 1) == leafNode->_id.length()) {
+  const size_t idLength = _id.length();
+  const int childIndex = leafNode->_id[idLength] - '0';
+  if ((idLength + 1) == leafNode->_id.length()) {
     if (_children[childIndex] != NULL) {
       THROW_EXCEPTION("Logic error!");
     }
@@ -390,11 +393,11 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   }
 
   if (_errorDownloadingMetadata) {
-    return RenderState::error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL.getPath() + "\"");
+    return RenderState::error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
   }
 
   if (_errorParsingMetadata) {
-    return RenderState::error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL.getPath() + "\"");
+    return RenderState::error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
   }
 
   return RenderState::ready();
@@ -405,7 +408,7 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              const Frustum* frustum,
                                              long long nowInMS) {
   if (_rootNode != NULL) {
-#warning TODO: make plugable the colorization of the cloud
+// #warning TODO: make plugable the colorization of the cloud
 #ifdef C_CODE
     const double maxHeight = (_colorPolicy == MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
 #endif
@@ -414,8 +417,6 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
 #endif
 
     const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
-    // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _averageHeight * 3, _pointSize, nowInMS);
-    // const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, _maxHeight, _pointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
@@ -444,7 +445,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
     if (bounds->touchesFrustum(frustum)) {
       bool justRecalculatedProjectedArea = false;
       if ((_projectedArea == -1) ||
-          ((_lastProjectedAreaTimeInMS + 350) < nowInMS)) {
+          ((_lastProjectedAreaTimeInMS + 500) < nowInMS)) {
         const double currentProjectedArea = bounds->projectedArea(rc);
         if (currentProjectedArea != _projectedArea) {
           _projectedArea = currentProjectedArea;
@@ -453,8 +454,9 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
         }
       }
 
-#warning TODO: quality factor 1
-      const double minProjectedArea = 250;
+// #warning TODO: quality factor 1
+//      const double minProjectedArea = 250 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+      const double minProjectedArea = 2500 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(pointCloud,
                                                   rc,
@@ -516,10 +518,9 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                              Vector3D(averageX, averageY, averageZ),
                              pointsBuffer,
                              1,
-                             pointSize * 2,
+                             pointSize * 2 *  IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                              Color::newFromRGBA(1, 1, 0, 1), // flatColor
                              NULL, // colors
-                             1,    // colorsIntensity
                              true);
     }
     _mesh->render(rc, glState);
@@ -570,7 +571,7 @@ PointCloudsRenderer::PointCloudLeafNode::~PointCloudLeafNode() {
 }
 
 int PointCloudsRenderer::PointCloudLeafNode::calculateCurrentLoadedLevel() const {
-  const int loadedPointsCount = _firstPointsVerticesBuffer->size() / 3;
+  const size_t loadedPointsCount = _firstPointsVerticesBuffer->size() / 3;
   int accummulated = 0;
   for (int i = 0; i < _levelsCount; i++) {
     const int levelPointsCount = _levelsPointsCount[i];
@@ -716,14 +717,14 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferCancel(int level) {
 DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight,
                                                                 double maxHeight,
                                                                 float pointSize) {
-  const int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer->size();
+  const size_t firstPointsVerticesBufferSize = _firstPointsVerticesBuffer->size();
 
-  const Color baseColor = Color::magenta();
+  const Color baseColor = Color::MAGENTA;
   const int wheelSize = 2147483647;
   const IMathUtils* mu = IMathUtils::instance();
 
   if (_currentLoadedLevel <= _preloadedLevel) {
-    const int firstPointsCount = firstPointsVerticesBufferSize / 3;
+    const size_t firstPointsCount = firstPointsVerticesBufferSize / 3;
 
     if (_firstPointsColorsBuffer == NULL) {
       const double deltaHeight = maxHeight - minHeight;
@@ -749,10 +750,9 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       *_average,
                                       _firstPointsVerticesBuffer,
                                       1,
-                                      pointSize,
+                                      pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                                       NULL,                     // flatColor
                                       _firstPointsColorsBuffer, // colors
-                                      1,                        // colorsIntensity
                                       true);
     mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
 
@@ -767,7 +767,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer( pointsCount * 3 );
 
   vertices->rawPut(0, _firstPointsVerticesBuffer);
-  int cursor = firstPointsVerticesBufferSize;
+  size_t cursor = firstPointsVerticesBufferSize;
   for (int level = _preloadedLevel+1; level <= _currentLoadedLevel; level++) {
     IFloatBuffer* levelVerticesBuffers = _levelsVerticesBuffers[level];
     if (levelVerticesBuffers != NULL) {
@@ -778,7 +778,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
 
   IFloatBuffer* colors   = IFactory::instance()->createFloatBuffer( pointsCount * 4 );
   const double deltaHeight = maxHeight - minHeight;
-  const int firstPointsCount = firstPointsVerticesBufferSize / 3;
+  const size_t firstPointsCount = firstPointsVerticesBufferSize / 3;
 
   for (int i = 0; i < firstPointsCount; i++) {
     const float height = _firstPointsHeightsBuffer->get(i);
@@ -805,7 +805,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
         const Color color = baseColor.wheelStep(wheelSize,
                                                 mu->round(wheelSize * alpha) );
 
-        const int offset = cursor + i*4;
+        const size_t offset = cursor + i*4;
         colors->rawPut(offset + 0, color._red);
         colors->rawPut(offset + 1, color._green);
         colors->rawPut(offset + 2, color._blue);
@@ -820,10 +820,9 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     *_average,
                                     vertices,
                                     1,
-                                    pointSize,
+                                    pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                                     NULL,   // flatColor
                                     colors, // colors
-                                    1,      // colorsIntensity
                                     true);
   // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
   mesh->setRenderVerticesCount( pointsCount );
@@ -844,7 +843,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
                                                              bool justRecalculatedProjectedArea) {
 
   if (justRecalculatedProjectedArea) {
-#warning TODO: quality factor 2
+// #warning TODO: quality factor 2
     const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.09f);
     // const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.25f);
     int accummulated = 0;
@@ -1088,12 +1087,6 @@ void PointCloudsRenderer::removeAllPointClouds() {
 void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
   if (_cloudsSize > 0) {
-//    const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-//    const float deviceQualityFactor = deviceInfo->getQualityFactor();
-////    const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-////    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
-//    const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / 256;
-
     if (_timer == NULL) {
       _timer = rc->getFactory()->createTimer();
     }

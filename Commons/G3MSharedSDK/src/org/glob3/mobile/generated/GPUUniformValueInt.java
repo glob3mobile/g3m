@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniformValueInt extends GPUUniformValue
 {
   public void dispose()
@@ -28,7 +28,7 @@ public class GPUUniformValueInt extends GPUUniformValue
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("Uniform Value Integer: ");
     isb.addInt(_value);
-    String s = isb.getString();
+    final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;

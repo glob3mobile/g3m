@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  HereLayer.cpp
 //  G3MiOSSDK
@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 public class HereLayer extends RasterLayer
 {
-  private final String _appId;
+  private final String _appID;
   private final String _appCode;
   private final int _initialLevel;
 
@@ -34,7 +34,7 @@ public class HereLayer extends RasterLayer
   {
     HereLayer t = (HereLayer) that;
   
-    if (!_appId.equals(t._appId))
+    if (!_appID.equals(t._appID))
     {
       return false;
     }
@@ -81,7 +81,7 @@ public class HereLayer extends RasterLayer
     isb.addString("http://m.nok.it/");
   
     isb.addString("?app_id=");
-    isb.addString(_appId);
+    isb.addString(_appID);
   
     isb.addString("&app_code=");
     isb.addString(_appCode);
@@ -170,30 +170,30 @@ public class HereLayer extends RasterLayer
   }
 
 
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
+  public HereLayer(String appID, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, condition, new java.util.ArrayList<Info>());
+     this(appID, appCode, timeToCache, readExpired, initialLevel, transparency, condition, new java.util.ArrayList<Info>());
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
+  public HereLayer(String appID, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, null, new java.util.ArrayList<Info>());
+     this(appID, appCode, timeToCache, readExpired, initialLevel, transparency, null, new java.util.ArrayList<Info>());
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
+  public HereLayer(String appID, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, 1, null, new java.util.ArrayList<Info>());
+     this(appID, appCode, timeToCache, readExpired, initialLevel, 1, null, new java.util.ArrayList<Info>());
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
+  public HereLayer(String appID, String appCode, TimeInterval timeToCache, boolean readExpired)
   {
-     this(appId, appCode, timeToCache, readExpired, 2, 1, null, new java.util.ArrayList<Info>());
+     this(appID, appCode, timeToCache, readExpired, 2, 1, null, new java.util.ArrayList<Info>());
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache)
+  public HereLayer(String appID, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, true, 2, 1, null, new java.util.ArrayList<Info>());
+     this(appID, appCode, timeToCache, true, 2, 1, null, new java.util.ArrayList<Info>());
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
+  public HereLayer(String appID, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
-     _appId = appId;
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.FULL_SPHERE, 1, 1, initialLevel, 20, new Vector2S((short)256, (short)256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, layerInfo);
+     _appID = appID;
      _appCode = appCode;
      _initialLevel = initialLevel;
   }
@@ -210,15 +210,15 @@ public class HereLayer extends RasterLayer
 
   public final HereLayer copy()
   {
-    return new HereLayer(_appId, _appCode, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
+    return new HereLayer(_appID, _appCode, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _layerInfo);
   }
 
   public final RenderState getRenderState()
   {
     _errors.clear();
-    if (_appId.compareTo("") == 0)
+    if (_appID.compareTo("") == 0)
     {
-      _errors.add("Missing layer parameter: appId");
+      _errors.add("Missing layer parameter: appID");
     }
     if (_appCode.compareTo("") == 0)
     {
@@ -234,7 +234,7 @@ public class HereLayer extends RasterLayer
 
   public final Sector getDataSector()
   {
-    return Sector.fullSphere();
+    return Sector.FULL_SPHERE;
   }
 
 }

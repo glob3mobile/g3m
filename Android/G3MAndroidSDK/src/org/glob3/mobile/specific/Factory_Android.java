@@ -18,8 +18,8 @@ import android.content.Context;
 
 
 public final class Factory_Android
-         extends
-            IFactory {
+   extends
+      IFactory {
 
 
    private final Context _context;
@@ -89,8 +89,8 @@ public final class Factory_Android
 
 
    @Override
-   public ICanvas createCanvas() {
-      return new Canvas_Android();
+   public ICanvas createCanvas(final boolean retina) {
+      return new Canvas_Android(retina);
    }
 
 

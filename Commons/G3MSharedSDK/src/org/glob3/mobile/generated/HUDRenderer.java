@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  HUDRenderer.cpp
 //  G3MiOSSDK
@@ -152,7 +152,14 @@ public class HUDRenderer extends DefaultRenderer
   //  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
   //                                                                                           0, height,
   //                                                                                           -halfWidth, halfWidth);
-    MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(0, width, 0, height, -1, +1);
+  
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+  
+    MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(0, logicWidth, 0, height, -1, +1);
   
     ProjectionGLFeature pr = (ProjectionGLFeature) _glState.getGLFeature(GLFeatureID.GLF_PROJECTION);
     if (pr == null)

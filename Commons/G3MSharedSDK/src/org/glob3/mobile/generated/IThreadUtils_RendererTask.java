@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class IThreadUtils_RendererTask extends GTask
 {
   private GAsyncTask _task;
@@ -13,10 +13,15 @@ public class IThreadUtils_RendererTask extends GTask
   public final void run(G3MContext context)
   {
     _task.onPostExecute(context);
+  }
+
+  public void dispose()
+  {
     if (_autodelete)
     {
       if (_task != null)
          _task.dispose();
     }
+    super.dispose();
   }
 }

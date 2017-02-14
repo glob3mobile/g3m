@@ -1,33 +1,54 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
+//
+//  TrailsRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 10/23/12.
+//
+//
+
+//
+//  TrailsRenderer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 10/23/12.
+//
+//
+
+
+
+//class Trail;
+//class Camera;
+//class ProjectionGLFeature;
+//class ModelGLFeature;
+
+
 public class TrailsRenderer extends DefaultRenderer
 {
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
 
-
   private GLState _glState;
 
-  private void updateGLState(G3MRenderContext rc)
+  private void updateGLState(Camera camera)
   {
-  
-    final Camera cam = rc.getCurrentCamera();
     if (_projection == null)
     {
-      _projection = new ProjectionGLFeature(cam.getProjectionMatrix44D());
+      _projection = new ProjectionGLFeature(camera.getProjectionMatrix44D());
       _glState.addGLFeature(_projection, true);
     }
     else
     {
-      _projection.setMatrix(cam.getProjectionMatrix44D());
+      _projection.setMatrix(camera.getProjectionMatrix44D());
     }
   
     if (_model == null)
     {
-      _model = new ModelGLFeature(cam.getModelMatrix44D());
+      _model = new ModelGLFeature(camera.getModelMatrix44D());
       _glState.addGLFeature(_model, true);
     }
     else
     {
-      _model.setMatrix(cam.getModelMatrix44D());
+      _model.setMatrix(camera.getModelMatrix44D());
     }
   }
   private ProjectionGLFeature _projection;
@@ -55,25 +76,39 @@ public class TrailsRenderer extends DefaultRenderer
   public final void removeTrail(Trail trail, boolean deleteTrail)
   {
     final int trailsCount = _trails.size();
-    int foundIndex = -1;
     for (int i = 0; i < trailsCount; i++)
     {
       Trail each = _trails.get(i);
       if (trail == each)
       {
-        foundIndex = i;
+        _trails.remove(i);
+        if (deleteTrail)
+        {
+          if (trail != null)
+             trail.dispose();
+        }
         break;
       }
     }
-    if (foundIndex >= 0)
+  }
+
+  public final void removeAllTrails()
+  {
+     removeAllTrails(true);
+  }
+  public final void removeAllTrails(boolean deleteTrails)
+  {
+    if (deleteTrails)
     {
-      _trails.remove(foundIndex);
-      if (deleteTrail)
+      final int trailsCount = _trails.size();
+      for (int i = 0; i < trailsCount; i++)
       {
+        Trail trail = _trails.get(i);
         if (trail != null)
            trail.dispose();
       }
     }
+    _trails.clear();
   }
 
   public void dispose()
@@ -88,6 +123,7 @@ public class TrailsRenderer extends DefaultRenderer
     _trails.clear();
   
     _glState._release();
+    super.dispose();
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -98,20 +134,22 @@ public class TrailsRenderer extends DefaultRenderer
   public final void render(G3MRenderContext rc, GLState glState)
   {
     final int trailsCount = _trails.size();
-    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
-    updateGLState(rc);
-    for (int i = 0; i < trailsCount; i++)
+    if (trailsCount > 0)
     {
-      Trail trail = _trails.get(i);
-      if (trail != null)
+      final Camera camera = rc.getCurrentCamera();
+  
+      updateGLState(camera);
+  
+      final Frustum frustum = camera.getFrustumInModelCoordinates();
+      for (int i = 0; i < trailsCount; i++)
       {
-        trail.render(rc, frustum, _glState);
+        Trail trail = _trails.get(i);
+        if (trail != null)
+        {
+          trail.render(rc, frustum, _glState);
+        }
       }
     }
   }
 
 }
-//#define MAX_POSITIONS_PER_SEGMENT 128
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark TrailsRenderer

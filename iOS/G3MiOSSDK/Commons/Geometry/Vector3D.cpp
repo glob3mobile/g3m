@@ -3,27 +3,45 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Vector3D.hpp"
+
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
-
+#include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
+#include "MutableMatrix44D.hpp"
 
-Vector3D Vector3D::zero = Vector3D(0,0,0);
 
+const Vector3D Vector3D::ZERO   = Vector3D(0,0,0);
+const Vector3D Vector3D::NANV   = Vector3D(NAND, NAND, NAND);
+const Vector3D Vector3D::UP_X   = Vector3D(1,0,0);
+const Vector3D Vector3D::DOWN_X = Vector3D(-1,0,0);
+const Vector3D Vector3D::UP_Y   = Vector3D(0,1,0);
+const Vector3D Vector3D::DOWN_Y = Vector3D(0,-1,0);
+const Vector3D Vector3D::UP_Z   = Vector3D(0,0,1);
+const Vector3D Vector3D::DOWN_Z = Vector3D(0,0,-1);
 
-Vector3D Vector3D::normalized() const {
+bool Vector3D::isNan() const {
+  return (ISNAN(_x) ||
+          ISNAN(_y) ||
+          ISNAN(_z));
+}
+
+const Vector3D Vector3D::normalized() const {
   if (isNan()) {
-    return nan();
+    return NANV;
   }
   if (isZero()) {
-    return zero;
+    return ZERO;
   }
   const double d = length();
-  return Vector3D(_x / d, _y / d, _z / d);
+  return (d == 1) ? *this : Vector3D(_x / d, _y / d, _z / d);
+}
+
+double Vector3D::length() const {
+  return IMathUtils::instance()->sqrt(squaredLength());
 }
 
 double Vector3D::angleInRadiansBetween(const Vector3D& other) const {
@@ -108,26 +126,26 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double u = axis._x;
   const double v = axis._y;
   const double w = axis._z;
-  
+
   const double cosTheta = COS(theta._radians);
   const double sinTheta = SIN(theta._radians);
 
   const double ms = axis.squaredLength();
   const double m = IMathUtils::instance()->sqrt(ms);
-  
+
   return Vector3D(
                   ((u * (u * _x + v * _y + w * _z)) +
                    (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) +
                    (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms,
-                  
+
                   ((v * (u * _x + v * _y + w * _z)) +
                    (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) +
                    (m * ((w * _x) - (u * _z)) * sinTheta)) / ms,
-                  
+
                   ((w * (u * _x + v * _y + w * _z)) +
                    (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) +
                    (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms
-                  
+
                   );
 }
 
@@ -172,8 +190,8 @@ Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const
   return projected.times(this->length());
 }
 
-Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
-                       const double homogeneus) const {
+Vector3D Vector3D::transformedBy(const MutableMatrix44D& m,
+                                 const double homogeneus) const {
   //int __TODO_move_to_matrix;
   return Vector3D(_x * m.get0() + _y * m.get4() + _z * m.get8() + homogeneus * m.get12(),
                   _x * m.get1() + _y * m.get5() + _z * m.get9() + homogeneus * m.get13(),
@@ -181,7 +199,7 @@ Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
 }
 
 
-const std::string Vector3D::description() const {  
+const std::string Vector3D::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(V3D ");
   isb->addDouble(_x);
@@ -222,4 +240,18 @@ Vector3D Vector3D::sub(const MutableVector3D& v) const {
   return Vector3D(_x - v.x(),
                   _y - v.y(),
                   _z - v.z());
+}
+
+bool Vector3D::isPerpendicularTo(const Vector3D& v) const {
+  return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.001;
+  //  const double d = IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z);
+  //  if (!(d < 0.001)) {
+  //    ILogger::instance()->logError("****>>> %d", d);
+  //  }
+  //  return d < 0.001;
+}
+
+Angle Vector3D::angleBetween(const Vector3D& a,
+                             const Vector3D& b) {
+  return Angle::fromRadians(angleInRadiansBetween(a, b));
 }

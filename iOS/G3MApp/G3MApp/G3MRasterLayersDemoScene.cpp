@@ -3,7 +3,6 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/16/13.
-//  Copyright (c) 2013 Igo Software SL. All rights reserved.
 //
 
 #include "G3MRasterLayersDemoScene.hpp"
@@ -21,6 +20,9 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/TimeInterval.hpp>
 #include <G3MiOSSDK/MercatorTiledLayer.hpp>
+#include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
+
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
@@ -102,7 +104,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   BingMapsLayer* bingMapsCollinsBart = new BingMapsLayer(BingMapType::CollinsBart(),
                                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                                          TimeInterval::fromDays(30));
-  bingMapsCollinsBart->setTitle("MapQuest OSM");
+  bingMapsCollinsBart->setTitle("Bing Collins Bart");
   bingMapsCollinsBart->setEnable(false);
   layerSet->addLayer(bingMapsCollinsBart);
 
@@ -139,10 +141,58 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   arcGISOverlayLayerTest->setTitle("ESRI ArcGis Online");
   arcGISOverlayLayerTest->setEnable(false);
   layerSet->addLayer(arcGISOverlayLayerTest);
+
+
+  { // Uruguay (WMS)
+
+    WMSLayer* unidadesPaisajisticas = new WMSLayer("Unidades_Paisajisticas",
+                                                   URL("http://www.dinama.gub.uy/sia/ecosistemas/ecosistemas.cgi"),
+                                                   WMS_1_1_0,
+                                                   Sector::fromDegrees(-34.9739999999999966, -58.4393000000000029,
+                                                                       -30.0854999999999997, -53.1811000000000007),
+                                                   "image/png", // format
+                                                   "EPSG:4326",
+                                                   "",          // style
+                                                   true,        // isTransparent
+                                                   NULL,        // condition,
+                                                   TimeInterval::fromDays(30),
+                                                   true,        // readExpired
+                                                   NULL,        // parameters
+                                                   0.85f         // transparency
+                                                   );
+    unidadesPaisajisticas->setTitle("Uruguay_Unidades_Paisajisticas");
+    unidadesPaisajisticas->setEnable(false);
+    layerSet->addLayer(unidadesPaisajisticas);
+
+
+    WMSLayer* ambientesAcuaticos = new WMSLayer("ambientes_acuaticos",
+                                                URL("http://www.dinama.gub.uy/sia/ecosistemas/ecosistemas.cgi"),
+                                                WMS_1_1_0,
+                                                Sector::fromDegrees(-40.0005999999999986, -59.4996000000000009,
+                                                                    -32.9996000000000009, -49.4981000000000009),
+                                                "image/png", // format
+                                                "EPSG:4326",
+                                                "",          // style
+                                                true,        // isTransparent
+                                                NULL,        // condition,
+                                                TimeInterval::fromDays(30),
+                                                true,        // readExpired
+                                                NULL,        // parameters
+                                                0.85f         // transparency
+                                                );
+    ambientesAcuaticos->setTitle("Uruguay_Ambientes_Acuaticos");
+    ambientesAcuaticos->setEnable(false);
+    layerSet->addLayer(ambientesAcuaticos);
+  }
 }
 
 
 void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
+#warning Diego at work!
+  PlanetRenderer* planetRenderer = getModel()->getPlanetRenderer();
+  planetRenderer->setShowStatistics(true);
+  planetRenderer->setIncrementalTileQuality(true);
+
   createLayerSet( getModel()->getLayerSet() );
 }
 
@@ -168,7 +218,7 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
     layerSet->getLayerByTitle("CartoDB Meteorites")->setEnable(true);
   }
   else if (option == "MapQuest Aerial") {
-    layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
+    layerSet->getLayerByTitle("MapQuest Aerial")->setEnable(true);
   }
   else if (option == "MapQuest OSM") {
     layerSet->getLayerByTitle("MapQuest OSM")->setEnable(true);
@@ -180,16 +230,33 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
     layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
     layerSet->getLayerByTitle("ESRI ArcGis Online")->setEnable(true);
 
-    getModel()->getG3MWidget()->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                          Geodetic3D::fromDegrees(38.6, -77.2, 30000),
-                                                          Angle::zero(),
-                                                          Angle::zero());
+    getModel()->getG3MWidget()->setAnimatedCameraPosition(Geodetic3D::fromDegrees(38.6,
+                                                                                  -77.2,
+                                                                                  30000));
   }
   else if (option == "Bing Aerial") {
     layerSet->getLayerByTitle("Bing Aerial")->setEnable(true);
   }
   else if (option == "Bing Aerial with Labels") {
     layerSet->getLayerByTitle("Bing Aerial With Labels")->setEnable(true);
+  }
+  else if (option == "Bing Collins Bart") {
+    layerSet->getLayerByTitle("Bing Collins Bart")->setEnable(true);
+  }
+  else if (option == "Uruguay (WMS)") {
+    layerSet->getLayerByTitle("Nasa Blue Marble (WMS)")->setEnable(true);
+    layerSet->getLayerByTitle("Uruguay_Unidades_Paisajisticas")->setEnable(true);
+    layerSet->getLayerByTitle("Uruguay_Ambientes_Acuaticos")->setEnable(true);
+
+    // just uruguay land
+    //    getModel()->getG3MWidget()->setAnimatedCameraPosition(Geodetic3D::fromDegrees(-32.568042356920749114,
+    //                                                                                  -56.383545687724506479,
+    //                                                                                  1190419));
+
+    // land and water area
+    getModel()->getG3MWidget()->setAnimatedCameraPosition(Geodetic3D::fromDegrees(-35.093636856649169431,
+                                                                                  -56.098973158344456635,
+                                                                                  2139700));
   }
   else {
     ILogger::instance()->logError("option \"%s\" not supported", option.c_str());

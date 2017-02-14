@@ -3,20 +3,17 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Effects
 #define G3MiOSSDK_Effects
 
-
-#include "TimeInterval.hpp"
-#include "ITimer.hpp"
-#include "IMathUtils.hpp"
 #include <vector>
-class IFactory;
 
 class G3MRenderContext;
+class TimeInterval;
+class ITimer;
+class IFactory;
 class G3MContext;
 
 
@@ -49,10 +46,7 @@ protected:
     return result;
   }
 
-  static double sigmoid(double x) {
-    x = 12.0*x - 6.0;
-    return (1.0 / (1.0 + IMathUtils::instance()->exp(-1.0 * x)));
-  }
+  static double sigmoid(double x);
 
   static double gently(const double x,
                        const double lower,
@@ -98,8 +92,6 @@ public:
 };
 
 
-
-
 class EffectWithDuration : public Effect {
 private:
   long long       _started;
@@ -109,22 +101,9 @@ private:
 protected:
 
   EffectWithDuration(const TimeInterval& duration,
-                     const bool linearTiming) :
-  _durationMS(duration._milliseconds),
-  _linearTiming(linearTiming),
-  _started(0)
-  {
+                     const bool linearTiming);
 
-  }
-
-  double percentDone(const TimeInterval& when) const {
-    const long long elapsed = when._milliseconds - _started;
-
-    const double percent = (double) elapsed / _durationMS;
-    if (percent > 1) return 1;
-    if (percent < 0) return 0;
-    return percent;
-  }
+  double percentDone(const TimeInterval& when) const;
 
   double getAlpha(const TimeInterval& when) const {
     const double percent = percentDone(when);
@@ -133,15 +112,8 @@ protected:
 
 
 public:
-  //  virtual void stop(const G3MRenderContext* rc,
-  //                    const TimeInterval& when) {
-  //
-  //  }
-
   virtual void start(const G3MRenderContext* rc,
-                     const TimeInterval& when) {
-    _started = when._milliseconds;
-  }
+                     const TimeInterval& when);
 
   virtual bool isDone(const G3MRenderContext* rc,
                       const TimeInterval& when) {
@@ -149,8 +121,6 @@ public:
     return (percent >= 1);
   }
 };
-
-
 
 
 class EffectWithForce : public Effect {
@@ -176,13 +146,28 @@ public:
   };
 
   virtual bool isDone(const G3MRenderContext* rc,
-                      const TimeInterval& when) {
-    return (IMathUtils::instance()->abs(_force) < 1e-6);
-  }
+                      const TimeInterval& when);
 
 };
 
 
+class EffectNeverEnding : public Effect {
+private:
+
+protected:
+  EffectNeverEnding() {}
+
+public:
+  virtual void doStep(const G3MRenderContext* rc,
+                      const TimeInterval& when) {
+  };
+
+  virtual bool isDone(const G3MRenderContext* rc,
+                      const TimeInterval& when) {
+    return false;
+  }
+
+};
 
 
 class EffectsScheduler {
@@ -211,11 +196,6 @@ private:
 
   std::vector<EffectRun*> _effectsRuns;
   ITimer*                 _timer;
-#ifdef C_CODE
-  const IFactory*         _factory;
-#else
-  IFactory*         _factory;
-#endif
 
   void processFinishedEffects(const G3MRenderContext* rc,
                               const TimeInterval& when);
@@ -235,20 +215,13 @@ public:
 
   void initialize(const G3MContext* context);
 
-  virtual ~EffectsScheduler() {
-    delete _timer;
-
-    for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
-      EffectRun* effectRun = _effectsRuns[i];
-      delete effectRun;
-    }
-  }
+  virtual ~EffectsScheduler();
 
   void startEffect(Effect* effect,
                    EffectTarget* target);
 
   void cancelAllEffects();
-  
+
   void cancelAllEffectsFor(EffectTarget* target);
 
   void onResume(const G3MContext* context) {

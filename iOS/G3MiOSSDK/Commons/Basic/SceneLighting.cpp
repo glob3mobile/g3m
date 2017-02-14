@@ -10,12 +10,13 @@
 
 #include "GLState.hpp"
 #include "Vector3D.hpp"
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "Camera.hpp"
-
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "MeshRenderer.hpp"
+#include "G3MRenderContext.hpp"
+
 
 void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Vector3D lightDir(1, 0,0);
@@ -25,8 +26,8 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
   if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
     glState->addGLFeature(new DirectionLightGLFeature(lightDir,
-                                                      Color::yellow(),
-                                                      Color::white()),
+                                                      Color::YELLOW,
+                                                      Color::WHITE),
                           false);
   }
   /* //Add this to obtain a rotating "sun"
@@ -39,7 +40,7 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
 
    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle),
    Vector3D::upZ(),
-   Vector3D::zero);
+   Vector3D::ZERO);
 
    f->setLightDirection(lightDir.transformedBy(m, 1.0));
 
@@ -61,23 +62,23 @@ _meshRenderer(NULL)
 
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Camera* camera = rc->getCurrentCamera();
-//  const Vector3D camDir = camera->getViewDirectionMutable();
-//  MutableVector3D camDir;
+
   camera->getViewDirectionInto(_camDir);
-  const MutableVector3D up = camera->getUpMutable();
+  camera->getUpMutable(_up);
+
   if ((_cameraDirX == _camDir.x()) &&
       (_cameraDirY == _camDir.y()) &&
       (_cameraDirZ == _camDir.z()) &&
-      (_upX == up.x()) &&
-      (_upY == up.y()) &&
-      (_upZ == up.z())) {
+      (_upX == _up.x()) &&
+      (_upY == _up.y()) &&
+      (_upZ == _up.z())) {
     return;
   }
 
   const MutableVector3D cameraVector = _camDir.times(-1);
 
   //Light slightly different of camera position
-  const MutableVector3D rotationLightDirAxis = up.cross(cameraVector);
+  const MutableVector3D rotationLightDirAxis = _up.cross(cameraVector);
   const MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis,
                                                                  Angle::fromDegrees(45.0));
 
@@ -109,7 +110,7 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
                                         vertices->create(),
                                         (float)3.0,
                                         (float)1.0,
-                                        new Color(Color::red()));
+                                        new Color(Color::RED));
       _meshRenderer->addMesh(mesh);
     }
   }
@@ -118,8 +119,8 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   _cameraDirX = _camDir.x();
   _cameraDirY = _camDir.y();
   _cameraDirZ = _camDir.z();
-  
-  _upX = up.x();
-  _upY = up.y();
-  _upZ = up.z();
+
+  _upX = _up.x();
+  _upY = _up.y();
+  _upZ = _up.z();
 }

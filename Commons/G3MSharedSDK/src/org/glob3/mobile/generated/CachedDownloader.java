@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  CachedDownloader.cpp
 //  G3MiOSSDK
@@ -16,6 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
+//class IStorage;
+//class IImageResult;
 
 
 public class CachedDownloader extends IDownloader
@@ -98,7 +102,7 @@ public class CachedDownloader extends IDownloader
     _downloader.stop();
   }
 
-  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener)
+  public final long requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IBufferDownloadListener listener, boolean deleteListener, String tag)
   {
   
     _requestsCounter++;
@@ -127,13 +131,13 @@ public class CachedDownloader extends IDownloader
     // cache miss
     if (useCache)
     {
-      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true);
+      return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, new BufferSaverDownloadListener(this, cachedBuffer, listener, deleteListener, _storage, timeToCache), true, tag);
     }
   
-    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, listener, deleteListener);
+    return _downloader.requestBuffer(url, priority, TimeInterval.zero(), false, listener, deleteListener, tag);
   }
 
-  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener)
+  public final long requestImage(URL url, long priority, TimeInterval timeToCache, boolean readExpired, IImageDownloadListener listener, boolean deleteListener, String tag)
   {
     _requestsCounter++;
   
@@ -160,14 +164,19 @@ public class CachedDownloader extends IDownloader
     final boolean useCache = _storage.isAvailable() && !url.isFileProtocol() && !timeToCache.isZero();
     if (useCache)
     {
-      return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true);
+      return _downloader.requestImage(url, priority, TimeInterval.zero(), false, new ImageSaverDownloadListener(this, cachedImage, listener, deleteListener, _storage, timeToCache), true, tag);
     }
-    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, listener, deleteListener);
+    return _downloader.requestImage(url, priority, TimeInterval.zero(), false, listener, deleteListener, tag);
   }
 
-  public final void cancelRequest(long requestId)
+  public final boolean cancelRequest(long requestID)
   {
-    _downloader.cancelRequest(requestId);
+    return _downloader.cancelRequest(requestID);
+  }
+
+  public final void cancelRequestsTagged(String tag)
+  {
+    _downloader.cancelRequestsTagged(tag);
   }
 
   public void dispose()
@@ -193,11 +202,11 @@ public class CachedDownloader extends IDownloader
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("CachedDownloader(cache hits=");
-    isb.addInt(_cacheHitsCounter);
+    isb.addLong(_cacheHitsCounter);
     isb.addString("/");
-    isb.addInt(_requestsCounter);
+    isb.addLong(_requestsCounter);
     isb.addString(", saves=");
-    isb.addInt(_savesCounter);
+    isb.addLong(_savesCounter);
     isb.addString(", downloader=");
     isb.addString(_downloader.statistics());
     final String s = isb.getString();

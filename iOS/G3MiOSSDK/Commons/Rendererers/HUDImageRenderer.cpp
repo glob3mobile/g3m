@@ -8,7 +8,7 @@
 
 #include "HUDImageRenderer.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "TexturesHandler.hpp"
@@ -25,6 +25,10 @@
 #include "IStringUtils.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "IFactory.hpp"
+#include "G3MEventContext.hpp"
+#include "G3MRenderContext.hpp"
+#include "GLFeature.hpp"
+#include "GLState.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 
@@ -34,7 +38,7 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
                                                   IImageListener* listener,
                                                   bool deleteListener) {
 
-  ICanvas* canvas = rc->getFactory()->createCanvas();
+  ICanvas* canvas = rc->getFactory()->createCanvas(true);
   canvas->initialize(width, height);
 
   drawOn(canvas, width, height);
@@ -59,8 +63,12 @@ _changeCounter(0)
 void HUDImageRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                              int width,
                                              int height) {
-  const int halfWidth  = width  / 2;
-  const int halfHeight = height / 2;
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  const int halfWidth  = logicWidth / 2;
+  const int halfHeight = height     / 2;
   MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
                                                                                            -halfHeight, halfHeight,
                                                                                            -halfWidth,  halfWidth);
@@ -120,7 +128,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const IStringUtils* su = IStringUtils::instance();
   const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
                                                                                     textureName,
                                                                                     false);
@@ -128,15 +136,18 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   delete _image;
   _image = NULL;
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
 
 
   const Camera* camera = rc->getCurrentCamera();
-
-  const double halfWidth  = camera->getViewPortWidth()  / 2.0;
+  int viewPortWidth = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
+  const double halfWidth  = viewPortWidth               / 2.0;
   const double halfHeight = camera->getViewPortHeight() / 2.0;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
@@ -160,7 +171,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
 
-  TextureMapping* textureMapping = new SimpleTextureMapping(texId,
+  TextureMapping* textureMapping = new SimpleTextureMapping(texID,
                                                             texCoords.create(),
                                                             true,
                                                             true);
@@ -178,7 +189,10 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
 
         const Camera* camera = rc->getCurrentCamera();
 
-        const int width  = camera->getViewPortWidth();
+        int width = camera->getViewPortWidth();
+        if (rc->getViewMode() == STEREO) {
+          width /= 2;
+        }
         const int height = camera->getViewPortHeight();
 
         _imageFactory->create(rc,

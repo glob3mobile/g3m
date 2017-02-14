@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUAttributeVec4Float extends GPUAttribute
 {
   public void dispose()
@@ -11,6 +11,3 @@ public class GPUAttributeVec4Float extends GPUAttribute
      super(name, id, GLType.glFloat(), 4);
   }
 }
-////////
-
-

@@ -7,10 +7,10 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.SphericalPlanet;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -22,8 +22,8 @@ import android.widget.RelativeLayout;
 
 
 public class ThreeDModelActivity
-         extends
-            Activity {
+   extends
+      Activity {
 
    private G3MBuilder_Android _builder;
    private G3MWidget_Android  _g3mWidget;
@@ -35,19 +35,27 @@ public class ThreeDModelActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_three_dmodel);
 
+      //      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
+      //      layerSet.disableAllLayers();
+      //      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
+
       final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
       layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Map Box Aerial").setEnable(true);
+      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
 
       _builder = new G3MBuilder_Android(this);
-      _builder.setPlanet(Planet.createSphericalEarth());
+      _builder.setPlanet(SphericalPlanet.createEarth());
       _builder.getPlanetRendererBuilder().setLayerSet(layerSet);
       _builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
 
       final ShapesRenderer planeShapeRenderer = new ShapesRenderer();
-      planeShapeRenderer.loadBSONSceneJS(new URL("file:///A320.bson", false), "file:///textures-A320/", false, new Geodetic3D(
-               Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), 10000),
-               AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+      planeShapeRenderer.loadBSONSceneJS( //
+               new URL("file:///A320.bson", false), //
+               "file:///textures-A320/", //
+               false, // isTransparent
+               true, // depthTest
+               new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24), Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
+                        10000), AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
 
                   @Override
                   public void onBeforeAddShape(final SGShape shape) {

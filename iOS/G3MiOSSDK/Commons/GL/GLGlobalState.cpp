@@ -9,7 +9,7 @@
 #include "GLGlobalState.hpp"
 
 #include "IFloatBuffer.hpp"
-#include "IGLTextureId.hpp"
+#include "IGLTextureID.hpp"
 
 #include "GPUProgram.hpp"
 #include "INativeGL.hpp"
@@ -65,23 +65,23 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
   }
 
   //Polygon Offset
-  if (_polygonOffsetFill != currentState._polygonOffsetFill) {
-    currentState._polygonOffsetFill = _polygonOffsetFill;
+ // if (_polygonOffsetFill != currentState._polygonOffsetFill) {
+//    currentState._polygonOffsetFill = _polygonOffsetFill;
     if (_polygonOffsetFill) {
       nativeGL->enable(GLStage::polygonOffsetFill());
 
-      if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
-          _polygonOffsetUnits != currentState._polygonOffsetUnits) {
+     /* if (_polygonOffsetFactor != currentState._polygonOffsetFactor ||
+          _polygonOffsetUnits != currentState._polygonOffsetUnits) {*/
         nativeGL->polygonOffset(_polygonOffsetFactor, _polygonOffsetUnits);
 
         currentState._polygonOffsetUnits = _polygonOffsetUnits;
         currentState._polygonOffsetFactor = _polygonOffsetFactor;
-      }
+   //   }
     }
     else {
       nativeGL->disable(GLStage::polygonOffsetFill());
     }
-  }
+//  }
 
   //Blending Factors
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor) {
@@ -94,13 +94,13 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
 
   for (int i = 0; i < MAX_N_TEXTURES; i++) {
 
-    if (_boundTextureId[i] != NULL) {
-      if (currentState._boundTextureId[i] == NULL ||
-          !_boundTextureId[i]->isEquals(currentState._boundTextureId[i])) {
+    if (_boundTextureID[i] != NULL) {
+      if (currentState._boundTextureID[i] == NULL ||
+          !_boundTextureID[i]->isEquals(currentState._boundTextureID[i])) {
         nativeGL->setActiveTexture(i);
-        nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId[i]);
+        nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureID[i]);
 
-        currentState._boundTextureId[i] = _boundTextureId[i];
+        currentState._boundTextureID[i] = _boundTextureID[i];
       }
       //else {
       //  ILogger::instance()->logInfo("Texture already bound.\n");
@@ -128,6 +128,6 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
     currentState._clearColorB = _clearColorB;
     currentState._clearColorA = _clearColorA;
   }
-
+  
 }
 

@@ -3,20 +3,18 @@
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 12/2/14.
-//  Copyright (c) 2014 Igo Software SL. All rights reserved.
 //
 
 #include "G3MHUDDemoScene.hpp"
 
-//#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/CanvasImageBuilder.hpp>
 #include <G3MiOSSDK/ICanvas.hpp>
 #include <G3MiOSSDK/Color.hpp>
 #include <G3MiOSSDK/IStringUtils.hpp>
 #include <G3MiOSSDK/GFont.hpp>
-#include <G3MiOSSDK/Context.hpp>
+#include <G3MiOSSDK/G3MContext.hpp>
 #include <G3MiOSSDK/HUDQuadWidget.hpp>
 #include <G3MiOSSDK/HUDRenderer.hpp>
 #include <G3MiOSSDK/HUDRelativePosition.hpp>
@@ -27,6 +25,8 @@
 #include <G3MiOSSDK/GTask.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PeriodicalTask.hpp>
+#include <G3MiOSSDK/IMathUtils.hpp>
+
 #include "G3MDemoModel.hpp"
 
 
@@ -44,7 +44,7 @@ protected:
     canvas->setFillColor(Color::fromRGBA(0, 0, 0, 0.5));
     canvas->fillRectangle(0, 0, width, height);
 
-    canvas->setFillColor(Color::white());
+    canvas->setFillColor(Color::WHITE);
 
 
     const IStringUtils* su = context->getStringUtils();
@@ -69,14 +69,22 @@ protected:
       }
     }
 
-    canvas->setLineColor(Color::white());
+    canvas->setLineColor(Color::WHITE);
     canvas->setLineWidth(8);
     canvas->strokeRectangle(0, 0, width, height);
   }
 
+
+  const std::string getImageName(const G3MContext* context) const {
+    const IStringUtils* su = context->getStringUtils();
+
+    return "_AltimeterCanvasImage_" + su->toString(_width) + "_" + su->toString(_height) + "_" + su->toString(_altitude);
+  }
+
+
 public:
   AltimeterCanvasImageBuilder() :
-  CanvasImageBuilder(256, 256*3)
+  CanvasImageBuilder(256, 256*3, true)
   {
   }
 
@@ -164,10 +172,9 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2);
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                           TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
   HUDRenderer* hudRenderer = model->getHUDRenderer();
@@ -197,12 +204,12 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
                                                           GFont::monospaced(38), // font
                                                           6,                     // margin
-                                                          Color::yellow(),       // color
-                                                          Color::black(),        // shadowColor
+                                                          Color::YELLOW,         // color
+                                                          Color::BLACK,          // shadowColor
                                                           3,                     // shadowBlur
                                                           1,                     // shadowOffsetX
                                                           -1,                    // shadowOffsetY
-                                                          Color::red(),          // backgroundColor
+                                                          Color::RED,            // backgroundColor
                                                           4,                     // cornerRadius
                                                           true                   // mutable
                                                           );
@@ -255,4 +262,3 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                                                             altimeterCanvasImageBuilder)));
   
 }
-

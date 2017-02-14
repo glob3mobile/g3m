@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IMathUtils.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 29/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 //
@@ -12,23 +11,28 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
 
 
-//#define SIN(x) java.lang.Math.sin(x)
-//#define COS(x) java.lang.Math.cos(x)
-//#define TAN(x) java.lang.Math.tan(x)
-//#define NAND java.lang.Double.NaN
-//#define NANF java.lang.Float.NaN
+//#define SIN(x) Math.sin(x)
+//#define COS(x) Math.cos(x)
+//#define TAN(x) Math.tan(x)
+//#define NAND Double.NaN
+//#define NANF Float.NaN
 
 
 //#define PI 3.14159265358979323846264338327950288
 //#define HALF_PI 1.57079632679489661923132169163975144
 
 //#define ISNAN(x) (x != x)
+
+//#define TO_RADIANS(degrees) ((degrees) / 180.0 * 3.14159265358979323846264338327950288)
+//#define TO_DEGREES(radians) ((radians) * (180.0 / 3.14159265358979323846264338327950288))
+
+//class Geodetic2D;
+//class Angle;
 
 public abstract class IMathUtils
 {
@@ -53,9 +57,6 @@ public abstract class IMathUtils
   public void dispose()
   {
   }
-
-//  virtual double NanD() const = 0;
-//  virtual float  NanF() const = 0;
 
   public abstract double sin(double v);
   public abstract float sin(float v);
@@ -129,6 +130,12 @@ public abstract class IMathUtils
     return (i1 < i2) ? i1 : i2;
   }
 
+  public final long min(long i1, long i2)
+  {
+    return (i1 < i2) ? i1 : i2;
+  }
+
+
   public abstract double max(double d1, double d2);
   public abstract float max(float f1, float f2);
 
@@ -156,12 +163,18 @@ public abstract class IMathUtils
   public abstract double ceil(double d);
   public abstract float ceil(float f);
 
-  public abstract double fmod(double d1, double d2);
-  public abstract float fmod(float f1, float f2);
+  public abstract double mod(double d1, double d2);
+  public abstract float mod(float f1, float f2);
 
   public double linearInterpolation(double from, double to, double alpha)
   {
     return from + ((to - from) * alpha);
+  }
+
+  public double cosineInterpolation(double from, double to, double alpha)
+  {
+    final double alpha2 = (1.0 - Math.cos(alpha *DefineConstants.PI)) / 2.0;
+    return (from * (1.0 - alpha2) + to * alpha2);
   }
 
   public float linearInterpolation(float from, float to, float alpha)
@@ -247,5 +260,38 @@ public abstract class IMathUtils
     return fracPart * denominator;
   }
 
+  /** answer a double value in the range 0.0 (inclusive) and 1.0 (exclusive) */
+  public abstract double nextRandomDouble();
+
+  public final Geodetic2D greatCircleIntermediatePoint(Angle fromLat, Angle fromLon, Angle toLat, Angle toLon, double alpha)
+  {
+  
+    final double fromLatRad = fromLat._radians;
+    final double toLatRad = toLat._radians;
+    final double fromLonRad = fromLon._radians;
+    final double toLonRad = toLon._radians;
+  
+    final double cosFromLat = Math.cos(fromLatRad);
+    final double cosToLat = Math.cos(toLatRad);
+  
+    final double d = 2 * Math.asin(Math.sqrt(Math.pow((Math.sin((fromLatRad - toLatRad) / 2)), 2) + (cosFromLat * cosToLat * Math.pow(Math.sin((fromLonRad - toLonRad) / 2), 2))));
+  
+    final double A = Math.sin((1 - alpha) * d) / Math.sin(d);
+    final double B = Math.sin(alpha * d) / Math.sin(d);
+    final double x = (A * cosFromLat * Math.cos(fromLonRad)) + (B * cosToLat * Math.cos(toLonRad));
+    final double y = (A * cosFromLat * Math.sin(fromLonRad)) + (B * cosToLat * Math.sin(toLonRad));
+    final double z = (A * Math.sin(fromLatRad)) + (B * Math.sin(toLatRad));
+    final double latRad = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+    final double lngRad = Math.atan2(y, x);
+  
+    return new Geodetic2D(Angle.fromRadians(latRad), Angle.fromRadians(lngRad));
+  }
+
+  public int gcd(int a, int b)
+  {
+    return (b == 0) ? a : gcd(b, a % b);
+  }
+
+  public abstract double copySign(double a, double b);
 
 }

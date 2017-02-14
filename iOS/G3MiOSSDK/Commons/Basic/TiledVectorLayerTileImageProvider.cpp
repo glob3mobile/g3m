@@ -24,7 +24,6 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
   if (_imageAssembler != NULL) {
     _imageAssembler->deletedRasterizer();
   }
-
   delete _symbolizer;
   delete _buffer;
   delete _geoObject;
@@ -46,7 +45,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObj
   const long long coordinatesCount = geoObject->getCoordinatesCount();
   if (coordinatesCount > 5000) {
     ILogger::instance()->logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d",
-                                    _tileId.c_str(),
+                                    _tileID.c_str(),
                                     coordinatesCount);
   }
 
@@ -64,7 +63,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObj
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground(const G3MContext* context) {
   if (_imageAssembler != NULL) {
-    _canvas = IFactory::instance()->createCanvas();
+    _canvas = IFactory::instance()->createCanvas(false);
     _canvas->initialize(_imageWidth, _imageHeight);
 
     if (_geoObjectHolder != NULL) {
@@ -102,7 +101,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground
 //        const long long coordinatesCount = _geoObject->getCoordinatesCount();
 //        if (coordinatesCount > 5000) {
 //          ILogger::instance()->logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d",
-//                                          _tileId.c_str(),
+//                                          _tileID.c_str(),
 //                                          coordinatesCount
 //                                          );
 //        }
@@ -179,11 +178,11 @@ TiledVectorLayerTileImageProvider::ImageAssembler::ImageAssembler(TiledVectorLay
                                                                   const TileImageContribution*       contribution,
                                                                   TileImageListener*                 listener,
                                                                   bool                               deleteListener,
-                                                                  const Vector2I&                    imageResolution,
+                                                                  const Vector2S&                    imageResolution,
                                                                   IDownloader*                       downloader,
                                                                   const IThreadUtils*                threadUtils) :
 _tileImageProvider(tileImageProvider),
-_tileId(tile->_id),
+_tileID(tile->_id),
 _tileSector(tile->_sector),
 _tileIsMercator(tile->_mercator),
 _tileLevel(tile->_level),
@@ -196,7 +195,7 @@ _downloader(downloader),
 _threadUtils(threadUtils),
 _canceled(false),
 _downloadListener(NULL),
-_downloadRequestId(-1),
+_downloadRequestID(-1),
 _rasterizer(NULL),
 _symbolizer(NULL)
 {
@@ -204,23 +203,11 @@ _symbolizer(NULL)
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorLayer* layer,
                                                               const Tile*             tile,
-                                                              long long               tileDownloadPriority,
+                                                              long long               tileTextureDownloadPriority,
                                                               bool                    logDownloadActivity) {
-//  _downloadListener = new GEOJSONBufferDownloadListener(this);
-//
-//  _symbolizer = layer->symbolizerCopy();
-
-//  _downloadRequestId = layer->requestGEOJSONBuffer(tile,
-//                                                   _downloader,
-//                                                   tileDownloadPriority,
-//                                                   logDownloadActivity,
-//                                                   _downloadListener,
-//                                                   true /* deleteListener */);
-
-
+  
   TiledVectorLayer::RequestGEOJSONBufferData* requestData = layer->getRequestGEOJSONBufferData(tile);
 
-//  GEOObject* geoObject = _tileImageProvider->getGEOObjectFor(requestData->_url);
   const GEOObjectHolder* geoObjectHolder = _tileImageProvider->getGEOObjectFor(requestData->_url);
   if (geoObjectHolder == NULL) {
     _symbolizer = layer->symbolizerCopy();
@@ -229,18 +216,14 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
     if (logDownloadActivity) {
       ILogger::instance()->logInfo("Downloading %s", requestData->_url._path.c_str());
     }
-    _downloadRequestId = _downloader->requestBuffer(requestData->_url,
-                                                    tileDownloadPriority,
+    _downloadRequestID = _downloader->requestBuffer(requestData->_url,
+                                                    tileTextureDownloadPriority,
                                                     requestData->_timeToCache,
                                                     requestData->_readExpired,
                                                     _downloadListener,
                                                     true /* deleteListener */);
   }
   else {
-//    geoObjectDownloaded(geoObject,
-//                        _symbolizer);
-//    aa
-
     const GEORasterSymbolizer* symbolizer = layer->symbolizerCopy();
 
     _rasterizer = new GEOJSONBufferRasterizer(this,
@@ -250,7 +233,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
                                               _imageWidth,
                                               _imageHeight,
                                               symbolizer,
-                                              _tileId,
+                                              _tileID,
                                               _tileSector,
                                               _tileIsMercator,
                                               _tileLevel);
@@ -277,23 +260,23 @@ TiledVectorLayerTileImageProvider::ImageAssembler::~ImageAssembler() {
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::cancel() {
   _canceled = true;
-  if (_downloadRequestId >= 0) {
-    _downloader->cancelRequest(_downloadRequestId);
-    _downloadRequestId = -1;
+  if (_downloadRequestID >= 0) {
+    _downloader->cancelRequest(_downloadRequestID);
+    _downloadRequestID = -1;
   }
   if (_rasterizer != NULL) {
     _rasterizer->cancel();
   }
 
-  _listener->imageCreationCanceled(_tileId);
-  _tileImageProvider->requestFinish(_tileId);
+  _listener->imageCreationCanceled(_tileID);
+  _tileImageProvider->requestFinish(_tileID);
 }
 
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(const URL& url,
                                                                          IByteBuffer* buffer) {
   _downloadListener = NULL;
-  _downloadRequestId = -1;
+  _downloadRequestID = -1;
 
   if (_canceled) {
     delete buffer;
@@ -309,7 +292,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(const U
                                               _imageWidth,
                                               _imageHeight,
                                               symbolizer,
-                                              _tileId,
+                                              _tileID,
                                               _tileSector,
                                               _tileIsMercator,
                                               _tileLevel);
@@ -320,33 +303,33 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(const U
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadError(const URL& url) {
   _downloadListener = NULL;
-  _downloadRequestId = -1;
+  _downloadRequestID = -1;
 
-  _listener->imageCreationError(_tileId,
+  _listener->imageCreationError(_tileID,
                                 "Download error - " + url._path);
-  _tileImageProvider->requestFinish(_tileId);
+  _tileImageProvider->requestFinish(_tileID);
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadCanceled() {
   _downloadListener = NULL;
-  _downloadRequestId = -1;
+  _downloadRequestID = -1;
 }
 
 void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const IImage* image) {
   _imageAssembler->imageCreated(image,
-                                _imageId);
+                                _imageID);
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImage* image,
-                                                                     const std::string& imageId) {
+                                                                     const std::string& imageID) {
   // retain the _contribution before calling the listener, as it takes full ownership of the contribution
   TileImageContribution::retainContribution(_contribution);
 
-  _listener->imageCreated(_tileId,
+  _listener->imageCreated(_tileID,
                           image,
-                          imageId,
+                          imageID,
                           _contribution);
-  _tileImageProvider->requestFinish(_tileId);
+  _tileImageProvider->requestFinish(_tileID);
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::rasterizedGEOObject(const URL& url,
@@ -359,7 +342,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::rasterizedGEOObject(cons
   }
 
   if (canvas == NULL) {
-    _listener->imageCreationError(_tileId, "GEOJSON parser error");
+    _listener->imageCreationError(_tileID, "GEOJSON parser error");
     if (_deleteListener) {
       delete _listener;
     }
@@ -382,8 +365,8 @@ const TileImageContribution* TiledVectorLayerTileImageProvider::contribution(con
 
 void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                const TileImageContribution* contribution,
-                                               const Vector2I& resolution,
-                                               long long tileDownloadPriority,
+                                               const Vector2S& resolution,
+                                               long long tileTextureDownloadPriority,
                                                bool logDownloadActivity,
                                                TileImageListener* listener,
                                                bool deleteListener,
@@ -402,38 +385,38 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
 
   assembler->start(_layer,
                    tile,
-                   tileDownloadPriority,
+                   tileTextureDownloadPriority,
                    logDownloadActivity);
 }
 
-void TiledVectorLayerTileImageProvider::cancel(const std::string& tileId) {
+void TiledVectorLayerTileImageProvider::cancel(const std::string& tileID) {
 #ifdef C_CODE
-  if (_assemblers.find(tileId) != _assemblers.end()) {
-    ImageAssembler* assembler = _assemblers[tileId];
+  if (_assemblers.find(tileID) != _assemblers.end()) {
+    ImageAssembler* assembler = _assemblers[tileID];
 
     assembler->cancel();
   }
 #endif
 #ifdef JAVA_CODE
-  final ImageAssembler assembler = _assemblers.get(tileId);
+  final ImageAssembler assembler = _assemblers.get(tileID);
   if (assembler != null) {
     assembler.cancel();
   }
 #endif
 }
 
-void TiledVectorLayerTileImageProvider::requestFinish(const std::string& tileId) {
+void TiledVectorLayerTileImageProvider::requestFinish(const std::string& tileID) {
 #ifdef C_CODE
-  if (_assemblers.find(tileId) != _assemblers.end()) {
-    ImageAssembler* assembler = _assemblers[tileId];
+  if (_assemblers.find(tileID) != _assemblers.end()) {
+    ImageAssembler* assembler = _assemblers[tileID];
 
-    _assemblers.erase(tileId);
+    _assemblers.erase(tileID);
 
     delete assembler;
   }
 #endif
 #ifdef JAVA_CODE
-  final ImageAssembler assembler = _assemblers.remove(tileId);
+  final ImageAssembler assembler = _assemblers.remove(tileID);
   if (assembler != null) {
     assembler.dispose();
   }

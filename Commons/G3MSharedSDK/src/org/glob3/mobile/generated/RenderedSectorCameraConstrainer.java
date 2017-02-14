@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class RenderedSectorCameraConstrainer implements ICameraConstrainer
 {
   private final double _maxHeight;
@@ -44,7 +44,7 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
         }
         else
         {
-          nextCamera.copyFrom(previousCamera);
+          nextCamera.copyFrom(previousCamera, true);
         }
       }
     }

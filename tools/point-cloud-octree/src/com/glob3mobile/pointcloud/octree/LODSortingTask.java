@@ -14,13 +14,16 @@ import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
+import com.glob3mobile.utils.Geodetic3D;
+import com.glob3mobile.utils.Sector;
+import com.glob3mobile.utils.Utils;
 
 import es.igosoftware.util.GProgress;
 
 
 class LODSortingTask
-         implements
-            PersistentOctree.Visitor {
+   implements
+      PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
@@ -33,7 +36,7 @@ class LODSortingTask
 
 
    LODSortingTask(final File cloudDirectory,
-            final String lodCloudName,
+                  final String lodCloudName,
                   final String sourceCloudName,
                   final long pointsCount,
                   final int maxPointsPerLeaf) {
@@ -47,7 +50,7 @@ class LODSortingTask
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- importing \"" + sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _maxPointsPerLeaf = maxPointsPerLeaf;
@@ -64,7 +67,7 @@ class LODSortingTask
          if (pointsSize > _maxPointsPerLeaf) {
             final byte[] binaryID = Utils.toBinaryID(node.getID());
             final Sector sector = TileHeader.sectorFor(binaryID);
-            splitPoints(transaction, _lodDB, binaryID, sector, new ArrayList<Geodetic3D>(points), _maxPointsPerLeaf);
+            splitPoints(transaction, _lodDB, binaryID, sector, new ArrayList<>(points), _maxPointsPerLeaf);
          }
          else {
             process(transaction, _lodDB, node.getID(), points);
@@ -84,7 +87,7 @@ class LODSortingTask
    private static List<Geodetic3D> extractPoints(final Sector sector,
                                                  final List<Geodetic3D> points) {
 
-      final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
+      final List<Geodetic3D> extracted = new ArrayList<>();
 
       final Iterator<Geodetic3D> iterator = points.iterator();
       while (iterator.hasNext()) {
@@ -137,8 +140,8 @@ class LODSortingTask
                         final List<Geodetic3D> points) {
       final int pointsSize = points.size();
 
-      final List<Integer> sortedIndices = new ArrayList<Integer>(pointsSize);
-      final LinkedList<Integer> lodIndices = new LinkedList<Integer>();
+      final List<Integer> sortedIndices = new ArrayList<>(pointsSize);
+      final LinkedList<Integer> lodIndices = new LinkedList<>();
 
       if (pointsSize == 1) {
          // just one vertex, no need to sort
@@ -158,21 +161,14 @@ class LODSortingTask
       final int lodLevels = lodIndices.size();
       _sumLevelsCount += lodLevels;
 
-      //      final String parentID = parentID(nodeID);
-
-      //      System.out.println(nodeID + //
-      //                         " lodLevels=" + lodLevels + //
-      //                         ", points=" + pointsSize + //
-      //                         ", lodIndices=" + lodIndices);
-
-      final List<List<Geodetic3D>> levelsPoints = new ArrayList<List<Geodetic3D>>(lodLevels);
+      final List<List<Geodetic3D>> levelsPoints = new ArrayList<>(lodLevels);
       int pointsCounter = 0;
       int fromIndexI = 0;
       for (int level = 0; level < lodLevels; level++) {
          final int toIndexI = lodIndices.get(level);
 
          final int levelPointsSize = (toIndexI - fromIndexI) + 1;
-         final List<Geodetic3D> levelPoints = new ArrayList<Geodetic3D>(levelPointsSize);
+         final List<Geodetic3D> levelPoints = new ArrayList<>(levelPointsSize);
          //         System.out.println("Extracting point for level " + level + " range=" + fromIndexI + "->" + toIndexI + " (size="
          //                            + levelPointsSize + ")");
          for (int indexI = fromIndexI; indexI <= toIndexI; indexI++) {

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MutableVector2I.cpp
 //  G3MiOSSDK
@@ -69,6 +69,13 @@ public class MutableVector2I
 
   public final Vector2I asVector2I()
   {
-  return new Vector2I(_x, _y);
+    return new Vector2I(_x, _y);
   }
+
+  public final void set(int x, int y)
+  {
+    _x = x;
+    _y = y;
+  }
+
 }

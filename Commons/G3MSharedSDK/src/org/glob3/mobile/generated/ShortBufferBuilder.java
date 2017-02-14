@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  ShortBufferBuilder.cpp
 //  G3MiOSSDK
@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class IShortBuffer;
+
 
 public class ShortBufferBuilder
 {
@@ -84,7 +85,6 @@ public class ShortBufferBuilder
 
   public final IShortBuffer create()
   {
-    //return IFactory.instance().createShortBuffer( _values.toArray() );
     return IFactory.instance().createShortBuffer( _values._array, _values._size );
   }
 
@@ -94,7 +94,7 @@ public class ShortBufferBuilder
     isb.addString("ShortBufferBuilder: ");
     for (int i = 0; i < (int)_values.size(); i++)
     {
-
+  
       short v = _values.get(i);
       isb.addInt(v);
       isb.addString(", ");
@@ -104,6 +104,7 @@ public class ShortBufferBuilder
        isb.dispose();
     return s;
   }
+
   @Override
   public String toString() {
     return description();

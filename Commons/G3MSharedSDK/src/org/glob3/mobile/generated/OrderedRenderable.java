@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  OrderedRenderable.cpp
 //  G3MiOSSDK
@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+//class G3MRenderContext;
 //class GLGlobalState;
 //class GPUProgramState;
 //class GLState;

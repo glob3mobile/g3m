@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class LeveledTexturedMesh extends Mesh
 {
   private final Mesh _mesh;
@@ -80,10 +80,6 @@ public class LeveledTexturedMesh extends Mesh
 
   public void dispose()
   {
-  ///#ifdef JAVA_CODE
-  //  synchronized (this) {
-  ///#endif
-  
     if (_ownedMesh)
     {
       if (_mesh != null)
@@ -100,14 +96,9 @@ public class LeveledTexturedMesh extends Mesh
       }
   
       _mappings = null;
-  //    _mappings = NULL;
     }
   
     _glState._release();
-  
-  ///#ifdef JAVA_CODE
-  //  }
-  ///#endif
   
     super.dispose();
   }
@@ -127,16 +118,16 @@ public class LeveledTexturedMesh extends Mesh
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-  public final boolean setGLTextureIdForLevel(int level, TextureIDReference glTextureId)
+  public final boolean setGLTextureIDForLevel(int level, TextureIDReference glTextureID)
   {
   
     if (_mappings.size() > 0)
     {
-      if (glTextureId != null)
+      if (glTextureID != null)
       {
         if ((_currentLevel < 0) || (level < _currentLevel))
         {
-          _mappings.get(level).setGLTextureId(glTextureId);
+          _mappings.get(level).setGLTextureID(glTextureID);
           _currentLevel = -1;
           return true;
         }
@@ -146,14 +137,14 @@ public class LeveledTexturedMesh extends Mesh
     return false;
   }
 
-  public final TextureIDReference getTopLevelTextureId()
+  public final TextureIDReference getTopLevelTextureID()
   {
     final LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping != null)
     {
       if (_currentLevel == 0)
       {
-        return mapping.getGLTextureId();
+        return mapping.getGLTextureID();
       }
     }
   

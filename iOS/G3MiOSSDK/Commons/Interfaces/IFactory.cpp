@@ -8,6 +8,8 @@
 
 #include "IFactory.hpp"
 
+#include "ILogger.hpp"
+
 IFactory* IFactory::_instance = NULL;
 
 const IDeviceInfo* IFactory::getDeviceInfo() const {
@@ -15,4 +17,18 @@ const IDeviceInfo* IFactory::getDeviceInfo() const {
     _deviceInfo = createDeviceInfo();
   }
   return _deviceInfo;
+}
+
+void IFactory::setInstance(IFactory* factory) {
+  if (_instance != NULL) {
+    ILogger::instance()->logWarning("IFactory instance already set!");
+    delete _instance;
+  }
+  _instance = factory;
+}
+
+IFactory::IFactory() :
+_deviceInfo(NULL)
+{
+
 }

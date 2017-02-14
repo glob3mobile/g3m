@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Layer
@@ -54,7 +53,7 @@ protected:
         const LayerCondition* condition,
         std::vector<const Info*>* layerInfo);
 
-  virtual std::string getLayerType() const = 0;
+  virtual const std::string getLayerType() const = 0;
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
 

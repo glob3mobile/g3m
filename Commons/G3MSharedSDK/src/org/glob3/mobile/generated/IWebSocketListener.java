@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IWebSocketListener.hpp
 //  G3MiOSSDK
@@ -19,7 +19,7 @@ public interface IWebSocketListener
 
   void onError(IWebSocket ws, String error);
 
-  void onMesssage(IWebSocket ws, String message);
+  void onMessage(IWebSocket ws, String message);
 
   void onClose(IWebSocket ws);
 

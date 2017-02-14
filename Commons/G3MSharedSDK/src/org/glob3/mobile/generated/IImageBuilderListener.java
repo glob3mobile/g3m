@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  IImageBuilderListener.hpp
 //  G3MiOSSDK

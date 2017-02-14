@@ -14,8 +14,11 @@
 #include "FloatBufferBuilderFromColor.hpp"
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
-
+#include "IMathUtils.hpp"
 #include "BilinearInterpolator.hpp"
+#include "Geodetic3D.hpp"
+#include "Vector2D.hpp"
+
 
 ElevationData::ElevationData(const Sector& sector,
                              const Vector2I& extent) :
@@ -55,7 +58,8 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
                                averageElevation, minElevation, maxElevation, deltaElevation);
 
-  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
+  const Geodetic3D center(sector._center, averageElevation);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, center);
 
   FloatBufferBuilderFromColor colors;
 
@@ -98,7 +102,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
                                 pointSize,
                                 flatColor,
                                 colors.create(),
-                                0,
                                 false);
 
   delete vertices;
@@ -154,7 +157,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   Color* flatColor = NULL;
 
   Mesh* result = new DirectMesh(GLPrimitive::points(),
-                                //GLPrimitive::lineStrip(),
                                 true,
                                 vertices->getCenter(),
                                 vertices->create(),
@@ -162,7 +164,6 @@ Mesh* ElevationData::createMesh(const Planet* planet,
                                 pointSize,
                                 flatColor,
                                 colors.create(),
-                                0,
                                 false);
 
   delete vertices;
@@ -177,10 +178,10 @@ Interpolator* ElevationData::getInterpolator() const {
   return _interpolator;
 }
 
-double ElevationData::getElevationAt(const Angle& latitude,
-                                     const Angle& longitude) const {
+double ElevationData::getElevationAt(const Angle& latitude2,
+                                     const Angle& longitude2) const {
 
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  const Vector2D uv = _sector.getUVCoordinates(latitude2, longitude2);
   const double u = uv._x;
   const double v = uv._y;
 

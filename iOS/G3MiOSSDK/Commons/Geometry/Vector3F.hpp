@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__Vector3F__
 #define __G3MiOSSDK__Vector3F__
 
-#include "IMathUtils.hpp"
-
 
 class Vector3F {
 private:
@@ -45,16 +43,13 @@ public:
   ~Vector3F() {
   }
 
-
   float dot(const Vector3F& v) const {
     return ((_x * v._x) +
             (_y * v._y) +
             (_z * v._z));
   }
 
-  double length() const {
-    return IMathUtils::instance()->sqrt(squaredLength());
-  }
+  double length() const;
 
   double squaredLength() const {
     return _x * _x + _y * _y + _z * _z;
@@ -86,11 +81,7 @@ public:
             (_z == 0));
   }
 
-  bool isNan() const {
-    return (ISNAN(_x) ||
-            ISNAN(_y) ||
-            ISNAN(_z));
-  }
+  bool isNan() const;
   
 };
 

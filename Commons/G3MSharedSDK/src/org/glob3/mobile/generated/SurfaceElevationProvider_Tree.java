@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //Every SurfaceElevationProvider should store petitions in a SurfaceElevationProvider_Tree
 public class SurfaceElevationProvider_Tree extends GenericQuadTree
 {

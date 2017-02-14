@@ -1,10 +1,9 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  BusyQuadRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
@@ -14,14 +13,14 @@ package org.glob3.mobile.generated;
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 
 
 
-
-//***************************************************************
+//class IImage;
+//class Mesh;
+//class Color;
 
 
 public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
@@ -37,11 +36,11 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
 
   private boolean initMesh(G3MRenderContext rc)
   {
-    TextureIDReference texId = null;
+    TextureIDReference texID = null;
   
-    texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
+    texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
   
-    if (texId == null)
+    if (texID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return false;
@@ -66,7 +65,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
     if (vertices != null)
        vertices.dispose();
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
+    TextureMapping texMap = new SimpleTextureMapping(texID, texCoords.create(), true, false);
   
     _quadMesh = new TexturedMesh(im, true, texMap, true, true);
   
@@ -130,22 +129,25 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int halfWidth = width / 2;
+    int logicWidth = width;
+    if (ec.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+    final int halfWidth = logicWidth / 2;
     final int halfHeight = height / 2;
     _projectionMatrix.copyValue(MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth));
   }
 
   public void dispose()
   {
-    //rc->getFactory()->deleteImage(_image);
-    //_image = NULL;
     if (_image != null)
        _image.dispose();
     if (_quadMesh != null)
        _quadMesh.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
-
+  
     _glState._release();
   }
 

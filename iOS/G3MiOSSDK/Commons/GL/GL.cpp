@@ -3,7 +3,6 @@
 //  Glob3 Mobile
 //
 //  Created by Agustin Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #include <list>
@@ -15,13 +14,12 @@
 #include "Vector2D.hpp"
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
-#include "IGLTextureId.hpp"
-
+#include "IGLTextureID.hpp"
 #include "GPUProgram.hpp"
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
-
 #include "GLState.hpp"
+
 
 void GL::clearScreen(const Color& color) {
   //  if (_verbose) {
@@ -33,15 +31,29 @@ void GL::clearScreen(const Color& color) {
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
-void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
+void GL::drawElements(int mode,
+                      IShortBuffer* indices,
+                      int count,
+                      const GLState* state,
                       GPUProgramManager& progManager) {
-
   state->applyOnGPU(this, progManager);
 
   _nativeGL->drawElements(mode,
-                          indices->size(),
+                          count,
                           indices);
 }
+
+void GL::drawElements(int mode,
+                      IShortBuffer* indices,
+                      const GLState* state,
+                      GPUProgramManager& progManager) {
+  drawElements(mode,
+               indices,
+               (int) indices->size(),
+               state,
+               progManager);
+}
+
 
 void GL::drawArrays(int mode,
                     int first,
@@ -109,7 +121,7 @@ bool GL::isPowerOfTwo(int x) {
           );
 }
 
-const IGLTextureId* GL::uploadTexture(const IImage* image,
+const IGLTextureID* GL::uploadTexture(const IImage* image,
                                       int format,
                                       bool generateMipmap) {
 
@@ -117,12 +129,12 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
   //    ILogger::instance()->logInfo("GL::uploadTexture()");
   //  }
 
-  const IGLTextureId* texId = getGLTextureId();
-  if (texId != NULL) {
+  const IGLTextureID* texID = getGLTextureID();
+  if (texID != NULL) {
     GLGlobalState newState;
 
     newState.setPixelStoreIAlignmentUnpack(1);
-    newState.bindTexture(texId);
+    newState.bindTexture(0, texID);
 
     newState.applyChanges(this, *_currentGLGlobalState);
 
@@ -162,7 +174,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
         _nativeGL->generateMipmap(texture2D);
       }
       else {
-        ILogger::instance()->logError("Can't generate bitmap. Texture dimensions are not power of two.");
+        ILogger::instance()->logError("Can't generate mipmap. Texture dimensions are not power of two.");
       }
     }
   }
@@ -171,78 +183,62 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     return NULL;
   }
 
-  return texId;
+  return texID;
 }
 
-const IGLTextureId* GL::getGLTextureId() {
+const IGLTextureID* GL::getGLTextureID() {
   //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+  //    ILogger::instance()->logInfo("GL::getGLTextureID()");
   //  }
 
-  if (_texturesIdBag.size() == 0) {
+  if (_texturesIDBag.size() == 0) {
     //const int bugdetSize = 256;
     const int bugdetSize = 1024;
     //const int bugdetSize = 10240;
 
-    const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
-    const int idsCount = ids.size();
-    for (int i = 0; i < idsCount; i++) {
-      // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
-      _texturesIdBag.push_front(ids[i]);
+    const std::vector<IGLTextureID*> ids = _nativeGL->genTextures(bugdetSize);
+    const size_t idsCount = ids.size();
+    for (size_t i = 0; i < idsCount; i++) {
+      // ILogger::instance()->logInfo("  = Created textureID=%s", ids[i]->description().c_str());
+      _texturesIDBag.push_front(ids[i]);
     }
 
-    _texturesIdAllocationCounter += idsCount;
+    _texturesIDAllocationCounter += idsCount;
 
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
+    ILogger::instance()->logInfo("= Created %d texturesIDs (accumulated %d).",
                                  idsCount,
-                                 _texturesIdAllocationCounter);
+                                 _texturesIDAllocationCounter);
   }
 
-  //  _texturesIdGetCounter++;
+  //  _texturesIDGetCounter++;
 
-  if (_texturesIdBag.size() == 0) {
-    ILogger::instance()->logError("TextureIds bag exhausted");
+  if (_texturesIDBag.size() == 0) {
+    ILogger::instance()->logError("TextureIDs bag exhausted");
     return NULL;
   }
 
-  const IGLTextureId* result = _texturesIdBag.back();
-  _texturesIdBag.pop_back();
-
-  //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-  //         result.getGLTextureId(),
-  //         _texturesIdBag.size(),
-  //         _texturesIdGetCounter,
-  //         _texturesIdTakeCounter,
-  //         _texturesIdGetCounter - _texturesIdTakeCounter);
+  const IGLTextureID* result = _texturesIDBag.back();
+  _texturesIDBag.pop_back();
 
   return result;
 }
 
-void GL::deleteTexture(const IGLTextureId* textureId) {
-
+void GL::deleteTexture(const IGLTextureID* textureID) {
   //  if (_verbose) {
   //    ILogger::instance()->logInfo("GL::deleteTexture()");
   //  }
 
-  if (textureId != NULL) {
-    if ( _nativeGL->deleteTexture(textureId) ) {
-      _texturesIdBag.push_back(textureId);
+  if (textureID != NULL) {
+    _currentGLGlobalState->onTextureDelete(textureID);
+
+    if ( _nativeGL->deleteTexture(textureID) ) {
+      _texturesIDBag.push_back(textureID);
     }
     else {
-      delete textureId;
+      delete textureID;
     }
 
-    if (_currentGLGlobalState->getBoundTexture() == textureId) {
-      _currentGLGlobalState->bindTexture(NULL);
-    }
-
-    //    GLState::textureHasBeenDeleted(textureId);
-
-    //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-    //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-    //    }
-
-    //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
+    //ILogger::instance()->logInfo("  = delete textureID=%s", texture->description().c_str());
   }
 }
 

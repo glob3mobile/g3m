@@ -7,14 +7,16 @@
 //
 
 #include "HUDRenderer.hpp"
+
 #include "RenderState.hpp"
 #include "HUDWidget.hpp"
-
 #include "MutableMatrix44D.hpp"
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 #include "GL.hpp"
-#include "Context.hpp"
+#include "G3MRenderContext.hpp"
+#include "G3MEventContext.hpp"
+
 
 HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
 _glState(new GLState()),
@@ -25,7 +27,7 @@ _readyWhenWidgetsReady(readyWhenWidgetsReady)
 }
 
 HUDRenderer::~HUDRenderer() {
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     delete widget;
   }
@@ -38,7 +40,7 @@ HUDRenderer::~HUDRenderer() {
 }
 
 void HUDRenderer::onChangedContext() {
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->initialize(_context);
   }
@@ -54,7 +56,7 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
 }
 
 void HUDRenderer::removeAllWidgets() {
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     delete widget;
   }
@@ -73,7 +75,7 @@ RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
   bool busyFlag  = false;
   bool errorFlag = false;
 
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     if (widget->isEnable()) {
       const RenderState childRenderState = widget->getRenderState(rc);
@@ -125,7 +127,13 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 //  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
 //                                                                                           0, height,
 //                                                                                           -halfWidth, halfWidth);
-  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
+
+  int logicWidth = width;
+  if (ec->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+
+  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, logicWidth,
                                                                                            0, height,
                                                                                            -1, +1);
 
@@ -138,7 +146,7 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
     pr->setMatrix(projectionMatrix.asMatrix44D());
   }
 
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->onResizeViewportEvent(ec, width, height);
   }
@@ -154,7 +162,7 @@ void HUDRenderer::render(const G3MRenderContext* rc,
 
   nativeGL->depthMask(false);
 
-  for (int i = 0; i < _widgetsSize; i++) {
+  for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->render(rc, _glState);
   }

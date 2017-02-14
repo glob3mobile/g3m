@@ -8,7 +8,7 @@
 
 #include "MultiTexturedHUDQuadWidget.hpp"
 
-#include "Context.hpp"
+#include "G3MContext.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
@@ -20,6 +20,11 @@
 #include "TexturedMesh.hpp"
 #include "HUDPosition.hpp"
 #include "RenderState.hpp"
+#include "G3MRenderContext.hpp"
+#include "GLConstants.hpp"
+#include "TimeInterval.hpp"
+#include "IImage.hpp"
+
 
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:
@@ -69,28 +74,31 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     return NULL;
   }
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image1,
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image1,
                                                                                     GLFormat::rgba(),
                                                                                     _imageURL1._path,
                                                                                     false);
 
-  if (texId == NULL) {
+  if (texID == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
 
-  const TextureIDReference* texId2 = rc->getTexturesHandler()->getTextureIDReference(_image2,
+  const TextureIDReference* texID2 = rc->getTexturesHandler()->getTextureIDReference(_image2,
                                                                                      GLFormat::rgba(),
                                                                                      _imageURL2._path,
                                                                                      false);
 
-  if (texId2 == NULL) {
+  if (texID2 == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
 
   const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getViewPortWidth();
+  int viewPortWidth  = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    viewPortWidth /= 2;
+  }
   const int viewPortHeight = camera->getViewPortHeight();
 
   const float width  = _width;
@@ -119,11 +127,11 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   delete vertices;
 
-  _mtMapping = new MultiTextureMapping(texId,
+  _mtMapping = new MultiTextureMapping(texID,
                                        texCoords.create(),
                                        true,
                                        true,
-                                       texId2,
+                                       texID2,
                                        texCoords.create(),
                                        true,
                                        true,

@@ -31,56 +31,64 @@
 #include "BSONParser.hpp"
 #include "SceneJSParserStatistics.hpp"
 
-SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
-                                                      const std::string &uriPrefix,
-                                                      bool isTransparent,
-                                                      Geodetic3D* position,
-                                                      AltitudeMode altitudeMode) {
+SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
+                                                      const std::string&    uriPrefix,
+                                                      bool                  isTransparent,
+                                                      bool                  depthTest,
+                                                      Geodetic3D*           position,
+                                                      AltitudeMode          altitudeMode) {
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
 
-SGShape* SceneJSShapesParser::parseFromJSON(const std::string &json,
-                                            const std::string &uriPrefix,
-                                            bool isTransparent,
-                                            Geodetic3D* position,
-                                            AltitudeMode altitudeMode) {
+SGShape* SceneJSShapesParser::parseFromJSON(const std::string& json,
+                                            const std::string& uriPrefix,
+                                            bool               isTransparent,
+                                            bool               depthTest,
+                                            Geodetic3D*        position,
+                                            AltitudeMode       altitudeMode) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
 
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
 
 SGShape* SceneJSShapesParser::parseFromJSON(const IByteBuffer* json,
                                             const std::string& uriPrefix,
-                                            bool isTransparent,
-                                            Geodetic3D* position,
-                                            AltitudeMode altitudeMode) {
+                                            bool               isTransparent,
+                                            bool               depthTest,
+                                            Geodetic3D*        position,
+                                            AltitudeMode       altitudeMode) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json->getAsString());
 
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
 
-SGShape* SceneJSShapesParser::parseFromBSON(IByteBuffer *bson,
-                                            const std::string &uriPrefix,
-                                            bool isTransparent,
-                                            Geodetic3D* position,
-                                            AltitudeMode altitudeMode) {
+SGShape* SceneJSShapesParser::parseFromBSON(IByteBuffer*       bson,
+                                            const std::string& uriPrefix,
+                                            bool               isTransparent,
+                                            bool               depthTest,
+                                            Geodetic3D*        position,
+                                            AltitudeMode       altitudeMode) {
   const JSONBaseObject* jsonObject = BSONParser::parse(bson);
 
   return SceneJSShapesParser(jsonObject,
                              uriPrefix,
                              isTransparent,
+                             depthTest,
                              position,
                              altitudeMode).getRootShape();
 }
@@ -101,11 +109,13 @@ void SceneJSShapesParser::pvtParse(const JSONBaseObject* json,
 }
 
 SceneJSShapesParser::SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                                         const std::string& uriPrefix,
-                                         bool isTransparent,
-                                         Geodetic3D* position,
-                                         AltitudeMode altitudeMode) :
+                                         const std::string&    uriPrefix,
+                                         bool                  isTransparent,
+                                         bool                  depthTest,
+                                         Geodetic3D*           position,
+                                         AltitudeMode          altitudeMode) :
 _uriPrefix(uriPrefix),
+_depthTest(depthTest),
 _rootShape(NULL)
 {
   _statistics = new SceneJSParserStatistics();
@@ -124,8 +134,8 @@ int SceneJSShapesParser::parseChildren(const JSONObject* jsonObject,
 
   const JSONArray* jsNodes = jsonObject->getAsArray("nodes");
   if (jsNodes != NULL) {
-    const int nodesCount = jsNodes->size();
-    for (int i = 0; i < nodesCount; i++) {
+    const size_t nodesCount = jsNodes->size();
+    for (size_t i = 0; i < nodesCount; i++) {
       const JSONObject* child = jsNodes->getAsObject(i);
       if (child != NULL) {
         SGNode* childNode = toNode(child);
@@ -163,12 +173,12 @@ SGNode* SceneJSShapesParser::createNode(const JSONObject* jsonObject) const {
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
-  SGNode* node = new SGNode(id, sId);
+  SGNode* node = new SGNode(id, sID);
 
   processedKeys += parseChildren(jsonObject, node);
 
@@ -185,8 +195,8 @@ SGRotateNode* SceneJSShapesParser::createRotateNode(const JSONObject* jsonObject
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -218,7 +228,7 @@ SGRotateNode* SceneJSShapesParser::createRotateNode(const JSONObject* jsonObject
     processedKeys++;
   }
 
-  SGRotateNode* node = new SGRotateNode(id, sId,
+  SGRotateNode* node = new SGRotateNode(id, sID,
                                         x, y, z,
                                         angle);
 
@@ -237,8 +247,8 @@ SGTranslateNode* SceneJSShapesParser::createTranslateNode(const JSONObject* json
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -263,7 +273,7 @@ SGTranslateNode* SceneJSShapesParser::createTranslateNode(const JSONObject* json
     processedKeys++;
   }
 
-  SGTranslateNode* node = new SGTranslateNode(id, sId,
+  SGTranslateNode* node = new SGTranslateNode(id, sID,
                                               x, y, z);
 
   processedKeys += parseChildren(jsonObject, node);
@@ -290,8 +300,8 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -343,7 +353,7 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
-  SGMaterialNode* node = new SGMaterialNode(id, sId,
+  SGMaterialNode* node = new SGMaterialNode(id, sID,
                                             baseColor,
                                             specularColor,
                                             specular,
@@ -367,8 +377,8 @@ SGLayerNode* SceneJSShapesParser::createLayerNode(const JSONObject* jsonObject) 
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -414,7 +424,7 @@ SGLayerNode* SceneJSShapesParser::createLayerNode(const JSONObject* jsonObject) 
     processedKeys++;
   }
 
-  SGLayerNode* node = new SGLayerNode(id, sId,
+  SGLayerNode* node = new SGLayerNode(id, sID,
                                       uri,
                                       applyTo,
                                       blendMode,
@@ -440,19 +450,19 @@ SGTextureNode* SceneJSShapesParser::createTextureNode(const JSONObject* jsonObje
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
-  SGTextureNode* node = new SGTextureNode(id, sId);
+  SGTextureNode* node = new SGTextureNode(id, sID);
 
   processedKeys += parseChildren(jsonObject, node);
 
   const JSONArray* jsLayers = jsonObject->getAsArray("layers");
   if (jsLayers != NULL) {
-    int layersCount = jsLayers->size();
-    for (int i = 0; i < layersCount; i++) {
+    size_t layersCount = jsLayers->size();
+    for (size_t i = 0; i < layersCount; i++) {
       const JSONObject* jsLayer = jsLayers->getAsObject(i);
       if (jsLayer != NULL) {
         node->addLayer( createLayerNode(jsLayer) );
@@ -475,8 +485,8 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
-  const std::string sId = jsonObject->getAsString("sid", "");
-  if (sId.compare("") != 0) {
+  const std::string sID = jsonObject->getAsString("sid", "");
+  if (sID.compare("") != 0) {
     processedKeys++;
   }
 
@@ -516,9 +526,9 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     return NULL;
   }
   processedKeys++;
-  int verticesCount = jsPositions->size();
+  size_t verticesCount = jsPositions->size();
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount);
-  for (int i = 0; i < verticesCount; i++) {
+  for (size_t i = 0; i < verticesCount; i++) {
     vertices->put(i, (float) jsPositions->getAsNumber(i)->value());
     _statistics->computeVertex();
   }
@@ -526,9 +536,9 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
   const JSONArray* jsColors = jsonObject->getAsArray("colors");
   IFloatBuffer* colors = NULL;
   if (jsColors != NULL) {
-    const int colorsCount = jsColors->size();
+    const size_t colorsCount = jsColors->size();
     colors = IFactory::instance()->createFloatBuffer(colorsCount);
-    for (int i = 0; i < colorsCount; i++) {
+    for (size_t i = 0; i < colorsCount; i++) {
       const float value = (float) jsColors->getAsNumber(i)->value();
       colors->put(i, value);
     }
@@ -538,10 +548,10 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
   const JSONArray* jsUV = jsonObject->getAsArray("uv");
   IFloatBuffer* uv = NULL;
   if (jsUV != NULL) {
-    const int uvCount = jsUV->size();
+    const size_t uvCount = jsUV->size();
     uv = IFactory::instance()->createFloatBuffer(uvCount);
     bool isY = false;
-    for (int i = 0; i < uvCount; i++) {
+    for (size_t i = 0; i < uvCount; i++) {
       float value = (float) jsUV->getAsNumber(i)->value();
       if (isY) {
         value = 1 - value;
@@ -556,9 +566,9 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
   IFloatBuffer* normals = NULL;
   //TODO: WORKING JM
   if (jsNormals != NULL) {
-    const int normalsCount = jsNormals->size();
+    const size_t normalsCount = jsNormals->size();
     normals = IFactory::instance()->createFloatBuffer(normalsCount);
-    for (int i = 0; i < normalsCount; i++) {
+    for (size_t i = 0; i < normalsCount; i++) {
       float value = (float) jsNormals->getAsNumber(i)->value();
       normals->put(i, value);
     }
@@ -571,9 +581,9 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     return NULL;
   }
   int indicesOutOfRange = 0;
-  int indicesCount = jsIndices->size();
+  size_t indicesCount = jsIndices->size();
   IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesCount);
-  for (int i = 0; i < indicesCount; i++) {
+  for (size_t i = 0; i < indicesCount; i++) {
     const long long indice = (long long) jsIndices->getAsNumber(i)->value();
     if (indice > 32767) {
       indicesOutOfRange++;
@@ -588,13 +598,14 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
                                   indicesCount);
   }
 
-  SGGeometryNode* node = new SGGeometryNode(id, sId,
+  SGGeometryNode* node = new SGGeometryNode(id, sID,
                                             primitive,
                                             vertices,
                                             colors,
                                             uv,
                                             normals,
-                                            indices);
+                                            indices,
+                                            _depthTest);
 
   processedKeys += parseChildren(jsonObject, node);
 

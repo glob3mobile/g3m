@@ -3,10 +3,14 @@
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 12/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include "TexturedMesh.hpp"
+
+#include "TextureMapping.hpp"
+#include "GLState.hpp"
+#include "Vector3D.hpp"
+
 
 void TexturedMesh::createGLState() {
 }
@@ -18,4 +22,39 @@ void TexturedMesh::rawRender(const G3MRenderContext* rc,
 
   _glState->setParent(parentState);
   _mesh->render(rc, _glState);
+}
+
+
+TexturedMesh::TexturedMesh(Mesh* mesh,
+                           bool ownedMesh,
+                           TextureMapping* const textureMapping,
+                           bool ownedTexMapping,
+                           bool transparent) :
+_mesh(mesh),
+_ownedMesh(ownedMesh),
+_textureMapping(textureMapping),
+_ownedTexMapping(ownedTexMapping),
+_transparent(transparent),
+_glState(new GLState())
+{
+  createGLState();
+}
+
+TexturedMesh::~TexturedMesh() {
+  if (_ownedMesh) {
+    delete _mesh;
+  }
+  if (_ownedTexMapping) {
+    delete _textureMapping;
+  }
+
+  _glState->_release();
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+const Vector3D TexturedMesh::getVertex(size_t i) const {
+  return _mesh->getVertex(i);
 }

@@ -3,20 +3,13 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Geodetic3D
 #define G3MiOSSDK_Geodetic3D
 
 #include "Angle.hpp"
-#include "Geodetic2D.hpp"
-
-//Altitude modes taken from KML standard (with the exception of relative to sea floor)
-enum AltitudeMode{
-  RELATIVE_TO_GROUND,   //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
-  ABSOLUTE              //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
-};
+class Geodetic2D;
 
 
 /**
@@ -48,13 +41,19 @@ public:
 
   static Geodetic3D linearInterpolation(const Geodetic3D& from,
                                         const Geodetic3D& to,
-                                        double alpha) {
-    return Geodetic3D(Angle::linearInterpolation(from._latitude,  to._latitude,  alpha),
-                      Angle::linearInterpolation(from._longitude, to._longitude, alpha),
-                      IMathUtils::instance()->linearInterpolation(from._height, to._height, alpha)
-                      //((1.0 - alpha) * from._height) + (alpha * to._height)
-                      );
-  }
+                                        double alpha);
+
+  static Geodetic3D linearInterpolationFromDegrees(const double fromLatitudeDegrees,
+                                                   const double fromLongitudeDegrees,
+                                                   const double fromHeight,
+                                                   const double toLatitudeDegrees,
+                                                   const double toLongitudeDegrees,
+                                                   const double toHeight,
+                                                   double alpha);
+
+  static Geodetic3D cosineInterpolation(const Geodetic3D& from,
+                                        const Geodetic3D& to,
+                                        double alpha);
 
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
@@ -66,12 +65,7 @@ public:
   }
 
   Geodetic3D(const Geodetic2D& g2,
-             const double height):
-  _latitude(g2._latitude),
-  _longitude(g2._longitude),
-  _height(height)
-  {
-  }
+             const double height);
 
   Geodetic3D(const Geodetic3D& g) :
   _latitude(g._latitude),
@@ -83,9 +77,7 @@ public:
   ~Geodetic3D() {
   }
 
-  Geodetic2D asGeodetic2D() const {
-    return Geodetic2D(_latitude, _longitude);
-  }
+  Geodetic2D asGeodetic2D() const;
 
   const std::string description() const;
 #ifdef JAVA_CODE
@@ -123,7 +115,6 @@ public:
   bool isEquals(const Geodetic3D& that) const;
   
 };
-
 
 
 #endif

@@ -8,8 +8,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public final class GLUniformID_WebGL
-         implements
-            IGLUniformID {
+   implements
+      IGLUniformID {
 
    private final JavaScriptObject _id;
 

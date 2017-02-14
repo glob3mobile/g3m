@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  MeshShape.cpp
 //  G3MiOSSDK
@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class MeshShape extends AbstractMeshShape
+public class MeshShape extends AbstractMeshShape
 {
   protected final Mesh createMesh(G3MRenderContext rc)
   {
@@ -27,7 +27,11 @@ public abstract class MeshShape extends AbstractMeshShape
   public MeshShape(Geodetic3D position, AltitudeMode altitudeMode, Mesh mesh)
   {
      super(position, altitudeMode, mesh);
+  }
 
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+  {
+    throw new RuntimeException("Not implemented!");
   }
 
 }

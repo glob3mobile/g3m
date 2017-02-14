@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 17/09/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_JSONBaseObject
@@ -28,6 +27,10 @@ public:
     return (object == NULL) ? NULL : object->deepCopy();
   }
 
+  static const std::string toString(const JSONBaseObject* object) {
+    return (object == NULL) ? "null" : object->toString();
+  }
+
   virtual ~JSONBaseObject() {
   }
 
@@ -43,14 +46,16 @@ public:
   virtual JSONBaseObject* deepCopy() const = 0;
 
   virtual const std::string description() const = 0;
-#ifdef JAVA_CODE
-  @Override
-  public String toString() {
-    return description();
-  }
-#endif
+//#ifdef JAVA_CODE
+//  @Override
+//  public String toString() {
+//    return description();
+//  }
+//#endif
 
   virtual void acceptVisitor(JSONVisitor* visitor) const = 0;
+
+  virtual const std::string toString() const = 0;
 
 };
 

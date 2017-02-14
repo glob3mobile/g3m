@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 public class GPUUniform extends GPUVariable
 {
 
@@ -61,7 +61,7 @@ public class GPUUniform extends GPUVariable
 
   public final void set(GPUUniformValue v)
   {
-    if (_type == v.getType()) //type checking
+    if (_type == v._type) //type checking
     {
       if (_value == null || !_value.isEquals(v))
       {
@@ -76,7 +76,7 @@ public class GPUUniform extends GPUVariable
     }
     else
     {
-      ILogger.instance().logError("Attempting to set uniform " + _name + " with invalid value type.");
+      throw new RuntimeException("Attempting to set uniform \"" + _name + "\" with invalid value type.");
     }
   }
 
@@ -91,7 +91,7 @@ public class GPUUniform extends GPUVariable
     {
       if (_value == null)
       {
-        ILogger.instance().logError("Uniform " + _name + " was not set.");
+        throw new RuntimeException("Uniform \"" + _name + "\" was not set.");
       }
     }
   }

@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 14/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Plane
@@ -87,7 +86,7 @@ public:
 
   Vector3D intersectionWithRay(const Vector3D& origin,
                                const Vector3D& direction) const;
-  
+
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
                                              const Vector3D& direction);
 
@@ -98,7 +97,6 @@ public:
   Vector3D getNormal() const {
     return _normal;
   }
-
   
 };
 

@@ -10,32 +10,33 @@
 #include "ILogger.hpp"
 
 void DefaultRenderer::setEnable(bool enable) {
-  if(enable != _enable){
+  if(enable != _enable) {
     _enable = enable;
-    if(_changedInfoListener!= NULL){
-      if(isEnable()){
+    if(_changedInfoListener!= NULL) {
+      if(isEnable()) {
         notifyChangedInfo(_info);
       }
       else {
         const std::vector<const Info*> info;
-        _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+        _changedInfoListener->changedRendererInfo(_rendererID, info);
       }
     }
   }
 }
 
-void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                                     const size_t rendererID) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of DefaultRenderer already set");
   }
   else {
     _changedInfoListener = changedInfoListener;
-    _rendererIdentifier = rendererIdentifier;
+    _rendererID = rendererID;
     notifyChangedInfo(_info);
   }
 }
 
-void DefaultRenderer::setInfo(const std::vector<const Info*> info){
+void DefaultRenderer::setInfo(const std::vector<const Info*>& info) {
   _info.clear();
 #ifdef C_CODE
   _info.insert(_info.end(),
@@ -48,7 +49,7 @@ void DefaultRenderer::setInfo(const std::vector<const Info*> info){
   notifyChangedInfo(_info);
 }
 
-void DefaultRenderer::addInfo(const std::vector<const Info*> info){
+void DefaultRenderer::addInfo(const std::vector<const Info*>& info) {
 #ifdef C_CODE
   _info.insert(_info.end(),
                info.begin(),
@@ -60,7 +61,7 @@ void DefaultRenderer::addInfo(const std::vector<const Info*> info){
   notifyChangedInfo(_info);
 }
 
-void DefaultRenderer::addInfo(const Info* info){
+void DefaultRenderer::addInfo(const Info* info) {
 #ifdef C_CODE
   _info.insert(_info.end(), info);
 #endif
@@ -70,10 +71,10 @@ void DefaultRenderer::addInfo(const Info* info){
   notifyChangedInfo(_info);
 }
 
-void DefaultRenderer::notifyChangedInfo(const std::vector<const Info*> info) {
-  if(_changedInfoListener!= NULL){
-    if(isEnable()){
-      _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+void DefaultRenderer::notifyChangedInfo(const std::vector<const Info*>& info) {
+  if(_changedInfoListener!= NULL) {
+    if(isEnable()) {
+      _changedInfoListener->changedRendererInfo(_rendererID, info);
     }
   }
 }

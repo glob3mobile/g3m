@@ -3,15 +3,14 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #include "Geodetic2D.hpp"
 
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
+#include "IMathUtils.hpp"
 
-#include <math.h>
 
 bool Geodetic2D::isBetween(const Geodetic2D& min,
                            const Geodetic2D& max) const {
@@ -24,10 +23,9 @@ bool Geodetic2D::closeTo(const Geodetic2D &other) const {
   if (!_latitude.closeTo(other._latitude)) {
     return false;
   }
-  
+
   return _longitude.closeTo(other._longitude);
 }
-
 
 const std::string Geodetic2D::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -41,27 +39,48 @@ const std::string Geodetic2D::description() const {
   return s;
 }
 
-Angle Geodetic2D::angleTo(const Geodetic2D& other) const
-{
-//  const double cos1 = _latitude.cosinus();
-//  const Vector3D normal1(cos1 * _longitude.cosinus(),
-//                         cos1 * _longitude.sinus(),
-//                         _latitude.sinus());
-//  const double cos2 = other._latitude.cosinus();
-//  const Vector3D normal2(cos2 * other._longitude.cosinus(),
-//                         cos2 * other._longitude.sinus(),
-//                         other._latitude.sinus());
-
+Angle Geodetic2D::angleTo(const Geodetic2D& that) const {
   const double cos1 = COS(_latitude._radians);
   const Vector3D normal1(cos1 * COS(_longitude._radians),
                          cos1 * SIN(_longitude._radians),
                          SIN(_latitude._radians));
-  const double cos2 = COS(other._latitude._radians);
-  const Vector3D normal2(cos2 * COS(other._longitude._radians),
-                         cos2 * SIN(other._longitude._radians),
-                         SIN(other._latitude._radians));
+  const double cos2 = COS(that._latitude._radians);
+  const Vector3D normal2(cos2 * COS(that._longitude._radians),
+                         cos2 * SIN(that._longitude._radians),
+                         SIN(that._latitude._radians));
 
   return Angle::fromRadians(asin(normal1.cross(normal2).squaredLength()));
-
 }
 
+double Geodetic2D::bearingInRadians(const Angle& fromLatitude,
+                                    const Angle& fromLongitude,
+                                    const Angle& toLatitude,
+                                    const Angle& toLongitude) {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const double deltaLonRad = toLongitude._radians - fromLongitude._radians;
+
+  const double toLatCos = COS(toLatitude._radians);
+
+  const double y = SIN(deltaLonRad) * toLatCos;
+  const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(deltaLonRad);
+  const double radians = mu->atan2(y, x);
+  return radians;
+
+  //  const double pi2 = PI*2;
+  //  return mu->mod(radians + pi2, pi2);
+
+  //  const double r1 = mu->mod(radians, pi2);
+  //  const double r2 = mu->mod(radians + pi2, pi2);
+  //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
+}
+
+double Geodetic2D::bearingInDegrees(const Angle& fromLatitude,
+                                    const Angle& fromLongitude,
+                                    const Angle& toLatitude,
+                                    const Angle& toLongitude) {
+  return TO_DEGREES(bearingInRadians(fromLatitude,
+                                     fromLongitude,
+                                     toLatitude,
+                                     toLongitude));
+}

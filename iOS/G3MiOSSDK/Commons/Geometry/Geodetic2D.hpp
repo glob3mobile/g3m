@@ -3,7 +3,6 @@
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_Geodetic2D
@@ -68,21 +67,13 @@ public:
   static double bearingInRadians(const Angle& fromLatitude,
                                  const Angle& fromLongitude,
                                  const Angle& toLatitude,
-                                 const Angle& toLongitude) {
-    const Angle dLon = toLongitude.sub(fromLongitude);
+                                 const Angle& toLongitude);
 
-//    const double toLatCos = toLatitude.cosinus();
-    const double toLatCos = COS(toLatitude._radians);
+  static double bearingInDegrees(const Angle& fromLatitude,
+                                 const Angle& fromLongitude,
+                                 const Angle& toLatitude,
+                                 const Angle& toLongitude);
 
-//    const double y = dLon.sinus() * toLatCos;
-    const double y = SIN(dLon._radians) * toLatCos;
-//    const double x = fromLatitude.cosinus() * toLatitude.sinus() - fromLatitude.sinus() * toLatCos * dLon.cosinus();
-    const double x = COS(fromLatitude._radians) * SIN(toLatitude._radians) - SIN(fromLatitude._radians) * toLatCos * COS(dLon._radians);
-    const double radians = IMathUtils::instance()->atan2(y, x);
-
-    return radians;
-  }
-  
   /**
    * Returns the (initial) bearing from this point to the supplied point
    *   see http://williams.best.vwh.net/avform.htm#Crs
@@ -137,7 +128,7 @@ public:
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
   
-  Angle angleTo(const Geodetic2D& other) const;
+  Angle angleTo(const Geodetic2D& that) const;
   
   
   /**
