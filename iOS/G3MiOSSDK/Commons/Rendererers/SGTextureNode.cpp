@@ -11,6 +11,30 @@
 #include "SGLayerNode.hpp"
 #include "GLGlobalState.hpp"
 
+
+
+class EnvMappingCustomShader : public CustomShaderGLFeature {
+  
+public:
+  EnvMappingCustomShader() :
+  CustomShaderGLFeature("env-geometry-shader") {
+  };
+  
+protected:
+    //using CustomShaderGLFeature::onInitializeShader;
+    bool onInitializeShader(const GL* gl, const GLState* state, const GPUProgram* linkedProgram) {
+      return false;
+    }
+  
+    //using CustomShaderGLFeature::onAfterApplyShaderOnGPU;
+    void onAfterApplyShaderOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram) {
+    }
+  
+    //using CustomShaderGLFeature::applyOnGlobalGLState;
+    void applyOnGlobalGLState(GLGlobalState* state) const {
+    }
+};
+
 void SGTextureNode::addLayer(SGLayerNode* layer) {
   _layers.push_back(layer);
 
@@ -67,23 +91,8 @@ const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLSt
   if (_glState == NULL) {
     _glState = new GLState();
     if (_envEffect) {
-        _glState->addGLFeature(new CustomShaderGLFeature("env-geometry-shader") {
-        @Override
-        protected boolean onInitializeShader(GL gl, GLState state,
-                                             GPUProgram linkedProgram) {
-          return false;
-        }
-        
-        @Override
-        protected void onAfterApplyShaderOnGPU(GL gl, GLState state,
-                                               GPUProgram linkedProgram) {
-        }
-        
-        @Override
-        public void applyOnGlobalGLState(GLGlobalState state) {
-          
-        }
-      }, true);
+        EnvMappingCustomShader* env = new EnvMappingCustomShader();
+        _glState->addGLFeature(env, true);
     }
 
 

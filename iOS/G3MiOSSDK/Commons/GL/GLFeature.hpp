@@ -612,14 +612,15 @@ public:
 class CustomShaderGLFeature: public GLFeature {
 private:
     bool _initializedShader;
-    
-    ~CustomShaderGLFeature() {
-#ifdef JAVA_CODE
-        super.dispose();
-#endif
-    }
 
 protected:
+  
+  ~CustomShaderGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
     virtual bool onInitializeShader(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
     virtual void onAfterApplyShaderOnGPU(const GL* gl, const GLState* state, const GPUProgram* linkedProgram)=0;
     
