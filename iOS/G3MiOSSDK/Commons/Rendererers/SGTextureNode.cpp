@@ -66,6 +66,26 @@ SGTextureNode::~SGTextureNode() {
 const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLState* parentState) {
   if (_glState == NULL) {
     _glState = new GLState();
+    if (_envEffect) {
+        _glState->addGLFeature(new CustomShaderGLFeature("env-geometry-shader") {
+        @Override
+        protected boolean onInitializeShader(GL gl, GLState state,
+                                             GPUProgram linkedProgram) {
+          return false;
+        }
+        
+        @Override
+        protected void onAfterApplyShaderOnGPU(GL gl, GLState state,
+                                               GPUProgram linkedProgram) {
+        }
+        
+        @Override
+        public void applyOnGlobalGLState(GLGlobalState state) {
+          
+        }
+      }, true);
+    }
+
 
     const size_t layersCount = _layers.size();
     for (size_t i = 0; i < layersCount; i++) {

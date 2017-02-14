@@ -30,6 +30,8 @@
 #include "IShortBuffer.hpp"
 #include "BSONParser.hpp"
 #include "SceneJSParserStatistics.hpp"
+#include "NormalsUtils.hpp"
+#include "GLConstants.hpp"
 
 SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject *jsonObject,
                                                       const std::string &uriPrefix,
@@ -444,8 +446,14 @@ SGTextureNode* SceneJSShapesParser::createTextureNode(const JSONObject* jsonObje
   if (sId.compare("") != 0) {
     processedKeys++;
   }
-
-  SGTextureNode* node = new SGTextureNode(id, sId);
+  
+  std::string sEffect = jsonObject->getAsString("effect", "");
+  if (sEffect.compare("") != 0) {
+    processedKeys++;
+  }
+  
+  bool envMapEffect = sEffect.compare("environmentMap") == 0;
+  SGTextureNode* node = new SGTextureNode(id, sId, envMapEffect);
 
   processedKeys += parseChildren(jsonObject, node);
 
@@ -480,6 +488,11 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     processedKeys++;
   }
 
+  const std::string normalsMode = jsonObject->getAsString("normals", "");
+  if (normalsMode.compare("") != 0) {
+    processedKeys++;
+  }
+  const bool genNormals = normalsMode.compare("generate") == 0;
 
   const JSONString* jsPrimitive = jsonObject->getAsString("primitive");
   int primitive = GLPrimitive::triangles(); // triangles is the default
@@ -581,6 +594,11 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(const JSONObject* jsonOb
     indices->rawPut(i, (short) indice);
   }
   processedKeys++;
+  
+  if (genNormals && primitive == GLPrimitive::triangles()) {
+    normals = NormalsUtils::createTriangleSmoothNormals(vertices, indices);
+  }
+
 
   if (indicesOutOfRange > 0) {
     ILogger::instance()->logError("SceneJSShapesParser: There are %d (of %d) indices out of range.",

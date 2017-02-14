@@ -18,12 +18,15 @@ private:
   std::vector<SGLayerNode*> _layers;
 
   GLState* _glState;
+  bool _envEffect;
 
 public:
   SGTextureNode(const std::string& id,
-                const std::string& sId) :
+                const std::string& sId,
+                const bool envEffect) :
   SGNode(id, sId),
-  _glState(NULL)
+  _glState(NULL),
+  _envEffect(envEffect)
   {
 
   }
