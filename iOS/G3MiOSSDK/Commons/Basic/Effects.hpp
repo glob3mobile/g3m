@@ -35,17 +35,6 @@ public:
 class Effect {
 protected:
 
-  static double pace(const double f) {
-    if (f < 0) return 0;
-    if (f > 1) return 1;
-
-    //const double result = gently(f, 0.6, 0.85);
-    const double result = gently(f, 0.25, 0.75);
-    if (result < 0) return 0;
-    if (result > 1) return 1;
-    return result;
-  }
-
   static double sigmoid(double x);
 
   static double gently(const double x,
@@ -72,6 +61,15 @@ protected:
   }
 
 public:
+  static double pace(const double f) {
+    if (f <= 0) return 0;
+    if (f >= 1) return 1;
+    const double result = gently(f, 0.25, 0.75);
+    if (result <= 0) return 0;
+    if (result >= 1) return 1;
+    return result;
+  }
+
   virtual void start(const G3MRenderContext* rc,
                      const TimeInterval& when) = 0;
 
