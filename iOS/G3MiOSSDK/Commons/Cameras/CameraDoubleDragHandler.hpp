@@ -53,7 +53,7 @@ public:
   void onUp(const G3MEventContext *eventContext,
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
-
+  
 };
 
 #endif

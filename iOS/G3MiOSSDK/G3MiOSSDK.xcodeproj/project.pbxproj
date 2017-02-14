@@ -2692,12 +2692,16 @@
 			children = (
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
+				CF3E266E1E5353F300A3FEC6 /* CameraContext.cpp */,
+				CF3E266F1E5353F300A3FEC6 /* CameraContext.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
 				FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
 				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
 				FBC23099179730FF009343FC /* CameraEffects.cpp */,
 				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
+				CF3E266B1E5353B700A3FEC6 /* CameraEventGesture.cpp */,
+				CF3E266C1E5353B700A3FEC6 /* CameraEventGesture.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
 				385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */,
 				385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */,
@@ -2721,10 +2725,6 @@
 				D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */,
 				CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */,
 				CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */,
-				CF3E266B1E5353B700A3FEC6 /* CameraEventGesture.cpp */,
-				CF3E266C1E5353B700A3FEC6 /* CameraEventGesture.hpp */,
-				CF3E266E1E5353F300A3FEC6 /* CameraContext.cpp */,
-				CF3E266F1E5353F300A3FEC6 /* CameraContext.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
