@@ -755,7 +755,7 @@ public abstract class IG3MBuilder
   {
     if (_cameraConstraints != null)
     {
-      ILogger.instance().logWarning("LOGIC WARNING: camera contraints previously set will be ignored and deleted");
+      ILogger.instance().logWarning("LOGIC WARNING: camera constraints previously set will be ignored and deleted");
       for (int i = 0; i < _cameraConstraints.size(); i++)
       {
         if (_cameraConstraints.get(i) != null)

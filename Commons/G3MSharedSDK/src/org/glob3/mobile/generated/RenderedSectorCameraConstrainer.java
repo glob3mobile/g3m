@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated;
 public class RenderedSectorCameraConstrainer implements ICameraConstrainer
 {
-  private final double _maxHeight;
   private final PlanetRenderer _planetRenderer;
+  private final double _maxHeight;
 
 
   public RenderedSectorCameraConstrainer(PlanetRenderer planetRenderer, double maxHeight)
@@ -15,7 +15,7 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
   {
   }
 
-  public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
+  public final boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
     if (_planetRenderer != null)
     {

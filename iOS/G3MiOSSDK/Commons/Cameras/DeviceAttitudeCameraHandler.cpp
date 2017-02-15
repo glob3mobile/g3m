@@ -16,6 +16,7 @@
 #include "Planet.hpp"
 #include "ErrorHandling.hpp"
 #include "RenderState.hpp"
+#include "Camera.hpp"
 
 
 RenderState DeviceAttitudeCameraHandler::getRenderState(const G3MRenderContext* rc) {

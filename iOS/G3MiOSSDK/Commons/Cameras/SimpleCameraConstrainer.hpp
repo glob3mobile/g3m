@@ -15,24 +15,17 @@
 class SimpleCameraConstrainer : public ICameraConstrainer {
 public:
 
-  SimpleCameraConstrainer()
-  //  _previousCameraTimestamp(0),
-  //  _nextCameraTimestamp(0)
-  {
-
+  SimpleCameraConstrainer() {
   }
 
 
   ~SimpleCameraConstrainer() {
   }
 
-  virtual bool onCameraChange(const Planet* planet,
-                              const Camera* previousCamera,
-                              Camera* nextCamera) const;
+  bool onCameraChange(const Planet* planet,
+                      const Camera* previousCamera,
+                      Camera* nextCamera) const;
 
-  //private:
-  //  mutable long long _previousCameraTimestamp;
-  //  mutable long long _nextCameraTimestamp;
 };
 
 #endif

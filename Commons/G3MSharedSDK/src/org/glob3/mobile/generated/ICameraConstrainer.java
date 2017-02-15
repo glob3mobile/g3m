@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 //class Planet;
 //class Camera;
 
+
 public interface ICameraConstrainer
 {
   void dispose();

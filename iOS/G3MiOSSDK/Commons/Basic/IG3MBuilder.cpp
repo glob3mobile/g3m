@@ -454,7 +454,7 @@ void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
  */
 void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints) {
   if (_cameraConstraints) {
-    ILogger::instance()->logWarning("LOGIC WARNING: camera contraints previously set will be ignored and deleted");
+    ILogger::instance()->logWarning("LOGIC WARNING: camera constraints previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _cameraConstraints->size(); i++) {
       delete _cameraConstraints->at(i);
     }

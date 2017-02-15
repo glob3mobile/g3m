@@ -14,6 +14,7 @@
 
 class PlanetRenderer;
 
+
 class SectorAndHeightCameraConstrainer: public ICameraConstrainer {
 private:
   const Sector _sector;
@@ -31,16 +32,16 @@ public:
   ~SectorAndHeightCameraConstrainer() {
   }
 
-  virtual bool onCameraChange(const Planet* planet,
-                              const Camera* previousCamera,
-                              Camera* nextCamera) const;
+  bool onCameraChange(const Planet* planet,
+                      const Camera* previousCamera,
+                      Camera* nextCamera) const;
 
 };
 
 class RenderedSectorCameraConstrainer: public ICameraConstrainer {
 private:
-  const double _maxHeight;
   const PlanetRenderer* _planetRenderer;
+  const double          _maxHeight;
 
 public:
 
@@ -54,9 +55,9 @@ public:
   ~RenderedSectorCameraConstrainer() {
   }
 
-  virtual bool onCameraChange(const Planet* planet,
-                              const Camera* previousCamera,
-                              Camera* nextCamera) const;
+  bool onCameraChange(const Planet* planet,
+                      const Camera* previousCamera,
+                      Camera* nextCamera) const;
   
 };
 

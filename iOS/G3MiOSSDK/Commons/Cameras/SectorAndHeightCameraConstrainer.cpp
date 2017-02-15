@@ -8,9 +8,9 @@
 
 #include "SectorAndHeightCameraConstrainer.hpp"
 
-#include "PlanetRenderer.hpp"
-#include "Camera.hpp"
 #include "Geodetic3D.hpp"
+#include "Camera.hpp"
+#include "PlanetRenderer.hpp"
 
 
 bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
@@ -65,6 +65,6 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
       }
     }
   }
-
+  
   return true;
 }
