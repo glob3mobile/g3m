@@ -57,5 +57,4 @@ public class SGTranslateNode extends SGNode
     super.dispose();
   }
 
-
 }

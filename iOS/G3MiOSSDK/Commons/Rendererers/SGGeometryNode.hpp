@@ -42,7 +42,8 @@ public:
 
   ~SGGeometryNode();
 
-  void rawRender(const G3MRenderContext* rc, const GLState* glState);
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* glState);
 
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState);

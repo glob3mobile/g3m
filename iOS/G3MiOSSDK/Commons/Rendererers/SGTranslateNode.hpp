@@ -40,7 +40,6 @@ public:
 
   ~SGTranslateNode();
 
-
 };
 
 #endif

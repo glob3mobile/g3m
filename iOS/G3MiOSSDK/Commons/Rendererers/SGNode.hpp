@@ -76,12 +76,14 @@ public:
     return _children[i];
   }
 
-  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) {}
+  virtual void rawRender(const G3MRenderContext* rc,
+                         const GLState* parentGLState) {
+  }
 
   virtual const std::string description() {
     return "SGNode";
   }
-
+  
 };
 
 #endif
