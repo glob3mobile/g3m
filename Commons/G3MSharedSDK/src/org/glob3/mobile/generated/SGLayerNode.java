@@ -17,9 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-//class IGLTextureID;
-//class IImage;
 //class TextureIDReference;
+//class IImage;
+//class URL;
+
 
 public class SGLayerNode extends SGNode
 {
@@ -61,7 +62,6 @@ public class SGLayerNode extends SGNode
     }
   
     rc.getDownloader().requestImage(getURL(), DownloadPriority.HIGHEST, TimeInterval.fromDays(30), true, new SGLayerNode_ImageDownloadListener(this), true);
-                                      //TEXTURES_DOWNLOAD_PRIORITY,
   }
 
   private TextureIDReference _textureID;
@@ -91,6 +91,7 @@ public class SGLayerNode extends SGNode
   public void dispose()
   {
     _textureID.dispose(); //Releasing texture through TextureIDReference class
+    super.dispose();
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -113,7 +114,6 @@ public class SGLayerNode extends SGNode
 
   public final boolean modifyGLState(G3MRenderContext rc, GLState state)
   {
-  
     if (!_initialized)
     {
       _initialized = true;
@@ -130,7 +130,6 @@ public class SGLayerNode extends SGNode
     state.addGLFeature(new TextureIDGLFeature(_textureID.getID()), false);
   
     return true;
-  
   }
 
   public final String description()

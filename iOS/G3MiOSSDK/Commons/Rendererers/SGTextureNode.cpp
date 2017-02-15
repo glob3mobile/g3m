@@ -10,6 +10,8 @@
 
 #include "SGLayerNode.hpp"
 #include "GLGlobalState.hpp"
+#include "GLState.hpp"
+
 
 void SGTextureNode::addLayer(SGLayerNode* layer) {
   _layers.push_back(layer);

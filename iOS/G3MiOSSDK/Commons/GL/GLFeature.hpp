@@ -8,17 +8,16 @@
 #ifndef G3MiOSSDK_GLFeature
 #define G3MiOSSDK_GLFeature
 
+#include "RCObject.hpp"
+
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
-#include "GPUAttribute.hpp"
-#include "Vector2F.hpp"
 #include "ViewMode.hpp"
-
-#include "RCObject.hpp"
 
 class Camera;
 
-enum GLFeatureID{
+
+enum GLFeatureID {
   GLF_BILLBOARD,
   GLF_VIEWPORT_EXTENT,
   GLF_GEOMETRY,
@@ -76,23 +75,23 @@ private:
     super.dispose();
 #endif
   }
-  
+
   GPUUniformValueVec2FloatMutable* _size;
   GPUUniformValueVec2FloatMutable* _anchor;
-  
+
 public:
   BillboardGLFeature(const Vector3D& position,
                      float billboardWidth,
                      float billboardHeight,
                      float anchorU, float anchorV);
-  
+
   void applyOnGlobalGLState(GLGlobalState* state) const;
-  
+
   void changeSize(int textureWidth,
                   int textureHeight) {
     _size->changeValue(textureWidth, textureHeight);
   }
-  
+
   void changeAnchor(float anchorU, float anchorV) {
     _anchor->changeValue(anchorU, anchorV);
   }
@@ -105,7 +104,7 @@ private:
     super.dispose();
 #endif
   }
-  
+
   GPUUniformValueVec2FloatMutable* _extent;
 
 public:
@@ -116,7 +115,7 @@ public:
                           ViewMode      viewMode);
 
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
-  
+
   void changeExtent(int viewportWidth,
                     int viewportHeight);
 };
@@ -130,19 +129,19 @@ private:
     super.dispose();
 #endif
   }
-  
+
   GPUUniformValueVec3FloatMutable* _camPos;
-  
+
 public:
   CameraPositionGLFeature(const Camera* cam);
-  
+
   void applyOnGlobalGLState(GLGlobalState* state)  const {
     //Used for atmospheric blending
     state->enableBlend();
     state->setBlendFactors(GLBlendFactor::srcAlpha(),
                            GLBlendFactor::oneMinusSrcAlpha());
   }
-  
+
   void update(const Camera* cam);
 };
 
@@ -445,7 +444,7 @@ public:
                    int sFactor,
                    int dFactor,
                    int target = 0);
-  
+
   bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
 
   void setTranslation(float u, float v);

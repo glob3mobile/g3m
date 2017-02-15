@@ -22,13 +22,13 @@ private:
   std::vector<PyramidNode*>* getChildren();
 
   DEMGrid* _grid;
-  bool _stickyGrid;
+//  bool _stickyGrid;
 
   std::vector<PyramidNode*>* _children;
   size_t                     _childrenSize;
 
-  const PyramidNode*  _parent;
-  const size_t        _childID;
+//  const PyramidNode*  _parent;
+//  const size_t        _childID;
   PyramidDEMProvider* _pyramidDEMProvider;
 
   std::vector<DEMSubscription*>* _subscriptions;

@@ -30,6 +30,8 @@
 #include "IShortBuffer.hpp"
 #include "BSONParser.hpp"
 #include "SceneJSParserStatistics.hpp"
+#include "Color.hpp"
+
 
 SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
                                                       const std::string&    uriPrefix,

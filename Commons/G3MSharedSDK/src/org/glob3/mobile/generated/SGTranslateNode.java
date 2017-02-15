@@ -51,4 +51,11 @@ public class SGTranslateNode extends SGNode
     return "SGTranslateNode";
   }
 
+  public void dispose()
+  {
+    _glState._release();
+    super.dispose();
+  }
+
+
 }

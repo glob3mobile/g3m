@@ -17,10 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class IFloatBuffer;
 //class IShortBuffer;
-//class GPUProgramState;
+
 
 public class SGGeometryNode extends SGNode
 {
@@ -40,11 +39,7 @@ public class SGGeometryNode extends SGNode
   
     if (_normals != null)
     {
-  
-      //    _glState->addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
-      //                                                      (float)0.0), false);
-  
-      _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0), false);
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
   
   
     }
@@ -86,7 +81,6 @@ public class SGGeometryNode extends SGNode
     _glState._release();
   
     super.dispose();
-  
   }
 
   public final void rawRender(G3MRenderContext rc, GLState glState)

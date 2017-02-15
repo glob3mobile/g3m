@@ -9,6 +9,7 @@
 #define G3MiOSSDK_Mark
 
 #include <string>
+
 #include "Geodetic3D.hpp"
 #include "G3MContext.hpp"
 
@@ -23,6 +24,7 @@
 #include "PeriodicalTask.hpp"
 #include "IImageBuilderListener.hpp"
 #include "AltitudeMode.hpp"
+#include "Vector2F.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -33,6 +35,7 @@ class GPUProgramState;
 class TextureIDReference;
 class EffectTarget;
 class IImageBuilder;
+
 
 class MarkUserData {
 public:

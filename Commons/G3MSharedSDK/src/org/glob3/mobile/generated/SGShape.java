@@ -37,14 +37,8 @@ public class SGShape extends Shape
      _uriPrefix = uriPrefix;
      _isTransparent = isTransparent;
     _glState = new GLState();
-    if (_isTransparent)
-    {
-      _glState.addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
-    }
-    else
-    {
-      _glState.addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
-    }
+    final boolean blend = _isTransparent;
+    _glState.addGLFeature(new BlendingModeGLFeature(blend, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
   }
 
   public void dispose()

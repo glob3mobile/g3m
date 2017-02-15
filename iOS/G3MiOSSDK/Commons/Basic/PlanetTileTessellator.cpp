@@ -34,6 +34,7 @@
 
 #include "DEMGridUtils.hpp"
 #include "Geodetic3D.hpp"
+#include "Vector2F.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):

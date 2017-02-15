@@ -40,13 +40,13 @@ public class PyramidNode
   }
 
   private DEMGrid _grid;
-  private boolean _stickyGrid;
+//  bool _stickyGrid;
 
   private java.util.ArrayList<PyramidNode> _children;
   private int _childrenSize;
 
-  private final PyramidNode _parent;
-  private final int _childID;
+//  const PyramidNode*  _parent;
+//  const size_t        _childID;
   private PyramidDEMProvider _pyramidDEMProvider;
 
   private java.util.ArrayList<DEMSubscription> _subscriptions;
@@ -59,9 +59,10 @@ public class PyramidNode
   public final int _y;
 
   public PyramidNode(PyramidNode parent, int childID, Sector sector, int z, int x, int y, PyramidDEMProvider pyramidDEMProvider)
+  //_parent(parent),
+  //_childID(childID),
+  //_stickyGrid(false),
   {
-     _parent = parent;
-     _childID = childID;
      _sector = new Sector(sector);
      _resolution = new Geodetic2D(sector._deltaLatitude.div(pyramidDEMProvider._tileExtent._y), sector._deltaLongitude.div(pyramidDEMProvider._tileExtent._x));
      _z = z;
@@ -69,7 +70,6 @@ public class PyramidNode
      _y = y;
      _pyramidDEMProvider = pyramidDEMProvider;
      _grid = null;
-     _stickyGrid = false;
      _children = null;
      _childrenSize = 0;
      _subscriptions = null;
@@ -117,7 +117,7 @@ public class PyramidNode
       if ((x == _x) && (y == _y))
       {
         _grid = grid;
-        _stickyGrid = stickyGrid;
+  //      _stickyGrid = stickyGrid;
         return true;
       }
       return false;
