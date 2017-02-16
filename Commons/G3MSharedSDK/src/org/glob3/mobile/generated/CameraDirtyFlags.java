@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class FrustumPolicy;
 //class Vector3D;
 //class Vector2I;
 //class Vector2F;
@@ -35,6 +36,7 @@ package org.glob3.mobile.generated;
 //class FrustumData;
 //class IFloatBuffer;
 //class Planet;
+
 
 
 public class CameraDirtyFlags

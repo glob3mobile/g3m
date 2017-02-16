@@ -20,12 +20,50 @@ package org.glob3.mobile.generated;
 
 public class SimpleCameraConstrainer implements ICameraConstrainer
 {
+  private final double _minHeight;
+  private final double _maxHeight;
+  private final double _minHeightPlanetRadiiFactor;
+  private final double _maxHeightPlanetRadiiFactor;
 
-  public SimpleCameraConstrainer()
-  //  _previousCameraTimestamp(0),
-  //  _nextCameraTimestamp(0)
+  private SimpleCameraConstrainer(double minHeight, double maxHeight, double minHeightPlanetRadiiFactor, double maxHeightPlanetRadiiFactor)
   {
+     _minHeight = minHeight;
+     _maxHeight = maxHeight;
+     _minHeightPlanetRadiiFactor = minHeightPlanetRadiiFactor;
+     _maxHeightPlanetRadiiFactor = maxHeightPlanetRadiiFactor;
+  }
 
+
+  public static SimpleCameraConstrainer create(double minHeight, double maxHeight, double minHeightPlanetRadiiFactor, double maxHeightPlanetRadiiFactor)
+  {
+    return new SimpleCameraConstrainer(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
+  }
+
+  public static SimpleCameraConstrainer createDefault()
+  {
+    final double minHeight = 10;
+    final double minHeightPlanetRadiiFactor = Double.NaN;
+  
+    final double maxHeight = Double.NaN;
+    final double maxHeightPlanetRadiiFactor = 9;
+  
+    return create(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
+  }
+
+  public static SimpleCameraConstrainer createFixed(double minHeight, double maxHeight)
+  {
+    final double minHeightPlanetRadiiFactor = Double.NaN;
+    final double maxHeightPlanetRadiiFactor = Double.NaN;
+  
+    return create(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
+  }
+
+  public static SimpleCameraConstrainer createPlanetRadiiFactor(double minHeightPlanetRadiiFactor, double maxHeightPlanetRadiiFactor)
+  {
+    final double minHeight = Double.NaN;
+    final double maxHeight = Double.NaN;
+  
+    return create(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
   }
 
 
@@ -33,33 +71,24 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   {
   }
 
-  public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
+  public final boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
-  
-    //  long long previousCameraTimestamp = previousCamera->getTimestamp();
-    //  long long nextCameraTimestamp = nextCamera->getTimestamp();
-    //  if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp) {
-    //    _previousCameraTimestamp = previousCameraTimestamp;
-    //    _nextCameraTimestamp = nextCameraTimestamp;
-    //    ILogger::instance()->logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n",
-    //                                 _previousCameraTimestamp, _nextCameraTimestamp);
-    //  }
-  
-    final double radii = planet.getRadii().maxAxis();
-    final double maxHeight = radii *9;
-    final double minHeight = 10;
-  
-    final double height = nextCamera.getGeodeticPosition()._height;
-  
-    if ((height < minHeight) || (height > maxHeight))
-    {
-      nextCamera.copyFrom(previousCamera, true);
-    }
-  
-    return true;
-  }
+   final double radii = planet.getRadii().maxAxis();
+   final double minHeight = (_minHeight != _minHeight) ? (radii * _minHeightPlanetRadiiFactor) : _minHeight;
+   final double maxHeight = (_maxHeight != _maxHeight) ? (radii * _maxHeightPlanetRadiiFactor) : _maxHeight;
+ 
+   final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+ 
+   if (cameraPosition._height < minHeight)
+   {
+     nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, minHeight);
+   }
+   else if (cameraPosition._height > maxHeight)
+   {
+     nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, maxHeight);
+   }
+ 
+   return true;
+ }
 
-  //private:
-  //  mutable long long _previousCameraTimestamp;
-  //  mutable long long _nextCameraTimestamp;
 }

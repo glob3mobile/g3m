@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class MeshRenderer;
+//class Camera;
 
 
 public class HeightOffsetLocationModifier implements ILocationModifier

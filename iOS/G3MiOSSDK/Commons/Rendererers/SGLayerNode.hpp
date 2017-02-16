@@ -10,11 +10,11 @@
 #define __G3MiOSSDK__SGLayerNode__
 
 #include "SGNode.hpp"
-#include "URL.hpp"
 
-class IGLTextureID;
-class IImage;
 class TextureIDReference;
+class IImage;
+class URL;
+
 
 class SGLayerNode : public SGNode {
 private:

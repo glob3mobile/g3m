@@ -9,27 +9,27 @@
 #include "SceneJSShapesParser.hpp"
 
 #include "IJSONParser.hpp"
-#include "IByteBuffer.hpp"
+#include "BSONParser.hpp"
 #include "JSONObject.hpp"
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
-
-#include "SGNode.hpp"
+#include "SceneJSParserStatistics.hpp"
 #include "SGShape.hpp"
+#include "SGNode.hpp"
+#include "SGLayerNode.hpp"
 #include "SGRotateNode.hpp"
 #include "SGTranslateNode.hpp"
 #include "SGMaterialNode.hpp"
 #include "SGTextureNode.hpp"
 #include "SGGeometryNode.hpp"
-#include "SGLayerNode.hpp"
 #include "JSONBoolean.hpp"
 #include "GLConstants.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "IShortBuffer.hpp"
-#include "BSONParser.hpp"
-#include "SceneJSParserStatistics.hpp"
+#include "Color.hpp"
+
 
 SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
                                                       const std::string&    uriPrefix,

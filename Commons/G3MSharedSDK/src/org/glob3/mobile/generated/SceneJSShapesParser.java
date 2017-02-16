@@ -18,20 +18,20 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class SGShape;
-//class IByteBuffer;
 //class JSONBaseObject;
+//class Geodetic3D;
 //class JSONObject;
 //class SGNode;
 //class SGRotateNode;
+//class SGTranslateNode;
 //class SGMaterialNode;
 //class SGTextureNode;
 //class SGGeometryNode;
-//class SGTranslateNode;
 //class SGLayerNode;
 //class Color;
 //class SceneJSParserStatistics;
+//class IByteBuffer;
 
 
 public class SceneJSShapesParser

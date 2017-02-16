@@ -8,21 +8,19 @@
 
 #include "SGLayerNode.hpp"
 
-#include "IGLTextureID.hpp"
-#include "GL.hpp"
+#include "IImageDownloadListener.hpp"
+#include "ILogger.hpp"
+#include "URL.hpp"
+#include "IStringBuilder.hpp"
+#include "SGShape.hpp"
 #include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
-#include "SGShape.hpp"
-#include "IImageDownloadListener.hpp"
-#include "TexturesHandler.hpp"
-#include "TextureIDReference.hpp"
-#include "IStringBuilder.hpp"
-#include "GPUProgramManager.hpp"
-#include "GPUProgram.hpp"
 #include "DownloadPriority.hpp"
 #include "TimeInterval.hpp"
-
-//#define TEXTURES_DOWNLOAD_PRIORITY 1000000
+#include "TexturesHandler.hpp"
+#include "GLConstants.hpp"
+#include "GLState.hpp"
+#include "TextureIDReference.hpp"
 
 
 class SGLayerNode_ImageDownloadListener : public IImageDownloadListener {
@@ -64,6 +62,7 @@ SGLayerNode::~SGLayerNode() {
 #endif
 #ifdef JAVA_CODE
   _textureID.dispose(); //Releasing texture through TextureIDReference class
+  super.dispose();
 #endif
 }
 
@@ -98,7 +97,6 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
   }
 
   rc->getDownloader()->requestImage(getURL(),
-                                    //TEXTURES_DOWNLOAD_PRIORITY,
                                     DownloadPriority::HIGHEST,
                                     TimeInterval::fromDays(30),
                                     true,
@@ -123,7 +121,6 @@ const TextureIDReference* SGLayerNode::getTextureID(const G3MRenderContext* rc) 
 }
 
 bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
-
   if (!_initialized) {
     _initialized = true;
     requestImage(rc);
@@ -138,5 +135,4 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
   state->addGLFeature(new TextureIDGLFeature(_textureID->getID()), false);
   
   return true;
-  
 }

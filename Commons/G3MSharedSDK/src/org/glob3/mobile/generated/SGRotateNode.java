@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class SGRotateNode extends SGNode
 {
   private final double _x;
@@ -44,6 +45,7 @@ public class SGRotateNode extends SGNode
   public void dispose()
   {
     _glState._release();
+    super.dispose();
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
@@ -56,6 +58,5 @@ public class SGRotateNode extends SGNode
   {
     return "SGRotateNode";
   }
-
 
 }

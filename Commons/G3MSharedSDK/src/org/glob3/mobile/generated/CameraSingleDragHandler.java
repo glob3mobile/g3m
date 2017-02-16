@@ -40,6 +40,11 @@ public class CameraSingleDragHandler extends CameraEventHandler
     super.dispose();
   }
 
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
+  }
+
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     if (touchEvent.getTouchCount() != 1)
@@ -106,14 +111,14 @@ public class CameraSingleDragHandler extends CameraEventHandler
     final Vector3D initialRay = camera.pixel2Ray(pixel);
     if (!initialRay.isNan())
     {
-      cameraContext.setCurrentGesture(Gesture.Drag);
+      cameraContext.setCurrentGesture(CameraEventGesture.Drag);
       eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), initialRay);
     }
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
-    if (cameraContext.getCurrentGesture() != Gesture.Drag)
+    if (cameraContext.getCurrentGesture() != CameraEventGesture.Drag)
     {
       return;
     }
@@ -153,7 +158,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 //#warning method getPixelsInMM is ! working fine in iOS devices
       final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);
   
-      if ((cameraContext.getCurrentGesture() == Gesture.Drag) && (desp > delta))
+      if ((cameraContext.getCurrentGesture() == CameraEventGesture.Drag) && (desp > delta))
       {
         Effect effect = planet.createEffectFromLastSingleDrag();
         if (effect != null)
@@ -164,6 +169,6 @@ public class CameraSingleDragHandler extends CameraEventHandler
       }
     }
   
-    cameraContext.setCurrentGesture(Gesture.None);
+    cameraContext.setCurrentGesture(CameraEventGesture.None);
   }
 }

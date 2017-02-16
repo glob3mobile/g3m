@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated;
-///#define TEXTURES_DOWNLOAD_PRIORITY 1000000
-
-
 public class SGLayerNode_ImageDownloadListener extends IImageDownloadListener
 {
   private SGLayerNode _layerNode;

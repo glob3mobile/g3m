@@ -46,17 +46,7 @@ private:
 
 public:
 
-  GLState():
-  _parentGLState(NULL),
-  _linkedProgram(NULL),
-  _parentsTimestamp(-1),
-  _timestamp(0),
-  _valuesSet(NULL),
-  _globalState(NULL),
-  _accumulatedFeatures(NULL)
-  {
-    _features = new GLFeatureSet();
-  }
+  GLState();
 
   int getTimestamp() const { return _timestamp; }
 

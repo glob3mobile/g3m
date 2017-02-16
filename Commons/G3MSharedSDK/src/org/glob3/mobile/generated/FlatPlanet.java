@@ -361,7 +361,7 @@ public class FlatPlanet extends Planet
     return Vector3D.UP_Y;
   }
 
-  public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
+  public final void applyCameraConstrains(Camera previousCamera, Camera nextCamera)
   {
   
   }

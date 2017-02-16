@@ -625,7 +625,7 @@ public class SphericalPlanet extends Planet
     return Vector3D.UP_Z;
   }
 
-  public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
+  public final void applyCameraConstrains(Camera previousCamera, Camera nextCamera)
   {
   
   }

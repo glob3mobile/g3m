@@ -36,6 +36,10 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     super.dispose();
   }
 
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
+  }
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -122,12 +126,12 @@ public class CameraDoubleDragHandler extends CameraEventHandler
       return;
     }
   
-    cameraContext.setCurrentGesture(Gesture.DoubleDrag);
+    cameraContext.setCurrentGesture(CameraEventGesture.DoubleDrag);
     eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel0), camera.pixel2Ray(pixel1));
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
+    if (cameraContext.getCurrentGesture() != CameraEventGesture.DoubleDrag)
     {
       return;
     }
@@ -155,7 +159,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   }
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    cameraContext.setCurrentGesture(Gesture.None);
+    cameraContext.setCurrentGesture(CameraEventGesture.None);
   }
 
 }

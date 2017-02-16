@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class IImage;
 //class IFloatBuffer;
 //class IGLTextureID;
@@ -25,6 +26,7 @@ package org.glob3.mobile.generated;
 //class TextureIDReference;
 //class EffectTarget;
 //class IImageBuilder;
+
 
 public class MarkUserData
 {

@@ -7,22 +7,31 @@ package org.glob3.mobile.generated;
 //
 
 
-
-//class TouchEvent;
+//class RenderState;
 //class G3MRenderContext;
 //class CameraContext;
+//class G3MEventContext;
+//class TouchEvent;
+
 
 public abstract class CameraEventHandler
 {
+  protected CameraEventHandler()
+  {
 
-  public abstract boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+  }
 
-  public abstract void render(G3MRenderContext rc, CameraContext cameraContext);
 
   public void dispose()
   {
 
   }
+
+  public abstract RenderState getRenderState(G3MRenderContext rc);
+
+  public abstract void render(G3MRenderContext rc, CameraContext cameraContext);
+
+  public abstract boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
   public abstract void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 

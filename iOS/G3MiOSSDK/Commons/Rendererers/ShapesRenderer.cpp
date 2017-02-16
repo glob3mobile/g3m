@@ -21,6 +21,7 @@
 #include "G3MRenderContext.hpp"
 #include "GLState.hpp"
 #include "Planet.hpp"
+#include "Geodetic3D.hpp"
 
 
 class TransparentShapeWrapper : public OrderedRenderable {

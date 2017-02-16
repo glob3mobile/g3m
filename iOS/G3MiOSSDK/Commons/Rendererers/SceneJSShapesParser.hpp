@@ -9,25 +9,24 @@
 #ifndef __G3MiOSSDK__SceneJSShapesParser__
 #define __G3MiOSSDK__SceneJSShapesParser__
 
-
 #include <string>
 
-#include "Geodetic3D.hpp"
 #include "AltitudeMode.hpp"
 
 class SGShape;
-class IByteBuffer;
 class JSONBaseObject;
+class Geodetic3D;
 class JSONObject;
 class SGNode;
 class SGRotateNode;
+class SGTranslateNode;
 class SGMaterialNode;
 class SGTextureNode;
 class SGGeometryNode;
-class SGTranslateNode;
 class SGLayerNode;
 class Color;
 class SceneJSParserStatistics;
+class IByteBuffer;
 
 
 class SceneJSShapesParser {

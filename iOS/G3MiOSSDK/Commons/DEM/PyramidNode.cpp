@@ -22,15 +22,15 @@ PyramidNode::PyramidNode(const PyramidNode*  parent,
                          const int           x,
                          const int           y,
                          PyramidDEMProvider* pyramidDEMProvider) :
-_parent(parent),
-_childID(childID),
+//_parent(parent),
+//_childID(childID),
 _sector(sector),
 _resolution(sector._deltaLatitude.div(pyramidDEMProvider->_tileExtent._y),
             sector._deltaLongitude.div(pyramidDEMProvider->_tileExtent._x)),
 _z(z), _x(x), _y(y),
 _pyramidDEMProvider(pyramidDEMProvider),
 _grid(NULL),
-_stickyGrid(false),
+//_stickyGrid(false),
 _children(NULL),
 _childrenSize(0),
 _subscriptions(NULL)
@@ -84,7 +84,7 @@ bool PyramidNode::insertGrid(int z,
   else if (z == _z) {
     if ((x == _x) && (y == _y)) {
       _grid = grid;
-      _stickyGrid = stickyGrid;
+//      _stickyGrid = stickyGrid;
       return true;
     }
     return false;

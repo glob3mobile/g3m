@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class Camera;
 
+
 public enum GLFeatureID
 {
   GLF_BILLBOARD,

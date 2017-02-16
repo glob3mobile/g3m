@@ -127,7 +127,7 @@ public abstract class Planet
 
   public abstract Vector3D getNorth();
 
-  public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
+  public abstract void applyCameraConstrains(Camera previousCamera, Camera nextCamera);
 
   public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
 

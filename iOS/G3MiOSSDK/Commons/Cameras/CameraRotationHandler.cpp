@@ -15,7 +15,13 @@
 #include "G3MEventContext.hpp"
 #include "Planet.hpp"
 #include "Angle.hpp"
+#include "CameraContext.hpp"
+#include "RenderState.hpp"
 
+
+RenderState CameraRotationHandler::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
 
 bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
                                          const TouchEvent* touchEvent,

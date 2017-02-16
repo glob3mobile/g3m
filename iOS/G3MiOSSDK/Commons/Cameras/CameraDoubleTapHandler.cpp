@@ -15,7 +15,13 @@
 #include "Planet.hpp"
 #include "Camera.hpp"
 #include "Effects.hpp"
+#include "CameraContext.hpp"
+#include "RenderState.hpp"
 
+
+RenderState CameraDoubleTapHandler::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
 
 bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,

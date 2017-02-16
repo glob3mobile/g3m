@@ -26,8 +26,7 @@ private:
 
 
 public:
-  CameraDoubleDragHandler()
-  {
+  CameraDoubleDragHandler() {
   }
 
   ~CameraDoubleDragHandler() {
@@ -36,6 +35,7 @@ public:
 #endif
   }
 
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,
@@ -53,7 +53,7 @@ public:
   void onUp(const G3MEventContext *eventContext,
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
-
+  
 };
 
 #endif

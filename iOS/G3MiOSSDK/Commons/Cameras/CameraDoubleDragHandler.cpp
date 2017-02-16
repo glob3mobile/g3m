@@ -6,12 +6,18 @@
 //
 
 #include "CameraDoubleDragHandler.hpp"
-#include "GL.hpp"
+
+#include "RenderState.hpp"
 #include "TouchEvent.hpp"
+#include "Camera.hpp"
+#include "CameraContext.hpp"
 #include "G3MEventContext.hpp"
 #include "Planet.hpp"
-#include "Camera.hpp"
 
+
+RenderState CameraDoubleDragHandler::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
 
 bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent,

@@ -16,6 +16,7 @@
 #include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
 
+class FrustumPolicy;
 class Vector3D;
 class Vector2I;
 class Vector2F;
@@ -32,6 +33,7 @@ class MutableVector2I;
 class FrustumData;
 class IFloatBuffer;
 class Planet;
+
 
 
 class CameraDirtyFlags {
@@ -111,7 +113,8 @@ public:
 class Camera {
 public:
 
-  explicit Camera(long long timestamp);
+  explicit Camera(long long timestamp,
+                  const FrustumPolicy* frustumPolicy);
 
   ~Camera();
 
@@ -192,6 +195,7 @@ public:
   void setPitch(const Angle& angle);
 
   const Geodetic3D getGeodeticPosition() const;
+  const double getGeodeticHeight() const;
 
   void setGeodeticPosition(const Geodetic3D& g3d);
 
@@ -292,7 +296,13 @@ public:
 
   FrustumData getFrustumData() const;
 
+  const Planet* getPlanet() const {
+    return _planet;
+  }
+
 private:
+
+  const FrustumPolicy* _frustumPolicy;
 
   Camera(const Camera &that);
 
@@ -439,7 +449,7 @@ private:
     }
     return _modelViewMatrix;
   }
-  
+
 };
 
 #endif

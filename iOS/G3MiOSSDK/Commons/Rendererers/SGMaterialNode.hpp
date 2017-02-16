@@ -10,8 +10,9 @@
 #define __G3MiOSSDK__SGMaterialNode__
 
 #include "SGNode.hpp"
-#include "Color.hpp"
-#include "GLFeature.hpp"
+
+class Color;
+
 
 class SGMaterialNode : public SGNode {
 private:
@@ -23,11 +24,10 @@ private:
 #endif
   const Color* _specularColor;
 
-//  const double _specular;
-//  const double _shine;
-//  const double _alpha;
-//  const double _emit;
-
+  //  const double _specular;
+  //  const double _shine;
+  //  const double _alpha;
+  //  const double _emit;
 
   GLState* _glState;
 
@@ -40,52 +40,19 @@ public:
                  double specular,
                  double shine,
                  double alpha,
-                 double emit) :
-  SGNode(id, sID),
-  _baseColor(baseColor),
-  _specularColor(specularColor),
-  _glState(new GLState())
-//  _specular(specular),
-//  _shine(shine),
-//  _alpha(alpha),
-//  _emit(emit)
-  {
-#ifdef C_CODE
-    _glState->addGLFeature(new FlatColorGLFeature(*_baseColor, false, 0, 0), false);
-#endif
-#ifdef JAVA_CODE
-    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
-#endif
-  }
+                 double emit);
 
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState) {
-    _glState->setParent(parentState);
-    return _glState;
-  }
+                             const GLState* parentState);
 
-  void setBaseColor(Color* baseColor) {
-    if (baseColor != _baseColor) {
-      delete _baseColor;
-      _baseColor = baseColor;
-    }
-  }
+  void setBaseColor(Color* baseColor);
 
-  ~SGMaterialNode() {
-    delete _baseColor;
-    delete _specularColor;
-
-    _glState->_release();
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-  }
+  ~SGMaterialNode();
 
   const std::string description() {
     return "SGMaterialNode";
   }
-
+  
 };
 
 #endif

@@ -626,8 +626,8 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
   return traslation.multiply(rotation);
 }
 
-void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
-                                                Camera* nextCamera) const {
+void EllipsoidalPlanet::applyCameraConstrains(const Camera* previousCamera,
+                                              Camera* nextCamera) const {
 
 }
 

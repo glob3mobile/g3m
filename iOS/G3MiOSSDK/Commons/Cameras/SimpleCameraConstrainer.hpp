@@ -13,26 +13,46 @@
 
 
 class SimpleCameraConstrainer : public ICameraConstrainer {
+private:
+  const double _minHeight;
+  const double _maxHeight;
+  const double _minHeightPlanetRadiiFactor;
+  const double _maxHeightPlanetRadiiFactor;
+
+  SimpleCameraConstrainer(const double minHeight,
+                          const double maxHeight,
+                          const double minHeightPlanetRadiiFactor,
+                          const double maxHeightPlanetRadiiFactor) :
+  _minHeight(minHeight),
+  _maxHeight(maxHeight),
+  _minHeightPlanetRadiiFactor(minHeightPlanetRadiiFactor),
+  _maxHeightPlanetRadiiFactor(maxHeightPlanetRadiiFactor)
+  {
+  }
+
 public:
 
-  SimpleCameraConstrainer()
-  //  _previousCameraTimestamp(0),
-  //  _nextCameraTimestamp(0)
-  {
+  static SimpleCameraConstrainer* create(const double minHeight,
+                                         const double maxHeight,
+                                         const double minHeightPlanetRadiiFactor,
+                                         const double maxHeightPlanetRadiiFactor);
 
-  }
+  static SimpleCameraConstrainer* createDefault();
+
+  static SimpleCameraConstrainer* createFixed(const double minHeight,
+                                              const double maxHeight);
+
+  static SimpleCameraConstrainer* createPlanetRadiiFactor(const double minHeightPlanetRadiiFactor,
+                                                          const double maxHeightPlanetRadiiFactor);
 
 
   ~SimpleCameraConstrainer() {
   }
 
-  virtual bool onCameraChange(const Planet* planet,
-                              const Camera* previousCamera,
-                              Camera* nextCamera) const;
-
-  //private:
-  //  mutable long long _previousCameraTimestamp;
-  //  mutable long long _nextCameraTimestamp;
+  bool onCameraChange(const Planet* planet,
+                      const Camera* previousCamera,
+                      Camera* nextCamera) const;
+  
 };
 
 #endif

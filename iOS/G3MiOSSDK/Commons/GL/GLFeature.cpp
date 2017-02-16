@@ -7,8 +7,10 @@
 //
 
 #include "GLFeature.hpp"
+
 #include "Camera.hpp"
 #include "Vector2F.hpp"
+
 
 ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,
                                                  int viewportHeight) :

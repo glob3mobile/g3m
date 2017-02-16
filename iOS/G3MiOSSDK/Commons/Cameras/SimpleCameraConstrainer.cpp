@@ -11,31 +11,75 @@
 #include "Camera.hpp"
 #include "Planet.hpp"
 #include "Geodetic3D.hpp"
+#include "IMathUtils.hpp"
 
 
-bool SimpleCameraConstrainer::onCameraChange(const Planet *planet,
+SimpleCameraConstrainer* SimpleCameraConstrainer::create(const double minHeight,
+                                                         const double maxHeight,
+                                                         const double minHeightPlanetRadiiFactor,
+                                                         const double maxHeightPlanetRadiiFactor) {
+  return new SimpleCameraConstrainer(minHeight,
+                                     maxHeight,
+                                     minHeightPlanetRadiiFactor,
+                                     maxHeightPlanetRadiiFactor);
+}
+
+
+SimpleCameraConstrainer* SimpleCameraConstrainer::createDefault() {
+  const double minHeight                  = 10;
+  const double minHeightPlanetRadiiFactor = NAND;
+
+  const double maxHeight                  = NAND;
+  const double maxHeightPlanetRadiiFactor = 9;
+
+  return create(minHeight,
+                maxHeight,
+                minHeightPlanetRadiiFactor,
+                maxHeightPlanetRadiiFactor);
+}
+
+SimpleCameraConstrainer* SimpleCameraConstrainer::createFixed(const double minHeight,
+                                                              const double maxHeight) {
+  const double minHeightPlanetRadiiFactor = NAND;
+  const double maxHeightPlanetRadiiFactor = NAND;
+
+  return create(minHeight,
+                maxHeight,
+                minHeightPlanetRadiiFactor,
+                maxHeightPlanetRadiiFactor);
+}
+
+SimpleCameraConstrainer* SimpleCameraConstrainer::createPlanetRadiiFactor(const double minHeightPlanetRadiiFactor,
+                                                                          const double maxHeightPlanetRadiiFactor) {
+  const double minHeight = NAND;
+  const double maxHeight = NAND;
+
+  return create(minHeight,
+                maxHeight,
+                minHeightPlanetRadiiFactor,
+                maxHeightPlanetRadiiFactor);
+}
+
+\
+bool SimpleCameraConstrainer::onCameraChange(const Planet* planet,
                                              const Camera* previousCamera,
                                              Camera* nextCamera) const {
-
-  //  long long previousCameraTimestamp = previousCamera->getTimestamp();
-  //  long long nextCameraTimestamp = nextCamera->getTimestamp();
-  //  if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp) {
-  //    _previousCameraTimestamp = previousCameraTimestamp;
-  //    _nextCameraTimestamp = nextCameraTimestamp;
-  //    ILogger::instance()->logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n",
-  //                                 _previousCameraTimestamp, _nextCameraTimestamp);
-  //  }
-
   const double radii = planet->getRadii().maxAxis();
-  const double maxHeight = radii*9;
-  const double minHeight = 10;
+  const double minHeight = ISNAN(_minHeight) ? (radii * _minHeightPlanetRadiiFactor) : _minHeight;
+  const double maxHeight = ISNAN(_maxHeight) ? (radii * _maxHeightPlanetRadiiFactor) : _maxHeight;
 
-  const double height = nextCamera->getGeodeticPosition()._height;
+  const Geodetic3D cameraPosition = nextCamera->getGeodeticPosition();
 
-  if ((height < minHeight) || (height > maxHeight)) {
-    nextCamera->copyFrom(*previousCamera,
-                         true);
+  if (cameraPosition._height < minHeight) {
+    nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                    cameraPosition._longitude,
+                                    minHeight);
   }
-  
+  else if (cameraPosition._height > maxHeight) {
+    nextCamera->setGeodeticPosition(cameraPosition._latitude,
+                                    cameraPosition._longitude,
+                                    maxHeight);
+  }
+
   return true;
 }

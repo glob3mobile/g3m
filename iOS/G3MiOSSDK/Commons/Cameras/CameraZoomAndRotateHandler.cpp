@@ -13,7 +13,13 @@
 #include "G3MEventContext.hpp"
 #include "Planet.hpp"
 #include "Camera.hpp"
+#include "CameraContext.hpp"
+#include "RenderState.hpp"
 
+
+RenderState CameraZoomAndRotateHandler::getRenderState(const G3MRenderContext* rc) {
+  return RenderState::ready();
+}
 
 bool CameraZoomAndRotateHandler::onTouchEvent(const G3MEventContext *eventContext,
                                               const TouchEvent* touchEvent,

@@ -57,6 +57,7 @@ class G3MRenderContext;
 class SurfaceElevationProvider;
 class GLState;
 class G3MEventContext;
+class FrustumPolicy;
 
 
 class WidgetUserData {
@@ -118,8 +119,9 @@ public:
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
                            const InitialCameraPositionProvider* initialCameraPositionProvider,
-                           InfoDisplay* infoDisplay,
-                           ViewMode viewMode);
+                           InfoDisplay*                         infoDisplay,
+                           ViewMode                             viewMode,
+                           const FrustumPolicy*                 frustumPolicy);
 
   ~G3MWidget();
 
@@ -270,8 +272,10 @@ private:
 
   std::vector<ICameraConstrainer*> _cameraConstrainers;
 
-  Camera*          _currentCamera;
-  Camera*          _nextCamera;
+  const FrustumPolicy* _frustumPolicy;
+  Camera*              _currentCamera;
+  Camera*              _nextCamera;
+
   TexturesHandler* _texturesHandler;
 
   Color*           _backgroundColor;
@@ -354,7 +358,8 @@ private:
             SceneLighting*                       sceneLighting,
             const InitialCameraPositionProvider* initialCameraPositionProvider,
             InfoDisplay*                         infoDisplay,
-            ViewMode                             viewMode);
+            ViewMode                             viewMode,
+            const FrustumPolicy*                 frustumPolicy);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
@@ -364,7 +369,7 @@ private:
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
 
   void rawRender(const RenderState_Type renderStateType);
-
+  
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);

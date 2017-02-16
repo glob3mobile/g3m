@@ -163,11 +163,11 @@ public:
     return Vector3D::UP_Z;
   }
 
-  void applyCameraConstrainers(const Camera* previousCamera,
-                               Camera* nextCamera) const;
+  void applyCameraConstrains(const Camera* previousCamera,
+                             Camera* nextCamera) const;
 
   Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const;
-
+  
   const std::string getType() const {
     return "Spherical";
   }

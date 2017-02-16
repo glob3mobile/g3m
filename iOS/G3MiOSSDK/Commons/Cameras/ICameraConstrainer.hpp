@@ -9,9 +9,9 @@
 #ifndef __G3MiOSSDK__ICameraConstrainer__
 #define __G3MiOSSDK__ICameraConstrainer__
 
-//class Planet;
-//class Camera;
-#include "Camera.hpp"
+class Planet;
+class Camera;
+
 
 class ICameraConstrainer {
 public:

@@ -172,7 +172,7 @@ public class MarksRenderer extends DefaultRenderer
   
       MutableVector3D cameraPosition = new MutableVector3D();
       camera.getCartesianPositionMutable(cameraPosition);
-      final double cameraHeight = camera.getGeodeticPosition()._height;
+      final double cameraHeight = camera.getGeodeticHeight();
   
       updateGLState(rc);
   

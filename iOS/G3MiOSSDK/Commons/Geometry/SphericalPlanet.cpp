@@ -523,8 +523,8 @@ MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3
   return traslation.multiply(rotation);
 }
 
-void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
-                                              Camera* nextCamera) const {
+void SphericalPlanet::applyCameraConstrains(const Camera* previousCamera,
+                                            Camera* nextCamera) const {
 
 }
 

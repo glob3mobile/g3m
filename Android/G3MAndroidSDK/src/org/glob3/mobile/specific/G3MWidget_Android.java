@@ -3,46 +3,30 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.GPUProgramFactory;
-import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.ICameraActivityListener;
-import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.IDeviceLocation;
-import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
-import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InfoDisplay;
-import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
-import org.glob3.mobile.generated.ViewMode;
 import org.glob3.mobile.generated.WidgetUserData;
 
+import android.annotation.SuppressLint;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -195,6 +179,7 @@ public final class G3MWidget_Android
    }
 
 
+   @SuppressLint("ClickableViewAccessibility")
    @Override
    public boolean onTouchEvent(final MotionEvent event) {
 
@@ -275,88 +260,6 @@ public final class G3MWidget_Android
          //         _g3mWidget.onResume();
       }
       return _g3mWidget;
-   }
-
-
-   static private GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory factory = new BasicShadersGL2();
-
-      /*
-      factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
-      factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-
-      factory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-               GL2Shaders._texturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", GL2Shaders._transformedTexCoortexturedMeshVertexShader,
-               GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-               GL2Shaders._flatColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", GL2Shaders._TexturedMesh_DirectionLightVertexShader,
-               GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
-               GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-       */
-
-      return new GPUProgramManager(factory);
-   }
-
-
-   public void initWidget(final IStorage storage,
-                          final IDownloader downloader,
-                          final IThreadUtils threadUtils,
-                          final ICameraActivityListener cameraActivityListener,
-                          final Planet planet,
-                          final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
-                          final CameraRenderer cameraRenderer,
-                          final org.glob3.mobile.generated.Renderer mainRenderer,
-                          final org.glob3.mobile.generated.Renderer busyRenderer,
-                          final ErrorRenderer errorRenderer,
-                          final org.glob3.mobile.generated.Renderer hudRenderer,
-                          final Color backgroundColor,
-                          final boolean logFPS,
-                          final boolean logDownloaderStatistics,
-                          final GInitializationTask initializationTask,
-                          final boolean autoDeleteInitializationTask,
-                          final java.util.ArrayList<PeriodicalTask> periodicalTasks,
-                          final SceneLighting sceneLighting,
-                          final InitialCameraPositionProvider initialCameraPositionProvider,
-                          final WidgetUserData userData,
-                          final InfoDisplay infoDisplay) {
-
-      _g3mWidget = G3MWidget.create(//
-               getGL(), //
-               storage, //
-               downloader, //
-               threadUtils, //
-               cameraActivityListener, //
-               planet, //
-               cameraConstrainers, //
-               cameraRenderer, //
-               mainRenderer, //
-               busyRenderer, //
-               errorRenderer, //
-               hudRenderer, //
-               backgroundColor, //
-               logFPS, //
-               logDownloaderStatistics, //
-               initializationTask, //
-               autoDeleteInitializationTask, //
-               periodicalTasks, //
-               createGPUProgramManager(), //
-               sceneLighting, //
-               initialCameraPositionProvider, //
-               infoDisplay, //
-               ViewMode.MONO);
-
-      _g3mWidget.setUserData(userData);
    }
 
 

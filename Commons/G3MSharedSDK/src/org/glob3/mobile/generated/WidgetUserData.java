@@ -57,6 +57,7 @@ package org.glob3.mobile.generated;
 //class SurfaceElevationProvider;
 //class GLState;
 //class G3MEventContext;
+//class FrustumPolicy;
 
 
 public class WidgetUserData

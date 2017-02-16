@@ -39,6 +39,8 @@
 #include "PlanetRenderer.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "AtmosphereRenderer.hpp"
+#include "DynamicFrustumPolicy.hpp"
+#include "CameraRenderer.hpp"
 
 
 IG3MBuilder::IG3MBuilder() :
@@ -65,7 +67,8 @@ _userData(NULL),
 _sceneLighting(NULL),
 _shownSector(NULL),
 _infoDisplay(NULL),
-_atmosphere(false)
+_atmosphere(false),
+_frustumPolicy(NULL)
 {
 }
 
@@ -103,6 +106,7 @@ IG3MBuilder::~IG3MBuilder() {
   delete _userData;
   delete _planetRendererBuilder;
   delete _shownSector;
+  delete _frustumPolicy;
 }
 
 /**
@@ -448,16 +452,16 @@ void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
  *
  * @param cameraConstraints - std::vector<ICameraConstrainer*>
  */
-void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints) {
-  if (_cameraConstraints) {
-    ILogger::instance()->logWarning("LOGIC WARNING: camera contraints previously set will be ignored and deleted");
+void IG3MBuilder::setCameraConstraints(const std::vector<ICameraConstrainer*>& cameraConstraints) {
+  if (_cameraConstraints == NULL) {
+    _cameraConstraints = new std::vector<ICameraConstrainer*>;
+  }
+  else {
+    ILogger::instance()->logWarning("LOGIC WARNING: camera constraints previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _cameraConstraints->size(); i++) {
       delete _cameraConstraints->at(i);
     }
     _cameraConstraints->clear();
-  }
-  else {
-    _cameraConstraints = new std::vector<ICameraConstrainer*>;
   }
   for (unsigned int i = 0; i < cameraConstraints.size(); i++) {
     _cameraConstraints->push_back(cameraConstraints[i]);
@@ -559,7 +563,7 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
  *
  * @param renderers - std::vector<Renderer*>
  */
-void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
+void IG3MBuilder::setRenderers(const std::vector<Renderer*>& renderers) {
   if (!containsPlanetRenderer(renderers)) {
     ILogger::instance()->logError("LOGIC ERROR: renderers list must contain at least an instance of the PlanetRenderer class");
     return;
@@ -613,7 +617,7 @@ void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
  *
  * @param periodicalTasks - std::vector<PeriodicalTask*>
  */
-void IG3MBuilder::setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks) {
+void IG3MBuilder::setPeriodicalTasks(const std::vector<PeriodicalTask*>& periodicalTasks) {
   if (_periodicalTasks) {
     ILogger::instance()->logWarning("LOGIC WARNING: periodical tasks previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _periodicalTasks->size(); i++) {
@@ -667,6 +671,20 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
 void IG3MBuilder::setAtmosphere(const bool atmosphere) {
   _atmosphere = atmosphere;
   setBackgroundColor( _atmosphere ? Color::newFromRGBA(0, 0, 0, 1) : NULL );
+}
+
+FrustumPolicy* IG3MBuilder::getFrustumPolicy() {
+  if (_frustumPolicy == NULL) {
+    _frustumPolicy = new DynamicFrustumPolicy();
+  }
+  return _frustumPolicy;
+}
+
+void IG3MBuilder::setFrustumPolicy(FrustumPolicy* frustumPolicy) {
+  if (frustumPolicy != _frustumPolicy) {
+    delete _frustumPolicy;
+    _frustumPolicy = frustumPolicy;
+  }
 }
 
 /**
@@ -748,7 +766,8 @@ G3MWidget* IG3MBuilder::create() {
                                             getSceneLighting(),
                                             icpp,
                                             infoDisplay,
-                                            MONO);
+                                            MONO,
+                                            getFrustumPolicy());
 
   g3mWidget->setUserData(getUserData());
 
@@ -777,13 +796,15 @@ G3MWidget* IG3MBuilder::create() {
   delete _shownSector;
   _shownSector = NULL;
 
+  _frustumPolicy = NULL;
+
   return g3mWidget;
 }
 
 std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() {
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
-  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  cameraConstraints->push_back(scc);
+
+  cameraConstraints->push_back( SimpleCameraConstrainer::createDefault() );
 
   return cameraConstraints;
 }
@@ -818,7 +839,7 @@ std::vector<Renderer*>* IG3MBuilder::createDefaultRenderers() {
  *
  * @return bool
  */
-bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
+bool IG3MBuilder::containsPlanetRenderer(const std::vector<Renderer*>& renderers) {
   for (unsigned int i = 0; i < renderers.size(); i++) {
     if (renderers[i]->isPlanetRenderer()) {
       return true;
