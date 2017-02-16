@@ -13,6 +13,7 @@
 
 class SGLayerNode;
 
+
 class SGTextureNode : public SGNode {
 private:
   std::vector<SGLayerNode*> _layers;
@@ -35,7 +36,7 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc);
 
   void initialize(const G3MContext* context,
-                  SGShape *shape);
+                  const std::string& uriPrefix);
 
   const GLState* createState(const G3MRenderContext* rc,
                              const GLState* parentState);

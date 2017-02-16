@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class SGTranslateNode extends SGNode
 {
   private final double _x;

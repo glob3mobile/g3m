@@ -13,7 +13,6 @@
 #include <vector>
 
 class G3MContext;
-class SGShape;
 class G3MRenderContext;
 class GLState;
 
@@ -33,7 +32,7 @@ protected:
   protected G3MContext _context;
 #endif
 
-  SGShape *_shape;
+  std::string _uriPrefix;
 
 public:
 
@@ -42,14 +41,14 @@ public:
   _id(id),
   _sID(sID),
   _context(NULL),
-  _shape(NULL)
+  _uriPrefix("")
   {
   }
 
   virtual ~SGNode();
 
   virtual void initialize(const G3MContext* context,
-                          SGShape *shape);
+                          const std::string& uriPrefix);
 
   void addNode(SGNode* child);
 
