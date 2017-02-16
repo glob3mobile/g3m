@@ -28,7 +28,7 @@ public class DynamicFrustumPolicy extends FrustumPolicy
 
   public final Vector2D calculateFrustumZNearAndZFar(Camera camera)
   {
-    final double height = camera.getGeodeticPosition()._height;
+    final double height = camera.getGeodeticHeight();
     double zNear = height * 0.1;
   
     final double zFar = camera.getPlanet().distanceToHorizon(camera.getCartesianPosition());

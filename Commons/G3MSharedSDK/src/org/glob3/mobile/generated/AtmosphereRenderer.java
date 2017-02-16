@@ -112,7 +112,7 @@ public class AtmosphereRenderer extends DefaultRenderer
     _previousBackgroundColor = new Color(rc.getWidget().getBackgroundColor());
   
     //Computing background color
-    final double camHeight = rc.getCurrentCamera().getGeodeticPosition()._height;
+    final double camHeight = rc.getCurrentCamera().getGeodeticHeight();
     _overPrecisionThreshold = (camHeight < _minHeight * 1.2);
     if (_overPrecisionThreshold)
     {
@@ -149,7 +149,7 @@ public class AtmosphereRenderer extends DefaultRenderer
     }
   
     //Rendering
-    final double camHeigth = rc.getCurrentCamera().getGeodeticPosition()._height;
+    final double camHeigth = rc.getCurrentCamera().getGeodeticHeight();
     if (camHeigth > _minHeight)
     {
       updateGLState(rc.getCurrentCamera());

@@ -75,7 +75,7 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
   _previousBackgroundColor = new Color(rc->getWidget()->getBackgroundColor());
 
   //Computing background color
-  const double camHeight = rc->getCurrentCamera()->getGeodeticPosition()._height;
+  const double camHeight = rc->getCurrentCamera()->getGeodeticHeight();
   _overPrecisionThreshold = (camHeight < _minHeight * 1.2);
   if (_overPrecisionThreshold) {
     rc->getWidget()->setBackgroundColor(_blueSky);
@@ -119,7 +119,7 @@ void AtmosphereRenderer::render(const G3MRenderContext* rc,
   }
 
   //Rendering
-  const double camHeigth = rc->getCurrentCamera()->getGeodeticPosition()._height;
+  const double camHeigth = rc->getCurrentCamera()->getGeodeticHeight();
   if (camHeigth > _minHeight) {
     updateGLState(rc->getCurrentCamera());
     _glState->setParent(glState);

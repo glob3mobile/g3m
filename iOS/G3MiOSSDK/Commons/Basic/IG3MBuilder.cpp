@@ -803,8 +803,8 @@ G3MWidget* IG3MBuilder::create() {
 
 std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() {
   std::vector<ICameraConstrainer*>* cameraConstraints = new std::vector<ICameraConstrainer*>;
-  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  cameraConstraints->push_back(scc);
+
+  cameraConstraints->push_back( SimpleCameraConstrainer::createDefault() );
 
   return cameraConstraints;
 }

@@ -50,7 +50,7 @@ Camera::~Camera() {
 void Camera::copyFrom(const Camera &that,
                       bool  ignoreTimestamp) {
 
-  if (ignoreTimestamp || _timestamp != that._timestamp) {
+  if (ignoreTimestamp || (_timestamp != that._timestamp)) {
 
     that.forceMatrixCreation();
 
@@ -585,7 +585,7 @@ void Camera::setCartesianPosition(const MutableVector3D& v) {
     _geodeticPosition = NULL;
     _dirtyFlags.setAllDirty();
     const double distanceToPlanetCenter = _position.length();
-    const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
+    const double planetRadius = distanceToPlanetCenter - getGeodeticHeight();
     _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
     _normalizedPosition.copyFrom(_position);
     _normalizedPosition.normalize();
@@ -594,6 +594,10 @@ void Camera::setCartesianPosition(const MutableVector3D& v) {
 
 void Camera::setCartesianPosition(const Vector3D& v) {
   setCartesianPosition(v.asMutableVector3D());
+}
+
+const double Camera::getGeodeticHeight() const {
+  return getGeodeticPosition()._height;
 }
 
 const Geodetic3D Camera::getGeodeticPosition() const {

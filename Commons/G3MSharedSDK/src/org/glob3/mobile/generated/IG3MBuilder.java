@@ -267,8 +267,8 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<ICameraConstrainer> createDefaultCameraConstraints()
   {
     java.util.ArrayList<ICameraConstrainer> cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
-    SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
-    cameraConstraints.add(scc);
+  
+    cameraConstraints.add(SimpleCameraConstrainer.createDefault());
   
     return cameraConstraints;
   }

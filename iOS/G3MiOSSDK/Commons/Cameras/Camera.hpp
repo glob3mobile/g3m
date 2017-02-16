@@ -195,6 +195,7 @@ public:
   void setPitch(const Angle& angle);
 
   const Geodetic3D getGeodeticPosition() const;
+  const double getGeodeticHeight() const;
 
   void setGeodeticPosition(const Geodetic3D& g3d);
 

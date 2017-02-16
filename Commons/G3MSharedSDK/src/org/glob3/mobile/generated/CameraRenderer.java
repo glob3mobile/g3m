@@ -68,7 +68,8 @@ public class CameraRenderer implements ProtoRenderer
   
     for (int i = 0; i < _handlersSize; i++)
     {
-      _handlers.get(i).render(rc, _cameraContext);
+      CameraEventHandler handler = _handlers.get(i);
+      handler.render(rc, _cameraContext);
     }
   }
 
@@ -91,7 +92,8 @@ public class CameraRenderer implements ProtoRenderer
       // pass the event to all the handlers
       for (int i = 0; i < _handlersSize; i++)
       {
-        if (_handlers.get(i).onTouchEvent(ec, touchEvent, _cameraContext))
+        CameraEventHandler handler = _handlers.get(i);
+        if (handler.onTouchEvent(ec, touchEvent, _cameraContext))
         {
           return true;
         }
@@ -109,7 +111,6 @@ public class CameraRenderer implements ProtoRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    //  return RenderState::ready();
     _errors.clear();
     boolean busyFlag = false;
     boolean errorFlag = false;

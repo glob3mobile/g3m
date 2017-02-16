@@ -20,9 +20,50 @@ package org.glob3.mobile.generated;
 
 public class SimpleCameraConstrainer implements ICameraConstrainer
 {
+  private final double _minHeight;
+  private final double _maxHeight;
+  private final double _minHeightPlanetRadiiFactor;
+  private final double _maxHeightPlanetRadiiFactor;
 
-  public SimpleCameraConstrainer()
+  private SimpleCameraConstrainer(double minHeight, double maxHeight, double minHeightPlanetRadiiFactor, double maxHeightPlanetRadiiFactor)
   {
+     _minHeight = minHeight;
+     _maxHeight = maxHeight;
+     _minHeightPlanetRadiiFactor = minHeightPlanetRadiiFactor;
+     _maxHeightPlanetRadiiFactor = maxHeightPlanetRadiiFactor;
+  }
+
+
+  public static SimpleCameraConstrainer create(double minHeight, double maxHeight, double minHeightPlanetRadiiFactor, double maxHeightPlanetRadiiFactor)
+  {
+    return new SimpleCameraConstrainer(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
+  }
+
+  public static SimpleCameraConstrainer createDefault()
+  {
+    final double minHeight = 10;
+    final double minHeightPlanetRadiiFactor = Double.NaN;
+  
+    final double maxHeight = Double.NaN;
+    final double maxHeightPlanetRadiiFactor = 9;
+  
+    return create(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
+  }
+
+  public static SimpleCameraConstrainer createFixed(double minHeight, double maxHeight)
+  {
+    final double minHeightPlanetRadiiFactor = Double.NaN;
+    final double maxHeightPlanetRadiiFactor = Double.NaN;
+  
+    return create(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
+  }
+
+  public static SimpleCameraConstrainer createPlanetRadiiFactor(double minHeightPlanetRadiiFactor, double maxHeightPlanetRadiiFactor)
+  {
+    final double minHeight = Double.NaN;
+    final double maxHeight = Double.NaN;
+  
+    return create(minHeight, maxHeight, minHeightPlanetRadiiFactor, maxHeightPlanetRadiiFactor);
   }
 
 
@@ -32,15 +73,21 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 
   public final boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
+    //    nextCamera->copyFrom(*previousCamera, true);
+  
     final double radii = planet.getRadii().maxAxis();
-    final double maxHeight = radii *9;
-    final double minHeight = 10;
+    final double minHeight = (_minHeight != _minHeight) ? (radii * _minHeightPlanetRadiiFactor) : _minHeight;
+    final double maxHeight = (_maxHeight != _maxHeight) ? (radii * _maxHeightPlanetRadiiFactor) : _maxHeight;
   
-    final double height = nextCamera.getGeodeticPosition()._height;
+    final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
   
-    if ((height < minHeight) || (height > maxHeight))
+    if (cameraPosition._height < minHeight)
     {
-      nextCamera.copyFrom(previousCamera, true);
+      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, minHeight);
+    }
+    else if (cameraPosition._height > maxHeight)
+    {
+      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, maxHeight);
     }
   
     return true;

@@ -233,8 +233,8 @@ MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& de
   return MutableMatrix44D::createTranslationMatrix(P1.sub(P0));
 }
 
-void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
-                                         Camera* nextCamera) const {
+void FlatPlanet::applyCameraConstrains(const Camera* previousCamera,
+                                       Camera* nextCamera) const {
 
 }
 

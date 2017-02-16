@@ -50,7 +50,7 @@ public class Camera
   public final void copyFrom(Camera that, boolean ignoreTimestamp)
   {
   
-    if (ignoreTimestamp || _timestamp != that._timestamp)
+    if (ignoreTimestamp || (_timestamp != that._timestamp))
     {
   
       that.forceMatrixCreation();
@@ -348,7 +348,7 @@ public class Camera
       _geodeticPosition = null;
       _dirtyFlags.setAllDirty();
       final double distanceToPlanetCenter = _position.length();
-      final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
+      final double planetRadius = distanceToPlanetCenter - getGeodeticHeight();
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
       _normalizedPosition.copyFrom(_position);
       _normalizedPosition.normalize();
@@ -390,6 +390,10 @@ public class Camera
       _geodeticPosition = new Geodetic3D(_planet.toGeodetic3D(getCartesianPosition()));
     }
     return _geodeticPosition;
+  }
+  public final double getGeodeticHeight()
+  {
+    return getGeodeticPosition()._height;
   }
 
   public final void setGeodeticPosition(Geodetic3D g3d)

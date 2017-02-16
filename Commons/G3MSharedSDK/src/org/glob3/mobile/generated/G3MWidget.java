@@ -188,9 +188,13 @@ public class G3MWidget implements ChangedRendererInfoListener
     for (int i = 0; i< cameraConstrainersCount; i++)
     {
       ICameraConstrainer constrainer = _cameraConstrainers.get(i);
-      constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
+      final boolean validNextCamera = constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
+      if (!validNextCamera)
+      {
+        _nextCamera.copyFrom(_currentCamera, true);
+      }
     }
-    _planet.applyCameraConstrainers(_currentCamera, _nextCamera);
+    _planet.applyCameraConstrains(_currentCamera, _nextCamera);
   
     _currentCamera.copyFrom(_nextCamera, false);
   

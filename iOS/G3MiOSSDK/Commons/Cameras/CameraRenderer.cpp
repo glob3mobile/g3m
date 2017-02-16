@@ -35,7 +35,8 @@ void CameraRenderer::render(const G3MRenderContext* rc,
   //rc->getCurrentCamera()->render(rc, parentState);
 
   for (size_t i = 0; i < _handlersSize; i++) {
-    _handlers[i]->render(rc, _cameraContext);
+    CameraEventHandler* handler = _handlers[i];
+    handler->render(rc, _cameraContext);
   }
 }
 
@@ -50,7 +51,8 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 
     // pass the event to all the handlers
     for (size_t i = 0; i < _handlersSize; i++) {
-      if (_handlers[i]->onTouchEvent(ec, touchEvent, _cameraContext)) {
+      CameraEventHandler* handler = _handlers[i];
+      if (handler->onTouchEvent(ec, touchEvent, _cameraContext)) {
         return true;
       }
     }
@@ -61,7 +63,6 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 RenderState CameraRenderer::getRenderState(const G3MRenderContext* rc) {
-  //  return RenderState::ready();
   _errors.clear();
   bool busyFlag  = false;
   bool errorFlag = false;

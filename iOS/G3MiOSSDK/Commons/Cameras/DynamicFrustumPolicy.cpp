@@ -21,7 +21,7 @@ DynamicFrustumPolicy::~DynamicFrustumPolicy() {
 }
 
 const Vector2D DynamicFrustumPolicy::calculateFrustumZNearAndZFar(const Camera& camera) const {
-  const double height = camera.getGeodeticPosition()._height;
+  const double height = camera.getGeodeticHeight();
   double zNear = height * 0.1;
 
   const double zFar = camera.getPlanet()->distanceToHorizon(camera.getCartesianPosition());

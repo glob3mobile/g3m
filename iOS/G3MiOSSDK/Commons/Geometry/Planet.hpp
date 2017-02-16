@@ -129,13 +129,13 @@ public:
 
   virtual Vector3D getNorth() const = 0;
 
-  virtual void applyCameraConstrainers(const Camera* previousCamera,
-                                       Camera* nextCamera) const = 0;
+  virtual void applyCameraConstrains(const Camera* previousCamera,
+                                     Camera* nextCamera) const = 0;
 
   virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
-
+  
   virtual const std::string getType() const = 0;
   
 };
