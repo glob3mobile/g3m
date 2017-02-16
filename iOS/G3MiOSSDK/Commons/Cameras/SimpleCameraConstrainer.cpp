@@ -60,12 +60,10 @@ SimpleCameraConstrainer* SimpleCameraConstrainer::createPlanetRadiiFactor(const 
                 maxHeightPlanetRadiiFactor);
 }
 
-
+\
 bool SimpleCameraConstrainer::onCameraChange(const Planet* planet,
                                              const Camera* previousCamera,
                                              Camera* nextCamera) const {
-  //    nextCamera->copyFrom(*previousCamera, true);
-
   const double radii = planet->getRadii().maxAxis();
   const double minHeight = ISNAN(_minHeight) ? (radii * _minHeightPlanetRadiiFactor) : _minHeight;
   const double maxHeight = ISNAN(_maxHeight) ? (radii * _maxHeightPlanetRadiiFactor) : _maxHeight;

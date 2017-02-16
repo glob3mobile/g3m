@@ -73,24 +73,22 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 
   public final boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
-    //    nextCamera->copyFrom(*previousCamera, true);
-  
-    final double radii = planet.getRadii().maxAxis();
-    final double minHeight = (_minHeight != _minHeight) ? (radii * _minHeightPlanetRadiiFactor) : _minHeight;
-    final double maxHeight = (_maxHeight != _maxHeight) ? (radii * _maxHeightPlanetRadiiFactor) : _maxHeight;
-  
-    final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
-  
-    if (cameraPosition._height < minHeight)
-    {
-      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, minHeight);
-    }
-    else if (cameraPosition._height > maxHeight)
-    {
-      nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, maxHeight);
-    }
-  
-    return true;
-  }
+   final double radii = planet.getRadii().maxAxis();
+   final double minHeight = (_minHeight != _minHeight) ? (radii * _minHeightPlanetRadiiFactor) : _minHeight;
+   final double maxHeight = (_maxHeight != _maxHeight) ? (radii * _maxHeightPlanetRadiiFactor) : _maxHeight;
+ 
+   final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+ 
+   if (cameraPosition._height < minHeight)
+   {
+     nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, minHeight);
+   }
+   else if (cameraPosition._height > maxHeight)
+   {
+     nextCamera.setGeodeticPosition(cameraPosition._latitude, cameraPosition._longitude, maxHeight);
+   }
+ 
+   return true;
+ }
 
 }

@@ -751,9 +751,13 @@ public abstract class IG3MBuilder
    *
    * @param cameraConstraints - std::vector<ICameraConstrainer*>
    */
-  public final void setCameraConstrainsts(java.util.ArrayList<ICameraConstrainer> cameraConstraints)
+  public final void setCameraConstraints(java.util.ArrayList<ICameraConstrainer> cameraConstraints)
   {
-    if (_cameraConstraints != null)
+    if (_cameraConstraints == null)
+    {
+      _cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
+    }
+    else
     {
       ILogger.instance().logWarning("LOGIC WARNING: camera constraints previously set will be ignored and deleted");
       for (int i = 0; i < _cameraConstraints.size(); i++)
@@ -762,10 +766,6 @@ public abstract class IG3MBuilder
            _cameraConstraints.get(i).dispose();
       }
       _cameraConstraints.clear();
-    }
-    else
-    {
-      _cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
     }
     for (int i = 0; i < cameraConstraints.size(); i++)
     {

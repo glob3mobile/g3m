@@ -452,16 +452,16 @@ void IG3MBuilder::addCameraConstraint(ICameraConstrainer* cameraConstraint) {
  *
  * @param cameraConstraints - std::vector<ICameraConstrainer*>
  */
-void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints) {
-  if (_cameraConstraints) {
+void IG3MBuilder::setCameraConstraints(const std::vector<ICameraConstrainer*>& cameraConstraints) {
+  if (_cameraConstraints == NULL) {
+    _cameraConstraints = new std::vector<ICameraConstrainer*>;
+  }
+  else {
     ILogger::instance()->logWarning("LOGIC WARNING: camera constraints previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _cameraConstraints->size(); i++) {
       delete _cameraConstraints->at(i);
     }
     _cameraConstraints->clear();
-  }
-  else {
-    _cameraConstraints = new std::vector<ICameraConstrainer*>;
   }
   for (unsigned int i = 0; i < cameraConstraints.size(); i++) {
     _cameraConstraints->push_back(cameraConstraints[i]);
@@ -563,7 +563,7 @@ void IG3MBuilder::addRenderer(Renderer *renderer) {
  *
  * @param renderers - std::vector<Renderer*>
  */
-void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
+void IG3MBuilder::setRenderers(const std::vector<Renderer*>& renderers) {
   if (!containsPlanetRenderer(renderers)) {
     ILogger::instance()->logError("LOGIC ERROR: renderers list must contain at least an instance of the PlanetRenderer class");
     return;
@@ -617,7 +617,7 @@ void IG3MBuilder::addPeriodicalTask(PeriodicalTask* periodicalTask) {
  *
  * @param periodicalTasks - std::vector<PeriodicalTask*>
  */
-void IG3MBuilder::setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks) {
+void IG3MBuilder::setPeriodicalTasks(const std::vector<PeriodicalTask*>& periodicalTasks) {
   if (_periodicalTasks) {
     ILogger::instance()->logWarning("LOGIC WARNING: periodical tasks previously set will be ignored and deleted");
     for (unsigned int i = 0; i < _periodicalTasks->size(); i++) {
@@ -839,7 +839,7 @@ std::vector<Renderer*>* IG3MBuilder::createDefaultRenderers() {
  *
  * @return bool
  */
-bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
+bool IG3MBuilder::containsPlanetRenderer(const std::vector<Renderer*>& renderers) {
   for (unsigned int i = 0; i < renderers.size(); i++) {
     if (renderers[i]->isPlanetRenderer()) {
       return true;

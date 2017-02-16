@@ -100,7 +100,7 @@ private:
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
 
-  bool containsPlanetRenderer(std::vector<Renderer*> renderers);
+  bool containsPlanetRenderer(const std::vector<Renderer*>& renderers);
 
 
 protected:
@@ -139,7 +139,7 @@ public:
 
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
 
-  void setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraConstraints);
+  void setCameraConstraints(const std::vector<ICameraConstrainer*>& cameraConstraints);
 
   void setCameraRenderer(CameraRenderer* cameraRenderer);
 
@@ -153,11 +153,11 @@ public:
 
   void addRenderer(Renderer* renderer);
 
-  void setRenderers(std::vector<Renderer*> renderers);
+  void setRenderers(const std::vector<Renderer*>& renderers);
 
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
 
-  void setPeriodicalTasks(std::vector<PeriodicalTask*> periodicalTasks);
+  void setPeriodicalTasks(const std::vector<PeriodicalTask*>& periodicalTasks);
 
   void setLogFPS(const bool logFPS);
 
