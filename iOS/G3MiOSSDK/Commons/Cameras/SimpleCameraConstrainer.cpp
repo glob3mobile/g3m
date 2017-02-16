@@ -24,7 +24,6 @@ SimpleCameraConstrainer* SimpleCameraConstrainer::create(const double minHeight,
                                      maxHeightPlanetRadiiFactor);
 }
 
-
 SimpleCameraConstrainer* SimpleCameraConstrainer::createDefault() {
   const double minHeight                  = 10;
   const double minHeightPlanetRadiiFactor = NAND;
@@ -60,7 +59,6 @@ SimpleCameraConstrainer* SimpleCameraConstrainer::createPlanetRadiiFactor(const 
                 maxHeightPlanetRadiiFactor);
 }
 
-\
 bool SimpleCameraConstrainer::onCameraChange(const Planet* planet,
                                              const Camera* previousCamera,
                                              Camera* nextCamera) const {
