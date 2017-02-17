@@ -64,10 +64,6 @@ public:
   int getLevel() const {
     return _currentLevel;
   }
-
-  void showNormals(bool v) const {
-    _mesh->showNormals(v);
-  }
   
 };
 

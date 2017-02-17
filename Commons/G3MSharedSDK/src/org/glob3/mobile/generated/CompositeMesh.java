@@ -61,7 +61,6 @@ public class CompositeMesh extends Mesh
        _boundingVolume.dispose();
   
     super.dispose();
-  
   }
 
   public final int getVertexCount()
@@ -133,16 +132,6 @@ public class CompositeMesh extends Mesh
     {
       Mesh child = _children.get(i);
       child.render(rc, parentGLState);
-    }
-  }
-
-  public final void showNormals(boolean v)
-  {
-    final int childrenCount = _children.size();
-    for (int i = 0; i < childrenCount; i++)
-    {
-      Mesh child = _children.get(i);
-      child.showNormals(v);
     }
   }
 

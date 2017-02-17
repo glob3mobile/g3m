@@ -56,9 +56,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState* parentGLState) const;
-
-  virtual void showNormals(bool v) const = 0;
-
+  
 };
 
 #endif

@@ -10,13 +10,16 @@
 #define __G3MiOSSDK__MeshRenderer__
 
 #include "DefaultRenderer.hpp"
+
 #include <vector>
-#include "GLState.hpp"
+
 #include "DownloadPriority.hpp"
-#include "TimeInterval.hpp"
 #include "URL.hpp"
+#include "TimeInterval.hpp"
 
 class Mesh;
+class Color;
+class Camera;
 
 
 class MeshLoadListener {
@@ -40,7 +43,6 @@ enum MeshType {
 
 class MeshRenderer : public DefaultRenderer {
 private:
-
 
   class LoadQueueItem {
   public:
@@ -91,18 +93,18 @@ private:
     ~LoadQueueItem() {
     }
   };
-  
-  
+
+
 
   std::vector<Mesh*> _meshes;
-  
+
   GLState* _glState;
   void updateGLState(const Camera* camera);
 
   std::vector<LoadQueueItem*> _loadQueue;
 
   void drainLoadQueue();
-  
+
   void cleanLoadQueue();
 
   void requestMeshBuffer(const URL&          url,
@@ -117,18 +119,10 @@ private:
                          bool                isBSON,
                          const MeshType      meshType);
 
-  mutable bool _showNormals;
-
-
 public:
 
-  MeshRenderer():
-  _glState(new GLState()),
-  _showNormals(false)
-  {
-    _context = NULL;
-  }
-  
+  MeshRenderer();
+
   ~MeshRenderer();
 
   void addMesh(Mesh* mesh);
@@ -140,7 +134,7 @@ public:
   void disableAll();
 
   void onChangedContext();
-  
+
   void onLostContext();
 
   void render(const G3MRenderContext* rc, GLState* glState);
@@ -238,10 +232,8 @@ public:
                  listener,
                  deleteListener);
   }
-
-  void showNormals(bool v) const;
-
-
+  
+  
 };
 
 #endif

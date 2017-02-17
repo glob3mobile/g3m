@@ -56,10 +56,6 @@ public:
     _mesh->render(rc, parentGLState);
   }
 
-  void showNormals(bool v) const {
-    _mesh->showNormals(v);
-  }
-
   Mesh* getMesh() const {
     return _mesh;
   }

@@ -353,6 +353,10 @@
 		CF92FCF11E3B913400A439D3 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */; };
 		CF93F40A1E5736A100E97FF1 /* SceneJSNodeParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */; };
 		CF93F40B1E5743BB00E97FF1 /* SceneJSNodeParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */; };
+		CF93F40E1E574BA200E97FF1 /* SceneJSMeshParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F40C1E574BA200E97FF1 /* SceneJSMeshParser.cpp */; };
+		CF93F4111E574C5500E97FF1 /* SGMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F40F1E574C5500E97FF1 /* SGMesh.cpp */; };
+		CF93F4121E574C9300E97FF1 /* SceneJSMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F40D1E574BA200E97FF1 /* SceneJSMeshParser.hpp */; };
+		CF93F4131E574C9300E97FF1 /* SGMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F4101E574C5500E97FF1 /* SGMesh.hpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
 		CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */; };
@@ -848,6 +852,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF93F4121E574C9300E97FF1 /* SceneJSMeshParser.hpp in CopyFiles */,
+				CF93F4131E574C9300E97FF1 /* SGMesh.hpp in CopyFiles */,
 				CF93F40B1E5743BB00E97FF1 /* SceneJSNodeParser.hpp in CopyFiles */,
 				CF3E26731E535A0400A3FEC6 /* MutableVector2F.hpp in CopyFiles */,
 				CF3E26711E53599700A3FEC6 /* CameraEventGesture.hpp in CopyFiles */,
@@ -1734,6 +1740,10 @@
 		CF92FCF01E3B913400A439D3 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Commons/Geometry/Quaternion.hpp; sourceTree = "<group>"; };
 		CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSNodeParser.cpp; path = Commons/Rendererers/SceneJSNodeParser.cpp; sourceTree = "<group>"; };
 		CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSNodeParser.hpp; path = Commons/Rendererers/SceneJSNodeParser.hpp; sourceTree = "<group>"; };
+		CF93F40C1E574BA200E97FF1 /* SceneJSMeshParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSMeshParser.cpp; path = Commons/Rendererers/SceneJSMeshParser.cpp; sourceTree = "<group>"; };
+		CF93F40D1E574BA200E97FF1 /* SceneJSMeshParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSMeshParser.hpp; path = Commons/Rendererers/SceneJSMeshParser.hpp; sourceTree = "<group>"; };
+		CF93F40F1E574C5500E97FF1 /* SGMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMesh.cpp; path = Commons/Rendererers/SGMesh.cpp; sourceTree = "<group>"; };
+		CF93F4101E574C5500E97FF1 /* SGMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGMesh.hpp; path = Commons/Rendererers/SGMesh.hpp; sourceTree = "<group>"; };
 		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineStringGeometry.hpp; path = Commons/GEO/GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrderedRenderable.cpp; path = Commons/Basic/OrderedRenderable.cpp; sourceTree = "<group>"; };
@@ -2988,6 +2998,8 @@
 				D89FBD7C1725444800FFA541 /* MeshShape.hpp */,
 				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
 				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
+				CF93F40C1E574BA200E97FF1 /* SceneJSMeshParser.cpp */,
+				CF93F40D1E574BA200E97FF1 /* SceneJSMeshParser.hpp */,
 				CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */,
 				CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */,
 				E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */,
@@ -3000,6 +3012,8 @@
 				CF11E8C5164D653000935052 /* SGLayerNode.hpp */,
 				CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */,
 				CF857B32164C77B00089F1DE /* SGMaterialNode.hpp */,
+				CF93F40F1E574C5500E97FF1 /* SGMesh.cpp */,
+				CF93F4101E574C5500E97FF1 /* SGMesh.hpp */,
 				CF4CA475164C669D009BB7EB /* SGNode.cpp */,
 				CF4CA476164C669D009BB7EB /* SGNode.hpp */,
 				CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */,
@@ -3398,6 +3412,7 @@
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
 				CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */,
+				CF93F40E1E574BA200E97FF1 /* SceneJSMeshParser.cpp in Sources */,
 				CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */,
 				4435E3D019056ED70064A7D7 /* ChangedRendererInfoListener.cpp in Sources */,
 				CFE11ECA1DD0BBEE00355A89 /* CameraGoToPositionEffect.cpp in Sources */,
@@ -3482,6 +3497,7 @@
 				CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */,
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
 				44131129190A504600C83A00 /* NullStorage.cpp in Sources */,
+				CF93F4111E574C5500E97FF1 /* SGMesh.cpp in Sources */,
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				D842D9AF1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,

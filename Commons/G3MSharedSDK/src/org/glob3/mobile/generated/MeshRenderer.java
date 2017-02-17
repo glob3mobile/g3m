@@ -2,7 +2,6 @@ package org.glob3.mobile.generated;
 public class MeshRenderer extends DefaultRenderer
 {
 
-
   private static class LoadQueueItem
   {
     public final URL          _url;
@@ -93,14 +92,10 @@ public class MeshRenderer extends DefaultRenderer
   
   }
 
-  private boolean _showNormals;
-
-
 
   public MeshRenderer()
   {
      _glState = new GLState();
-     _showNormals = false;
     _context = null;
   }
 
@@ -122,7 +117,6 @@ public class MeshRenderer extends DefaultRenderer
   public final void addMesh(Mesh mesh)
   {
     _meshes.add(mesh);
-    mesh.showNormals(_showNormals);
   }
 
   public final void clearMeshes()
@@ -348,17 +342,6 @@ public class MeshRenderer extends DefaultRenderer
   public final void loadBSONMesh(URL url, Color color, MeshLoadListener listener, boolean deleteListener)
   {
     loadBSONMesh(url, color, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, listener, deleteListener);
-  }
-
-  public final void showNormals(boolean v)
-  {
-    _showNormals = v;
-    final int meshesCount = _meshes.size();
-    for (int i = 0; i < meshesCount; i++)
-    {
-      Mesh mesh = _meshes.get(i);
-      mesh.showNormals(v);
-    }
   }
 
 

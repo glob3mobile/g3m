@@ -70,11 +70,6 @@ public class MeshHolder extends Mesh
     _mesh.render(rc, parentGLState);
   }
 
-  public final void showNormals(boolean v)
-  {
-    _mesh.showNormals(v);
-  }
-
   public final Mesh getMesh()
   {
     return _mesh;

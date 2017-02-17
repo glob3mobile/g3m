@@ -18,10 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
-
+//class MutableMatrix44D;
+//class ModelTransformGLFeature;
 //class IFloatBuffer;
 //class Color;
-//class ModelTransformGLFeature;
 
 
 public abstract class AbstractMesh extends Mesh
@@ -78,45 +78,6 @@ public abstract class AbstractMesh extends Mesh
     {
       _glState.addGLFeature(new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
     }
-  
-  }
-
-  private boolean _showNormals;
-  private Mesh _normalsMesh;
-  private Mesh createNormalsMesh()
-  {
-    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, 1.0f, 2.0f, new Color(Color.RED), null, false, null);
-  
-    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-  
-    BoundingVolume volume = getBoundingVolume();
-    Sphere sphere = volume.createSphere();
-    double normalsSize = sphere.getRadius() / 100.0;
-    if (sphere != null)
-       sphere.dispose();
-  
-    final int size = _vertices.size();
-    for (int i = 0; i < size; i+=3)
-    {
-      final Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
-      final Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
-  
-      final Vector3D v_n = v.add(n.normalized().times(normalsSize));
-  
-      fbb.add(v);
-      fbb.add(v_n);
-    }
-  
-    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, fbb.create(), 2.0f, 1.0f, new Color(Color.BLUE));
-  
-    if (fbb != null)
-       fbb.dispose();
-  
-    CompositeMesh compositeMesh = new CompositeMesh();
-    compositeMesh.addMesh(verticesMesh);
-    compositeMesh.addMesh(normalsMesh);
-  
-    return compositeMesh;
   
   }
 
@@ -213,8 +174,6 @@ public abstract class AbstractMesh extends Mesh
      _depthTest = depthTest;
      _glState = new GLState();
      _normals = normals;
-     _normalsMesh = null;
-     _showNormals = false;
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _polygonOffsetFill = polygonOffsetFill;
@@ -254,9 +213,6 @@ public abstract class AbstractMesh extends Mesh
   
     _glState._release();
   
-    if (_normalsMesh != null)
-       _normalsMesh.dispose();
-  
     super.dispose();
   }
 
@@ -293,35 +249,6 @@ public abstract class AbstractMesh extends Mesh
   {
     _glState.setParent(parentGLState);
     rawRender(rc);
-  
-    if (_normals != null)
-    {
-      if (_showNormals)
-      {
-        if (_normalsMesh == null)
-        {
-          _normalsMesh = createNormalsMesh();
-        }
-        if (_normalsMesh != null)
-        {
-          _normalsMesh.render(rc, parentGLState);
-        }
-      }
-      else
-      {
-        if (_normalsMesh != null)
-        {
-          if (_normalsMesh != null)
-             _normalsMesh.dispose();
-          _normalsMesh = null;
-        }
-      }
-    }
-  }
-
-  public final void showNormals(boolean v)
-  {
-    _showNormals = v;
   }
 
   public final void setUserTransformMatrix(MutableMatrix44D userTransformMatrix)

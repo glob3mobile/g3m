@@ -80,9 +80,4 @@ public class LeveledMesh extends Mesh
     return _currentLevel;
   }
 
-  public final void showNormals(boolean v)
-  {
-    _mesh.showNormals(v);
-  }
-
 }

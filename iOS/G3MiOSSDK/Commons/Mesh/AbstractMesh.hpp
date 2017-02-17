@@ -11,12 +11,12 @@
 
 #include "Mesh.hpp"
 
-
 #include "Vector3D.hpp"
 
+class MutableMatrix44D;
+class ModelTransformGLFeature;
 class IFloatBuffer;
 class Color;
-class ModelTransformGLFeature;
 
 
 class AbstractMesh : public Mesh {
@@ -28,10 +28,6 @@ private:
   MutableMatrix44D* createTransformMatrix() const;
 
   void createGLState();
-
-  mutable bool _showNormals;
-  mutable Mesh* _normalsMesh;
-  Mesh* createNormalsMesh() const;
 
 protected:
   const int           _primitive;
@@ -82,10 +78,6 @@ public:
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
-
-  void showNormals(bool v) const {
-    _showNormals = v;
-  }
 
   void setUserTransformMatrix(MutableMatrix44D* userTransformMatrix);
   

@@ -24,7 +24,6 @@ CompositeMesh::~CompositeMesh() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 size_t CompositeMesh::getVertexCount() const {
@@ -100,13 +99,5 @@ void CompositeMesh::rawRender(const G3MRenderContext* rc,
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     child->render(rc, parentGLState);
-  }
-}
-
-void CompositeMesh::showNormals(bool v) const {
-  const size_t childrenCount = _children.size();
-  for (size_t i = 0; i < childrenCount; i++) {
-    Mesh* child = _children[i];
-    child->showNormals(v);
   }
 }

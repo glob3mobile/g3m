@@ -27,6 +27,8 @@
 #include <G3MiOSSDK/G3MContext.hpp>
 #include <G3MiOSSDK/GAsyncTask.hpp>
 #include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/Color.hpp>
+#include <G3MiOSSDK/IMathUtils.hpp>
 
 #include "G3MDemoModel.hpp"
 
