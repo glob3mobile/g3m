@@ -351,6 +351,8 @@
 		CF9227D51E31154300B79A87 /* MutableQuaternionF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9227D31E31154300B79A87 /* MutableQuaternionF.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
 		CF92FCF11E3B913400A439D3 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */; };
+		CF93F40A1E5736A100E97FF1 /* SceneJSNodeParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */; };
+		CF93F40B1E5743BB00E97FF1 /* SceneJSNodeParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
 		CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */; };
@@ -846,6 +848,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF93F40B1E5743BB00E97FF1 /* SceneJSNodeParser.hpp in CopyFiles */,
 				CF3E26731E535A0400A3FEC6 /* MutableVector2F.hpp in CopyFiles */,
 				CF3E26711E53599700A3FEC6 /* CameraEventGesture.hpp in CopyFiles */,
 				CF3E26721E53599700A3FEC6 /* CameraContext.hpp in CopyFiles */,
@@ -1729,6 +1732,8 @@
 		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = Commons/Geometry/Quaternion.cpp; sourceTree = "<group>"; };
 		CF92FCF01E3B913400A439D3 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Commons/Geometry/Quaternion.hpp; sourceTree = "<group>"; };
+		CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSNodeParser.cpp; path = Commons/Rendererers/SceneJSNodeParser.cpp; sourceTree = "<group>"; };
+		CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSNodeParser.hpp; path = Commons/Rendererers/SceneJSNodeParser.hpp; sourceTree = "<group>"; };
 		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineStringGeometry.hpp; path = Commons/GEO/GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrderedRenderable.cpp; path = Commons/Basic/OrderedRenderable.cpp; sourceTree = "<group>"; };
@@ -2969,8 +2974,6 @@
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
-				D89FBD7B1725444800FFA541 /* MeshShape.cpp */,
-				D89FBD7C1725444800FFA541 /* MeshShape.hpp */,
 				CF45E023164851C5004746BB /* AbstractMeshShape.cpp */,
 				CF45E024164851C5004746BB /* AbstractMeshShape.hpp */,
 				CF5A8A301656B67F00508C38 /* BoxShape.cpp */,
@@ -2981,8 +2984,12 @@
 				CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */,
 				FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */,
 				FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */,
+				D89FBD7B1725444800FFA541 /* MeshShape.cpp */,
+				D89FBD7C1725444800FFA541 /* MeshShape.hpp */,
 				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
 				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
+				CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */,
+				CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */,
 				E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */,
 				E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */,
 				CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */,
@@ -3003,10 +3010,10 @@
 				CF857B36164C78B10089F1DE /* SGTextureNode.hpp */,
 				CF857B3D164C80DB0089F1DE /* SGTranslateNode.cpp */,
 				CF857B3E164C80DB0089F1DE /* SGTranslateNode.hpp */,
-				441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */,
-				441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */,
 				CF5EA5D2163DDC7900D8F797 /* Shape.cpp */,
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
+				441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */,
+				441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */,
 				CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */,
 				CFCAEC4816BB20D500CDC17D /* ShapeOrbitCameraEffect.hpp */,
 				CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */,
@@ -3107,42 +3114,42 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
-				D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */,
-				D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */,
 				D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */,
 				D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */,
-				D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */,
-				D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */,
-				D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */,
-				D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */,
-				D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */,
-				D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */,
 				CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */,
 				CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */,
 				CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */,
 				CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */,
 				CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */,
 				CFDB7B72166AB99B00756DE8 /* DirectMesh.hpp */,
+				D8765D021779C3AE004B62F4 /* FlatColorMesh.cpp */,
+				D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */,
+				CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */,
+				CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */,
+				CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */,
+				CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */,
+				D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */,
+				D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */,
 				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
+				D8765D001779C3AE004B62F4 /* LeveledMesh.cpp */,
+				D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */,
 				CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */,
 				CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */,
 				D8A5601D15AEF64E00035086 /* Mesh.cpp */,
 				D8A5601E15AEF64E00035086 /* Mesh.hpp */,
-				CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */,
-				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
-				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
-				CFE60468190442FE00E6C78B /* TextureMapping.cpp */,
 				CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */,
 				CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */,
+				D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */,
+				D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */,
 				CF290D4B187F149D000BE644 /* SimpleTextureMapping.cpp */,
 				CF290D4C187F149D000BE644 /* SimpleTextureMapping.hpp */,
+				CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */,
+				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
+				CFE60468190442FE00E6C78B /* TextureMapping.cpp */,
+				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
 				CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */,
 				CF290D4F187F1543000BE644 /* TransformableTextureMapping.hpp */,
-				CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */,
-				CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */,
-				CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */,
-				CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -3420,6 +3427,7 @@
 				CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */,
 				CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */,
 				CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */,
+				CF93F40A1E5736A100E97FF1 /* SceneJSNodeParser.cpp in Sources */,
 				CFBD815619A3E0E100F1A8C4 /* PointCloudsRenderer.cpp in Sources */,
 				CF67D9CE1C5AB8E800873661 /* DecoratorTileVisibilityTester.cpp in Sources */,
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,

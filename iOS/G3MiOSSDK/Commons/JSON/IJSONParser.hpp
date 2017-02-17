@@ -41,11 +41,11 @@ public:
                                       bool nullAsObject) = 0;
 
 
-  virtual const JSONBaseObject* parse(IByteBuffer* buffer) {
+  virtual const JSONBaseObject* parse(const IByteBuffer* buffer) {
     return parse(buffer, false);
   }
 
-  virtual const JSONBaseObject* parse(IByteBuffer* buffer,
+  virtual const JSONBaseObject* parse(const IByteBuffer* buffer,
                                       bool nullAsObject) = 0;
 
   virtual void deleteJSONData(const JSONBaseObject* object) {
@@ -53,6 +53,5 @@ public:
   }
   
 };
-
 
 #endif

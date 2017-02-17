@@ -25,6 +25,7 @@ public class SceneJSParserStatistics
   private int _materialsCount;
   private int _geometriesCount;
   private int _verticesCount;
+
   public SceneJSParserStatistics()
   {
     _nodesCount = 0;
@@ -32,37 +33,46 @@ public class SceneJSParserStatistics
     _geometriesCount = 0;
     _verticesCount = 0;
   }
+
   public void dispose()
   {
   }
+
   public final void computeNode()
   {
     _nodesCount++;
   }
+
   public final int getNodesCount()
   {
     return _nodesCount;
   }
+
   public final void computeMaterial()
   {
     _materialsCount++;
   }
+
   public final int getMaterialsCount()
   {
     return _materialsCount;
   }
+
   public final void computeGeometry()
   {
     _geometriesCount++;
   }
+
   public final int getGeometriesCount()
   {
     return _geometriesCount;
   }
+
   public final void computeVertex()
   {
     _verticesCount++;
   }
+
   public final int getVerticesCount()
   {
     return _verticesCount;
@@ -93,6 +103,7 @@ public class SceneJSParserStatistics
   
     return stats;
   }
+
   public final void log()
   {
     if (ILogger.instance() != null)

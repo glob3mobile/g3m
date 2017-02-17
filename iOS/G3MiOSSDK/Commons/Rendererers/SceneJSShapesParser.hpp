@@ -16,60 +16,14 @@
 class SGShape;
 class JSONBaseObject;
 class Geodetic3D;
-class JSONObject;
-class SGNode;
-class SGRotateNode;
-class SGTranslateNode;
-class SGMaterialNode;
-class SGTextureNode;
-class SGGeometryNode;
-class SGLayerNode;
-class Color;
-class SceneJSParserStatistics;
 class IByteBuffer;
 
 
 class SceneJSShapesParser {
 private:
-  SGShape*           _rootShape;
-  const std::string& _uriPrefix;
-  const bool         _depthTest;
+  SceneJSShapesParser() {
 
-  SceneJSShapesParser(const JSONBaseObject* jsonObject,
-                      const std::string&    uriPrefix,
-                      bool                  isTransparent,
-                      bool                  depthTest,
-                      Geodetic3D*           position,
-                      AltitudeMode          altitudeMode);
-
-  SGShape* getRootShape() const {
-    return _rootShape;
   }
-
-  void pvtParse(const JSONBaseObject* json,
-                bool isTransparent,
-                Geodetic3D* position,
-                AltitudeMode altitudeMode);
-
-  SGNode* toNode(const JSONBaseObject* jsonBaseObject) const;
-
-  int parseChildren(const JSONObject* jsonObject,
-                    SGNode* node) const;
-
-  void checkProcessedKeys(const JSONObject* jsonObject,
-                          int processedKeys) const;
-
-  SGNode*          createNode         (const JSONObject* jsonObject) const;
-  SGRotateNode*    createRotateNode   (const JSONObject* jsonObject) const;
-  SGTranslateNode* createTranslateNode(const JSONObject* jsonObject) const;
-  SGMaterialNode*  createMaterialNode (const JSONObject* jsonObject) const;
-  SGTextureNode*   createTextureNode  (const JSONObject* jsonObject) const;
-  SGGeometryNode*  createGeometryNode (const JSONObject* jsonObject) const;
-  SGLayerNode*     createLayerNode    (const JSONObject* jsonObject) const;
-
-  Color* parseColor(const JSONObject* jsColor) const;
-
-  SceneJSParserStatistics* _statistics;
 
 public:
 
@@ -94,7 +48,7 @@ public:
                                 Geodetic3D*        position,
                                 AltitudeMode       altitudeMode);
 
-  static SGShape* parseFromBSON(IByteBuffer*       bson,
+  static SGShape* parseFromBSON(const IByteBuffer* bson,
                                 const std::string& uriPrefix,
                                 bool               isTransparent,
                                 bool               depthTest,

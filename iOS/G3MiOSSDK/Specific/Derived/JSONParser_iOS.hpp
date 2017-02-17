@@ -27,7 +27,7 @@ public:
   JSONBaseObject* parse(const std::string& string,
                         bool nullAsObject);
 
-  JSONBaseObject* parse(IByteBuffer* buffer,
+  JSONBaseObject* parse(const IByteBuffer* buffer,
                         bool nullAsObject);
 
 };
