@@ -24,13 +24,6 @@ AbstractMesh::~AbstractMesh() {
 
   delete _boundingVolume;
 
-  delete _transformMatrix;
-  delete _userTransformMatrix;
-
-  _transformGLFeature->_release();
-
-  _glState->_release();
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -49,74 +42,30 @@ AbstractMesh::AbstractMesh(const int primitive,
                            bool polygonOffsetFill,
                            float polygonOffsetFactor,
                            float polygonOffsetUnits) :
+TransformableMesh(center),
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
 _flatColor(flatColor),
 _colors(colors),
 _boundingVolume(NULL),
-_center(center),
 _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
-_glState(new GLState()),
 _normals(normals),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_polygonOffsetFill(polygonOffsetFill),
-_transformMatrix(NULL),
-_userTransformMatrix( MutableMatrix44D::newIdentity() )
+_polygonOffsetFill(polygonOffsetFill)
 {
-  _transformGLFeature = new ModelTransformGLFeature(getTransformMatrix()->asMatrix44D());
-
-  createGLState();
 }
 
-MutableMatrix44D* AbstractMesh::createTransformMatrix() const {
-  if (_center.isNan() || _center.isZero()) {
-    return new MutableMatrix44D(*_userTransformMatrix);
-  }
-
-  const MutableMatrix44D centerM = MutableMatrix44D::createTranslationMatrix(_center);
-  if (_userTransformMatrix == NULL) {
-    return new MutableMatrix44D(centerM);
-  }
-
-  MutableMatrix44D* result = new MutableMatrix44D();
-  result->copyValueOfMultiplication(centerM,
-                                    *_userTransformMatrix);
-
-  return result;
-}
-
-MutableMatrix44D* AbstractMesh::getTransformMatrix() {
-  if (_transformMatrix == NULL) {
-    _transformMatrix = createTransformMatrix();
-  }
-  return _transformMatrix;
-}
-
-void AbstractMesh::setUserTransformMatrix(MutableMatrix44D* userTransformMatrix) {
-  if (userTransformMatrix == NULL) {
-    THROW_EXCEPTION("userTransformMatrix is NULL");
-  }
-
-  if (userTransformMatrix != _userTransformMatrix) {
-    delete _userTransformMatrix;
-    _userTransformMatrix = userTransformMatrix;
-  }
-
-  delete _transformMatrix;
-  _transformMatrix = NULL;
-
+void AbstractMesh::userTransformMatrixChanged() {
   delete _boundingVolume;
   _boundingVolume = NULL;
-
-  _transformGLFeature->setMatrix(getTransformMatrix()->asMatrix44D());
 }
 
 BoundingVolume* AbstractMesh::computeBoundingVolume() const {
-  if (!_userTransformMatrix->isIdentity()) {
+  if (hasUserTransform()) {
     return NULL;
   }
 
@@ -181,56 +130,57 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
   return _flatColor->isTransparent();
 }
 
-void AbstractMesh::createGLState() {
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
-                                               3,                    // Our buffer contains elements of 3
-                                               0,                    // Index 0
-                                               false,                // Not normalized
-                                               0,                    // Stride 0
-                                               _depthTest,
-                                               false,                // cullFace
-                                               0,                    // culledFace
-                                               _polygonOffsetFill,
-                                               _polygonOffsetFactor,
-                                               _polygonOffsetUnits,
-                                               _lineWidth,
-                                               true,                 // needsPointSize
-                                               _pointSize),
-                         false);
+void AbstractMesh::rawRender(const G3MRenderContext* rc,
+                             const GLState* parentGLState) const {
+  GLState* glState = getGLState();
+  glState->setParent(parentGLState);
+  renderMesh(rc, glState);
+}
+
+void AbstractMesh::initializeGLState(GLState* glState) const {
+  TransformableMesh::initializeGLState(glState);
+
+  glState->addGLFeature(new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
+                                              3,                    // Our buffer contains elements of 3
+                                              0,                    // Index 0
+                                              false,                // Not normalized
+                                              0,                    // Stride 0
+                                              _depthTest,
+                                              false,                // cullFace
+                                              0,                    // culledFace
+                                              _polygonOffsetFill,
+                                              _polygonOffsetFactor,
+                                              _polygonOffsetUnits,
+                                              _lineWidth,
+                                              true,                 // needsPointSize
+                                              _pointSize),
+                        false);
 
   if (_normals != NULL) {
-    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
-                           false);
+    glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
+                          false);
   }
 
-  _glState->addGLFeature(_transformGLFeature, true);
-
   if ((_flatColor != NULL) && (_colors == NULL)) {
-    _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
-                                                  _flatColor->isTransparent(),
-                                                  GLBlendFactor::srcAlpha(),
-                                                  GLBlendFactor::oneMinusSrcAlpha()),
-                           false);
+    glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
+                                                 _flatColor->isTransparent(),
+                                                 GLBlendFactor::srcAlpha(),
+                                                 GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
 
     return;
   }
 
   if (_colors != NULL) {
-    _glState->addGLFeature(new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
-                                              4,            // Our buffer contains elements of 4
-                                              0,            // Index 0
-                                              false,        // Not normalized
-                                              0,            // Stride 0
-                                              true,
-                                              GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha()),
-                           false);
+    glState->addGLFeature(new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
+                                             4,            // Our buffer contains elements of 4
+                                             0,            // Index 0
+                                             false,        // Not normalized
+                                             0,            // Stride 0
+                                             true,
+                                             GLBlendFactor::srcAlpha(),
+                                             GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
   }
-
-}
-
-void AbstractMesh::rawRender(const G3MRenderContext* rc,
-                             const GLState* parentGLState) const {
-  _glState->setParent(parentGLState);
-  rawRender(rc);
+  
 }

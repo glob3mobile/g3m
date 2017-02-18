@@ -9,30 +9,19 @@
 #ifndef __G3MiOSSDK__AbstractMesh__
 #define __G3MiOSSDK__AbstractMesh__
 
-#include "Mesh.hpp"
+#include "TransformableMesh.hpp"
 
-#include "Vector3D.hpp"
 
-class MutableMatrix44D;
-class ModelTransformGLFeature;
 class IFloatBuffer;
 class Color;
 
 
-class AbstractMesh : public Mesh {
+class AbstractMesh : public TransformableMesh {
 private:
-  MutableMatrix44D*        _transformMatrix;
-  ModelTransformGLFeature* _transformGLFeature;
-  MutableMatrix44D*        _userTransformMatrix;
-  MutableMatrix44D* getTransformMatrix();
-  MutableMatrix44D* createTransformMatrix() const;
-
-  void createGLState();
 
 protected:
   const int           _primitive;
   const bool          _owner;
-  const Vector3D      _center;
   const IFloatBuffer* _vertices;
   const Color*        _flatColor;
   const IFloatBuffer* _colors;
@@ -44,7 +33,6 @@ protected:
   const float         _polygonOffsetFactor;
   const float         _polygonOffsetUnits;
 
-  GLState* _glState;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
@@ -63,7 +51,12 @@ protected:
                float polygonOffsetFactor,
                float polygonOffsetUnits);
 
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+  virtual void renderMesh(const G3MRenderContext* rc,
+                          GLState* glState) const = 0;
+
+  void userTransformMatrixChanged();
+
+  void initializeGLState(GLState* glState) const;
 
 public:
   ~AbstractMesh();
@@ -79,8 +72,6 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void setUserTransformMatrix(MutableMatrix44D* userTransformMatrix);
-  
 };
 
 #endif

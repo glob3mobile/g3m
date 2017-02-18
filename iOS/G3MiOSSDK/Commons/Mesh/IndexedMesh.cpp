@@ -13,17 +13,6 @@
 #include "G3MRenderContext.hpp"
 
 
-IndexedMesh::~IndexedMesh() {
-  if (_ownsIndices) {
-    delete _indices;
-  }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
-}
-
 IndexedMesh::IndexedMesh(const int primitive,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
@@ -58,7 +47,21 @@ _ownsIndices(ownsIndices)
 
 }
 
-void IndexedMesh::rawRender(const G3MRenderContext* rc) const {
+IndexedMesh::~IndexedMesh() {
+  if (_ownsIndices) {
+    delete _indices;
+  }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+void IndexedMesh::renderMesh(const G3MRenderContext* rc,
+                             GLState* glState) const {
   GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
+  gl->drawElements(_primitive,
+                   _indices,
+                   glState,
+                   *rc->getGPUProgramManager());
 }

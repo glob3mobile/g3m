@@ -357,6 +357,8 @@
 		CF93F4111E574C5500E97FF1 /* SGMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F40F1E574C5500E97FF1 /* SGMesh.cpp */; };
 		CF93F4121E574C9300E97FF1 /* SceneJSMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F40D1E574BA200E97FF1 /* SceneJSMeshParser.hpp */; };
 		CF93F4131E574C9300E97FF1 /* SGMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F4101E574C5500E97FF1 /* SGMesh.hpp */; };
+		CF93F4161E5756F900E97FF1 /* TransformableMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F4141E5756F900E97FF1 /* TransformableMesh.cpp */; };
+		CF93F4171E57575C00E97FF1 /* TransformableMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F4151E5756F900E97FF1 /* TransformableMesh.hpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
 		CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */; };
@@ -852,6 +854,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF93F4171E57575C00E97FF1 /* TransformableMesh.hpp in CopyFiles */,
 				CF93F4121E574C9300E97FF1 /* SceneJSMeshParser.hpp in CopyFiles */,
 				CF93F4131E574C9300E97FF1 /* SGMesh.hpp in CopyFiles */,
 				CF93F40B1E5743BB00E97FF1 /* SceneJSNodeParser.hpp in CopyFiles */,
@@ -1744,6 +1747,8 @@
 		CF93F40D1E574BA200E97FF1 /* SceneJSMeshParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSMeshParser.hpp; path = Commons/Rendererers/SceneJSMeshParser.hpp; sourceTree = "<group>"; };
 		CF93F40F1E574C5500E97FF1 /* SGMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMesh.cpp; path = Commons/Rendererers/SGMesh.cpp; sourceTree = "<group>"; };
 		CF93F4101E574C5500E97FF1 /* SGMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGMesh.hpp; path = Commons/Rendererers/SGMesh.hpp; sourceTree = "<group>"; };
+		CF93F4141E5756F900E97FF1 /* TransformableMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TransformableMesh.cpp; path = Commons/Mesh/TransformableMesh.cpp; sourceTree = "<group>"; };
+		CF93F4151E5756F900E97FF1 /* TransformableMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TransformableMesh.hpp; path = Commons/Mesh/TransformableMesh.hpp; sourceTree = "<group>"; };
 		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineStringGeometry.hpp; path = Commons/GEO/GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrderedRenderable.cpp; path = Commons/Basic/OrderedRenderable.cpp; sourceTree = "<group>"; };
@@ -3162,6 +3167,8 @@
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
 				CFE60468190442FE00E6C78B /* TextureMapping.cpp */,
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
+				CF93F4141E5756F900E97FF1 /* TransformableMesh.cpp */,
+				CF93F4151E5756F900E97FF1 /* TransformableMesh.hpp */,
 				CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */,
 				CF290D4F187F1543000BE644 /* TransformableTextureMapping.hpp */,
 			);
@@ -3544,6 +3551,7 @@
 				CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */,
 				CF5934531DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp in Sources */,
 				CF9FDBC91DB3B6F5009D972A /* FloatBufferDEMGrid.cpp in Sources */,
+				CF93F4161E5756F900E97FF1 /* TransformableMesh.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,
 				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
 				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
