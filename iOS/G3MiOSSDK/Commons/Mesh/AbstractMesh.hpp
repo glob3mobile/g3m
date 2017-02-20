@@ -65,7 +65,7 @@ public:
 
   size_t getVertexCount() const;
 
-  const Vector3D getVertex(size_t i) const;
+  const Vector3D getVertex(const size_t i) const;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const;
 

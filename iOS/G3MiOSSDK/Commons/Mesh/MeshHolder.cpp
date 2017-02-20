@@ -11,6 +11,6 @@
 #include "Vector3D.hpp"
 
 
-const Vector3D MeshHolder::getVertex(size_t i) const {
+const Vector3D MeshHolder::getVertex(const size_t i) const {
   return _mesh->getVertex(i);
 }

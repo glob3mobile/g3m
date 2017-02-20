@@ -15,7 +15,7 @@
 
 SGMesh::SGMesh(SGNode*            node,
                const std::string& uriPrefix,
-               bool               isTransparent) :
+               const bool         isTransparent) :
 TransformableMesh(Vector3D::ZERO),
 _node(node),
 _uriPrefix(uriPrefix),
@@ -49,7 +49,7 @@ size_t SGMesh::getVertexCount() const {
   THROW_EXCEPTION("Can't implement");
 }
 
-const Vector3D SGMesh::getVertex(size_t i) const {
+const Vector3D SGMesh::getVertex(const size_t i) const {
   THROW_EXCEPTION("Can't implement");
 }
 

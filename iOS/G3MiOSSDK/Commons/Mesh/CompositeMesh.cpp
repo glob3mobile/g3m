@@ -47,7 +47,7 @@ bool CompositeMesh::isTransparent(const G3MRenderContext* rc) const {
   return false;
 }
 
-const Vector3D CompositeMesh::getVertex(size_t index) const {
+const Vector3D CompositeMesh::getVertex(const size_t index) const {
   int acumIndex = 0;
   const size_t childrenCount = _children.size();
   for (size_t i = 0; i < childrenCount; i++) {

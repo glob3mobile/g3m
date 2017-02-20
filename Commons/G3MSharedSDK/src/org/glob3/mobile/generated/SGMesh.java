@@ -23,7 +23,7 @@ public class SGMesh extends TransformableMesh
 {
   private SGNode _node;
   private final String _uriPrefix;
-  private boolean _isTransparent;
+  private final boolean _isTransparent;
 
   private boolean _nodeInitialized;
 

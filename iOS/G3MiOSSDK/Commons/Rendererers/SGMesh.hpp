@@ -17,7 +17,7 @@ class SGMesh : public TransformableMesh {
 private:
   SGNode*           _node;
   const std::string _uriPrefix;
-  bool              _isTransparent;
+  const bool        _isTransparent;
 
   mutable bool _nodeInitialized;
 
@@ -31,13 +31,13 @@ public:
 
   SGMesh(SGNode*            node,
          const std::string& uriPrefix,
-         bool               isTransparent);
+         const bool         isTransparent);
 
   ~SGMesh();
 
   size_t getVertexCount() const;
 
-  const Vector3D getVertex(size_t i) const;
+  const Vector3D getVertex(const size_t i) const;
 
   BoundingVolume* getBoundingVolume() const;
 

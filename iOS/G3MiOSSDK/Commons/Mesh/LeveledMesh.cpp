@@ -10,6 +10,6 @@
 
 #include "Vector3D.hpp"
 
-const Vector3D LeveledMesh::getVertex(size_t i) const {
+const Vector3D LeveledMesh::getVertex(const size_t i) const {
   return _mesh->getVertex(i);
 }
