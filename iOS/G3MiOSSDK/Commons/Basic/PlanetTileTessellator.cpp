@@ -31,10 +31,11 @@
 #include "Sphere.hpp"
 #include "Vector2S.hpp"
 #include "G3MRenderContext.hpp"
-
 #include "DEMGridUtils.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2F.hpp"
+#include "IMathUtils.hpp"
+#include "Vector2D.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):

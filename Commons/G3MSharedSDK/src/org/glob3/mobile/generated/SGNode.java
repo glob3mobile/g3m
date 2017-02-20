@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 //class G3MContext;
-//class SGShape;
 //class G3MRenderContext;
 //class GLState;
 
@@ -32,7 +31,7 @@ public class SGNode
 
   protected G3MContext _context;
 
-  protected SGShape _shape;
+  protected String _uriPrefix;
 
 
   public SGNode(String id, String sID)
@@ -40,7 +39,7 @@ public class SGNode
      _id = id;
      _sID = sID;
      _context = null;
-     _shape = null;
+     _uriPrefix = "";
   }
 
   public void dispose()
@@ -54,16 +53,16 @@ public class SGNode
     }
   }
 
-  public void initialize(G3MContext context, SGShape shape)
+  public void initialize(G3MContext context, String uriPrefix)
   {
     _context = context;
-    _shape = shape;
+    _uriPrefix = uriPrefix;
   
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-      child.initialize(context, shape);
+      child.initialize(_context, _uriPrefix);
     }
   }
 
@@ -72,7 +71,7 @@ public class SGNode
     _children.add(child);
     if (_context != null)
     {
-      child.initialize(_context, _shape);
+      child.initialize(_context, _uriPrefix);
     }
   }
 

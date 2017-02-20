@@ -45,7 +45,7 @@ public:
 
   virtual size_t getVertexCount() const = 0;
 
-  virtual const Vector3D getVertex(size_t i) const = 0;
+  virtual const Vector3D getVertex(const size_t index) const = 0;
 
   virtual BoundingVolume* getBoundingVolume() const = 0;
 
@@ -56,9 +56,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState* parentGLState) const;
-
-  virtual void showNormals(bool v) const = 0;
-
+  
 };
 
 #endif

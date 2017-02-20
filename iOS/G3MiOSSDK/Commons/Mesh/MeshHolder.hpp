@@ -41,7 +41,7 @@ public:
     return _mesh->getVertexCount();
   }
 
-  const Vector3D getVertex(size_t i) const;
+  const Vector3D getVertex(const size_t index) const;
 
   BoundingVolume* getBoundingVolume() const {
     return _mesh->getBoundingVolume();
@@ -54,10 +54,6 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const {
     _mesh->render(rc, parentGLState);
-  }
-
-  void showNormals(bool v) const {
-    _mesh->showNormals(v);
   }
 
   Mesh* getMesh() const {

@@ -12,7 +12,6 @@
 #include "ILogger.hpp"
 #include "URL.hpp"
 #include "IStringBuilder.hpp"
-#include "SGShape.hpp"
 #include "G3MRenderContext.hpp"
 #include "IDownloader.hpp"
 #include "DownloadPriority.hpp"
@@ -83,7 +82,7 @@ void SGLayerNode::onImageDownload(const IImage* image) {
 
 URL SGLayerNode::getURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_shape->getURIPrefix());
+  isb->addString(_uriPrefix);
   isb->addString(_uri);
   const std::string path = isb->getString();
   delete isb;

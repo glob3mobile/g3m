@@ -55,9 +55,9 @@ public class LeveledMesh extends Mesh
     return _mesh.getVertexCount();
   }
 
-  public final Vector3D getVertex(int i)
+  public final Vector3D getVertex(int index)
   {
-    return _mesh.getVertex(i);
+    return _mesh.getVertex(index);
   }
 
   public final void rawRender(G3MRenderContext rc, GLState parentState)
@@ -78,11 +78,6 @@ public class LeveledMesh extends Mesh
   public final int getLevel()
   {
     return _currentLevel;
-  }
-
-  public final void showNormals(boolean v)
-  {
-    _mesh.showNormals(v);
   }
 
 }

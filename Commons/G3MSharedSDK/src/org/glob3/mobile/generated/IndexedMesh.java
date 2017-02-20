@@ -21,11 +21,12 @@ package org.glob3.mobile.generated;
 public class IndexedMesh extends AbstractMesh
 {
   private IShortBuffer _indices;
-  private boolean _ownsIndices;
-  protected final void rawRender(G3MRenderContext rc)
+  private final boolean _ownsIndices;
+
+  protected final void renderMesh(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, _glState, rc.getGPUProgramManager());
+    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager());
   }
 
   public IndexedMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor)
@@ -77,11 +78,11 @@ public class IndexedMesh extends AbstractMesh
     }
   
     super.dispose();
-  
   }
 
   public final IShortBuffer getIndices()
   {
     return _indices;
   }
+
 }

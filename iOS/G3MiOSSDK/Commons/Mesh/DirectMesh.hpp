@@ -17,10 +17,8 @@ private:
   size_t _renderVerticesCount;
 
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
-
-//  Mesh* createNormalsMesh() const;
-
+  void renderMesh(const G3MRenderContext* rc,
+                  GLState* glState) const;
 
 public:
   DirectMesh(const int primitive,

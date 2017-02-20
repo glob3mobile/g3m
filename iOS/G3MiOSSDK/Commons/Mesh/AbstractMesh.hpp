@@ -9,34 +9,19 @@
 #ifndef __G3MiOSSDK__AbstractMesh__
 #define __G3MiOSSDK__AbstractMesh__
 
-#include "Mesh.hpp"
+#include "TransformableMesh.hpp"
 
-
-#include "Vector3D.hpp"
 
 class IFloatBuffer;
 class Color;
-class ModelTransformGLFeature;
 
 
-class AbstractMesh : public Mesh {
+class AbstractMesh : public TransformableMesh {
 private:
-  MutableMatrix44D*        _transformMatrix;
-  ModelTransformGLFeature* _transformGLFeature;
-  MutableMatrix44D*        _userTransformMatrix;
-  MutableMatrix44D* getTransformMatrix();
-  MutableMatrix44D* createTransformMatrix() const;
-
-  void createGLState();
-
-  mutable bool _showNormals;
-  mutable Mesh* _normalsMesh;
-  Mesh* createNormalsMesh() const;
 
 protected:
   const int           _primitive;
   const bool          _owner;
-  const Vector3D      _center;
   const IFloatBuffer* _vertices;
   const Color*        _flatColor;
   const IFloatBuffer* _colors;
@@ -48,7 +33,6 @@ protected:
   const float         _polygonOffsetFactor;
   const float         _polygonOffsetUnits;
 
-  GLState* _glState;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
@@ -67,7 +51,12 @@ protected:
                float polygonOffsetFactor,
                float polygonOffsetUnits);
 
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+  virtual void renderMesh(const G3MRenderContext* rc,
+                          GLState* glState) const = 0;
+
+  void userTransformMatrixChanged();
+
+  void initializeGLState(GLState* glState) const;
 
 public:
   ~AbstractMesh();
@@ -76,19 +65,13 @@ public:
 
   size_t getVertexCount() const;
 
-  const Vector3D getVertex(size_t i) const;
+  const Vector3D getVertex(const size_t index) const;
 
   virtual bool isTransparent(const G3MRenderContext* rc) const;
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v) const {
-    _showNormals = v;
-  }
-
-  void setUserTransformMatrix(MutableMatrix44D* userTransformMatrix);
-  
 };
 
 #endif

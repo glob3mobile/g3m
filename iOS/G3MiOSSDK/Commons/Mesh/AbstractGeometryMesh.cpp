@@ -8,20 +8,8 @@
 
 #include "AbstractGeometryMesh.hpp"
 
-#include "IFloatBuffer.hpp"
-#include "Color.hpp"
-#include "GL.hpp"
 #include "Box.hpp"
 
-
-#include "DirectMesh.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "CompositeMesh.hpp"
-#include "Sphere.hpp"
-
-#include "Camera.hpp"
-
-#include "GLState.hpp"
 
 AbstractGeometryMesh::~AbstractGeometryMesh() {
   if (_ownsVertices) {
@@ -35,8 +23,6 @@ AbstractGeometryMesh::~AbstractGeometryMesh() {
   delete _translationMatrix;
 
   _glState->_release();
-
-  delete _normalsMesh;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -69,8 +55,6 @@ _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
 _glState(new GLState()),
-_normalsMesh(NULL),
-_showNormals(false),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
 _polygonOffsetFill(polygonOffsetFill)
@@ -121,8 +105,8 @@ BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   return _extent;
 }
 
-const Vector3D AbstractGeometryMesh::getVertex(size_t i) const {
-  const size_t p = i * 3;
+const Vector3D AbstractGeometryMesh::getVertex(const size_t index) const {
+  const size_t p = index * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
                   _vertices->get(p+1) + _center._y,
                   _vertices->get(p+2) + _center._z);
@@ -160,78 +144,4 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
                                      const GLState* parentGLState) const {
   _glState->setParent(parentGLState);
   rawRender(rc);
-
-  //RENDERING NORMALS
-  if (_normals != NULL) {
-    if (_showNormals) {
-      if (_normalsMesh == NULL) {
-        _normalsMesh = createNormalsMesh();
-      }
-      if (_normalsMesh != NULL) {
-        _normalsMesh->render(rc, parentGLState);
-      }
-    }
-    else {
-      if (_normalsMesh != NULL) {
-        delete _normalsMesh;
-        _normalsMesh = NULL;
-      }
-    }
-  }
-}
-
-
-Mesh* AbstractGeometryMesh::createNormalsMesh() const {
-
-  DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
-                                            false,
-                                            _center,
-                                            _vertices,
-                                            1.0f,
-                                            2.0f,
-                                            new Color(Color::RED),
-                                            NULL,
-                                            false,
-                                            NULL);
-
-  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-
-  BoundingVolume* volume = getBoundingVolume();
-  Sphere* sphere = volume->createSphere();
-  double normalsSize = sphere->getRadius() / 10.0;
-  delete sphere;
-
-  const size_t size = _vertices->size();
-
-//#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
-
-  for (size_t i = 0; i < size; i+=6) {
-    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
-    Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
-
-    Vector3D v_n = v.add(n.normalized().times(normalsSize));
-
-    fbb->add(v);
-    fbb->add(v_n);
-  }
-
-  IFloatBuffer* normalsVer = fbb->create();
-  delete fbb;
-
-
-
-  DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
-                                           true,
-                                           _center,
-                                           normalsVer,
-                                           2.0f,
-                                           1.0f,
-                                           new Color(Color::BLUE));
-
-  CompositeMesh* compositeMesh = new CompositeMesh();
-  compositeMesh->addMesh(verticesMesh);
-  compositeMesh->addMesh(normalsMesh);
-
-  return normalsMesh;
-  
 }

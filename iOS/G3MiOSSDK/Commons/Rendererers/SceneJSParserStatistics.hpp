@@ -15,23 +15,34 @@ class ILogger;
 
 class SceneJSParserStatistics {
 private:
-  mutable int _nodesCount;
-  mutable int _materialsCount;
-  mutable int _geometriesCount;
-  mutable int _verticesCount;
+  int _nodesCount;
+  int _materialsCount;
+  int _geometriesCount;
+  int _verticesCount;
+
 public:
   SceneJSParserStatistics();
+
   ~SceneJSParserStatistics();
+
   void computeNode();
+
   int getNodesCount() const;
+
   void computeMaterial();
+
   int getMaterialsCount() const;
+
   void computeGeometry();
+
   int getGeometriesCount() const;
+
   void computeVertex();
+
   int getVerticesCount() const;
-  
+
   const std::string asLogString() const;
+
   void log() const;
 };
 

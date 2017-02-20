@@ -36,7 +36,7 @@ SGShape::~SGShape() {
 }
 
 void SGShape::initialize(const G3MContext* context) {
-  _node->initialize(context, this);
+  _node->initialize(context, _uriPrefix);
 }
 
 bool SGShape::isReadyToRender(const G3MRenderContext* rc) {

@@ -8,16 +8,9 @@
 
 #include "AbstractMesh.hpp"
 
-#include "IFloatBuffer.hpp"
-#include "Color.hpp"
-#include "GL.hpp"
-#include "Box.hpp"
-#include "DirectMesh.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "CompositeMesh.hpp"
-#include "Sphere.hpp"
-#include "Camera.hpp"
 #include "GLFeature.hpp"
+#include "GLState.hpp"
+#include "Box.hpp"
 
 
 AbstractMesh::~AbstractMesh() {
@@ -30,15 +23,6 @@ AbstractMesh::~AbstractMesh() {
   delete _flatColor;
 
   delete _boundingVolume;
-
-  delete _transformMatrix;
-  delete _userTransformMatrix;
-
-  _transformGLFeature->_release();
-
-  _glState->_release();
-
-  delete _normalsMesh;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -58,76 +42,30 @@ AbstractMesh::AbstractMesh(const int primitive,
                            bool polygonOffsetFill,
                            float polygonOffsetFactor,
                            float polygonOffsetUnits) :
+TransformableMesh(center),
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
 _flatColor(flatColor),
 _colors(colors),
 _boundingVolume(NULL),
-_center(center),
 _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
-_glState(new GLState()),
 _normals(normals),
-_normalsMesh(NULL),
-_showNormals(false),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_polygonOffsetFill(polygonOffsetFill),
-_transformMatrix(NULL),
-_userTransformMatrix( MutableMatrix44D::newIdentity() )
+_polygonOffsetFill(polygonOffsetFill)
 {
-  _transformGLFeature = new ModelTransformGLFeature(getTransformMatrix()->asMatrix44D());
-
-  createGLState();
 }
 
-MutableMatrix44D* AbstractMesh::createTransformMatrix() const {
-  if (_center.isNan() || _center.isZero()) {
-    return new MutableMatrix44D(*_userTransformMatrix);
-  }
-
-  const MutableMatrix44D centerM = MutableMatrix44D::createTranslationMatrix(_center);
-  if (_userTransformMatrix == NULL) {
-    return new MutableMatrix44D(centerM);
-  }
-
-  MutableMatrix44D* result = new MutableMatrix44D();
-  result->copyValueOfMultiplication(centerM,
-                                    *_userTransformMatrix);
-
-  return result;
-}
-
-MutableMatrix44D* AbstractMesh::getTransformMatrix() {
-  if (_transformMatrix == NULL) {
-    _transformMatrix = createTransformMatrix();
-  }
-  return _transformMatrix;
-}
-
-void AbstractMesh::setUserTransformMatrix(MutableMatrix44D* userTransformMatrix) {
-  if (userTransformMatrix == NULL) {
-    THROW_EXCEPTION("userTransformMatrix is NULL");
-  }
-
-  if (userTransformMatrix != _userTransformMatrix) {
-    delete _userTransformMatrix;
-    _userTransformMatrix = userTransformMatrix;
-  }
-
-  delete _transformMatrix;
-  _transformMatrix = NULL;
-
+void AbstractMesh::userTransformMatrixChanged() {
   delete _boundingVolume;
   _boundingVolume = NULL;
-
-  _transformGLFeature->setMatrix(getTransformMatrix()->asMatrix44D());
 }
 
 BoundingVolume* AbstractMesh::computeBoundingVolume() const {
-  if (!_userTransformMatrix->isIdentity()) {
+  if (hasUserTransform()) {
     return NULL;
   }
 
@@ -174,8 +112,8 @@ BoundingVolume* AbstractMesh::getBoundingVolume() const {
   return _boundingVolume;
 }
 
-const Vector3D AbstractMesh::getVertex(size_t i) const {
-  const size_t p = i * 3;
+const Vector3D AbstractMesh::getVertex(const size_t index) const {
+  const size_t p = index * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
                   _vertices->get(p+1) + _center._y,
                   _vertices->get(p+2) + _center._z);
@@ -192,122 +130,57 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
   return _flatColor->isTransparent();
 }
 
-void AbstractMesh::createGLState() {
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
-                                               3,                    // Our buffer contains elements of 3
-                                               0,                    // Index 0
-                                               false,                // Not normalized
-                                               0,                    // Stride 0
-                                               _depthTest,
-                                               false,                // cullFace
-                                               0,                    // culledFace
-                                               _polygonOffsetFill,
-                                               _polygonOffsetFactor,
-                                               _polygonOffsetUnits,
-                                               _lineWidth,
-                                               true,                 // needsPointSize
-                                               _pointSize),
-                         false);
+void AbstractMesh::rawRender(const G3MRenderContext* rc,
+                             const GLState* parentGLState) const {
+  GLState* glState = getGLState();
+  glState->setParent(parentGLState);
+  renderMesh(rc, glState);
+}
+
+void AbstractMesh::initializeGLState(GLState* glState) const {
+  TransformableMesh::initializeGLState(glState);
+
+  glState->addGLFeature(new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
+                                              3,                    // Our buffer contains elements of 3
+                                              0,                    // Index 0
+                                              false,                // Not normalized
+                                              0,                    // Stride 0
+                                              _depthTest,
+                                              false,                // cullFace
+                                              0,                    // culledFace
+                                              _polygonOffsetFill,
+                                              _polygonOffsetFactor,
+                                              _polygonOffsetUnits,
+                                              _lineWidth,
+                                              true,                 // needsPointSize
+                                              _pointSize),
+                        false);
 
   if (_normals != NULL) {
-    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
-                           false);
+    glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
+                          false);
   }
 
-  _glState->addGLFeature(_transformGLFeature, true);
-
   if ((_flatColor != NULL) && (_colors == NULL)) {
-    _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
-                                                  _flatColor->isTransparent(),
-                                                  GLBlendFactor::srcAlpha(),
-                                                  GLBlendFactor::oneMinusSrcAlpha()),
-                           false);
+    glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
+                                                 _flatColor->isTransparent(),
+                                                 GLBlendFactor::srcAlpha(),
+                                                 GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
 
     return;
   }
 
   if (_colors != NULL) {
-    _glState->addGLFeature(new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
-                                              4,            // Our buffer contains elements of 4
-                                              0,            // Index 0
-                                              false,        // Not normalized
-                                              0,            // Stride 0
-                                              true,
-                                              GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha()),
-                           false);
+    glState->addGLFeature(new ColorGLFeature(_colors,      // The attribute is a float vector of 4 elements RGBA
+                                             4,            // Our buffer contains elements of 4
+                                             0,            // Index 0
+                                             false,        // Not normalized
+                                             0,            // Stride 0
+                                             true,
+                                             GLBlendFactor::srcAlpha(),
+                                             GLBlendFactor::oneMinusSrcAlpha()),
+                          false);
   }
-
-}
-
-void AbstractMesh::rawRender(const G3MRenderContext* rc,
-                             const GLState* parentGLState) const {
-  _glState->setParent(parentGLState);
-  rawRender(rc);
-
-  if (_normals != NULL) {
-    if (_showNormals) {
-      if (_normalsMesh == NULL) {
-        _normalsMesh = createNormalsMesh();
-      }
-      if (_normalsMesh != NULL) {
-        _normalsMesh->render(rc, parentGLState);
-      }
-    }
-    else {
-      if (_normalsMesh != NULL) {
-        delete _normalsMesh;
-        _normalsMesh = NULL;
-      }
-    }
-  }
-}
-
-
-Mesh* AbstractMesh::createNormalsMesh() const {
-  DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
-                                            false,
-                                            _center,
-                                            _vertices,
-                                            1.0f,
-                                            2.0f,
-                                            new Color(Color::RED),
-                                            NULL,
-                                            false,
-                                            NULL);
-
-  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-
-  BoundingVolume* volume = getBoundingVolume();
-  Sphere* sphere = volume->createSphere();
-  double normalsSize = sphere->getRadius() / 100.0;
-  delete sphere;
-
-  const size_t size = _vertices->size();
-  for (size_t i = 0; i < size; i+=3) {
-    const Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
-    const Vector3D n(_normals->get(i),  _normals->get(i+1),  _normals->get(i+2));
-
-    const Vector3D v_n = v.add(n.normalized().times(normalsSize));
-
-    fbb->add(v);
-    fbb->add(v_n);
-  }
-
-  DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
-                                           true,
-                                           _center,
-                                           fbb->create(),
-                                           2.0f,
-                                           1.0f,
-                                           new Color(Color::BLUE));
-
-  delete fbb;
-
-  CompositeMesh* compositeMesh = new CompositeMesh();
-  compositeMesh->addMesh(verticesMesh);
-  compositeMesh->addMesh(normalsMesh);
-  
-  return compositeMesh;
   
 }

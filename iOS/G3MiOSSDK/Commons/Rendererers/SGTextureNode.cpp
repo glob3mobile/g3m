@@ -17,7 +17,7 @@ void SGTextureNode::addLayer(SGLayerNode* layer) {
   _layers.push_back(layer);
 
   if (_context != NULL) {
-    layer->initialize(_context, _shape);
+    layer->initialize(_context, _uriPrefix);
   }
 
   if (_glState != NULL) {
@@ -39,13 +39,13 @@ bool SGTextureNode::isReadyToRender(const G3MRenderContext* rc) {
 }
 
 void SGTextureNode::initialize(const G3MContext* context,
-                               SGShape *shape) {
-  SGNode::initialize(context, shape);
+                               const std::string& uriPrefix) {
+  SGNode::initialize(context, uriPrefix);
 
   const size_t layersCount = _layers.size();
   for (size_t i = 0; i < layersCount; i++) {
     SGLayerNode* child = _layers[i];
-    child->initialize(context, shape);
+    child->initialize(_context, _uriPrefix);
   }
 }
 

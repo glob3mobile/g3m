@@ -22,15 +22,11 @@ public class DirectMesh extends AbstractMesh
 {
   private int _renderVerticesCount;
 
-  protected final void rawRender(G3MRenderContext rc)
+  protected final void renderMesh(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-  
-    gl.drawArrays(_primitive, 0, (int)_renderVerticesCount, _glState, rc.getGPUProgramManager());
+    gl.drawArrays(_primitive, 0, (int)_renderVerticesCount, glState, rc.getGPUProgramManager());
   }
-
-//  Mesh* createNormalsMesh() const;
-
 
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor)
   {
