@@ -45,7 +45,7 @@ public:
 
   virtual size_t getVertexCount() const = 0;
 
-  virtual const Vector3D getVertex(const size_t i) const = 0;
+  virtual const Vector3D getVertex(const size_t index) const = 0;
 
   virtual BoundingVolume* getBoundingVolume() const = 0;
 

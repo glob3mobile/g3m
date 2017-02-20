@@ -49,7 +49,7 @@ size_t SGMesh::getVertexCount() const {
   THROW_EXCEPTION("Can't implement");
 }
 
-const Vector3D SGMesh::getVertex(const size_t i) const {
+const Vector3D SGMesh::getVertex(const size_t index) const {
   THROW_EXCEPTION("Can't implement");
 }
 

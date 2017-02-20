@@ -109,8 +109,8 @@ size_t LeveledTexturedMesh::getVertexCount() const {
   return _mesh->getVertexCount();
 }
 
-const Vector3D LeveledTexturedMesh::getVertex(const size_t i) const {
-  return _mesh->getVertex(i);
+const Vector3D LeveledTexturedMesh::getVertex(const size_t index) const {
+  return _mesh->getVertex(index);
 }
 
 BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {

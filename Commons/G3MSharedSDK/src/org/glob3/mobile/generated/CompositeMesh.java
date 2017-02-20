@@ -31,11 +31,22 @@ public class CompositeMesh extends Mesh
       return null;
     }
   
-    BoundingVolume result = _children.get(0).getBoundingVolume().copy();
+    BoundingVolume childBV = _children.get(0).getBoundingVolume();
+    if (childBV == null)
+    {
+      return null;
+    }
+    BoundingVolume result = childBV.copy();
     for (int i = 1; i < childrenCount; i++)
     {
-      Mesh child = _children.get(i);
-      BoundingVolume newResult = result.mergedWith(child.getBoundingVolume());
+      childBV = _children.get(i).getBoundingVolume();
+      if (childBV == null)
+      {
+        if (result != null)
+           result.dispose();
+        return null;
+      }
+      BoundingVolume newResult = result.mergedWith(childBV);
       if (result != null)
          result.dispose();
       result = newResult;

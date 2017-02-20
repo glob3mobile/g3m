@@ -189,9 +189,9 @@ public abstract class AbstractMesh extends TransformableMesh
     return _vertices.size() / 3;
   }
 
-  public final Vector3D getVertex(int i)
+  public final Vector3D getVertex(int index)
   {
-    final int p = i * 3;
+    final int p = index * 3;
     return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 

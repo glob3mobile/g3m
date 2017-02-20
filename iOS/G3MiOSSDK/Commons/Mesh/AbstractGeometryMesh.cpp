@@ -105,8 +105,8 @@ BoundingVolume* AbstractGeometryMesh::getBoundingVolume() const {
   return _extent;
 }
 
-const Vector3D AbstractGeometryMesh::getVertex(const size_t i) const {
-  const size_t p = i * 3;
+const Vector3D AbstractGeometryMesh::getVertex(const size_t index) const {
+  const size_t p = index * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
                   _vertices->get(p+1) + _center._y,
                   _vertices->get(p+2) + _center._z);

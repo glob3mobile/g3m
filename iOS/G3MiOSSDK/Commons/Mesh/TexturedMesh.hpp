@@ -44,7 +44,7 @@ public:
     return _mesh->getVertexCount();
   }
   
-  const Vector3D getVertex(const size_t i) const;
+  const Vector3D getVertex(const size_t index) const;
   
   const TextureMapping* const getTextureMapping() const {
     return _textureMapping;

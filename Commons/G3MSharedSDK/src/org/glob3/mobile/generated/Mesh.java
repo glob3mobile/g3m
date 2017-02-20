@@ -73,7 +73,7 @@ public abstract class Mesh
 
   public abstract int getVertexCount();
 
-  public abstract Vector3D getVertex(int i);
+  public abstract Vector3D getVertex(int index);
 
   public abstract BoundingVolume getBoundingVolume();
 

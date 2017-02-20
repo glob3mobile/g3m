@@ -46,7 +46,7 @@ public:
     return _mesh->getVertexCount();
   }
   
-  const Vector3D getVertex(const size_t i) const;
+  const Vector3D getVertex(const size_t index) const;
   
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentState) const {

@@ -55,6 +55,6 @@ TexturedMesh::~TexturedMesh() {
 #endif
 }
 
-const Vector3D TexturedMesh::getVertex(const size_t i) const {
-  return _mesh->getVertex(i);
+const Vector3D TexturedMesh::getVertex(const size_t index) const {
+  return _mesh->getVertex(index);
 }

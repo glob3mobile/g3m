@@ -65,7 +65,7 @@ public class SGMesh extends TransformableMesh
     throw new RuntimeException("Can't implement");
   }
 
-  public final Vector3D getVertex(int i)
+  public final Vector3D getVertex(int index)
   {
     throw new RuntimeException("Can't implement");
   }

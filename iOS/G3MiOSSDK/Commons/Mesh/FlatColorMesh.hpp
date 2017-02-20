@@ -68,8 +68,8 @@ public:
     return _mesh->getVertexCount();
   }
 
-  const Vector3D getVertex(const size_t i) const {
-    return _mesh->getVertex(i);
+  const Vector3D getVertex(const size_t index) const {
+    return _mesh->getVertex(index);
   }
 
   bool isTransparent(const G3MRenderContext* rc) const {

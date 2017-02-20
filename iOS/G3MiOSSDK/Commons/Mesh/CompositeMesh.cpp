@@ -68,10 +68,18 @@ BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
     return NULL;
   }
 
-  BoundingVolume* result = _children[0]->getBoundingVolume()->copy();
+  BoundingVolume* childBV = _children[0]->getBoundingVolume();
+  if (childBV == NULL) {
+    return NULL;
+  }
+  BoundingVolume* result = childBV->copy();
   for (size_t i = 1; i < childrenCount; i++) {
-    Mesh* child = _children[i];
-    BoundingVolume* newResult = result->mergedWith( child->getBoundingVolume() );
+    childBV = _children[i]->getBoundingVolume();
+    if (childBV == NULL) {
+      delete result;
+      return NULL;
+    }
+    BoundingVolume* newResult = result->mergedWith( childBV );
     delete result;
     result = newResult;
   }
