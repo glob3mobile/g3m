@@ -22,14 +22,14 @@ MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& positio
                                        position._height);
 }
 
-CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
+CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& position) const {
 
-  Vector3D origin = toCartesian(geo);
-  Vector3D z = centricSurfaceNormal(origin);
-  Vector3D y = getNorth().projectionInPlane(z);
-  Vector3D x = y.cross(z);
+  const Vector3D origin = toCartesian(position);
+  const Vector3D z = centricSurfaceNormal(origin);
+  const Vector3D y = getNorth().projectionInPlane(z);
+  const Vector3D x = y.cross(z);
 
-  return CoordinateSystem(x,y,z, origin);
+  return CoordinateSystem(x, y, z, origin);
 }
 
 std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,

@@ -63,7 +63,8 @@ public:
   CoordinateSystem applyRotation(const MutableMatrix44D& m) const;
   
   MutableMatrix44D getRotationMatrix() const;
-  
+  MutableMatrix44D getMatrix() const;
+
   void copyValueOfRotationMatrix(MutableMatrix44D& m) const;
   
   bool isConsistent() const;

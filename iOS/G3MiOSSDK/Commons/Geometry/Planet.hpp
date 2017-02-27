@@ -134,7 +134,7 @@ public:
 
   virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
-  CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
+  CoordinateSystem getCoordinateSystemAt(const Geodetic3D& position) const;
   
   virtual const std::string getType() const = 0;
   

@@ -236,6 +236,12 @@ public class CoordinateSystem
   {
     return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0, 0, 0, 1);
   }
+  public final MutableMatrix44D getMatrix()
+  {
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_origin);
+    final MutableMatrix44D rotation = getRotationMatrix();
+    return translation.multiply(rotation);
+  }
 
   public final void copyValueOfRotationMatrix(MutableMatrix44D m)
   {

@@ -131,15 +131,15 @@ public abstract class Planet
 
   public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
 
-  public final CoordinateSystem getCoordinateSystemAt(Geodetic3D geo)
+  public final CoordinateSystem getCoordinateSystemAt(Geodetic3D position)
   {
   
-    Vector3D origin = toCartesian(geo);
-    Vector3D z = centricSurfaceNormal(origin);
-    Vector3D y = getNorth().projectionInPlane(z);
-    Vector3D x = y.cross(z);
+    final Vector3D origin = toCartesian(position);
+    final Vector3D z = centricSurfaceNormal(origin);
+    final Vector3D y = getNorth().projectionInPlane(z);
+    final Vector3D x = y.cross(z);
   
-    return new CoordinateSystem(x,y,z, origin);
+    return new CoordinateSystem(x, y, z, origin);
   }
 
   public abstract String getType();
