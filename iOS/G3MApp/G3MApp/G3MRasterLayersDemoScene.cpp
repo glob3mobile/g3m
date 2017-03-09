@@ -22,6 +22,8 @@
 #include <G3MiOSSDK/MercatorTiledLayer.hpp>
 #include <G3MiOSSDK/Geodetic3D.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/DayDreamControllerCameraHandler.hpp>
 
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
@@ -194,6 +196,14 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setIncrementalTileQuality(true);
 
   createLayerSet( getModel()->getLayerSet() );
+  
+  //Camera starting here
+  getModel()->getG3MWidget()->setCameraPosition(Geodetic3D::fromDegrees(20, 20, 5e4));
+  
+  //Daydream Controller
+  DayDreamControllerCameraHandler* ddch = new DayDreamControllerCameraHandler();
+  getModel()->getG3MWidget()->getCameraRenderer()->addHandler(ddch);
+  ddch->setMeshRenderer( getModel()->getMeshRenderer() );
 }
 
 void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
