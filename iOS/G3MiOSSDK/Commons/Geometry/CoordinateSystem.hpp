@@ -43,11 +43,6 @@ public:
                    const Vector3D& z,
                    const Vector3D& origin);
 
-  Mesh* createMesh(double size,
-                   const Color& xColor,
-                   const Color& yColor,
-                   const Color& zColor) const;
-
   CoordinateSystem applyTaitBryanAngles(const TaitBryanAngles& angles) const;
 
   CoordinateSystem applyTaitBryanAngles(const Angle& heading,
@@ -77,6 +72,13 @@ public:
     return description();
   }
 #endif
+
+  Mesh* createMesh(double size,
+                   const Color& xColor,
+                   const Color& yColor,
+                   const Color& zColor) const;
+
+  Mesh* createMesh(double size) const;
 
 };
 

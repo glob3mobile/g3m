@@ -17,6 +17,7 @@
 #include "GLConstants.hpp"
 #include "TaitBryanAngles.hpp"
 #include "IStringBuilder.hpp"
+#include "Color.hpp"
 
 
 CoordinateSystem CoordinateSystem::global() {
@@ -77,6 +78,13 @@ bool CoordinateSystem::checkConsistency(const Vector3D& x,
 
 CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const {
   return CoordinateSystem(_x, _y, _z, newOrigin);
+}
+
+Mesh* CoordinateSystem::createMesh(double size) const {
+  return createMesh(size,
+                    Color::RED,
+                    Color::GREEN,
+                    Color::BLUE);
 }
 
 Mesh* CoordinateSystem::createMesh(double size,
