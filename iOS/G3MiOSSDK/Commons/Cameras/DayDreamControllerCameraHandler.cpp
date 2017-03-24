@@ -63,7 +63,7 @@ void DayDreamControllerCameraHandler::render(const G3MRenderContext* rc, CameraC
     //RotZ -> Roll
     MutableMatrix44D rotZ = MutableMatrix44D::createRotationMatrix(angle, Vector3D::UP_Z);
     
-    CoordinateSystem globalPlusDDAdjToDDRotations = globalAdjToDDRotations.applyRotation(rotZ);
+    CoordinateSystem globalPlusDDAdjToDDRotations = globalAdjToDDRotations.applyRotation(rotX);
     
     //_meshRenderer->addMesh(globalPlusDDAdjToDDRotations.createMesh(5e7, Color::red().muchDarker(), Color::green().muchDarker(), Color::blue().muchDarker()));
     
@@ -75,10 +75,6 @@ void DayDreamControllerCameraHandler::render(const G3MRenderContext* rc, CameraC
     MutableMatrix44D iniCamGeoTransf = _initialCamCS->getRotationMatrix();
     CoordinateSystem geoTransGlobal = globalPlusDD.applyRotation(iniCamGeoTransf).changeOrigin(_initialCamCS->_origin);
     _meshRenderer->addMesh(geoTransGlobal.createMesh(5e7, Color::red(), Color::green(), Color::blue()));
-    
-    
-    
-    
     
   }
 
