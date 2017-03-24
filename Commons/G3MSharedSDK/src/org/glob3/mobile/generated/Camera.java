@@ -690,6 +690,12 @@ public class Camera
     return _planet;
   }
 
+  public final void setFrustumPolicy(FrustumPolicy fp)
+  {
+    _frustumPolicy = fp;
+    _dirtyFlags.setAllDirty();
+  }
+
 
   private final FrustumPolicy _frustumPolicy;
 

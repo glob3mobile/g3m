@@ -116,6 +116,11 @@ public class G3MWidget implements ChangedRendererInfoListener
        _auxCam.dispose();
     if (_frustumPolicy != null)
        _frustumPolicy.dispose();
+  
+    if (_nearFrustumPolicy != null)
+       _nearFrustumPolicy.dispose();
+    if (_nearFrustumRenderer != null)
+       _nearFrustumRenderer.dispose();
   }
 
   public final void render(int width, int height)
@@ -729,11 +734,14 @@ public class G3MWidget implements ChangedRendererInfoListener
   private RenderState _rendererState;
   private ProtoRenderer _selectedRenderer;
 
+  private NearFrustumRenderer _nearFrustumRenderer;
+
   private EffectsScheduler _effectsScheduler;
 
   private java.util.ArrayList<ICameraConstrainer> _cameraConstrainers = new java.util.ArrayList<ICameraConstrainer>();
 
   private final FrustumPolicy _frustumPolicy;
+  private final FrustumPolicy _nearFrustumPolicy;
   private Camera _currentCamera;
   private Camera _nextCamera;
 
@@ -851,6 +859,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _leftEyeCam = null;
      _rightEyeCam = null;
      _auxCam = null;
+     _nearFrustumRenderer = new NearFrustumRenderer();
+     _nearFrustumPolicy = new FixedFrustumPolicy(0.1, 10);
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -1027,6 +1037,13 @@ public class G3MWidget implements ChangedRendererInfoListener
         {
           _mainRenderer.render(_renderContext, _rootState);
         }
+  
+        //Shortening Frustum
+        ((FixedFrustumPolicy)_nearFrustumPolicy).setRange(0.0001, _currentCamera.getFrustumData()._znear);
+        _currentCamera.setFrustumPolicy(_nearFrustumPolicy);
+        _gl.clearDepthBuffer();
+        _nearFrustumRenderer.render(_renderContext, _rootState);
+        _currentCamera.setFrustumPolicy(_frustumPolicy);
   
         break;
   

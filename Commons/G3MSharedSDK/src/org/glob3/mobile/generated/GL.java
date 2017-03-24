@@ -429,6 +429,11 @@ public class GL
     _nativeGL.viewport(x, y, width, height);
   }
 
+  public final void clearDepthBuffer()
+  {
+    _nativeGL.clear(GLBufferType.depthBuffer());
+  }
+
 
 }
 //void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {
