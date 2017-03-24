@@ -44,15 +44,15 @@ std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                 direction.x(), direction.y(), direction.z());
 }
 
-Vector3D Planet::closestIntersection(const Vector3D& pos,
-                                     const Vector3D& ray) const {
-  if (pos.isNan() || ray.isNan()) {
+const Vector3D Planet::closestIntersection(const Vector3D& origin,
+                                           const Vector3D& direction) const {
+  if (origin.isNan() || direction.isNan()) {
     return Vector3D::NANV;
   }
-  std::vector<double> distances = intersectionsDistances(pos._x, pos._y, pos._z,
-                                                         ray._x, ray._y, ray._z);
+  std::vector<double> distances = intersectionsDistances(origin._x,    origin._y,    origin._z,
+                                                         direction._x, direction._y, direction._z);
   if (distances.empty()) {
     return Vector3D::NANV;
   }
-  return pos.add(ray.times(distances[0]));
+  return origin.add(direction.times(distances[0]));
 }

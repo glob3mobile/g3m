@@ -85,18 +85,18 @@ public abstract class Planet
 
   public abstract double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2);
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  public final Vector3D closestIntersection(Vector3D origin, Vector3D direction)
   {
-    if (pos.isNan() || ray.isNan())
+    if (origin.isNan() || direction.isNan())
     {
       return Vector3D.NANV;
     }
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
+    java.util.ArrayList<Double> distances = intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
     if (distances.isEmpty())
     {
       return Vector3D.NANV;
     }
-    return pos.add(ray.times(distances.get(0)));
+    return origin.add(direction.times(distances.get(0)));
   }
 
 

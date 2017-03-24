@@ -75,7 +75,7 @@ public class Ellipsoid
 
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+    java.util.ArrayList<Double> result = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
     final double a = (directionX * directionX * _oneOverRadiiSquared._x + directionY * directionY * _oneOverRadiiSquared._y + directionZ * directionZ * _oneOverRadiiSquared._z);
@@ -91,31 +91,31 @@ public class Ellipsoid
     if (discriminant < 0.0)
     {
       // no intersections
-      return intersections;
     }
     else if (discriminant == 0.0)
     {
       // one intersection at a tangent point
-      //return new double[1] { -0.5 * b / a };
-      intersections.add(-0.5 * b / a);
-      return intersections;
-    }
-  
-    final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils.instance().sqrt(discriminant));
-    final double root1 = t / a;
-    final double root2 = c / t;
-  
-    // Two intersections - return the smallest first.
-    if (root1 < root2)
-    {
-      intersections.add(root1);
-      intersections.add(root2);
+      result.add(-0.5 * b / a);
     }
     else
     {
-      intersections.add(root2);
-      intersections.add(root1);
+      final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils.instance().sqrt(discriminant));
+      final double root1 = t / a;
+      final double root2 = c / t;
+  
+      // Two intersections - return the smallest first.
+      if (root1 < root2)
+      {
+        result.add(root1);
+        result.add(root2);
+      }
+      else
+      {
+        result.add(root2);
+        result.add(root1);
+      }
     }
-    return intersections;
+  
+    return result;
   }
 }
