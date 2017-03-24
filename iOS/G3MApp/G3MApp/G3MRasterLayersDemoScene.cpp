@@ -194,6 +194,10 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setIncrementalTileQuality(true);
 
   createLayerSet( getModel()->getLayerSet() );
+  
+  getModel()->getG3MWidget()->setCameraPosition(Geodetic3D::fromDegrees(27.05392035893508762, -15.534032544664327702, 26904));
+  getModel()->getG3MWidget()->setCameraHeadingPitchRoll(Angle::zero(), Angle::fromDegrees(-13), Angle::zero());
+  
 }
 
 void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,

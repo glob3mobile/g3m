@@ -13,6 +13,8 @@
 #include "G3MRenderContext.hpp"
 #include "Color.hpp"
 #include "TransformableMesh.hpp"
+#include "Planet.hpp"
+#include "Geodetic3D.hpp"
 
 
 void NearFrustumRenderer::render(const G3MRenderContext* rc,
@@ -21,13 +23,19 @@ void NearFrustumRenderer::render(const G3MRenderContext* rc,
   const Camera* cam = rc->getCurrentCamera();
   CoordinateSystem camCS = cam->getCameraCoordinateSystem();
   
+//  Vector3D front2 = camCS._y;
+//  Vector3D up2 = camCS._z;
+//  Vector3D right2 = camCS._x;
+  
+  Vector3D up = rc->getPlanet()->geodeticSurfaceNormal(cam->getGeodeticPosition());
+  Vector3D right = camCS._y.cross(up);
+  Vector3D front = up.cross(right);
+  
+  Vector3D controllerDisp = front.scaleToLength(0.7)
+                                  .sub(up.scaleToLength(0.5))
+                                  .add(right.scaleToLength(0.1));
 
-  Vector3D origin = cam->getCartesianPosition().add(camCS._y.scaleToLength(1.0))
-                                              .sub(camCS._z.scaleToLength(0.2))
-                                              .add(camCS._x.scaleToLength(0.1));
-  
-  
-  double h = cam->getGeodeticHeight();
+  Vector3D origin = cam->getCartesianPosition().add(controllerDisp);
   
   CoordinateSystem camCS2 = camCS.changeOrigin(origin);
   
