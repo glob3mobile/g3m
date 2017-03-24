@@ -31,6 +31,10 @@ void GL::clearScreen(const Color& color) {
   _nativeGL->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
+void GL::clearDepthBuffer(){
+  _nativeGL->clear(GLBufferType::depthBuffer());
+}
+
 void GL::drawElements(int mode,
                       IShortBuffer* indices,
                       int count,

@@ -72,6 +72,11 @@ public:
   double squaredLength() const {
     return _x * _x + _y * _y + _z * _z;
   }
+  
+  Vector3D scaleToLength(double d) const{
+    double l = length();
+    return Vector3D(_x * d / l, _y * d / l, _z * d / l);
+  }
 
   double dot(const Vector3D& v) const {
     return _x * v._x + _y * v._y + _z * v._z;

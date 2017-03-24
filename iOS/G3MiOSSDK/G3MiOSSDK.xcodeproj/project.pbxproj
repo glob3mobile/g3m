@@ -560,6 +560,8 @@
 		D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */; };
 		D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */; };
 		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
+		D818277F1E854FAC00034382 /* NearFrustumRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D818277D1E854FAC00034382 /* NearFrustumRenderer.cpp */; };
+		D81827801E8550F800034382 /* NearFrustumRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D818277E1E854FAC00034382 /* NearFrustumRenderer.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -854,6 +856,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D81827801E8550F800034382 /* NearFrustumRenderer.hpp in CopyFiles */,
 				CF93F4171E57575C00E97FF1 /* TransformableMesh.hpp in CopyFiles */,
 				CF93F4121E574C9300E97FF1 /* SceneJSMeshParser.hpp in CopyFiles */,
 				CF93F4131E574C9300E97FF1 /* SGMesh.hpp in CopyFiles */,
@@ -1997,6 +2000,8 @@
 		D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLighting.cpp; path = Commons/Basic/SceneLighting.cpp; sourceTree = "<group>"; };
 		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
 		D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TaitBryanAngles.hpp; path = Commons/Geometry/TaitBryanAngles.hpp; sourceTree = "<group>"; };
+		D818277D1E854FAC00034382 /* NearFrustumRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NearFrustumRenderer.cpp; path = Commons/Rendererers/NearFrustumRenderer.cpp; sourceTree = "<group>"; };
+		D818277E1E854FAC00034382 /* NearFrustumRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NearFrustumRenderer.hpp; path = Commons/Rendererers/NearFrustumRenderer.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
@@ -2853,6 +2858,8 @@
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
 				D8299B951DA7D5A0000923F9 /* AtmosphereRenderer.cpp */,
 				D8299B961DA7D5A0000923F9 /* AtmosphereRenderer.hpp */,
+				D818277D1E854FAC00034382 /* NearFrustumRenderer.cpp */,
+				D818277E1E854FAC00034382 /* NearFrustumRenderer.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -3515,6 +3522,7 @@
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 				CF1B62D319055B7900AB01A9 /* TilesRenderParameters.cpp in Sources */,
 				E745CC7916484A9A00819711 /* IStorage.cpp in Sources */,
+				D818277F1E854FAC00034382 /* NearFrustumRenderer.cpp in Sources */,
 				CFE11EC71DD0B90900355A89 /* AltitudeMode.cpp in Sources */,
 				CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */,
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,

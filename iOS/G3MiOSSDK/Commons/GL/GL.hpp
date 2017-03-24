@@ -263,6 +263,8 @@ public:
     _nativeGL->viewport(x, y, width, height);
   }
   
+  void clearDepthBuffer();
+  
   
 };
 

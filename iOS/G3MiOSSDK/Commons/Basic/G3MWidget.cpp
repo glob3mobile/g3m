@@ -70,6 +70,29 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
+class FixedFrustumPolicy: public FrustumPolicy{
+private:
+  double _znear;
+  double _zfar;
+public:
+  FixedFrustumPolicy(double znear, double zfar):
+  _znear(znear),
+  _zfar(zfar){}
+  
+  void setRange(double znear, double zfar){
+    _znear = znear;
+    _zfar = zfar;
+  }
+  
+  const Vector2D calculateFrustumZNearAndZFar(const Camera& camera) const{
+    return Vector2D(_znear, _zfar);
+  }
+  
+  const FrustumPolicy* copy() const{
+    new FixedFrustumPolicy(_znear, _zfar);
+  }
+};
+
 G3MWidget::G3MWidget(GL*                                  gl,
                      IStorage*                            storage,
                      IDownloader*                         downloader,
@@ -157,7 +180,9 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL)
+_auxCam(NULL),
+_nearFrustumRenderer(new NearFrustumRenderer()),
+_nearFrustumPolicy(new FixedFrustumPolicy(0.1, 10))
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -325,6 +350,9 @@ G3MWidget::~G3MWidget() {
   delete _leftEyeCam;
   delete _auxCam;
   delete _frustumPolicy;
+  
+  delete _nearFrustumPolicy;
+  delete _nearFrustumRenderer;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -503,6 +531,8 @@ RenderState G3MWidget::calculateRendererState() {
   return busyFlag ? RenderState::busy() : RenderState::ready();
 }
 
+
+
 void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
   if (_rootState == NULL) {
@@ -519,6 +549,14 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
       if (_mainRenderer->isEnable()) {
         _mainRenderer->render(_renderContext, _rootState);
       }
+      
+      //Shortening Frustum
+      ((FixedFrustumPolicy*)_nearFrustumPolicy)->setRange(0.0001,
+                                                          _currentCamera->getFrustumData()._znear);
+      _currentCamera->setFrustumPolicy(_nearFrustumPolicy);
+      _gl->clearDepthBuffer();
+      _nearFrustumRenderer->render(_renderContext, _rootState);
+      _currentCamera->setFrustumPolicy(_frustumPolicy);
 
       break;
 

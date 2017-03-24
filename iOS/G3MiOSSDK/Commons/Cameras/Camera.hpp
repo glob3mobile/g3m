@@ -299,6 +299,11 @@ public:
   const Planet* getPlanet() const {
     return _planet;
   }
+  
+  void setFrustumPolicy(const FrustumPolicy* fp){
+    _frustumPolicy = fp;
+    _dirtyFlags.setAllDirty();
+  }
 
 private:
 

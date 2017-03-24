@@ -15,6 +15,8 @@
 #include "InfoDisplay.hpp"
 #include "ViewMode.hpp"
 
+#include "NearFrustumRenderer.hpp"
+
 class IMathUtils;
 class ILogger;
 class G3MWidget;
@@ -267,12 +269,15 @@ private:
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
   ProtoRenderer*      _selectedRenderer;
+  
+  NearFrustumRenderer* _nearFrustumRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 
   std::vector<ICameraConstrainer*> _cameraConstrainers;
 
   const FrustumPolicy* _frustumPolicy;
+  const FrustumPolicy* _nearFrustumPolicy;
   Camera*              _currentCamera;
   Camera*              _nextCamera;
 
