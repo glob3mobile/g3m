@@ -26,6 +26,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class Sector;
 //class CoordinateSystem;
+//class Ray;
 
 
 public abstract class Planet
@@ -99,6 +100,10 @@ public abstract class Planet
     return origin.add(direction.times(distances.get(0)));
   }
 
+  public final Vector3D closestIntersection(Ray ray)
+  {
+    return closestIntersection(ray._origin, ray._direction);
+  }
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height);
 

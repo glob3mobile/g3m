@@ -20,6 +20,7 @@ class Effect;
 class Camera;
 class Sector;
 class CoordinateSystem;
+class Ray;
 
 
 class Planet {
@@ -97,6 +98,7 @@ public:
   const Vector3D closestIntersection(const Vector3D& origin,
                                      const Vector3D& direction) const;
 
+  const Vector3D closestIntersection(const Ray& ray) const;
 
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
                                                          const Angle& longitude,

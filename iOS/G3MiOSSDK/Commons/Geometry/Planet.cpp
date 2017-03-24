@@ -14,7 +14,7 @@
 #include "Plane.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
-
+#include "Ray.hpp"
 
 MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
   return createGeodeticTransformMatrix(position._latitude,
@@ -42,6 +42,11 @@ std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                                    const MutableVector3D& direction) const {
   return intersectionsDistances(origin._x,     origin._y,     origin._z,
                                 direction.x(), direction.y(), direction.z());
+}
+
+const Vector3D Planet::closestIntersection(const Ray& ray) const {
+  return closestIntersection(ray._origin,
+                             ray._direction);
 }
 
 const Vector3D Planet::closestIntersection(const Vector3D& origin,
