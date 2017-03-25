@@ -337,9 +337,8 @@ private:
 
 #ifdef C_CODE
   const FrustumPolicy* _frustumPolicy;
-#endif
-#ifdef JAVA_CODE
-  private FrustumPolicy _frustumPolicy;
+#else
+  FrustumPolicy* _frustumPolicy;
 #endif
 
   mutable long long _timestamp;

@@ -43,7 +43,8 @@ public class Camera
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
-    _frustumPolicy = null;
+    if (_frustumPolicy != null)
+       _frustumPolicy.dispose();
     if (_frustumData != null)
        _frustumData.dispose();
   }
