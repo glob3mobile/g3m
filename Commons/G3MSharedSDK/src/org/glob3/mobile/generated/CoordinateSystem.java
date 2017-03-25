@@ -79,34 +79,6 @@ public class CoordinateSystem
     }
   }
 
-  public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
-  {
-    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
-  
-    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
-    fbb.add(_origin);
-    fbb.add(_origin.add(_x.normalized().times(size)));
-    colors.add(xColor);
-    colors.add(xColor);
-  
-    fbb.add(_origin);
-    fbb.add(_origin.add(_y.normalized().times(size)));
-    colors.add(yColor);
-    colors.add(yColor);
-  
-    fbb.add(_origin);
-    fbb.add(_origin.add(_z.normalized().times(size)));
-    colors.add(zColor);
-    colors.add(zColor);
-  
-    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), 5.0f, 1.0f, null, colors.create(), false, null);
-  
-    if (fbb != null)
-       fbb.dispose();
-  
-    return dm;
-  }
-
   public final CoordinateSystem applyTaitBryanAngles(TaitBryanAngles angles)
   {
     return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
@@ -236,6 +208,12 @@ public class CoordinateSystem
   {
     return new MutableMatrix44D(_x._x, _x._y, _x._z, 0, _y._x, _y._y, _y._z, 0, _z._x, _z._y, _z._z, 0, 0, 0, 0, 1);
   }
+  public final MutableMatrix44D getMatrix()
+  {
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(_origin);
+    final MutableMatrix44D rotation = getRotationMatrix();
+    return translation.multiply(rotation);
+  }
 
   public final void copyValueOfRotationMatrix(MutableMatrix44D m)
   {
@@ -267,6 +245,39 @@ public class CoordinateSystem
   @Override
   public String toString() {
     return description();
+  }
+
+  public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
+  {
+    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+  
+    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
+    fbb.add(_origin);
+    fbb.add(_origin.add(_x.normalized().times(size)));
+    colors.add(xColor);
+    colors.add(xColor);
+  
+    fbb.add(_origin);
+    fbb.add(_origin.add(_y.normalized().times(size)));
+    colors.add(yColor);
+    colors.add(yColor);
+  
+    fbb.add(_origin);
+    fbb.add(_origin.add(_z.normalized().times(size)));
+    colors.add(zColor);
+    colors.add(zColor);
+  
+    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), 5.0f, 1.0f, null, colors.create(), false, null);
+  
+    if (fbb != null)
+       fbb.dispose();
+  
+    return dm;
+  }
+
+  public final Mesh createMesh(double size)
+  {
+    return createMesh(size, Color.RED, Color.GREEN, Color.BLUE);
   }
 
 }

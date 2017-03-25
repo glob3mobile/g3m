@@ -183,6 +183,7 @@
 		CF44A0741DDE18FF00E5B270 /* DecoratorDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF44A06F1DDE0B0000E5B270 /* DecoratorDEMGrid.hpp */; };
 		CF44A0751DDE18FF00E5B270 /* SubsetDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
+		CF45E1861E85519C00C36699 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E1841E85519C00C36699 /* Ray.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */; };
 		CF47E0F51901D66F00410BB5 /* CanvasTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0F31901D66F00410BB5 /* CanvasTileImageProvider.cpp */; };
@@ -1535,6 +1536,8 @@
 		CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SubsetDEMGrid.hpp; path = Commons/DEM/SubsetDEMGrid.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
+		CF45E1841E85519C00C36699 /* Ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ray.cpp; path = Commons/Geometry/Ray.cpp; sourceTree = "<group>"; };
+		CF45E1851E85519C00C36699 /* Ray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ray.hpp; path = Commons/Geometry/Ray.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageProvider.hpp; path = Commons/Basic/TileImageProvider.hpp; sourceTree = "<group>"; };
@@ -2564,15 +2567,16 @@
 				D8A6C0D31781D807007BC175 /* Matrix44D.hpp */,
 				D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */,
 				D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */,
+				CF49512B1E46316B00D10A70 /* MutableAngle.cpp */,
+				CF49512C1E46316B00D10A70 /* MutableAngle.hpp */,
 				D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */,
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				CF9227D31E31154300B79A87 /* MutableQuaternionF.cpp */,
 				CF9227D41E31154300B79A87 /* MutableQuaternionF.hpp */,
-				CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */,
-				CF92FCF01E3B913400A439D3 /* Quaternion.hpp */,
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
 				CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */,
+				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
 				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
 				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
@@ -2585,6 +2589,10 @@
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
 				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
 				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
+				CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */,
+				CF92FCF01E3B913400A439D3 /* Quaternion.hpp */,
+				CF45E1841E85519C00C36699 /* Ray.cpp */,
+				CF45E1851E85519C00C36699 /* Ray.hpp */,
 				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				CF31578D1DD0921400133123 /* RectangleF.cpp */,
 				D89FBD7A172543D100FFA541 /* RectangleF.hpp */,
@@ -2613,9 +2621,6 @@
 				CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */,
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF1918A81A9E5B2C00BF433C /* MutableVector2F.cpp */,
-				CF1918A91A9E5B2C00BF433C /* MutableVector2F.hpp */,
-				CF49512B1E46316B00D10A70 /* MutableAngle.cpp */,
-				CF49512C1E46316B00D10A70 /* MutableAngle.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -3508,6 +3513,7 @@
 				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */,
+				CF45E1861E85519C00C36699 /* Ray.cpp in Sources */,
 				CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */,
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
 				44131129190A504600C83A00 /* NullStorage.cpp in Sources */,

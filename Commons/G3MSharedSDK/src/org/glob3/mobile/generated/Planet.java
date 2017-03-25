@@ -26,6 +26,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class Sector;
 //class CoordinateSystem;
+//class Ray;
 
 
 public abstract class Planet
@@ -85,20 +86,24 @@ public abstract class Planet
 
   public abstract double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2);
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  public final Vector3D closestIntersection(Vector3D origin, Vector3D direction)
   {
-    if (pos.isNan() || ray.isNan())
+    if (origin.isNan() || direction.isNan())
     {
       return Vector3D.NANV;
     }
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
+    java.util.ArrayList<Double> distances = intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
     if (distances.isEmpty())
     {
       return Vector3D.NANV;
     }
-    return pos.add(ray.times(distances.get(0)));
+    return origin.add(direction.times(distances.get(0)));
   }
 
+  public final Vector3D closestIntersection(Ray ray)
+  {
+    return closestIntersection(ray._origin, ray._direction);
+  }
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height);
 
@@ -131,15 +136,15 @@ public abstract class Planet
 
   public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
 
-  public final CoordinateSystem getCoordinateSystemAt(Geodetic3D geo)
+  public final CoordinateSystem getCoordinateSystemAt(Geodetic3D position)
   {
   
-    Vector3D origin = toCartesian(geo);
-    Vector3D z = centricSurfaceNormal(origin);
-    Vector3D y = getNorth().projectionInPlane(z);
-    Vector3D x = y.cross(z);
+    final Vector3D origin = toCartesian(position);
+    final Vector3D z = centricSurfaceNormal(origin);
+    final Vector3D y = getNorth().projectionInPlane(z);
+    final Vector3D x = y.cross(z);
   
-    return new CoordinateSystem(x,y,z, origin);
+    return new CoordinateSystem(x, y, z, origin);
   }
 
   public abstract String getType();

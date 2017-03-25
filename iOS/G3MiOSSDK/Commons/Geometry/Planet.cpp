@@ -14,7 +14,7 @@
 #include "Plane.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
-
+#include "Ray.hpp"
 
 MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
   return createGeodeticTransformMatrix(position._latitude,
@@ -22,14 +22,14 @@ MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& positio
                                        position._height);
 }
 
-CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
+CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& position) const {
 
-  Vector3D origin = toCartesian(geo);
-  Vector3D z = centricSurfaceNormal(origin);
-  Vector3D y = getNorth().projectionInPlane(z);
-  Vector3D x = y.cross(z);
+  const Vector3D origin = toCartesian(position);
+  const Vector3D z = centricSurfaceNormal(origin);
+  const Vector3D y = getNorth().projectionInPlane(z);
+  const Vector3D x = y.cross(z);
 
-  return CoordinateSystem(x,y,z, origin);
+  return CoordinateSystem(x, y, z, origin);
 }
 
 std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
@@ -44,15 +44,20 @@ std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                 direction.x(), direction.y(), direction.z());
 }
 
-Vector3D Planet::closestIntersection(const Vector3D& pos,
-                                     const Vector3D& ray) const {
-  if (pos.isNan() || ray.isNan()) {
+const Vector3D Planet::closestIntersection(const Ray& ray) const {
+  return closestIntersection(ray._origin,
+                             ray._direction);
+}
+
+const Vector3D Planet::closestIntersection(const Vector3D& origin,
+                                           const Vector3D& direction) const {
+  if (origin.isNan() || direction.isNan()) {
     return Vector3D::NANV;
   }
-  std::vector<double> distances = intersectionsDistances(pos._x, pos._y, pos._z,
-                                                         ray._x, ray._y, ray._z);
+  std::vector<double> distances = intersectionsDistances(origin._x,    origin._y,    origin._z,
+                                                         direction._x, direction._y, direction._z);
   if (distances.empty()) {
     return Vector3D::NANV;
   }
-  return pos.add(ray.times(distances[0]));
+  return origin.add(direction.times(distances[0]));
 }
