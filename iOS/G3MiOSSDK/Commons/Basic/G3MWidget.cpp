@@ -44,6 +44,8 @@
 #include "ErrorHandling.hpp"
 #include "GLState.hpp"
 #include "FrustumPolicy.hpp"
+#include "FrustumData.hpp"
+
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -552,7 +554,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
       
       //Shortening Frustum
       ((FixedFrustumPolicy*)_nearFrustumPolicy)->setRange(0.0001,
-                                                          _currentCamera->getFrustumData()._znear);
+                                                          _currentCamera->getFrustumData()->_zNear);
       _currentCamera->setFrustumPolicy(_nearFrustumPolicy);
       _gl->clearDepthBuffer();
       _nearFrustumRenderer->render(_renderContext, _rootState);

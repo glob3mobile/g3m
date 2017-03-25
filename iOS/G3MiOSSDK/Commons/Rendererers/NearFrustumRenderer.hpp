@@ -9,36 +9,30 @@
 #ifndef NearFrustumRenderer_hpp
 #define NearFrustumRenderer_hpp
 
-#include <stdio.h>
-
 #include "DefaultRenderer.hpp"
-#include "RenderState.hpp"
-#include "MeshRenderer.hpp"
-
-#include <vector>
+class MeshRenderer;
 
 
 class NearFrustumRenderer : public DefaultRenderer {
 private:
   MeshRenderer* _mr;
+
 public:
-  NearFrustumRenderer():_mr(new MeshRenderer()){}
-  
-  ~NearFrustumRenderer(){delete _mr;}
-  
-  void onChangedContext(){}
-  
-  RenderState getRenderState(const G3MRenderContext* rc){
-    return RenderState::ready();
-  }
-  
+  NearFrustumRenderer();
+
+  ~NearFrustumRenderer();
+
+  void onChangedContext();
+
+  RenderState getRenderState(const G3MRenderContext* rc);
+
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width,
-                             int height){}
-  
+                             int height);
+
   void render(const G3MRenderContext* rc,
               GLState* glState);
-  
+
 };
 
-#endif /* NearFrustumRenderer_hpp */
+#endif

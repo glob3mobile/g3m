@@ -19,6 +19,7 @@
 #include "Geodetic3D.hpp"
 #include "IMathUtils.hpp"
 #include "ILogger.hpp"
+#include "FrustumData.hpp"
 
 
 MutableMatrix44D MutableMatrix44D::TEMP1;
@@ -342,9 +343,9 @@ MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const 
 }
 
 MutableMatrix44D MutableMatrix44D::createProjectionMatrix(const FrustumData& data) {
-  return createProjectionMatrix(data._left, data._right,
+  return createProjectionMatrix(data._left,   data._right,
                                 data._bottom, data._top,
-                                data._znear, data._zfar);
+                                data._zNear,  data._zFar);
 }
 
 MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right,

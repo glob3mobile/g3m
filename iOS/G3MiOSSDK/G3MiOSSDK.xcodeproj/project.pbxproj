@@ -285,6 +285,9 @@
 		CF74A8881DDA069D000767A3 /* Projection.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF74A8801DDA010B000767A3 /* Projection.hpp */; };
 		CF74A8891DDA069D000767A3 /* WebMercatorProjection.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF74A8831DDA02DC000767A3 /* WebMercatorProjection.hpp */; };
 		CF74A88A1DDA069D000767A3 /* WGS84Projetion.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF74A8861DDA0626000767A3 /* WGS84Projetion.hpp */; };
+		CF7529631E867FF0003C9605 /* FrustumData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7529611E867FF0003C9605 /* FrustumData.cpp */; };
+		CF7529641E868089003C9605 /* FrustumData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7529621E867FF0003C9605 /* FrustumData.hpp */; };
+		CF7529651E868089003C9605 /* Ray.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF45E1851E85519C00C36699 /* Ray.hpp */; };
 		CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */; };
 		CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */; };
 		CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */; };
@@ -857,6 +860,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF7529641E868089003C9605 /* FrustumData.hpp in CopyFiles */,
+				CF7529651E868089003C9605 /* Ray.hpp in CopyFiles */,
 				D81827801E8550F800034382 /* NearFrustumRenderer.hpp in CopyFiles */,
 				CF93F4171E57575C00E97FF1 /* TransformableMesh.hpp in CopyFiles */,
 				CF93F4121E574C9300E97FF1 /* SceneJSMeshParser.hpp in CopyFiles */,
@@ -1665,6 +1670,8 @@
 		CF74A8831DDA02DC000767A3 /* WebMercatorProjection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WebMercatorProjection.hpp; path = Commons/Basic/WebMercatorProjection.hpp; sourceTree = "<group>"; };
 		CF74A8851DDA0626000767A3 /* WGS84Projetion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WGS84Projetion.cpp; path = Commons/Basic/WGS84Projetion.cpp; sourceTree = "<group>"; };
 		CF74A8861DDA0626000767A3 /* WGS84Projetion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WGS84Projetion.hpp; path = Commons/Basic/WGS84Projetion.hpp; sourceTree = "<group>"; };
+		CF7529611E867FF0003C9605 /* FrustumData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrustumData.cpp; path = Commons/Geometry/FrustumData.cpp; sourceTree = "<group>"; };
+		CF7529621E867FF0003C9605 /* FrustumData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrustumData.hpp; path = Commons/Geometry/FrustumData.hpp; sourceTree = "<group>"; };
 		CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrTileLODTester.cpp; path = Commons/Rendererers/OrTileLODTester.cpp; sourceTree = "<group>"; };
 		CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrTileLODTester.hpp; path = Commons/Rendererers/OrTileLODTester.hpp; sourceTree = "<group>"; };
 		CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapBoo.cpp; path = Commons/Basic/MapBoo.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2557,6 +2564,8 @@
 				FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
 				CC0DFA6D178B49E6001F6355 /* Frustum.hpp */,
+				CF7529611E867FF0003C9605 /* FrustumData.cpp */,
+				CF7529621E867FF0003C9605 /* FrustumData.hpp */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,
 				383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */,
 				383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */,
@@ -3441,6 +3450,7 @@
 				D874D08E18900B1600610F85 /* SingleBILElevationDataProvider.cpp in Sources */,
 				CF3E266D1E5353B700A3FEC6 /* CameraEventGesture.cpp in Sources */,
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
+				CF7529631E867FF0003C9605 /* FrustumData.cpp in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */,
 				CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */,

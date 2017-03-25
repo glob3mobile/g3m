@@ -118,7 +118,7 @@ public:
 
   ~Camera();
 
-  void copyFrom(const Camera &c,
+  void copyFrom(const Camera& that,
                 bool  ignoreTimestamp);
 
   void resizeViewport(int width, int height);
@@ -294,7 +294,7 @@ public:
 
   void getVerticesOfZNearPlane(IFloatBuffer* vertices) const;
 
-  FrustumData getFrustumData() const;
+  const FrustumData* getFrustumData() const;
 
   const Planet* getPlanet() const {
     return _planet;
@@ -364,7 +364,7 @@ private:
   MutableVector3D         _normalizedPosition;
 
   mutable CameraDirtyFlags _dirtyFlags;
-  mutable FrustumData      _frustumData;
+  mutable FrustumData*     _frustumData;
   mutable MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelMatrix;
   mutable MutableMatrix44D _modelViewMatrix;
@@ -402,8 +402,6 @@ private:
     }
   }
 
-
-
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
@@ -417,25 +415,12 @@ private:
   Geodetic3D* _getGeodeticCenterOfView() const;
 
   // camera frustum
-  Frustum*  getFrustum() const {
-    if (_dirtyFlags._frustumDirty) {
-      _dirtyFlags._frustumDirty = false;
-      delete _frustum;
-      _frustum = new Frustum(getFrustumData());
-    }
-    return _frustum;
-  }
+  Frustum* getFrustum() const;
 
-  FrustumData calculateFrustumData() const;
+  FrustumData* calculateFrustumData() const;
 
   // opengl projection matrix
-  const MutableMatrix44D& getProjectionMatrix() const {
-    if (_dirtyFlags._projectionMatrixDirty) {
-      _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(getFrustumData()));
-    }
-    return _projectionMatrix;
-  }
+  const MutableMatrix44D& getProjectionMatrix() const;
 
   // Model matrix, computed in CPU in double precision
   const MutableMatrix44D& getModelMatrix() const {
