@@ -127,7 +127,7 @@ _position(0, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _dirtyFlags(),
-_frustumData(),
+_frustumData(NULL),
 _projectionMatrix(),
 _modelMatrix(),
 _modelViewMatrix(),
@@ -529,7 +529,7 @@ void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
   Vector3D pos = getCartesianPosition();
   Vector3D vd = getViewDirection();
 
-  //  const float zRange = getFrustumData()._zfar - getFrustumData()._zNear;
+  //  const float zRange = getFrustumData()._zFar - getFrustumData()._zNear;
   //  float zOffset = zRange * 1e-6;
   //  if (zOffset < 1.0f) {
   //    zOffset = 1.0f;

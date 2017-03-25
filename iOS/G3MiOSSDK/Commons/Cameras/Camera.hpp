@@ -299,15 +299,13 @@ public:
   const Planet* getPlanet() const {
     return _planet;
   }
-  
+
   void setFrustumPolicy(const FrustumPolicy* fp){
     _frustumPolicy = fp;
     _dirtyFlags.setAllDirty();
   }
 
 private:
-
-  const FrustumPolicy* _frustumPolicy;
 
   Camera(const Camera &that);
 
@@ -336,6 +334,13 @@ private:
   //  _timestamp(that._timestamp)
   //  {
   //  }
+
+#ifdef C_CODE
+  const FrustumPolicy* _frustumPolicy;
+#endif
+#ifdef JAVA_CODE
+  private FrustumPolicy _frustumPolicy;
+#endif
 
   mutable long long _timestamp;
 
@@ -439,7 +444,7 @@ private:
     }
     return _modelViewMatrix;
   }
-
+  
 };
 
 #endif

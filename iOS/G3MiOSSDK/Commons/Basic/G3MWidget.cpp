@@ -72,28 +72,35 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-class FixedFrustumPolicy: public FrustumPolicy{
+class FixedFrustumPolicy : public FrustumPolicy {
 private:
-  double _znear;
-  double _zfar;
+  double _zNear;
+  double _zFar;
+
 public:
-  FixedFrustumPolicy(double znear, double zfar):
-  _znear(znear),
-  _zfar(zfar){}
-  
-  void setRange(double znear, double zfar){
-    _znear = znear;
-    _zfar = zfar;
+  FixedFrustumPolicy(double zNear,
+                     double zFar) :
+  _zNear(zNear),
+  _zFar(zFar)
+  {
   }
-  
-  const Vector2D calculateFrustumZNearAndZFar(const Camera& camera) const{
-    return Vector2D(_znear, _zfar);
+
+  void setRange(double zNear,
+                double zFar)
+  {
+    _zNear = zNear;
+    _zFar  = zFar;
   }
-  
-  const FrustumPolicy* copy() const{
-    new FixedFrustumPolicy(_znear, _zfar);
+
+  const Vector2D calculateFrustumZNearAndZFar(const Camera& camera) const {
+    return Vector2D(_zNear, _zFar);
+  }
+
+  const FrustumPolicy* copy() const {
+    return new FixedFrustumPolicy(_zNear, _zFar);
   }
 };
+
 
 G3MWidget::G3MWidget(GL*                                  gl,
                      IStorage*                            storage,

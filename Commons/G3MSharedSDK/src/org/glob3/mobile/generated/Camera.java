@@ -10,7 +10,7 @@ public class Camera
      _center = new MutableVector3D(0, 0, 0);
      _up = new MutableVector3D(0, 0, 1);
      _dirtyFlags = new CameraDirtyFlags();
-     _frustumData = new FrustumData();
+     _frustumData = null;
      _projectionMatrix = new MutableMatrix44D();
      _modelMatrix = new MutableMatrix44D();
      _modelViewMatrix = new MutableMatrix44D();
@@ -43,8 +43,9 @@ public class Camera
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
-    if (_frustumPolicy != null)
-       _frustumPolicy.dispose();
+    _frustumPolicy = null;
+    if (_frustumData != null)
+       _frustumData.dispose();
   }
 
   public final void copyFrom(Camera that, boolean ignoreTimestamp)
@@ -69,7 +70,9 @@ public class Camera
   
       _dirtyFlags.copyFrom(that._dirtyFlags);
   
-      _frustumData = that._frustumData;
+      if (_frustumData != null)
+         _frustumData.dispose();
+      _frustumData = new FrustumData(that._frustumData);
   
       _projectionMatrix.copyValue(that._projectionMatrix);
       _modelMatrix.copyValue(that._modelMatrix);
@@ -485,7 +488,7 @@ public class Camera
   {
     // this implementation is not right exact, but it's faster.
     final double z = sphere._center.distanceTo(getCartesianPosition());
-    final double rWorld = sphere._radius * _frustumData._znear / z;
+    final double rWorld = sphere._radius * _frustumData._zNear / z;
     final double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
     return DefineConstants.PI * rScreen * rScreen;
   }
@@ -570,7 +573,7 @@ public class Camera
     _ray1.putSub(_position, point1);
     final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
     final FrustumData frustumData = getFrustumData();
-    final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
+    final double distanceInMeters = frustumData._zNear * IMathUtils.instance().tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
@@ -659,7 +662,7 @@ public class Camera
     Vector3D pos = getCartesianPosition();
     Vector3D vd = getViewDirection();
   
-    //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
+    //  const float zRange = getFrustumData()._zFar - getFrustumData()._zNear;
     //  float zOffset = zRange * 1e-6;
     //  if (zOffset < 1.0f) {
     //    zOffset = 1.0f;
@@ -680,6 +683,8 @@ public class Camera
     if (_dirtyFlags._frustumDataDirty)
     {
       _dirtyFlags._frustumDataDirty = false;
+      if (_frustumData != null)
+         _frustumData.dispose();
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
@@ -696,8 +701,6 @@ public class Camera
     _dirtyFlags.setAllDirty();
   }
 
-
-  private final FrustumPolicy _frustumPolicy;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Camera(Camera that);
@@ -728,6 +731,8 @@ public class Camera
   //  {
   //  }
 
+  private FrustumPolicy _frustumPolicy;
+
   private long _timestamp;
 
   private MutableVector3D _ray0 = new MutableVector3D();
@@ -751,7 +756,7 @@ public class Camera
   private MutableVector3D _normalizedPosition = new MutableVector3D();
 
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
-  private FrustumData _frustumData = new FrustumData();
+  private FrustumData _frustumData;
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
@@ -796,8 +801,6 @@ public class Camera
       _dirtyFlags.setAllDirty();
     }
   }
-
-
 
   // intersection of view direction with globe in(x,y,z)
   private MutableVector3D _getCartesianCenterOfView()

@@ -791,30 +791,30 @@ public class MutableMatrix44D
   
   }
 
-  public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+  public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double zNear, double zFar)
   {
     // set frustum MutableMatrix44D in double
     final double rl = right - left;
     final double tb = top - bottom;
-    final double fn = zfar - znear;
+    final double fn = zFar - zNear;
   
-    return new MutableMatrix44D(2 * znear / rl, 0, 0, 0, 0, 2 * znear / tb, 0, 0, (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1, 0, 0, -2 * zfar / fn * znear, 0);
+    return new MutableMatrix44D(2 * zNear / rl, 0, 0, 0, 0, 2 * zNear / tb, 0, 0, (right + left) / rl, (top + bottom) / tb, -(zFar + zNear) / fn, -1, 0, 0, -2 * zFar / fn * zNear, 0);
   
   }
 
   public static MutableMatrix44D createProjectionMatrix(FrustumData data)
   {
-    return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
+    return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._zNear, data._zFar);
   }
 
-  public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+  public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double zNear, double zFar)
   {
     // set frustum MutableMatrix44D in double
     final double rl = right - left;
     final double tb = top - bottom;
-    final double fn = zfar - znear;
+    final double fn = zFar - zNear;
   
-    return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
+    return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zFar+zNear) / fn, 1);
   }
 
   public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ)

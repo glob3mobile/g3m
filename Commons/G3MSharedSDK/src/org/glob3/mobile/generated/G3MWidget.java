@@ -1039,7 +1039,7 @@ public class G3MWidget implements ChangedRendererInfoListener
         }
   
         //Shortening Frustum
-        ((FixedFrustumPolicy)_nearFrustumPolicy).setRange(0.0001, _currentCamera.getFrustumData()._znear);
+        ((FixedFrustumPolicy)_nearFrustumPolicy).setRange(0.0001, _currentCamera.getFrustumData()._zNear);
         _currentCamera.setFrustumPolicy(_nearFrustumPolicy);
         _gl.clearDepthBuffer();
         _nearFrustumRenderer.render(_renderContext, _rootState);

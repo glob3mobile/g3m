@@ -1,27 +1,28 @@
 package org.glob3.mobile.generated;
 public class FixedFrustumPolicy extends FrustumPolicy
 {
-  private double _znear;
-  private double _zfar;
-  public FixedFrustumPolicy(double znear, double zfar)
+  private double _zNear;
+  private double _zFar;
+
+  public FixedFrustumPolicy(double zNear, double zFar)
   {
-     _znear = znear;
-     _zfar = zfar;
+     _zNear = zNear;
+     _zFar = zFar;
   }
 
-  public final void setRange(double znear, double zfar)
+  public final void setRange(double zNear, double zFar)
   {
-    _znear = znear;
-    _zfar = zfar;
+    _zNear = zNear;
+    _zFar = zFar;
   }
 
   public final Vector2D calculateFrustumZNearAndZFar(Camera camera)
   {
-    return new Vector2D(_znear, _zfar);
+    return new Vector2D(_zNear, _zFar);
   }
 
   public final FrustumPolicy copy()
   {
-    new FixedFrustumPolicy(_znear, _zfar);
+    return new FixedFrustumPolicy(_zNear, _zFar);
   }
 }

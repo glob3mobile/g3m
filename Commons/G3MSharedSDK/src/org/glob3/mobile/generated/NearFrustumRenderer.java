@@ -16,13 +16,13 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
+//class MeshRenderer;
 
 
 public class NearFrustumRenderer extends DefaultRenderer
 {
   private MeshRenderer _mr;
+
   public NearFrustumRenderer()
   {
      _mr = new MeshRenderer();
@@ -30,8 +30,9 @@ public class NearFrustumRenderer extends DefaultRenderer
 
   public void dispose()
   {
-     if (_mr != null)
-        _mr.dispose();
+    super.dispose();
+    if (_mr != null)
+       _mr.dispose();
   }
 
   public final void onChangedContext()
@@ -53,30 +54,23 @@ public class NearFrustumRenderer extends DefaultRenderer
     final Camera cam = rc.getCurrentCamera();
     CoordinateSystem camCS = cam.getCameraCoordinateSystem();
   
-  //  Vector3D front2 = camCS._y;
-  //  Vector3D up2 = camCS._z;
-  //  Vector3D right2 = camCS._x;
+    final Vector3D up = rc.getPlanet().geodeticSurfaceNormal(cam.getGeodeticPosition());
+    final Vector3D right = camCS._y.cross(up);
+    final Vector3D front = up.cross(right);
   
-    Vector3D up = rc.getPlanet().geodeticSurfaceNormal(cam.getGeodeticPosition());
-    Vector3D right = camCS._y.cross(up);
-    Vector3D front = up.cross(right);
+    final Vector3D controllerDisp = front.scaleToLength(0.7).sub(up.scaleToLength(0.5)).add(right.scaleToLength(0.1));
   
-    Vector3D controllerDisp = front.scaleToLength(0.7).sub(up.scaleToLength(0.5)).add(right.scaleToLength(0.1));
+    final Vector3D origin = cam.getCartesianPosition().add(controllerDisp);
   
-    Vector3D origin = cam.getCartesianPosition().add(controllerDisp);
+    final CoordinateSystem camCS2 = camCS.changeOrigin(origin);
   
-    CoordinateSystem camCS2 = camCS.changeOrigin(origin);
-  
-    Mesh mesh = camCS2.createMesh(1.2, Color.red(), Color.blue(), Color.green());
+    Mesh mesh = camCS2.createMesh(1000000, Color.RED, Color.GREEN, Color.BLUE);
   
     _mr.clearMeshes();
     _mr.addMesh(mesh);
     _mr.render(rc, glState);
   
-    ILogger.instance().logInfo("Frustum %f - %f. Model at: %f meters.", cam.getFrustumData()._znear, cam.getFrustumData()._zfar, camCS._origin.distanceTo(origin));
-  
-  
-  
+    ILogger.instance().logInfo("Frustum %f - %f. Model at: %f meters.", cam.getFrustumData()._zNear, cam.getFrustumData()._zFar, camCS._origin.distanceTo(origin));
   
   }
 
