@@ -41,6 +41,7 @@
 #include "AtmosphereRenderer.hpp"
 #include "DynamicFrustumPolicy.hpp"
 #include "CameraRenderer.hpp"
+#include "NearFrustumRenderer.hpp"
 
 
 IG3MBuilder::IG3MBuilder() :
