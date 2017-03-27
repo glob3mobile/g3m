@@ -9,18 +9,24 @@
 #ifndef NearFrustumRenderer_hpp
 #define NearFrustumRenderer_hpp
 
-#include "DefaultRenderer.hpp"
+#include "Renderer.hpp"
 
 class Camera;
 
 
-class NearFrustumRenderer : public DefaultRenderer {
+class NearFrustumRenderer : public Renderer {
 
 public:
+
   virtual void render(Camera* currentCamera,
                       const G3MRenderContext* rc,
                       GLState* glState) = 0;
 
+  SurfaceElevationProvider* getSurfaceElevationProvider();
+
+  PlanetRenderer* getPlanetRenderer();
+
+  bool isPlanetRenderer();
 
 };
 

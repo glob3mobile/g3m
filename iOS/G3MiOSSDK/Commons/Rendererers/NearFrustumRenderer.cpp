@@ -8,3 +8,15 @@
 
 #include "NearFrustumRenderer.hpp"
 
+
+SurfaceElevationProvider* NearFrustumRenderer::getSurfaceElevationProvider() {
+  return NULL;
+}
+
+PlanetRenderer* NearFrustumRenderer::getPlanetRenderer() {
+  return NULL;
+}
+
+bool NearFrustumRenderer::isPlanetRenderer() {
+  return false;
+}

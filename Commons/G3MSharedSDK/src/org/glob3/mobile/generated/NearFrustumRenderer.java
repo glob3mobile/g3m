@@ -20,10 +20,25 @@ package org.glob3.mobile.generated;
 //class Camera;
 
 
-public abstract class NearFrustumRenderer extends DefaultRenderer
+public abstract class NearFrustumRenderer implements Renderer
 {
+
 
   public abstract void render(Camera currentCamera, G3MRenderContext rc, GLState glState);
 
+  public final SurfaceElevationProvider getSurfaceElevationProvider()
+  {
+    return null;
+  }
+
+  public final PlanetRenderer getPlanetRenderer()
+  {
+    return null;
+  }
+
+  public final boolean isPlanetRenderer()
+  {
+    return false;
+  }
 
 }

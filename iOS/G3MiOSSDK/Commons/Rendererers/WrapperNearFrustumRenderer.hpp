@@ -24,11 +24,33 @@ public:
 
   ~WrapperNearFrustumRenderer();
 
+  void initialize(const G3MContext* context);
+
+  void start(const G3MRenderContext* rc);
+
+  void stop(const G3MRenderContext* rc);
+
+  void onResume(const G3MContext* context);
+
+  void onPause(const G3MContext* context);
+
+  void onDestroy(const G3MContext* context);
+
+  bool isEnable() const;
+
+  void setEnable(bool enable);
+
   RenderState getRenderState(const G3MRenderContext* rc);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width,
                              int height);
+
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent);
+
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
+                                      const size_t rendererID);
 
   void render(Camera* currentCamera,
               const G3MRenderContext* rc,
