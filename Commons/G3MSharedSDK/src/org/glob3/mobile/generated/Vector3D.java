@@ -97,6 +97,12 @@ public class Vector3D
     return _x * _x + _y * _y + _z * _z;
   }
 
+  public final Vector3D scaleToLength(double d)
+  {
+    double l = length();
+    return new Vector3D(_x * d / l, _y * d / l, _z * d / l);
+  }
+
   public final double dot(Vector3D v)
   {
     return _x * v._x + _y * v._y + _z * v._z;

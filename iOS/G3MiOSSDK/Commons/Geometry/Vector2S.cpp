@@ -10,6 +10,6 @@
 
 #include "Vector2I.hpp"
 
-Vector2I Vector2S::asVector2I() const{
+Vector2I Vector2S::asVector2I() const {
   return Vector2I(_x,_y);
 }

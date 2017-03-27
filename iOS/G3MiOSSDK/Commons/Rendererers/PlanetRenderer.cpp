@@ -41,6 +41,7 @@
 #include "GLFeature.hpp"
 #include "Geodetic3D.hpp"
 #include "GLState.hpp"
+#include "FrustumData.hpp"
 
 
 class VisibleSectorListenerEntry {
@@ -879,8 +880,8 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                      _lastCamera->getHeading()._degrees,
                                      _lastCamera->getPitch()._degrees);
         ILogger::instance()->logInfo("Camera zNear=%f zFar=%f",
-                                     _lastCamera->getFrustumData()._znear,
-                                     _lastCamera->getFrustumData()._zfar);
+                                     _lastCamera->getFrustumData()->_zNear,
+                                     _lastCamera->getFrustumData()->_zFar);
 
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
           return true;

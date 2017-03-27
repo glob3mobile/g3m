@@ -346,7 +346,7 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
                                                     const ElevationData* elevationData,
                                                     float verticalExaggeration,
                                                     FloatBufferBuilderFromGeodetic* vertices,
-                                                    TileTessellatorMeshData& tileTessellatorMeshData) const{
+                                                    TileTessellatorMeshData& tileTessellatorMeshData) const {
 
   const IMathUtils* mu = IMathUtils::instance();
   double minElevation = mu->maxDouble();

@@ -43,7 +43,7 @@ IDeviceAttitude::~IDeviceAttitude() {
 }
 
 
-CoordinateSystem IDeviceAttitude::getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const{
+CoordinateSystem IDeviceAttitude::getCameraCoordinateSystemForInterfaceOrientation(InterfaceOrientation orientation) const {
   
   if (_camCSLL == NULL) {
     _camCSPortrait = new CoordinateSystem(Vector3D(1,0,0), //X

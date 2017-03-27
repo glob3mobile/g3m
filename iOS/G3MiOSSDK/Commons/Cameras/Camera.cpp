@@ -23,6 +23,8 @@
 #include "Sector.hpp"
 #include "IFloatBuffer.hpp"
 #include "FrustumPolicy.hpp"
+#include "FrustumData.hpp"
+
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
@@ -45,9 +47,10 @@ Camera::~Camera() {
   delete _geodeticCenterOfView;
   delete _geodeticPosition;
   delete _frustumPolicy;
+  delete _frustumData;
 }
 
-void Camera::copyFrom(const Camera &that,
+void Camera::copyFrom(const Camera& that,
                       bool  ignoreTimestamp) {
 
   if (ignoreTimestamp || (_timestamp != that._timestamp)) {
@@ -69,7 +72,8 @@ void Camera::copyFrom(const Camera &that,
     _dirtyFlags.copyFrom(that._dirtyFlags);
 
 #ifdef C_CODE
-    _frustumData = FrustumData(that._frustumData);
+    delete _frustumData;
+    _frustumData = new FrustumData(*that._frustumData);
 #endif
 #ifdef JAVA_CODE
     _frustumData = that._frustumData;
@@ -128,7 +132,7 @@ _position(0, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _dirtyFlags(),
-_frustumData(),
+_frustumData(NULL),
 _projectionMatrix(),
 _modelMatrix(),
 _modelViewMatrix(),
@@ -393,11 +397,16 @@ void Camera::setPointOfView(const Geodetic3D& center,
   //  _dirtyFlags.setAllDirty();
 }
 
-FrustumData Camera::calculateFrustumData() const {
+FrustumData* Camera::calculateFrustumData() const {
   const Vector2D zNearAndZFar = _frustumPolicy->calculateFrustumZNearAndZFar(*this);
   const double zNear = zNearAndZFar._x;
   const double zFar  = zNearAndZFar._y;
 
+  return calculateFrustumData(zNear, zFar);
+}
+
+FrustumData* Camera::calculateFrustumData(const double zNear,
+                                          const double zFar) const {
   if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
     const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
 
@@ -420,16 +429,16 @@ FrustumData Camera::calculateFrustumData() const {
   const double left   = -right;
   const double top    = _tanHalfVerticalFOV * zNear;
   const double bottom = -top;
-  return FrustumData(left,   right,
-                     bottom, top,
-                     zNear,  zFar);
+  return new FrustumData(left,   right,
+                         bottom, top,
+                         zNear,  zFar);
 }
 
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   // this implementation is not right exact, but it's faster.
   const double z = sphere._center.distanceTo(getCartesianPosition());
-  const double rWorld = sphere._radius * _frustumData._znear / z;
-  const double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
+  const double rWorld = sphere._radius * _frustumData->_zNear / z;
+  const double rScreen = rWorld * _viewPortHeight / (_frustumData->_top - _frustumData->_bottom);
   return PI * rScreen * rScreen;
 }
 
@@ -518,27 +527,20 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   _ray0.putSub(_position, point0);
   _ray1.putSub(_position, point1);
   const double angleInRadians = MutableVector3D::angleInRadiansBetween(_ray1, _ray0);
-  const FrustumData frustumData = getFrustumData();
-  const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
-  return distanceInMeters * _viewPortHeight / frustumData._top;
+  const FrustumData* frustumData = getFrustumData();
+  const double distanceInMeters = frustumData->_zNear * IMathUtils::instance()->tan(angleInRadians/2);
+  return distanceInMeters * _viewPortHeight / frustumData->_top;
 }
 
-void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
+void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const {
+  const Plane zNearPlane = getFrustumInModelCoordinates()->getNearPlane();
 
-  Plane zNearPlane = getFrustumInModelCoordinates()->getNearPlane();
+  const Vector3D pos = getCartesianPosition();
+  const Vector3D vd = getViewDirection();
 
-  Vector3D pos = getCartesianPosition();
-  Vector3D vd = getViewDirection();
-
-  //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
-  //  float zOffset = zRange * 1e-6;
-  //  if (zOffset < 1.0f) {
-  //    zOffset = 1.0f;
-  //  }
-
-  Vector3D c = zNearPlane.intersectionWithRay(pos, vd);//.add(vd.times(zOffset / vd.length()));
-  Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
-  Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 2.0);
+  const Vector3D c     = zNearPlane.intersectionWithRay(pos, vd);
+  const Vector3D up    = getUp().normalized().times(getFrustumData()->_top * 2.0);
+  const Vector3D right = vd.cross(up).normalized().times(getFrustumData()->_right * 2.0);
 
   vertices->putVector3D(0, c.sub(up).sub(right));
   vertices->putVector3D(1, c.add(up).sub(right));
@@ -685,9 +687,10 @@ void Camera::getModelViewMatrixInto(MutableMatrix44D& matrix) const {
   matrix.copyValue(getModelViewMatrix());
 }
 
-FrustumData Camera::getFrustumData() const {
+const FrustumData* Camera::getFrustumData() const {
   if (_dirtyFlags._frustumDataDirty) {
     _dirtyFlags._frustumDataDirty = false;
+    delete _frustumData;
     _frustumData = calculateFrustumData();
   }
   return _frustumData;
@@ -700,4 +703,34 @@ Geodetic3D* Camera::_getGeodeticCenterOfView() const {
     _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
   }
   return _geodeticCenterOfView;
+}
+
+Frustum* Camera::getFrustum() const {
+  if (_dirtyFlags._frustumDirty) {
+    _dirtyFlags._frustumDirty = false;
+    delete _frustum;
+    _frustum = new Frustum(getFrustumData());
+  }
+  return _frustum;
+}
+
+const MutableMatrix44D& Camera::getProjectionMatrix() const {
+  if (_dirtyFlags._projectionMatrixDirty) {
+    _dirtyFlags._projectionMatrixDirty = false;
+    _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(*getFrustumData()));
+  }
+  return _projectionMatrix;
+}
+
+void Camera::setFixedFrustum(const double zNear,
+                             const double zFar) {
+  _dirtyFlags.setAllDirty();
+
+  delete _frustumData;
+  _frustumData = calculateFrustumData(zNear, zFar);
+  _dirtyFlags._frustumDataDirty = false;
+}
+
+void Camera::resetFrustumPolicy() {
+  _dirtyFlags.setAllDirty();
 }
