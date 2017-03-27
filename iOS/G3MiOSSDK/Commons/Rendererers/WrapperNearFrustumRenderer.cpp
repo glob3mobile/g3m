@@ -14,7 +14,9 @@
 #include "GL.hpp"
 
 
-WrapperNearFrustumRenderer::WrapperNearFrustumRenderer(Renderer* renderer) :
+WrapperNearFrustumRenderer::WrapperNearFrustumRenderer(const double zNear,
+                                                       Renderer* renderer) :
+_zNear(zNear),
 _renderer(renderer)
 {
 }
@@ -39,7 +41,7 @@ void WrapperNearFrustumRenderer::onResizeViewportEvent(const G3MEventContext* ec
 void WrapperNearFrustumRenderer::render(Camera* currentCamera,
                                         const G3MRenderContext* rc,
                                         GLState* glState) {
-  currentCamera->setFixedFrustum(0.0001,
+  currentCamera->setFixedFrustum(_zNear,
                                  currentCamera->getFrustumData()->_zNear);
   rc->getGL()->clearDepthBuffer();
   render(rc, glState);

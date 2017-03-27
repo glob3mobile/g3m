@@ -20,11 +20,13 @@ package org.glob3.mobile.generated;
 
 public class WrapperNearFrustumRenderer extends NearFrustumRenderer
 {
+  private final double _zNear;
   private Renderer _renderer;
 
 
-  public WrapperNearFrustumRenderer(Renderer renderer)
+  public WrapperNearFrustumRenderer(double zNear, Renderer renderer)
   {
+     _zNear = zNear;
      _renderer = renderer;
   }
 
@@ -47,7 +49,7 @@ public class WrapperNearFrustumRenderer extends NearFrustumRenderer
 
   public final void render(Camera currentCamera, G3MRenderContext rc, GLState glState)
   {
-    currentCamera.setFixedFrustum(0.0001, currentCamera.getFrustumData()._zNear);
+    currentCamera.setFixedFrustum(_zNear, currentCamera.getFrustumData()._zNear);
     rc.getGL().clearDepthBuffer();
     render(rc, glState);
     currentCamera.resetFrustumPolicy();

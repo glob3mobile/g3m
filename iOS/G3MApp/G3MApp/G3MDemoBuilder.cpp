@@ -98,8 +98,8 @@ void G3MDemoBuilder::build() {
   builder->addRenderer(vectorStreamingRenderer);
 
   //Uncomment to see render debug mesh on top of tiles
-//#warning remove setRenderDebug(true);
-//  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  //#warning remove setRenderDebug(true);
+  //builder->getPlanetRendererBuilder()->setRenderDebug(true);
 
   _initialized = true;
   _model = new G3MDemoModel(_listener,
@@ -113,7 +113,9 @@ void G3MDemoBuilder::build() {
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer);
 
-  builder->setNearFrustumRenderer(new WrapperNearFrustumRenderer());
+  const double zNear = 0.1;
+  Renderer* renderer = new MeshRenderer();
+  builder->setNearFrustumRenderer(new WrapperNearFrustumRenderer(zNear, renderer));
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }

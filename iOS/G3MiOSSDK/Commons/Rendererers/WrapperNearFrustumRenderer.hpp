@@ -14,11 +14,13 @@
 
 class WrapperNearFrustumRenderer : public NearFrustumRenderer {
 private:
+  const double _zNear;
   Renderer* _renderer;
 
 
 public:
-  WrapperNearFrustumRenderer(Renderer* renderer);
+  WrapperNearFrustumRenderer(const double zNear,
+                             Renderer* renderer);
 
   ~WrapperNearFrustumRenderer();
 
