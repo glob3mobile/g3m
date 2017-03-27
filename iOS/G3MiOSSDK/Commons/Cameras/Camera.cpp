@@ -71,8 +71,13 @@ void Camera::copyFrom(const Camera& that,
 
     _dirtyFlags.copyFrom(that._dirtyFlags);
 
+#ifdef C_CODE
     delete _frustumData;
     _frustumData = new FrustumData(*that._frustumData);
+#endif
+#ifdef JAVA_CODE
+    _frustumData = that._frustumData;
+#endif
 
     _projectionMatrix.copyValue(that._projectionMatrix);
     _modelMatrix.copyValue(that._modelMatrix);

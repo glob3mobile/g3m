@@ -71,9 +71,7 @@ public class Camera
   
       _dirtyFlags.copyFrom(that._dirtyFlags);
   
-      if (_frustumData != null)
-         _frustumData.dispose();
-      _frustumData = new FrustumData(that._frustumData);
+      _frustumData = that._frustumData;
   
       _projectionMatrix.copyValue(that._projectionMatrix);
       _modelMatrix.copyValue(that._modelMatrix);
