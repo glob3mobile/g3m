@@ -22,6 +22,7 @@
 #include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
 #include <G3MiOSSDK/VectorStreamingRenderer.hpp>
 #include <G3MiOSSDK/AtmosphereRenderer.hpp>
+#include <G3MiOSSDK/WrapperNearFrustumRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -111,6 +112,8 @@ void G3MDemoBuilder::build() {
                             hudRenderer,
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer);
+
+  builder->setNearFrustumRenderer(new WrapperNearFrustumRenderer());
 
   builder->setInitializationTask(new G3MDemoInitializationTask(_model), true);
 }

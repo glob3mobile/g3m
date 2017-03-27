@@ -657,21 +657,14 @@ public class Camera
 
   public final void getVerticesOfZNearPlane(IFloatBuffer vertices)
   {
+    final Plane zNearPlane = getFrustumInModelCoordinates().getNearPlane();
   
-    Plane zNearPlane = getFrustumInModelCoordinates().getNearPlane();
+    final Vector3D pos = getCartesianPosition();
+    final Vector3D vd = getViewDirection();
   
-    Vector3D pos = getCartesianPosition();
-    Vector3D vd = getViewDirection();
-  
-    //  const float zRange = getFrustumData()._zFar - getFrustumData()._zNear;
-    //  float zOffset = zRange * 1e-6;
-    //  if (zOffset < 1.0f) {
-    //    zOffset = 1.0f;
-    //  }
-  
-    Vector3D c = zNearPlane.intersectionWithRay(pos, vd); //.add(vd.times(zOffset / vd.length()));
-    Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
-    Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 2.0);
+    final Vector3D c = zNearPlane.intersectionWithRay(pos, vd);
+    final Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
+    final Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 2.0);
   
     vertices.putVector3D(0, c.sub(up).sub(right));
     vertices.putVector3D(1, c.add(up).sub(right));
@@ -696,9 +689,18 @@ public class Camera
     return _planet;
   }
 
-  public final void setFrustumPolicy(FrustumPolicy fp)
+  public final void setFixedFrustum(double zNear, double zFar)
   {
-    _frustumPolicy = fp;
+    _dirtyFlags.setAllDirty();
+  
+    if (_frustumData != null)
+       _frustumData.dispose();
+    _frustumData = calculateFrustumData(zNear, zFar);
+    _dirtyFlags._frustumDataDirty = false;
+  }
+
+  public final void resetFrustumPolicy()
+  {
     _dirtyFlags.setAllDirty();
   }
 
@@ -732,7 +734,7 @@ public class Camera
   //  {
   //  }
 
-  private FrustumPolicy _frustumPolicy;
+  private final FrustumPolicy _frustumPolicy;
 
   private long _timestamp;
 
@@ -846,6 +848,10 @@ public class Camera
     final double zNear = zNearAndZFar._x;
     final double zFar = zNearAndZFar._y;
   
+    return calculateFrustumData(zNear, zFar);
+  }
+  private FrustumData calculateFrustumData(double zNear, double zFar)
+  {
     if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;

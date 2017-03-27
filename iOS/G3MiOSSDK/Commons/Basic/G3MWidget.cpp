@@ -44,7 +44,7 @@
 #include "ErrorHandling.hpp"
 #include "GLState.hpp"
 #include "FrustumPolicy.hpp"
-#include "FrustumData.hpp"
+#include "NearFrustumRenderer.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -72,36 +72,6 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-class FixedFrustumPolicy : public FrustumPolicy {
-private:
-  double _zNear;
-  double _zFar;
-
-public:
-  FixedFrustumPolicy(double zNear,
-                     double zFar) :
-  _zNear(zNear),
-  _zFar(zFar)
-  {
-  }
-
-  void setRange(double zNear,
-                double zFar)
-  {
-    _zNear = zNear;
-    _zFar  = zFar;
-  }
-
-  const Vector2D calculateFrustumZNearAndZFar(const Camera& camera) const {
-    return Vector2D(_zNear, _zFar);
-  }
-
-  const FrustumPolicy* copy() const {
-    return new FixedFrustumPolicy(_zNear, _zFar);
-  }
-};
-
-
 G3MWidget::G3MWidget(GL*                                  gl,
                      IStorage*                            storage,
                      IDownloader*                         downloader,
@@ -114,6 +84,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      ProtoRenderer*                       busyRenderer,
                      ErrorRenderer*                       errorRenderer,
                      Renderer*                            hudRenderer,
+                     NearFrustumRenderer*                 nearFrustumRenderer,
                      const Color&                         backgroundColor,
                      const bool                           logFPS,
                      const bool                           logDownloaderStatistics,
@@ -141,6 +112,7 @@ _mainRenderer(mainRenderer),
 _busyRenderer(busyRenderer),
 _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
+_nearFrustumRenderer(nearFrustumRenderer),
 _width(1),
 _height(1),
 _frustumPolicy(frustumPolicy),
@@ -189,9 +161,7 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL),
-_nearFrustumRenderer(new NearFrustumRenderer()),
-_nearFrustumPolicy(new FixedFrustumPolicy(0.1, 10))
+_auxCam(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -200,6 +170,9 @@ _nearFrustumPolicy(new FixedFrustumPolicy(0.1, 10))
   _errorRenderer->initialize(_context);
   if (_hudRenderer != NULL) {
     _hudRenderer->initialize(_context);
+  }
+  if (_nearFrustumRenderer != NULL) {
+    _nearFrustumRenderer->initialize(_context);
   }
   _currentCamera->initialize(_context);
   _nextCamera->initialize(_context);
@@ -243,15 +216,6 @@ _nearFrustumPolicy(new FixedFrustumPolicy(0.1, 10))
                                         _surfaceElevationProvider,
                                         _viewMode,
                                         this);
-
-
-  //#ifdef C_CODE
-  //  delete _rendererState;
-  //  _rendererState = new RenderState( calculateRendererState() );
-  //#endif
-  //#ifdef JAVA_CODE
-  //  _rendererState = calculateRendererState();
-  //#endif
 }
 
 
@@ -267,6 +231,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              ProtoRenderer*                       busyRenderer,
                              ErrorRenderer*                       errorRenderer,
                              Renderer*                            hudRenderer,
+                             NearFrustumRenderer*                 nearFrustumRenderer,
                              const Color&                         backgroundColor,
                              const bool                           logFPS,
                              const bool                           logDownloaderStatistics,
@@ -292,6 +257,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        busyRenderer,
                        errorRenderer,
                        hudRenderer,
+                       nearFrustumRenderer,
                        backgroundColor,
                        logFPS,
                        logDownloaderStatistics,
@@ -318,6 +284,7 @@ G3MWidget::~G3MWidget() {
   delete _busyRenderer;
   delete _errorRenderer;
   delete _hudRenderer;
+  delete _nearFrustumRenderer;
   delete _gl;
   delete _effectsScheduler;
   delete _currentCamera;
@@ -358,10 +325,8 @@ G3MWidget::~G3MWidget() {
   delete _rightEyeCam;
   delete _leftEyeCam;
   delete _auxCam;
+
   delete _frustumPolicy;
-  
-  delete _nearFrustumPolicy;
-  delete _nearFrustumRenderer;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -382,6 +347,12 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
       if (_hudRenderer != NULL) {
         if (_hudRenderer->isEnable()) {
           handled = _hudRenderer->onTouchEvent(&ec, touchEvent);
+        }
+      }
+
+      if (!handled && (_nearFrustumRenderer != NULL)) {
+        if (_nearFrustumRenderer->isEnable()) {
+          handled = _nearFrustumRenderer->onTouchEvent(&ec, touchEvent);
         }
       }
 
@@ -489,6 +460,9 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_hudRenderer != NULL) {
     _hudRenderer->onResizeViewportEvent(&ec, width, height);
   }
+  if (_nearFrustumRenderer != NULL) {
+    _nearFrustumRenderer->onResizeViewportEvent(&ec, width, height);
+  }
 }
 
 
@@ -529,6 +503,16 @@ RenderState G3MWidget::calculateRendererState() {
     }
   }
 
+  if (_nearFrustumRenderer != NULL) {
+    RenderState nearFrustumRendererRenderState = _nearFrustumRenderer->getRenderState(_renderContext);
+    if (nearFrustumRendererRenderState._type == RENDER_ERROR) {
+      return nearFrustumRendererRenderState;
+    }
+    else if (nearFrustumRendererRenderState._type == RENDER_BUSY) {
+      busyFlag = true;
+    }
+  }
+
   RenderState mainRendererRenderState = _mainRenderer->getRenderState(_renderContext);
   if (mainRendererRenderState._type == RENDER_ERROR) {
     return mainRendererRenderState;
@@ -558,14 +542,6 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
       if (_mainRenderer->isEnable()) {
         _mainRenderer->render(_renderContext, _rootState);
       }
-      
-      //Shortening Frustum
-      ((FixedFrustumPolicy*)_nearFrustumPolicy)->setRange(0.0001,
-                                                          _currentCamera->getFrustumData()->_zNear);
-      _currentCamera->setFrustumPolicy(_nearFrustumPolicy);
-      _gl->clearDepthBuffer();
-      _nearFrustumRenderer->render(_renderContext, _rootState);
-      _currentCamera->setFrustumPolicy(_frustumPolicy);
 
       break;
 
@@ -594,15 +570,22 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
     orderedRenderables->clear();
   }
 
-  if (_hudRenderer != NULL) {
-    if (renderStateType == RENDER_READY) {
+  if (renderStateType == RENDER_READY) {
+    if (_nearFrustumRenderer != NULL) {
+      if (_nearFrustumRenderer->isEnable()) {
+        _nearFrustumRenderer->render(_currentCamera,
+                                     _renderContext,
+                                     _rootState);
+      }
+    }
+
+    if (_hudRenderer != NULL) {
       if (_hudRenderer->isEnable()) {
         _hudRenderer->render(_renderContext, _rootState);
       }
     }
   }
-
-
+  
 }
 
 void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateType) {
@@ -845,6 +828,9 @@ void G3MWidget::onPause() {
   if (_hudRenderer != NULL) {
     _hudRenderer->onPause(_context);
   }
+  if (_nearFrustumRenderer != NULL) {
+    _nearFrustumRenderer->onPause(_context);
+  }
 
   _downloader->onPause(_context);
   _storage->onPause(_context);
@@ -863,6 +849,9 @@ void G3MWidget::onResume() {
   if (_hudRenderer != NULL) {
     _hudRenderer->onResume(_context);
   }
+  if (_nearFrustumRenderer != NULL) {
+    _nearFrustumRenderer->onResume(_context);
+  }
 
   _effectsScheduler->onResume(_context);
 
@@ -879,6 +868,9 @@ void G3MWidget::onDestroy() {
   _errorRenderer->onDestroy(_context);
   if (_hudRenderer != NULL) {
     _hudRenderer->onDestroy(_context);
+  }
+  if (_nearFrustumRenderer != NULL) {
+    _nearFrustumRenderer->onDestroy(_context);
   }
 
   _downloader->onDestroy(_context);

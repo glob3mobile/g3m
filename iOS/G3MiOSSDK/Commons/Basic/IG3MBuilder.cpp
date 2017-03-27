@@ -57,6 +57,7 @@ _planetRendererBuilder(NULL),
 _busyRenderer(NULL),
 _errorRenderer(NULL),
 _hudRenderer(NULL),
+_nearFrustumRenderer(NULL),
 _renderers(NULL),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
@@ -95,6 +96,7 @@ IG3MBuilder::~IG3MBuilder() {
   delete _busyRenderer;
   delete _errorRenderer;
   delete _hudRenderer;
+  delete _nearFrustumRenderer;
   delete _backgroundColor;
   delete _initializationTask;
   if (_periodicalTasks) {
@@ -234,6 +236,10 @@ ErrorRenderer* IG3MBuilder::getErrorRenderer() {
 
 Renderer* IG3MBuilder::getHUDRenderer() const {
   return _hudRenderer;
+}
+
+NearFrustumRenderer* IG3MBuilder::getNearFrustumRenderer() const {
+  return _nearFrustumRenderer;
 }
 
 /**
@@ -538,6 +544,18 @@ void IG3MBuilder::setHUDRenderer(Renderer* hudRenderer) {
   _hudRenderer = hudRenderer;
 }
 
+void IG3MBuilder::setNearFrustumRenderer(NearFrustumRenderer* nearFrustumRenderer) {
+  if (_nearFrustumRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: nearFrustumRenderer already initialized");
+    return;
+  }
+  if (!nearFrustumRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: nearFrustumRenderer cannot be NULL");
+    return;
+  }
+  _nearFrustumRenderer = nearFrustumRenderer;
+}
+
 /**
  * Adds a new renderer to the renderers list.
  * The renderers list will be initializated with a default renderers set (empty set at the moment).
@@ -756,6 +774,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getBusyRenderer(),
                                             getErrorRenderer(),
                                             getHUDRenderer(),
+                                            getNearFrustumRenderer(),
                                             *getBackgroundColor(),
                                             getLogFPS(),
                                             getLogDownloaderStatistics(),
@@ -788,6 +807,7 @@ G3MWidget* IG3MBuilder::create() {
   _busyRenderer = NULL;
   _errorRenderer = NULL;
   _hudRenderer = NULL;
+  _nearFrustumRenderer = NULL;
   _initializationTask = NULL;
   delete _periodicalTasks;
   _periodicalTasks = NULL;

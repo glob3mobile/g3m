@@ -15,8 +15,6 @@
 #include "InfoDisplay.hpp"
 #include "ViewMode.hpp"
 
-#include "NearFrustumRenderer.hpp"
-
 class IMathUtils;
 class ILogger;
 class G3MWidget;
@@ -60,6 +58,7 @@ class SurfaceElevationProvider;
 class GLState;
 class G3MEventContext;
 class FrustumPolicy;
+class NearFrustumRenderer;
 
 
 class WidgetUserData {
@@ -112,6 +111,7 @@ public:
                            ProtoRenderer*                       busyRenderer,
                            ErrorRenderer*                       errorRenderer,
                            Renderer*                            hudRenderer,
+                           NearFrustumRenderer*                 nearFrustumRenderer,
                            const Color&                         backgroundColor,
                            const bool                           logFPS,
                            const bool                           logDownloaderStatistics,
@@ -262,22 +262,20 @@ private:
   GL*                 _gl;
   const Planet*       _planet;
 
-  CameraRenderer*     _cameraRenderer;
-  Renderer*           _mainRenderer;
-  ProtoRenderer*      _busyRenderer;
-  ErrorRenderer*      _errorRenderer;
-  Renderer*           _hudRenderer;
-  RenderState*        _rendererState;
-  ProtoRenderer*      _selectedRenderer;
-  
+  CameraRenderer*      _cameraRenderer;
+  Renderer*            _mainRenderer;
+  ProtoRenderer*       _busyRenderer;
+  ErrorRenderer*       _errorRenderer;
+  Renderer*            _hudRenderer;
   NearFrustumRenderer* _nearFrustumRenderer;
+  RenderState*         _rendererState;
+  ProtoRenderer*       _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 
   std::vector<ICameraConstrainer*> _cameraConstrainers;
 
   const FrustumPolicy* _frustumPolicy;
-  const FrustumPolicy* _nearFrustumPolicy;
   Camera*              _currentCamera;
   Camera*              _nextCamera;
 
@@ -353,6 +351,7 @@ private:
             ProtoRenderer*                       busyRenderer,
             ErrorRenderer*                       errorRenderer,
             Renderer*                            hudRenderer,
+            NearFrustumRenderer*                 nearFrustumRenderer,
             const Color&                         backgroundColor,
             const bool                           logFPS,
             const bool                           logDownloaderStatistics,

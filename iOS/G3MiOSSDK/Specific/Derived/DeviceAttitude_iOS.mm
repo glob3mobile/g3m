@@ -16,7 +16,7 @@ _showsDeviceMovementDisplay(showsDeviceMovementDisplay)
   _mm = [[CMMotionManager alloc] init];
 }
 
-void DeviceAttitude_iOS::startTrackingDeviceOrientation() const{
+void DeviceAttitude_iOS::startTrackingDeviceOrientation() const {
   // Tell CoreMotion to show the compass calibration HUD when required
   // to provide true north-referenced attitude
   _mm.showsDeviceMovementDisplay = _showsDeviceMovementDisplay;
@@ -30,16 +30,16 @@ void DeviceAttitude_iOS::startTrackingDeviceOrientation() const{
                                                                                Vector3D::ZERO));
 }
 
-void DeviceAttitude_iOS::stopTrackingDeviceOrientation() const{
+void DeviceAttitude_iOS::stopTrackingDeviceOrientation() const {
   [_mm stopDeviceMotionUpdates];
 }
 
 
-bool DeviceAttitude_iOS::isTracking() const{
+bool DeviceAttitude_iOS::isTracking() const {
   return _mm.deviceMotionActive;
 }
 
-void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const{
+void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMatrix) const {
   
   if (isTracking()) {
     
@@ -58,7 +58,7 @@ void DeviceAttitude_iOS::copyValueOfRotationMatrix(MutableMatrix44D& rotationMat
   }
 }
 
-InterfaceOrientation DeviceAttitude_iOS::getCurrentInterfaceOrientation() const{
+InterfaceOrientation DeviceAttitude_iOS::getCurrentInterfaceOrientation() const {
   
   UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
   

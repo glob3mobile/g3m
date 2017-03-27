@@ -15,7 +15,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class IMathUtils;
 //class ILogger;
 //class G3MWidget;
@@ -59,6 +58,7 @@ package org.glob3.mobile.generated;
 //class GLState;
 //class G3MEventContext;
 //class FrustumPolicy;
+//class NearFrustumRenderer;
 
 
 public class WidgetUserData

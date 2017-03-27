@@ -10,28 +10,17 @@
 #define NearFrustumRenderer_hpp
 
 #include "DefaultRenderer.hpp"
-class MeshRenderer;
+
+class Camera;
 
 
 class NearFrustumRenderer : public DefaultRenderer {
-private:
-  MeshRenderer* _mr;
 
 public:
-  NearFrustumRenderer();
+  virtual void render(Camera* currentCamera,
+                      const G3MRenderContext* rc,
+                      GLState* glState) = 0;
 
-  ~NearFrustumRenderer();
-
-  void onChangedContext();
-
-  RenderState getRenderState(const G3MRenderContext* rc);
-
-  void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width,
-                             int height);
-
-  void render(const G3MRenderContext* rc,
-              GLState* glState);
 
 };
 

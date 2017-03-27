@@ -300,10 +300,10 @@ public:
     return _planet;
   }
 
-  void setFrustumPolicy(const FrustumPolicy* fp){
-    _frustumPolicy = fp;
-    _dirtyFlags.setAllDirty();
-  }
+  void setFixedFrustum(const double zNear,
+                       const double zFar);
+
+  void resetFrustumPolicy();
 
 private:
 
@@ -335,11 +335,7 @@ private:
   //  {
   //  }
 
-#ifdef C_CODE
   const FrustumPolicy* _frustumPolicy;
-#else
-  FrustumPolicy* _frustumPolicy;
-#endif
 
   mutable long long _timestamp;
 
@@ -422,6 +418,8 @@ private:
   Frustum* getFrustum() const;
 
   FrustumData* calculateFrustumData() const;
+  FrustumData* calculateFrustumData(const double zNear,
+                                    const double zFar) const;
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const;

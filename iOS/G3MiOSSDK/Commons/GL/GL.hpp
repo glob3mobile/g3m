@@ -37,7 +37,7 @@ private:
   GLGlobalState* _currentGLGlobalState;
   GPUProgram*    _currentGPUProgram;
 
-  
+
   std::list<const IGLTextureID*> _texturesIDBag;
   long                           _texturesIDAllocationCounter;
 
@@ -75,17 +75,10 @@ public:
     GLGlobalState::initializationAvailable();
 
     _currentGLGlobalState = new GLGlobalState();
-    _clearScreenState = new GLGlobalState();
-
-    //    _currentState = GLGlobalState::newDefault(); //Init after constants
+    _clearScreenState     = new GLGlobalState();
   }
 
   void clearScreen(const Color& color);
-
-  //  void drawElements(int mode,
-  //                    IShortBuffer* indices, const GLGlobalState& state,
-  //                    GPUProgramManager& progManager,
-  //                    const GPUProgramState* gpuState);
 
   void drawElements(int mode,
                     IShortBuffer* indices,
@@ -97,12 +90,6 @@ public:
                     int count,
                     const GLState* state,
                     GPUProgramManager& progManager);
-
-  //  void drawArrays(int mode,
-  //                  int first,
-  //                  int count, const GLGlobalState& state,
-  //                  GPUProgramManager& progManager,
-  //                  const GPUProgramState* gpuState);
 
   void drawArrays(int mode,
                   int first,
@@ -116,10 +103,6 @@ public:
                                     bool generateMipmap);
 
   void deleteTexture(const IGLTextureID* textureID);
-
-  //  void getViewport(int v[]) {
-  //    _nativeGL->getIntegerv(GLVariable::viewport(), v);
-  //  }
 
   ~GL() {
 #ifdef C_CODE
@@ -167,7 +150,6 @@ public:
   }
 
   bool deleteProgram(const GPUProgram* program) {
-
     if (program == NULL) {
       return false;
     }
@@ -259,12 +241,11 @@ public:
     return _currentGLGlobalState;
   }
 
-  void viewport(int x, int y, int width, int height) const{
+  void viewport(int x, int y, int width, int height) const {
     _nativeGL->viewport(x, y, width, height);
   }
   
   void clearDepthBuffer();
-  
   
 };
 

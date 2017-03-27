@@ -38,6 +38,7 @@ class MarksRenderer;
 class ErrorRenderer;
 class InfoDisplay;
 class FrustumPolicy;
+class NearFrustumRenderer;
 
 
 class IG3MBuilder {
@@ -58,6 +59,7 @@ private:
   ProtoRenderer*                    _busyRenderer;
   ErrorRenderer*                    _errorRenderer;
   Renderer*                         _hudRenderer;
+  NearFrustumRenderer*              _nearFrustumRenderer;
   std::vector<Renderer*>*           _renderers;
   GInitializationTask*              _initializationTask;
   bool                              _autoDeleteInitializationTask;
@@ -79,6 +81,7 @@ private:
   ProtoRenderer*                    getBusyRenderer();
   ErrorRenderer*                    getErrorRenderer();
   Renderer*                         getHUDRenderer() const;
+  NearFrustumRenderer*              getNearFrustumRenderer() const;
   Color*                            getBackgroundColor();
   std::vector<Renderer*>*           getRenderers();
   bool                              getLogFPS();
@@ -150,6 +153,8 @@ public:
   void setErrorRenderer(ErrorRenderer* errorRenderer);
 
   void setHUDRenderer(Renderer* hudRenderer);
+
+  void setNearFrustumRenderer(NearFrustumRenderer* nearFrustumRenderer);
 
   void addRenderer(Renderer* renderer);
 

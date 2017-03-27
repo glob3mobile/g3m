@@ -397,6 +397,11 @@ FrustumData* Camera::calculateFrustumData() const {
   const double zNear = zNearAndZFar._x;
   const double zFar  = zNearAndZFar._y;
 
+  return calculateFrustumData(zNear, zFar);
+}
+
+FrustumData* Camera::calculateFrustumData(const double zNear,
+                                          const double zFar) const {
   if (ISNAN(_tanHalfHorizontalFOV) || ISNAN(_tanHalfVerticalFOV)) {
     const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
 
@@ -522,22 +527,15 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   return distanceInMeters * _viewPortHeight / frustumData->_top;
 }
 
-void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const{
+void Camera::getVerticesOfZNearPlane(IFloatBuffer* vertices) const {
+  const Plane zNearPlane = getFrustumInModelCoordinates()->getNearPlane();
 
-  Plane zNearPlane = getFrustumInModelCoordinates()->getNearPlane();
+  const Vector3D pos = getCartesianPosition();
+  const Vector3D vd = getViewDirection();
 
-  Vector3D pos = getCartesianPosition();
-  Vector3D vd = getViewDirection();
-
-  //  const float zRange = getFrustumData()._zFar - getFrustumData()._zNear;
-  //  float zOffset = zRange * 1e-6;
-  //  if (zOffset < 1.0f) {
-  //    zOffset = 1.0f;
-  //  }
-
-  Vector3D c = zNearPlane.intersectionWithRay(pos, vd);//.add(vd.times(zOffset / vd.length()));
-  Vector3D up = getUp().normalized().times(getFrustumData()->_top * 2.0);
-  Vector3D right = vd.cross(up).normalized().times(getFrustumData()->_right * 2.0);
+  const Vector3D c     = zNearPlane.intersectionWithRay(pos, vd);
+  const Vector3D up    = getUp().normalized().times(getFrustumData()->_top * 2.0);
+  const Vector3D right = vd.cross(up).normalized().times(getFrustumData()->_right * 2.0);
 
   vertices->putVector3D(0, c.sub(up).sub(right));
   vertices->putVector3D(1, c.add(up).sub(right));
@@ -717,4 +715,17 @@ const MutableMatrix44D& Camera::getProjectionMatrix() const {
     _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(*getFrustumData()));
   }
   return _projectionMatrix;
+}
+
+void Camera::setFixedFrustum(const double zNear,
+                             const double zFar) {
+  _dirtyFlags.setAllDirty();
+
+  delete _frustumData;
+  _frustumData = calculateFrustumData(zNear, zFar);
+  _dirtyFlags._frustumDataDirty = false;
+}
+
+void Camera::resetFrustumPolicy() {
+  _dirtyFlags.setAllDirty();
 }

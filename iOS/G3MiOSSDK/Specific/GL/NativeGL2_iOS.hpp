@@ -576,7 +576,7 @@ public:
     glDepthMask(v);
   }
   
-  void viewport(int x, int y, int width, int height) const{
+  void viewport(int x, int y, int width, int height) const {
     glViewport(x, y, width, height);
   }
   
