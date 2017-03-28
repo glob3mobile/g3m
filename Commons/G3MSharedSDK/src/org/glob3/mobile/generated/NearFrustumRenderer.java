@@ -24,6 +24,8 @@ public abstract class NearFrustumRenderer implements Renderer
 {
 
 
+  public abstract void render(G3MRenderContext rc, GLState glState);
+
   public abstract void render(Camera currentCamera, G3MRenderContext rc, GLState glState);
 
   public final SurfaceElevationProvider getSurfaceElevationProvider()
