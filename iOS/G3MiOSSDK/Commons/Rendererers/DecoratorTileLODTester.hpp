@@ -9,7 +9,7 @@
 #ifndef DecoratorTileLODTester_hpp
 #define DecoratorTileLODTester_hpp
 
-#include "TileLoDTester.hpp"
+#include "TileLODTester.hpp"
 
 
 class DecoratorTileLODTester : public TileLODTester {
