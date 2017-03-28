@@ -1073,6 +1073,7 @@ void G3MWidget::changeToFixedFrustum(double zNear, double zFar){
     case STEREO:
       _leftEyeCam->setFixedFrustum(zNear, zFar);
       _rightEyeCam->setFixedFrustum(zNear, zFar);
+      _currentCamera->setFixedFrustum(zNear, zFar);
       break;
     default:
       THROW_EXCEPTION("WRONG VIEW MODE :: changeToFixedFrustum");
@@ -1087,6 +1088,7 @@ void G3MWidget::resetFrustumPolicy(){
     case STEREO:
       _leftEyeCam->resetFrustumPolicy();
       _rightEyeCam->resetFrustumPolicy();
+      _currentCamera->resetFrustumPolicy();
       break;
     default:
       THROW_EXCEPTION("WRONG VIEW MODE :: resetFrustumPolicy");
