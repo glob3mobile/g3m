@@ -613,7 +613,8 @@ void G3MWidget::rawRenderStereoParallelAxis(const RenderState_Type renderStateTy
       const Vector3D camPos = _currentCamera->getCartesianPosition();
       const Vector3D camCenter = _currentCamera->getCenter();
       const Vector3D eyesDirection = _currentCamera->getUp().cross(_currentCamera->getViewDirection()).normalized();
-      const double halfEyesSeparation = 0.07 / 2.0;
+//      const double halfEyesSeparation = 0.07 / 2.0;
+      const double halfEyesSeparation = 0.001;
       const Vector3D up = _currentCamera->getUp();
 
       const Angle hFOV_2 = _currentCamera->getHorizontalFOV().times(0.5);
