@@ -21,10 +21,6 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState) = 0;
 
-  virtual void render(Camera* currentCamera,
-                      const G3MRenderContext* rc,
-                      GLState* glState) = 0;
-
   SurfaceElevationProvider* getSurfaceElevationProvider();
 
   PlanetRenderer* getPlanetRenderer();

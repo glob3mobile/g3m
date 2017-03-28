@@ -12,6 +12,7 @@
 #include "FrustumData.hpp"
 #include "G3MRenderContext.hpp"
 #include "GL.hpp"
+#include "G3MWidget.hpp"
 
 
 WrapperNearFrustumRenderer::WrapperNearFrustumRenderer(const double zNear,
@@ -77,35 +78,11 @@ void WrapperNearFrustumRenderer::setChangedRendererInfoListener(ChangedRendererI
 
 }
 
-void WrapperNearFrustumRenderer::render(Camera* currentCamera,
-                                        const G3MRenderContext* rc,
-                                        GLState* glState) {
-  currentCamera->setFixedFrustum(_zNear,
-                                 currentCamera->getFrustumData()->_zNear);
-  rc->getGL()->clearDepthBuffer();
-  render(rc, glState);
-  currentCamera->resetFrustumPolicy();
-}
-
 void WrapperNearFrustumRenderer::render(const G3MRenderContext* rc,
                                         GLState* glState) {
-//  const Camera* cam = rc->getCurrentCamera();
-//  const CoordinateSystem camCS = cam->getCameraCoordinateSystem();
-//
-//  const Vector3D up    = rc->getPlanet()->geodeticSurfaceNormal(cam->getGeodeticPosition());
-//  const Vector3D right = camCS._y.cross(up);
-//  const Vector3D front = up.cross(right);
-//
-//  const Vector3D controllerDisp = front.scaleToLength(0.7).sub(up.scaleToLength(0.5)).add(right.scaleToLength(0.1));
-//
-//  const Vector3D origin = cam->getCartesianPosition().add(controllerDisp);
-//
-//  const CoordinateSystem camCS2 = camCS.changeOrigin(origin);
-//
-//  Mesh* mesh = camCS2.createMesh(1000000, Color::RED, Color::GREEN, Color::BLUE);
-//
-//  _meshRenderer->clearMeshes();
-//  _meshRenderer->addMesh(mesh);
-
+  rc->getWidget()->changeToFixedFrustum(_zNear,
+                                        rc->getCurrentCamera()->getFrustumData()->_zNear);
+  rc->getGL()->clearDepthBuffer();
   _renderer->render(rc, glState);
+  rc->getWidget()->resetFrustumPolicy();
 }
