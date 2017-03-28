@@ -11,7 +11,8 @@
 
 #include "Renderer.hpp"
 
-class Camera;
+class FrustumData;
+class FrustumPolicyHandler;
 
 
 class NearFrustumRenderer : public Renderer {
@@ -21,7 +22,8 @@ public:
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState) = 0;
 
-  virtual void render(Camera* currentCamera,
+  virtual void render(const FrustumData* currentFrustumData,
+                      FrustumPolicyHandler* handler,
                       const G3MRenderContext* rc,
                       GLState* glState) = 0;
 

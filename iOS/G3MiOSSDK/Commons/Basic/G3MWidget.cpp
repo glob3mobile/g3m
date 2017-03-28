@@ -573,7 +573,8 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
   if (renderStateType == RENDER_READY) {
     if (_nearFrustumRenderer != NULL) {
       if (_nearFrustumRenderer->isEnable()) {
-        _nearFrustumRenderer->render(_currentCamera,
+        _nearFrustumRenderer->render(_currentCamera->getFrustumData(),
+                                     this,
                                      _renderContext,
                                      _rootState);
       }
@@ -1063,5 +1064,36 @@ void G3MWidget::setViewMode(ViewMode viewMode) {
     _renderContext->setViewMode(_viewMode);
     
     onResizeViewportEvent(_width, _height);
+  }
+}
+
+void G3MWidget::changeToFixedFrustum(double zNear,
+                                     double zFar) {
+  switch (_viewMode) {
+    case MONO:
+      _currentCamera->setFixedFrustum(zNear, zFar);
+      break;
+    case STEREO:
+      _leftEyeCam->setFixedFrustum(zNear, zFar);
+      _rightEyeCam->setFixedFrustum(zNear, zFar);
+      _currentCamera->setFixedFrustum(zNear, zFar);
+      break;
+    default:
+      THROW_EXCEPTION("WRONG VIEW MODE :: changeToFixedFrustum");
+  }
+}
+
+void G3MWidget::resetFrustumPolicy() {
+  switch (_viewMode) {
+    case MONO:
+      _currentCamera->resetFrustumPolicy();
+      break;
+    case STEREO:
+      _leftEyeCam->resetFrustumPolicy();
+      _rightEyeCam->resetFrustumPolicy();
+      _currentCamera->resetFrustumPolicy();
+      break;
+    default:
+      THROW_EXCEPTION("WRONG VIEW MODE :: resetFrustumPolicy");
   }
 }

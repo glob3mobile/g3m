@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated;
-public class G3MWidget implements ChangedRendererInfoListener
+public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHandler
 {
 
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IDeviceAttitude devAttitude, IDeviceLocation devLocation)
@@ -731,6 +731,41 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
+  public final void changeToFixedFrustum(double zNear, double zFar)
+  {
+    switch (_viewMode)
+    {
+      case MONO:
+        _currentCamera.setFixedFrustum(zNear, zFar);
+        break;
+      case STEREO:
+        _leftEyeCam.setFixedFrustum(zNear, zFar);
+        _rightEyeCam.setFixedFrustum(zNear, zFar);
+        _currentCamera.setFixedFrustum(zNear, zFar);
+        break;
+      default:
+        throw new RuntimeException("WRONG VIEW MODE :: changeToFixedFrustum");
+    }
+  }
+
+  public final void resetFrustumPolicy()
+  {
+    switch (_viewMode)
+    {
+      case MONO:
+        _currentCamera.resetFrustumPolicy();
+        break;
+      case STEREO:
+        _leftEyeCam.resetFrustumPolicy();
+        _rightEyeCam.resetFrustumPolicy();
+        _currentCamera.resetFrustumPolicy();
+        break;
+      default:
+        throw new RuntimeException("WRONG VIEW MODE :: resetFrustumPolicy");
+    }
+  }
+
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -1101,7 +1136,7 @@ public class G3MWidget implements ChangedRendererInfoListener
       {
         if (_nearFrustumRenderer.isEnable())
         {
-          _nearFrustumRenderer.render(_currentCamera, _renderContext, _rootState);
+          _nearFrustumRenderer.render(_currentCamera.getFrustumData(), this, _renderContext, _rootState);
         }
       }
   

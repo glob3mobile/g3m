@@ -52,11 +52,12 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                       const size_t rendererID);
 
-  void render(Camera* currentCamera,
-              const G3MRenderContext* rc,
+  void render(const G3MRenderContext* rc,
               GLState* glState);
 
-  void render(const G3MRenderContext* rc,
+  void render(const FrustumData* currentFrustumData,
+              FrustumPolicyHandler* handler,
+              const G3MRenderContext* rc,
               GLState* glState);
   
 };

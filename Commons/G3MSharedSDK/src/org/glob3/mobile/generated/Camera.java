@@ -694,6 +694,7 @@ public class Camera
 
   public final void setFixedFrustum(double zNear, double zFar)
   {
+    _timestamp++;
     _fixedZNear = zNear;
     _fixedZFar = zFar;
     _dirtyFlags.setAllDirty();
@@ -701,6 +702,7 @@ public class Camera
 
   public final void resetFrustumPolicy()
   {
+    _timestamp++;
     _fixedZNear = Double.NaN;
     _fixedZFar = Double.NaN;
     _dirtyFlags.setAllDirty();
@@ -771,6 +773,9 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
   private double _tanHalfVerticalFOV;
   private double _tanHalfHorizontalFOV;
+
+  private double _fixedZNear;
+  private double _fixedZFar;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
@@ -927,8 +932,5 @@ public class Camera
     }
     return _modelViewMatrix;
   }
-
-  private double _fixedZNear;
-  private double _fixedZFar;
 
 }
