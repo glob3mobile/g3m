@@ -375,6 +375,9 @@ private:
   mutable double           _tanHalfVerticalFOV;
   mutable double           _tanHalfHorizontalFOV;
 
+  double _fixedZNear;
+  double _fixedZFar;
+
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
   public:

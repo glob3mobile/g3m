@@ -79,6 +79,9 @@ void Camera::copyFrom(const Camera& that,
     _frustumData = that._frustumData;
 #endif
 
+    _fixedZNear = that._fixedZNear;
+    _fixedZFar  = that._fixedZFar;
+
     _projectionMatrix.copyValue(that._projectionMatrix);
     _modelMatrix.copyValue(that._modelMatrix);
     _modelViewMatrix.copyValue(that._modelViewMatrix);
@@ -148,7 +151,9 @@ _tanHalfVerticalFOV(NAND),
 _tanHalfHorizontalFOV(NAND),
 _timestamp(timestamp),
 _viewPortWidth(-1),
-_viewPortHeight(-1)
+_viewPortHeight(-1),
+_fixedZNear(NAND),
+_fixedZFar(NAND)
 {
   resizeViewport(0, 0);
   _dirtyFlags.setAllDirty();
@@ -398,9 +403,18 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData* Camera::calculateFrustumData() const {
-  const Vector2D zNearAndZFar = _frustumPolicy->calculateFrustumZNearAndZFar(*this);
-  const double zNear = zNearAndZFar._x;
-  const double zFar  = zNearAndZFar._y;
+  double zNear;
+  double zFar;
+
+  if ( ISNAN(_fixedZNear) || ISNAN(_fixedZFar) ) {
+    const Vector2D zNearAndZFar = _frustumPolicy->calculateFrustumZNearAndZFar(*this);
+    zNear = ISNAN(_fixedZNear) ? zNearAndZFar._x : _fixedZNear;
+    zFar  = ISNAN(_fixedZFar)  ? zNearAndZFar._y : _fixedZFar;
+  }
+  else {
+    zNear = _fixedZNear;
+    zFar  = _fixedZFar;
+  }
 
   return calculateFrustumData(zNear, zFar);
 }
@@ -724,13 +738,13 @@ const MutableMatrix44D& Camera::getProjectionMatrix() const {
 
 void Camera::setFixedFrustum(const double zNear,
                              const double zFar) {
+  _fixedZNear = zNear;
+  _fixedZFar  = zFar;
   _dirtyFlags.setAllDirty();
-
-  delete _frustumData;
-  _frustumData = calculateFrustumData(zNear, zFar);
-  _dirtyFlags._frustumDataDirty = false;
 }
 
 void Camera::resetFrustumPolicy() {
+  _fixedZNear = NAND;
+  _fixedZFar  = NAND;
   _dirtyFlags.setAllDirty();
 }
