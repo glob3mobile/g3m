@@ -17,7 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-//class Camera;
+//class FrustumData;
+//class FrustumPolicyHandler;
 
 
 public abstract class NearFrustumRenderer implements Renderer
@@ -26,7 +27,7 @@ public abstract class NearFrustumRenderer implements Renderer
 
   public abstract void render(G3MRenderContext rc, GLState glState);
 
-  public abstract void render(Camera currentCamera, G3MRenderContext rc, GLState glState);
+  public abstract void render(FrustumData currentFrustumData, FrustumPolicyHandler handler, G3MRenderContext rc, GLState glState);
 
   public final SurfaceElevationProvider getSurfaceElevationProvider()
   {

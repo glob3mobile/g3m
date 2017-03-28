@@ -24,6 +24,10 @@ public class WrapperNearFrustumRenderer extends NearFrustumRenderer
   private Renderer _renderer;
 
 
+
+  ///#include "Camera.hpp"
+  
+  
   public WrapperNearFrustumRenderer(double zNear, Renderer renderer)
   {
      _zNear = zNear;
@@ -93,38 +97,20 @@ public class WrapperNearFrustumRenderer extends NearFrustumRenderer
 
   public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererID)
   {
-  
-  }
-
-  public final void render(Camera currentCamera, G3MRenderContext rc, GLState glState)
-  {
-    currentCamera.setFixedFrustum(_zNear, currentCamera.getFrustumData()._zNear);
-    rc.getGL().clearDepthBuffer();
-    render(rc, glState);
-    currentCamera.resetFrustumPolicy();
+    _renderer.setChangedRendererInfoListener(changedInfoListener, rendererID);
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-  //  const Camera* cam = rc->getCurrentCamera();
-  //  const CoordinateSystem camCS = cam->getCameraCoordinateSystem();
-  //
-  //  const Vector3D up    = rc->getPlanet()->geodeticSurfaceNormal(cam->getGeodeticPosition());
-  //  const Vector3D right = camCS._y.cross(up);
-  //  const Vector3D front = up.cross(right);
-  //
-  //  const Vector3D controllerDisp = front.scaleToLength(0.7).sub(up.scaleToLength(0.5)).add(right.scaleToLength(0.1));
-  //
-  //  const Vector3D origin = cam->getCartesianPosition().add(controllerDisp);
-  //
-  //  const CoordinateSystem camCS2 = camCS.changeOrigin(origin);
-  //
-  //  Mesh* mesh = camCS2.createMesh(1000000, Color::RED, Color::GREEN, Color::BLUE);
-  //
-  //  _meshRenderer->clearMeshes();
-  //  _meshRenderer->addMesh(mesh);
-  
     _renderer.render(rc, glState);
+  }
+
+  public final void render(FrustumData currentFrustumData, FrustumPolicyHandler handler, G3MRenderContext rc, GLState glState)
+  {
+    handler.changeToFixedFrustum(_zNear, currentFrustumData._zNear);
+    rc.getGL().clearDepthBuffer();
+    render(rc, glState);
+    handler.resetFrustumPolicy();
   }
 
 }

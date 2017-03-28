@@ -14,7 +14,7 @@
 #include "Angle.hpp"
 #include "InfoDisplay.hpp"
 #include "ViewMode.hpp"
-#include "FrustumPolicyReceiver.hpp"
+#include "FrustumPolicyHandler.hpp"
 
 class IMathUtils;
 class ILogger;
@@ -86,7 +86,7 @@ public:
   }
 };
 
-class G3MWidget : public ChangedRendererInfoListener, FrustumPolicyReceiver {
+class G3MWidget : public ChangedRendererInfoListener, FrustumPolicyHandler {
 public:
 
   static void initSingletons(ILogger*            logger,
@@ -251,10 +251,12 @@ public:
   void removeAllPeriodicalTasks();
 
   void setViewMode(ViewMode viewMode);
-  
-  void changeToFixedFrustum(double zNear, double zFar);
-  
+
+  void changeToFixedFrustum(double zNear,
+                            double zFar);
+
   void resetFrustumPolicy();
+
 
 private:
   IStorage*                _storage;

@@ -8,17 +8,11 @@
 
 #include "WrapperNearFrustumRenderer.hpp"
 
-#include "Camera.hpp"
+//#include "Camera.hpp"
 #include "FrustumData.hpp"
 #include "G3MRenderContext.hpp"
 #include "GL.hpp"
-#include "G3MWidget.hpp"
-
-#warning at work
-#include "CoordinateSystem.hpp"
-#include "Planet.hpp"
-#include "Geodetic3D.hpp"
-#include "MeshRenderer.hpp"
+#include "FrustumPolicyHandler.hpp"
 
 
 WrapperNearFrustumRenderer::WrapperNearFrustumRenderer(const double zNear,
@@ -81,44 +75,21 @@ bool WrapperNearFrustumRenderer::onTouchEvent(const G3MEventContext* ec,
 
 void WrapperNearFrustumRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                                                 const size_t rendererID) {
-
+  _renderer->setChangedRendererInfoListener(changedInfoListener,
+                                            rendererID);
 }
 
 void WrapperNearFrustumRenderer::render(const G3MRenderContext* rc,
                                         GLState* glState) {
-  
-//#warning JM at work
-//  const Camera* cam = rc->getCurrentCamera();
-//  const CoordinateSystem camCS = cam->getCameraCoordinateSystem();
-//  
-//  const Vector3D up    = rc->getPlanet()->geodeticSurfaceNormal(cam->getGeodeticPosition());
-//  const Vector3D right = camCS._y.cross(up);
-//  const Vector3D front = up.cross(right);
-//  
-//  const Vector3D controllerDisp = front.scaleToLength(0.7).sub(up.scaleToLength(0.5)).add(right.scaleToLength(0.1));
-//  
-//  const Vector3D origin = cam->getCartesianPosition().add(controllerDisp);
-//  
-//  const CoordinateSystem camCS2 = camCS.changeOrigin(origin);
-//  
-//  Mesh* meshDarker = camCS2.createMesh(1e10, Color::RED.muchDarker(), Color::GREEN.muchDarker(), Color::BLUE.muchDarker());
-//  
-//  ((MeshRenderer*)_renderer)->clearMeshes();
-//  ((MeshRenderer*)_renderer)->addMesh(meshDarker);
-  
   _renderer->render(rc, glState);
-  
-  
-  rc->getWidget()->changeToFixedFrustum(_zNear,
-                                        rc->getCurrentCamera()->getFrustumData()->_zNear);
+}
+
+void WrapperNearFrustumRenderer::render(const FrustumData* currentFrustumData,
+                                        FrustumPolicyHandler* handler,
+                                        const G3MRenderContext* rc,
+                                        GLState* glState) {
+  handler->changeToFixedFrustum(_zNear, currentFrustumData->_zNear);
   rc->getGL()->clearDepthBuffer();
-  
-//#warning JM at work
-//  Mesh* mesh = camCS2.createMesh(1e10, Color::RED, Color::GREEN, Color::BLUE);
-//  ((MeshRenderer*)_renderer)->clearMeshes();
-//  ((MeshRenderer*)_renderer)->addMesh(mesh);
-  
-  
-  _renderer->render(rc, glState);
-  rc->getWidget()->resetFrustumPolicy();
+  render(rc, glState);
+  handler->resetFrustumPolicy();
 }

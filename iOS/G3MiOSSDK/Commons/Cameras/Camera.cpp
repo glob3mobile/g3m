@@ -738,12 +738,14 @@ const MutableMatrix44D& Camera::getProjectionMatrix() const {
 
 void Camera::setFixedFrustum(const double zNear,
                              const double zFar) {
+  _timestamp++;
   _fixedZNear = zNear;
   _fixedZFar  = zFar;
   _dirtyFlags.setAllDirty();
 }
 
 void Camera::resetFrustumPolicy() {
+  _timestamp++;
   _fixedZNear = NAND;
   _fixedZFar  = NAND;
   _dirtyFlags.setAllDirty();

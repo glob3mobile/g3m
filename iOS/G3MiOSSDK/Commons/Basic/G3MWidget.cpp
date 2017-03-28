@@ -573,7 +573,9 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
   if (renderStateType == RENDER_READY) {
     if (_nearFrustumRenderer != NULL) {
       if (_nearFrustumRenderer->isEnable()) {
-        _nearFrustumRenderer->render(_renderContext,
+        _nearFrustumRenderer->render(_currentCamera->getFrustumData(),
+                                     this,
+                                     _renderContext,
                                      _rootState);
       }
     }
@@ -1065,7 +1067,8 @@ void G3MWidget::setViewMode(ViewMode viewMode) {
   }
 }
 
-void G3MWidget::changeToFixedFrustum(double zNear, double zFar){
+void G3MWidget::changeToFixedFrustum(double zNear,
+                                     double zFar) {
   switch (_viewMode) {
     case MONO:
       _currentCamera->setFixedFrustum(zNear, zFar);
@@ -1080,7 +1083,7 @@ void G3MWidget::changeToFixedFrustum(double zNear, double zFar){
   }
 }
 
-void G3MWidget::resetFrustumPolicy(){
+void G3MWidget::resetFrustumPolicy() {
   switch (_viewMode) {
     case MONO:
       _currentCamera->resetFrustumPolicy();

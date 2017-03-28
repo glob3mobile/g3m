@@ -54,6 +54,11 @@ public:
 
   void render(const G3MRenderContext* rc,
               GLState* glState);
+
+  void render(const FrustumData* currentFrustumData,
+              FrustumPolicyHandler* handler,
+              const G3MRenderContext* rc,
+              GLState* glState);
   
 };
 
