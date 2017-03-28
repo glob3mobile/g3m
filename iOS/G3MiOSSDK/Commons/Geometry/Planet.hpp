@@ -20,6 +20,7 @@ class Effect;
 class Camera;
 class Sector;
 class CoordinateSystem;
+class Ray;
 
 
 class Planet {
@@ -94,8 +95,10 @@ public:
   virtual double computeFastLatLonDistance(const Geodetic2D& g1,
                                            const Geodetic2D& g2) const = 0;
 
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
+  const Vector3D closestIntersection(const Vector3D& origin,
+                                     const Vector3D& direction) const;
 
+  const Vector3D closestIntersection(const Ray& ray) const;
 
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Angle& latitude,
                                                          const Angle& longitude,
@@ -134,7 +137,7 @@ public:
 
   virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
-  CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
+  CoordinateSystem getCoordinateSystemAt(const Geodetic3D& position) const;
   
   virtual const std::string getType() const = 0;
   

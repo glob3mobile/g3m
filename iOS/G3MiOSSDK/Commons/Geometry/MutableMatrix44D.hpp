@@ -243,13 +243,13 @@ public:
 
   static MutableMatrix44D createProjectionMatrix(double left, double right,
                                                  double bottom, double top,
-                                                 double znear, double zfar);
+                                                 double zNear, double zFar);
 
   static MutableMatrix44D createProjectionMatrix(const FrustumData& data);
 
   static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
                                                              double bottom, double top,
-                                                             double znear, double zfar);
+                                                             double zNear, double zFar);
 
   static MutableMatrix44D createScaleMatrix(double scaleX,
                                             double scaleY,

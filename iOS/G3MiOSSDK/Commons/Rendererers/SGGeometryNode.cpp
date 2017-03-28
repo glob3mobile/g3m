@@ -11,6 +11,7 @@
 #include "GLState.hpp"
 #include "G3MRenderContext.hpp"
 #include "Vector2F.hpp"
+#include "IShortBuffer.hpp"
 
 
 SGGeometryNode::SGGeometryNode(const std::string& id,

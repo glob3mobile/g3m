@@ -38,7 +38,7 @@ DeviceAttitudeCameraHandler::~DeviceAttitudeCameraHandler() {
   delete _locationModifier;
 }
 
-void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const{
+void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const {
   if (nextCamera->hasValidViewDirection()) {
     nextCamera->setGeodeticPosition(pos);
   }

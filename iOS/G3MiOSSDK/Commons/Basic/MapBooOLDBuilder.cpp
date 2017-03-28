@@ -1637,6 +1637,9 @@ G3MWidget* MapBooOLDBuilder::create() {
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
   MapBooOLD_HUDRenderer* hudRenderer = new MapBooOLD_HUDRenderer();
+
+  NearFrustumRenderer* nearFrustumRenderer = NULL;
+
   InfoDisplay* infoDisplay = new MapBooOLD_HUDRendererInfoDisplay(hudRenderer);
   infoDisplay->showDisplay();
 
@@ -1652,6 +1655,7 @@ G3MWidget* MapBooOLDBuilder::create() {
                                  createBusyRenderer(),
                                  createErrorRenderer(),
                                  hudRenderer,
+                                 nearFrustumRenderer,
                                  Color::BLACK,
                                  false,      // logFPS
                                  false,      // logDownloaderStatistics

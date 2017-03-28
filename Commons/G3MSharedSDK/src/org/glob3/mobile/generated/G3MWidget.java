@@ -22,10 +22,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, NearFrustumRenderer nearFrustumRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider, infoDisplay, viewMode, frustumPolicy);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, nearFrustumRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider, infoDisplay, viewMode, frustumPolicy);
   }
 
   public void dispose()
@@ -50,6 +50,8 @@ public class G3MWidget implements ChangedRendererInfoListener
        _errorRenderer.dispose();
     if (_hudRenderer != null)
        _hudRenderer.dispose();
+    if (_nearFrustumRenderer != null)
+       _nearFrustumRenderer.dispose();
     if (_gl != null)
        _gl.dispose();
     if (_effectsScheduler != null)
@@ -114,6 +116,7 @@ public class G3MWidget implements ChangedRendererInfoListener
        _leftEyeCam.dispose();
     if (_auxCam != null)
        _auxCam.dispose();
+  
     if (_frustumPolicy != null)
        _frustumPolicy.dispose();
   }
@@ -343,6 +346,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _hudRenderer.onResizeViewportEvent(ec, width, height);
     }
+    if (_nearFrustumRenderer != null)
+    {
+      _nearFrustumRenderer.onResizeViewportEvent(ec, width, height);
+    }
   }
 
   public final void onPause()
@@ -359,6 +366,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_hudRenderer != null)
     {
       _hudRenderer.onPause(_context);
+    }
+    if (_nearFrustumRenderer != null)
+    {
+      _nearFrustumRenderer.onPause(_context);
     }
   
     _downloader.onPause(_context);
@@ -380,6 +391,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _hudRenderer.onResume(_context);
     }
+    if (_nearFrustumRenderer != null)
+    {
+      _nearFrustumRenderer.onResume(_context);
+    }
   
     _effectsScheduler.onResume(_context);
   
@@ -398,6 +413,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_hudRenderer != null)
     {
       _hudRenderer.onDestroy(_context);
+    }
+    if (_nearFrustumRenderer != null)
+    {
+      _nearFrustumRenderer.onDestroy(_context);
     }
   
     _downloader.onDestroy(_context);
@@ -726,6 +745,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   private ProtoRenderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
+  private NearFrustumRenderer _nearFrustumRenderer;
   private RenderState _rendererState;
   private ProtoRenderer _selectedRenderer;
 
@@ -797,7 +817,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   private Camera _rightEyeCam;
 
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, NearFrustumRenderer nearFrustumRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -814,6 +834,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _busyRenderer = busyRenderer;
      _errorRenderer = errorRenderer;
      _hudRenderer = hudRenderer;
+     _nearFrustumRenderer = nearFrustumRenderer;
      _width = 1;
      _height = 1;
      _frustumPolicy = frustumPolicy;
@@ -860,6 +881,10 @@ public class G3MWidget implements ChangedRendererInfoListener
     {
       _hudRenderer.initialize(_context);
     }
+    if (_nearFrustumRenderer != null)
+    {
+      _nearFrustumRenderer.initialize(_context);
+    }
     _currentCamera.initialize(_context);
     _nextCamera.initialize(_context);
   
@@ -887,15 +912,6 @@ public class G3MWidget implements ChangedRendererInfoListener
   
   
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider, _viewMode, this);
-  
-  
-    ///#ifdef C_CODE
-    //  delete _rendererState;
-    //  _rendererState = new RenderState( calculateRendererState() );
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //  _rendererState = calculateRendererState();
-    ///#endif
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -912,6 +928,14 @@ public class G3MWidget implements ChangedRendererInfoListener
           if (_hudRenderer.isEnable())
           {
             handled = _hudRenderer.onTouchEvent(ec, touchEvent);
+          }
+        }
+  
+        if (!handled && (_nearFrustumRenderer != null))
+        {
+          if (_nearFrustumRenderer.isEnable())
+          {
+            handled = _nearFrustumRenderer.onTouchEvent(ec, touchEvent);
           }
         }
   
@@ -976,6 +1000,19 @@ public class G3MWidget implements ChangedRendererInfoListener
         return hudRendererRenderState;
       }
       else if (hudRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+      {
+        busyFlag = true;
+      }
+    }
+  
+    if (_nearFrustumRenderer != null)
+    {
+      RenderState nearFrustumRendererRenderState = _nearFrustumRenderer.getRenderState(_renderContext);
+      if (nearFrustumRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+      {
+        return nearFrustumRendererRenderState;
+      }
+      else if (nearFrustumRendererRenderState._type == RenderState_Type.RENDER_BUSY)
       {
         busyFlag = true;
       }
@@ -1058,9 +1095,17 @@ public class G3MWidget implements ChangedRendererInfoListener
       orderedRenderables.clear();
     }
   
-    if (_hudRenderer != null)
+    if (renderStateType == RenderState_Type.RENDER_READY)
     {
-      if (renderStateType == RenderState_Type.RENDER_READY)
+      if (_nearFrustumRenderer != null)
+      {
+        if (_nearFrustumRenderer.isEnable())
+        {
+          _nearFrustumRenderer.render(_currentCamera, _renderContext, _rootState);
+        }
+      }
+  
+      if (_hudRenderer != null)
       {
         if (_hudRenderer.isEnable())
         {
@@ -1068,7 +1113,6 @@ public class G3MWidget implements ChangedRendererInfoListener
         }
       }
     }
-  
   
   }
 
@@ -1111,7 +1155,8 @@ public class G3MWidget implements ChangedRendererInfoListener
         final Vector3D camPos = _currentCamera.getCartesianPosition();
         final Vector3D camCenter = _currentCamera.getCenter();
         final Vector3D eyesDirection = _currentCamera.getUp().cross(_currentCamera.getViewDirection()).normalized();
-        final double halfEyesSeparation = 0.07 / 2.0;
+  //      const double halfEyesSeparation = 0.07 / 2.0;
+        final double halfEyesSeparation = 0.001;
         final Vector3D up = _currentCamera.getUp();
   
         final Angle hFOV_2 = _currentCamera.getHorizontalFOV().times(0.5);

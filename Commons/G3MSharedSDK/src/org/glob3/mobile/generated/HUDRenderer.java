@@ -148,7 +148,7 @@ public class HUDRenderer extends DefaultRenderer
   //                                                                                           -halfWidth,  halfWidth);
   //  double left, double right,
   //  double bottom, double top,
-  //  double znear, double zfar
+  //  double zNear, double zFar
   //  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
   //                                                                                           0, height,
   //                                                                                           -halfWidth, halfWidth);

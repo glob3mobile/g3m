@@ -1113,10 +1113,13 @@ public abstract class MapBooOLDBuilder
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
     MapBooOLD_HUDRenderer hudRenderer = new MapBooOLD_HUDRenderer();
+  
+    NearFrustumRenderer nearFrustumRenderer = null;
+  
     InfoDisplay infoDisplay = new MapBooOLD_HUDRendererInfoDisplay(hudRenderer);
     infoDisplay.showDisplay();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.BLACK, false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay, ViewMode.MONO, new DynamicFrustumPolicy()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, nearFrustumRenderer, Color.BLACK, false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay, ViewMode.MONO, new DynamicFrustumPolicy()); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   

@@ -1,4 +1,24 @@
 package org.glob3.mobile.generated;
+//
+//  Frustum.cpp
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 15/07/12.
+//
+
+//
+//  Frustum.h
+//  G3MiOSSDK
+//
+//  Created by Agustin Trujillo Pino on 15/07/12.
+//
+
+
+
+//class BoundingVolume;
+//class Box;
+//class FrustumData;
+
 public class Frustum
 {
   private final Plane _leftPlane;
@@ -177,41 +197,41 @@ public class Frustum
 
   }
 
-  public Frustum(double left, double right, double bottom, double top, double znear, double zfar)
+  public Frustum(double left, double right, double bottom, double top, double zNear, double zFar)
   {
-     _ltn = new Vector3D(new Vector3D(left, top, -znear));
-     _rtn = new Vector3D(new Vector3D(right, top, -znear));
-     _lbn = new Vector3D(new Vector3D(left, bottom, -znear));
-     _rbn = new Vector3D(new Vector3D(right, bottom, -znear));
-     _ltf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *top, -zfar));
-     _rtf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *top, -zfar));
-     _lbf = new Vector3D(new Vector3D(zfar/znear *left, zfar/znear *bottom, -zfar));
-     _rbf = new Vector3D(new Vector3D(zfar/znear *right, zfar/znear *bottom, -zfar));
-     _leftPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(left, top, -znear), new Vector3D(left, bottom, -znear));
-     _bottomPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(left, bottom, -znear), new Vector3D(right, bottom, -znear));
-     _rightPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(right, bottom, -znear), new Vector3D(right, top, -znear));
-     _topPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(right, top, -znear), new Vector3D(left, top, -znear));
-     _nearPlane = new Plane(new Vector3D(0, 0, 1), znear);
-     _farPlane = new Plane(new Vector3D(0, 0, -1), -zfar);
+     _ltn = new Vector3D(new Vector3D(left, top, -zNear));
+     _rtn = new Vector3D(new Vector3D(right, top, -zNear));
+     _lbn = new Vector3D(new Vector3D(left, bottom, -zNear));
+     _rbn = new Vector3D(new Vector3D(right, bottom, -zNear));
+     _ltf = new Vector3D(new Vector3D(zFar/zNear *left, zFar/zNear *top, -zFar));
+     _rtf = new Vector3D(new Vector3D(zFar/zNear *right, zFar/zNear *top, -zFar));
+     _lbf = new Vector3D(new Vector3D(zFar/zNear *left, zFar/zNear *bottom, -zFar));
+     _rbf = new Vector3D(new Vector3D(zFar/zNear *right, zFar/zNear *bottom, -zFar));
+     _leftPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(left, top, -zNear), new Vector3D(left, bottom, -zNear));
+     _bottomPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(left, bottom, -zNear), new Vector3D(right, bottom, -zNear));
+     _rightPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(right, bottom, -zNear), new Vector3D(right, top, -zNear));
+     _topPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(right, top, -zNear), new Vector3D(left, top, -zNear));
+     _nearPlane = new Plane(new Vector3D(0, 0, 1), zNear);
+     _farPlane = new Plane(new Vector3D(0, 0, -1), -zFar);
      _boundingVolume = null;
   }
 
-  public Frustum (FrustumData data)
+  public Frustum(FrustumData data)
   {
-     _ltn = new Vector3D(new Vector3D(data._left, data._top, -data._znear));
-     _rtn = new Vector3D(new Vector3D(data._right, data._top, -data._znear));
-     _lbn = new Vector3D(new Vector3D(data._left, data._bottom, -data._znear));
-     _rbn = new Vector3D(new Vector3D(data._right, data._bottom, -data._znear));
-     _ltf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._top, -data._zfar));
-     _rtf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._top, -data._zfar));
-     _lbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._left, data._zfar/data._znear *data._bottom, -data._zfar));
-     _rbf = new Vector3D(new Vector3D(data._zfar/data._znear *data._right, data._zfar/data._znear *data._bottom, -data._zfar));
-     _leftPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear));
-     _bottomPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear));
-     _rightPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear));
-     _topPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear));
-     _nearPlane = new Plane(new Vector3D(0, 0, 1), data._znear);
-     _farPlane = new Plane(new Vector3D(0, 0, -1), -data._zfar);
+     _ltn = new Vector3D(new Vector3D(data._left, data._top, -data._zNear));
+     _rtn = new Vector3D(new Vector3D(data._right, data._top, -data._zNear));
+     _lbn = new Vector3D(new Vector3D(data._left, data._bottom, -data._zNear));
+     _rbn = new Vector3D(new Vector3D(data._right, data._bottom, -data._zNear));
+     _ltf = new Vector3D(new Vector3D(data._zFar/data._zNear *data._left, data._zFar/data._zNear *data._top, -data._zFar));
+     _rtf = new Vector3D(new Vector3D(data._zFar/data._zNear *data._right, data._zFar/data._zNear *data._top, -data._zFar));
+     _lbf = new Vector3D(new Vector3D(data._zFar/data._zNear *data._left, data._zFar/data._zNear *data._bottom, -data._zFar));
+     _rbf = new Vector3D(new Vector3D(data._zFar/data._zNear *data._right, data._zFar/data._zNear *data._bottom, -data._zFar));
+     _leftPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._left, data._top, -data._zNear), new Vector3D(data._left, data._bottom, -data._zNear));
+     _bottomPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._left, data._bottom, -data._zNear), new Vector3D(data._right, data._bottom, -data._zNear));
+     _rightPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._right, data._bottom, -data._zNear), new Vector3D(data._right, data._top, -data._zNear));
+     _topPlane = Plane.fromPoints(Vector3D.ZERO, new Vector3D(data._right, data._top, -data._zNear), new Vector3D(data._left, data._top, -data._zNear));
+     _nearPlane = new Plane(new Vector3D(0, 0, 1), data._zNear);
+     _farPlane = new Plane(new Vector3D(0, 0, -1), -data._zFar);
      _boundingVolume = null;
   }
 

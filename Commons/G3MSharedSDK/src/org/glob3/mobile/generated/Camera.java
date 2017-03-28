@@ -10,7 +10,7 @@ public class Camera
      _center = new MutableVector3D(0, 0, 0);
      _up = new MutableVector3D(0, 0, 1);
      _dirtyFlags = new CameraDirtyFlags();
-     _frustumData = new FrustumData();
+     _frustumData = null;
      _projectionMatrix = new MutableMatrix44D();
      _modelMatrix = new MutableMatrix44D();
      _modelViewMatrix = new MutableMatrix44D();
@@ -45,6 +45,8 @@ public class Camera
        _geodeticPosition.dispose();
     if (_frustumPolicy != null)
        _frustumPolicy.dispose();
+    if (_frustumData != null)
+       _frustumData.dispose();
   }
 
   public final void copyFrom(Camera that, boolean ignoreTimestamp)
@@ -485,7 +487,7 @@ public class Camera
   {
     // this implementation is not right exact, but it's faster.
     final double z = sphere._center.distanceTo(getCartesianPosition());
-    final double rWorld = sphere._radius * _frustumData._znear / z;
+    final double rWorld = sphere._radius * _frustumData._zNear / z;
     final double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
     return DefineConstants.PI * rScreen * rScreen;
   }
@@ -570,7 +572,7 @@ public class Camera
     _ray1.putSub(_position, point1);
     final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
     final FrustumData frustumData = getFrustumData();
-    final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
+    final double distanceInMeters = frustumData._zNear * IMathUtils.instance().tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
@@ -653,21 +655,14 @@ public class Camera
 
   public final void getVerticesOfZNearPlane(IFloatBuffer vertices)
   {
+    final Plane zNearPlane = getFrustumInModelCoordinates().getNearPlane();
   
-    Plane zNearPlane = getFrustumInModelCoordinates().getNearPlane();
+    final Vector3D pos = getCartesianPosition();
+    final Vector3D vd = getViewDirection();
   
-    Vector3D pos = getCartesianPosition();
-    Vector3D vd = getViewDirection();
-  
-    //  const float zRange = getFrustumData()._zfar - getFrustumData()._znear;
-    //  float zOffset = zRange * 1e-6;
-    //  if (zOffset < 1.0f) {
-    //    zOffset = 1.0f;
-    //  }
-  
-    Vector3D c = zNearPlane.intersectionWithRay(pos, vd); //.add(vd.times(zOffset / vd.length()));
-    Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
-    Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 2.0);
+    final Vector3D c = zNearPlane.intersectionWithRay(pos, vd);
+    final Vector3D up = getUp().normalized().times(getFrustumData()._top * 2.0);
+    final Vector3D right = vd.cross(up).normalized().times(getFrustumData()._right * 2.0);
   
     vertices.putVector3D(0, c.sub(up).sub(right));
     vertices.putVector3D(1, c.add(up).sub(right));
@@ -680,6 +675,8 @@ public class Camera
     if (_dirtyFlags._frustumDataDirty)
     {
       _dirtyFlags._frustumDataDirty = false;
+      if (_frustumData != null)
+         _frustumData.dispose();
       _frustumData = calculateFrustumData();
     }
     return _frustumData;
@@ -690,8 +687,21 @@ public class Camera
     return _planet;
   }
 
+  public final void setFixedFrustum(double zNear, double zFar)
+  {
+    _dirtyFlags.setAllDirty();
+  
+    if (_frustumData != null)
+       _frustumData.dispose();
+    _frustumData = calculateFrustumData(zNear, zFar);
+    _dirtyFlags._frustumDataDirty = false;
+  }
 
-  private final FrustumPolicy _frustumPolicy;
+  public final void resetFrustumPolicy()
+  {
+    _dirtyFlags.setAllDirty();
+  }
+
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Camera(Camera that);
@@ -722,6 +732,8 @@ public class Camera
   //  {
   //  }
 
+  private final FrustumPolicy _frustumPolicy;
+
   private long _timestamp;
 
   private MutableVector3D _ray0 = new MutableVector3D();
@@ -745,7 +757,7 @@ public class Camera
   private MutableVector3D _normalizedPosition = new MutableVector3D();
 
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
-  private FrustumData _frustumData = new FrustumData();
+  private FrustumData _frustumData;
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
@@ -791,8 +803,6 @@ public class Camera
     }
   }
 
-
-
   // intersection of view direction with globe in(x,y,z)
   private MutableVector3D _getCartesianCenterOfView()
   {
@@ -836,6 +846,10 @@ public class Camera
     final double zNear = zNearAndZFar._x;
     final double zFar = zNearAndZFar._y;
   
+    return calculateFrustumData(zNear, zFar);
+  }
+  private FrustumData calculateFrustumData(double zNear, double zFar)
+  {
     if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
     {
       final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;

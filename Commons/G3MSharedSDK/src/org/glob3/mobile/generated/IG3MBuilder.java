@@ -44,6 +44,7 @@ package org.glob3.mobile.generated;
 //class ErrorRenderer;
 //class InfoDisplay;
 //class FrustumPolicy;
+//class NearFrustumRenderer;
 
 
 public abstract class IG3MBuilder
@@ -60,6 +61,7 @@ public abstract class IG3MBuilder
   private ProtoRenderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
+  private NearFrustumRenderer _nearFrustumRenderer;
   private java.util.ArrayList<Renderer> _renderers;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
@@ -158,6 +160,10 @@ public abstract class IG3MBuilder
   private Renderer getHUDRenderer()
   {
     return _hudRenderer;
+  }
+  private NearFrustumRenderer getNearFrustumRenderer()
+  {
+    return _nearFrustumRenderer;
   }
 
   /**
@@ -436,7 +442,7 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO, getFrustumPolicy());
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getNearFrustumRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO, getFrustumPolicy());
   
     g3mWidget.setUserData(getUserData());
   
@@ -457,6 +463,7 @@ public abstract class IG3MBuilder
     _busyRenderer = null;
     _errorRenderer = null;
     _hudRenderer = null;
+    _nearFrustumRenderer = null;
     _initializationTask = null;
     _periodicalTasks = null;
     _periodicalTasks = null;
@@ -491,6 +498,7 @@ public abstract class IG3MBuilder
      _busyRenderer = null;
      _errorRenderer = null;
      _hudRenderer = null;
+     _nearFrustumRenderer = null;
      _renderers = null;
      _initializationTask = null;
      _autoDeleteInitializationTask = true;
@@ -545,6 +553,8 @@ public abstract class IG3MBuilder
        _errorRenderer.dispose();
     if (_hudRenderer != null)
        _hudRenderer.dispose();
+    if (_nearFrustumRenderer != null)
+       _nearFrustumRenderer.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
     if (_initializationTask != null)
@@ -859,6 +869,21 @@ public abstract class IG3MBuilder
       return;
     }
     _hudRenderer = hudRenderer;
+  }
+
+  public final void setNearFrustumRenderer(NearFrustumRenderer nearFrustumRenderer)
+  {
+    if (_nearFrustumRenderer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: nearFrustumRenderer already initialized");
+      return;
+    }
+    if (nearFrustumRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: nearFrustumRenderer cannot be NULL");
+      return;
+    }
+    _nearFrustumRenderer = nearFrustumRenderer;
   }
 
 

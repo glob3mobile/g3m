@@ -97,6 +97,12 @@ public class Vector3D
     return _x * _x + _y * _y + _z * _z;
   }
 
+  public final Vector3D scaleToLength(double d)
+  {
+    double l = length();
+    return new Vector3D(_x * d / l, _y * d / l, _z * d / l);
+  }
+
   public final double dot(Vector3D v)
   {
     return _x * v._x + _y * v._y + _z * v._z;
@@ -308,9 +314,9 @@ public class Vector3D
 
   public final Vector3D projectionInPlane(Vector3D normal)
   {
-    Vector3D axis = normal.cross(this);
-    MutableMatrix44D m = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), axis);
-    Vector3D projected = normal.transformedBy(m, 0).normalized();
+    final Vector3D axis = normal.cross(this);
+    final MutableMatrix44D m = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), axis);
+    final Vector3D projected = normal.transformedBy(m, 0).normalized();
     return projected.times(this.length());
   }
 

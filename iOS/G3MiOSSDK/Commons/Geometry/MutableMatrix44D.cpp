@@ -19,6 +19,7 @@
 #include "Geodetic3D.hpp"
 #include "IMathUtils.hpp"
 #include "ILogger.hpp"
+#include "FrustumData.hpp"
 
 
 MutableMatrix44D MutableMatrix44D::TEMP1;
@@ -342,23 +343,23 @@ MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const 
 }
 
 MutableMatrix44D MutableMatrix44D::createProjectionMatrix(const FrustumData& data) {
-  return createProjectionMatrix(data._left, data._right,
+  return createProjectionMatrix(data._left,   data._right,
                                 data._bottom, data._top,
-                                data._znear, data._zfar);
+                                data._zNear,  data._zFar);
 }
 
 MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right,
                                                           double bottom, double top,
-                                                          double znear, double zfar) {
+                                                          double zNear, double zFar) {
   // set frustum MutableMatrix44D in double
   const double rl = right - left;
   const double tb = top - bottom;
-  const double fn = zfar - znear;
+  const double fn = zFar - zNear;
 
-  return MutableMatrix44D(2 * znear / rl, 0, 0, 0,
-                          0, 2 * znear / tb, 0, 0,
-                          (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1,
-                          0, 0, -2 * zfar / fn * znear, 0);
+  return MutableMatrix44D(2 * zNear / rl, 0, 0, 0,
+                          0, 2 * zNear / tb, 0, 0,
+                          (right + left) / rl, (top + bottom) / tb, -(zFar + zNear) / fn, -1,
+                          0, 0, -2 * zFar / fn * zNear, 0);
 
 }
 
@@ -594,16 +595,16 @@ MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
 
 MutableMatrix44D MutableMatrix44D::createOrthographicProjectionMatrix(double left, double right,
                                                                       double bottom, double top,
-                                                                      double znear, double zfar) {
+                                                                      double zNear, double zFar) {
   // set frustum MutableMatrix44D in double
   const double rl = right - left;
   const double tb = top - bottom;
-  const double fn = zfar - znear;
+  const double fn = zFar - zNear;
 
   return MutableMatrix44D(2 / rl, 0, 0, 0,
                           0, 2 / tb, 0, 0,
                           0, 0, -2 / fn, 0,
-                          -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1 );
+                          -(right+left) / rl, -(top+bottom) / tb, -(zFar+zNear) / fn, 1 );
 }
 
 MutableMatrix44D MutableMatrix44D::createScaleMatrix(const Vector3D& scale) {

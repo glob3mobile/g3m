@@ -58,6 +58,7 @@ class SurfaceElevationProvider;
 class GLState;
 class G3MEventContext;
 class FrustumPolicy;
+class NearFrustumRenderer;
 
 
 class WidgetUserData {
@@ -110,6 +111,7 @@ public:
                            ProtoRenderer*                       busyRenderer,
                            ErrorRenderer*                       errorRenderer,
                            Renderer*                            hudRenderer,
+                           NearFrustumRenderer*                 nearFrustumRenderer,
                            const Color&                         backgroundColor,
                            const bool                           logFPS,
                            const bool                           logDownloaderStatistics,
@@ -260,13 +262,14 @@ private:
   GL*                 _gl;
   const Planet*       _planet;
 
-  CameraRenderer*     _cameraRenderer;
-  Renderer*           _mainRenderer;
-  ProtoRenderer*      _busyRenderer;
-  ErrorRenderer*      _errorRenderer;
-  Renderer*           _hudRenderer;
-  RenderState*        _rendererState;
-  ProtoRenderer*      _selectedRenderer;
+  CameraRenderer*      _cameraRenderer;
+  Renderer*            _mainRenderer;
+  ProtoRenderer*       _busyRenderer;
+  ErrorRenderer*       _errorRenderer;
+  Renderer*            _hudRenderer;
+  NearFrustumRenderer* _nearFrustumRenderer;
+  RenderState*         _rendererState;
+  ProtoRenderer*       _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 
@@ -348,6 +351,7 @@ private:
             ProtoRenderer*                       busyRenderer,
             ErrorRenderer*                       errorRenderer,
             Renderer*                            hudRenderer,
+            NearFrustumRenderer*                 nearFrustumRenderer,
             const Color&                         backgroundColor,
             const bool                           logFPS,
             const bool                           logDownloaderStatistics,

@@ -12,54 +12,7 @@
 
 class BoundingVolume;
 class Box;
-
-
-class FrustumData {
-public:
-  double _left;
-  double _right;
-  double _bottom;
-  double _top;
-  double _znear;
-  double _zfar;
-
-  FrustumData(double left,
-              double right,
-              double bottom,
-              double top,
-              double znear,
-              double zfar) :
-  _left(left),
-  _right(right),
-  _bottom(bottom),
-  _top(top),
-  _znear(znear),
-  _zfar(zfar)
-  {
-  }
-
-  FrustumData(const FrustumData& fd) :
-  _left(fd._left),
-  _right(fd._right),
-  _bottom(fd._bottom),
-  _top(fd._top),
-  _znear(fd._znear),
-  _zfar(fd._zfar)
-  {
-  }
-
-  FrustumData():
-  _left(-1),
-  _right(1),
-  _bottom(-1),
-  _top(1),
-  _znear(1),
-  _zfar(10)
-  {
-  }
-
-};
-
+class FrustumData;
 
 class Frustum {
 private:
@@ -133,34 +86,34 @@ public:
 
   Frustum(double left, double right,
           double bottom, double top,
-          double znear, double zfar):
-  _ltn(Vector3D(left,   top,      -znear)),
-  _rtn(Vector3D(right,  top,      -znear)),
-  _lbn(Vector3D(left,   bottom,   -znear)),
-  _rbn(Vector3D(right,  bottom,   -znear)),
-  _ltf(Vector3D(zfar/znear*left,  zfar/znear*top,     -zfar)),
-  _rtf(Vector3D(zfar/znear*right, zfar/znear*top,     -zfar)),
-  _lbf(Vector3D(zfar/znear*left,  zfar/znear*bottom,  -zfar)),
-  _rbf(Vector3D(zfar/znear*right, zfar/znear*bottom,  -zfar)),
+          double zNear, double zFar):
+  _ltn(Vector3D(left,   top,      -zNear)),
+  _rtn(Vector3D(right,  top,      -zNear)),
+  _lbn(Vector3D(left,   bottom,   -zNear)),
+  _rbn(Vector3D(right,  bottom,   -zNear)),
+  _ltf(Vector3D(zFar/zNear*left,  zFar/zNear*top,     -zFar)),
+  _rtf(Vector3D(zFar/zNear*right, zFar/zNear*top,     -zFar)),
+  _lbf(Vector3D(zFar/zNear*left,  zFar/zNear*bottom,  -zFar)),
+  _rbf(Vector3D(zFar/zNear*right, zFar/zNear*bottom,  -zFar)),
   _leftPlane(Plane::fromPoints(Vector3D::ZERO,
-                               Vector3D(left, top, -znear),
-                               Vector3D(left, bottom, -znear))),
+                               Vector3D(left, top, -zNear),
+                               Vector3D(left, bottom, -zNear))),
   _bottomPlane(Plane::fromPoints(Vector3D::ZERO,
-                                 Vector3D(left, bottom, -znear),
-                                 Vector3D(right, bottom, -znear))),
+                                 Vector3D(left, bottom, -zNear),
+                                 Vector3D(right, bottom, -zNear))),
   _rightPlane(Plane::fromPoints(Vector3D::ZERO,
-                                Vector3D(right, bottom, -znear),
-                                Vector3D(right, top, -znear))),
+                                Vector3D(right, bottom, -zNear),
+                                Vector3D(right, top, -zNear))),
   _topPlane(Plane::fromPoints(Vector3D::ZERO,
-                              Vector3D(right, top, -znear),
-                              Vector3D(left, top, -znear))),
-  _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
-  _farPlane(Plane(Vector3D(0, 0, -1), -zfar)),
+                              Vector3D(right, top, -zNear),
+                              Vector3D(left, top, -zNear))),
+  _nearPlane(Plane(Vector3D(0, 0, 1), zNear)),
+  _farPlane(Plane(Vector3D(0, 0, -1), -zFar)),
   _boundingVolume(NULL)
   {
   }
 
-  Frustum (const FrustumData& data);
+  explicit Frustum(const FrustumData* data);
 
   bool contains(const Vector3D& point) const;
 
@@ -181,7 +134,7 @@ public:
   Plane getRightPlane() const  { return _rightPlane; }
   Plane getNearPlane() const   { return _nearPlane; }
   Plane getFarPlane() const    { return _farPlane; }
-
+  
 };
 
 #endif
