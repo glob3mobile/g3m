@@ -38,6 +38,7 @@ public class MeshRenderer extends DefaultRenderer
   }
 
 
+  private boolean _visibilityCulling;
 
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
@@ -95,6 +96,11 @@ public class MeshRenderer extends DefaultRenderer
 
   public MeshRenderer()
   {
+     this(true);
+  }
+  public MeshRenderer(boolean visibilityCulling)
+  {
+     _visibilityCulling = visibilityCulling;
      _glState = new GLState();
     _context = null;
   }
@@ -175,17 +181,27 @@ public class MeshRenderer extends DefaultRenderer
       final Camera camera = rc.getCurrentCamera();
   
       updateGLState(camera);
-  
-      final Frustum frustum = camera.getFrustumInModelCoordinates();
-  
       _glState.setParent(glState);
   
-      for (int i = 0; i < meshesCount; i++)
+      if (_visibilityCulling)
       {
-        Mesh mesh = _meshes.get(i);
-        final BoundingVolume boundingVolume = mesh.getBoundingVolume();
-        if ((boundingVolume == null) || boundingVolume.touchesFrustum(frustum))
+        final Frustum frustum = camera.getFrustumInModelCoordinates();
+  
+        for (int i = 0; i < meshesCount; i++)
         {
+          Mesh mesh = _meshes.get(i);
+          final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+          if ((boundingVolume == null) || boundingVolume.touchesFrustum(frustum))
+          {
+            mesh.render(rc, _glState);
+          }
+        }
+      }
+      else
+      {
+        for (int i = 0; i < meshesCount; i++)
+        {
+          Mesh mesh = _meshes.get(i);
           mesh.render(rc, _glState);
         }
       }
