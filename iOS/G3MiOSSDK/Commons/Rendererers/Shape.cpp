@@ -59,6 +59,9 @@ _glState(new GLState()),
 _surfaceElevationProvider(NULL)
 {
   _localTransform.setValid(false);
+  if (position->isNan()) {
+    THROW_EXCEPTION("position can't be NAN");
+  }
 }
 
 Shape::~Shape() {
@@ -256,7 +259,9 @@ void Shape::setPosition(const Geodetic3D& position) {
   if (_altitudeMode == RELATIVE_TO_GROUND) {
     THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
   }
-
+  if (position.isNan()) {
+    THROW_EXCEPTION("position can't be NAN");
+  }
 #ifdef C_CODE
   delete _position;
   _position = new Geodetic3D(position);
@@ -268,6 +273,9 @@ void Shape::setPosition(const Geodetic3D& position) {
 }
 
 void Shape::setHeading(const Angle& heading) {
+  if (heading.isNan()) {
+    THROW_EXCEPTION("heading can't be NAN");
+  }
 #ifdef C_CODE
   delete _heading;
   _heading = new Angle(heading);
@@ -279,6 +287,9 @@ void Shape::setHeading(const Angle& heading) {
 }
 
 void Shape::setPitch(const Angle& pitch) {
+  if (pitch.isNan()) {
+    THROW_EXCEPTION("pitch can't be NAN");
+  }
 #ifdef C_CODE
   delete _pitch;
   _pitch = new Angle(pitch);
@@ -290,6 +301,9 @@ void Shape::setPitch(const Angle& pitch) {
 }
 
 void Shape::setRoll(const Angle& roll) {
+  if (roll.isNan()) {
+    THROW_EXCEPTION("roll can't be NAN");
+  }
 #ifdef C_CODE
   delete _roll;
   _roll = new Angle(roll);
@@ -303,6 +317,15 @@ void Shape::setRoll(const Angle& roll) {
 void Shape::setHeadingPitchRoll(const Angle& heading,
                                 const Angle& pitch,
                                 const Angle& roll) {
+  if (heading.isNan()) {
+    THROW_EXCEPTION("heading can't be NAN");
+  }
+  if (pitch.isNan()) {
+    THROW_EXCEPTION("pitch can't be NAN");
+  }
+  if (roll.isNan()) {
+    THROW_EXCEPTION("roll can't be NAN");
+  }
 #ifdef C_CODE
   delete _heading;
   _heading = new Angle(heading);
@@ -326,7 +349,18 @@ void Shape::setFullPosition(const Geodetic3D& position,
   if (_altitudeMode == RELATIVE_TO_GROUND) {
     THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
   }
-
+  if (position.isNan()) {
+    THROW_EXCEPTION("position can't be NAN");
+  }
+  if (heading.isNan()) {
+    THROW_EXCEPTION("heading can't be NAN");
+  }
+  if (pitch.isNan()) {
+    THROW_EXCEPTION("pitch can't be NAN");
+  }
+  if (roll.isNan()) {
+    THROW_EXCEPTION("roll can't be NAN");
+  }
 #ifdef C_CODE
   delete _position;
   _position = new Geodetic3D(position);

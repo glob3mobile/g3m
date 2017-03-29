@@ -395,6 +395,10 @@ public class Camera
     if (_geodeticPosition == null)
     {
       _geodeticPosition = new Geodetic3D(_planet.toGeodetic3D(getCartesianPosition()));
+      if (_geodeticPosition.isNan())
+      {
+        throw new RuntimeException("Camera logic error, invalid _geodeticPosition");
+      }
     }
     return _geodeticPosition;
   }

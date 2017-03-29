@@ -35,7 +35,7 @@ public class Geodetic3D
 
   public final boolean isNan()
   {
-    return _latitude.isNan() || _longitude.isNan();
+    return _latitude.isNan() || _longitude.isNan() || (_height != _height);
   }
 
   public static Geodetic3D zero()

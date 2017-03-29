@@ -24,6 +24,7 @@
 #include "IFloatBuffer.hpp"
 #include "FrustumPolicy.hpp"
 #include "FrustumData.hpp"
+#include "ErrorHandling.hpp"
 
 
 void Camera::initialize(const G3MContext* context) {
@@ -619,6 +620,9 @@ const double Camera::getGeodeticHeight() const {
 const Geodetic3D Camera::getGeodeticPosition() const {
   if (_geodeticPosition == NULL) {
     _geodeticPosition = new Geodetic3D( _planet->toGeodetic3D(getCartesianPosition()) );
+    if (_geodeticPosition->isNan()) {
+      THROW_EXCEPTION("Camera logic error, invalid _geodeticPosition");
+    }
   }
   return *_geodeticPosition;
 }

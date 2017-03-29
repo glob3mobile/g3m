@@ -11,7 +11,10 @@ public abstract class EffectWithDuration extends Effect
      _durationMS = duration._milliseconds;
      _linearTiming = linearTiming;
      _started = 0;
-  
+    if (_durationMS <= 0)
+    {
+      throw new RuntimeException("Invalid duration");
+    }
   }
 
   protected final double percentDone(TimeInterval when)

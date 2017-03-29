@@ -15,6 +15,7 @@
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ITimer.hpp"
+#include "ErrorHandling.hpp"
 
 
 double Effect::sigmoid(double x) {
@@ -28,7 +29,9 @@ _durationMS(duration._milliseconds),
 _linearTiming(linearTiming),
 _started(0)
 {
-
+  if (_durationMS <= 0) {
+    THROW_EXCEPTION("Invalid duration");
+  }
 }
 
 

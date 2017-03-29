@@ -20,10 +20,13 @@ _height(height)
 {
 }
 
+bool Geodetic3D::isNan() const {
+  return _latitude.isNan() || _longitude.isNan() || ISNAN(_height);
+}
+
 Geodetic2D Geodetic3D::asGeodetic2D() const {
   return Geodetic2D(_latitude, _longitude);
 }
-
 
 const std::string Geodetic3D::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

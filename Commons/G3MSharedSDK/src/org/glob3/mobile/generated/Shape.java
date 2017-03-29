@@ -123,6 +123,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _glState = new GLState();
      _surfaceElevationProvider = null;
     _localTransform.setValid(false);
+    if (position.isNan())
+    {
+      throw new RuntimeException("position can't be NAN");
+    }
   }
 
   public void dispose()
@@ -185,7 +189,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     {
       throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
     }
-  
+    if (position.isNan())
+    {
+      throw new RuntimeException("position can't be NAN");
+    }
     _position = position;
     cleanTransformMatrix();
   }
@@ -196,7 +203,22 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     {
       throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
     }
-  
+    if (position.isNan())
+    {
+      throw new RuntimeException("position can't be NAN");
+    }
+    if (heading.isNan())
+    {
+      throw new RuntimeException("heading can't be NAN");
+    }
+    if (pitch.isNan())
+    {
+      throw new RuntimeException("pitch can't be NAN");
+    }
+    if (roll.isNan())
+    {
+      throw new RuntimeException("roll can't be NAN");
+    }
     _position = position;
     _heading = heading;
     _pitch = pitch;
@@ -248,22 +270,46 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final void setHeading(Angle heading)
   {
+    if (heading.isNan())
+    {
+      throw new RuntimeException("heading can't be NAN");
+    }
     _heading = heading;
     cleanTransformMatrix();
   }
   public final void setPitch(Angle pitch)
   {
+    if (pitch.isNan())
+    {
+      throw new RuntimeException("pitch can't be NAN");
+    }
     _pitch = pitch;
     cleanTransformMatrix();
   }
   public final void setRoll(Angle roll)
   {
+    if (roll.isNan())
+    {
+      throw new RuntimeException("roll can't be NAN");
+    }
     _roll = roll;
     cleanTransformMatrix();
   }
 
   public final void setHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
   {
+    if (heading.isNan())
+    {
+      throw new RuntimeException("heading can't be NAN");
+    }
+    if (pitch.isNan())
+    {
+      throw new RuntimeException("pitch can't be NAN");
+    }
+    if (roll.isNan())
+    {
+      throw new RuntimeException("roll can't be NAN");
+    }
     _heading = heading;
     _pitch = pitch;
     _roll = roll;
