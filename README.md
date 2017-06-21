@@ -1,7 +1,7 @@
 g3m
 ===
 
-##The multiplatform advanced visualization framework
+###The multiplatform advanced visualization framework
 ###G3M is a **framework** developed and designed to: 
 
  + Develop **mobile maps** apps in 2D, 2,5D and 3D
