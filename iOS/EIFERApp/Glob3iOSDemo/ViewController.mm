@@ -990,7 +990,7 @@ class AltitudeFixerLM: public ILocationModifier{
   [G3MWidget widget]->setViewMode(MONO);
   [self activateDeviceAttitudeTracking];
   
-  [locationModeButton setHidden:FALSE];
+  [locationModeButton setHidden:TRUE];
   [self changeLocationMode:true];
 }
 

@@ -77,6 +77,13 @@ public:
                     const TouchEvent& touchEvent,
                     CameraContext *cameraContext) {}
   
+  void setLocationModifier(ILocationModifier* lm){
+    if (_locationModifier != NULL && _locationModifier != lm){
+      delete _locationModifier;
+    }
+    _locationModifier = lm;
+  }
+  
 };
 
 #endif /* defined(__G3MiOSSDK__DeviceAttitudeCameraHandler__) */
