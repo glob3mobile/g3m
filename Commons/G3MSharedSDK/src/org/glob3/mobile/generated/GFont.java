@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  GFont.cpp
 //  G3MiOSSDK
@@ -35,10 +35,18 @@ public class GFont
      _size = size;
      _bold = bold;
      _italic = italic;
-
   }
 
-
+  public static GFont custom(String name, float size, boolean bold) { return custom(name, size, bold, false); }
+  public static GFont custom(String name, float size) { return custom(name, size, false, false); }
+  public static GFont custom(String name)
+    {
+        return custom(name, 20, false, false);
+    }
+  public static GFont custom(String name, float size, boolean bold, boolean italic)
+  {
+      return new GFont(name, size, bold, italic);
+  }
 
   public static GFont serif(float size, boolean bold)
   {
@@ -116,6 +124,8 @@ public class GFont
   {
     return (_name.compareTo(GFont.MONOSPACED) == 0);
   }
+
+  public final String getName() { return _name; }
 
   public final float getSize()
   {

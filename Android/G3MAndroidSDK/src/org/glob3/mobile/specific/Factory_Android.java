@@ -2,6 +2,8 @@
 
 package org.glob3.mobile.specific;
 
+import android.content.Context;
+
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IDeviceInfo;
@@ -13,8 +15,6 @@ import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.IWebSocket;
 import org.glob3.mobile.generated.IWebSocketListener;
 import org.glob3.mobile.generated.URL;
-
-import android.content.Context;
 
 
 public final class Factory_Android
@@ -90,7 +90,7 @@ public final class Factory_Android
 
    @Override
    public ICanvas createCanvas() {
-      return new Canvas_Android();
+      return new Canvas_Android(_context.getAssets());
    }
 
 

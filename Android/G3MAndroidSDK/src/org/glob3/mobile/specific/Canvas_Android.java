@@ -2,14 +2,7 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector2F;
-
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
@@ -21,10 +14,20 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
+import org.glob3.mobile.generated.GFont;
+import org.glob3.mobile.generated.ICanvas;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
+import org.glob3.mobile.generated.Vector2F;
+
 
 public final class Canvas_Android
    extends
       ICanvas {
+
+   private final AssetManager _assetManager;
 
    private Bitmap      _bitmap          = null;
    private Canvas      _canvas          = null;
@@ -38,7 +41,8 @@ public final class Canvas_Android
    private final Rect  _rect            = new Rect(); // Rect instance for reuse (and avoid garbage)
 
 
-   Canvas_Android() {
+   Canvas_Android(AssetManager assetManager) {
+      _assetManager = assetManager;
       _fillPaint = new Paint();
       _fillPaint.setAntiAlias(true);
       _fillPaint.setStyle(Paint.Style.FILL);
@@ -69,7 +73,7 @@ public final class Canvas_Android
    }
 
 
-   private static Typeface createTypeface(final GFont font) {
+   private Typeface createTypeface(final GFont font) {
       final Typeface fontFamily;
       if (font.isSansSerif()) {
          fontFamily = Typeface.SANS_SERIF;
@@ -79,6 +83,9 @@ public final class Canvas_Android
       }
       else if (font.isMonospaced()) {
          fontFamily = Typeface.MONOSPACE;
+      }
+      else if (font.getName() != null) {
+          fontFamily = Typeface.createFromAsset(_assetManager, "fonts/" + font.getName());
       }
       else {
          throw new RuntimeException("Unsupported Font type");
