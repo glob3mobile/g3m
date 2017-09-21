@@ -437,9 +437,15 @@ public final class MathUtils_WebGL
 
 
    @Override
+<<<<<<< HEAD
    public double copySign(final double a,
                           final double b) {
       return Math.copySign(a, b);
+=======
+   public int parseIntHex(final String hex) {
+      // TODO Auto-generated method stub
+      return 0;
+>>>>>>> caceresview
    }
 
 

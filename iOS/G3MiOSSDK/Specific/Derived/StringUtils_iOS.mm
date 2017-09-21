@@ -99,6 +99,12 @@ std::string StringUtils_iOS::rtrim(const std::string& string) const {
   return s;
 }
 
+std::string StringUtils_iOS::capitalize(const std::string& string) const {
+
+  NSString* nsString = [NSString stringWithCppString: string];
+  return std::string([[nsString capitalizedString] UTF8String]);
+}
+
 bool StringUtils_iOS::endsWith(const std::string& string,
                                const std::string& suffix) const {
   const size_t stringLength = string.length();

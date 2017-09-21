@@ -79,6 +79,15 @@ public final class StringUtils_Android
 
 
    @Override
+   public String capitalize(final String string) {
+      if (!string.isEmpty()) {
+         return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
+      }
+      return string;
+   }
+
+
+   @Override
    public boolean endsWith(final String string,
                            final String suffix) {
       return string.endsWith(suffix);
@@ -171,13 +180,15 @@ public final class StringUtils_Android
       return Float.toString(value);
    }
 
-
    @Override
    public String replaceAll(final String originalString,
                             final String searchString,
                             final String replaceString) {
       return originalString.replace(searchString, replaceString);
    }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> caceresview
 }

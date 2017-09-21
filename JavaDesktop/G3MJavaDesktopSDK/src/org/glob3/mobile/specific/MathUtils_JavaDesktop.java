@@ -372,6 +372,13 @@ public class MathUtils_JavaDesktop
 
 
    @Override
+   public int parseIntHex(final String hex) {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+
+   @Override
    public float rawIntBitsToFloat(final int value) {
       return Float.intBitsToFloat(value);
    }

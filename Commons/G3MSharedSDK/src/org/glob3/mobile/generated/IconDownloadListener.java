@@ -23,6 +23,7 @@ public class IconDownloadListener extends IImageDownloadListener
 
   public final void onDownload(URL url, IImage image, boolean expired)
   {
+    _mark.resetRequestIconId();
     final boolean hasLabel = (_label.length() != 0);
 
     if (hasLabel)
@@ -39,18 +40,21 @@ public class IconDownloadListener extends IImageDownloadListener
 
   public final void onError(URL url)
   {
+    _mark.resetRequestIconId();
     ILogger.instance().logError("Error trying to download image \"%s\"", url._path);
     _mark.onTextureDownloadError();
   }
 
   public final void onCancel(URL url)
   {
+    _mark.resetRequestIconId();
     // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
     _mark.onTextureDownloadError();
   }
 
   public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
+    _mark.resetRequestIconId();
     // do nothing
   }
 }

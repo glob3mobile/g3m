@@ -337,6 +337,12 @@ public final class MathUtils_Android
 
 
    @Override
+   public int parseIntHex(final String hex) {
+      return Integer.parseInt(hex, 16);
+   }
+
+
+   @Override
    public short maxInt16() {
       return Short.MAX_VALUE;
    }

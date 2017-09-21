@@ -323,6 +323,38 @@ public final class G3MWidget_Android
    }
 
 
+   public void setAnimatedCameraPosition(final Geodetic3D position,
+                                         final Angle heading,
+                                         final Angle pitch) {
+      getG3MWidget().setAnimatedCameraPosition(position, heading, pitch);
+   }
+
+
+   public void setAnimatedCameraPosition(final TimeInterval interval,
+                                         final Geodetic3D position,
+                                         final Angle heading,
+                                         final Angle pitch,
+                                         final boolean linearTiming,
+                                         final boolean linearHeight) {
+
+      getG3MWidget().setAnimatedCameraPosition(interval, position, heading, pitch, linearTiming, linearHeight);
+   }
+
+
+   public void setAnimatedCameraPosition(final TimeInterval interval,
+                                         final Geodetic3D fromPosition,
+                                         final Geodetic3D toPosition,
+                                         final Angle fromHeading,
+                                         final Angle toHeading,
+                                         final Angle fromPitch,
+                                         final Angle toPitch,
+                                         final boolean linearTiming,
+                                         final boolean linearHeight) {
+      getG3MWidget().setAnimatedCameraPosition(interval, fromPosition, toPosition, fromHeading, toHeading, fromPitch, toPitch,
+               linearTiming, linearHeight);
+   }
+
+
    public CameraRenderer getCameraRenderer() {
       return getG3MWidget().getCameraRenderer();
    }

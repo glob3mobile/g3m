@@ -173,8 +173,7 @@ Mesh* createSectorMesh(const Planet* planet,
   //                                          planet,
   //                                          sector._center);
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
-  
-  
+
   // create indices
   ShortBufferBuilder indices;
   
@@ -197,7 +196,6 @@ Mesh* createSectorMesh(const Planet* planet,
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
                        offset);
     vertices->add(g);
-    
     indices.add(indicesCounter++);
   }
   
@@ -206,7 +204,6 @@ Mesh* createSectorMesh(const Planet* planet,
     const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
                        offset);
     vertices->add(g);
-    
     indices.add(indicesCounter++);
   }
   
@@ -288,13 +285,12 @@ Mesh* createSectorMesh(const Planet* planet,
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
-  
+
   [self initCustomizedWithBuilder];
   
   //[self initTestingTileImageProvider];
   
   //[self initWithNonOverlappingMarks];
-  
   
   //  [self initWithMapBooBuilder];
   
@@ -493,7 +489,7 @@ public:
     }
     
     delete result;
-    
+
     //    Geodetic3D position(Geodetic3D(_sector.getCenter(), 5000));
     //    [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     //[_iosWidget widget]->setCameraPosition(position);
@@ -529,6 +525,62 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
   
   LayerSet* layerSet = new LayerSet();
+  //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  //  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer(builder.getPlanet()) );
+  //
+  //  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
+  //                        new SampleSymbolizer(builder.getPlanet()));
+
+  //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
+  //                                               new ToggleGEORendererTask(geoRenderer)));
+
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+  //                                                                                Color::red(),
+  //                                                                                false,
+  //                                                                                true));
+  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+  //                                                                                Color::yellow(),
+  //                                                                                true,
+  //                                                                                false));
+  //  const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
+  //                                            -17.2423142646939311, 145.4950606689779420);
+  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
+                                            40.3423148480663158, -5.5116079822178570);
+  //  final Geodetic2D lower = new Geodetic2D( //
+  //                                          Angle.fromDegrees(40.1540143280790858), //
+  //                                          Angle.fromDegrees(-5.8664874640814313));
+  //  final Geodetic2D upper = new Geodetic2D( //
+  //                                          Angle.fromDegrees(40.3423148480663158), //
+  //                                          Angle.fromDegrees(-5.5116079822178570));
+  //
+  //  final Sector demSector = new Sector(lower, upper);
+
+  builder.setShownSector(sector);
+
+  //  builder.setPlanet(Planet::createSphericalEarth());
+  //  builder.setPlanet(Planet::createFlatEarth());
+
+  //  int _DIEGO_AT_WORK;
+  //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
+
+  //  MeshRenderer* meshRenderer = new MeshRenderer();
+  //  builder.addRenderer(meshRenderer);
+  //  meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
+
+  builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
+                                true);
+  
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///aus4326.bil", false),
+                                                                                     sector,
+                                                                                     Vector2I(2083, 2001),
+                                                                                     -758.905);
+  
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
   const bool forceFirstLevelTilesRenderOnStart = false;
   std::vector<std::string> errors;
   //  layerSet->createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, errors);
@@ -1083,10 +1135,81 @@ public:
                                             40.3423148480663158, -5.5116079822178570);
   
   builder.setShownSector(sector);
-  
   builder.initializeWidget();
 }
 
+
+//class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
+//public:
+//  void onNameChanged(const G3MContext* context,
+//                     const std::string& name) {
+//    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
+//                                 name.c_str());
+//  }
+//
+//  void onIconChanged(const G3MContext* context,
+//                     const std::string& icon) {
+//    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
+//                                 icon.c_str());
+//  }
+//
+//  void onScenesChanged(const G3MContext* context,
+//                       const std::vector<MapBoo_Scene*>& scenes) {
+//    const int scenesSize = scenes.size();
+//    for (int i = 0; i < scenesSize; i++) {
+//      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
+//                                   i,
+//                                   scenes[i]->description().c_str());
+//    }
+//  }
+//
+//  void onSceneChanged(const G3MContext* context,
+//                      int sceneIndex,
+//                      const MapBoo_Scene* scene) {
+//    ILogger::instance()->logInfo("MapBoo application current scene=%l",
+//                                 sceneIndex);
+//  }
+//
+//  void onWebsiteChanged(const G3MContext* context,
+//                        const std::string& website) {}
+//
+//  void onEMailChanged(const G3MContext* context,
+//                      const std::string& eMail) {}
+//
+//  void onAboutChanged(const G3MContext* context,
+//                      const std::string& about) {}
+//
+//  void onWebSocketOpen(const G3MContext* context) {}
+//
+//  void onWebSocketClose(const G3MContext* context) {}
+//
+//  void onTerrainTouch(MapBooBuilder*         builder,
+//                      const G3MEventContext* ec,
+//                      const Vector2I&        pixel,
+//                      const Camera*          camera,
+//                      const Geodetic3D&      position,
+//                      const Tile*            tile) { }
+//};
+
+
+//- (void) initWithMapBooBuilder
+//{
+//  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
+//
+//  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
+//
+//  bool enableNotifications = false;
+//
+//  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
+//                                       URL("http://192.168.1.2:8080/web", false),
+//                                       URL("ws://192.168.1.2:8888/tube", false),
+//                                       "",
+//                                       VIEW_RUNTIME,
+//                                       applicationListener,
+//                                       enableNotifications);
+//
+//  _g3mcBuilder->initializeWidget();
+//}
 
 - (void) initWithDefaultBuilder
 {
@@ -1100,6 +1223,14 @@ public:
   float verticalExaggeration = 1.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
+  //ElevationDataProvider* elevationDataProvider = NULL;
+  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider)
+
+
+  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                                                     Sector::fullSphere(),
+  //                                                                                     Vector2I(2048, 1024));
+
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                     Sector::fullSphere(),
                                                                                     Vector2I(2048, 1024));
@@ -1170,18 +1301,6 @@ public:
   }
   
 };
-
-
-//class SampleTileRenderingListener : public TileRenderingListener {
-//public:
-//  void startRendering(const Tile* tile) {
-//    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-//  }
-//
-//  void stopRendering(const Tile* tile) {
-//    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-//  }
-//};
 
 
 - (void) initCustomizedWithBuilder
@@ -1280,7 +1399,6 @@ public:
   
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
-  
   if (false) { //Testing Reference System
     
     //Test Plane
@@ -1318,6 +1436,11 @@ public:
   //                                   10,
   //                                   new TestMeshLoadListener(),
   //                                   true);
+  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
+                                   2,
+                                   0,
+                                   new TestMeshLoadListener(),
+                                   true);
   //  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
   //                                   2,
   //                                   0,
@@ -1470,7 +1593,6 @@ public:
       }
       
     };
-    
     
     AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder = new AltimeterCanvasImageBuilder();
     HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageBuilder,
@@ -1655,8 +1777,6 @@ public:
           nextCamera->setFOV(Angle::nan(), Angle::fromDegrees(_angle));
           
           return true;
-          
-          
         }
       };
       
@@ -1691,7 +1811,67 @@ public:
       builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
       
     }
- 
+}
+
+
+//  [self createInterpolationTest: meshRenderer];
+
+//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+
+//Draw light direction
+if (false) {
+
+  Vector3D lightDir = Vector3D(100000, 0,0);
+  //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000));
+
+  vertex->add(v);
+  vertex->add(v.add(lightDir));
+  //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+
+  meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
+                                        true,
+                                        vertex->getCenter(),
+                                        vertex->create(),
+                                        3.0,
+                                        1.0,
+                                        Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+
+  delete vertex;
+
+}
+
+GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+                                                                   geoRenderer: geoRenderer
+                                                                  meshRenderer: meshRenderer
+                                                                 marksRenderer: marksRenderer
+                                                                        planet: planet];
+builder.setInitializationTask(initializationTask, true);
+
+PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+builder.addPeriodicalTask(periodicalTask);
+
+const bool logFPS = false;
+builder.setLogFPS(logFPS);
+
+const bool logDownloaderStatistics = false;
+builder.setLogDownloaderStatistics(logDownloaderStatistics);
+
+//builder.getPlanetRendererBuilder()->setRenderDebug(true);
+
+//  WidgetUserData* userData = NULL;
+//  builder.setUserData(userData);
+
+// initialization
+builder.initializeWidget();
+//  [self testGenericQuadTree:geoTileRasterizer];
+}
+
+- (void) testGenericQuadTree: (GEOTileRasterizer*) geoTileRasterizer{
   }
   
   
@@ -1754,8 +1934,6 @@ public:
 }
 
 - (void) testGenericQuadTree: (GEOVectorLayer*) geoVectorLayer {
-  
-  
   NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/populated_places"
                                                               ofType: @"geojson"];
   
@@ -1790,6 +1968,7 @@ public:
         
         //      double areaProportion = 0.5;
         printf("TREE WITH CHILD_ARE_PROPORTION %f\n--------------------\n", areaProportion);
+
         GenericQuadTree_TESTER::run(tree, geoVectorLayer);
         
         delete x;
@@ -1876,7 +2055,7 @@ public:
   //                                          planet,
   //                                          Geodetic2D::zero());
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-  
+
   FloatBufferBuilderFromColor colors;
   
   
@@ -1899,8 +2078,7 @@ public:
   const double minHeight = heightNE;
   const double maxHeight = heightNW;
   const double deltaHeight = maxHeight - minHeight;
-  
-  
+
   vertices->add(sector.getSW(), heightSW);  colors.add(1, 0, 0, 1);
   vertices->add(sector.getSE(), heightSE);  colors.add(1, 0, 0, 1);
   vertices->add(sector.getNE(), heightNE);  colors.add(1, 0, 0, 1);
@@ -2010,7 +2188,7 @@ public:
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
-  
+
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -2817,9 +2995,8 @@ public:
                           const LayerTouchEvent& event) {
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
-        
+
         ILogger::instance()->logInfo("%s", url._path.c_str());
-        
         return true;
       }
     };
@@ -2856,7 +3033,6 @@ public:
                                                             event.getSector());
         
         printf ("touched Temperature. Feature info = %s\n", url._path.c_str());
-        
         return true;
       }
     };
@@ -2918,6 +3094,7 @@ public:
 - (MarksRenderer*) createMarksRenderer
 {
   
+
   //  class TestMarkTouchListener : public MarkTouchListener {
   //  public:
   //    bool touchedMark(Mark* mark) {
@@ -2938,7 +3115,6 @@ public:
   // marks renderer
   const bool readyWhenMarksReady = false;
   MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
-  
   //#warning Buggy mark
   //  Mark* buggyMark = new Mark("BUGGY MARK",
   //                             Geodetic3D::fromDegrees(47.4369010925, 19.2555999756, 1100.0),
@@ -3048,8 +3224,7 @@ public:
                                      false,
                                      Color::fromRGBA(0, 1, 1, 1));
   shapesRenderer->addShape(sphere);
-  
-  
+
   Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
                                            Angle::fromDegrees(-122),
                                            45000),
@@ -3060,15 +3235,14 @@ public:
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
-  
+
   //    const URL textureURL("file:///world.jpg", false);
   //
   //  const double factor = 2e5;
   //  const Vector3D radius1(factor, factor, factor);
   //  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
   //  const Vector3D radiusBox(factor, factor*1.5, factor*2);
-  
-  
+
   //  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
   //                                           Angle::fromDegrees(10),
   //                                           radiusBox.z()/2),
@@ -3113,7 +3287,7 @@ public:
   //                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
   //                                          );
   //    shapesRenderer->addShape(mercator1);
-  
+
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
   //                                                       radius._x * 1.1),
@@ -3209,7 +3383,6 @@ public:
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
-#warning TODO vtp: probar con canvas los 4 casos de drawImage:
     QuadListener(ShapesRenderer* sr):_sr(sr) {
       
     }
@@ -3397,8 +3570,7 @@ private:
     
     const int wheelSize = 7;
     _colorIndex = (_colorIndex + 1) % wheelSize;
-    
-    
+
     BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                                  RELATIVE_TO_GROUND,
                                  Vector3D(boxExtent, boxExtent, height),
@@ -3409,7 +3581,6 @@ private:
     
     //box->setPitch(Angle::fromDegrees(45));
     return box;
-    
   }
   
   Mark* createMark(const GEO2DPointGeometry* geometry) const {
@@ -3486,7 +3657,7 @@ public:
     //    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
     //                                                createLineStyle(geometry),
     //                                                30000) );
-    
+
     symbols->push_back( new GEOLineRasterSymbol(geometry->getCoordinates(),
                                                 createLineRasterStyle(geometry)) );
     
@@ -3523,7 +3694,6 @@ public:
         symbols->push_back( new GEOMarkSymbol(mark) );
       }
     }
-    
     //    const std::string label = properties->getAsString("name", "");
     //
     //    if (label.compare("") != 0) {
@@ -3547,6 +3717,7 @@ public:
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
   
+
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
@@ -3845,7 +4016,6 @@ public:
     const Planet* _planet;
     
     
-    
   public:
     SampleInitializationTask(G3MWidget_iOS*  iosWidget,
                              ShapesRenderer* shapesRenderer,
@@ -4075,12 +4245,12 @@ public:
               /**/
               const double fromDistance = 75000;
               const double toDistance   = 18750;
-              
+
               // const Angle fromAzimuth = Angle::fromDegrees(-90);
               // const Angle toAzimuth   = Angle::fromDegrees(-90 + 360 + 180);
               const Angle fromAzimuth = Angle::fromDegrees(-90);
               const Angle toAzimuth   = Angle::fromDegrees(270);
-              
+
               // const Angle fromAltitude = Angle::fromDegrees(65);
               // const Angle toAltitude   = Angle::fromDegrees(5);
               // const Angle fromAltitude = Angle::fromDegrees(30);
@@ -4093,7 +4263,7 @@ public:
                                  fromAzimuth,  toAzimuth,
                                  fromAltitude, toAltitude);
               /**/
-              
+
               delete buffer;
             }
           }
@@ -4157,7 +4327,7 @@ public:
           }
         }
       }
-      
+
       if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];

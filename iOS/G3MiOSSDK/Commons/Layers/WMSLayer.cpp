@@ -195,6 +195,7 @@ _style(style),
 _isTransparent(isTransparent),
 _extraParameter("")
 {
+
 }
 
 WMSLayer::WMSLayer(const std::string&                mapLayer,
@@ -232,7 +233,7 @@ _style(style),
 _isTransparent(isTransparent),
 _extraParameter("")
 {
-
+  
 }
 
 double WMSLayer::toBBOXLongitude(const Angle& longitude) const {
@@ -251,6 +252,7 @@ const URL WMSLayer::createURL(const Tile* tile) const {
   //  }
 
   const Sector tileSector = tile->_sector;
+
   //  if (!_sector.touchesWith(tileSector)) {
   //    return petitions;
   //  }
@@ -284,8 +286,8 @@ const URL WMSLayer::createURL(const Tile* tile) const {
   //  }
 
   req += "REQUEST=GetMap&SERVICE=WMS";
-
-
+  
+  
   switch (_mapServerVersion) {
     case WMS_1_3_0:
     {
@@ -299,12 +301,11 @@ const URL WMSLayer::createURL(const Tile* tile) const {
 
       }
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
-
+      
       isb->addString("&WIDTH=");
       isb->addInt(width);
       isb->addString("&HEIGHT=");
       isb->addInt(height);
-
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
       isb->addString(",");
@@ -316,7 +317,6 @@ const URL WMSLayer::createURL(const Tile* tile) const {
 
       req += isb->getString();
       delete isb;
-
       break;
     }
     case WMS_1_1_0:
@@ -353,10 +353,11 @@ const URL WMSLayer::createURL(const Tile* tile) const {
       break;
     }
   }
-
+  
   req += "&LAYERS=" + _mapLayer;
-
+  
 	req += "&FORMAT=" + _format;
+
 
   //Style
   if (_style != "") {
@@ -365,7 +366,7 @@ const URL WMSLayer::createURL(const Tile* tile) const {
 	else {
     req += "&STYLES=";
   }
-
+  
   //ASKING TRANSPARENCY
   if (_isTransparent) {
     req += "&TRANSPARENT=TRUE";
@@ -373,7 +374,7 @@ const URL WMSLayer::createURL(const Tile* tile) const {
   else {
     req += "&TRANSPARENT=FALSE";
   }
-
+  
   if (_extraParameter.compare("") != 0) {
     req += "&";
     req += _extraParameter;
@@ -387,7 +388,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   if (!_dataSector.touchesWith(tileSector)) {
     return URL::nullURL();
   }
-
+  
   const Sector intersectionSector = tileSector.intersection(_dataSector);
 
 	//Server name
@@ -395,20 +396,18 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 	if (req[req.size()-1] != '?') {
 		req += '?';
 	}
-
+  
   //If the server refer to itself as localhost...
   size_t pos = req.find("localhost");
   if (pos != -1) {
     req = req.substr(pos+9);
-
     size_t pos2 = req.find("/", 8);
     std::string newHost = req.substr(0, pos2);
-
+    
     req = newHost + req;
   }
-
+  
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-
 
   switch (_queryServerVersion) {
     case WMS_1_3_0:
@@ -422,12 +421,12 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       }
 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
-
+      
       isb->addString("&WIDTH=");
       isb->addInt(_parameters->_tileTextureResolution._x);
       isb->addString("&HEIGHT=");
       isb->addInt(_parameters->_tileTextureResolution._y);
-
+      
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLatitude( intersectionSector._lower._latitude ) );
       isb->addString(",");
@@ -438,9 +437,8 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addDouble( toBBOXLongitude( intersectionSector._upper._longitude ) );
 
       req += isb->getString();
-
+      
       delete isb;
-
       break;
     }
     case WMS_1_1_0:
@@ -448,7 +446,6 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
     {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
-
       if (_srs != "") {
         req += "&SRS=" + _srs;
       }
@@ -457,12 +454,12 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       }
 
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
-
+      
       isb->addString("&WIDTH=");
       isb->addInt(_parameters->_tileTextureResolution._x);
       isb->addString("&HEIGHT=");
       isb->addInt(_parameters->_tileTextureResolution._y);
-
+      
       isb->addString("&BBOX=");
       isb->addDouble( toBBOXLongitude( intersectionSector._lower._longitude ) );
       isb->addString(",");
@@ -473,16 +470,16 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addDouble( toBBOXLatitude( intersectionSector._upper._latitude ) );
 
       req += isb->getString();
-
+      
       delete isb;
       break;
     }
   }
   req += "&LAYERS=" + _queryLayer;
   req += "&QUERY_LAYERS=" + _queryLayer;
-
+  
   req += "&INFO_FORMAT=text/plain";
-
+  
   const IMathUtils* mu = IMathUtils::instance();
 
   double u;
@@ -499,6 +496,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
 
   //X and Y
   //const Vector2D uv = sector.getUVCoordinates(position);
+
   const long long x = mu->round( (u * _parameters->_tileTextureResolution._x) );
   const long long y = mu->round( (v * _parameters->_tileTextureResolution._y) );
 

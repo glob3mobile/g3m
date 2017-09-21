@@ -33,6 +33,7 @@
 		4435E3DC19072F140064A7D7 /* ProtoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */; };
 		4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4436A81E18ED518100CB6792 /* ChangedInfoListener.cpp */; };
 		4436A82118ED7B8F00CB6792 /* ChangedInfoListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */; };
+		4465A13B1C9AB42E00555612 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4465A13A1C9AB42E00555612 /* CoreMotion.framework */; };
 		44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44A00492175500B900C6686D /* ICameraActivityListener.hpp */; };
 		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; };
 		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; };
@@ -846,6 +847,10 @@
 		E780A5C816D3AEDA000F0395 /* G3MWidget_iOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; };
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
+		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
+		E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87557C516E915D10031FBB3 /* TMSLayer.cpp */; };
+		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
+		E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */; };
 		FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */; };
 		FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */; };
 		FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2B1B2517F880B5006307EC /* Quadric.cpp */; };
@@ -908,6 +913,7 @@
 				CF8CED3B1DA6C4420058748E /* BILDownloader.hpp in CopyFiles */,
 				CFE737B81D9AED8D009FFB78 /* MarksFilter.hpp in CopyFiles */,
 				CF6FA7CA1D7D785400A4320A /* Trail.hpp in CopyFiles */,
+				E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */,
 				CF236E281CB3EF50002D4D77 /* ViewMode.hpp in CopyFiles */,
 				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
@@ -1354,6 +1360,7 @@
 		4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProtoRenderer.cpp; path = Commons/Rendererers/ProtoRenderer.cpp; sourceTree = "<group>"; };
 		4436A81E18ED518100CB6792 /* ChangedInfoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedInfoListener.cpp; path = Commons/Basic/ChangedInfoListener.cpp; sourceTree = "<group>"; };
 		4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChangedInfoListener.hpp; path = Commons/Basic/ChangedInfoListener.hpp; sourceTree = "<group>"; };
+		4465A13A1C9AB42E00555612 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44A00492175500B900C6686D /* ICameraActivityListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraActivityListener.hpp; path = Commons/Interfaces/ICameraActivityListener.hpp; sourceTree = "<group>"; };
 		44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -2191,6 +2198,8 @@
 		E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
 		E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DownloadPriority.cpp; path = Commons/Basic/DownloadPriority.cpp; sourceTree = "<group>"; };
 		E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DownloadPriority.hpp; path = Commons/Basic/DownloadPriority.hpp; sourceTree = "<group>"; };
+		E86A5B891672118F0098449B /* PanoDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanoDownloadListener.cpp; sourceTree = "<group>"; };
+		E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PanoDownloadListener.hpp; sourceTree = "<group>"; };
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraZoomAndRotateHandler.cpp; path = Commons/Cameras/CameraZoomAndRotateHandler.cpp; sourceTree = "<group>"; };
 		FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraZoomAndRotateHandler.hpp; path = Commons/Cameras/CameraZoomAndRotateHandler.hpp; sourceTree = "<group>"; };
@@ -2212,6 +2221,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4465A13B1C9AB42E00555612 /* CoreMotion.framework in Frameworks */,
 				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
 				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
 				44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */,
@@ -2689,6 +2699,8 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
+				E86A5B891672118F0098449B /* PanoDownloadListener.cpp */,
+				E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */,
 				CF4FAAD31695F344009734CA /* BSONGenerator.cpp */,
 				CF4FAAD41695F344009734CA /* BSONGenerator.hpp */,
 				CF7EDA081694914A002C760A /* BSONParser.cpp */,
@@ -3247,6 +3259,7 @@
 		D8EEF3B71577924D003FEB5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4465A13A1C9AB42E00555612 /* CoreMotion.framework */,
 				44AFBB2819D4286C00EB78E9 /* CoreData.framework */,
 				44AFBB2619D4276000EB78E9 /* QuartzCore.framework */,
 				44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */,
@@ -3588,6 +3601,7 @@
 				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
 				CF9227D51E31154300B79A87 /* MutableQuaternionF.cpp in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
+				E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */,
 				CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */,
 				CF5934531DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp in Sources */,
 				CF9FDBC91DB3B6F5009D972A /* FloatBufferDEMGrid.cpp in Sources */,
@@ -3810,6 +3824,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -3822,7 +3837,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -3851,7 +3866,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -3859,6 +3874,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -3871,7 +3887,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -3893,7 +3909,7 @@
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -3905,7 +3921,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSSDK/G3MiOSSDK-Prefix.pch";
@@ -3937,7 +3953,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSSDK/G3MiOSSDK-Prefix.pch";

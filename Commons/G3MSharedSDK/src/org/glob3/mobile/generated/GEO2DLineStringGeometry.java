@@ -47,6 +47,7 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
     _coordinatesData = (coordinates == null) ? null : new GEO2DCoordinatesData(coordinates);
   }
 
+
   public void dispose()
   {
     if (_coordinatesData != null)

@@ -142,7 +142,6 @@ private:
 #endif
 
   Vector3D* _cartesianPosition;
-
   bool           _textureSolved;
 #ifdef C_CODE
   const IImage*  _textureImage;
@@ -194,6 +193,9 @@ private:
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
+  
+  IDownloader* _downloader;
+  long long _requestIconID = -1;
 
 public:
 
@@ -394,6 +396,9 @@ public:
   bool getZoomInAppears() const {
     return _zoomInAppears;
   }
+  
+  
+  void resetRequestIconId();
 
 };
 

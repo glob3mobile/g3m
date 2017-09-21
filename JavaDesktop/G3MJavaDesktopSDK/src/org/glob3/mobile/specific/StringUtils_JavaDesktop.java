@@ -162,6 +162,15 @@ public final class StringUtils_JavaDesktop
 
 
    @Override
+   public String capitalize(final String string) {
+      if (!string.isEmpty()) {
+         return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
+      }
+      return string;
+   }
+
+
+   @Override
    public double parseDouble(final String str) {
       return Double.parseDouble(str);
    }

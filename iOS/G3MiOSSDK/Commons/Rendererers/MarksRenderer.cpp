@@ -168,6 +168,7 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
         }
 
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
+
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
         const RectangleF markPixelBounds(markPixel._x - ((float) markWidth / 2),
@@ -228,7 +229,6 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
-
     _lastCamera = camera; // Saving camera for use in onTouchEvent
 
     MutableVector3D cameraPosition;

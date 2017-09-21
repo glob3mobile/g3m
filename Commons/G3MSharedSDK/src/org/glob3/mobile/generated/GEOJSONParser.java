@@ -64,6 +64,7 @@ public class GEOJSONParser
 
   }
 
+
   private GEOObject pvtParse(boolean showStatistics)
   {
     GEOObject result = null;
@@ -297,7 +298,7 @@ public class GEOJSONParser
       for (int i = 0; i < coordinatesArrayCount; i++)
       {
         final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(i);
-        java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
+          java.util.ArrayList<Geodetic2D> coordinates = create2DCoordinates(jsCoordinates);
         if (coordinates != null)
         {
           coordinatesArray.add(coordinates);

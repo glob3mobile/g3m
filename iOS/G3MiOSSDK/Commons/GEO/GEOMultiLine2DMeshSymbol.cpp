@@ -12,8 +12,7 @@
 #include "G3MRenderContext.hpp"
 #include "Planet.hpp"
 
-
-GEOMultiLine2DMeshSymbol::GEOMultiLine2DMeshSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+GEOMultiLine2DMeshSymbol::GEOMultiLine2DMeshSymbol(const std::vector<const std::vector<Geodetic2D*>*>* coordinatesArray,
                                                    const GEOLine2DStyle& style,
                                                    double deltaHeight) :
 _coordinatesArray(coordinatesArray),

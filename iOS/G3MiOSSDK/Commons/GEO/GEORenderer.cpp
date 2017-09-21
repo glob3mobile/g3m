@@ -75,6 +75,7 @@ void GEORenderer::render(const G3MRenderContext* rc, GLState* glState) {
       const GEORenderer_ObjectSymbolizerPair* pair = _children[i];
 
       if (pair->_geoObject != NULL) {
+        
         const GEOSymbolizer* symbolizer = (pair->_symbolizer == NULL) ? _defaultSymbolizer : pair->_symbolizer;
 
         pair->_geoObject->symbolize(rc,

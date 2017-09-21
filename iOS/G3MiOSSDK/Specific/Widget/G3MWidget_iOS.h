@@ -8,6 +8,9 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "TouchEvent.hpp"
+#import "GL.hpp"
+#import "G3MContext.hpp"
 
 @class ES2Renderer;
 

@@ -534,6 +534,108 @@ public class Sector
       {
         lat = _lower._latitude._degrees;
       }
+<<<<<<< HEAD
+=======
+      if ((_upper._longitude._radians < that._lower._longitude._radians) || (_lower._longitude._radians > that._upper._longitude._radians))
+      {
+        return false;
+      }
+    
+      // Overlapping on all axes means Sectors are intersecting
+      return true;
+    }
+
+    public final Geodetic2D getSW()
+    {
+        return _lower;
+    }
+
+    public final Geodetic2D getNE()
+    {
+        return _upper;
+    }
+
+    public final Geodetic2D getNW()
+    {
+        return new Geodetic2D(_upper._latitude, _lower._longitude);
+    }
+
+    public final Geodetic2D getSE()
+    {
+        return new Geodetic2D(_lower._latitude, _upper._longitude);
+    }
+
+    public final Geodetic2D getCenter()
+    {
+        return _center;
+    }
+
+    // (u,v) are similar to texture coordinates inside the Sector
+    // (u,v)=(0,0) in NW point, and (1,1) in SE point
+
+    // (u,v) are similar to texture coordinates inside the Sector
+    // (u,v)=(0,0) in NW point, and (1,1) in SE point
+    public final Geodetic2D getInnerPoint(double u, double v)
+    {
+      return new Geodetic2D(Angle.linearInterpolation(_lower._latitude, _upper._latitude, 1.0 - v), Angle.linearInterpolation(_lower._longitude, _upper._longitude, u));
+    }
+
+    public final Angle getInnerPointLongitude(double u)
+    {
+      return Angle.linearInterpolation(_lower._longitude, _upper._longitude, u);
+    }
+    public final Angle getInnerPointLatitude(double v)
+    {
+      return Angle.linearInterpolation(_lower._latitude, _upper._latitude, 1.0 - v);
+    }
+
+
+    public final Vector2D getUVCoordinates(Geodetic2D point)
+    {
+        return getUVCoordinates(point._latitude, point._longitude);
+    }
+
+    public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
+    {
+        return new Vector2D((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians, (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians);
+    }
+
+
+
+    public final Vector2F getUVCoordinatesF(Angle latitude, Angle longitude)
+    {
+        return new Vector2F((float)((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians), (float)((_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians));
+    }
+
+    public final double getUCoordinate(Angle longitude)
+    {
+        return (longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians;
+    }
+
+    public final double getVCoordinate(Angle latitude)
+    {
+        return (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians;
+    }
+
+
+    public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
+    {
+      //  const Camera* camera = rc->getCurrentCamera();
+      //  const Planet* planet = rc->getPlanet();
+      //
+      //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
+      //  const double angleInRadians = IMathUtils::instance()->acos(dot);
+      //
+      //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
+    
+      if (planet.isFlat())
+         return false;
+    
+      final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
+      final double angleInRadians = java.lang.Math.acos(dot);
+    
+      return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
+>>>>>>> caceresview
     }
   
     if (lon > _upper._longitude._degrees)

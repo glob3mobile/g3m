@@ -59,6 +59,7 @@ private:
   {
 
   }
+    
 
   GEOObject* pvtParse(bool showStatistics) const;
 

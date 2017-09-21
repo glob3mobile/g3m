@@ -30,7 +30,6 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   if (_coordinatesArrayData != NULL) {
     _coordinatesArrayData->_release();
   }
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif

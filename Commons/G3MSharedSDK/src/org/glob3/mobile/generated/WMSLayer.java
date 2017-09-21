@@ -145,6 +145,7 @@ public class WMSLayer extends RasterLayer
     //  }
   
     final Sector tileSector = tile._sector;
+  
     //  if (!_sector.touchesWith(tileSector)) {
     //    return petitions;
     //  }
@@ -202,7 +203,6 @@ public class WMSLayer extends RasterLayer
         isb.addInt(width);
         isb.addString("&HEIGHT=");
         isb.addInt(height);
-  
         isb.addString("&BBOX=");
         isb.addDouble(toBBOXLatitude(sector._lower._latitude));
         isb.addString(",");
@@ -215,7 +215,6 @@ public class WMSLayer extends RasterLayer
         req += isb.getString();
         if (isb != null)
            isb.dispose();
-  
         break;
       }
       case WMS_1_1_0:
@@ -259,6 +258,7 @@ public class WMSLayer extends RasterLayer
     req += "&LAYERS=" + _mapLayer;
   
      req += "&FORMAT=" + _format;
+  
   
     //Style
     if (!_style.equals(""))
@@ -455,6 +455,7 @@ public class WMSLayer extends RasterLayer
      _style = style;
      _isTransparent = isTransparent;
      _extraParameter = "";
+  
   }
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
@@ -508,7 +509,6 @@ public class WMSLayer extends RasterLayer
     if (pos != -1)
     {
       req = req.substring(pos+9);
-  
       int pos2 = req.indexOf("/", 8);
       String newHost = req.substring(0, pos2);
   
@@ -516,7 +516,6 @@ public class WMSLayer extends RasterLayer
     }
   
     req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-  
   
     switch (_queryServerVersion)
     {
@@ -552,7 +551,6 @@ public class WMSLayer extends RasterLayer
   
         if (isb != null)
            isb.dispose();
-  
         break;
       }
       case WMS_1_1_0:
@@ -560,7 +558,6 @@ public class WMSLayer extends RasterLayer
       {
         // default is 1.1.1
         req += "&VERSION=1.1.1";
-  
         if (!_srs.equals(""))
         {
           req += "&SRS=" + _srs;
@@ -616,6 +613,7 @@ public class WMSLayer extends RasterLayer
   
     //X and Y
     //const Vector2D uv = sector.getUVCoordinates(position);
+  
     final long x = mu.round((u * _parameters._tileTextureResolution._x));
     final long y = mu.round((v * _parameters._tileTextureResolution._y));
   

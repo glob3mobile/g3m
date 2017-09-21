@@ -8,6 +8,12 @@
 #ifndef G3MiOSSDK_Color
 #define G3MiOSSDK_Color
 
+#include <iostream>
+#include <string>
+#include <sstream>
+
+#include "ILogger.hpp"
+#include "IMathUtils.hpp"
 #include <string>
 
 class Angle;
@@ -26,6 +32,44 @@ private:
   _alpha(alpha)
   {
 
+  }
+    
+  static bool isValidHex(const std::string &hex) {      
+      if (hex[0] == '#') {
+          if (hex.length() != 7) {
+              return false;
+          }
+      }
+      else {
+          if (hex.length() != 6) {
+              return false;
+          }
+      }
+        
+      #ifdef C_CODE
+      if(hex.find_first_not_of("#0123456789abcdefABCDEF") != hex.npos){ return false;}
+      #endif
+      #ifdef JAVA_CODE
+      if(!hex.matches("^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$")){ return false;}
+      #endif
+    
+      return true;
+  }
+  
+  static Color* hexToRGB(std::string hex) {
+      if (!isValidHex(hex)) {
+          ILogger::instance()->logError("The value received is not avalid hex string!");
+      }
+      
+      if (hex[0] == '#') {
+          hex.erase(0,1);
+      }
+      
+      std::string R = hex.substr(0, 2);
+      std::string G = hex.substr(2, 2);
+      std::string B = hex.substr(4, 2);
+      
+      return new Color((float)IMathUtils::instance()->parseIntHex(R)/255,(float)IMathUtils::instance()->parseIntHex(G)/255,(float)IMathUtils::instance()->parseIntHex(B)/255,1);
   }
 
 public:
@@ -70,6 +114,10 @@ public:
                             const float blue,
                             const float alpha) {
     return new Color(red, green, blue, alpha);
+  }
+    
+  static Color* newFromHEX(const std::string hex){
+      return hexToRGB(hex);
   }
 
   static Color fromHueSaturationBrightness(double hueInRadians,

@@ -187,6 +187,7 @@ public class GEORenderer extends DefaultRenderer
   
         if (pair._geoObject != null)
         {
+  
           final GEOSymbolizer symbolizer = (pair._symbolizer == null) ? _defaultSymbolizer : pair._symbolizer;
   
           pair._geoObject.symbolize(rc, symbolizer, _meshRenderer, _shapesRenderer, _marksRenderer, _geoVectorLayer);

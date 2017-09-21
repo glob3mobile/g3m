@@ -32,7 +32,6 @@ public class MarksRenderer extends DefaultRenderer
 
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
-
   private long _downloadPriority;
 
   private GLState _glState;
@@ -167,7 +166,6 @@ public class MarksRenderer extends DefaultRenderer
     if (marksSize > 0)
     {
       final Camera camera = rc.getCurrentCamera();
-  
       _lastCamera = camera; // Saving camera for use in onTouchEvent
   
       MutableVector3D cameraPosition = new MutableVector3D();
@@ -321,6 +319,7 @@ public class MarksRenderer extends DefaultRenderer
           }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
+  
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
           final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
@@ -383,7 +382,6 @@ public class MarksRenderer extends DefaultRenderer
     return RenderState.ready();
   }
 
-  //TODO: WHY? VTP
   public final void onResume(G3MContext context)
   {
     _context = context;

@@ -102,6 +102,7 @@ public:
   virtual std::string trim(const std::string& string) const {
     return rtrim(ltrim(string));
   }
+  virtual std::string capitalize(const std::string& string) const = 0;
 
   virtual long long parseHexInt(const std::string& str) const = 0;
 

@@ -31,7 +31,6 @@ private:
   mutable Vector3D* _normalizedCartesianCenter;
 
 public:
-
   //Special instances
   static const Sector FULL_SPHERE;
   static const Sector NAN_SECTOR;
@@ -149,6 +148,7 @@ public:
 
   const std::string id() const;
   const std::string description() const;
+
 #ifdef JAVA_CODE
   @Override
   public String toString() {

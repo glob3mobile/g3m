@@ -93,6 +93,7 @@ public abstract class IStringUtils
   {
     return rtrim(ltrim(String));
   }
+  public abstract String capitalize(String String);
 
   public abstract long parseHexInt(String str);
 

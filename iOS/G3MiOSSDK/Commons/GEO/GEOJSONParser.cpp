@@ -303,7 +303,7 @@ GEOGeometry* GEOJSONParser::createMultiLineStringGeometry(const JSONObject* json
 
     for (int i = 0; i < coordinatesArrayCount; i++) {
       const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(i);
-      std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
+        std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
       if (coordinates != NULL) {
         coordinatesArray->push_back( coordinates );
         _lineStringsInMultiLineString2DCount++;

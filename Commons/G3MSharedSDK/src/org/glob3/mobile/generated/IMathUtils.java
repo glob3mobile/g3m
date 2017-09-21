@@ -122,6 +122,8 @@ public abstract class IMathUtils
   public abstract int toInt(double value);
   public abstract int toInt(float value);
 
+  public abstract int parseIntHex(String hex);
+
   public abstract double min(double d1, double d2);
   public abstract float min(float f1, float f2);
 

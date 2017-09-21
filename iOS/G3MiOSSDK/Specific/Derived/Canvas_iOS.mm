@@ -140,8 +140,8 @@ void Canvas_iOS::_setLineMiterLimit(float limit) {
 }
 
 void Canvas_iOS::_setLineDash(float lengths[],
-                              int count,
-                              float phase) {
+                                   int count,
+                                   float phase) {
 #if __LP64__
   double* lengthsD = new double[count];
   for (int i = 0; i < count; i++) {
@@ -157,6 +157,7 @@ void Canvas_iOS::_setLineDash(float lengths[],
                        lengths, count);
 #endif
 }
+
 void Canvas_iOS::_setShadow(const Color& color,
                             float blur,
                             float offsetX,

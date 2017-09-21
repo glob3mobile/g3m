@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__IG3MBuilder__
 
 #include <vector>
+
 class GL;
 class IStorage;
 class IDownloader;

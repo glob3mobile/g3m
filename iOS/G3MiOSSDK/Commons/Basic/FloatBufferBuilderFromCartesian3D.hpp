@@ -10,8 +10,8 @@
 
 #include "FloatBufferBuilder.hpp"
 
-
 class FloatBufferBuilderFromCartesian3D : public FloatBufferBuilder {
+
 private:
   const CenterStrategy _centerStrategy;
   float _cx;

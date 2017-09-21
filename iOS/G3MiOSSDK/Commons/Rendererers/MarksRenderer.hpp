@@ -23,17 +23,16 @@ class MarksRenderer : public DefaultRenderer {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
-
+  
 #ifdef C_CODE
   const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
   private Camera     _lastCamera;
 #endif
-
+  
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
-
   long long _downloadPriority;
 
   GLState* _glState;
@@ -62,7 +61,7 @@ public:
 
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete);
-
+  
   virtual ~MarksRenderer();
 
   virtual void onChangedContext();
@@ -70,20 +69,19 @@ public:
   virtual void render(const G3MRenderContext* rc, GLState* glState);
 
   void addMark(Mark* mark);
-
+  
   void removeMark(Mark* mark);
 
   void removeAllMarks(bool deleteMarks = true);
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
-
+  
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  //TODO: WHY? VTP
   void onResume(const G3MContext* context) {
     _context = context;
   }

@@ -15,11 +15,13 @@ class GEO2DCoordinatesArrayData;
 
 class GEO2DMultiLineStringGeometry : public GEOGeometry2D {
 private:
+
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
 
   GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData);
 
 protected:
+
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;

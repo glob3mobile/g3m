@@ -106,7 +106,13 @@ public:
 
   int toInt(double value) const { return (int) value; }
   int toInt(float value) const { return (int) value; }
-
+    
+  int parseIntHex(std::string hex) const {
+      std::istringstream istr(hex);
+      size_t val;
+      istr >> std::hex >> val;
+      return val;
+  }
 
   double min(double d1, double d2) const {
     return (d1 < d2) ? d1 : d2;

@@ -77,7 +77,7 @@ public class G3MSimpleTileCacheExampleActivity
       final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext(),
                G3MSimpleTileCacheExampleActivity.this);
       // Are cached the first two levels of the world
-      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2, false);
       // Sector specified cached at the indicated levels
 
       _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(

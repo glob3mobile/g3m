@@ -26,7 +26,7 @@ protected:
                          double deltaHeight,
                          const Planet* planet) const;
 
-  Mesh* createLines2DMesh(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+  Mesh* createLines2DMesh(const std::vector<const std::vector<Geodetic2D*>*>* coordinatesArray,
                           const Color& lineColor,
                           float lineWidth,
                           double deltaHeight,
