@@ -634,11 +634,11 @@ class AltitudeFixerLM: public ILocationModifier{
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
-  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+//  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
   //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];

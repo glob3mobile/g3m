@@ -26,7 +26,7 @@ _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
   //TODO CHECK CONSISTENCY
   if (!checkConsistency(x, y, z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
-    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
+    //THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
