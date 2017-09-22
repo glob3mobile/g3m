@@ -205,6 +205,8 @@
 #include <G3MiOSSDK/PointCloudMesh.hpp>
 #include <G3MiOSSDK/Surface.hpp>
 
+#include <G3MiOSSDK/Cylinder.hpp>
+
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -757,6 +759,13 @@ class AltitudeFixerLM: public ILocationModifier{
   builder.addCameraConstraint(camConstrainer);
   
   builder.setBackgroundColor(new Color(Color::fromRGBA255(0, 0, 0, 0)));
+  
+  
+  //Cylinder Test
+  Vector3D s = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 0));
+  Vector3D e = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 1e5));
+  Cylinder cyl(s,e, 1.0e4);
+  meshRenderer->addMesh(cyl.createMesh(Color::red(), 20));
   
   builder.initializeWidget();
 }

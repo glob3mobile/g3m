@@ -77,7 +77,6 @@
 		CF02302919119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */; };
 		CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */; };
 		CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0421D419F9986D00F5D33F /* MutableVector2F.cpp */; };
-		CF0421D719F99ADD00F5D33F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0421D519F9986D00F5D33F /* MutableVector2F.hpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
 		CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF07DD0B175D32CC00839F5D /* Color.cpp */; };
@@ -598,6 +597,8 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
+		D8F631D11F753FEB00361DDA /* Cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F631CF1F753FEB00361DDA /* Cylinder.cpp */; };
+		D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F631D01F753FEB00361DDA /* Cylinder.hpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
@@ -807,6 +808,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */,
 				D82E2F181CEDEE970041B88D /* ColorLegendHelper.hpp in CopyFiles */,
 				D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */,
 				D8EA74541CC79A69007464C8 /* CityGMLRenderer.hpp in CopyFiles */,
@@ -2029,6 +2031,8 @@
 		D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CoordinateSystem.cpp; path = Commons/Geometry/CoordinateSystem.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CoordinateSystem.hpp; path = Commons/Geometry/CoordinateSystem.hpp; sourceTree = "<group>"; };
+		D8F631CF1F753FEB00361DDA /* Cylinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cylinder.cpp; path = Commons/Geometry/Cylinder.cpp; sourceTree = "<group>"; };
+		D8F631D01F753FEB00361DDA /* Cylinder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Cylinder.hpp; path = Commons/Geometry/Cylinder.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -2486,6 +2490,8 @@
 				D8D781E81CA3E5D40025E988 /* Polygon2D.hpp */,
 				D8D781EA1CA400750025E988 /* Polygon3D.cpp */,
 				D8D781EB1CA400750025E988 /* Polygon3D.hpp */,
+				D8F631CF1F753FEB00361DDA /* Cylinder.cpp */,
+				D8F631D01F753FEB00361DDA /* Cylinder.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -3409,6 +3415,7 @@
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
 				CFD3D8B116D1729A00CE9242 /* WMSBilElevationDataProvider.cpp in Sources */,
 				CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */,
+				D8F631D11F753FEB00361DDA /* Cylinder.cpp in Sources */,
 				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
