@@ -656,6 +656,8 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
+		D8F35FB81F750E2B003326B0 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F35FB61F750E2B003326B0 /* TMSLayer.cpp */; };
+		D8F35FB91F750E4B003326B0 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F35FB71F750E2B003326B0 /* TMSLayer.hpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
@@ -848,8 +850,6 @@
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
 		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
-		E87557C716E915D10031FBB3 /* TMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87557C516E915D10031FBB3 /* TMSLayer.cpp */; };
-		E87557C816E9160F0031FBB3 /* TMSLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87557C616E915D10031FBB3 /* TMSLayer.hpp */; };
 		E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */; };
 		FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */; };
 		FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */; };
@@ -869,6 +869,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8F35FB91F750E4B003326B0 /* TMSLayer.hpp in CopyFiles */,
 				D8B2BCEC1E8A9AE200BC08BE /* FrustumPolicyHandler.hpp in CopyFiles */,
 				CFFA5B811E89548500AF294E /* WrapperNearFrustumRenderer.hpp in CopyFiles */,
 				CF7529641E868089003C9605 /* FrustumData.hpp in CopyFiles */,
@@ -2176,6 +2177,8 @@
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CoordinateSystem.cpp; path = Commons/Geometry/CoordinateSystem.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CoordinateSystem.hpp; path = Commons/Geometry/CoordinateSystem.hpp; sourceTree = "<group>"; };
+		D8F35FB61F750E2B003326B0 /* TMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMSLayer.cpp; sourceTree = "<group>"; };
+		D8F35FB71F750E2B003326B0 /* TMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -3095,6 +3098,8 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				D8F35FB61F750E2B003326B0 /* TMSLayer.cpp */,
+				D8F35FB71F750E2B003326B0 /* TMSLayer.hpp */,
 				CF2B32671911A5A500B4AC52 /* VectorLayer.cpp */,
 				CF2B32681911A5A500B4AC52 /* VectorLayer.hpp */,
 				CF02302119119B0100FD85E0 /* TiledVectorLayer.cpp */,
@@ -3698,6 +3703,7 @@
 				CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */,
+				D8F35FB81F750E2B003326B0 /* TMSLayer.cpp in Sources */,
 				CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
 				D8378FA21BFB331300E6557E /* DeviceAttitudeCameraHandler.cpp in Sources */,

@@ -13,6 +13,7 @@
 #include "Tile.hpp"
 #include "RenderState.hpp"
 #include "TimeInterval.hpp"
+#include "IStringBuilder.hpp"
 
 
 TMSLayer::TMSLayer(const std::string& mapLayer,
@@ -53,7 +54,7 @@ const std::string TMSLayer::description() const {
 const URL TMSLayer::createURL(const Tile* tile) const {
   
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_mapServerURL.getPath());
+  isb->addString(_mapServerURL._path);
   isb->addString(_mapLayer);
   isb->addString("/");
   isb->addInt(tile->_level);
