@@ -15,6 +15,8 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilder.hpp"
 #include "ShortBufferBuilder.hpp"
+#include "CompositeMesh.hpp"
+#include "DirectMesh.hpp"
 
 Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
   
@@ -28,11 +30,21 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
                                                                      _start);
   
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  FloatBufferBuilderFromCartesian3D* fbbC1 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  fbbC1->add(_start);
+  FloatBufferBuilderFromCartesian3D* fbbC2 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  fbbC2->add(_end);
   
   FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* normalsC1 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  normalsC1->add(d.times(-1.0));
+  FloatBufferBuilderFromCartesian3D* normalsC2 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  normalsC2->add(d);
+  
   MutableVector3D x(p);
   for (int i = 0; i < nSegments; ++i){
     
+    //Tube
     Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
     Vector3D newEndPoint = newStartPoint.add(d);
     x.set(newStartPoint._x, newStartPoint._y, newStartPoint._z);
@@ -43,8 +55,23 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
     normals->add(newStartPoint.sub(_start));
     normals->add(newEndPoint.sub(_end));
     
+    //Cover1
+    fbbC1->add(newStartPoint);
+    normalsC1->add(d.times(-1.0));
+    //Cover2
+    fbbC2->add(newEndPoint);
+    normalsC2->add(d);
   }
   
+  //Still covers
+  Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
+  fbbC1->add(newStartPoint);
+  normalsC1->add(d.times(-1.0));
+  Vector3D newEndPoint = newStartPoint.add(d);
+  fbbC2->add(newEndPoint);
+  normalsC2->add(d);
+  
+
   ShortBufferBuilder ind;
   for (int i = 0; i < nSegments*2; ++i){
     ind.add((short)i);
@@ -52,25 +79,57 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
   ind.add((short)0);
   ind.add((short)1);
   
+  IFloatBuffer* vertices = fbb->create();
+  
   IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                           fbb->getCenter(),
-                           fbb->create(),
-                           true,
-                           ind.create(),
-                           true,
-                           1.0,
-                           1.0,
-                           new Color(color),
-                           NULL,
-                           1.0f,
-                           true,
-                           normals->create(),
-                           false,
-                           0,
-                           0);
+                                    fbb->getCenter(),
+                                    vertices,
+                                    true,
+                                    ind.create(),
+                                    true,
+                                    1.0,
+                                    1.0,
+                                    new Color(color),
+                                    NULL,
+                                    1.0f,
+                                    true,
+                                    normals->create(),
+                                    false,
+                                    0,
+                                    0);
+  
+  
+  CompositeMesh* cm = new CompositeMesh();
+  cm->addMesh(im);
+  
+  //Covers
+  if (true){
+    DirectMesh* c1 = new DirectMesh(GLPrimitive::triangleFan(),
+                                    true,
+                                    fbbC1->getCenter(),
+                                    fbbC1->create(),
+                                    1.0,
+                                    1.0,
+                                    new Color(color));
+    cm->addMesh(c1);
+    
+    DirectMesh* c2 = new DirectMesh(GLPrimitive::triangleFan(),
+                                    true,
+                                    fbbC2->getCenter(),
+                                    fbbC2->create(),
+                                    1.0,
+                                    1.0,
+                                    new Color(color));
+    cm->addMesh(c2);
+    
+    
+  }
+  
   
   delete normals;
   delete fbb;
-  return im;
+  
+  
+  return cm;
   
 }

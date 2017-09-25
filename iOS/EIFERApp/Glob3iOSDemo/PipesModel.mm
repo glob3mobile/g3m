@@ -33,14 +33,18 @@ void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationDat
       Geodetic3D g = Geodetic3D::fromDegrees(lat, lon, h + ed->getElevationAt(Geodetic2D::fromDegrees(lat, lon)));
       Geodetic3D g2 = Geodetic3D::fromDegrees(lat2, lon2, h2 + + ed->getElevationAt(Geodetic2D::fromDegrees(lat2, lon2)));
 
+      //Tubes
       Cylinder c(p->toCartesian(g), p->toCartesian(g2), 0.5);
+      mr->addMesh(c.createMesh(Color::red(), 5));
       
-      mr->addMesh(c.createMesh(Color::red(), 15));
-      
-      //Cylinder c2(p->toCartesian(Geodetic3D(g._latitude, g._longitude, g._height-0.5)), p->toCartesian(Geodetic3D(g._latitude, g._longitude, g._height+0.5)), 0.5);
-      
-      mr->addMesh(c.createMesh(Color::red(), 10));
-      //mr->addMesh(c2.createMesh(Color::blue(), 15));
+      //Junctions
+//      Cylinder c2(p->toCartesian(Geodetic3D(g._latitude, g._longitude, g._height-0.5)),
+//                  p->toCartesian(Geodetic3D(g._latitude, g._longitude, g._height+0.7)), 0.7);
+//      mr->addMesh(c2.createMesh(Color::blue(), 5));
+//      
+//      Cylinder c3(p->toCartesian(Geodetic3D(g2._latitude, g2._longitude, g2._height-0.5)),
+//                  p->toCartesian(Geodetic3D(g2._latitude, g2._longitude, g2._height+0.7)), 0.7);
+//      mr->addMesh(c3.createMesh(Color::blue(), 5));
       
     }
     
