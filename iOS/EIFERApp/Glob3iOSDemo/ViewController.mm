@@ -206,6 +206,7 @@
 #include <G3MiOSSDK/Surface.hpp>
 
 #include <G3MiOSSDK/Cylinder.hpp>
+#include "PipesModel.hpp"
 
 
 #import <QuartzCore/QuartzCore.h>
@@ -635,7 +636,7 @@ class AltitudeFixerLM: public ILocationModifier{
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
 //  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
@@ -761,11 +762,13 @@ class AltitudeFixerLM: public ILocationModifier{
   builder.setBackgroundColor(new Color(Color::fromRGBA255(0, 0, 0, 0)));
   
   
-  //Cylinder Test
-  Vector3D s = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 0));
-  Vector3D e = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 1e5));
-  Cylinder cyl(s,e, 1.0e4);
-  meshRenderer->addMesh(cyl.createMesh(Color::red(), 20));
+//  //Cylinder Test
+//  Vector3D s = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 0));
+//  Vector3D e = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 1e5));
+//  Cylinder cyl(s,e, 1.0e4);
+//  meshRenderer->addMesh(cyl.createMesh(Color::red(), 20));
+  
+
   
   builder.initializeWidget();
 }
@@ -786,6 +789,9 @@ class AltitudeFixerLM: public ILocationModifier{
                                          new MyCityGMLRendererListener(self),
                                          true);
   }
+  
+  
+  PipesModel::addMeshes(_planet, meshRenderer, elevationData);
 }
 
 -(void) onProgress {
