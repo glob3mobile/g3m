@@ -181,60 +181,57 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
 
-  private void visitTilesTouchesWith(java.util.ArrayList<Layer> layers, Sector sector, int firstLevelToVisit, int maxLevelToVisit)
+  private void visitTilesTouchesWith(Sector sector, int firstLevel, int maxLevel)
   {
-    ILogger logger = ILogger.instance();
-  
     if (_tileVisitor != null)
     {
       final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
-  
-      final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-      long numVisits = 0;
-  
-      if (firstLevelToVisit == parameters._firstLevel)
+      if (parameters == null)
       {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        return;
+      }
   
-        logger.logInfo("Precaching top level: %d", firstLevelToVisit);
-        for (int i = 0; i < firstLevelTilesCount; i++)
+      final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
+      if (firstLevel < firstLevelToVisit)
+      {
+        ILogger.instance().logError("Can only visit from level %d", firstLevelToVisit);
+        return;
+      }
+  
+      final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
+      if (maxLevel > maxLevelToVisit)
+      {
+        ILogger.instance().logError("Can only visit to level %d", maxLevelToVisit);
+        return;
+      }
+  
+      if (firstLevelToVisit > maxLevelToVisit)
+      {
+        ILogger.instance().logError("Can't visit, first level is gratter than max level");
+        return;
+      }
+  
+      java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
+      final int layersCount = _layerSet.size();
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layerSet.getLayer(i);
+        if (layer.isEnable() && layer.getRenderState()._type == RenderState_Type.RENDER_READY)
         {
-          Tile tile = _firstLevelTiles.get(i);
-          if (tile._sector.touchesWith(sector))
-          {
-            numVisits++;
-            _tileVisitor.visitTile(layers, tile);
-          }
-        }
-        logger.logInfo("%d request for precaching top level has been sent. Waiting responses...", numVisits);
-  
-  
-        logger.logInfo("Precaching rests of levels");
-        numVisits = 0;
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          if (tile._sector.touchesWith(sector))
-          {
-            numVisits+=visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
-          }
+          layers.add(layer);
         }
       }
-      else
-      {
-        logger.logInfo("Precaching from %d to %d levels", firstLevelToVisit, maxLevelToVisit);
-        for (int i = 0; i < firstLevelTilesCount; i++)
-        {
-          Tile tile = _firstLevelTiles.get(i);
-          if (tile._sector.touchesWith(sector))
-          {
-            _tileVisitor.visitTile(layers, tile);
-            numVisits++;
-            numVisits+=visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
-          }
-        }
-        logger.logInfo("%d request for precaching from %d to %d levels has been sent. Waiting responses...",numVisits, firstLevelToVisit, maxLevelToVisit);
   
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        if (tile._sector.touchesWith(sector))
+        {
+          _tileVisitor.visitTile(layers, tile);
+          visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
+        }
       }
     }
     else
@@ -243,9 +240,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
-  private long visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
+  private void visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
   {
-    long numVisits = 0;
     if (tile._level < maxLevel)
     {
       java.util.ArrayList<Tile> subTiles = tile.getSubTiles();
@@ -258,14 +254,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         {
           if ((tile._level >= topLevel))
           {
-            numVisits++;
             _tileVisitor.visitTile(layers, tl);
           }
-          numVisits += visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
+          visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
         }
       }
     }
-    return numVisits;
   }
 
   private long _tileTextureDownloadPriority;
@@ -761,72 +755,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return RenderState.ready();
   }
 
-  public final void acceptTileVisitor(ITileVisitor tileVisitor, Sector sector, int firstLevel, int maxLevel, boolean forlevels)
+  public final void acceptTileVisitor(ITileVisitor tileVisitor, Sector sector, int topLevel, int maxLevel)
   {
-    ILogger logger = ILogger.instance();
-    if (tileVisitor != null)
-    {
-      _tileVisitor = tileVisitor;
-      final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
-      if (parameters == null)
-      {
-        logger.logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
-        return;
-      }
-  
-      final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
-      if (firstLevel < firstLevelToVisit)
-      {
-        logger.logError("Can only visit from level %", firstLevelToVisit);
-        return;
-      }
-  
-      final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
-  
-      if (maxLevel > maxLevelToVisit)
-      {
-        logger.logError("Can only visit to level %", maxLevelToVisit);
-        return;
-      }
-  
-      if (firstLevelToVisit > maxLevelToVisit)
-      {
-        logger.logError("Can't visit, first level is gratter than max level");
-        return;
-      }
-  
-      java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
-      final int layersCount = _layerSet.size();
-      for (int i = 0; i < layersCount; i++)
-      {
-        Layer layer = _layerSet.getLayer(i);
-        if (layer.isEnable() && layer.getRenderState()._type == RenderState_Type.RENDER_READY)
-        {
-          layers.add(layer);
-        }
-      }
-      if(forlevels)
-      {
-        final int numlevels = maxLevelToVisit - firstLevelToVisit;
-        for (int i = 0; i < numlevels; i++)
-        {
-          final int level = firstLevelToVisit+i;
-          logger.logInfo("Precaching level %d.", level);
-          visitTilesTouchesWith(layers, sector, level, level+1);
-        }
-      }
-      else
-      {
-        visitTilesTouchesWith(layers, sector, firstLevelToVisit, maxLevelToVisit);
-      }
-  
-    }
-    else
-    {
-      logger.logError("TileVisitor is NULL");
-    }
+    _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
   }
-
 
   public final void start(G3MRenderContext rc)
   {
@@ -897,7 +830,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   /**
    Add a listener for notification of visible-sector changes.
-
+   
    @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered immediately.
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
@@ -907,7 +840,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   /**
    Add a listener for notification of visible-sector changes.
-
+   
    The event is triggered immediately without waiting for the visible-sector get settled.
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener)

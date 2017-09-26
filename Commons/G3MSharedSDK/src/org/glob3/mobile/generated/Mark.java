@@ -907,6 +907,7 @@ public class Mark implements SurfaceElevationListener
   
         if (_textureID != null)
         {
+  
           if (_glState == null)
           {
             createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
@@ -1062,9 +1063,6 @@ public class Mark implements SurfaceElevationListener
     return _zoomInAppears;
   }
 
-<<<<<<< HEAD
-}
-=======
 
   public final void resetRequestIconId()
   {
@@ -1072,4 +1070,3 @@ public class Mark implements SurfaceElevationListener
   }
 
 }
->>>>>>> caceresview

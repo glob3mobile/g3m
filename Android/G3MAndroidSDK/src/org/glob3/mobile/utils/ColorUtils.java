@@ -1,5 +1,3 @@
-
-
 package org.glob3.mobile.utils;
 
 import org.glob3.mobile.generated.Color;

@@ -16,11 +16,9 @@ package org.glob3.mobile.generated;
 
 
 
-<<<<<<< HEAD
+
 //class Angle;
 
-=======
->>>>>>> caceresview
 
 public class Color
 {

@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //class MarksRenderer;
 public class PanoDownloadListener extends IBufferDownloadListener
 {
@@ -21,8 +21,8 @@ public class PanoDownloadListener extends IBufferDownloadListener
     {
       String String = buffer.getAsString();
       final JSONBaseObject json = IJSONParser.instance().parse(String);
-      ILogger.instance().logInfo(url.getPath());
-      parseMETADATA(IStringUtils.instance().substring(url.getPath(), 0, IStringUtils.instance().indexOf(url.getPath(), "/info.txt")), json.asObject());
+      ILogger.instance().logInfo(url._path);
+      parseMETADATA(IStringUtils.instance().substring(url._path, 0, IStringUtils.instance().indexOf(url._path, "/info.txt")), json.asObject());
       IJSONParser.instance().deleteJSONData(json);
       if (buffer != null)
          buffer.dispose();
