@@ -92,7 +92,7 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
                                     new Color(color),
                                     NULL,
                                     1.0f,
-                                    true,
+                                    false,
                                     normals->create(),
                                     false,
                                     0,
@@ -103,7 +103,7 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
   cm->addMesh(im);
   
   //Covers
-  if (true){
+  if (/* DISABLES CODE */ (false)){
     DirectMesh* c1 = new DirectMesh(GLPrimitive::triangleFan(),
                                     true,
                                     fbbC1->getCenter(),
@@ -121,8 +121,6 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments){
                                     1.0,
                                     new Color(color));
     cm->addMesh(c2);
-    
-    
   }
   
   

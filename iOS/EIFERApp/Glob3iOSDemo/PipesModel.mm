@@ -16,6 +16,8 @@ void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationDat
   
   NSString* s = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pipesCoords" ofType:@"csv"] encoding:NSASCIIStringEncoding error:nil ];
   
+  int nPipes = 0;
+  
   NSArray* lines = [s componentsSeparatedByString:@"\n"];
   for (size_t i = 0; i < lines.count; i++){
     NSArray* numbers = [lines[i] componentsSeparatedByString:@" "];
@@ -37,6 +39,8 @@ void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationDat
       Cylinder c(p->toCartesian(g), p->toCartesian(g2), 0.5);
       mr->addMesh(c.createMesh(Color::red(), 5));
       
+      nPipes++;
+      
       //Junctions
 //      Cylinder c2(p->toCartesian(Geodetic3D(g._latitude, g._longitude, g._height-0.5)),
 //                  p->toCartesian(Geodetic3D(g._latitude, g._longitude, g._height+0.7)), 0.7);
@@ -49,4 +53,6 @@ void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationDat
     }
     
   }
+  
+  printf("%d pipes created.\n", nPipes);
 }
