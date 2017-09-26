@@ -791,7 +791,7 @@ class AltitudeFixerLM: public ILocationModifier{
   }
   
   
-  PipesModel::addMeshes(_planet, meshRenderer, elevationData);
+  PipesModel::addMeshes(_planet, meshRenderer, elevationData, -4.0);
 }
 
 -(void) onProgress {

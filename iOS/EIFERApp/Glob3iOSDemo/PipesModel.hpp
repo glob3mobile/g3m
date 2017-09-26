@@ -20,7 +20,7 @@ class PipesModel{
 public:
   static double coord;
   
-  static void addMeshes(const Planet* p, MeshRenderer* mr, const ElevationData* ed);
+  static void addMeshes(const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset = 0.0);
   
 };
 

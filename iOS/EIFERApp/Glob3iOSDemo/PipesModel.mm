@@ -12,7 +12,7 @@
 
 #import <UIKit/UIKit.h>
 
-void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationData* ed){
+void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset){
   
   NSString* s = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pipesCoords" ofType:@"csv"] encoding:NSASCIIStringEncoding error:nil ];
   
@@ -32,8 +32,8 @@ void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationDat
       double lat2 = ((NSString*)numbers[4]).doubleValue;
       double h2 = ((NSString*)numbers[5]).doubleValue;
       
-      Geodetic3D g = Geodetic3D::fromDegrees(lat, lon, h + ed->getElevationAt(Geodetic2D::fromDegrees(lat, lon)));
-      Geodetic3D g2 = Geodetic3D::fromDegrees(lat2, lon2, h2 + + ed->getElevationAt(Geodetic2D::fromDegrees(lat2, lon2)));
+      Geodetic3D g = Geodetic3D::fromDegrees(lat, lon, h + ed->getElevationAt(Geodetic2D::fromDegrees(lat, lon)) + heightOffset);
+      Geodetic3D g2 = Geodetic3D::fromDegrees(lat2, lon2, h2 + + ed->getElevationAt(Geodetic2D::fromDegrees(lat2, lon2)) + heightOffset);
 
       //Tubes
       Cylinder c(p->toCartesian(g), p->toCartesian(g2), 0.5);
