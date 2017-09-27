@@ -638,6 +638,7 @@ class AltitudeFixerLM: public ILocationModifier{
 //  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+//  [self addCityGMLFile:"file:///AR_demo_with_buildings.gml" needsToBeFixOnGround:true]; //NOT WORKING
 //  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
@@ -791,7 +792,8 @@ class AltitudeFixerLM: public ILocationModifier{
   }
   
   
-  PipesModel::addMeshes(_planet, meshRenderer, elevationData, -4.0);
+  PipesModel::addMeshes("pipesCoords", _planet, meshRenderer, elevationData, -4.0);
+  PipesModel::addMeshes("pipesCoordsMetzt", _planet, meshRenderer, NULL, -4.0);
 }
 
 -(void) onProgress {
@@ -845,11 +847,18 @@ class AltitudeFixerLM: public ILocationModifier{
   }
   
   //Whole city!
+//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
+//                                                Angle::fromDegrees(-109.452892),
+//                                                Angle::fromDegrees(-44.938813)
+//                                                );
+  
   [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
-                                                Angle::fromDegrees(-109.452892),
-                                                Angle::fromDegrees(-44.938813)
+                                                Geodetic3D::fromDegrees(49.1034419341, 6.2225732157,  1000.0),
+                                                Angle::fromDegrees(0.0),
+                                                Angle::fromDegrees(-90.0)
                                                 );
+  
   
   [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(activateMenu) userInfo:nil repeats:FALSE];
   

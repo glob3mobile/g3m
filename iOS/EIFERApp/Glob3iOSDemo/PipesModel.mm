@@ -12,9 +12,9 @@
 
 #import <UIKit/UIKit.h>
 
-void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset){
+void PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset){
   
-  NSString* s = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pipesCoords" ofType:@"csv"] encoding:NSASCIIStringEncoding error:nil ];
+  NSString* s = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:fileName.c_str()] ofType:@"csv"] encoding:NSASCIIStringEncoding error:nil ];
   
   int nPipes = 0;
   
@@ -32,8 +32,11 @@ void PipesModel::addMeshes(const Planet* p, MeshRenderer* mr, const ElevationDat
       double lat2 = ((NSString*)numbers[4]).doubleValue;
       double h2 = ((NSString*)numbers[5]).doubleValue;
       
-      Geodetic3D g = Geodetic3D::fromDegrees(lat, lon, h + ed->getElevationAt(Geodetic2D::fromDegrees(lat, lon)) + heightOffset);
-      Geodetic3D g2 = Geodetic3D::fromDegrees(lat2, lon2, h2 + + ed->getElevationAt(Geodetic2D::fromDegrees(lat2, lon2)) + heightOffset);
+      double o1 = ed == NULL? 0.0 : ed->getElevationAt(Geodetic2D::fromDegrees(lat, lon));
+      double o2 = ed == NULL? 0.0 : ed->getElevationAt(Geodetic2D::fromDegrees(lat2, lon2));
+      
+      Geodetic3D g = Geodetic3D::fromDegrees(lat, lon, h + o1 + heightOffset);
+      Geodetic3D g2 = Geodetic3D::fromDegrees(lat2, lon2, h2 + o2 + heightOffset);
 
       //Tubes
       Cylinder c(p->toCartesian(g), p->toCartesian(g2), 0.5);

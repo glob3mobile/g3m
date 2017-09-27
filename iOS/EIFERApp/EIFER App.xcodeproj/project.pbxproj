@@ -13,6 +13,8 @@
 		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
 		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
 		D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80D57301BBAA1F400BA4762 /* Images.xcassets */; };
+		D82CAE301F7AE81700E6CCBE /* pipesCoordsMetzt.csv in Resources */ = {isa = PBXBuildFile; fileRef = D82CAE2F1F7AE81700E6CCBE /* pipesCoordsMetzt.csv */; };
+		D82CAE321F7AE9B900E6CCBE /* AR_demo_with_buildings.gml in Resources */ = {isa = PBXBuildFile; fileRef = D82CAE311F7AE9B900E6CCBE /* AR_demo_with_buildings.gml */; };
 		D82D00501CF4ACB20038C6FB /* k_s in Resources */ = {isa = PBXBuildFile; fileRef = D82D004F1CF4ACB20038C6FB /* k_s */; };
 		D850B6DC1F76B51400FED5E3 /* PipesModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = D850B6DA1F76B51300FED5E3 /* PipesModel.mm */; };
 		D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86F55911CD9E75700A724F8 /* CameraViewController.m */; };
@@ -99,6 +101,8 @@
 		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		D80D57301BBAA1F400BA4762 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = G3MiOSDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		D82CAE2F1F7AE81700E6CCBE /* pipesCoordsMetzt.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pipesCoordsMetzt.csv; sourceTree = "<group>"; };
+		D82CAE311F7AE9B900E6CCBE /* AR_demo_with_buildings.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AR_demo_with_buildings.gml; sourceTree = "<group>"; };
 		D82D004F1CF4ACB20038C6FB /* k_s */ = {isa = PBXFileReference; lastKnownFileType = folder; path = k_s; sourceTree = "<group>"; };
 		D850B6DA1F76B51300FED5E3 /* PipesModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PipesModel.mm; sourceTree = "<group>"; };
 		D850B6DB1F76B51300FED5E3 /* PipesModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PipesModel.hpp; sourceTree = "<group>"; };
@@ -275,6 +279,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D82CAE311F7AE9B900E6CCBE /* AR_demo_with_buildings.gml */,
+				D82CAE2F1F7AE81700E6CCBE /* pipesCoordsMetzt.csv */,
 				D8A8F94F1F76BD3900BCDD60 /* pipesCoords.csv */,
 				D88048291D3D068E001E8249 /* plane_off.png */,
 				D880482A1D3D068E001E8249 /* plane_on.png */,
@@ -426,6 +432,7 @@
 				E71B15401626D27F003D1013 /* Icon.png in Resources */,
 				D8DF55D41CC4D9C300D7D084 /* ka_31467.bil in Resources */,
 				D8DF558F1CC4D4D100D7D084 /* EIFER Resources in Resources */,
+				D82CAE321F7AE9B900E6CCBE /* AR_demo_with_buildings.gml in Resources */,
 				E71B15411626D27F003D1013 /* Icon@2x.png in Resources */,
 				D8DF55C91CC4D9C300D7D084 /* bulach_4326_lod2.gml in Resources */,
 				D8DF55CE1CC4D9C300D7D084 /* eifer_logo.png in Resources */,
@@ -436,6 +443,7 @@
 				D8DF55DB1CC4D9C300D7D084 /* random_cluster.geojson in Resources */,
 				D8DF55D11CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml in Resources */,
 				D8DF55D61CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml in Resources */,
+				D82CAE301F7AE81700E6CCBE /* pipesCoordsMetzt.csv in Resources */,
 				D82D00501CF4ACB20038C6FB /* k_s in Resources */,
 				D8DF55CB1CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml in Resources */,
 			);
