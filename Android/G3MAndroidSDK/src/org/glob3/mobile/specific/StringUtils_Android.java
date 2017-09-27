@@ -186,9 +186,4 @@ public final class StringUtils_Android
                             final String replaceString) {
       return originalString.replace(searchString, replaceString);
    }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> caceresview
 }

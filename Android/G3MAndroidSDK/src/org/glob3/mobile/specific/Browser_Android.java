@@ -53,24 +53,7 @@ public class Browser_Android {
       _webView.getSettings().setAppCacheEnabled(true);
       _webView.setClickable(true);
       _webView.getSettings().setLightTouchEnabled(true);
-      //_webView.setAlwaysDrawnWithCacheEnabled(true);
-      //_webView.getSettings().setDomStorageEnabled(true);
-      //_webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-      //_webView.setLongClickable(false);
-      //_webView.getSettings().setSupportZoom(true);
-      //_webView.getSettings().setBuiltInZoomControls(true);
-      //_webView.getSettings().setUseWideViewPort(true);
 
-      /* --This was commentted because not allow to load panoramics images
-       * 
-            _webView.setWebViewClient(new WebViewClient() {
-               @Override
-               public boolean shouldOverrideUrlLoading(final WebView view,
-                                                       final String url) {
-                  view.loadUrl(url);
-                  return true;
-               }
-            });*/
       _webView.setWebViewClient(new WebViewClient());
 
       _webView.setWebChromeClient(new WebChromeClient() {
@@ -94,31 +77,8 @@ public class Browser_Android {
          }
       });
 
-      //      _webView.setWebViewClient(new WebViewClient() {
-      //
-      //         @Override
-      //         public boolean shouldOverrideUrlLoading(final WebView view,
-      //                                                 final String url) {
-      //            view.loadUrl(url);
-      //            return true;
-      //         }
-      //      });
-
-      Log.v("Opening url: ", targetUrl.getPath());
-      _webView.loadUrl(targetUrl.getPath());
+      Log.v("Opening url: ", targetUrl._path);
+      _webView.loadUrl(targetUrl._path);
    }
-
-   //   public void openInBrowser(final URL url) {
-   //
-   //
-   //      //      final android.webkit.WebView wv = (android.webkit.WebView) this.findViewById(R.id.webview);
-   //      //      wv.loadUrl(url.getPath());
-   //
-   //      final Uri uri = Uri.parse(url.getPath());
-   //      //final Uri uri = Uri.parse("file:///android_asset/planarpanoramic.html");
-   //      final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-   //      _activity.startActivity(intent);
-   //
-   //   }
 
 }
