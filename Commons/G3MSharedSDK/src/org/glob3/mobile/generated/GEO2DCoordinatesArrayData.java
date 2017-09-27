@@ -167,4 +167,15 @@ public class GEO2DCoordinatesArrayData extends RCObject
     return result;
   }
 
+  public final java.util.ArrayList<java.util.ArrayList<Geodetic2D> > asGeodetic2DNestedArray()
+  {
+    java.util.ArrayList<java.util.ArrayList<Geodetic2D> > c = new java.util.ArrayList<java.util.ArrayList<Geodetic2D> >();
+    for (int i = 0; i < _coordinatesArray.size(); i++)
+    {
+      java.util.ArrayList<Geodetic2D> cc = _coordinatesArray.get(i).getCoordinates();
+      c.add(cc);
+    }
+    return c;
+  }
+
 }

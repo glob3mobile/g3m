@@ -133,3 +133,12 @@ long long GEO2DCoordinatesArrayData::getCoordinatesCount() const {
   }
   return result;
 }
+
+std::vector<std::vector<Geodetic2D*> > GEO2DCoordinatesArrayData::asGeodetic2DNestedArray() const{
+  std::vector<std::vector<Geodetic2D*> > c;
+  for (size_t i = 0; i < _coordinatesArray->size(); i++){
+    std::vector<Geodetic2D*> cc = *_coordinatesArray->at(i)->getCoordinates();
+    c.push_back(cc);
+  }
+  return c;
+}

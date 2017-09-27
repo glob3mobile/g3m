@@ -39,6 +39,8 @@ public:
   const Sector* getSector() const;
 
   long long getCoordinatesCount() const;
+  
+  std::vector<std::vector<Geodetic2D*> > asGeodetic2DNestedArray() const;
 
 };
 
