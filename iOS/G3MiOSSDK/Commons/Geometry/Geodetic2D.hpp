@@ -19,6 +19,8 @@ class Geodetic2D {
 public:
   const Angle _latitude;
   const Angle _longitude;
+  
+  static Geodetic2D GEO2DNAN;
 
   
   static Geodetic2D zero() {

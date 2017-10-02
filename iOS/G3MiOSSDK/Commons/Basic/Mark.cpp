@@ -171,6 +171,8 @@ public:
   void onCancel(const URL& url) {
     _mark->resetRequestIconId();
     // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
+    
+    //TODO: JM: This code might be executed after deleting mark
     _mark->onTextureDownloadError();
   }
   
