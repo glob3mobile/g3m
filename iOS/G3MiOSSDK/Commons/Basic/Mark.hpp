@@ -35,6 +35,7 @@ class GPUProgramState;
 class TextureIDReference;
 class EffectTarget;
 class IImageBuilder;
+class IconDownloadListener;
 
 
 class MarkUserData {
@@ -196,6 +197,8 @@ private:
   
   IDownloader* _downloader;
   long long _requestIconID = -1;
+  
+  IconDownloadListener* _iconDownloadListener;
 
 public:
 

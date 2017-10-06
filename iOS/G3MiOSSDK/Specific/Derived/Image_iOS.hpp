@@ -28,8 +28,17 @@ private:
 public:
 
   virtual ~Image_iOS() {
-    _image        = NULL;
-    _sourceBuffer = NULL;
+    printf("DELETING Image_iOS: %p\n", this);
+    
+    //TODO: JM Delete this
+    if (_image != nil){
+      printf("DELETING Image_iOS: %p with UIImage: %p\n", this, _image);
+      
+      //_image        = nil;
+    }
+    if (_sourceBuffer != nil){
+      _sourceBuffer = nil;
+    }
 
     delete [] _rawData;
   }
@@ -40,6 +49,7 @@ public:
   _sourceBuffer(sourceBuffer),
   _rawData(NULL)
   {
+    printf("CREATED Image_IOS with UIImage: %p\n", _image);
   }
 
   UIImage* getUIImage() const {

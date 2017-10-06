@@ -33,7 +33,7 @@ class MarkEffectTarget : public EffectTarget {
 public:
   ~MarkEffectTarget() {
   }
-
+  
 #ifndef C_CODE
   void unusedMethod() { }
 #endif
@@ -44,7 +44,7 @@ class MarkZoomInEffect : public EffectWithDuration {
 private:
   Mark* _mark;
   const float _initialSize;
-
+  
 public:
   MarkZoomInEffect(Mark* mark,
                    const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(400),
@@ -55,23 +55,23 @@ public:
   {
     _mark->setOnScreenSizeOnProportionToImage(_initialSize, _initialSize);
   }
-
+  
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     const double alpha = getAlpha(when);
     float s = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
     _mark->setOnScreenSizeOnProportionToImage(s, s);
   }
-
+  
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) {
     _mark->setOnScreenSizeOnProportionToImage(1, 1);
   }
-
+  
   void cancel(const TimeInterval& when) {
     _mark->setOnScreenSizeOnProportionToImage(1, 1);
   }
-
+  
 };
 
 
@@ -79,7 +79,7 @@ class MarkLabelImageListener : public IImageListener {
 private:
   IImage* _iconImage;
   Mark*   _mark;
-
+  
 public:
   MarkLabelImageListener(IImage* iconImage,
                          Mark* mark) :
@@ -88,11 +88,11 @@ public:
   {
     
   }
-
+  
   void imageCreated(const IImage* image) {
     delete _iconImage;
     _iconImage = NULL;
-
+    
     if (image == NULL) {
       _mark->onTextureDownloadError();
     }
@@ -113,7 +113,9 @@ private:
   const Color*       _labelFontColor;
   const Color*       _labelShadowColor;
   const int          _labelGapSize;
-
+  
+  bool _markHasBeenDeleted;
+  
 public:
   IconDownloadListener(Mark* mark,
                        const std::string& label,
@@ -128,9 +130,14 @@ public:
   _labelFontSize(labelFontSize),
   _labelFontColor(labelFontColor),
   _labelShadowColor(labelShadowColor),
-  _labelGapSize(labelGapSize)
+  _labelGapSize(labelGapSize),
+  _markHasBeenDeleted(false)
   {
     
+  }
+  
+  void markHasBeenDeleted(){
+    _markHasBeenDeleted = true;
   }
   
   void onDownload(const URL& url,
@@ -163,24 +170,27 @@ public:
   }
   
   void onError(const URL& url) {
-    _mark->resetRequestIconId();
     ILogger::instance()->logError("Error trying to download image \"%s\"", url._path.c_str());
-    _mark->onTextureDownloadError();
+    if (!_markHasBeenDeleted){
+      _mark->resetRequestIconId();
+      _mark->onTextureDownloadError();
+    }
   }
   
   void onCancel(const URL& url) {
-    _mark->resetRequestIconId();
-    // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
-    
-    //TODO: JM: This code might be executed after deleting mark
-    _mark->onTextureDownloadError();
+    if (!_markHasBeenDeleted){
+      _mark->resetRequestIconId();
+      // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
+      _mark->onTextureDownloadError();
+    }
   }
   
   void onCanceledDownload(const URL& url,
                           IImage* image,
                           bool expired) {
-    _mark->resetRequestIconId();
-    // do nothing
+    if (!_markHasBeenDeleted){
+      _mark->resetRequestIconId();
+    }
   }
 };
 
@@ -246,9 +256,10 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_iconDownloadListener(NULL)
 {
-  
+    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(const std::string& label,
@@ -302,9 +313,10 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_iconDownloadListener(NULL)
 {
-  
+    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(const URL&         iconURL,
@@ -355,9 +367,10 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_iconDownloadListener(NULL)
 {
-  
+    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(const IImage*      image,
@@ -407,9 +420,10 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_iconDownloadListener(NULL)
 {
-
+    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(IImageBuilder*     imageBuilder,
@@ -458,11 +472,13 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_iconDownloadListener(NULL)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
   }
+  printf("CREATED MARK: %p\n", this);
 }
 
 
@@ -477,7 +493,7 @@ void Mark::initialize(const G3MContext* context,
                                              this);
     }
   }
-
+  
   if (!_textureSolved) {
     if (_imageBuilder != NULL) {
       _imageBuilder->build(context,
@@ -488,19 +504,21 @@ void Mark::initialize(const G3MContext* context,
       const bool hasIconURL = ( _iconURL._path.length() != 0 );
       if (hasIconURL) {
         _downloader = context->getDownloader();
-
+        
+        _iconDownloadListener = new IconDownloadListener(this,
+                                                         _label,
+                                                         _labelBottom,
+                                                         _labelFontSize,
+                                                         _labelFontColor,
+                                                         _labelShadowColor,
+                                                         _labelGapSize);
+        
         _requestIconID = _downloader->requestImage(_iconURL,
-                                 downloadPriority,
-                                 TimeInterval::fromDays(30),
-                                 true,
-                                 new IconDownloadListener(this,
-                                                          _label,
-                                                          _labelBottom,
-                                                          _labelFontSize,
-                                                          _labelFontColor,
-                                                          _labelShadowColor,
-                                                          _labelGapSize),
-                                 true);
+                                                   downloadPriority,
+                                                   TimeInterval::fromDays(30),
+                                                   true,
+                                                   _iconDownloadListener,
+                                                   true);
       }
       else {
         const bool hasLabel = ( _label.length() != 0 );
@@ -522,12 +540,12 @@ void Mark::initialize(const G3MContext* context,
 
 void Mark::onTextureDownloadError() {
   _textureSolved = true;
-
+  
   delete _labelFontColor;
   _labelFontColor = NULL;
   delete _labelShadowColor;
   _labelShadowColor = NULL;
-
+  
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
                                 _iconURL._path.c_str(),
                                 _label.c_str());
@@ -535,24 +553,24 @@ void Mark::onTextureDownloadError() {
 
 void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
-
+  
   delete _labelFontColor;
   _labelFontColor = NULL;
   delete _labelShadowColor;
   _labelShadowColor = NULL;
-
+  
   _textureImage = image;
-
+  
   if (!_textureSizeSetExternally) {
     _textureWidth = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
-
+    
     if (_textureProportionSetExternally) {
       _textureWidth *= _textureWidthProportion;
       _textureHeight *= _textureHeightProportion;
     }
   }
-
+  
 }
 
 bool Mark::isReady() const {
@@ -565,6 +583,14 @@ void Mark::resetRequestIconId() {
 
 
 Mark::~Mark() {
+  //TODO: JM Delete this
+  printf("DELETED MARK: %p\n", this);
+  
+  //Signal listener cleaning is no longer needed
+  if (_iconDownloadListener != NULL){
+    _iconDownloadListener->markHasBeenDeleted();
+  }
+  
   if (_requestIconID != -1) {
     _downloader->cancelRequest(_requestIconID);
   }
@@ -573,20 +599,20 @@ Mark::~Mark() {
     _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
   }
   delete _effectTarget;
-
+  
   delete _labelFontColor;
   delete _labelShadowColor;
-
+  
   delete _position;
-
+  
   delete _normalAtMarkPosition;
-
+  
   if (_surfaceElevationProvider != NULL) {
     if (!_surfaceElevationProvider->removeListener(this)) {
       ILogger::instance()->logError("Couldn't remove mark as listener of Surface Elevation Provider.");
     }
   }
-
+  
   delete _cartesianPosition;
   if (_autoDeleteListener) {
     delete _listener;
@@ -594,15 +620,16 @@ Mark::~Mark() {
   if (_autoDeleteUserData) {
     delete _userData;
   }
-
-  delete _textureImage;
-
+  
+  //TODO: JM FIND OUT WHY CRASHES
+  //delete _textureImage;
+  
   delete _imageBuilder;
-
+  
   if (_glState != NULL) {
     _glState->_release();
   }
-
+  
   if (_textureID != NULL) {
 #ifdef JAVA_CODE
     _textureID.dispose();
@@ -613,16 +640,16 @@ Mark::~Mark() {
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
-
+    
     double altitude = _position->_height;
     if (_altitudeMode == RELATIVE_TO_GROUND) {
       altitude += _currentSurfaceElevation;
     }
-
+    
     Geodetic3D positionWithSurfaceElevation(_position->_latitude,
                                             _position->_longitude,
                                             altitude);
-
+    
     _cartesianPosition = new Vector3D( planet->toCartesian(positionWithSurfaceElevation) );
   }
   return _cartesianPosition;
@@ -643,17 +670,17 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
-
+  
   _billboardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
                                          _textureWidth,
                                          _textureHeight,
                                          _anchorU, _anchorV);
-
+  
   _glState->addGLFeature(_billboardGLF,
                          false);
-
+  
   if (_textureID != NULL) {
-
+    
     if (_hasTCTransformations) {
       _textureGLF = new TextureGLFeature(_textureID->getID(),
                                          billboardTexCoords,
@@ -690,7 +717,7 @@ void Mark::createGLState(const Planet* planet,
                                          0.0f,
                                          0.0f);
     }
-
+    
     _glState->addGLFeature(_textureGLF,
                            false);
   }
@@ -703,9 +730,9 @@ void Mark::render(const G3MRenderContext* rc,
                   const Planet* planet,
                   GL* gl,
                   IFloatBuffer* billboardTexCoords) {
-
+  
   const Vector3D* markPosition = getCartesianPosition(planet);
-
+  
   _markCameraVector.set(markPosition->_x - cameraPosition.x(),
                         markPosition->_y - cameraPosition.y(),
                         markPosition->_z - cameraPosition.z());
@@ -719,12 +746,12 @@ void Mark::render(const G3MRenderContext* rc,
     const double squaredDistanceToCamera = _markCameraVector.squaredLength();
     renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
   }
-
+  
   _renderedMark = false;
-
+  
   if (renderableByDistance) {
     bool occludedByHorizon = false;
-
+    
     if (_position->_height > cameraHeight) {
       // Computing horizon culling
       const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
@@ -748,25 +775,25 @@ void Mark::render(const G3MRenderContext* rc,
       //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
       occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
     }
-
+    
     if (!occludedByHorizon) {
       if ((_textureID == NULL) && (_textureImage != NULL)) {
         _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                      GLFormat::rgba(),
                                                                      _imageID,
                                                                      false);
-
+        
         delete _textureImage;
         _textureImage = NULL;
       }
-
+      
       if (_textureID != NULL) {
-
+        
         if (_glState == NULL) {
           createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
         }
         _glState->setParent(parentGLState);
-
+        
         if (_firstRender) {
           _firstRender = false;
           if (_zoomInAppears) {
@@ -775,34 +802,34 @@ void Mark::render(const G3MRenderContext* rc,
                                            getEffectTarget());
           }
         }
-
+        
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
                                 4,
                                 _glState,
                                 *rc->getGPUProgramManager());
-
+        
         _renderedMark = true;
       }
     }
   }
-
+  
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,  // Without considering vertical exaggeration
                             double verticalExaggeration) {
-
+  
   if (ISNAN(rawElevation)) {
     _currentSurfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
   }
   else {
     _currentSurfaceElevation = rawElevation * verticalExaggeration;
   }
-
+  
   delete _cartesianPosition;
   _cartesianPosition = NULL;
-
+  
   clearGLState();
 }
 
@@ -817,7 +844,7 @@ void Mark::setPosition(const Geodetic3D& position) {
   if (_altitudeMode == RELATIVE_TO_GROUND) {
     THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
   }
-
+  
   delete _position;
 #ifdef C_CODE
   _position = new Geodetic3D(position);
@@ -825,19 +852,19 @@ void Mark::setPosition(const Geodetic3D& position) {
 #ifdef JAVA_CODE
   _position = position;
 #endif
-
+  
   delete _cartesianPosition;
   _cartesianPosition = NULL;
-
+  
   clearGLState();
 }
 
 void Mark::setOnScreenSizeOnPixels(int width, int height) {
-
+  
   _textureWidth = width;
   _textureHeight = height;
   _textureSizeSetExternally = true;
-
+  
   if (_glState != NULL) {
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL) {
@@ -851,7 +878,7 @@ void Mark::setOnScreenSizeOnProportionToImage(float width, float height) {
   _textureWidthProportion = width;
   _textureHeightProportion = height;
   _textureProportionSetExternally = true;
-
+  
   if (_glState != NULL) {
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL) {
@@ -863,23 +890,23 @@ void Mark::setOnScreenSizeOnProportionToImage(float width, float height) {
 
 void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
                                                const Vector2F& scaling) {
-
+  
   _translationTCX = translation._x;
   _translationTCY = translation._y;
-
+  
   _scalingTCX = scaling._x;
   _scalingTCY = scaling._y;
-
+  
   if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1) {
     _hasTCTransformations = true;
   }
-
+  
   if (_textureGLF != NULL) {
-
+    
     if (!_textureGLF->hasTranslateAndScale()) {
       clearGLState();
     }
-
+    
     _textureGLF->setTranslation(_translationTCX, _translationTCY);
     _textureGLF->setScale(_scalingTCX, _scalingTCY);
   }
@@ -895,14 +922,14 @@ void Mark::setMarkAnchor(float anchorU, float anchorV) {
 
 void Mark::onImageCreationError(const std::string& error) {
   _textureSolved = true;
-
-//  delete _labelFontColor;
-//  _labelFontColor = NULL;
-//  delete _labelShadowColor;
-//  _labelShadowColor = NULL;
+  
+  //  delete _labelFontColor;
+  //  _labelFontColor = NULL;
+  //  delete _labelShadowColor;
+  //  _labelShadowColor = NULL;
   delete _imageBuilder;
   _imageBuilder = NULL;
-
+  
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
                                 error.c_str());
 }
@@ -911,20 +938,20 @@ void Mark::onImageCreated(const IImage* image,
                           const std::string& imageName) {
   _textureSolved = true;
   _imageID = imageName;
-
-//  delete _labelFontColor;
-//  _labelFontColor = NULL;
-//  delete _labelShadowColor;
-//  _labelShadowColor = NULL;
+  
+  //  delete _labelFontColor;
+  //  _labelFontColor = NULL;
+  //  delete _labelShadowColor;
+  //  _labelShadowColor = NULL;
   delete _imageBuilder;
   _imageBuilder = NULL;
-
+  
   _textureImage = image;
-
+  
   if (!_textureSizeSetExternally) {
     _textureWidth  = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
-
+    
     if (_textureProportionSetExternally) {
       _textureWidth  *= _textureWidthProportion;
       _textureHeight *= _textureHeightProportion;
