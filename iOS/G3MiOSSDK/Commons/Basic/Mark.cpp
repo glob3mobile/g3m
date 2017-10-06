@@ -540,6 +540,7 @@ void Mark::initialize(const G3MContext* context,
 
 void Mark::onTextureDownloadError() {
   _textureSolved = true;
+  _iconDownloadListener = NULL;
   
   delete _labelFontColor;
   _labelFontColor = NULL;
@@ -553,6 +554,8 @@ void Mark::onTextureDownloadError() {
 
 void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
+  
+  _iconDownloadListener = NULL;
   
   delete _labelFontColor;
   _labelFontColor = NULL;
@@ -579,6 +582,7 @@ bool Mark::isReady() const {
 
 void Mark::resetRequestIconId() {
   _requestIconID = -1;
+  _iconDownloadListener = NULL;
 }
 
 
@@ -622,7 +626,7 @@ Mark::~Mark() {
   }
   
   //TODO: JM FIND OUT WHY CRASHES
-  //delete _textureImage;
+  delete _textureImage;
   
   delete _imageBuilder;
   

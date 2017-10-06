@@ -127,6 +127,7 @@ void MarksRenderer::removeAllMarks(bool deleteMarks) {
   if (deleteMarks) {
     const size_t marksSize = _marks.size();
     for (size_t i = 0; i < marksSize; i++) {
+      //TODO: JM CHECK THIS
       delete _marks[i];
     }
   }
