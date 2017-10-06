@@ -259,7 +259,6 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL)
 {
-    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(const std::string& label,
@@ -316,7 +315,6 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL)
 {
-    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(const URL&         iconURL,
@@ -370,7 +368,6 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL)
 {
-    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(const IImage*      image,
@@ -423,7 +420,6 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL)
 {
-    printf("CREATED MARK: %p\n", this);
 }
 
 Mark::Mark(IImageBuilder*     imageBuilder,
@@ -478,7 +474,6 @@ _iconDownloadListener(NULL)
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
   }
-  printf("CREATED MARK: %p\n", this);
 }
 
 
@@ -587,9 +582,6 @@ void Mark::resetRequestIconId() {
 
 
 Mark::~Mark() {
-  //TODO: JM Delete this
-  printf("DELETED MARK: %p\n", this);
-  
   //Signal listener cleaning is no longer needed
   if (_iconDownloadListener != NULL){
     _iconDownloadListener->markHasBeenDeleted();
