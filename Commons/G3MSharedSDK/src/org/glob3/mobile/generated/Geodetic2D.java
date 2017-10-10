@@ -24,6 +24,8 @@ public class Geodetic2D
   public final Angle _latitude ;
   public final Angle _longitude ;
 
+  public static Geodetic2D GEO2DNAN = Geodetic2D.fromDegrees(Double.NaN, Double.NaN);
+
 
   public static Geodetic2D zero()
   {

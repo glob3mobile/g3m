@@ -270,6 +270,7 @@ public class MarksRenderer extends DefaultRenderer
       final int marksSize = _marks.size();
       for (int i = 0; i < marksSize; i++)
       {
+        //TODO: JM CHECK THIS
         if (_marks.get(i) != null)
            _marks.get(i).dispose();
       }
@@ -442,6 +443,26 @@ public class MarksRenderer extends DefaultRenderer
     }
   
     return removed;
+  }
+
+  public final java.util.ArrayList<Mark> getMarks(MarksFilter filter)
+  {
+  
+    if (filter == null)
+    {
+      return _marks;
+    }
+  
+    java.util.ArrayList<Mark> marks = new java.util.ArrayList<Mark>();
+    for (int i = 0; i < _marks.size(); ++i)
+    {
+      if (filter.test(_marks.get(i)))
+      {
+        marks.add(_marks.get(i));
+      }
+    }
+  
+    return marks;
   }
 
 }

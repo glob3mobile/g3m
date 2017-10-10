@@ -108,7 +108,7 @@ public class URL
 
   public final boolean isNull()
   {
-    return (_path.equals("__NULL__"));
+    return (_path.compareTo("__NULL__") == 0 || _path.length() == 0);
   }
 
   public final boolean isEquals(URL that)

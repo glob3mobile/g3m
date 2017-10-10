@@ -169,6 +169,10 @@ public class Mark implements SurfaceElevationListener
   private IDownloader _downloader;
   private long _requestIconID = -1;
 
+  private IconDownloadListener _iconDownloadListener;
+
+  private boolean _enabled; //Disables mark rendering
+
 
 
   public static class ImageBuilderListener implements IImageBuilderListener
@@ -285,7 +289,8 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
-  
+     _iconDownloadListener = null;
+     _enabled = true;
   }
 
   /**
@@ -366,7 +371,8 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
-  
+     _iconDownloadListener = null;
+     _enabled = true;
   }
 
   /**
@@ -435,7 +441,8 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
-  
+     _iconDownloadListener = null;
+     _enabled = true;
   }
 
   /**
@@ -502,7 +509,8 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
-  
+     _iconDownloadListener = null;
+     _enabled = true;
   }
 
   /**
@@ -569,6 +577,8 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _iconDownloadListener = null;
+     _enabled = true;
     if (_imageBuilder.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image builders");
@@ -577,6 +587,12 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
+    //Signal listener cleaning is no longer needed
+    if (_iconDownloadListener != null)
+    {
+      _iconDownloadListener.markHasBeenDeleted();
+    }
+  
     if (_requestIconID != -1)
     {
       _downloader.cancelRequest(_requestIconID);
@@ -619,6 +635,7 @@ public class Mark implements SurfaceElevationListener
          _userData.dispose();
     }
   
+    //TODO: JM FIND OUT WHY CRASHES
     _textureImage = null;
   
     if (_imageBuilder != null)
@@ -676,7 +693,9 @@ public class Mark implements SurfaceElevationListener
         {
           _downloader = context.getDownloader();
   
-          _requestIconID = _downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
+          _iconDownloadListener = new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize);
+  
+          _requestIconID = _downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, _iconDownloadListener, true);
         }
         else
         {
@@ -707,6 +726,7 @@ public class Mark implements SurfaceElevationListener
   public final void onTextureDownloadError()
   {
     _textureSolved = true;
+    _iconDownloadListener = null;
   
     _labelFontColor = null;
     _labelFontColor = null;
@@ -719,6 +739,8 @@ public class Mark implements SurfaceElevationListener
   public final void onTextureDownload(IImage image)
   {
     _textureSolved = true;
+  
+    _iconDownloadListener = null;
   
     _labelFontColor = null;
     _labelFontColor = null;
@@ -746,10 +768,10 @@ public class Mark implements SurfaceElevationListener
     _textureSolved = true;
     _imageID = imageName;
   
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
+    //  delete _labelFontColor;
+    //  _labelFontColor = NULL;
+    //  delete _labelShadowColor;
+    //  _labelShadowColor = NULL;
     if (_imageBuilder != null)
        _imageBuilder.dispose();
     _imageBuilder = null;
@@ -773,10 +795,10 @@ public class Mark implements SurfaceElevationListener
   {
     _textureSolved = true;
   
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
+    //  delete _labelFontColor;
+    //  _labelFontColor = NULL;
+    //  delete _labelShadowColor;
+    //  _labelShadowColor = NULL;
     if (_imageBuilder != null)
        _imageBuilder.dispose();
     _imageBuilder = null;
@@ -814,6 +836,11 @@ public class Mark implements SurfaceElevationListener
     _userData = userData;
   }
 
+  public final void setEnabled(boolean v)
+  {
+    _enabled = v;
+  }
+
   public final boolean touched()
   {
     return (_listener == null) ? false : _listener.touchedMark(this);
@@ -848,6 +875,11 @@ public class Mark implements SurfaceElevationListener
 
   public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
+  
+    if (!_enabled)
+    {
+      return;
+    }
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
@@ -1067,6 +1099,7 @@ public class Mark implements SurfaceElevationListener
   public final void resetRequestIconId()
   {
     _requestIconID = -1;
+    _iconDownloadListener = null;
   }
 
 }

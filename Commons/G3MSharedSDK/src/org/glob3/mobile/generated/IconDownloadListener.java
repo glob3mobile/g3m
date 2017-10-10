@@ -9,6 +9,8 @@ public class IconDownloadListener extends IImageDownloadListener
   private final Color _labelShadowColor;
   private final int _labelGapSize;
 
+  private boolean _markHasBeenDeleted;
+
   public IconDownloadListener(Mark mark, String label, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
   {
      _mark = mark;
@@ -18,7 +20,13 @@ public class IconDownloadListener extends IImageDownloadListener
      _labelFontColor = labelFontColor;
      _labelShadowColor = labelShadowColor;
      _labelGapSize = labelGapSize;
+     _markHasBeenDeleted = false;
 
+  }
+
+  public final void markHasBeenDeleted()
+  {
+    _markHasBeenDeleted = true;
   }
 
   public final void onDownload(URL url, IImage image, boolean expired)
@@ -40,21 +48,29 @@ public class IconDownloadListener extends IImageDownloadListener
 
   public final void onError(URL url)
   {
-    _mark.resetRequestIconId();
     ILogger.instance().logError("Error trying to download image \"%s\"", url._path);
-    _mark.onTextureDownloadError();
+    if (!_markHasBeenDeleted)
+    {
+      _mark.resetRequestIconId();
+      _mark.onTextureDownloadError();
+    }
   }
 
   public final void onCancel(URL url)
   {
-    _mark.resetRequestIconId();
-    // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
-    _mark.onTextureDownloadError();
+    if (!_markHasBeenDeleted)
+    {
+      _mark.resetRequestIconId();
+      // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
+      _mark.onTextureDownloadError();
+    }
   }
 
   public final void onCanceledDownload(URL url, IImage image, boolean expired)
   {
-    _mark.resetRequestIconId();
-    // do nothing
+    if (!_markHasBeenDeleted)
+    {
+      _mark.resetRequestIconId();
+    }
   }
 }
