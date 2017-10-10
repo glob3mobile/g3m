@@ -199,6 +199,8 @@ private:
   long long _requestIconID = -1;
   
   IconDownloadListener* _iconDownloadListener;
+  
+  bool _enabled; //Disables mark rendering
 
 public:
 
@@ -349,6 +351,10 @@ public:
       delete _userData;
     }
     _userData = userData;
+  }
+  
+  void setEnabled(bool v){
+    _enabled = v;
   }
 
   bool touched();

@@ -339,3 +339,22 @@ size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
   return removed;
 }
 
+std::vector<Mark*> MarksRenderer::getMarks(const MarksFilter* filter) const {
+  
+  if (filter == NULL){
+    return _marks;
+  }
+  
+  std::vector<Mark*> marks;
+  
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
+    Mark* mark = _marks[i];
+    if (filter->test(mark)) {
+      marks.push_back(mark);
+    }
+  }
+  
+  return marks;
+}
+

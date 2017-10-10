@@ -110,6 +110,8 @@ public:
   size_t removeAllMarks(const MarksFilter& filter,
                         bool deleteMarks);
   
+  std::vector<Mark*> getMarks(const MarksFilter* filter) const;
+  
 };
 
 #endif

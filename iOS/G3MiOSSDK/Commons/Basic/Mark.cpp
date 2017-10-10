@@ -257,7 +257,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_iconDownloadListener(NULL)
+_iconDownloadListener(NULL),
+_enabled(true)
 {
 }
 
@@ -313,7 +314,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_iconDownloadListener(NULL)
+_iconDownloadListener(NULL),
+_enabled(true)
 {
 }
 
@@ -366,7 +368,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_iconDownloadListener(NULL)
+_iconDownloadListener(NULL),
+_enabled(true)
 {
 }
 
@@ -418,7 +421,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_iconDownloadListener(NULL)
+_iconDownloadListener(NULL),
+_enabled(true)
 {
 }
 
@@ -469,7 +473,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_iconDownloadListener(NULL)
+_iconDownloadListener(NULL),
+_enabled(true)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
@@ -726,6 +731,10 @@ void Mark::render(const G3MRenderContext* rc,
                   const Planet* planet,
                   GL* gl,
                   IFloatBuffer* billboardTexCoords) {
+  
+  if (!_enabled){
+    return;
+  }
   
   const Vector3D* markPosition = getCartesianPosition(planet);
   
