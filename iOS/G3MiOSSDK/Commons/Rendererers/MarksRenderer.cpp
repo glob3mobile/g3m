@@ -346,12 +346,9 @@ std::vector<Mark*> MarksRenderer::getMarks(const MarksFilter* filter) const {
   }
   
   std::vector<Mark*> marks;
-  
-  const size_t marksSize = _marks.size();
-  for (size_t i = 0; i < marksSize; i++) {
-    Mark* mark = _marks[i];
-    if (filter->test(mark)) {
-      marks.push_back(mark);
+  for (size_t i = 0; i < _marks.size(); ++i) {
+    if (filter->test(_marks[i])) {
+      marks.push_back(_marks[i]);
     }
   }
   
