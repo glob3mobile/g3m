@@ -113,7 +113,7 @@ public:
   }
 
   bool isNull() const {
-    return (_path == "__NULL__");
+    return (_path.compare("__NULL__") == 0 || _path.empty());
   }
 
   bool isEquals(const URL& that) const {
