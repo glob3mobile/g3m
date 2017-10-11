@@ -29,6 +29,8 @@
 #include "G3MRenderContext.hpp"
 #include "GLFeature.hpp"
 #include "GLState.hpp"
+#include "IFactory.hpp"
+#include "IDeviceInfo.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 
@@ -37,6 +39,30 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
                                                   int height,
                                                   IImageListener* listener,
                                                   bool deleteListener) {
+  
+  //Preventing textures too large
+  const double dpr = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+  const double widthDPR = width * dpr;
+  const double heightDPR = height * dpr;
+  const int maxTexSize = rc->getGL()->getNative()->getMaxTextureSize();
+  
+  double ratio = 1.0;
+  if (widthDPR > maxTexSize && heightDPR > maxTexSize){
+    const double ratioW = maxTexSize / widthDPR;
+    const double ratioH = maxTexSize / heightDPR;
+    ratio = (ratioW < ratioH)? ratioW : ratioH; //Minimazing the required max
+
+  } else{
+    if (widthDPR > maxTexSize){
+      ratio = maxTexSize / widthDPR;
+    }
+    if (heightDPR > maxTexSize){
+      ratio = maxTexSize / heightDPR;
+    }
+  }
+  
+  width *= ratio;
+  height *= ratio;
 
   ICanvas* canvas = rc->getFactory()->createCanvas(true);
   canvas->initialize(width, height);
@@ -193,8 +219,8 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
         if (rc->getViewMode() == STEREO) {
           width /= 2;
         }
-        const int height = camera->getViewPortHeight();
-
+        int height = camera->getViewPortHeight();
+        
         _imageFactory->create(rc,
                               width, height,
                               new HUDImageRenderer::ImageListener(this),

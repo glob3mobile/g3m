@@ -207,6 +207,10 @@ public:
   
   virtual void viewport(int x, int y, int width, int height) const = 0;
   
+  virtual void flushAllGLErrors() const = 0;
+  
+  virtual int getMaxTextureSize() const = 0;
+  
 };
 
 #endif

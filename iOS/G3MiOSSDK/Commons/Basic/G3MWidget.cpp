@@ -805,6 +805,9 @@ void G3MWidget::render(int width, int height) {
       _lastCacheStatistics = cacheStatistics;
     }
   }
+  
+  //Check if any GL Error was raised during the frame execution
+  _gl->getNative()->flushAllGLErrors();
 }
 
 void G3MWidget::setSelectedRenderer(ProtoRenderer* selectedRenderer) {

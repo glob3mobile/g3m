@@ -199,6 +199,7 @@ public:
 
   void texImage2D(const IImage* image,
                   int format) const {
+
     const unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
 
     glTexImage2D(GL_TEXTURE_2D,
@@ -578,6 +579,28 @@ public:
   
   void viewport(int x, int y, int width, int height) const {
     glViewport(x, y, width, height);
+  }
+  
+  void flushAllGLErrors() const{
+    GLenum e;
+    while (GL_NO_ERROR != (e = glGetError()) ) {
+      
+      std::string error;
+      
+      switch(e) {
+        case GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;
+        case GL_INVALID_ENUM:           error="INVALID_ENUM";           break;
+        case GL_INVALID_VALUE:          error="INVALID_VALUE";          break;
+        case GL_OUT_OF_MEMORY:          error="OUT_OF_MEMORY";          break;
+        case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
+      }
+      
+      ILogger::instance()->logWarning("OpenGL Error detected: %s", error.c_str());
+    }
+  }
+  
+  int getMaxTextureSize() const{
+    return GL_MAX_TEXTURE_SIZE;
   }
   
 };
