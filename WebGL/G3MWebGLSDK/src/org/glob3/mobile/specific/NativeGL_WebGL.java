@@ -1,5 +1,3 @@
-
-
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
@@ -11,6 +9,7 @@ import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLTextureID;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.Matrix44D;
@@ -510,6 +509,14 @@ public final class NativeGL_WebGL
    public native int Error_NoError() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NO_ERROR;
    }-*/;
+   
+   public native int Error_InvalidOperation() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INVALID_OPERATION;
+   }-*/;
+   
+   public native int Error_InvalidValue() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INVALID_VALUE;
+   }-*/;
 
 
    @Override
@@ -858,6 +865,51 @@ public final class NativeGL_WebGL
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.viewport(x, y, width, height);
    }-*/;
+
+
+@Override
+public void flushAllGLErrors() {
+    int e;
+    while (Error_NoError() != (e = getError()) ) {
+
+       String error = "UNRECOGNIZED";
+       
+       if (e == Error_InvalidOperation()){
+    	   error="INVALID_OPERATION"; 
+       } else if (e == Error_InvalidEnum()){
+    	   error="INVALID_ENUM";
+       }else if (e == Error_InvalidValue()){
+    	   error="INVALID_VALUE";
+       }else if (e == Error_OutOfMemory()){
+    	   error="OUT_OF_MEMORY";
+       }else if (e == Error_InvalidFrameBufferOperation()){
+    	   error="INVALID_FRAMEBUFFER_OPERATION";
+       }
+
+       ILogger.instance().logWarning("OpenGL Error detected: %s", error);
+    }
+}
+
+
+private native int Error_InvalidFrameBufferOperation() /*-{
+return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INVALID_FRAMEBUFFER_OPERATION;
+}-*/;
+
+
+private native int Error_OutOfMemory() /*-{
+return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INVALID_OUT_OF_MEMORY;
+}-*/;
+
+
+private native int Error_InvalidEnum() /*-{
+return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INVALID_ENUM;
+}-*/;
+
+
+@Override
+public native int getMaxTextureSize() /*-{
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.MAX_TEXTURE_SIZE;
+}-*/;
 
 
 }

@@ -585,7 +585,7 @@ public:
     GLenum e;
     while (GL_NO_ERROR != (e = glGetError()) ) {
       
-      std::string error;
+      std::string error = "UNRECOGNIZED";
       
       switch(e) {
         case GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;

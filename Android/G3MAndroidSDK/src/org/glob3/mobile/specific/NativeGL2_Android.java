@@ -874,5 +874,29 @@ public final class NativeGL2_Android
       GLES20.glViewport(x, y, width, height);
    }
 
+   @Override
+   public void flushAllGLErrors() {
+      int e;
+      while (GLES20.GL_NO_ERROR != (e = GLES20.glGetError()) ) {
+
+         String error = "UNRECOGNIZED";
+
+         switch(e) {
+            case GLES20.GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;
+            case GLES20.GL_INVALID_ENUM:           error="INVALID_ENUM";           break;
+            case GLES20.GL_INVALID_VALUE:          error="INVALID_VALUE";          break;
+            case GLES20.GL_OUT_OF_MEMORY:          error="OUT_OF_MEMORY";          break;
+            case GLES20.GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
+         }
+
+         ILogger.instance().logWarning("OpenGL Error detected: %s", error);
+      }
+   }
+
+   @Override
+   public int getMaxTextureSize() {
+      return GLES20.GL_MAX_TEXTURE_SIZE;
+   }
+
 
 }
