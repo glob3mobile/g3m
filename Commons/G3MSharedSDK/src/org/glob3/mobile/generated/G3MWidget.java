@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
+
 public class G3MWidget implements ChangedRendererInfoListener
 {
 
@@ -739,16 +740,19 @@ public class G3MWidget implements ChangedRendererInfoListener
   public final void setEyeDistance(double eDist)
   {
     _eyeDistance = eDist;
+    if (_auxCam != null)
+    {
+      _auxCam.dispose();
+      _auxCam = null;
+    }
     if (_leftEyeCam != null)
     {
-      if (_leftEyeCam != null)
-         _leftEyeCam.dispose();
+      _leftEyeCam.dispose();
       _leftEyeCam = null;
     }
     if (_rightEyeCam != null)
     {
-      if (_rightEyeCam != null)
-         _rightEyeCam.dispose();
+      _rightEyeCam.dispose();
       _rightEyeCam = null;
     }
   }
