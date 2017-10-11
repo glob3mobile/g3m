@@ -43,6 +43,35 @@ public class HUDImageRenderer extends DefaultRenderer
     public final void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener)
     {
     
+      //Preventing textures too large
+      final double dpr = IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+      final double widthDPR = width * dpr;
+      final double heightDPR = height * dpr;
+      final int maxTexSize = rc.getGL().getNative().getMaxTextureSize();
+    
+      double ratio = 1.0;
+      if (widthDPR > maxTexSize && heightDPR > maxTexSize)
+      {
+        final double ratioW = maxTexSize / widthDPR;
+        final double ratioH = maxTexSize / heightDPR;
+        ratio = (ratioW < ratioH)? ratioW : ratioH; //Minimazing the required max
+    
+      }
+      else
+      {
+        if (widthDPR > maxTexSize)
+        {
+          ratio = maxTexSize / widthDPR;
+        }
+        if (heightDPR > maxTexSize)
+        {
+          ratio = maxTexSize / heightDPR;
+        }
+      }
+    
+      width *= ratio;
+      height *= ratio;
+    
       ICanvas canvas = rc.getFactory().createCanvas(true);
       canvas.initialize(width, height);
     
@@ -98,7 +127,7 @@ public class HUDImageRenderer extends DefaultRenderer
           {
             width /= 2;
           }
-          final int height = camera.getViewPortHeight();
+          int height = camera.getViewPortHeight();
   
           _imageFactory.create(rc, width, height, new HUDImageRenderer.ImageListener(this), true);
         }

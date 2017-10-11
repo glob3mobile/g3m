@@ -168,6 +168,11 @@ public class GL
       _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
       _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
   
+      if ((image.getWidth() < 0 || image.getWidth() > _nativeGL.getMaxTextureSize()) || (image.getHeight() < 0 || image.getHeight() > _nativeGL.getMaxTextureSize()))
+      {
+        ILogger.instance().logWarning("Creating GL Texture of Invalid Size");
+      }
+  
       _nativeGL.texImage2D(image, format);
   
       if (generateMipmap)

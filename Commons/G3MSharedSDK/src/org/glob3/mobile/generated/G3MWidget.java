@@ -272,6 +272,9 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
         _lastCacheStatistics = cacheStatistics;
       }
     }
+  
+    //Check if any GL Error was raised during the frame execution
+    _gl.getNative().flushAllGLErrors();
   }
 
   public final void onTouchEvent(TouchEvent touchEvent)
