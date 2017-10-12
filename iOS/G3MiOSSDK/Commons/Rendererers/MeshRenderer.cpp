@@ -738,3 +738,15 @@ void MeshRenderer::addMesh(Mesh* mesh) {
   _meshes.push_back(mesh);
   mesh->showNormals(_showNormals);
 }
+
+#warning Chano adding stuff
+
+std::vector<Mesh*> MeshRenderer::getMeshes() {
+    std::vector<Mesh *> copyMesh;
+    const size_t meshesCount = _meshes.size();
+
+    for (size_t i=0;i< meshesCount ;i++){
+        copyMesh.push_back(_meshes[i]);
+    }
+    return copyMesh;
+}

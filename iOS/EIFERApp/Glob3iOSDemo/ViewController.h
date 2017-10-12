@@ -92,6 +92,7 @@ class DeviceAttitudeCameraHandler;
 
 @property __weak IBOutlet UILabel *timeLabel;
 @property MeshRenderer* meshRenderer;
+@property MeshRenderer* pipeMeshRenderer;
 @property MeshRenderer* meshRendererPC;
 @property MarksRenderer* marksRenderer;
 @property ShapesRenderer* shapesRenderer;

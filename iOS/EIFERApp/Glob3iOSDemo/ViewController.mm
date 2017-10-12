@@ -206,6 +206,7 @@
 #include <G3MiOSSDK/Surface.hpp>
 
 #include <G3MiOSSDK/Cylinder.hpp>
+#include <G3MiOSSDK/G3MEventContext.hpp> //Línea puesta por Chano.
 #include "PipesModel.hpp"
 
 
@@ -345,12 +346,31 @@ class ColorChangingMeshTask: public GTask{
 class MyEDCamConstrainer: public ICameraConstrainer {
   
   ElevationData* _ed;
+    
+  bool _shouldCaptureMotion;
+  MeshRenderer * _mr;
+  std::vector<Cylinder::CylinderMeshInfo> *_cylInfo;
+  std::string &_lastText;
+    
   public:
   
-  MyEDCamConstrainer(ElevationData* ed):_ed(ed){}
+    MyEDCamConstrainer(ElevationData* ed,std::string &text):
+    _ed(ed),
+    _shouldCaptureMotion(false),
+    _mr(NULL),
+    _cylInfo(NULL),
+    _lastText(text){}
   
   void setED(ElevationData* ed){
     _ed = ed;
+  }
+    
+#warning Unfortunately Chano was here!
+  void shouldCaptureMotion(bool capture, MeshRenderer *meshRenderer,
+                             std::vector<Cylinder::CylinderMeshInfo> *cylinderInfo){
+    _shouldCaptureMotion = capture;
+    _mr = meshRenderer;
+    _cylInfo = cylinderInfo;
   }
   
   //Returns false if it could not create a valid nextCamera
@@ -374,6 +394,32 @@ class MyEDCamConstrainer: public ICameraConstrainer {
         }
       }
     }
+    if (_shouldCaptureMotion && !nextCamera->getGeodeticPosition().isEquals(previousCamera->getGeodeticPosition())){
+        //NSDate *methodStart = [NSDate date];
+        
+        const std::string text = Cylinder::adaptMeshes(_mr,
+                                                 _cylInfo,
+                                                 nextCamera,
+                                                 planet);
+        
+        /*NSDate *methodFinish = [NSDate date];
+         NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+         NSLog(@"executionTime = %f", executionTime);*/
+        
+        
+        if (text.compare("") != 0 && text.compare(_lastText) != 0){
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
+                                                            message:[NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            _lastText = text;
+            [alert show];
+        }
+
+    }
+      
     return true;
   }
 };
@@ -579,10 +625,14 @@ class AltitudeFixerLM: public ILocationModifier{
 
 ///////////////////
 
-@implementation ViewController
+@implementation ViewController{
+    std::vector<Cylinder::CylinderMeshInfo> cylinderInfo;
+    std::string lastText;
+}
 
 @synthesize G3MWidget;
 @synthesize meshRenderer;
+@synthesize pipeMeshRenderer;
 @synthesize marksRenderer;
 @synthesize meshRendererPC;
 @synthesize cityGMLRenderer;
@@ -611,6 +661,7 @@ class AltitudeFixerLM: public ILocationModifier{
   
   elevationData = NULL;
   meshRenderer = NULL;
+  pipeMeshRenderer = NULL;
   marksRenderer = NULL;
   
   //VR;
@@ -635,19 +686,19 @@ class AltitudeFixerLM: public ILocationModifier{
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
   
-//  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
 //  [self addCityGMLFile:"file:///AR_demo_with_buildings.gml" needsToBeFixOnGround:true]; //NOT WORKING
-//  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-//  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-  //      [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+        [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+        [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
   
   _modelsLoadedCounter = 0;
   
@@ -733,7 +784,9 @@ class AltitudeFixerLM: public ILocationModifier{
   
   meshRenderer = new MeshRenderer();
   meshRendererPC = new MeshRenderer();
+  pipeMeshRenderer = new MeshRenderer();
   builder.addRenderer(meshRendererPC);
+  builder.addRenderer(pipeMeshRenderer);
   marksRenderer = new MarksRenderer(false);
   
   //Karlsruhe Schloss model
@@ -757,7 +810,7 @@ class AltitudeFixerLM: public ILocationModifier{
   
   builder.setInitializationTask(new MyInitTask(self, useDEM));
   
-  camConstrainer = new MyEDCamConstrainer(NULL); //Wait for ED to arrive
+  camConstrainer = new MyEDCamConstrainer(NULL,lastText); //Wait for ED to arrive
   builder.addCameraConstraint(camConstrainer);
   
   builder.setBackgroundColor(new Color(Color::fromRGBA255(0, 0, 0, 0)));
@@ -768,7 +821,6 @@ class AltitudeFixerLM: public ILocationModifier{
 //  Vector3D e = _planet->toCartesian(Geodetic3D::fromDegrees(0, 0, 1e5));
 //  Cylinder cyl(s,e, 1.0e4);
 //  meshRenderer->addMesh(cyl.createMesh(Color::red(), 20));
-  
 
   
   builder.initializeWidget();
@@ -791,9 +843,12 @@ class AltitudeFixerLM: public ILocationModifier{
                                          true);
   }
   
-  
-  PipesModel::addMeshes("pipesCoords", _planet, meshRenderer, elevationData, -4.0);
-  PipesModel::addMeshes("pipesCoordsMetzt", _planet, meshRenderer, NULL, -4.0);
+#warning cambiar profundidad aquí.
+  cylinderInfo.clear();
+  cylinderInfo = PipesModel::addMeshes("pipesCoords", _planet, pipeMeshRenderer, elevationData, -4.0);
+  std::vector<Cylinder::CylinderMeshInfo> cylinderInfo2 = PipesModel::addMeshes("pipesCoordsMetzt", _planet, pipeMeshRenderer, NULL, -4.0);
+  cylinderInfo.insert(cylinderInfo.end(), cylinderInfo2.begin(), cylinderInfo2.end());
+  cylinderInfo2.clear();
 }
 
 -(void) onProgress {
@@ -847,17 +902,20 @@ class AltitudeFixerLM: public ILocationModifier{
   }
   
   //Whole city!
-//  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
-//                                                Angle::fromDegrees(-109.452892),
-//                                                Angle::fromDegrees(-44.938813)
-//                                                );
-  
   [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                Geodetic3D::fromDegrees(49.1034419341, 6.2225732157,  1000.0),
-                                                Angle::fromDegrees(0.0),
-                                                Angle::fromDegrees(-90.0)
+                                                Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
+                                                Angle::fromDegrees(-109.452892),
+                                                Angle::fromDegrees(-44.938813)
                                                 );
+  
+/*
+//METZ
+  [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                Geodetic3D::fromDegrees(49.1034419341, 6.2225732157,  100.0),//1000
+                                                Angle::fromDegrees(0.0),//0
+                                                Angle::fromDegrees(-15.0) //-90
+                                                );
+ */
   
   
   [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(activateMenu) userInfo:nil repeats:FALSE];
@@ -874,6 +932,7 @@ class AltitudeFixerLM: public ILocationModifier{
 -(void) activateMenu{
   _isMenuAvailable = true;
   printf("Menu activated");
+  camConstrainer->shouldCaptureMotion(true, pipeMeshRenderer, &cylinderInfo);
 }
 
 - (IBAction)switchCityGML:(id)sender {

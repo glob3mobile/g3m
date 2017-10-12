@@ -37,6 +37,10 @@ public:
                  const GLState* parentGLState) const;
 
   void showNormals(bool v) const;
+    
+#warning Chano adding stuff
+    
+  Mesh * getChildAtIndex(int i);
 
 };
 

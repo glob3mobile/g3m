@@ -12,7 +12,10 @@
 
 #import <UIKit/UIKit.h>
 
-void PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset){
+std::vector<Cylinder::CylinderMeshInfo> PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset){
+    
+  //Línea añadida por mí
+  std::vector<Cylinder::CylinderMeshInfo> cylinderInfo;
   
   NSString* s = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:fileName.c_str()] ofType:@"csv"] encoding:NSASCIIStringEncoding error:nil ];
   
@@ -40,7 +43,11 @@ void PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRen
 
       //Tubes
       Cylinder c(p->toCartesian(g), p->toCartesian(g2), 0.5);
-      mr->addMesh(c.createMesh(Color::red(), 5));
+      
+        
+      mr->addMesh(c.createMesh(Color::fromRGBA255(255, 0, 0, 32), 5, p));
+//      mr->addMesh(c.createMesh(Color::fromRGBA255(255, 0, 0, 255), 5, p));
+      cylinderInfo.push_back(Cylinder::CylinderMeshInfo(c._info));
       
       nPipes++;
       
@@ -58,4 +65,5 @@ void PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRen
   }
   
   printf("%d pipes created.\n", nPipes);
+  return cylinderInfo;
 }

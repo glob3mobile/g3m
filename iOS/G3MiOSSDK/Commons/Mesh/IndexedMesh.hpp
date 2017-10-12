@@ -42,6 +42,7 @@ public:
   const IShortBuffer* getIndices() const {
     return _indices;
   }
+    
 };
 
 #endif

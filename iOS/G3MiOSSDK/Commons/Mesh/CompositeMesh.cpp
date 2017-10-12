@@ -108,3 +108,9 @@ void CompositeMesh::showNormals(bool v) const {
     child->showNormals(v);
   }
 }
+
+#warning Chano adding stuff
+
+Mesh * CompositeMesh::getChildAtIndex(int i){
+    return _children[i];
+}
