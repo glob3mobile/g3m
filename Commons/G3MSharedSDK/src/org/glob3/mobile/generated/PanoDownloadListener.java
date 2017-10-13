@@ -51,7 +51,7 @@ public class PanoDownloadListener extends IBufferDownloadListener
     
       Mark mark = new Mark(new URL(_urlIcon,false), new Geodetic3D(latitude, longitude, 0), AltitudeMode.RELATIVE_TO_GROUND, 0, new PanoMarkUserData(json.getAsString(NAME).value(), new URL(url, false)),true);
     
-      mark.setOnScreenSizeOnProportionToImage(2.0, 2.0);
+      mark.setOnScreenSizeOnProportionToImage(2.0f, 2.0f);
     
       _panoMarksRenderer.addMark(mark);
     }

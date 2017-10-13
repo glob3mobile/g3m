@@ -52,7 +52,7 @@ void PanoDownloadListener::parseMETADATA(std::string url, const JSONObject* json
   Mark* mark = new Mark(URL(_urlIcon,false),
                         Geodetic3D(latitude, longitude, 0), RELATIVE_TO_GROUND, 0, new PanoMarkUserData(json->getAsString(NAME)->value(), new URL(url, false)),true);
   
-  mark->setOnScreenSizeOnProportionToImage(2.0, 2.0);
+  mark->setOnScreenSizeOnProportionToImage(2.0f, 2.0f);
   
   _panoMarksRenderer->addMark(mark);
 }

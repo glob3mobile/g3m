@@ -11,7 +11,7 @@
 #include "Vector3D.hpp"
 #include "IMathUtils.hpp"
 
-Geodetic2D Geodetic2D::GEO2DNAN = Geodetic2D::fromDegrees(NAND, NAND);
+Geodetic2D Geodetic2D::Geo2DNull = Geodetic2D::fromDegrees(NAND, NAND);
 
 bool Geodetic2D::isBetween(const Geodetic2D& min,
                            const Geodetic2D& max) const {

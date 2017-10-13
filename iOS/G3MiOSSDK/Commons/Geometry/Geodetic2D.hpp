@@ -20,7 +20,7 @@ public:
   const Angle _latitude;
   const Angle _longitude;
   
-  static Geodetic2D GEO2DNAN;
+  static Geodetic2D Geo2DNull;
 
   
   static Geodetic2D zero() {
