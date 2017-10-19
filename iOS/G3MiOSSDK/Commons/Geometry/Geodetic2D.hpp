@@ -15,6 +15,9 @@
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
+
+class Geodetic3D;
+
 class Geodetic2D {
 public:
   const Angle _latitude;
@@ -215,6 +218,8 @@ public:
     return true;
   }
 #endif
+  
+  Geodetic3D asGeodetic3DWithHeight(double height) const;
 
 };
 

@@ -6,6 +6,7 @@
 //
 
 #include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
 
 #include "IStringBuilder.hpp"
 #include "Vector3D.hpp"
@@ -84,4 +85,8 @@ double Geodetic2D::bearingInDegrees(const Angle& fromLatitude,
                                      fromLongitude,
                                      toLatitude,
                                      toLongitude));
+}
+
+Geodetic3D Geodetic2D::asGeodetic3DWithHeight(double height) const{
+  return Geodetic3D(_latitude, _longitude, height);
 }
