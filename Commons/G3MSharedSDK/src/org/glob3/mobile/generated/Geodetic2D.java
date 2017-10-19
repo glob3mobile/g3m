@@ -19,6 +19,9 @@ package org.glob3.mobile.generated;
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
+
+//class Geodetic3D;
+
 public class Geodetic2D
 {
   public final Angle _latitude ;
@@ -246,6 +249,11 @@ public class Geodetic2D
       return false;
     }
     return true;
+  }
+
+  public final Geodetic3D asGeodetic3DWithHeight(double height)
+  {
+    return new Geodetic3D(_latitude, _longitude, height);
   }
 
 }
