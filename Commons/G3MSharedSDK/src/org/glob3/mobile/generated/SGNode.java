@@ -1,4 +1,4 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
 //
 //  SGNode.cpp
 //  G3MiOSSDK
@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GPUProgramState;
 
+import java.util.ArrayList;
+
 public class SGNode
 {
   protected final String _id;
@@ -39,6 +41,7 @@ public class SGNode
 
   protected SGShape _shape;
 
+  private BoundingVolume _boundingVolume;
 
   public SGNode(String id, String sId)
   //  _parent(NULL)
@@ -51,8 +54,8 @@ public class SGNode
 
 
   ///#include "GPUProgramState.hpp"
-  
-  
+
+
   public void dispose()
   {
     final int childrenCount = _children.size();
@@ -62,13 +65,16 @@ public class SGNode
       if (child != null)
          child.dispose();
     }
+    if (_boundingVolume != null) {
+        _boundingVolume.dispose();
+    }
   }
 
   public void initialize(G3MContext context, SGShape shape)
   {
     _context = context;
     _shape = shape;
-  
+
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
@@ -98,40 +104,40 @@ public class SGNode
         return false;
       }
     }
-  
+
     return true;
   }
 
   public void prepareRender(G3MRenderContext rc)
   {
-  
+
   }
 
   public void cleanUpRender(G3MRenderContext rc)
   {
-  
+
   }
 
   public void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
-  
+
   //  ILogger::instance()->logInfo("Rendering SG: " + description());
-  
+
     final GLState glState = createState(rc, parentGLState);
     if (glState != null)
     {
-  
+
       prepareRender(rc);
-  
+
       rawRender(rc, glState);
-  
+
       final int childrenCount = _children.size();
       for (int i = 0; i < childrenCount; i++)
       {
         SGNode child = _children.get(i);
         child.render(rc, glState, renderNotReadyShapes);
       }
-  
+
       cleanUpRender(rc);
     }
     else
@@ -157,6 +163,51 @@ public class SGNode
 
   public void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
+  }
+
+  protected BoundingVolume getSelfBoundingVolume() {
+      return null;
+  }
+
+  private BoundingVolume calculateBoundingVolume()
+  {
+    final ArrayList<BoundingVolume> bounds = new ArrayList<>();
+    final BoundingVolume selfBounds = getSelfBoundingVolume();
+    if (selfBounds != null) {
+      bounds.add(selfBounds);
+    }
+    for (SGNode node : _children) {
+      final BoundingVolume nodeBounds = node.getBoundingVolume();
+      if (nodeBounds != null) {
+        bounds.add(nodeBounds);
+      }
+    }
+
+    final int childrenCount = bounds.size();
+    if (childrenCount == 0)
+    {
+      return null;
+    }
+
+    BoundingVolume result = bounds.get(0);
+    for (int i = 1; i < childrenCount; i++)
+    {
+      BoundingVolume newResult = result.mergedWith(bounds.get(i));
+      if (i > 1) {
+        result.dispose();
+      }
+      result = newResult;
+    }
+    return result;
+  }
+
+  public final BoundingVolume getBoundingVolume()
+  {
+    if (_boundingVolume == null)
+    {
+      _boundingVolume = calculateBoundingVolume();
+    }
+    return _boundingVolume;
   }
 
   public String description()
