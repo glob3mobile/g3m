@@ -2,15 +2,9 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -20,9 +14,21 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.URL;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static android.R.attr.path;
 
 
 public final class Downloader_Android_Handler {
@@ -190,19 +196,43 @@ public final class Downloader_Android_Handler {
       HttpURLConnection connection = null;
 
       try {
-         if (_g3mURL.isFileProtocol()) {
+         if (_g3mURL._path.contains(".zip")) {
+            final String path = _g3mURL._path.replaceFirst(URL.FILE_PROTOCOL, "");
+
+            final int split_index = path.lastIndexOf(".zip") + 4;
+            final String zipFilePath = path.substring(0, split_index);
+            final String filePath = path.substring(split_index);
+            if (zipFilePath != null && filePath != null) {
+               final File file = new File(zipFilePath);
+               final InputStream zipFileIS = file.exists() ? new FileInputStream(file)
+                       : downloader.getAppContext().getAssets().open(zipFilePath);
+
+               ZipInputStream is = new ZipInputStream(zipFileIS);
+               ZipEntry entry;
+               while ((entry = is.getNextEntry()) != null) {
+                  if (filePath.equals(entry.getName())) {
+                     data = getData(is, -1);
+                     if (data != null) {
+                        statusCode = 200;
+                     }
+                  }
+                  if (!entry.isDirectory()) {
+                     is.closeEntry();
+                  }
+               }
+            }
+         } else if (_g3mURL.isFileProtocol()) {
             final String filePath = _g3mURL._path.replaceFirst(URL.FILE_PROTOCOL, "");
 
             final File file = new File(filePath);
-            final InputStream fileIS = file.exists() ? new FileInputStream(file) //
-                                                    : downloader.getAppContext().getAssets().open(filePath);
+            final InputStream fileIS = file.exists() ? new FileInputStream(file)
+                    : downloader.getAppContext().getAssets().open(filePath);
 
             data = getData(fileIS, -1);
             if (data != null) {
                statusCode = 200;
             }
-         }
-         else {
+         } else {
             //            final long s = SystemClock.currentThreadTimeMillis();
             //            ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod started.");
 
