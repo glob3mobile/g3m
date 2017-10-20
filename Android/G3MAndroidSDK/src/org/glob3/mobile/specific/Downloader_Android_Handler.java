@@ -211,7 +211,7 @@ public final class Downloader_Android_Handler {
                ZipEntry entry;
                while ((entry = is.getNextEntry()) != null) {
                   if (filePath.equals(entry.getName())) {
-                     data = getData(is, -1);
+                     data = getData(is, -1, false);
                      if (data != null) {
                         statusCode = 200;
                      }
@@ -220,6 +220,7 @@ public final class Downloader_Android_Handler {
                      is.closeEntry();
                   }
                }
+               is.close();
             }
          } else if (_g3mURL.isFileProtocol()) {
             final String filePath = _g3mURL._path.replaceFirst(URL.FILE_PROTOCOL, "");
@@ -282,9 +283,11 @@ public final class Downloader_Android_Handler {
       return new Image_Android(bitmap, data);
    }
 
+   private byte[] getData(final InputStream is, final int contentLength) {
+      return getData(is, contentLength, true);
+   }
 
-   private byte[] getData(final InputStream is,
-                          final int contentLength) {
+   private byte[] getData(final InputStream is, final int contentLength, boolean autoclose) {
       byte[] data = null;
 
       try {
@@ -301,7 +304,9 @@ public final class Downloader_Android_Handler {
          baos.flush();
          data = baos.toByteArray();
          baos.close();
-         bis.close();
+         if (autoclose) {
+            bis.close();
+         }
       }
       catch (final IOException e) {
          ILogger.instance().logError(TAG + " getData: IOException url=" + _g3mURL._path);
