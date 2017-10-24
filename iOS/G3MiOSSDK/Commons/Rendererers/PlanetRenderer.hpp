@@ -430,6 +430,10 @@ public:
   
   void onTileHasChangedMesh(const Tile* tile) const;
   
+  const LayerSet* getLayerSet() const{
+    return _layerSet;
+  }
+  
 };
 
 #endif
