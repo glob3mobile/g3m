@@ -14,7 +14,7 @@
 
 class RenderingCondition{
 public:
-  ~RenderingCondition(){}
+  virtual ~RenderingCondition(){}
   virtual bool mustRender(const G3MRenderContext* context) = 0;
 };
 
