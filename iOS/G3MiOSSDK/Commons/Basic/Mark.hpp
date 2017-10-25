@@ -25,6 +25,7 @@
 #include "IImageBuilderListener.hpp"
 #include "AltitudeMode.hpp"
 #include "Vector2F.hpp"
+#include "RenderingCondition.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -201,6 +202,7 @@ private:
   IconDownloadListener* _iconDownloadListener;
   
   bool _enabled; //Disables mark rendering
+  RenderingCondition* _renderingCondition;
 
 public:
 
@@ -356,6 +358,11 @@ public:
   void setEnabled(bool v){
     _enabled = v;
   }
+  
+  bool mustRender(const G3MRenderContext *context) const{
+    bool rc = (_renderingCondition == NULL)? true : _renderingCondition->mustRender(context);
+    return _enabled && rc;
+  }
 
   bool touched();
 
@@ -406,8 +413,14 @@ public:
     return _zoomInAppears;
   }
   
-  
   void resetRequestIconId();
+  
+  void setRenderingCondition(RenderingCondition* rc){
+    if (_renderingCondition != rc){
+      delete _renderingCondition;
+    }
+    _renderingCondition = rc;
+  }
 
 };
 

@@ -258,7 +258,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
-_enabled(true)
+_enabled(true),
+_renderingCondition(NULL)
 {
 }
 
@@ -315,7 +316,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
-_enabled(true)
+_enabled(true),
+_renderingCondition(NULL)
 {
 }
 
@@ -369,7 +371,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
-_enabled(true)
+_enabled(true),
+_renderingCondition(NULL)
 {
 }
 
@@ -422,7 +425,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
-_enabled(true)
+_enabled(true),
+_renderingCondition(NULL)
 {
 }
 
@@ -474,7 +478,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
-_enabled(true)
+_enabled(true),
+_renderingCondition(NULL)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
@@ -637,6 +642,8 @@ Mark::~Mark() {
 #endif
     delete _textureID; //Releasing texture
   }
+  
+  delete _renderingCondition;
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
@@ -732,7 +739,7 @@ void Mark::render(const G3MRenderContext* rc,
                   GL* gl,
                   IFloatBuffer* billboardTexCoords) {
   
-  if (!_enabled){
+  if (!mustRender(rc)){
     return;
   }
   

@@ -620,6 +620,8 @@
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
+		D89F7A991FA0B4060052F47E /* RenderingCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89F7A981FA0B4050052F47E /* RenderingCondition.cpp */; };
+		D89F7A9A1FA0B4B90052F47E /* RenderingCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89F7A971FA0B4050052F47E /* RenderingCondition.hpp */; };
 		D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7B1725444800FFA541 /* MeshShape.cpp */; };
 		D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
@@ -867,6 +869,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D89F7A9A1FA0B4B90052F47E /* RenderingCondition.hpp in CopyFiles */,
 				D8B2BCEC1E8A9AE200BC08BE /* FrustumPolicyHandler.hpp in CopyFiles */,
 				CFFA5B811E89548500AF294E /* WrapperNearFrustumRenderer.hpp in CopyFiles */,
 				CF7529641E868089003C9605 /* FrustumData.hpp in CopyFiles */,
@@ -2099,6 +2102,8 @@
 		D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeElevationDataProvider.hpp; path = Commons/Basic/CompositeElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Image_iOS.hpp; path = Specific/Derived/Image_iOS.hpp; sourceTree = "<group>"; };
 		D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Image_iOS.mm; path = Specific/Derived/Image_iOS.mm; sourceTree = "<group>"; };
+		D89F7A971FA0B4050052F47E /* RenderingCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RenderingCondition.hpp; path = Commons/Basic/RenderingCondition.hpp; sourceTree = "<group>"; };
+		D89F7A981FA0B4050052F47E /* RenderingCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderingCondition.cpp; path = Commons/Basic/RenderingCondition.cpp; sourceTree = "<group>"; };
 		D89FBD7A172543D100FFA541 /* RectangleF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleF.hpp; path = Commons/Geometry/RectangleF.hpp; sourceTree = "<group>"; };
 		D89FBD7B1725444800FFA541 /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshShape.cpp; path = Commons/Rendererers/MeshShape.cpp; sourceTree = "<group>"; };
 		D89FBD7C1725444800FFA541 /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
@@ -2345,6 +2350,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D89F7A981FA0B4050052F47E /* RenderingCondition.cpp */,
+				D89F7A971FA0B4050052F47E /* RenderingCondition.hpp */,
 				CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */,
 				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
 				CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */,
@@ -3788,6 +3795,7 @@
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
 				D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */,
+				D89F7A991FA0B4060052F47E /* RenderingCondition.cpp in Sources */,
 				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
