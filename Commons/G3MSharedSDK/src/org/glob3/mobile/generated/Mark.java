@@ -172,6 +172,7 @@ public class Mark implements SurfaceElevationListener
   private IconDownloadListener _iconDownloadListener;
 
   private boolean _enabled; //Disables mark rendering
+  private RenderingCondition _renderingCondition;
 
 
 
@@ -291,6 +292,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _iconDownloadListener = null;
      _enabled = true;
+     _renderingCondition = null;
   }
 
   /**
@@ -373,6 +375,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _iconDownloadListener = null;
      _enabled = true;
+     _renderingCondition = null;
   }
 
   /**
@@ -443,6 +446,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _iconDownloadListener = null;
      _enabled = true;
+     _renderingCondition = null;
   }
 
   /**
@@ -511,6 +515,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _iconDownloadListener = null;
      _enabled = true;
+     _renderingCondition = null;
   }
 
   /**
@@ -579,6 +584,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _iconDownloadListener = null;
      _enabled = true;
+     _renderingCondition = null;
     if (_imageBuilder.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image builders");
@@ -651,6 +657,9 @@ public class Mark implements SurfaceElevationListener
       _textureID.dispose();
       _textureID = null; //Releasing texture
     }
+  
+    if (_renderingCondition != null)
+       _renderingCondition.dispose();
   }
 
   public final boolean isInitialized()
@@ -841,6 +850,12 @@ public class Mark implements SurfaceElevationListener
     _enabled = v;
   }
 
+  public final boolean mustRender(G3MRenderContext context)
+  {
+    boolean rc = (_renderingCondition == null)? true : _renderingCondition.mustRender(context);
+    return _enabled && rc;
+  }
+
   public final boolean touched()
   {
     return (_listener == null) ? false : _listener.touchedMark(this);
@@ -876,7 +891,7 @@ public class Mark implements SurfaceElevationListener
   public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
-    if (!_enabled)
+    if (!mustRender(rc))
     {
       return;
     }
@@ -1095,11 +1110,20 @@ public class Mark implements SurfaceElevationListener
     return _zoomInAppears;
   }
 
-
   public final void resetRequestIconId()
   {
     _requestIconID = -1;
     _iconDownloadListener = null;
+  }
+
+  public final void setRenderingCondition(RenderingCondition rc)
+  {
+    if (_renderingCondition != rc)
+    {
+      if (_renderingCondition != null)
+         _renderingCondition.dispose();
+    }
+    _renderingCondition = rc;
   }
 
 }

@@ -1075,4 +1075,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _tileVisibilityTester.onTileHasChangedMesh(tile);
   }
 
+  public final LayerSet getLayerSet()
+  {
+    return _layerSet;
+  }
+
 }
