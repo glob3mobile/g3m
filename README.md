@@ -1,17 +1,7 @@
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-4197306-21', 'github.com');
-  ga('send', 'pageview');
-
-</script>
 g3m
 ===
 
-##The multiplatform advanced visualization framework
+###The multiplatform advanced visualization framework
 ###G3M is a **framework** developed and designed to: 
 
  + Develop **mobile maps** apps in 2D, 2,5D and 3D
