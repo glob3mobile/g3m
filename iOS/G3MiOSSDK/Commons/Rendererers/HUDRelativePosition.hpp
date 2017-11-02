@@ -11,32 +11,33 @@
 
 #include "HUDPosition.hpp"
 
+enum HUDRelativePositionAlign {
+  LEFT,
+  RIGHT,
+  CENTER,
+  ABOVE,
+  BELOW,
+  MIDDLE
+};
+
+enum HUDRelativePositionAnchor {
+  VIEWPORT_WIDTH,
+  VIEWPORT_HEIGHT
+};
+
 class HUDRelativePosition : public HUDPosition {
 public:
-  enum Align {
-    LEFT,
-    RIGHT,
-    CENTER,
-    ABOVE,
-    BELOW,
-    MIDDLE
-  };
-
-  enum Anchor {
-    VIEWPORT_WIDTH,
-    VIEWPORT_HEIGHT
-  };
-
+  
 private:
   const float _factor;
   const float _margin;
-  const HUDRelativePosition::Anchor _relativeTo;
-  const HUDRelativePosition::Align  _align;
-
+  const HUDRelativePositionAnchor _relativeTo;
+  const HUDRelativePositionAlign  _align;
+  
 public:
   HUDRelativePosition(float factor,
-                      HUDRelativePosition::Anchor relativeTo,
-                      HUDRelativePosition::Align  align,
+                      HUDRelativePositionAnchor relativeTo,
+                      HUDRelativePositionAlign  align,
                       float margin = 0) :
   _factor(factor),
   _relativeTo(relativeTo),
@@ -44,13 +45,13 @@ public:
   _margin(margin)
   {
   }
-
+  
   virtual ~HUDRelativePosition() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
+  
   float getPosition(int viewPortWidth,
                     int viewPortHeight,
                     float widgetWidth,
@@ -59,3 +60,4 @@ public:
 };
 
 #endif
+
