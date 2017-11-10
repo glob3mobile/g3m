@@ -212,6 +212,11 @@ public class MeshRenderer extends DefaultRenderer
   {
   }
 
+  public final java.util.ArrayList<Mesh> getMeshes()
+  {
+    return _meshes;
+  }
+
   public final void loadJSONPointCloud(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, MeshLoadListener listener)
   {
      loadJSONPointCloud(url, priority, timeToCache, readExpired, pointSize, deltaHeight, listener, true);

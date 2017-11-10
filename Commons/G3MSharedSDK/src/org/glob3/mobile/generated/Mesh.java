@@ -52,8 +52,7 @@ public abstract class Mesh
 
   public void dispose()
   {
-    if (_userData != null)
-       _userData.dispose();
+    _userData = null;
   }
 
   public final Mesh.MeshUserData getUserData()
@@ -65,8 +64,7 @@ public abstract class Mesh
   {
     if (_userData != userData)
     {
-      if (_userData != null)
-         _userData.dispose();
+      _userData = null;
       _userData = userData;
     }
   }

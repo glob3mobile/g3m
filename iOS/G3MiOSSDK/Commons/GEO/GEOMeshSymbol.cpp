@@ -43,6 +43,8 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
                                 new Color(lineColor),
                                 NULL,
                                 false);
+  
+  modifyMeshAfterCreation(result);
 
   delete vertices;
 
@@ -92,6 +94,8 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<const std::vector<Geode
                                  false);
 
   delete vertices;
+  
+  modifyMeshAfterCreation(result);
 
   return result;
 }

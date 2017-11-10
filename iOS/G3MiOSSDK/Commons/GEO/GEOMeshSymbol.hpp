@@ -10,8 +10,8 @@
 #define __G3MiOSSDK__GEOMeshSymbol__
 
 #include "GEOSymbol.hpp"
+#include "Mesh.hpp"
 
-class Mesh;
 class Geodetic2D;
 class Color;
 class Ellipsoid;
@@ -34,8 +34,20 @@ protected:
 
 
   virtual Mesh* createMesh(const G3MRenderContext* rc) const = 0;
+  
+  mutable bool _meshEnabledAtCreation;
+  mutable Mesh::MeshUserData* _meshData;
+  void modifyMeshAfterCreation(Mesh* result) const{
+    if (_meshData != NULL){
+      result->setUserData(_meshData);
+      _meshData = NULL;
+    }
+    result->setEnable(_meshEnabledAtCreation);
+  }
 
 public:
+  
+  GEOMeshSymbol():_meshData(NULL), _meshEnabledAtCreation(true){}
 
   bool symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizer*    symbolizer,
@@ -43,6 +55,14 @@ public:
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
                  GEOVectorLayer*         geoVectorLayer) const;
+  
+  void setMeshUserData(Mesh::MeshUserData* meshData){
+    _meshData = meshData;
+  }
+  
+  void setMeshEnabled(bool enabled){
+    _meshEnabledAtCreation = enabled;
+  }
 
 
 };

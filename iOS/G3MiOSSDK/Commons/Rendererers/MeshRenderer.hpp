@@ -143,6 +143,10 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
   }
+  
+  std::vector<Mesh*> getMeshes() const{
+    return _meshes;
+  }
 
   void loadJSONPointCloud(const URL&          url,
                           long long           priority,

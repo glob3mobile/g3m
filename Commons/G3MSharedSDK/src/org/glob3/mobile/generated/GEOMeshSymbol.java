@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Mesh;
 //class Geodetic2D;
 //class Color;
 //class Ellipsoid;
@@ -39,6 +38,8 @@ public abstract class GEOMeshSymbol extends GEOSymbol
     }
   
     Mesh result = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, false);
+  
+    modifyMeshAfterCreation(result);
   
     if (vertices != null)
        vertices.dispose();
@@ -79,12 +80,32 @@ public abstract class GEOMeshSymbol extends GEOSymbol
     if (vertices != null)
        vertices.dispose();
   
+    modifyMeshAfterCreation(result);
+  
     return result;
   }
 
 
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
+  protected boolean _meshEnabledAtCreation;
+  protected Mesh.MeshUserData _meshData;
+  protected final void modifyMeshAfterCreation(Mesh result)
+  {
+    if (_meshData != null)
+    {
+      result.setUserData(_meshData);
+      _meshData = null;
+    }
+    result.setEnable(_meshEnabledAtCreation);
+  }
+
+
+  public GEOMeshSymbol()
+  {
+     _meshData = null;
+     _meshEnabledAtCreation = true;
+  }
 
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
@@ -101,6 +122,16 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       }
     }
     return true;
+  }
+
+  public final void setMeshUserData(Mesh.MeshUserData meshData)
+  {
+    _meshData = meshData;
+  }
+
+  public final void setMeshEnabled(boolean enabled)
+  {
+    _meshEnabledAtCreation = enabled;
   }
 
 
