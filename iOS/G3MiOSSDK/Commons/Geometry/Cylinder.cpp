@@ -232,10 +232,103 @@ std::string Cylinder::adaptMeshes(MeshRenderer *mr,
         std::vector<double> dt = distances(visibleInfo.at(i),camera,planet);
         IFloatBuffer *colors = im->getColorsFloatBuffer();
         for (size_t j=3, c=0; j<colors->size(); j=j+4, c++){
-            double ndt = (dt[c] > 100)? 0: 1 - ((dt[c] / maxDt));
+            double ndt = smoothstepAlpha(dt[c], maxDt, true);
             colors->put(j,(float)ndt); //Suponiendo que sea un valor de alpha
         }
     }
     return text;
 }
 
+double Cylinder::rawAlpha(double distance, double proximityThreshold, bool divide){
+    double ndt = (distance > proximityThreshold)? 0: 1;
+    if (divide) ndt = ndt / 2;
+    return ndt;
+}
+
+double Cylinder::linearAlpha(double distance, double proximityThreshold, bool divide){
+    double ndt = (distance > proximityThreshold)? 0: 1 - ((distance / proximityThreshold));
+//    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+}
+
+double Cylinder::smoothstepAlpha(double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    double ndt = (distance > proximityThreshold)? 0: 1 - ( 3*pow(softDistance,2) - 2*pow(softDistance,3));
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+}
+double Cylinder::perlinSmootherstepAlpha (double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    double ndt = (distance > proximityThreshold)? 0: 1 - ( 6*pow(softDistance,5) - 15*pow(softDistance,4) + 10*pow(softDistance,3));
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+    
+}
+double Cylinder::mcDonaldSmootheststepAlpha (double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    double ndt = (distance > proximityThreshold)? 0: 1 - ( -20*pow(softDistance,7) + 70*pow(softDistance,6) - 84*pow(softDistance,5) + 35*pow(softDistance,4));
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+}
+double Cylinder::sigmoidAlpha (double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    softDistance = (softDistance * 10) - 5;
+    
+    double ndt = (distance > proximityThreshold)? 0: 1 - ( 1 /(1 + exp(-softDistance)));
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+    
+}
+double Cylinder::tanhAlpha (double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    softDistance = (softDistance * 10) - 5;
+    
+    double factor = 2 /(1 + exp(-2*softDistance));
+    factor = factor / 2; // Para convertir de 0-2 a 0-1
+    
+    double ndt = (distance > proximityThreshold)? 0: 1 - factor;
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+}
+
+double Cylinder::arctanAlpha (double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    softDistance = (softDistance * 20) - 10;
+    
+    double factor = atan(softDistance);
+    factor = factor + 1.5;
+    factor = factor / 3; // Para convertir de -1.5 / 1.5 a 0 / 1
+    
+    double ndt = (distance > proximityThreshold)? 0: 1 - factor;
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+    
+    return ndt;
+}
+
+double Cylinder::softsignAlpha (double distance, double proximityThreshold, bool divide){
+    double softDistance = distance / proximityThreshold;
+    softDistance = (softDistance * 100) - 50;
+    
+    double factor = softDistance /(1 + fabs(softDistance));
+    factor = factor + 1;
+    factor = factor / 2; // Para convertir de -1 / 1 a 0 / 1
+    
+    double ndt = (distance > proximityThreshold)? 0: 1 - factor;
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    if (divide) ndt = ndt / 2;
+        
+    return ndt;
+}

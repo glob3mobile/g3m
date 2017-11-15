@@ -35,7 +35,7 @@ public abstract class ElevationData
     return _interpolator;
   }
 
-  protected final Sector _sector ;
+  protected Sector _sector ; //Ojo que me cargué el Final de aquí.
   protected final int _width;
   protected final int _height;
 
@@ -200,6 +200,14 @@ public abstract class ElevationData
   public Sector getSector()
   {
     return _sector;
+  }
+  
+  // Chano working at something awful!
+  // Pregunta: ¿hará falta modificar también el sector del Provider?
+  // Respuesta: Con total seguridad y superioridad! xD
+  
+  public void setSector(Sector sector){
+	  _sector = sector;
   }
 
   public abstract boolean hasNoData();

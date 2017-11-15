@@ -25,12 +25,47 @@
 			Your web browser must have JavaScript enabled in order for this
 			application to display correctly.</div>
 	</noscript>
-
+	<div id="header">
+		<img id="menuIcon" src="menuIcon.png" />
+		<div id="logoContainer">
+			<img id="eiferLogo" src="eifer_logo.png" />
+			<img id="ulpgcLogo" src="ulpgc_logo.jpg" />
+		</div>
+	</div>
+	
 	<div id="g3mWidgetHolder">
+	</div>
+	
+	<div id="footer">
+		<p id="Position"> Lat: 27.895648 Lon: -15.467864, Hgt: 1245.44 </p>
+		<p id="LastEvent"> No pipes near our current position </p>
+	</div>
+	
+	<div id="startScreen">
+		<h3 id="LoadingTitle"> Setting things up: please wait ... </h3>
+		<p id="LoadingDetails"> Unknown file parsing </p>
+	</div>
+	<div id="menuScreen">
+		<h3 id="MenuTitle"> Settings </h3>
+		<input id="bCheckbox" type="checkbox" value="Buildings" checked> Buildings <br />
+  		<input id="pCheckbox" type="checkbox" value="Pipes" checked> Pipes <br />
+  		<input id="pNumber" type="number" name="quantity" min="1" max="100" value="25"> Pipe proximity alert distance (m.) <br />
+        <input id="pMethod" type="number" name="method" min="1" max="9" value="2"> Alpha method <br />
+        <p> Alpha method reference: 1-Fixed, 2-Linear(default), 3-Smoothstep, 4-Smootherstep, 5-Smootheststep, 6-Sigmoid, 7-Tanh, 8-Arctan, 9-Softsign </p>
+  		<button id="acceptButton" onclick="acceptMenu()">OK</button>
+  		<button id="cancelButton" onclick="cancelMenu()">Cancel</button>
+  		<!--<br/>
+  		<button id="holeButton" onclick="changeHole()">Hole here!</button>-->
 	</div>
 	
 	<script type="text/javascript">
 	var _onLoadG3MListener = null;
+	var menuOpened = false;
+	
+	var buildings = true;
+	var pipes = true;
+	var proximity = 25;
+    var method = 2;
 
     function onLoadG3M() {
     	// the G3M objets is already loaded
@@ -41,6 +76,67 @@
     function setOnLoadG3MListener(func) {
     	_onLoadG3MListener = func;
     }
+    
+    function openMenu(){
+    	var x = document.getElementById("menuScreen");
+    	x.style.display = "inline-block";
+    }
+    
+    function cancelMenu(){
+    	//Reset menu
+    	var bCheckbox = document.getElementById("bCheckbox");
+    	bCheckbox.checked = buildings;
+    	var pCheckbox = document.getElementById("pCheckbox");
+    	pCheckbox.checked = pipes;
+    	var pNumber = document.getElementById("pNumber");
+    	pNumber.value = proximity;
+        var pMethod = document.getElementById("pMethod");
+        pMethod.value = method;
+    	
+    	var x = document.getElementById("menuScreen");
+    	x.style.display = "none";
+    	menuOpened = false;
+    }
+    
+    function acceptMenu(){
+    	
+    	var bCheckbox = document.getElementById("bCheckbox");
+    	buildings = bCheckbox.checked;
+    	var pCheckbox = document.getElementById("pCheckbox");
+    	pipes = pCheckbox.checked;
+    	var pNumber = document.getElementById("pNumber");
+    	proximity = Number(pNumber.value);
+        var pMethod = document.getElementById("pMethod");
+        method = Number(pMethod.value);
+    	
+    	//Call the G3M!
+    	if (window.G3M){
+    		window.G3M.activateBuildings(buildings);
+    		window.G3M.activatePipes(pipes);
+    		window.G3M.setProximity(proximity);
+            window.G3M.setAlphaMethod(method);
+    	}
+    	
+    	var x = document.getElementById("menuScreen");
+    	x.style.display = "none";
+    	menuOpened = false;
+    }
+    
+    function changeHole(){
+    	if (window.G3M){
+    		window.G3M.changeHole();
+    	}
+    }
+    
+    document.getElementById("menuIcon").addEventListener("click", function(){
+        menuOpened = !menuOpened;
+        if (menuOpened){
+        	openMenu();
+        }
+        else {
+        	cancelMenu();
+        }
+    });
 	</script>
 	
 </body>

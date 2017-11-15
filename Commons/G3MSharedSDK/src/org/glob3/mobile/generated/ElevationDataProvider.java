@@ -27,6 +27,8 @@ public abstract class ElevationDataProvider
   public abstract void cancelRequest(long requestId);
 
   public abstract java.util.ArrayList<Sector> getSectors();
+  
+  public abstract void setSector(Sector sector);
 
   public abstract Vector2I getMinResolution();
 

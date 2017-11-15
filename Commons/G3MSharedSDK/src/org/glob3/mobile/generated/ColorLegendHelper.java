@@ -2552,7 +2552,7 @@ public class ColorLegendHelper
     java.util.ArrayList<Double> naturalBreaks = new java.util.ArrayList<Double>();
     for (int i = 0; i < res.size(); i++)
     {
-      naturalBreaks.add((int)res.get(i));
+      naturalBreaks.add((double)res.get(i));
     }
     res = null;
     res = null;

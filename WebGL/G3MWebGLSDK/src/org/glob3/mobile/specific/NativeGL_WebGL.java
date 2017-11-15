@@ -842,6 +842,10 @@ public final class NativeGL_WebGL
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR_MIPMAP_LINEAR;
    }-*/;
 
+   @Override
+   public native int TextureParameterValue_Repeat() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.REPEAT;
+   }-*/;
 
    @Override
    public native void setActiveTexture(final int i) /*-{

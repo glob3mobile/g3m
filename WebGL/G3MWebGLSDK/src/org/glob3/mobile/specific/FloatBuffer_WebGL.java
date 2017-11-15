@@ -257,5 +257,18 @@ public final class FloatBuffer_WebGL
    public long getID() {
       return _id;
    }
+   
+   @Override
+   public void put(final int i, 
+		   final IFloatBuffer srcBuffer,
+		   final int srcFromIndex,
+		   final int count)
+   {
+	   if ((i < 0) || ((i + count) > size())) {
+		   throw new RuntimeException("buffer put error");
+	   }
+	   FloatBuffer_WebGL webBuffer = (FloatBuffer_WebGL) srcBuffer;
+	   rawPut(i,webBuffer,srcFromIndex,count);
+   }
 
 }

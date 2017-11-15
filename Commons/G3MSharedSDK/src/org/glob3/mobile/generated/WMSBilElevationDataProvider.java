@@ -124,5 +124,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
 //    int WORKING_JM;
     return Vector2I.zero();
   }
+  
+  public void setSector (Sector sector){}
 
 }

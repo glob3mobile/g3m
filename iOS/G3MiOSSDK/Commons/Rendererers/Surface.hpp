@@ -136,6 +136,10 @@ public:
       for (size_t i = 0; i < _geodeticCoordinates.size(); i++) {
         Geodetic3D* g= _geodeticCoordinates[i];
         double h = elevationData->getElevationAt(g->_latitude, g->_longitude);
+        // Having an elevData does not imply the elevData covers the building area.
+        // 0 if it does not cover the area.
+        if (h != h) h = 0;
+          
         coor3D.push_back(new Vector3D(planet.toCartesian(g->_latitude,
                                                          g->_longitude,
                                                          h + g->_height - baseHeight)));

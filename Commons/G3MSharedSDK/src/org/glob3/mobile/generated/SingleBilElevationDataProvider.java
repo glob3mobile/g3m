@@ -10,7 +10,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   private ElevationData _elevationData;
   private boolean _elevationDataResolved;
   private final URL _bilUrl;
-  private final Sector _sector ;
+  private Sector _sector ;
   private final int _extentWidth;
   private final int _extentHeight;
 
@@ -164,6 +164,10 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   public final Vector2I getMinResolution()
   {
     return new Vector2I(_extentWidth, _extentHeight);
+  }
+  
+  public void setSector(Sector sector){
+	  _sector = sector;
   }
 
 }

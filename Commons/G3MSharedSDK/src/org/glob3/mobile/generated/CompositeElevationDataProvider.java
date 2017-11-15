@@ -322,6 +322,18 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     onChanged();
   }
 
+  public final void changeFirstEDP(ElevationDataProvider edp){
+	  _providers.set(0, edp);
+	  if (_context != null)
+	  {
+		  edp.initialize(_context);
+	  }
+	  
+	  edp.setChangedListener(_changedListener);
+	  onChanged();
+  }
+  
+  
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
     int size = _providers.size();
@@ -403,6 +415,8 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     }
     return new Vector2I(x,y);
   }
+
+  public void setSector(Sector sector) {} // This one does nothing //
 
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:

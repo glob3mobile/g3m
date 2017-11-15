@@ -380,6 +380,22 @@ class MyEDCamConstrainer: public ICameraConstrainer {
     
     if (previousCamera->computeZNear() < 5){
       //We are using VR
+        const std::string text = Cylinder::adaptMeshes(_mr,
+                                                       _cylInfo,
+                                                       nextCamera,
+                                                       planet);
+        
+        
+        if (text.compare("") != 0 && text.compare(_lastText) != 0){
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
+                                                            message:[NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            _lastText = text;
+            [alert show];
+        }
       return true;
     }
     if (_ed != NULL){
@@ -685,6 +701,19 @@ class AltitudeFixerLM: public ILocationModifier{
   [timeLabel setHidden:TRUE];
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
+    
+    [self addCityGMLFile:"file:///building-1.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-2.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-12.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-15.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-16.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-17.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-18.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-20.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-25.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-26.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-28.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-29.gml" needsToBeFixOnGround:true];
   
   [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
   [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
@@ -699,6 +728,7 @@ class AltitudeFixerLM: public ILocationModifier{
         [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
         [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
         [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+
   
   _modelsLoadedCounter = 0;
   

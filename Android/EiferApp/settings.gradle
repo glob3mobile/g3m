@@ -1,0 +1,1 @@
+include ':app', ':G3MAndroidSDK', ':G3MSharedSDK'

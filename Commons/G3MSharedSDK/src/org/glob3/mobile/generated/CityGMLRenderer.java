@@ -9,7 +9,7 @@ public class CityGMLRenderer extends DefaultRenderer
   private MarksRenderer _marksRenderer;
   private GEOVectorLayer _vectorLayer;
 
-  private final Camera _lastCamera;
+  private Camera _lastCamera;
 
   private CityGMLBuildingTouchedListener _touchListener;
 
@@ -41,7 +41,7 @@ public class CityGMLRenderer extends DefaultRenderer
 
       for (int j = 0; j < b._surfaces.size(); j++)
       {
-        CityGMLBuildingSurface s = b._surfaces[j];
+        CityGMLBuildingSurface s = b._surfaces.get(j);
         if (s.getType() == CityGMLBuildingSurfaceType.GROUND)
         {
 
@@ -101,7 +101,7 @@ public class CityGMLRenderer extends DefaultRenderer
 
       //Creating mesh model
             final boolean checkSurfacesVisibility = true;
-            _mesh = CityGMLBuildingTessellator.createMesh(_buildings, *_vc._context.getPlanet(), _fixOnGround, checkSurfacesVisibility, null, _vc._elevationData);
+            _mesh = CityGMLBuildingTessellator.createMesh(_buildings, _vc._context.getPlanet(), _fixOnGround, checkSurfacesVisibility, null, _vc._elevationData);
       _buildingMeshes.add(_mesh);
 
 //      for (size_t i = 0; i < _buildings.size(); i++) {
@@ -191,8 +191,6 @@ public class CityGMLRenderer extends DefaultRenderer
 
   public final void addBuildingDataFromURL(URL url)
   {
-  
-  
     _context.getDownloader().requestBuffer(url, 1000, TimeInterval.forever(), true, new BuildingDataBDL(_buildings, _context), true);
   }
 

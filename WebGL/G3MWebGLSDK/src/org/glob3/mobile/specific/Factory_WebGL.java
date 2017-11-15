@@ -112,6 +112,11 @@ IFactory {
    protected IDeviceInfo createDeviceInfo() {
       return new DeviceInfo_WebGL();
    }
+   
+   @Override
+   public IXMLNode createXMLNodeFromXML(final String node){
+	   return new XMLNode_WebGL(node);
+   }
 
 
 }

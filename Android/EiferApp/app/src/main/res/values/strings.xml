@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">EiferApp</string>
+
+    <string name="menu_modes">Modes</string>
+
+    <string name="menu_tab_1">Map</string>
+    <string name="menu_tab_2">VR</string>
+    <string name="menu_tab_3">Stereo</string>
+    <string name="menu_tab_4">AR</string>
+
+    <string name="menu_colors">Colors</string>
+    <string name="menu_citygml">CityGML Settings</string>
+    <string name="menu_pipes">Pipes</string>
+    <string name="menu_buildings">Buildings</string>
+    <string name="menu_alpha_heading">Pipe Visualization Settings</string>
+    <string name="menu_alpha">Alpha</string>
+    <string name="menu_holes">Holes</string>
+    <string name="menu_method">Method</string>
+    <string name="menu_apply">Apply settings</string>
+
+    <string-array name="menu_color_spinner">
+        <item> Random Colors </item>
+        <item> Heat Demand </item>
+        <item> Building Volume  </item>
+        <item> GHG Emissions </item>
+        <item> Demographic SOM </item>
+        <item> Demographic K-Means </item>
+    </string-array>
+
+    <string-array name="menu_alphamethod_spinner">
+        <item> Fixed </item>
+        <item> Linear </item>
+        <item> Smoothstep  </item>
+        <item> Smootherstep </item>
+        <item> Smootheststep </item>
+        <item> Sigmoid </item>
+        <item> Tanh </item>
+        <item> Arctan </item>
+        <item> Softsign </item>
+    </string-array>
+
+    <string name="buildings_title">Building selected</string>
+    <string name="buildings_ok">Show solar radiation data</string>
+    <string name="buildings_cancel">Cancel</string>
+
+    <string name="location_req_failure"> Failure when requesting GPS Permission. Map mode is set instead.</string>
+    <string name="camera_req_failure"> Failure when requesting Camera Permission..</string>
+
+    <string name="startTitle">Loading City Models</string>
+    <string name="startMessage">Depending on your mobile phone, this could last from seconds to a few minutes. Please wait ... </string>
+
+    <string name="abortSimulation">Stop</string>
+</resources>

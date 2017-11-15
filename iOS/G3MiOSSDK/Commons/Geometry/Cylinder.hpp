@@ -64,7 +64,17 @@ private:
                                        const Camera *camera,
                                        const Planet *planet);
     
-
+    
+  static double rawAlpha(double distance, double proximityThreshold, bool divide);
+  static double linearAlpha(double distance, double proximityThreshold, bool divide);
+  static double smoothstepAlpha(double distance, double proximityThreshold, bool divide);
+  static double perlinSmootherstepAlpha (double distance, double proximityThreshold, bool divide);
+  static double mcDonaldSmootheststepAlpha (double distance, double proximityThreshold, bool divide);
+  static double sigmoidAlpha (double distance, double proximityThreshold, bool divide);
+  static double tanhAlpha (double distance, double proximityThreshold, bool divide);
+  static double arctanAlpha (double distance, double proximityThreshold, bool divide);
+  static double softsignAlpha (double distance, double proximityThreshold, bool divide);
+    
 };
 
 #endif /* Cylinder_hpp */

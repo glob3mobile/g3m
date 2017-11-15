@@ -7,8 +7,95 @@ html, body {
 
 #g3mWidgetHolder {
 	width: 100%;
-	height: 100%;
+	height: 80%;
 	overflow: hidden;
+	z-index : 1;
+}
+
+#_g3m_canvas {
+	cursor: url(../shovel.png), auto;
+}
+
+#startScreen, #menuScreen {
+	position: absolute;
+	top: 10%;
+	left: 0;
+	width: 100%;
+	height: 80%;
+	z-index : 2;
+}
+
+#startScreen {
+	background-color: white;
+}
+
+#menuScreen {
+	background-color: rgba(255,255,255,0.5);
+	display: none;
+	padding: 20px;
+}
+
+#bCheckbox, #pCheckbox{
+	margin-bottom: 10px;
+}
+
+#pNumber, #pMethod {
+	margin-bottom: 20px;
+}
+
+#acceptButton, #cancelButton, #holeButton {
+	width: 100px;
+	height: 30px;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+
+#LoadingTitle, #LoadingDetails {
+	margin: 0;
+	padding: 5px;
+	width: 100%;
+	text-align: center;
+}
+
+#menuIcon, #eiferLogo, #ulpgcLogo {
+	height: 50px;
+	margin: 10px;
+	padding: 0px;
+}
+
+#menuIcon {
+	display: none;
+}
+
+#logoContainer {
+	float: right;
+}
+
+#footer {
+	width: 100%;
+	height: 9%;
+}
+
+
+#header {
+	width: 100%;
+	height: 10%;
+}
+
+#Position, #LastEvent {
+	width: 49%;
+	margin: 0;
+	padding: 5px;
+	display: inline-block;
+}
+
+#Position {
+	float: left;
+}
+
+#LastEvent {
+	float: right;
+	text-align: right;
 }
 
 canvas:focus {
