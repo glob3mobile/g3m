@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
+		8465B6F01FBC5E3000118771 /* PopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6EF1FBC5E3000118771 /* PopupViewController.m */; };
 		8468CDC31FB070E0008AE04E /* building-12.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDB91FB070E0008AE04E /* building-12.gml */; };
 		8468CDC41FB070E0008AE04E /* building-15.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDBA1FB070E0008AE04E /* building-15.gml */; };
 		8468CDC51FB070E0008AE04E /* building-16.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDBB1FB070E0008AE04E /* building-16.gml */; };
@@ -108,6 +109,8 @@
 /* Begin PBXFileReference section */
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		8465B6EE1FBC5E3000118771 /* PopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupViewController.h; sourceTree = "<group>"; };
+		8465B6EF1FBC5E3000118771 /* PopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupViewController.m; sourceTree = "<group>"; };
 		8468CDB91FB070E0008AE04E /* building-12.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-12.gml"; path = "EIFER Resources/building-12.gml"; sourceTree = "<group>"; };
 		8468CDBA1FB070E0008AE04E /* building-15.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-15.gml"; path = "EIFER Resources/building-15.gml"; sourceTree = "<group>"; };
 		8468CDBB1FB070E0008AE04E /* building-16.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-16.gml"; path = "EIFER Resources/building-16.gml"; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 				D8EEF4271577B0D6003FEB5E /* Resources */,
 				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
 				D8EEF39A1577920B003FEB5E /* AppDelegate.m */,
+				8465B6EE1FBC5E3000118771 /* PopupViewController.h */,
+				8465B6EF1FBC5E3000118771 /* PopupViewController.m */,
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
@@ -505,6 +510,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
+				8465B6F01FBC5E3000118771 /* PopupViewController.m in Sources */,
 				D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D850B6DC1F76B51400FED5E3 /* PipesModel.mm in Sources */,
