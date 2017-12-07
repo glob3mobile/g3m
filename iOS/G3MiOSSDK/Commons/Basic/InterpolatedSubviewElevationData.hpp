@@ -42,12 +42,12 @@ public:
       for (int x = 0; x < _width; x++) {
         const double u = (double) x / (_width - 1);
 
-        const Angle longitude = _sector.getInnerPointLongitude(u);
+        const Angle longitude = _sector->getInnerPointLongitude(u);
 
         for (int y = 0; y < _height; y++) {
           const double v = 1.0 - ( (double) y / (_height - 1) );
 
-          const Angle latitude = _sector.getInnerPointLatitude(v);
+          const Angle latitude = _sector->getInnerPointLatitude(v);
 
           const int index = ((_height-1-y) * _width) + x;
 

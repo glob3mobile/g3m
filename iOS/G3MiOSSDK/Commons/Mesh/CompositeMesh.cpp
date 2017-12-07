@@ -11,6 +11,7 @@
 #include "Vector3D.hpp"
 
 CompositeMesh::~CompositeMesh() {
+        
   const size_t childrenCount = _children.size();
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];

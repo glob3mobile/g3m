@@ -135,6 +135,7 @@ public:
   }
 
   void addElevationDataProvider(ElevationDataProvider* edp);
+  void changeFirstEDP(ElevationDataProvider* edp);
 
   bool isReadyToRender(const G3MRenderContext* rc);
 

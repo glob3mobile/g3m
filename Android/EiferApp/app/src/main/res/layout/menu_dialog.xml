@@ -100,6 +100,20 @@
 
         <TextView
             android:paddingTop="10px"
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_location_title" />
+
+        <Switch
+            android:id="@+id/switchLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/menu_location" />
+
+        <TextView
+            android:paddingTop="10px"
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -160,6 +174,45 @@
                 android:entries="@array/menu_alphamethod_spinner"
                 android:gravity="center"/>
         </LinearLayout>
+
+        <TextView
+            android:paddingTop="10px"
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_alpha_heading" />
+
+        <Switch
+            android:paddingTop="5px"
+            android:id="@+id/switchCorrection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/menu_correction" />
+
+        <LinearLayout
+            android:paddingTop="5px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="@string/undefined" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="openPositionFixer"
+                android:text="@string/fixPosition"
+                android:gravity="center"/>
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/button"

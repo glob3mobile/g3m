@@ -7,22 +7,91 @@ public class Cylinder {
 	public static class CylinderMeshInfo {
 		public ArrayList<Double> _latlng;
 		public int _cylId;
-		
-		public CylinderMeshInfo() {_cylId = 0; _latlng = new ArrayList<Double>();}
-		public CylinderMeshInfo(int id) {_cylId = id; _latlng = new ArrayList<Double>();}
+		public String internalMat;
+		public String externalMat;
+		public String internalWidth;
+		public String externalWidth;
+		public String cylinderClass;
+		public String cylinderType;
+		public boolean isTransport;
+		public boolean isCommunication;
+		public int officialId;
+
+		public CylinderMeshInfo() {_cylId = 0; _latlng = new ArrayList<Double>(); isTransport = false; isCommunication = false; officialId = -1;}
+		public CylinderMeshInfo(int id) {_cylId = id; _latlng = new ArrayList<Double>(); isTransport = false; isCommunication = false; officialId = -1;}
 		public CylinderMeshInfo(CylinderMeshInfo cylInfo){
 			_cylId = cylInfo._cylId;
 			_latlng = new ArrayList<Double>();
 			_latlng.addAll(cylInfo._latlng);
+			internalMat = cylInfo.internalMat;
+			externalMat = cylInfo.externalMat;
+			internalWidth = cylInfo.internalWidth;
+			externalWidth = cylInfo.externalWidth;
+			cylinderClass = cylInfo.cylinderClass;
+			cylinderType = cylInfo.cylinderType;
+			isTransport = cylInfo.isTransport;
+			isCommunication = cylInfo.isCommunication;
+			officialId = cylInfo.officialId;
 		}
+		public void setID (int theId){
+			officialId = theId;
+		}
+
 		public void addLatLng(double lat, double lng, double hgt){
 			_latlng.add(lat);
 			_latlng.add(lng);
 			_latlng.add(hgt);
 		}
+
+		public void setMaterials(String extMat, String intMat){
+			//Ad hoc
+			externalMat = extMat;
+			internalMat = intMat;
+		}
+
+		public void setWidths(double intWidth, double extWidth){
+			//Ad hoc
+			externalWidth = extWidth + " cm.";
+			internalWidth = intWidth + " cm.";
+		}
+
+		public void setClassAndType (String cClass, String cType){
+			//Ad hoc
+			cylinderClass = cClass;
+			cylinderType = cType;
+		}
+
+		public void setTransportComm (boolean transport, boolean communication){
+			//Ad hoc;
+			isTransport = transport;
+			isCommunication = communication;
+		}
+
+		public String getMessage(){
+			String msg = "ID: "+ officialId + "\n";
+			msg = msg + "Class: "+cylinderClass + "\n";
+			msg = msg + "Type: "+cylinderType + "\n";
+			if (cylinderClass == "Cable"){
+                msg = msg + "Internal Material: "+internalMat + "\n";
+                msg = msg + "External Material: "+externalMat + "\n";
+				msg = msg + "Cross section: " + externalWidth + "\n";
+				msg = msg + "Is Transmission: "+isTransport + "\n";
+				msg = msg + "Is Communication: "+isCommunication;
+			}
+			else {
+                msg = msg + "Material: " + externalMat + "\n";
+				msg = msg + "Internal Width: "+internalWidth + "\n";
+				msg = msg + "External Width: "+externalWidth;
+			}
+			return msg;
+		}
+
 	}
 	
 	public CylinderMeshInfo _info;
+	//public Sphere _sphere;
+	public Sphere _sphere;
+	public Box _box;
 	private Vector3D _start;
 	private Vector3D _end;
 	private double _radius;
@@ -35,6 +104,7 @@ public class Cylinder {
 		_start = start;
 		_end = end;
 		_radius = radius;
+		_sphere = null;
 		_info = new CylinderMeshInfo();
 	}
 	
@@ -134,13 +204,35 @@ public class Cylinder {
 		                                    false,
 		                                    0.0f,
 		                                    0.0f);
-		  
+		  _sphere = createSphere(fbb); //(Box) im.getBoundingVolume();
+		  Box aBox = (Box)(im.getBoundingVolume());
+		  _box = new Box(aBox._lower,aBox._upper);
 		  
 		  CompositeMesh cm = new CompositeMesh();
 		  cm.addMesh(im);
 		  return cm;
 	}
-		    
+
+	private Sphere createSphere(FloatBufferBuilderFromCartesian3D fbb){
+
+		java.util.ArrayList<Vector3D> vs = new java.util.ArrayList<Vector3D>();
+
+		for (short i = 0; i < fbb.size(); i++)
+		{
+			vs.add(new Vector3D(fbb.getAbsoluteVector3D(i)));
+		}
+
+		return Sphere.createSphereContainingPoints(vs);
+	}
+
+	public void intersectWithRay(Vector3D origin, Vector3D rayDirection){
+		//TODO: implementar algo. Si es que tengo fuerzas ...
+		//http://inmensia.com/articulos/raytracing/cilindroycono.html
+		//https://www.gamedev.net/forums/topic/467789-raycylinder-intersection/
+	}
+
+
+
 	public static String adaptMeshes(MeshRenderer meshRenderer,
 			ArrayList<CylinderMeshInfo> cylInfo,
 			final Camera camera,

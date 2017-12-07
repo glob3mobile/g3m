@@ -27,6 +27,8 @@ public:
                       double deltaHeight);
 
   virtual ~BufferElevationData() {
+
+  delete _sector;
 #ifdef JAVA_CODE
     super.dispose();
 #endif

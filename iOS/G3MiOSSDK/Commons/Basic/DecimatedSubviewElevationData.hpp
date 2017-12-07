@@ -28,8 +28,8 @@ public:
                        sector,
                        extent)
   {
-    const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector._lower);
-    const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector._upper);
+    const Vector2D parentXYAtLower = getParentXYAt(elevationData, _sector->_lower);
+    const Vector2D parentXYAtUpper = getParentXYAt(elevationData, _sector->_upper);
     const Vector2D parentDeltaXY = parentXYAtUpper.sub(parentXYAtLower);
 
     for (int x = 0; x < _width; x++) {

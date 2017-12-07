@@ -25,6 +25,24 @@
 
 #define PROXIMITY_VALUE 25
 
+int Cylinder::DISTANCE_METHOD = 2;
+bool Cylinder::DEPTH_ENABLED = false;
+
+void Cylinder::setDistanceMethod(int method){
+    Cylinder::DISTANCE_METHOD = method;
+}
+
+int Cylinder::getDistanceMethod() {
+    return Cylinder::DISTANCE_METHOD;
+}
+
+void Cylinder::setDepthEnabled(bool enabled){
+    Cylinder::DEPTH_ENABLED = enabled;
+}
+bool Cylinder::getDepthEnabled(){
+    return Cylinder::DEPTH_ENABLED;
+}
+
 Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet *planet){
   
   Vector3D d = _end.sub(_start);
@@ -51,6 +69,8 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet
   FloatBufferBuilderFromColor colors;
   
   MutableVector3D x(p);
+  std::vector<Vector3D *> vs;
+    
   for (int i = 0; i < nSegments; ++i){
     
     //Tube
@@ -58,8 +78,9 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet
     Vector3D newEndPoint = newStartPoint.add(d);
     x.set(newStartPoint._x, newStartPoint._y, newStartPoint._z);
     
-    fbb->add(newStartPoint);
-    fbb->add(newEndPoint);
+    fbb->add(newStartPoint); vs.push_back(new Vector3D(newStartPoint));
+    fbb->add(newEndPoint); vs.push_back(new Vector3D(newEndPoint));
+      
     Geodetic3D stPoint = planet->toGeodetic3D(newStartPoint);
     Geodetic3D endPoint = planet->toGeodetic3D(newEndPoint);
     _info.addLatLng(stPoint._latitude._degrees, stPoint._longitude._degrees, stPoint._height);
@@ -80,12 +101,12 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet
   }
   
   //Still covers
-  Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
+  /*Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
   fbbC1->add(newStartPoint);
   normalsC1->add(d.times(-1.0));
   Vector3D newEndPoint = newStartPoint.add(d);
   fbbC2->add(newEndPoint);
-  normalsC2->add(d);
+  normalsC2->add(d);*/
   
 
   ShortBufferBuilder ind;
@@ -96,7 +117,6 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet
   ind.add((short)1);
   
   IFloatBuffer* vertices = fbb->create();
-#warning Tercer parámetro booleano == Depth Test. True oculta todo lo subterráneo.
   IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     fbb->getCenter(),
                                     vertices,
@@ -108,44 +128,39 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet
                                     NULL,//new Color(color),
                                     colors.create(),//NULL,
                                     1.0f,
-                                    false,
+                                    DEPTH_ENABLED,
                                     normals->create(),
                                     false,
                                     0,
                                     0);
-  
-  
-  CompositeMesh* cm = new CompositeMesh();
-  cm->addMesh(im);
-  
-  //Covers
-  if (/* DISABLES CODE */ (false)){
-    DirectMesh* c1 = new DirectMesh(GLPrimitive::triangleFan(),
-                                    true,
-                                    fbbC1->getCenter(),
-                                    fbbC1->create(),
-                                    1.0,
-                                    1.0,
-                                    new Color(color));
-    cm->addMesh(c1);
     
-    DirectMesh* c2 = new DirectMesh(GLPrimitive::triangleFan(),
-                                    true,
-                                    fbbC2->getCenter(),
-                                    fbbC2->create(),
-                                    1.0,
-                                    1.0,
-                                    new Color(color));
-    cm->addMesh(c2);
-  }
+  createSphere(vs);
   
   
   delete normals;
   delete fbb;
   
   
-  return cm;
+  //return cm;
+    return im;
   
+}
+
+void Cylinder::createSphere(std::vector<Vector3D*> &vs){
+    /*std::vector<Vector3D*> vs;
+    for (int i=0; i < fbb->size(); i++) {
+        vs.push_back(new Vector3D(fbb->getVector3D(i)));
+    }*/
+    
+    Sphere sphere = Sphere::createSphereContainingPoints(vs);
+    s = new Sphere(sphere);
+    for (size_t i = 0; i < vs.size(); i++) {
+        delete vs.at(i);
+    }
+    vs.clear();
+    
+    
+    
 }
 
 #warning Chano adding stuff
@@ -158,8 +173,8 @@ std::vector<Mesh *> Cylinder::visibleMeshes(MeshRenderer *mr, const Camera *came
     std::vector<Mesh *> theMeshes = mr->getMeshes();
     std::vector<Mesh *> theVisibleMeshes;
     for (size_t i=0;i<theMeshes.size();i++){
-        CompositeMesh *cm = (CompositeMesh *) theMeshes[i];
-        IndexedMesh *im = (IndexedMesh *) cm->getChildAtIndex(0);
+//        CompositeMesh *cm = (CompositeMesh *) theMeshes[i];
+        IndexedMesh *im = (IndexedMesh *) theMeshes[i]; // cm->getChildAtIndex(0);
         // Pregunta: ¿el cash devuelve un puntero diferente a la misma dirección de memoria o otra dirección de memoria?
         cylInfo->at(i)._cylId = (int) i;
         CylinderMeshInfo info = cylInfo->at(i);
@@ -232,11 +247,39 @@ std::string Cylinder::adaptMeshes(MeshRenderer *mr,
         std::vector<double> dt = distances(visibleInfo.at(i),camera,planet);
         IFloatBuffer *colors = im->getColorsFloatBuffer();
         for (size_t j=3, c=0; j<colors->size(); j=j+4, c++){
-            double ndt = smoothstepAlpha(dt[c], maxDt, true);
+            double ndt = getAlpha(dt[c], maxDt, true);
             colors->put(j,(float)ndt); //Suponiendo que sea un valor de alpha
         }
     }
     return text;
+}
+
+double Cylinder::getAlpha(double distance, double proximityThreshold, bool divide){
+    if (getDepthEnabled() == true){
+        return rawAlpha(distance,10000,false); //This should cover a whole city without problems.
+    }
+    else switch (getDistanceMethod()) {
+        case 1:
+            return rawAlpha(distance,proximityThreshold,divide);
+        case 2:
+            return linearAlpha(distance,proximityThreshold,divide);
+        case 3:
+            return smoothstepAlpha(distance,proximityThreshold,divide);
+        case 4:
+            return perlinSmootherstepAlpha(distance,proximityThreshold,divide);
+        case 5:
+            return mcDonaldSmootheststepAlpha(distance,proximityThreshold,divide);
+        case 6:
+            return sigmoidAlpha(distance,proximityThreshold,divide);
+        case 7:
+            return tanhAlpha(distance,proximityThreshold,divide);
+        case 8:
+            return arctanAlpha(distance,proximityThreshold,divide);
+        case 9:
+            return softsignAlpha(distance,proximityThreshold,divide);
+    }
+    
+    return NAND; // NAN
 }
 
 double Cylinder::rawAlpha(double distance, double proximityThreshold, bool divide){

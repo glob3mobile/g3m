@@ -19,12 +19,20 @@
 class PipesModel{
 public:
   static double coord;
+  static std::vector<Cylinder::CylinderMeshInfo> cylinderInfo;
+  static std::vector<Cylinder *> cylinders;
+    
   
-  static std::vector<Cylinder::CylinderMeshInfo> addMeshes(const std::string& fileName, const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset = 0.0);
+  static void addMeshes(const std::string& fileName, const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset = 0.0);
+    
+  static void reset();
+    
+  //static void insertNewCylinder(Geodetic3D &start,Geodetic3D &end, const Planet *p, MeshRenderer *mr, const ElevationData *ed, double heightOffset = 0.0);
+    
+  static void insertNewCylinder(Geodetic3D &start,Geodetic3D &end, const Planet *p, MeshRenderer *mr, const ElevationData *ed, double heightOffset,
+                                int theId, std::string iMat, std::string eMat,double iDiam, double eDiam, std::string pClass, std::string pType, bool isT, bool isC);
   
 };
-
-
 
 
 #endif /* PipesModel_hpp */

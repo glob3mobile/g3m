@@ -1,6 +1,8 @@
 package org.eifer.eiferapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -9,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.eifer.eiferapp.g3mutils.AltitudeFixerLM;
+import org.eifer.eiferapp.g3mutils.CorrectedAltitudeFixedLM;
 import org.eifer.eiferapp.g3mutils.HoleCoverHelper;
 import org.eifer.eiferapp.g3mutils.KarlsruheVirtualWalkLM;
 import org.eifer.eiferapp.g3mutils.MyCityGMLBuildingTouchedListener;
@@ -25,9 +29,12 @@ import org.eifer.eiferapp.g3mutils.MyCityGMLRendererListener;
 import org.eifer.eiferapp.g3mutils.MyEDCamConstrainer;
 import org.eifer.eiferapp.g3mutils.MyEDListener;
 import org.eifer.eiferapp.g3mutils.MyHoleListener;
+import org.eifer.eiferapp.g3mutils.PipeTouchedListener;
 import org.eifer.eiferapp.g3mutils.PipesModel;
+import org.eifer.eiferapp.g3mutils.PipesRenderer;
 import org.eifer.eiferapp.g3mutils.PointCloudEvolutionTask;
 import org.eifer.eiferapp.g3mutils.SchlossListener;
+import org.eifer.eiferapp.g3mutils.UtilityNetworkParser;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Camera;
@@ -56,6 +63,7 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
@@ -107,6 +115,7 @@ public class GlobeFragment extends Fragment{
     private MeshRenderer meshRenderer;
     private MeshRenderer holeRenderer;
     private MeshRenderer meshRendererPointCloud;
+    private PipesRenderer pipesRenderer;
 
     public CompositeElevationDataProvider combo;
     public ElevationData elevData = null;
@@ -116,6 +125,7 @@ public class GlobeFragment extends Fragment{
     private int _modelsLoadedCounter;
     private int buildingColor = 0;
     private int mapMode = 0;
+    private boolean correction = false;
 
     boolean _isMenuAvailable = false;
     //VR
@@ -131,6 +141,9 @@ public class GlobeFragment extends Fragment{
     //Location Mode
     boolean _locationUsesRealGPS = true;
     DeviceAttitudeCameraHandler _dac = null;
+    MarksRenderer marksRenderer;
+
+    public Mark positionMark; public Angle heading = null;
 
     //------------------------------
     // Código globero
@@ -145,9 +158,11 @@ public class GlobeFragment extends Fragment{
 
     private void addBuildings(){
 
-       addCityGMLFile("file:///innenstadt_ost_4326_lod2.gml",false);
-	   addCityGMLFile("file:///innenstadt_west_4326_lod2.gml",false);
-	   addCityGMLFile("file:///technologiepark_WGS84.gml",true);
+       //addCityGMLFile("file:///innenstadt_ost_4326_lod2.gml",false);
+	   //addCityGMLFile("file:///innenstadt_west_4326_lod2.gml",false);
+	   //addCityGMLFile("file:///technologiepark_WGS84.gml",true);
+        addCityGMLFile("file:///tpk_lod3_t1_wgs84.gml",true);
+
 	 //  [self addCityGMLFile:"file:///AR_demo_with_buildings.gml" needsToBeFixOnGround:true]; //NOT WORKING
 	   /*addCityGMLFile("file:///hagsfeld_4326_lod2.gml",false);
 	   addCityGMLFile("file:///durlach_4326_lod2_PART_1.gml",false);
@@ -180,15 +195,53 @@ public class GlobeFragment extends Fragment{
         builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
         pipeMeshRenderer = new MeshRenderer();
-        builder.addRenderer(pipeMeshRenderer);
+        //builder.addRenderer(pipeMeshRenderer);
+
+        pipesRenderer = new PipesRenderer(pipeMeshRenderer,this);
+        pipesRenderer.setHoleMode(isHole());
+        pipesRenderer.setTouchListener(new PipeTouchedListener() {
+            @Override
+            public void onPipeTouched(final Cylinder pipe, final Cylinder.CylinderMeshInfo info) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                        // set title
+                        alertDialogBuilder.setTitle(getString(R.string.pipes_title));
+                        // Set message
+                        String msg = info.getMessage();
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage(msg)
+                                .setCancelable(false)
+                                .setPositiveButton(getString(R.string.pipes_ok),new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) { }
+                                });
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                });
+            }
+        });
+        builder.addRenderer(pipesRenderer);
+
         holeRenderer = new MeshRenderer();
         builder.addRenderer(holeRenderer);
         meshRenderer = new MeshRenderer();
-        builder.addRenderer(meshRenderer);
+        //builder.addRenderer(meshRenderer);
         meshRendererPointCloud = new MeshRenderer();
         builder.addRenderer(meshRendererPointCloud);
-        final MarksRenderer marksRenderer = new MarksRenderer(false);
+        marksRenderer = new MarksRenderer(false);
         builder.addRenderer(marksRenderer);
+        positionMark = new Mark(new URL("file:///bolita.png",false),
+                Geodetic3D.fromDegrees(28,-15.50,0),
+                AltitudeMode.ABSOLUTE);
+        marksRenderer.addMark(positionMark);
+        marksRenderer.setEnable(false);
+
+
         shapesRenderer = new ShapesRenderer();
         builder.addRenderer(shapesRenderer);
 
@@ -198,7 +251,8 @@ public class GlobeFragment extends Fragment{
 
         cityGMLRenderer.setTouchListener(new MyCityGMLBuildingTouchedListener(this));
         builder.addRenderer(cityGMLRenderer);
-        camConstrainer = new MyEDCamConstrainer(null,"",getContext()); //Wait for ED to arrive
+
+        camConstrainer = new MyEDCamConstrainer(null,"",getActivity()); //Wait for ED to arrive
         builder.addCameraConstraint(camConstrainer);
         builder.setBackgroundColor(Color.transparent());
 
@@ -209,10 +263,29 @@ public class GlobeFragment extends Fragment{
         _placeHolder.addView(widget);
     }
 
+    public void activePositionFixer(){
+        marksRenderer.setEnable(true);
+        camConstrainer.setMark(positionMark);
+    }
+
+    public void stopPositionFixer(){
+        camConstrainer.setMark(null);
+        marksRenderer.setEnable(false);
+        heading = camConstrainer.markHeading;
+    }
+
     private void initTask(boolean useDem){
         isUsingDem = useDem;
+        widget.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        widget.setZOrderMediaOverlay(true);
         if (useDem){
-            Geodetic3D pipeCenter = Geodetic3D.fromDegrees(49.01664816, 8.43442120,0);
+            HoleCoverHelper.loadHoleImage(widget.getG3MContext().getDownloader(),
+                    widget.getG3MContext().getThreadUtils(),
+                    "file:///holetexture.jpg");
+            HoleCoverHelper.loadCoverImage(widget.getG3MContext().getDownloader(),
+                    widget.getG3MContext().getThreadUtils(),
+                    "file:///covertexture3.jpg");
+            Geodetic3D pipeCenter = Geodetic3D.fromDegrees(0,0,0); //Geodetic3D.fromDegrees(49.01664816, 8.43442120,0);
             Planet p = widget.getG3MContext().getPlanet();
             Vector3D v1= p.toCartesian(pipeCenter);
             Vector3D v2 = new Vector3D(v1._x - 10, v1._y - 10, v1._z);
@@ -253,8 +326,21 @@ public class GlobeFragment extends Fragment{
                 @Override
                 public boolean onTerrainTouch(G3MEventContext ec, Vector2F pixel, Camera camera, Geodetic3D position,
                                               Tile tile) {
-                    if (isHole())
-                        changeHole(position);
+                    if (isHole()){
+                        if (mapMode == 0)
+                            changeHole(position);
+                        else{
+                            Vector3D cameraDir = camera.getViewDirection();
+                            Camera c = new Camera(camera.getTimestamp());
+                            c.copyFrom(camera,true);
+                            c.translateCamera(cameraDir.normalized().times(25));
+                            Geodetic3D cameraPos = c.getGeodeticPosition();
+                            changeHole(cameraPos);
+                        }
+
+                    }
+
+
                     return false;
                 }
 
@@ -283,7 +369,7 @@ public class GlobeFragment extends Fragment{
                 Math.max(l._latitude._degrees, u._latitude._degrees),
                 Math.max(l._longitude._degrees, u._longitude._degrees));
         final Sector holeSector = new Sector(lower,upper);
-        HoleCoverHelper.generateHoleCover(holeSector, v1, planet, elevData, holeRenderer);
+        HoleCoverHelper.generateHoleCover(holeSector, v1, planet,widget.getG3MWidget().getRenderContext(), elevData, holeRenderer);
 
         ILogger.instance().logError(holeSector.description());
         final SingleBilElevationDataProvider holeEdp = new SingleBilElevationDataProvider(new URL("file:///hole3.bil"),
@@ -322,11 +408,17 @@ public class GlobeFragment extends Fragment{
         }
     }
 
-    public void addPipeMeshes(){
+    public void addPipeMeshes()
+    {
+        UtilityNetworkParser.initialize(widget.getG3MContext(),elevData,pipeMeshRenderer,-4.0);
+        UtilityNetworkParser.parseFromURL(new URL("file:///jochen_underground.gml"));
+
+
         PipesModel.addMeshes("file:///pipesCoords.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, elevData, -4.0,
                 widget.getG3MContext().getDownloader());
         PipesModel.addMeshes("file:///pipesCoordsMetzt.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, null, -4.0,
                 widget.getG3MContext().getDownloader());
+
     }
 
     public void setElevationData(ElevationData ed){
@@ -447,6 +539,7 @@ public class GlobeFragment extends Fragment{
 
     public void setHole(final boolean enable){
         if (enable != Cylinder.isDepthEnabled()){
+            pipesRenderer.setHoleMode(enable);
             holeRenderer.setEnable(enable);
             Cylinder.setDepthEnabled(enable);
             widget.getG3MContext().getThreadUtils().invokeInRendererThread(new GTask(){
@@ -456,7 +549,7 @@ public class GlobeFragment extends Fragment{
                         changeHole(Geodetic3D.fromDegrees(0,0,0));
                     }
                     pipeMeshRenderer.clearMeshes();
-                    PipesModel.cylinderInfo.clear();
+                    PipesModel.reset();
                     addPipeMeshes();
 
                 }
@@ -509,6 +602,15 @@ public class GlobeFragment extends Fragment{
             }
         }
 
+    }
+
+    public boolean getCorrection(){
+        return correction;
+    }
+
+    public void setCorrection(boolean enable){
+        correction = enable;
+        changeLocationMode(_locationUsesRealGPS);
     }
 
     private void setAR(){
@@ -674,7 +776,10 @@ public class GlobeFragment extends Fragment{
         }
 
         if (_dac == null){
-            ILocationModifier  lm = (_locationUsesRealGPS)?  new AltitudeFixerLM(elevData) : new KarlsruheVirtualWalkLM(elevData);
+            ILocationModifier  lm = (_locationUsesRealGPS)?
+                    (correction && heading != null) ?
+                            new CorrectedAltitudeFixedLM(elevData,positionMark.getPosition().asGeodetic2D()) : new AltitudeFixerLM(elevData) :
+                    new KarlsruheVirtualWalkLM(elevData);
 
             _dac = new DeviceAttitudeCameraHandler(true, lm);
         }
@@ -707,9 +812,10 @@ public class GlobeFragment extends Fragment{
     }
 
     private void activateARMode(){
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-        //widget.setZOrderOnTop(true);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         widget.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        widget.setZOrderMediaOverlay(true);
+        //widget.setZOrderOnTop(true);
         widget.getG3MContext().getThreadUtils().invokeInRendererThread(new GTask() {
             @Override
             public void run(G3MContext context) {
@@ -717,16 +823,37 @@ public class GlobeFragment extends Fragment{
                 widget.getG3MWidget().setViewMode(ViewMode.MONO);
                 activateDeviceAttitudeTracking();
                 changeLocationMode(true);
+
             }
         },true);
+        //Bad attempt to get what I want ...
+        //widget.bringToFront();
+        //widget.setZOrderOnTop(true);
 
+        //MainActivity activity = (MainActivity) getActivity();
+        //activity.setZ();
+
+
+    }
+
+    public boolean getUsesGPS(){
+        return _locationUsesRealGPS;
+    }
+
+    public void setUsesGPS(boolean v){
+        _locationUsesRealGPS = v;
+        int map = getMapMode();
+        if (map == 1 || map == 2)
+            changeLocationMode(v);
     }
 
     private void changeLocationMode(boolean v){
         _locationUsesRealGPS = v;
 
         if (_dac != null){
-            ILocationModifier lm = (_locationUsesRealGPS)?  new AltitudeFixerLM(elevData) :
+            ILocationModifier lm = (_locationUsesRealGPS)?
+                    (correction && heading != null) ?
+                            new CorrectedAltitudeFixedLM(elevData,positionMark.getPosition().asGeodetic2D()) : new AltitudeFixerLM(elevData) :
              new KarlsruheVirtualWalkLM(elevData);
 
             _dac.setLocationModifier(lm);

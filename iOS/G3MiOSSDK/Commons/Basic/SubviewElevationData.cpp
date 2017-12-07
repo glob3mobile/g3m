@@ -32,6 +32,7 @@ _buffer( new float[_width * _height] )
 
 SubviewElevationData::~SubviewElevationData() {
   delete [] _buffer;
+  delete _sector;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -53,7 +54,7 @@ const std::string SubviewElevationData::description(bool detailed) const {
   isb->addString("x");
   isb->addInt(_height);
   isb->addString(" sector=");
-  isb->addString( _sector.description() );
+  isb->addString( _sector->description() );
   if (detailed) {
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {

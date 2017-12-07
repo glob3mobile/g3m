@@ -19,7 +19,7 @@
 
 ElevationData::ElevationData(const Sector& sector,
                              const Vector2I& extent) :
-_sector(sector),
+_sector(new Sector(sector)),
 _width(extent._x),
 _height(extent._y),
 _resolution(sector._deltaLatitude.div(extent._y),
@@ -142,7 +142,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
       const double v = 1.0 - ( (double) y / (_height - 1) );
 
-      const Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
+      const Geodetic2D position = _sector->getInnerPoint(u, v).add(positionOffset2D);
 
       vertices->add(position,
                     positionOffset._height + (elevation * verticalExaggeration));
@@ -180,7 +180,7 @@ Interpolator* ElevationData::getInterpolator() const {
 double ElevationData::getElevationAt(const Angle& latitude,
                                      const Angle& longitude) const {
 
-  const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  const Vector2D uv = _sector->getUVCoordinates(latitude, longitude);
   const double u = uv._x;
   const double v = uv._y;
 

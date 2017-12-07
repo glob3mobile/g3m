@@ -7,6 +7,10 @@ import static android.content.Context.WINDOW_SERVICE;
 import static android.hardware.Sensor.TYPE_ACCELEROMETER;
 import static android.hardware.Sensor.TYPE_MAGNETIC_FIELD;
 import static android.hardware.SensorManager.SENSOR_DELAY_GAME;
+import static android.hardware.SensorManager.SENSOR_STATUS_ACCURACY_HIGH;
+import static android.hardware.SensorManager.SENSOR_STATUS_ACCURACY_LOW;
+import static android.hardware.SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM;
+import static android.hardware.SensorManager.SENSOR_STATUS_UNRELIABLE;
 import static android.hardware.SensorManager.getRotationMatrix;
 
 import org.glob3.mobile.generated.IDeviceAttitude;
@@ -109,6 +113,13 @@ public class DeviceAttitude_Android
       }
       else {
          if (getRotationMatrix(_rotationMatrix, _inclinationMatrix, _lastAccels, _lastMagFields)) {
+            if(_display.getRotation() == Surface.ROTATION_0||_display.getRotation() == Surface.ROTATION_180){
+               SensorManager.remapCoordinateSystem(_rotationMatrix,SensorManager.AXIS_X*-1, SensorManager.AXIS_MINUS_Y*-1,_rotationMatrix);
+            }
+            /*else{
+               SensorManager.remapCoordinateSystem(_rotationMatrix,SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,_rotationMatrix);
+            }*/
+
             rotationMatrix.setValue( //
                      _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
                      _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
@@ -143,6 +154,24 @@ public class DeviceAttitude_Android
    public void onAccuracyChanged(final Sensor sensor,
                                  final int accuracy) {
       ILogger.instance().logInfo("Sensor " + sensor.getName() + " changed accuracy to " + accuracy);
+      switch (accuracy){
+         case SENSOR_STATUS_ACCURACY_HIGH: {
+            android.util.Log.e("___ ACCURACY ___", " ___ PERFECT! ___");
+            break;
+         }
+         case SENSOR_STATUS_ACCURACY_MEDIUM: {
+            android.util.Log.e("___ ACCURACY ___", " ___MEDIUM! ___");
+            break;
+         }
+         case SENSOR_STATUS_ACCURACY_LOW:{
+            android.util.Log.e("___ ACCURACY ___", " ___ BAD, RECALIBRATION SUGGESTED! ___");
+            break;
+         }
+         case SENSOR_STATUS_UNRELIABLE: {
+            android.util.Log.e("___ ACCURACY ___", " ___ HORRIBLE, RECALIBRATION MANDATORY! ___");
+         }
+      }
+
    }
 
 

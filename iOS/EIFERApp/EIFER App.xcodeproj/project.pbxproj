@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
-		8465B6F01FBC5E3000118771 /* PopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6EF1FBC5E3000118771 /* PopupViewController.m */; };
+		843BC90E1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml in Resources */ = {isa = PBXBuildFile; fileRef = 843BC90D1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml */; };
+		8465B6F01FBC5E3000118771 /* PopupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6EF1FBC5E3000118771 /* PopupViewController.mm */; };
 		8468CDC31FB070E0008AE04E /* building-12.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDB91FB070E0008AE04E /* building-12.gml */; };
 		8468CDC41FB070E0008AE04E /* building-15.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDBA1FB070E0008AE04E /* building-15.gml */; };
 		8468CDC51FB070E0008AE04E /* building-16.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDBB1FB070E0008AE04E /* building-16.gml */; };
@@ -20,6 +21,12 @@
 		8468CDCA1FB070E0008AE04E /* building-26.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDC01FB070E0008AE04E /* building-26.gml */; };
 		8468CDCB1FB070E0008AE04E /* building-28.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDC11FB070E0008AE04E /* building-28.gml */; };
 		8468CDCC1FB070E0008AE04E /* building-29.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDC21FB070E0008AE04E /* building-29.gml */; };
+		846E90CB1FBEE17400D75740 /* hole3.bil in Resources */ = {isa = PBXBuildFile; fileRef = 846E90CA1FBEE17400D75740 /* hole3.bil */; };
+		848C55E51FD17E51008EE656 /* jochen_underground.gml in Resources */ = {isa = PBXBuildFile; fileRef = 848C55E41FD17E51008EE656 /* jochen_underground.gml */; };
+		849B8E1F1FD051B100EBD799 /* UtilityNetworkParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 849B8E1D1FD051B000EBD799 /* UtilityNetworkParser.mm */; };
+		849E860C1FC71D71004AE1F0 /* covertexture3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 849E860A1FC71D71004AE1F0 /* covertexture3.jpg */; };
+		849E860D1FC71D71004AE1F0 /* holetexture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 849E860B1FC71D71004AE1F0 /* holetexture.jpg */; };
+		849E86101FC7243B004AE1F0 /* PipesRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 849E860E1FC7243B004AE1F0 /* PipesRenderer.mm */; };
 		84CA232F1FACC37D00AE8DDD /* building-1.gml in Resources */ = {isa = PBXBuildFile; fileRef = 84CA232D1FACC37D00AE8DDD /* building-1.gml */; };
 		84CA23301FACC37D00AE8DDD /* building-2.gml in Resources */ = {isa = PBXBuildFile; fileRef = 84CA232E1FACC37D00AE8DDD /* building-2.gml */; };
 		CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E61770E8F100D5A80C /* libicucore.dylib */; };
@@ -109,8 +116,9 @@
 /* Begin PBXFileReference section */
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		843BC90D1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = tpk_lod3_t1_wgs84.gml; path = "EIFER Resources/tpk_lod3_t1_wgs84.gml"; sourceTree = "<group>"; };
 		8465B6EE1FBC5E3000118771 /* PopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupViewController.h; sourceTree = "<group>"; };
-		8465B6EF1FBC5E3000118771 /* PopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupViewController.m; sourceTree = "<group>"; };
+		8465B6EF1FBC5E3000118771 /* PopupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PopupViewController.mm; sourceTree = "<group>"; };
 		8468CDB91FB070E0008AE04E /* building-12.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-12.gml"; path = "EIFER Resources/building-12.gml"; sourceTree = "<group>"; };
 		8468CDBA1FB070E0008AE04E /* building-15.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-15.gml"; path = "EIFER Resources/building-15.gml"; sourceTree = "<group>"; };
 		8468CDBB1FB070E0008AE04E /* building-16.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-16.gml"; path = "EIFER Resources/building-16.gml"; sourceTree = "<group>"; };
@@ -121,6 +129,14 @@
 		8468CDC01FB070E0008AE04E /* building-26.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-26.gml"; path = "EIFER Resources/building-26.gml"; sourceTree = "<group>"; };
 		8468CDC11FB070E0008AE04E /* building-28.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-28.gml"; path = "EIFER Resources/building-28.gml"; sourceTree = "<group>"; };
 		8468CDC21FB070E0008AE04E /* building-29.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-29.gml"; path = "EIFER Resources/building-29.gml"; sourceTree = "<group>"; };
+		846E90CA1FBEE17400D75740 /* hole3.bil */ = {isa = PBXFileReference; lastKnownFileType = file; name = hole3.bil; path = "EIFER Resources/hole3.bil"; sourceTree = "<group>"; };
+		848C55E41FD17E51008EE656 /* jochen_underground.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = jochen_underground.gml; path = "EIFER Resources/jochen_underground.gml"; sourceTree = "<group>"; };
+		849B8E1D1FD051B000EBD799 /* UtilityNetworkParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UtilityNetworkParser.mm; sourceTree = "<group>"; };
+		849B8E1E1FD051B100EBD799 /* UtilityNetworkParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UtilityNetworkParser.hpp; sourceTree = "<group>"; };
+		849E860A1FC71D71004AE1F0 /* covertexture3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = covertexture3.jpg; path = "EIFER Resources/covertexture3.jpg"; sourceTree = "<group>"; };
+		849E860B1FC71D71004AE1F0 /* holetexture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = holetexture.jpg; path = "EIFER Resources/holetexture.jpg"; sourceTree = "<group>"; };
+		849E860E1FC7243B004AE1F0 /* PipesRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PipesRenderer.mm; sourceTree = "<group>"; };
+		849E860F1FC7243B004AE1F0 /* PipesRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PipesRenderer.hpp; sourceTree = "<group>"; };
 		84CA232D1FACC37D00AE8DDD /* building-1.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-1.gml"; path = "EIFER Resources/building-1.gml"; sourceTree = "<group>"; };
 		84CA232E1FACC37D00AE8DDD /* building-2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-2.gml"; path = "EIFER Resources/building-2.gml"; sourceTree = "<group>"; };
 		CF4027E61770E8F100D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -271,7 +287,7 @@
 				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
 				D8EEF39A1577920B003FEB5E /* AppDelegate.m */,
 				8465B6EE1FBC5E3000118771 /* PopupViewController.h */,
-				8465B6EF1FBC5E3000118771 /* PopupViewController.m */,
+				8465B6EF1FBC5E3000118771 /* PopupViewController.mm */,
 				D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */,
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
@@ -281,6 +297,10 @@
 				D86F55911CD9E75700A724F8 /* CameraViewController.m */,
 				D850B6DA1F76B51300FED5E3 /* PipesModel.mm */,
 				D850B6DB1F76B51300FED5E3 /* PipesModel.hpp */,
+				849E860E1FC7243B004AE1F0 /* PipesRenderer.mm */,
+				849E860F1FC7243B004AE1F0 /* PipesRenderer.hpp */,
+				849B8E1D1FD051B000EBD799 /* UtilityNetworkParser.mm */,
+				849B8E1E1FD051B100EBD799 /* UtilityNetworkParser.hpp */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -308,6 +328,11 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				848C55E41FD17E51008EE656 /* jochen_underground.gml */,
+				843BC90D1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml */,
+				849E860A1FC71D71004AE1F0 /* covertexture3.jpg */,
+				849E860B1FC71D71004AE1F0 /* holetexture.jpg */,
+				846E90CA1FBEE17400D75740 /* hole3.bil */,
 				8468CDB91FB070E0008AE04E /* building-12.gml */,
 				8468CDBA1FB070E0008AE04E /* building-15.gml */,
 				8468CDBB1FB070E0008AE04E /* building-16.gml */,
@@ -447,6 +472,7 @@
 				D88F1F0D1CC6298B005866FA /* SolarRadiation.geojson in Resources */,
 				D8DF55D31CC4D9C300D7D084 /* Innenstadt_west_all_data.geojson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
+				848C55E51FD17E51008EE656 /* jochen_underground.gml in Resources */,
 				8468CDC91FB070E0008AE04E /* building-25.gml in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				D8DF55D91CC4D9C300D7D084 /* knielingen_4326_lod2.gml in Resources */,
@@ -477,6 +503,7 @@
 				D8DF55D71CC4D9C300D7D084 /* knielingen_4326_lod2_PART_2.gml in Resources */,
 				D8DF55D81CC4D9C300D7D084 /* knielingen_4326_lod2_PART_3.gml in Resources */,
 				E71B153E1626D27F003D1013 /* Icon-Small.png in Resources */,
+				849E860C1FC71D71004AE1F0 /* covertexture3.jpg in Resources */,
 				E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */,
 				8468CDCA1FB070E0008AE04E /* building-26.gml in Resources */,
 				E71B15401626D27F003D1013 /* Icon.png in Resources */,
@@ -487,8 +514,10 @@
 				D82CAE321F7AE9B900E6CCBE /* AR_demo_with_buildings.gml in Resources */,
 				E71B15411626D27F003D1013 /* Icon@2x.png in Resources */,
 				D8DF55C91CC4D9C300D7D084 /* bulach_4326_lod2.gml in Resources */,
+				843BC90E1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml in Resources */,
 				D8DF55CE1CC4D9C300D7D084 /* eifer_logo.png in Resources */,
 				D88F1F121CC65B18005866FA /* down.png in Resources */,
+				846E90CB1FBEE17400D75740 /* hole3.bil in Resources */,
 				8468CDCC1FB070E0008AE04E /* building-29.gml in Resources */,
 				D8DF55DA1CC4D9C300D7D084 /* random_cluster_fewer_points.geojson in Resources */,
 				D88F1F101CC65390005866FA /* up.png in Resources */,
@@ -499,6 +528,7 @@
 				D82CAE301F7AE81700E6CCBE /* pipesCoordsMetzt.csv in Resources */,
 				D82D00501CF4ACB20038C6FB /* k_s in Resources */,
 				D8DF55CB1CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml in Resources */,
+				849E860D1FC71D71004AE1F0 /* holetexture.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,8 +540,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
-				8465B6F01FBC5E3000118771 /* PopupViewController.m in Sources */,
+				849E86101FC7243B004AE1F0 /* PipesRenderer.mm in Sources */,
+				8465B6F01FBC5E3000118771 /* PopupViewController.mm in Sources */,
 				D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */,
+				849B8E1F1FD051B100EBD799 /* UtilityNetworkParser.mm in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D850B6DC1F76B51400FED5E3 /* PipesModel.mm in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,

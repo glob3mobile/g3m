@@ -110,6 +110,8 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
     CoordinateSystem local = rc.getPlanet().getCoordinateSystemAt(camPosition);
     local.copyValueOfRotationMatrix(_localRM);
     _camRM.copyValueOfMultiplication(_localRM, _attitudeMatrix);
+    //ILogger.instance().logWarning(_localRM.toString());
+    //ILogger.instance().logWarning(ori.toString());
   
     //Applying to Camera CS
     CoordinateSystem finalCS = camCS.applyRotation(_camRM);

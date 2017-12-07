@@ -382,7 +382,7 @@ public class CityGMLRenderer extends DefaultRenderer
       if (touchedB != null)
       {
         _touchListener.onBuildingTouched(touchedB);
-        return true;
+        return false; //return true;
       }
     }
   

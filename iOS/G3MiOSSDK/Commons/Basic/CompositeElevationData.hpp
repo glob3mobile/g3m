@@ -43,6 +43,7 @@ public:
       delete _data[i];
     }
     delete _interpolator;
+    delete _sector;
     
 #ifdef JAVA_CODE
   super.dispose();
@@ -57,7 +58,7 @@ public:
   Vector3D getMinMaxAverageElevations() const;
 
   const Sector getSector() const {
-    return _sector;
+    return *_sector;
   }
 
   bool hasNoData() const {

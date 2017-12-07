@@ -23,6 +23,7 @@ class Sector;
 class Mesh;
 class MeshRenderer;
 class MarksRenderer;
+class PipesRenderer;
 class HUDRenderer;
 class LabelImageBuilder;
 class ElevationData;
@@ -35,6 +36,8 @@ class LayerSet;
 class ShapesRenderer;
 class Planet;
 class DeviceAttitudeCameraHandler;
+class Geodetic3D;
+class CompositeElevationDataProvider;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
@@ -93,24 +96,40 @@ class DeviceAttitudeCameraHandler;
 @property __weak IBOutlet UILabel *timeLabel;
 @property MeshRenderer* meshRenderer;
 @property MeshRenderer* pipeMeshRenderer;
+@property MeshRenderer* holeRenderer;
 @property MeshRenderer* meshRendererPC;
 @property MarksRenderer* marksRenderer;
+@property PipesRenderer* pipesRenderer;
 @property ShapesRenderer* shapesRenderer;
 @property CityGMLRenderer* cityGMLRenderer;
 
 @property GEOVectorLayer* vectorLayer;
 
-@property const ElevationData* elevationData;
+@property CompositeElevationDataProvider *combo;
+@property const ElevationData *elevationData;
+@property ElevationData *holeElevData;
 @property MyEDCamConstrainer* camConstrainer;
 
 -(void) loadCityModel;
 
 -(void) onCityModelLoaded;
 -(void) onProgress;
-
+-(int) getMapMode;
 -(void) addPointCloudMesh:(Mesh*) pc;
 -(void) removePointCloudMesh;
 
 -(void) loadSolarRadiationPointCloudForBuilding:(CityGMLBuilding*) building;
+
+- (void) setBuildingsActive:(bool)active;
+- (void) setPipesActive:(bool)active;
+- (void) setMode:(int)activeMode;
+- (void) setActiveColor:(int)row;
+- (void) setWidgetAnimation:(bool)active;
+- (void) setAlphaMethod:(int) alphaMethod;
+- (void) setHole:(bool) enable;
+
+- (void) changeHole:(Geodetic3D) position;
+- (void) addPipeMeshes;
+- (bool) isHole;
 
 @end

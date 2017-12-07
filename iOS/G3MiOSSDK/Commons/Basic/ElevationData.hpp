@@ -26,13 +26,15 @@ private:
   Interpolator* getInterpolator() const;
 
 protected:
-  const Sector _sector;
+  
   const int _width;
   const int _height;
-
+  Sector * _sector;
   const Geodetic2D _resolution;
 
 public:
+  
+    
   ElevationData(const Sector& sector,
                 const Vector2I& extent);
 
@@ -74,7 +76,12 @@ public:
                            const Vector2I& resolution) const;
 
   virtual const Sector getSector() const {
-    return _sector;
+    return *_sector;
+  }
+    
+  void setSector(const Sector sector) {
+      delete _sector;
+      _sector = new Sector(sector);
   }
 
   virtual bool hasNoData() const = 0;

@@ -1,0 +1,142 @@
+//
+//  PopupViewController.m
+//  EIFER App
+//
+//  Created by Chano on 15/11/17.
+//
+//
+
+#import "PopupViewController.h"
+
+#import "ViewController.h"
+
+@interface PopupViewController ()
+@property (weak, nonatomic) IBOutlet UIScrollView *theScrollView;
+@property (weak, nonatomic) IBOutlet UIView *theScrollContent;
+
+@end
+
+@implementation PopupViewController{
+    NSArray *colorArray, *methodArray;
+    int colorRow, prevColor, methodRow, prevMethod, modeRow, alphaRow;
+    bool areBuildings, arePipes;
+}
+
+- (void) setCurrentStateWithMode:(int) mode
+                           Color:(int) color
+                           Alpha:(int) alpha
+                          Method:(int) method
+                       Buildings:(bool) buildings
+                           Pipes:(bool) pipes{
+    modeRow = mode;
+    prevColor = color;
+    methodRow = method;
+    prevMethod = method;
+    alphaRow = alpha;
+    colorRow = color;
+    areBuildings = buildings;
+    arePipes = pipes;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    colorArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
+    methodArray = @[@"Fixed", @"Linear", @"Smoothstep", @"Smootherstep", @"Smootheststep", @"Sigmoid", @"Tanh", @"Arctan", @"Softsign"];
+    
+    [self.methodSpinner selectRow:methodRow inComponent:0 animated:NO];
+    [self.colorSpinner selectRow:colorRow inComponent:0 animated:NO];
+    self.modeBar.selectedSegmentIndex = modeRow;
+    self.alphaBar.selectedSegmentIndex = alphaRow;
+    [self.buildingsSwitch setOn:areBuildings];
+    [self.pipesSwitch setOn:arePipes];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    self.theScrollView.delegate = self;
+    //self.theScrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.theScrollView setScrollEnabled:YES];
+//    self.theScrollView.contentSize = self.theScrollContent.frame.size;
+    //[scrollview setShowsHorizontalScrollIndicator:YES];
+//    [self.theScrollView setShowsVerticalScrollIndicator:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+- (IBAction)applySettings:(id)sender {
+    __weak const ViewController *vC = (ViewController *) [self presentingViewController];
+    
+    if ([self.buildingsSwitch isOn] != areBuildings) {
+        [vC setBuildingsActive:[self.buildingsSwitch isOn]];
+    }
+    if ([self.pipesSwitch isOn] != arePipes) {
+        [vC setPipesActive:[self.pipesSwitch isOn]];
+    }
+    if (prevColor != colorRow){
+        [vC setActiveColor:colorRow];
+    }
+    
+    if (modeRow != (int)self.modeBar.selectedSegmentIndex) {
+        [vC setMode:(int)self.modeBar.selectedSegmentIndex];
+    }
+    
+    if (alphaRow != (int)self.alphaBar.selectedSegmentIndex) {
+        bool isHole = ((int)self.alphaBar.selectedSegmentIndex == 1);
+        [vC setHole:isHole];
+    }
+    
+    if (methodRow != prevMethod){
+        [vC setAlphaMethod:methodRow];
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [vC setWidgetAnimation:true];
+    }];
+}
+
+////PICKER VIEW
+
+// The number of columns of data
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// The number of rows of data
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView == self.colorSpinner)
+        return (int) colorArray.count;
+    else if (pickerView == self.methodSpinner)
+        return (int) methodArray.count;
+    else
+        return 0;
+}
+
+// The data to return for the row and component (column) that's being passed in
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (pickerView == self.colorSpinner)
+        return colorArray[row];
+    else if (pickerView == self.methodSpinner)
+        return methodArray[row];
+    else
+        return nil;
+}
+
+// Catpure the picker view selection
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (pickerView == self.colorSpinner){
+        colorRow = (int) row;
+    }
+    else if (pickerView == self.methodSpinner){
+        methodRow = (int) row;
+    }
+}
+
+
+@end

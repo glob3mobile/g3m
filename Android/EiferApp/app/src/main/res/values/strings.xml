@@ -43,6 +43,12 @@
     <string name="buildings_ok">Show solar radiation data</string>
     <string name="buildings_cancel">Cancel</string>
 
+    <string name="pipes_title">Pipe selected</string>
+    <string name="pipes_ok">OK</string>
+
+    <string name="menu_location_title">Location settings</string>
+    <string name="menu_location">Uses real location</string>
+
     <string name="location_req_failure"> Failure when requesting GPS Permission. Map mode is set instead.</string>
     <string name="camera_req_failure"> Failure when requesting Camera Permission..</string>
 
@@ -50,4 +56,9 @@
     <string name="startMessage">Depending on your mobile phone, this could last from seconds to a few minutes. Please wait ... </string>
 
     <string name="abortSimulation">Stop</string>
+
+    <string name="menu_correction">GPS Correction Settings</string>
+    <string name="fixer_unable"> Defining a position for correction settings is only possible in map mode. </string>
+    <string name="fixPosition">Set</string>
+    <string name="undefined">Position undefined</string>
 </resources>

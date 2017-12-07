@@ -239,6 +239,16 @@ public class CityGMLBuildingTessellator
   {
   
     final double threshold = 0.005;
+
+    if (b1._surfaces.size() == 0){
+      ILogger.instance().logError("SURFACES IS 0");
+    }
+    else if (b1._surfaces.get(0)._geodeticCoordinates.size() == 0){
+      ILogger.instance().logError("GEOCOORDS IS 0");
+    }
+    else {
+      ILogger.instance().logError("ALL SEEMS GOOD");
+    }
   
     double dLat = b1._surfaces.get(0)._geodeticCoordinates.get(0)._latitude._degrees - b2._surfaces.get(0)._geodeticCoordinates.get(0)._latitude._degrees;
     dLat = IMathUtils.instance().abs(dLat);

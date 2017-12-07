@@ -8,12 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PopupViewController : UIViewController
+@interface PopupViewController : UIViewController<UIPickerViewDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeBar;
 @property (weak, nonatomic) IBOutlet UIPickerView *colorSpinner;
 @property (weak, nonatomic) IBOutlet UISwitch *buildingsSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *pipesSwitch;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *alphaBar;
 @property (weak, nonatomic) IBOutlet UIPickerView *methodSpinner;
+
+- (void) setCurrentStateWithMode:(int) mode
+                           Color:(int) color
+                           Alpha:(int) alpha
+                          Method:(int) method
+                       Buildings:(bool) buildings
+                           Pipes:(bool) pipes;
 
 @end

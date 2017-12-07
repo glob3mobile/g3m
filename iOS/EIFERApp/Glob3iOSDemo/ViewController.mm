@@ -7,6 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "PopupViewController.h"
+
+#import "PipesRenderer.hpp"
 
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
@@ -88,6 +91,7 @@
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/QuadShape.hpp>
 #import <G3MiOSSDK/IImageUtils.hpp>
+#import <G3MiOSSDK/IImageDownloadListener.hpp>
 #import <G3MiOSSDK/RectangleF.hpp>
 #import <G3MiOSSDK/ShortBufferElevationData.hpp>
 #import <G3MiOSSDK/SGShape.hpp>
@@ -207,7 +211,13 @@
 
 #include <G3MiOSSDK/Cylinder.hpp>
 #include <G3MiOSSDK/G3MEventContext.hpp> //Línea puesta por Chano.
+#include <G3MiOSSDK/TexturesHandler.hpp>
+#include <G3MiOSSDK/TextureIDReference.hpp>
+#include <G3MiOSSDK/TexturedMesh.hpp>
+#include <G3MiOSSDK/FloatBufferBuilderFromCartesian2D.hpp>
+#include <G3MiOSSDK/SimpleTextureMapping.hpp>
 #include "PipesModel.hpp"
+#include "UtilityNetworkParser.hpp"
 
 
 #import <QuartzCore/QuartzCore.h>
@@ -215,6 +225,441 @@
 #import "AppDelegate.h"
 
 #include <typeinfo>
+
+class PipeListener: public PipeTouchedListener{
+public:
+    void onPipeTouched(Cylinder *c, Cylinder::CylinderMeshInfo info){
+        //NSString *str = [NSString stringWithFormat:@"ID: %d",info._cylId];
+        NSString *str = [NSString stringWithFormat:@"%s",info.getMessage().c_str()];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Pipe Touched"
+                                                         message:str
+                                                        delegate:nil
+                                               cancelButtonTitle:@"OK"
+                                               otherButtonTitles:nil];
+        [alert show];
+    }
+    
+};
+
+class HoleTouchListener : public TerrainTouchListener{
+private:
+    ViewController *vC;
+public:
+    HoleTouchListener(ViewController * viewController):
+    vC(viewController){}
+    
+    ~HoleTouchListener(){
+        vC = NULL;
+    }
+    
+    bool onTerrainTouch(const G3MEventContext* ec,
+                        const Vector2F&        pixel,
+                        const Camera*          camera,
+                        const Geodetic3D&      position,
+                        const Tile*            tile){
+        if ([vC isHole]){
+            if([vC getMapMode] == 0){
+              [vC changeHole:position];
+            }
+            else{
+                const Vector3D cameraDir = camera->getViewDirection();
+                Camera c(camera->getTimestamp());
+                c.copyFrom(*camera, true);
+                c.translateCamera(cameraDir.normalized().times(25));
+                Geodetic3D cameraPos = c.getGeodeticPosition();
+                [vC changeHole:cameraPos];
+            }
+        }
+        
+        return false;
+    }
+};
+
+class MyHoleListener : public IElevationDataListener {
+    
+private:
+    ViewController *vC;
+    
+public:
+    MyHoleListener(ViewController *viewController):
+    vC(viewController){}
+    
+    ~MyHoleListener() {
+        vC = NULL;
+    }
+    
+    void onData(const Sector& sector, const Vector2I& extent, ElevationData *elevationData) {
+        vC.holeElevData = elevationData;
+        [vC loadCityModel];
+        vC = NULL;
+    }
+    
+    void onError(const Sector&, const Vector2I& extent) {
+        vC = NULL;
+    }
+    
+    void onCancel(const Sector&, const Vector2I& extent) {
+        vC = NULL;
+    }
+    
+};
+
+
+class HoleCoverHelper {
+
+    public:
+    static void generateHoleCover(Sector sector, Vector3D center, const Planet *p, const G3MRenderContext *rc,
+                                         const ElevationData *elevData, MeshRenderer *holeRenderer){
+        
+        Sector holeSector = generateSector(center,p,9);
+        Sector outerSector = generateSector(center,p,15);
+        lineWidth = 8;
+        pointWidth = 8;
+        //Color.fromRGBA255(128,0,0,255);
+        wallColor = new Color(Color::fromRGBA255(153,76,0,255)); //Color.yellow().muchLighter();
+        coverColor = new Color(wallColor->lighter());
+        groundColor = new Color(wallColor->darker());
+        holeRenderer->clearMeshes();
+        
+        generateHole(holeSector,p,rc,elevData,holeRenderer);
+        generateOuterCover(holeSector,outerSector,p,elevData,holeRenderer,rc);
+        
+        delete wallColor;
+        delete coverColor;
+        delete groundColor;
+        
+    }
+    
+    static void loadHoleImage(IDownloader *downloader, URL path){
+        downloader->requestImage(path,1000,TimeInterval::fromDays(30),true, new HoleImageListener(), true);
+    }
+    
+    static void loadCoverImage(IDownloader *downloader, URL path){
+        downloader->requestImage(path, 1000, TimeInterval::fromDays(30), true, new CoverImageListener(), true);
+    }
+    
+    static void deleteImages(){
+        delete coverImage;
+        delete holeImage;
+        coverImage = NULL;
+        holeImage = NULL;
+    }
+    
+    
+private:
+    static Color *groundColor, *wallColor, *coverColor;
+    static float lineWidth,pointWidth;
+    static const int HOLE_DEPTH = 20;
+    static IImage *coverImage, *holeImage;
+    
+    class HoleImageListener : public IImageDownloadListener{
+    public:
+        void onDownload(const URL& url, IImage *image, bool expired) {
+            holeImage = image;
+        }
+        void onError(const URL& url) {}
+        void onCancel(const URL& url) {}
+        void onCanceledDownload(const URL& url,IImage* image, bool expired){}
+        
+       ~HoleImageListener(){}
+    };
+    class CoverImageListener : public IImageDownloadListener{
+    public:
+        void onDownload(const URL& url, IImage *image, bool expired) {
+            coverImage = image;
+        }
+        void onError(const URL& url) {}
+        void onCancel(const URL& url) {}
+        void onCanceledDownload(const URL& url,IImage* image, bool expired){}
+        
+        ~CoverImageListener(){}
+    };
+    
+    static Sector generateSector(Vector3D v1, const Planet *p, double offset){
+        Vector3D v2 = Vector3D(v1._x - offset, v1._y - offset, v1._z);
+        Vector3D v3 = Vector3D(v1._x + offset, v1._y + offset, v1._z);
+        Geodetic3D l = p->toGeodetic3D(v2);
+        Geodetic3D u = p->toGeodetic3D(v3);
+        Geodetic2D lower = Geodetic2D::fromDegrees(
+                                                  fmin(l._latitude._degrees, u._latitude._degrees),
+                                                  fmin(l._longitude._degrees, u._longitude._degrees));
+        Geodetic2D upper = Geodetic2D::fromDegrees(
+                                                  fmax(l._latitude._degrees, u._latitude._degrees),
+                                                  fmax(l._longitude._degrees, u._longitude._degrees));
+        
+        return Sector(lower,upper);
+    }
+    
+    static void generateHole(Sector holeSector, const Planet *p, const G3MRenderContext *rc,
+                                     const ElevationData *elevData, MeshRenderer *holeRenderer){
+        
+        Geodetic2D nw = holeSector.getNW();
+        Geodetic2D ne = holeSector.getNE();
+        Geodetic2D sw = holeSector.getSW();
+        Geodetic2D se = holeSector.getSE();
+        
+        double hnw = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(nw) + 0.5 : 1;
+        double hne = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(ne) + 0.5 : 1;
+        double hsw = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(sw) + 0.5 : 1;
+        double hse = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(se) + 0.5 : 1;
+        
+        double md = ((hnw + hne + hsw + hse) / 4) - HOLE_DEPTH;
+        
+        generateHoleGround(holeSector,md,p,rc,holeRenderer);
+        generateHoleWall(nw,ne,hnw,hne,md,p,holeRenderer,rc);
+        generateHoleWall(ne,se,hne,hse,md,p,holeRenderer,rc);
+        generateHoleWall(se,sw,hse,hsw,md,p,holeRenderer,rc);
+        generateHoleWall(sw,nw,hsw,hnw,md,p,holeRenderer,rc);
+        
+    }
+    
+    static void generateHoleGround(Sector holeSector,double depth, const Planet *p,
+                                   const G3MRenderContext *rc, MeshRenderer *holeRenderer){
+        Geodetic2D nw = holeSector.getNW();
+        Geodetic2D ne = holeSector.getNE();
+        Geodetic2D sw = holeSector.getSW();
+        Geodetic2D se = holeSector.getSE();
+        // Ground
+        FloatBufferBuilderFromGeodetic *fbb =
+        FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(p);
+        
+        double md = fmax(depth,1);
+        fbb->add(Geodetic3D(nw,md));
+        fbb->add(Geodetic3D(ne,md));
+        fbb->add(Geodetic3D(se,md));
+        fbb->add(Geodetic3D(sw,md));
+        fbb->add(Geodetic3D(nw,md));
+        
+        Mesh *mesh = new DirectMesh(GLPrimitive::triangleStrip(),
+                                   true,
+                                   fbb->getCenter(),
+                                   fbb->create(),
+                                   lineWidth,
+                                   pointWidth,
+                                   new Color(*groundColor),
+                                   NULL, 0.0f, true);
+        if (coverImage != NULL){
+            const std::string texName = "HOLETEXTURE_" + holeSector.description();
+
+            
+            const TextureIDReference *texId = rc->getTexturesHandler()->getTextureIDReference(coverImage, GLFormat::rgba(),texName,false);
+            FloatBufferBuilderFromCartesian2D texCoords;
+            texCoords.add(0,0);
+            texCoords.add(0,1);
+            texCoords.add(1,1);
+            texCoords.add(1,0);
+            TextureMapping *tMapping = new SimpleTextureMapping(texId,texCoords.create(),true,true);
+            TexturedMesh *tMesh = new TexturedMesh(mesh,true,tMapping,true,false);
+            holeRenderer->addMesh(tMesh);
+         }
+         else {
+             holeRenderer->addMesh(mesh);
+         }
+
+        
+        delete fbb;
+    }
+    
+    static void generateHoleWall(Geodetic2D start, Geodetic2D end,
+                                         double hStart, double hEnd, double depth, const Planet *p, MeshRenderer *holeRenderer,const G3MRenderContext *rc){
+        
+        FloatBufferBuilderFromGeodetic *fbb =
+        FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(p);
+        
+        double md = fmax(depth,1);
+        
+        fbb->add(Geodetic3D(start,hStart));
+        fbb->add(Geodetic3D(end,hEnd));
+        fbb->add(Geodetic3D(end,md));
+        fbb->add(Geodetic3D(start,md));
+        fbb->add(Geodetic3D(start,hStart));
+        
+        Mesh *mesh = new DirectMesh(GLPrimitive::triangleStrip(),
+                                   true,
+                                   fbb->getCenter(),
+                                   fbb->create(),
+                                   lineWidth,
+                                   pointWidth,
+                                   new Color(*wallColor),//color,
+                                   NULL, 0.0f, true);
+        if (holeImage != NULL){
+            const std::string texName = "HOLETEXTURE_" + start.description() + end.description();
+            const TextureIDReference *texId = rc->getTexturesHandler()->getTextureIDReference(holeImage, GLFormat::rgba(),texName,false);
+            FloatBufferBuilderFromCartesian2D texCoords;
+            texCoords.add(1,0);
+            texCoords.add(0,0);
+            texCoords.add(0,1);
+            texCoords.add(1,1);
+            
+            TextureMapping *tMapping = new SimpleTextureMapping(texId,texCoords.create(),true,true);
+            TexturedMesh *tMesh = new TexturedMesh(mesh,true,tMapping,true,false);
+            holeRenderer->addMesh(tMesh);
+        }
+        else {
+            holeRenderer->addMesh(mesh);
+        }
+        
+        delete fbb;
+    }
+    
+   static void generateOuterCover(Sector holeSector,Sector outerSector,
+                                           const Planet *p, const ElevationData *elevData, MeshRenderer *holeRenderer,const G3MRenderContext *rc){
+        Geodetic2D nw = holeSector.getNW();
+        Geodetic2D ne = holeSector.getNE();
+        Geodetic2D sw = holeSector.getSW();
+        Geodetic2D se = holeSector.getSE();
+        
+        double hnw = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(nw) + 0.5 : 1;
+        double hne = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(ne) + 0.5 : 1;
+        double hsw = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(sw) + 0.5 : 1;
+        double hse = (elevData != NULL &&
+                      elevData->getSector().fullContains(holeSector)) ?
+        elevData->getElevationAt(se) + 0.5 : 1;
+        
+        Geodetic2D onw = outerSector.getNW();
+        Geodetic2D one = outerSector.getNE();
+        Geodetic2D osw = outerSector.getSW();
+        Geodetic2D ose = outerSector.getSE();
+        
+        double honw = (elevData != NULL &&
+                       elevData->getSector().fullContains(outerSector)) ?
+        elevData->getElevationAt(onw) : 1;
+        double hone = (elevData != NULL &&
+                       elevData->getSector().fullContains(outerSector)) ?
+        elevData->getElevationAt(one) : 1;
+        double hosw = (elevData != NULL &&
+                       elevData->getSector().fullContains(outerSector)) ?
+        elevData->getElevationAt(osw) : 1;
+        double hose = (elevData != NULL &&
+                       elevData->getSector().fullContains(outerSector)) ?
+        elevData->getElevationAt(ose) : 1;
+        
+        Geodetic3D outerNW = Geodetic3D(onw,honw);
+        Geodetic3D outerNE = Geodetic3D(one,hone);
+        Geodetic3D outerSW = Geodetic3D(osw,hosw);
+        Geodetic3D outerSE = Geodetic3D(ose,hose);
+        Geodetic3D innerNW = Geodetic3D(nw,hnw);
+        Geodetic3D innerNE = Geodetic3D(ne,hne);
+        Geodetic3D innerSW = Geodetic3D(sw,hsw);
+        Geodetic3D innerSE = Geodetic3D(se,hse);
+        
+        generateOuterGround(outerNW,outerNE,innerNW,innerNE,p,holeRenderer,rc);
+        generateOuterGround(outerNE,outerSE,innerNE,innerSE,p,holeRenderer,rc);
+        generateOuterGround(outerSE,outerSW,innerSE,innerSW,p,holeRenderer,rc);
+        generateOuterGround(outerSW,outerNW,innerSW,innerNW,p,holeRenderer,rc);
+        
+    }
+    
+    static void generateOuterGround(Geodetic3D outerStart, Geodetic3D outerEnd,
+                                            Geodetic3D innerStart, Geodetic3D innerEnd, const Planet *p, MeshRenderer *holeRenderer,const G3MRenderContext *rc ){
+        FloatBufferBuilderFromGeodetic *fbb =
+        FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(p);
+        
+        fbb->add(innerStart);
+        fbb->add(innerEnd);
+        fbb->add(outerEnd);
+        fbb->add(outerStart);
+        fbb->add(innerStart);
+        
+        Mesh *mesh = new DirectMesh(GLPrimitive::triangleStrip(),
+                                   true,
+                                   fbb->getCenter(),
+                                   fbb->create(),
+                                   lineWidth,
+                                   pointWidth,
+                                   new Color(*coverColor),//color,
+                                   NULL, 0.0f, true);
+        
+        if (coverImage != NULL){
+            const std::string texName = "HOLETEXTURE_" + outerStart.description() + outerEnd.description();
+            const TextureIDReference *texId = rc->getTexturesHandler()->getTextureIDReference(coverImage, GLFormat::rgba(),texName,false);
+            FloatBufferBuilderFromCartesian2D texCoords;
+            texCoords.add(0,0);
+            texCoords.add(0,1);
+            texCoords.add(1,1);
+            texCoords.add(1,0);
+            
+            TextureMapping *tMapping = new SimpleTextureMapping(texId,texCoords.create(),true,true);
+            TexturedMesh *tMesh = new TexturedMesh(mesh,true,tMapping,true,false);
+            holeRenderer->addMesh(tMesh);
+        }
+        else {
+            holeRenderer->addMesh(mesh);
+        }
+        
+        delete fbb;
+    }
+};
+
+Color * HoleCoverHelper::groundColor, *HoleCoverHelper::wallColor, *HoleCoverHelper::coverColor;
+float HoleCoverHelper::lineWidth, HoleCoverHelper::pointWidth;
+IImage *HoleCoverHelper::coverImage, *HoleCoverHelper::holeImage;
+
+
+class changeHoleTask : public GTask {
+    
+    ViewController *vc;
+    bool enable;
+
+public:
+    changeHoleTask(ViewController *viewController, bool isEnabled):
+    vc(viewController),
+    enable(isEnabled){}
+    
+    void run(const G3MContext *context){
+        vc.pipeMeshRenderer->clearMeshes();
+        if (!enable){
+            [vc changeHole:Geodetic3D::fromDegrees(1,1,0)];
+        }
+        [vc addPipeMeshes];
+        
+    }
+    
+    ~changeHoleTask(){
+        vc = nil;
+    }
+    
+    
+    
+};
+
+class changeFirstEDPTask : public GTask{
+    
+    ViewController *vc;
+    Sector holeSector;
+    ElevationDataProvider *holeEDP;
+    
+public:
+    
+    changeFirstEDPTask(ViewController *viewController,const Sector sector, ElevationDataProvider *edp):
+    vc(viewController),
+    holeSector(sector),
+    holeEDP(edp){}
+    
+    
+    void run (const G3MContext *context){
+        //vc.holeElevData->setSector(holeSector);
+        vc.combo->changeFirstEDP(holeEDP);
+    }
+    
+    ~changeFirstEDPTask(){
+        vc = nil;
+    }
+};
 
 class PointCloudEvolutionTask: public GTask{
   
@@ -349,7 +794,6 @@ class MyEDCamConstrainer: public ICameraConstrainer {
     
   bool _shouldCaptureMotion;
   MeshRenderer * _mr;
-  std::vector<Cylinder::CylinderMeshInfo> *_cylInfo;
   std::string &_lastText;
     
   public:
@@ -358,7 +802,6 @@ class MyEDCamConstrainer: public ICameraConstrainer {
     _ed(ed),
     _shouldCaptureMotion(false),
     _mr(NULL),
-    _cylInfo(NULL),
     _lastText(text){}
   
   void setED(ElevationData* ed){
@@ -366,11 +809,9 @@ class MyEDCamConstrainer: public ICameraConstrainer {
   }
     
 #warning Unfortunately Chano was here!
-  void shouldCaptureMotion(bool capture, MeshRenderer *meshRenderer,
-                             std::vector<Cylinder::CylinderMeshInfo> *cylinderInfo){
+  void shouldCaptureMotion(bool capture, MeshRenderer *meshRenderer){
     _shouldCaptureMotion = capture;
     _mr = meshRenderer;
-    _cylInfo = cylinderInfo;
   }
   
   //Returns false if it could not create a valid nextCamera
@@ -381,20 +822,20 @@ class MyEDCamConstrainer: public ICameraConstrainer {
     if (previousCamera->computeZNear() < 5){
       //We are using VR
         const std::string text = Cylinder::adaptMeshes(_mr,
-                                                       _cylInfo,
+                                                       &PipesModel::cylinderInfo,
                                                        nextCamera,
                                                        planet);
         
         
         if (text.compare("") != 0 && text.compare(_lastText) != 0){
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
+            /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
                                                             message:[NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding]
                                                            delegate:nil
                                                   cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
+                                                  otherButtonTitles:nil];*/
             _lastText = text;
-            [alert show];
+            //[alert show];
         }
       return true;
     }
@@ -414,7 +855,7 @@ class MyEDCamConstrainer: public ICameraConstrainer {
         //NSDate *methodStart = [NSDate date];
         
         const std::string text = Cylinder::adaptMeshes(_mr,
-                                                 _cylInfo,
+                                                 &PipesModel::cylinderInfo,
                                                  nextCamera,
                                                  planet);
         
@@ -425,13 +866,13 @@ class MyEDCamConstrainer: public ICameraConstrainer {
         
         if (text.compare("") != 0 && text.compare(_lastText) != 0){
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
+            /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
                                                             message:[NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding]
                                                            delegate:nil
                                                   cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
+                                                  otherButtonTitles:nil];*/
             _lastText = text;
-            [alert show];
+            //[alert show];
         }
 
     }
@@ -531,16 +972,45 @@ class MyInitTask: public GInitializationTask{
   
   void run(const G3MContext* context){
     if (_useDEM){
+        HoleCoverHelper::loadHoleImage([_vc.G3MWidget widget]->getG3MContext()->getDownloader(),
+                                      URL("file:///holetexture.jpg",false));
+        HoleCoverHelper::loadCoverImage([_vc.G3MWidget widget]->getG3MContext()->getDownloader(),
+                                       URL("file:///covertexture3.jpg",false));
+      Geodetic3D pipeCenter = Geodetic3D::fromDegrees(1,1,0); //Geodetic3D.fromDegrees(49.01664816, 8.43442120,0);
+      const Planet *p = [_vc.G3MWidget widget]->getG3MContext()->getPlanet();
+      Vector3D v1= p->toCartesian(pipeCenter);
+      Vector3D v2 = Vector3D(v1._x - 10, v1._y - 10, v1._z);
+      Vector3D v3 = Vector3D(v1._x + 10, v1._y + 10, v1._z);
+      Geodetic3D l = p->toGeodetic3D(v2);
+      Geodetic3D u = p->toGeodetic3D(v3);
+      Geodetic2D lower = Geodetic2D::fromDegrees(fmin(l._latitude._degrees, u._latitude._degrees),
+                                                 fmin(l._longitude._degrees, u._longitude._degrees));
+      Geodetic2D upper = Geodetic2D::fromDegrees(fmax(l._latitude._degrees, u._latitude._degrees),
+                                                 fmax(l._longitude._degrees, u._longitude._degrees));
+        
+      Sector holeSector = Sector(lower,upper);
+      SingleBilElevationDataProvider *holeEdp = new SingleBilElevationDataProvider(URL("file:///hole3.bil"),
+                                                                                    holeSector,
+                                                                                    Vector2I(11, 11));
+        
+      holeEdp->requestElevationData(holeSector, Vector2I(11, 11),new MyHoleListener(_vc), true);
+        
       Sector karlsruheSector = Sector::fromDegrees(48.9397891179, 8.27643508429, 49.0930546874, 8.5431344933);
       SingleBilElevationDataProvider* edp = new SingleBilElevationDataProvider(URL("file:///ka_31467.bil"),
                                                                                karlsruheSector,
                                                                                Vector2I(308, 177));
-      [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(edp, true);
+        
+      _vc.combo = new CompositeElevationDataProvider();
+      _vc.combo->addElevationDataProvider(holeEdp);
+      _vc.combo->addElevationDataProvider(edp);
+      [_vc.G3MWidget widget]->getPlanetRenderer()->setElevationDataProvider(_vc.combo,true);
       
       edp->requestElevationData(karlsruheSector, Vector2I(308, 177), new MyEDListener(_vc, context->getThreadUtils()), true);
+      [_vc.G3MWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new HoleTouchListener(_vc));
     } else{
       [_vc loadCityModel];
     }
+      
   }
   
   bool isDone(const G3MContext* context){
@@ -644,15 +1114,23 @@ class AltitudeFixerLM: public ILocationModifier{
 @implementation ViewController{
     std::vector<Cylinder::CylinderMeshInfo> cylinderInfo;
     std::string lastText;
+    __weak IBOutlet UIImageView *eiferLogo;
+    
+    bool pipes,buildings;
+    int alpha,color,mode,method;
 }
 
 @synthesize G3MWidget;
 @synthesize meshRenderer;
 @synthesize pipeMeshRenderer;
+@synthesize holeRenderer;
 @synthesize marksRenderer;
 @synthesize meshRendererPC;
+@synthesize pipesRenderer;
 @synthesize cityGMLRenderer;
 @synthesize elevationData;
+@synthesize combo;
+@synthesize holeElevData;
 @synthesize timeLabel;
 @synthesize camConstrainer;
 @synthesize vectorLayer;
@@ -674,11 +1152,24 @@ class AltitudeFixerLM: public ILocationModifier{
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+  //Previous considerations
+  pipes = true;
+  buildings = true;
+  mode = 0;
+  alpha = 0;
+  method = 1;
+  color = 0;
+    
   
   elevationData = NULL;
   meshRenderer = NULL;
   pipeMeshRenderer = NULL;
   marksRenderer = NULL;
+  holeRenderer = NULL;
+    
+  UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+  [eiferLogo setUserInteractionEnabled:YES];
+  [eiferLogo addGestureRecognizer:singleTap];
   
   //VR;
   _prevPos = NULL;
@@ -702,7 +1193,7 @@ class AltitudeFixerLM: public ILocationModifier{
   
   _pickerArray = @[@"Random Colors", @"Heat Demand", @"Building Volume", @"GHG Emissions", @"Demographic Clusters (SOM)", @"Demographic Clusters (k-means)"];
     
-    [self addCityGMLFile:"file:///building-1.gml" needsToBeFixOnGround:true];
+    /*[self addCityGMLFile:"file:///building-1.gml" needsToBeFixOnGround:true];
     [self addCityGMLFile:"file:///building-2.gml" needsToBeFixOnGround:true];
     [self addCityGMLFile:"file:///building-12.gml" needsToBeFixOnGround:true];
     [self addCityGMLFile:"file:///building-15.gml" needsToBeFixOnGround:true];
@@ -713,21 +1204,22 @@ class AltitudeFixerLM: public ILocationModifier{
     [self addCityGMLFile:"file:///building-25.gml" needsToBeFixOnGround:true];
     [self addCityGMLFile:"file:///building-26.gml" needsToBeFixOnGround:true];
     [self addCityGMLFile:"file:///building-28.gml" needsToBeFixOnGround:true];
-    [self addCityGMLFile:"file:///building-29.gml" needsToBeFixOnGround:true];
+    [self addCityGMLFile:"file:///building-29.gml" needsToBeFixOnGround:true];*/
   
-  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
+//  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
+//  // [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
 //  [self addCityGMLFile:"file:///AR_demo_with_buildings.gml" needsToBeFixOnGround:true]; //NOT WORKING
-  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
-        [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
-        [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
-        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
-        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
-        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///hagsfeld_4326_lod2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///durlach_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//  [self addCityGMLFile:"file:///hohenwettersbach_4326_lod2.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///bulach_4326_lod2.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///daxlanden_4326_lod2.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
+//        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
+    [self addCityGMLFile:"file:///tpk_lod3_t1_wgs84.gml" needsToBeFixOnGround:true];
 
   
   _modelsLoadedCounter = 0;
@@ -748,6 +1240,18 @@ class AltitudeFixerLM: public ILocationModifier{
   [G3MWidget widget]->setCameraPitch(Angle::fromDegrees(-53.461659));
   
   
+}
+
+- (int) getMapMode{
+    return mode;
+}
+
+- (void) tapDetected{
+    if (_isMenuAvailable ) {
+    PopupViewController *popupController = [[self storyboard] instantiateViewControllerWithIdentifier:@"popupViewController"];
+    [popupController setCurrentStateWithMode:mode Color:color Alpha:alpha Method:method Buildings:buildings Pipes:pipes];
+    [self presentViewController:popupController animated:YES completion:nil];
+    }
 }
 
 -(void) loadSolarRadiationPointCloudForBuilding:(CityGMLBuilding*) building{
@@ -815,8 +1319,17 @@ class AltitudeFixerLM: public ILocationModifier{
   meshRenderer = new MeshRenderer();
   meshRendererPC = new MeshRenderer();
   pipeMeshRenderer = new MeshRenderer();
+    
+  pipesRenderer = new PipesRenderer(pipeMeshRenderer,self);
+  pipesRenderer->setHoleMode([self isHole]);
+  pipesRenderer->setTouchListener(new PipeListener());
+    
+    
+    
+  holeRenderer = new MeshRenderer();
   builder.addRenderer(meshRendererPC);
-  builder.addRenderer(pipeMeshRenderer);
+  builder.addRenderer(pipesRenderer);
+  builder.addRenderer(holeRenderer);
   marksRenderer = new MarksRenderer(false);
   
   //Karlsruhe Schloss model
@@ -865,20 +1378,27 @@ class AltitudeFixerLM: public ILocationModifier{
 }
 
 -(void) loadCityModel{
+    if ((_useDem && holeElevData != NULL && elevationData != NULL) || (!_useDem)) {
+        
+        for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
+            cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]._fileName),
+                                                 _cityGMLFiles[i]._needsToBeFixedOnGround,
+                                                 new MyCityGMLRendererListener(self),
+                                                 true);
+        }
+        
+        [self addPipeMeshes];
+    }
+    
   
-  for (size_t i = 0; i < _cityGMLFiles.size(); i++) {
-    cityGMLRenderer->addBuildingsFromURL(URL(_cityGMLFiles[i]._fileName),
-                                         _cityGMLFiles[i]._needsToBeFixedOnGround,
-                                         new MyCityGMLRendererListener(self),
-                                         true);
-  }
   
-#warning cambiar profundidad aquí.
-  cylinderInfo.clear();
-  cylinderInfo = PipesModel::addMeshes("pipesCoords", _planet, pipeMeshRenderer, elevationData, -4.0);
-  std::vector<Cylinder::CylinderMeshInfo> cylinderInfo2 = PipesModel::addMeshes("pipesCoordsMetzt", _planet, pipeMeshRenderer, NULL, -4.0);
-  cylinderInfo.insert(cylinderInfo.end(), cylinderInfo2.begin(), cylinderInfo2.end());
-  cylinderInfo2.clear();
+}
+
+- (void) addPipeMeshes{
+    PipesModel::reset();
+    UtilityNetworkParser::initialize([G3MWidget widget]->getG3MContext(),elevationData,pipeMeshRenderer,-4.0);
+    URL url = URL("file:///jochen_underground.gml");
+    UtilityNetworkParser::parseFromURL(url);
 }
 
 -(void) onProgress {
@@ -962,20 +1482,90 @@ class AltitudeFixerLM: public ILocationModifier{
 -(void) activateMenu{
   _isMenuAvailable = true;
   printf("Menu activated");
-  camConstrainer->shouldCaptureMotion(true, pipeMeshRenderer, &cylinderInfo);
+  camConstrainer->shouldCaptureMotion(true, pipeMeshRenderer);
 }
 
 - (IBAction)switchCityGML:(id)sender {
   bool viewBuildings = [((UISwitch*) sender) isOn];
-  
-  if (viewBuildings){
-    cityGMLRenderer->setEnable(true);
-    [_dataPicker setUserInteractionEnabled:TRUE];
     
-  } else{
-    cityGMLRenderer->setEnable(false);
-    [_dataPicker setUserInteractionEnabled:FALSE];
-  }
+  [self setBuildingsActive:viewBuildings];
+}
+
+- (void) setAlphaMethod:(int) alphaMethod{
+    Cylinder::setDistanceMethod(alphaMethod+1);
+    method = alphaMethod;
+}
+
+
+
+- (void) changeHole:(Geodetic3D) position{
+    const Planet *planet = [G3MWidget widget]->getG3MContext()->getPlanet();
+    const IThreadUtils *_tUtils = [G3MWidget widget]->getG3MContext()->getThreadUtils();
+    const G3MRenderContext *rc = [G3MWidget widget]->getG3MRenderContext();
+    
+    Vector3D v1 = planet->toCartesian(position);
+    Vector3D v2 = Vector3D(v1._x - 10, v1._y - 10, v1._z);
+    Vector3D v3 = Vector3D(v1._x + 10, v1._y + 10, v1._z);
+    Geodetic3D l = planet->toGeodetic3D(v2);
+    Geodetic3D u = planet->toGeodetic3D(v3);
+    Geodetic2D lower = Geodetic2D::fromDegrees(
+                                              fmin(l._latitude._degrees, u._latitude._degrees),
+                                              fmin(l._longitude._degrees, u._longitude._degrees));
+    Geodetic2D upper = Geodetic2D::fromDegrees(
+                                              fmax(l._latitude._degrees, u._latitude._degrees),
+                                              fmax(l._longitude._degrees, u._longitude._degrees));
+    Sector holeSector = Sector(lower,upper);
+    HoleCoverHelper::generateHoleCover(holeSector, v1, planet,rc, elevationData, holeRenderer);
+    
+    ILogger::instance()->logError(holeSector.description());
+    SingleBilElevationDataProvider *holeEdp = new SingleBilElevationDataProvider(URL("file:///hole3.bil"),
+                                                                                      holeSector,
+                                                                                      Vector2I(11, 11));
+    //holeEdp.requestElevationData(holeSector, new Vector2I(11, 11),new MyHoleListener(this), true);
+    
+    
+    _tUtils->invokeInRendererThread(new changeFirstEDPTask(self,holeSector,holeEdp), true);
+}
+
+- (bool) isHole{
+    return Cylinder::getDepthEnabled();
+}
+
+- (void) setHole:(bool) enable{
+    if (enable != Cylinder::getDepthEnabled()){
+        holeRenderer->setEnable(enable);
+        pipesRenderer->setHoleMode(enable);
+        Cylinder::setDepthEnabled(enable);
+        [G3MWidget widget]->getG3MContext()->getThreadUtils()
+            ->invokeInRendererThread(new changeHoleTask(self,enable),true);
+    }
+    alpha = (enable)? 1:0;
+}
+
+- (void) setBuildingsActive:(bool)active{
+#warning Esto desaparecerá al caer el menú viejo.
+    if (active){
+        cityGMLRenderer->setEnable(true);
+        [_dataPicker setUserInteractionEnabled:TRUE];
+        
+    } else{
+        cityGMLRenderer->setEnable(false);
+        [_dataPicker setUserInteractionEnabled:FALSE];
+    }
+    buildings = active;
+}
+
+- (void) setPipesActive:(bool)active{
+    //pipeMeshRenderer->setEnable(active);
+    pipesRenderer->setEnable(active);
+    pipes = active;
+}
+
+- (void) setWidgetAnimation:(bool)active{
+    if (active)
+        [G3MWidget startAnimation];
+    else
+        [G3MWidget stopAnimation];
 }
 
 - (IBAction)switchSolarRadiationPC:(id)sender {
@@ -1077,7 +1667,7 @@ class AltitudeFixerLM: public ILocationModifier{
   
   [self useOSM:FALSE];
   
-  _headerView.hidden = TRUE;
+  ///_headerView.hidden = TRUE;
   [G3MWidget widget]->getPlanetRenderer()->setEnable(true);
   
   [_camVC enableVideo:FALSE];
@@ -1110,6 +1700,8 @@ class AltitudeFixerLM: public ILocationModifier{
 - (void)viewDidUnload
 {
   G3MWidget = nil;
+  PipesModel::reset();
+  HoleCoverHelper::deleteImages();
   [super viewDidUnload];
   // Release any retained subviews of the main view.
   // e.g. self.myOutlet = nil;
@@ -1161,23 +1753,28 @@ class AltitudeFixerLM: public ILocationModifier{
   
 }
 
+- (void) setMode:(int)activeMode{
+    switch (activeMode){
+        case 0:
+            [self activateMapMode];
+            break;
+        case 1:
+            [self activateMonoVRMode];
+            break;
+        case 2:
+            [self activateStereoVRMode];
+            break;
+        case 3:
+            [self activateARMode];
+            break;
+    }
+    mode = activeMode;
+}
+
 //// MENU
 - (IBAction)modeChanged:(UISegmentedControl *)sender {
   
-  switch (sender.selectedSegmentIndex){
-    case 0:
-    [self activateMapMode];
-    break;
-    case 1:
-    [self activateMonoVRMode];
-    break;
-    case 2:
-    [self activateStereoVRMode];
-    break;
-    case 3:
-    [self activateARMode];
-    break;
-  }
+  [self setMode:(int)sender.selectedSegmentIndex];
 }
 
 
@@ -1193,7 +1790,8 @@ class AltitudeFixerLM: public ILocationModifier{
     //Gradient background
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = CGRectMake(_menuView.bounds.origin.x, _menuView.bounds.origin.y,
-                                _menuView.bounds.size.width*3, _menuView.bounds.size.height);    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
+                                _menuView.bounds.size.width*3, _menuView.bounds.size.height);
+      gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
     [_menuView.layer insertSublayer:gradient atIndex:0];
     
   } else{
@@ -1233,6 +1831,35 @@ class AltitudeFixerLM: public ILocationModifier{
   }
 }
 
+-(void) setActiveColor:(int)row{
+    if (row == 0){
+        RandomBuildingColorPicker* rcp = new RandomBuildingColorPicker();
+        cityGMLRenderer->colorBuildings(rcp);
+        delete rcp;
+    }
+    
+    if (row == 1){
+        cityGMLRenderer->colorBuildingsWithColorBrewer("Heat Demand", "Pastel1", 8);
+    }
+    
+    if (row == 2){
+        cityGMLRenderer->colorBuildingsWithColorBrewer("Building Volume", "Pastel1", 8);
+    }
+    
+    if (row == 3){
+        cityGMLRenderer->colorBuildingsWithColorBrewer("GHG Emissions", "Pastel1", 8);
+    }
+    
+    if (row == 4){
+        cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (SOM)", "Pastel1", 8);
+    }
+    
+    if (row == 5){
+        cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (k-Means)", "Pastel1", 8);
+    }
+    color = row;
+}
+
 
 /////PICKER VIEW
 
@@ -1257,31 +1884,7 @@ class AltitudeFixerLM: public ILocationModifier{
 // Catpure the picker view selection
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-  if (row == 0){
-    RandomBuildingColorPicker* rcp = new RandomBuildingColorPicker();
-    cityGMLRenderer->colorBuildings(rcp);
-    delete rcp;
-  }
-  
-  if (row == 1){
-    cityGMLRenderer->colorBuildingsWithColorBrewer("Heat Demand", "Pastel1", 8);
-  }
-  
-  if (row == 2){
-    cityGMLRenderer->colorBuildingsWithColorBrewer("Building Volume", "Pastel1", 8);
-  }
-  
-  if (row == 3){
-    cityGMLRenderer->colorBuildingsWithColorBrewer("GHG Emissions", "Pastel1", 8);
-  }
-  
-  if (row == 4){
-    cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (SOM)", "Pastel1", 8);
-  }
-  
-  if (row == 5){
-    cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (k-Means)", "Pastel1", 8);
-  }
+    [self setActiveColor:(int)row];
 }
 
 @end

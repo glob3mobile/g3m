@@ -22,6 +22,19 @@ void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvi
 
   onChanged();
 }
+void CompositeElevationDataProvider::changeFirstEDP(ElevationDataProvider *edp){
+    ElevationDataProvider *oldEdp = _providers[0];
+    _providers[0] = edp;
+    if (_context != NULL)
+    {
+        edp->initialize(_context);
+    }
+    
+    edp->setChangedListener(_changedListener);
+    onChanged();
+    
+    delete oldEdp;
+}
 
 bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc) {
   size_t size = _providers.size();

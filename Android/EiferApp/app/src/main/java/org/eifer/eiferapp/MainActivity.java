@@ -5,10 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,12 +24,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.glob3.mobile.generated.Geodetic3D;
+
+import java.text.DecimalFormat;
+
 public class MainActivity extends AppCompatActivity {
 
     Dialog dialog;
     ProgressDialog startingDialog;
     private Camera mCamera;
     private CameraPreview mPreview;
+    private MenuItem dialogItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         mPreview = null;
+    }
+
+    public void setZ(){
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.bringToFront();
     }
 
     @Override
@@ -82,6 +94,95 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void setPositionFixerBar(final boolean active){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout bar = (LinearLayout) findViewById(R.id.positionFixerLayout);
+                if (active && (bar.getVisibility() != View.VISIBLE)){
+                    bar.setVisibility(View.VISIBLE);
+                }
+                if (active){
+                    TextView t = (TextView) findViewById(R.id.positionFixerText);
+                    t.setText(generateMessage());
+                }
+                else {
+                    bar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public void stopPositionFixerAction(View view){
+        FragmentManager fmanager = this.getSupportFragmentManager();
+        GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
+
+        fragment.stopPositionFixer();
+        setPositionFixerBar(false);
+
+        if (dialogItem != null)
+            dialogItem.setEnabled(true);
+        openDialog();
+    }
+
+    public void openPositionFixer(View view){
+
+        FragmentManager fmanager = this.getSupportFragmentManager();
+        GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
+
+        if (fragment.getMapMode() > 0){
+            Toast.makeText(this,getString(R.string.fixer_unable),Toast.LENGTH_SHORT).show();
+        }
+        else {
+            dialog.dismiss();
+            dialog = null;
+            if (dialogItem != null)
+                dialogItem.setEnabled(false);
+            setPositionFixerBar(true);
+            fragment.activePositionFixer();
+        }
+    }
+
+    private String generateMessage(){
+        FragmentManager fmanager = this.getSupportFragmentManager();
+        GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
+
+
+        DecimalFormat df = new DecimalFormat();
+        df.setMinimumFractionDigits(8);
+        df.setMaximumFractionDigits(8);
+        Geodetic3D mg = fragment.positionMark.getPosition();
+        String message = "";
+        if (fragment.heading != null) {
+            try {
+                message = "Lat: " + df.format(mg._latitude._degrees);
+                message = message + ", lon: " + df.format(mg._longitude._degrees);
+                df.setMinimumFractionDigits(2);
+                df.setMaximumFractionDigits(2);
+                message = message + ", hgt: " + df.format(mg._height);
+                message = message + ", heading: " + df.format(fragment.heading._degrees);
+            } catch (Exception E) {
+            }
+        }
+        else {
+            message = getString(R.string.undefined);
+        }
+        return message;
+    }
+
+
+
+    public void updatePositionFixer(final String string){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout bar = (LinearLayout) findViewById(R.id.positionFixerLayout);
+                TextView t = (TextView) findViewById(R.id.positionFixerText);
+                t.setText(string);
+            }
+        });
+    }
+
     public void stopPointCloudAnimationAction(View view){
         FragmentManager fmanager = this.getSupportFragmentManager();
         GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
@@ -98,8 +199,15 @@ public class MainActivity extends AppCompatActivity {
             preview.addView(mPreview);
         }
         else {
-            mPreview.setCamera(mCamera);
+            if (mCamera != null)
+                mPreview.setCamera(mCamera);
+            else
+                Log.e("___ ERRORS ___", "Camera not released! ");
         }
+        mPreview.setZOrderMediaOverlay(false);
+        mPreview.setZOrderOnTop(false);
+        if (Build.VERSION.SDK_INT >= 21)
+            mPreview.setZ(0);
     }
 
     public float getHorizontalFoV(){
@@ -130,12 +238,12 @@ public class MainActivity extends AppCompatActivity {
             mCamera.release();        // release the camera for other applications
             mCamera = null;
         }
-        /*FrameLayout preview = (FrameLayout) findViewById(R.id.theSurfaceView);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.theSurfaceView);
         preview.removeView(mPreview);
-        mPreview = null;*/
-        if (mPreview != null){
+        mPreview = null;
+        /*if (mPreview != null){
             mPreview.setCamera(mCamera);
-        }
+        }*/
     }
 
     @Override
@@ -155,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_settings:
+                dialogItem = item;
                 openDialog();
 
                 return true;
@@ -191,10 +300,13 @@ public class MainActivity extends AppCompatActivity {
         boolean buildings = fragment.areBuildingsEnabled();
         Switch bSwitch = (Switch) vi.findViewById(R.id.switchBuildings);
         Switch pSwitch = (Switch) vi.findViewById(R.id.switchPipes);
+        Switch lSwitch = (Switch) vi.findViewById(R.id.switchLocation);
+        Switch cSwitch = (Switch) vi.findViewById(R.id.switchCorrection);
         Spinner mSpinner = vi.findViewById(R.id.spinnerMethod);
         Spinner bSpinner = vi.findViewById(R.id.spinnerColors);
         SeekBar alphaSeekbar = vi.findViewById(R.id.alphaMethodBar);
         SeekBar modeSeekbar = vi.findViewById(R.id.modeSeekbar);
+        TextView position = vi.findViewById(R.id.textView14);
 
         int alphaValue = (fragment.isHole()) ? 1:0;
 
@@ -203,8 +315,11 @@ public class MainActivity extends AppCompatActivity {
         //bSpinner.setEnabled(false);
         bSwitch.setChecked(buildings);
         pSwitch.setChecked(pipes);
+        lSwitch.setChecked(fragment.getUsesGPS());
+        cSwitch.setChecked(fragment.getCorrection());
         mSpinner.setSelection(fragment.getAlphaMethod());
         alphaSeekbar.setProgress(alphaValue);
+        position.setText(generateMessage());
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(vi);
@@ -215,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
     public void applySettings(View view){
         Switch bSwitch = dialog.findViewById(R.id.switchBuildings);
         Switch pSwitch = dialog.findViewById(R.id.switchPipes);
+        Switch lSwitch = dialog.findViewById(R.id.switchLocation);
+        Switch cSwitch = dialog.findViewById(R.id.switchCorrection);
         Spinner mSpinner = dialog.findViewById(R.id.spinnerMethod);
         Spinner bSpinner = dialog.findViewById(R.id.spinnerColors);
         SeekBar alphaSeekbar = dialog.findViewById(R.id.alphaMethodBar);
@@ -222,12 +339,14 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager fmanager = this.getSupportFragmentManager();
         GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
+        fragment.setUsesGPS(lSwitch.isChecked());
         fragment.setMapMode(modeSeekbar.getProgress());
         fragment.setBuildingsEnabled(bSwitch.isChecked());
         fragment.setPipesEnabled(pSwitch.isChecked());
         fragment.setAlphaMethod(mSpinner.getSelectedItemPosition());
         fragment.setBuildingColor(bSpinner.getSelectedItemPosition());
-        boolean isHole = (alphaSeekbar.getProgress() == 1) ? true : false;
+        fragment.setCorrection(cSwitch.isChecked());
+        boolean isHole = (alphaSeekbar.getProgress() == 1);
         fragment.setHole(isHole);
 
         dialog.dismiss();

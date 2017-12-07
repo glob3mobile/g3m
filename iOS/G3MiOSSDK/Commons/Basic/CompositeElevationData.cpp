@@ -60,7 +60,7 @@ const std::string CompositeElevationData::description(bool detailed) const {
   isb->addString("x");
   isb->addInt(_height);
   isb->addString(" sector=");
-  isb->addString( _sector.description() );
+  isb->addString( _sector->description() );
   if (detailed) {
     isb->addString("\n");
     for (int row = 0; row < _width; row++) {

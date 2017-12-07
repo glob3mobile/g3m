@@ -217,6 +217,10 @@ public:
   const G3MContext* getG3MContext() const {
     return _context;
   }
+    
+  const G3MRenderContext* getG3MRenderContext() const {
+    return _renderContext;
+  }
 
   void setBackgroundColor(const Color& backgroundColor);
 

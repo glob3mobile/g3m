@@ -33,7 +33,7 @@ public:
   Vector3D getMinMaxAverageElevations() const;
   
   bool hasNoData() const { return _hasNoData;}
-
+    
 };
 
 #endif

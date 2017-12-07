@@ -3,14 +3,30 @@ package org.eifer.eiferapp.g3mutils;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.ElevationData;
+import org.glob3.mobile.generated.FloatBufferBuilder;
+import org.glob3.mobile.generated.FloatBufferBuilderFromCartesian2D;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MRenderContext;
+import org.glob3.mobile.generated.GLFormat;
 import org.glob3.mobile.generated.GLPrimitive;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SimpleTextureMapping;
+import org.glob3.mobile.generated.TextureIDReference;
+import org.glob3.mobile.generated.TextureMapping;
+import org.glob3.mobile.generated.TexturedMesh;
+import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector3D;
 
 /**
@@ -22,8 +38,55 @@ public class HoleCoverHelper {
         private static Color groundColor, wallColor, coverColor;
         private static float lineWidth,pointWidth;
         private static int HOLE_DEPTH = 20;
+        private static IImage holeimage, coverimage;
 
-        public static void generateHoleCover(Sector sector, Vector3D center, Planet p,
+        public static void loadHoleImage(final IDownloader downloader, final IThreadUtils utils, final String path){
+            utils.invokeInBackground(new GTask() {
+                @Override
+                public void run(G3MContext context) {
+                    downloader.requestImage(new URL(path, false), 1000, TimeInterval.fromDays(30), true, new IImageDownloadListener() {
+                        @Override
+                        public void onDownload(URL url, IImage image, boolean expired) {
+                            holeimage = image;
+                        }
+
+                        @Override
+                        public void onError(URL url) {}
+
+                        @Override
+                        public void onCancel(URL url) {}
+
+                        @Override
+                        public void onCanceledDownload(URL url, IImage image, boolean expired) {}
+                    }, true);
+                }
+            },true);
+        }
+
+    public static void loadCoverImage(final IDownloader downloader, final IThreadUtils utils, final String path){
+        utils.invokeInBackground(new GTask() {
+            @Override
+            public void run(G3MContext context) {
+                downloader.requestImage(new URL(path, false), 1000, TimeInterval.fromDays(30), true, new IImageDownloadListener() {
+                    @Override
+                    public void onDownload(URL url, IImage image, boolean expired) {
+                        coverimage = image;
+                    }
+
+                    @Override
+                    public void onError(URL url) {}
+
+                    @Override
+                    public void onCancel(URL url) {}
+
+                    @Override
+                    public void onCanceledDownload(URL url, IImage image, boolean expired) {}
+                }, true);
+            }
+        },true);
+    }
+
+        public static void generateHoleCover(Sector sector, Vector3D center, Planet p, G3MRenderContext rc,
                                              ElevationData elevData, MeshRenderer holeRenderer){
 
             Sector holeSector = generateSector(center,p,9);
@@ -36,8 +99,8 @@ public class HoleCoverHelper {
             groundColor = wallColor.darker();
             holeRenderer.clearMeshes();
 
-            generateHole(holeSector,p,elevData,holeRenderer);
-            generateOuterCover(holeSector,outerSector,p,elevData,holeRenderer);
+            generateHole(holeSector,p,rc,elevData,holeRenderer);
+            generateOuterCover(holeSector,outerSector,p,rc,elevData,holeRenderer);
 
         }
 
@@ -56,7 +119,7 @@ public class HoleCoverHelper {
             return new Sector(lower,upper);
         }
 
-        private static void generateHole(Sector holeSector, Planet p,
+        private static void generateHole(Sector holeSector, Planet p, G3MRenderContext rc,
                                          ElevationData elevData, MeshRenderer holeRenderer){
 
             Geodetic2D nw = holeSector.getNW();
@@ -79,15 +142,15 @@ public class HoleCoverHelper {
 
             double md = ((hnw + hne + hsw + hse) / 4) - HOLE_DEPTH;
 
-            generateHoleGround(holeSector,md,p,holeRenderer);
-            generateHoleWall(nw,ne,hnw,hne,md,p,holeRenderer);
-            generateHoleWall(ne,se,hne,hse,md,p,holeRenderer);
-            generateHoleWall(se,sw,hse,hsw,md,p,holeRenderer);
-            generateHoleWall(sw,nw,hsw,hnw,md,p,holeRenderer);
+            generateHoleGround(holeSector,md,p,holeRenderer,rc);
+            generateHoleWall(nw,ne,hnw,hne,md,p,holeRenderer,rc);
+            generateHoleWall(ne,se,hne,hse,md,p,holeRenderer,rc);
+            generateHoleWall(se,sw,hse,hsw,md,p,holeRenderer,rc);
+            generateHoleWall(sw,nw,hsw,hnw,md,p,holeRenderer,rc);
 
         }
 
-        private static void generateHoleGround(Sector holeSector,double depth, Planet p, MeshRenderer holeRenderer){
+        private static void generateHoleGround(Sector holeSector,double depth, Planet p, MeshRenderer holeRenderer, G3MRenderContext rc){
             Geodetic2D nw = holeSector.getNW();
             Geodetic2D ne = holeSector.getNE();
             Geodetic2D sw = holeSector.getSW();
@@ -111,11 +174,25 @@ public class HoleCoverHelper {
                     pointWidth,
                     groundColor,
                     null, 0.0f, true);
-            holeRenderer.addMesh(mesh);
+            if (coverimage != null){
+                String texName = "HOLETEXTURE_" + holeSector.description();
+                TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(coverimage, GLFormat.rgba(),texName,false);
+                FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+                texCoords.add(0,0);
+                texCoords.add(0,1);
+                texCoords.add(1,1);
+                texCoords.add(1,0);
+                TextureMapping tMapping = new SimpleTextureMapping(texId,texCoords.create(),true,true);
+                TexturedMesh tMesh = new TexturedMesh(mesh,true,tMapping,true,false);
+                holeRenderer.addMesh(tMesh);
+            }
+            else {
+                holeRenderer.addMesh(mesh);
+            }
         }
 
-        private static void generateHoleWall(Geodetic2D start, Geodetic2D end,
-                                             double hStart, double hEnd, double depth, Planet p, MeshRenderer holeRenderer){
+        private static void generateHoleWall(Geodetic2D start, Geodetic2D end, double hStart, double hEnd,
+                                             double depth, Planet p, MeshRenderer holeRenderer, G3MRenderContext rc){
 
             FloatBufferBuilderFromGeodetic fbb =
                     FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(p);
@@ -136,11 +213,29 @@ public class HoleCoverHelper {
                     pointWidth,
                     wallColor,//color,
                     null, 0.0f, true);
-            holeRenderer.addMesh(mesh);
+            if (holeimage != null){
+                String texName = "HOLETEXTURE_" + start.description() + end.description();
+                TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(holeimage, GLFormat.rgba(),texName,false);
+                FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+                texCoords.add(1,0);
+                texCoords.add(0,0);
+                texCoords.add(0,1);
+                texCoords.add(1,1);
+
+                TextureMapping tMapping = new SimpleTextureMapping(texId,texCoords.create(),true,true);
+                TexturedMesh tMesh = new TexturedMesh(mesh,true,tMapping,true,false);
+                holeRenderer.addMesh(tMesh);
+            }
+            else {
+                holeRenderer.addMesh(mesh);
+            }
+
+
+
         }
 
         private static void generateOuterCover(Sector holeSector,Sector outerSector,
-                                               Planet p, ElevationData elevData, MeshRenderer holeRenderer){
+                                               Planet p, G3MRenderContext rc, ElevationData elevData, MeshRenderer holeRenderer){
             Geodetic2D nw = holeSector.getNW();
             Geodetic2D ne = holeSector.getNE();
             Geodetic2D sw = holeSector.getSW();
@@ -186,15 +281,15 @@ public class HoleCoverHelper {
             Geodetic3D innerSW = new Geodetic3D(sw,hsw);
             Geodetic3D innerSE = new Geodetic3D(se,hse);
 
-            generateOuterGround(outerNW,outerNE,innerNW,innerNE,p,holeRenderer);
-            generateOuterGround(outerNE,outerSE,innerNE,innerSE,p,holeRenderer);
-            generateOuterGround(outerSE,outerSW,innerSE,innerSW,p,holeRenderer);
-            generateOuterGround(outerSW,outerNW,innerSW,innerNW,p,holeRenderer);
+            generateOuterGround(outerNW,outerNE,innerNW,innerNE,p,holeRenderer,rc);
+            generateOuterGround(outerNE,outerSE,innerNE,innerSE,p,holeRenderer,rc);
+            generateOuterGround(outerSE,outerSW,innerSE,innerSW,p,holeRenderer,rc);
+            generateOuterGround(outerSW,outerNW,innerSW,innerNW,p,holeRenderer,rc);
 
         }
 
-        private static void generateOuterGround(Geodetic3D outerStart, Geodetic3D outerEnd,
-                                                Geodetic3D innerStart, Geodetic3D innerEnd, Planet p, MeshRenderer holeRenderer ){
+        private static void generateOuterGround(Geodetic3D outerStart, Geodetic3D outerEnd,Geodetic3D innerStart, Geodetic3D innerEnd,
+                                                 Planet p, MeshRenderer holeRenderer, G3MRenderContext rc ){
             FloatBufferBuilderFromGeodetic fbb =
                     FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(p);
 
@@ -212,6 +307,20 @@ public class HoleCoverHelper {
                     pointWidth,
                     coverColor,//color,
                     null, 0.0f, true);
-            holeRenderer.addMesh(mesh);
+            if (coverimage != null){
+                String texName = "HOLETEXTURE_" + outerStart.description() + outerEnd.description();
+                TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(coverimage, GLFormat.rgba(),texName,false);
+                FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+                texCoords.add(0,0);
+                texCoords.add(1,0);
+                texCoords.add(1,1);
+                texCoords.add(0,1);
+                TextureMapping tMapping = new SimpleTextureMapping(texId,texCoords.create(),true,true);
+                TexturedMesh tMesh = new TexturedMesh(mesh,true,tMapping,true,false);
+                holeRenderer.addMesh(tMesh);
+            }
+            else {
+                holeRenderer.addMesh(mesh);
+            }
         }
 }
