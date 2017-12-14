@@ -1493,6 +1493,36 @@ class AltitudeFixerLM: public ILocationModifier{
         //      shape->setHeading(Angle::fromDegrees(-4));
       }
     };
+      
+    class MeteoListener : public ShapeLoadListener {
+      public:
+          MeteoListener()
+          {
+          }
+          
+          void onBeforeAddShape(SGShape* shape) {
+//              shape->setPitch(Angle::fromDegrees(90));
+          }
+          
+          void onAfterAddShape(SGShape* shape) {
+              shape->setScale(5);
+              shape->setPitch(Angle::fromDegrees(90));
+              //      shape->setHeading(Angle::fromDegrees(-4));
+          }
+      };
+      
+      class RandomListener : public MarkTouchListener {
+      public:
+          bool touchedMark(Mark * mark){
+              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"SENSOR TOUCHED"
+                                                              message:@"Information about the sensor can be displayed instead of this screen."
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+              [alert show];
+              return true;
+          }
+      };
     
     shapesRenderer->loadJSONSceneJS(URL("file:///k_s/k_schloss.json"),
                                     "file:///k_s/",
@@ -1500,6 +1530,24 @@ class AltitudeFixerLM: public ILocationModifier{
                                     new Geodetic3D(Geodetic3D::fromDegrees(49.013500, 8.404249, 117.82)), //
                                     ABSOLUTE,
                                     new SchlossListener());
+      
+      
+      shapesRenderer->loadJSONSceneJS(URL("file:///boyas.json"),
+                                     "file:///k_s/",
+                                     false,
+                                     new Geodetic3D(Geodetic3D::fromDegrees(49.01098659,8.40410182,121.91)),
+                                      AltitudeMode::ABSOLUTE,
+                                     new MeteoListener());
+      
+      falseMarksRenderer->addMark(new Mark(
+                                          URL("file:///transparent2.png",false),
+                                           Geodetic3D::fromDegrees(49.01098659,8.40410182,0),
+                                           AltitudeMode::RELATIVE_TO_GROUND,
+                                          1000,
+                                          NULL,
+                                          true,
+                                          new RandomListener(),
+                                          true));
     
     std::string v[] = {"91214493", "23638639", "15526553", "15526562", "15526550", "13956101", "156061723", "15526578"};
     
