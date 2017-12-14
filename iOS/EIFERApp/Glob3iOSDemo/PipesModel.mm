@@ -78,10 +78,10 @@ void PipesModel::insertNewCylinder(Geodetic3D &start,Geodetic3D &end, const Plan
     c->_info.setID(theId);
     
     int red,green;
-    if (c->_info.cylinderType == "naturalGas"){
+    if (c->_info.cylinderType.compare("naturalGas") == 0){
         red = 255; green = 0;
     }
-    else if (c->_info.cylinderType == "High power"){
+    else if (c->_info.cylinderType.compare("High power") == 0){
         red = 255; green = 255;
     }
     else {

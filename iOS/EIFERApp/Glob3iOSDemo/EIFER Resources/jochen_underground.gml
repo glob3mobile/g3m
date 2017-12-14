@@ -964,8 +964,8 @@
 							<gml:posList>8.43841449878679 49.0199796393728 -2 8.43853036765397 49.0199270334325 -2 8.43887203226242 49.0197750604037 -2 8.43896947958464 49.0197353217111 -2 8.43905623405136 49.0196990737153 -2 8.43919228721998 49.0196418180357 -2 8.43937059218388 49.0196067267162 -2 8.4396326073908 49.01988027255 -2 8.43904732106153 49.020131611777 -2 8.43927149294109 49.0203851353392 -2</gml:posList>
 						</gml:LineString>
 					</utility:lod1Geometry>
-					<utility:exteriorDiameter uom="cm">10</utility:exteriorDiameter>
-					<utility:interiorDiameter uom="cm">9.5</utility:interiorDiameter>
+					<utility:exteriorDiameter>10</utility:exteriorDiameter>
+					<utility:interiorDiameter>9.5</utility:interiorDiameter>
 				</utility:RoundPipe>
 			</utility:component>
 			<utility:component>
@@ -978,8 +978,8 @@
 							<gml:posList>8.44012876382217 49.0191944412257 -2 8.43944840560186 49.019471112954 -2 8.43917804491175 49.0195782741256 -2 8.43888391624881 49.0197127123602 -2 8.43867594648717 49.0198023376482 -2 8.43875844824315 49.0198697413451 -2</gml:posList>
 						</gml:LineString>
 					</utility:lod1Geometry>
-					<utility:exteriorDiameter uom="cm">10</utility:exteriorDiameter>
-					<utility:interiorDiameter uom="cm">9.5</utility:interiorDiameter>
+					<utility:exteriorDiameter>10</utility:exteriorDiameter>
+					<utility:interiorDiameter>9.5</utility:interiorDiameter>
 				</utility:RoundPipe>
 			</utility:component>
 			<utility:component>
@@ -992,8 +992,8 @@
 							<gml:posList>8.43917200347275 49.0196229871325 -2 8.43922286049049 49.0196702014512 -2</gml:posList>
 						</gml:LineString>
 					</utility:lod1Geometry>
-					<utility:exteriorDiameter uom="cm">10</utility:exteriorDiameter>
-					<utility:interiorDiameter uom="cm">9.5</utility:interiorDiameter>
+					<utility:exteriorDiameter>10</utility:exteriorDiameter>
+					<utility:interiorDiameter>9.5</utility:interiorDiameter>
 				</utility:RoundPipe>
 			</utility:component>
 		</utility:Network>
