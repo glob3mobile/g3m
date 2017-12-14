@@ -24,6 +24,7 @@ import org.eifer.eiferapp.g3mutils.AltitudeFixerLM;
 import org.eifer.eiferapp.g3mutils.CorrectedAltitudeFixedLM;
 import org.eifer.eiferapp.g3mutils.HoleCoverHelper;
 import org.eifer.eiferapp.g3mutils.KarlsruheVirtualWalkLM;
+import org.eifer.eiferapp.g3mutils.MeteoListener;
 import org.eifer.eiferapp.g3mutils.MyCityGMLBuildingTouchedListener;
 import org.eifer.eiferapp.g3mutils.MyCityGMLRendererListener;
 import org.eifer.eiferapp.g3mutils.MyEDCamConstrainer;
@@ -64,6 +65,7 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
@@ -141,7 +143,7 @@ public class GlobeFragment extends Fragment{
     //Location Mode
     boolean _locationUsesRealGPS = true;
     DeviceAttitudeCameraHandler _dac = null;
-    MarksRenderer marksRenderer;
+    MarksRenderer marksRenderer,falseMarksRenderer;
 
     public Mark positionMark; public Angle heading = null;
 
@@ -158,7 +160,7 @@ public class GlobeFragment extends Fragment{
 
     private void addBuildings(){
 
-       //addCityGMLFile("file:///innenstadt_ost_4326_lod2.gml",false);
+       addCityGMLFile("file:///innenstadt_ost_4326_lod2.gml",false);
 	   //addCityGMLFile("file:///innenstadt_west_4326_lod2.gml",false);
 	   //addCityGMLFile("file:///technologiepark_WGS84.gml",true);
         addCityGMLFile("file:///tpk_lod3_t1_wgs84.gml",true);
@@ -241,9 +243,11 @@ public class GlobeFragment extends Fragment{
         marksRenderer.addMark(positionMark);
         marksRenderer.setEnable(false);
 
-
+        falseMarksRenderer = new MarksRenderer(false);
+        builder.addRenderer(falseMarksRenderer);
         shapesRenderer = new ShapesRenderer();
         builder.addRenderer(shapesRenderer);
+
 
         cityGMLRenderer = new CityGMLRenderer(meshRenderer,
                 null /* marksRenderer */,
@@ -463,6 +467,35 @@ public class GlobeFragment extends Fragment{
                     new Geodetic3D(Geodetic3D.fromDegrees(49.013500, 8.404249, 117.82)), //
                     AltitudeMode.ABSOLUTE,
                     new SchlossListener());
+
+            MarkTouchListener randomListener = new MarkTouchListener() {
+                @Override
+                public boolean touchedMark(Mark mark) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            MainActivity activity = (MainActivity) getActivity();
+                            activity.openGraphDialog();
+                        }
+                    });
+                    return false;
+                }
+            };
+
+            shapesRenderer.loadJSONSceneJS(new URL("file:///boyas.json"),
+                    "file:///k_s/",
+                    false,
+                    Geodetic3D.fromDegrees(49.01098659,8.40410182,121.91),
+                    AltitudeMode.ABSOLUTE,
+                    new MeteoListener());
+            falseMarksRenderer.addMark(new Mark(
+                    new URL("file:///transparent2.png",false),
+                    Geodetic3D.fromDegrees(49.01098659,8.40410182,0),
+                    AltitudeMode.RELATIVE_TO_GROUND,
+                    1000,
+                    null,
+                    true,
+                    randomListener,
+                    true));
 
             String v[] = {"91214493", "23638639", "15526553", "15526562", "15526550", "13956101", "156061723", "15526578"};
 

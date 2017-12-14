@@ -41,7 +41,10 @@ class CompositeElevationDataProvider;
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIAlertViewDelegate>  {
   IBOutlet G3MWidget_iOS* G3MWidget;
+    __weak IBOutlet UIView *PositionView;
 
+    __weak IBOutlet UIButton *PositionButton;
+    __weak IBOutlet UILabel *PositionLabel;
   MapBooBuilder_iOS* _g3mcBuilder;
   
   const Planet * _planet;
@@ -99,6 +102,7 @@ class CompositeElevationDataProvider;
 @property MeshRenderer* holeRenderer;
 @property MeshRenderer* meshRendererPC;
 @property MarksRenderer* marksRenderer;
+@property MarksRenderer* falseMarksRenderer;
 @property PipesRenderer* pipesRenderer;
 @property ShapesRenderer* shapesRenderer;
 @property CityGMLRenderer* cityGMLRenderer;
@@ -122,6 +126,7 @@ class CompositeElevationDataProvider;
 
 - (void) setBuildingsActive:(bool)active;
 - (void) setPipesActive:(bool)active;
+- (void) setCorrectionActive:(bool)active;
 - (void) setMode:(int)activeMode;
 - (void) setActiveColor:(int)row;
 - (void) setWidgetAnimation:(bool)active;
@@ -131,5 +136,11 @@ class CompositeElevationDataProvider;
 - (void) changeHole:(Geodetic3D) position;
 - (void) addPipeMeshes;
 - (bool) isHole;
+
+- (Geodetic3D) getMarkPosition;
+- (Angle) getMarkHeading;
+- (void) activePositionFixer;
+- (void) updatePositionFixer:(NSString *)message;
+- (IBAction)PositionSetterAction:(id)sender;
 
 @end

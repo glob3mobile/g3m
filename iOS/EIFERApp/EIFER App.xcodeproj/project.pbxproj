@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
+		842D6B591FE187F800140B1F /* bolita.png in Resources */ = {isa = PBXBuildFile; fileRef = 842D6B561FE187F800140B1F /* bolita.png */; };
+		842D6B5A1FE187F800140B1F /* boyas.json in Resources */ = {isa = PBXBuildFile; fileRef = 842D6B571FE187F800140B1F /* boyas.json */; };
+		842D6B5B1FE187F800140B1F /* transparent2.png in Resources */ = {isa = PBXBuildFile; fileRef = 842D6B581FE187F800140B1F /* transparent2.png */; };
 		843BC90E1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml in Resources */ = {isa = PBXBuildFile; fileRef = 843BC90D1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml */; };
 		8465B6F01FBC5E3000118771 /* PopupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6EF1FBC5E3000118771 /* PopupViewController.mm */; };
 		8468CDC31FB070E0008AE04E /* building-12.gml in Resources */ = {isa = PBXBuildFile; fileRef = 8468CDB91FB070E0008AE04E /* building-12.gml */; };
@@ -116,6 +119,9 @@
 /* Begin PBXFileReference section */
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		842D6B561FE187F800140B1F /* bolita.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolita.png; path = "EIFER Resources/bolita.png"; sourceTree = "<group>"; };
+		842D6B571FE187F800140B1F /* boyas.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = boyas.json; path = "EIFER Resources/boyas.json"; sourceTree = "<group>"; };
+		842D6B581FE187F800140B1F /* transparent2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = transparent2.png; path = "EIFER Resources/transparent2.png"; sourceTree = "<group>"; };
 		843BC90D1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = tpk_lod3_t1_wgs84.gml; path = "EIFER Resources/tpk_lod3_t1_wgs84.gml"; sourceTree = "<group>"; };
 		8465B6EE1FBC5E3000118771 /* PopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupViewController.h; sourceTree = "<group>"; };
 		8465B6EF1FBC5E3000118771 /* PopupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PopupViewController.mm; sourceTree = "<group>"; };
@@ -328,6 +334,9 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				842D6B561FE187F800140B1F /* bolita.png */,
+				842D6B571FE187F800140B1F /* boyas.json */,
+				842D6B581FE187F800140B1F /* transparent2.png */,
 				848C55E41FD17E51008EE656 /* jochen_underground.gml */,
 				843BC90D1FCF03D3004E9A83 /* tpk_lod3_t1_wgs84.gml */,
 				849E860A1FC71D71004AE1F0 /* covertexture3.jpg */,
@@ -465,6 +474,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842D6B591FE187F800140B1F /* bolita.png in Resources */,
 				D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */,
 				D8D0DF3D1CE3300100B5B6D3 /* technologiepark_WGS84.gml in Resources */,
 				D8DF55CA1CC4D9C300D7D084 /* daxlanden_4326_lod2.gml in Resources */,
@@ -493,6 +503,7 @@
 				D8DF55CF1CC4D9C300D7D084 /* hagsfeld_4326_lod2.gml in Resources */,
 				8468CDC41FB070E0008AE04E /* building-15.gml in Resources */,
 				E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */,
+				842D6B5B1FE187F800140B1F /* transparent2.png in Resources */,
 				E71B153D1626D27F003D1013 /* Icon-Small-50.png in Resources */,
 				8468CDCB1FB070E0008AE04E /* building-28.gml in Resources */,
 				D880482C1D3D068E001E8249 /* plane_on.png in Resources */,
@@ -526,6 +537,7 @@
 				D8DF55D11CC4D9C300D7D084 /* innenstadt_ost_4326_lod2.gml in Resources */,
 				D8DF55D61CC4D9C300D7D084 /* knielingen_4326_lod2_PART_1.gml in Resources */,
 				D82CAE301F7AE81700E6CCBE /* pipesCoordsMetzt.csv in Resources */,
+				842D6B5A1FE187F800140B1F /* boyas.json in Resources */,
 				D82D00501CF4ACB20038C6FB /* k_s in Resources */,
 				D8DF55CB1CC4D9C300D7D084 /* durlach_4326_lod2_PART_1.gml in Resources */,
 				849E860D1FC71D71004AE1F0 /* holetexture.jpg in Resources */,

@@ -1,1 +1,1 @@
-include ':app', ':G3MAndroidSDK', ':G3MSharedSDK'
+include ':app', ':G3MAndroidSDK', ':G3MSharedSDK', ":GraphView"

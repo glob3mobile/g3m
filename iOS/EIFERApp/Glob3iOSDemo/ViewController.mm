@@ -791,22 +791,40 @@ class ColorChangingMeshTask: public GTask{
 class MyEDCamConstrainer: public ICameraConstrainer {
   
   ElevationData* _ed;
-    
+  __weak ViewController *vc;
   bool _shouldCaptureMotion;
   MeshRenderer * _mr;
   std::string &_lastText;
+  Mark * positionMark;
+  static double markHeading;
     
   public:
+    
   
-    MyEDCamConstrainer(ElevationData* ed,std::string &text):
+    MyEDCamConstrainer(ElevationData* ed,std::string &text,ViewController *viewController):
     _ed(ed),
     _shouldCaptureMotion(false),
     _mr(NULL),
-    _lastText(text){}
+    _lastText(text),
+    positionMark(NULL),
+    vc(viewController){}
   
   void setED(ElevationData* ed){
     _ed = ed;
   }
+    
+  void setMark (Mark *mark){
+    positionMark = mark;
+  }
+    
+  Angle getMarkHeading(){
+      if (markHeading == -1000){
+          return Angle::nan();
+      }
+      return Angle::fromDegrees(markHeading);
+  }
+    
+
     
 #warning Unfortunately Chano was here!
   void shouldCaptureMotion(bool capture, MeshRenderer *meshRenderer){
@@ -828,14 +846,7 @@ class MyEDCamConstrainer: public ICameraConstrainer {
         
         
         if (text.compare("") != 0 && text.compare(_lastText) != 0){
-            
-            /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
-                                                            message:[NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];*/
             _lastText = text;
-            //[alert show];
         }
       return true;
     }
@@ -852,34 +863,35 @@ class MyEDCamConstrainer: public ICameraConstrainer {
       }
     }
     if (_shouldCaptureMotion && !nextCamera->getGeodeticPosition().isEquals(previousCamera->getGeodeticPosition())){
-        //NSDate *methodStart = [NSDate date];
         
         const std::string text = Cylinder::adaptMeshes(_mr,
                                                  &PipesModel::cylinderInfo,
                                                  nextCamera,
                                                  planet);
         
-        /*NSDate *methodFinish = [NSDate date];
-         NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-         NSLog(@"executionTime = %f", executionTime);*/
-        
         
         if (text.compare("") != 0 && text.compare(_lastText) != 0){
-            
-            /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Proximity alert"
-                                                            message:[NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];*/
             _lastText = text;
-            //[alert show];
         }
 
+    }
+    if (positionMark != NULL){
+          Geodetic2D nAsG2D = nextCamera->getGeodeticPosition().asGeodetic2D();
+           double hgt = (_ed != NULL)? _ed->getElevationAt(nAsG2D) : 0;
+          Geodetic3D mg = Geodetic3D(nAsG2D,hgt);
+          positionMark->setPosition(mg);
+          markHeading = nextCamera->getHeading()._degrees;
+#warning Do something at this point ...
+        NSString *string = [NSString stringWithFormat:@"Lat: %.8f, Lon: %.8f \nHgt: %.2f, Heading: %.2f",
+                            mg._latitude._degrees,mg._longitude._degrees,mg._height,markHeading];
+        [vc updatePositionFixer:string];
     }
       
     return true;
   }
 };
+
+double MyEDCamConstrainer::markHeading = -1000;
 
 class MyEDListener: public IElevationDataListener{
   
@@ -1077,6 +1089,45 @@ class KarlsruheVirtualWalkLM: public ILocationModifier{
 };
 
 
+class CorrectedAltitudeFixedLM: public ILocationModifier {
+    const ElevationData *_ed;
+    Geodetic2D *_initialPosition;
+    Geodetic2D _markPosition;
+    double _viewHeight;
+    
+    public :
+    CorrectedAltitudeFixedLM(const ElevationData *ed, Geodetic2D markPosition):
+    _ed(ed),
+    _markPosition(markPosition),
+    _viewHeight(2.0),
+    _initialPosition(NULL){}
+    
+    
+    ~CorrectedAltitudeFixedLM(){
+        if (_initialPosition != NULL)
+            delete _initialPosition;
+    }
+    
+    Geodetic3D modify(const Geodetic3D &location){
+        if (_initialPosition == NULL){
+            _initialPosition = new Geodetic2D(location._latitude, location._longitude);
+        }
+        
+        // compute what I have walked from initial position
+        Geodetic2D incGeo = location.asGeodetic2D().sub(*_initialPosition);
+        
+        Geodetic2D fakePos = _markPosition.add(incGeo);
+        double h = _ed->getElevationAt(fakePos);
+        if (isnan(h)) {
+            h = 0;
+        }
+        
+        return Geodetic3D(fakePos, h + _viewHeight);
+    }
+    
+};
+
+
 class AltitudeFixerLM: public ILocationModifier{
   const ElevationData* _ed;
   const Geodetic2D* _initialPosition;
@@ -1116,8 +1167,10 @@ class AltitudeFixerLM: public ILocationModifier{
     std::string lastText;
     __weak IBOutlet UIImageView *eiferLogo;
     
-    bool pipes,buildings;
+    bool pipes,buildings,correction;
     int alpha,color,mode,method;
+    
+    Mark *positionMark;
 }
 
 @synthesize G3MWidget;
@@ -1125,6 +1178,7 @@ class AltitudeFixerLM: public ILocationModifier{
 @synthesize pipeMeshRenderer;
 @synthesize holeRenderer;
 @synthesize marksRenderer;
+@synthesize falseMarksRenderer;
 @synthesize meshRendererPC;
 @synthesize pipesRenderer;
 @synthesize cityGMLRenderer;
@@ -1155,11 +1209,11 @@ class AltitudeFixerLM: public ILocationModifier{
   //Previous considerations
   pipes = true;
   buildings = true;
+  correction = false;
   mode = 0;
   alpha = 0;
   method = 1;
   color = 0;
-    
   
   elevationData = NULL;
   meshRenderer = NULL;
@@ -1249,7 +1303,7 @@ class AltitudeFixerLM: public ILocationModifier{
 - (void) tapDetected{
     if (_isMenuAvailable ) {
     PopupViewController *popupController = [[self storyboard] instantiateViewControllerWithIdentifier:@"popupViewController"];
-    [popupController setCurrentStateWithMode:mode Color:color Alpha:alpha Method:method Buildings:buildings Pipes:pipes];
+        [popupController setCurrentStateWithMode:mode Color:color Alpha:alpha Method:method Buildings:buildings Pipes:pipes Correction:correction];
     [self presentViewController:popupController animated:YES completion:nil];
     }
 }
@@ -1331,6 +1385,14 @@ class AltitudeFixerLM: public ILocationModifier{
   builder.addRenderer(pipesRenderer);
   builder.addRenderer(holeRenderer);
   marksRenderer = new MarksRenderer(false);
+  builder.addRenderer(marksRenderer);
+  positionMark = new Mark(URL("file:///bolita.png",false),
+                          Geodetic3D::fromDegrees(28,-15.50,0),
+                          AltitudeMode::ABSOLUTE);
+  marksRenderer->addMark(positionMark);
+  marksRenderer->setEnable(false);
+  falseMarksRenderer = new MarksRenderer(false);
+  builder.addRenderer(falseMarksRenderer);
   
   //Karlsruhe Schloss model
   shapesRenderer = new ShapesRenderer();
@@ -1353,7 +1415,7 @@ class AltitudeFixerLM: public ILocationModifier{
   
   builder.setInitializationTask(new MyInitTask(self, useDEM));
   
-  camConstrainer = new MyEDCamConstrainer(NULL,lastText); //Wait for ED to arrive
+  camConstrainer = new MyEDCamConstrainer(NULL,lastText,self); //Wait for ED to arrive
   builder.addCameraConstraint(camConstrainer);
   
   builder.setBackgroundColor(new Color(Color::fromRGBA255(0, 0, 0, 0)));
@@ -1649,7 +1711,10 @@ class AltitudeFixerLM: public ILocationModifier{
   }
   
   if (_dac == NULL){
-    ILocationModifier * lm = (_locationUsesRealGPS)?  (ILocationModifier *) new AltitudeFixerLM([self elevationData]) :
+    ILocationModifier * lm = (_locationUsesRealGPS)?
+      (correction && ![self getMarkHeading].isNan())?
+        (ILocationModifier *) new CorrectedAltitudeFixedLM([self elevationData],[self getMarkPosition].asGeodetic2D()) :
+      (ILocationModifier *) new AltitudeFixerLM([self elevationData]) :
     (ILocationModifier *) new KarlsruheVirtualWalkLM(elevationData);
     
     _dac = new DeviceAttitudeCameraHandler(true, lm);
@@ -1702,6 +1767,7 @@ class AltitudeFixerLM: public ILocationModifier{
   G3MWidget = nil;
   PipesModel::reset();
   HoleCoverHelper::deleteImages();
+  delete positionMark;
   [super viewDidUnload];
   // Release any retained subviews of the main view.
   // e.g. self.myOutlet = nil;
@@ -1822,13 +1888,16 @@ class AltitudeFixerLM: public ILocationModifier{
 
 -(void) changeLocationMode:(BOOL) v{
   _locationUsesRealGPS = v;
-  
-  if (_dac != NULL){
-    ILocationModifier * lm = (_locationUsesRealGPS)?  (ILocationModifier *) new AltitudeFixerLM([self elevationData]) :
-    (ILocationModifier *) new KarlsruheVirtualWalkLM(elevationData);
     
-    _dac->setLocationModifier(lm);
-  }
+    if (_dac == NULL){
+        ILocationModifier * lm = (_locationUsesRealGPS)?
+        (correction && ![self getMarkHeading].isNan())?
+        (ILocationModifier *) new CorrectedAltitudeFixedLM([self elevationData],[self getMarkPosition].asGeodetic2D()) :
+        (ILocationModifier *) new AltitudeFixerLM([self elevationData]) :
+        (ILocationModifier *) new KarlsruheVirtualWalkLM(elevationData);
+        
+        _dac = new DeviceAttitudeCameraHandler(true, lm);
+    }
 }
 
 -(void) setActiveColor:(int)row{
@@ -1858,6 +1927,42 @@ class AltitudeFixerLM: public ILocationModifier{
         cityGMLRenderer->colorBuildingsWithColorBrewer("Demographic Clusters (k-Means)", "Pastel1", 8);
     }
     color = row;
+}
+
+- (Geodetic3D) getMarkPosition{
+    if (positionMark != NULL)
+        return positionMark->getPosition();
+    return Geodetic3D::zero();
+}
+
+- (Angle) getMarkHeading{
+    return camConstrainer->getMarkHeading();
+}
+
+- (void) setCorrectionActive:(bool)active{
+    correction = active;
+    [self changeLocationMode:_locationUsesRealGPS];
+}
+
+- (void) activePositionFixer{
+    [PositionView setHidden:FALSE];
+    marksRenderer->setEnable(true);
+    camConstrainer->setMark(positionMark);
+}
+
+- (IBAction)PositionSetterAction:(id)sender {
+    [self stopPositionFixer];
+}
+
+- (void) stopPositionFixer{
+    camConstrainer->setMark(NULL);
+    marksRenderer->setEnable(false);
+    [PositionView setHidden:TRUE];
+    [self tapDetected];
+}
+
+- (void) updatePositionFixer:(NSString *)message{
+    [PositionLabel setText:message];
 }
 
 

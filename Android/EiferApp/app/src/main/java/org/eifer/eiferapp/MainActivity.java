@@ -24,13 +24,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.glob3.mobile.generated.Geodetic3D;
 
 import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    Dialog dialog;
+    Dialog dialog, graphDialog;
     ProgressDialog startingDialog;
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -286,6 +290,37 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fmanager = this.getSupportFragmentManager();
         GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
         fragment.onPostCreate();
+    }
+
+    public void openGraphDialog(){
+        graphDialog = new Dialog(this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vi = inflater.inflate(R.layout.sensor_dialog, null);
+
+        GraphView graph = (GraphView) vi.findViewById(R.id.SensorGraph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.addSeries(series);
+
+        String message = "Fake sensor \n\nPosition: Schlossgarten, Karlsruhe, Germany \nModel: Fake Sensor 101\nManufacturer: Fake Industry" +
+                "\nMeasured property: Temperature \nSupported protocol: http \nLast value: 6 (2017/11/12 12:16:00)\nLast five values:\n ";
+        TextView textView = (TextView) vi.findViewById(R.id.SensorText);
+        textView.setText(message);
+
+        graphDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        graphDialog.setContentView(vi);
+        graphDialog.setCancelable(true);
+        graphDialog.show();
+    }
+
+    public void closeAction(View view){
+        graphDialog.dismiss();
+        graphDialog = null;
     }
 
     private void openDialog(){

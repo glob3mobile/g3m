@@ -10,6 +10,8 @@
 
 #import "ViewController.h"
 
+#import <G3MiOSSDK/Geodetic3D.hpp>
+
 @interface PopupViewController ()
 @property (weak, nonatomic) IBOutlet UIScrollView *theScrollView;
 @property (weak, nonatomic) IBOutlet UIView *theScrollContent;
@@ -19,7 +21,7 @@
 @implementation PopupViewController{
     NSArray *colorArray, *methodArray;
     int colorRow, prevColor, methodRow, prevMethod, modeRow, alphaRow;
-    bool areBuildings, arePipes;
+    bool areBuildings, arePipes, isCorrection;
 }
 
 - (void) setCurrentStateWithMode:(int) mode
@@ -27,7 +29,8 @@
                            Alpha:(int) alpha
                           Method:(int) method
                        Buildings:(bool) buildings
-                           Pipes:(bool) pipes{
+                           Pipes:(bool) pipes
+                      Correction:(bool) correction{
     modeRow = mode;
     prevColor = color;
     methodRow = method;
@@ -36,6 +39,47 @@
     colorRow = color;
     areBuildings = buildings;
     arePipes = pipes;
+    isCorrection = correction;
+}
+
+- (IBAction)setCorrectionsAction:(id)sender {
+    
+    __weak const ViewController *vC = (ViewController *) [self presentingViewController];
+    
+    if ([vC getMapMode] > 0){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Correction settings only enabled for Map mode"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else {
+        [self dismissViewControllerAnimated:NO completion:^{
+           //Do stuff here
+            [vC setWidgetAnimation:true];
+            [vC activePositionFixer];
+        }];
+    }
+    /*
+     public void openPositionFixer(View view){
+     
+     FragmentManager fmanager = this.getSupportFragmentManager();
+     GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
+     
+     if (fragment.getMapMode() > 0){
+     Toast.makeText(this,getString(R.string.fixer_unable),Toast.LENGTH_SHORT).show();
+     }
+     else {
+     dialog.dismiss();
+     dialog = null;
+     if (dialogItem != null)
+     dialogItem.setEnabled(false);
+     setPositionFixerBar(true);
+     fragment.activePositionFixer();
+     }
+     }
+     */
 }
 
 - (void)viewDidLoad {
@@ -50,6 +94,8 @@
     self.alphaBar.selectedSegmentIndex = alphaRow;
     [self.buildingsSwitch setOn:areBuildings];
     [self.pipesSwitch setOn:arePipes];
+    [self.correctionSwitch setOn:isCorrection];
+    [self.positionText setText:[self generateMessage]];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -75,6 +121,11 @@
     if ([self.pipesSwitch isOn] != arePipes) {
         [vC setPipesActive:[self.pipesSwitch isOn]];
     }
+    if ([self.correctionSwitch isOn] != isCorrection){
+        [vC setCorrectionActive:[self.correctionSwitch isOn]];
+    }
+    
+    
     if (prevColor != colorRow){
         [vC setActiveColor:colorRow];
     }
@@ -95,6 +146,28 @@
     [self dismissViewControllerAnimated:YES completion:^{
         [vC setWidgetAnimation:true];
     }];
+}
+- (NSString *) generateMessage
+{
+    __weak const ViewController *vC = (ViewController *) [self presentingViewController];
+    
+    Geodetic3D mg = [vC getMarkPosition];
+    Angle heading = [vC getMarkHeading];
+    NSString *message;
+    if (!heading.isNan()) {
+   
+        message = [NSString stringWithFormat:
+                         @"Lat: %.8f, lon: %.8f \nHgt: %.2f, heading: %.2f",
+                         mg._latitude._degrees,
+                         mg._longitude._degrees,
+                         mg._height,
+                         heading._degrees];
+    }
+    else{
+        message = @"Position undefined";
+    }
+    
+    return message;
 }
 
 ////PICKER VIEW
