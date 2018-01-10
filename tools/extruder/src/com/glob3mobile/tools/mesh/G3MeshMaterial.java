@@ -43,7 +43,7 @@ public class G3MeshMaterial {
       if (textureURL == null) {
          return "";
       }
-      return "(U/" + textureURL.getPath() + ")";
+      return "(U/" + textureURL._path + ")";
    }
 
 
@@ -102,7 +102,7 @@ public class G3MeshMaterial {
          result.put("color", toJSON(_color));
       }
       if ((_textureURL != null) && !_textureURL.isNull()) {
-         result.put("textureURL", _textureURL.getPath());
+         result.put("textureURL", _textureURL._path);
       }
 
       return result;
