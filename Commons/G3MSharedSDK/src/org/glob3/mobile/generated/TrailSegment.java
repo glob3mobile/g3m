@@ -87,8 +87,10 @@ public class TrailSegment
     final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-  
-  
+
+
+    Vector3D lastPoint1 = null;
+    Vector3D lastPoint2 = null;
     final Vector3D rotationAxis = Vector3D.downZ();
     for (int i = 0; i < positionsSize; i++)
     {
@@ -97,9 +99,22 @@ public class TrailSegment
       final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(anglesInRadians.get(i)), rotationAxis);
       final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
       final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
-  
-      vertices.add(offsetN.transformedBy(matrix, 1));
-      vertices.add(offsetP.transformedBy(matrix, 1));
+
+      Vector3D point1 = offsetN.transformedBy(matrix, 1);
+      Vector3D point2 = offsetP.transformedBy(matrix, 1);
+      if (i == 0 || point1.sub(lastPoint1).length() + point2.sub(lastPoint2).length() < point1.sub(lastPoint2).length() + point2.sub(lastPoint1).length()) {
+        vertices.add(point1);
+        vertices.add(point2);
+        lastPoint1 = point1;
+        lastPoint2 = point2;
+        System.out.println("");
+      } else {
+        vertices.add(point2);
+        vertices.add(point1);
+        lastPoint1 = point2;
+        lastPoint2 = point1;
+        System.out.println(" reverted!");
+      }
     }
   
     Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
