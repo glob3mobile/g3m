@@ -30,6 +30,7 @@ public class SGNode
 {
   protected final String _id;
   protected final String _sId;
+  protected String _uriPrefix;
 
   //  SGNode*              _parent;
   protected java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
@@ -39,8 +40,6 @@ public class SGNode
 
   protected G3MContext _context;
 
-  protected SGShape _shape;
-
   private BoundingVolume _boundingVolume;
 
   public SGNode(String id, String sId)
@@ -49,9 +48,7 @@ public class SGNode
      _id = id;
      _sId = sId;
      _context = null;
-     _shape = null;
   }
-
 
   ///#include "GPUProgramState.hpp"
 
@@ -70,16 +67,16 @@ public class SGNode
     }
   }
 
-  public void initialize(G3MContext context, SGShape shape)
+  public void initialize(G3MContext context, String uriPrefix)
   {
     _context = context;
-    _shape = shape;
+    _uriPrefix = uriPrefix;
 
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-      child.initialize(context, shape);
+      child.initialize(context, _uriPrefix);
     }
   }
 
@@ -89,7 +86,7 @@ public class SGNode
     _children.add(child);
     if (_context != null)
     {
-      child.initialize(_context, _shape);
+      child.initialize(_context, _uriPrefix);
     }
   }
 

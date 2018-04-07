@@ -70,7 +70,7 @@ public class SGShape extends Shape
 
   public final void initialize(G3MContext context)
   {
-    _node.initialize(context, this);
+    _node.initialize(context, getURIPrefix());
   }
 
   public final void setRenderBounds(boolean newState) {
