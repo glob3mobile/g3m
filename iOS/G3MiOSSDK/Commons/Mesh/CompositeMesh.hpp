@@ -13,35 +13,37 @@
 
 class CompositeMesh : public Mesh {
 private:
-  std::vector<Mesh*> _children;
-
-  BoundingVolume* calculateBoundingVolume() const;
-
-  mutable BoundingVolume* _boundingVolume;
-  
-
+    std::vector<Mesh*> _children;
+    
+    BoundingVolume* calculateBoundingVolume() const;
+    
+    mutable BoundingVolume* _boundingVolume;
+    
+    
 public:
-  virtual ~CompositeMesh();
-  
-  size_t getVertexCount() const;
-
-  const Vector3D getVertex(size_t i) const;
-
-  BoundingVolume* getBoundingVolume() const;
-
-  bool isTransparent(const G3MRenderContext* rc) const;
-
-  void addMesh(Mesh* mesh);
-
-  void rawRender(const G3MRenderContext* rc,
-                 const GLState* parentGLState) const;
-
-  void showNormals(bool v) const;
+    virtual ~CompositeMesh();
+    
+    size_t getVertexCount() const;
+    
+    const Vector3D getVertex(size_t i) const;
+    
+    BoundingVolume* getBoundingVolume() const;
+    
+    bool isTransparent(const G3MRenderContext* rc) const;
+    
+    void addMesh(Mesh* mesh);
+    
+    void rawRender(const G3MRenderContext* rc,
+                   const GLState* parentGLState) const;
+    
+    void showNormals(bool v) const;
     
 #warning Chano adding stuff
     
-  Mesh * getChildAtIndex(int i);
-
+    Mesh * getChildAtIndex(int i);
+    
+    void setColorTransparency(const std::vector<double>& transparency);
+    
 };
 
 #endif

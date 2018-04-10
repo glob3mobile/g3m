@@ -115,3 +115,11 @@ void CompositeMesh::showNormals(bool v) const {
 Mesh * CompositeMesh::getChildAtIndex(int i){
     return _children[i];
 }
+
+void CompositeMesh::setColorTransparency(const std::vector<double>& transparency){
+    const size_t childrenCount = _children.size();
+    for (size_t i = 0; i < childrenCount; i++) {
+        Mesh* child = _children[i];
+        child->setColorTransparency(transparency);
+    }
+}

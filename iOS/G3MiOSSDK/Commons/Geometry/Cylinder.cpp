@@ -44,113 +44,120 @@ bool Cylinder::getDepthEnabled(){
 }
 
 Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet *planet){
-  
-  Vector3D d = _end.sub(_start);
-  Vector3D r = d._z == 0? Vector3D(0.0,0.0,1.0) : Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
-  
-  Vector3D p = _start.add(r.times(_radius / r.length()));
-  
-  MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(360.0 / nSegments),
-                                                                     d,
-                                                                     _start);
     
-  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  FloatBufferBuilderFromCartesian3D* fbbC1 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  fbbC1->add(_start);
-  FloatBufferBuilderFromCartesian3D* fbbC2 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  fbbC2->add(_end);
-  
-  FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  FloatBufferBuilderFromCartesian3D* normalsC1 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  normalsC1->add(d.times(-1.0));
-  FloatBufferBuilderFromCartesian3D* normalsC2 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  normalsC2->add(d);
+    Vector3D d = _end.sub(_start);
+    Vector3D r = d._z == 0? Vector3D(0.0,0.0,1.0) : Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
     
-  FloatBufferBuilderFromColor colors;
-  
-  MutableVector3D x(p);
-  std::vector<Vector3D *> vs;
+    Vector3D p = _start.add(r.times(_radius / r.length()));
     
-  for (int i = 0; i < nSegments; ++i){
+    const double totalAngle = _endAngle - _startAngle;
     
-    //Tube
-    Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
-    Vector3D newEndPoint = newStartPoint.add(d);
-    x.set(newStartPoint._x, newStartPoint._y, newStartPoint._z);
     
-    fbb->add(newStartPoint); vs.push_back(new Vector3D(newStartPoint));
-    fbb->add(newEndPoint); vs.push_back(new Vector3D(newEndPoint));
-      
-    Geodetic3D stPoint = planet->toGeodetic3D(newStartPoint);
-    Geodetic3D endPoint = planet->toGeodetic3D(newEndPoint);
-    _info.addLatLng(stPoint._latitude._degrees, stPoint._longitude._degrees, stPoint._height);
-    _info.addLatLng(endPoint._latitude._degrees, endPoint._longitude._degrees, endPoint._height);
+    MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(
+                                                                       Angle::fromDegrees(totalAngle / nSegments),
+                                                                       d,
+                                                                       _start);
     
-    normals->add(newStartPoint.sub(_start));
-    normals->add(newEndPoint.sub(_end));
+    FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+    FloatBufferBuilderFromCartesian3D* fbbC1 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+    fbbC1->add(_start);
+    FloatBufferBuilderFromCartesian3D* fbbC2 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+    fbbC2->add(_end);
     
-    //Cover1
-    fbbC1->add(newStartPoint);
+    FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    FloatBufferBuilderFromCartesian3D* normalsC1 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
     normalsC1->add(d.times(-1.0));
-    //Cover2
-    fbbC2->add(newEndPoint);
+    FloatBufferBuilderFromCartesian3D* normalsC2 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
     normalsC2->add(d);
-      
-    colors.add(color);
-    colors.add(color);
-  }
-  
-  //Still covers
-  /*Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
-  fbbC1->add(newStartPoint);
-  normalsC1->add(d.times(-1.0));
-  Vector3D newEndPoint = newStartPoint.add(d);
-  fbbC2->add(newEndPoint);
-  normalsC2->add(d);*/
-  
-
-  ShortBufferBuilder ind;
-  for (int i = 0; i < nSegments*2; ++i){
-    ind.add((short)i);
-  }
-  ind.add((short)0);
-  ind.add((short)1);
-  
-  IFloatBuffer* vertices = fbb->create();
-  IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                                    fbb->getCenter(),
-                                    vertices,
-                                    true,
-                                    ind.create(),
-                                    true,
-                                    1.0,
-                                    1.0,
-                                    NULL,//new Color(color),
-                                    colors.create(),//NULL,
-                                    1.0f,
-                                    DEPTH_ENABLED,
-                                    normals->create(),
-                                    false,
-                                    0,
-                                    0);
     
-  createSphere(vs);
-  
-  
-  delete normals;
-  delete fbb;
-  
-  
-  //return cm;
+    FloatBufferBuilderFromColor colors;
+    
+    MutableVector3D x(p);
+    x = x.transformedBy(
+    MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(_startAngle),
+                                                  d, _start), 1.0);
+    std::vector<Vector3D *> vs;
+    
+    for (int i = 0; i < nSegments; ++i){
+        
+        //Tube
+        Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
+        Vector3D newEndPoint = newStartPoint.add(d);
+        x.set(newStartPoint._x, newStartPoint._y, newStartPoint._z);
+        
+        fbb->add(newStartPoint); vs.push_back(new Vector3D(newStartPoint));
+        fbb->add(newEndPoint); vs.push_back(new Vector3D(newEndPoint));
+        
+        Geodetic3D stPoint = planet->toGeodetic3D(newStartPoint);
+        Geodetic3D endPoint = planet->toGeodetic3D(newEndPoint);
+        _info.addLatLng(stPoint._latitude._degrees, stPoint._longitude._degrees, stPoint._height);
+        _info.addLatLng(endPoint._latitude._degrees, endPoint._longitude._degrees, endPoint._height);
+        
+        normals->add(newStartPoint.sub(_start));
+        normals->add(newEndPoint.sub(_end));
+        
+        //Cover1
+        fbbC1->add(newStartPoint);
+        normalsC1->add(d.times(-1.0));
+        //Cover2
+        fbbC2->add(newEndPoint);
+        normalsC2->add(d);
+        
+        colors.add(color);
+        colors.add(color);
+    }
+    
+    //Still covers
+    /*Vector3D newStartPoint = x.asVector3D().transformedBy(m, 1.0);
+     fbbC1->add(newStartPoint);
+     normalsC1->add(d.times(-1.0));
+     Vector3D newEndPoint = newStartPoint.add(d);
+     fbbC2->add(newEndPoint);
+     normalsC2->add(d);*/
+    
+    
+    ShortBufferBuilder ind;
+    for (int i = 0; i < nSegments*2; ++i){
+        ind.add((short)i);
+    }
+    ind.add((short)0);
+    ind.add((short)1);
+    
+    IFloatBuffer* vertices = fbb->create();
+    IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                      fbb->getCenter(),
+                                      vertices,
+                                      true,
+                                      ind.create(),
+                                      true,
+                                      1.0,
+                                      1.0,
+                                      NULL,//new Color(color),
+                                      colors.create(),//NULL,
+                                      1.0f,
+                                      DEPTH_ENABLED,
+                                      normals->create(),
+                                      false,
+                                      0,
+                                      0);
+    
+    createSphere(vs);
+    
+    
+    delete normals;
+    delete fbb;
+    
+    
+    //return cm;
     return im;
-  
+    
 }
 
 void Cylinder::createSphere(std::vector<Vector3D*> &vs){
     /*std::vector<Vector3D*> vs;
-    for (int i=0; i < fbb->size(); i++) {
-        vs.push_back(new Vector3D(fbb->getVector3D(i)));
-    }*/
+     for (int i=0; i < fbb->size(); i++) {
+     vs.push_back(new Vector3D(fbb->getVector3D(i)));
+     }*/
     
     Sphere sphere = Sphere::createSphereContainingPoints(vs);
     s = new Sphere(sphere);
@@ -173,12 +180,12 @@ std::vector<Mesh *> Cylinder::visibleMeshes(MeshRenderer *mr, const Camera *came
     std::vector<Mesh *> theMeshes = mr->getMeshes();
     std::vector<Mesh *> theVisibleMeshes;
     for (size_t i=0;i<theMeshes.size();i++){
-//        CompositeMesh *cm = (CompositeMesh *) theMeshes[i];
+        //        CompositeMesh *cm = (CompositeMesh *) theMeshes[i];
         IndexedMesh *im = (IndexedMesh *) theMeshes[i]; // cm->getChildAtIndex(0);
         // Pregunta: ¿el cash devuelve un puntero diferente a la misma dirección de memoria o otra dirección de memoria?
         cylInfo->at(i)._cylId = (int) i;
         CylinderMeshInfo info = cylInfo->at(i);
-       // IFloatBuffer *vertices = im->getVerticesFloatBuffer();
+        // IFloatBuffer *vertices = im->getVerticesFloatBuffer();
         //const size_t numberVertices = vertices->size();
         bool visible = false;
         int vpWidth = camera->getViewPortWidth();
@@ -188,7 +195,7 @@ std::vector<Mesh *> Cylinder::visibleMeshes(MeshRenderer *mr, const Camera *came
             Vector3D vPos = planet->toCartesian(Geodetic3D::fromDegrees(info._latlng[j], info._latlng[j+1], info._latlng[j+2]));
             Vector2F pixel = camera->point2Pixel(vPos);
             if (pixel._x >= 0 and pixel._x < vpWidth and pixel._y >=0 and pixel._y <= vpHeight){
-//            if (pixel._x >= 0 and pixel._x < vpHeight and pixel._y >=0 and pixel._y <= vpWidth){
+                //            if (pixel._x >= 0 and pixel._x < vpHeight and pixel._y >=0 and pixel._y <= vpWidth){
                 visible = true;
                 Vector3D ray = camera->pixel2Ray(pixel).normalized();
                 break;
@@ -217,9 +224,9 @@ std::vector<double> Cylinder::distances(CylinderMeshInfo info,
 
 
 std::string Cylinder::adaptMeshes(MeshRenderer *mr,
-                           std::vector<CylinderMeshInfo> * cylInfo,
-                           const Camera *camera,
-                           const Planet *planet){
+                                  std::vector<CylinderMeshInfo> * cylInfo,
+                                  const Camera *camera,
+                                  const Planet *planet){
     
     std::vector<CylinderMeshInfo> visibleInfo;
     std::vector<Mesh*> theMeshes = visibleMeshes(mr,camera,planet,cylInfo,visibleInfo);
@@ -236,20 +243,19 @@ std::string Cylinder::adaptMeshes(MeshRenderer *mr,
                 char buffer [75];
                 sprintf(buffer, "You are close to a visible pipe with id %d \n",visibleInfo.at(i)._cylId);
                 text.append(buffer);
-               // textWritten = true;
+                // textWritten = true;
                 break;
             }
         }
     }
     
     for (size_t i=0;i<theMeshes.size();i++){
-        IndexedMesh *im = (IndexedMesh *) theMeshes[i];
+        Mesh *im = (Mesh *) theMeshes[i];
         std::vector<double> dt = distances(visibleInfo.at(i),camera,planet);
-        IFloatBuffer *colors = im->getColorsFloatBuffer();
-        for (size_t j=3, c=0; j<colors->size(); j=j+4, c++){
-            double ndt = getAlpha(dt[c], maxDt, true);
-            colors->put(j,(float)ndt); //Suponiendo que sea un valor de alpha
+        for (size_t i = 0; i < dt.size(); ++i){
+            dt[i] = 1.0; //getAlpha(dt[i], maxDt, true);
         }
+        im->setColorTransparency(dt);
     }
     return text;
 }
@@ -290,7 +296,7 @@ double Cylinder::rawAlpha(double distance, double proximityThreshold, bool divid
 
 double Cylinder::linearAlpha(double distance, double proximityThreshold, bool divide){
     double ndt = (distance > proximityThreshold)? 0: 1 - ((distance / proximityThreshold));
-//    ¿Dividir entre 2 para alpha inicial 0.5 ? //
+    //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
     if (divide) ndt = ndt / 2;
     
     return ndt;
@@ -372,6 +378,6 @@ double Cylinder::softsignAlpha (double distance, double proximityThreshold, bool
     double ndt = (distance > proximityThreshold)? 0: 1 - factor;
     //    ¿Dividir entre 2 para alpha inicial 0.5 ? //
     if (divide) ndt = ndt / 2;
-        
+    
     return ndt;
 }

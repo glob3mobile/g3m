@@ -516,6 +516,8 @@
 		D850242C1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */; };
 		D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
+		D8682BC22063EA3D004FACEC /* Ditch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8682BC02063EA3D004FACEC /* Ditch.cpp */; };
+		D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8682BC12063EA3D004FACEC /* Ditch.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
 		D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */; };
@@ -808,6 +810,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */,
 				D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */,
 				D82E2F181CEDEE970041B88D /* ColorLegendHelper.hpp in CopyFiles */,
 				D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */,
@@ -1899,6 +1902,8 @@
 		D85024271CB6431500519C60 /* ColorLegend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorLegend.hpp; path = Commons/Basic/ColorLegend.hpp; sourceTree = "<group>"; };
 		D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLBuildingColorProvider.cpp; path = Commons/Rendererers/CityGMLBuildingColorProvider.cpp; sourceTree = "<group>"; };
 		D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CityGMLBuildingColorProvider.hpp; path = Commons/Rendererers/CityGMLBuildingColorProvider.hpp; sourceTree = "<group>"; };
+		D8682BC02063EA3D004FACEC /* Ditch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ditch.cpp; path = Commons/Geometry/Ditch.cpp; sourceTree = "<group>"; };
+		D8682BC12063EA3D004FACEC /* Ditch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ditch.hpp; path = Commons/Geometry/Ditch.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2412,6 +2417,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D8682BC02063EA3D004FACEC /* Ditch.cpp */,
+				D8682BC12063EA3D004FACEC /* Ditch.hpp */,
 				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
 				D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */,
 				D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */,
@@ -3494,6 +3501,7 @@
 				CF6FE3ED1899812800C05775 /* G3MMeshParser.cpp in Sources */,
 				CF67D9D11C5BC29000873661 /* G3MContext.cpp in Sources */,
 				CFC3F8FA17510DA800986630 /* MapBooOLDBuilder.cpp in Sources */,
+				D8682BC22063EA3D004FACEC /* Ditch.cpp in Sources */,
 				CFC3F8FE175110FE00986630 /* MapBooOLDBuilder_iOS.mm in Sources */,
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
 				CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */,

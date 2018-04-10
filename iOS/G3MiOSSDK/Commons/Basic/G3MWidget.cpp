@@ -219,6 +219,11 @@ _interOcularDistance(200.0)
   //#endif
 }
 
+void G3MWidget::setSecondPassRenderer(Renderer* r){
+    _secondPassRenderer = r;
+    _secondPassRenderer->initialize(_context);
+}
+
 
 G3MWidget* G3MWidget::create(GL*                                  gl,
                              IStorage*                            storage,
@@ -487,6 +492,17 @@ RenderState G3MWidget::calculateRendererState() {
       busyFlag = true;
     }
   }
+    
+    if (_secondPassRenderer != NULL) {
+        RenderState s = _secondPassRenderer->getRenderState(_renderContext);
+        if (s._type == RENDER_ERROR) {
+            return s;
+        }
+        else if (s._type == RENDER_BUSY) {
+            busyFlag = true;
+        }
+    }
+
 
   RenderState mainRendererRenderState = _mainRenderer->getRenderState(_renderContext);
   if (mainRendererRenderState._type == RENDER_ERROR) {
@@ -515,6 +531,12 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
       if (_mainRenderer->isEnable()) {
         _mainRenderer->render(_renderContext, _rootState);
       }
+#warning JM AT WORK
+          //SECOND PASS
+          if (_secondPassRenderer != NULL){
+              _gl->clearDepthBuffer();
+              _secondPassRenderer->render(_renderContext, _rootState);
+          }
       
       break;
       
@@ -789,6 +811,7 @@ void G3MWidget::onPause() {
   _mainRenderer->onPause(_context);
   _busyRenderer->onPause(_context);
   _errorRenderer->onPause(_context);
+    _secondPassRenderer->onPause(_context);
   if (_hudRenderer != NULL) {
     _hudRenderer->onPause(_context);
   }
@@ -807,6 +830,7 @@ void G3MWidget::onResume() {
   _mainRenderer->onResume(_context);
   _busyRenderer->onResume(_context);
   _errorRenderer->onResume(_context);
+    _secondPassRenderer->onResume(_context);
   if (_hudRenderer != NULL) {
     _hudRenderer->onResume(_context);
   }
@@ -824,6 +848,7 @@ void G3MWidget::onDestroy() {
   _mainRenderer->onDestroy(_context);
   _busyRenderer->onDestroy(_context);
   _errorRenderer->onDestroy(_context);
+    _secondPassRenderer->onDestroy(_context);
   if (_hudRenderer != NULL) {
     _hudRenderer->onDestroy(_context);
   }

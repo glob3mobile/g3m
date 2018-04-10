@@ -91,7 +91,7 @@ public:
             cylinderType = cType;
         }
         
-       void setTransportComm (bool transport, bool communication){
+        void setTransportComm (bool transport, bool communication){
             //Ad hoc;
             isTransport = transport;
             isCommunication = communication;
@@ -116,20 +116,24 @@ public:
             }
             return sstm.str();
         }
-
+        
     } _info;
     
     Sphere *s;
     
-    Cylinder(const Vector3D& start, const Vector3D& end, const double radius):
-    _start(start), _end(end), _radius(radius), s(NULL){}
-        
+    Cylinder(const Vector3D& start, const Vector3D& end,
+             const double radius,
+             const double startAngle = 0.0,
+             const double endAngle = 360.0):
+    _start(start), _end(end), _radius(radius), s(NULL),
+    _startAngle(startAngle), _endAngle(endAngle){}
+    
     Mesh* createMesh(const Color& color, const int nSegments,const Planet *planet);
     
     static std::string adaptMeshes(MeshRenderer *meshRenderer,
-                            std::vector<CylinderMeshInfo> *cylInfo,
-                            const Camera *camera,
-                            const Planet *planet);
+                                   std::vector<CylinderMeshInfo> *cylInfo,
+                                   const Camera *camera,
+                                   const Planet *planet);
     
     static void setDistanceMethod(int method);
     static int getDistanceMethod();
@@ -138,30 +142,32 @@ public:
     
 private:
     
-  const Vector3D _start;
-  const Vector3D _end;
-  const double _radius;
+    const Vector3D _start;
+    const Vector3D _end;
+    const double _radius;
+    const double _startAngle;
+    const double _endAngle;
     
-  static std::vector<Mesh *> visibleMeshes(MeshRenderer *mr, const Camera *camera,
-                                           const Planet *planet,
-                                           std::vector<CylinderMeshInfo> *cylInfo,
-                                           std::vector<CylinderMeshInfo> &visibleInfo);
-  static std::vector<double> distances(CylinderMeshInfo info,
-                                       const Camera *camera,
-                                       const Planet *planet);
+    static std::vector<Mesh *> visibleMeshes(MeshRenderer *mr, const Camera *camera,
+                                             const Planet *planet,
+                                             std::vector<CylinderMeshInfo> *cylInfo,
+                                             std::vector<CylinderMeshInfo> &visibleInfo);
+    static std::vector<double> distances(CylinderMeshInfo info,
+                                         const Camera *camera,
+                                         const Planet *planet);
     
-  void createSphere(std::vector<Vector3D*> &vs);
+    void createSphere(std::vector<Vector3D*> &vs);
     
-  static double getAlpha(double distance, double proximityThreshold, bool divide);
-  static double rawAlpha(double distance, double proximityThreshold, bool divide);
-  static double linearAlpha(double distance, double proximityThreshold, bool divide);
-  static double smoothstepAlpha(double distance, double proximityThreshold, bool divide);
-  static double perlinSmootherstepAlpha (double distance, double proximityThreshold, bool divide);
-  static double mcDonaldSmootheststepAlpha (double distance, double proximityThreshold, bool divide);
-  static double sigmoidAlpha (double distance, double proximityThreshold, bool divide);
-  static double tanhAlpha (double distance, double proximityThreshold, bool divide);
-  static double arctanAlpha (double distance, double proximityThreshold, bool divide);
-  static double softsignAlpha (double distance, double proximityThreshold, bool divide);
+    static double getAlpha(double distance, double proximityThreshold, bool divide);
+    static double rawAlpha(double distance, double proximityThreshold, bool divide);
+    static double linearAlpha(double distance, double proximityThreshold, bool divide);
+    static double smoothstepAlpha(double distance, double proximityThreshold, bool divide);
+    static double perlinSmootherstepAlpha (double distance, double proximityThreshold, bool divide);
+    static double mcDonaldSmootheststepAlpha (double distance, double proximityThreshold, bool divide);
+    static double sigmoidAlpha (double distance, double proximityThreshold, bool divide);
+    static double tanhAlpha (double distance, double proximityThreshold, bool divide);
+    static double arctanAlpha (double distance, double proximityThreshold, bool divide);
+    static double softsignAlpha (double distance, double proximityThreshold, bool divide);
     
 };
 

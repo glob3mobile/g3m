@@ -256,7 +256,9 @@ public:
   void setInterocularDistanceForStereoView(double iod){
     _interOcularDistance = iod;
   }
-
+    
+    void setSecondPassRenderer(Renderer* r);
+    
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -266,6 +268,8 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
   const Planet*       _planet;
+
+    Renderer* _secondPassRenderer;
 
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;

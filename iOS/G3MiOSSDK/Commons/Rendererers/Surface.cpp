@@ -7,3 +7,5 @@
 //
 
 #include "Surface.hpp"
+
+int Surface::numberOfWalls = 0;

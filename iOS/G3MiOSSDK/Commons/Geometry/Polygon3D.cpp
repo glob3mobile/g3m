@@ -8,6 +8,8 @@
 
 #include "Polygon3D.hpp"
 
+int Polygon3D::numberOfP3D = 0;
+int Polygon3D::numberOfP3D_4 = 0;
 
 std::vector<Vector2D*> Polygon3D::createCoordinates2D() {
   

@@ -9,6 +9,8 @@
 #include <stdio.h>
 
 #include "PipesModel.hpp"
+#include "Ditch.hpp"
+#include "CompositeMesh.hpp"
 
 #import <UIKit/UIKit.h>
 
@@ -88,9 +90,24 @@ void PipesModel::insertNewCylinder(Geodetic3D &start,Geodetic3D &end, const Plan
         red = 0; green = 255;
     }
     
-    mr->addMesh((*c).createMesh(Color::fromRGBA255(red,green,0,32), 5, p));
+    Ditch *ditch = new Ditch(Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                             Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                             eDiam / 5);
+    
+    Mesh* pipeMesh = (*c).createMesh(Color::fromRGBA255(red,green,0,32), 5, p);
+    Mesh* ditchMesh = (*ditch).createMesh(Color::black(), 5, p, ed);
+    delete ditch;
+    
+    CompositeMesh* cm = new CompositeMesh();
+    
+    cm->addMesh(ditchMesh);
+    cm->addMesh(pipeMesh);
+    
+    mr->addMesh(cm);
+    
     cylinderInfo.push_back(Cylinder::CylinderMeshInfo((*c)._info));
     cylinders.push_back(c);
+    
 }
 
 void PipesModel::reset(){

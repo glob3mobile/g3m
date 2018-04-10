@@ -142,6 +142,7 @@
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
 #import <G3MiOSSDK/ChessboardLayer.hpp>
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
+#import <G3MiOSSDK/CompositeRenderer.hpp>
 
 #import <G3MiOSSDK/DefaultInfoDisplay.hpp>
 #import <G3MiOSSDK/DebugTileImageProvider.hpp>
@@ -839,6 +840,7 @@ class MyEDCamConstrainer: public ICameraConstrainer {
     
     if (previousCamera->computeZNear() < 5){
       //We are using VR
+        
         const std::string text = Cylinder::adaptMeshes(_mr,
                                                        &PipesModel::cylinderInfo,
                                                        nextCamera,
@@ -1382,7 +1384,7 @@ class AltitudeFixerLM: public ILocationModifier{
     
   holeRenderer = new MeshRenderer();
   builder.addRenderer(meshRendererPC);
-  builder.addRenderer(pipesRenderer);
+//  builder.addRenderer(pipesRenderer);
   builder.addRenderer(holeRenderer);
   marksRenderer = new MarksRenderer(false);
   builder.addRenderer(marksRenderer);
@@ -1411,7 +1413,7 @@ class AltitudeFixerLM: public ILocationModifier{
   
   cityGMLRenderer->setTouchListener(new MyCityGMLBuildingTouchedListener(self));
   
-  builder.addRenderer(cityGMLRenderer);
+  //builder.addRenderer(cityGMLRenderer);
   
   builder.setInitializationTask(new MyInitTask(self, useDEM));
   
@@ -1429,6 +1431,13 @@ class AltitudeFixerLM: public ILocationModifier{
 
   
   builder.initializeWidget();
+    
+    
+    CompositeRenderer* cr = new CompositeRenderer();
+    cr->addRenderer(pipesRenderer);
+    cr->addRenderer(cityGMLRenderer);
+    
+    [self.G3MWidget widget]->setSecondPassRenderer(cr);
 }
 
 -(void) onCityModelLoaded{
@@ -1583,9 +1592,9 @@ class AltitudeFixerLM: public ILocationModifier{
   //NO WAITING ANYMORE
   _waitingMessageView.hidden = TRUE;
   
-  printf("N OF WALLS: %d\n", numberOfWalls);
-  printf("N OF TESSELLATED WALLS: %d\n", numberOfP3D);
-  printf("N OF TESSELLATED WALLS_4: %d\n", numberOfP3D_4);
+    printf("N OF WALLS: %d\n", Surface::numberOfWalls);
+    printf("N OF TESSELLATED WALLS: %d\n", Polygon3D::numberOfP3D);
+    printf("N OF TESSELLATED WALLS_4: %d\n", Polygon3D::numberOfP3D_4);
 }
 
 
