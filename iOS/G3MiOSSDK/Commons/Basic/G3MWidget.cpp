@@ -154,7 +154,8 @@ _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
 _auxCam(NULL),
-_interOcularDistance(200.0)
+_interOcularDistance(200.0),
+_secondPassRenderer(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);

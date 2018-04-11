@@ -82,7 +82,8 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
 
     glDeleteBuffers(1, &_vertexBuffer);
     if (GL_NO_ERROR != glGetError()) {
-      THROW_EXCEPTION("Problem deleting VBO");
+#warning TODO: CHECK THIS ERROR
+        //THROW_EXCEPTION("Problem deleting VBO");
     }
 
     if (_vertexBuffer == _boundVertexBuffer) {
