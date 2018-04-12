@@ -9,8 +9,8 @@
 #include <stdio.h>
 
 #include "PipesModel.hpp"
-#include "Ditch.hpp"
-#include "CompositeMesh.hpp"
+#include <G3MiOSSDK/Ditch.hpp>
+#include <G3MiOSSDK/CompositeMesh.hpp>
 
 #import <UIKit/UIKit.h>
 
