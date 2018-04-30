@@ -256,6 +256,9 @@ public:
                             double zFar);
 
   void resetFrustumPolicy();
+    
+    
+    RenderState calculateRendererState();
 
 
 private:
@@ -374,7 +377,6 @@ private:
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
 
-  RenderState calculateRendererState();
 
   void setSelectedRenderer(ProtoRenderer* selectedRenderer);
 
