@@ -180,13 +180,13 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
       meshesCounter++;
       
       //Linking buildings with its mesh
-      for (int j = 0; j < processedBuildings.size(); j++) {
-        
-        processedBuildings[j]->setTessellatorData(createData(buildingVertexIndex[j*2],
-                                                             buildingVertexIndex[j*2+1],
-                                                             im,
-                                                             *vertices));
-      }
+//      for (int j = 0; j < processedBuildings.size(); j++) {
+//        
+//        processedBuildings[j]->setTessellatorData(createData(buildingVertexIndex[j*2],
+//                                                             buildingVertexIndex[j*2+1],
+//                                                             im,
+//                                                             *vertices));
+//      }
       
       //Reset
       buildingVertexIndex.clear();
@@ -211,13 +211,13 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
                                     true, 1.0f, 1.0f, NULL, colors->create(), 1.0f, true, normals->create());
   
   //Linking buildings with its mesh
-  for (int j = 0; j < processedBuildings.size(); j++) {
-    
-    processedBuildings[j]->setTessellatorData(createData(buildingVertexIndex[j*2],
-                                                         buildingVertexIndex[j*2+1],
-                                                         im,
-                                                         *vertices));
-  }
+//  for (int j = 0; j < processedBuildings.size(); j++) {
+//
+//    processedBuildings[j]->setTessellatorData(createData(buildingVertexIndex[j*2],
+//                                                         buildingVertexIndex[j*2+1],
+//                                                         im,
+//                                                         *vertices));
+//  }
   
   delete vertices;
   delete normals;
@@ -240,20 +240,24 @@ Mesh* CityGMLBuildingTessellator::createMesh(const std::vector<CityGMLBuilding*>
 
 void CityGMLBuildingTessellator::changeColorOfBuildingInBoundedMesh(const CityGMLBuilding* building, const Color& color){
   
-  DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) building->getTessllatorData();
-  
-  if (data == NULL){
-    THROW_EXCEPTION("NO TESSELLATOR DATA FOR BUILDING");
-  }
-  
-  AbstractMesh* mesh = (AbstractMesh*)data->_containerMesh;
+//  DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) building->getTessllatorData();
+//
+//  if (data == NULL){
+//    THROW_EXCEPTION("NO TESSELLATOR DATA FOR BUILDING");
+//  }
+//
+//  AbstractMesh* mesh = (AbstractMesh*)data->_containerMesh;
+    AbstractMesh* mesh = (AbstractMesh*)building->_containerMesh;
   
   if (mesh != NULL){
     //TODO
     IFloatBuffer* colors = mesh->getColorsFloatBuffer();
     
-    const int initPos = data->_firstVertexIndexWithinContainerMesh * 4;
-    const int finalPos = data->_lastVertexIndexWithinContainerMesh * 4;
+//    const int initPos = data->_firstVertexIndexWithinContainerMesh * 4;
+//    const int finalPos = data->_lastVertexIndexWithinContainerMesh * 4;
+      
+      const int initPos = building->_firstVertexInMesh * 4;
+      const int finalPos = building->_lastVertexInMesh * 4;
     
     for (int i = initPos; i < finalPos;) {
       colors->put(i++, color._red);
@@ -277,11 +281,12 @@ Mark* CityGMLBuildingTessellator::createMark(const CityGMLBuilding* building, co
 
 
 const Sphere* CityGMLBuildingTessellator::getSphereOfBuilding(const CityGMLBuilding* b){
-  DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) b->getTessllatorData();
-  if (data == NULL){
-    return NULL;
-  }
-  return data->_bSphere;
+//  DefaultCityGMLBuildingTessellatorData* data = (DefaultCityGMLBuildingTessellatorData*) b->getTessllatorData();
+//  if (data == NULL){
+//    return NULL;
+//  }
+//  return data->_bSphere;
+    return b->_boundingSphere;
 }
 
 bool CityGMLBuildingTessellator::areClose(const CityGMLBuilding* b1, const CityGMLBuilding* b2){

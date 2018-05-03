@@ -256,3 +256,7 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
   return false;
 }
 
+void CityGMLRenderer::setBuildings(const std::vector<CityGMLBuilding*>& buildings){
+    _buildings = buildings;
+}
+

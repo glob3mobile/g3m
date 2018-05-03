@@ -34,15 +34,20 @@ public:
 
 class CityGMLBuilding {
   
-  Mesh* _containerMesh;
-  short _firstVertexIndexWithinContainerMesh;
-  short _lastVertexIndexWithinContainerMesh;
+//  Mesh* _containerMesh;
+//  short _firstVertexInMesh;
+//  short _lastVertexInMesh;
   
   std::vector<CityGMLBuildingNumericProperty*> _numericProperties;
   
-  CityGMLBuildingTessellatorData* _tessellatorData;
+  //CityGMLBuildingTessellatorData* _tessellatorData;
   
 public:
+    
+    const Mesh* _containerMesh;
+    const short _firstVertexInMesh;
+    const short _lastVertexInMesh;
+    const Sphere* _boundingSphere;
   
   const std::string                _name;
   const int                        _roofTypeCode;
@@ -53,6 +58,21 @@ public:
 #ifdef JAVA_CODE
   public final java.util.ArrayList<CityGMLBuildingSurface> _surfaces;
 #endif
+    
+    CityGMLBuilding(const std::string name,
+                    Mesh* containerMesh,
+                    short firstVertexInMesh,
+                    short lastVertexInMesh,
+                    Sphere* boundingSphere):
+    _name(name),
+    _roofTypeCode(0),
+    //_tessellatorData(NULL),
+    _containerMesh(containerMesh),
+    _firstVertexInMesh(firstVertexInMesh),
+    _lastVertexInMesh(lastVertexInMesh),
+    _boundingSphere(boundingSphere)
+    {
+    }
   
   CityGMLBuilding(const std::string name,
                   int roofType,
@@ -60,13 +80,16 @@ public:
   _name(name),
   _roofTypeCode(roofType),
   _surfaces(walls),
-  _tessellatorData(NULL)
+    _firstVertexInMesh(0),
+    _lastVertexInMesh(0),
+    _containerMesh(NULL)//,
+  //_tessellatorData(NULL)
   {
   }
   
   ~CityGMLBuilding()
   {
-    delete _tessellatorData;
+    //delete _tessellatorData;
     
     removeSurfaceData();
     
@@ -290,14 +313,14 @@ public:
     
     static int checkWallsVisibility(const std::vector<CityGMLBuilding*> buildings);
     
-    CityGMLBuildingTessellatorData* getTessllatorData() const{
-      return _tessellatorData;
-    }
+//    CityGMLBuildingTessellatorData* getTessllatorData() const{
+//      return _tessellatorData;
+//    }
     
-    void setTessellatorData(CityGMLBuildingTessellatorData* data){
-      delete _tessellatorData;
-      _tessellatorData = data;
-    }
+//    void setTessellatorData(CityGMLBuildingTessellatorData* data){
+//      delete _tessellatorData;
+//      _tessellatorData = data;
+//    }
     
     int getNumberOfVertex(){
       int n = 0;
