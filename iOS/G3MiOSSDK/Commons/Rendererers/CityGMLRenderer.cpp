@@ -233,7 +233,7 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
     CityGMLBuilding* touchedB = NULL;
     
     for (size_t i = 0; i < _buildings.size(); i++) {
-      const Sphere* s = CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
+        const Sphere* s = _buildings[i]->_boundingSphere;//CityGMLBuildingTessellator::getSphereOfBuilding(_buildings[i]);
       
       if (s != NULL){
         const std::vector<double> dists = s->intersectionsDistances(origin._x, origin._y, origin._z,
@@ -245,6 +245,8 @@ bool CityGMLRenderer::onTouchEvent(const G3MEventContext* ec,
           }
         }
         
+      } else{
+          ILogger::instance()->logError("Building without sphere.");
       }
     }
     
