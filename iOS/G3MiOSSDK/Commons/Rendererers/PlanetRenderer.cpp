@@ -623,7 +623,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
                                            const int firstLevel,
-                                           const int maxLevel) {
+                                           const int maxLevel,
+                                           bool onlyExistingTiles) {
   if (_tileVisitor != NULL) {
     const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
     if (parameters == NULL) {
@@ -666,7 +667,8 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
                                  tile,
                                  sector,
                                  firstLevelToVisit,
-                                 maxLevelToVisit);
+                                 maxLevelToVisit,
+                                 onlyExistingTiles);
       }
     }
   }
@@ -679,7 +681,13 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                               Tile* tile,
                                               const Sector& sectorToVisit,
                                               const int topLevel,
-                                              const int maxLevel) {
+                                              const int maxLevel,
+                                              bool onlyExistingTiles) {
+    
+    if (!tile->hasSubtiles() && onlyExistingTiles){
+        return;
+    }
+    
   if (tile->_level < maxLevel) {
     std::vector<Tile*>* subTiles = tile->getSubTiles();
 
@@ -690,7 +698,7 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
         if ((tile->_level >= topLevel)) {
           _tileVisitor->visitTile(layers, tl);
         }
-        visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
+        visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel, onlyExistingTiles);
       }
     }
   }
@@ -918,15 +926,35 @@ void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,
                                                                     stabilizationInterval) );
 }
 
+class NotifyElevationListeners_TileVisitor: public ITileVisitor{
+    PlanetRenderer* _pr;
+public:
+    NotifyElevationListeners_TileVisitor(PlanetRenderer* pr):_pr(pr){}
+    
+    void visitTile(std::vector<Layer*>& layers,
+                   const Tile* tile) const{
+        _pr->sectorElevationChanged(tile->getElevationData());
+    }
+};
+
 void PlanetRenderer::addListener(const Angle& latitude,
                                  const Angle& longitude,
                                  SurfaceElevationListener* listener) {
   _elevationListenersTree.add(Geodetic2D(latitude, longitude), listener);
+    
+    Sector sector(Geodetic2D(latitude, longitude), Geodetic2D(latitude, longitude));
+    const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
+    ITileVisitor* tv = new NotifyElevationListeners_TileVisitor(this);
+    acceptTileVisitor(tv,
+                      sector,
+                      parameters->_firstLevel, parameters->_maxLevel,
+                      true);
+    delete tv;
 }
 
 void PlanetRenderer::addListener(const Geodetic2D& position,
                                  SurfaceElevationListener* listener) {
-  _elevationListenersTree.add(position, listener);
+    this->addListener(position._latitude, position._longitude, listener);
 }
 
 bool PlanetRenderer::removeListener(SurfaceElevationListener* listener) {

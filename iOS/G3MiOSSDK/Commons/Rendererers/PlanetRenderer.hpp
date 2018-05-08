@@ -194,13 +194,15 @@ private:
 
   void visitTilesTouchesWith(const Sector& sector,
                              const int topLevel,
-                             const int maxLevel);
+                             const int maxLevel,
+                             bool visitTilesTouchesWith);
 
   void visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
                                 const int topLevel,
-                                const int maxLevel);
+                                const int maxLevel,
+                                bool onlyExistingTiles);
 
   long long _tileTextureDownloadPriority;
 
@@ -284,9 +286,10 @@ public:
   void acceptTileVisitor(ITileVisitor* tileVisitor,
                          const Sector& sector,
                          const int topLevel,
-                         const int maxLevel) {
+                         const int maxLevel,
+                         bool onlyExistingTiles=false) {
     _tileVisitor = tileVisitor;
-    visitTilesTouchesWith(sector, topLevel, maxLevel);
+    visitTilesTouchesWith(sector, topLevel, maxLevel, onlyExistingTiles);
   }
 
   void start(const G3MRenderContext* rc) {
