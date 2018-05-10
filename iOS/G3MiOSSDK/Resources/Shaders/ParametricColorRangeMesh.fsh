@@ -5,9 +5,9 @@
 //
 
 uniform lowp vec4 uColorAt0;
-uniform lowp vec4 uColotAt1;
-attribute float aColorValue;
+uniform lowp vec4 uColorAt1;
+varying highp float colorValue;
 
 void main() {
-  gl_FragColor = mix(uColorAt0, uColorAt1, aColorValue);
+  gl_FragColor = mix(uColorAt0, uColorAt1, colorValue);
 }

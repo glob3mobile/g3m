@@ -27,16 +27,21 @@ public:
 "attribute vec4 aPosition;\n" +
 "uniform mat4 uModelview;\n" +
 "uniform float uPointSize;\n" +
+"attribute float aColorValue;\n" +
+"varying highp float colorValue;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
+"colorValue = aColorValue;\n" +
+"highp float x = aColorValue;\n" +
+"x = x +1.0;\n" +
 "}\n",
  emptyString +  
 "uniform lowp vec4 uColorAt0;\n" +
-"uniform lowp vec4 uColotAt1;\n" +
-"attribute float aColorValue;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"varying highp float colorValue;\n" +
 "void main() {\n" +
-"gl_FragColor = mix(uColorAt0, uColorAt1, aColorValue);\n" +
+"gl_FragColor = mix(uColorAt0, uColorAt1, colorValue);\n" +
 "}\n");
     this->add(sourcesParametricColorRangeMesh);
 

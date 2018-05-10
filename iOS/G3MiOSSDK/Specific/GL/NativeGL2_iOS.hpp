@@ -521,6 +521,8 @@ public:
     
     //NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
     switch (type) {
+        case GL_FLOAT:
+            return new GPUAttributeVec1Float(name, id);
       case GL_FLOAT_VEC3:
         return new GPUAttributeVec3Float(name, id);
       case GL_FLOAT_VEC4:
@@ -528,6 +530,7 @@ public:
       case GL_FLOAT_VEC2:
         return new GPUAttributeVec2Float(name, id);
       default:
+        ILogger::instance()->logError("Unrecognized attribute %s", name);
         return NULL;
         break;
     }

@@ -60,6 +60,12 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   const bool isPoints = GPUVariable::hasUniform(uniformsCode, ROUNDED_POINT_BORDER_COLOR);
   
 //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
+    
+    const bool isColorRange = GPUVariable::hasUniform(uniformsCode, COLORRANGE_COLOR_AT_0);
+    
+    if (isColorRange){
+        return compileProgramWithName(gl, "ParametricColorRangeMesh");
+    }
 
   if (isPoints){
     return compileProgramWithName(gl, "RoundedColoredPoints");
