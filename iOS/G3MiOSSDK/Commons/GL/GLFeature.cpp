@@ -51,6 +51,25 @@ _borderColor(new GPUUniformValueVec4Float(borderColor)){
   _values->addUniformValue(ROUNDED_POINT_BORDER_COLOR, _borderColor, false);
 }
 
+
+ColorRangeGLFeature::ColorRangeGLFeature(const Color& colorAt0,
+                                         const Color& colorAt1,
+                                         IFloatBuffer* values):
+GLFeature(NO_GROUP, GLF_POINT_SHAPE),
+_colorAt0(new GPUUniformValueVec4Float(colorAt0)),
+_colorAt1(new GPUUniformValueVec4Float(colorAt1)),
+_parameteValue(new GPUAttributeValueVec1Float(values,
+                                              1, 0, 0, false))
+{
+    _values->addUniformValue(COLORRANGE_COLOR_AT_0,
+                             _colorAt0,
+                             false);
+    _values->addUniformValue(COLORRANGE_COLOR_AT_1,
+                             _colorAt1,
+                             false);
+    _values->addAttributeValue(COLORRANGE_VALUE, _parameteValue, false);
+}
+
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        float billboardWidth,
                                        float billboardHeight,

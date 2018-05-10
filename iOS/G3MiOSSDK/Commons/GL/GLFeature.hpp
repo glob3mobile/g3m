@@ -116,6 +116,27 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 };
 
+//////////////////////////
+
+class ColorRangeGLFeature: public GLFeature {
+private:
+    ~ColorRangeGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameteValue;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+public:
+    ColorRangeGLFeature(const Color& colorAt0, const Color& colorAt1,
+                        IFloatBuffer* values);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+};
+
 /////////////////////////
 
 class ViewportExtentGLFeature: public GLFeature {

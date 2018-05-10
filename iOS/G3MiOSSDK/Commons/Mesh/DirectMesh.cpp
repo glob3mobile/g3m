@@ -23,7 +23,9 @@ DirectMesh::DirectMesh(const int primitive,
                        bool polygonOffsetFill,
                        float polygonOffsetFactor,
                        float polygonOffsetUnits,
-                       const IFloatBuffer* valuesInColorRange) :
+                       IFloatBuffer* valuesInColorRange,
+                       const Color* colorRangeAt0,
+                       const Color* colorRangeAt1) :
 AbstractMesh(primitive,
              owner,
              center,
@@ -38,7 +40,9 @@ AbstractMesh(primitive,
              polygonOffsetFill,
              polygonOffsetFactor,
              polygonOffsetUnits,
-             valuesInColorRange)
+             valuesInColorRange,
+             colorRangeAt0,
+             colorRangeAt1)
 {
   _renderVerticesCount = vertices->size() / 3;
 }

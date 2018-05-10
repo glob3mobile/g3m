@@ -37,7 +37,9 @@ public:
              bool polygonOffsetFill = false,
              float polygonOffsetFactor = 0,
              float polygonOffsetUnits = 0,
-             const IFloatBuffer* valuesInColorRange = NULL);
+             IFloatBuffer* valuesInColorRange = NULL,
+             const Color* colorRangeAt0 = NULL,
+             const Color* colorRangeAt1 = NULL);
 
   ~DirectMesh() {
 #ifdef JAVA_CODE

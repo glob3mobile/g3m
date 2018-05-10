@@ -165,6 +165,14 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   if (name.compare("uRoundedPointBorderColor") == 0){
     return ROUNDED_POINT_BORDER_COLOR;
   }
+    
+    if (name.compare("uColorAt0") == 0){
+        return COLORRANGE_COLOR_AT_0;
+    }
+    
+    if (name.compare("uColorAt1") == 0){
+        return COLORRANGE_COLOR_AT_1;
+    }
 
   return UNRECOGNIZED_UNIFORM;
 }
@@ -198,6 +206,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   if (name.compare("aPosition2D") == 0) {
     return POSITION_2D;
   }
+    
+    if (name.compare("aColorValue") == 0) {
+        return COLORRANGE_VALUE;
+    }
 
   return UNRECOGNIZED_ATTRIBUTE;
 }
