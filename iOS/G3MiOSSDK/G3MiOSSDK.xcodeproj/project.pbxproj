@@ -2021,6 +2021,8 @@
 		D8D781F81CA425690025E988 /* CityGMLBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CityGMLBuilding.hpp; path = Commons/Rendererers/CityGMLBuilding.hpp; sourceTree = "<group>"; };
 		D8D894EB17731870007E41A5 /* GPUVariable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUVariable.cpp; sourceTree = "<group>"; };
 		D8D894EC17731870007E41A5 /* GPUVariable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUVariable.hpp; sourceTree = "<group>"; };
+		D8DCF5F720A45BE10015AC66 /* ParametricColorRangeMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColorRangeMesh.vsh; sourceTree = "<group>"; };
+		D8DCF5F820A45C0F0015AC66 /* ParametricColorRangeMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColorRangeMesh.fsh; sourceTree = "<group>"; };
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
 		D8E76950160742FD008EC7B9 /* GLConstants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLConstants.hpp; sourceTree = "<group>"; };
@@ -3124,7 +3126,9 @@
 				D8CE5D33173BB5D800C7AAE6 /* Default.fsh */,
 				D8CE5D32173BB5D800C7AAE6 /* Default.vsh */,
 				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
+				D8DCF5F820A45C0F0015AC66 /* ParametricColorRangeMesh.fsh */,
 				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
+				D8DCF5F720A45BE10015AC66 /* ParametricColorRangeMesh.vsh */,
 				D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */,
 				D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */,
 				CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */,

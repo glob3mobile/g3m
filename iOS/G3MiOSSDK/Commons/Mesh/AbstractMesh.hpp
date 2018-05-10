@@ -32,6 +32,7 @@ protected:
     const float             _pointSize;
     const bool              _depthTest;
     const IFloatBuffer*           _normals;
+    const IFloatBuffer*     _valuesInColorRange;
     
     mutable BoundingVolume* _boundingVolume;
     BoundingVolume* computeBoundingVolume() const;
@@ -53,7 +54,8 @@ protected:
                  const IFloatBuffer* normals,
                  bool polygonOffsetFill,
                  float polygonOffsetFactor,
-                 float polygonOffsetUnits);
+                 float polygonOffsetUnits,
+                 const IFloatBuffer* valuesInColorRange = NULL);
     
     virtual void rawRender(const G3MRenderContext* rc) const = 0;
     //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;

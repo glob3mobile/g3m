@@ -57,7 +57,8 @@ AbstractMesh::AbstractMesh(const int primitive,
                            const IFloatBuffer* normals,
                            bool polygonOffsetFill,
                            float polygonOffsetFactor,
-                           float polygonOffsetUnits) :
+                           float polygonOffsetUnits,
+                           const IFloatBuffer* valuesInColorRange) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -78,7 +79,8 @@ _normalsMesh(NULL),
 _showNormals(false),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_polygonOffsetFill(polygonOffsetFill)
+_polygonOffsetFill(polygonOffsetFill),
+_valuesInColorRange(valuesInColorRange)
 {
   createGLState();
 }
