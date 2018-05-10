@@ -1041,3 +1041,7 @@ void G3MWidget::setViewMode(ViewMode viewMode) {
     onResizeViewportEvent(_width, _height);
   }
 }
+
+void G3MWidget::addFrameTask(FrameTask* frameTask){
+    _frameTasksExecutor->addPreRenderTask(frameTask);
+}

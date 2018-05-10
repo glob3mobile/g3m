@@ -13,6 +13,11 @@ class G3MRenderContext;
 
 class FrameTask {
 public:
+    
+    const bool _repeatUntilCancellation;
+    
+    FrameTask(bool repeatUntilCancellation = false): _repeatUntilCancellation(repeatUntilCancellation){}
+    
   virtual ~FrameTask() {
 
   }

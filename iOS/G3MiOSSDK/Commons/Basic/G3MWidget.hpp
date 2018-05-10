@@ -14,6 +14,7 @@
 #include "Angle.hpp"
 #include "InfoDisplay.hpp"
 #include "ViewMode.hpp"
+#include "FrameTask.hpp"
 
 class G3MWidget;
 class IFactory;
@@ -259,6 +260,9 @@ public:
     
     void setSecondPassRenderer(Renderer* r);
     
+    
+    void addFrameTask(FrameTask* frameTask);
+    
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -382,6 +386,7 @@ private:
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
+    
   
 };
 
