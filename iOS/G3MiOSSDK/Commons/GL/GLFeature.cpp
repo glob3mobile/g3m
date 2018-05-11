@@ -75,6 +75,40 @@ void ColorRangeGLFeature::setValues(IFloatBuffer* values){
     _parameterValue->replaceBuffer(values);
 }
 
+DynamicColorRangeGLFeature::DynamicColorRangeGLFeature(const Color& colorAt0,
+                                         const Color& colorAt1,
+                                         IFloatBuffer* values,
+                                         IFloatBuffer* valuesNext, float time):
+GLFeature(NO_GROUP, GLF_POINT_SHAPE),
+_colorAt0(new GPUUniformValueVec4Float(colorAt0)),
+_colorAt1(new GPUUniformValueVec4Float(colorAt1)),
+_parameterValue(new GPUAttributeValueVec1Float(values,
+                                               1, 0, 0, false)),
+_parameterValueNext(new GPUAttributeValueVec1Float(valuesNext,
+                                               1, 0, 0, false)),
+_time(new GPUUniformValueFloat(time))
+{
+    _values->addUniformValue(COLORRANGE_COLOR_AT_0,
+                             _colorAt0,
+                             false);
+    _values->addUniformValue(COLORRANGE_COLOR_AT_1,
+                             _colorAt1,
+                             false);
+    
+    _values->addUniformValue(TIME,
+                             _time,
+                             false);
+    
+    _values->addAttributeValue(COLORRANGE_VALUE, _parameterValue, false);
+    _values->addAttributeValue(COLORRANGE_VALUE_NEXT, _parameterValue, false);
+}
+
+
+void DynamicColorRangeGLFeature::setValues(IFloatBuffer* values, IFloatBuffer* valuesNext){
+    _parameterValue->replaceBuffer(values);
+    _parameterValueNext->replaceBuffer(valuesNext);
+}
+
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        float billboardWidth,
                                        float billboardHeight,

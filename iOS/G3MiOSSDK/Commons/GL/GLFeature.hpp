@@ -139,6 +139,32 @@ public:
     void setValues(IFloatBuffer* values);
 };
 
+//////////////////////////
+
+class DynamicColorRangeGLFeature: public GLFeature {
+private:
+    ~DynamicColorRangeGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameterValue;
+    GPUAttributeValueVec1Float* _parameterValueNext;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+    GPUUniformValueFloat* _time;
+    
+public:
+    DynamicColorRangeGLFeature(const Color& colorAt0, const Color& colorAt1,
+                        IFloatBuffer* values, IFloatBuffer* valuesNext, float time);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values, IFloatBuffer* valuesNext);
+};
+
 /////////////////////////
 
 class ViewportExtentGLFeature: public GLFeature {

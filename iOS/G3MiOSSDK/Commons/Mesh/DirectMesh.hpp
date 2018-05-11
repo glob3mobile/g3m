@@ -39,7 +39,9 @@ public:
              float polygonOffsetUnits = 0,
              IFloatBuffer* valuesInColorRange = NULL,
              const Color* colorRangeAt0 = NULL,
-             const Color* colorRangeAt1 = NULL);
+             const Color* colorRangeAt1 = NULL,
+             IFloatBuffer* nextValuesInColorRange = NULL,
+             float currentTime = 0.0f);
 
   ~DirectMesh() {
 #ifdef JAVA_CODE

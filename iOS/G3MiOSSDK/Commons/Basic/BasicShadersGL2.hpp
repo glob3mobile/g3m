@@ -212,6 +212,33 @@ public:
 "}\n");
     this->add(sourcesTexturedMesh);
 
+    GPUProgramSources sourcesDynamicParametricColorRangeMesh("DynamicParametricColorRangeMesh",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"attribute float aColorValueNext; //Between 0..1\n" +
+"varying highp float colorValueAt0;\n" +
+"varying highp float colorValueAt1;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"colorValueAt0 = aColorValue;\n" +
+"colorValueAt1 = aColorValueNext;\n" +
+"}\n",
+ emptyString +  
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"varying highp float colorValueAt0;\n" +
+"varying highp float colorValueAt1;\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"void main() {\n" +
+"highp float currentValue = mix(colorValueAt0, colorValueAt1, uTime);\n" +
+"gl_FragColor = mix(uColorAt0, uColorAt1, colorValue);\n" +
+"}\n");
+    this->add(sourcesDynamicParametricColorRangeMesh);
+
     GPUProgramSources sourcesBillboard_TransformedTexCoor("Billboard_TransformedTexCoor",
  emptyString +  
 "attribute vec2 aTextureCoord;\n" +

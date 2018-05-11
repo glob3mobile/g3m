@@ -60,7 +60,9 @@ AbstractMesh::AbstractMesh(const int primitive,
                            float polygonOffsetUnits,
                            IFloatBuffer* valuesInColorRange,
                            const Color* colorRangeAt0,
-                           const Color* colorRangeAt1) :
+                           const Color* colorRangeAt1,
+                           IFloatBuffer* nextValuesInColorRange,
+                           float currentTime) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -85,7 +87,10 @@ _polygonOffsetFill(polygonOffsetFill),
 _valuesInColorRange(valuesInColorRange),
 _colorRangeAt0(colorRangeAt0),
 _colorRangeAt1(colorRangeAt1),
-_colorRangeGLFeature(NULL)
+_colorRangeGLFeature(NULL),
+_nextValuesInColorRange(nextValuesInColorRange),
+_currentTime(currentTime),
+_dynamicColorRangeGLFeature(NULL)
 {
     createGLState();
 }
@@ -191,10 +196,21 @@ void AbstractMesh::createGLState() {
         
     }
     else if (_valuesInColorRange != NULL && _colorRangeAt1 != NULL && _colorRangeAt0  != NULL){
-        _colorRangeGLFeature = new ColorRangeGLFeature(*_colorRangeAt0,
-                                                       *_colorRangeAt1,
-                                                       _valuesInColorRange);
-        _glState->addGLFeature(_colorRangeGLFeature, false);
+        
+        if (_nextValuesInColorRange == NULL){
+        
+            _colorRangeGLFeature = new ColorRangeGLFeature(*_colorRangeAt0,
+                                                           *_colorRangeAt1,
+                                                           _valuesInColorRange);
+            _glState->addGLFeature(_colorRangeGLFeature, false);
+        } else{
+            _dynamicColorRangeGLFeature = new DynamicColorRangeGLFeature(*_colorRangeAt0,
+                                                           *_colorRangeAt1,
+                                                           _valuesInColorRange,
+                                                             _nextValuesInColorRange,
+                                                             _currentTime);
+            _glState->addGLFeature(_dynamicColorRangeGLFeature, false);
+        }
     }
     
 }

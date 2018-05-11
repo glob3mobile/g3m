@@ -173,6 +173,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     if (name.compare("uColorAt1") == 0){
         return COLORRANGE_COLOR_AT_1;
     }
+    
+    if (name.compare("uTime") == 0){
+        return TIME;
+    }
 
   return UNRECOGNIZED_UNIFORM;
 }
@@ -209,6 +213,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
     
     if (name.compare("aColorValue") == 0) {
         return COLORRANGE_VALUE;
+    }
+    
+    if (name.compare("aColorValueNext") == 0) {
+        return COLORRANGE_VALUE_NEXT;
     }
 
   return UNRECOGNIZED_ATTRIBUTE;

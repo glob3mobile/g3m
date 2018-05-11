@@ -62,9 +62,14 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
     
     const bool isColorRange = GPUVariable::hasUniform(uniformsCode, COLORRANGE_COLOR_AT_0);
+    const bool isDynamic = GPUVariable::hasUniform(uniformsCode, TIME);
     
     if (isColorRange){
-        return compileProgramWithName(gl, "ParametricColorRangeMesh");
+        if (!isDynamic){
+            return compileProgramWithName(gl, "ParametricColorRangeMesh");
+        } else{
+            return compileProgramWithName(gl, "DynamicParametricColorRangeMesh");
+        }
     }
 
   if (isPoints){

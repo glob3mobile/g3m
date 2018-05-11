@@ -1869,6 +1869,8 @@
 		D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimedCacheTileLODTester.hpp; path = Commons/Rendererers/TimedCacheTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxFrameTimeTileLODTester.cpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.cpp; sourceTree = "<group>"; };
 		D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MaxFrameTimeTileLODTester.hpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D82A78CB20A5C98400A9BDAA /* DynamicParametricColorRangeMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRangeMesh.vsh; sourceTree = "<group>"; };
+		D82A78CC20A5C98D00A9BDAA /* DynamicParametricColorRangeMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRangeMesh.fsh; sourceTree = "<group>"; };
 		D82E2F151CEDEE5A0041B88D /* ColorLegendHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorLegendHelper.cpp; path = Commons/Basic/ColorLegendHelper.cpp; sourceTree = "<group>"; };
 		D82E2F161CEDEE5A0041B88D /* ColorLegendHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorLegendHelper.hpp; path = Commons/Basic/ColorLegendHelper.hpp; sourceTree = "<group>"; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
@@ -3127,8 +3129,10 @@
 				D8CE5D32173BB5D800C7AAE6 /* Default.vsh */,
 				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
 				D8DCF5F820A45C0F0015AC66 /* ParametricColorRangeMesh.fsh */,
+				D82A78CC20A5C98D00A9BDAA /* DynamicParametricColorRangeMesh.fsh */,
 				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
 				D8DCF5F720A45BE10015AC66 /* ParametricColorRangeMesh.vsh */,
+				D82A78CB20A5C98400A9BDAA /* DynamicParametricColorRangeMesh.vsh */,
 				D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */,
 				D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */,
 				CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */,
