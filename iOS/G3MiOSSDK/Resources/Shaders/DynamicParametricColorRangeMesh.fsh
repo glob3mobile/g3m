@@ -16,5 +16,5 @@ void main() {
     
     highp float currentValue = mix(colorValueAt0, colorValueAt1, uTime);
     
-  gl_FragColor = mix(uColorAt0, uColorAt1, colorValue);
+  gl_FragColor = mix(uColorAt0, uColorAt1, currentValue);
 }

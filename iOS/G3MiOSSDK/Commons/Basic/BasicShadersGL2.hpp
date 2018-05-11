@@ -235,7 +235,7 @@ public:
 "uniform highp float uTime; //Between 0..1\n" +
 "void main() {\n" +
 "highp float currentValue = mix(colorValueAt0, colorValueAt1, uTime);\n" +
-"gl_FragColor = mix(uColorAt0, uColorAt1, colorValue);\n" +
+"gl_FragColor = mix(uColorAt0, uColorAt1, currentValue);\n" +
 "}\n");
     this->add(sourcesDynamicParametricColorRangeMesh);
 
