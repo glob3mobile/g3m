@@ -84,7 +84,8 @@ _polygonOffsetUnits(polygonOffsetUnits),
 _polygonOffsetFill(polygonOffsetFill),
 _valuesInColorRange(valuesInColorRange),
 _colorRangeAt0(colorRangeAt0),
-_colorRangeAt1(colorRangeAt1)
+_colorRangeAt1(colorRangeAt1),
+_colorRangeGLFeature(NULL)
 {
     createGLState();
 }
@@ -190,9 +191,10 @@ void AbstractMesh::createGLState() {
         
     }
     else if (_valuesInColorRange != NULL && _colorRangeAt1 != NULL && _colorRangeAt0  != NULL){
-        _glState->addGLFeature(new ColorRangeGLFeature(*_colorRangeAt0,
+        _colorRangeGLFeature = new ColorRangeGLFeature(*_colorRangeAt0,
                                                        *_colorRangeAt1,
-                                                       _valuesInColorRange), false);
+                                                       _valuesInColorRange);
+        _glState->addGLFeature(_colorRangeGLFeature, false);
     }
     
 }

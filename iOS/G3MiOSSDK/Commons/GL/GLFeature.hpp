@@ -126,7 +126,7 @@ private:
 #endif
     }
     
-    GPUAttributeValueVec1Float* _parameteValue;
+    GPUAttributeValueVec1Float* _parameterValue;
     GPUUniformValueVec4Float* _colorAt0;
     GPUUniformValueVec4Float* _colorAt1;
     
@@ -135,6 +135,8 @@ public:
                         IFloatBuffer* values);
     
     void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values);
 };
 
 /////////////////////////

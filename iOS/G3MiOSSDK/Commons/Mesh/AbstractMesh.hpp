@@ -36,6 +36,7 @@ protected:
     IFloatBuffer*     _valuesInColorRange;
     const Color* _colorRangeAt0;
     const Color* _colorRangeAt1;
+    ColorRangeGLFeature* _colorRangeGLFeature;
     
     mutable BoundingVolume* _boundingVolume;
     BoundingVolume* computeBoundingVolume() const;
@@ -108,6 +109,12 @@ public:
                 double ndt = transparency[c];
                 colors->put(j,(float)ndt); //Suponiendo que sea un valor de alpha
             }
+        }
+    }
+    
+    void setColorRangeValues(IFloatBuffer* values){
+        if (_colorRangeGLFeature != NULL){
+            _colorRangeGLFeature->setValues(values);
         }
     }
     

@@ -244,6 +244,17 @@ public:
 #warning Chano adding stuff
     
   std::vector<Mesh*> getMeshes();
+    
+    void eraseMesh(Mesh* mesh){
+        
+        std::vector<Mesh*>::iterator it = _meshes.begin();
+        while(it != _meshes.end()){
+            if (*it == mesh){
+                _meshes.erase(it);
+                break;
+            }
+        }
+    }
 
 
 };

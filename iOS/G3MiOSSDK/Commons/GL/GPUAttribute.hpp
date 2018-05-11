@@ -244,7 +244,7 @@ class GPUAttributeValueVecFloat : public GPUAttributeValue {
 private:
   const IFloatBuffer* _buffer;
   const int _timestamp;
-  const long long _id;
+  long long _id;
 
 protected:
   ~GPUAttributeValueVecFloat() {
@@ -268,6 +268,15 @@ public:
 
     gl->vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
+    
+    void replaceBuffer(const IFloatBuffer* buffer){
+        if (_buffer != buffer){
+            delete _buffer;
+            _buffer = buffer;
+            _id = _buffer->getID();
+        }
+    }
+    
 
   bool isEquals(const GPUAttributeValue* v) const {
 
