@@ -154,7 +154,7 @@ private:
     GPUUniformValueVec4Float* _colorAt0;
     GPUUniformValueVec4Float* _colorAt1;
     
-    GPUUniformValueFloat* _time;
+    GPUUniformValueFloatMutable* _time;
     
 public:
     DynamicColorRangeGLFeature(const Color& colorAt0, const Color& colorAt1,
@@ -163,6 +163,7 @@ public:
     void applyOnGlobalGLState(GLGlobalState* state)  const {}
     
     void setValues(IFloatBuffer* values, IFloatBuffer* valuesNext);
+    void setTime(float time);
 };
 
 /////////////////////////

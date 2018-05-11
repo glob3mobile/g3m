@@ -219,23 +219,19 @@ public:
 "uniform float uPointSize;\n" +
 "attribute float aColorValue; //Between 0..1\n" +
 "attribute float aColorValueNext; //Between 0..1\n" +
-"varying highp float colorValueAt0;\n" +
-"varying highp float colorValueAt1;\n" +
+"varying highp float currentColorValue;\n" +
+"uniform highp float uTime; //Between 0..1\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
-"colorValueAt0 = aColorValue;\n" +
-"colorValueAt1 = aColorValueNext;\n" +
+"currentColorValue = mix(aColorValue, aColorValueNext, uTime);\n" +
 "}\n",
  emptyString +  
 "uniform lowp vec4 uColorAt0;\n" +
 "uniform lowp vec4 uColorAt1;\n" +
-"varying highp float colorValueAt0;\n" +
-"varying highp float colorValueAt1;\n" +
-"uniform highp float uTime; //Between 0..1\n" +
+"varying highp float currentColorValue;\n" +
 "void main() {\n" +
-"highp float currentValue = mix(colorValueAt0, colorValueAt1, uTime);\n" +
-"gl_FragColor = mix(uColorAt0, uColorAt1, currentValue);\n" +
+"gl_FragColor = mix(uColorAt0, uColorAt1, currentColorValue);\n" +
 "}\n");
     this->add(sourcesDynamicParametricColorRangeMesh);
 

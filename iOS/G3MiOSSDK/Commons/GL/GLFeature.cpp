@@ -86,7 +86,7 @@ _parameterValue(new GPUAttributeValueVec1Float(values,
                                                1, 0, 0, false)),
 _parameterValueNext(new GPUAttributeValueVec1Float(valuesNext,
                                                1, 0, 0, false)),
-_time(new GPUUniformValueFloat(time))
+_time(new GPUUniformValueFloatMutable(time))
 {
     _values->addUniformValue(COLORRANGE_COLOR_AT_0,
                              _colorAt0,
@@ -100,13 +100,17 @@ _time(new GPUUniformValueFloat(time))
                              false);
     
     _values->addAttributeValue(COLORRANGE_VALUE, _parameterValue, false);
-    _values->addAttributeValue(COLORRANGE_VALUE_NEXT, _parameterValue, false);
+    _values->addAttributeValue(COLORRANGE_VALUE_NEXT, _parameterValueNext, false);
 }
 
 
 void DynamicColorRangeGLFeature::setValues(IFloatBuffer* values, IFloatBuffer* valuesNext){
     _parameterValue->replaceBuffer(values);
     _parameterValueNext->replaceBuffer(valuesNext);
+}
+
+void DynamicColorRangeGLFeature::setTime(float time){
+    _time->changeValue(time);
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,

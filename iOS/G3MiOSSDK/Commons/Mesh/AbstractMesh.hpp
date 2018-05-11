@@ -123,6 +123,13 @@ public:
         }
     }
     
+    void setTime(float time){
+        if (_currentTime != time){
+            _currentTime = time;
+            _dynamicColorRangeGLFeature->setTime(time);
+        }
+    }
+    
     
 };
 
