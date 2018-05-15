@@ -35,7 +35,12 @@ public:
               IFloatBuffer* normals = NULL,
               bool polygonOffsetFill = false,
               float polygonOffsetFactor = 0,
-              float polygonOffsetUnits = 0);
+              float polygonOffsetUnits = 0,
+              IFloatBuffer* valuesInColorRange = NULL,
+              const Color* colorRangeAt0 = NULL,
+              const Color* colorRangeAt1 = NULL,
+              IFloatBuffer* nextValuesInColorRange = NULL,
+              float currentTime = 0.0f);
 
   ~IndexedMesh();
   

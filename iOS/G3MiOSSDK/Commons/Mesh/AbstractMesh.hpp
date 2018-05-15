@@ -123,6 +123,12 @@ public:
         }
     }
     
+    void setDynamicColorRangeValues(IFloatBuffer* values, IFloatBuffer* valuesNext){
+        if (_dynamicColorRangeGLFeature != NULL){
+            _dynamicColorRangeGLFeature->setValues(values, valuesNext);
+        }
+    }
+    
     void setTime(float time){
         if (_currentTime != time){
             _currentTime = time;

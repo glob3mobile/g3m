@@ -491,7 +491,6 @@ public:
   }
   bool isEquals(const GPUUniformValue* v) const {
     GPUUniformValueFloat *v2 = (GPUUniformValueFloat *)v;
-      if (_value != v2->_value) printf("GPUUniformValueFloat changed value\n");
     return _value == v2->_value;
   }
 
