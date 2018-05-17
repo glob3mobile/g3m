@@ -41,9 +41,44 @@ public:
     
 };
 
+class CityGMLRenderer_Quadrant_Building{
+public:
+    CityGMLBuilding* _building;
+    short _firstVertexInMesh;
+    short _lastVertexInMesh;
+    const Sphere* _boundingSphere;
+};
+
+class CityGMLRenderer_Quadrant{
+public:
+    
+    Mesh* _mesh;
+    const int _x, _y;
+    const Vector3D _center;
+    std::vector<CityGMLRenderer_Quadrant_Building> _buildings;
+    
+    CityGMLRenderer_Quadrant(int x, int y, const Vector3D& center):
+    _x(x), _y(y), _center(center), _mesh(NULL){}
+    
+    std::string getMeshFileName(){
+        IStringBuilder* sb = IStringBuilder::newStringBuilder();
+        sb->addString("Mesh_");
+        sb->addInt(_x);
+        sb->addString("_");
+        sb->addInt(_y);
+        sb->addString(".json");
+        std::string x = sb->getString();
+        delete sb;
+        return x;
+    }
+    
+};
+
 class CityGMLRenderer: public DefaultRenderer{
     
     std::vector<CityGMLBuilding*> _buildings;
+    
+    std::vector<CityGMLRenderer_Quadrant*> _quadrants;
     
     ElevationData* _elevationData;
     MeshRenderer* _meshRenderer;
@@ -200,6 +235,12 @@ public:
     _vectorLayer(vectorLayer),
     _touchListener(NULL){}
     
+    void addQuadrants(std::vector<CityGMLRenderer_Quadrant*> quadrants){
+        for (size_t i = 0; i < quadrants.size(); ++i){
+            _quadrants.push_back(quadrants[i]);
+        }
+    }
+    
     void setElevationData(ElevationData* ed){
         _elevationData = ed;
     }
@@ -215,6 +256,8 @@ public:
     const std::vector<CityGMLBuilding*>* getBuildings() const{
         return &_buildings;
     }
+    
+    void addBuildingsFromFolder(const std::string* path);
     
     void addBuildingsFromURL(const URL& url,
                              bool fixBuildingsOnGround,

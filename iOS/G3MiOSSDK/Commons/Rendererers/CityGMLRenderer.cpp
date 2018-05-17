@@ -262,3 +262,10 @@ void CityGMLRenderer::setBuildings(const std::vector<CityGMLBuilding*>& building
     _buildings = buildings;
 }
 
+
+void CityGMLRenderer::addBuildingsFromFolder(const std::string* path){
+    
+    
+    
+}
+
