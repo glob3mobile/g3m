@@ -17,6 +17,7 @@
     <string name="menu_holes">Holes</string>
     <string name="menu_method">Method</string>
     <string name="menu_apply">Apply settings</string>
+    <string name="menu_ditch">Ditch</string>
 
     <string-array name="menu_color_spinner">
         <item> Random Colors </item>

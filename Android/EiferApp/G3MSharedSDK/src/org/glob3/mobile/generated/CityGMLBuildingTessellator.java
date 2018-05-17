@@ -247,7 +247,7 @@ public class CityGMLBuildingTessellator
       ILogger.instance().logError("GEOCOORDS IS 0");
     }
     else {
-      ILogger.instance().logError("ALL SEEMS GOOD");
+      //ILogger.instance().logError("ALL SEEMS GOOD");
     }
   
     double dLat = b1._surfaces.get(0)._geodeticCoordinates.get(0)._latitude._degrees - b2._surfaces.get(0)._geodeticCoordinates.get(0)._latitude._degrees;

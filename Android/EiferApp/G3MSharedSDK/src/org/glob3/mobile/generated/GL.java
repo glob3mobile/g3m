@@ -125,6 +125,10 @@ public class GL
     //    _currentState = GLGlobalState::newDefault(); //Init after constants
   }
 
+  public final void clearDepthBuffer() {
+    _nativeGL.clear(GLBufferType.depthBuffer());
+  }
+
   public final void clearScreen(Color color)
   {
     //  if (_verbose) {

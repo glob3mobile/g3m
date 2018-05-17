@@ -44,10 +44,30 @@ void PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRen
       Geodetic3D g2 = Geodetic3D::fromDegrees(lat2, lon2, h2 + o2 + heightOffset);
 
       //Tubes
-      Cylinder *c = new Cylinder(p->toCartesian(g), p->toCartesian(g2), 0.5);
+      double eDiam = 5;
+      Cylinder *c = new Cylinder(p->toCartesian(g), p->toCartesian(g2), eDiam/10);
       
-        
-      mr->addMesh((*c).createMesh(Color::fromRGBA255(255, 0, 0, 32), 5, p));
+      if (Cylinder::getDitchEnabled()){
+          Ditch *ditch = new Ditch(Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                                   Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                                   eDiam / 5);
+              
+          Mesh* pipeMesh = (*c).createMesh(Color::fromRGBA255(255,0,0,32), 5, p);
+          Mesh* ditchMesh = (*ditch).createMesh(Color::black(), 5, p, ed);
+          delete ditch;
+              
+          CompositeMesh* cm = new CompositeMesh();
+              
+          cm->addMesh(ditchMesh);
+          cm->addMesh(pipeMesh);
+              
+          mr->addMesh(cm);
+      }
+      else
+      {
+          mr->addMesh((*c).createMesh(Color::fromRGBA255(255, 0, 0, 32), 5, p));
+      }
+      
       cylinderInfo.push_back(Cylinder::CylinderMeshInfo((*c)._info));
       cylinders.push_back(c);
       
@@ -90,21 +110,30 @@ void PipesModel::insertNewCylinder(Geodetic3D &start,Geodetic3D &end, const Plan
         red = 0; green = 255;
     }
     
-    Ditch *ditch = new Ditch(Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
-                             Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
-                             eDiam / 5);
+    if (Cylinder::getDitchEnabled()){
+        Ditch *ditch = new Ditch(Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                                 Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                                 eDiam / 5);
     
-    Mesh* pipeMesh = (*c).createMesh(Color::fromRGBA255(red,green,0,32), 5, p);
-    Mesh* ditchMesh = (*ditch).createMesh(Color::black(), 5, p, ed);
-    delete ditch;
+        Mesh* pipeMesh = (*c).createMesh(Color::fromRGBA255(red,green,0,32), 5, p);
+        Mesh* ditchMesh = (*ditch).createMesh(Color::black(), 5, p, ed);
+        delete ditch;
     
-    CompositeMesh* cm = new CompositeMesh();
+        /*CompositeMesh* cm = new CompositeMesh();
     
-    cm->addMesh(ditchMesh);
-    cm->addMesh(pipeMesh);
+        cm->addMesh(ditchMesh);
+        cm->addMesh(pipeMesh);
     
-    mr->addMesh(cm);
-    
+        mr->addMesh(cm);*/
+
+        //This was changed because of weird behaviour of MeshRenderer->clearMeshes() when CompositeMesh introduced.
+        mr->addMesh(ditchMesh);
+        mr->addMesh(pipeMesh);
+    }
+    else {
+        mr->addMesh((*c).createMesh(Color::fromRGBA255(red,green,0,32), 5, p));
+    }
+
     cylinderInfo.push_back(Cylinder::CylinderMeshInfo((*c)._info));
     cylinders.push_back(c);
     

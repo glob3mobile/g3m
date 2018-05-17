@@ -340,10 +340,12 @@ public class MainActivity extends AppCompatActivity {
         Spinner mSpinner = vi.findViewById(R.id.spinnerMethod);
         Spinner bSpinner = vi.findViewById(R.id.spinnerColors);
         SeekBar alphaSeekbar = vi.findViewById(R.id.alphaMethodBar);
+        SeekBar ditchSeekbar = vi.findViewById(R.id.ditchMethodBar);
         SeekBar modeSeekbar = vi.findViewById(R.id.modeSeekbar);
         TextView position = vi.findViewById(R.id.textView14);
 
         int alphaValue = (fragment.isHole()) ? 1:0;
+        int ditchValue = (fragment.isDitch()) ? 1:0;
 
         modeSeekbar.setProgress(fragment.getMapMode());
         bSpinner.setSelection(fragment.getBuildingColor());
@@ -354,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
         cSwitch.setChecked(fragment.getCorrection());
         mSpinner.setSelection(fragment.getAlphaMethod());
         alphaSeekbar.setProgress(alphaValue);
+        ditchSeekbar.setProgress(ditchValue);
         position.setText(generateMessage());
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -370,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
         Spinner mSpinner = dialog.findViewById(R.id.spinnerMethod);
         Spinner bSpinner = dialog.findViewById(R.id.spinnerColors);
         SeekBar alphaSeekbar = dialog.findViewById(R.id.alphaMethodBar);
+        SeekBar ditchSeekbar = dialog.findViewById(R.id.ditchMethodBar);
         SeekBar modeSeekbar = dialog.findViewById(R.id.modeSeekbar);
 
         FragmentManager fmanager = this.getSupportFragmentManager();
@@ -382,7 +386,9 @@ public class MainActivity extends AppCompatActivity {
         fragment.setBuildingColor(bSpinner.getSelectedItemPosition());
         fragment.setCorrection(cSwitch.isChecked());
         boolean isHole = (alphaSeekbar.getProgress() == 1);
+        boolean isDitch = (ditchSeekbar.getProgress() == 1);
         fragment.setHole(isHole);
+        fragment.setDitch(isDitch);
 
         dialog.dismiss();
         dialog = null;

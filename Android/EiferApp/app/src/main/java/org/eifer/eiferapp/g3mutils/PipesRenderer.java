@@ -36,7 +36,7 @@ public class PipesRenderer extends DefaultRenderer {
     private boolean _holeMode;
     private GlobeFragment gf;
 
-    public PipesRenderer(MeshRenderer meshRenderer, GlobeFragment globeFragment){
+    public PipesRenderer(MeshRenderer meshRenderer, GlobeFragment globeFragment) {
         _meshRenderer = meshRenderer;
         gf = globeFragment;
 

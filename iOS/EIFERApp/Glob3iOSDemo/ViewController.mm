@@ -638,6 +638,26 @@ public:
     
 };
 
+class changeDitchTask : public GTask {
+    
+    ViewController *vc;
+    bool enable;
+    
+public:
+    changeDitchTask(ViewController *viewController, bool isEnabled):
+    vc(viewController),
+    enable(isEnabled){}
+    
+    void run(const G3MContext *context){
+        vc.pipeMeshRenderer->clearMeshes();
+        [vc addPipeMeshes];
+    }
+    
+    ~changeDitchTask(){
+        vc = nil;
+    }
+};
+
 class changeFirstEDPTask : public GTask{
     
     ViewController *vc;
@@ -1213,7 +1233,7 @@ class AltitudeFixerLM: public ILocationModifier{
   buildings = true;
   correction = false;
   mode = 0;
-  alpha = 0;
+  alpha = 1; //Now it is not Alpha/Hole, but Alpha/Ditch. Ditch gains preference ...
   method = 1;
   color = 0;
   
@@ -1470,6 +1490,8 @@ class AltitudeFixerLM: public ILocationModifier{
     UtilityNetworkParser::initialize([G3MWidget widget]->getG3MContext(),elevationData,pipeMeshRenderer,-4.0);
     URL url = URL("file:///jochen_underground.gml");
     UtilityNetworkParser::parseFromURL(url);
+    
+    #warning Si hiciera falta colocar las otras tuberias, irian aqui ....
 }
 
 -(void) onProgress {
@@ -1657,6 +1679,19 @@ class AltitudeFixerLM: public ILocationModifier{
         Cylinder::setDepthEnabled(enable);
         [G3MWidget widget]->getG3MContext()->getThreadUtils()
             ->invokeInRendererThread(new changeHoleTask(self,enable),true);
+    }
+    alpha = (enable)? 1:0;
+}
+
+- (bool) isDitch{
+    return Cylinder::getDitchEnabled();
+}
+
+- (void) setDitch:(bool) enable{
+    if (enable != Cylinder::getDitchEnabled()){
+        Cylinder::setDitchEnabled(enable);
+        [G3MWidget widget]->getG3MContext()->getThreadUtils()
+        ->invokeInRendererThread(new changeDitchTask(self,enable),true);
     }
     alpha = (enable)? 1:0;
 }

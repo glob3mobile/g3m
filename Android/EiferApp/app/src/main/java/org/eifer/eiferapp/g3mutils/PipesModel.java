@@ -7,13 +7,16 @@ package org.eifer.eiferapp.g3mutils;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.CompositeMesh;
 import org.glob3.mobile.generated.Cylinder;
+import org.glob3.mobile.generated.Ditch;
 import org.glob3.mobile.generated.ElevationData;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TimeInterval;
@@ -25,6 +28,7 @@ public class PipesModel {
     public static ArrayList<Cylinder> cylinders = new ArrayList<>();
     public static ArrayList<Cylinder.CylinderMeshInfo> cylinderInfo = new ArrayList<>();
     public static int loadedFiles = 0;
+
 
     public static void addMeshes(final String file,
                                  final Planet p, final MeshRenderer mr, final ElevationData ed,
@@ -76,9 +80,29 @@ public class PipesModel {
                 Geodetic3D g2 = Geodetic3D.fromDegrees(lat2, lon2, h2 + o2 + heightOffset);
 
                 //Tubes
-                Cylinder c= new Cylinder(p.toCartesian(g), p.toCartesian(g2), 0.5);
+                double eDiam = 5;
+                Cylinder c= new Cylinder(p.toCartesian(g), p.toCartesian(g2), eDiam / 10);
 
-                mr.addMesh(c.createMesh(Color.fromRGBA255(255, 0, 0, 32), 5, p));
+                if (Cylinder.isDitchEnabled()){
+                    Ditch ditch = new Ditch(new Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                            new Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                            eDiam / 5);
+
+                    Mesh pipeMesh = c.createMesh(Color.fromRGBA255(255,0,0,32), 5, p);
+                    Mesh ditchMesh = ditch.createMesh(Color.black(), 5, p, ed);
+                    //delete ditch;
+
+                    CompositeMesh cm = new CompositeMesh();
+
+                    cm.addMesh(ditchMesh);
+                    cm.addMesh(pipeMesh);
+
+                    mr.addMesh(cm);
+                }
+                else {
+                    mr.addMesh(c.createMesh(Color.fromRGBA255(255,0,0,32), 5, p));
+                }
+
                 cylinderInfo.add(new Cylinder.CylinderMeshInfo(c._info));
                 cylinders.add(c);
 
@@ -114,19 +138,42 @@ public class PipesModel {
         c._info.setID(theId);
 
         Color pipeColor;
+        int red; int green;
         if (c._info.cylinderType.contentEquals("naturalGas")){
-            pipeColor = Color.fromRGBA255(255, 0, 0, 32);
+            red = 255; green = 0;
+            //pipeColor = Color.fromRGBA255(255, 0, 0, 32);
         }
         else if (c._info.cylinderType.contentEquals("High power")){
-            pipeColor = Color.fromRGBA255(255,255,0,32);
+            red = 255; green = 255;
+            //pipeColor = Color.fromRGBA255(255,255,0,32);
         }
         else {
-            pipeColor = Color.fromRGBA255(0,255,0,32);
+            red = 0; green = 255;
+            //pipeColor = Color.fromRGBA255(0,255,0,32);
         }
 
-        mr.addMesh(c.createMesh(pipeColor, 5, p));
+        if (Cylinder.isDitchEnabled()){
+            Ditch ditch = new Ditch(new Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                    new Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                    eDiam / 5);
+
+            Mesh pipeMesh = c.createMesh(Color.fromRGBA255(red,green,0,32), 5, p);
+            Mesh ditchMesh = ditch.createMesh(Color.black(), 5, p, ed);
+            //delete ditch;
+
+            CompositeMesh cm = new CompositeMesh();
+
+            cm.addMesh(ditchMesh);
+            cm.addMesh(pipeMesh);
+
+            mr.addMesh(cm);
+        }
+        else {
+            mr.addMesh(c.createMesh(Color.fromRGBA255(red,green,0,32), 5, p));
+        }
         cylinderInfo.add(new Cylinder.CylinderMeshInfo(c._info));
         cylinders.add(c);
+        /**/
     }
 
     public static void reset(){

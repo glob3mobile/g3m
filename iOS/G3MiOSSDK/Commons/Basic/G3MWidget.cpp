@@ -349,6 +349,13 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
           handled = _hudRenderer->onTouchEvent(&ec, touchEvent);
         }
       }
+      
+//      Chano added this event.
+      if (_secondPassRenderer != NULL ){
+          if (!handled && _secondPassRenderer->isEnable()){
+              handled = _secondPassRenderer->onTouchEvent(&ec, touchEvent);
+          }
+      }
 
       if (!handled && _mainRenderer->isEnable()) {
         handled = _mainRenderer->onTouchEvent(&ec, touchEvent);

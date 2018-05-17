@@ -143,6 +143,11 @@ public class CompositeMesh extends Mesh
       child.showNormals(v);
     }
   }
+
+  // Unfortunately Chano was here !
+  public int size(){
+    return _children.size();
+  }
   
   public Mesh getChildAtIndex(int i){
 	    return _children.get(i);

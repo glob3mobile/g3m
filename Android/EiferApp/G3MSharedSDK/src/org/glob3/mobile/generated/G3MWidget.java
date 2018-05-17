@@ -1,4 +1,8 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;
+
+import static org.glob3.mobile.generated.RenderState_Type.RENDER_BUSY;
+import static org.glob3.mobile.generated.RenderState_Type.RENDER_ERROR;
+
 public class G3MWidget implements ChangedRendererInfoListener
 {
 
@@ -350,6 +354,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     _mainRenderer.onPause(_context);
     _busyRenderer.onPause(_context);
     _errorRenderer.onPause(_context);
+    _secondPassRenderer.onPause(_context);
     if (_hudRenderer != null)
     {
       _hudRenderer.onPause(_context);
@@ -370,6 +375,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     _mainRenderer.onResume(_context);
     _busyRenderer.onResume(_context);
     _errorRenderer.onResume(_context);
+    _secondPassRenderer.onResume(_context);
     if (_hudRenderer != null)
     {
       _hudRenderer.onResume(_context);
@@ -389,6 +395,7 @@ public class G3MWidget implements ChangedRendererInfoListener
     _mainRenderer.onDestroy(_context);
     _busyRenderer.onDestroy(_context);
     _errorRenderer.onDestroy(_context);
+    _secondPassRenderer.onDestroy(_context);
     if (_hudRenderer != null)
     {
       _hudRenderer.onDestroy(_context);
@@ -721,6 +728,8 @@ public class G3MWidget implements ChangedRendererInfoListener
   private GL _gl;
   private final Planet _planet;
 
+  private Renderer _secondPassRenderer;
+
   private CameraRenderer _cameraRenderer;
   private Renderer _mainRenderer;
   private ProtoRenderer _busyRenderer;
@@ -850,6 +859,7 @@ public class G3MWidget implements ChangedRendererInfoListener
      _rightEyeCam = null;
      _auxCam = null;
      _interOcularDistance = 200.0;
+    _secondPassRenderer = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -900,6 +910,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     ///#endif
   }
 
+  public void setSecondPassRenderer(Renderer r){
+    _secondPassRenderer = r;
+    _secondPassRenderer.initialize(_context);
+  }
+
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     final RenderState_Type renderStateType = _rendererState._type;
@@ -914,6 +929,13 @@ public class G3MWidget implements ChangedRendererInfoListener
           if (_hudRenderer.isEnable())
           {
             handled = _hudRenderer.onTouchEvent(ec, touchEvent);
+          }
+        }
+
+        //Unfortunately Chano was here. Hope this is the place ...
+        if (_secondPassRenderer != null ){
+          if (!handled && _secondPassRenderer.isEnable()){
+            handled = _secondPassRenderer.onTouchEvent(ec, touchEvent);
           }
         }
   
@@ -961,11 +983,11 @@ public class G3MWidget implements ChangedRendererInfoListener
     boolean busyFlag = false;
   
     RenderState cameraRendererRenderState = _cameraRenderer.getRenderState(_renderContext);
-    if (cameraRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+    if (cameraRendererRenderState._type == RENDER_ERROR)
     {
       return cameraRendererRenderState;
     }
-    else if (cameraRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+    else if (cameraRendererRenderState._type == RENDER_BUSY)
     {
       busyFlag = true;
     }
@@ -973,22 +995,32 @@ public class G3MWidget implements ChangedRendererInfoListener
     if (_hudRenderer != null)
     {
       RenderState hudRendererRenderState = _hudRenderer.getRenderState(_renderContext);
-      if (hudRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+      if (hudRendererRenderState._type == RENDER_ERROR)
       {
         return hudRendererRenderState;
       }
-      else if (hudRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+      else if (hudRendererRenderState._type == RENDER_BUSY)
       {
         busyFlag = true;
       }
     }
-  
+
+    if (_secondPassRenderer != null) {
+      RenderState s = _secondPassRenderer.getRenderState(_renderContext);
+      if (s._type == RENDER_ERROR) {
+        return s;
+      }
+      else if (s._type == RENDER_BUSY) {
+        busyFlag = true;
+      }
+    }
+
     RenderState mainRendererRenderState = _mainRenderer.getRenderState(_renderContext);
-    if (mainRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+    if (mainRendererRenderState._type == RENDER_ERROR)
     {
       return mainRendererRenderState;
     }
-    else if (mainRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+    else if (mainRendererRenderState._type == RENDER_BUSY)
     {
       busyFlag = true;
     }
@@ -1028,6 +1060,13 @@ public class G3MWidget implements ChangedRendererInfoListener
         if (_mainRenderer.isEnable())
         {
           _mainRenderer.render(_renderContext, _rootState);
+        }
+
+        // TODO  JM AT WORK
+        //SECOND PASS
+        if (_secondPassRenderer != null){
+          _gl.clearDepthBuffer();
+          _secondPassRenderer.render(_renderContext, _rootState);
         }
   
         break;

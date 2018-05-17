@@ -131,7 +131,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/menu_alpha" />
+                android:text="@string/menu_alpha"
+                android:visibility="gone" />
 
             <SeekBar
                 android:id="@+id/alphaMethodBar"
@@ -140,7 +141,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:max="1"
-                android:progress="1" />
+                android:progress="1"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -148,7 +150,44 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/menu_holes" />
+                android:text="@string/menu_holes"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="5px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView104"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/menu_alpha"
+                />
+
+            <SeekBar
+                android:id="@+id/ditchMethodBar"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:max="1"
+                android:progress="1"
+                />
+
+            <TextView
+                android:id="@+id/textView105"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/menu_ditch"
+                />
 
         </LinearLayout>
 

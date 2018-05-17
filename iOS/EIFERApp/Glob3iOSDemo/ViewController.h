@@ -132,6 +132,7 @@ class CompositeElevationDataProvider;
 - (void) setWidgetAnimation:(bool)active;
 - (void) setAlphaMethod:(int) alphaMethod;
 - (void) setHole:(bool) enable;
+- (void) setDitch:(bool) enable;
 
 - (void) changeHole:(Geodetic3D) position;
 - (void) addPipeMeshes;

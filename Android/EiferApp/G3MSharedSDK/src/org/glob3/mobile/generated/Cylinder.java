@@ -99,6 +99,15 @@ public class Cylinder {
 	private static double PROXIMITY_VALUE = 25.0;
 	private static int DISTANCE_METHOD = 2;
 	private static boolean DEPTH_ENABLED = false;
+	private static boolean isDitch = true;
+
+	public static boolean isDitchEnabled(){
+		return isDitch;
+	}
+
+	public static void setDitchEnabled(boolean enable){
+		isDitch = enable;
+	}
 	
 	public Cylinder(final Vector3D start, final Vector3D end, final double radius){
 		_start = start;
@@ -260,7 +269,9 @@ public class Cylinder {
 	        IFloatBuffer colors = im.getColorsFloatBuffer();
 	        for (int j=3, c=0; j<colors.size(); j=j+4, c++){
 	            //double ndt = (dt.get(c) > 100)? 0: 1 - ((dt.get(c) / maxDt));
-	        	double ndt = getAlpha(dt.get(c),maxDt,true);
+
+
+				double ndt = (isDitchEnabled())?1.0:getAlpha(dt.get(c),maxDt,true);
 	            colors.put(j,(float)ndt); //Suponiendo que sea un valor de alpha
 	        }
 	    }
@@ -277,8 +288,21 @@ public class Cylinder {
 		ArrayList<Mesh> theMeshes = mr.getMeshes();
 	    ArrayList<Mesh> theVisibleMeshes = new ArrayList<Mesh>();
 	    for (int i=0;i<theMeshes.size();i++){
+
+			/*
 	        CompositeMesh cm = (CompositeMesh) theMeshes.get(i);
-	        IndexedMesh im = (IndexedMesh) cm.getChildAtIndex(0);
+			IndexedMesh im = (IndexedMesh) cm.getChildAtIndex(0);
+			//Original
+			*/
+
+
+			CompositeMesh cm = (CompositeMesh) theMeshes.get(i);
+			if (cm.size() > 1)
+				cm = (CompositeMesh) cm.getChildAtIndex(1);
+
+			IndexedMesh im = (IndexedMesh) cm.getChildAtIndex(0);
+
+
 	        // Pregunta: ¿el cash devuelve un puntero diferente a la misma dirección de memoria o otra dirección de memoria?
 	        cylInfo.get(i)._cylId = (int) i;
 	        CylinderMeshInfo info = cylInfo.get(i);

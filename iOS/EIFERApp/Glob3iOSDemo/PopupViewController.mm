@@ -135,8 +135,10 @@
     }
     
     if (alphaRow != (int)self.alphaBar.selectedSegmentIndex) {
-        bool isHole = ((int)self.alphaBar.selectedSegmentIndex == 1);
-        [vC setHole:isHole];
+        //bool isHole = ((int)self.alphaBar.selectedSegmentIndex == 1);
+        //[vC setHole:isHole];
+        bool isDitch = ((int)self.alphaBar.selectedSegmentIndex == 1);
+        [vC setDitch:isDitch];
     }
     
     if (methodRow != prevMethod){

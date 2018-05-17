@@ -49,6 +49,7 @@ import org.glob3.mobile.generated.CityGMLBuildingTessellator;
 import org.glob3.mobile.generated.CityGMLRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeElevationDataProvider;
+import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.Cylinder;
 import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.ElevationData;
@@ -227,7 +228,7 @@ public class GlobeFragment extends Fragment{
                 });
             }
         });
-        builder.addRenderer(pipesRenderer);
+        //builder.addRenderer(pipesRenderer); //TODO BECAUSE OF DITCH
 
         holeRenderer = new MeshRenderer();
         builder.addRenderer(holeRenderer);
@@ -254,7 +255,7 @@ public class GlobeFragment extends Fragment{
                 null);
 
         cityGMLRenderer.setTouchListener(new MyCityGMLBuildingTouchedListener(this));
-        builder.addRenderer(cityGMLRenderer);
+        //builder.addRenderer(cityGMLRenderer); //TODO BECAUSE OF DITCH
 
         camConstrainer = new MyEDCamConstrainer(null,"",getActivity()); //Wait for ED to arrive
         builder.addCameraConstraint(camConstrainer);
@@ -262,6 +263,10 @@ public class GlobeFragment extends Fragment{
 
         widget = builder.createWidget();
 
+        CompositeRenderer cr = new CompositeRenderer();
+        cr.addRenderer(pipesRenderer);
+        cr.addRenderer(cityGMLRenderer);
+        widget.getG3MWidget().setSecondPassRenderer(cr);
 
         RelativeLayout _placeHolder = (RelativeLayout) this.getActivity().findViewById(R.id.g3mWidgetHolderShort);
         _placeHolder.addView(widget);
@@ -418,10 +423,10 @@ public class GlobeFragment extends Fragment{
         UtilityNetworkParser.parseFromURL(new URL("file:///jochen_underground.gml"));
 
 
-        PipesModel.addMeshes("file:///pipesCoords.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, elevData, -4.0,
-                widget.getG3MContext().getDownloader());
-        PipesModel.addMeshes("file:///pipesCoordsMetzt.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, null, -4.0,
-                widget.getG3MContext().getDownloader());
+        //PipesModel.addMeshes("file:///pipesCoords.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, elevData, -4.0,
+                //widget.getG3MContext().getDownloader());
+        //PipesModel.addMeshes("file:///pipesCoordsMetzt.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, null, -4.0,
+                //widget.getG3MContext().getDownloader());
 
     }
 
@@ -546,7 +551,8 @@ public class GlobeFragment extends Fragment{
     }
 
     public boolean arePipesEnabled(){
-        return pipeMeshRenderer.isEnable();
+        //return pipeMeshRenderer.isEnable();
+        return pipesRenderer.isEnable();
     }
 
     public void setBuildingsEnabled(boolean enabled){
@@ -555,7 +561,8 @@ public class GlobeFragment extends Fragment{
     }
 
     public void setPipesEnabled(boolean enabled){
-        pipeMeshRenderer.setEnable(enabled);
+        //pipeMeshRenderer.setEnable(enabled);
+        pipesRenderer.setEnable(enabled);
     }
 
     public int getAlphaMethod(){
@@ -585,6 +592,25 @@ public class GlobeFragment extends Fragment{
                     PipesModel.reset();
                     addPipeMeshes();
 
+                }
+
+            },true);
+        }
+    }
+
+    public boolean isDitch(){
+        return Cylinder.isDitchEnabled();
+    }
+
+    public void setDitch(boolean enable){
+        if (enable != Cylinder.isDitchEnabled()){
+            Cylinder.setDitchEnabled(enable);
+            widget.getG3MContext().getThreadUtils().invokeInRendererThread(new GTask(){
+                @Override
+                public void run(G3MContext context){
+                    pipeMeshRenderer.clearMeshes();
+                    PipesModel.reset();
+                    addPipeMeshes();
                 }
 
             },true);

@@ -27,6 +27,7 @@ class Cylinder{
 private:
     static int DISTANCE_METHOD;
     static bool DEPTH_ENABLED;
+    static bool DITCH_ENABLED;
 public:
     
     
@@ -139,6 +140,8 @@ public:
     static int getDistanceMethod();
     static void setDepthEnabled(bool enabled);
     static bool getDepthEnabled();
+    static void setDitchEnabled(bool enabled);
+    static bool getDitchEnabled();
     
 private:
     

@@ -27,6 +27,7 @@
 
 int Cylinder::DISTANCE_METHOD = 2;
 bool Cylinder::DEPTH_ENABLED = false;
+bool Cylinder::DITCH_ENABLED = true;
 
 void Cylinder::setDistanceMethod(int method){
     Cylinder::DISTANCE_METHOD = method;
@@ -41,6 +42,14 @@ void Cylinder::setDepthEnabled(bool enabled){
 }
 bool Cylinder::getDepthEnabled(){
     return Cylinder::DEPTH_ENABLED;
+}
+
+bool Cylinder::getDitchEnabled(){
+    return Cylinder::DITCH_ENABLED;
+}
+
+void Cylinder::setDitchEnabled(bool enabled){
+    Cylinder::DITCH_ENABLED = enabled;
 }
 
 Mesh* Cylinder::createMesh(const Color& color, const int nSegments, const Planet *planet){
@@ -164,10 +173,7 @@ void Cylinder::createSphere(std::vector<Vector3D*> &vs){
     for (size_t i = 0; i < vs.size(); i++) {
         delete vs.at(i);
     }
-    vs.clear();
-    
-    
-    
+    vs.clear(); 
 }
 
 #warning Chano adding stuff
@@ -177,11 +183,20 @@ std::vector<Mesh *> Cylinder::visibleMeshes(MeshRenderer *mr, const Camera *came
                                             const Planet *planet,
                                             std::vector<CylinderMeshInfo> *cylInfo,
                                             std::vector<CylinderMeshInfo> &visibleInfo){
-    std::vector<Mesh *> theMeshes = mr->getMeshes();
+    int ori = 0, inc = 1;
+    if (getDitchEnabled()){
+        ori = 1, inc = 2;
+    }
+    std::vector<Mesh *> theMeshes = mr->getMeshes(ori,inc);
     std::vector<Mesh *> theVisibleMeshes;
+    
+    
     for (size_t i=0;i<theMeshes.size();i++){
+        IndexedMesh *im = NULL;
+        im = (IndexedMesh *) theMeshes[i];
+        
         //        CompositeMesh *cm = (CompositeMesh *) theMeshes[i];
-        IndexedMesh *im = (IndexedMesh *) theMeshes[i]; // cm->getChildAtIndex(0);
+       // IndexedMesh *im = (IndexedMesh *) theMeshes[i]; // cm->getChildAtIndex(0);
         // Pregunta: ¿el cash devuelve un puntero diferente a la misma dirección de memoria o otra dirección de memoria?
         cylInfo->at(i)._cylId = (int) i;
         CylinderMeshInfo info = cylInfo->at(i);
@@ -253,7 +268,7 @@ std::string Cylinder::adaptMeshes(MeshRenderer *mr,
         Mesh *im = (Mesh *) theMeshes[i];
         std::vector<double> dt = distances(visibleInfo.at(i),camera,planet);
         for (size_t i = 0; i < dt.size(); ++i){
-            dt[i] = 1.0; //getAlpha(dt[i], maxDt, true);
+            dt[i] = (getDitchEnabled())? 1.0: getAlpha(dt[i], maxDt, true);
         }
         im->setColorTransparency(dt);
     }

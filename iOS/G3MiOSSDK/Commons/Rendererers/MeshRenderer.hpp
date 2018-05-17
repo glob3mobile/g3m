@@ -243,7 +243,7 @@ public:
 
 #warning Chano adding stuff
     
-  std::vector<Mesh*> getMeshes();
+  std::vector<Mesh*> getMeshes(int ori,int inc);
 
 
 };

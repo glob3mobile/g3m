@@ -495,7 +495,7 @@
                                                 <rect key="frame" x="19" y="307" width="337.5" height="29"/>
                                                 <segments>
                                                     <segment title="Alpha"/>
-                                                    <segment title="Holes"/>
+                                                    <segment title="Ditch"/>
                                                 </segments>
                                             </segmentedControl>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Method" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jzl-a3-fHo">
