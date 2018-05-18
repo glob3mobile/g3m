@@ -41,6 +41,8 @@ protected:
     DynamicColorRangeGLFeature* _dynamicColorRangeGLFeature;
     float _currentTime;
     
+    ModelTransformGLFeature* _modelTransform;
+    
     mutable BoundingVolume* _boundingVolume;
     BoundingVolume* computeBoundingVolume() const;
     
@@ -134,6 +136,10 @@ public:
             _currentTime = time;
             _dynamicColorRangeGLFeature->setTime(time);
         }
+    }
+    
+    void setTransformation(Matrix44D* matrix){
+        _modelTransform->setMatrix(matrix);
     }
     
     

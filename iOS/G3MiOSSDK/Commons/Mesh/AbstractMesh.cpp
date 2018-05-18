@@ -39,6 +39,8 @@ AbstractMesh::~AbstractMesh() {
     
     delete _normalsMesh;
     
+    _modelTransform->_release();
+    
 #ifdef JAVA_CODE
     super.dispose();
 #endif
@@ -90,7 +92,8 @@ _colorRangeAt1(colorRangeAt1),
 _colorRangeGLFeature(NULL),
 _nextValuesInColorRange(nextValuesInColorRange),
 _currentTime(currentTime),
-_dynamicColorRangeGLFeature(NULL)
+_dynamicColorRangeGLFeature(NULL),
+_modelTransform(new ModelTransformGLFeature(Matrix44D::createIdentity()))
 {
     createGLState();
 }
@@ -178,6 +181,8 @@ void AbstractMesh::createGLState() {
     if (_translationMatrix != NULL) {
         _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
     }
+    
+    _glState->addGLFeature(_modelTransform, true);
     
     if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
         _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
