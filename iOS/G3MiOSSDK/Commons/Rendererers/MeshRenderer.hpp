@@ -133,7 +133,7 @@ public:
 
   void addMesh(Mesh* mesh);
 
-  void clearMeshes();
+  void clearMeshes(bool deleteMeshes = true);
 
   void enableAll();
 
