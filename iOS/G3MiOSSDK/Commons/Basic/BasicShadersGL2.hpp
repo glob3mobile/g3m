@@ -552,11 +552,25 @@ public:
 "varying vec3 lightColor;\n" +
 "attribute vec4 aColor;\n" +
 "varying vec4 VertexColor;\n" +
-"varying highp float vertexDist;\n" +
+"varying highp float alpha;\n" +
 "uniform highp float uTransparencyDistanceThreshold;\n" +
+"#define HALF_PI 1.5707963268\n" +
+"#define START_FADING_AT 0.75\n" +
 "void main() {\n" +
 "vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
-"vertexDist = -vertexInModel.z;\n" +
+"highp float vertexDist = -vertexInModel.z;\n" +
+"highp float d = vertexDist / uTransparencyDistanceThreshold;\n" +
+"if (d < START_FADING_AT){\n" +
+"alpha = 1.0;\n" +
+"} else{\n" +
+"if (d > 1.0){\n" +
+"alpha = 0.0;\n" +
+"} else{\n" +
+"d = (d - START_FADING_AT) / (1.0 - START_FADING_AT);\n" +
+"d = (1.0 + d) * (HALF_PI);\n" +
+"alpha = sin(d);\n" +
+"}\n" +
+"}\n" +
 "vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
 "vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
 "float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
@@ -572,16 +586,15 @@ public:
 "precision highp float;\n" +
 "varying vec4 VertexColor;\n" +
 "varying vec3 lightColor;\n" +
-"varying highp float vertexDist;\n" +
-"uniform highp float uTransparencyDistanceThreshold;\n" +
+"varying highp float alpha;\n" +
 "void main() {\n" +
-"if (vertexDist > uTransparencyDistanceThreshold){\n" +
+"if (alpha <= 0.0){\n" +
 "discard;\n" +
 "}\n" +
 "gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
 "gl_FragColor.g = VertexColor.g * lightColor.r;\n" +
 "gl_FragColor.b = VertexColor.b * lightColor.r;\n" +
-"gl_FragColor.a = VertexColor.a;\n" +
+"gl_FragColor.a = VertexColor.a * alpha;\n" +
 "}\n");
     this->add(sourcesColorMesh_DirectionLight_DistanceTransparency);
 
