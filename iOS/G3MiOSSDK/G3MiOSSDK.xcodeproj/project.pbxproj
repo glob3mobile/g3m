@@ -1837,6 +1837,8 @@
 		D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D80787601846141400A6DB28 /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D80787611846141400A6DB28 /* TexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
+		D809B06820B2B73200BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh_DirectionLight_DistanceTransparency.vsh; sourceTree = "<group>"; };
+		D809B06920B2B73800BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh_DirectionLight_DistanceTransparency.fsh; sourceTree = "<group>"; };
 		D80A28691746474E0058CEC3 /* Planet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Planet.cpp; path = Commons/Geometry/Planet.cpp; sourceTree = "<group>"; };
 		D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalPlanet.cpp; path = Commons/Geometry/EllipsoidalPlanet.cpp; sourceTree = "<group>"; };
 		D80A286F1746572E0058CEC3 /* GLState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GLState.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -3112,7 +3114,9 @@
 				D84B45011CD8A1F60041CA1F /* RoundedColoredPoints.vsh */,
 				D84B45021CD8A1F60041CA1F /* RoundedColoredPoints.fsh */,
 				D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */,
+				D809B06920B2B73800BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.fsh */,
 				D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */,
+				D809B06820B2B73200BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.vsh */,
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */,
 				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,

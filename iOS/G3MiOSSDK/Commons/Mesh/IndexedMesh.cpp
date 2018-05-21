@@ -43,7 +43,8 @@ IndexedMesh::IndexedMesh(const int primitive,
                          const Color* colorRangeAt0,
                          const Color* colorRangeAt1,
                          IFloatBuffer* nextValuesInColorRange,
-                         float currentTime) :
+                         float currentTime,
+                         float transparencyDistanceThreshold) :
 AbstractMesh(primitive,
              ownsVertices,
              center,
@@ -62,7 +63,8 @@ AbstractMesh(primitive,
              colorRangeAt0,
              colorRangeAt1,
              nextValuesInColorRange,
-             currentTime),
+             currentTime,
+             transparencyDistanceThreshold),
 _indices(indices),
 _ownsIndices(ownsIndices)
 {

@@ -539,6 +539,52 @@ public:
 "}\n");
     this->add(sourcesColorMesh_DirectionLight);
 
+    GPUProgramSources sourcesColorMesh_DirectionLight_DistanceTransparency("ColorMesh_DirectionLight_DistanceTransparency",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec3 aNormal;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
+"uniform float uPointSize;\n" +
+"uniform vec3 uAmbientLightColor;\n" +
+"uniform vec3 uDiffuseLightColor;\n" +
+"uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
+"varying vec3 lightColor;\n" +
+"attribute vec4 aColor;\n" +
+"varying vec4 VertexColor;\n" +
+"varying highp float vertexDist;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"void main() {\n" +
+"vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
+"vertexDist = -vertexInModel.z;\n" +
+"vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+"vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+"float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+"lightColor.x = min(lightColor.x, 1.0);\n" +
+"lightColor.y = min(lightColor.y, 1.0);\n" +
+"lightColor.z = min(lightColor.z, 1.0);\n" +
+"VertexColor = aColor;\n" +
+"}\n",
+ emptyString +  
+"precision highp float;\n" +
+"varying vec4 VertexColor;\n" +
+"varying vec3 lightColor;\n" +
+"varying highp float vertexDist;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"void main() {\n" +
+"if (vertexDist > uTransparencyDistanceThreshold){\n" +
+"discard;\n" +
+"}\n" +
+"gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.r;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.r;\n" +
+"gl_FragColor.a = VertexColor.a;\n" +
+"}\n");
+    this->add(sourcesColorMesh_DirectionLight_DistanceTransparency);
+
     GPUProgramSources sourcesNoColorMesh("NoColorMesh",
  emptyString +  
 "attribute vec4 aPosition;\n" +

@@ -34,7 +34,10 @@ enum GLFeatureID{
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
   GLF_BLENDING_MODE,
-  GLF_POINT_SHAPE
+  GLF_POINT_SHAPE,
+    GLF_COLOR_RANGE,
+    GLF_DYNAMIC_COLOR_RANGE,
+    GLF_TRANSPARENCY_DISTANCE_THRESHOLD
 };
 
 class GLFeature: public RCObject {
@@ -164,6 +167,23 @@ public:
     
     void setValues(IFloatBuffer* values, IFloatBuffer* valuesNext);
     void setTime(float time);
+};
+
+/////////////////////////
+
+
+class TransparencyDistanceThresholdGLFeature: public GLFeature {
+private:
+    ~TransparencyDistanceThresholdGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+public:
+    TransparencyDistanceThresholdGLFeature(float distance);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
 };
 
 /////////////////////////

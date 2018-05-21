@@ -41,7 +41,8 @@ public:
              const Color* colorRangeAt0 = NULL,
              const Color* colorRangeAt1 = NULL,
              IFloatBuffer* nextValuesInColorRange = NULL,
-             float currentTime = 0.0f);
+             float currentTime = 0.0f,
+             float transparencyDistanceThreshold = -1.0f);
 
   ~DirectMesh() {
 #ifdef JAVA_CODE

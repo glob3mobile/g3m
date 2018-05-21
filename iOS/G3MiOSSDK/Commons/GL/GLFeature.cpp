@@ -55,7 +55,7 @@ _borderColor(new GPUUniformValueVec4Float(borderColor)){
 ColorRangeGLFeature::ColorRangeGLFeature(const Color& colorAt0,
                                          const Color& colorAt1,
                                          IFloatBuffer* values):
-GLFeature(NO_GROUP, GLF_POINT_SHAPE),
+GLFeature(NO_GROUP, GLF_COLOR_RANGE),
 _colorAt0(new GPUUniformValueVec4Float(colorAt0)),
 _colorAt1(new GPUUniformValueVec4Float(colorAt1)),
 _parameterValue(new GPUAttributeValueVec1Float(values,
@@ -79,7 +79,7 @@ DynamicColorRangeGLFeature::DynamicColorRangeGLFeature(const Color& colorAt0,
                                          const Color& colorAt1,
                                          IFloatBuffer* values,
                                          IFloatBuffer* valuesNext, float time):
-GLFeature(NO_GROUP, GLF_POINT_SHAPE),
+GLFeature(NO_GROUP, GLF_DYNAMIC_COLOR_RANGE),
 _colorAt0(new GPUUniformValueVec4Float(colorAt0)),
 _colorAt1(new GPUUniformValueVec4Float(colorAt1)),
 _parameterValue(new GPUAttributeValueVec1Float(values,
@@ -101,6 +101,12 @@ _time(new GPUUniformValueFloatMutable(time))
     
     _values->addAttributeValue(COLORRANGE_VALUE, _parameterValue, false);
     _values->addAttributeValue(COLORRANGE_VALUE_NEXT, _parameterValueNext, false);
+}
+
+TransparencyDistanceThresholdGLFeature::TransparencyDistanceThresholdGLFeature(float distance): GLFeature(NO_GROUP, GLF_TRANSPARENCY_DISTANCE_THRESHOLD){
+    _values->addUniformValue(TRANSPARENCY_DISTANCE_THRESLHOLD,
+                             new GPUUniformValueFloat(distance),
+                             false);
 }
 
 
@@ -496,6 +502,7 @@ ModelViewGLFeature::ModelViewGLFeature(const Camera* camera) :
 GLCameraGroupFeature(camera->getModelViewMatrix44D(), GLF_MODEL_VIEW)
 {
 }
+
 
 DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
                                                  const Color& diffuseLightColor,

@@ -41,6 +41,9 @@ protected:
     DynamicColorRangeGLFeature* _dynamicColorRangeGLFeature;
     float _currentTime;
     
+    float _transparencyDistanceThreshold;
+    ModelGLFeature* _model;
+    
     ModelTransformGLFeature* _modelTransform;
     
     mutable BoundingVolume* _boundingVolume;
@@ -68,7 +71,8 @@ protected:
                  const Color* colorRangeAt0 = NULL,
                  const Color* colorRangeAt1 = NULL,
                  IFloatBuffer* nextValuesInColorRange = NULL,
-                 float currentTime = 0.0f);
+                 float currentTime = 0.0f,
+                 float transparencyDistanceThreshold = -1.0);
     
     virtual void rawRender(const G3MRenderContext* rc) const = 0;
     //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;

@@ -27,7 +27,8 @@ DirectMesh::DirectMesh(const int primitive,
                        const Color* colorRangeAt0,
                        const Color* colorRangeAt1,
                        IFloatBuffer* nextValuesInColorRange,
-                       float currentTime) :
+                       float currentTime,
+                       float transparencyDistanceThreshold) :
 AbstractMesh(primitive,
              owner,
              center,
@@ -46,7 +47,8 @@ AbstractMesh(primitive,
              colorRangeAt0,
              colorRangeAt1,
              nextValuesInColorRange,
-             currentTime)
+             currentTime,
+             transparencyDistanceThreshold)
 {
   _renderVerticesCount = vertices->size() / 3;
 }

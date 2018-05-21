@@ -64,6 +64,8 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     const bool isColorRange = GPUVariable::hasUniform(uniformsCode, COLORRANGE_COLOR_AT_0);
     const bool isDynamic = GPUVariable::hasUniform(uniformsCode, TIME);
     
+    const bool hasTranspDist = GPUVariable::hasUniform(uniformsCode, TRANSPARENCY_DISTANCE_THRESLHOLD);
+    
     if (isColorRange){
         if (!isDynamic){
             return compileProgramWithName(gl, "ParametricColorRangeMesh");
@@ -135,6 +137,9 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   if (!flatColor && !texture && color) {
     if (hasLight){
+        if (hasTranspDist){
+            return compileProgramWithName(gl, "ColorMesh_DirectionLight_DistanceTransparency");
+        }
       return compileProgramWithName(gl, "ColorMesh_DirectionLight");
     }
     

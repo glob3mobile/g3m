@@ -39,7 +39,12 @@ AbstractMesh::~AbstractMesh() {
     
     delete _normalsMesh;
     
-    _modelTransform->_release();
+    if (_modelTransform != NULL){
+        _modelTransform->_release();
+    }
+    if (_model != NULL){
+        _model->_release();
+    }
     
 #ifdef JAVA_CODE
     super.dispose();
@@ -64,7 +69,8 @@ AbstractMesh::AbstractMesh(const int primitive,
                            const Color* colorRangeAt0,
                            const Color* colorRangeAt1,
                            IFloatBuffer* nextValuesInColorRange,
-                           float currentTime) :
+                           float currentTime,
+                           float transparencyDistanceThreshold) :
 _primitive(primitive),
 _owner(owner),
 _vertices(vertices),
@@ -93,7 +99,9 @@ _colorRangeGLFeature(NULL),
 _nextValuesInColorRange(nextValuesInColorRange),
 _currentTime(currentTime),
 _dynamicColorRangeGLFeature(NULL),
-_modelTransform(new ModelTransformGLFeature(Matrix44D::createIdentity()))
+_modelTransform(new ModelTransformGLFeature(Matrix44D::createIdentity())),
+_transparencyDistanceThreshold(transparencyDistanceThreshold),
+_model(NULL)
 {
     createGLState();
 }
@@ -184,6 +192,12 @@ void AbstractMesh::createGLState() {
     
     _glState->addGLFeature(_modelTransform, true);
     
+    if (_transparencyDistanceThreshold > 0.0){
+        _glState->addGLFeature(new TransparencyDistanceThresholdGLFeature(_transparencyDistanceThreshold), false);
+        _model = new ModelGLFeature(Matrix44D::createIdentity());
+        _glState->addGLFeature(_model, true);
+    }
+    
     if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
         _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
                                                       _flatColor->isTransparent(),
@@ -222,6 +236,13 @@ void AbstractMesh::createGLState() {
 
 void AbstractMesh::rawRender(const G3MRenderContext* rc,
                              const GLState* parentGLState) const {
+    if (_model != NULL){
+        Matrix44D* model = rc->getCurrentCamera()->getModelMatrix44D();
+//        Matrix44D* transform = _translationMatrix->asMatrix44D();
+//        Matrix44D* m = transform->createMultiplication(*model);
+        _model->setMatrix(model);
+    }
+    
     _glState->setParent(parentGLState);
     rawRender(rc);
     

@@ -177,6 +177,10 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     if (name.compare("uTime") == 0){
         return TIME;
     }
+    
+    if (name.compare("uTransparencyDistanceThreshold") == 0){
+        return TRANSPARENCY_DISTANCE_THRESLHOLD;
+    }
 
   return UNRECOGNIZED_UNIFORM;
 }
