@@ -50,7 +50,8 @@ _logTilesPetitions(false),
 _changedInfoListener(NULL),
 _touchEventTypeOfTerrainTouchListener(LongPress),
 _tileLODTester(NULL),
-_tileVisibilityTester(NULL)
+_tileVisibilityTester(NULL),
+_skirted(true)
 {
 }
 
@@ -391,8 +392,7 @@ bool PlanetRendererBuilder::getRenderTileMeshes() {
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
   //#warning Testing Terrain Normals
-  const bool skirted = true;
-  return new PlanetTileTessellator(skirted, getRenderedSector());
+  return new PlanetTileTessellator(_skirted, getRenderedSector());
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {

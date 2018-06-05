@@ -94,6 +94,8 @@ private:
   TileLODTester* createDefaultTileLODTester() const;
 
   TileVisibilityTester* createDefaultTileVisibilityTester() const;
+    
+    bool _skirted;
 
 
 public:
@@ -143,6 +145,10 @@ public:
   TileLODTester* getTileLODTester();
 
   TileVisibilityTester* getTileVisibilityTester();
+    
+    void setSkirted(bool v){
+        _skirted = v;
+    }
 
 };
 
