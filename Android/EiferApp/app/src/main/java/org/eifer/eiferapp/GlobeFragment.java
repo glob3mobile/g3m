@@ -35,6 +35,7 @@ import org.eifer.eiferapp.g3mutils.PipesModel;
 import org.eifer.eiferapp.g3mutils.PipesRenderer;
 import org.eifer.eiferapp.g3mutils.PointCloudEvolutionTask;
 import org.eifer.eiferapp.g3mutils.SchlossListener;
+import org.eifer.eiferapp.g3mutils.TPKLoadListener;
 import org.eifer.eiferapp.g3mutils.UtilityNetworkParser;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
@@ -164,7 +165,7 @@ public class GlobeFragment extends Fragment{
        addCityGMLFile("file:///innenstadt_ost_4326_lod2.gml",false);
 	   //addCityGMLFile("file:///innenstadt_west_4326_lod2.gml",false);
 	   //addCityGMLFile("file:///technologiepark_WGS84.gml",true);
-        addCityGMLFile("file:///tpk_lod3_t1_wgs84.gml",true);
+       // addCityGMLFile("file:///tpk_lod3_t1_wgs84.gml",true);
 
 	 //  [self addCityGMLFile:"file:///AR_demo_with_buildings.gml" needsToBeFixOnGround:true]; //NOT WORKING
 	   /*addCityGMLFile("file:///hagsfeld_4326_lod2.gml",false);
@@ -465,6 +466,7 @@ public class GlobeFragment extends Fragment{
         ILogger.instance().logInfo("City Model Loaded");
 
         final boolean includeCastleModel = true;
+        final boolean TPKAsShapes = true;
         if (includeCastleModel){
             shapesRenderer.loadJSONSceneJS(new URL("file:///k_schloss.json"),
                     "file:///k_s/",
@@ -510,8 +512,9 @@ public class GlobeFragment extends Fragment{
                     CityGMLBuildingTessellator.changeColorOfBuildingInBoundedMesh(b, Color.transparent());
                 }
             }
-
-
+        }
+        if (TPKAsShapes){
+            loadTPKShapes();
         }
 
         //Whole city!
@@ -544,6 +547,32 @@ public class GlobeFragment extends Fragment{
 	  */
 
 
+    }
+
+    public void loadTPKShapes(){
+
+        double lat = 49.02004116;
+        double lon = 8.43959427;
+        double hgt = (elevData != null) ? elevData.getElevationAt(Geodetic2D.fromDegrees(lat,lon)) : 0;
+
+        shapesRenderer.loadJSONSceneJS(new URL("file:///tpk1.json",false),
+                "file:///",
+                true,
+                new Geodetic3D(Geodetic3D.fromDegrees(lat,lon,hgt)),
+                AltitudeMode.ABSOLUTE,
+                new TPKLoadListener());
+        shapesRenderer.loadJSONSceneJS(new URL("file:///tpk2.json",false),
+                "file:///",
+                true,
+                new Geodetic3D(Geodetic3D.fromDegrees(lat,lon,hgt)),
+                AltitudeMode.ABSOLUTE,
+                new TPKLoadListener());
+        shapesRenderer.loadJSONSceneJS(new URL("file:///tpk3.json",false),
+                "file:///",
+                true,
+                new Geodetic3D(Geodetic3D.fromDegrees(lat,lon,hgt)),
+                AltitudeMode.ABSOLUTE,
+                new TPKLoadListener());
     }
 
     public boolean areBuildingsEnabled(){

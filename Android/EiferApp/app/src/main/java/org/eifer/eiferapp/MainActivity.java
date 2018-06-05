@@ -24,9 +24,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
+/*import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.LineGraphSeries;*/
 
 import org.glob3.mobile.generated.Geodetic3D;
 
@@ -293,7 +293,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openGraphDialog(){
-        graphDialog = new Dialog(this);
+        //TODO Reimport OpenGraph. Maven failures somewhere ...
+
+        /*graphDialog = new Dialog(this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vi = inflater.inflate(R.layout.sensor_dialog, null);
 
@@ -315,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         graphDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         graphDialog.setContentView(vi);
         graphDialog.setCancelable(true);
-        graphDialog.show();
+        graphDialog.show();*/
     }
 
     public void closeAction(View view){

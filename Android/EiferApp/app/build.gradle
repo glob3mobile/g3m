@@ -29,5 +29,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':G3MAndroidSDK')
     compile project(':G3MSharedSDK')
-    compile project(':GraphView')
+    //compile project(':GraphView')
 }
