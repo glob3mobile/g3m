@@ -12,24 +12,16 @@
 #include <string>
 #include <vector>
 
-#include "GLState.hpp"
-
 class G3MContext;
 class G3MRenderContext;
-class SGShape;
-class GLGlobalState;
-class GPUProgramState;
+class GLState;
 
 class SGNode {
 protected:
   const std::string _id;
-  const std::string _sId;
-  
-  //  SGNode*              _parent;
+  const std::string _sID;
+
   std::vector<SGNode*> _children;
-  
-  
-  //  void setParent(SGNode* parent);
   
 protected:
 #ifdef C_CODE
@@ -39,24 +31,23 @@ protected:
   protected G3MContext _context;
 #endif
   
-  SGShape *_shape;
+  std::string _uriPrefix;
   
 public:
   
   SGNode(const std::string& id,
-         const std::string& sId) :
+         const std::string& sID) :
   _id(id),
-  _sId(sId),
+  _sID(sID),
   _context(NULL),
-  _shape(NULL)
-  //  _parent(NULL)
+  _uriPrefix(NULL)
   {
   }
   
   virtual ~SGNode();
   
   virtual void initialize(const G3MContext* context,
-                          SGShape *shape);
+                          const std::string& uriPrefix);
   
   void addNode(SGNode* child);
   

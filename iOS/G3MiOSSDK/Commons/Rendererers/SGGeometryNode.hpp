@@ -25,6 +25,7 @@ private:
   IFloatBuffer* _uv;
   IFloatBuffer* _normals;
   IShortBuffer* _indices;
+    const bool _depthTest;
   
   GLState* _glState;
   void createGLState();
@@ -32,34 +33,22 @@ private:
 public:
 
   SGGeometryNode(const std::string& id,
-                 const std::string& sId,
+                 const std::string& sID,
                  int                primitive,
                  IFloatBuffer*      vertices,
                  IFloatBuffer*      colors,
                  IFloatBuffer*      uv,
                  IFloatBuffer*      normals,
-                 IShortBuffer*      indices) :
-  SGNode(id, sId),
-  _primitive(primitive),
-  _vertices(vertices),
-  _colors(colors),
-  _uv(uv),
-  _normals(normals),
-  _indices(indices),
-  _glState(new GLState())
-  {
-    createGLState();
-  }
+                 IShortBuffer*      indices,
+                 const bool depthTest);
 
   ~SGGeometryNode();
 
-  void rawRender(const G3MRenderContext* rc, const GLState* glState);
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* glState);
   
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState) {
-    _glState->setParent(parentState);
-    return _glState;
-  }
+                             const GLState* parentState);
 
   std::string description() {
     return "SGGeometryNode";

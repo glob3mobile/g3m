@@ -1282,7 +1282,7 @@ class AltitudeFixerLM: public ILocationModifier{
     [self addCityGMLFile:"file:///building-28.gml" needsToBeFixOnGround:true];
     [self addCityGMLFile:"file:///building-29.gml" needsToBeFixOnGround:true];*/
   
-//  [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
+ [self addCityGMLFile:"file:///innenstadt_ost_4326_lod2.gml" needsToBeFixOnGround:false];
 //  [self addCityGMLFile:"file:///innenstadt_west_4326_lod2.gml" needsToBeFixOnGround:false];
 //  // [self addCityGMLFile:"file:///technologiepark_WGS84.gml" needsToBeFixOnGround:true];
 //  [self addCityGMLFile:"file:///AR_demo_with_buildings.gml" needsToBeFixOnGround:true]; //NOT WORKING
@@ -1295,7 +1295,7 @@ class AltitudeFixerLM: public ILocationModifier{
 //        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_1.gml" needsToBeFixOnGround:false];
 //        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_2.gml" needsToBeFixOnGround:false];
 //        [self addCityGMLFile:"file:///knielingen_4326_lod2_PART_3.gml" needsToBeFixOnGround:false];
-    [self addCityGMLFile:"file:///tpk_lod3_t1_wgs84.gml" needsToBeFixOnGround:true];
+    //[self addCityGMLFile:"file:///tpk_lod3_t1_wgs84.gml" needsToBeFixOnGround:true];
 
   
   _modelsLoadedCounter = 0;
@@ -1508,6 +1508,7 @@ class AltitudeFixerLM: public ILocationModifier{
   ILogger::instance()->logInfo("City Model Loaded");
   
   const bool includeCastleModel = true;
+  const bool TPKAsShapes = true;
   if (includeCastleModel){
     class SchlossListener : public ShapeLoadListener {
       public:
@@ -1557,7 +1558,7 @@ class AltitudeFixerLM: public ILocationModifier{
     
     shapesRenderer->loadJSONSceneJS(URL("file:///k_s/k_schloss.json"),
                                     "file:///k_s/",
-                                    false, // isTransparent
+                                    false, true, // isTransparent
                                     new Geodetic3D(Geodetic3D::fromDegrees(49.013500, 8.404249, 117.82)), //
                                     ABSOLUTE,
                                     new SchlossListener());
@@ -1565,7 +1566,7 @@ class AltitudeFixerLM: public ILocationModifier{
       
       shapesRenderer->loadJSONSceneJS(URL("file:///boyas.json"),
                                      "file:///k_s/",
-                                     false,
+                                     false, true,
                                      new Geodetic3D(Geodetic3D::fromDegrees(49.01098659,8.40410182,121.91)),
                                       AltitudeMode::ABSOLUTE,
                                      new MeteoListener());
@@ -1591,7 +1592,9 @@ class AltitudeFixerLM: public ILocationModifier{
     
     
   }
-  
+    if (TPKAsShapes){
+        [self loadTPKShapes];
+    }
   //Whole city!
   [G3MWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                                 Geodetic3D::fromDegrees(49.07139214735035182, 8.134019638291379195, 22423.46165080198989),
@@ -1617,6 +1620,98 @@ class AltitudeFixerLM: public ILocationModifier{
     printf("N OF WALLS: %d\n", Surface::numberOfWalls);
     printf("N OF TESSELLATED WALLS: %d\n", Polygon3D::numberOfP3D);
     printf("N OF TESSELLATED WALLS_4: %d\n", Polygon3D::numberOfP3D_4);
+}
+
+- (void) loadTPKShapes{
+    class TPK1LoadListener : public ShapeLoadListener {
+        
+        //double _amp;
+        
+        
+    public:
+        TPK1LoadListener()
+        {
+            //_amp = amp;
+        }
+        
+        void onBeforeAddShape(SGShape* shape) {
+            shape->setPitch(Angle::fromDegrees(90));
+            /*shape->setHeading(Angle::fromDegrees(85));
+             shape->setScale(1.5, 2.5, 1);*/
+        }
+        
+        void onAfterAddShape(SGShape* shape) {
+            shape->setTranslation(55,0, -90);
+        }
+    };
+    
+    class TPK2LoadListener : public ShapeLoadListener {
+        
+        //double _amp;
+        
+        
+    public:
+        TPK2LoadListener()
+        {
+            //_amp = amp;
+        }
+        
+        void onBeforeAddShape(SGShape* shape) {
+            shape->setPitch(Angle::fromDegrees(90));
+            /*shape->setHeading(Angle::fromDegrees(85));
+             shape->setScale(1.5, 2.5, 1);*/
+        }
+        
+        void onAfterAddShape(SGShape* shape) {
+            shape->setTranslation(55,0,-90);
+        }
+    };
+    
+    class TPK3LoadListener : public ShapeLoadListener {
+        
+        //double _amp;
+        
+        
+    public:
+        TPK3LoadListener()
+        {
+            //_amp = amp;
+        }
+        
+        void onBeforeAddShape(SGShape* shape) {
+            shape->setPitch(Angle::fromDegrees(90));
+            /*shape->setHeading(Angle::fromDegrees(85));
+             shape->setScale(1.5, 2.5, 1);*/
+        }
+        
+        void onAfterAddShape(SGShape* shape) {
+            shape->setTranslation(55 ,0, -90);
+        }
+    };
+    
+    
+    double lat = 49.02004116;
+    double lon = 8.43959427;
+    double hgt = 0;
+    
+    shapesRenderer->loadJSONSceneJS(URL("file:///tpk1.json",false),
+                                    "file:///",
+                                    true,true,
+                                    new Geodetic3D(Geodetic3D::fromDegrees(lat,lon,hgt)),
+                                    AltitudeMode::ABSOLUTE,
+                                    new TPK1LoadListener());
+    shapesRenderer->loadJSONSceneJS(URL("file:///tpk2.json",false),
+                                    "file:///",
+                                    true,true,
+                                    new Geodetic3D(Geodetic3D::fromDegrees(lat,lon,hgt)),
+                                    AltitudeMode::ABSOLUTE,
+                                    new TPK2LoadListener());
+    shapesRenderer->loadJSONSceneJS(URL("file:///tpk3.json",false),
+                                    "file:///",
+                                    true,true,
+                                    new Geodetic3D(Geodetic3D::fromDegrees(lat,lon,hgt)),
+                                    AltitudeMode::ABSOLUTE,
+                                    new TPK3LoadListener());
 }
 
 

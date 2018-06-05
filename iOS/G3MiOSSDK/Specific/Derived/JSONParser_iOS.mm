@@ -38,7 +38,7 @@ JSONBaseObject* JSONParser_iOS::parseNSData(NSData* jsonData,
   return convert(nsJsonObject, nullAsObject);
 }
 
-JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer,
+JSONBaseObject* JSONParser_iOS::parse(const IByteBuffer* buffer,
                                       bool nullAsObject) {
   ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
 
