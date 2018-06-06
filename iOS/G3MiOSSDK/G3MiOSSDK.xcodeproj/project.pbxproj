@@ -491,6 +491,8 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */; };
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
+		D829FFDB20C7DADA00567F59 /* FlatMercatorPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D829FFDA20C7DADA00567F59 /* FlatMercatorPlanet.cpp */; };
+		D829FFDC20C7DDA100567F59 /* FlatMercatorPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D829FFD920C7DAC800567F59 /* FlatMercatorPlanet.hpp */; };
 		D82E2F171CEDEE5A0041B88D /* ColorLegendHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D82E2F151CEDEE5A0041B88D /* ColorLegendHelper.cpp */; };
 		D82E2F181CEDEE970041B88D /* ColorLegendHelper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D82E2F161CEDEE5A0041B88D /* ColorLegendHelper.hpp */; };
 		D8378F9E1BFB32B900E6557E /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */; };
@@ -810,6 +812,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D829FFDC20C7DDA100567F59 /* FlatMercatorPlanet.hpp in CopyFiles */,
 				D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */,
 				D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */,
 				D82E2F181CEDEE970041B88D /* ColorLegendHelper.hpp in CopyFiles */,
@@ -1871,6 +1874,8 @@
 		D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimedCacheTileLODTester.hpp; path = Commons/Rendererers/TimedCacheTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxFrameTimeTileLODTester.cpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.cpp; sourceTree = "<group>"; };
 		D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MaxFrameTimeTileLODTester.hpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D829FFD920C7DAC800567F59 /* FlatMercatorPlanet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlatMercatorPlanet.hpp; sourceTree = "<group>"; };
+		D829FFDA20C7DADA00567F59 /* FlatMercatorPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatMercatorPlanet.cpp; path = Commons/Geometry/FlatMercatorPlanet.cpp; sourceTree = "<group>"; };
 		D82A78CB20A5C98400A9BDAA /* DynamicParametricColorRangeMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRangeMesh.vsh; sourceTree = "<group>"; };
 		D82A78CC20A5C98D00A9BDAA /* DynamicParametricColorRangeMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRangeMesh.fsh; sourceTree = "<group>"; };
 		D82E2F151CEDEE5A0041B88D /* ColorLegendHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorLegendHelper.cpp; path = Commons/Basic/ColorLegendHelper.cpp; sourceTree = "<group>"; };
@@ -2440,7 +2445,9 @@
 				D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */,
 				CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */,
 				FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */,
+				D829FFDA20C7DADA00567F59 /* FlatMercatorPlanet.cpp */,
 				FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */,
+				D829FFD920C7DAC800567F59 /* FlatMercatorPlanet.hpp */,
 				CC0DFA6D178B49E6001F6355 /* Frustum.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,
@@ -3324,6 +3331,7 @@
 				CFB57DAD1860EB9600D5B094 /* HUDQuadWidget.cpp in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
+				D829FFDB20C7DADA00567F59 /* FlatMercatorPlanet.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
 				CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */,

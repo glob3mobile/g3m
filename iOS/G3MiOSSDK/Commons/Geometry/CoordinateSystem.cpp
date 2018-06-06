@@ -39,7 +39,7 @@ CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D
 {
   if (!checkConsistency(_x, _y, _z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
-    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
+    //THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
