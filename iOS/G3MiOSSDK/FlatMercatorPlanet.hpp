@@ -148,11 +148,6 @@ public:
                      const Angle& longitude,
                      const double height,
                      MutableVector3D& result) const {
-        //    const double x = longitude._degrees * _size._x / 360.0;
-        //    const double y = latitude._degrees  * _size._y / 180.0;
-        //    result.set(x, y, height);
-        
-        
         const double x = lon2x_m(longitude._degrees);
         const double y = lat2y_m(latitude._degrees);
         result.set(x, y, height);
