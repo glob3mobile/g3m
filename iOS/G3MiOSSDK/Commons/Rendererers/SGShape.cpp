@@ -9,6 +9,26 @@
 #include "SGShape.hpp"
 
 #include "SGNode.hpp"
+#include "GLState.hpp"
+
+SGShape::SGShape(SGNode* node,
+                  const std::string& uriPrefix,
+                  bool isTransparent,
+                  Geodetic3D* position,
+                  AltitudeMode altitudeMode) :
+Shape(position, altitudeMode),
+_node(node),
+_uriPrefix(uriPrefix),
+_isTransparent(isTransparent)
+{
+    _glState = new GLState();
+    const bool blend = _isTransparent;
+    _glState->addGLFeature(new BlendingModeGLFeature(blend,
+                                                     GLBlendFactor::srcAlpha(),
+                                                     GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
+}
+
 
 SGShape::~SGShape() {
   _glState->_release();
@@ -16,7 +36,7 @@ SGShape::~SGShape() {
 }
 
 void SGShape::initialize(const G3MContext* context) {
-  _node->initialize(context, this);
+  _node->initialize(context, _uriPrefix);
 }
 
 bool SGShape::isReadyToRender(const G3MRenderContext* rc) {

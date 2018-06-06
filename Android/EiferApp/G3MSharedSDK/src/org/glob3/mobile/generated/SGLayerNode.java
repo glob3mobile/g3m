@@ -17,9 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
-//class IGLTextureId;
+//class TextureIDReference
 //class IImage;
-//class TextureIDReference;
+//class URL;
 
 public class SGLayerNode extends SGNode
 {
@@ -36,20 +36,20 @@ public class SGLayerNode extends SGNode
 
   private boolean _initialized;
 
-  private TextureIDReference getTextureId(G3MRenderContext rc)
+  private TextureIDReference getTextureID(G3MRenderContext rc)
   {
-    if (_textureId == null)
+    if (_textureID == null)
     {
       if (_downloadedImage != null)
       {
-        final boolean generateMipmap = true;
-        _textureId = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL()._path, generateMipmap, GLTextureParameterValue.repeat());
+        final boolean generateMipmap = false;
+        _textureID = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL()._path, generateMipmap, GLTextureParameterValue.repeat());
   
         _downloadedImage = null;
         _downloadedImage = null;
       }
     }
-    return _textureId;
+    return _textureID;
   }
 
   private IImage _downloadedImage;
@@ -64,12 +64,12 @@ public class SGLayerNode extends SGNode
                                       //TEXTURES_DOWNLOAD_PRIORITY,
   }
 
-  private TextureIDReference _textureId;
+  private TextureIDReference _textureID;
 
   private URL getURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_shape.getURIPrefix());
+    isb.addString(_uriPrefix);
     isb.addString(_uri);
     final String path = isb.getString();
     if (isb != null)
@@ -79,18 +79,19 @@ public class SGLayerNode extends SGNode
   }
 
 
-  public SGLayerNode(String id, String sId, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
+  public SGLayerNode(String id, String sID, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
   {
-     super(id, sId);
+     super(id, sID);
      _uri = uri;
      _downloadedImage = null;
-     _textureId = null;
+     _textureID = null;
      _initialized = false;
   }
 
   public void dispose()
   {
-    _textureId.dispose(); //Releasing texture through TextureIDReference class
+    _textureID.dispose(); //Releasing texture through TextureIDReference class
+    super.dispose();
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -101,8 +102,8 @@ public class SGLayerNode extends SGNode
       requestImage(rc);
     }
   
-    final TextureIDReference textureId = getTextureId(rc);
-    return (textureId != null);
+    final TextureIDReference textureID = getTextureID(rc);
+    return (textureID != null);
   }
 
   public final void onImageDownload(IImage image)
@@ -120,14 +121,14 @@ public class SGLayerNode extends SGNode
       requestImage(rc);
     }
   
-    _textureId = getTextureId(rc);
-    if (_textureId == null)
+    _textureID = getTextureID(rc);
+    if (_textureID == null)
     {
       return false;
     }
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-    state.addGLFeature(new TextureIDGLFeature(_textureId.getID()), false);
+    state.addGLFeature(new TextureIDGLFeature(_textureID.getID()), false);
   
     return true;
   

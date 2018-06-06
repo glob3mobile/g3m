@@ -1692,7 +1692,7 @@ class AltitudeFixerLM: public ILocationModifier{
     
     double lat = 49.02004116;
     double lon = 8.43959427;
-    double hgt = 0;
+    double hgt = (elevationData != NULL) ? elevationData->getElevationAt(Geodetic2D::fromDegrees(lat, lon)) : 0;
     
     shapesRenderer->loadJSONSceneJS(URL("file:///tpk1.json",false),
                                     "file:///",

@@ -29,9 +29,9 @@ public class SGRotateNode extends SGNode
 
   private GLState _glState;
 
-  public SGRotateNode(String id, String sId, double x, double y, double z, double angle)
+  public SGRotateNode(String id, String sID, double x, double y, double z, double angle)
   {
-     super(id, sId);
+     super(id, sID);
      _x = x;
      _y = y;
      _z = z;
@@ -44,6 +44,7 @@ public class SGRotateNode extends SGNode
   public void dispose()
   {
     _glState._release();
+    super.dispose();
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)

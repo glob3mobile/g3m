@@ -22,22 +22,22 @@ public class SGMaterialNode extends SGNode
   private Color _baseColor;
   private final Color _specularColor;
 
-//  const double _specular;
-//  const double _shine;
-//  const double _alpha;
-//  const double _emit;
+  //  const double _specular;
+  //  const double _shine;
+  //  const double _alpha;
+  //  const double _emit;
 
 
   private GLState _glState;
 
 
-  public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
-//  _specular(specular),
-//  _shine(shine),
-//  _alpha(alpha),
-//  _emit(emit)
+  public SGMaterialNode(String id, String sID, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
+  //  _specular(specular),
+  //  _shine(shine),
+  //  _alpha(alpha),
+  //  _emit(emit)
   {
-     super(id, sId);
+     super(id, sID);
      _baseColor = baseColor;
      _specularColor = specularColor;
      _glState = new GLState();
@@ -66,7 +66,7 @@ public class SGMaterialNode extends SGNode
        _specularColor.dispose();
 
     _glState._release();
-  super.dispose();
+    super.dispose();
 
   }
 

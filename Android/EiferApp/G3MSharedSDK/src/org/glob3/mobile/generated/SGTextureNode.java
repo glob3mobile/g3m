@@ -25,9 +25,9 @@ public class SGTextureNode extends SGNode
 
   private GLState _glState;
 
-  public SGTextureNode(String id, String sId)
+  public SGTextureNode(String id, String sID)
   {
-     super(id, sId);
+     super(id, sID);
      _glState = null;
 
   }
@@ -56,7 +56,7 @@ public class SGTextureNode extends SGNode
   
     if (_context != null)
     {
-      layer.initialize(_context, _shape);
+      layer.initialize(_context, _uriPrefix);
     }
   
     if (_glState != null)
@@ -81,15 +81,15 @@ public class SGTextureNode extends SGNode
     return super.isReadyToRender(rc);
   }
 
-  public final void initialize(G3MContext context, SGShape shape)
+  public final void initialize(G3MContext context, String uriPrefix)
   {
-    super.initialize(context, shape);
+    super.initialize(context, uriPrefix);
   
     final int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++)
     {
       SGLayerNode child = _layers.get(i);
-      child.initialize(context, shape);
+      child.initialize(context, uriPrefix);
     }
   }
 

@@ -135,7 +135,7 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.generateMipmap(), textureSpec.getWrapping());
+  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.generateMipmap());
 
 
   if (_verbose) {

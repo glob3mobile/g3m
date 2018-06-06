@@ -26,25 +26,15 @@ private:
 public:
 
   SGTranslateNode(const std::string& id,
-                  const std::string& sId,
+                  const std::string& sID,
                   double x,
                   double y,
-                  double z) :
-  SGNode(id, sId),
-  _x(x),
-  _y(y),
-  _z(z),
-  _translationMatrix(MutableMatrix44D::createTranslationMatrix(_x, _y, _z)),
-  _glState(new GLState())
-  {
-    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
-  }
-  
+                  double z);
+    
+  ~SGTranslateNode();
+    
   const GLState* createState(const G3MRenderContext* rc,
-                             const GLState* parentState) {
-    _glState->setParent(parentState);
-    return _glState;
-  }
+                             const GLState* parentState);
 
   std::string description() {
     return "SGTranslateNode";

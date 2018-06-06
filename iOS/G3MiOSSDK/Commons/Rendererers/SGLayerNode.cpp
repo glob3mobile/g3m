@@ -71,8 +71,8 @@ bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
     requestImage(rc);
   }
 
-  const TextureIDReference* textureId = getTextureID(rc);
-  return (_textureID != NULL);
+  const TextureIDReference* textureID = getTextureID(rc);
+  return (textureID != NULL);
 }
 
 void SGLayerNode::onImageDownload(const IImage* image) {

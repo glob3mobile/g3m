@@ -470,7 +470,7 @@ public class GlobeFragment extends Fragment{
         if (includeCastleModel){
             shapesRenderer.loadJSONSceneJS(new URL("file:///k_schloss.json"),
                     "file:///k_s/",
-                    false, // isTransparent
+                    false, true,// isTransparent
                     new Geodetic3D(Geodetic3D.fromDegrees(49.013500, 8.404249, 117.82)), //
                     AltitudeMode.ABSOLUTE,
                     new SchlossListener());
@@ -490,7 +490,7 @@ public class GlobeFragment extends Fragment{
 
             shapesRenderer.loadJSONSceneJS(new URL("file:///boyas.json"),
                     "file:///k_s/",
-                    false,
+                    false, true,
                     Geodetic3D.fromDegrees(49.01098659,8.40410182,121.91),
                     AltitudeMode.ABSOLUTE,
                     new MeteoListener());
@@ -557,19 +557,19 @@ public class GlobeFragment extends Fragment{
 
         shapesRenderer.loadJSONSceneJS(new URL("file:///tpk1.json",false),
                 "file:///",
-                true,
+                true, true,
                 new Geodetic3D(Geodetic3D.fromDegrees(lat,lon,hgt)),
                 AltitudeMode.ABSOLUTE,
                 new TPKLoadListener());
         shapesRenderer.loadJSONSceneJS(new URL("file:///tpk2.json",false),
                 "file:///",
-                true,
+                true, true,
                 new Geodetic3D(Geodetic3D.fromDegrees(lat,lon,hgt)),
                 AltitudeMode.ABSOLUTE,
                 new TPKLoadListener());
         shapesRenderer.loadJSONSceneJS(new URL("file:///tpk3.json",false),
                 "file:///",
-                true,
+                true, true,
                 new Geodetic3D(Geodetic3D.fromDegrees(lat,lon,hgt)),
                 AltitudeMode.ABSOLUTE,
                 new TPKLoadListener());

@@ -40,7 +40,7 @@ public:
   _id(id),
   _sID(sID),
   _context(NULL),
-  _uriPrefix(NULL)
+  _uriPrefix("")
   {
   }
   
@@ -62,7 +62,8 @@ public:
                       bool renderNotReadyShapes);
 
   virtual const GLState* createState(const G3MRenderContext* rc,
-                                     const GLState* parentState) { return parentState;}
+                                     const GLState* parentState) { return parentState;
+  }
 
   size_t getChildrenCount() const {
     return _children.size();

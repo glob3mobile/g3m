@@ -27,32 +27,25 @@ package org.glob3.mobile.generated;
 public class SGNode
 {
   protected final String _id;
-  protected final String _sId;
+  protected final String _sID;
 
-  //  SGNode*              _parent;
   protected java.util.ArrayList<SGNode> _children = new java.util.ArrayList<SGNode>();
-
-
-  //  void setParent(SGNode* parent);
 
   protected G3MContext _context;
 
-  protected SGShape _shape;
+  protected String _uriPrefix;
 
 
-  public SGNode(String id, String sId)
+  public SGNode(String id, String sID)
   //  _parent(NULL)
   {
      _id = id;
-     _sId = sId;
+     _sID = sID;
      _context = null;
-     _shape = null;
+     _uriPrefix = "";
   }
 
 
-  ///#include "GPUProgramState.hpp"
-  
-  
   public void dispose()
   {
     final int childrenCount = _children.size();
@@ -64,26 +57,25 @@ public class SGNode
     }
   }
 
-  public void initialize(G3MContext context, SGShape shape)
+  public void initialize(G3MContext context, String uriPrefix)
   {
     _context = context;
-    _shape = shape;
+    _uriPrefix = uriPrefix;
   
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       SGNode child = _children.get(i);
-      child.initialize(context, shape);
+      child.initialize(_context,_uriPrefix);
     }
   }
 
   public final void addNode(SGNode child)
   {
-    //  child->setParent(this);
     _children.add(child);
     if (_context != null)
     {
-      child.initialize(_context, _shape);
+      child.initialize(_context, _uriPrefix);
     }
   }
 
@@ -114,9 +106,6 @@ public class SGNode
 
   public void render(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
-  
-  //  ILogger::instance()->logInfo("Rendering SG: " + description());
-  
     final GLState glState = createState(rc, parentGLState);
     if (glState != null)
     {
