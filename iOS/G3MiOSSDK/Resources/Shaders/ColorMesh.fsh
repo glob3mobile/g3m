@@ -7,5 +7,9 @@
 varying mediump vec4 VertexColor;
 
 void main() {
-  gl_FragColor = VertexColor;
+    if (VertexColor.a > 0.0){
+        gl_FragColor = VertexColor;
+    } else{
+        discard;
+    }
 }

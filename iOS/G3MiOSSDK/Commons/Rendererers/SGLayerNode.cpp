@@ -113,7 +113,7 @@ const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) 
                                                                    GLFormat::rgba(),
                                                                    getURL()._path,
                                                                    generateMipmap,
-                                                                   GLTextureParameterValue::repeat());
+                                                                GLTextureParameterValue::repeat());
 
       delete _downloadedImage;
       _downloadedImage = NULL;

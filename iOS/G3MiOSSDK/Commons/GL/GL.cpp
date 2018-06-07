@@ -115,7 +115,7 @@ bool GL::isPowerOfTwo(int x) {
 const IGLTextureId* GL::uploadTexture(const IImage* image,
                                       int format,
                                       bool generateMipmap,
-                                      int wrapping) { //Ignored parameter
+                                      int wrapping) {
     
     const IGLTextureId* texID = getGLTextureId();
     if (texID != NULL) {
@@ -144,13 +144,12 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
                                  GLTextureParameter::magFilter(),
                                  linear);
         
-        const int clampToEdge = GLTextureParameterValue::clampToEdge();
         _nativeGL->texParameteri(texture2D,
                                  GLTextureParameter::wrapS(),
-                                 clampToEdge);
+                                 wrapping);
         _nativeGL->texParameteri(texture2D,
                                  GLTextureParameter::wrapT(),
-                                 clampToEdge);
+                                 wrapping);
         
         _nativeGL->texImage2D(image, format);
         
@@ -173,74 +172,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     
     return texID;
 }
-
-
-//const IGLTextureId* GL::uploadTexture(const IImage* image,
-//                                      int format,
-//                                      bool generateMipmap,
-//                                      int wrapping) {
-//
-//    //  if (_verbose) {
-//    //    ILogger::instance()->logInfo("GL::uploadTexture()");
-//    //  }
-//
-//    const IGLTextureId* texId = getGLTextureId();
-//    if (texId != NULL) {
-//        GLGlobalState newState;
-//
-//        newState.setPixelStoreIAlignmentUnpack(1);
-//        newState.bindTexture(0, texId);
-//
-//        newState.applyChanges(this, *_currentGLGlobalState);
-//
-//        const int texture2D = GLTextureType::texture2D();
-//        const int linear    = GLTextureParameterValue::linear();
-//
-//        if (generateMipmap) {
-//            _nativeGL->texParameteri(texture2D,
-//                                     GLTextureParameter::minFilter(),
-//                                     GLTextureParameterValue::linearMipmapNearest());
-//        }
-//        else {
-//            _nativeGL->texParameteri(texture2D,
-//                                     GLTextureParameter::minFilter(),
-//                                     linear);
-//        }
-//
-//        _nativeGL->texParameteri(texture2D,
-//                                 GLTextureParameter::magFilter(),
-//                                 linear);
-//
-//        // const int clampToEdge = GLTextureParameterValue::clampToEdge();
-//        //    const int clampToEdge = GLTextureParameterValue::repeat();
-//        _nativeGL->texParameteri(texture2D,
-//                                 GLTextureParameter::wrapS(),
-//                                 wrapping);
-//        _nativeGL->texParameteri(texture2D,
-//                                 GLTextureParameter::wrapT(),
-//                                 wrapping);
-//
-//        _nativeGL->texImage2D(image, format);
-//
-//        if (generateMipmap) {
-//            if (
-//                isPowerOfTwo(image->getWidth()) &&
-//                isPowerOfTwo(image->getHeight())
-//                ) {
-//                _nativeGL->generateMipmap(texture2D);
-//            }
-//            else {
-//                ILogger::instance()->logError("Can't generate mipmap. Texture dimensions are not power of two.");
-//            }
-//        }
-//    }
-//    else {
-//        ILogger::instance()->logError("can't get a valid texture id\n");
-//        return NULL;
-//    }
-//
-//    return texId;
-//}
 
 const IGLTextureId* GL::getGLTextureId() {
     //  if (_verbose) {

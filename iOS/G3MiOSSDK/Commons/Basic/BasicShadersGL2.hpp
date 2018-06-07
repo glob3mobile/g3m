@@ -60,7 +60,11 @@ public:
  emptyString +  
 "varying mediump vec4 VertexColor;\n" +
 "void main() {\n" +
+"if (VertexColor.a > 0.0){\n" +
 "gl_FragColor = VertexColor;\n" +
+"} else{\n" +
+"discard;\n" +
+"}\n" +
 "}\n");
     this->add(sourcesColorMesh);
 
@@ -208,7 +212,12 @@ public:
 "varying mediump vec2 TextureCoordOut;\n" +
 "uniform sampler2D Sampler;\n" +
 "void main() {\n" +
-"gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+"lowp vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
+"if (color.a > 0.0){\n" +
+"gl_FragColor = color;\n" +
+"} else{\n" +
+"discard;\n" +
+"}\n" +
 "}\n");
     this->add(sourcesTexturedMesh);
 
@@ -532,10 +541,14 @@ public:
 "varying vec4 VertexColor;\n" +
 "varying vec3 lightColor;\n" +
 "void main() {\n" +
+"if (VertexColor.a <= 0.0){\n" +
+"discard;\n" +
+"} else{\n" +
 "gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
 "gl_FragColor.g = VertexColor.g * lightColor.r;\n" +
 "gl_FragColor.b = VertexColor.b * lightColor.r;\n" +
 "gl_FragColor.a = VertexColor.a;\n" +
+"}\n" +
 "}\n");
     this->add(sourcesColorMesh_DirectionLight);
 
