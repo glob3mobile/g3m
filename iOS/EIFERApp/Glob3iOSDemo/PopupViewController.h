@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PopupViewController : UIViewController<UIPickerViewDelegate,UIScrollViewDelegate>
+@interface PopupViewController : UIViewController<UIPickerViewDelegate,UIScrollViewDelegate,UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *distancePicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeBar;
 @property (weak, nonatomic) IBOutlet UIPickerView *colorSpinner;
 @property (weak, nonatomic) IBOutlet UISwitch *buildingsSwitch;
@@ -25,7 +26,8 @@
                           Method:(int) method
                        Buildings:(bool) buildings
                            Pipes:(bool) pipes
-                      Correction:(bool) correction;
+                      Correction:(bool) correction
+                        Distance:(int) distance;
 
 - (IBAction)setCorrectionsAction:(id)sender;
 

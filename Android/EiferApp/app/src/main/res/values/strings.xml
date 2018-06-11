@@ -58,7 +58,9 @@
 
     <string name="abortSimulation">Stop</string>
 
-    <string name="menu_correction">GPS Correction Settings</string>
+    <string name="menu_correction_title">GPS Correction Settings</string>
+    <string name="menu_correction">Uses GPS Correction</string>
+    <string name="menu_fade"> Fading distance (m) </string>
     <string name="fixer_unable"> Defining a position for correction settings is only possible in map mode. </string>
     <string name="fixPosition">Set</string>
     <string name="undefined">Position undefined</string>

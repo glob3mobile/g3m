@@ -133,6 +133,8 @@ class CompositeElevationDataProvider;
 - (void) setAlphaMethod:(int) alphaMethod;
 - (void) setHole:(bool) enable;
 - (void) setDitch:(bool) enable;
+- (int) getDistance;
+- (void) setDistance:(int) meters;
 
 - (void) changeHole:(Geodetic3D) position;
 - (void) addPipeMeshes;

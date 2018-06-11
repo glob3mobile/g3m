@@ -214,12 +214,34 @@
                 android:gravity="center"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:paddingTop="5px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView70"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="@string/menu_fade"
+                android:gravity="center"/>
+
+            <NumberPicker
+                android:id="@+id/distancePicker"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="3"
+             />
+        </LinearLayout>
+
         <TextView
             android:paddingTop="10px"
             android:id="@+id/textView13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/menu_alpha_heading" />
+            android:text="@string/menu_correction_title" />
 
         <Switch
             android:paddingTop="5px"

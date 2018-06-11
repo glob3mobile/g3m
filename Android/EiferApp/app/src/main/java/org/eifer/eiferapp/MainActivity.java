@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -31,6 +32,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;*/
 import org.glob3.mobile.generated.Geodetic3D;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -346,6 +348,12 @@ public class MainActivity extends AppCompatActivity {
         SeekBar modeSeekbar = vi.findViewById(R.id.modeSeekbar);
         TextView position = vi.findViewById(R.id.textView14);
 
+        NumberPicker np = vi.findViewById(R.id.distancePicker);
+
+        np.setMinValue(10); //As in really close!
+        np.setMaxValue(5100); //As in approximate distance to horizon line for a 2m-height-person in a flat area.
+        np.setValue(fragment.getDistance());
+
         int alphaValue = (fragment.isHole()) ? 1:0;
         int ditchValue = (fragment.isDitch()) ? 1:0;
 
@@ -377,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
         SeekBar alphaSeekbar = dialog.findViewById(R.id.alphaMethodBar);
         SeekBar ditchSeekbar = dialog.findViewById(R.id.ditchMethodBar);
         SeekBar modeSeekbar = dialog.findViewById(R.id.modeSeekbar);
+        NumberPicker distancePicker = dialog.findViewById(R.id.distancePicker);
 
         FragmentManager fmanager = this.getSupportFragmentManager();
         GlobeFragment fragment = (GlobeFragment) fmanager.findFragmentById(R.id.theFragment);
@@ -387,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
         fragment.setAlphaMethod(mSpinner.getSelectedItemPosition());
         fragment.setBuildingColor(bSpinner.getSelectedItemPosition());
         fragment.setCorrection(cSwitch.isChecked());
+        fragment.setDistance(distancePicker.getValue());
         boolean isHole = (alphaSeekbar.getProgress() == 1);
         boolean isDitch = (ditchSeekbar.getProgress() == 1);
         fragment.setHole(isHole);

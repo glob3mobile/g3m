@@ -97,6 +97,7 @@ public class Cylinder {
 	private double _radius;
 	
 	private static double PROXIMITY_VALUE = 25.0;
+	private static int DISTANCE_VALUE = 100;
 	private static int DISTANCE_METHOD = 2;
 	private static boolean DEPTH_ENABLED = false;
 	private static boolean isDitch = true;
@@ -117,9 +118,10 @@ public class Cylinder {
 		_info = new CylinderMeshInfo();
 	}
 	
-	public static void setProximity(double proximity){
-		PROXIMITY_VALUE = proximity;
+	public static void setDistance(int distance){
+		DISTANCE_VALUE = distance;
 	}
+	public static int getDistance(){return DISTANCE_VALUE;}
 	
 	public static void setDistanceMethod(int method){
 		DISTANCE_METHOD = method;
@@ -250,7 +252,7 @@ public class Cylinder {
 		ArrayList<CylinderMeshInfo> visibleInfo = new ArrayList<CylinderMeshInfo>();
 	    ArrayList<Mesh> theMeshes = visibleMeshes(meshRenderer,camera,planet,cylInfo,visibleInfo);
 	    
-	    double maxDt = 100;
+	    double maxDt = DISTANCE_VALUE;
 	    String text = "";
 	    
 	    for (int i=0;i<theMeshes.size();i++){

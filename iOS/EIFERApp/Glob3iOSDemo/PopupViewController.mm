@@ -20,7 +20,7 @@
 
 @implementation PopupViewController{
     NSArray *colorArray, *methodArray;
-    int colorRow, prevColor, methodRow, prevMethod, modeRow, alphaRow;
+    int colorRow, prevColor, methodRow, prevMethod, modeRow, alphaRow, distanceRow;
     bool areBuildings, arePipes, isCorrection;
 }
 
@@ -30,13 +30,15 @@
                           Method:(int) method
                        Buildings:(bool) buildings
                            Pipes:(bool) pipes
-                      Correction:(bool) correction{
+                      Correction:(bool) correction
+                        Distance:(int) distance{
     modeRow = mode;
     prevColor = color;
     methodRow = method;
     prevMethod = method;
     alphaRow = alpha;
     colorRow = color;
+    distanceRow = distance;
     areBuildings = buildings;
     arePipes = pipes;
     isCorrection = correction;
@@ -96,11 +98,13 @@
     [self.pipesSwitch setOn:arePipes];
     [self.correctionSwitch setOn:isCorrection];
     [self.positionText setText:[self generateMessage]];
+    [self.distancePicker setText:[NSString stringWithFormat:@"%d",distanceRow]];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     self.theScrollView.delegate = self;
+    self.distancePicker.delegate = self;
     //self.theScrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.theScrollView setScrollEnabled:YES];
 //    self.theScrollView.contentSize = self.theScrollContent.frame.size;
@@ -132,6 +136,11 @@
     
     if (modeRow != (int)self.modeBar.selectedSegmentIndex) {
         [vC setMode:(int)self.modeBar.selectedSegmentIndex];
+    }
+    
+    int dt = [[self.distancePicker text] intValue];
+    if (dt != distanceRow){
+        [vC setDistance:dt];
     }
     
     if (alphaRow != (int)self.alphaBar.selectedSegmentIndex) {
@@ -172,6 +181,11 @@
     return message;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return TRUE;
+}
+
 ////PICKER VIEW
 
 // The number of columns of data
@@ -179,6 +193,7 @@
 {
     return 1;
 }
+
 
 // The number of rows of data
 - (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component

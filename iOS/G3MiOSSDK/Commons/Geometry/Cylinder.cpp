@@ -26,6 +26,7 @@
 #define PROXIMITY_VALUE 25
 
 int Cylinder::DISTANCE_METHOD = 2;
+int Cylinder::DISTANCE_VALUE = 100;
 bool Cylinder::DEPTH_ENABLED = false;
 bool Cylinder::DITCH_ENABLED = true;
 
@@ -46,6 +47,14 @@ bool Cylinder::getDepthEnabled(){
 
 bool Cylinder::getDitchEnabled(){
     return Cylinder::DITCH_ENABLED;
+}
+
+int Cylinder::getDistance(){
+    return Cylinder::DISTANCE_VALUE;
+}
+
+void Cylinder::setDistance(int meters){
+    Cylinder::DISTANCE_VALUE = meters;
 }
 
 void Cylinder::setDitchEnabled(bool enabled){
@@ -246,7 +255,7 @@ std::string Cylinder::adaptMeshes(MeshRenderer *mr,
     std::vector<CylinderMeshInfo> visibleInfo;
     std::vector<Mesh*> theMeshes = visibleMeshes(mr,camera,planet,cylInfo,visibleInfo);
     
-    double maxDt = 100;
+    double maxDt = DISTANCE_VALUE;
     std::string text = "";
     
     for (size_t i=0;i<theMeshes.size();i++){

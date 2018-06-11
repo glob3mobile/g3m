@@ -26,6 +26,7 @@ class FloatBufferBuilderFromCartesian3D;
 class Cylinder{
 private:
     static int DISTANCE_METHOD;
+    static int DISTANCE_VALUE;
     static bool DEPTH_ENABLED;
     static bool DITCH_ENABLED;
 public:
@@ -142,6 +143,8 @@ public:
     static bool getDepthEnabled();
     static void setDitchEnabled(bool enabled);
     static bool getDitchEnabled();
+    static int getDistance();
+    static void setDistance(int meters);
     
 private:
     

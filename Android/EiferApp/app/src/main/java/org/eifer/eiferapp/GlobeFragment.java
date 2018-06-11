@@ -646,6 +646,14 @@ public class GlobeFragment extends Fragment{
         }
     }
 
+    public int getDistance(){
+        return Cylinder.getDistance();
+    }
+
+    public void setDistance(int meters){
+        Cylinder.setDistance(meters);
+    }
+
     public int getBuildingColor(){
         return buildingColor;
     }

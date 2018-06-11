@@ -1325,7 +1325,7 @@ class AltitudeFixerLM: public ILocationModifier{
 - (void) tapDetected{
     if (_isMenuAvailable ) {
     PopupViewController *popupController = [[self storyboard] instantiateViewControllerWithIdentifier:@"popupViewController"];
-        [popupController setCurrentStateWithMode:mode Color:color Alpha:alpha Method:method Buildings:buildings Pipes:pipes Correction:correction];
+        [popupController setCurrentStateWithMode:mode Color:color Alpha:alpha Method:method Buildings:buildings Pipes:pipes Correction:correction Distance:Cylinder::getDistance()];
     [self presentViewController:popupController animated:YES completion:nil];
     }
 }
@@ -2152,6 +2152,13 @@ class AltitudeFixerLM: public ILocationModifier{
     [PositionLabel setText:message];
 }
 
+- (void) setDistance:(int)meters{
+    Cylinder::setDistance(meters);
+}
+
+- (int) getDistance{
+    return Cylinder::getDistance();
+}
 
 /////PICKER VIEW
 
