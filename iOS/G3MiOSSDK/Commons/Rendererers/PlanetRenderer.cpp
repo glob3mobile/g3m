@@ -778,6 +778,9 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                      _lastCamera->getGeodeticPosition().description().c_str(),
                                      _lastCamera->getHeading()._degrees,
                                      _lastCamera->getPitch()._degrees);
+          
+          ILogger::instance()->logInfo("Camera cartesian position=%s",
+                                       _lastCamera->getCartesianPosition().description().c_str());
 
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
           return true;

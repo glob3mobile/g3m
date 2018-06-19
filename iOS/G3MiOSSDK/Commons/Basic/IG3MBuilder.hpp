@@ -68,6 +68,7 @@ private:
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
   InfoDisplay*                      _infoDisplay;
+    std::vector<Renderer*>          _multiPassRenderers;
 
   GL*                               getGL();
   ICameraActivityListener*          getCameraActivityListener();
@@ -200,6 +201,11 @@ public:
   MarksRenderer* createMarksRenderer();
   
   void setInfoDisplay(InfoDisplay* infoDisplay);
+    
+    
+    void addNextPassRenderer(Renderer* r){
+        _multiPassRenderers.push_back(r);
+    }
 };
 
 #endif

@@ -741,6 +741,10 @@ G3MWidget* IG3MBuilder::create() {
                                             MONO);
 
   g3mWidget->setUserData(getUserData());
+    
+    for(size_t i = 0; i < _multiPassRenderers.size(); ++i){
+        g3mWidget->addNextPassRenderer(_multiPassRenderers[i]);
+    }
 
 
   //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
