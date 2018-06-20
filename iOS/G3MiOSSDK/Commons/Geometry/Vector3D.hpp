@@ -228,6 +228,12 @@ public:
                         a._z * v1 + b._z * v);
     }
     
+    static Vector3D rayIntersectsTriangle(const Vector3D& rayOrigin,
+                                          const Vector3D& rayDirection,
+                                          const Vector3D& vertex0,
+                                          const Vector3D& vertex1,
+                                          const Vector3D& vertex2);
+    
 };
 
 

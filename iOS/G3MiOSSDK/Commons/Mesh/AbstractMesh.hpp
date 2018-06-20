@@ -99,6 +99,10 @@ public:
     void rawRender(const G3MRenderContext* rc,
                    const GLState* parentGLState) const;
     
+    Vector3D getCenter() const{
+        return _center;
+    }
+    
     void showNormals(bool v) const {
         _showNormals = v;
     }

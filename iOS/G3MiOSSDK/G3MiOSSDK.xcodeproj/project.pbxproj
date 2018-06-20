@@ -2018,6 +2018,8 @@
 		D8D1541F1C7329AE00E54742 /* Vector2S.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2S.cpp; path = Commons/Geometry/Vector2S.cpp; sourceTree = "<group>"; };
 		D8D154201C7329AE00E54742 /* Vector2S.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2S.hpp; path = Commons/Geometry/Vector2S.hpp; sourceTree = "<group>"; };
 		D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringBuilder.cpp; path = Commons/Interfaces/IStringBuilder.cpp; sourceTree = "<group>"; };
+		D8D3982B20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DistanceTransparency.vsh; sourceTree = "<group>"; };
+		D8D3982C20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DistanceTransparency.fsh; sourceTree = "<group>"; };
 		D8D781E71CA3E5D40025E988 /* Polygon2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Polygon2D.cpp; path = Commons/Geometry/Polygon2D.cpp; sourceTree = "<group>"; };
 		D8D781E81CA3E5D40025E988 /* Polygon2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Polygon2D.hpp; path = Commons/Geometry/Polygon2D.hpp; sourceTree = "<group>"; };
 		D8D781EA1CA400750025E988 /* Polygon3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Polygon3D.cpp; path = Commons/Geometry/Polygon3D.cpp; sourceTree = "<group>"; };
@@ -3118,6 +3120,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8D3982C20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.fsh */,
+				D8D3982B20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.vsh */,
 				D84B45011CD8A1F60041CA1F /* RoundedColoredPoints.vsh */,
 				D84B45021CD8A1F60041CA1F /* RoundedColoredPoints.fsh */,
 				D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */,

@@ -783,6 +783,46 @@ public:
 "}\n");
     this->add(sourcesBillboard);
 
+    GPUProgramSources sourcesFlatColorMesh_DistanceTransparency("FlatColorMesh_DistanceTransparency",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
+"uniform float uPointSize;\n" +
+"varying highp float alpha;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"#define HALF_PI 1.5707963268\n" +
+"#define START_FADING_AT 0.75\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
+"highp float vertexDist = -vertexInModel.z;\n" +
+"highp float d = vertexDist / uTransparencyDistanceThreshold;\n" +
+"if (d < START_FADING_AT){\n" +
+"alpha = 1.0;\n" +
+"} else{\n" +
+"if (d > 1.0){\n" +
+"alpha = 0.0;\n" +
+"} else{\n" +
+"d = (d - START_FADING_AT) / (1.0 - START_FADING_AT);\n" +
+"d = (1.0 + d) * (HALF_PI);\n" +
+"alpha = sin(d);\n" +
+"}\n" +
+"}\n" +
+"}\n",
+ emptyString +  
+"uniform lowp vec4 uFlatColor;\n" +
+"varying highp float alpha;\n" +
+"void main() {\n" +
+"if (alpha <= 0.0){\n" +
+"discard;\n" +
+"}\n" +
+"gl_FragColor = uFlatColor;\n" +
+"gl_FragColor.a *= alpha;\n" +
+"}\n");
+    this->add(sourcesFlatColorMesh_DistanceTransparency);
+
   }
 
 };

@@ -13,14 +13,14 @@
 
 
 IndexedMesh::~IndexedMesh() {
-  if (_ownsIndices) {
-    delete _indices;
-  }
-
+    if (_ownsIndices) {
+        delete _indices;
+    }
+    
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
+    
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
@@ -68,10 +68,25 @@ AbstractMesh(primitive,
 _indices(indices),
 _ownsIndices(ownsIndices)
 {
-
+    
 }
 
 void IndexedMesh::rawRender(const G3MRenderContext* rc) const {
-  GL* gl = rc->getGL();
-  gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
+    GL* gl = rc->getGL();
+    gl->drawElements(_primitive, _indices, _glState, *rc->getGPUProgramManager());
+}
+
+
+const void IndexedMesh::getTrianglePrimitive(short t,
+                                             MutableVector3D& v1,
+                                             MutableVector3D& v2,
+                                             MutableVector3D& v3) const{
+    t *= 3;
+    short i1 = _indices->get(t);
+    short i2 = _indices->get(t+1);
+    short i3 = _indices->get(t+2);
+    
+    v1.copyFrom(getVertex(i1));
+    v2.copyFrom(getVertex(i2));
+    v3.copyFrom(getVertex(i3));
 }
