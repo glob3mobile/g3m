@@ -55,6 +55,11 @@ public:
                                     MutableVector3D& v2,
                                     MutableVector3D& v3) const;
     
+    const Vector3D getHitWithRayForTrianglePrimitive(const Vector3D& origin,
+                                                     const Vector3D& ray,
+                                                     short firstTriangle=-1,
+                                                     short lastTriangle=-1) const;
+    
 };
 
 #endif

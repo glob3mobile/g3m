@@ -90,3 +90,39 @@ const void IndexedMesh::getTrianglePrimitive(short t,
     v2.copyFrom(getVertex(i2));
     v3.copyFrom(getVertex(i3));
 }
+
+
+const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& origin,
+                                                 const Vector3D& ray,
+                                                              short firstTriangle,
+                                                              short lastTriangle) const{
+    
+    if (firstTriangle < 0){
+        firstTriangle = 0;
+    }
+    if (lastTriangle < 0){
+        lastTriangle = (short)_indices->size() / 3;
+    }
+    
+    MutableVector3D v1,v2,v3, closestP = MutableVector3D::nan();
+    double minDist = IMathUtils::instance()->maxDouble();
+    //Triangle intersection
+    for(short t = firstTriangle; t < lastTriangle; ++t){
+        getTrianglePrimitive(t,v1,v2,v3);
+        
+        Vector3D p = Vector3D::rayIntersectsTriangle(origin,
+                                                     ray,
+                                                     v1.asVector3D(),
+                                                     v2.asVector3D(),
+                                                     v3.asVector3D());
+        
+        if (!p.isNan()){
+            double dist = p.squaredDistanceTo(origin);
+            if (dist < minDist){
+                closestP.copyFrom(p);
+                minDist = dist;
+            }
+        }
+    }
+    return closestP.asVector3D();
+}
