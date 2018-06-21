@@ -96,6 +96,11 @@ const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& or
                                                  const Vector3D& ray,
                                                               short firstTriangle,
                                                               short lastTriangle) const{
+    if (_primitive != GLPrimitive::triangles()
+        || _primitive != GLPrimitive::triangleStrip()){
+        ILogger::instance()->logError("getHitWithRayForTrianglePrimitive(): Primitive not supported");
+    }
+    
     
     if (firstTriangle < 0){
         firstTriangle = 0;
