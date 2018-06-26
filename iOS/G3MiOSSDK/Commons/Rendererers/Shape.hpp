@@ -132,6 +132,10 @@ public:
                         position,
                         linearInterpolation);
   }
+    
+    AltitudeMode getAltitudeMode() const{
+        return _altitudeMode;
+    }
 
   void setHeading(const Angle& heading) {
 #ifdef C_CODE

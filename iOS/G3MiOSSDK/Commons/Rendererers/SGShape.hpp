@@ -17,67 +17,70 @@ class SGNode;
 
 class SGShape : public Shape {
 private:
-  SGNode* _node;
-  const std::string _uriPrefix;
-
-  const bool _isTransparent;
-
-  GLState* _glState;
-
+    SGNode* _node;
+    const std::string _uriPrefix;
+    
+    const bool _isTransparent;
+    
+    GLState* _glState;
+    
 public:
-
-  SGShape(SGNode* node,
-          const std::string& uriPrefix,
-          bool isTransparent,
-          Geodetic3D* position,
-          AltitudeMode altitudeMode) :
-  Shape(position, altitudeMode),
-  _node(node),
-  _uriPrefix(uriPrefix),
-  _isTransparent(isTransparent)
-  {
-    _glState = new GLState();
-    if (_isTransparent) {
-      _glState->addGLFeature(new BlendingModeGLFeature(true,
-                                                       GLBlendFactor::srcAlpha(),
-                                                       GLBlendFactor::oneMinusSrcAlpha()),
-                             false);
+    
+    SGShape(SGNode* node,
+            const std::string& uriPrefix,
+            bool isTransparent,
+            Geodetic3D* position,
+            AltitudeMode altitudeMode) :
+    Shape(position, altitudeMode),
+    _node(node),
+    _uriPrefix(uriPrefix),
+    _isTransparent(isTransparent)
+    {
+        _glState = new GLState();
+        if (_isTransparent) {
+            _glState->addGLFeature(new BlendingModeGLFeature(true,
+                                                             GLBlendFactor::srcAlpha(),
+                                                             GLBlendFactor::oneMinusSrcAlpha()),
+                                   false);
+        }
+        else {
+            _glState->addGLFeature(new BlendingModeGLFeature(false,
+                                                             GLBlendFactor::srcAlpha(),
+                                                             GLBlendFactor::oneMinusSrcAlpha()),
+                                   false);
+        }
     }
-    else {
-      _glState->addGLFeature(new BlendingModeGLFeature(false,
-                                                       GLBlendFactor::srcAlpha(),
-                                                       GLBlendFactor::oneMinusSrcAlpha()),
-                             false);
+    
+    ~SGShape();
+    
+    SGShape* clone(Geodetic3D* position,
+                   AltitudeMode altitudeMode) const;
+    
+    SGNode* getNode() const {
+        return _node;
     }
-  }
-
-  ~SGShape();
-
-  SGNode* getNode() const {
-    return _node;
-  }
-
-  const std::string getURIPrefix() const {
-    return _uriPrefix;
-  }
-
-  void initialize(const G3MContext* context);
-
-  bool isReadyToRender(const G3MRenderContext* rc);
-
-  void rawRender(const G3MRenderContext* rc,
-                 GLState* parentState,
-                 bool renderNotReadyShapes);
-
-  bool isTransparent(const G3MRenderContext* rc) {
-    return _isTransparent;
-  }
-
-  std::vector<double> intersectionsDistances(const Planet* planet,
-                                             const Vector3D& origin,
-                                             const Vector3D& direction) const;
-  
-  
+    
+    const std::string getURIPrefix() const {
+        return _uriPrefix;
+    }
+    
+    void initialize(const G3MContext* context);
+    
+    bool isReadyToRender(const G3MRenderContext* rc);
+    
+    void rawRender(const G3MRenderContext* rc,
+                   GLState* parentState,
+                   bool renderNotReadyShapes);
+    
+    bool isTransparent(const G3MRenderContext* rc) {
+        return _isTransparent;
+    }
+    
+    std::vector<double> intersectionsDistances(const Planet* planet,
+                                               const Vector3D& origin,
+                                               const Vector3D& direction) const;
+    
+    
 };
 
 #endif
