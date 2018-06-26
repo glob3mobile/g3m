@@ -13,6 +13,8 @@
 class JSONNumber : public JSONBaseObject {
 public:
   virtual double value() const = 0;
+    
+  virtual void updateValue(double value) = 0;
 
   const JSONNumber* asNumber() const {
     return this;

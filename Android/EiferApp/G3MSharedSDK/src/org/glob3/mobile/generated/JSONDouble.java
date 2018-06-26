@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class JSONDouble extends JSONNumber
 {
-  private final double _value;
+  private double _value;
 
   public JSONDouble(double value)
   {
@@ -68,6 +68,10 @@ public class JSONDouble extends JSONNumber
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public void updateValue(double value){
+    _value = value;
   }
 
 }

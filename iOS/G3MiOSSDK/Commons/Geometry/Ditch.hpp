@@ -21,6 +21,7 @@ class Camera;
 class Planet;
 class IndexedMesh;
 class FloatBufferBuilderFromCartesian3D;
+class JSONArray;
 
 #include "Sphere.hpp"
 #include "Geodetic3D.hpp"
@@ -34,6 +35,7 @@ public:
     _start(start), _end(end), _width(width){}
     
     Mesh* createMesh(const Color& color, const int nSegments,const Planet *planet, const ElevationData *ed);
+    Mesh * createComplexDitchMesh(JSONArray * covers, const Planet* planet);
     
 private:
     

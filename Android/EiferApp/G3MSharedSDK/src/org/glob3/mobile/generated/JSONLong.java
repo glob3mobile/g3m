@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class JSONLong extends JSONNumber
 {
-  private final long _value;
+  private long _value;
 
   public JSONLong(long value)
   {
@@ -69,6 +69,10 @@ public class JSONLong extends JSONNumber
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public void updateValue(double value){
+    _value = (long) value;
   }
 
 }

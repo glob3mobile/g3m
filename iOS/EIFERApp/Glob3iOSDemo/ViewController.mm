@@ -219,7 +219,7 @@
 #include <G3MiOSSDK/SimpleTextureMapping.hpp>
 #include "PipesModel.hpp"
 #include "UtilityNetworkParser.hpp"
-
+#include "UtilityJSONParser.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -1487,10 +1487,18 @@ class AltitudeFixerLM: public ILocationModifier{
 
 - (void) addPipeMeshes{
     PipesModel::reset();
-    UtilityNetworkParser::initialize([G3MWidget widget]->getG3MContext(),elevationData,pipeMeshRenderer,-4.0);
+    /*UtilityNetworkParser::initialize([G3MWidget widget]->getG3MContext(),elevationData,pipeMeshRenderer,-4.0);
     URL url = URL("file:///jochen_underground.gml");
-    UtilityNetworkParser::parseFromURL(url);
+    UtilityNetworkParser::parseFromURL(url);*/
     
+    
+    UtilityJSONParser *parser = [UtilityJSONParser new];
+    [parser loadJSONWithPath:@"jochen_underground" elevData:elevationData
+                      planet:[G3MWidget widget]->getG3MContext()->getPlanet()
+                          mr:pipeMeshRenderer];
+    /*UtilityJSONParser::initialize([G3MWidget widget]->getG3MContext(),elevationData,pipeMeshRenderer,-4.0);
+    URL url = URL("file:///jochen_underground.json");
+    UtilityJSONParser::parseFromURL(url);*/
     #warning Si hiciera falta colocar las otras tuberias, irian aqui ....
 }
 

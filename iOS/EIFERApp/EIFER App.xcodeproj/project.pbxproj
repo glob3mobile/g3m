@@ -49,6 +49,9 @@
 		849E86101FC7243B004AE1F0 /* PipesRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 849E860E1FC7243B004AE1F0 /* PipesRenderer.mm */; };
 		84CA232F1FACC37D00AE8DDD /* building-1.gml in Resources */ = {isa = PBXBuildFile; fileRef = 84CA232D1FACC37D00AE8DDD /* building-1.gml */; };
 		84CA23301FACC37D00AE8DDD /* building-2.gml in Resources */ = {isa = PBXBuildFile; fileRef = 84CA232E1FACC37D00AE8DDD /* building-2.gml */; };
+		84EBFFD120DBAD2300FE2BDD /* UtilityJSONParserTwo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EBFFCF20DBAD2300FE2BDD /* UtilityJSONParserTwo.mm */; };
+		84EBFFD520DBC98A00FE2BDD /* UtilityJSONParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EBFFD420DBC98A00FE2BDD /* UtilityJSONParser.mm */; };
+		84EBFFD720DBCE2000FE2BDD /* jochen_underground.json in Resources */ = {isa = PBXBuildFile; fileRef = 84EBFFD620DBCE1F00FE2BDD /* jochen_underground.json */; };
 		CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E61770E8F100D5A80C /* libicucore.dylib */; };
 		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
 		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
@@ -179,6 +182,11 @@
 		849E860F1FC7243B004AE1F0 /* PipesRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PipesRenderer.hpp; sourceTree = "<group>"; };
 		84CA232D1FACC37D00AE8DDD /* building-1.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-1.gml"; path = "EIFER Resources/building-1.gml"; sourceTree = "<group>"; };
 		84CA232E1FACC37D00AE8DDD /* building-2.gml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "building-2.gml"; path = "EIFER Resources/building-2.gml"; sourceTree = "<group>"; };
+		84EBFFCF20DBAD2300FE2BDD /* UtilityJSONParserTwo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UtilityJSONParserTwo.mm; sourceTree = "<group>"; };
+		84EBFFD020DBAD2300FE2BDD /* UtilityJSONParserTwo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UtilityJSONParserTwo.hpp; sourceTree = "<group>"; };
+		84EBFFD320DBC98A00FE2BDD /* UtilityJSONParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityJSONParser.h; sourceTree = "<group>"; };
+		84EBFFD420DBC98A00FE2BDD /* UtilityJSONParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UtilityJSONParser.mm; sourceTree = "<group>"; };
+		84EBFFD620DBCE1F00FE2BDD /* jochen_underground.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jochen_underground.json; sourceTree = "<group>"; };
 		CF4027E61770E8F100D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		CF4027E81770E8F900D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -341,6 +349,10 @@
 				849E860F1FC7243B004AE1F0 /* PipesRenderer.hpp */,
 				849B8E1D1FD051B000EBD799 /* UtilityNetworkParser.mm */,
 				849B8E1E1FD051B100EBD799 /* UtilityNetworkParser.hpp */,
+				84EBFFCF20DBAD2300FE2BDD /* UtilityJSONParserTwo.mm */,
+				84EBFFD020DBAD2300FE2BDD /* UtilityJSONParserTwo.hpp */,
+				84EBFFD320DBC98A00FE2BDD /* UtilityJSONParser.h */,
+				84EBFFD420DBC98A00FE2BDD /* UtilityJSONParser.mm */,
 			);
 			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
@@ -368,6 +380,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				84EBFFD620DBCE1F00FE2BDD /* jochen_underground.json */,
 				846EC65420C68731004882C6 /* _auto_22.png */,
 				846EC65520C68731004882C6 /* _auto_24.png */,
 				846EC65620C68731004882C6 /* _auto_25_1_.jpg */,
@@ -527,6 +540,7 @@
 			files = (
 				842D6B591FE187F800140B1F /* bolita.png in Resources */,
 				D80D57311BBAA1F400BA4762 /* Images.xcassets in Resources */,
+				84EBFFD720DBCE2000FE2BDD /* jochen_underground.json in Resources */,
 				D8D0DF3D1CE3300100B5B6D3 /* technologiepark_WGS84.gml in Resources */,
 				846EC64E20C6870D004882C6 /* _auto_20.png in Resources */,
 				D8DF55CA1CC4D9C300D7D084 /* daxlanden_4326_lod2.gml in Resources */,
@@ -620,11 +634,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
+				84EBFFD120DBAD2300FE2BDD /* UtilityJSONParserTwo.mm in Sources */,
 				849E86101FC7243B004AE1F0 /* PipesRenderer.mm in Sources */,
 				8465B6F01FBC5E3000118771 /* PopupViewController.mm in Sources */,
 				D86F55921CD9E75700A724F8 /* CameraViewController.m in Sources */,
 				849B8E1F1FD051B100EBD799 /* UtilityNetworkParser.mm in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
+				84EBFFD520DBC98A00FE2BDD /* UtilityJSONParser.mm in Sources */,
 				D850B6DC1F76B51400FED5E3 /* PipesModel.mm in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
 			);

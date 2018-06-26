@@ -13,7 +13,7 @@
 
 class JSONInteger : public JSONNumber {
 private:
-  const int _value;
+  int _value;
 
 public:
   JSONInteger(int value) :
@@ -31,6 +31,10 @@ public:
 
   int intValue() const {
     return _value;
+  }
+    
+  void updateValue(double value){
+    _value = (int) value;
   }
 
   void acceptVisitor(JSONVisitor* visitor) const;

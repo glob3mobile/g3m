@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class JSONFloat extends JSONNumber
 {
-  private final float _value;
+  private float _value;
 
   public JSONFloat(float value)
   {
@@ -69,6 +69,10 @@ public class JSONFloat extends JSONNumber
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public void updateValue(double value){
+    _value = (float) value;
   }
 
 }

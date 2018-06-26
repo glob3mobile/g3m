@@ -13,7 +13,7 @@
 
 class JSONLong : public JSONNumber {
 private:
-  const long long _value;
+  long long _value;
 
 public:
   JSONLong(long long value) :
@@ -31,6 +31,10 @@ public:
 
   long long longValue() const {
     return _value;
+  }
+    
+  void updateValue(double value){
+    _value = (long long) value;
   }
 
   void acceptVisitor(JSONVisitor* visitor) const;

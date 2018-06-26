@@ -131,6 +131,115 @@ public class Cylinder {
 
 	public static boolean isDepthEnabled() { return DEPTH_ENABLED;}
 	public static void setDepthEnabled(boolean enabled) {DEPTH_ENABLED = enabled;}
+
+	public Mesh createComplexCylinderMesh(final Color color,final int nSegments, JSONArray covers, JSONArray covNormals, JSONArray line, final Planet planet){
+		FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+		FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+
+		FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+		ShortBufferBuilder ind = new ShortBufferBuilder();
+
+		int ct = 0;
+
+		for (int i=0;i<covers.size()-1;i++) {
+			JSONArray coverA = covers.getAsArray(i);
+			JSONArray coverB = covers.getAsArray(i + 1);
+			//JSONArray covNormalsA = covNormals.getAsArray(i);
+			//JSONArray covNormalsB = covNormals.getAsArray(i+1);
+			JSONArray start = line.getAsArray(i);
+			JSONArray end = line.getAsArray(i+1);
+
+
+			for (int j=0;j<coverA.size();j++){
+				JSONArray pointA = coverA.getAsArray(j);
+				JSONArray pointB = coverB.getAsArray(j);
+
+				//Nota: si las normales se ven raras, se quitan y se calculan a partir de la línea y del planeta
+				//JSONArray normalsA = covNormalsA.getAsArray(j);
+				//JSONArray normalsB = covNormalsB.getAsArray(j);
+
+				double lat = pointA.getAsNumber(1).value();
+				double lon = pointA.getAsNumber(0).value();
+				double hgt = pointA.getAsNumber(2).value(); // OJO: Elemento corrector debería ir fuera, donde pasamos de JSON de Android a JSON de globo
+				Vector3D pA = planet.toCartesian(Angle.fromDegrees(lat),Angle.fromDegrees(lon),hgt);
+				_info.addLatLng(lat, lon, hgt);
+
+				lat = pointB.getAsNumber(1).value();
+				lon = pointB.getAsNumber(0).value();
+				hgt = pointB.getAsNumber(2).value();
+				Vector3D pB = planet.toCartesian(Angle.fromDegrees(lat),Angle.fromDegrees(lon),hgt);
+				_info.addLatLng(lat,lon,hgt);
+				fbb.add(pA); fbb.add(pB);
+
+
+				lat = start.getAsNumber(1).value();
+				lon = start.getAsNumber(0).value();
+				hgt = start.getAsNumber(2).value();
+				Vector3D startXYZ = planet.toCartesian(Angle.fromDegrees(lat),Angle.fromDegrees(lon),hgt);
+
+				lat = end.getAsNumber(1).value();
+				lon = end.getAsNumber(0).value();
+				hgt = end.getAsNumber(2).value();
+				Vector3D endXYZ = planet.toCartesian(Angle.fromDegrees(lat),Angle.fromDegrees(lon),hgt);
+				Vector3D na = pA.sub(startXYZ);
+				Vector3D nb = pB.sub(endXYZ);
+				normals.add(na); normals.add(nb);
+
+				/*double x = normalsA.getAsNumber(0).value();
+				double y = normalsA.getAsNumber(1).value();
+				double z = normalsA.getAsNumber(2).value();
+				Vector3D nA = new Vector3D(x,y,z);
+				x = normalsB.getAsNumber(0).value();
+				y = normalsB.getAsNumber(1).value();
+				z = normalsB.getAsNumber(2).value();
+				Vector3D nB = new Vector3D(x,y,z);
+				normals.add(nA); normals.add(nB);*/
+
+				ind.add((short)ct);
+				ind.add((short)(ct+1));
+				ct = ct+2;
+
+				colors.add(color);
+				colors.add(color);
+			}
+		}
+		// Array
+			//Array Cover
+				//Arrays Puntos
+		/*for (int i = 0; i < nSegments*2; ++i){
+			ind.add((short)i);
+		}*/
+		/*ind.add((short)0);
+		ind.add((short)1);*/
+
+		IFloatBuffer vertices = fbb.create();
+		//#warning Tercer parámetro booleano == Depth Test. True oculta todo lo subterráneo.
+		IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(),
+				fbb.getCenter(),
+				vertices,
+				true,
+				ind.create(),
+				true,
+				1.0f,
+				1.0f,
+				null,//new Color(color),
+				colors.create(),//NULL,
+				1.0f,
+				DEPTH_ENABLED,
+				normals.create(),
+				false,
+				0.0f,
+				0.0f);
+
+		_sphere = createSphere(fbb); //(Box) im.getBoundingVolume();
+		Box aBox = (Box)(im.getBoundingVolume());
+		_box = new Box(aBox._lower,aBox._upper);
+
+		CompositeMesh cm = new CompositeMesh();
+		cm.addMesh(im);
+		return cm;
+
+	}
 	
 	public Mesh createMesh(final Color color, final int nSegments,final Planet planet){
 		Vector3D d = _end.sub(_start);
@@ -228,7 +337,7 @@ public class Cylinder {
 
 		java.util.ArrayList<Vector3D> vs = new java.util.ArrayList<Vector3D>();
 
-		for (short i = 0; i < fbb.size(); i++)
+		for (short i = 0; i < fbb.size()/3; i++)
 		{
 			vs.add(new Vector3D(fbb.getAbsoluteVector3D(i)));
 		}

@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class JSONInteger extends JSONNumber
 {
-  private final int _value;
+  private int _value;
 
   public JSONInteger(int value)
   {
@@ -69,6 +69,10 @@ public class JSONInteger extends JSONNumber
     if (isb != null)
        isb.dispose();
     return s;
+  }
+
+  public void updateValue(double value){
+    _value = (int) value;
   }
 
 }

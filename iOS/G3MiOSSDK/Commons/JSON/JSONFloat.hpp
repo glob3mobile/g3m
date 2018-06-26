@@ -13,7 +13,7 @@
 
 class JSONFloat : public JSONNumber {
 private:
-  const float _value;
+  float _value;
 
 public:
   JSONFloat(float value) :
@@ -31,6 +31,10 @@ public:
 
   float floatValue() const {
     return _value;
+  }
+    
+  void updateValue(double value){
+    _value = (float) value;
   }
 
   void acceptVisitor(JSONVisitor* visitor) const;

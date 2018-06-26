@@ -36,6 +36,7 @@ import org.eifer.eiferapp.g3mutils.PipesRenderer;
 import org.eifer.eiferapp.g3mutils.PointCloudEvolutionTask;
 import org.eifer.eiferapp.g3mutils.SchlossListener;
 import org.eifer.eiferapp.g3mutils.TPKLoadListener;
+import org.eifer.eiferapp.g3mutils.UtilityJSONParser;
 import org.eifer.eiferapp.g3mutils.UtilityNetworkParser;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
@@ -420,9 +421,11 @@ public class GlobeFragment extends Fragment{
 
     public void addPipeMeshes()
     {
-        UtilityNetworkParser.initialize(widget.getG3MContext(),elevData,pipeMeshRenderer,-4.0);
-        UtilityNetworkParser.parseFromURL(new URL("file:///jochen_underground.gml"));
+        /*UtilityNetworkParser.initialize(widget.getG3MContext(),elevData,pipeMeshRenderer,-4.0);
+        UtilityNetworkParser.parseFromURL(new URL("file:///jochen_underground.gml"));*/
 
+        UtilityJSONParser.initialize(widget.getG3MContext(),elevData,pipeMeshRenderer,-4.0);
+        UtilityJSONParser.parseFromURL(new URL("file:///jochen_underground.json"));
 
         //PipesModel.addMeshes("file:///pipesCoords.csv", widget.getG3MContext().getPlanet(), pipeMeshRenderer, elevData, -4.0,
                 //widget.getG3MContext().getDownloader());

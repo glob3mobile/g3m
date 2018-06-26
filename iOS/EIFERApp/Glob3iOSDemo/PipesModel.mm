@@ -17,6 +17,60 @@
 std::vector<Cylinder *> PipesModel::cylinders;
 std::vector<Cylinder::CylinderMeshInfo> PipesModel::cylinderInfo;
 
+
+
+void PipesModel::generateComplexPipe(Geodetic3D g,Geodetic3D g2,double eDiam,double iDiam,bool isT,bool isC,std::string theClass,std::string theType,
+                                std::string eMat,std::string iMat,int theId,JSONArray *covers,JSONArray *ditches,JSONArray *line,
+                                double covSegments,JSONArray *covNormals,const Planet *p, MeshRenderer *mr)
+{
+    Cylinder *c = new Cylinder(p->toCartesian(g), p->toCartesian(g2), eDiam / 10. );
+    c->_info.setClassAndType(theClass,theType);
+    c->_info.setMaterials(eMat,iMat);
+    c->_info.setWidths(iDiam,eDiam);
+    c->_info.setTransportComm(isT,isC);
+    c->_info.setID(theId);
+    
+    int red; int green;
+    if (c->_info.cylinderType.compare("naturalGas") == 0){
+        red = 255; green = 0;
+    }
+    else if (c->_info.cylinderType.compare("High power") == 0){
+        red = 255; green = 255;
+    }
+    else {
+        red = 0; green = 255;
+    }
+    
+    if (Cylinder::getDitchEnabled()){
+        Ditch *ditch = new Ditch(Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                                Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                                eDiam / 5);
+        
+        Mesh *pipeMesh = c->createComplexCylinderMesh(Color::fromRGBA255(red,green,0,32), (int) covSegments,
+                                                    covers,covNormals,line,p);
+        
+        // OJO : Tenemos que crear un ditch complejo a partir de lo que tenemos
+        Mesh *ditchMesh = ditch->createComplexDitchMesh(ditches,p);
+        delete ditch;
+        
+        //CompositeMesh *cm = new CompositeMesh();
+        
+        //cm->addMesh(ditchMesh);
+        //cm->addMesh(pipeMesh);
+        
+        //This was changed because of weird behaviour of MeshRenderer->clearMeshes() when CompositeMesh introduced.
+        mr->addMesh(ditchMesh);
+        mr->addMesh(pipeMesh);
+    }
+    else {
+        mr->addMesh(c->createComplexCylinderMesh(Color::fromRGBA255(red,green,0,32), (int) covSegments,
+                                               covers,covNormals,line,p));
+    }
+    cylinderInfo.push_back(Cylinder::CylinderMeshInfo((*c)._info));
+    cylinders.push_back(c);
+    
+}
+
 void PipesModel::addMeshes(const std::string& fileName, const Planet* p, MeshRenderer* mr, const ElevationData* ed, double heightOffset){
   
   NSString* s = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:fileName.c_str()] ofType:@"csv"] encoding:NSASCIIStringEncoding error:nil ];

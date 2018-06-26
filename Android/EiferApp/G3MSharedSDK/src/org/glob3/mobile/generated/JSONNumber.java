@@ -16,5 +16,6 @@ public abstract class JSONNumber extends JSONBaseObject
   {
     return this;
   }
+  public abstract void updateValue(double value);
 
 }

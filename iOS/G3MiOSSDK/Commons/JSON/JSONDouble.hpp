@@ -13,7 +13,7 @@
 
 class JSONDouble : public JSONNumber {
 private:
-  const double _value;
+  double _value;
 
 public:
   JSONDouble(double value) :
@@ -31,6 +31,10 @@ public:
 
   double doubleValue() const {
     return _value;
+  }
+    
+  void updateValue(double value){
+    _value = value;
   }
 
   void acceptVisitor(JSONVisitor* visitor) const;

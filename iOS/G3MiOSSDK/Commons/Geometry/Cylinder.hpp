@@ -19,6 +19,7 @@ class Camera;
 class Planet;
 class IndexedMesh;
 class FloatBufferBuilderFromCartesian3D;
+class JSONArray;
 
 #include "Sphere.hpp"
 #include <sstream>
@@ -131,6 +132,7 @@ public:
     _startAngle(startAngle), _endAngle(endAngle){}
     
     Mesh* createMesh(const Color& color, const int nSegments,const Planet *planet);
+    Mesh* createComplexCylinderMesh(const Color& color,int nSegments, JSONArray *covers, JSONArray *covNormals, JSONArray *line,const Planet *planet);
     
     static std::string adaptMeshes(MeshRenderer *meshRenderer,
                                    std::vector<CylinderMeshInfo> *cylInfo,

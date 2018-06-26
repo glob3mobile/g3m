@@ -4,6 +4,8 @@ package org.eifer.eiferapp.g3mutils;
  * Created by chano on 7/11/17.
  */
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Color;
@@ -16,6 +18,8 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.JSONArray;
+import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Mesh;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
@@ -53,7 +57,85 @@ public class PipesModel {
         },true);
     }
 
+    public static void parseComplexContent(final JSONArray array, final Planet p, MeshRenderer mr, final ElevationData ed, final double heightOffset)
+    {
+        for (int i=0;i<array.size();i++){
+            JSONObject pipeModel = array.getAsObject(i);
+            Geodetic3D g = Geodetic3D.fromDegrees(pipeModel.getAsArray("startPoint").getAsNumber(1).value(),
+                    pipeModel.getAsArray("startPoint").getAsNumber(0).value(),
+                    pipeModel.getAsArray("startPoint").getAsNumber(2).value());
+            Geodetic3D g2 = Geodetic3D.fromDegrees(pipeModel.getAsArray("endPoint").getAsNumber(1).value(),
+                    pipeModel.getAsArray("endPoint").getAsNumber(0).value(),
+                    pipeModel.getAsArray("endPoint").getAsNumber(2).value());
 
+            double eDiam = 0, iDiam = 0;
+            try {
+                eDiam = (double) pipeModel.getAsNumber("eDiam").value();
+                iDiam = (double) pipeModel.getAsNumber("iDiam").value();
+            }
+            catch (Exception e)
+            {
+                eDiam = (double) pipeModel.getAsNumber("crossSection").value();
+                iDiam = (double) pipeModel.getAsNumber("crossSection").value();
+            }
+
+            boolean isT = false, isC = false;
+            try{
+                isT = pipeModel.getAsBoolean("isTransportation").value();
+                isC = pipeModel.getAsBoolean("isCommunication").value();
+            }
+            catch (Exception e){}
+
+            double covSegments = (double) pipeModel.getAsNumber("covSegments").value();
+            double ditSegments = (double) pipeModel.getAsNumber("ditSegments").value();
+
+            Cylinder c = new Cylinder(p.toCartesian(g), p.toCartesian(g2), eDiam / 10. );
+            c._info.setClassAndType(pipeModel.getAsString("class").toString(),pipeModel.getAsString("type").toString());
+            c._info.setMaterials(pipeModel.getAsString("eMat").toString(),pipeModel.getAsString("iMat").toString());
+            c._info.setWidths(iDiam,eDiam);
+            c._info.setTransportComm(isT,isC);
+            c._info.setID(i);
+
+            int red; int green;
+            if (c._info.cylinderType.contentEquals("naturalGas")){
+                red = 255; green = 0;
+            }
+            else if (c._info.cylinderType.contentEquals("High power")){
+                red = 255; green = 255;
+            }
+            else {
+                red = 0; green = 255;
+            }
+
+            if (Cylinder.isDitchEnabled()){
+                Ditch ditch = new Ditch(new Geodetic3D(g.asGeodetic2D(), g._height - 1.0),
+                        new Geodetic3D(g2.asGeodetic2D(), g2._height - 1.0),
+                        eDiam / 5);
+
+                Mesh pipeMesh = c.createComplexCylinderMesh(Color.fromRGBA255(red,green,0,32), (int) covSegments,
+                        pipeModel.getAsArray("covers"),pipeModel.getAsArray("covNormals"),pipeModel.getAsArray("line"),p);
+
+                // OJO : Tenemos que crear un ditch complejo a partir de lo que tenemos
+                Mesh ditchMesh = ditch.createComplexDitchMesh(pipeModel.getAsArray("ditches"), p);
+                //delete ditch;
+
+                CompositeMesh cm = new CompositeMesh();
+
+                cm.addMesh(ditchMesh);
+                cm.addMesh(pipeMesh);
+
+                mr.addMesh(cm);
+            }
+            else {
+                mr.addMesh(c.createComplexCylinderMesh(Color.fromRGBA255(red,green,0,32), (int) covSegments,
+                        pipeModel.getAsArray("covers"),pipeModel.getAsArray("covNormals"),pipeModel.getAsArray("line"),p));
+            }
+            cylinderInfo.add(new Cylinder.CylinderMeshInfo(c._info));
+            cylinders.add(c);
+
+        }
+        Log.e("Log","log");
+    }
 
     private static void parseContent(final String csvContent, final Planet p, MeshRenderer mr,
                                      final ElevationData ed, final double heightOffset)
@@ -141,15 +223,12 @@ public class PipesModel {
         int red; int green;
         if (c._info.cylinderType.contentEquals("naturalGas")){
             red = 255; green = 0;
-            //pipeColor = Color.fromRGBA255(255, 0, 0, 32);
         }
         else if (c._info.cylinderType.contentEquals("High power")){
             red = 255; green = 255;
-            //pipeColor = Color.fromRGBA255(255,255,0,32);
         }
         else {
             red = 0; green = 255;
-            //pipeColor = Color.fromRGBA255(0,255,0,32);
         }
 
         if (Cylinder.isDitchEnabled()){

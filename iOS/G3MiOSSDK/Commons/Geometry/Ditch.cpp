@@ -22,6 +22,52 @@
 #include "MeshRenderer.hpp"
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
+#include "JSONArray.hpp"
+#include "JSONNumber.hpp"
+
+
+//public Mesh createComplexDitchMesh(JSONArray covers, final Planet planet){
+Mesh * Ditch::createComplexDitchMesh(JSONArray * covers, const Planet* planet)
+{
+    FloatBufferBuilderFromCartesian3D *fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+    
+    for (int i=0;i<covers->size()-1;i++) {
+        const JSONArray *coverA = covers->getAsArray(i);
+        const JSONArray *coverB = covers->getAsArray(i + 1);
+        
+        for (int j=0;j<coverA->size();j++){
+            const JSONArray *pointA = coverA->getAsArray(j);
+            const JSONArray *pointB = coverB->getAsArray(j);
+            
+            double lat = pointA->getAsNumber(1)->value();
+            double lon = pointA->getAsNumber(0)->value();
+            double hgt = pointA->getAsNumber(2)->value(); // OJO: Elemento corrector debería ir fuera, donde pasamos de JSON de Android a JSON de globo
+            Vector3D pA = planet->toCartesian(Angle::fromDegrees(lat),Angle::fromDegrees(lon),hgt);
+            
+            lat = pointB->getAsNumber(1)->value();
+            lon = pointB->getAsNumber(0)->value();
+            hgt = pointB->getAsNumber(2)->value();
+            Vector3D pB = planet->toCartesian(Angle::fromDegrees(lat),Angle::fromDegrees(lon),hgt);
+            
+            fbb->add(pA); fbb->add(pB);
+        }
+    }
+    
+    DirectMesh *dm = new DirectMesh(GLPrimitive::triangleStrip(),
+                                   true,
+                                   fbb->getCenter(),
+                                   fbb->create(),
+                                   2.0f,
+                                   100.0f,
+                                   Color::newFromRGBA(0.0f, 0.0f, 0.0f, 1.0f),
+                                   NULL,
+                                   0.0f,
+                                   true);
+    
+    delete fbb;
+    
+    return dm;
+}
 
 Mesh* Ditch::createMesh(const Color& color, const int nSegments, const Planet *planet, const ElevationData *ed)
 {
