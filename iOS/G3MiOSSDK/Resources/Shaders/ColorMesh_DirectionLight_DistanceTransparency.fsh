@@ -17,7 +17,7 @@ void main() {
     }
     
   gl_FragColor.r = VertexColor.r * lightColor.r;
-  gl_FragColor.g = VertexColor.g * lightColor.r;
-  gl_FragColor.b = VertexColor.b * lightColor.r;
+  gl_FragColor.g = VertexColor.g * lightColor.g;
+  gl_FragColor.b = VertexColor.b * lightColor.b;
   gl_FragColor.a = VertexColor.a * alpha;
 }

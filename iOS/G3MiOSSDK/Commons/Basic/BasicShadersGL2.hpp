@@ -605,8 +605,8 @@ public:
 "discard;\n" +
 "}\n" +
 "gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
-"gl_FragColor.g = VertexColor.g * lightColor.r;\n" +
-"gl_FragColor.b = VertexColor.b * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.g;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.b;\n" +
 "gl_FragColor.a = VertexColor.a * alpha;\n" +
 "}\n");
     this->add(sourcesColorMesh_DirectionLight_DistanceTransparency);
@@ -818,8 +818,10 @@ public:
 "if (alpha <= 0.0){\n" +
 "discard;\n" +
 "}\n" +
-"gl_FragColor = uFlatColor;\n" +
-"gl_FragColor.a *= alpha;\n" +
+"gl_FragColor.r = uFlatColor.r;\n" +
+"gl_FragColor.g = uFlatColor.g;\n" +
+"gl_FragColor.b = uFlatColor.b;\n" +
+"gl_FragColor.a = uFlatColor.a * alpha;\n" +
 "}\n");
     this->add(sourcesFlatColorMesh_DistanceTransparency);
 
