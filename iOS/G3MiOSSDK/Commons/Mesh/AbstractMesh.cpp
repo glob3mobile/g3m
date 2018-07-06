@@ -186,11 +186,12 @@ void AbstractMesh::createGLState() {
                                false);
     }
     
+    
+    _glState->addGLFeature(_modelTransform, true);
+    
     if (_translationMatrix != NULL) {
         _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
     }
-    
-    _glState->addGLFeature(_modelTransform, true);
     
     if (_transparencyDistanceThreshold > 0.0){
         _glState->addGLFeature(new TransparencyDistanceThresholdGLFeature(_transparencyDistanceThreshold), false);

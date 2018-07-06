@@ -9,6 +9,7 @@
 #include "G3MRenderContext.hpp"
 
 #include "ITimer.hpp"
+#include "ILogger.hpp"
 #include "OrderedRenderable.hpp"
 #include <algorithm>
 
@@ -32,6 +33,10 @@ void G3MRenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable
 #ifdef C_CODE
 bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2) {
+    if (or1 == NULL || or2 == NULL){
+        ILogger::instance()->logError("Problem at MyDataSortPredicate");
+        return false;
+    }
   return ( or1->squaredDistanceFromEye() >= or2->squaredDistanceFromEye() );
 }
 #endif

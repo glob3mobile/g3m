@@ -511,8 +511,6 @@
 		D84B45051CD8A8070041CA1F /* PointCloudMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84B45031CD8A8070041CA1F /* PointCloudMesh.cpp */; };
 		D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
-		D84D95201CBB9CB3003BB11B /* BuildingDataParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */; };
-		D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */; };
 		D85024281CB6431500519C60 /* ColorLegend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85024261CB6431500519C60 /* ColorLegend.cpp */; };
 		D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85024271CB6431500519C60 /* ColorLegend.hpp */; };
 		D850242C1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */; };
@@ -819,7 +817,6 @@
 				D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */,
 				D8EA74541CC79A69007464C8 /* CityGMLRenderer.hpp in CopyFiles */,
 				D8114E661CBE3DE9004E2BF0 /* CityGMLBuildingTessellator.hpp in CopyFiles */,
-				D84D95211CBBA4D0003BB11B /* BuildingDataParser.hpp in CopyFiles */,
 				D850242D1CB684E300519C60 /* CityGMLBuildingColorProvider.hpp in CopyFiles */,
 				D85024291CB643E900519C60 /* ColorLegend.hpp in CopyFiles */,
 				D8B3C69B1CAC0DF500A21D04 /* Vector2S.hpp in CopyFiles */,
@@ -1905,8 +1902,6 @@
 		D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PointCloudMesh.hpp; path = Commons/Mesh/PointCloudMesh.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuildingDataParser.cpp; path = Commons/Rendererers/BuildingDataParser.cpp; sourceTree = "<group>"; };
-		D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BuildingDataParser.hpp; path = Commons/Rendererers/BuildingDataParser.hpp; sourceTree = "<group>"; };
 		D85024261CB6431500519C60 /* ColorLegend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorLegend.cpp; path = Commons/Basic/ColorLegend.cpp; sourceTree = "<group>"; };
 		D85024271CB6431500519C60 /* ColorLegend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorLegend.hpp; path = Commons/Basic/ColorLegend.hpp; sourceTree = "<group>"; };
 		D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CityGMLBuildingColorProvider.cpp; path = Commons/Rendererers/CityGMLBuildingColorProvider.cpp; sourceTree = "<group>"; };
@@ -1957,6 +1952,8 @@
 		D89FBD7A172543D100FFA541 /* RectangleF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleF.hpp; path = Commons/Geometry/RectangleF.hpp; sourceTree = "<group>"; };
 		D89FBD7B1725444800FFA541 /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshShape.cpp; path = Commons/Rendererers/MeshShape.cpp; sourceTree = "<group>"; };
 		D89FBD7C1725444800FFA541 /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
+		D8A0A8A720EA5B6A00A6364E /* RoundedColoredPoints_DynamicParametricColorRange.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RoundedColoredPoints_DynamicParametricColorRange.fsh; sourceTree = "<group>"; };
+		D8A0A8A820EA5B6B00A6364E /* RoundedColoredPoints_DynamicParametricColorRange.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RoundedColoredPoints_DynamicParametricColorRange.vsh; sourceTree = "<group>"; };
 		D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedMesh.cpp; path = Commons/Mesh/IndexedMesh.cpp; sourceTree = "<group>"; };
 		D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IndexedMesh.hpp; path = Commons/Mesh/IndexedMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8A5601D15AEF64E00035086 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Mesh/Mesh.cpp; sourceTree = "<group>"; };
@@ -2750,8 +2747,6 @@
 				D8D781F81CA425690025E988 /* CityGMLBuilding.hpp */,
 				D850242A1CB6846F00519C60 /* CityGMLBuildingColorProvider.cpp */,
 				D850242B1CB6846F00519C60 /* CityGMLBuildingColorProvider.hpp */,
-				D84D951E1CBB9CB3003BB11B /* BuildingDataParser.cpp */,
-				D84D951F1CBB9CB3003BB11B /* BuildingDataParser.hpp */,
 				D8114E631CBE3109004E2BF0 /* CityGMLBuildingTessellator.cpp */,
 				D8114E641CBE3109004E2BF0 /* CityGMLBuildingTessellator.hpp */,
 				D8EA74511CC79991007464C8 /* CityGMLRenderer.cpp */,
@@ -3120,6 +3115,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8A0A8A720EA5B6A00A6364E /* RoundedColoredPoints_DynamicParametricColorRange.fsh */,
+				D8A0A8A820EA5B6B00A6364E /* RoundedColoredPoints_DynamicParametricColorRange.vsh */,
 				D8D3982C20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.fsh */,
 				D8D3982B20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.vsh */,
 				D84B45011CD8A1F60041CA1F /* RoundedColoredPoints.vsh */,
@@ -3588,7 +3585,6 @@
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
-				D84D95201CBB9CB3003BB11B /* BuildingDataParser.cpp in Sources */,
 				D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */,
 				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,

@@ -67,6 +67,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     const bool hasTranspDist = GPUVariable::hasUniform(uniformsCode, TRANSPARENCY_DISTANCE_THRESLHOLD);
     
     if (isColorRange){
+        if (isPoints){
+            return compileProgramWithName(gl, "RoundedColoredPoints_DynamicParametricColorRange");
+        }
+        
         if (!isDynamic){
             return compileProgramWithName(gl, "ParametricColorRangeMesh");
         } else{

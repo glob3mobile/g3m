@@ -681,6 +681,41 @@ public:
 "}\n");
     this->add(sourcesTextured2DMesh);
 
+    GPUProgramSources sourcesRoundedColoredPoints_DynamicParametricColorRange("RoundedColoredPoints_DynamicParametricColorRange",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec4 aColor;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"attribute float aColorValueNext; //Between 0..1\n" +
+"varying highp float currentColorValue;\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"currentColorValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"}\n",
+ emptyString +  
+"uniform lowp vec4 uRoundedPointBorderColor;\n" +
+"varying highp float currentColorValue;\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"void main() {\n" +
+"highp float circleRadius = 1.0 * (0.8 * currentColorValue + 0.2);\n" +
+"highp vec2 circCoord = 2.0 * gl_PointCoord - 1.0;\n" +
+"highp float dist = dot(circCoord, circCoord);\n" +
+"if (dist > circleRadius) {\n" +
+"discard;\n" +
+"}\n" +
+"if (dist < 0.8 * circleRadius){\n" +
+"gl_FragColor = mix(uColorAt0, uColorAt1, currentColorValue);\n" +
+"} else{\n" +
+"gl_FragColor = uRoundedPointBorderColor;\n" +
+"}\n" +
+"}\n");
+    this->add(sourcesRoundedColoredPoints_DynamicParametricColorRange);
+
     GPUProgramSources sourcesFlatColorMesh("FlatColorMesh",
  emptyString +  
 "attribute vec4 aPosition;\n" +
