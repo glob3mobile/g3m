@@ -453,6 +453,10 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
     if (_hudRenderer != NULL) {
         _hudRenderer->onResizeViewportEvent(&ec, width, height);
     }
+    
+    for (size_t i = 0; i < _multiPassRenderers.size(); ++i){
+        _multiPassRenderers[i]->onResizeViewportEvent(&ec, width, height);
+    }
 }
 
 
