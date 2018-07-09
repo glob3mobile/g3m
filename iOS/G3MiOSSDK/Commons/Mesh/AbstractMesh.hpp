@@ -19,16 +19,21 @@ class IFloatBuffer;
 class Color;
 
 class VertexColorScheme{
-    virtual ~VertexColorScheme(){}
+protected:
+    GLFeature* _feat;
+public:
+    virtual ~VertexColorScheme(){
+        _feat->_release();
+    }
     virtual GLFeature* getGLFeature() = 0;
-    virtual void setTime(float time) = 0;
+    virtual void setTime(float time){};
+    virtual void setColorRangeStaticValues(IFloatBuffer* values) const{};
+    virtual void setColorRangeDynamicValues(IFloatBuffer* values,
+                                            IFloatBuffer* nextValues) const{};
 };
 
-class Static2ColorScheme{
+class Static2ColorScheme: public VertexColorScheme{
 public:
-    
-    ColorRangeGLFeature* _feat;
-    
     Static2ColorScheme(IFloatBuffer* valuesInColorRange,
                         const Color& colorRangeAt0,
                         const Color& colorRangeAt1){
@@ -40,11 +45,13 @@ public:
         return _feat;
     }
     
-    void setTime(float time) const{}
+    void setColorRangeStaticValues(IFloatBuffer* values) const{
+        ((ColorRangeGLFeature*)_feat)->setValues(values);
+    }
 };
 
 
-class Dynamic2ColorScheme{
+class Dynamic2ColorScheme: public VertexColorScheme{
 public:
     
     DynamicColorRangeGLFeature* _feat;
@@ -63,13 +70,18 @@ public:
         return _feat;
     }
     
-    void setTime(float time) const{
-        _feat->setTime(time);
+    virtual void setTime(float time) const{
+        ((DynamicColorRangeGLFeature*)_feat)->setTime(time);
+    }
+    
+    void setColorRangeDynamicValues(IFloatBuffer* values,
+                                            IFloatBuffer* nextValues) const{
+        ((DynamicColorRangeGLFeature*)_feat)->setValues(values, nextValues);
     }
 };
 
 
-class Dynamic3ColorScheme{
+class Dynamic3ColorScheme: public VertexColorScheme{
 public:
     
     DynamicColorRange3GLFeature* _feat;
@@ -92,8 +104,13 @@ public:
         return _feat;
     }
     
-    void setTime(float time) const{
-        _feat->setTime(time);
+    virtual void setTime(float time) const{
+        ((DynamicColorRange3GLFeature*)_feat)->setTime(time);
+    }
+    
+    void setColorRangeDynamicValues(IFloatBuffer* values,
+                                            IFloatBuffer* nextValues) const{
+        ((DynamicColorRange3GLFeature*)_feat)->setValues(values, nextValues);
     }
 };
 
@@ -112,14 +129,7 @@ protected:
     const bool              _depthTest;
     const IFloatBuffer*           _normals;
     
-    IFloatBuffer*     _valuesInColorRange;
-    IFloatBuffer*     _nextValuesInColorRange;
-    const Color* _colorRangeAt0;
-    const Color* _colorRangeAt0_5;
-    const Color* _colorRangeAt1;
-    ColorRangeGLFeature* _colorRangeGLFeature;
-    DynamicColorRangeGLFeature* _dynamicColorRangeGLFeature;
-    float _currentTime;
+    VertexColorScheme* _vertexColorScheme;
     
     float _transparencyDistanceThreshold;
     ModelGLFeature* _model;
@@ -147,15 +157,10 @@ protected:
                  bool polygonOffsetFill,
                  float polygonOffsetFactor,
                  float polygonOffsetUnits,
-                 IFloatBuffer* valuesInColorRange = NULL,
-                 const Color* colorRangeAt0 = NULL,
-                 const Color* colorRangeAt1 = NULL,
-                 IFloatBuffer* nextValuesInColorRange = NULL,
-                 float currentTime = 0.0f,
-                 float transparencyDistanceThreshold = -1.0);
+                 VertexColorScheme* vertexColorScheme,
+                 float transparencyDistanceThreshold);
     
     virtual void rawRender(const G3MRenderContext* rc) const = 0;
-    //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
     
     GLState* _glState;
     
@@ -207,23 +212,8 @@ public:
         }
     }
     
-    void setColorRangeValues(IFloatBuffer* values){
-        if (_colorRangeGLFeature != NULL){
-            _colorRangeGLFeature->setValues(values);
-        }
-    }
-    
-    void setDynamicColorRangeValues(IFloatBuffer* values, IFloatBuffer* valuesNext){
-        if (_dynamicColorRangeGLFeature != NULL){
-            _dynamicColorRangeGLFeature->setValues(values, valuesNext);
-        }
-    }
-    
-    void setTime(float time){
-        if (_currentTime != time){
-            _currentTime = time;
-            _dynamicColorRangeGLFeature->setTime(time);
-        }
+    VertexColorScheme* getVertexColorScheme() const{
+        return _vertexColorScheme;
     }
     
     void setTransformation(Matrix44D* matrix){

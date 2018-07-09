@@ -46,6 +46,8 @@ AbstractMesh::~AbstractMesh() {
         _model->_release();
     }
     
+    delete _vertexColorScheme;
+    
 #ifdef JAVA_CODE
     super.dispose();
 #endif
@@ -65,11 +67,7 @@ AbstractMesh::AbstractMesh(const int primitive,
                            bool polygonOffsetFill,
                            float polygonOffsetFactor,
                            float polygonOffsetUnits,
-                           IFloatBuffer* valuesInColorRange,
-                           const Color* colorRangeAt0,
-                           const Color* colorRangeAt1,
-                           IFloatBuffer* nextValuesInColorRange,
-                           float currentTime,
+                           VertexColorScheme* vertexColorScheme,
                            float transparencyDistanceThreshold) :
 _primitive(primitive),
 _owner(owner),
@@ -92,13 +90,7 @@ _showNormals(false),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
 _polygonOffsetFill(polygonOffsetFill),
-_valuesInColorRange(valuesInColorRange),
-_colorRangeAt0(colorRangeAt0),
-_colorRangeAt1(colorRangeAt1),
-_colorRangeGLFeature(NULL),
-_nextValuesInColorRange(nextValuesInColorRange),
-_currentTime(currentTime),
-_dynamicColorRangeGLFeature(NULL),
+_vertexColorScheme(vertexColorScheme),
 _modelTransform(new ModelTransformGLFeature(Matrix44D::createIdentity())),
 _transparencyDistanceThreshold(transparencyDistanceThreshold),
 _model(NULL)
@@ -215,22 +207,8 @@ void AbstractMesh::createGLState() {
                                false);
         
     }
-    else if (_valuesInColorRange != NULL && _colorRangeAt1 != NULL && _colorRangeAt0  != NULL){
-        
-        if (_nextValuesInColorRange == NULL){
-        
-            _colorRangeGLFeature = new ColorRangeGLFeature(*_colorRangeAt0,
-                                                           *_colorRangeAt1,
-                                                           _valuesInColorRange);
-            _glState->addGLFeature(_colorRangeGLFeature, false);
-        } else{
-            _dynamicColorRangeGLFeature = new DynamicColorRangeGLFeature(*_colorRangeAt0,
-                                                           *_colorRangeAt1,
-                                                           _valuesInColorRange,
-                                                             _nextValuesInColorRange,
-                                                             _currentTime);
-            _glState->addGLFeature(_dynamicColorRangeGLFeature, false);
-        }
+    else if (_vertexColorScheme != NULL){
+        _glState->addGLFeature(_vertexColorScheme->getGLFeature(), true);
     }
     
 }
