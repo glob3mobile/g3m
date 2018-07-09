@@ -17,13 +17,21 @@ uniform highp float uTime; //Between 0..1
 
 uniform lowp vec4 uColorAt0;
 uniform lowp vec4 uColorAt1;
+uniform lowp vec4 uColorAt0_5;
 varying lowp vec4 vertexColor;
-varying lowp float currentValue;
+varying highp float currentValue;
 
 void main() {
-  gl_Position = uModelview * aPosition;
-  gl_PointSize = uPointSize;
+    gl_Position = uModelview * aPosition;
+    gl_PointSize = uPointSize;
     
     currentValue = mix(aColorValue, aColorValueNext, uTime);
-    vertexColor = mix(uColorAt0, uColorAt1, currentValue);
+    
+    if (currentValue < 0.5){
+        highp float v = currentValue * 2.0;
+        vertexColor = mix(uColorAt0, uColorAt0_5, v);
+    } else{
+        highp float v = (currentValue - 0.5) * 2.0;
+        vertexColor = mix(uColorAt0_5, uColorAt1, v);
+    }
 }

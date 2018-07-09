@@ -2001,6 +2001,12 @@
 		D8CBBAA61CAAB12C0089443B /* XMLNode_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = XMLNode_iOS.hpp; path = Specific/Derived/XMLNode_iOS.hpp; sourceTree = "<group>"; };
 		D8CBBAAA1CAAB1DA0089443B /* IXMLNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IXMLNode.hpp; path = Commons/XML/IXMLNode.hpp; sourceTree = "<group>"; };
 		D8CBBAAB1CAAB1DA0089443B /* IXMLNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IXMLNode.cpp; path = Commons/XML/IXMLNode.cpp; sourceTree = "<group>"; };
+		D8CC8D6620F3921100409CAA /* DynamicParametricColorRange3Mesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRange3Mesh.fsh; sourceTree = "<group>"; };
+		D8CC8D6720F3922700409CAA /* DynamicParametricColorRange3Mesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRange3Mesh.vsh; sourceTree = "<group>"; };
+		D8CC8D6820F3923400409CAA /* RoundedColoredPoints_DynamicParametricColorRange3.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RoundedColoredPoints_DynamicParametricColorRange3.vsh; sourceTree = "<group>"; };
+		D8CC8D6920F3923E00409CAA /* RoundedColoredPoints_DynamicParametricColorRange3.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RoundedColoredPoints_DynamicParametricColorRange3.fsh; sourceTree = "<group>"; };
+		D8CC8D6A20F397C200409CAA /* ParametricColorRange3Mesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColorRange3Mesh.vsh; sourceTree = "<group>"; };
+		D8CC8D6B20F397C900409CAA /* ParametricColorRange3Mesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColorRange3Mesh.fsh; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IBufferDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBufferDownloadListener.hpp; path = Commons/Downloader/IBufferDownloadListener.hpp; sourceTree = "<group>"; };
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian3D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian3D.hpp; sourceTree = "<group>"; };
@@ -3116,7 +3122,9 @@
 			isa = PBXGroup;
 			children = (
 				D8A0A8A720EA5B6A00A6364E /* RoundedColoredPoints_DynamicParametricColorRange.fsh */,
+				D8CC8D6920F3923E00409CAA /* RoundedColoredPoints_DynamicParametricColorRange3.fsh */,
 				D8A0A8A820EA5B6B00A6364E /* RoundedColoredPoints_DynamicParametricColorRange.vsh */,
+				D8CC8D6820F3923400409CAA /* RoundedColoredPoints_DynamicParametricColorRange3.vsh */,
 				D8D3982C20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.fsh */,
 				D8D3982B20D90E0100781EE8 /* FlatColorMesh_DistanceTransparency.vsh */,
 				D84B45011CD8A1F60041CA1F /* RoundedColoredPoints.vsh */,
@@ -3141,10 +3149,14 @@
 				D8CE5D32173BB5D800C7AAE6 /* Default.vsh */,
 				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
 				D8DCF5F820A45C0F0015AC66 /* ParametricColorRangeMesh.fsh */,
+				D8CC8D6B20F397C900409CAA /* ParametricColorRange3Mesh.fsh */,
 				D82A78CC20A5C98D00A9BDAA /* DynamicParametricColorRangeMesh.fsh */,
+				D8CC8D6620F3921100409CAA /* DynamicParametricColorRange3Mesh.fsh */,
 				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
 				D8DCF5F720A45BE10015AC66 /* ParametricColorRangeMesh.vsh */,
+				D8CC8D6A20F397C200409CAA /* ParametricColorRange3Mesh.vsh */,
 				D82A78CB20A5C98400A9BDAA /* DynamicParametricColorRangeMesh.vsh */,
+				D8CC8D6720F3922700409CAA /* DynamicParametricColorRange3Mesh.vsh */,
 				D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */,
 				D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */,
 				CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */,

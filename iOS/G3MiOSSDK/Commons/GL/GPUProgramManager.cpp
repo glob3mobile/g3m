@@ -62,11 +62,25 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     //  const bool bbAnchor = GPUVariable::hasUniform(uniformsCode,    BILLBOARD_ANCHOR);
     
     const bool isColorRange = GPUVariable::hasUniform(uniformsCode, COLORRANGE_COLOR_AT_0);
+    const bool isColorRange3 = GPUVariable::hasUniform(uniformsCode, COLORRANGE_COLOR_AT_0_5);
     const bool isDynamic = GPUVariable::hasUniform(uniformsCode, TIME);
     
     const bool hasTranspDist = GPUVariable::hasUniform(uniformsCode, TRANSPARENCY_DISTANCE_THRESLHOLD);
     
     if (isColorRange){
+        
+        if (isColorRange3){
+            if (isPoints){
+                return compileProgramWithName(gl, "RoundedColoredPoints_DynamicParametricColorRange3");
+            }
+            
+            if (!isDynamic){
+                return compileProgramWithName(gl, "ParametricColorRange3Mesh");
+            } else{
+                return compileProgramWithName(gl, "DynamicParametricColorRange3Mesh");
+            }
+        }
+        
         if (isPoints){
             return compileProgramWithName(gl, "RoundedColoredPoints_DynamicParametricColorRange");
         }
@@ -75,6 +89,18 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
             return compileProgramWithName(gl, "ParametricColorRangeMesh");
         } else{
             return compileProgramWithName(gl, "DynamicParametricColorRangeMesh");
+        }
+    }
+    
+    if (isColorRange3){
+        if (isPoints){
+            return compileProgramWithName(gl, "RoundedColoredPoints_DynamicParametricColorRange3");
+        }
+        
+        if (!isDynamic){
+            return compileProgramWithName(gl, "ParametricColorRange3Mesh");
+        } else{
+            return compileProgramWithName(gl, "DynamicParametricColorRange3Mesh");
         }
     }
     

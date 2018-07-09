@@ -29,17 +29,19 @@ public:
 "uniform float uPointSize;\n" +
 "attribute float aColorValue;\n" +
 "varying highp float colorValue;\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"varying highp float colorValue;\n" +
+"varying lowp vec4 vertexColor;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
 "colorValue = aColorValue;\n" +
-"highp float x = aColorValue;\n" +
-"x = x +1.0;\n" +
+"highp float currentValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"vertexColor = mix(uColorAt0, uColorAt1, aColorValue);\n" +
 "}\n",
  emptyString +  
-"uniform lowp vec4 uColorAt0;\n" +
-"uniform lowp vec4 uColorAt1;\n" +
-"varying highp float colorValue;\n" +
+"varying lowp vec4 vertexColor;\n" +
 "void main() {\n" +
 "gl_FragColor = mix(uColorAt0, uColorAt1, colorValue);\n" +
 "}\n");
@@ -221,6 +223,38 @@ public:
 "}\n");
     this->add(sourcesTexturedMesh);
 
+    GPUProgramSources sourcesDynamicParametricColorRange3Mesh("DynamicParametricColorRange3Mesh",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"attribute float aColorValueNext; //Between 0..1\n" +
+"varying highp float currentColorValue;\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"uniform lowp vec4 uColorAt0_5;\n" +
+"varying lowp vec4 vertexColor;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"highp float currentValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"if (currentValue < 0.5){\n" +
+"highp float v = currentValue * 2.0;\n" +
+"vertexColor = mix(uColorAt0, uColorAt0_5, v);\n" +
+"} else{\n" +
+"highp float v = (currentValue - 0.5) * 2.0;\n" +
+"vertexColor = mix(uColorAt0_5, uColorAt1, v);\n" +
+"}\n" +
+"}\n",
+ emptyString +  
+"varying lowp vec4 vertexColor;\n" +
+"void main() {\n" +
+"gl_FragColor = vertexColor;\n" +
+"}\n");
+    this->add(sourcesDynamicParametricColorRange3Mesh);
+
     GPUProgramSources sourcesDynamicParametricColorRangeMesh("DynamicParametricColorRangeMesh",
  emptyString +  
 "attribute vec4 aPosition;\n" +
@@ -230,17 +264,19 @@ public:
 "attribute float aColorValueNext; //Between 0..1\n" +
 "varying highp float currentColorValue;\n" +
 "uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"varying lowp vec4 vertexColor;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
-"currentColorValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"highp float v = mix(aColorValue, aColorValueNext, uTime);\n" +
+"vertexColor = mix(uColorAt0, uColorAt1, v);\n" +
 "}\n",
  emptyString +  
-"uniform lowp vec4 uColorAt0;\n" +
-"uniform lowp vec4 uColorAt1;\n" +
-"varying highp float currentColorValue;\n" +
+"varying lowp vec4 vertexColor;\n" +
 "void main() {\n" +
-"gl_FragColor = mix(uColorAt0, uColorAt1, currentColorValue);\n" +
+"gl_FragColor = vertexColor;\n" +
 "}\n");
     this->add(sourcesDynamicParametricColorRangeMesh);
 
@@ -319,6 +355,51 @@ public:
 "gl_FragColor = tex1 * tex2;\n" +
 "}\n");
     this->add(sourcesMultiTexturedMesh);
+
+    GPUProgramSources sourcesRoundedColoredPoints_DynamicParametricColorRange3("RoundedColoredPoints_DynamicParametricColorRange3",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec4 aColor;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"attribute float aColorValueNext; //Between 0..1\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"uniform lowp vec4 uColorAt0_5;\n" +
+"varying lowp vec4 vertexColor;\n" +
+"varying highp float currentValue;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"currentValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"if (currentValue < 0.5){\n" +
+"highp float v = currentValue * 2.0;\n" +
+"vertexColor = mix(uColorAt0, uColorAt0_5, v);\n" +
+"} else{\n" +
+"highp float v = (currentValue - 0.5) * 2.0;\n" +
+"vertexColor = mix(uColorAt0_5, uColorAt1, v);\n" +
+"}\n" +
+"}\n",
+ emptyString +  
+"uniform lowp vec4 uRoundedPointBorderColor;\n" +
+"varying lowp vec4 vertexColor;\n" +
+"varying highp float currentValue;\n" +
+"void main() {\n" +
+"highp float circleRadius = 1.0 * (0.8 * currentValue + 0.2);\n" +
+"highp vec2 circCoord = 2.0 * gl_PointCoord - 1.0;\n" +
+"highp float dist = dot(circCoord, circCoord);\n" +
+"if (dist > circleRadius) {\n" +
+"discard;\n" +
+"}\n" +
+"if (dist < 0.8 * circleRadius){\n" +
+"gl_FragColor = vertexColor;\n" +
+"} else{\n" +
+"gl_FragColor = uRoundedPointBorderColor;\n" +
+"}\n" +
+"}\n");
+    this->add(sourcesRoundedColoredPoints_DynamicParametricColorRange3);
 
     GPUProgramSources sourcesFullTransformedTexCoorTexturedMesh("FullTransformedTexCoorTexturedMesh",
  emptyString +  
@@ -511,6 +592,32 @@ public:
 "}\n");
     this->add(sourcesShader);
 
+    GPUProgramSources sourcesParametricColorRange3Mesh("ParametricColorRange3Mesh",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform float uPointSize;\n" +
+"attribute float aColorValue;\n" +
+"varying highp float colorValue;\n" +
+"void main() {\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"colorValue = aColorValue;\n" +
+"if (aColorValue < 0.5){\n" +
+"highp float v = aColorValue * 2.0;\n" +
+"vertexColor = mix(uColorAt0, uColorAt0_5, v);\n" +
+"} else{\n" +
+"highp float v = (aColorValue - 0.5) * 2.0;\n" +
+"vertexColor = mix(uColorAt0_5, uColorAt1, v);\n" +
+"}\n" +
+"}\n",
+ emptyString +  
+"varying lowp vec4 vertexColor;\n" +
+"void main() {\n" +
+"gl_FragColor = vertexColor;\n" +
+"}\n");
+    this->add(sourcesParametricColorRange3Mesh);
+
     GPUProgramSources sourcesColorMesh_DirectionLight("ColorMesh_DirectionLight",
  emptyString +  
 "attribute vec4 aPosition;\n" +
@@ -689,27 +796,30 @@ public:
 "uniform float uPointSize;\n" +
 "attribute float aColorValue; //Between 0..1\n" +
 "attribute float aColorValueNext; //Between 0..1\n" +
-"varying highp float currentColorValue;\n" +
 "uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"varying lowp vec4 vertexColor;\n" +
+"varying lowp float currentValue;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
-"currentColorValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"currentValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"vertexColor = mix(uColorAt0, uColorAt1, currentValue);\n" +
 "}\n",
  emptyString +  
 "uniform lowp vec4 uRoundedPointBorderColor;\n" +
-"varying highp float currentColorValue;\n" +
-"uniform lowp vec4 uColorAt0;\n" +
-"uniform lowp vec4 uColorAt1;\n" +
+"varying lowp vec4 vertexColor;\n" +
+"varying lowp float currentValue;\n" +
 "void main() {\n" +
-"highp float circleRadius = 1.0 * (0.8 * currentColorValue + 0.2);\n" +
+"highp float circleRadius = 1.0 * (0.8 * currentValue + 0.2);\n" +
 "highp vec2 circCoord = 2.0 * gl_PointCoord - 1.0;\n" +
 "highp float dist = dot(circCoord, circCoord);\n" +
 "if (dist > circleRadius) {\n" +
 "discard;\n" +
 "}\n" +
 "if (dist < 0.8 * circleRadius){\n" +
-"gl_FragColor = mix(uColorAt0, uColorAt1, currentColorValue);\n" +
+"gl_FragColor = vertexColor;\n" +
 "} else{\n" +
 "gl_FragColor = uRoundedPointBorderColor;\n" +
 "}\n" +
