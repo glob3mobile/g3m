@@ -103,6 +103,48 @@ _time(new GPUUniformValueFloatMutable(time))
     _values->addAttributeValue(COLORRANGE_VALUE_NEXT, _parameterValueNext, false);
 }
 
+DynamicColorRange3GLFeature::DynamicColorRange3GLFeature(const Color& colorAt0,
+                                                         const Color& colorAt0_5,
+                                                       const Color& colorAt1,
+                                                       IFloatBuffer* values,
+                                                       IFloatBuffer* valuesNext, float time):
+GLFeature(NO_GROUP, GLF_DYNAMIC_COLOR_RANGE),
+_colorAt0(new GPUUniformValueVec4Float(colorAt0)),
+_colorAt0_5(new GPUUniformValueVec4Float(colorAt0_5)),
+_colorAt1(new GPUUniformValueVec4Float(colorAt1)),
+_parameterValue(new GPUAttributeValueVec1Float(values,
+                                               1, 0, 0, false)),
+_parameterValueNext(new GPUAttributeValueVec1Float(valuesNext,
+                                                   1, 0, 0, false)),
+_time(new GPUUniformValueFloatMutable(time))
+{
+    _values->addUniformValue(COLORRANGE_COLOR_AT_0,
+                             _colorAt0,
+                             false);
+    _values->addUniformValue(COLORRANGE_COLOR_AT_1,
+                             _colorAt1,
+                             false);
+    _values->addUniformValue(COLORRANGE_COLOR_AT_0_5,
+                             _colorAt0_5,
+                             false);
+    
+    _values->addUniformValue(TIME,
+                             _time,
+                             false);
+    
+    _values->addAttributeValue(COLORRANGE_VALUE, _parameterValue, false);
+    _values->addAttributeValue(COLORRANGE_VALUE_NEXT, _parameterValueNext, false);
+}
+
+void DynamicColorRange3GLFeature::setValues(IFloatBuffer* values, IFloatBuffer* valuesNext){
+    _parameterValue->replaceBuffer(values);
+    _parameterValueNext->replaceBuffer(valuesNext);
+}
+
+void DynamicColorRange3GLFeature::setTime(float time){
+    _time->changeValue(time);
+}
+
 TransparencyDistanceThresholdGLFeature::TransparencyDistanceThresholdGLFeature(float distance): GLFeature(NO_GROUP, GLF_TRANSPARENCY_DISTANCE_THRESHOLD){
     _values->addUniformValue(TRANSPARENCY_DISTANCE_THRESLHOLD,
                              new GPUUniformValueFloat(distance),

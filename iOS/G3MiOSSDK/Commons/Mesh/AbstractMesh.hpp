@@ -18,6 +18,85 @@ class MutableMatrix44D;
 class IFloatBuffer;
 class Color;
 
+class VertexColorScheme{
+    virtual ~VertexColorScheme(){}
+    virtual GLFeature* getGLFeature() = 0;
+    virtual void setTime(float time) = 0;
+};
+
+class Static2ColorScheme{
+public:
+    
+    ColorRangeGLFeature* _feat;
+    
+    Static2ColorScheme(IFloatBuffer* valuesInColorRange,
+                        const Color& colorRangeAt0,
+                        const Color& colorRangeAt1){
+        _feat = new ColorRangeGLFeature(colorRangeAt0,
+                                               colorRangeAt1,
+                                               valuesInColorRange);
+    }
+    GLFeature* getGLFeature(){
+        return _feat;
+    }
+    
+    void setTime(float time) const{}
+};
+
+
+class Dynamic2ColorScheme{
+public:
+    
+    DynamicColorRangeGLFeature* _feat;
+    
+    Dynamic2ColorScheme(IFloatBuffer* valuesInColorRange,
+                        IFloatBuffer* nextValuesInColorRange,
+                        const Color& colorRangeAt0,
+                        const Color& colorRangeAt1){
+        _feat = new DynamicColorRangeGLFeature(colorRangeAt0,
+                                                colorRangeAt1,
+                                                valuesInColorRange,
+                                                nextValuesInColorRange,
+                                                0.0f);
+    }
+    GLFeature* getGLFeature(){
+        return _feat;
+    }
+    
+    void setTime(float time) const{
+        _feat->setTime(time);
+    }
+};
+
+
+class Dynamic3ColorScheme{
+public:
+    
+    DynamicColorRange3GLFeature* _feat;
+    
+    Dynamic3ColorScheme(IFloatBuffer* valuesInColorRange,
+                        IFloatBuffer* nextValuesInColorRange,
+                        const Color& colorRangeAt0,
+                        const Color& colorRangeAt0_5,
+                        const Color& colorRangeAt1){
+        _feat = new DynamicColorRange3GLFeature(colorRangeAt0,
+                                              colorRangeAt0_5,
+                                              colorRangeAt1,
+                                              valuesInColorRange,
+                                              nextValuesInColorRange,
+                                              0.0f);
+    }
+    
+    
+    GLFeature* getGLFeature(){
+        return _feat;
+    }
+    
+    void setTime(float time) const{
+        _feat->setTime(time);
+    }
+};
+
 class AbstractMesh : public Mesh {
 protected:
     const int               _primitive;
@@ -36,6 +115,7 @@ protected:
     IFloatBuffer*     _valuesInColorRange;
     IFloatBuffer*     _nextValuesInColorRange;
     const Color* _colorRangeAt0;
+    const Color* _colorRangeAt0_5;
     const Color* _colorRangeAt1;
     ColorRangeGLFeature* _colorRangeGLFeature;
     DynamicColorRangeGLFeature* _dynamicColorRangeGLFeature;

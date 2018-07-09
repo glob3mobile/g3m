@@ -171,6 +171,36 @@ public:
 
 /////////////////////////
 
+class DynamicColorRange3GLFeature: public GLFeature {
+private:
+    ~DynamicColorRange3GLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameterValue;
+    GPUAttributeValueVec1Float* _parameterValueNext;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt0_5;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+    GPUUniformValueFloatMutable* _time;
+    
+public:
+    DynamicColorRange3GLFeature(const Color& colorAt0,
+                                const Color& colorAt0_5,
+                                const Color& colorAt1,
+                               IFloatBuffer* values, IFloatBuffer* valuesNext, float time);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values, IFloatBuffer* valuesNext);
+    void setTime(float time);
+};
+
+/////////////////////////
+
 
 class TransparencyDistanceThresholdGLFeature: public GLFeature {
 private:
