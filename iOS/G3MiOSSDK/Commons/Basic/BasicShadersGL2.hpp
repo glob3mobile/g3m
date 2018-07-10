@@ -266,7 +266,7 @@ public:
 "uniform highp float uTime; //Between 0..1\n" +
 "uniform lowp vec4 uColorAt0;\n" +
 "uniform lowp vec4 uColorAt1;\n" +
-"varying lowp vec4 vertexColor;\n" +
+"varying highp vec4 vertexColor;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
@@ -274,7 +274,7 @@ public:
 "vertexColor = mix(uColorAt0, uColorAt1, v);\n" +
 "}\n",
  emptyString +  
-"varying lowp vec4 vertexColor;\n" +
+"varying highp vec4 vertexColor;\n" +
 "void main() {\n" +
 "gl_FragColor = vertexColor;\n" +
 "}\n");

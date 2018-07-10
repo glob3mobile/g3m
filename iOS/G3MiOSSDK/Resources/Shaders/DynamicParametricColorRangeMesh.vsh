@@ -18,7 +18,7 @@ uniform highp float uTime; //Between 0..1
 uniform lowp vec4 uColorAt0;
 uniform lowp vec4 uColorAt1;
 
-varying lowp vec4 vertexColor;
+varying highp vec4 vertexColor;
 
 void main() {
   gl_Position = uModelview * aPosition;
