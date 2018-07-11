@@ -21,6 +21,9 @@ private:
     
     
 public:
+    
+    CompositeMesh():_boundingVolume(NULL){}
+    
     virtual ~CompositeMesh();
     
     size_t getVertexCount() const;

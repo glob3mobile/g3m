@@ -33,7 +33,9 @@ AbstractMesh::~AbstractMesh() {
     delete _flatColor;
     
     delete _boundingVolume;
+    _boundingVolume = NULL;
     delete _translationMatrix;
+    _translationMatrix = NULL;
     
     _glState->_release();
     
