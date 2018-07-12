@@ -24,7 +24,9 @@
 
 void PointCloudMesh::updatePopUpEffect(float completionRatio){
     if (completionRatio > 1.0){
-        setTransformation(Matrix44D::createIdentity());
+        Matrix44D* m = Matrix44D::createIdentity();
+        setTransformation(m);
+        m->_release();
     } else{
         
         const float a = completionRatio*(2.0f-completionRatio); //Ease-Out
