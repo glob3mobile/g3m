@@ -349,6 +349,12 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
             if (!handled && _mainRenderer->isEnable()) {
                 handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
             }
+                        
+            if (!handled){
+                for (size_t i = 0; i < _multiPassRenderers.size(); ++i) {
+                    _multiPassRenderers[i]->onTouchEvent(&ec, touchEvent);
+                }
+            }
             
             if (!handled) {
                 handled = _cameraRenderer->onTouchEvent(&ec, touchEvent);
@@ -358,6 +364,7 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                     }
                 }
             }
+            
             break;
         }
         case RENDER_BUSY: {

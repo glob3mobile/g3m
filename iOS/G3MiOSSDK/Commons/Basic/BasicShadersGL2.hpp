@@ -387,7 +387,7 @@ public:
 "varying lowp vec4 vertexColor;\n" +
 "varying highp float currentValue;\n" +
 "void main() {\n" +
-"highp float circleRadius = 1.0 * (0.8 * currentValue + 0.2);\n" +
+"highp float circleRadius = 0.8 *(1.0 - currentValue)+ 0.2;\n" +
 "highp vec2 circCoord = 2.0 * gl_PointCoord - 1.0;\n" +
 "highp float dist = dot(circCoord, circCoord);\n" +
 "if (dist > circleRadius) {\n" +
@@ -812,7 +812,7 @@ public:
 "varying lowp vec4 vertexColor;\n" +
 "varying lowp float currentValue;\n" +
 "void main() {\n" +
-"highp float circleRadius = 1.0 * (0.8 * currentValue + 0.2);\n" +
+"highp float circleRadius = 0.8 *(1.0 - currentValue)+ 0.2;\n" +
 "highp vec2 circCoord = 2.0 * gl_PointCoord - 1.0;\n" +
 "highp float dist = dot(circCoord, circCoord);\n" +
 "if (dist > circleRadius) {\n" +
