@@ -40,7 +40,6 @@
 #include "IDeviceLocation.hpp"
 #include "IDeviceInfo.hpp"
 #include "InitialCameraPositionProvider.hpp"
-#include "CityGMLParser.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -161,8 +160,6 @@ _interOcularDistance(200.0)
     _mainRenderer->initialize(_context);
     _busyRenderer->initialize(_context);
     _errorRenderer->initialize(_context);
-    
-    CityGMLParser::initialize(_context);
     
     if (_hudRenderer != NULL) {
         _hudRenderer->initialize(_context);

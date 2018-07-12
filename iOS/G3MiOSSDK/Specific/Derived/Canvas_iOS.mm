@@ -58,6 +58,7 @@ void Canvas_iOS::_initialize(int width, int height) {
 
   if (_context == NULL) {
     ILogger::instance()->logError("Can't create CGContext");
+      delete colorSpace;
     return;
   }
 
