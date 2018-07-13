@@ -590,6 +590,8 @@
 		D8F631D11F753FEB00361DDA /* Cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F631CF1F753FEB00361DDA /* Cylinder.cpp */; };
 		D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F631D01F753FEB00361DDA /* Cylinder.hpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
+		D8FF565020F8D68A004BB177 /* VertexColorScheme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FF564E20F8D68A004BB177 /* VertexColorScheme.cpp */; };
+		D8FF565120F8D718004BB177 /* VertexColorScheme.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FF564F20F8D68A004BB177 /* VertexColorScheme.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71AA047191AACE400834D69 /* ICanvasUtils.cpp */; };
@@ -798,6 +800,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8FF565120F8D718004BB177 /* VertexColorScheme.hpp in CopyFiles */,
 				D829FFDC20C7DDA100567F59 /* FlatMercatorPlanet.hpp in CopyFiles */,
 				D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */,
 				D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */,
@@ -2027,6 +2030,8 @@
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GLGlobalState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
+		D8FF564E20F8D68A004BB177 /* VertexColorScheme.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VertexColorScheme.cpp; path = Commons/Mesh/VertexColorScheme.cpp; sourceTree = "<group>"; };
+		D8FF564F20F8D68A004BB177 /* VertexColorScheme.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = VertexColorScheme.hpp; path = Commons/Mesh/VertexColorScheme.hpp; sourceTree = "<group>"; };
 		D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRendererBuilder.cpp; path = Commons/Basic/PlanetRendererBuilder.cpp; sourceTree = "<group>"; };
@@ -2962,6 +2967,8 @@
 				D8765D031779C3AE004B62F4 /* FlatColorMesh.hpp */,
 				CFDFC05B166AB22A0065BC1F /* AbstractMesh.cpp */,
 				CFDFC05C166AB22A0065BC1F /* AbstractMesh.hpp */,
+				D8FF564E20F8D68A004BB177 /* VertexColorScheme.cpp */,
+				D8FF564F20F8D68A004BB177 /* VertexColorScheme.hpp */,
 				CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */,
 				CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */,
 				CFDB7B71166AB99B00756DE8 /* DirectMesh.cpp */,
@@ -3223,6 +3230,7 @@
 				D8B78E241C1208CB00DDE2B9 /* MaxLevelTileLODTester.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
 				44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */,
+				D8FF565020F8D68A004BB177 /* VertexColorScheme.cpp in Sources */,
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
 				D85024281CB6431500519C60 /* ColorLegend.cpp in Sources */,
 				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
