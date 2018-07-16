@@ -74,13 +74,17 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
     return;
   }
 
-  const MutableVector3D cameraVector = _camDir.times(-1);
+  
 
   //Light slightly different of camera position
+ /*
+  const MutableVector3D cameraVector = _camDir.times(-1);
   const MutableVector3D rotationLightDirAxis = _up.cross(cameraVector);
   const MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis,
-                                                                 Angle::fromDegrees(45.0));
-
+                                                            Angle::fromDegrees(45.0));
+  */
+    const MutableVector3D lightDir = _camDir.times(-1);
+    
   DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
   if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);

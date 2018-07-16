@@ -842,7 +842,7 @@ GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
 SceneLighting* IG3MBuilder::getSceneLighting() {
   if (_sceneLighting == NULL) {
     _sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0),
-                                                  Color::white());
+                                                  Color::fromRGBA((float)0.5, (float)0.5, (float)0.5, (float)1.0));
   }
   return _sceneLighting;
 }
