@@ -183,12 +183,12 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
 
   [_lock unlock];
 
-  if (selectedHandler == NULL) {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-  }
-  else {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-  }
+//  if (selectedHandler == NULL) {
+//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+//  }
+//  else {
+//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+//  }
 
   return selectedHandler;
 }

@@ -147,15 +147,20 @@ VectorStreamingRenderer::FeaturesParserAsyncTask::~FeaturesParserAsyncTask() {
 #endif
 }
 
-std::vector<VectorStreamingRenderer::Cluster*>* VectorStreamingRenderer::FeaturesParserAsyncTask::parseClusters(const JSONArray* clustersJson) {
-  if (clustersJson == NULL) {
+std::vector<VectorStreamingRenderer::Cluster*>* VectorStreamingRenderer::FeaturesParserAsyncTask::parseClusters(const JSONBaseObject* jsonBaseObject) {
+  if (jsonBaseObject == NULL) {
+    return NULL;
+  }
+
+  const JSONArray* jsonArray = jsonBaseObject->asArray();
+  if ((jsonArray == NULL) || (jsonArray->size() == 0)) {
     return NULL;
   }
 
   std::vector<VectorStreamingRenderer::Cluster*>* clusters = new std::vector<VectorStreamingRenderer::Cluster*>();
-  const size_t clustersCount = clustersJson->size();
+  const size_t clustersCount = jsonArray->size();
   for (size_t i = 0; i < clustersCount; i++) {
-    const JSONObject* clusterJson = clustersJson->getAsObject(i);
+    const JSONObject* clusterJson = jsonArray->getAsObject(i);
     const Geodetic2D* position = GEOJSONUtils::parseGeodetic2D( clusterJson->getAsArray("position") );
     const long long   size     = (long long) clusterJson->getAsNumber("size")->value();
 
@@ -171,7 +176,7 @@ std::vector<VectorStreamingRenderer::Node*>* VectorStreamingRenderer::FeaturesPa
   }
 
   const JSONArray* jsonArray = jsonBaseObject->asArray();
-  if (jsonArray == NULL) {
+  if ((jsonArray == NULL) || (jsonArray->size() == 0)) {
     return NULL;
   }
 
@@ -200,7 +205,7 @@ void VectorStreamingRenderer::FeaturesParserAsyncTask::runInBackground(const G3M
   if (jsonBaseObject != NULL) {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
 
-    _clusters = parseClusters( jsonObject->get("clusters")->asArray() );
+    _clusters = parseClusters( jsonObject->get("clusters") );
     _features = GEOJSONParser::parse( jsonObject->get("features")->asObject() , _verbose);
     _children = parseChildren( jsonObject->get("children") );
 
@@ -391,6 +396,7 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
       delete cluster;
     }
     delete _clusters;
+    _clusters = NULL;
     _clusterMarksCount = 0;
   }
 
@@ -856,8 +862,8 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
     }
     else {
       _sector        = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
-      _clustersCount = (long long) jsonObject->getAsNumber("clustersCount")->value();
-      _featuresCount = (long long) jsonObject->getAsNumber("featuresCount")->value();
+      _clustersCount = (long long) jsonObject->getAsNumber("clustersCount", 0);
+      _featuresCount = (long long) jsonObject->getAsNumber("featuresCount", 0);
       _nodesCount    = (int) jsonObject->getAsNumber("nodesCount")->value();
       _minNodeDepth  = (int) jsonObject->getAsNumber("minNodeDepth")->value();
       _maxNodeDepth  = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
