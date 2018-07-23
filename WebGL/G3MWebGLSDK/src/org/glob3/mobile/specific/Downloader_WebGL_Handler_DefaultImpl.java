@@ -43,7 +43,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final String tag) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<>();
+      _listeners = new ArrayList<ListenerEntry>();
       final ListenerEntry entry = new ListenerEntry(bufferListener, null, deleteListener, requestID, tag);
       _listeners.add(entry);
       _requestingImage = false;
@@ -59,7 +59,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final String tag) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<>();
+      _listeners = new ArrayList<ListenerEntry>();
       final ListenerEntry entry = new ListenerEntry(null, imageListener, deleteListener, requestID, tag);
       _listeners.add(entry);
       _requestingImage = true;
