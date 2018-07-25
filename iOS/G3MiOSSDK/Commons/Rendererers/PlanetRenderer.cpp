@@ -823,18 +823,17 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _statistics.log( rc->getLogger() );
   }
 
-  const Sector* previousLastVisibleSector = _lastVisibleSector;
+  // const Sector* previousLastVisibleSector = _lastVisibleSector;
   _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
-  if (previousLastVisibleSector != _lastVisibleSector) {
-    // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
-    if (_lastVisibleSector != NULL) {
-      const size_t visibleSectorListenersCount = _visibleSectorListeners.size();
-      for (size_t i = 0; i < visibleSectorListenersCount; i++) {
-        VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
-        entry->tryToNotifyListener(_lastVisibleSector, rc);
-      }
+  // if (previousLastVisibleSector != _lastVisibleSector) {
+  if (_lastVisibleSector != NULL) {
+    const size_t visibleSectorListenersCount = _visibleSectorListeners.size();
+    for (size_t i = 0; i < visibleSectorListenersCount; i++) {
+      VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
+      entry->tryToNotifyListener(_lastVisibleSector, rc);
     }
   }
+  // }
 
 }
 
