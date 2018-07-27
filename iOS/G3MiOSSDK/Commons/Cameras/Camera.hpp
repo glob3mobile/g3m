@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Camera.hpp
  *  Prueba Opengl iPad
  *
@@ -134,7 +134,7 @@ public:
     return (float) _viewPortWidth / _viewPortHeight;
   }
 
-  EffectTarget* getEffectTarget() {
+  EffectTarget* getEffectTarget() const {
     return _camEffectTarget;
   }
 

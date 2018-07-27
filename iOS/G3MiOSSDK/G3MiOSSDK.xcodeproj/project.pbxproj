@@ -482,6 +482,8 @@
 		D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */; };
 		D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */; };
 		D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */; };
+		D814B5B9210B4293007D700B /* CameraOrbitFixedPositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D814B5B7210B4293007D700B /* CameraOrbitFixedPositionEffect.cpp */; };
+		D814B5BA210B43FA007D700B /* CameraOrbitFixedPositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D814B5B8210B4293007D700B /* CameraOrbitFixedPositionEffect.hpp */; };
 		D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */; };
 		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
@@ -800,6 +802,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D814B5BA210B43FA007D700B /* CameraOrbitFixedPositionEffect.hpp in CopyFiles */,
 				D8FF565120F8D718004BB177 /* VertexColorScheme.hpp in CopyFiles */,
 				D829FFDC20C7DDA100567F59 /* FlatMercatorPlanet.hpp in CopyFiles */,
 				D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */,
@@ -1842,6 +1845,8 @@
 		D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix44DProvider.cpp; path = Commons/Geometry/Matrix44DProvider.cpp; sourceTree = "<group>"; };
 		D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneLighting.hpp; path = Commons/Basic/SceneLighting.hpp; sourceTree = "<group>"; };
 		D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLighting.cpp; path = Commons/Basic/SceneLighting.cpp; sourceTree = "<group>"; };
+		D814B5B7210B4293007D700B /* CameraOrbitFixedPositionEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CameraOrbitFixedPositionEffect.cpp; path = Commons/Cameras/CameraOrbitFixedPositionEffect.cpp; sourceTree = "<group>"; };
+		D814B5B8210B4293007D700B /* CameraOrbitFixedPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraOrbitFixedPositionEffect.hpp; path = Commons/Cameras/CameraOrbitFixedPositionEffect.hpp; sourceTree = "<group>"; };
 		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
 		D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TaitBryanAngles.hpp; path = Commons/Geometry/TaitBryanAngles.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2618,6 +2623,8 @@
 				FBC2309817972F4F009343FC /* CameraEffects.hpp */,
 				D8C486CE17E205E7000EAFC9 /* InitialCameraPositionProvider.cpp */,
 				D8C486CF17E205E7000EAFC9 /* InitialCameraPositionProvider.hpp */,
+				D814B5B7210B4293007D700B /* CameraOrbitFixedPositionEffect.cpp */,
+				D814B5B8210B4293007D700B /* CameraOrbitFixedPositionEffect.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -3299,6 +3306,7 @@
 				CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */,
 				CFCBA3C2190706C900FD2A2F /* RasterLayerTileImageProvider.cpp in Sources */,
 				CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */,
+				D814B5B9210B4293007D700B /* CameraOrbitFixedPositionEffect.cpp in Sources */,
 				CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */,
 				D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */,
 				D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */,
