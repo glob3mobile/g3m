@@ -241,7 +241,9 @@ public:
 
   void showNormals(bool v) const;
 
-#warning Chano adding stuff
+    size_t meshCount() const{
+        return _meshes.size();
+    }
     
   std::vector<Mesh*> getMeshes();
     

@@ -122,6 +122,8 @@ public:
   std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
 
   void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
+    
+    void clearOrderedRenderables();
   
 };
 

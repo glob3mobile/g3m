@@ -1845,6 +1845,8 @@
 		D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix44DProvider.cpp; path = Commons/Geometry/Matrix44DProvider.cpp; sourceTree = "<group>"; };
 		D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneLighting.hpp; path = Commons/Basic/SceneLighting.hpp; sourceTree = "<group>"; };
 		D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLighting.cpp; path = Commons/Basic/SceneLighting.cpp; sourceTree = "<group>"; };
+		D81224B92114675700207927 /* DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh; sourceTree = "<group>"; };
+		D81224BA2114676100207927 /* DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh; sourceTree = "<group>"; };
 		D814B5B7210B4293007D700B /* CameraOrbitFixedPositionEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CameraOrbitFixedPositionEffect.cpp; path = Commons/Cameras/CameraOrbitFixedPositionEffect.cpp; sourceTree = "<group>"; };
 		D814B5B8210B4293007D700B /* CameraOrbitFixedPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraOrbitFixedPositionEffect.hpp; path = Commons/Cameras/CameraOrbitFixedPositionEffect.hpp; sourceTree = "<group>"; };
 		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
@@ -1927,6 +1929,8 @@
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D895CA1C1861C32300AE8291 /* IImageUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageUtils.hpp; path = Commons/Basic/IImageUtils.hpp; sourceTree = "<group>"; };
 		D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageUtils.cpp; path = Commons/Basic/IImageUtils.cpp; sourceTree = "<group>"; };
+		D89CD2B52112FFA8000DE21B /* DynamicParametricColorMesh_DirectionLight_DistanceTransparency.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorMesh_DirectionLight_DistanceTransparency.vsh; sourceTree = "<group>"; };
+		D89CD2B62112FFDB000DE21B /* DynamicParametricColorMesh_DirectionLight_DistanceTransparency.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorMesh_DirectionLight_DistanceTransparency.fsh; sourceTree = "<group>"; };
 		D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileElevationDataRequest.cpp; path = Commons/Basic/TileElevationDataRequest.cpp; sourceTree = "<group>"; };
 		D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileElevationDataRequest.hpp; path = Commons/Basic/TileElevationDataRequest.hpp; sourceTree = "<group>"; };
 		D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeElevationData.cpp; path = Commons/Basic/CompositeElevationData.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -3103,8 +3107,12 @@
 				D84B45021CD8A1F60041CA1F /* RoundedColoredPoints.fsh */,
 				D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */,
 				D809B06920B2B73800BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.fsh */,
+				D89CD2B62112FFDB000DE21B /* DynamicParametricColorMesh_DirectionLight_DistanceTransparency.fsh */,
+				D81224BA2114676100207927 /* DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh */,
 				D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */,
 				D809B06820B2B73200BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.vsh */,
+				D89CD2B52112FFA8000DE21B /* DynamicParametricColorMesh_DirectionLight_DistanceTransparency.vsh */,
+				D81224B92114675700207927 /* DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh */,
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */,
 				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,

@@ -77,6 +77,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
             if (!isDynamic){
                 return compileProgramWithName(gl, "ParametricColorRange3Mesh");
             } else{
+                if (hasLight && hasTranspDist){
+                    return compileProgramWithName(gl, "DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency");
+                }
+                
                 return compileProgramWithName(gl, "DynamicParametricColorRange3Mesh");
             }
         }
@@ -88,6 +92,11 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
         if (!isDynamic){
             return compileProgramWithName(gl, "ParametricColorRangeMesh");
         } else{
+            if (hasLight && hasTranspDist){
+                return compileProgramWithName(gl, "DynamicParametricColorMesh_DirectionLight_DistanceTransparency");
+            }
+            
+            
             return compileProgramWithName(gl, "DynamicParametricColorRangeMesh");
         }
     }

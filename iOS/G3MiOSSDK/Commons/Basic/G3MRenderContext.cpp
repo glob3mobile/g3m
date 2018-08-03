@@ -65,9 +65,12 @@ std::vector<OrderedRenderable*>* G3MRenderContext::getSortedOrderedRenderables()
   return _orderedRenderables;
 }
 
+void G3MRenderContext::clearOrderedRenderables(){
+    delete _orderedRenderables;
+    _orderedRenderables = NULL;
+}
+
 void G3MRenderContext::clear() {
   _frameStartTimer->start();
-
-  delete _orderedRenderables;
-  _orderedRenderables = NULL;
+    clearOrderedRenderables();
 }

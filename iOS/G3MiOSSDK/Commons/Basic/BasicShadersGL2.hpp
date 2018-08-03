@@ -255,6 +255,77 @@ public:
 "}\n");
     this->add(sourcesDynamicParametricColorRange3Mesh);
 
+    GPUProgramSources sourcesDynamicParametricColor3Mesh_DirectionLight_DistanceTransparency("DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec3 aNormal;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
+"uniform float uPointSize;\n" +
+"uniform vec3 uAmbientLightColor;\n" +
+"uniform vec3 uDiffuseLightColor;\n" +
+"uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
+"varying vec3 lightColor;\n" +
+"varying vec4 VertexColor;\n" +
+"varying highp float alpha;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"attribute float aColorValueNext; //Between 0..1\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"uniform lowp vec4 uColorAt0_5;\n" +
+"#define HALF_PI 1.5707963268\n" +
+"#define START_FADING_AT 0.75\n" +
+"void main() {\n" +
+"vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
+"highp float vertexDist = -vertexInModel.z;\n" +
+"highp float d = vertexDist / uTransparencyDistanceThreshold;\n" +
+"if (d < START_FADING_AT){\n" +
+"alpha = 1.0;\n" +
+"} else{\n" +
+"if (d > 1.0){\n" +
+"alpha = 0.0;\n" +
+"} else{\n" +
+"d = (d - START_FADING_AT) / (1.0 - START_FADING_AT);\n" +
+"d = (1.0 + d) * (HALF_PI);\n" +
+"alpha = sin(d);\n" +
+"}\n" +
+"}\n" +
+"vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+"vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+"float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+"lightColor.x = min(lightColor.x, 1.0);\n" +
+"lightColor.y = min(lightColor.y, 1.0);\n" +
+"lightColor.z = min(lightColor.z, 1.0);\n" +
+"highp float currentValue = mix(aColorValue, aColorValueNext, uTime);\n" +
+"if (currentValue < 0.5){\n" +
+"highp float v = currentValue * 2.0;\n" +
+"VertexColor = mix(uColorAt0, uColorAt0_5, v);\n" +
+"} else{\n" +
+"highp float v = (currentValue - 0.5) * 2.0;\n" +
+"VertexColor = mix(uColorAt0_5, uColorAt1, v);\n" +
+"}\n" +
+"}\n",
+ emptyString +  
+"precision highp float;\n" +
+"varying vec4 VertexColor;\n" +
+"varying vec3 lightColor;\n" +
+"varying highp float alpha;\n" +
+"void main() {\n" +
+"if (alpha <= 0.0){\n" +
+"discard;\n" +
+"}\n" +
+"gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.g;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.b;\n" +
+"gl_FragColor.a = VertexColor.a * alpha;\n" +
+"}\n");
+    this->add(sourcesDynamicParametricColor3Mesh_DirectionLight_DistanceTransparency);
+
     GPUProgramSources sourcesDynamicParametricColorRangeMesh("DynamicParametricColorRangeMesh",
  emptyString +  
 "attribute vec4 aPosition;\n" +
@@ -761,6 +832,70 @@ public:
 "}\n" +
 "}\n");
     this->add(sourcesRoundedColoredPoints);
+
+    GPUProgramSources sourcesDynamicParametricColorMesh_DirectionLight_DistanceTransparency("DynamicParametricColorMesh_DirectionLight_DistanceTransparency",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec3 aNormal;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
+"uniform float uPointSize;\n" +
+"uniform vec3 uAmbientLightColor;\n" +
+"uniform vec3 uDiffuseLightColor;\n" +
+"uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
+"varying vec3 lightColor;\n" +
+"varying vec4 VertexColor;\n" +
+"varying highp float alpha;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"attribute float aColorValueNext; //Between 0..1\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"#define HALF_PI 1.5707963268\n" +
+"#define START_FADING_AT 0.75\n" +
+"void main() {\n" +
+"vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
+"highp float vertexDist = -vertexInModel.z;\n" +
+"highp float d = vertexDist / uTransparencyDistanceThreshold;\n" +
+"if (d < START_FADING_AT){\n" +
+"alpha = 1.0;\n" +
+"} else{\n" +
+"if (d > 1.0){\n" +
+"alpha = 0.0;\n" +
+"} else{\n" +
+"d = (d - START_FADING_AT) / (1.0 - START_FADING_AT);\n" +
+"d = (1.0 + d) * (HALF_PI);\n" +
+"alpha = sin(d);\n" +
+"}\n" +
+"}\n" +
+"vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+"vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+"float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+"lightColor.x = min(lightColor.x, 1.0);\n" +
+"lightColor.y = min(lightColor.y, 1.0);\n" +
+"lightColor.z = min(lightColor.z, 1.0);\n" +
+"highp float v = mix(aColorValue, aColorValueNext, uTime);\n" +
+"VertexColor = mix(uColorAt0, uColorAt1, v);\n" +
+"}\n",
+ emptyString +  
+"precision highp float;\n" +
+"varying vec4 VertexColor;\n" +
+"varying vec3 lightColor;\n" +
+"varying highp float alpha;\n" +
+"void main() {\n" +
+"if (alpha <= 0.0){\n" +
+"discard;\n" +
+"}\n" +
+"gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.g;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.b;\n" +
+"gl_FragColor.a = VertexColor.a * alpha;\n" +
+"}\n");
+    this->add(sourcesDynamicParametricColorMesh_DirectionLight_DistanceTransparency);
 
     GPUProgramSources sourcesTextured2DMesh("Textured2DMesh",
  emptyString +  

@@ -525,6 +525,20 @@ RenderState G3MWidget::calculateRendererState() {
     return busyFlag ? RenderState::busy() : RenderState::ready();
 }
 
+void G3MWidget::renderOrderedRenderable(){
+    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+    if (orderedRenderables != NULL) {
+        const size_t orderedRenderablesCount = orderedRenderables->size();
+        for (size_t i = 0; i < orderedRenderablesCount; i++) {
+            OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
+            orderedRenderable->render(_renderContext);
+            delete orderedRenderable;
+        }
+        
+        orderedRenderables->clear();
+    }
+}
+
 void G3MWidget::rawRender(const RenderState_Type renderStateType) {
     
     if (_rootState == NULL) {
@@ -540,11 +554,15 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
             
             if (_mainRenderer->isEnable()) {
                 _mainRenderer->render(_renderContext, _rootState);
+                renderOrderedRenderable();
+                _renderContext->clearOrderedRenderables();
             }
             
             for (size_t i = 0; i < _multiPassRenderers.size(); ++i){
                 _gl->clearDepthBuffer();
                 _multiPassRenderers[i]->render(_renderContext, _rootState);
+                renderOrderedRenderable();
+                _renderContext->clearOrderedRenderables();
             }
             
             
@@ -562,19 +580,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
             break;
             
     }
-    
-    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
-    if (orderedRenderables != NULL) {
-        const size_t orderedRenderablesCount = orderedRenderables->size();
-        for (size_t i = 0; i < orderedRenderablesCount; i++) {
-            OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-            orderedRenderable->render(_renderContext);
-            delete orderedRenderable;
-        }
-        
-        orderedRenderables->clear();
-    }
-    
+
     if (_hudRenderer != NULL) {
         if (renderStateType == RENDER_READY) {
             if (_hudRenderer->isEnable()) {

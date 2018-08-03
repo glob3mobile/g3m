@@ -386,7 +386,7 @@ private:
     
     void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
     
-    
+    void renderOrderedRenderable();
 };
 
 #endif

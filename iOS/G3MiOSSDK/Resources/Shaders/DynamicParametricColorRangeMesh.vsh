@@ -21,8 +21,8 @@ uniform lowp vec4 uColorAt1;
 varying highp vec4 vertexColor;
 
 void main() {
-  gl_Position = uModelview * aPosition;
-  gl_PointSize = uPointSize;
+    gl_Position = uModelview * aPosition;
+    gl_PointSize = uPointSize;
     
     highp float v = mix(aColorValue, aColorValueNext, uTime);
     vertexColor = mix(uColorAt0, uColorAt1, v);
