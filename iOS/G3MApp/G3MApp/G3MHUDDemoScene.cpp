@@ -140,7 +140,7 @@ public:
   }
 
   void run(const G3MContext* context) {
-    _angleInRadians += Angle::fromDegrees(2)._radians;
+    _angleInRadians += Angle::fromDegrees(1)._radians;
     //        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
     double degrees = Angle::fromRadians(_angleInRadians)._degrees;
     while (degrees > 360) {

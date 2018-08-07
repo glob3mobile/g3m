@@ -220,9 +220,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
       throw new RuntimeException("roll can't be NAN");
     }
     _position = position;
-    _heading = heading;
-    _pitch = pitch;
-    _roll = roll;
+    _heading  = heading;
+    _pitch    = pitch;
+    _roll     = roll;
     cleanTransformMatrix();
   }
 

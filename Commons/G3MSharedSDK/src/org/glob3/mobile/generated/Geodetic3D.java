@@ -58,6 +58,11 @@ public class Geodetic3D
     return new Geodetic3D(Angle.linearInterpolationFromDegrees(fromLatitudeDegrees, toLatitudeDegrees, alpha), Angle.linearInterpolationFromDegrees(fromLongitudeDegrees, toLongitudeDegrees, alpha), IMathUtils.instance().linearInterpolation(fromHeight, toHeight, alpha));
   }
 
+  public static Geodetic3D linearInterpolationFromRadians(double fromLatitudeRadians, double fromLongitudeRadians, double fromHeight, double toLatitudeRadians, double toLongitudeRadians, double toHeight, double alpha)
+  {
+    return new Geodetic3D(Angle.linearInterpolationFromRadians(fromLatitudeRadians, toLatitudeRadians, alpha), Angle.linearInterpolationFromRadians(fromLongitudeRadians, toLongitudeRadians, alpha), IMathUtils.instance().linearInterpolation(fromHeight, toHeight, alpha));
+  }
+
   public static Geodetic3D cosineInterpolation(Geodetic3D from, Geodetic3D to, double alpha)
   {
     return new Geodetic3D(Angle.cosineInterpolation(from._latitude, to._latitude, alpha), Angle.cosineInterpolation(from._longitude, to._longitude, alpha), IMathUtils.instance().cosineInterpolation(from._height, to._height, alpha));
