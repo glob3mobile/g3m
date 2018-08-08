@@ -252,7 +252,6 @@ void HUDQuadWidget::cleanMesh() {
 }
 
 void HUDQuadWidget::changed() {
-//#warning Diego at work!
   cleanMesh();
 
   delete _image;
@@ -287,7 +286,6 @@ void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
 void HUDQuadWidget::imageCreated(const IImage*      image,
                                  const std::string& imageName,
                                  int                imageRole) {
-
   if (imageRole == 0) {
     _buildingImage = false;
     _image = image;
@@ -300,24 +298,11 @@ void HUDQuadWidget::imageCreated(const IImage*      image,
     _backgroundImage = image;
     _backgroundImageName = imageName;
   }
-
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
 }
 
 void HUDQuadWidget::onImageBuildError(const std::string& error,
                                       int                imageRole) {
   _errors.push_back("HUDQuadWidget: " + error);
-
-  //  if (imageRole == 0) {
-  //    _buildingImage0 = false;
-  //  }
-  //  else if (imageRole == 1) {
-  //    _buildingBackgroundImage = false;
-  //  }
-
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
