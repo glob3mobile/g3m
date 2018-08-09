@@ -298,6 +298,7 @@ void TextureGLFeature::setTranslation(float u, float v) {
   else {
     if (u == 0.0 && v == 0.0) {
       _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+      _translation = NULL;
     }
     else {
       _translation->changeValue(u, v);
@@ -316,6 +317,7 @@ void TextureGLFeature::setScale(float u, float v) {
   else {
     if (u == 1.0 && v == 1.0) {
       _values->removeUniformValue(SCALE_TEXTURE_COORDS);
+      _scale = NULL;
     }
     else {
       _scale->changeValue(u, v);
@@ -326,13 +328,11 @@ void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, f
   if (_rotationAngle == NULL || _rotationCenter == NULL) {
     if (angle != 0.0) {
       _rotationCenter = new GPUUniformValueVec2FloatMutable(u, v);
-      
       _values->addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
                                _rotationCenter,
                                false);
       
       _rotationAngle = new GPUUniformValueFloatMutable(angle);
-      
       _values->addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
                                _rotationAngle,
                                false);
@@ -342,6 +342,8 @@ void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, f
     if (angle == 0.0) {
       _values->removeUniformValue(ROTATION_CENTER_TEXTURE_COORDS);
       _values->removeUniformValue(ROTATION_ANGLE_TEXTURE_COORDS);
+      _rotationCenter = NULL;
+      _rotationAngle  = NULL;
     }
     else {
       _rotationCenter->changeValue(u, v);

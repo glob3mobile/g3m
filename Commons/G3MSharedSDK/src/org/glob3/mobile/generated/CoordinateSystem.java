@@ -173,9 +173,9 @@ public class CoordinateSystem
       //Pitch 90
       final Vector3D wpp = wppp; //No Roll
   
-      Angle pitch = Angle.fromDegrees(90);
+      Angle pitch = Angle.halfPi();
       Angle roll = Angle.zero();
-      Angle heading = v.signedAngleBetween(wpp, w).sub(Angle.fromDegrees(180));
+      Angle heading = v.signedAngleBetween(wpp, w).sub(Angle.pi());
   
       return new TaitBryanAngles(heading, pitch, roll);
     }

@@ -101,6 +101,7 @@ public class TextureGLFeature extends GLColorGroupFeature
       if (u == 0.0 && v == 0.0)
       {
         _values.removeUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS);
+        _translation = null;
       }
       else
       {
@@ -121,6 +122,7 @@ public class TextureGLFeature extends GLColorGroupFeature
       if (u == 1.0 && v == 1.0)
       {
         _values.removeUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS);
+        _scale = null;
       }
       else
       {
@@ -135,11 +137,9 @@ public class TextureGLFeature extends GLColorGroupFeature
       if (angle != 0.0)
       {
         _rotationCenter = new GPUUniformValueVec2FloatMutable(u, v);
-  
         _values.addUniformValue(GPUUniformKey.ROTATION_CENTER_TEXTURE_COORDS, _rotationCenter, false);
   
         _rotationAngle = new GPUUniformValueFloatMutable(angle);
-  
         _values.addUniformValue(GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS, _rotationAngle, false);
       }
     }
@@ -149,6 +149,8 @@ public class TextureGLFeature extends GLColorGroupFeature
       {
         _values.removeUniformValue(GPUUniformKey.ROTATION_CENTER_TEXTURE_COORDS);
         _values.removeUniformValue(GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS);
+        _rotationCenter = null;
+        _rotationAngle = null;
       }
       else
       {
