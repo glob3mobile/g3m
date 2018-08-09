@@ -22,6 +22,7 @@ class VertexColorScheme{
 protected:
     GLFeature* _feat;
 public:
+    
     virtual ~VertexColorScheme(){
         _feat->_release();
     }
