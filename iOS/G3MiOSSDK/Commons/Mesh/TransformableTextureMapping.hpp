@@ -39,15 +39,14 @@ protected:
   }
 
 public:
-  void setTranslation(float translationU,
-                      float translationV);
+  void setTranslation(float u,
+                      float v);
 
-  void setScale(float scaleU,
-                float scaleV);
+  void setScale(float u,
+                float v);
 
-  void setRotation(float rotationAngleInRadians,
-                   float rotationCenterU,
-                   float rotationCenterV);
+  void setRotation(float angleInRadians,
+                   float centerU, float centerV);
 
 };
 

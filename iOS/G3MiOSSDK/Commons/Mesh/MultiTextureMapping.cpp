@@ -71,7 +71,8 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
         (tglf->getTextureID() == _glTextureID1->getID())) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
-      tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+      tglf->setRotation(_rotationInRadians,
+                        _rotationCenterU, _rotationCenterV);
       delete tglfs;
       return; //The TextureGLFeature for target 0 already exists and we do not have to recreate the state
     }

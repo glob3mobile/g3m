@@ -92,8 +92,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
       {
         if (textureID != null)
            textureID.dispose();
-  
-        rc.getLogger().logError("Can't background upload texture to GPU");
+        rc.getLogger().logError("Can't upload background texture to GPU");
         return null;
       }
     }

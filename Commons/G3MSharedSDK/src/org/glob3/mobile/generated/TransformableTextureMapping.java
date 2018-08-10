@@ -38,23 +38,23 @@ public abstract class TransformableTextureMapping extends TextureMapping
      _rotationCenterV = rotationCenterV;
   }
 
-  public final void setTranslation(float translationU, float translationV)
+  public final void setTranslation(float u, float v)
   {
-    _translationU = translationU;
-    _translationV = translationV;
+    _translationU = u;
+    _translationV = v;
   }
 
-  public final void setScale(float scaleU, float scaleV)
+  public final void setScale(float u, float v)
   {
-    _scaleU = scaleU;
-    _scaleV = scaleV;
+    _scaleU = u;
+    _scaleV = v;
   }
 
-  public final void setRotation(float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
+  public final void setRotation(float angleInRadians, float centerU, float centerV)
   {
-    _rotationInRadians = rotationAngleInRadians;
-    _rotationCenterU = rotationCenterU;
-    _rotationCenterV = rotationCenterV;
+    _rotationInRadians = angleInRadians;
+    _rotationCenterU = centerU;
+    _rotationCenterV = centerV;
   }
 
 }

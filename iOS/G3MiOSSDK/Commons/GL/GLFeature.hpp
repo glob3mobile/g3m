@@ -449,7 +449,8 @@ public:
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);
-  void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
+  void setRotation(float angleInRadians,
+                   float centerU, float centerV);
 
   int getTarget() const {
     return _target;
