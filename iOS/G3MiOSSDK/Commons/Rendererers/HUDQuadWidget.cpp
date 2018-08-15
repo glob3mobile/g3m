@@ -109,8 +109,7 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
     if (backgroundTextureID == NULL) {
       delete textureID;
-
-      rc->getLogger()->logError("Can't background upload texture to GPU");
+      rc->getLogger()->logError("Can't upload background texture to GPU");
       return NULL;
     }
   }
@@ -158,26 +157,20 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
                                               texCoords.create(),
                                               true,
                                               true,
-                                              _texCoordsTranslationU,
-                                              _texCoordsTranslationV,
-                                              _texCoordsScaleU,
-                                              _texCoordsScaleV,
+                                              _texCoordsTranslationU, _texCoordsTranslationV,
+                                              _texCoordsScaleU, _texCoordsScaleV,
                                               _texCoordsRotationInRadians,
-                                              _texCoordsRotationCenterU,
-                                              _texCoordsRotationCenterV);
+                                              _texCoordsRotationCenterU, _texCoordsRotationCenterV);
   }
   else {
     _textureMapping = new SimpleTextureMapping(textureID,
                                                texCoords.create(),
                                                true,
                                                true,
-                                               _texCoordsTranslationU,
-                                               _texCoordsTranslationV,
-                                               _texCoordsScaleU,
-                                               _texCoordsScaleV,
+                                               _texCoordsTranslationU, _texCoordsTranslationV,
+                                               _texCoordsScaleU, _texCoordsScaleV,
                                                _texCoordsRotationInRadians,
-                                               _texCoordsRotationCenterU,
-                                               _texCoordsRotationCenterV);
+                                               _texCoordsRotationCenterU, _texCoordsRotationCenterV);
   }
 
   return new TexturedMesh(dm, true, _textureMapping, true, true);
@@ -207,8 +200,8 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
                                          float centerU,
                                          float centerV) {
   _texCoordsRotationInRadians = angleInRadians;
-  _texCoordsRotationCenterU = centerU;
-  _texCoordsRotationCenterV = centerV;
+  _texCoordsRotationCenterU   = centerU;
+  _texCoordsRotationCenterV   = centerV;
 
   if (_textureMapping != NULL) {
     _textureMapping->setRotation(_texCoordsRotationInRadians,
@@ -216,7 +209,6 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
                                  _texCoordsRotationCenterV);
   }
 }
-
 
 void HUDQuadWidget::initialize(const G3MContext* context) {
   _context = context;
@@ -252,13 +244,12 @@ void HUDQuadWidget::cleanMesh() {
 }
 
 void HUDQuadWidget::changed() {
-//#warning Diego at work!
   cleanMesh();
 
   delete _image;
-  _image = NULL;
-  _imageName = "";
-  _imageWidth = 0;
+  _image       = NULL;
+  _imageName   = "";
+  _imageWidth  = 0;
   _imageHeight = 0;
 
   _buildingImage = true;
@@ -287,7 +278,6 @@ void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
 void HUDQuadWidget::imageCreated(const IImage*      image,
                                  const std::string& imageName,
                                  int                imageRole) {
-
   if (imageRole == 0) {
     _buildingImage = false;
     _image = image;
@@ -300,24 +290,11 @@ void HUDQuadWidget::imageCreated(const IImage*      image,
     _backgroundImage = image;
     _backgroundImageName = imageName;
   }
-
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
 }
 
 void HUDQuadWidget::onImageBuildError(const std::string& error,
                                       int                imageRole) {
   _errors.push_back("HUDQuadWidget: " + error);
-
-  //  if (imageRole == 0) {
-  //    _buildingImage0 = false;
-  //  }
-  //  else if (imageRole == 1) {
-  //    _buildingBackgroundImage = false;
-  //  }
-
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {

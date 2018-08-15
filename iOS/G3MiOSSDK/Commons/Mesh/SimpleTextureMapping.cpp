@@ -54,49 +54,50 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const {
   }
   else {
     TextureGLFeature* tglf = (TextureGLFeature*) state.getGLFeature(GLF_TEXTURE);
-    if (tglf != NULL && tglf->getTextureID() == _glTextureID->getID()) {
+    if ((tglf != NULL) && (tglf->getTextureID() == _glTextureID->getID())) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
-      tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+      tglf->setRotation(_rotationInRadians,
+                        _rotationCenterU, _rotationCenterV);
     }
     else {
       state.clearGLFeatureGroup(COLOR_GROUP);
-      if ((_scaleU != 1) ||
-          (_scaleV != 1) ||
-          (_translationU != 0) ||
-          (_translationV != 0) ||
-          (_rotationInRadians != 0)) {
-        state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
-                                                _texCoords,
-                                                2,
-                                                0,
-                                                false,
-                                                0,
-                                                _transparent,
-                                                _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-                                                GLBlendFactor::oneMinusSrcAlpha(),
-                                                _translationU,
-                                                _translationV,
-                                                _scaleU,
-                                                _scaleV,
-                                                _rotationInRadians,
-                                                _rotationCenterU,
-                                                _rotationCenterV),
-                           false);
-      }
-      else {
-        state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
-                                                _texCoords,
-                                                2,
-                                                0,
-                                                false,
-                                                0,
-                                                _transparent,
-                                                _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-                                                GLBlendFactor::oneMinusSrcAlpha()
-                                                ),
-                           false);
-      }
+      //if ((_scaleU != 1) ||
+      //    (_scaleV != 1) ||
+      //    (_translationU != 0) ||
+      //    (_translationV != 0) ||
+      //    (_rotationInRadians != 0)) {
+      state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
+                                              _texCoords,
+                                              2,
+                                              0,
+                                              false,
+                                              0,
+                                              _transparent,
+                                              _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha(),
+                                              _translationU,
+                                              _translationV,
+                                              _scaleU,
+                                              _scaleV,
+                                              _rotationInRadians,
+                                              _rotationCenterU,
+                                              _rotationCenterV),
+                         false);
+      //}
+      //else {
+      //  state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
+      //                                          _texCoords,
+      //                                          2,
+      //                                          0,
+      //                                          false,
+      //                                          0,
+      //                                          _transparent,
+      //                                          _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+      //                                          GLBlendFactor::oneMinusSrcAlpha()
+      //                                          ),
+      //                     false);
+      //}
     }
   }
 }

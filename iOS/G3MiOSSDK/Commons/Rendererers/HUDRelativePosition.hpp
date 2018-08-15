@@ -17,8 +17,8 @@ public:
     LEFT,
     RIGHT,
     CENTER,
-    ABOVE,
-    BELOW,
+    TOP,
+    BOTTOM,
     MIDDLE
   };
 

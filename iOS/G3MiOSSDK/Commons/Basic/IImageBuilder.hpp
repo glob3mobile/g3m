@@ -30,7 +30,7 @@ public:
                      bool deleteListener) = 0;
 
   virtual void setChangeListener(ChangedListener* listener) = 0;
-  
+
 };
 
 #endif

@@ -7,22 +7,21 @@
 //
 
 #include "TransformableTextureMapping.hpp"
-void TransformableTextureMapping::setTranslation(float translationU,
-                                                 float translationV) {
-  _translationU = translationU;
-  _translationV = translationV;
+void TransformableTextureMapping::setTranslation(float u,
+                                                 float v) {
+  _translationU = u;
+  _translationV = v;
 }
 
-void TransformableTextureMapping::setScale(float scaleU,
-                                           float scaleV) {
-  _scaleU = scaleU;
-  _scaleV = scaleV;
+void TransformableTextureMapping::setScale(float u,
+                                           float v) {
+  _scaleU = u;
+  _scaleV = v;
 }
 
-void TransformableTextureMapping::setRotation(float rotationAngleInRadians,
-                                              float rotationCenterU,
-                                              float rotationCenterV) {
-  _rotationInRadians = rotationAngleInRadians;
-  _rotationCenterU = rotationCenterU;
-  _rotationCenterV = rotationCenterV;
+void TransformableTextureMapping::setRotation(float angleInRadians,
+                                              float centerU, float centerV) {
+  _rotationInRadians = angleInRadians;
+  _rotationCenterU   = centerU;
+  _rotationCenterV   = centerV;
 }

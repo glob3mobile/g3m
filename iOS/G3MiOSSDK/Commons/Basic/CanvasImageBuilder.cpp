@@ -14,7 +14,8 @@
 #include "Color.hpp"
 #include "IImageListener.hpp"
 #include "IImageBuilderListener.hpp"
-//#include "IStringUtils.hpp"
+#include "IStringUtils.hpp"
+
 
 CanvasImageBuilder::~CanvasImageBuilder() {
   delete _canvas;
@@ -26,16 +27,18 @@ CanvasImageBuilder::~CanvasImageBuilder() {
 
 ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
   if ((_canvas == NULL) ||
-      (_canvasWidth  != _width) ||
-      (_canvasHeight != _height)) {
+      (_canvasWidth  != _width ) ||
+      (_canvasHeight != _height) ||
+      (_canvasRetina != _retina)) {
     delete _canvas;
 
     const IFactory* factory = context->getFactory();
 
     _canvas = factory->createCanvas(_retina);
     _canvas->initialize(_width, _height);
-    _canvasWidth = _width;
+    _canvasWidth  = _width;
     _canvasHeight = _height;
+    _canvasRetina = _retina;
   }
   else {
     _canvas->setFillColor(Color::TRANSPARENT);
@@ -79,7 +82,6 @@ public:
   }
 };
 
-
 void CanvasImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,
                                bool deleteListener) {
@@ -91,4 +93,13 @@ void CanvasImageBuilder::build(const G3MContext* context,
                                                            listener,
                                                            deleteListener),
                       true);
+}
+
+const std::string CanvasImageBuilder::getResolutionID(const G3MContext* context) const {
+  const IStringUtils* su = context->getStringUtils();
+
+  return (
+          su->toString(_width) + "x" + su->toString(_height) +
+          (_retina ? "@2x" : "")
+          );
 }

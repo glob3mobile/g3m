@@ -362,20 +362,16 @@ void Shape::setFullPosition(const Geodetic3D& position,
     THROW_EXCEPTION("roll can't be NAN");
   }
 #ifdef C_CODE
-  delete _position;
-  _position = new Geodetic3D(position);
-  delete _heading;
-  _heading = new Angle(heading);
-  delete _pitch;
-  _pitch = new Angle(pitch);
-  delete _roll;
-  _roll = new Angle(roll);
+  delete _position; _position = new Geodetic3D(position);
+  delete _heading;  _heading  = new Angle(heading);
+  delete _pitch;    _pitch    = new Angle(pitch);
+  delete _roll;     _roll     = new Angle(roll);
 #endif
 #ifdef JAVA_CODE
   _position = position;
-  _heading = heading;
-  _pitch = pitch;
-  _roll = roll;
+  _heading  = heading;
+  _pitch    = pitch;
+  _roll     = roll;
 #endif
   cleanTransformMatrix();
 }

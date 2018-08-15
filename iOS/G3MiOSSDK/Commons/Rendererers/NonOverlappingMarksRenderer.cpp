@@ -21,8 +21,6 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
-#include "HUDPosition.hpp"
-#include "HUDSize.hpp"
 #include "RenderState.hpp"
 #include "IImageBuilder.hpp"
 #include "IImageBuilderListener.hpp"
