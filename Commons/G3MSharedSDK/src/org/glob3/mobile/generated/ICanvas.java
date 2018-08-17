@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public abstract class ICanvas
 {
   protected final boolean _retina;
@@ -8,24 +9,30 @@ public abstract class ICanvas
 
   protected GFont _currentFont;
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isInitialized() const
   protected final boolean isInitialized()
   {
-    return (_canvasWidth > 0) && (_canvasHeight > 0);
+	return (_canvasWidth > 0) && (_canvasHeight > 0);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void checkInitialized() const
   protected final void checkInitialized()
   {
-    if (!isInitialized())
-    {
-      throw new RuntimeException("Canvas is not initialized");
-    }
+	if (!isInitialized())
+	{
+	  THROW_EXCEPTION("Canvas is not initialized");
+	}
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void checkCurrentFont() const
   protected final void checkCurrentFont()
   {
-    if (_currentFont == null)
-    {
-      throw new RuntimeException("Current font no set");
-    }
+	if (_currentFont == null)
+	{
+	  THROW_EXCEPTION("Current font no set");
+	}
   }
 
   protected abstract void _initialize(int width, int height);
@@ -105,16 +112,16 @@ public abstract class ICanvas
 
   protected ICanvas(boolean retina)
   {
-     _retina = retina;
-     _canvasWidth = -1;
-     _canvasHeight = -1;
-     _currentFont = null;
+	  _retina = retina;
+	  _canvasWidth = -1;
+	  _canvasHeight = -1;
+	  _currentFont = null;
   }
 
   public void dispose()
   {
-    if (_currentFont != null)
-       _currentFont.dispose();
+	if (_currentFont != null)
+		_currentFont.dispose();
   }
 
   /**
@@ -122,19 +129,19 @@ public abstract class ICanvas
    */
   public final void initialize(int width, int height)
   {
-    if ((width <= 0) || (height <= 0))
-    {
-      throw new RuntimeException("Invalid extent");
-    }
+	if ((width <= 0) || (height <= 0))
+	{
+	  THROW_EXCEPTION("Invalid extent");
+	}
   
-    if (isInitialized())
-    {
-      throw new RuntimeException("Canvas already initialized");
-    }
+	if (isInitialized())
+	{
+	  THROW_EXCEPTION("Canvas already initialized");
+	}
   
-    _canvasWidth = width;
-    _canvasHeight = height;
-    _initialize(width, height);
+	_canvasWidth = width;
+	_canvasHeight = height;
+	_initialize(width, height);
   }
 
 
@@ -146,8 +153,8 @@ public abstract class ICanvas
    */
   public final Vector2F textExtent(String text)
   {
-    checkCurrentFont();
-    return _textExtent(text);
+	checkCurrentFont();
+	return _textExtent(text);
   }
 
   /**
@@ -157,265 +164,280 @@ public abstract class ICanvas
    */
   public final void setFont(GFont font)
   {
-    if (_currentFont != null)
-       _currentFont.dispose();
-    _currentFont = new GFont(font);
-    _setFont(font);
+	if (_currentFont != null)
+		_currentFont.dispose();
+	_currentFont = new GFont(font);
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: _setFont(font);
+	_setFont(new GFont(font));
   }
 
   public final void setFillColor(Color color)
   {
-    checkInitialized();
-    _setFillColor(color);
+	checkInitialized();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: _setFillColor(color);
+	_setFillColor(new Color(color));
   }
 
   public final void setLineColor(Color color)
   {
-    checkInitialized();
-    _setLineColor(color);
+	checkInitialized();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: _setLineColor(color);
+	_setLineColor(new Color(color));
   }
 
   public final void setLineWidth(float width)
   {
-    checkInitialized();
-    _setLineWidth(width);
+	checkInitialized();
+	_setLineWidth(width);
   }
 
   public final void setLineCap(StrokeCap cap)
   {
-    checkInitialized();
-    _setLineCap(cap);
+	checkInitialized();
+	_setLineCap(cap);
   }
 
   public final void setLineJoin(StrokeJoin join)
   {
-    checkInitialized();
-    _setLineJoin(join);
+	checkInitialized();
+	_setLineJoin(join);
   }
 
   public final void setLineMiterLimit(float limit)
   {
-    checkInitialized();
-    _setLineMiterLimit(limit);
+	checkInitialized();
+	_setLineMiterLimit(limit);
   }
 
   public final void setLineDash(float[] lengths, int count, int phase)
   {
-    checkInitialized();
-    _setLineDash(lengths, count, phase);
+	checkInitialized();
+	_setLineDash(lengths, count, phase);
   }
 
-  void setLineDash(float[] lengths,
-                   int phase) {
-    setLineDash(lengths, lengths.length, phase);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+  public final void setLineDash(float[] lengths, int phase)
+  {
+	setLineDash(lengths, lengths.length, phase);
   }
+//#endif
 
   public final void setShadow(Color color, float blur, float offsetX, float offsetY)
   {
-    checkInitialized();
-    _setShadow(color, blur, offsetX, offsetY);
+	checkInitialized();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: _setShadow(color, blur, offsetX, offsetY);
+	_setShadow(new Color(color), blur, offsetX, offsetY);
   }
 
   public final void removeShadow()
   {
-    checkInitialized();
-    _removeShadow();
+	checkInitialized();
+	_removeShadow();
   }
 
   public final void clearRect(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _clearRect(left, top, width, height);
+	checkInitialized();
+	_clearRect(left, top, width, height);
   }
 
   public final void fillRectangle(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _fillRectangle(left, top, width, height);
+	checkInitialized();
+	_fillRectangle(left, top, width, height);
   }
 
   public final void strokeRectangle(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _strokeRectangle(left, top, width, height);
+	checkInitialized();
+	_strokeRectangle(left, top, width, height);
   }
 
   public final void fillAndStrokeRectangle(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _fillAndStrokeRectangle(left, top, width, height);
+	checkInitialized();
+	_fillAndStrokeRectangle(left, top, width, height);
   }
 
   public final void fillRoundedRectangle(float left, float top, float width, float height, float radius)
   {
-    checkInitialized();
-    _fillRoundedRectangle(left, top, width, height, radius);
+	checkInitialized();
+	_fillRoundedRectangle(left, top, width, height, radius);
   }
 
   public final void strokeRoundedRectangle(float left, float top, float width, float height, float radius)
   {
-    checkInitialized();
-    _strokeRoundedRectangle(left, top, width, height, radius);
+	checkInitialized();
+	_strokeRoundedRectangle(left, top, width, height, radius);
   }
 
   public final void fillAndStrokeRoundedRectangle(float left, float top, float width, float height, float radius)
   {
-    checkInitialized();
-    _fillAndStrokeRoundedRectangle(left, top, width, height, radius);
+	checkInitialized();
+	_fillAndStrokeRoundedRectangle(left, top, width, height, radius);
   }
 
   public final void fillEllipse(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _fillEllipse(left, top, width, height);
+	checkInitialized();
+	_fillEllipse(left, top, width, height);
   }
 
   public final void strokeEllipse(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _strokeEllipse(left, top, width, height);
+	checkInitialized();
+	_strokeEllipse(left, top, width, height);
   }
 
   public final void fillAndStrokeEllipse(float left, float top, float width, float height)
   {
-    checkInitialized();
-    _fillAndStrokeEllipse(left, top, width, height);
+	checkInitialized();
+	_fillAndStrokeEllipse(left, top, width, height);
   }
 
 
   public final void createImage(IImageListener listener, boolean autodelete)
   {
-    checkInitialized();
-    _createImage(listener, autodelete);
+	checkInitialized();
+	_createImage(listener, autodelete);
   }
 
   public final void fillText(String text, float left, float top)
   {
-    checkInitialized();
-    checkCurrentFont();
-    _fillText(text, left, top);
+	checkInitialized();
+	checkCurrentFont();
+	_fillText(text, left, top);
   }
 
   public final void drawImage(IImage image, float destLeft, float destTop)
   {
-    checkInitialized();
-    _drawImage(image, destLeft, destTop);
+	checkInitialized();
+	_drawImage(image, destLeft, destTop);
   }
 
   public final void drawImage(IImage image, float destLeft, float destTop, float transparency)
   {
-    checkInitialized();
-    _drawImage(image, destLeft, destTop, transparency);
+	checkInitialized();
+	_drawImage(image, destLeft, destTop, transparency);
   }
 
   public final void drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight)
   {
-    checkInitialized();
-    _drawImage(image, destLeft, destTop, destWidth, destHeight);
+	checkInitialized();
+	_drawImage(image, destLeft, destTop, destWidth, destHeight);
   }
 
   public final void drawImage(IImage image, float destLeft, float destTop, float destWidth, float destHeight, float transparency)
   {
-    checkInitialized();
-    _drawImage(image, destLeft, destTop, destWidth, destHeight, transparency);
+	checkInitialized();
+	_drawImage(image, destLeft, destTop, destWidth, destHeight, transparency);
   }
 
   public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight)
   {
-    checkInitialized();
+	checkInitialized();
   
-    if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
-    {
-      throw new RuntimeException("Invalid source rectangle in drawImage");
-    }
+	if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
+	{
+	  THROW_EXCEPTION("Invalid source rectangle in drawImage");
+	}
   
-    _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+	_drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
   }
 
   public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, float transparency)
   {
-    checkInitialized();
+	checkInitialized();
   
-    if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
-    {
-      throw new RuntimeException("Invalid source rectangle in drawImage");
-    }
+	if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
+	{
+	  THROW_EXCEPTION("Invalid source rectangle in drawImage");
+	}
   
-    if (transparency <= 0.0)
-    {
-      return;
-    }
+	if (transparency <= 0.0)
+	{
+	  return;
+	}
   
-    if (transparency >= 1.0)
-    {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
-    }
-    else
-    {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
-    }
+	if (transparency >= 1.0)
+	{
+	  _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+	}
+	else
+	{
+	  _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
+	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getWidth() const
   public final int getWidth()
   {
-    return _canvasWidth;
+	return _canvasWidth;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getHeight() const
   public final int getHeight()
   {
-    return _canvasHeight;
+	return _canvasHeight;
   }
 
   public final void beginPath()
   {
-    checkInitialized();
-    _beginPath();
+	checkInitialized();
+	_beginPath();
   }
 
   public final void closePath()
   {
-    checkInitialized();
-    _closePath();
+	checkInitialized();
+	_closePath();
   }
 
   public final void stroke()
   {
-    checkInitialized();
-    _stroke();
+	checkInitialized();
+	_stroke();
   }
 
   public final void fill()
   {
-    checkInitialized();
-    _fill();
+	checkInitialized();
+	_fill();
   }
 
   public final void fillAndStroke()
   {
-    checkInitialized();
-    _fillAndStroke();
+	checkInitialized();
+	_fillAndStroke();
   }
 
   public final void moveTo(float x, float y)
   {
-    checkInitialized();
-    _moveTo(x, y);
+	checkInitialized();
+	_moveTo(x, y);
   }
 
   public final void moveTo(Vector2F position)
   {
-    moveTo(position._x, position._y);
+	moveTo(position._x, position._y);
   }
 
   public final void lineTo(float x, float y)
   {
-    checkInitialized();
-    _lineTo(x, y);
+	checkInitialized();
+	_lineTo(x, y);
   }
 
   public final void lineTo(Vector2F position)
   {
-    lineTo(position._x, position._y);
+	lineTo(position._x, position._y);
   }
 
 }

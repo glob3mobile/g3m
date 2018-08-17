@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  IImageBuilderListener.hpp
 //  G3MiOSSDK
 //
@@ -8,15 +7,26 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 
 
-public interface IImageBuilderListener
+public abstract class IImageBuilderListener
 {
-  void dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
+//#endif
 
-  void imageCreated(IImage image, String imageName);
+  public abstract void imageCreated(IImage image, String imageName);
 
-  void onError(String error);
+  public abstract void onError(String error);
 
 }

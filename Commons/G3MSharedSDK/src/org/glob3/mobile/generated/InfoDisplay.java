@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  InfoDisplay.cpp
 //  G3MiOSSDK
 //
@@ -17,9 +16,15 @@ package org.glob3.mobile.generated;
 
 
 
-public interface InfoDisplay extends ChangedInfoListener
+public abstract class InfoDisplay extends ChangedInfoListener
 {
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
 
   public abstract void showDisplay();
 

@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  IThreadUtils.cpp
 //  G3MiOSSDK

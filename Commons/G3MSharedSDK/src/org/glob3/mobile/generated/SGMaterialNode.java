@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  SGMaterialNode.cpp
 //  G3MiOSSDK
@@ -19,7 +20,14 @@ package org.glob3.mobile.generated;
 
 public class SGMaterialNode extends SGNode
 {
-  private Color _baseColor;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  private final Color _baseColor;
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+  public Color _baseColor = new internal();
+//#endif
   private final Color _specularColor;
 
 //  const double _specular;
@@ -37,42 +45,54 @@ public class SGMaterialNode extends SGNode
 //  _alpha(alpha),
 //  _emit(emit)
   {
-     super(id, sId);
-     _baseColor = baseColor;
-     _specularColor = specularColor;
-     _glState = new GLState();
-    _glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
+	  super(id, sId);
+	  _baseColor = baseColor;
+	  _specularColor = specularColor;
+	  _glState = new GLState();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+	_glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	_glState.addGLFeature(new FlatColorGLFeature(_baseColor, false, 0, 0), false);
+//#endif
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-    _glState.setParent(parentState);
-    return _glState;
+	_glState.setParent(parentState);
+	return _glState;
   }
 
   public final void setBaseColor(Color baseColor)
   {
-    if (baseColor != _baseColor)
-    {
-      _baseColor = null;
-      _baseColor = baseColor;
-    }
+	if (baseColor != _baseColor)
+	{
+	  if (_baseColor != null)
+		  _baseColor.dispose();
+	  _baseColor = baseColor;
+	}
   }
 
   public void dispose()
   {
-    _baseColor = null;
-    if (_specularColor != null)
-       _specularColor.dispose();
+	if (_baseColor != null)
+		_baseColor.dispose();
+	if (_specularColor != null)
+		_specularColor.dispose();
 
-    _glState._release();
+	_glState._release();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
   super.dispose();
+//#endif
 
   }
 
   public final String description()
   {
-    return "SGMaterialNode";
+	return "SGMaterialNode";
   }
 
 }

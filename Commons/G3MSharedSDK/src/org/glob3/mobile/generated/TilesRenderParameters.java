@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class TilesRenderParameters
 {
   public final boolean _renderDebug;
@@ -9,22 +10,22 @@ public class TilesRenderParameters
 
   public TilesRenderParameters(boolean renderDebug, boolean forceFirstLevelTilesRenderOnStart, boolean incrementalTileQuality, Quality quality)
   {
-     _renderDebug = renderDebug;
-     _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
-     _incrementalTileQuality = incrementalTileQuality;
-     _quality = quality;
-    switch (quality)
-    {
-      case QUALITY_LOW:
-        _texturePixelsPerInch = 64;
-        break;
-      case QUALITY_MEDIUM:
-        _texturePixelsPerInch = 128;
-        break;
-      default: //HIGH
-        _texturePixelsPerInch = 256;
-        break;
-    }
+	  _renderDebug = renderDebug;
+	  _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
+	  _incrementalTileQuality = incrementalTileQuality;
+	  _quality = quality;
+	switch (quality)
+	{
+	  case QUALITY_LOW:
+		_texturePixelsPerInch = 64;
+		break;
+	  case QUALITY_MEDIUM:
+		_texturePixelsPerInch = 128;
+		break;
+	  default: //HIGH
+		_texturePixelsPerInch = 256;
+		break;
+	}
   }
 
   public void dispose()

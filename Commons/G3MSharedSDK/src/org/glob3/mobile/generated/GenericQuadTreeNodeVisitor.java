@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  GenericQuadTree.cpp
 //  G3MiOSSDK
@@ -17,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GenericQuadTree_Node;
 
 public abstract class GenericQuadTreeNodeVisitor
@@ -26,5 +28,7 @@ public abstract class GenericQuadTreeNodeVisitor
   }
 
   public abstract boolean visitNode(GenericQuadTree_Node node);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void endVisit(boolean aborted) const = 0;
   public abstract void endVisit(boolean aborted);
 }

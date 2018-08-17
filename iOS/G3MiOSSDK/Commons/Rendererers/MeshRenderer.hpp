@@ -255,6 +255,7 @@ public:
                 _meshes.erase(it);
                 break;
             }
+            it++;
         }
     }
 

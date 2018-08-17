@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  HUDSize.hpp
 //  G3MiOSSDK
 //
@@ -15,6 +14,8 @@ public abstract class HUDSize
 
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual float getSize(int viewPortWidth, int viewPortHeight, int bitmapWidth, int bitmapHeight) const = 0;
   public abstract float getSize(int viewPortWidth, int viewPortHeight, int bitmapWidth, int bitmapHeight);
 
   public void dispose()

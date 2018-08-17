@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  ICanvasUtils.cpp
 //  G3MiOSSDK
@@ -18,8 +19,11 @@ package org.glob3.mobile.generated;
 
 
 ///#include "ILogger.hpp"
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ICanvas;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GFont;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector2F;
 
 public enum VerticalAlignment
@@ -28,13 +32,13 @@ public enum VerticalAlignment
   Middle,
   Bottom;
 
-   public int getValue()
-   {
-      return this.ordinal();
-   }
+	public int getValue()
+	{
+		return this.ordinal();
+	}
 
-   public static VerticalAlignment forValue(int value)
-   {
-      return values()[value];
-   }
+	public static VerticalAlignment forValue(int value)
+	{
+		return values()[value];
+	}
 }

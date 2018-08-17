@@ -297,6 +297,20 @@ Mesh* AbstractMesh::createNormalsMesh() const {
     
 }
 
+size_t AbstractMesh::getClosestVertex(const Vector3D& v, double & distance) const{
+    size_t n = getVertexCount();
+    size_t index = n+1;
+    distance = IMathUtils::instance()->maxDouble();
+    for (size_t i = 0; i < n; ++i){
+        double d = getVertex(i).squaredDistanceTo(v);
+        if (distance > d){
+            distance = d;
+            index = i;
+        }
+    }
+    return index;
+}
+
 
 
 

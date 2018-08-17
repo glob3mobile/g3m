@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-public class CameraRenderer implements ProtoRenderer
+package org.glob3.mobile.generated;public class CameraRenderer extends ProtoRenderer
 {
   private boolean _processTouchEvents;
   private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();
@@ -7,50 +6,50 @@ public class CameraRenderer implements ProtoRenderer
 
   public CameraRenderer()
   {
-     _cameraContext = null;
-     _processTouchEvents = true;
+	  _cameraContext = null;
+	  _processTouchEvents = true;
   }
 
   public void dispose()
   {
-    if (_cameraContext != null)
-       _cameraContext.dispose();
-    final int handlersSize = _handlers.size();
-    for (int i = 0; i < handlersSize; i++)
-    {
-      CameraEventHandler handler = _handlers.get(i);
-      if (handler != null)
-         handler.dispose();
-    }
+	if (_cameraContext != null)
+		_cameraContext.dispose();
+	final int handlersSize = _handlers.size();
+	for (int i = 0; i < handlersSize; i++)
+	{
+	  CameraEventHandler handler = _handlers.get(i);
+	  if (handler != null)
+		  handler.dispose();
+	}
   }
 
   public final void addHandler(CameraEventHandler handler)
   {
-    _handlers.add(handler);
+	_handlers.add(handler);
   }
 
   public final void setProcessTouchEvents(boolean processTouchEvents)
   {
-    _processTouchEvents = processTouchEvents;
+	_processTouchEvents = processTouchEvents;
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
   
-    // create the CameraContext
-    if (_cameraContext == null)
-    {
-      _cameraContext = new CameraContext(Gesture.None, rc.getNextCamera());
-    }
+	// create the CameraContext
+	if (_cameraContext == null)
+	{
+	  _cameraContext = new CameraContext(Gesture.None, rc.getNextCamera());
+	}
   
-    // render camera object
+	// render camera object
   //  rc->getCurrentCamera()->render(rc, parentState);
   
-    final int handlersSize = _handlers.size();
-    for (int i = 0; i < handlersSize; i++)
-    {
-      _handlers.get(i).render(rc, _cameraContext);
-    }
+	final int handlersSize = _handlers.size();
+	for (int i = 0; i < handlersSize; i++)
+	{
+	  _handlers.get(i).render(rc, _cameraContext);
+	}
   }
 
   public final void initialize(G3MContext context)
@@ -60,28 +59,28 @@ public class CameraRenderer implements ProtoRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    if (_processTouchEvents)
-    {
-      // abort all the camera effect currently running
-      if (touchEvent.getType() == TouchEventType.Down)
-      {
-        EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
-        ec.getEffectsScheduler().cancelAllEffectsFor(target);
-      }
+	if (_processTouchEvents)
+	{
+	  // abort all the camera effect currently running
+	  if (touchEvent.getType() == TouchEventType.Down)
+	  {
+		EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
+		ec.getEffectsScheduler().cancelAllEffectsFor(target);
+	  }
   
-      // pass the event to all the handlers
-      final int handlersSize = _handlers.size();
-      for (int i = 0; i < handlersSize; i++)
-      {
-        if (_handlers.get(i).onTouchEvent(ec, touchEvent, _cameraContext))
-        {
-          return true;
-        }
-      }
-    }
+	  // pass the event to all the handlers
+	  final int handlersSize = _handlers.size();
+	  for (int i = 0; i < handlersSize; i++)
+	  {
+		if (_handlers.get(i).onTouchEvent(ec, touchEvent, _cameraContext))
+		{
+		  return true;
+		}
+	  }
+	}
   
-    // if no handler processed the event, return not-handled
-    return false;
+	// if no handler processed the event, return not-handled
+	return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -91,7 +90,7 @@ public class CameraRenderer implements ProtoRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    return RenderState.ready();
+	return RenderState.ready();
   }
 
   public final void start(G3MRenderContext rc)
@@ -122,20 +121,37 @@ public class CameraRenderer implements ProtoRenderer
   public final void removeHandler(CameraEventHandler handler)
   {
   
-    if ( _handlers.remove(handler) ) {
-      return;
-    }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+	int size = _handlers.size();
+	for (int i = 0; i < size; i++)
+	{
+	  if (_handlers.get(i) == handler)
+	  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+		_handlers.erase(_handlers.iterator() + i);
+		return;
+	  }
+	}
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	if (_handlers.remove(handler))
+	{
+	  return;
+	}
+//#endif
   
-    ILogger.instance().logError("Could not remove camera handler.");
+	ILogger.instance().logError("Could not remove camera handler.");
   }
 
   public final void clearHandlers()
   {
-    for (int i = 0; i < _handlers.size(); i++)
-    {
-      if (_handlers.get(i) != null)
-         _handlers.get(i).dispose();
-    }
-    _handlers.clear();
+	for (int i = 0; i < _handlers.size(); i++)
+	{
+	  if (_handlers.get(i) != null)
+		  _handlers.get(i).dispose();
+	}
+	_handlers.clear();
   }
 }

@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  ProtoRenderer.cpp
 //  G3MiOSSDK
 //
@@ -16,31 +15,45 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
 
-public interface ProtoRenderer
+public abstract class ProtoRenderer
 {
-  void dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
+//#endif
 
-  void initialize(G3MContext context);
+  public abstract void initialize(G3MContext context);
 
 
-  void render(G3MRenderContext rc, GLState glState);
+  public abstract void render(G3MRenderContext rc, GLState glState);
 
-  void onResizeViewportEvent(G3MEventContext ec, int width, int height);
+  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
-  void start(G3MRenderContext rc);
+  public abstract void start(G3MRenderContext rc);
 
-  void stop(G3MRenderContext rc);
+  public abstract void stop(G3MRenderContext rc);
 
   // Android activity lifecyle
-  void onResume(G3MContext context);
+  public abstract void onResume(G3MContext context);
 
-  void onPause(G3MContext context);
+  public abstract void onPause(G3MContext context);
 
-  void onDestroy(G3MContext context);
+  public abstract void onDestroy(G3MContext context);
 
 }

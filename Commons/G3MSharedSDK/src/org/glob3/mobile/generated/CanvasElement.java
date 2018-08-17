@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  CanvasElement.cpp
 //  G3MiOSSDK
 //
@@ -17,6 +16,7 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ICanvas;
 
 public abstract class CanvasElement
@@ -39,8 +39,8 @@ public abstract class CanvasElement
 
   public void drawCentered(ICanvas canvas)
   {
-    final Vector2F extent = getExtent(canvas);
-    drawAt((canvas.getWidth() - extent._x) / 2, (canvas.getHeight() - extent._y) / 2, canvas);
+	final Vector2F extent = getExtent(canvas);
+	drawAt((canvas.getWidth() - extent._x) / 2, (canvas.getHeight() - extent._y) / 2, canvas);
   }
 
 }

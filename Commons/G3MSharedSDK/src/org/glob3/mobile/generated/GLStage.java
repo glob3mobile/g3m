@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class GLStage
 {
   private static int _polygonOffsetFill = 0;
@@ -8,29 +9,29 @@ public class GLStage
 
   public static int polygonOffsetFill()
   {
-    return _polygonOffsetFill;
+	return _polygonOffsetFill;
   }
 
   public static int depthTest()
   {
-    return _depthTest;
+	return _depthTest;
   }
 
   public static int blend()
   {
-    return _blend;
+	return _blend;
   }
 
   public static int cullFace()
   {
-    return _cullFace;
+	return _cullFace;
   }
 
   public static void init(INativeGL ngl)
   {
-    _polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
-    _depthTest = ngl.Feature_DepthTest();
-    _blend = ngl.Feature_Blend();
-    _cullFace = ngl.Feature_CullFace();
+	_polygonOffsetFill = ngl.Feature_PolygonOffsetFill();
+	_depthTest = ngl.Feature_DepthTest();
+	_blend = ngl.Feature_Blend();
+	_cullFace = ngl.Feature_CullFace();
   }
 }

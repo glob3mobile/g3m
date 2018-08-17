@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  CameraRotationHandler.cpp
 //  G3MiOSSDK
 //
@@ -32,48 +31,51 @@ public class CameraRotationHandler extends CameraEventHandler
 
   public CameraRotationHandler()
   {
-     _pivotPoint = new MutableVector3D(0, 0, 0);
-     _pivotPixel = new MutableVector2F(0, 0);
+	  _pivotPoint = new MutableVector3D(0, 0, 0);
+	  _pivotPixel = new MutableVector2F(0, 0);
   }
 
   public void dispose()
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
   super.dispose();
+//#endif
 
   }
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    /*
-    // testing set camera methods
-    if (touchEvent->getTouchCount()==4 && touchEvent->getType()==Up) {
-      Camera *camera = cameraContext->getNextCamera();
-      camera->setGeodeticPosition(Geodetic3D(Angle::fromDegrees(40.027865),Angle::fromDegrees(-3.599683),1000.670056));
-      camera->setPitch(Angle::fromDegrees(50.739328));
-      camera->setHeading(Angle::fromDegrees(-36.706477));
-      return true;
-    }*/
+	/*
+	// testing set camera methods
+	if (touchEvent->getTouchCount()==4 && touchEvent->getType()==Up) {
+	  Camera *camera = cameraContext->getNextCamera();
+	  camera->setGeodeticPosition(Geodetic3D(Angle::fromDegrees(40.027865),Angle::fromDegrees(-3.599683),1000.670056));
+	  camera->setPitch(Angle::fromDegrees(50.739328));
+	  camera->setHeading(Angle::fromDegrees(-36.706477));
+	  return true;
+	}*/
   
   
-    // three finger needed
-    if (touchEvent.getTouchCount()!=3)
-       return false;
+	// three finger needed
+	if (touchEvent.getTouchCount()!=3)
+		return false;
   
-    switch (touchEvent.getType())
-    {
-      case Down:
-        onDown(eventContext, touchEvent, cameraContext);
-        break;
-      case Move:
-        onMove(eventContext, touchEvent, cameraContext);
-        break;
-      case Up:
-        onUp(eventContext, touchEvent, cameraContext);
-      default:
-        break;
-    }
+	switch (touchEvent.getType())
+	{
+	  case Down:
+		onDown(eventContext, touchEvent, cameraContext);
+		break;
+	  case Move:
+		onMove(eventContext, touchEvent, cameraContext);
+		break;
+	  case Up:
+		onUp(eventContext, touchEvent, cameraContext);
+	  default:
+		break;
+	}
   
-    return true;
+	return true;
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
@@ -103,85 +105,111 @@ public class CameraRotationHandler extends CameraEventHandler
 
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    Camera camera = cameraContext.getNextCamera();
-    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
-    cameraContext.setCurrentGesture(Gesture.Rotate);
+	Camera camera = cameraContext.getNextCamera();
+	tangible.RefObject<MutableVector3D> tempRef__cameraPosition = new tangible.RefObject<MutableVector3D>(_cameraPosition);
+	tangible.RefObject<MutableVector3D> tempRef__cameraCenter = new tangible.RefObject<MutableVector3D>(_cameraCenter);
+	tangible.RefObject<MutableVector3D> tempRef__cameraUp = new tangible.RefObject<MutableVector3D>(_cameraUp);
+	camera.getLookAtParamsInto(tempRef__cameraPosition, tempRef__cameraCenter, tempRef__cameraUp);
+	_cameraPosition = tempRef__cameraPosition.argvalue;
+	_cameraCenter = tempRef__cameraCenter.argvalue;
+	_cameraUp = tempRef__cameraUp.argvalue;
+	cameraContext.setCurrentGesture(Gesture.Rotate);
   
-    // middle pixel in 2D
-    Vector2F pixel0 = touchEvent.getTouch(0).getPos();
-    Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-    Vector2F pixel2 = touchEvent.getTouch(2).getPos();
-    Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
-    _pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
-    //_lastYValid = _initialPixel.y();
+	// middle pixel in 2D
+	Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+	Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+	Vector2F pixel2 = touchEvent.getTouch(2).getPos();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
+	Vector2F averagePixel = pixel0.add(new Vector2F(pixel1)).add(new Vector2F(pixel2)).div(3.0f);
+	_pivotPixel = new MutableVector2F(averagePixel._x, averagePixel._y);
+	//_lastYValid = _initialPixel.y();
   
-    // compute center of view
+	// compute center of view
   //  _pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
-    _pivotPoint.copyFrom(camera.getXYZCenterOfView());
-    if (_pivotPoint.isNan())
-    {
-      ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");
-      cameraContext.setCurrentGesture(Gesture.None);
-    }
+	_pivotPoint.copyFrom(camera.getXYZCenterOfView());
+	if (_pivotPoint.isNan())
+	{
+	  ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");
+	  cameraContext.setCurrentGesture(Gesture.None);
+	}
   
-    //printf ("down 3 fingers\n");
+	//printf ("down 3 fingers\n");
   }
 
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    final IMathUtils mu = IMathUtils.instance();
+	final IMathUtils mu = IMathUtils.instance();
   
-    //_currentGesture = getGesture(touchEvent);
-    if (cameraContext.getCurrentGesture() != Gesture.Rotate)
-       return;
+	//_currentGesture = getGesture(touchEvent);
+	if (cameraContext.getCurrentGesture() != Gesture.Rotate)
+		return;
   
-    // current middle pixel in 2D
-    final Vector2F c0 = touchEvent.getTouch(0).getPos();
-    final Vector2F c1 = touchEvent.getTouch(1).getPos();
-    final Vector2F c2 = touchEvent.getTouch(2).getPos();
-    final Vector2F cm = c0.add(c1).add(c2).div(3.0f);
+	// current middle pixel in 2D
+	final Vector2F c0 = touchEvent.getTouch(0).getPos();
+	final Vector2F c1 = touchEvent.getTouch(1).getPos();
+	final Vector2F c2 = touchEvent.getTouch(2).getPos();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: const Vector2F cm = c0.add(c1).add(c2).div(3.0f);
+	final Vector2F cm = c0.add(new Vector2F(c1)).add(new Vector2F(c2)).div(3.0f);
   
-    // compute normal to Initial point
-    Vector3D normal = eventContext.getPlanet().geodeticSurfaceNormal(_pivotPoint);
+	// compute normal to Initial point
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_pivotPoint);
+	Vector3D normal = eventContext.getPlanet().geodeticSurfaceNormal(new MutableVector3D(_pivotPoint));
   
-    // vertical rotation around normal vector to globe
-    Camera camera = cameraContext.getNextCamera();
-    camera.setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
-    Angle angle_v = Angle.fromDegrees((_pivotPixel._x-cm._x)*0.25);
-    camera.rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
+	// vertical rotation around normal vector to globe
+	Camera camera = cameraContext.getNextCamera();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: camera->setLookAtParams(_cameraPosition, _cameraCenter, _cameraUp);
+	camera.setLookAtParams(new MutableVector3D(_cameraPosition), new MutableVector3D(_cameraCenter), new MutableVector3D(_cameraUp));
+	Angle angle_v = Angle.fromDegrees((_pivotPixel._x-cm._x)*0.25);
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: camera->rotateWithAxisAndPoint(normal, _pivotPoint.asVector3D(), angle_v);
+	camera.rotateWithAxisAndPoint(new Vector3D(normal), _pivotPoint.asVector3D(), new Angle(angle_v));
   
-    // compute angle between normal and view direction
-    Vector3D view = camera.getViewDirection();
-    double dot = normal.normalized().dot(view.normalized().times(-1));
-    double initialAngle = mu.acos(dot) / DefineConstants.PI * 180;
+	// compute angle between normal and view direction
+	Vector3D view = camera.getViewDirection();
+	double dot = normal.normalized().dot(view.normalized().times(-1));
+	double initialAngle = mu.acos(dot) / DefineConstants.PI * 180;
   
-    // rotate more than 85 degrees or less than 0 degrees is not allowed
-    double delta = (cm._y - _pivotPixel._y) * 0.25;
-    double finalAngle = initialAngle + delta;
-    if (finalAngle > 85)
-       delta = 85 - initialAngle;
-    if (finalAngle < 0)
-       delta = -initialAngle;
+	// rotate more than 85 degrees or less than 0 degrees is not allowed
+	double delta = (cm._y - _pivotPixel._y) * 0.25;
+	double finalAngle = initialAngle + delta;
+	if (finalAngle > 85)
+		delta = 85 - initialAngle;
+	if (finalAngle < 0)
+		delta = -initialAngle;
   
-    // create temporal camera to test if next rotation is valid
-    camera.getLookAtParamsInto(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
+	// create temporal camera to test if next rotation is valid
+	tangible.RefObject<MutableVector3D> tempRef__tempCameraPosition = new tangible.RefObject<MutableVector3D>(_tempCameraPosition);
+	tangible.RefObject<MutableVector3D> tempRef__tempCameraCenter = new tangible.RefObject<MutableVector3D>(_tempCameraCenter);
+	tangible.RefObject<MutableVector3D> tempRef__tempCameraUp = new tangible.RefObject<MutableVector3D>(_tempCameraUp);
+	camera.getLookAtParamsInto(tempRef__tempCameraPosition, tempRef__tempCameraCenter, tempRef__tempCameraUp);
+	_tempCameraPosition = tempRef__tempCameraPosition.argvalue;
+	_tempCameraCenter = tempRef__tempCameraCenter.argvalue;
+	_tempCameraUp = tempRef__tempCameraUp.argvalue;
   
-    // horizontal rotation over the original camera horizontal axix
-    Vector3D u = camera.getHorizontalVector();
-    camera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
+	// horizontal rotation over the original camera horizontal axix
+	Vector3D u = camera.getHorizontalVector();
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: camera->rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle::fromDegrees(delta));
+	camera.rotateWithAxisAndPoint(new Vector3D(u), _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
   
-    // update camera only if new view intersects globe
-    if (camera.getXYZCenterOfView().isNan())
-    {
-      camera.setLookAtParams(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
-    }
+	// update camera only if new view intersects globe
+	if (camera.getXYZCenterOfView().isNan())
+	{
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: camera->setLookAtParams(_tempCameraPosition, _tempCameraCenter, _tempCameraUp);
+	  camera.setLookAtParams(new MutableVector3D(_tempCameraPosition), new MutableVector3D(_tempCameraCenter), new MutableVector3D(_tempCameraUp));
+	}
   
   }
 
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-    cameraContext.setCurrentGesture(Gesture.None);
-    _pivotPixel = MutableVector2F.zero();
+	cameraContext.setCurrentGesture(Gesture.None);
+	_pivotPixel = MutableVector2F.zero();
   }
 
 

@@ -492,7 +492,6 @@
 		D824A8561C295BCD002C84AA /* TimedCacheTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8541C295BCD002C84AA /* TimedCacheTileLODTester.cpp */; };
 		D824A8591C296381002C84AA /* MaxFrameTimeTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */; };
 		D829FFDB20C7DADA00567F59 /* FlatMercatorPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D829FFDA20C7DADA00567F59 /* FlatMercatorPlanet.cpp */; };
-		D829FFDC20C7DDA100567F59 /* FlatMercatorPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D829FFD920C7DAC800567F59 /* FlatMercatorPlanet.hpp */; };
 		D82E2F171CEDEE5A0041B88D /* ColorLegendHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D82E2F151CEDEE5A0041B88D /* ColorLegendHelper.cpp */; };
 		D82E2F181CEDEE970041B88D /* ColorLegendHelper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D82E2F161CEDEE5A0041B88D /* ColorLegendHelper.hpp */; };
 		D8378F9E1BFB32B900E6557E /* IDeviceAttitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8378F991BFB32B900E6557E /* IDeviceAttitude.cpp */; };
@@ -804,7 +803,6 @@
 			files = (
 				D814B5BA210B43FA007D700B /* CameraOrbitFixedPositionEffect.hpp in CopyFiles */,
 				D8FF565120F8D718004BB177 /* VertexColorScheme.hpp in CopyFiles */,
-				D829FFDC20C7DDA100567F59 /* FlatMercatorPlanet.hpp in CopyFiles */,
 				D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */,
 				D8F631D21F75582300361DDA /* Cylinder.hpp in CopyFiles */,
 				D82E2F181CEDEE970041B88D /* ColorLegendHelper.hpp in CopyFiles */,
@@ -1851,6 +1849,7 @@
 		D814B5B8210B4293007D700B /* CameraOrbitFixedPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraOrbitFixedPositionEffect.hpp; path = Commons/Cameras/CameraOrbitFixedPositionEffect.hpp; sourceTree = "<group>"; };
 		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
 		D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TaitBryanAngles.hpp; path = Commons/Geometry/TaitBryanAngles.hpp; sourceTree = "<group>"; };
+		D818BE812126EEC4000C03A5 /* FlatMercatorPlanet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FlatMercatorPlanet.hpp; path = Commons/Geometry/FlatMercatorPlanet.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
@@ -1861,7 +1860,6 @@
 		D824A8551C295BCD002C84AA /* TimedCacheTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TimedCacheTileLODTester.hpp; path = Commons/Rendererers/TimedCacheTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D824A8571C296381002C84AA /* MaxFrameTimeTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MaxFrameTimeTileLODTester.cpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.cpp; sourceTree = "<group>"; };
 		D824A8581C296381002C84AA /* MaxFrameTimeTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MaxFrameTimeTileLODTester.hpp; path = Commons/Rendererers/MaxFrameTimeTileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D829FFD920C7DAC800567F59 /* FlatMercatorPlanet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FlatMercatorPlanet.hpp; sourceTree = "<group>"; };
 		D829FFDA20C7DADA00567F59 /* FlatMercatorPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatMercatorPlanet.cpp; path = Commons/Geometry/FlatMercatorPlanet.cpp; sourceTree = "<group>"; };
 		D82A78CB20A5C98400A9BDAA /* DynamicParametricColorRangeMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRangeMesh.vsh; sourceTree = "<group>"; };
 		D82A78CC20A5C98D00A9BDAA /* DynamicParametricColorRangeMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DynamicParametricColorRangeMesh.fsh; sourceTree = "<group>"; };
@@ -2417,6 +2415,7 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D818BE812126EEC4000C03A5 /* FlatMercatorPlanet.hpp */,
 				D8682BC02063EA3D004FACEC /* Ditch.cpp */,
 				D8682BC12063EA3D004FACEC /* Ditch.hpp */,
 				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
@@ -2436,7 +2435,6 @@
 				FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */,
 				D829FFDA20C7DADA00567F59 /* FlatMercatorPlanet.cpp */,
 				FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */,
-				D829FFD920C7DAC800567F59 /* FlatMercatorPlanet.hpp */,
 				CC0DFA6D178B49E6001F6355 /* Frustum.hpp */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,

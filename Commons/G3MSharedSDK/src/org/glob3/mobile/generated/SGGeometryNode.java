@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  SGGeometryNode.cpp
 //  G3MiOSSDK
@@ -18,8 +19,11 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IShortBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GPUProgramState;
 
 public class SGGeometryNode extends SGNode
@@ -35,73 +39,76 @@ public class SGGeometryNode extends SGNode
   private void createGLState()
   {
   
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+	_glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
   
-    if (_normals != null)
-    {
+	if (_normals != null)
+	{
   
-      //    _glState->addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
-      //                                                      (float)0.0), false);
+	  //    _glState->addGLFeature(new DirectionLightGLFeature(Vector3D(1, 0,0),  Color::yellow(),
+	  //                                                      (float)0.0), false);
   
-      _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0), false);
+	  _glState.addGLFeature(new VertexNormalGLFeature(_normals,3,0,false,0), false);
   
   
-    }
+	}
   
-    if (_uv != null)
-    {
-      _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2F.zero(), Vector2F.zero()), false);
-    }
+	if (_uv != null)
+	{
+	  _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2F.zero(), Vector2F.zero()), false);
+	}
   }
 
 
   public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices)
   {
-     super(id, sId);
-     _primitive = primitive;
-     _vertices = vertices;
-     _colors = colors;
-     _uv = uv;
-     _normals = normals;
-     _indices = indices;
-     _glState = new GLState();
-    createGLState();
+	  super(id, sId);
+	  _primitive = primitive;
+	  _vertices = vertices;
+	  _colors = colors;
+	  _uv = uv;
+	  _normals = normals;
+	  _indices = indices;
+	  _glState = new GLState();
+	createGLState();
   }
 
   public void dispose()
   {
-    if (_vertices != null)
-       _vertices.dispose();
-    if (_colors != null)
-       _colors.dispose();
-    if (_uv != null)
-       _uv.dispose();
-    if (_normals != null)
-       _normals.dispose();
-    if (_indices != null)
-       _indices.dispose();
+	if (_vertices != null)
+		_vertices.dispose();
+	if (_colors != null)
+		_colors.dispose();
+	if (_uv != null)
+		_uv.dispose();
+	if (_normals != null)
+		_normals.dispose();
+	if (_indices != null)
+		_indices.dispose();
   
-    _glState._release();
+	_glState._release();
   
-    super.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	super.dispose();
+//#endif
   
   }
 
   public final void rawRender(G3MRenderContext rc, GLState glState)
   {
-    GL gl = rc.getGL();
-    gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager());
+	GL gl = rc.getGL();
+	gl.drawElements(_primitive, _indices, glState, rc.getGPUProgramManager());
   }
 
   public final GLState createState(G3MRenderContext rc, GLState parentState)
   {
-    _glState.setParent(parentState);
-    return _glState;
+	_glState.setParent(parentState);
+	return _glState;
   }
 
   public final String description()
   {
-    return "SGGeometryNode";
+	return "SGGeometryNode";
   }
 
 }

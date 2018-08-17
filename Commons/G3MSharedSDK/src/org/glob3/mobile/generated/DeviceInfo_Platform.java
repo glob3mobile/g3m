@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  IDeviceInfo.cpp
 //  G3MiOSSDK
@@ -22,13 +23,13 @@ public enum DeviceInfo_Platform
   DEVICE_Android,
   DEVICE_GWT;
 
-   public int getValue()
-   {
-      return this.ordinal();
-   }
+	public int getValue()
+	{
+		return this.ordinal();
+	}
 
-   public static DeviceInfo_Platform forValue(int value)
-   {
-      return values()[value];
-   }
+	public static DeviceInfo_Platform forValue(int value)
+	{
+		return values()[value];
+	}
 }

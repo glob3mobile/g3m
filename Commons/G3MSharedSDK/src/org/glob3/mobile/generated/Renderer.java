@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  Renderer.cpp
 //  G3MiOSSDK
 //
@@ -15,18 +14,30 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TouchEvent;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SurfaceElevationProvider;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class PlanetRenderer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderState;
 
 
 
-public interface Renderer extends ProtoRenderer
+public abstract class Renderer extends ProtoRenderer
 {
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
 
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isEnable() const = 0;
   public abstract boolean isEnable();
 
   public abstract void setEnable(boolean enable);

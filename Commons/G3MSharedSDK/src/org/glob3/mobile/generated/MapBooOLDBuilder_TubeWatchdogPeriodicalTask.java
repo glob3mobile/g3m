@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class MapBooOLDBuilder_TubeWatchdogPeriodicalTask extends GTask
 {
   private MapBooOLDBuilder _builder;
@@ -6,25 +7,25 @@ public class MapBooOLDBuilder_TubeWatchdogPeriodicalTask extends GTask
 
   public MapBooOLDBuilder_TubeWatchdogPeriodicalTask(MapBooOLDBuilder builder)
   {
-     _builder = builder;
-     _firstRun = true;
+	  _builder = builder;
+	  _firstRun = true;
   }
 
   public final void run(G3MContext context)
   {
-    if (_firstRun)
-    {
-      _firstRun = false;
-    }
-    else
-    {
-      if (!_builder.isApplicationTubeOpen())
-      {
-        _builder.pollApplicationDataFromServer(context);
+	if (_firstRun)
+	{
+	  _firstRun = false;
+	}
+	else
+	{
+	  if (!_builder.isApplicationTubeOpen())
+	  {
+		_builder.pollApplicationDataFromServer(context);
 
-        _builder.openApplicationTube(context);
-      }
-    }
+		_builder.openApplicationTube(context);
+	  }
+	}
   }
 
 }

@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  LevelTileCondition.cpp
 //  G3MiOSSDK
@@ -24,13 +25,16 @@ public class LevelTileCondition extends LayerCondition
 
   public LevelTileCondition(int minLevel, int maxLevel)
   {
-     _minLevel = minLevel;
-     _maxLevel = maxLevel;
+	  _minLevel = minLevel;
+	  _maxLevel = maxLevel;
   }
 
   public void dispose()
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
   super.dispose();
+//#endif
 
   }
 
@@ -55,15 +59,19 @@ public class LevelTileCondition extends LayerCondition
   //          (level <= _maxLevel));
   //}
   
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isAvailable(const Tile* tile) const
   public final boolean isAvailable(Tile tile)
   {
-    final int level = tile._level;
-    return ((level >= _minLevel) && (level <= _maxLevel));
+	final int level = tile._level;
+	return ((level >= _minLevel) && (level <= _maxLevel));
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: LayerCondition* copy() const
   public final LayerCondition copy()
   {
-    return new LevelTileCondition(_minLevel, _maxLevel);
+	return new LevelTileCondition(_minLevel, _maxLevel);
   }
 
 }

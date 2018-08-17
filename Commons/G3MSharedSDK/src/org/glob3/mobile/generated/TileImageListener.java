@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  TileImageListener.hpp
 //  G3MiOSSDK
 //
@@ -8,6 +7,7 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 
 public abstract class TileImageListener

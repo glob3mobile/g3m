@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  CircleShape.cpp
 //  G3MiOSSDK
 //
@@ -27,104 +26,111 @@ public class CircleShape extends AbstractMeshShape
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
-    final IMathUtils mu = IMathUtils.instance();
+	final IMathUtils mu = IMathUtils.instance();
   
-    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+	FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
-    // first is the center
-    vertices.add(0.0, 0.0, 0.0);
+	// first is the center
+	vertices.add(0.0, 0.0, 0.0);
   
-    final double twicePi = DefineConstants.PI * 2;
+	final double twicePi = DefineConstants.PI * 2;
   
-    for (int i = 0; i <= _steps; i++)
-    {
-      final double angleInRadians = i * twicePi / _steps;
-      final double x = _radius * mu.cos(angleInRadians);
-      final double y = _radius * mu.sin(angleInRadians);
-      vertices.add(x, y, 0);
-    }
+	for (int i = 0; i <= _steps; i++)
+	{
+	  final double angleInRadians = i * twicePi / _steps;
+	  final double x = _radius * mu.cos(angleInRadians);
+	  final double y = _radius * mu.sin(angleInRadians);
+	  vertices.add(x, y, 0);
+	}
   
-    Color color = (_color == null) ? null : new Color(_color);
+	Color color = (_color == null) ? null : new Color(_color);
   
-    if (_useNormals)
-    {
+	if (_useNormals)
+	{
   
-      FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      for (int i = 0; i <= _steps+1; i++)
-      {
-        normals.add(0.0, 0.0, 1.0);
-      }
+	  FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+	  for (int i = 0; i <= _steps+1; i++)
+	  {
+		normals.add(0.0, 0.0, 1.0);
+	  }
   
-      Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color, null, 1, true, normals.create());
+	  Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color, null, 1, true, normals.create());
   
-      if (normals != null)
-         normals.dispose();
-      if (vertices != null)
-         vertices.dispose();
+	  if (normals != null)
+		  normals.dispose();
+	  if (vertices != null)
+		  vertices.dispose();
   
-      return result;
+	  return result;
   
-    }
+	}
   
-    Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color);
+	Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.zero, vertices.create(), 1, 1, color);
   
-    if (vertices != null)
-       vertices.dispose();
+	if (vertices != null)
+		vertices.dispose();
   
-    return result;
+	return result;
   }
 
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps)
   {
-     this(position, altitudeMode, radius, color, steps, true);
+	  this(position, altitudeMode, radius, color, steps, true);
   }
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color)
   {
-     this(position, altitudeMode, radius, color, 64, true);
+	  this(position, altitudeMode, radius, color, 64, true);
   }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: CircleShape(Geodetic3D* position, AltitudeMode altitudeMode, float radius, const Color& color, int steps = 64, boolean useNormals = true) : AbstractMeshShape(position, altitudeMode), _radius(radius), _color(new Color(color)), _steps(steps), _useNormals(useNormals)
   public CircleShape(Geodetic3D position, AltitudeMode altitudeMode, float radius, Color color, int steps, boolean useNormals)
   {
-     super(position, altitudeMode);
-     _radius = radius;
-     _color = new Color(color);
-     _steps = steps;
-     _useNormals = useNormals;
+	  super(position, altitudeMode);
+	  _radius = radius;
+	  _color = new Color(color);
+	  _steps = steps;
+	  _useNormals = useNormals;
 
   }
 
   public void dispose()
   {
-    if (_color != null)
-       _color.dispose();
+	if (_color != null)
+		_color.dispose();
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
   super.dispose();
+//#endif
 
   }
 
   public final void setRadius(float radius)
   {
-    if (_radius != radius)
-    {
-      _radius = radius;
-      cleanMesh();
-    }
+	if (_radius != radius)
+	{
+	  _radius = radius;
+	  cleanMesh();
+	}
   }
 
   public final void setColor(Color color)
   {
-    if (_color != color)
-    {
-      if (_color != null)
-         _color.dispose();
-      _color = color;
-      cleanMesh();
-    }
+	if (_color != color)
+	{
+	  if (_color != null)
+		  _color.dispose();
+	  _color = color;
+	  cleanMesh();
+	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: java.util.ArrayList<double> intersectionsDistances(const Planet* planet, const Vector3D& origin, const Vector3D& direction) const
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
-    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
-    return intersections;
+	java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+	return intersections;
   }
 
 

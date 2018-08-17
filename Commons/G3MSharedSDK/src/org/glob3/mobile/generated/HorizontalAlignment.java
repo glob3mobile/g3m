@@ -1,17 +1,18 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public enum HorizontalAlignment
 {
   Left,
   Center,
   Right;
 
-   public int getValue()
-   {
-      return this.ordinal();
-   }
+	public int getValue()
+	{
+		return this.ordinal();
+	}
 
-   public static HorizontalAlignment forValue(int value)
-   {
-      return values()[value];
-   }
+	public static HorizontalAlignment forValue(int value)
+	{
+		return values()[value];
+	}
 }

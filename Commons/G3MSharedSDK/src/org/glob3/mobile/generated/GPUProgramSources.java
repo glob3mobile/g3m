@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  GPUProgramFactory.hpp
 //  G3MiOSSDK
 //
@@ -21,15 +20,15 @@ public class GPUProgramSources
 
   public GPUProgramSources(String name, String vertexSource, String fragmentSource)
   {
-     _name = name;
-     _vertexSource = vertexSource;
-     _fragmentSource = fragmentSource;
+	  _name = name;
+	  _vertexSource = vertexSource;
+	  _fragmentSource = fragmentSource;
   }
 
   public GPUProgramSources(GPUProgramSources that)
   {
-     _name = that._name;
-     _vertexSource = that._vertexSource;
-     _fragmentSource = that._fragmentSource;
+	  _name = that._name;
+	  _vertexSource = that._vertexSource;
+	  _fragmentSource = that._fragmentSource;
   }
 }

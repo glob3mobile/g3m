@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class NonOverlappingMarksRenderer extends DefaultRenderer
 {
   private final int _maxVisibleMarks;
@@ -16,39 +17,39 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private void computeMarksToBeRendered(Camera camera, Planet planet)
   {
-    _visibleMarks.clear();
-    _visibleMarksIDsBuilder.clear();
+	_visibleMarks.clear();
+	_visibleMarksIDsBuilder.clear();
   
-    final Frustum frustrum = camera.getFrustumInModelCoordinates();
+	final Frustum frustrum = camera.getFrustumInModelCoordinates();
   
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
-    {
-      NonOverlappingMark m = _marks.get(i);
+	final int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  NonOverlappingMark m = _marks.get(i);
   
-      if (_visibleMarks.size() < _maxVisibleMarks && frustrum.contains(m.getCartesianPosition(planet)))
-      {
-        _visibleMarks.add(m);
+	  if (_visibleMarks.size() < _maxVisibleMarks && frustrum.contains(m.getCartesianPosition(planet)))
+	  {
+		_visibleMarks.add(m);
   
-        _visibleMarksIDsBuilder.addLong(i);
-        _visibleMarksIDsBuilder.addString("/");
-      }
-      else
-      {
-        // Resetting marks location of invisible anchors
-        // #warning Do we really need this?
-        m.resetWidgetPositionVelocityAndForce();
-      }
-    }
+		_visibleMarksIDsBuilder.addLong(i);
+		_visibleMarksIDsBuilder.addString("/");
+	  }
+	  else
+	  {
+		// Resetting marks location of invisible anchors
+		// #warning Do we really need this?
+		m.resetWidgetPositionVelocityAndForce();
+	  }
+	}
   
-    if (!_visibleMarksIDsBuilder.contentEqualsTo(_visibleMarksIDs))
-    {
-      _visibleMarksIDs = _visibleMarksIDsBuilder.getString();
-      for (int i = 0; i < _visibilityListeners.size(); i++)
-      {
-        _visibilityListeners.get(i).onVisibilityChange(_visibleMarks);
-      }
-    }
+	if (!_visibleMarksIDsBuilder.contentEqualsTo(_visibleMarksIDs))
+	{
+	  _visibleMarksIDs = _visibleMarksIDsBuilder.getString();
+	  for (int i = 0; i < _visibilityListeners.size(); i++)
+	  {
+		_visibilityListeners.get(i).onVisibilityChange(_visibleMarks);
+	  }
+	}
   
   }
 
@@ -56,251 +57,259 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
 
   private void computeForces(Camera camera, Planet planet)
   {
-    final int visibleMarksSize = _visibleMarks.size();
+	final int visibleMarksSize = _visibleMarks.size();
   
-    //Compute Mark Anchor Screen Positions
-    for (int i = 0; i < visibleMarksSize; i++)
-    {
-      _visibleMarks.get(i).computeAnchorScreenPos(camera, planet);
-    }
+	//Compute Mark Anchor Screen Positions
+	for (int i = 0; i < visibleMarksSize; i++)
+	{
+	  _visibleMarks.get(i).computeAnchorScreenPos(camera, planet);
+	}
   
-    //Compute Mark Forces
-    for (int i = 0; i < visibleMarksSize; i++)
-    {
-      NonOverlappingMark mark = _visibleMarks.get(i);
-      mark.applyHookesLaw();
+	//Compute Mark Forces
+	for (int i = 0; i < visibleMarksSize; i++)
+	{
+	  NonOverlappingMark mark = _visibleMarks.get(i);
+	  mark.applyHookesLaw();
   
-      for (int j = i+1; j < visibleMarksSize; j++)
-      {
-        mark.applyCoulombsLaw(_visibleMarks.get(j));
-      }
+	  for (int j = i+1; j < visibleMarksSize; j++)
+	  {
+		mark.applyCoulombsLaw(_visibleMarks.get(j));
+	  }
   
-      for (int j = 0; j < visibleMarksSize; j++)
-      {
-        if (i != j)
-        {
-          mark.applyCoulombsLawFromAnchor(_visibleMarks.get(j));
-        }
-      }
-    }
+	  for (int j = 0; j < visibleMarksSize; j++)
+	  {
+		if (i != j)
+		{
+		  mark.applyCoulombsLawFromAnchor(_visibleMarks.get(j));
+		}
+	  }
+	}
   }
   private void renderMarks(G3MRenderContext rc, GLState glState)
   {
-    final int visibleMarksSize = _visibleMarks.size();
-    if (visibleMarksSize > 0)
-    {
-      // draw all the springs in a shot to avoid OpenGL state changes
-      for (int i = 0; i < visibleMarksSize; i++)
-      {
-        _visibleMarks.get(i).renderSpringWidget(rc, glState);
-      }
+	final int visibleMarksSize = _visibleMarks.size();
+	if (visibleMarksSize > 0)
+	{
+	  // draw all the springs in a shot to avoid OpenGL state changes
+	  for (int i = 0; i < visibleMarksSize; i++)
+	  {
+		_visibleMarks.get(i).renderSpringWidget(rc, glState);
+	  }
   
-      // draw all the anchorwidgets in a shot to avoid OpenGL state changes
-      for (int i = 0; i < visibleMarksSize; i++)
-      {
-        _visibleMarks.get(i).renderAnchorWidget(rc, glState);
-      }
+	  // draw all the anchorwidgets in a shot to avoid OpenGL state changes
+	  for (int i = 0; i < visibleMarksSize; i++)
+	  {
+		_visibleMarks.get(i).renderAnchorWidget(rc, glState);
+	  }
   
-      // draw all the widgets in a shot to avoid OpenGL state changes
-      for (int i = 0; i < visibleMarksSize; i++)
-      {
-        _visibleMarks.get(i).renderWidget(rc, glState);
-      }
-    }
+	  // draw all the widgets in a shot to avoid OpenGL state changes
+	  for (int i = 0; i < visibleMarksSize; i++)
+	  {
+		_visibleMarks.get(i).renderWidget(rc, glState);
+	  }
+	}
   }
   private void applyForces(long now, Camera camera, ViewMode viewMode)
   {
-    if (_lastPositionsUpdatedTime != 0) //If not First frame
-    {
-      int viewPortWidth = camera.getViewPortWidth();
-      if (viewMode == ViewMode.STEREO)
-      {
-        viewPortWidth /= 2;
-      }
-      final int viewPortHeight = camera.getViewPortHeight();
+	if (_lastPositionsUpdatedTime != 0) //If not First frame
+	{
+	  int viewPortWidth = camera.getViewPortWidth();
+	  if (viewMode == ViewMode.STEREO)
+	  {
+		viewPortWidth /= 2;
+	  }
+	  final int viewPortHeight = camera.getViewPortHeight();
   
-      final double elapsedMS = now - _lastPositionsUpdatedTime;
-      float timeInSeconds = (float)(elapsedMS / 1000.0);
-      if (timeInSeconds > 0.03f)
-      {
-        timeInSeconds = 0.03f;
-      }
+	  final double elapsedMS = now - _lastPositionsUpdatedTime;
+	  float timeInSeconds = (float)(elapsedMS / 1000.0);
+	  if (timeInSeconds > 0.03f)
+	  {
+		timeInSeconds = 0.03f;
+	  }
   
-      //Update Position based on last Forces
-      final int visibleMarksSize = _visibleMarks.size();
-      for (int i = 0; i < visibleMarksSize; i++)
-      {
-        _visibleMarks.get(i).updatePositionWithCurrentForce(timeInSeconds, viewPortWidth, viewPortHeight, _viewportMargin);
-      }
-    }
+	  //Update Position based on last Forces
+	  final int visibleMarksSize = _visibleMarks.size();
+	  for (int i = 0; i < visibleMarksSize; i++)
+	  {
+		_visibleMarks.get(i).updatePositionWithCurrentForce(timeInSeconds, viewPortWidth, viewPortHeight, _viewportMargin);
+	  }
+	}
   
-    _lastPositionsUpdatedTime = now;
+	_lastPositionsUpdatedTime = now;
   }
 
   public NonOverlappingMarksRenderer(int maxVisibleMarks)
   {
-     this(maxVisibleMarks, 5);
+	  this(maxVisibleMarks, 5);
   }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin = 5): _maxVisibleMarks(maxVisibleMarks), _viewportMargin(viewportMargin), _lastPositionsUpdatedTime(0), _visibleMarksIDsBuilder(IStringBuilder::newStringBuilder()), _visibleMarksIDs(""), _touchListener(null)
   public NonOverlappingMarksRenderer(int maxVisibleMarks, float viewportMargin)
   {
-     _maxVisibleMarks = maxVisibleMarks;
-     _viewportMargin = viewportMargin;
-     _lastPositionsUpdatedTime = 0;
-     _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
-     _visibleMarksIDs = "";
-     _touchListener = null;
+	  _maxVisibleMarks = maxVisibleMarks;
+	  _viewportMargin = viewportMargin;
+	  _lastPositionsUpdatedTime = 0;
+	  _visibleMarksIDsBuilder = IStringBuilder.newStringBuilder();
+	  _visibleMarksIDs = "";
+	  _touchListener = null;
   
   }
 
   public void dispose()
   {
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
-    {
-      if (_marks.get(i) != null)
-         _marks.get(i).dispose();
-    }
+	final int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  if (_marks.get(i) != null)
+		  _marks.get(i).dispose();
+	}
   
-    for (int i = 0; i < _visibilityListeners.size(); i++)
-    {
-      if (_visibilityListeners.get(i) != null)
-         _visibilityListeners.get(i).dispose();
-    }
+	for (int i = 0; i < _visibilityListeners.size(); i++)
+	{
+	  if (_visibilityListeners.get(i) != null)
+		  _visibilityListeners.get(i).dispose();
+	}
   
-    if (_visibleMarksIDsBuilder != null)
-       _visibleMarksIDsBuilder.dispose();
+	if (_visibleMarksIDsBuilder != null)
+		_visibleMarksIDsBuilder.dispose();
   }
 
   public final void addMark(NonOverlappingMark mark)
   {
-    _marks.add(mark);
+	_marks.add(mark);
   }
 
   public final void removeAllMarks()
   {
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
-    {
-      if (_marks.get(i) != null)
-         _marks.get(i).dispose();
-    }
-    _marks.clear();
-    _visibleMarks.clear();
+	final int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  if (_marks.get(i) != null)
+		  _marks.get(i).dispose();
+	}
+	_marks.clear();
+	_visibleMarks.clear();
   }
 
   public final void addVisibilityListener(NonOverlappingMarksVisibilityListener listener)
   {
-    _visibilityListeners.add(listener);
+	_visibilityListeners.add(listener);
   }
 
   public final void removeAllListeners()
   {
-    for (int i = 0; i < _visibilityListeners.size(); i++)
-    {
-      if (_visibilityListeners.get(i) != null)
-         _visibilityListeners.get(i).dispose();
-    }
-    _visibilityListeners.clear();
+	for (int i = 0; i < _visibilityListeners.size(); i++)
+	{
+	  if (_visibilityListeners.get(i) != null)
+		  _visibilityListeners.get(i).dispose();
+	}
+	_visibilityListeners.clear();
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    return RenderState.ready();
+	return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    if (!_marks.isEmpty())
-    {
-      final Camera camera = rc.getCurrentCamera();
-      final Planet planet = rc.getPlanet();
-      ViewMode viewMode = rc.getViewMode();
+	if (!_marks.isEmpty())
+	{
+	  final Camera camera = rc.getCurrentCamera();
+	  final Planet planet = rc.getPlanet();
+	  ViewMode viewMode = rc.getViewMode();
   
-      computeMarksToBeRendered(camera, planet);
-      computeForces(camera, planet);
-      applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera, viewMode);
+	  computeMarksToBeRendered(camera, planet);
+	  computeForces(camera, planet);
+	  applyForces(rc.getFrameStartTimer().nowInMilliseconds(), camera, viewMode);
   
-      renderMarks(rc, glState);
-    }
+	  renderMarks(rc, glState);
+	}
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    boolean handled = false;
+	boolean handled = false;
   
-    if (touchEvent.getType() == TouchEventType.DownUp)
-    {
-      final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
+	if (touchEvent.getType() == TouchEventType.DownUp)
+	{
+	  final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
   
-      double minSqDistance = IMathUtils.instance().maxDouble();
-      NonOverlappingMark nearestMark = null;
+	  double minSqDistance = IMathUtils.instance().maxDouble();
+	  NonOverlappingMark nearestMark = null;
   
-      final int visibleMarksSize = _visibleMarks.size();
-      for (int i = 0; i < visibleMarksSize; i++)
-      {
-        NonOverlappingMark mark = _visibleMarks.get(i);
+	  final int visibleMarksSize = _visibleMarks.size();
+	  for (int i = 0; i < visibleMarksSize; i++)
+	  {
+		NonOverlappingMark mark = _visibleMarks.get(i);
   
-        final int markWidth = mark.getWidth();
-        if (markWidth <= 0)
-        {
-          continue;
-        }
+		final int markWidth = mark.getWidth();
+		if (markWidth <= 0)
+		{
+		  continue;
+		}
   
-        final int markHeight = mark.getHeight();
-        if (markHeight <= 0)
-        {
-          continue;
-        }
+		final int markHeight = mark.getHeight();
+		if (markHeight <= 0)
+		{
+		  continue;
+		}
   
-        final Vector2F markPixel = mark.getScreenPos();
+		final Vector2F markPixel = mark.getScreenPos();
   
-        final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
+		final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
   
-        if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
-        {
-          final double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
-          if (sqDistance < minSqDistance)
-          {
-            nearestMark = mark;
-            minSqDistance = sqDistance;
-          }
-        }
-      }
+		if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
+		{
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
+		  final double sqDistance = markPixel.squaredDistanceTo(new Vector2F(touchedPixel));
+		  if (sqDistance < minSqDistance)
+		  {
+			nearestMark = mark;
+			minSqDistance = sqDistance;
+		  }
+		}
+	  }
   
-      if (nearestMark != null)
-      {
-        handled = nearestMark.onTouchEvent(touchedPixel);
-        if (!handled)
-        {
-          if (_touchListener != null)
-          {
-            handled = _touchListener.touchedMark(nearestMark, touchedPixel);
-          }
-        }
-      }
+	  if (nearestMark != null)
+	  {
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: handled = nearestMark->onTouchEvent(touchedPixel);
+		handled = nearestMark.onTouchEvent(new Vector2F(touchedPixel));
+		if (!handled)
+		{
+		  if (_touchListener != null)
+		  {
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: handled = _touchListener->touchedMark(nearestMark, touchedPixel);
+			handled = _touchListener.touchedMark(nearestMark, new Vector2F(touchedPixel));
+		  }
+		}
+	  }
   
-    }
+	}
   
-    return handled;
+	return handled;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int marksSize = _marks.size();
-    for (int i = 0; i < marksSize; i++)
-    {
-      _marks.get(i).onResizeViewportEvent(ec, width, height);
-    }
+	final int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  _marks.get(i).onResizeViewportEvent(ec, width, height);
+	}
   }
 
   public final void setTouchListener(NonOverlappingMarkTouchListener touchListener)
   {
-    if (_touchListener != null && _touchListener != touchListener)
-    {
-      if (_touchListener != null)
-         _touchListener.dispose();
-    }
-    _touchListener = touchListener;
+	if (_touchListener != null && _touchListener != touchListener)
+	{
+	  if (_touchListener != null)
+		  _touchListener.dispose();
+	}
+	_touchListener = touchListener;
   }
 
 }

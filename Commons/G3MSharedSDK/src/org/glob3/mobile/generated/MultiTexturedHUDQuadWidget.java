@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  MultiTexturedHUDQuadWidget.cpp
 //  G3MiOSSDK
@@ -17,15 +18,27 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class HUDPosition;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SimpleTextureMapping;
 
 public class MultiTexturedHUDQuadWidget extends HUDWidget
 {
-  private final URL _imageURL1;
-  private final URL _imageURL2;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  private final URL _imageURL1 = new URL();
+  private final URL _imageURL2 = new URL();
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+  public final URL _imageURL1 = new internal();
+  public final URL _imageURL2 = new internal();
+//#endif
 
   private final HUDPosition _x;
   private final HUDPosition _y;
@@ -50,220 +63,224 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
 
   private Mesh createMesh(G3MRenderContext rc)
   {
-    if ((_image1 == null) || (_image2 == null))
-    {
-      return null;
-    }
+	if ((_image1 == null) || (_image2 == null))
+	{
+	  return null;
+	}
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false);
+	final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false);
   
-    if (texId == null)
-    {
-      rc.getLogger().logError("Can't upload texture to GPU");
-      return null;
-    }
+	if (texId == null)
+	{
+	  rc.getLogger().logError("Can't upload texture to GPU");
+	  return null;
+	}
   
-    final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false);
+	final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false);
   
-    if (texId2 == null)
-    {
-      rc.getLogger().logError("Can't upload texture to GPU");
-      return null;
-    }
+	if (texId2 == null)
+	{
+	  rc.getLogger().logError("Can't upload texture to GPU");
+	  return null;
+	}
   
-    final Camera camera = rc.getCurrentCamera();
-    int viewPortWidth = camera.getViewPortWidth();
-    if (rc.getViewMode() == ViewMode.STEREO)
-    {
-      viewPortWidth /= 2;
-    }
-    final int viewPortHeight = camera.getViewPortHeight();
+	final Camera camera = rc.getCurrentCamera();
+	int viewPortWidth = camera.getViewPortWidth();
+	if (rc.getViewMode() == ViewMode.STEREO)
+	{
+	  viewPortWidth /= 2;
+	}
+	final int viewPortHeight = camera.getViewPortHeight();
   
-    final float width = _width;
-    final float height = _height;
-    final float x = _x.getPosition(viewPortWidth, viewPortHeight, width, height);
-    final float y = _y.getPosition(viewPortWidth, viewPortHeight, width, height);
+	final float width = _width;
+	final float height = _height;
+	final float x = _x.getPosition(viewPortWidth, viewPortHeight, width, height);
+	final float y = _y.getPosition(viewPortWidth, viewPortHeight, width, height);
   
-    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-    vertices.add(x, height+y, 0);
-    vertices.add(x, y, 0);
-    vertices.add(width+x, height+y, 0);
-    vertices.add(width+x, y, 0);
+	FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+	vertices.add(x, height+y, 0);
+	vertices.add(x, y, 0);
+	vertices.add(width+x, height+y, 0);
+	vertices.add(width+x, y, 0);
   
-    FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-    texCoords.add(0, 0);
-    texCoords.add(0, 1);
-    texCoords.add(1, 0);
-    texCoords.add(1, 1);
+	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+	texCoords.add(0, 0);
+	texCoords.add(0, 1);
+	texCoords.add(1, 0);
+	texCoords.add(1, 1);
   
-    DirectMesh dm = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
+	DirectMesh dm = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
-    if (vertices != null)
-       vertices.dispose();
+	if (vertices != null)
+		vertices.dispose();
   
-    _mtMapping = new MultiTextureMapping(texId, texCoords.create(), true, true, texId2, texCoords.create(), true, true, _texCoordsTranslationU, _texCoordsTranslationV, _texCoordsScaleU, _texCoordsScaleV, _texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
+	_mtMapping = new MultiTextureMapping(texId, texCoords.create(), true, true, texId2, texCoords.create(), true, true, _texCoordsTranslationU, _texCoordsTranslationV, _texCoordsScaleU, _texCoordsScaleV, _texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
   
-    return new TexturedMesh(dm, true, _mtMapping, true, true);
+	return new TexturedMesh(dm, true, _mtMapping, true, true);
   }
   private Mesh getMesh(G3MRenderContext rc)
   {
-    if (_mesh == null)
-    {
-      _mesh = createMesh(rc);
-    }
-    return _mesh;
+	if (_mesh == null)
+	{
+	  _mesh = createMesh(rc);
+	}
+	return _mesh;
   }
 
   private void cleanMesh()
   {
-    _mtMapping = null;
+	_mtMapping = null;
   
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
+	if (_mesh != null)
+		_mesh.dispose();
+	_mesh = null;
   }
 
   protected final void rawRender(G3MRenderContext rc, GLState glState)
   {
-    Mesh mesh = getMesh(rc);
-    if (mesh != null)
-    {
-      mesh.render(rc, glState);
-    }
+	Mesh mesh = getMesh(rc);
+	if (mesh != null)
+	{
+	  mesh.render(rc, glState);
+	}
   }
 
   public MultiTexturedHUDQuadWidget(URL imageURL1, URL imageURL2, HUDPosition x, HUDPosition y, float width, float height)
   {
-     _imageURL1 = imageURL1;
-     _imageURL2 = imageURL2;
-     _x = x;
-     _y = y;
-     _width = width;
-     _height = height;
-     _mesh = null;
-     _mtMapping = null;
-     _image1 = null;
-     _image2 = null;
-     _downloadingImage = false;
-     _texCoordsTranslationU = 0F;
-     _texCoordsTranslationV = 0F;
-     _texCoordsScaleU = 1F;
-     _texCoordsScaleV = 1F;
-     _texCoordsRotationInRadians = 0F;
-     _texCoordsRotationCenterU = 0F;
-     _texCoordsRotationCenterV = 0F;
+	  _imageURL1 = new URL(imageURL1);
+	  _imageURL2 = new URL(imageURL2);
+	  _x = x;
+	  _y = y;
+	  _width = width;
+	  _height = height;
+	  _mesh = null;
+	  _mtMapping = null;
+	  _image1 = null;
+	  _image2 = null;
+	  _downloadingImage = false;
+	  _texCoordsTranslationU = 0F;
+	  _texCoordsTranslationV = 0F;
+	  _texCoordsScaleU = 1F;
+	  _texCoordsScaleV = 1F;
+	  _texCoordsRotationInRadians = 0F;
+	  _texCoordsRotationCenterU = 0F;
+	  _texCoordsRotationCenterV = 0F;
   }
 
   public final void setTexCoordsTranslation(float u, float v)
   {
-    _texCoordsTranslationU = u;
-    _texCoordsTranslationV = v;
+	_texCoordsTranslationU = u;
+	_texCoordsTranslationV = v;
   
-    if (_mtMapping != null)
-    {
-      _mtMapping.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
-    }
+	if (_mtMapping != null)
+	{
+	  _mtMapping.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
+	}
   }
 
   public final void setTexCoordsScale(float u, float v)
   {
-    _texCoordsScaleU = u;
-    _texCoordsScaleV = v;
+	_texCoordsScaleU = u;
+	_texCoordsScaleV = v;
   
-    if (_mtMapping != null)
-    {
-      _mtMapping.setScale(_texCoordsScaleU, _texCoordsScaleV);
-    }
+	if (_mtMapping != null)
+	{
+	  _mtMapping.setScale(_texCoordsScaleU, _texCoordsScaleV);
+	}
   }
 
   public final void setTexCoordsRotation(float angleInRadians, float centerU, float centerV)
   {
-    _texCoordsRotationInRadians = angleInRadians;
-    _texCoordsRotationCenterU = centerU;
-    _texCoordsRotationCenterV = centerV;
+	_texCoordsRotationInRadians = angleInRadians;
+	_texCoordsRotationCenterU = centerU;
+	_texCoordsRotationCenterV = centerV;
   
-    if (_mtMapping != null)
-    {
-      _mtMapping.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
-    }
+	if (_mtMapping != null)
+	{
+	  _mtMapping.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
+	}
   }
 
   public final void setTexCoordsRotation(Angle angle, float centerU, float centerV)
   {
-    setTexCoordsRotation((float) angle._radians, centerU, centerV);
+	setTexCoordsRotation((float) angle._radians, centerU, centerV);
   }
 
   public void dispose()
   {
-    if (_image1 != null)
-       _image1.dispose();
-    if (_image2 != null)
-       _image2.dispose();
+	if (_image1 != null)
+		_image1.dispose();
+	if (_image2 != null)
+		_image2.dispose();
   
-    if (_mesh != null)
-       _mesh.dispose();
+	if (_mesh != null)
+		_mesh.dispose();
   
-    if (_x != null)
-       _x.dispose();
-    if (_y != null)
-       _y.dispose();
+	if (_x != null)
+		_x.dispose();
+	if (_y != null)
+		_y.dispose();
   }
 
   public final void initialize(G3MContext context)
   {
-    if (!_downloadingImage && (_image1 == null) && (_image2 == null))
-    {
-      _downloadingImage = true;
-      IDownloader downloader = context.getDownloader();
-      downloader.requestImage(_imageURL1, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
+	if (!_downloadingImage && (_image1 == null) && (_image2 == null))
+	{
+	  _downloadingImage = true;
+	  IDownloader downloader = context.getDownloader();
+	  downloader.requestImage(_imageURL1, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
   
-      downloader.requestImage(_imageURL2, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
-    }
+	  downloader.requestImage(_imageURL2, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
+	}
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    cleanMesh();
+	cleanMesh();
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    if (!_errors.isEmpty())
-    {
-      return RenderState.error(_errors);
-    }
-    else if (_downloadingImage)
-    {
-      return RenderState.busy();
-    }
-    else
-    {
-      return RenderState.ready();
-    }
+	if (!_errors.isEmpty())
+	{
+	  return RenderState.error(_errors);
+	}
+	else if (_downloadingImage)
+	{
+	  return RenderState.busy();
+	}
+	else
+	{
+	  return RenderState.ready();
+	}
   }
 
   /** private, do not call */
   public final void onImageDownload(IImage image, URL url)
   {
-    if (url.isEquals(_imageURL1))
-    {
-      _image1 = image;
-    }
-    if (url.isEquals(_imageURL2))
-    {
-      _image2 = image;
-    }
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: if (url.isEquals(_imageURL1))
+	if (url.isEquals(new URL(_imageURL1)))
+	{
+	  _image1 = image;
+	}
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: if (url.isEquals(_imageURL2))
+	if (url.isEquals(new URL(_imageURL2)))
+	{
+	  _image2 = image;
+	}
   
-    if ((_image1 != null) && (_image2 != null))
-    {
-      _downloadingImage = false;
-    }
+	if ((_image1 != null) && (_image2 != null))
+	{
+	  _downloadingImage = false;
+	}
   }
 
   /** private, do not call */
   public final void onImageDownloadError(URL url)
   {
-    _errors.add("MultiTexturedHUDQuadWidget: Error downloading \"" + url._path + "\"");
+	_errors.add("MultiTexturedHUDQuadWidget: Error downloading \"" + url._path + "\"");
   }
 
 }

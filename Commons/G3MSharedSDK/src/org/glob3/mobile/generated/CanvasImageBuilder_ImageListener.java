@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-public class CanvasImageBuilder_ImageListener extends IImageListener
+package org.glob3.mobile.generated;public class CanvasImageBuilder_ImageListener implements IImageListener
 {
   private final String _imageName;
   private IImageBuilderListener _listener;
@@ -8,29 +7,29 @@ public class CanvasImageBuilder_ImageListener extends IImageListener
 
   public CanvasImageBuilder_ImageListener(String imageName, IImageBuilderListener listener, boolean deleteListener)
   {
-     _imageName = imageName;
-     _listener = listener;
-     _deleteListener = deleteListener;
+	  _imageName = imageName;
+	  _listener = listener;
+	  _deleteListener = deleteListener;
   }
 
   public void dispose()
   {
-    if (_deleteListener)
-    {
-      if (_listener != null)
-         _listener.dispose();
-    }
+	if (_deleteListener)
+	{
+	  if (_listener != null)
+		  _listener.dispose();
+	}
   }
 
   public final void imageCreated(IImage image)
   {
-    _listener.imageCreated(image, _imageName);
+	_listener.imageCreated(image, _imageName);
 
-    if (_deleteListener)
-    {
-      if (_listener != null)
-         _listener.dispose();
-    }
-    _listener = null;
+	if (_deleteListener)
+	{
+	  if (_listener != null)
+		  _listener.dispose();
+	}
+	_listener = null;
   }
 }

@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  ILocationModifier.h
 //  G3MiOSSDK
 //
@@ -8,16 +7,23 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic3D;
 
 /** Class used as modifier of GPS data from DeviceAttitudeCameraHandler**/
 
-public interface ILocationModifier
+public abstract class ILocationModifier
 {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
 
   /** 
    Modifies the sensors position every frame 
    **/
-  Geodetic3D modify(Geodetic3D location);
+  public abstract Geodetic3D modify(Geodetic3D location);
 
 }

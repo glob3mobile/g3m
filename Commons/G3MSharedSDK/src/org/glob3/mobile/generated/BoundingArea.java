@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  BoundingArea.hpp
 //  G3MiOSSDK
 //

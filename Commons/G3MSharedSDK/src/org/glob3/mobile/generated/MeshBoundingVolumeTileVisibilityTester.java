@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  MeshBoundingVolumeTileVisibilityTester.cpp
 //  G3MiOSSDK
@@ -23,20 +24,27 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
 
   public void dispose()
   {
-    super.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	super.dispose();
+//#endif
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isVisible(const G3MRenderContext* rc, const PlanetRenderContext* prc, Tile* tile) const
   public final boolean isVisible(G3MRenderContext rc, PlanetRenderContext prc, Tile tile)
   {
-    final Mesh mesh = tile.getTessellatorMesh(rc, prc);
-    if (mesh == null)
-    {
-      return false;
-    }
+	final Mesh mesh = tile.getTessellatorMesh(rc, prc);
+	if (mesh == null)
+	{
+	  return false;
+	}
   
-    return mesh.getBoundingVolume().touchesFrustum(prc._frustumInModelCoordinates);
+	return mesh.getBoundingVolume().touchesFrustum(prc._frustumInModelCoordinates);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void onTileHasChangedMesh(const Tile* tile) const
   public final void onTileHasChangedMesh(Tile tile)
   {
   
@@ -47,6 +55,8 @@ public class MeshBoundingVolumeTileVisibilityTester extends TileVisibilityTester
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void renderStarted() const
   public final void renderStarted()
   {
   

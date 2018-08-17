@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-public abstract class EffectNeverEnding extends Effect
+package org.glob3.mobile.generated;public abstract class EffectNeverEnding extends Effect
 {
 
   protected EffectNeverEnding()
@@ -12,7 +11,7 @@ public abstract class EffectNeverEnding extends Effect
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-    return false;
+	return false;
   }
 
 }

@@ -28,13 +28,11 @@ void PointCloudMesh::updatePopUpEffect(float completionRatio){
         setTransformation(m);
         m->_release();
     } else{
-        
         const float a = completionRatio*(2.0f-completionRatio); //Ease-Out
-        
-        
         const float scale = 1.0f + (1.0f - a) * 0.2f;
-        
-        MutableMatrix44D ms = MutableMatrix44D::createScaleMatrix(scale, scale, scale);
+        MutableMatrix44D ms = MutableMatrix44D::createScaleMatrix(scale,
+                                                                  scale,
+                                                                  scale);
         MutableMatrix44D m = _mt2.multiply(ms).multiply(_mt1);
         setTransformation(m.asMatrix44D());
     }

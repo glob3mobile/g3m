@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  Vector3F.cpp
 //  G3MiOSSDK
@@ -26,7 +27,7 @@ public class Vector3F
 
   public static Vector3F zero()
   {
-    return new Vector3F(0, 0, 0);
+	return new Vector3F(0, 0, 0);
   }
 
   public final float _x;
@@ -35,16 +36,16 @@ public class Vector3F
 
   public Vector3F(float x, float y, float z)
   {
-     _x = x;
-     _y = y;
-     _z = z;
+	  _x = x;
+	  _y = y;
+	  _z = z;
   }
 
   public Vector3F(Vector3F that)
   {
-     _x = that._x;
-     _y = that._y;
-     _z = that._z;
+	  _x = that._x;
+	  _y = that._y;
+	  _z = that._z;
   }
 
   public void dispose()
@@ -52,46 +53,62 @@ public class Vector3F
   }
 
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: float dot(const Vector3F& v) const
   public final float dot(Vector3F v)
   {
-    return ((_x * v._x) + (_y * v._y) + (_z * v._z));
+	return ((_x * v._x) + (_y * v._y) + (_z * v._z));
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double length() const
   public final double length()
   {
-    return IMathUtils.instance().sqrt(squaredLength());
+	return IMathUtils.instance().sqrt(squaredLength());
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double squaredLength() const
   public final double squaredLength()
   {
-    return _x * _x + _y * _y + _z * _z;
+	return _x * _x + _y * _y + _z * _z;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3F normalized() const
   public final Vector3F normalized()
   {
-    final double d = length();
-    return new Vector3F((float)(_x / d), (float)(_y / d), (float)(_z / d));
+	final double d = length();
+	return new Vector3F((float)(_x / d), (float)(_y / d), (float)(_z / d));
   }
 
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3F sub(const Vector3F& that) const
   public final Vector3F sub(Vector3F that)
   {
-    return new Vector3F(_x - that._x, _y - that._y, _z - that._z);
+	return new Vector3F(_x - that._x, _y - that._y, _z - that._z);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3F cross(const Vector3F& that) const
   public final Vector3F cross(Vector3F that)
   {
-    return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
+	return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isZero() const
   public final boolean isZero()
   {
-    return ((_x == 0) && (_y == 0) && (_z == 0));
+	return ((_x == 0) && (_y == 0) && (_z == 0));
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-    return ((_x != _x) || (_y != _y) || (_z != _z));
+	return ((_x != _x) || (_y != _y) || (_z != _z));
   }
 
 }

@@ -1,29 +1,30 @@
-package org.glob3.mobile.generated; 
-public class MarkLabelImageListener extends IImageListener
+package org.glob3.mobile.generated;import java.util.*;
+
+public class MarkLabelImageListener implements IImageListener
 {
   private IImage _iconImage;
   private Mark _mark;
 
   public MarkLabelImageListener(IImage iconImage, Mark mark)
   {
-     _iconImage = iconImage;
-     _mark = mark;
+	  _iconImage = iconImage;
+	  _mark = mark;
 
   }
 
   public final void imageCreated(IImage image)
   {
-    if (_iconImage != null)
-       _iconImage.dispose();
-    _iconImage = null;
+	if (_iconImage != null)
+		_iconImage.dispose();
+	_iconImage = null;
 
-    if (image == null)
-    {
-      _mark.onTextureDownloadError();
-    }
-    else
-    {
-      _mark.onTextureDownload(image);
-    }
+	if (image == null)
+	{
+	  _mark.onTextureDownloadError();
+	}
+	else
+	{
+	  _mark.onTextureDownload(image);
+	}
   }
 }

@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class MapBooOLD_ErrorRenderer extends DefaultRenderer
 {
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
@@ -10,15 +11,15 @@ public class MapBooOLD_ErrorRenderer extends DefaultRenderer
   }
   public final void setErrors(java.util.ArrayList<String> errors)
   {
-    _errors = errors;
+	_errors = errors;
   }
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    if (_errors.size() > 0)
-    {
-      return RenderState.error(_errors);
-    }
-    return RenderState.ready();
+	if (_errors.size() > 0)
+	{
+	  return RenderState.error(_errors);
+	}
+	return RenderState.ready();
   }
   public final void render(G3MRenderContext rc, GLState glState)
   {

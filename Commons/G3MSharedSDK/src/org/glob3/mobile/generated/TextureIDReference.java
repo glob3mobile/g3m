@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  TextureIDReference.cpp
 //  G3MiOSSDK
@@ -16,7 +17,9 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TexturesHandler;
 
 public class TextureIDReference
@@ -31,30 +34,36 @@ public class TextureIDReference
 
   public TextureIDReference(IGLTextureId id, boolean isPremultiplied, TexturesHandler texHandler)
   {
-     _id = id;
-     _isPremultiplied = isPremultiplied;
-     _texHandler = texHandler;
+	  _id = id;
+	  _isPremultiplied = isPremultiplied;
+	  _texHandler = texHandler;
   }
 
   public void dispose()
   {
-    _texHandler.releaseGLTextureId(_id);
+	_texHandler.releaseGLTextureId(_id);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: TextureIDReference* createCopy() const
   public final TextureIDReference createCopy()
   {
-    _texHandler.retainGLTextureId(_id);
-    return new TextureIDReference(_id, _isPremultiplied, _texHandler);
+	_texHandler.retainGLTextureId(_id);
+	return new TextureIDReference(_id, _isPremultiplied, _texHandler);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const IGLTextureId* getID() const
   public final IGLTextureId getID()
   {
-    return _id;
+	return _id;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isPremultiplied() const
   public final boolean isPremultiplied()
   {
-    return _isPremultiplied;
+	return _isPremultiplied;
   }
 
 }

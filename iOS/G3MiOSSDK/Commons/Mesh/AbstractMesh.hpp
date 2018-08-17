@@ -119,6 +119,8 @@ public:
         _modelTransform->setMatrix(matrix);
     }
     
+    size_t getClosestVertex(const Vector3D& v, double& distance) const;
+    
     
 };
 

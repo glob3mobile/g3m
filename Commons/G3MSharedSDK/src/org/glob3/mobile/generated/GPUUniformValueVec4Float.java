@@ -1,11 +1,15 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 ////////////////////////////////////////////////////////////
 
 public class GPUUniformValueVec4Float extends GPUUniformValue
 {
   public void dispose()
   {
-    super.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	super.dispose();
+//#endif
   }
 
   public final float _x;
@@ -15,46 +19,52 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
 
   public GPUUniformValueVec4Float(Color color)
   {
-     super(GLType.glVec4Float());
-     _x = color._red;
-     _y = color._green;
-     _z = color._blue;
-     _w = color._alpha;
+	  super(GLType.glVec4Float());
+	  _x = color._red;
+	  _y = color._green;
+	  _z = color._blue;
+	  _w = color._alpha;
   }
 
   public GPUUniformValueVec4Float(float x, float y, float z, float w)
   {
-     super(GLType.glVec4Float());
-     _x = x;
-     _y = y;
-     _z = z;
-     _w = w;
+	  super(GLType.glVec4Float());
+	  _x = x;
+	  _y = y;
+	  _z = z;
+	  _w = w;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void setUniform(GL* gl, const IGLUniformID* id) const
   public final void setUniform(GL gl, IGLUniformID id)
   {
-    gl.uniform4f(id, _x, _y, _z, _w);
+	gl.uniform4f(id, _x, _y, _z, _w);
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEquals(const GPUUniformValue* v) const
   public final boolean isEquals(GPUUniformValue v)
   {
-    GPUUniformValueVec4Float v2 = (GPUUniformValueVec4Float)v;
-    return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
+	GPUUniformValueVec4Float v2 = (GPUUniformValueVec4Float)v;
+	return (_x == v2._x) && (_y == v2._y) && (_z == v2._z) && (_w == v2._w);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: String description() const
   public final String description()
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("Uniform Value Vec4Float: x:");
-    isb.addDouble(_x);
-    isb.addString("y:");
-    isb.addDouble(_y);
-    isb.addString("z:");
-    isb.addDouble(_z);
-    isb.addString("w:");
-    isb.addDouble(_w);
-    String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.addString("Uniform Value Vec4Float: x:");
+	isb.addDouble(_x);
+	isb.addString("y:");
+	isb.addDouble(_y);
+	isb.addString("z:");
+	isb.addDouble(_z);
+	isb.addString("w:");
+	isb.addDouble(_w);
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 }

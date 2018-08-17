@@ -1,0 +1,322 @@
+//
+//  Sphere.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 04/06/13.
+//
+//
+
+#include "Sphere.hpp"
+#include "Box.hpp"
+#include "Camera.hpp"
+#include "ShortBufferBuilder.hpp"
+#include "IndexedMesh.hpp"
+#include "GLConstants.hpp"
+
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+
+
+Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
+  const size_t size = points.size();
+  
+  if (size < 2) {
+    return NULL;
+  }
+  
+  double xmin = points[0]._x;
+  double xmax = points[0]._x;
+  double ymin = points[0]._y;
+  double ymax = points[0]._y;
+  double zmin = points[0]._z;
+  double zmax = points[0]._z;
+  
+  for (size_t i = 1; i < size; i++) {
+    const Vector3D p = points[i];
+    
+    const double x = p._x;
+    const double y = p._y;
+    const double z = p._z;
+    
+    if (x < xmin) xmin = x;
+    if (x > xmax) xmax = x;
+    if (y < ymin) ymin = y;
+    if (y > ymax) ymax = y;
+    if (z < zmin) zmin = z;
+    if (z > zmax) zmax = z;
+  }
+  
+  const Vector3D center = Vector3D((xmin + xmax) / 2,
+                                   (ymin + ymax) / 2,
+                                   (zmin + zmax) / 2);
+  double sqRad = center.squaredDistanceTo(points[0]);
+  for (size_t i = 1; i < size; i++) {
+    const double dt = center.squaredDistanceTo(points[i]);
+    if (dt > sqRad) {
+      sqRad = dt;
+    }
+  }
+  
+  return new Sphere(center, IMathUtils::instance()->sqrt(sqRad));
+}
+
+double Sphere::projectedArea(const G3MRenderContext* rc) const {
+  return rc->getCurrentCamera()->getProjectedSphereArea(*this);
+}
+
+//Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
+//  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
+//  return Vector2I::zero();
+//}
+
+Mesh* Sphere::createWireframeMesh(const Color& color,
+                                  short resolution) const {
+  const IMathUtils* mu = IMathUtils::instance();
+  const double delta = PI / (resolution-1);
+  
+  // create vertices
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  for (int i=0; i<2*resolution-2; i++) {
+    const double longitude = -PI + i*delta;
+    for (int j=0; j<resolution; j++) {
+      const double latitude = -PI/2 + j*delta;
+      const double h = mu->cos(latitude);
+      const double x = h * mu->cos(longitude);
+      const double y = h * mu->sin(longitude);
+      const double z = mu->sin(latitude);
+      vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
+    }
+  }
+  
+  // create border indices for vertical lines
+  ShortBufferBuilder indices;
+  for (short i=0; i<2*resolution-2; i++) {
+    for (short j=0; j<resolution-1; j++) {
+      indices.add((short) (j+i*resolution));
+      indices.add((short) (j+1+i*resolution));
+    }
+  }
+  
+  // create border indices for horizontal lines
+  for (short j=1; j<resolution-1; j++) {
+    for (short i=0; i<2*resolution-3; i++) {
+      indices.add((short) (j+i*resolution));
+      indices.add((short) (j+(i+1)*resolution));
+    }
+  }
+  for (short j=1; j<resolution-1; j++) {
+    const short i = (short) (2*resolution-3);
+    indices.add((short) (j+i*resolution));
+    indices.add((short) (j));
+  }
+  
+  Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
+                               vertices->getCenter(),
+                               vertices->create(),
+                               true,
+                               indices.create(),
+                               true,
+                               2,
+                               1,
+                               new Color(color),
+                               NULL,
+                               0,
+                               true);
+  
+  delete vertices;
+  
+  return mesh;
+}
+
+
+void Sphere::render(const G3MRenderContext* rc,
+                    const GLState* parentState,
+                    const Color& color) const {
+  if (_mesh == NULL) {
+    _mesh = createWireframeMesh(color, (short) 16);
+  }
+  _mesh->render(rc, parentState);
+}
+
+
+bool Sphere::touchesFrustum(const Frustum *frustum) const {
+#warning This implementation could gives false positives
+  // this implementation is not right exact, but it's faster.
+  if (frustum->getNearPlane().signedDistance(_center)   > _radius) return false;
+  if (frustum->getFarPlane().signedDistance(_center)    > _radius) return false;
+  if (frustum->getLeftPlane().signedDistance(_center)   > _radius) return false;
+  if (frustum->getRightPlane().signedDistance(_center)  > _radius) return false;
+  if (frustum->getTopPlane().signedDistance(_center)    > _radius) return false;
+  if (frustum->getBottomPlane().signedDistance(_center) > _radius) return false;
+  return true;
+}
+
+
+bool Sphere::touchesBox(const Box* that) const {
+  const Vector3D p = that->closestPoint(_center);
+  const Vector3D v = p.sub(_center);
+  return v.dot(v) <= (_radius * _radius);
+}
+
+
+bool Sphere::touchesSphere(const Sphere* that) const {
+  const Vector3D d = _center.sub(that->_center);
+  const double squaredDist = d.dot(d);
+  const double radiusSum = _radius + that->_radius;
+  return squaredDist <= (radiusSum * radiusSum);
+}
+
+
+BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
+  if (that->fullContainedInSphere(this)) {
+    return new Sphere(*this);
+  }
+  
+  const Vector3D upper = that->getUpper();
+  const Vector3D lower = that->getLower();
+  
+  double minX = _center._x - _radius;
+  if (lower._x < minX) { minX = lower._x; }
+  
+  double maxX = _center._x + _radius;
+  if (upper._x > maxX) { maxX = upper._x; }
+  
+  double minY = _center._y - _radius;
+  if (lower._y < minY) { minY = lower._y; }
+  
+  double maxY = _center._y + _radius;
+  if (upper._y > maxY) { maxY = upper._y; }
+  
+  double minZ = _center._z - _radius;
+  if (lower._z < minZ) { minZ = lower._z; }
+  
+  double maxZ = _center._z + _radius;
+  if (upper._z > maxZ) { maxZ = upper._z; }
+  
+  return new Box(Vector3D(minX, minY, minZ),
+                 Vector3D(maxX, maxY, maxZ));
+  
+  /* Diego: creo que este test ya no hace falta, porque el coste del método
+   fullContainedInBox es casi tanto es casi similar a todo lo anterior
+   if (fullContainedInBox(that)) {
+   return new Box(*that);
+   }
+   if (that->fullContainedInSphere(this)) {
+   return new Sphere(*this);
+   }*/
+  
+}
+
+
+BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
+  const double d = _center.distanceTo(that->_center);
+  
+  if (d + that->_radius <= _radius) {
+    return new Sphere(*this);
+  }
+  if (d + _radius <= that->_radius)  {
+    return new Sphere(*that);
+  }
+  
+  const double radius = (d + _radius + that->_radius) / 2.0;
+  const Vector3D u = _center.sub(that->_center).normalized();
+  const Vector3D center = _center.add( u.times( radius - _radius ) );
+  
+  return new Sphere(center, radius);
+}
+
+
+bool Sphere::contains(const Vector3D& point) const {
+  return _center.squaredDistanceTo(point) <= _radiusSquared;
+}
+
+
+bool Sphere::fullContainedInBox(const Box* that) const {
+  const Vector3D upper = that->getUpper();
+  const Vector3D lower = that->getLower();
+  if (_center._x + _radius > upper._x) return false;
+  if (_center._x - _radius < lower._x) return false;
+  if (_center._y + _radius > upper._y) return false;
+  if (_center._y - _radius < lower._y) return false;
+  if (_center._z + _radius > upper._z) return false;
+  if (_center._z - _radius < lower._z) return false;
+  return true;
+}
+
+
+bool Sphere::fullContainedInSphere(const Sphere* that) const {
+  const double d = _center.distanceTo(that->_center);
+  return (d + _radius <= that->_radius);
+}
+
+Sphere* Sphere::createSphere() const {
+  return new Sphere(*this);
+}
+
+Sphere Sphere::createSphereContainingPoints(const std::vector<Vector3D*>& points){
+  
+  Vector3D center = Vector3D::getCenter(points);
+  
+  double d = center.squaredDistanceTo(*points[0]);
+  for (size_t i = 1; i < points.size(); i++) {
+    double di =  center.squaredDistanceTo(*points[i]);
+    if (di > d){
+      d = di;
+    }
+  }
+  
+  return Sphere(center, IMathUtils::instance()->sqrt(d) );
+  
+}
+
+std::vector<double> Sphere::intersectionsDistances(double originX,
+                                                   double originY,
+                                                   double originZ,
+                                                   double directionX,
+                                                   double directionY,
+                                                   double directionZ) const {
+  
+  //Sphere is places in the cartesian origin for this math to work
+  originX -= _center._x;
+  originY -= _center._y;
+  originZ -= _center._z;
+  
+  std::vector<double> intersections;
+  
+  // By laborious algebraic manipulation....
+  const double a = directionX * directionX  + directionY * directionY + directionZ * directionZ;
+  
+  const double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+  
+  const double c = originX * originX + originY * originY + originZ * originZ - _radiusSquared;
+  
+  // Solve the quadratic equation: ax^2 + bx + c = 0.
+  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+  const double discriminant = b * b - 4 * a * c;
+  if (discriminant < 0.0) {
+    // no intersections
+    return intersections;
+  }
+  else if (discriminant == 0.0) {
+    // one intersection at a tangent point
+    //return new double[1] { -0.5 * b / a };
+    intersections.push_back(-0.5 * b / a);
+    return intersections;
+  }
+  
+  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
+  const double root1 = (-b + rootDiscriminant) / (2*a);
+  const double root2 = (-b - rootDiscriminant) / (2*a);
+  
+  // Two intersections - return the smallest first.
+  if (root1 < root2) {
+    intersections.push_back(root1);
+    intersections.push_back(root2);
+  }
+  else {
+    intersections.push_back(root2);
+    intersections.push_back(root1);
+  }
+  return intersections;
+}
+

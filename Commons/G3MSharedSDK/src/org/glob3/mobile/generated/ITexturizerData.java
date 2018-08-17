@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  ITexturizerData.hpp
 //  G3MiOSSDK
 //
@@ -8,9 +7,22 @@ package org.glob3.mobile.generated;
 //
 
 
-public interface ITexturizerData
+public abstract class ITexturizerData
 {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#else
   // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
-  
-  void dispose();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void unusedMethod() const = 0;
+  public abstract void unusedMethod();
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
+//#endif
 }

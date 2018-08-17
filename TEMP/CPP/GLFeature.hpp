@@ -1,0 +1,704 @@
+//
+//  GLFeature.hpp
+//  G3MiOSSDK
+//
+//  Created by Agustín Trujillo Pino on 27/10/12.
+//
+
+#ifndef G3MiOSSDK_GLFeature
+#define G3MiOSSDK_GLFeature
+
+#include "GPUVariableValueSet.hpp"
+#include "GLFeatureGroup.hpp"
+#include "GPUAttribute.hpp"
+#include "Vector2F.hpp"
+#include "ViewMode.hpp"
+
+#include "RCObject.hpp"
+
+class Camera;
+
+enum GLFeatureID{
+  GLF_BILLBOARD,
+  GLF_VIEWPORT_EXTENT,
+  GLF_GEOMETRY,
+  GLF_MODEL,
+  GLF_PROJECTION,
+  GLF_MODEL_TRANSFORM,
+  GLF_TEXTURE,
+  GLF_COLOR,
+  GLF_FLATCOLOR,
+  GLF_TEXTURE_ID,
+  GLF_TEXTURE_COORDS,
+  GLF_DIRECTION_LIGTH,
+  GLF_VERTEX_NORMAL,
+  GLF_MODEL_VIEW,
+  GLF_BLENDING_MODE,
+  GLF_POINT_SHAPE,
+    GLF_COLOR_RANGE,
+    GLF_DYNAMIC_COLOR_RANGE,
+    GLF_TRANSPARENCY_DISTANCE_THRESHOLD
+};
+
+class GLFeature: public RCObject {
+protected:
+  ~GLFeature() {
+    delete _values;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+protected:
+  GPUVariableValueSet* _values;
+
+public:
+  const GLFeatureGroupName _group;
+  const GLFeatureID _id;
+
+  GLFeature(GLFeatureGroupName group,
+            GLFeatureID id) :
+  _group(group),
+  _id(id)
+  {
+    _values = new GPUVariableValueSet();
+  }
+
+  const GPUVariableValueSet* getGPUVariableValueSet() const {
+    return _values;
+  }
+
+  virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
+
+};
+
+class BillboardGLFeature: public GLFeature {
+private:
+  ~BillboardGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  GPUUniformValueVec2FloatMutable* _size;
+  GPUUniformValueVec2FloatMutable* _anchor;
+  
+public:
+  BillboardGLFeature(const Vector3D& position,
+                     float billboardWidth,
+                     float billboardHeight,
+                     float anchorU, float anchorV);
+  
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+  
+  void changeSize(int textureWidth,
+                  int textureHeight) {
+    _size->changeValue(textureWidth, textureHeight);
+  }
+  
+  void changeAnchor(float anchorU, float anchorV) {
+    _anchor->changeValue(anchorU, anchorV);
+  }
+};
+
+//////////////////////////
+
+class PointShapeGLFeature: public GLFeature {
+private:
+  ~PointShapeGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  GPUUniformValueVec4Float* _borderColor;
+  
+public:
+  PointShapeGLFeature(const Color& borderColor);
+  
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+};
+
+//////////////////////////
+
+class ColorRangeGLFeature: public GLFeature {
+private:
+    ~ColorRangeGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameterValue;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+public:
+    ColorRangeGLFeature(const Color& colorAt0, const Color& colorAt1,
+                        IFloatBuffer* values);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values);
+};
+
+//////////////////////////
+
+class DynamicColorRangeGLFeature: public GLFeature {
+private:
+    ~DynamicColorRangeGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameterValue;
+    GPUAttributeValueVec1Float* _parameterValueNext;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+    GPUUniformValueFloatMutable* _time;
+    
+public:
+    DynamicColorRangeGLFeature(const Color& colorAt0, const Color& colorAt1,
+                        IFloatBuffer* values, IFloatBuffer* valuesNext, float time);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values, IFloatBuffer* valuesNext);
+    void setTime(float time);
+};
+
+/////////////////////////
+
+class DynamicColorRange3GLFeature: public GLFeature {
+private:
+    ~DynamicColorRange3GLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameterValue;
+    GPUAttributeValueVec1Float* _parameterValueNext;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt0_5;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+    GPUUniformValueFloatMutable* _time;
+    
+public:
+    DynamicColorRange3GLFeature(const Color& colorAt0,
+                                const Color& colorAt0_5,
+                                const Color& colorAt1,
+                               IFloatBuffer* values, IFloatBuffer* valuesNext, float time);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values, IFloatBuffer* valuesNext);
+    void setTime(float time);
+};
+
+/////////////////////////
+
+
+class TransparencyDistanceThresholdGLFeature: public GLFeature {
+private:
+    ~TransparencyDistanceThresholdGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+public:
+    TransparencyDistanceThresholdGLFeature(float distance);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+};
+
+/////////////////////////
+
+class ViewportExtentGLFeature: public GLFeature {
+private:
+  ~ViewportExtentGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  GPUUniformValueVec2FloatMutable* _extent;
+
+public:
+  ViewportExtentGLFeature(int viewportWidth,
+                          int viewportHeight);
+
+  ViewportExtentGLFeature(const Camera* camera,
+                          ViewMode      viewMode);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+  
+  void changeExtent(int viewportWidth,
+                    int viewportHeight);
+};
+
+/////////////////////////////////////////////////////////
+
+
+class GeometryGLFeature: public GLFeature {
+private:
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec4Float* _position;
+
+  const bool  _depthTestEnabled;
+  const bool  _cullFace;
+  const int   _culledFace;
+  const bool  _polygonOffsetFill;
+  const float _polygonOffsetFactor;
+  const float _polygonOffsetUnits;
+  const float _lineWidth;
+
+  ~GeometryGLFeature();
+
+public:
+
+  GeometryGLFeature(const IFloatBuffer* buffer,
+                    int arrayElementSize,
+                    int index,
+                    bool normalized,
+                    int stride,
+                    bool depthTestEnabled,
+                    bool cullFace,
+                    int culledFace,
+                    bool  polygonOffsetFill,
+                    float polygonOffsetFactor,
+                    float polygonOffsetUnits,
+                    float lineWidth,
+                    bool needsPointSize,
+                    float pointSize);
+
+
+  void applyOnGlobalGLState(GLGlobalState* state) const ;
+
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+class Geometry2DGLFeature: public GLFeature {
+private:
+  //Position + cull + depth + polygonoffset + linewidth
+  GPUAttributeValueVec2Float* _position;
+
+  const float _lineWidth;
+
+  ~Geometry2DGLFeature();
+
+  GPUUniformValueVec2FloatMutable* _translation;
+
+public:
+
+  Geometry2DGLFeature(IFloatBuffer* buffer,
+                      int arrayElementSize,
+                      int index,
+                      bool normalized,
+                      int stride,
+                      float lineWidth,
+                      bool needsPointSize,
+                      float pointSize,
+                      const Vector2F& translation);
+
+  void setTranslation(float x, float y) {
+    _translation->changeValue(x, y);
+  }
+
+
+  void applyOnGlobalGLState(GLGlobalState* state) const ;
+
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+class GLCameraGroupFeature: public GLFeature {
+private:
+
+#ifdef C_CODE
+  Matrix44DHolder* _matrixHolder;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44DHolder _matrixHolder = null;
+#endif
+
+protected:
+  ~GLCameraGroupFeature() {
+    _matrixHolder->_release();
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+
+  GLCameraGroupFeature(Matrix44D* matrix,
+                       GLFeatureID id) :
+  GLFeature(CAMERA_GROUP, id),
+  _matrixHolder(new Matrix44DHolder(matrix))
+  {
+  }
+
+  const Matrix44D* getMatrix() const {
+    return _matrixHolder->getMatrix();
+  }
+
+  const void setMatrix(const Matrix44D* matrix) {
+    _matrixHolder->setMatrix(matrix);
+  }
+
+  const Matrix44DHolder* getMatrixHolder() const {
+    return _matrixHolder;
+  }
+
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
+};
+
+class ModelViewGLFeature: public GLCameraGroupFeature {
+private:
+  ~ModelViewGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ModelViewGLFeature(Matrix44D* modelview) :
+  GLCameraGroupFeature(modelview, GLF_MODEL_VIEW)
+  {
+  }
+
+  ModelViewGLFeature(const Camera* camera);
+};
+
+class ModelGLFeature: public GLCameraGroupFeature {
+private:
+  ~ModelGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ModelGLFeature(Matrix44D* model) :
+  GLCameraGroupFeature(model, GLF_MODEL)
+  {
+  }
+
+  ModelGLFeature(const Camera* camera);
+};
+
+class ProjectionGLFeature: public GLCameraGroupFeature {
+private:
+  ~ProjectionGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ProjectionGLFeature(Matrix44D* projection) :
+  GLCameraGroupFeature(projection, GLF_PROJECTION)
+  {
+  }
+
+  ProjectionGLFeature(const Camera* camera);
+};
+
+class ModelTransformGLFeature: public GLCameraGroupFeature {
+private:
+  ~ModelTransformGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ModelTransformGLFeature(Matrix44D* transform) :
+  GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM)
+  {
+  }
+};
+///////////////////////////////////////////////////////////////////////////////////////////
+
+class PriorityGLFeature: public GLFeature {
+protected:
+  ~PriorityGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  const int _priority;
+
+  PriorityGLFeature(GLFeatureGroupName g,
+                    GLFeatureID id,
+                    int priority) :
+  GLFeature(g, id),
+  _priority(priority)
+  {
+  }
+};
+
+class GLColorGroupFeature: public PriorityGLFeature {
+private:
+  const bool _blend;
+  const int _sFactor;
+  const int _dFactor;
+
+protected:
+  ~GLColorGroupFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  GLColorGroupFeature(GLFeatureID id,
+                      int priority,
+                      bool blend,
+                      int sFactor,
+                      int dFactor) :
+  PriorityGLFeature(COLOR_GROUP, id, priority),
+  _blend(blend),
+  _sFactor(sFactor),
+  _dFactor(dFactor)
+  {
+  }
+
+  void blendingOnGlobalGLState(GLGlobalState* state) const {
+    if (_blend) {
+      state->enableBlend();
+      state->setBlendFactors(_sFactor, _dFactor);
+    }
+    else {
+      state->disableBlend();
+    }
+  }
+};
+
+class TextureGLFeature: public GLColorGroupFeature {
+private:
+#ifdef C_CODE
+  IGLTextureId const* _texID;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _texID = null;
+#endif
+
+  ~TextureGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  const int _target;
+
+  void createBasicValues(IFloatBuffer* texCoords,
+                         int arrayElementSize,
+                         int index,
+                         bool normalized,
+                         int stride);
+
+  GPUUniformValueVec2FloatMutable* _translation;
+  GPUUniformValueVec2FloatMutable* _scale;
+  GPUUniformValueVec2FloatMutable* _rotationCenter;
+  GPUUniformValueFloatMutable* _rotationAngle;
+
+public:
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor,
+                   float translateU,
+                   float translateV,
+                   float scaleU,
+                   float scaleV,
+                   float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV,
+                   int target = 0);
+
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor,
+                   int target = 0);
+  
+  bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
+
+  void setTranslation(float u, float v);
+  void setScale(float u, float v);
+  void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
+
+  int getTarget() const {
+    return _target;
+  }
+
+#ifdef C_CODE
+  IGLTextureId const* getTextureID() const {
+    return _texID;
+  }
+#endif
+#ifdef JAVA_CODE
+  public final IGLTextureId getTextureID() {
+    return _texID;
+  }
+#endif
+
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+};
+
+class ColorGLFeature: public GLColorGroupFeature {
+private:
+  ~ColorGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ColorGLFeature(const IFloatBuffer* colors,
+                 int arrayElementSize,
+                 int index,
+                 bool normalized,
+                 int stride,
+                 bool blend,
+                 int sFactor,
+                 int dFactor);
+
+  void applyOnGlobalGLState(GLGlobalState* state) const {
+    blendingOnGlobalGLState(state);
+  }
+};
+
+class FlatColorGLFeature: public GLColorGroupFeature {
+private:
+  ~FlatColorGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  FlatColorGLFeature(const Color& color,
+                     bool blend = false,
+                     int sFactor = GLBlendFactor::srcAlpha(),
+                     int dFactor = GLBlendFactor::oneMinusSrcAlpha());
+  void applyOnGlobalGLState(GLGlobalState* state) const {
+    blendingOnGlobalGLState(state);
+  }
+};
+
+class TextureIDGLFeature: public PriorityGLFeature {
+private:
+#ifdef C_CODE
+  IGLTextureId const* _texID;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _texID = null;
+#endif
+
+  ~TextureIDGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  TextureIDGLFeature(const IGLTextureId* texID);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+};
+
+class BlendingModeGLFeature: public GLColorGroupFeature {
+private:
+  ~BlendingModeGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  BlendingModeGLFeature(bool blend, int sFactor, int dFactor);
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+};
+
+class TextureCoordsGLFeature: public PriorityGLFeature {
+private:
+  ~TextureCoordsGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  TextureCoordsGLFeature(IFloatBuffer* texCoords,
+                         int arrayElementSize,
+                         int index,
+                         bool normalized,
+                         int stride,
+                         bool coordsTransformed,
+                         const Vector2F& translate,
+                         const Vector2F& scale);
+
+  void applyOnGlobalGLState(GLGlobalState* state) const;
+};
+
+class DirectionLightGLFeature: public GLFeature {
+private:
+  GPUUniformValueVec3FloatMutable* _lightDirectionUniformValue;
+
+  ~DirectionLightGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
+                          const Color& diffuseLightColor,
+                          const Color& ambientLightColor);
+
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
+
+  void setLightDirection(const Vector3D& lightDir);
+};
+
+class VertexNormalGLFeature: public GLFeature {
+private:
+  ~VertexNormalGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  VertexNormalGLFeature(const IFloatBuffer* buffer,
+                        int arrayElementSize,
+                        int index,
+                        bool normalized,
+                        int stride);
+  
+  void applyOnGlobalGLState(GLGlobalState* state) const {}
+};
+
+
+#endif

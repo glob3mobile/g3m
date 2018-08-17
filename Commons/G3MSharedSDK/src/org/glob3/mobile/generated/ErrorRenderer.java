@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  ErrorRenderer.cpp
 //  G3MiOSSDK
 //
@@ -18,8 +17,14 @@ package org.glob3.mobile.generated;
 
 
 
-public interface ErrorRenderer extends ProtoRenderer
+public abstract class ErrorRenderer extends ProtoRenderer
 {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
 
   public abstract void setErrors(java.util.ArrayList<String> errors);
 

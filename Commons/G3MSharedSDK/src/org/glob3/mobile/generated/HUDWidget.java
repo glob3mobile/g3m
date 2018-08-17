@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  HUDWidget.cpp
 //  G3MiOSSDK
@@ -16,10 +17,15 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLState;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderState;
 
 
@@ -31,17 +37,19 @@ public abstract class HUDWidget
 
   public HUDWidget()
   {
-     _enable = true;
+	  _enable = true;
   }
 
   public final void setEnable(boolean enable)
   {
-    _enable = enable;
+	_enable = enable;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEnable() const
   public final boolean isEnable()
   {
-    return _enable;
+	return _enable;
   }
 
   public void dispose()
@@ -57,10 +65,10 @@ public abstract class HUDWidget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    if (_enable)
-    {
-      rawRender(rc, glState);
-    }
+	if (_enable)
+	{
+	  rawRender(rc, glState);
+	}
   }
 
 }

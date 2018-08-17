@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  IDeviceLocation.cpp
 //  G3MiOSSDK
@@ -25,18 +26,18 @@ public abstract class IDeviceLocation
 
   public static IDeviceLocation instance()
   {
-    return _instance;
+	return _instance;
   }
 
   public static void setInstance(IDeviceLocation loc)
   {
-    if (_instance != null)
-    {
-      ILogger.instance().logWarning("IDeviceLocation instance already set!");
-      if (_instance != null)
-         _instance.dispose();
-    }
-    _instance = loc;
+	if (_instance != null)
+	{
+	  ILogger.instance().logWarning("IDeviceLocation instance already set!");
+	  if (_instance != null)
+		  _instance.dispose();
+	}
+	_instance = loc;
   }
 
   public void dispose()

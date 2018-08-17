@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  Geodetic3D.cpp
 //  G3MiOSSDK
@@ -21,13 +22,13 @@ public enum AltitudeMode
   RELATIVE_TO_GROUND, //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
   ABSOLUTE; //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
 
-   public int getValue()
-   {
-      return this.ordinal();
-   }
+	public int getValue()
+	{
+		return this.ordinal();
+	}
 
-   public static AltitudeMode forValue(int value)
-   {
-      return values()[value];
-   }
+	public static AltitudeMode forValue(int value)
+	{
+		return values()[value];
+	}
 }

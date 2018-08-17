@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  MarksRenderer.cpp
 //  G3MiOSSDK
@@ -18,10 +19,15 @@ package org.glob3.mobile.generated;
 ///#include "GPUProgramState.hpp"
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mark;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MarkTouchListener;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ITimer;
 
 
@@ -31,6 +37,8 @@ public abstract class MarksFilter
   {
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean test(const Mark* mark) const = 0;
   public abstract boolean test(Mark mark);
 
 }

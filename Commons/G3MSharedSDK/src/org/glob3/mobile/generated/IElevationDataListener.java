@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  ElevationDataProvider.cpp
 //  G3MiOSSDK
 //
@@ -16,25 +15,39 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Sector;
 //class Vector2I;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ElevationData;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
 
 
 
-public interface IElevationDataListener
+public abstract class IElevationDataListener
 {
-  void dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
+//#endif
 
   /**
    Callback method for ElevationData creation. Pointer is owned by Listener
    */
-  void onData(Sector sector, Vector2I extent, ElevationData elevationData);
+  public abstract void onData(Sector sector, Vector2I extent, ElevationData elevationData);
 
-  void onError(Sector sector, Vector2I extent);
+  public abstract void onError(Sector sector, Vector2I extent);
 
-  void onCancel(Sector sector, Vector2I extent);
+  public abstract void onCancel(Sector sector, Vector2I extent);
 
 }

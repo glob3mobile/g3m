@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  IWebSocketListener.hpp
 //  G3MiOSSDK
 //
@@ -8,19 +7,30 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IWebSocket;
 
-public interface IWebSocketListener
+public abstract class IWebSocketListener
 {
-  void dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+  public void dispose()
+  {
+  }
+//#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void dispose();
+//#endif
 
 
-  void onOpen(IWebSocket ws);
+  public abstract void onOpen(IWebSocket ws);
 
-  void onError(IWebSocket ws, String error);
+  public abstract void onError(IWebSocket ws, String error);
 
-  void onMessage(IWebSocket ws, String message);
+  public abstract void onMessage(IWebSocket ws, String message);
 
-  void onClose(IWebSocket ws);
+  public abstract void onClose(IWebSocket ws);
 
 }

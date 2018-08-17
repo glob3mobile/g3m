@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  LabelPosition.h
 //  G3MiOSSDK
 //
@@ -13,13 +12,13 @@ public enum LabelPosition
   Bottom,
   Right;
 
-   public int getValue()
-   {
-      return this.ordinal();
-   }
+	public int getValue()
+	{
+		return this.ordinal();
+	}
 
-   public static LabelPosition forValue(int value)
-   {
-      return values()[value];
-   }
+	public static LabelPosition forValue(int value)
+	{
+		return values()[value];
+	}
 }

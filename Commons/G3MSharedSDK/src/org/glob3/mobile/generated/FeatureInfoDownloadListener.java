@@ -1,5 +1,6 @@
-package org.glob3.mobile.generated; 
-public class FeatureInfoDownloadListener extends IBufferDownloadListener
+package org.glob3.mobile.generated;import java.util.*;
+
+public class FeatureInfoDownloadListener implements IBufferDownloadListener
 {
   private MapBooOLDApplicationChangeListener _applicationListener;
 
@@ -8,10 +9,10 @@ public class FeatureInfoDownloadListener extends IBufferDownloadListener
    */
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    if (_applicationListener != null)
-    {
-      _applicationListener.onFeatureInfoReceived(buffer);
-    }
+	if (_applicationListener != null)
+	{
+	  _applicationListener.onFeatureInfoReceived(buffer);
+	}
   }
 
   /**
@@ -42,13 +43,16 @@ public class FeatureInfoDownloadListener extends IBufferDownloadListener
 
   public FeatureInfoDownloadListener(MapBooOLDApplicationChangeListener applicationListener)
   {
-     _applicationListener = applicationListener;
+	  _applicationListener = applicationListener;
 
   }
 
   public void dispose()
   {
-    super.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	super.dispose();
+//#endif
 
   }
 

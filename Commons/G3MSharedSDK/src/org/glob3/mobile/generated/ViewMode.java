@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  ViewMode.cpp
 //  G3MiOSSDK
 //
@@ -21,13 +20,13 @@ public enum ViewMode
   MONO,
   STEREO;
 
-   public int getValue()
-   {
-      return this.ordinal();
-   }
+	public int getValue()
+	{
+		return this.ordinal();
+	}
 
-   public static ViewMode forValue(int value)
-   {
-      return values()[value];
-   }
+	public static ViewMode forValue(int value)
+	{
+		return values()[value];
+	}
 }

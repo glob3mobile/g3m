@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  MercatorUtils.cpp
 //  G3MiOSSDK
@@ -37,81 +38,84 @@ public class MercatorUtils
 
   public static Angle upperLimit()
   {
-    return _upperLimit;
+	return _upperLimit;
   }
 
   public static Angle lowerLimit()
   {
-    return _lowerLimit;
+	return _lowerLimit;
   }
 
   public static double upperLimitInDegrees()
   {
-    return _upperLimitInDegrees;
+	return _upperLimitInDegrees;
   }
 
   public static double lowerLimitInDegrees()
   {
-    return _lowerLimitInDegrees;
+	return _lowerLimitInDegrees;
   }
 
   public static double upperLimitInRadians()
   {
-    return _upperLimitInRadians;
+	return _upperLimitInRadians;
   }
 
   public static double lowerLimitInRadians()
   {
-    return _lowerLimitInRadians;
+	return _lowerLimitInRadians;
   }
 
   public static double clampIntoLimitsInRadians(Angle angle)
   {
-    final double radians = angle._radians;
-    if (radians < _lowerLimitInRadians)
-    {
-      return _lowerLimitInRadians;
-    }
-    if (radians > _upperLimitInRadians)
-    {
-      return _upperLimitInRadians;
-    }
-    return radians;
+	final double radians = angle._radians;
+	if (radians < _lowerLimitInRadians)
+	{
+	  return _lowerLimitInRadians;
+	}
+	if (radians > _upperLimitInRadians)
+	{
+	  return _upperLimitInRadians;
+	}
+	return radians;
   }
 
   public static double getMercatorV(Angle latitude)
   {
-    if (latitude._degrees >= _upperLimitInDegrees)
-    {
-      return 0;
-    }
-    if (latitude._degrees <= _lowerLimitInDegrees)
-    {
-      return 1;
-    }
+	if (latitude._degrees >= _upperLimitInDegrees)
+	{
+	  return 0;
+	}
+	if (latitude._degrees <= _lowerLimitInDegrees)
+	{
+	  return 1;
+	}
 
-    final IMathUtils mu = IMathUtils.instance();
-    final double pi4 = DefineConstants.PI * 4;
+	final IMathUtils mu = IMathUtils.instance();
+	final double pi4 = DefineConstants.PI * 4;
 
 //    const double latSin = latitude.sinus();
-    final double latSin = java.lang.Math.sin(latitude._radians);
-    return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
+//C++ TO JAVA CONVERTER TODO TASK: The #define macro SIN was defined in alternate ways and cannot be replaced in-line:
+	final double latSin = SIN(latitude._radians);
+	return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
   }
 
   public static Angle toLatitude(double v)
   {
-    final IMathUtils mu = IMathUtils.instance();
+	final IMathUtils mu = IMathUtils.instance();
 
-    final double exp = mu.exp(-2 * DefineConstants.PI * (1.0 - v - 0.5));
-    final double atan = mu.atan(exp);
-    return Angle.fromRadians((DefineConstants.PI / 2) - 2 * atan);
+	final double exp = mu.exp(-2 * DefineConstants.PI * (1.0 - v - 0.5));
+	final double atan = mu.atan(exp);
+	return Angle.fromRadians((DefineConstants.PI / 2) - 2 * atan);
   }
 
   public static Angle calculateSplitLatitude(Angle lowerLatitude, Angle upperLatitude)
   {
-    final double middleV = (getMercatorV(lowerLatitude) + getMercatorV(upperLatitude)) / 2;
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: const double middleV = (getMercatorV(lowerLatitude) + getMercatorV(upperLatitude)) / 2;
+	final double middleV = (getMercatorV(new Angle(lowerLatitude)) + getMercatorV(new Angle(upperLatitude))) / 2;
 
-    return toLatitude(middleV);
+	return toLatitude(middleV);
   }
 
 //  /**
@@ -132,26 +136,26 @@ public class MercatorUtils
 
   public static double longitudeToMeters(Angle longitude)
   {
-      return longitude._degrees * _originShift / 180.0;
+		return longitude._degrees * _originShift / 180.0;
   }
 
   public static double latitudeToMeters(Angle latitude)
   {
-    if (latitude._degrees >= _upperLimitInDegrees)
-    {
-      return 20037508.342789244;
-    }
-    if (latitude._degrees <= _lowerLimitInDegrees)
-    {
-      return -20037508.342789244;
-    }
+	if (latitude._degrees >= _upperLimitInDegrees)
+	{
+	  return 20037508.342789244;
+	}
+	if (latitude._degrees <= _lowerLimitInDegrees)
+	{
+	  return -20037508.342789244;
+	}
 
-    final IMathUtils mu = IMathUtils.instance();
+	final IMathUtils mu = IMathUtils.instance();
 
-    double my = mu.log(mu.tan((90 + latitude._degrees) * DefineConstants.PI / 360.0)) / (DefineConstants.PI / 180.0);
-      my = my * _originShift / 180.0;
+	double my = mu.log(mu.tan((90 + latitude._degrees) * DefineConstants.PI / 360.0)) / (DefineConstants.PI / 180.0);
+		my = my * _originShift / 180.0;
 
-      return my;
+		return my;
   }
 
 }

@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class NonOverlappingMark
 {
   private float _springLengthInPixels;
@@ -7,7 +8,7 @@ public class NonOverlappingMark
 //  MutableVector2F _anchorScreenPosition;
 
   private Vector3D _cartesianPos;
-  private Geodetic3D _geoPosition ;
+  private Geodetic3D _geoPosition = new Geodetic3D();
 
   private MutableVector2F _speed = new MutableVector2F();
   private MutableVector2F _force = new MutableVector2F();
@@ -33,294 +34,312 @@ public class NonOverlappingMark
 
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, anchorElectricCharge, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, electricCharge, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, 3000.0f, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, maxSpringLength, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, 0.0f, 3000.0f, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, minSpringLength, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, springK, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, springLengthInPixels, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, touchListener, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position)
   {
-     this(imageBuilderWidget, imageBuilderAnchor, position, null, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
+	  this(imageBuilderWidget, imageBuilderAnchor, position, null, 100.0f, 70.0f, 0.0f, 0.0f, 3000.0f, 2000.0f, 0.95f);
   }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: NonOverlappingMark(IImageBuilder* imageBuilderWidget, IImageBuilder* imageBuilderAnchor, const Geodetic3D& position, NonOverlappingMarkTouchListener* touchListener = null, float springLengthInPixels = 100.0f, float springK = 70.0f, float minSpringLength = 0.0f, float maxSpringLength = 0.0f, float electricCharge = 3000.0f, float anchorElectricCharge = 2000.0f, float resistanceFactor = 0.95f): _cartesianPos(null), _speed(MutableVector2F::zero()), _force(MutableVector2F::zero()), _geoPosition(position), _springLengthInPixels(springLengthInPixels * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio()), _springK(springK), _minSpringLength((minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f)) * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio()), _maxSpringLength((maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f)) * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio()), _electricCharge(electricCharge), _anchorElectricCharge(anchorElectricCharge), _resistanceFactor(resistanceFactor), _touchListener(touchListener), _springGLState(null), _springVertices(null), _springViewportExtentGLFeature(null)
   public NonOverlappingMark(IImageBuilder imageBuilderWidget, IImageBuilder imageBuilderAnchor, Geodetic3D position, NonOverlappingMarkTouchListener touchListener, float springLengthInPixels, float springK, float minSpringLength, float maxSpringLength, float electricCharge, float anchorElectricCharge, float resistanceFactor)
   {
-     _cartesianPos = null;
-     _speed = new MutableVector2F(MutableVector2F.zero());
-     _force = new MutableVector2F(MutableVector2F.zero());
-     _geoPosition = new Geodetic3D(position);
-     _springLengthInPixels = springLengthInPixels * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
-     _springK = springK;
-     _minSpringLength = (minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f)) * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
-     _maxSpringLength = (maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f)) * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
-     _electricCharge = electricCharge;
-     _anchorElectricCharge = anchorElectricCharge;
-     _resistanceFactor = resistanceFactor;
-     _touchListener = touchListener;
-     _springGLState = null;
-     _springVertices = null;
-     _springViewportExtentGLFeature = null;
-    _widget = new MarkWidget(imageBuilderWidget);
-    _anchorWidget = new MarkWidget(imageBuilderAnchor);
+	  _cartesianPos = null;
+	  _speed = new MutableVector2F(MutableVector2F.zero());
+	  _force = new MutableVector2F(MutableVector2F.zero());
+	  _geoPosition = new Geodetic3D(position);
+	  _springLengthInPixels = springLengthInPixels * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+	  _springK = springK;
+	  _minSpringLength = (minSpringLength > 0 ? minSpringLength : (springLengthInPixels * 0.25f)) * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+	  _maxSpringLength = (maxSpringLength > 0 ? maxSpringLength : (springLengthInPixels * 1.25f)) * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+	  _electricCharge = electricCharge;
+	  _anchorElectricCharge = anchorElectricCharge;
+	  _resistanceFactor = resistanceFactor;
+	  _touchListener = touchListener;
+	  _springGLState = null;
+	  _springVertices = null;
+	  _springViewportExtentGLFeature = null;
+	_widget = new MarkWidget(imageBuilderWidget);
+	_anchorWidget = new MarkWidget(imageBuilderAnchor);
   }
 
   public final void setID(String id)
   {
-    _id = id;
+	_id = id;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String getID() const
   public final String getID()
   {
-    return _id;
+	return _id;
   }
 
   public void dispose()
   {
-    if (_touchListener != null)
-       _touchListener.dispose();
+	if (_touchListener != null)
+		_touchListener.dispose();
   
-    if (_widget != null)
-       _widget.dispose();
-    if (_anchorWidget != null)
-       _anchorWidget.dispose();
-    if (_cartesianPos != null)
-       _cartesianPos.dispose();
+	if (_widget != null)
+		_widget.dispose();
+	if (_anchorWidget != null)
+		_anchorWidget.dispose();
+	if (_cartesianPos != null)
+		_cartesianPos.dispose();
   
-    if (_springGLState != null)
-    {
-      _springGLState._release();
-    }
+	if (_springGLState != null)
+	{
+	  _springGLState._release();
+	}
   
-    if (_springVertices != null)
-       _springVertices.dispose();
+	if (_springVertices != null)
+		_springVertices.dispose();
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getCartesianPosition(const Planet* planet) const
   public final Vector3D getCartesianPosition(Planet planet)
   {
-    // #warning toCartesian without garbage
-    if (_cartesianPos == null)
-    {
-      _cartesianPos = new Vector3D(planet.toCartesian(_geoPosition));
-    }
-    return _cartesianPos;
+	// #warning toCartesian without garbage
+	if (_cartesianPos == null)
+	{
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: _cartesianPos = new Vector3D(planet->toCartesian(_geoPosition));
+	  _cartesianPos = new Vector3D(planet.toCartesian(new Geodetic3D(_geoPosition)));
+	}
+	return _cartesianPos;
   }
 
   public final void computeAnchorScreenPos(Camera camera, Planet planet)
   {
-    Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
+	Vector2F sp = new Vector2F(camera.point2Pixel(getCartesianPosition(planet)));
   
-    _anchorWidget.setScreenPos(sp._x, sp._y);
+	_anchorWidget.setScreenPos(sp._x, sp._y);
   
-    if (_widget.getScreenPos().isNan())
-    {
-      final float deltaX = (float)(IMathUtils.instance().nextRandomDouble() * 2 - 1);
-      final float deltaY = (float)(IMathUtils.instance().nextRandomDouble() * 2 - 1);
-      _widget.setScreenPos(sp._x + deltaX, sp._y + deltaY);
-    }
+	if (_widget.getScreenPos().isNan())
+	{
+	  final float deltaX = (float)(IMathUtils.instance().nextRandomDouble() * 2 - 1);
+	  final float deltaY = (float)(IMathUtils.instance().nextRandomDouble() * 2 - 1);
+	  _widget.setScreenPos(sp._x + deltaX, sp._y + deltaY);
+	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector2F getScreenPos() const
   public final Vector2F getScreenPos()
   {
-     return _widget.getScreenPos();
+	  return _widget.getScreenPos();
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector2F getAnchorScreenPos() const
   public final Vector2F getAnchorScreenPos()
   {
-     return _anchorWidget.getScreenPos();
+	  return _anchorWidget.getScreenPos();
   }
 
   public final void renderWidget(G3MRenderContext rc, GLState glState)
   {
-    if (_widget.isReady())
-    {
-      if (_anchorWidget.isReady())
-      {
-        _widget.render(rc, glState);
-      }
-    }
-    else
-    {
-      _widget.init(rc);
-    }
+	if (_widget.isReady())
+	{
+	  if (_anchorWidget.isReady())
+	  {
+		_widget.render(rc, glState);
+	  }
+	}
+	else
+	{
+	  _widget.init(rc);
+	}
   }
 
   public final void renderAnchorWidget(G3MRenderContext rc, GLState glState)
   {
-    if (_anchorWidget.isReady())
-    {
-      if (_widget.isReady())
-      {
-        _anchorWidget.render(rc, glState);
-      }
-    }
-    else
-    {
-      _anchorWidget.init(rc);
-    }
+	if (_anchorWidget.isReady())
+	{
+	  if (_widget.isReady())
+	  {
+		_anchorWidget.render(rc, glState);
+	  }
+	}
+	else
+	{
+	  _anchorWidget.init(rc);
+	}
   }
 
   public final void renderSpringWidget(G3MRenderContext rc, GLState glState)
   {
-    if (!_widget.isReady() || !_anchorWidget.isReady())
-    {
-      return;
-    }
+	if (!_widget.isReady() || !_anchorWidget.isReady())
+	{
+	  return;
+	}
   
-    final Vector2F sp = getScreenPos();
-    final Vector2F asp = getAnchorScreenPos();
+	final Vector2F sp = getScreenPos();
+	final Vector2F asp = getAnchorScreenPos();
   
-    if (_springGLState == null)
-    {
-      _springGLState = new GLState();
+	if (_springGLState == null)
+	{
+	  _springGLState = new GLState();
   
-      _springGLState.addGLFeature(new FlatColorGLFeature(Color.black()), false);
+	  _springGLState.addGLFeature(new FlatColorGLFeature(Color.black()), false);
   
-      _springVertices = rc.getFactory().createFloatBuffer(2 * 2);
-      _springVertices.rawPut(0, sp._x);
-      _springVertices.rawPut(1, -sp._y);
-      _springVertices.rawPut(2, asp._x);
-      _springVertices.rawPut(3, -asp._y);
+	  _springVertices = rc.getFactory().createFloatBuffer(2 * 2);
+	  _springVertices.rawPut(0, sp._x);
+	  _springVertices.rawPut(1, -sp._y);
+	  _springVertices.rawPut(2, asp._x);
+	  _springVertices.rawPut(3, -asp._y);
   
-      _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 1.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
+	  _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 1.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
   
-      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
-      _springGLState.addGLFeature(_springViewportExtentGLFeature, false);
-    }
-    else
-    {
-      _springVertices.put(0, sp._x);
-      _springVertices.put(1, -sp._y);
-      _springVertices.put(2, asp._x);
-      _springVertices.put(3, -asp._y);
-    }
+	  _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
+	  _springGLState.addGLFeature(_springViewportExtentGLFeature, false);
+	}
+	else
+	{
+	  _springVertices.put(0, sp._x);
+	  _springVertices.put(1, -sp._y);
+	  _springVertices.put(2, asp._x);
+	  _springVertices.put(3, -asp._y);
+	}
   
-    rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager()); // count -  first
+	rc.getGL().drawArrays(GLPrimitive.lines(), 0, 2, _springGLState, rc.getGPUProgramManager()); // count -  first
   }
 
   public final void applyCoulombsLaw(NonOverlappingMark that)
   {
-    final Vector2F d = getScreenPos().sub(that.getScreenPos());
+	final Vector2F d = getScreenPos().sub(that.getScreenPos());
   
-    final double distance = d.length() + 0.001;
-    Vector2F direction = d.div((float)distance);
+	final double distance = d.length() + 0.001;
+	Vector2F direction = d.div((float)distance);
   
-    float strength = (float)(this._electricCharge * that._electricCharge / (distance * distance));
+	float strength = (float)(this._electricCharge * that._electricCharge / (distance * distance));
   
-    final Vector2F force = direction.times(strength);
+	final Vector2F force = direction.times(strength);
   
-    this.applyForce(force._x, force._y);
-    that.applyForce(-force._x, -force._y);
+	this.applyForce(force._x, force._y);
+	that.applyForce(-force._x, -force._y);
   }
   public final void applyCoulombsLawFromAnchor(NonOverlappingMark that)
   {
-    Vector2F dAnchor = getScreenPos().sub(that.getAnchorScreenPos());
-    double distanceAnchor = dAnchor.length() + 0.001;
+	Vector2F dAnchor = getScreenPos().sub(that.getAnchorScreenPos());
+	double distanceAnchor = dAnchor.length() + 0.001;
   
-    Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
+	Vector2F directionAnchor = dAnchor.div((float)distanceAnchor);
   
-    float strengthAnchor = (float)(this._electricCharge * that._anchorElectricCharge / (distanceAnchor * distanceAnchor));
+	float strengthAnchor = (float)(this._electricCharge * that._anchorElectricCharge / (distanceAnchor * distanceAnchor));
   
-    this.applyForce(directionAnchor._x * strengthAnchor, directionAnchor._y * strengthAnchor);
+	this.applyForce(directionAnchor._x * strengthAnchor, directionAnchor._y * strengthAnchor);
   }
 
   public final void applyHookesLaw()
   {
-    Vector2F d = getScreenPos().sub(getAnchorScreenPos());
-    double mod = d.length();
-    double displacement = _springLengthInPixels - mod;
-    Vector2F direction = d.div((float)mod);
+	Vector2F d = getScreenPos().sub(getAnchorScreenPos());
+	double mod = d.length();
+	double displacement = _springLengthInPixels - mod;
+	Vector2F direction = d.div((float)mod);
   
-    float force = (float)(_springK * displacement);
+	float force = (float)(_springK * displacement);
   
-    applyForce(direction._x * force, direction._y * force);
+	applyForce(direction._x * force, direction._y * force);
   }
 
   public final void applyForce(float x, float y)
   {
-    _force.add(x, y);
+	_force.add(x, y);
   }
 
   public final void updatePositionWithCurrentForce(float timeInSeconds, int viewportWidth, int viewportHeight, float viewportMargin)
   {
-    _speed.add(_force._x * timeInSeconds, _force._y * timeInSeconds);
-    _speed.times(_resistanceFactor);
+	_speed.add(_force._x * timeInSeconds, _force._y * timeInSeconds);
+	_speed.times(_resistanceFactor);
   
-    //Force has been applied and must be reset
-    _force.set(0, 0);
+	//Force has been applied and must be reset
+	_force.set(0, 0);
   
-    //Update position
-    Vector2F widgetPosition = _widget.getScreenPos();
+	//Update position
+	Vector2F widgetPosition = _widget.getScreenPos();
   
-    final float newX = widgetPosition._x + (_speed._x * timeInSeconds);
-    final float newY = widgetPosition._y + (_speed._y * timeInSeconds);
+	final float newX = widgetPosition._x + (_speed._x * timeInSeconds);
+	final float newY = widgetPosition._y + (_speed._y * timeInSeconds);
   
-    Vector2F anchorPosition = _anchorWidget.getScreenPos();
+	Vector2F anchorPosition = _anchorWidget.getScreenPos();
   
-    //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
-    Vector2F spring = new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
+	//  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
+	Vector2F spring = new Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
   
-    _widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
+	_widget.setAndClampScreenPos(anchorPosition._x + spring._x, anchorPosition._y + spring._y, viewportWidth, viewportHeight, viewportMargin);
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    _widget.onResizeViewportEvent(ec, width, height);
-    _anchorWidget.onResizeViewportEvent(ec, width, height);
+	_widget.onResizeViewportEvent(ec, width, height);
+	_anchorWidget.onResizeViewportEvent(ec, width, height);
   
-    if (_springViewportExtentGLFeature != null)
-    {
-      int logicWidth = width;
-      if (ec.getViewMode() == ViewMode.STEREO)
-      {
-        logicWidth /= 2;
-      }
-      _springViewportExtentGLFeature.changeExtent(logicWidth, height);
-    }
+	if (_springViewportExtentGLFeature != null)
+	{
+	  int logicWidth = width;
+	  if (ec.getViewMode() == ViewMode.STEREO)
+	  {
+		logicWidth /= 2;
+	  }
+	  _springViewportExtentGLFeature.changeExtent(logicWidth, height);
+	}
   }
 
   public final void resetWidgetPositionVelocityAndForce()
   {
-    _widget.resetPosition();
+	_widget.resetPosition();
 //    _widgetScreenPosition.put(NANF, NANF);
-    _speed.set(0, 0);
-    _force.set(0, 0);
+	_speed.set(0, 0);
+	_force.set(0, 0);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getWidth() const
   public final int getWidth()
   {
-    return _widget.getWidth();
+	return _widget.getWidth();
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getHeight() const
   public final int getHeight()
   {
-    return _widget.getHeight();
+	return _widget.getHeight();
   }
 
   public final boolean onTouchEvent(Vector2F touchedPixel)
   {
-    if (_touchListener != null)
-    {
-      return _touchListener.touchedMark(this, touchedPixel);
-    }
-    return false;
+	if (_touchListener != null)
+	{
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: return _touchListener->touchedMark(this, touchedPixel);
+	  return _touchListener.touchedMark(this, new Vector2F(touchedPixel));
+	}
+	return false;
   }
 
 }

@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  CompositeElevationData.cpp
 //  G3MiOSSDK
 //
@@ -30,152 +29,167 @@ public class CompositeElevationData extends ElevationData
    */
   public CompositeElevationData(ElevationData data)
   {
-     super(data.getSector(), data.getExtent());
-     _hasNoData = data.hasNoData();
-     _interpolator = new BilinearInterpolator();
-    _data.add(data);
+	  super(data.getSector(), data.getExtent());
+	  _hasNoData = data.hasNoData();
+	  _interpolator = new BilinearInterpolator();
+	_data.add(data);
   }
 
   public final void addElevationData(ElevationData data)
   {
   //  ElevationData* d0 = _data[0];
   
-    if ((data.getExtentWidth() != _width) || (data.getExtentHeight() != _height))
-    {
-      ILogger.instance().logError("Extents don't match.");
-    }
+	if ((data.getExtentWidth() != _width) || (data.getExtentHeight() != _height))
+	{
+	  ILogger.instance().logError("Extents don't match.");
+	}
   
   //  Sector s = data->getSector();
   //  Sector s2 = d0->getSector();
   
-    if (!data.getSector().isEquals(getSector()))
-    {
-      ILogger.instance().logError("Sectors don't match.");
-    }
+	if (!data.getSector().isEquals(getSector()))
+	{
+	  ILogger.instance().logError("Sectors don't match.");
+	}
   
-    _data.add(data);
+	_data.add(data);
   
-    //Checking NoData
-    for (int i = 0; i < _width; i++)
-    {
-      for (int j = 0; j < _height; j++)
-      {
-        double height = getElevationAt(i, j);
-        if ((height != height))
-        {
-          _hasNoData = true;
-          return;
-        }
-      }
-    }
+	//Checking NoData
+	for (int i = 0; i < _width; i++)
+	{
+	  for (int j = 0; j < _height; j++)
+	  {
+		double height = getElevationAt(i, j);
+		if ((height != height))
+		{
+		  _hasNoData = true;
+		  return;
+		}
+	  }
+	}
   }
 
   public void dispose()
   {
-    int s = _data.size();
-    for (int i = 0; i < s; i++)
-    {
-      if (_data.get(i) != null)
-         _data.get(i).dispose();
-    }
-    if (_interpolator != null)
-       _interpolator.dispose();
+	int s = _data.size();
+	for (int i = 0; i < s; i++)
+	{
+	  if (_data.get(i) != null)
+		  _data.get(i).dispose();
+	}
+	if (_interpolator != null)
+		_interpolator.dispose();
+	if (_sector != null)
+		_sector.dispose();
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
   super.dispose();
+//#endif
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double getElevationAt(int x, int y) const
   public final double getElevationAt(int x, int y)
   {
-    final int size = _data.size();
-    for (int i = 0; i < size; i++)
-    {
-      final double h = _data.get(i).getElevationAt(x, y);
-      if (!(h != h))
-      {
-        return h;
-      }
-    }
+	final int size = _data.size();
+	for (int i = 0; i < size; i++)
+	{
+	  final double h = _data.get(i).getElevationAt(x, y);
+	  if (!(h != h))
+	  {
+		return h;
+	  }
+	}
   
-    return java.lang.Double.NaN;
+	return NAND;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description(boolean detailed) const
   public final String description(boolean detailed)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("(CompositeElevationData extent=");
-    isb.addInt(_width);
-    isb.addString("x");
-    isb.addInt(_height);
-    isb.addString(" sector=");
-    isb.addString(_sector.description());
-    if (detailed)
-    {
-      isb.addString("\n");
-      for (int row = 0; row < _width; row++)
-      {
-        //isb->addString("   ");
-        for (int col = 0; col < _height; col++)
-        {
-          isb.addDouble(getElevationAt(col, row));
-          isb.addString(",");
-        }
-        isb.addString("\n");
-      }
-    }
-    isb.addString(")");
-    final String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.addString("(CompositeElevationData extent=");
+	isb.addInt(_width);
+	isb.addString("x");
+	isb.addInt(_height);
+	isb.addString(" sector=");
+	isb.addString(_sector.description());
+	if (detailed)
+	{
+	  isb.addString("\n");
+	  for (int row = 0; row < _width; row++)
+	  {
+		//isb->addString("   ");
+		for (int col = 0; col < _height; col++)
+		{
+		  isb.addDouble(getElevationAt(col, row));
+		  isb.addString(",");
+		}
+		isb.addString("\n");
+	  }
+	}
+	isb.addString(")");
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getMinMaxAverageElevations() const
   public final Vector3D getMinMaxAverageElevations()
   {
-    final IMathUtils mu = IMathUtils.instance();
-    double minHeight = mu.maxDouble();
-    double maxHeight = mu.minDouble();
-    double sumHeight = 0.0;
+	final IMathUtils mu = IMathUtils.instance();
+	double minHeight = mu.maxDouble();
+	double maxHeight = mu.minDouble();
+	double sumHeight = 0.0;
   
-    for (int i = 0; i < _width; i++)
-    {
-      for (int j = 0; j < _height; j++)
-      {
-        final double height = getElevationAt(i, j);
-        if (!(height != height))
-        {
-          if (height < minHeight)
-          {
-            minHeight = height;
-          }
-          if (height > maxHeight)
-          {
-            maxHeight = height;
-          }
-          sumHeight += height;
-        }
-      }
-    }
+	for (int i = 0; i < _width; i++)
+	{
+	  for (int j = 0; j < _height; j++)
+	  {
+		final double height = getElevationAt(i, j);
+		if (!(height != height))
+		{
+		  if (height < minHeight)
+		  {
+			minHeight = height;
+		  }
+		  if (height > maxHeight)
+		  {
+			maxHeight = height;
+		  }
+		  sumHeight += height;
+		}
+	  }
+	}
   
-    if (minHeight == mu.maxDouble())
-    {
-      minHeight = 0;
-    }
-    if (maxHeight == mu.minDouble())
-    {
-      maxHeight = 0;
-    }
+	if (minHeight == mu.maxDouble())
+	{
+	  minHeight = 0;
+	}
+	if (maxHeight == mu.minDouble())
+	{
+	  maxHeight = 0;
+	}
   
-    return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
+	return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Sector getSector() const
   public final Sector getSector()
   {
-    return _sector;
+	return _sector;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean hasNoData() const
   public final boolean hasNoData()
   {
-    return _hasNoData;
+	return _hasNoData;
   }
 
 }

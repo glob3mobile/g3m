@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  NullStorage.cpp
 //  G3MiOSSDK
@@ -16,16 +17,16 @@ package org.glob3.mobile.generated;
 
 
 
-public class NullStorage extends IStorage
+public class NullStorage implements IStorage
 {
   public final IByteBufferResult readBuffer(URL url, boolean readExpired)
   {
-    return new IByteBufferResult(null, false);
+	return new IByteBufferResult(null, false);
   }
 
   public final IImageResult readImage(URL url, boolean readExpired)
   {
-    return new IImageResult(null, false);
+	return new IImageResult(null, false);
   }
 
 
@@ -60,7 +61,7 @@ public class NullStorage extends IStorage
 
   public final boolean isAvailable()
   {
-    return false;
+	return false;
   }
 
 

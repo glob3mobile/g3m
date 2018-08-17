@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 public class MapBooOLDBuilder_ChangeSceneTask extends GTask
 {
   private MapBooOLDBuilder _builder;
@@ -6,12 +7,12 @@ public class MapBooOLDBuilder_ChangeSceneTask extends GTask
 
   public MapBooOLDBuilder_ChangeSceneTask(MapBooOLDBuilder builder, String sceneId)
   {
-     _builder = builder;
-     _sceneId = sceneId;
+	  _builder = builder;
+	  _sceneId = sceneId;
   }
 
   public final void run(G3MContext context)
   {
-    _builder.rawChangeScene(_sceneId);
+	_builder.rawChangeScene(_sceneId);
   }
 }

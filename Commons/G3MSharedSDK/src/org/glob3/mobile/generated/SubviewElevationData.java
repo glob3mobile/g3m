@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  SubviewElevationData.cpp
 //  G3MiOSSDK
@@ -26,109 +27,122 @@ public class SubviewElevationData extends ElevationData
 
   protected SubviewElevationData(ElevationData elevationData, Sector sector, Vector2I extent)
   {
-     super(sector, extent);
-     _buffer = new float[_width * _height];
-    if ((elevationData == null) || (elevationData.getExtentWidth() < 1) || (elevationData.getExtentHeight() < 1))
-    {
-      ILogger.instance().logError("SubviewElevationData can't subview given elevation data.");
-      _buffer = null;
-      return;
-    }
+	  super(sector, extent);
+	  _buffer = new float[_width * _height];
+	if ((elevationData == null) || (elevationData.getExtentWidth() < 1) || (elevationData.getExtentHeight() < 1))
+	{
+	  ILogger.instance().logError("SubviewElevationData can't subview given elevation data.");
+	  _buffer = null;
+	  return;
+	}
   
-    _hasNoData = false;
+	_hasNoData = false;
   }
 
 
   public void dispose()
   {
-    _buffer = null;
+	_buffer = null;
+	if (_sector != null)
+		_sector.dispose();
   
-    super.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	super.dispose();
+//#endif
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double getElevationAt(int x, int y) const
   public final double getElevationAt(int x, int y)
   {
   
-    final int index = ((_height-1-y) * _width) + x;
+	final int index = ((_height-1-y) * _width) + x;
   
-    return _buffer[index];
+	return _buffer[index];
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description(boolean detailed) const
   public final String description(boolean detailed)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("(SubviewElevationData extent=");
-    isb.addInt(_width);
-    isb.addString("x");
-    isb.addInt(_height);
-    isb.addString(" sector=");
-    isb.addString(_sector.description());
-    if (detailed)
-    {
-      isb.addString("\n");
-      for (int row = 0; row < _width; row++)
-      {
-        //isb->addString("   ");
-        for (int col = 0; col < _height; col++)
-        {
-          isb.addDouble(getElevationAt(col, row));
-          isb.addString(",");
-        }
-        isb.addString("\n");
-      }
-    }
-    isb.addString(")");
-    final String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.addString("(SubviewElevationData extent=");
+	isb.addInt(_width);
+	isb.addString("x");
+	isb.addInt(_height);
+	isb.addString(" sector=");
+	isb.addString(_sector.description());
+	if (detailed)
+	{
+	  isb.addString("\n");
+	  for (int row = 0; row < _width; row++)
+	  {
+		//isb->addString("   ");
+		for (int col = 0; col < _height; col++)
+		{
+		  isb.addDouble(getElevationAt(col, row));
+		  isb.addString(",");
+		}
+		isb.addString("\n");
+	  }
+	}
+	isb.addString(")");
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getMinMaxAverageElevations() const
   public final Vector3D getMinMaxAverageElevations()
   {
-    final IMathUtils mu = IMathUtils.instance();
+	final IMathUtils mu = IMathUtils.instance();
   
-    double minHeight = mu.maxDouble();
-    double maxHeight = mu.minDouble();
-    double sumHeight = 0.0;
+	double minHeight = mu.maxDouble();
+	double maxHeight = mu.minDouble();
+	double sumHeight = 0.0;
   
-    for (int x = 0; x < _width; x++)
-    {
-      for (int y = 0; y < _height; y++)
-      {
-        final double height = getElevationAt(x, y);
-        if (!(height != height))
-        {
-          if (height < minHeight)
-          {
-            minHeight = height;
-          }
-          if (height > maxHeight)
-          {
-            maxHeight = height;
-          }
-          sumHeight += height;
-        }
-      }
-    }
+	for (int x = 0; x < _width; x++)
+	{
+	  for (int y = 0; y < _height; y++)
+	  {
+		final double height = getElevationAt(x, y);
+		if (!(height != height))
+		{
+		  if (height < minHeight)
+		  {
+			minHeight = height;
+		  }
+		  if (height > maxHeight)
+		  {
+			maxHeight = height;
+		  }
+		  sumHeight += height;
+		}
+	  }
+	}
   
-    if (minHeight == mu.maxDouble())
-    {
-      minHeight = 0;
-    }
-    if (maxHeight == mu.minDouble())
-    {
-      maxHeight = 0;
-    }
+	if (minHeight == mu.maxDouble())
+	{
+	  minHeight = 0;
+	}
+	if (maxHeight == mu.minDouble())
+	{
+	  maxHeight = 0;
+	}
   
-    return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
+	return new Vector3D(minHeight, maxHeight, sumHeight / (_width * _height));
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean hasNoData() const
   public final boolean hasNoData()
   {
-     return _hasNoData;
+	  return _hasNoData;
   }
 
 }

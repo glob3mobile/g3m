@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  IXMLNode.cpp
 //  G3MiOSSDK
 //

@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  IStringBuilder.cpp
 //  G3MiOSSDK
@@ -22,20 +23,22 @@ public abstract class IStringBuilder
 
 
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IStringBuilder* getNewInstance() const = 0;
   protected abstract IStringBuilder getNewInstance();
 
   public static void setInstance(IStringBuilder isb)
   {
-    if (_instance != null)
-    {
-      ILogger.instance().logWarning("IStringBuilder set two times");
-    }
-    _instance = isb;
+	if (_instance != null)
+	{
+	  ILogger.instance().logWarning("IStringBuilder set two times");
+	}
+	_instance = isb;
   }
 
   public static IStringBuilder newStringBuilder()
   {
-    return _instance.getNewInstance();
+	return _instance.getNewInstance();
   }
 
   public abstract IStringBuilder addDouble(double d);
@@ -49,6 +52,8 @@ public abstract class IStringBuilder
 
   public abstract IStringBuilder clear();
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const String getString() const = 0;
   public abstract String getString();
 
   // a virtual destructor is needed for conversion to Java
@@ -56,6 +61,8 @@ public abstract class IStringBuilder
   {
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean contentEqualsTo(const String& that) const = 0;
   public abstract boolean contentEqualsTo(String that);
 
 }

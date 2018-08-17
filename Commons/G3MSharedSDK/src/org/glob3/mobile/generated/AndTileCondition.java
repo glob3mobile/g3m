@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  AndTileCondition.cpp
 //  G3MiOSSDK
 //
@@ -22,27 +21,27 @@ public class AndTileCondition extends LayerCondition
 {
   private java.util.ArrayList<LayerCondition> _children = new java.util.ArrayList<LayerCondition>();
 
-  private AndTileCondition(java.util.ArrayList<LayerCondition> children)
+  private AndTileCondition(java.util.ArrayList<LayerCondition*> children)
   {
-     _children = children;
+	  _children = children;
   }
 
 
   public AndTileCondition(LayerCondition child1, LayerCondition child2)
   {
-    _children.add(child1);
-    _children.add(child2);
+	_children.add(child1);
+	_children.add(child2);
   }
 
   public void dispose()
   {
-    int size = _children.size();
-    for (int i = 0; i < size; i++)
-    {
-      LayerCondition child = _children.get(i);
-      if (child != null)
-         child.dispose();
-    }
+	int size = _children.size();
+	for (int i = 0; i < size; i++)
+	{
+	  LayerCondition child = _children.get(i);
+	  if (child != null)
+		  child.dispose();
+	}
   }
 
 //  bool isAvailable(const G3MRenderContext* rc,
@@ -76,23 +75,27 @@ public class AndTileCondition extends LayerCondition
   //  return true;
   //}
   
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isAvailable(const Tile* tile) const
   public final boolean isAvailable(Tile tile)
   {
-    int size = _children.size();
-    for (int i = 0; i < size; i++)
-    {
-      LayerCondition child = _children.get(i);
-      if (!child.isAvailable(tile))
-      {
-        return false;
-      }
-    }
-    return true;
+	int size = _children.size();
+	for (int i = 0; i < size; i++)
+	{
+	  LayerCondition child = _children.get(i);
+	  if (!child.isAvailable(tile))
+	  {
+		return false;
+	  }
+	}
+	return true;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: LayerCondition* copy() const
   public final LayerCondition copy()
   {
-    return new AndTileCondition(_children);
+	return new AndTileCondition(_children);
   }
 
 }

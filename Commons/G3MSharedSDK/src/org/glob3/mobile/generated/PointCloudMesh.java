@@ -1,4 +1,5 @@
-package org.glob3.mobile.generated; 
+package org.glob3.mobile.generated;import java.util.*;
+
 //
 //  PointCloudMesh.cpp
 //  G3MiOSSDK
@@ -18,196 +19,48 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableMatrix44D;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Color;
 
-public class PointCloudMesh extends Mesh
+public class PointCloudMesh extends DirectMesh
 {
-  protected final boolean _owner;
-  protected final Vector3D _center ;
-  protected final MutableMatrix44D _translationMatrix;
-  protected final IFloatBuffer _vertices;
-  protected IFloatBuffer _colors;
-  protected final float _pointSize;
-  protected final boolean _depthTest;
-  protected Color _borderColor ;
+	private Vector3D _buildingAnchor = new Vector3D();
+	private MutableMatrix44D _mt1 = new MutableMatrix44D();
+	private MutableMatrix44D _mt2 = new MutableMatrix44D();
 
-  protected BoundingVolume _boundingVolume;
-  protected final BoundingVolume computeBoundingVolume()
-  {
-    final int vertexCount = getVertexCount();
-  
-    if (vertexCount == 0)
-    {
-      return null;
-    }
-  
-    double minX = 1e12;
-    double minY = 1e12;
-    double minZ = 1e12;
-  
-    double maxX = -1e12;
-    double maxY = -1e12;
-    double maxZ = -1e12;
-  
-    for (int i = 0; i < vertexCount; i++)
-    {
-      final int i3 = i * 3;
-  
-      final double x = _vertices.get(i3) + _center._x;
-      final double y = _vertices.get(i3 + 1) + _center._y;
-      final double z = _vertices.get(i3 + 2) + _center._z;
-  
-      if (x < minX)
-         minX = x;
-      if (x > maxX)
-         maxX = x;
-  
-      if (y < minY)
-         minY = y;
-      if (y > maxY)
-         maxY = y;
-  
-      if (z < minZ)
-         minZ = z;
-      if (z > maxZ)
-         maxZ = z;
-    }
-  
-    return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
-  }
+	public PointCloudMesh(boolean owner, Vector3D buildingAnchor, Vector3D center, IFloatBuffer vertices, float pointSize, IFloatBuffer colors, boolean depthTest, Color borderColor, VertexColorScheme vertexColorScheme) //Depth test
+	{
+		super(GLPrimitive.points(), owner, center, vertices, 1.0, pointSize, null, null, 0.0f, false, null, false, 0, 0, vertexColorScheme, -1.0f);
+		_buildingAnchor = new Vector3D(buildingAnchor);
+		_mt1 = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_buildingAnchor.times(-1)));
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: _mt2 = new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(_buildingAnchor));
+		_mt2 = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(new Vector3D(_buildingAnchor)));
+		_glState.addGLFeature(new PointShapeGLFeature(borderColor), false);
+	}
 
-  protected GLState _glState;
+	public final void updatePopUpEffect(float completionRatio)
+	{
+		if (completionRatio > 1.0)
+		{
+			Matrix44D m = Matrix44D.createIdentity();
+			setTransformation(m);
+			m._release();
+		}
+		else
+		{
+			final float a = completionRatio*(2.0f-completionRatio); //Ease-Out
+			final float scale = 1.0f + (1.0f - a) * 0.2f;
+			MutableMatrix44D ms = MutableMatrix44D.createScaleMatrix(scale, scale, scale);
+//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
+//ORIGINAL LINE: MutableMatrix44D m = _mt2.multiply(ms).multiply(_mt1);
+			MutableMatrix44D m = _mt2.multiply(new MutableMatrix44D(ms)).multiply(new MutableMatrix44D(_mt1));
+			setTransformation(m.asMatrix44D());
+		}
+	}
 
-  protected final void createGLState()
-  {
-  
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, 0.0f, 0.0f, 1.0f, true, _pointSize), false); //Polygon Offset - Cull and culled face - Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
-  
-    _glState.addGLFeature(new PointShapeGLFeature(_borderColor), false);
-  
-    if (_translationMatrix != null)
-    {
-      _glState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
-    }
-  
-    applyColor();
-  }
-
-//  const std::vector<IFloatBuffer*> _colorsCollection;
-  protected final void applyColor()
-  {
-    _glState.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
-  
-    ColorGLFeature c = new ColorGLFeature(_colors, 4, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()); // Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 4 -  The attribute is a float vector of 4 elements RGBA
-    _glState.addGLFeature(c, false);
-  }
-
-
-
-  public PointCloudMesh(boolean owner, Vector3D center, IFloatBuffer vertices, float pointSize, IFloatBuffer colors, boolean depthTest, Color borderColor)
-  {
-     _owner = owner;
-     _vertices = vertices;
-     _boundingVolume = null;
-     _center = new Vector3D(center);
-     _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
-     _pointSize = pointSize;
-     _depthTest = depthTest;
-     _glState = new GLState();
-     _borderColor = new Color(borderColor);
-     _colors = colors;
-    createGLState();
-  }
-
-  public void dispose()
-  {
-    if (_owner)
-    {
-      if (_vertices != null)
-         _vertices.dispose();
-      if (_colors != null)
-         _colors.dispose();
-  
-  //    for (size_t i = 0; i < _colorsCollection.size(); i++){
-  //      delete _colorsCollection[i];
-  //    }
-  
-    }
-  
-    if (_boundingVolume != null)
-       _boundingVolume.dispose();
-    if (_translationMatrix != null)
-       _translationMatrix.dispose();
-  
-    _glState._release();
-  
-    super.dispose();
-  }
-
-  public final BoundingVolume getBoundingVolume()
-  {
-    if (_boundingVolume == null)
-    {
-      _boundingVolume = computeBoundingVolume();
-    }
-    return _boundingVolume;
-  }
-
-  public final int getVertexCount()
-  {
-    return _vertices.size() / 3;
-  }
-
-  public final Vector3D getVertex(int i)
-  {
-    final int p = i * 3;
-    return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
-  }
-
-  public final boolean isTransparent(G3MRenderContext rc)
-  {
-    return false;
-  }
-
-  public final void rawRender(G3MRenderContext rc, GLState parentGLState)
-  {
-    _glState.setParent(parentGLState);
-  
-    GL gl = rc.getGL();
-  
-    gl.drawArrays(GLPrimitive.points(), 0, (int)_vertices.size() / 3, _glState, rc.getGPUProgramManager());
-  }
-
-//  IFloatBuffer* getColorsFloatBuffer() const{
-//    return (IFloatBuffer*)_colorsCollection[0];
-//  }
-
-//  void changeToColors(int i);
-
-  public final void showNormals(boolean v) //NO NORMALS
-  {
-  }
-
-//  int getNumberOfColors() const{
-//    return (int)_colorsCollection.size();
-//  }
-
-  public final void changeToColors(IFloatBuffer colors)
-  {
-    if (_colors == colors)
-    {
-      return;
-    }
-  
-    if (_owner)
-    {
-      if (_colors != null)
-         _colors.dispose();
-      _colors = colors;
-    }
-  
-    applyColor();
-  }
 }

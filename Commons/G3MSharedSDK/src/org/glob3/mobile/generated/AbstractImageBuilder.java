@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  AbstractImageBuilder.cpp
 //  G3MiOSSDK
 //
@@ -25,15 +24,15 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 
   protected final void changed()
   {
-    if (_changeListener != null)
-    {
-      _changeListener.changed();
-    }
+	if (_changeListener != null)
+	{
+	  _changeListener.changed();
+	}
   }
 
   public AbstractImageBuilder()
   {
-     _changeListener = null;
+	  _changeListener = null;
   }
 
   public void dispose()
@@ -42,11 +41,11 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 
   public final void setChangeListener(ChangedListener changeListener)
   {
-    if (_changeListener != null)
-    {
-      throw new RuntimeException("changeListener already set!");
-    }
-    _changeListener = changeListener;
+	if (_changeListener != null)
+	{
+	  THROW_EXCEPTION("changeListener already set!");
+	}
+	_changeListener = changeListener;
   }
 
 }

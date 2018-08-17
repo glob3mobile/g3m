@@ -1,5 +1,4 @@
-package org.glob3.mobile.generated; 
-//
+package org.glob3.mobile.generated;//
 //  CanvasTileImageProvider.cpp
 //  G3MiOSSDK
 //
@@ -16,7 +15,9 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Color;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ICanvas;
 
 public abstract class CanvasTileImageProvider extends TileImageProvider
@@ -29,40 +30,45 @@ public abstract class CanvasTileImageProvider extends TileImageProvider
 
   protected CanvasTileImageProvider()
   {
-     _canvas = null;
-     _transparent = Color.newFromRGBA(0, 0, 0, 0);
+	  _canvas = null;
+	  _transparent = Color.newFromRGBA(0, 0, 0, 0);
   }
 
   public void dispose()
   {
-    if (_canvas != null)
-       _canvas.dispose();
-    if (_transparent != null)
-       _transparent.dispose();
+	if (_canvas != null)
+		_canvas.dispose();
+	if (_transparent != null)
+		_transparent.dispose();
   
-    super.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	super.dispose();
+//#endif
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: ICanvas* getCanvas(int width, int height) const
   protected final ICanvas getCanvas(int width, int height)
   {
-    if ((_canvas == null) || (_canvasWidth != width) || (_canvasHeight != height))
-    {
-      if (_canvas != null)
-         _canvas.dispose();
+	if ((_canvas == null) || (_canvasWidth != width) || (_canvasHeight != height))
+	{
+	  if (_canvas != null)
+		  _canvas.dispose();
   
-      _canvas = IFactory.instance().createCanvas(false);
-      _canvas.initialize(width, height);
+	  _canvas = IFactory.instance().createCanvas(false);
+	  _canvas.initialize(width, height);
   
-      _canvasWidth = width;
-      _canvasHeight = height;
-    }
-    else
-    {
-      _canvas.clearRect(0, 0, width, height);
-      _canvas.setFillColor(_transparent);
-      _canvas.fillRectangle(0, 0, width, height);
-    }
-    return _canvas;
+	  _canvasWidth = width;
+	  _canvasHeight = height;
+	}
+	else
+	{
+	  _canvas.clearRect(0, 0, width, height);
+	  _canvas.setFillColor(_transparent);
+	  _canvas.fillRectangle(0, 0, width, height);
+	}
+	return _canvas;
   }
 
 }
