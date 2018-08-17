@@ -46,6 +46,8 @@ public:
               const IFloatBuffer* srcBuffer) {
     put(i, srcBuffer, 0, srcBuffer->size());
   }
+    
+    virtual size_t size() const = 0;
   
 };
 

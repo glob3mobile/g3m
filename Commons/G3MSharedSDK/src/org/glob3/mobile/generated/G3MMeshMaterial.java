@@ -15,9 +15,7 @@ package org.glob3.mobile.generated;//
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Color;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class URL;
 
 public class G3MMeshMaterial
@@ -28,17 +26,17 @@ public class G3MMeshMaterial
 
   public G3MMeshMaterial(String id, Color color, URL textureURL)
   {
-	  _id = id;
-	  _color = color;
-	  _textureURL = textureURL;
+     _id = id;
+     _color = color;
+     _textureURL = textureURL;
 
   }
 
   public void dispose()
   {
-	if (_color != null)
-		_color.dispose();
-	if (_textureURL != null)
-		_textureURL.dispose();
+    if (_color != null)
+       _color.dispose();
+    if (_textureURL != null)
+       _textureURL.dispose();
   }
 }

@@ -15,25 +15,15 @@ package org.glob3.mobile.generated;//
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileLODTester;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileVisibilityTester;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Frustum;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerTilesRenderParameters;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTexturizer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TilesRenderParameters;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ITimer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ElevationDataProvider;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTessellator;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
 
 public class PlanetRenderContext
@@ -53,16 +43,9 @@ public class PlanetRenderContext
   public boolean _renderTileMeshes;
   public boolean _logTilesPetitions;
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public final Frustum _frustumInModelCoordinates;
-  public final LayerTilesRenderParameters _layerTilesRenderParameters;
-  public final TilesRenderParameters _tilesRenderParameters;
-//#else
   public Frustum _frustumInModelCoordinates;
   public LayerTilesRenderParameters _layerTilesRenderParameters;
   public TilesRenderParameters _tilesRenderParameters;
-//#endif
 
   public void dispose()
   {

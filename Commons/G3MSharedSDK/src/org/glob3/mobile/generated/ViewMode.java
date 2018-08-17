@@ -20,13 +20,13 @@ public enum ViewMode
   MONO,
   STEREO;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static ViewMode forValue(int value)
-	{
-		return values()[value];
-	}
+   public static ViewMode forValue(int value)
+   {
+      return values()[value];
+   }
 }

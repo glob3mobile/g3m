@@ -15,7 +15,6 @@ package org.glob3.mobile.generated;//
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
 
 
@@ -23,26 +22,26 @@ public class BingMapType
 {
   public static String Aerial()
   {
-	return "Aerial";
+    return "Aerial";
   }
 
   public static String AerialWithLabels()
   {
-	return "AerialWithLabels";
+    return "AerialWithLabels";
   }
 
   public static String Road()
   {
-	return "Road";
+    return "Road";
   }
 
   public static String OrdnanceSurvey()
   {
-	return "OrdnanceSurvey";
+    return "OrdnanceSurvey";
   }
 
   public static String CollinsBart()
   {
-	return "CollinsBart";
+    return "CollinsBart";
   }
 }

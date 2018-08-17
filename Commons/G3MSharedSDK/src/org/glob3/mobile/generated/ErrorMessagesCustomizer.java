@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  HUDErrorRenderer.cpp
 //  G3MiOSSDK
 //
@@ -18,18 +16,11 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class HUDImageRenderer;
 
 
-public abstract class ErrorMessagesCustomizer
+public interface ErrorMessagesCustomizer
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
 
-  public abstract java.util.ArrayList<String> customize(java.util.ArrayList<String> errors);
+  java.util.ArrayList<String> customize(java.util.ArrayList<String> errors);
 }

@@ -7,22 +7,14 @@ package org.glob3.mobile.generated;//
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONBoolean;
 //class JSONNumber;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONString;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONArray;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONObject;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONDouble;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONFloat;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONInteger;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONLong;
 
 

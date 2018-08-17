@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  GLFeature.cpp
 //  G3MiOSSDK
 //
@@ -18,7 +16,6 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
 
 public enum GLFeatureID
@@ -39,17 +36,17 @@ public enum GLFeatureID
   GLF_MODEL_VIEW,
   GLF_BLENDING_MODE,
   GLF_POINT_SHAPE,
-	GLF_COLOR_RANGE,
-	GLF_DYNAMIC_COLOR_RANGE,
-	GLF_TRANSPARENCY_DISTANCE_THRESHOLD;
+    GLF_COLOR_RANGE,
+    GLF_DYNAMIC_COLOR_RANGE,
+    GLF_TRANSPARENCY_DISTANCE_THRESHOLD;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static GLFeatureID forValue(int value)
-	{
-		return values()[value];
-	}
+   public static GLFeatureID forValue(int value)
+   {
+      return values()[value];
+   }
 }

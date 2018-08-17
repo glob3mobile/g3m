@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  ICanvas.cpp
 //  G3MiOSSDK
 //
@@ -17,13 +15,9 @@ package org.glob3.mobile.generated;import java.util.*;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Color;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImageListener;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GFont;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 
 
@@ -33,13 +27,13 @@ public enum StrokeCap
   CAP_ROUND,
   CAP_SQUARE;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static StrokeCap forValue(int value)
-	{
-		return values()[value];
-	}
+   public static StrokeCap forValue(int value)
+   {
+      return values()[value];
+   }
 }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  HUDAbsolutePosition.cpp
 //  G3MiOSSDK
 //
@@ -24,22 +22,17 @@ public class HUDAbsolutePosition extends HUDPosition
 
   public HUDAbsolutePosition(float position)
   {
-	  _position = position;
+     _position = position;
   }
 
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.dispose();
-//#endif
+    super.dispose();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float getPosition(int viewPortWidth, int viewPortHeight, float widgetWidth, float widgetHeight) const
   public final float getPosition(int viewPortWidth, int viewPortHeight, float widgetWidth, float widgetHeight)
   {
-	return _position;
+    return _position;
   }
 
 }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public class LabelImageBuilder_ImageListener implements IImageListener
+package org.glob3.mobile.generated;public class LabelImageBuilder_ImageListener extends IImageListener
 {
   private IImageBuilderListener _listener;
   private boolean _deleteListener;
@@ -8,26 +6,26 @@ public class LabelImageBuilder_ImageListener implements IImageListener
 
   public LabelImageBuilder_ImageListener(IImageBuilderListener listener, boolean deleteListener, String imageName)
   {
-	  _listener = listener;
-	  _deleteListener = deleteListener;
-	  _imageName = imageName;
+     _listener = listener;
+     _deleteListener = deleteListener;
+     _imageName = imageName;
   }
 
 
   public final void imageCreated(IImage image)
   {
-	_listener.imageCreated(image, _imageName);
-	if (_deleteListener)
-	{
-	  if (_listener != null)
-		  _listener.dispose();
-	}
-	_listener = null;
+    _listener.imageCreated(image, _imageName);
+    if (_deleteListener)
+    {
+      if (_listener != null)
+         _listener.dispose();
+    }
+    _listener = null;
   }
 
   public void dispose()
   {
-	if (_listener != null)
-		_listener.dispose();
+    if (_listener != null)
+       _listener.dispose();
   }
 }

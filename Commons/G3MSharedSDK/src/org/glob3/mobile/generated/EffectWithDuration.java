@@ -7,34 +7,28 @@ package org.glob3.mobile.generated;public abstract class EffectWithDuration exte
 
   protected EffectWithDuration(TimeInterval duration, boolean linearTiming)
   {
-	  _durationMS = duration._milliseconds;
-	  _linearTiming = linearTiming;
-	  _started = 0;
+     _durationMS = duration._milliseconds;
+     _linearTiming = linearTiming;
+     _started = 0;
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double percentDone(const TimeInterval& when) const
   protected final double percentDone(TimeInterval when)
   {
-	final long elapsed = when._milliseconds - _started;
+    final long elapsed = when._milliseconds - _started;
 
-	final double percent = (double) elapsed / _durationMS;
-	if (percent > 1)
-		return 1;
-	if (percent < 0)
-		return 0;
-	return percent;
+    final double percent = (double) elapsed / _durationMS;
+    if (percent > 1)
+       return 1;
+    if (percent < 0)
+       return 0;
+    return percent;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getAlpha(const TimeInterval& when) const
   protected final double getAlpha(TimeInterval when)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const double percent = percentDone(when);
-	final double percent = percentDone(new TimeInterval(when));
-	return _linearTiming ? percent : pace(percent);
+    final double percent = percentDone(when);
+    return _linearTiming ? percent : pace(percent);
   }
 
 
@@ -45,14 +39,12 @@ package org.glob3.mobile.generated;public abstract class EffectWithDuration exte
 
   public void start(G3MRenderContext rc, TimeInterval when)
   {
-	_started = when._milliseconds;
+    _started = when._milliseconds;
   }
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const double percent = percentDone(when);
-	final double percent = percentDone(new TimeInterval(when));
-	return (percent >= 1);
+    final double percent = percentDone(when);
+    return (percent >= 1);
   }
 }

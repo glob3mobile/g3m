@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public class MarkEffectTarget extends EffectTarget
+package org.glob3.mobile.generated;public class MarkEffectTarget implements EffectTarget
 {
   public void dispose()
   {

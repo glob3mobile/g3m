@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  TrailsRenderer.cpp
 //  G3MiOSSDK
 //
@@ -18,16 +16,13 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Planet;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Frustum;
 
 public class TrailSegment
 {
-  private Color _color = new Color();
+  private Color _color ;
   private final float _ribbonWidth;
 
   private boolean _positionsDirty;
@@ -37,211 +32,183 @@ public class TrailSegment
 
   private Mesh createMesh(Planet planet)
   {
-	final int positionsSize = _positions.size();
+    final int positionsSize = _positions.size();
   
-	if (positionsSize < 2)
-	{
-	  return null;
-	}
-  
-  
-	java.util.ArrayList<Double> anglesInRadians = new java.util.ArrayList<Double>();
-	for (int i = 1; i < positionsSize; i++)
-	{
-	  final Geodetic3D current = _positions.get(i);
-	  final Geodetic3D previous = _positions.get(i - 1);
-  
-	  final double angleInRadians = Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
-	  if (i == 1)
-	  {
-		if (_previousSegmentLastPosition == null)
-		{
-		  anglesInRadians.add(angleInRadians);
-		  anglesInRadians.add(angleInRadians);
-		}
-		else
-		{
-		  final double angle2InRadians = Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
-		  final double avr = (angleInRadians + angle2InRadians) / 2.0;
-  
-		  anglesInRadians.add(avr);
-		  anglesInRadians.add(avr);
-		}
-	  }
-	  else
-	  {
-		anglesInRadians.add(angleInRadians);
-		final double avr = (angleInRadians + anglesInRadians.get(i - 1)) / 2.0;
-		anglesInRadians.set(i - 1, avr);
-	  }
-	}
-  
-	if (_nextSegmentFirstPosition != null)
-	{
-	  final int lastPositionIndex = positionsSize - 1;
-	  final Geodetic3D lastPosition = _positions.get(lastPositionIndex);
-	  final double angleInRadians = Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
-  
-	  final double avr = (angleInRadians + anglesInRadians.get(lastPositionIndex)) / 2.0;
-	  anglesInRadians.set(lastPositionIndex, avr);
-	}
+    if (positionsSize < 2)
+    {
+      return null;
+    }
   
   
-	final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
-	final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
+    java.util.ArrayList<Double> anglesInRadians = new java.util.ArrayList<Double>();
+    for (int i = 1; i < positionsSize; i++)
+    {
+      final Geodetic3D current = _positions.get(i);
+      final Geodetic3D previous = _positions.get(i - 1);
   
-	FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+      final double angleInRadians = Geodetic2D.bearingInRadians(previous._latitude, previous._longitude, current._latitude, current._longitude);
+      if (i == 1)
+      {
+        if (_previousSegmentLastPosition == null)
+        {
+          anglesInRadians.add(angleInRadians);
+          anglesInRadians.add(angleInRadians);
+        }
+        else
+        {
+          final double angle2InRadians = Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude);
+          final double avr = (angleInRadians + angle2InRadians) / 2.0;
+  
+          anglesInRadians.add(avr);
+          anglesInRadians.add(avr);
+        }
+      }
+      else
+      {
+        anglesInRadians.add(angleInRadians);
+        final double avr = (angleInRadians + anglesInRadians.get(i - 1)) / 2.0;
+        anglesInRadians.set(i - 1, avr);
+      }
+    }
+  
+    if (_nextSegmentFirstPosition != null)
+    {
+      final int lastPositionIndex = positionsSize - 1;
+      final Geodetic3D lastPosition = _positions.get(lastPositionIndex);
+      final double angleInRadians = Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude);
+  
+      final double avr = (angleInRadians + anglesInRadians.get(lastPositionIndex)) / 2.0;
+      anglesInRadians.set(lastPositionIndex, avr);
+    }
   
   
-	final Vector3D rotationAxis = Vector3D.downZ();
-	for (int i = 0; i < positionsSize; i++)
-	{
-	  final Geodetic3D position = _positions.get(i);
+    final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
+    final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromRadians(anglesInRadians[i]), rotationAxis);
-	  final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(anglesInRadians.get(i)), new Vector3D(rotationAxis));
-	  final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
-	  final MutableMatrix44D matrix = geoMatrix.multiply(new MutableMatrix44D(rotationMatrix));
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: vertices->add(offsetN.transformedBy(matrix, 1));
-	  vertices.add(offsetN.transformedBy(new MutableMatrix44D(matrix), 1));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: vertices->add(offsetP.transformedBy(matrix, 1));
-	  vertices.add(offsetP.transformedBy(new MutableMatrix44D(matrix), 1));
-	}
   
-	Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
+    final Vector3D rotationAxis = Vector3D.downZ();
+    for (int i = 0; i < positionsSize; i++)
+    {
+      final Geodetic3D position = _positions.get(i);
   
-	if (vertices != null)
-		vertices.dispose();
+      final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromRadians(anglesInRadians.get(i)), rotationAxis);
+      final MutableMatrix44D geoMatrix = planet.createGeodeticTransformMatrix(position);
+      final MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
   
-	return surfaceMesh;
+      vertices.add(offsetN.transformedBy(matrix, 1));
+      vertices.add(offsetP.transformedBy(matrix, 1));
+    }
+  
+    Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return surfaceMesh;
   }
 
   private Mesh _mesh;
   private Mesh getMesh(Planet planet)
   {
-	if (_positionsDirty || (_mesh == null))
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	  _mesh = createMesh(planet);
-	  _positionsDirty = false;
-	}
-	return _mesh;
+    if (_positionsDirty || (_mesh == null))
+    {
+      if (_mesh != null)
+         _mesh.dispose();
+      _mesh = createMesh(planet);
+      _positionsDirty = false;
+    }
+    return _mesh;
   }
 
 
   public TrailSegment(Color color, float ribbonWidth)
   {
-	  _color = new Color(color);
-	  _ribbonWidth = ribbonWidth;
-	  _positionsDirty = true;
-	  _mesh = null;
-	  _nextSegmentFirstPosition = null;
-	  _previousSegmentLastPosition = null;
+     _color = new Color(color);
+     _ribbonWidth = ribbonWidth;
+     _positionsDirty = true;
+     _mesh = null;
+     _nextSegmentFirstPosition = null;
+     _previousSegmentLastPosition = null;
 
   }
 
   public void dispose()
   {
-	if (_previousSegmentLastPosition != null)
-		_previousSegmentLastPosition.dispose();
-	if (_nextSegmentFirstPosition != null)
-		_nextSegmentFirstPosition.dispose();
+    if (_previousSegmentLastPosition != null)
+       _previousSegmentLastPosition.dispose();
+    if (_nextSegmentFirstPosition != null)
+       _nextSegmentFirstPosition.dispose();
   
-	if (_mesh != null)
-		_mesh.dispose();
+    if (_mesh != null)
+       _mesh.dispose();
   
-	final int positionsSize = _positions.size();
-	for (int i = 0; i < positionsSize; i++)
-	{
-	  final Geodetic3D position = _positions.get(i);
-	  if (position != null)
-		  position.dispose();
-	}
+    final int positionsSize = _positions.size();
+    for (int i = 0; i < positionsSize; i++)
+    {
+      final Geodetic3D position = _positions.get(i);
+      if (position != null)
+         position.dispose();
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getSize() const
   public final int getSize()
   {
-	return _positions.size();
+    return _positions.size();
   }
 
   public final void addPosition(Angle latitude, Angle longitude, double height)
   {
-	_positionsDirty = true;
-	_positions.add(new Geodetic3D(latitude, longitude, height));
+    _positionsDirty = true;
+    _positions.add(new Geodetic3D(latitude, longitude, height));
   }
 
   public final void addPosition(Geodetic3D position)
   {
-	addPosition(position._latitude, position._longitude, position._height);
+    addPosition(position._latitude, position._longitude, position._height);
   }
 
   public final void setNextSegmentFirstPosition(Angle latitude, Angle longitude, double height)
   {
-	_positionsDirty = true;
-	if (_nextSegmentFirstPosition != null)
-		_nextSegmentFirstPosition.dispose();
-	_nextSegmentFirstPosition = new Geodetic3D(latitude, longitude, height);
+    _positionsDirty = true;
+    if (_nextSegmentFirstPosition != null)
+       _nextSegmentFirstPosition.dispose();
+    _nextSegmentFirstPosition = new Geodetic3D(latitude, longitude, height);
   }
 
   public final void setPreviousSegmentLastPosition(Geodetic3D position)
   {
-	_positionsDirty = true;
-	if (_previousSegmentLastPosition != null)
-		_previousSegmentLastPosition.dispose();
-	_previousSegmentLastPosition = new Geodetic3D(position);
+    _positionsDirty = true;
+    if (_previousSegmentLastPosition != null)
+       _previousSegmentLastPosition.dispose();
+    _previousSegmentLastPosition = new Geodetic3D(position);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic3D getLastPosition() const
   public final Geodetic3D getLastPosition()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	return *(_positions.get(_positions.size() - 1));
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	return _positions.get(_positions.size() - 1);
-//#endif
+    return _positions.get(_positions.size() - 1);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic3D getPreLastPosition() const
   public final Geodetic3D getPreLastPosition()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	return *(_positions.get(_positions.size() - 2));
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	return _positions.get(_positions.size() - 2);
-//#endif
+    return _positions.get(_positions.size() - 2);
   }
 
   public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
   {
-	Mesh mesh = getMesh(rc.getPlanet());
-	if (mesh != null)
-	{
-	  BoundingVolume bounding = mesh.getBoundingVolume();
-	  if (bounding != null)
-	  {
-		if (bounding.touchesFrustum(frustum))
-		{
-		  mesh.render(rc, state);
-		}
-	  }
-	}
+    Mesh mesh = getMesh(rc.getPlanet());
+    if (mesh != null)
+    {
+      BoundingVolume bounding = mesh.getBoundingVolume();
+      if (bounding != null)
+      {
+        if (bounding.touchesFrustum(frustum))
+        {
+          mesh.render(rc, state);
+        }
+      }
+    }
   }
 
 }

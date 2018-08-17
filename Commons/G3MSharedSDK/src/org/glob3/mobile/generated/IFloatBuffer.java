@@ -13,15 +13,13 @@ public abstract class IFloatBuffer implements IBuffer
 
   public IFloatBuffer()
   {
-	  super();
+     super();
   }
 
   public void dispose()
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual float get(int i) const = 0;
   public abstract float get(int i);
 
   public abstract void put(int i, float value);
@@ -34,14 +32,16 @@ public abstract class IFloatBuffer implements IBuffer
 
   public final void rawPut(int i, IFloatBuffer srcBuffer)
   {
-	rawPut(i, srcBuffer, 0, srcBuffer.size());
+    rawPut(i, srcBuffer, 0, srcBuffer.size());
   }
 
   public abstract void put(int i, IFloatBuffer srcBuffer, int srcFromIndex, int count);
 
   public final void put(int i, IFloatBuffer srcBuffer)
   {
-	put(i, srcBuffer, 0, srcBuffer.size());
+    put(i, srcBuffer, 0, srcBuffer.size());
   }
+
+    public abstract int size();
 
 }

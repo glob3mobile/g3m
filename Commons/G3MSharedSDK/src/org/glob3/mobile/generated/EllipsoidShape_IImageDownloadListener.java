@@ -1,17 +1,17 @@
-package org.glob3.mobile.generated;public class EllipsoidShape_IImageDownloadListener implements IImageDownloadListener
+package org.glob3.mobile.generated;public class EllipsoidShape_IImageDownloadListener extends IImageDownloadListener
 {
   private EllipsoidShape _ellipsoidShape;
 
 
   public EllipsoidShape_IImageDownloadListener(EllipsoidShape ellipsoidShape)
   {
-	  _ellipsoidShape = ellipsoidShape;
+     _ellipsoidShape = ellipsoidShape;
 
   }
 
   public final void onDownload(URL url, IImage image, boolean expired)
   {
-	_ellipsoidShape.imageDownloaded(image);
+    _ellipsoidShape.imageDownloaded(image);
   }
 
   public final void onError(URL url)

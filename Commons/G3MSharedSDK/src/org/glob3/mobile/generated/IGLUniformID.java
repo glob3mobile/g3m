@@ -6,21 +6,9 @@ package org.glob3.mobile.generated;//
 //
 
 
-public abstract class IGLUniformID
+public interface IGLUniformID
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isValid() const = 0;
-  public abstract boolean isValid();
+  boolean isValid();
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void dispose();
-//#endif
+  void dispose();
 }

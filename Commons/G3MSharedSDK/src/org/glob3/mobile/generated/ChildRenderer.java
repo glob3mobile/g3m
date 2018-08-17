@@ -24,53 +24,41 @@ public class ChildRenderer
 
   public ChildRenderer(Renderer renderer)
   {
-	  _renderer = renderer;
+     _renderer = renderer;
 
   }
 
-  public ChildRenderer(Renderer renderer, java.util.ArrayList<const Info> info)
+  public ChildRenderer(Renderer renderer, java.util.ArrayList<Info> info)
   {
-	  _renderer = renderer;
-	setInfo(info);
+     _renderer = renderer;
+    setInfo(info);
   }
 
   public void dispose()
   {
-	_renderer = null;
-	_info.clear();
+    _renderer = null;
+    _info.clear();
   }
 
   public final void addInfo(Info inf)
   {
-	_info.add(inf);
+    _info.add(inf);
   }
 
-  public final void setInfo(java.util.ArrayList<const Info> info)
+  public final void setInfo(java.util.ArrayList<Info> info)
   {
-	_info.clear();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'insert' method in Java:
-	_info.insert(_info.end(), info.iterator(), info.end());
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	_info.addAll(info);
-//#endif
+    _info.clear();
+    _info.addAll(info);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Renderer* getRenderer() const
   public final Renderer getRenderer()
   {
-	return _renderer;
+    return _renderer;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const java.util.ArrayList<const Info*> getInfo() const
   public final java.util.ArrayList<Info> getInfo()
   {
-	return _info;
+    return _info;
   }
 
 }

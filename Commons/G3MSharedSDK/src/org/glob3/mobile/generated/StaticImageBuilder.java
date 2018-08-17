@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  StaticImageBuilder.cpp
 //  G3MiOSSDK
 //
@@ -17,7 +15,6 @@ package org.glob3.mobile.generated;import java.util.*;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 
 public class StaticImageBuilder extends AbstractImageBuilder
@@ -27,38 +24,33 @@ public class StaticImageBuilder extends AbstractImageBuilder
 
   public StaticImageBuilder(IImage image, String imageName)
   {
-	  _image = image;
-	  _imageName = imageName;
+     _image = image;
+     _imageName = imageName;
 
   }
 
   public void dispose()
   {
-	if (_image != null)
-		_image.dispose();
+    if (_image != null)
+       _image.dispose();
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.dispose();
-//#endif
+    super.dispose();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isMutable() const
   public final boolean isMutable()
   {
-	return false;
+    return false;
   }
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
-	listener.imageCreated(_image.shallowCopy(), _imageName);
+    listener.imageCreated(_image.shallowCopy(), _imageName);
   
-	if (deleteListener)
-	{
-	  if (listener != null)
-		  listener.dispose();
-	}
+    if (deleteListener)
+    {
+      if (listener != null)
+         listener.dispose();
+    }
   }
 
 }

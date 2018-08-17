@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  RasterLayerTileImageProvider.cpp
 //  G3MiOSSDK
 //
@@ -19,107 +17,71 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RasterLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IDownloader;
 
 
 public class RasterLayerTileImageProvider extends TileImageProvider
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final RasterLayer _layer;
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-  public RasterLayer _layer = new internal();
-//#endif
+  private RasterLayer _layer;
   private IDownloader _downloader;
 
   private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
 
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	for (java.util.Iterator<const String, Long> iter = _requestsIdsPerTile.iterator(); iter.hasNext();)
-	{
-	  final long requestId = iter.next().getValue();
-	  _downloader.cancelRequest(requestId);
-	}
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet())
-	{
-	  _downloader.cancelRequest(entry.getValue());
-	}
+    for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet()) {
+      _downloader.cancelRequest(entry.getValue());
+    }
   
-	super.dispose();
-//#endif
+    super.dispose();
   }
 
 
   public RasterLayerTileImageProvider(RasterLayer layer, IDownloader downloader)
   {
-	  _layer = layer;
-	  _downloader = downloader;
+     _layer = layer;
+     _downloader = downloader;
   }
 
   public final TileImageContribution contribution(Tile tile)
   {
-	return (_layer == null) ? null : _layer.contribution(tile);
+    return (_layer == null) ? null : _layer.contribution(tile);
   }
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
-	final String tileId = tile._id;
+    final String tileId = tile._id;
   
-	final long requestId = _layer.requestImage(tile, _downloader, tileDownloadPriority, logDownloadActivity, new RLTIP_ImageDownloadListener(this, tileId, contribution, listener, deleteListener), true); // deleteListener
+    final long requestId = _layer.requestImage(tile, _downloader, tileDownloadPriority, logDownloadActivity, new RLTIP_ImageDownloadListener(this, tileId, contribution, listener, deleteListener), true); // deleteListener
   
-	if (requestId >= 0)
-	{
-	  _requestsIdsPerTile.put(tileId, requestId);
-	}
+    if (requestId >= 0)
+    {
+      _requestsIdsPerTile.put(tileId, requestId);
+    }
   }
 
   public final void cancel(String tileId)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	if (_requestsIdsPerTile.containsKey(tileId))
-	{
-	  final long requestId = _requestsIdsPerTile.get(tileId);
-  
-	  _downloader.cancelRequest(requestId);
-  
-	  _requestsIdsPerTile.remove(tileId);
-	}
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	final Long requestId = _requestsIdsPerTile.remove(tileId);
-	if (requestId != null)
-	{
-	  _downloader.cancelRequest(requestId);
-	}
-//#endif
+    final Long requestId = _requestsIdsPerTile.remove(tileId);
+    if (requestId != null) {
+      _downloader.cancelRequest(requestId);
+    }
   }
 
 
   public final void requestFinish(String tileId)
   {
-	_requestsIdsPerTile.remove(tileId);
+    _requestsIdsPerTile.remove(tileId);
   }
 
   public final void layerDeleted(RasterLayer layer)
   {
-	if (layer != _layer)
-	{
-	  THROW_EXCEPTION("Logic error");
-	}
-	_layer = null;
+    if (layer != _layer)
+    {
+      throw new RuntimeException("Logic error");
+    }
+    _layer = null;
   }
 
 }

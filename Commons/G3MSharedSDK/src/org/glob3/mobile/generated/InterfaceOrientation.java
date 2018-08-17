@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  IDeviceAttitude.cpp
 //  G3MiOSDemo
 //
@@ -26,13 +24,13 @@ public enum InterfaceOrientation
   LANDSCAPE_RIGHT,
   LANDSCAPE_LEFT;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static InterfaceOrientation forValue(int value)
-	{
-		return values()[value];
-	}
+   public static InterfaceOrientation forValue(int value)
+   {
+      return values()[value];
+   }
 }

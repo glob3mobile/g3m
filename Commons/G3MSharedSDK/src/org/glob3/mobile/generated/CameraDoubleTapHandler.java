@@ -22,25 +22,22 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
   super.dispose();
-//#endif
 
   }
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	// only one finger needed
-	if (touchEvent.getTouchCount()!=1)
-		return false;
-	if (touchEvent.getTapCount()!=2)
-		return false;
-	if (touchEvent.getType()!=TouchEventType.Down)
-		return false;
+    // only one finger needed
+    if (touchEvent.getTouchCount()!=1)
+       return false;
+    if (touchEvent.getTapCount()!=2)
+       return false;
+    if (touchEvent.getType()!=TouchEventType.Down)
+       return false;
   
-	onDown(eventContext, touchEvent, cameraContext);
-	return true;
+    onDown(eventContext, touchEvent, cameraContext);
+    return true;
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
@@ -51,38 +48,36 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   /* // compute globe point where user tapped
-	const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-	Camera* camera = cameraContext->getNextCamera();
-	const Vector3D initialPoint = camera->pixel2PlanetPoint(pixel);
-	if (initialPoint.isNan()) return;
+    const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+    Camera* camera = cameraContext->getNextCamera();
+    const Vector3D initialPoint = camera->pixel2PlanetPoint(pixel);
+    if (initialPoint.isNan()) return;
   
-	// compute central point of view
-	const Vector3D centerPoint = camera->getXYZCenterOfView();
+    // compute central point of view
+    const Vector3D centerPoint = camera->getXYZCenterOfView();
   
-	// compute drag parameters
-	const Vector3D axis = initialPoint.cross(centerPoint);
-	const Angle angle   = Angle::fromRadians(- IMathUtils::instance()->asin(axis.length()/initialPoint.length()/centerPoint.length()));
+    // compute drag parameters
+    const Vector3D axis = initialPoint.cross(centerPoint);
+    const Angle angle   = Angle::fromRadians(- IMathUtils::instance()->asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
-	// compute zoom factor
-	const double height   = camera->getGeodeticPosition()._height;
-	const double distance = height * 0.6;
+    // compute zoom factor
+    const double height   = camera->getGeodeticPosition()._height;
+    const double distance = height * 0.6;
   
-	// create effect
-	Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
-	*/
+    // create effect
+    Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
+    */
   
-	final Vector2F pixel = touchEvent.getTouch(0).getPos();
-	final Planet planet = eventContext.getPlanet();
-	Camera camera = cameraContext.getNextCamera();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: Effect* effect = planet->createDoubleTapEffect(camera->getCartesianPosition(), camera->getViewDirection(), camera->pixel2Ray(pixel));
-	Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(new Vector2F(pixel)));
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
+    final Planet planet = eventContext.getPlanet();
+    Camera camera = cameraContext.getNextCamera();
+    Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel));
   
-	if (effect != null)
-	{
-	  EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
-	  eventContext.getEffectsScheduler().startEffect(effect, target);
-	}
+    if (effect != null)
+    {
+      EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
+      eventContext.getEffectsScheduler().startEffect(effect, target);
+    }
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  MeshRenderer.cpp
 //  G3MiOSSDK
 //
@@ -18,25 +16,14 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
 
 
-public abstract class MeshLoadListener
+public interface MeshLoadListener
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void dispose();
-//#endif
+  void dispose();
 
-  public abstract void onError(URL url);
-  public abstract void onBeforeAddMesh(Mesh mesh);
-  public abstract void onAfterAddMesh(Mesh mesh);
+  void onError(URL url);
+  void onBeforeAddMesh(Mesh mesh);
+  void onAfterAddMesh(Mesh mesh);
 }

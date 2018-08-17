@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  GLFeatureGroup.cpp
 //  G3MiOSSDK
 //
@@ -18,7 +16,6 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GLFeature;
 
 public enum GLFeatureGroupName
@@ -29,36 +26,36 @@ public enum GLFeatureGroupName
   COLOR_GROUP(2),
   LIGHTING_GROUP(3);
 
-	private int intValue;
-	private static java.util.HashMap<Integer, GLFeatureGroupName> mappings;
-	private static java.util.HashMap<Integer, GLFeatureGroupName> getMappings()
-	{
-		if (mappings == null)
-		{
-			synchronized (GLFeatureGroupName.class)
-			{
-				if (mappings == null)
-				{
-					mappings = new java.util.HashMap<Integer, GLFeatureGroupName>();
-				}
-			}
-		}
-		return mappings;
-	}
+   private int intValue;
+   private static java.util.HashMap<Integer, GLFeatureGroupName> mappings;
+   private static java.util.HashMap<Integer, GLFeatureGroupName> getMappings()
+   {
+      if (mappings == null)
+      {
+         synchronized (GLFeatureGroupName.class)
+         {
+            if (mappings == null)
+            {
+               mappings = new java.util.HashMap<Integer, GLFeatureGroupName>();
+            }
+         }
+      }
+      return mappings;
+   }
 
-	private GLFeatureGroupName(int value)
-	{
-		intValue = value;
-		GLFeatureGroupName.getMappings().put(value, this);
-	}
+   private GLFeatureGroupName(int value)
+   {
+      intValue = value;
+      GLFeatureGroupName.getMappings().put(value, this);
+   }
 
-	public int getValue()
-	{
-		return intValue;
-	}
+   public int getValue()
+   {
+      return intValue;
+   }
 
-	public static GLFeatureGroupName forValue(int value)
-	{
-		return getMappings().get(value);
-	}
+   public static GLFeatureGroupName forValue(int value)
+   {
+      return getMappings().get(value);
+   }
 }

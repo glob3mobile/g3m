@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  InterpolatedSubviewElevationData.cpp
 //  G3MiOSSDK
 //
@@ -24,54 +22,52 @@ public class InterpolatedSubviewElevationData extends SubviewElevationData
 
   public InterpolatedSubviewElevationData(ElevationData elevationData, Sector sector, Vector2I extent)
   {
-	  super(elevationData, sector, extent);
+     super(elevationData, sector, extent);
 
-	if (sector.isEquals(elevationData.getSector()) && extent._x == elevationData.getExtentWidth() && extent._y == elevationData.getExtentHeight())
-	{
+    if (sector.isEquals(elevationData.getSector()) && extent._x == elevationData.getExtentWidth() && extent._y == elevationData.getExtentHeight())
+    {
 
-	  //Performing copy
-	  for (int x = 0; x < _width; x++)
-	  {
-		for (int y = 0; y < _height; y++)
-		{
-		  final int index = ((_height-1-y) * _width) + x;
-		  _buffer[index] = (float)elevationData.getElevationAt(x, y);
-		}
-	  }
+      //Performing copy
+      for (int x = 0; x < _width; x++)
+      {
+        for (int y = 0; y < _height; y++)
+        {
+          final int index = ((_height-1-y) * _width) + x;
+          _buffer[index] = (float)elevationData.getElevationAt(x, y);
+        }
+      }
 
-	}
-	else
-	{
+    }
+    else
+    {
 
-	  for (int x = 0; x < _width; x++)
-	  {
-		final double u = (double) x / (_width - 1);
+      for (int x = 0; x < _width; x++)
+      {
+        final double u = (double) x / (_width - 1);
 
-		final Angle longitude = _sector.getInnerPointLongitude(u);
+        final Angle longitude = _sector.getInnerPointLongitude(u);
 
-		for (int y = 0; y < _height; y++)
-		{
-		  final double v = 1.0 - ((double) y / (_height - 1));
+        for (int y = 0; y < _height; y++)
+        {
+          final double v = 1.0 - ((double) y / (_height - 1));
 
-		  final Angle latitude = _sector.getInnerPointLatitude(v);
+          final Angle latitude = _sector.getInnerPointLatitude(v);
 
-		  final int index = ((_height-1-y) * _width) + x;
+          final int index = ((_height-1-y) * _width) + x;
 
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const double height = elevationData->getElevationAt(latitude, longitude);
-		  final double height = elevationData.getElevationAt(new Angle(latitude), new Angle(longitude));
+          final double height = elevationData.getElevationAt(latitude, longitude);
 
-		  _buffer[index] = (float) height;
+          _buffer[index] = (float) height;
 
-		  if (!_hasNoData)
-		  {
-			if ((height != height))
-			{
-			  _hasNoData = true;
-			}
-		  }
-		}
-	  }
-	}
+          if (!_hasNoData)
+          {
+            if ((height != height))
+            {
+              _hasNoData = true;
+            }
+          }
+        }
+      }
+    }
   }
 }

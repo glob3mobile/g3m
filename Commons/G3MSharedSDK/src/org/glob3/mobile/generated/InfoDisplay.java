@@ -16,15 +16,9 @@ package org.glob3.mobile.generated;//
 
 
 
-public abstract class InfoDisplay extends ChangedInfoListener
+public interface InfoDisplay extends ChangedInfoListener
 {
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
 
   public abstract void showDisplay();
 

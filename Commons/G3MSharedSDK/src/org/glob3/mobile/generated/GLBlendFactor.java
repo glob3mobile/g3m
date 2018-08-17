@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public class GLBlendFactor
+package org.glob3.mobile.generated;public class GLBlendFactor
 {
   private static int _srcAlpha = 0;
   private static int _oneMinusSrcAlpha = 0;
@@ -10,26 +8,26 @@ public class GLBlendFactor
 
   public static int srcAlpha()
   {
-	  return _srcAlpha;
+     return _srcAlpha;
   }
   public static int oneMinusSrcAlpha()
   {
-	  return _oneMinusSrcAlpha;
+     return _oneMinusSrcAlpha;
   }
   public static int one()
   {
-	  return _one;
+     return _one;
   }
   public static int zero()
   {
-	  return _zero;
+     return _zero;
   }
 
   public static void init(INativeGL ngl)
   {
-	_srcAlpha = ngl.BlendFactor_SrcAlpha();
-	_oneMinusSrcAlpha = ngl.BlendFactor_OneMinusSrcAlpha();
-	_one = ngl.BlendFactor_One();
-	_zero = ngl.BlendFactor_Zero();
+    _srcAlpha = ngl.BlendFactor_SrcAlpha();
+    _oneMinusSrcAlpha = ngl.BlendFactor_OneMinusSrcAlpha();
+    _one = ngl.BlendFactor_One();
+    _zero = ngl.BlendFactor_Zero();
   }
 }

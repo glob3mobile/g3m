@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  TransformableTextureMapping.cpp
 //  G3MiOSSDK
 //
@@ -30,32 +28,32 @@ public abstract class TransformableTextureMapping extends TextureMapping
 
   protected TransformableTextureMapping(float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
-	  _translationU = translationU;
-	  _translationV = translationV;
-	  _scaleU = scaleU;
-	  _scaleV = scaleV;
-	  _rotationInRadians = rotationAngleInRadians;
-	  _rotationCenterU = rotationCenterU;
-	  _rotationCenterV = rotationCenterV;
+     _translationU = translationU;
+     _translationV = translationV;
+     _scaleU = scaleU;
+     _scaleV = scaleV;
+     _rotationInRadians = rotationAngleInRadians;
+     _rotationCenterU = rotationCenterU;
+     _rotationCenterV = rotationCenterV;
   }
 
   public final void setTranslation(float translationU, float translationV)
   {
-	_translationU = translationU;
-	_translationV = translationV;
+    _translationU = translationU;
+    _translationV = translationV;
   }
 
   public final void setScale(float scaleU, float scaleV)
   {
-	_scaleU = scaleU;
-	_scaleV = scaleV;
+    _scaleU = scaleU;
+    _scaleV = scaleV;
   }
 
   public final void setRotation(float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
-	_rotationInRadians = rotationAngleInRadians;
-	_rotationCenterU = rotationCenterU;
-	_rotationCenterV = rotationCenterV;
+    _rotationInRadians = rotationAngleInRadians;
+    _rotationCenterU = rotationCenterU;
+    _rotationCenterV = rotationCenterV;
   }
 
 }

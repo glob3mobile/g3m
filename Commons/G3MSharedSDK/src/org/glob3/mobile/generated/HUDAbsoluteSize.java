@@ -14,14 +14,12 @@ public class HUDAbsoluteSize extends HUDSize
 
   public HUDAbsoluteSize(float size)
   {
-	  _size = size;
+     _size = size;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float getSize(int viewPortWidth, int viewPortHeight, int bitmapWidth, int bitmapHeight) const
   public final float getSize(int viewPortWidth, int viewPortHeight, int bitmapWidth, int bitmapHeight)
   {
-	return _size;
+    return _size;
   }
 
 }

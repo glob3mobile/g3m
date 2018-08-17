@@ -14,8 +14,6 @@ public abstract class HUDPosition
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual float getPosition(int viewPortWidth, int viewPortHeight, float widgetWidth, float widgetHeight) const = 0;
   public abstract float getPosition(int viewPortWidth, int viewPortHeight, float widgetWidth, float widgetHeight);
 
 }

@@ -4,22 +4,20 @@ package org.glob3.mobile.generated;public class DTT_TileTextureBuilderHolder imp
 
   public DTT_TileTextureBuilderHolder(DTT_TileTextureBuilder builder)
   {
-	  _builder = builder;
+     _builder = builder;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: DTT_TileTextureBuilder* get() const
   public final DTT_TileTextureBuilder get()
   {
-	return _builder;
+    return _builder;
   }
 
   public void dispose()
   {
-	if (_builder != null)
-	{
-	  _builder._release();
-	}
+    if (_builder != null)
+    {
+      _builder._release();
+    }
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:

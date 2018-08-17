@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  RenderState.cpp
 //  G3MiOSSDK
 //
@@ -24,13 +22,13 @@ public enum RenderState_Type
   RENDER_BUSY,
   RENDER_ERROR;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static RenderState_Type forValue(int value)
-	{
-		return values()[value];
-	}
+   public static RenderState_Type forValue(int value)
+   {
+      return values()[value];
+   }
 }

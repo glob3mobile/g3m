@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  BuildingSurface.cpp
 //  G3MiOSSDK
 //
@@ -22,249 +20,222 @@ package org.glob3.mobile.generated;import java.util.*;
 public class Surface
 {
 
-	private double _maxHeight;
+    private double _maxHeight;
 
 
 
-	public static int numberOfWalls = 0;
+    public static int numberOfWalls = 0;
 
 
-	public java.util.ArrayList<Geodetic3D> _geodeticCoordinates = new java.util.ArrayList<Geodetic3D>();
+    public java.util.ArrayList<Geodetic3D> _geodeticCoordinates = new java.util.ArrayList<Geodetic3D>();
 
-//C++ TO JAVA CONVERTER TODO TASK: The #define macro NAND was defined in alternate ways and cannot be replaced in-line:
-	public Surface(java.util.ArrayList<Geodetic3D> geodeticCoordinates)
-	{
-		_geodeticCoordinates = geodeticCoordinates;
-		_maxHeight = NAND;
-		numberOfWalls++;
-	}
-
+    public Surface(java.util.ArrayList<Geodetic3D> geodeticCoordinates)
+    {
+       _geodeticCoordinates = geodeticCoordinates;
+       _maxHeight = java.lang.Double.NaN;
+        numberOfWalls++;
+    }
 
 
-	public void dispose()
-	{
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-		for (int i = 0; i < _geodeticCoordinates.size(); i++)
-		{
-			if (_geodeticCoordinates.get(i) != null)
-				_geodeticCoordinates.get(i).dispose();
-		}
-		_geodeticCoordinates.clear();
-//#endif
-	}
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getBaseHeight() const
-	public final double getBaseHeight()
-	{
-		double minHeight = 0;
-		minHeight = IMathUtils.instance().maxDouble();
-		for (int i = 0; i < _geodeticCoordinates.size(); i++)
-		{
-			final double h = _geodeticCoordinates.get(i)._height;
-			if (h < minHeight)
-			{
-				minHeight = h;
-			}
-		}
-		return minHeight;
-	}
+    public void dispose()
+    {
+    }
+
+    public final double getBaseHeight()
+    {
+        double minHeight = 0;
+        minHeight = IMathUtils.instance().maxDouble();
+        for (int i = 0; i < _geodeticCoordinates.size(); i++)
+        {
+            final double h = _geodeticCoordinates.get(i)._height;
+            if (h < minHeight)
+            {
+                minHeight = h;
+            }
+        }
+        return minHeight;
+    }
 
 
-	public final Geodetic3D getMin()
-	{
-		double minLat = IMathUtils.instance().maxDouble();
-		double minLon = IMathUtils.instance().maxDouble();
-		double minH = IMathUtils.instance().maxDouble();
+    public final Geodetic3D getMin()
+    {
+        double minLat = IMathUtils.instance().maxDouble();
+        double minLon = IMathUtils.instance().maxDouble();
+        double minH = IMathUtils.instance().maxDouble();
 
-		for (int i = 0; i < _geodeticCoordinates.size(); i++)
-		{
-			Geodetic3D g = _geodeticCoordinates.get(i);
-			final double lon = g._longitude._degrees;
-			if (lon < minLon)
-			{
-				minLon = lon;
-			}
-			final double lat = g._latitude._degrees;
-			if (lat < minLat)
-			{
-				minLat = lat;
-			}
-			final double h = g._height;
-			if (h < minH)
-			{
-				minH = h;
-			}
-		}
-		return Geodetic3D.fromDegrees(minLat, minLon, minH);
-	}
-
-
-	public final Geodetic3D getMax()
-	{
-		double maxLat = IMathUtils.instance().minDouble();
-		double maxLon = IMathUtils.instance().minDouble();
-		double maxH = IMathUtils.instance().minDouble();
-
-		for (int i = 0; i < _geodeticCoordinates.size(); i++)
-		{
-			Geodetic3D g = _geodeticCoordinates.get(i);
-			final double lon = g._longitude._degrees;
-			if (lon > maxLon)
-			{
-				maxLon = lon;
-			}
-			final double lat = g._latitude._degrees;
-			if (lat > maxLat)
-			{
-				maxLat = lat;
-			}
-			final double h = g._height;
-			if (h > maxH)
-			{
-				maxH = h;
-			}
-		}
-		return Geodetic3D.fromDegrees(maxLat, maxLon, maxH);
-	}
+        for (int i = 0; i < _geodeticCoordinates.size(); i++)
+        {
+            Geodetic3D g = _geodeticCoordinates.get(i);
+            final double lon = g._longitude._degrees;
+            if (lon < minLon)
+            {
+                minLon = lon;
+            }
+            final double lat = g._latitude._degrees;
+            if (lat < minLat)
+            {
+                minLat = lat;
+            }
+            final double h = g._height;
+            if (h < minH)
+            {
+                minH = h;
+            }
+        }
+        return Geodetic3D.fromDegrees(minLat, minLon, minH);
+    }
 
 
-	public final Geodetic3D getCenter()
-	{
-		final Geodetic3D min = getMin();
-		final Geodetic3D max = getMax();
+    public final Geodetic3D getMax()
+    {
+        double maxLat = IMathUtils.instance().minDouble();
+        double maxLon = IMathUtils.instance().minDouble();
+        double maxH = IMathUtils.instance().minDouble();
 
-		return Geodetic3D.fromDegrees((min._latitude._degrees + max._latitude._degrees) / 2, (min._longitude._degrees + max._longitude._degrees) / 2, (min._height + max._height) / 2);
-	}
-
-	public final java.util.ArrayList<Vector3D> createCartesianCoordinates(Planet planet, double baseHeight, ElevationData elevationData)
-	{
-
-		java.util.ArrayList<Vector3D> coor3D = new java.util.ArrayList<Vector3D>();
-
-		if (elevationData == null)
-		{
-			for (int i = 0; i < _geodeticCoordinates.size(); i++)
-			{
-				Geodetic3D g = _geodeticCoordinates.get(i);
-				coor3D.add(new Vector3D(planet.toCartesian(g._latitude, g._longitude, g._height - baseHeight)));
-			}
-		}
-		else
-		{
-			for (int i = 0; i < _geodeticCoordinates.size(); i++)
-			{
-				Geodetic3D g = _geodeticCoordinates.get(i);
-				double h = elevationData.getElevationAt(g._latitude, g._longitude);
-				// Having an elevData does not imply the elevData covers the building area.
-				// 0 if it does not cover the area.
-				if (h != h)
-					h = 0;
-
-				coor3D.add(new Vector3D(planet.toCartesian(g._latitude, g._longitude, h + g._height - baseHeight)));
-			}
-		}
-		return coor3D;
-	}
-
-	public final short addTrianglesByEarClipping(tangible.RefObject<FloatBufferBuilderFromCartesian3D> fbb, tangible.RefObject<FloatBufferBuilderFromCartesian3D> normals, tangible.RefObject<ShortBufferBuilder> indexes, tangible.RefObject<FloatBufferBuilderFromColor> colors, double baseHeight, Planet planet, short firstIndex, Color color, ElevationData elevationData)
-	{
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const java.util.ArrayList<Vector3D*> cartesianC = createCartesianCoordinates(planet, baseHeight, elevationData);
-		final java.util.ArrayList<Vector3D> cartesianC = createCartesianCoordinates(new Planet(planet), baseHeight, elevationData);
-		final Polygon3D polygon = new Polygon3D(cartesianC);
-		final short lastVertex = polygon.addTrianglesByEarClipping(fbb, normals, indexes, firstIndex);
-
-		for (short j = firstIndex; j < lastVertex; j++)
-		{
-			colors.argvalue.add(color);
-		}
-		return lastVertex;
-	}
+        for (int i = 0; i < _geodeticCoordinates.size(); i++)
+        {
+            Geodetic3D g = _geodeticCoordinates.get(i);
+            final double lon = g._longitude._degrees;
+            if (lon > maxLon)
+            {
+                maxLon = lon;
+            }
+            final double lat = g._latitude._degrees;
+            if (lat > maxLat)
+            {
+                maxLat = lat;
+            }
+            final double h = g._height;
+            if (h > maxH)
+            {
+                maxH = h;
+            }
+        }
+        return Geodetic3D.fromDegrees(maxLat, maxLon, maxH);
+    }
 
 
-	public final void addMarkersToCorners(MarksRenderer mr, double substractHeight)
-	{
+    public final Geodetic3D getCenter()
+    {
+        final Geodetic3D min = getMin();
+        final Geodetic3D max = getMax();
 
-		for (int i = 0; i < _geodeticCoordinates.size(); i++)
-		{
-			IStringBuilder isb = IStringBuilder.newStringBuilder();
-			isb.addInt((int)i);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-			Mark m = new Mark(isb.getString(), *_geodeticCoordinates.get(i), AltitudeMode.ABSOLUTE, 10000.0);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-			Mark m = new Mark(isb.getString(), _geodeticCoordinates.get(i), AltitudeMode.ABSOLUTE, 10000.0);
-//#endif
-			if (isb != null)
-				isb.dispose();
-			mr.addMark(m);
-		}
+        return Geodetic3D.fromDegrees((min._latitude._degrees + max._latitude._degrees) / 2, (min._longitude._degrees + max._longitude._degrees) / 2, (min._height + max._height) / 2);
+    }
 
-	}
+    public final java.util.ArrayList<Vector3D> createCartesianCoordinates(Planet planet, double baseHeight, ElevationData elevationData)
+    {
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean includesPoint(const Geodetic3D& g) const
-	public final boolean includesPoint(Geodetic3D g)
-	{
-		int nv = (int) _geodeticCoordinates.size();
-		for (int i = 0; i < nv; i++)
-		{
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (_geodeticCoordinates[i]->isEquals(g))
-			if (_geodeticCoordinates.get(i).isEquals(new Geodetic3D(g)))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+        java.util.ArrayList<Vector3D> coor3D = new java.util.ArrayList<Vector3D>();
 
-	public final boolean isEquivalentTo(Surface that)
-	{
-		if (that._geodeticCoordinates.size() != _geodeticCoordinates.size())
-		{
-			return false;
-		}
+        if (elevationData == null)
+        {
+            for (int i = 0; i < _geodeticCoordinates.size(); i++)
+            {
+                Geodetic3D g = _geodeticCoordinates.get(i);
+                coor3D.add(new Vector3D(planet.toCartesian(g._latitude, g._longitude, g._height - baseHeight)));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _geodeticCoordinates.size(); i++)
+            {
+                Geodetic3D g = _geodeticCoordinates.get(i);
+                double h = elevationData.getElevationAt(g._latitude, g._longitude);
+                // Having an elevData does not imply the elevData covers the building area.
+                // 0 if it does not cover the area.
+                if (h != h)
+                   h = 0;
 
-		if (that.getMaxHeight() != getMaxHeight())
-		{
-			return false;
-		}
+                coor3D.add(new Vector3D(planet.toCartesian(g._latitude, g._longitude, h + g._height - baseHeight)));
+            }
+        }
+        return coor3D;
+    }
 
-		int nv = (int) _geodeticCoordinates.size();
+    public final short addTrianglesByEarClipping(FloatBufferBuilderFromCartesian3D fbb, FloatBufferBuilderFromCartesian3D normals, ShortBufferBuilder indexes, FloatBufferBuilderFromColor colors, double baseHeight, Planet planet, short firstIndex, Color color, ElevationData elevationData)
+    {
+        final java.util.ArrayList<Vector3D> cartesianC = createCartesianCoordinates(planet, baseHeight, elevationData);
+        final Polygon3D polygon = new Polygon3D(cartesianC);
+        final short lastVertex = polygon.addTrianglesByEarClipping(fbb, normals, indexes, firstIndex);
 
-		for (int i = 0; i < nv; i++)
-		{
-			Geodetic3D g = _geodeticCoordinates.get(i);
-			if (!that.includesPoint(g))
-			{
-				return false;
-			}
-		}
+        for (short j = firstIndex; j < lastVertex; j++)
+        {
+            colors.add(color);
+        }
+        return lastVertex;
+    }
 
-		return true;
-	}
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getMaxHeight() const
-	public final double getMaxHeight()
-	{
-		if ((_maxHeight != _maxHeight))
-		{
-			_maxHeight = -9999999;
-			int nv = (int) _geodeticCoordinates.size();
-			for (int i = 0; i < nv; i++)
-			{
-				if (_maxHeight < _geodeticCoordinates.get(i)._height) //SIG = MAX LAT
-				{
-					_maxHeight = _geodeticCoordinates.get(i)._height;
-				}
-			}
-		}
-		return _maxHeight;
-	}
+    public final void addMarkersToCorners(MarksRenderer mr, double substractHeight)
+    {
+
+        for (int i = 0; i < _geodeticCoordinates.size(); i++)
+        {
+            IStringBuilder isb = IStringBuilder.newStringBuilder();
+            isb.addInt((int)i);
+            Mark m = new Mark(isb.getString(), _geodeticCoordinates.get(i), AltitudeMode.ABSOLUTE, 10000.0);
+            if (isb != null)
+               isb.dispose();
+            mr.addMark(m);
+        }
+
+    }
+
+    public final boolean includesPoint(Geodetic3D g)
+    {
+        int nv = (int) _geodeticCoordinates.size();
+        for (int i = 0; i < nv; i++)
+        {
+            if (_geodeticCoordinates.get(i).isEquals(g))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public final boolean isEquivalentTo(Surface that)
+    {
+        if (that._geodeticCoordinates.size() != _geodeticCoordinates.size())
+        {
+            return false;
+        }
+
+        if (that.getMaxHeight() != getMaxHeight())
+        {
+            return false;
+        }
+
+        int nv = (int) _geodeticCoordinates.size();
+
+        for (int i = 0; i < nv; i++)
+        {
+            Geodetic3D g = _geodeticCoordinates.get(i);
+            if (!that.includesPoint(g))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public final double getMaxHeight()
+    {
+        if ((_maxHeight != _maxHeight))
+        {
+            _maxHeight = -9999999;
+            int nv = (int) _geodeticCoordinates.size();
+            for (int i = 0; i < nv; i++)
+            {
+                if (_maxHeight < _geodeticCoordinates.get(i)._height) //SIG = MAX LAT
+                {
+                    _maxHeight = _geodeticCoordinates.get(i)._height;
+                }
+            }
+        }
+        return _maxHeight;
+    }
 }

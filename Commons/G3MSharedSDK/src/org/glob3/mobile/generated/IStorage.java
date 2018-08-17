@@ -1,19 +1,10 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public abstract class IStorage
+package org.glob3.mobile.generated;public abstract class IStorage
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  protected final G3MContext _context;
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-  protected G3MContext _context = new protected();
-//#endif
+  protected G3MContext _context;
 
   public IStorage()
   {
-	  _context = null;
+     _context = null;
   }
 
   public void dispose()
@@ -22,7 +13,7 @@ public abstract class IStorage
 
   public void initialize(G3MContext context)
   {
-	_context = context;
+    _context = context;
   }
 
 

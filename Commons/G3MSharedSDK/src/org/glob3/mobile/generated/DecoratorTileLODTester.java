@@ -23,40 +23,33 @@ public abstract class DecoratorTileLODTester extends TileLODTester
 
   protected DecoratorTileLODTester(TileLODTester tileLODTester)
   {
-	  _tileLODTester = tileLODTester;
-	if (_tileLODTester == null)
-	{
-	  THROW_EXCEPTION("NULL NOT ALLOWED");
-	}
+     _tileLODTester = tileLODTester;
+    if (_tileLODTester == null)
+    {
+      throw new RuntimeException("NULL NOT ALLOWED");
+    }
   }
 
   public void dispose()
   {
-	if (_tileLODTester != null)
-		_tileLODTester.dispose();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.dispose();
-//#endif
+    if (_tileLODTester != null)
+       _tileLODTester.dispose();
+    super.dispose();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void onTileHasChangedMesh(const Tile* tile) const
   public void onTileHasChangedMesh(Tile tile)
   {
-	_tileLODTester.onTileHasChangedMesh(tile);
+    _tileLODTester.onTileHasChangedMesh(tile);
   }
 
   public void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)
   {
-	_tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
+    _tileLODTester.onLayerTilesRenderParametersChanged(ltrp);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void renderStarted() const
   public void renderStarted()
   {
-	_tileLODTester.renderStarted();
+    _tileLODTester.renderStarted();
   }
 
 }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  SimpleCameraConstrainer.cpp
 //  G3MiOSSDK
 //
@@ -34,32 +32,30 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean onCameraChange(const Planet *planet, const Camera* previousCamera, Camera* nextCamera) const
   public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
   
-	//  long long previousCameraTimestamp = previousCamera->getTimestamp();
-	//  long long nextCameraTimestamp = nextCamera->getTimestamp();
-	//  if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp) {
-	//    _previousCameraTimestamp = previousCameraTimestamp;
-	//    _nextCameraTimestamp = nextCameraTimestamp;
-	//    ILogger::instance()->logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n",
-	//                                 _previousCameraTimestamp, _nextCameraTimestamp);
-	//  }
+    //  long long previousCameraTimestamp = previousCamera->getTimestamp();
+    //  long long nextCameraTimestamp = nextCamera->getTimestamp();
+    //  if (previousCameraTimestamp != _previousCameraTimestamp || nextCameraTimestamp != _nextCameraTimestamp) {
+    //    _previousCameraTimestamp = previousCameraTimestamp;
+    //    _nextCameraTimestamp = nextCameraTimestamp;
+    //    ILogger::instance()->logInfo("Cameras Timestamp: Previous=%lld; Next=%lld\n",
+    //                                 _previousCameraTimestamp, _nextCameraTimestamp);
+    //  }
   
-	final double radii = planet.getRadii().maxAxis();
-	final double maxHeight = radii *9;
-	final double minHeight = 1;
+    final double radii = planet.getRadii().maxAxis();
+    final double maxHeight = radii *9;
+    final double minHeight = 1;
   
-	final double height = nextCamera.getGeodeticPosition()._height;
+    final double height = nextCamera.getGeodeticPosition()._height;
   
-	if ((height < minHeight) || (height > maxHeight))
-	{
-	  nextCamera.copyFrom(previousCamera, true);
-	}
+    if ((height < minHeight) || (height > maxHeight))
+    {
+      nextCamera.copyFrom(previousCamera, true);
+    }
   
-	return true;
+    return true;
   }
 
   //private:

@@ -1,18 +1,16 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public enum StrokeJoin
+package org.glob3.mobile.generated;public enum StrokeJoin
 {
   JOIN_MITER,
   JOIN_ROUND,
   JOIN_BEVEL;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static StrokeJoin forValue(int value)
-	{
-		return values()[value];
-	}
+   public static StrokeJoin forValue(int value)
+   {
+      return values()[value];
+   }
 }

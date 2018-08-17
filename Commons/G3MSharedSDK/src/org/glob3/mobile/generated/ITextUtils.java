@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  ITextUtils.cpp
 //  G3MiOSSDK
 //
@@ -17,11 +15,8 @@ package org.glob3.mobile.generated;import java.util.*;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Color;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImageListener;
 
 
@@ -31,18 +26,18 @@ public abstract class ITextUtils
 
   public static void setInstance(ITextUtils factory)
   {
-	if (_instance != null)
-	{
-	  ILogger.instance().logWarning("ITextUtils instance already set!");
-	  if (_instance != null)
-		  _instance.dispose();
-	}
-	_instance = factory;
+    if (_instance != null)
+    {
+      ILogger.instance().logWarning("ITextUtils instance already set!");
+      if (_instance != null)
+         _instance.dispose();
+    }
+    _instance = factory;
   }
 
   public static ITextUtils instance()
   {
-	return _instance;
+    return _instance;
   }
 
   public void dispose()
@@ -52,12 +47,12 @@ public abstract class ITextUtils
 
   public void createLabelImage(String label, IImageListener listener, boolean autodelete)
   {
-	final float fontSize = 20F;
+    final float fontSize = 20F;
   
-	final Color color = Color.white();
-	final Color shadowColor = Color.black();
+    final Color color = Color.white();
+    final Color shadowColor = Color.black();
   
-	createLabelImage(label, fontSize, color, shadowColor, listener, autodelete);
+    createLabelImage(label, fontSize, color, shadowColor, listener, autodelete);
   }
 
   public abstract void createLabelImage(String label, float fontSize, Color color, Color shadowColor, IImageListener listener, boolean autodelete);
@@ -65,14 +60,14 @@ public abstract class ITextUtils
 
   public void labelImage(IImage image, String label, LabelPosition labelPosition, IImageListener listener, boolean autodelete)
   {
-	final float fontSize = 20F;
+    final float fontSize = 20F;
   
-	final Color color = Color.white();
-	final Color shadowColor = Color.black();
+    final Color color = Color.white();
+    final Color shadowColor = Color.black();
   
-	final int separation = 2;
+    final int separation = 2;
   
-	labelImage(image, label, labelPosition, separation, fontSize, color, shadowColor, listener, autodelete);
+    labelImage(image, label, labelPosition, separation, fontSize, color, shadowColor, listener, autodelete);
   }
 
   public abstract void labelImage(IImage image, String label, LabelPosition labelPosition, int separation, float fontSize, Color color, Color shadowColor, IImageListener listener, boolean autodelete);

@@ -18,9 +18,7 @@ package org.glob3.mobile.generated;/*
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GPUProgramState;
 
 public class CameraDirtyFlags
@@ -39,75 +37,70 @@ public class CameraDirtyFlags
 
   public CameraDirtyFlags()
   {
-	setAllDirty();
+    setAllDirty();
   }
 
   public final void copyFrom(CameraDirtyFlags other)
   {
-	_frustumDataDirty = other._frustumDataDirty;
-	_projectionMatrixDirty = other._projectionMatrixDirty;
-	_modelMatrixDirty = other._modelMatrixDirty;
-	_modelViewMatrixDirty = other._modelViewMatrixDirty;
-	_cartesianCenterOfViewDirty = other._cartesianCenterOfViewDirty;
-	_geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
-	_frustumDirty = other._frustumDirty;
-	_frustumMCDirty = other._frustumMCDirty;
+    _frustumDataDirty = other._frustumDataDirty;
+    _projectionMatrixDirty = other._projectionMatrixDirty;
+    _modelMatrixDirty = other._modelMatrixDirty;
+    _modelViewMatrixDirty = other._modelViewMatrixDirty;
+    _cartesianCenterOfViewDirty = other._cartesianCenterOfViewDirty;
+    _geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
+    _frustumDirty = other._frustumDirty;
+    _frustumMCDirty = other._frustumMCDirty;
   }
 
   public CameraDirtyFlags(CameraDirtyFlags other)
   {
-	_frustumDataDirty = other._frustumDataDirty;
-	_projectionMatrixDirty = other._projectionMatrixDirty;
-	_modelMatrixDirty = other._modelMatrixDirty;
-	_modelViewMatrixDirty = other._modelViewMatrixDirty;
-	_cartesianCenterOfViewDirty = other._cartesianCenterOfViewDirty;
-	_geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
-	_frustumDirty = other._frustumDirty;
-	_frustumMCDirty = other._frustumMCDirty;
+    _frustumDataDirty = other._frustumDataDirty;
+    _projectionMatrixDirty = other._projectionMatrixDirty;
+    _modelMatrixDirty = other._modelMatrixDirty;
+    _modelViewMatrixDirty = other._modelViewMatrixDirty;
+    _cartesianCenterOfViewDirty = other._cartesianCenterOfViewDirty;
+    _geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
+    _frustumDirty = other._frustumDirty;
+    _frustumMCDirty = other._frustumMCDirty;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	String d = "";
-	if (_frustumDataDirty)
-		d += "FD ";
-	if (_projectionMatrixDirty)
-		d += "PM ";
-	if (_modelMatrixDirty)
-		d += "MM ";
-	if (_modelViewMatrixDirty)
-		d += "MVM ";
-	if (_cartesianCenterOfViewDirty)
-		d += "CCV ";
-	if (_geodeticCenterOfViewDirty)
-		d += "GCV ";
-	if (_frustumDirty)
-		d += "F ";
-	if (_frustumMCDirty)
-		d += "FMC ";
-	return d;
+    String d = "";
+    if (_frustumDataDirty)
+       d += "FD ";
+    if (_projectionMatrixDirty)
+       d += "PM ";
+    if (_modelMatrixDirty)
+       d += "MM ";
+    if (_modelViewMatrixDirty)
+       d += "MVM ";
+    if (_cartesianCenterOfViewDirty)
+       d += "CCV ";
+    if (_geodeticCenterOfViewDirty)
+       d += "GCV ";
+    if (_frustumDirty)
+       d += "F ";
+    if (_frustumMCDirty)
+       d += "FMC ";
+    return d;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-  public final Override public String toString()
-  {
-	return description();
+  @Override
+  public String toString() {
+    return description();
   }
-//#endif
 
   public final void setAllDirty()
   {
-	_frustumDataDirty = true;
-	_projectionMatrixDirty = true;
-	_modelMatrixDirty = true;
-	_modelViewMatrixDirty = true;
-	_cartesianCenterOfViewDirty = true;
-	_geodeticCenterOfViewDirty = true;
-	_frustumDirty = true;
-	_frustumMCDirty = true;
+    _frustumDataDirty = true;
+    _projectionMatrixDirty = true;
+    _modelMatrixDirty = true;
+    _modelViewMatrixDirty = true;
+    _cartesianCenterOfViewDirty = true;
+    _geodeticCenterOfViewDirty = true;
+    _frustumDirty = true;
+    _frustumMCDirty = true;
   }
 
 }

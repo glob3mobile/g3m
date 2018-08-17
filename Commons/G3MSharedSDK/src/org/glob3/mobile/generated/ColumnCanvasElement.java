@@ -21,95 +21,90 @@ public class ColumnCanvasElement extends GroupCanvasElement
   private final HorizontalAlignment _elementAlign;
   protected final Vector2F calculateExtent(ICanvas canvas)
   {
-	float width = 0F;
-	float height = 0F;
+    float width = 0F;
+    float height = 0F;
   
-	final int childrenSize = _children.size();
-	for (int i = 0; i < childrenSize; i++)
-	{
-	  CanvasElement child = _children.get(i);
+    final int childrenSize = _children.size();
+    for (int i = 0; i < childrenSize; i++)
+    {
+      CanvasElement child = _children.get(i);
   
-	  final Vector2F childExtent = child.getExtent(canvas);
+      final Vector2F childExtent = child.getExtent(canvas);
   
-	  if (childExtent._x > width)
-	  {
-		width = childExtent._x;
-	  }
+      if (childExtent._x > width)
+      {
+        width = childExtent._x;
+      }
   
-	  height += childExtent._y;
-	}
+      height += childExtent._y;
+    }
   
-	return new Vector2F(width, height);
+    return new Vector2F(width, height);
   }
 
   public ColumnCanvasElement(Color color, float margin, float padding, float cornerRadius)
   {
-	  this(color, margin, padding, cornerRadius, HorizontalAlignment.Center);
+     this(color, margin, padding, cornerRadius, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement(Color color, float margin, float padding)
   {
-	  this(color, margin, padding, 0, HorizontalAlignment.Center);
+     this(color, margin, padding, 0, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement(Color color, float margin)
   {
-	  this(color, margin, 0, 0, HorizontalAlignment.Center);
+     this(color, margin, 0, 0, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement(Color color)
   {
-	  this(color, 0, 0, 0, HorizontalAlignment.Center);
+     this(color, 0, 0, 0, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement()
   {
-	  this(Color.transparent(), 0, 0, 0, HorizontalAlignment.Center);
+     this(Color.transparent(), 0, 0, 0, HorizontalAlignment.Center);
   }
-//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: ColumnCanvasElement(const Color& color = Color::transparent(), float margin = 0, float padding = 0, float cornerRadius = 0, const HorizontalAlignment elementAlign = Center) : GroupCanvasElement(color, margin, padding, cornerRadius), _elementAlign(elementAlign)
   public ColumnCanvasElement(Color color, float margin, float padding, float cornerRadius, HorizontalAlignment elementAlign)
   {
-	  super(color, margin, padding, cornerRadius);
-	  _elementAlign = elementAlign;
+     super(color, margin, padding, cornerRadius);
+     _elementAlign = elementAlign;
   }
 
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
   super.dispose();
-//#endif
   }
 
   public final void rawDrawAt(float left, float top, Vector2F extent, ICanvas canvas)
   {
-	final float halfWidth = extent._x / 2;
+    final float halfWidth = extent._x / 2;
   
-	float cursorTop = top;
+    float cursorTop = top;
   
-	final int childrenSize = _children.size();
-	for (int i = 0; i < childrenSize; i++)
-	{
-	  CanvasElement child = _children.get(i);
+    final int childrenSize = _children.size();
+    for (int i = 0; i < childrenSize; i++)
+    {
+      CanvasElement child = _children.get(i);
   
-	  final Vector2F childExtent = child.getExtent(canvas);
+      final Vector2F childExtent = child.getExtent(canvas);
   
-	  float cursorLeft;
-	  switch (_elementAlign)
-	  {
-		case Left:
-		  cursorLeft = left;
-		  break;
-		case Right:
-		  cursorLeft = left + extent._x - childExtent._x;
-		  break;
-		case Center:
-		default:
-		  cursorLeft = left + halfWidth - (childExtent._x / 2);
-		  break;
-	  }
+      float cursorLeft;
+      switch (_elementAlign)
+      {
+        case Left:
+          cursorLeft = left;
+          break;
+        case Right:
+          cursorLeft = left + extent._x - childExtent._x;
+          break;
+        case Center:
+        default:
+          cursorLeft = left + halfWidth - (childExtent._x / 2);
+          break;
+      }
   
-	  child.drawAt(cursorLeft, cursorTop, canvas);
+      child.drawAt(cursorLeft, cursorTop, canvas);
   
-	  cursorTop += childExtent._y;
-	}
+      cursorTop += childExtent._y;
+    }
   }
 
 }

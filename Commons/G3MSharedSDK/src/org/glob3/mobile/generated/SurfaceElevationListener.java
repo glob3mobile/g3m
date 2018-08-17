@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  SurfaceElevationProvider.cpp
 //  G3MiOSSDK
 //
@@ -19,29 +17,17 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Angle;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic2D;
 
 
 
-public abstract class SurfaceElevationListener
+public interface SurfaceElevationListener
 {
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void dispose();
-//#endif
+  void dispose();
 
-  public abstract void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration); //Without considering vertical exaggeration
+  void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration); //Without considering vertical exaggeration
 
-  public abstract void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration); //Without considering vertical exaggeration
+  void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration); //Without considering vertical exaggeration
 }

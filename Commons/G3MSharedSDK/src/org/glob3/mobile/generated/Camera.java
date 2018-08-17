@@ -3,577 +3,422 @@ package org.glob3.mobile.generated;public class Camera
 
   public Camera(long timestamp)
   {
-	  _planet = null;
-	  _position = new MutableVector3D(0, 0, 0);
-	  _center = new MutableVector3D(0, 0, 0);
-	  _up = new MutableVector3D(0, 0, 1);
-	  _dirtyFlags = new CameraDirtyFlags();
-	  _frustumData = new FrustumData();
-	  _projectionMatrix = new MutableMatrix44D();
-	  _modelMatrix = new MutableMatrix44D();
-	  _modelViewMatrix = new MutableMatrix44D();
-	  _cartesianCenterOfView = new MutableVector3D(0,0,0);
-	  _geodeticCenterOfView = null;
-	  _frustum = null;
-	  _frustumInModelCoordinates = null;
-	  _camEffectTarget = new CameraEffectTarget();
-	  _geodeticPosition = null;
-	  _angle2Horizon = -99;
-	  _normalizedPosition = new MutableVector3D(0, 0, 0);
-	  _tanHalfVerticalFOV = NAND;
-	  _tanHalfHorizontalFOV = NAND;
-	  _timestamp = timestamp;
-	  _viewPortWidth = -1;
-	  _viewPortHeight = -1;
-	  _forcedZNear = NAND;
-	resizeViewport(0, 0);
-	_dirtyFlags.setAllDirty();
+     _planet = null;
+     _position = new MutableVector3D(0, 0, 0);
+     _center = new MutableVector3D(0, 0, 0);
+     _up = new MutableVector3D(0, 0, 1);
+     _dirtyFlags = new CameraDirtyFlags();
+     _frustumData = new FrustumData();
+     _projectionMatrix = new MutableMatrix44D();
+     _modelMatrix = new MutableMatrix44D();
+     _modelViewMatrix = new MutableMatrix44D();
+     _cartesianCenterOfView = new MutableVector3D(0,0,0);
+     _geodeticCenterOfView = null;
+     _frustum = null;
+     _frustumInModelCoordinates = null;
+     _camEffectTarget = new CameraEffectTarget();
+     _geodeticPosition = null;
+     _angle2Horizon = -99;
+     _normalizedPosition = new MutableVector3D(0, 0, 0);
+     _tanHalfVerticalFOV = java.lang.Double.NaN;
+     _tanHalfHorizontalFOV = java.lang.Double.NaN;
+     _timestamp = timestamp;
+     _viewPortWidth = -1;
+     _viewPortHeight = -1;
+     _forcedZNear = java.lang.Double.NaN;
+    resizeViewport(0, 0);
+    _dirtyFlags.setAllDirty();
   }
 
   public void dispose()
   {
-	if (_camEffectTarget != null)
-		_camEffectTarget.dispose();
-	if (_frustum != null)
-		_frustum.dispose();
-	if (_frustumInModelCoordinates != null)
-		_frustumInModelCoordinates.dispose();
-	if (_geodeticCenterOfView != null)
-		_geodeticCenterOfView.dispose();
-	if (_geodeticPosition != null)
-		_geodeticPosition.dispose();
+    if (_camEffectTarget != null)
+       _camEffectTarget.dispose();
+    if (_frustum != null)
+       _frustum.dispose();
+    if (_frustumInModelCoordinates != null)
+       _frustumInModelCoordinates.dispose();
+    if (_geodeticCenterOfView != null)
+       _geodeticCenterOfView.dispose();
+    if (_geodeticPosition != null)
+       _geodeticPosition.dispose();
   }
 
   public final void copyFrom(Camera that, boolean ignoreTimestamp)
   {
   
-	if (ignoreTimestamp || _timestamp != that._timestamp)
-	{
+    if (ignoreTimestamp || _timestamp != that._timestamp)
+    {
   
-	  that.forceMatrixCreation();
+      that.forceMatrixCreation();
   
-	  _timestamp = that._timestamp;
+      _timestamp = that._timestamp;
   
-	  _viewPortWidth = that._viewPortWidth;
-	  _viewPortHeight = that._viewPortHeight;
+      _viewPortWidth = that._viewPortWidth;
+      _viewPortHeight = that._viewPortHeight;
   
-	  _planet = that._planet;
+      _planet = that._planet;
   
-	  _position.copyFrom(that._position);
-	  _center.copyFrom(that._center);
-	  _up.copyFrom(that._up);
-	  _normalizedPosition.copyFrom(that._normalizedPosition);
+      _position.copyFrom(that._position);
+      _center.copyFrom(that._center);
+      _up.copyFrom(that._up);
+      _normalizedPosition.copyFrom(that._normalizedPosition);
   
-	  _dirtyFlags.copyFrom(that._dirtyFlags);
+      _dirtyFlags.copyFrom(that._dirtyFlags);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  _frustumData = new FrustumData(that._frustumData);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy assignment (rather than a reference assignment) - this should be verified and a 'copyFrom' method should be created if it does not yet exist:
-//ORIGINAL LINE: _frustumData = that._frustumData;
-	  _frustumData.copyFrom(that._frustumData);
-//#endif
+      _frustumData = that._frustumData;
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _projectionMatrix.copyValue(that._projectionMatrix);
-	  _projectionMatrix.copyValue(new MutableMatrix44D(that._projectionMatrix));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _modelMatrix.copyValue(that._modelMatrix);
-	  _modelMatrix.copyValue(new MutableMatrix44D(that._modelMatrix));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _modelViewMatrix.copyValue(that._modelViewMatrix);
-	  _modelViewMatrix.copyValue(new MutableMatrix44D(that._modelViewMatrix));
+      _projectionMatrix.copyValue(that._projectionMatrix);
+      _modelMatrix.copyValue(that._modelMatrix);
+      _modelViewMatrix.copyValue(that._modelViewMatrix);
   
-	  _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+      _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  if (_geodeticCenterOfView != null)
-		  _geodeticCenterOfView.dispose();
-	  _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	  _geodeticCenterOfView = that._geodeticCenterOfView;
-//#endif
+      _geodeticCenterOfView = that._geodeticCenterOfView;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  if (_frustum != null)
-		  _frustum.dispose();
-	  _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	  _frustum = that._frustum;
-//#endif
+      _frustum = that._frustum;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  if (_frustumInModelCoordinates != null)
-		  _frustumInModelCoordinates.dispose();
-	  _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	  _frustumInModelCoordinates = that._frustumInModelCoordinates;
-//#endif
+      _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  if (_geodeticPosition != null)
-		  _geodeticPosition.dispose();
-	  _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	  _geodeticPosition = that._geodeticPosition;
-//#endif
-	  _angle2Horizon = that._angle2Horizon;
+      _geodeticPosition = that._geodeticPosition;
+      _angle2Horizon = that._angle2Horizon;
   
-	  _tanHalfVerticalFOV = that._tanHalfVerticalFOV;
-	  _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
+      _tanHalfVerticalFOV = that._tanHalfVerticalFOV;
+      _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
   
-	  _forcedZNear = that._forcedZNear;
-	}
+      _forcedZNear = that._forcedZNear;
+    }
   
   }
 
   public final void resizeViewport(int width, int height)
   {
-	if ((width != _viewPortWidth) || (height != _viewPortHeight))
-	{
-	  _timestamp++;
+    if ((width != _viewPortWidth) || (height != _viewPortHeight))
+    {
+      _timestamp++;
   
-	  final int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
-	  final int viewPortW = (_viewPortWidth == 0) ? width : _viewPortWidth;
-	  _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * viewPortW;
-	  _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
+      final int viewPortH = (_viewPortHeight == 0) ? height : _viewPortHeight;
+      final int viewPortW = (_viewPortWidth == 0) ? width : _viewPortWidth;
+      _tanHalfVerticalFOV = _tanHalfVerticalFOV / width * viewPortW;
+      _tanHalfHorizontalFOV = _tanHalfHorizontalFOV / height * viewPortH;
   
-	  _viewPortWidth = width;
-	  _viewPortHeight = height;
+      _viewPortWidth = width;
+      _viewPortHeight = height;
   
-	  _dirtyFlags.setAllDirty();
+      _dirtyFlags.setAllDirty();
   
-	  _tanHalfHorizontalFOV = NAND;
-	  _tanHalfVerticalFOV = NAND;
-	}
+      _tanHalfHorizontalFOV = java.lang.Double.NaN;
+      _tanHalfVerticalFOV = java.lang.Double.NaN;
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D pixel2Ray(const Vector2I& pixel) const
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
-	final int px = pixel._x;
-	final int py = _viewPortHeight - pixel._y;
-	final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final int px = pixel._x;
+    final int py = _viewPortHeight - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
-	final Vector3D obj = getModelViewMatrix().unproject(new Vector3D(pixel3D), 0, 0, _viewPortWidth, _viewPortHeight);
-	if (obj.isNan())
-	{
-	  ILogger.instance().logWarning("Pixel to Ray return NaN");
-	  return obj;
-	}
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    if (obj.isNan())
+    {
+      ILogger.instance().logWarning("Pixel to Ray return NaN");
+      return obj;
+    }
   
-	return obj.sub(_position.asVector3D());
+    return obj.sub(_position.asVector3D());
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D pixel2Ray(const Vector2F& pixel) const
   public final Vector3D pixel2Ray(Vector2F pixel)
   {
-	final float px = pixel._x;
-	final float py = _viewPortHeight - pixel._y;
-	final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final float px = pixel._x;
+    final float py = _viewPortHeight - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
-	final Vector3D obj = getModelViewMatrix().unproject(new Vector3D(pixel3D), 0, 0, _viewPortWidth, _viewPortHeight);
-	if (obj.isNan())
-	{
-	  ILogger.instance().logWarning("Pixel to Ray return NaN");
-	  return obj;
-	}
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
+    if (obj.isNan())
+    {
+      ILogger.instance().logWarning("Pixel to Ray return NaN");
+      return obj;
+    }
   
-	return obj.sub(_position.asVector3D());
+    return obj.sub(_position.asVector3D());
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const
   public final Vector3D pixel2PlanetPoint(Vector2I pixel)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
-	return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(new Vector2I(pixel)));
+    return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector2F point2Pixel(const Vector3D& point) const
   public final Vector2F point2Pixel(Vector3D point)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
-	final Vector2D p = getModelViewMatrix().project(new Vector3D(point), 0, 0, _viewPortWidth, _viewPortHeight);
+    final Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
-	return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
+    return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector2F point2Pixel(const Vector3F& point) const
   public final Vector2F point2Pixel(Vector3F point)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
-	final Vector2F p = getModelViewMatrix().project(new Vector3F(point), 0, 0, _viewPortWidth, _viewPortHeight);
+    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
-	return new Vector2F(p._x, (_viewPortHeight - p._y));
+    return new Vector2F(p._x, (_viewPortHeight - p._y));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getViewPortWidth() const
   public final int getViewPortWidth()
   {
-	  return _viewPortWidth;
+     return _viewPortWidth;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getViewPortHeight() const
   public final int getViewPortHeight()
   {
-	  return _viewPortHeight;
+     return _viewPortHeight;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float getViewPortRatio() const
   public final float getViewPortRatio()
   {
-	return (float) _viewPortWidth / _viewPortHeight;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: EffectTarget* getEffectTarget() const
   public final EffectTarget getEffectTarget()
   {
-	return _camEffectTarget;
+    return _camEffectTarget;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getCartesianPosition() const
   public final Vector3D getCartesianPosition()
   {
-	  return _position.asVector3D();
+     return _position.asVector3D();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void getCartesianPositionMutable(MutableVector3D& result) const
-  public final void getCartesianPositionMutable(tangible.RefObject<MutableVector3D> result)
+  public final void getCartesianPositionMutable(MutableVector3D result)
   {
-	result.argvalue.copyFrom(_position);
+    result.copyFrom(_position);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getNormalizedPosition() const
   public final Vector3D getNormalizedPosition()
   {
-	  return _normalizedPosition.asVector3D();
+     return _normalizedPosition.asVector3D();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getCenter() const
   public final Vector3D getCenter()
   {
-	  return _center.asVector3D();
+     return _center.asVector3D();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getUp() const
   public final Vector3D getUp()
   {
-	  return _up.asVector3D();
+     return _up.asVector3D();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void getUpMutable(MutableVector3D& result) const
-  public final void getUpMutable(tangible.RefObject<MutableVector3D> result)
+  public final void getUpMutable(MutableVector3D result)
   {
-	result.argvalue.copyFrom(_up);
+    result.copyFrom(_up);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Geodetic3D getGeodeticCenterOfView() const
   public final Geodetic3D getGeodeticCenterOfView()
   {
-	  return _getGeodeticCenterOfView();
+     return _getGeodeticCenterOfView();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getXYZCenterOfView() const
   public final Vector3D getXYZCenterOfView()
   {
-	  return _getCartesianCenterOfView().asVector3D();
+     return _getCartesianCenterOfView().asVector3D();
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getViewDirection() const
   public final Vector3D getViewDirection()
   {
-	// return _center.sub(_position).asVector3D();
+    // return _center.sub(_position).asVector3D();
 
-	// perform the substraction inlinde to avoid a temporary MutableVector3D instance
-	return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean hasValidViewDirection() const
   public final boolean hasValidViewDirection()
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: double d = _center.squaredDistanceTo(_position);
-	double d = _center.squaredDistanceTo(new MutableVector3D(_position));
-	return (d > 0) && !(d != d);
+    double d = _center.squaredDistanceTo(_position);
+    return (d > 0) && !(d != d);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const void getViewDirectionInto(MutableVector3D& result) const
-  public final void getViewDirectionInto(tangible.RefObject<MutableVector3D> result)
+  public final void getViewDirectionInto(MutableVector3D result)
   {
-	result.argvalue.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+    result.set(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
 
   public final void dragCamera(Vector3D p0, Vector3D p1)
   {
-	// compute the rotation axe
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D rotationAxis = p0.cross(p1);
-	final Vector3D rotationAxis = p0.cross(new Vector3D(p1));
+    // compute the rotation axe
+    final Vector3D rotationAxis = p0.cross(p1);
   
-	// compute the angle
-	//const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-	final Angle rotationDelta = Angle.fromRadians(-IMathUtils.instance().asin(rotationAxis.length()/p0.length()/p1.length()));
+    // compute the angle
+    //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
+    final Angle rotationDelta = Angle.fromRadians(-IMathUtils.instance().asin(rotationAxis.length()/p0.length()/p1.length()));
   
-	if (rotationDelta.isNan())
-	{
-	  return;
-	}
+    if (rotationDelta.isNan())
+    {
+      return;
+    }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: rotateWithAxis(rotationAxis, rotationDelta);
-	rotateWithAxis(new Vector3D(rotationAxis), new Angle(rotationDelta));
+    rotateWithAxis(rotationAxis, rotationDelta);
   }
   public final void rotateWithAxis(Vector3D axis, Angle delta)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
-	applyTransform(MutableMatrix44D.createRotationMatrix(new Angle(delta), new Vector3D(axis)));
+    applyTransform(MutableMatrix44D.createRotationMatrix(delta, axis));
   }
   public final void moveForward(double d)
   {
-	final Vector3D view = getViewDirection().normalized();
-	applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
+    final Vector3D view = getViewDirection().normalized();
+    applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
   }
   public final void translateCamera(Vector3D desp)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: applyTransform(MutableMatrix44D::createTranslationMatrix(desp));
-	applyTransform(MutableMatrix44D.createTranslationMatrix(new Vector3D(desp)));
+    applyTransform(MutableMatrix44D.createTranslationMatrix(desp));
   }
 
   public final void pivotOnCenter(Angle a)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D rotationAxis = _position.sub(_center).asVector3D();
-	final Vector3D rotationAxis = _position.sub(new MutableVector3D(_center)).asVector3D();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: rotateWithAxis(rotationAxis, a);
-	rotateWithAxis(new Vector3D(rotationAxis), new Angle(a));
+    final Vector3D rotationAxis = _position.sub(_center).asVector3D();
+    rotateWithAxis(rotationAxis, a);
   }
 
   public final void rotateWithAxisAndPoint(Vector3D axis, Vector3D point, Angle delta)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(delta, axis, point);
-	final MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(new Angle(delta), new Vector3D(axis), new Vector3D(point));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: applyTransform(m);
-	applyTransform(new MutableMatrix44D(m));
+    final MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(delta, axis, point);
+    applyTransform(m);
   }
 
   public final void print()
   {
-	getModelMatrix().print("Model Matrix", ILogger.instance());
-	getProjectionMatrix().print("Projection Matrix", ILogger.instance());
-	getModelViewMatrix().print("ModelView Matrix", ILogger.instance());
-	ILogger.instance().logInfo("Viewport width: %d, height %d\n", _viewPortWidth, _viewPortHeight);
+    getModelMatrix().print("Model Matrix", ILogger.instance());
+    getProjectionMatrix().print("Projection Matrix", ILogger.instance());
+    getModelViewMatrix().print("ModelView Matrix", ILogger.instance());
+    ILogger.instance().logInfo("Viewport width: %d, height %d\n", _viewPortWidth, _viewPortHeight);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Frustum* const getFrustumInModelCoordinates() const
   public final Frustum getFrustumInModelCoordinates()
   {
-	if (_dirtyFlags._frustumMCDirty)
-	{
-	  _dirtyFlags._frustumMCDirty = false;
-	  if (_frustumInModelCoordinates != null)
-		  _frustumInModelCoordinates.dispose();
-	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix());
-	}
-	return _frustumInModelCoordinates;
+    if (_dirtyFlags._frustumMCDirty)
+    {
+      _dirtyFlags._frustumMCDirty = false;
+      if (_frustumInModelCoordinates != null)
+         _frustumInModelCoordinates.dispose();
+      _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix());
+    }
+    return _frustumInModelCoordinates;
   }
 
   public final Vector3D getHorizontalVector()
   {
-	//int todo_remove_get_in_matrix;
-	final MutableMatrix44D M = getModelMatrix();
-	return new Vector3D(M.get0(), M.get4(), M.get8());
+    //int todo_remove_get_in_matrix;
+    final MutableMatrix44D M = getModelMatrix();
+    return new Vector3D(M.get0(), M.get4(), M.get8());
   }
 
   public final Angle compute3DAngularDistance(Vector2I pixel0, Vector2I pixel1)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D point0 = pixel2PlanetPoint(pixel0);
-	final Vector3D point0 = pixel2PlanetPoint(new Vector2I(pixel0));
-	if (point0.isNan())
-	{
-	  return Angle.nan();
-	}
+    final Vector3D point0 = pixel2PlanetPoint(pixel0);
+    if (point0.isNan())
+    {
+      return Angle.nan();
+    }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D point1 = pixel2PlanetPoint(pixel1);
-	final Vector3D point1 = pixel2PlanetPoint(new Vector2I(pixel1));
-	if (point1.isNan())
-	{
-	  return Angle.nan();
-	}
+    final Vector3D point1 = pixel2PlanetPoint(pixel1);
+    if (point1.isNan())
+    {
+      return Angle.nan();
+    }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return Vector3D::angleBetween(point0, point1);
-	return Vector3D.angleBetween(new Vector3D(point0), new Vector3D(point1));
+    return Vector3D.angleBetween(point0, point1);
   }
 
   public final void initialize(G3MContext context)
   {
-	_planet = context.getPlanet();
-	// #warning move this to Planet, and remove isFlat() method (DGD)
-	if (_planet.isFlat())
-	{
-	  setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
-	  setUp(new MutableVector3D(0, 1, 0));
-	}
-	else
-	{
-	  setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
-	  setUp(new MutableVector3D(0, 0, 1));
-	}
-	_dirtyFlags.setAllDirty();
+    _planet = context.getPlanet();
+    // #warning move this to Planet, and remove isFlat() method (DGD)
+    if (_planet.isFlat())
+    {
+      setCartesianPosition(new MutableVector3D(0, 0, _planet.getRadii()._y * 5));
+      setUp(new MutableVector3D(0, 1, 0));
+    }
+    else
+    {
+      setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
+      setUp(new MutableVector3D(0, 0, 1));
+    }
+    _dirtyFlags.setAllDirty();
   }
 
   public final void setCartesianPosition(MutableVector3D v)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (!v.equalTo(_position))
-	if (!v.equalTo(new MutableVector3D(_position)))
-	{
-	  _timestamp++;
-	  _position.copyFrom(v);
-	  if (_geodeticPosition != null)
-		  _geodeticPosition.dispose();
-	  _geodeticPosition = null;
-	  _dirtyFlags.setAllDirty();
-	  final double distanceToPlanetCenter = _position.length();
-	  final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
-	  _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-	  _normalizedPosition.copyFrom(_position);
-	  _normalizedPosition.normalize();
-	}
+    if (!v.equalTo(_position))
+    {
+      _timestamp++;
+      _position.copyFrom(v);
+      if (_geodeticPosition != null)
+         _geodeticPosition.dispose();
+      _geodeticPosition = null;
+      _dirtyFlags.setAllDirty();
+      final double distanceToPlanetCenter = _position.length();
+      final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
+      _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
+      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.normalize();
+    }
   }
 
   public final void setCartesianPosition(Vector3D v)
   {
-	setCartesianPosition(v.asMutableVector3D());
+    setCartesianPosition(v.asMutableVector3D());
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Angle getHeading() const
   public final Angle getHeading()
   {
-	return getHeadingPitchRoll()._heading;
+    return getHeadingPitchRoll()._heading;
   }
   public final void setHeading(Angle angle)
   {
-	final TaitBryanAngles angles = getHeadingPitchRoll();
-	final CoordinateSystem localRS = getLocalCoordinateSystem();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
-	final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(new Angle(angle), angles._pitch, angles._roll);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCameraCoordinateSystem(cameraRS);
-	setCameraCoordinateSystem(new CoordinateSystem(cameraRS));
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
+    setCameraCoordinateSystem(cameraRS);
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Angle getPitch() const
   public final Angle getPitch()
   {
-	return getHeadingPitchRoll()._pitch;
+    return getHeadingPitchRoll()._pitch;
   }
   public final void setPitch(Angle angle)
   {
-	final TaitBryanAngles angles = getHeadingPitchRoll();
-	final CoordinateSystem localRS = getLocalCoordinateSystem();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
-	final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, new Angle(angle), angles._roll);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCameraCoordinateSystem(cameraRS);
-	setCameraCoordinateSystem(new CoordinateSystem(cameraRS));
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
+    setCameraCoordinateSystem(cameraRS);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Geodetic3D getGeodeticPosition() const
   public final Geodetic3D getGeodeticPosition()
   {
-	if (_geodeticPosition == null)
-	{
-	  _geodeticPosition = new Geodetic3D(_planet.toGeodetic3D(getCartesianPosition()));
-	}
-	return _geodeticPosition;
+    if (_geodeticPosition == null)
+    {
+      _geodeticPosition = new Geodetic3D(_planet.toGeodetic3D(getCartesianPosition()));
+    }
+    return _geodeticPosition;
   }
 
   public final void setGeodeticPosition(Geodetic3D g3d)
   {
-	final Angle heading = getHeading();
-	final Angle pitch = getPitch();
-	setPitch(Angle.fromDegrees(-90));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-	MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), new Geodetic3D(g3d));
-	if (dragMatrix.isValid())
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: applyTransform(dragMatrix);
-		applyTransform(new MutableMatrix44D(dragMatrix));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setHeading(heading);
-	setHeading(new Angle(heading));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setPitch(pitch);
-	setPitch(new Angle(pitch));
+    final Angle heading = getHeading();
+    final Angle pitch = getPitch();
+    setPitch(Angle.fromDegrees(-90));
+    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid())
+       applyTransform(dragMatrix);
+    setHeading(heading);
+    setPitch(pitch);
   }
 
   public final void setGeodeticPositionStablePitch(Geodetic3D g3d)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
-	MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), new Geodetic3D(g3d));
-	if (dragMatrix.isValid())
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: applyTransform(dragMatrix);
-		applyTransform(new MutableMatrix44D(dragMatrix));
+    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid())
+       applyTransform(dragMatrix);
   }
 
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
-	setGeodeticPosition(new Geodetic3D(latitude, longitude, height));
+    setGeodeticPosition(new Geodetic3D(latitude, longitude, height));
   }
 
   public final void setGeodeticPosition(Geodetic2D g2d, double height)
   {
-	setGeodeticPosition(new Geodetic3D(g2d, height));
+    setGeodeticPosition(new Geodetic3D(g2d, height));
   }
 
   /**
@@ -586,319 +431,239 @@ package org.glob3.mobile.generated;public class Camera
    */
   public final void setPointOfView(Geodetic3D center, double distance, Angle azimuth, Angle altitude)
   {
-	// TODO_deal_with_cases_when_center_in_poles
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D cartesianCenter = _planet->toCartesian(center);
-	final Vector3D cartesianCenter = _planet.toCartesian(new Geodetic3D(center));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D normal = _planet->geodeticSurfaceNormal(center);
-	final Vector3D normal = _planet.geodeticSurfaceNormal(new Geodetic3D(center));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D north2D = _planet->getNorth().projectionInPlane(normal);
-	final Vector3D north2D = _planet.getNorth().projectionInPlane(new Vector3D(normal));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D orientedVector = north2D.rotateAroundAxis(normal, azimuth.times(-1));
-	final Vector3D orientedVector = north2D.rotateAroundAxis(new Vector3D(normal), azimuth.times(-1));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D axis = orientedVector.cross(normal);
-	final Vector3D axis = orientedVector.cross(new Vector3D(normal));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D finalVector = orientedVector.rotateAroundAxis(axis, altitude);
-	final Vector3D finalVector = orientedVector.rotateAroundAxis(new Vector3D(axis), new Angle(altitude));
-	final Vector3D position = cartesianCenter.add(finalVector.normalized().times(distance));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D finalUp = finalVector.rotateAroundAxis(axis, Angle::fromDegrees(90.0f));
-	final Vector3D finalUp = finalVector.rotateAroundAxis(new Vector3D(axis), Angle.fromDegrees(90.0f));
-	setCartesianPosition(position.asMutableVector3D());
-	setCenter(cartesianCenter.asMutableVector3D());
-	setUp(finalUp.asMutableVector3D());
-	//  _dirtyFlags.setAllDirty();
+    // TODO_deal_with_cases_when_center_in_poles
+    final Vector3D cartesianCenter = _planet.toCartesian(center);
+    final Vector3D normal = _planet.geodeticSurfaceNormal(center);
+    final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
+    final Vector3D orientedVector = north2D.rotateAroundAxis(normal, azimuth.times(-1));
+    final Vector3D axis = orientedVector.cross(normal);
+    final Vector3D finalVector = orientedVector.rotateAroundAxis(axis, altitude);
+    final Vector3D position = cartesianCenter.add(finalVector.normalized().times(distance));
+    final Vector3D finalUp = finalVector.rotateAroundAxis(axis, Angle.fromDegrees(90.0f));
+    setCartesianPosition(position.asMutableVector3D());
+    setCenter(cartesianCenter.asMutableVector3D());
+    setUp(finalUp.asMutableVector3D());
+    //  _dirtyFlags.setAllDirty();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void forceMatrixCreation() const
   public final void forceMatrixCreation()
   {
-	getGeodeticCenterOfView();
-	//getXYZCenterOfView();
-	_getCartesianCenterOfView();
-	getFrustumInModelCoordinates();
-	getProjectionMatrix44D();
-	getModelMatrix44D();
-	getModelViewMatrix().asMatrix44D();
+    getGeodeticCenterOfView();
+    //getXYZCenterOfView();
+    _getCartesianCenterOfView();
+    getFrustumInModelCoordinates();
+    getProjectionMatrix44D();
+    getModelMatrix44D();
+    getModelViewMatrix().asMatrix44D();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Matrix44D* getModelMatrix44D() const
   public final Matrix44D getModelMatrix44D()
   {
-	return getModelMatrix().asMatrix44D();
+    return getModelMatrix().asMatrix44D();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Matrix44D* getProjectionMatrix44D() const
   public final Matrix44D getProjectionMatrix44D()
   {
-	return getProjectionMatrix().asMatrix44D();
+    return getProjectionMatrix().asMatrix44D();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Matrix44D* getModelViewMatrix44D() const
   public final Matrix44D getModelViewMatrix44D()
   {
-	return getModelViewMatrix().asMatrix44D();
+    return getModelViewMatrix().asMatrix44D();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getAngle2HorizonInRadians() const
   public final double getAngle2HorizonInRadians()
   {
-	  return _angle2Horizon;
+     return _angle2Horizon;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getProjectedSphereArea(const Sphere& sphere) const
   public final double getProjectedSphereArea(Sphere sphere)
   {
-	// this implementation is not right exact, but it's faster.
-	final double z = sphere._center.distanceTo(getCartesianPosition());
-	final double rWorld = sphere._radius * _frustumData._znear / z;
-	final double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
-	return DefineConstants.PI * rScreen * rScreen;
+    // this implementation is not right exact, but it's faster.
+    final double z = sphere._center.distanceTo(getCartesianPosition());
+    final double rWorld = sphere._radius * _frustumData._znear / z;
+    final double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
+    return DefineConstants.PI * rScreen * rScreen;
   }
 
   public final void applyTransform(MutableMatrix44D M)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCartesianPosition(_position.transformedBy(M, 1.0));
-	setCartesianPosition(_position.transformedBy(new MutableMatrix44D(M), 1.0));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCenter(_center.transformedBy(M, 1.0));
-	setCenter(_center.transformedBy(new MutableMatrix44D(M), 1.0));
+    setCartesianPosition(_position.transformedBy(M, 1.0));
+    setCenter(_center.transformedBy(M, 1.0));
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setUp(_up.transformedBy(M, 0.0));
-	setUp(_up.transformedBy(new MutableMatrix44D(M), 0.0));
+    setUp(_up.transformedBy(M, 0.0));
   
-	//_dirtyFlags.setAllDirty();
+    //_dirtyFlags.setAllDirty();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isPositionWithin(const Sector& sector, double height) const
   public final boolean isPositionWithin(Sector sector, double height)
   {
-	final Geodetic3D position = getGeodeticPosition();
-	return sector.contains(position._latitude, position._longitude) && height >= position._height;
+    final Geodetic3D position = getGeodeticPosition();
+    return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isCenterOfViewWithin(const Sector& sector, double height) const
   public final boolean isCenterOfViewWithin(Sector sector, double height)
   {
-	final Geodetic3D position = getGeodeticCenterOfView();
-	return sector.contains(position._latitude, position._longitude) && height >= position._height;
+    final Geodetic3D position = getGeodeticCenterOfView();
+    return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   public final void setFOV(Angle vertical, Angle horizontal)
   {
-	final Angle halfHFOV = horizontal.div(2.0);
-	final Angle halfVFOV = vertical.div(2.0);
-	final double newH = halfHFOV.tangent();
-	final double newV = halfVFOV.tangent();
-	if ((newH != _tanHalfHorizontalFOV) || (newV != _tanHalfVerticalFOV))
-	{
-	  _timestamp++;
-	  _tanHalfHorizontalFOV = newH;
-	  _tanHalfVerticalFOV = newV;
+    final Angle halfHFOV = horizontal.div(2.0);
+    final Angle halfVFOV = vertical.div(2.0);
+    final double newH = halfHFOV.tangent();
+    final double newV = halfVFOV.tangent();
+    if ((newH != _tanHalfHorizontalFOV) || (newV != _tanHalfVerticalFOV))
+    {
+      _timestamp++;
+      _tanHalfHorizontalFOV = newH;
+      _tanHalfVerticalFOV = newV;
   
-	  _dirtyFlags._frustumDataDirty = true;
-	  _dirtyFlags._projectionMatrixDirty = true;
-	  _dirtyFlags._modelViewMatrixDirty = true;
-	  _dirtyFlags._frustumDirty = true;
-	  _dirtyFlags._frustumMCDirty = true;
-	}
+      _dirtyFlags._frustumDataDirty = true;
+      _dirtyFlags._projectionMatrixDirty = true;
+      _dirtyFlags._modelViewMatrixDirty = true;
+      _dirtyFlags._frustumDirty = true;
+      _dirtyFlags._frustumMCDirty = true;
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getRoll() const
   public final Angle getRoll()
   {
-	return getHeadingPitchRoll()._roll;
+    return getHeadingPitchRoll()._roll;
   }
   public final void setRoll(Angle angle)
   {
-	final TaitBryanAngles angles = getHeadingPitchRoll();
+    final TaitBryanAngles angles = getHeadingPitchRoll();
   
-	final CoordinateSystem localRS = getLocalCoordinateSystem();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
-	final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, new Angle(angle));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCameraCoordinateSystem(cameraRS);
-	setCameraCoordinateSystem(new CoordinateSystem(cameraRS));
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
+    setCameraCoordinateSystem(cameraRS);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: CoordinateSystem getLocalCoordinateSystem() const
   public final CoordinateSystem getLocalCoordinateSystem()
   {
-	return _planet.getCoordinateSystemAt(getGeodeticPosition());
+    return _planet.getCoordinateSystemAt(getGeodeticPosition());
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: CoordinateSystem getCameraCoordinateSystem() const
   public final CoordinateSystem getCameraCoordinateSystem()
   {
-	return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
+    return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TaitBryanAngles getHeadingPitchRoll() const
   public final TaitBryanAngles getHeadingPitchRoll()
   {
-	final CoordinateSystem localRS = getLocalCoordinateSystem();
-	final CoordinateSystem cameraRS = getCameraCoordinateSystem();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return cameraRS.getTaitBryanAngles(localRS);
-	return cameraRS.getTaitBryanAngles(new CoordinateSystem(localRS));
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = getCameraCoordinateSystem();
+    return cameraRS.getTaitBryanAngles(localRS);
   }
   public final void setHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
   {
-	final CoordinateSystem localRS = getLocalCoordinateSystem();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
-	final CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(new Angle(heading), new Angle(pitch), new Angle(roll));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCameraCoordinateSystem(newCameraRS);
-	setCameraCoordinateSystem(new CoordinateSystem(newCameraRS));
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
+    setCameraCoordinateSystem(newCameraRS);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getEstimatedPixelDistance(const Vector3D& point0, const Vector3D& point1) const
   public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _ray0.putSub(_position, point0);
-	_ray0.putSub(new MutableVector3D(_position), new Vector3D(point0));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _ray1.putSub(_position, point1);
-	_ray1.putSub(new MutableVector3D(_position), new Vector3D(point1));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const double angleInRadians = MutableVector3D::angleInRadiansBetween(_ray1, _ray0);
-	final double angleInRadians = MutableVector3D.angleInRadiansBetween(new MutableVector3D(_ray1), new MutableVector3D(_ray0));
-	final FrustumData frustumData = getFrustumData();
-	final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
-	return distanceInMeters * _viewPortHeight / frustumData._top;
+    _ray0.putSub(_position, point0);
+    _ray1.putSub(_position, point1);
+    final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
+    final FrustumData frustumData = getFrustumData();
+    final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
+    return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: inline long getTimestamp() const
   public final long getTimestamp()
   {
-	return _timestamp;
+    return _timestamp;
   }
 
   public final void setLookAtParams(MutableVector3D position, MutableVector3D center, MutableVector3D up)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCartesianPosition(position);
-	setCartesianPosition(new MutableVector3D(position));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setCenter(center);
-	setCenter(new MutableVector3D(center));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: setUp(up);
-	setUp(new MutableVector3D(up));
+    setCartesianPosition(position);
+    setCenter(center);
+    setUp(up);
   }
 
-  public final void getLookAtParamsInto(tangible.RefObject<MutableVector3D> position, tangible.RefObject<MutableVector3D> center, tangible.RefObject<MutableVector3D> up)
+  public final void getLookAtParamsInto(MutableVector3D position, MutableVector3D center, MutableVector3D up)
   {
-	position.argvalue.copyFrom(_position);
-	center.argvalue.copyFrom(_center);
-	up.argvalue.copyFrom(_up);
+    position.copyFrom(_position);
+    center.copyFrom(_center);
+    up.copyFrom(_up);
   }
 
-  public final void getModelViewMatrixInto(tangible.RefObject<MutableMatrix44D> matrix)
+  public final void getModelViewMatrixInto(MutableMatrix44D matrix)
   {
-	matrix.argvalue.copyValue(getModelViewMatrix());
+    matrix.copyValue(getModelViewMatrix());
   }
 
-  public final void getViewPortInto(tangible.RefObject<MutableVector2I> viewport)
+  public final void getViewPortInto(MutableVector2I viewport)
   {
-	viewport.argvalue.set(_viewPortWidth, _viewPortHeight);
+    viewport.set(_viewPortWidth, _viewPortHeight);
   }
 
-  public static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, tangible.RefObject<MutableVector3D> ray)
+  public static void pixel2RayInto(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix, MutableVector3D ray)
   {
-	final float px = pixel._x;
-	final float py = viewport.y() - pixel._y;
-	final Vector3D pixel3D = new Vector3D(px, py, 0);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
-	final Vector3D obj = modelViewMatrix.unproject(new Vector3D(pixel3D), 0, 0, viewport.x(), viewport.y());
-	if (obj.isNan())
-	{
-	  ray.argvalue.copyFrom(obj);
-	}
-	else
-	{
-	  ray.argvalue.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
-	}
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      ray.copyFrom(obj);
+    }
+    else
+    {
+      ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
+    }
   }
 
   public static Vector3D pixel2Ray(MutableVector3D position, Vector2F pixel, MutableVector2I viewport, MutableMatrix44D modelViewMatrix)
   {
-	final float px = pixel._x;
-	final float py = viewport.y() - pixel._y;
-	final Vector3D pixel3D = new Vector3D(px, py, 0);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
-	final Vector3D obj = modelViewMatrix.unproject(new Vector3D(pixel3D), 0, 0, viewport.x(), viewport.y());
-	if (obj.isNan())
-	{
-	  return obj;
-	}
-	return obj.sub(position.asVector3D());
+    final float px = pixel._x;
+    final float py = viewport.y() - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+    final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
+    if (obj.isNan())
+    {
+      return obj;
+    }
+    return obj.sub(position.asVector3D());
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getHorizontalFOV() const
   public final Angle getHorizontalFOV()
   {
-	return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFOV) * 2);
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfHorizontalFOV) * 2);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getVerticalFOV() const
   public final Angle getVerticalFOV()
   {
-	return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFOV) * 2);
+    return Angle.fromRadians(IMathUtils.instance().atan(_tanHalfVerticalFOV) * 2);
   }
 
   public final void setCameraCoordinateSystem(CoordinateSystem rs)
   {
-	_timestamp++;
-	_center.copyFrom(_position);
-	_center.addInPlace(rs._y);
-	_up.copyFrom(rs._z);
-	_dirtyFlags.setAllDirty();
+    _timestamp++;
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+    _up.copyFrom(rs._z);
+    _dirtyFlags.setAllDirty();
   }
 
   public final void forceZNear(double zNear)
   {
-	_forcedZNear = zNear;
+    _forcedZNear = zNear;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double computeZNear() const
   public final double computeZNear()
   {
-	if (!(_forcedZNear != _forcedZNear))
-	{
-	  return _forcedZNear;
-	}
+    if (!(_forcedZNear != _forcedZNear))
+    {
+      return _forcedZNear;
+    }
   
-	final double height = getGeodeticPosition()._height;
-	double zNear = height * 0.1;
-	return zNear;
+    final double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
+    return zNear;
   }
 
 
@@ -942,12 +707,7 @@ package org.glob3.mobile.generated;public class Camera
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _viewPortWidth;
   private int _viewPortHeight;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final Planet _planet;
-//#else
   private Planet _planet;
-//#endif
   private MutableVector3D _position = new MutableVector3D(); // position
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
@@ -973,188 +733,164 @@ package org.glob3.mobile.generated;public class Camera
   private double _tanHalfHorizontalFOV;
 
   //The Camera Effect Target
-  private abstract static class CameraEffectTarget extends EffectTarget
+  private static class CameraEffectTarget implements EffectTarget
   {
-	public void dispose()
-	{
-	}
+    public void dispose()
+    {
+    }
   }
 
   private CameraEffectTarget _camEffectTarget;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D centerOfViewOnPlanet() const
   private Vector3D centerOfViewOnPlanet()
   {
-	return _planet.closestIntersection(_position.asVector3D(), getViewDirection());
+    return _planet.closestIntersection(_position.asVector3D(), getViewDirection());
   }
 
   private void setCenter(MutableVector3D v)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (!v.equalTo(_center))
-	if (!v.equalTo(new MutableVector3D(_center)))
-	{
-	  _timestamp++;
-	  _center.copyFrom(v);
-	  _dirtyFlags.setAllDirty();
-	}
+    if (!v.equalTo(_center))
+    {
+      _timestamp++;
+      _center.copyFrom(v);
+      _dirtyFlags.setAllDirty();
+    }
   }
 
   private void setUp(MutableVector3D v)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (!v.equalTo(_up))
-	if (!v.equalTo(new MutableVector3D(_up)))
-	{
-	  _timestamp++;
-	  _up.copyFrom(v);
-	  _dirtyFlags.setAllDirty();
-	}
+    if (!v.equalTo(_up))
+    {
+      _timestamp++;
+      _up.copyFrom(v);
+      _dirtyFlags.setAllDirty();
+    }
   }
 
   // data to compute frustum
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: FrustumData getFrustumData() const
   private FrustumData getFrustumData()
   {
-	if (_dirtyFlags._frustumDataDirty)
-	{
-	  _dirtyFlags._frustumDataDirty = false;
-	  _frustumData = calculateFrustumData();
-	}
-	return _frustumData;
+    if (_dirtyFlags._frustumDataDirty)
+    {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
   }
 
   // intersection of view direction with globe in(x,y,z)
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D _getCartesianCenterOfView() const
   private MutableVector3D _getCartesianCenterOfView()
   {
-	if (_dirtyFlags._cartesianCenterOfViewDirty)
-	{
-	  _dirtyFlags._cartesianCenterOfViewDirty = false;
-	  //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
-	  _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
-	}
-	return _cartesianCenterOfView;
+    if (_dirtyFlags._cartesianCenterOfViewDirty)
+    {
+      _dirtyFlags._cartesianCenterOfViewDirty = false;
+      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
+    }
+    return _cartesianCenterOfView;
   }
 
   // intersection of view direction with globe in geodetic
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic3D* _getGeodeticCenterOfView() const
   private Geodetic3D _getGeodeticCenterOfView()
   {
-	if (_dirtyFlags._geodeticCenterOfViewDirty)
-	{
-	  _dirtyFlags._geodeticCenterOfViewDirty = false;
-	  if (_geodeticCenterOfView != null)
-		  _geodeticCenterOfView.dispose();
-	  _geodeticCenterOfView = new Geodetic3D(_planet.toGeodetic3D(getXYZCenterOfView()));
-	}
-	return _geodeticCenterOfView;
+    if (_dirtyFlags._geodeticCenterOfViewDirty)
+    {
+      _dirtyFlags._geodeticCenterOfViewDirty = false;
+      if (_geodeticCenterOfView != null)
+         _geodeticCenterOfView.dispose();
+      _geodeticCenterOfView = new Geodetic3D(_planet.toGeodetic3D(getXYZCenterOfView()));
+    }
+    return _geodeticCenterOfView;
   }
 
   // camera frustum
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Frustum* getFrustum() const
   private Frustum getFrustum()
   {
-	if (_dirtyFlags._frustumDirty)
-	{
-	  _dirtyFlags._frustumDirty = false;
-	  if (_frustum != null)
-		  _frustum.dispose();
-	  _frustum = new Frustum(getFrustumData());
-	}
-	return _frustum;
+    if (_dirtyFlags._frustumDirty)
+    {
+      _dirtyFlags._frustumDirty = false;
+      if (_frustum != null)
+         _frustum.dispose();
+      _frustum = new Frustum(getFrustumData());
+    }
+    return _frustum;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: FrustumData calculateFrustumData() const
   private FrustumData calculateFrustumData()
   {
-	double zNear = computeZNear();
+    double zNear = computeZNear();
   
-	double zFar = _planet.distanceToHorizon(_position.asVector3D());
+    double zFar = _planet.distanceToHorizon(_position.asVector3D());
   
-	final double goalRatio = 1000;
-	final double ratio = zFar / zNear;
-	if (ratio < goalRatio)
-	{
-	  zNear = zFar / goalRatio;
-	}
+    final double goalRatio = 1000;
+    final double ratio = zFar / zNear;
+    if (ratio < goalRatio)
+    {
+      zNear = zFar / goalRatio;
+    }
   
-	if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
-	{
-	  final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
+    if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) || (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
+    {
+      final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
   
-	  if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) && (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
-	  {
-		//Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
-		_tanHalfVerticalFOV = 0.3;
-		_tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
-	  }
-	  else
-	  {
-		if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV))
-		{
-		  _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
-		}
-		else if (_tanHalfVerticalFOV != _tanHalfVerticalFOV)
-		{
-		  _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
-		}
-	  }
-	}
+      if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV) && (_tanHalfVerticalFOV != _tanHalfVerticalFOV))
+      {
+        //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+        _tanHalfVerticalFOV = 0.3;
+        _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
+      }
+      else
+      {
+        if ((_tanHalfHorizontalFOV != _tanHalfHorizontalFOV))
+        {
+          _tanHalfHorizontalFOV = _tanHalfVerticalFOV / ratioScreen;
+        }
+        else if (_tanHalfVerticalFOV != _tanHalfVerticalFOV)
+        {
+          _tanHalfVerticalFOV = _tanHalfHorizontalFOV * ratioScreen;
+        }
+      }
+    }
   
-	final double right = _tanHalfHorizontalFOV * zNear;
-	final double left = -right;
-	final double top = _tanHalfVerticalFOV * zNear;
-	final double bottom = -top;
-	return new FrustumData(left, right, bottom, top, zNear, zFar);
+    final double right = _tanHalfHorizontalFOV * zNear;
+    final double left = -right;
+    final double top = _tanHalfVerticalFOV * zNear;
+    final double bottom = -top;
+    return new FrustumData(left, right, bottom, top, zNear, zFar);
   }
 
   // opengl projection matrix
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableMatrix44D& getProjectionMatrix() const
   private MutableMatrix44D getProjectionMatrix()
   {
-	if (_dirtyFlags._projectionMatrixDirty)
-	{
-	  _dirtyFlags._projectionMatrixDirty = false;
-	  _projectionMatrix.copyValue(MutableMatrix44D.createProjectionMatrix(getFrustumData()));
-	}
-	return _projectionMatrix;
+    if (_dirtyFlags._projectionMatrixDirty)
+    {
+      _dirtyFlags._projectionMatrixDirty = false;
+      _projectionMatrix.copyValue(MutableMatrix44D.createProjectionMatrix(getFrustumData()));
+    }
+    return _projectionMatrix;
   }
 
   // Model matrix, computed in CPU in double precision
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableMatrix44D& getModelMatrix() const
   private MutableMatrix44D getModelMatrix()
   {
-	if (_dirtyFlags._modelMatrixDirty)
-	{
-	  _dirtyFlags._modelMatrixDirty = false;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _modelMatrix.copyValue(MutableMatrix44D::createModelMatrix(_position, _center, _up));
-	  _modelMatrix.copyValue(MutableMatrix44D.createModelMatrix(new MutableVector3D(_position), new MutableVector3D(_center), new MutableVector3D(_up)));
-	}
-	return _modelMatrix;
+    if (_dirtyFlags._modelMatrixDirty)
+    {
+      _dirtyFlags._modelMatrixDirty = false;
+      _modelMatrix.copyValue(MutableMatrix44D.createModelMatrix(_position, _center, _up));
+    }
+    return _modelMatrix;
   }
 
   // multiplication of model * projection
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const MutableMatrix44D& getModelViewMatrix() const
   private MutableMatrix44D getModelViewMatrix()
   {
-	if (_dirtyFlags._modelViewMatrixDirty)
-	{
-	  _dirtyFlags._modelViewMatrixDirty = false;
-	  //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
-	  _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
-	}
-	return _modelViewMatrix;
+    if (_dirtyFlags._modelViewMatrixDirty)
+    {
+      _dirtyFlags._modelViewMatrixDirty = false;
+      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
+      _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
+    }
+    return _modelViewMatrix;
   }
 
   private double _forcedZNear;

@@ -17,14 +17,8 @@ package org.glob3.mobile.generated;//
 
 
 
-public abstract class ErrorRenderer extends ProtoRenderer
+public interface ErrorRenderer extends ProtoRenderer
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
 
   public abstract void setErrors(java.util.ArrayList<String> errors);
 

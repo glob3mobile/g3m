@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  TileData.cpp
 //  G3MiOSSDK
 //
@@ -31,19 +29,9 @@ public class TileData
 
   public TileData(int id)
   {
-	  _id = id;
+     _id = id;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
+  void dispose() {
   }
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-  public final void dispose()
-  {
-  }
-//#endif
 }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  GLErrorRenderer.cpp
 //  G3MiOSSDK
 //
@@ -21,24 +19,21 @@ public class GLErrorRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-	GL gl = rc.getGL();
-	final ILogger logger = rc.getLogger();
+    GL gl = rc.getGL();
+    final ILogger logger = rc.getLogger();
   
-	int error = gl.getError();
-	while (error != GLError.noError())
-	{
-	  logger.logError("GL Error: %d", error);
-	  error = gl.getError();
-	}
+    int error = gl.getError();
+    while (error != GLError.noError())
+    {
+      logger.logError("GL Error: %d", error);
+      error = gl.getError();
+    }
   
   }
 
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.dispose();
-//#endif
+    super.dispose();
   }
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  Matrix44DProvider.cpp
 //  G3MiOSSDK
 //
@@ -24,13 +22,8 @@ public abstract class Matrix44DProvider extends RCObject
 {
   public void dispose()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.dispose();
-//#endif
+    super.dispose();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const Matrix44D* getMatrix() const = 0;
   public abstract Matrix44D getMatrix();
 }

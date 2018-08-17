@@ -1,7 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider
+package org.glob3.mobile.generated;public class PlanetRenderer extends DefaultRenderer implements ChangedListener, ChangedInfoListener, SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -19,14 +16,7 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
 
   private TilesStatistics _statistics = new TilesStatistics();
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final Camera _lastCamera;
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-  public Camera _lastCamera = new internal();
-//#endif
+  private Camera     _lastCamera;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
   private boolean _firstLevelTilesJustCreated;
@@ -36,152 +26,153 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
 
   private void clearFirstLevelTiles()
   {
-	final int firstLevelTilesCount = _firstLevelTiles.size();
-	for (int i = 0; i < firstLevelTilesCount; i++)
-	{
-	  Tile tile = _firstLevelTiles.get(i);
-	  tile.toBeDeleted(_texturizer, _elevationDataProvider);
-	  if (tile != null)
-		  tile.dispose();
-	}
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++)
+    {
+      Tile tile = _firstLevelTiles.get(i);
+      tile.toBeDeleted(_texturizer, _elevationDataProvider);
+      if (tile != null)
+         tile.dispose();
+    }
   
-	_firstLevelTiles.clear();
+    _firstLevelTiles.clear();
   }
   private void createFirstLevelTiles(G3MContext context)
   {
   
-	final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
-	if (parameters == null)
-	{
-	  //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
-	  return;
-	}
+    final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
+    if (parameters == null)
+    {
+      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+      return;
+    }
   
-	java.util.ArrayList<Tile> topLevelTiles = new java.util.ArrayList<Tile>();
+    java.util.ArrayList<Tile> topLevelTiles = new java.util.ArrayList<Tile>();
   
-	final Angle fromLatitude = parameters._topSector._lower._latitude;
-	final Angle fromLongitude = parameters._topSector._lower._longitude;
+    final Angle fromLatitude = parameters._topSector._lower._latitude;
+    final Angle fromLongitude = parameters._topSector._lower._longitude;
   
-	final Angle deltaLan = parameters._topSector._deltaLatitude;
-	final Angle deltaLon = parameters._topSector._deltaLongitude;
+    final Angle deltaLan = parameters._topSector._deltaLatitude;
+    final Angle deltaLon = parameters._topSector._deltaLongitude;
   
-	final int topSectorSplitsByLatitude = parameters._topSectorSplitsByLatitude;
-	final int topSectorSplitsByLongitude = parameters._topSectorSplitsByLongitude;
+    final int topSectorSplitsByLatitude = parameters._topSectorSplitsByLatitude;
+    final int topSectorSplitsByLongitude = parameters._topSectorSplitsByLongitude;
   
-	final Angle tileHeight = deltaLan.div(topSectorSplitsByLatitude);
-	final Angle tileWidth = deltaLon.div(topSectorSplitsByLongitude);
+    final Angle tileHeight = deltaLan.div(topSectorSplitsByLatitude);
+    final Angle tileWidth = deltaLon.div(topSectorSplitsByLongitude);
   
-	for (int row = 0; row < topSectorSplitsByLatitude; row++)
-	{
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
-	  final Angle tileLatFrom = tileHeight.times(row).add(new Angle(fromLatitude));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Angle tileLatTo = tileLatFrom.add(tileHeight);
-	  final Angle tileLatTo = tileLatFrom.add(new Angle(tileHeight));
+    for (int row = 0; row < topSectorSplitsByLatitude; row++)
+    {
+      final Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
+      final Angle tileLatTo = tileLatFrom.add(tileHeight);
   
-	  for (int col = 0; col < topSectorSplitsByLongitude; col++)
-	  {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
-		final Angle tileLonFrom = tileWidth.times(col).add(new Angle(fromLongitude));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Angle tileLonTo = tileLonFrom.add(tileWidth);
-		final Angle tileLonTo = tileLonFrom.add(new Angle(tileWidth));
+      for (int col = 0; col < topSectorSplitsByLongitude; col++)
+      {
+        final Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
+        final Angle tileLonTo = tileLonFrom.add(tileWidth);
   
-		final Geodetic2D tileLower = new Geodetic2D(tileLatFrom, tileLonFrom);
-		final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
-		final Sector sector = new Sector(tileLower, tileUpper);
+        final Geodetic2D tileLower = new Geodetic2D(tileLatFrom, tileLonFrom);
+        final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
+        final Sector sector = new Sector(tileLower, tileUpper);
   
-		if (_renderedSector == null || sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
-		{
-		  Tile tile = new Tile(_texturizer, null, sector, parameters._mercator, 0, row, col, this);
-		  if (parameters._firstLevel == 0)
-		  {
-			_firstLevelTiles.add(tile);
-		  }
-		  else
-		  {
-			topLevelTiles.add(tile);
-		  }
-		}
-	  }
-	}
+        if (_renderedSector == null || sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
+        {
+          Tile tile = new Tile(_texturizer, null, sector, parameters._mercator, 0, row, col, this);
+          if (parameters._firstLevel == 0)
+          {
+            _firstLevelTiles.add(tile);
+          }
+          else
+          {
+            topLevelTiles.add(tile);
+          }
+        }
+      }
+    }
   
-	if (parameters._firstLevel > 0)
-	{
-	  final int topLevelTilesSize = topLevelTiles.size();
-	  for (int i = 0; i < topLevelTilesSize; i++)
-	  {
-		Tile tile = topLevelTiles.get(i);
-		tangible.RefObject<java.util.ArrayList<Tile>> tempRef__firstLevelTiles = new tangible.RefObject<java.util.ArrayList<Tile>>(_firstLevelTiles);
-		createFirstLevelTiles(tempRef__firstLevelTiles, tile, parameters._firstLevel);
-		_firstLevelTiles = tempRef__firstLevelTiles.argvalue;
-	  }
-	}
+    if (parameters._firstLevel > 0)
+    {
+      final int topLevelTilesSize = topLevelTiles.size();
+      for (int i = 0; i < topLevelTilesSize; i++)
+      {
+        Tile tile = topLevelTiles.get(i);
+        createFirstLevelTiles(_firstLevelTiles, tile, parameters._firstLevel);
+      }
+    }
   
-	tangible.RefObject<java.util.ArrayList<Tile>> tempRef__firstLevelTiles2 = new tangible.RefObject<java.util.ArrayList<Tile>>(_firstLevelTiles);
-	sortTiles(tempRef__firstLevelTiles2);
-	_firstLevelTiles = tempRef__firstLevelTiles2.argvalue;
+    sortTiles(_firstLevelTiles);
   
-	context.getLogger().logInfo("Created %d first level tiles", _firstLevelTiles.size());
-	if (_firstLevelTiles.size() > 64)
-	{
-	  context.getLogger().logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
-	}
+    context.getLogger().logInfo("Created %d first level tiles", _firstLevelTiles.size());
+    if (_firstLevelTiles.size() > 64)
+    {
+      context.getLogger().logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
+    }
   
-	_firstLevelTilesJustCreated = true;
+    _firstLevelTilesJustCreated = true;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void createFirstLevelTiles(java.util.ArrayList<Tile*>& firstLevelTiles, Tile* tile, int firstLevel) const
-  private void createFirstLevelTiles(tangible.RefObject<java.util.ArrayList<Tile>> firstLevelTiles, Tile tile, int firstLevel)
+  private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel)
   {
   
-	if (tile._level == firstLevel)
-	{
-	  firstLevelTiles.argvalue.add(tile);
-	}
-	else
-	{
-	  java.util.ArrayList<Tile> children = tile.createSubTiles(false);
+    if (tile._level == firstLevel)
+    {
+      firstLevelTiles.add(tile);
+    }
+    else
+    {
+      java.util.ArrayList<Tile> children = tile.createSubTiles(false);
   
-	  final int childrenSize = children.size();
-	  for (int i = 0; i < childrenSize; i++)
-	  {
-		Tile child = children.get(i);
-		createFirstLevelTiles(firstLevelTiles, child, firstLevel);
-	  }
+      final int childrenSize = children.size();
+      for (int i = 0; i < childrenSize; i++)
+      {
+        Tile child = children.get(i);
+        createFirstLevelTiles(firstLevelTiles, child, firstLevel);
+      }
   
-	  children = null;
-	  if (tile != null)
-		  tile.dispose();
-	}
+      children = null;
+      if (tile != null)
+         tile.dispose();
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void sortTiles(java.util.ArrayList<Tile*>& tiles) const
-  private void sortTiles(tangible.RefObject<java.util.ArrayList<Tile>> tiles)
+  private void sortTiles(java.util.ArrayList<Tile> tiles)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	std.sort(tiles.argvalue.iterator(), tiles.argvalue.end(), GlobalMembersPlanetRenderer.sortTilesObject);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	java.util.Collections.sort(tiles.argvalue, new java.util.Comparator<Tile>() { Override public int compare(final Tile i, final Tile j) { final int rowI = i._row; final int rowJ = j._row; if (rowI < rowJ) { return -1; } if (rowI > rowJ) { return 1; } final int columnI = i._column; final int columnJ = j._column; if (columnI < columnJ) { return -1; } if (columnI > columnJ) { return 1; } return 0; } });
-//#endif
+    java.util.Collections.sort(tiles,
+                               new java.util.Comparator<Tile>() {
+                                 @Override
+                                 public int compare(final Tile i,
+                                                    final Tile j) {
+                                   final int rowI = i._row;
+                                   final int rowJ = j._row;
+                                   if (rowI < rowJ) {
+                                     return -1;
+                                   }
+                                   if (rowI > rowJ) {
+                                     return 1;
+                                   }
+  
+                                   final int columnI = i._column;
+                                   final int columnJ = j._column;
+                                   if (columnI < columnJ) {
+                                     return -1;
+                                   }
+                                   if (columnI > columnJ) {
+                                     return 1;
+                                   }
+                                   return 0;
+                                 }
+                               });
   }
 
   private boolean _firstRender;
 
   private void pruneFirstLevelTiles()
   {
-	final int firstLevelTilesCount = _firstLevelTiles.size();
-	for (int i = 0; i < firstLevelTilesCount; i++)
-	{
-	  Tile tile = _firstLevelTiles.get(i);
-	  tile.prune(_texturizer, _elevationDataProvider);
-	}
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++)
+    {
+      Tile tile = _firstLevelTiles.get(i);
+      tile.prune(_texturizer, _elevationDataProvider);
+    }
   }
 
   private Sector _lastVisibleSector;
@@ -190,87 +181,83 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
 
   private void visitTilesTouchesWith(Sector sector, int firstLevel, int maxLevel)
   {
-	if (_tileVisitor != null)
-	{
-	  final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
-	  if (parameters == null)
-	  {
-		ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
-		return;
-	  }
+    if (_tileVisitor != null)
+    {
+      final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
+      if (parameters == null)
+      {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        return;
+      }
   
-	  final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
-	  if (firstLevel < firstLevelToVisit)
-	  {
-		ILogger.instance().logError("Can only visit from level %d", firstLevelToVisit);
-		return;
-	  }
+      final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
+      if (firstLevel < firstLevelToVisit)
+      {
+        ILogger.instance().logError("Can only visit from level %d", firstLevelToVisit);
+        return;
+      }
   
-	  final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
-	  if (maxLevel > maxLevelToVisit)
-	  {
-		ILogger.instance().logError("Can only visit to level %d", maxLevelToVisit);
-		return;
-	  }
+      final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
+      if (maxLevel > maxLevelToVisit)
+      {
+        ILogger.instance().logError("Can only visit to level %d", maxLevelToVisit);
+        return;
+      }
   
-	  if (firstLevelToVisit > maxLevelToVisit)
-	  {
-		ILogger.instance().logError("Can't visit, first level is gratter than max level");
-		return;
-	  }
+      if (firstLevelToVisit > maxLevelToVisit)
+      {
+        ILogger.instance().logError("Can't visit, first level is gratter than max level");
+        return;
+      }
   
-	  java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
-	  final int layersCount = _layerSet.size();
-	  for (int i = 0; i < layersCount; i++)
-	  {
-		Layer layer = _layerSet.getLayer(i);
-		if (layer.isEnable() && layer.getRenderState()._type == RenderState_Type.RENDER_READY)
-		{
-		  layers.add(layer);
-		}
-	  }
+      java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
+      final int layersCount = _layerSet.size();
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layerSet.getLayer(i);
+        if (layer.isEnable() && layer.getRenderState()._type == RenderState_Type.RENDER_READY)
+        {
+          layers.add(layer);
+        }
+      }
   
-	  final int firstLevelTilesCount = _firstLevelTiles.size();
-	  for (int i = 0; i < firstLevelTilesCount; i++)
-	  {
-		Tile tile = _firstLevelTiles.get(i);
-		if (tile._sector.touchesWith(sector))
-		{
-		  _tileVisitor.visitTile(layers, tile);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
-		  visitSubTilesTouchesWith(layers, tile, new Sector(sector), firstLevelToVisit, maxLevelToVisit);
-		}
-	  }
-	}
-	else
-	{
-	  ILogger.instance().logError("TileVisitor is NULL");
-	}
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        if (tile._sector.touchesWith(sector))
+        {
+          _tileVisitor.visitTile(layers, tile);
+          visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
+        }
+      }
+    }
+    else
+    {
+      ILogger.instance().logError("TileVisitor is NULL");
+    }
   }
 
   private void visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
   {
-	if (tile._level < maxLevel)
-	{
-	  java.util.ArrayList<Tile> subTiles = tile.getSubTiles();
+    if (tile._level < maxLevel)
+    {
+      java.util.ArrayList<Tile> subTiles = tile.getSubTiles();
   
-	  final int subTilesCount = subTiles.size();
-	  for (int i = 0; i < subTilesCount; i++)
-	  {
-		Tile tl = subTiles.get(i);
-		if (tl._sector.touchesWith(sectorToVisit))
-		{
-		  if ((tile._level >= topLevel))
-		  {
-			_tileVisitor.visitTile(layers, tl);
-		  }
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
-		  visitSubTilesTouchesWith(layers, tl, new Sector(sectorToVisit), topLevel, maxLevel);
-		}
-	  }
-	}
+      final int subTilesCount = subTiles.size();
+      for (int i = 0; i < subTilesCount; i++)
+      {
+        Tile tl = subTiles.get(i);
+        if (tl._sector.touchesWith(sectorToVisit))
+        {
+          if ((tile._level >= topLevel))
+          {
+            _tileVisitor.visitTile(layers, tl);
+          }
+          visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
+        }
+      }
+    }
   }
 
   private long _tileDownloadPriority;
@@ -283,16 +270,16 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
   private void updateGLState(G3MRenderContext rc)
   {
   
-	final Camera camera = rc.getCurrentCamera();
-	ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
-	if (f == null)
-	{
-	  _glState.addGLFeature(new ModelViewGLFeature(camera), true);
-	}
-	else
-	{
-	  f.setMatrix(camera.getModelViewMatrix44D());
-	}
+    final Camera camera = rc.getCurrentCamera();
+    ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
+    if (f == null)
+    {
+      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+    }
+    else
+    {
+      f.setMatrix(camera.getModelViewMatrix44D());
+    }
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
@@ -302,36 +289,26 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
   private Sector _renderedSector;
 
   private boolean _layerTilesRenderParametersDirty;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  private final LayerTilesRenderParameters _layerTilesRenderParameters;
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-  public LayerTilesRenderParameters _layerTilesRenderParameters = new internal();
-//#endif
+  private LayerTilesRenderParameters _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
-	if (_layerTilesRenderParametersDirty)
-	{
-	  _errors.clear();
-	  if (_layerTilesRenderParameters != null)
-		  _layerTilesRenderParameters.dispose();
-	  tangible.RefObject<java.util.ArrayList<String>> tempRef__errors = new tangible.RefObject<java.util.ArrayList<String>>(_errors);
-	  _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, tempRef__errors);
-	  _errors = tempRef__errors.argvalue;
-	  if (_layerTilesRenderParameters == null)
-	  {
-		ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
-	  }
-	  _layerTilesRenderParametersDirty = false;
+    if (_layerTilesRenderParametersDirty)
+    {
+      _errors.clear();
+      _layerTilesRenderParameters = null;
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
+      if (_layerTilesRenderParameters == null)
+      {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+      }
+      _layerTilesRenderParametersDirty = false;
   
-	  _tileLODTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
-	  _tileVisibilityTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
-	}
-	return _layerTilesRenderParameters;
+      _tileLODTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
+      _tileVisibilityTester.onLayerTilesRenderParametersChanged(_layerTilesRenderParameters);
+    }
+    return _layerTilesRenderParameters;
   }
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
@@ -344,332 +321,298 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener, TileLODTester tileLODTester, TileVisibilityTester tileVisibilityTester)
   {
-	  _tessellator = tessellator;
-	  _elevationDataProvider = elevationDataProvider;
-	  _ownsElevationDataProvider = ownsElevationDataProvider;
-	  _verticalExaggeration = verticalExaggeration;
-	  _texturizer = texturizer;
-	  _layerSet = layerSet;
-	  _tilesRenderParameters = tilesRenderParameters;
-	  _showStatistics = showStatistics;
-	  _firstLevelTilesJustCreated = false;
-	  _lastSplitTimer = null;
-	  _lastCamera = null;
-	  _firstRender = false;
-	  _lastVisibleSector = null;
-	  _tileDownloadPriority = tileDownloadPriority;
-	  _allFirstLevelTilesAreTextureSolved = false;
-	  _recreateTilesPending = false;
-	  _glState = new GLState();
-	  _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
-	  _layerTilesRenderParameters = null;
-	  _layerTilesRenderParametersDirty = true;
-	  _renderTileMeshes = renderTileMeshes;
-	  _logTilesPetitions = logTilesPetitions;
-	  _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
-	  _tileLODTester = tileLODTester;
-	  _tileVisibilityTester = tileVisibilityTester;
-	_context = null;
-	_changedInfoListener = changedInfoListener;
+     _tessellator = tessellator;
+     _elevationDataProvider = elevationDataProvider;
+     _ownsElevationDataProvider = ownsElevationDataProvider;
+     _verticalExaggeration = verticalExaggeration;
+     _texturizer = texturizer;
+     _layerSet = layerSet;
+     _tilesRenderParameters = tilesRenderParameters;
+     _showStatistics = showStatistics;
+     _firstLevelTilesJustCreated = false;
+     _lastSplitTimer = null;
+     _lastCamera = null;
+     _firstRender = false;
+     _lastVisibleSector = null;
+     _tileDownloadPriority = tileDownloadPriority;
+     _allFirstLevelTilesAreTextureSolved = false;
+     _recreateTilesPending = false;
+     _glState = new GLState();
+     _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
+     _layerTilesRenderParameters = null;
+     _layerTilesRenderParametersDirty = true;
+     _renderTileMeshes = renderTileMeshes;
+     _logTilesPetitions = logTilesPetitions;
+     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+     _tileLODTester = tileLODTester;
+     _tileVisibilityTester = tileVisibilityTester;
+    _context = null;
+    _changedInfoListener = changedInfoListener;
   
-	_layerSet.setChangeListener(this);
+    _layerSet.setChangeListener(this);
   
-	_layerSet.setChangedInfoListener(this);
+    _layerSet.setChangedInfoListener(this);
   
-	_rendererIdentifier = -1;
+    _rendererIdentifier = -1;
   
-	if (_tileLODTester == null)
-	{
-	  THROW_EXCEPTION("TileLODTester can't be NULL");
-	}
-	if (_tileVisibilityTester == null)
-	{
-	  THROW_EXCEPTION("TileVisibilityTester can't be NULL");
-	}
+    if (_tileLODTester == null)
+    {
+      throw new RuntimeException("TileLODTester can't be NULL");
+    }
+    if (_tileVisibilityTester == null)
+    {
+      throw new RuntimeException("TileVisibilityTester can't be NULL");
+    }
   
-	_prc = new PlanetRenderContext();
+    _prc = new PlanetRenderContext();
   }
 
   public void dispose()
   {
-	pruneFirstLevelTiles();
-	clearFirstLevelTiles();
+    pruneFirstLevelTiles();
+    clearFirstLevelTiles();
   
-	if (_layerTilesRenderParameters != null)
-		_layerTilesRenderParameters.dispose();
+    _layerTilesRenderParameters = null;
   
-	if (_tessellator != null)
-		_tessellator.dispose();
-	if (_elevationDataProvider != null)
-		_elevationDataProvider.dispose();
-	if (_texturizer != null)
-		_texturizer.dispose();
-	if (_tilesRenderParameters != null)
-		_tilesRenderParameters.dispose();
+    if (_tessellator != null)
+       _tessellator.dispose();
+    if (_elevationDataProvider != null)
+       _elevationDataProvider.dispose();
+    if (_texturizer != null)
+       _texturizer.dispose();
+    if (_tilesRenderParameters != null)
+       _tilesRenderParameters.dispose();
   
-	if (_lastSplitTimer != null)
-		_lastSplitTimer.dispose();
+    if (_lastSplitTimer != null)
+       _lastSplitTimer.dispose();
   
-	if (_lastVisibleSector != null)
-		_lastVisibleSector.dispose();
+    if (_lastVisibleSector != null)
+       _lastVisibleSector.dispose();
   
-	final int visibleSectorListenersCount = _visibleSectorListeners.size();
-	for (int i = 0; i < visibleSectorListenersCount; i++)
-	{
-	  VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-	  if (entry != null)
-		  entry.dispose();
-	}
+    final int visibleSectorListenersCount = _visibleSectorListeners.size();
+    for (int i = 0; i < visibleSectorListenersCount; i++)
+    {
+      VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
+      if (entry != null)
+         entry.dispose();
+    }
   
-	if (_renderedSector != null)
-		_renderedSector.dispose();
+    if (_renderedSector != null)
+       _renderedSector.dispose();
   
-	if (_tileLODTester != null)
-		_tileLODTester.dispose();
-	if (_tileVisibilityTester != null)
-		_tileVisibilityTester.dispose();
+    if (_tileLODTester != null)
+       _tileLODTester.dispose();
+    if (_tileVisibilityTester != null)
+       _tileVisibilityTester.dispose();
   
-	if (_prc != null)
-		_prc.dispose();
+    if (_prc != null)
+       _prc.dispose();
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.dispose();
-//#endif
+    super.dispose();
   }
 
   public final void initialize(G3MContext context)
   {
-	_context = context;
+    _context = context;
   
-	pruneFirstLevelTiles();
-	clearFirstLevelTiles();
-	createFirstLevelTiles(context);
+    pruneFirstLevelTiles();
+    clearFirstLevelTiles();
+    createFirstLevelTiles(context);
   
-	if (_lastSplitTimer != null)
-		_lastSplitTimer.dispose();
-	_lastSplitTimer = context.getFactory().createTimer();
+    if (_lastSplitTimer != null)
+       _lastSplitTimer.dispose();
+    _lastSplitTimer = context.getFactory().createTimer();
   
-	_layerSet.initialize(context);
-	_texturizer.initialize(context, _tilesRenderParameters);
-	if (_elevationDataProvider != null)
-	{
-	  _elevationDataProvider.initialize(context);
-	}
+    _layerSet.initialize(context);
+    _texturizer.initialize(context, _tilesRenderParameters);
+    if (_elevationDataProvider != null)
+    {
+      _elevationDataProvider.initialize(context);
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
   
-	final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
-	if (layerTilesRenderParameters == null)
-	{
-	  return;
-	}
+    final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
+    if (layerTilesRenderParameters == null)
+    {
+      return;
+    }
   
-	updateGLState(rc);
-	///#warning Testing Terrain Normals
-	_glState.setParent(glState);
+    updateGLState(rc);
+    ///#warning Testing Terrain Normals
+    _glState.setParent(glState);
   
-	// Saving camera for use in onTouchEvent
-	_lastCamera = rc.getCurrentCamera();
+    // Saving camera for use in onTouchEvent
+    _lastCamera = rc.getCurrentCamera();
   
-	_statistics.clear();
+    _statistics.clear();
   
-	final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-	final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-	final double correctionFactor = deviceInfo.getDPI() / factor;
+    final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
+    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+    final double correctionFactor = deviceInfo.getDPI() / factor;
   
-	final double texWidth = correctionFactor * layerTilesRenderParameters._tileTextureResolution._x;
-	final double texHeight = correctionFactor * layerTilesRenderParameters._tileTextureResolution._y;
+    final double texWidth = correctionFactor * layerTilesRenderParameters._tileTextureResolution._x;
+    final double texHeight = correctionFactor * layerTilesRenderParameters._tileTextureResolution._y;
   
-	final double texWidthSquared = texWidth * texWidth;
-	final double texHeightSquared = texHeight * texHeight;
+    final double texWidthSquared = texWidth * texWidth;
+    final double texHeightSquared = texHeight * texHeight;
   
-	final int firstLevelTilesCount = _firstLevelTiles.size();
+    final int firstLevelTilesCount = _firstLevelTiles.size();
   
-	final Frustum frustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+    final Frustum frustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
   
-	final long nowInMS = _lastSplitTimer.nowInMilliseconds();
+    final long nowInMS = _lastSplitTimer.nowInMilliseconds();
   
-	_prc._tileLODTester = _tileLODTester;
-	_prc._tileVisibilityTester = _tileVisibilityTester;
-	_prc._frustumInModelCoordinates = frustumInModelCoordinates;
-	_prc._verticalExaggeration = _verticalExaggeration;
-	_prc._layerTilesRenderParameters = layerTilesRenderParameters;
-	_prc._texturizer = _texturizer;
-	_prc._tilesRenderParameters = _tilesRenderParameters;
-	_prc._lastSplitTimer = _lastSplitTimer;
-	_prc._elevationDataProvider = _elevationDataProvider;
-	_prc._tessellator = _tessellator;
-	_prc._layerSet = _layerSet;
-	_prc._tileDownloadPriority = _tileDownloadPriority;
-	_prc._texWidthSquared = texWidthSquared;
-	_prc._texHeightSquared = texHeightSquared;
-	_prc._nowInMS = nowInMS;
-	_prc._renderTileMeshes = _renderTileMeshes;
-	_prc._logTilesPetitions = _logTilesPetitions;
-  
-  
-	_tileLODTester.renderStarted();
-	_tileVisibilityTester.renderStarted();
+    _prc._tileLODTester = _tileLODTester;
+    _prc._tileVisibilityTester = _tileVisibilityTester;
+    _prc._frustumInModelCoordinates = frustumInModelCoordinates;
+    _prc._verticalExaggeration = _verticalExaggeration;
+    _prc._layerTilesRenderParameters = layerTilesRenderParameters;
+    _prc._texturizer = _texturizer;
+    _prc._tilesRenderParameters = _tilesRenderParameters;
+    _prc._lastSplitTimer = _lastSplitTimer;
+    _prc._elevationDataProvider = _elevationDataProvider;
+    _prc._tessellator = _tessellator;
+    _prc._layerSet = _layerSet;
+    _prc._tileDownloadPriority = _tileDownloadPriority;
+    _prc._texWidthSquared = texWidthSquared;
+    _prc._texHeightSquared = texHeightSquared;
+    _prc._nowInMS = nowInMS;
+    _prc._renderTileMeshes = _renderTileMeshes;
+    _prc._logTilesPetitions = _logTilesPetitions;
   
   
-	if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-	{
-	  // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
-	  // loaded as they will be used as last-chance fallback texture for any tile.
+    _tileLODTester.renderStarted();
+    _tileVisibilityTester.renderStarted();
   
-	  for (int i = 0; i < firstLevelTilesCount; i++)
-	  {
-		Tile tile = _firstLevelTiles.get(i);
-		tile.render(rc, _prc, _glState, _statistics, null); // toVisitInNextIteration
-	  }
-	}
-	else
-	{
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  _toVisit = _firstLevelTiles;
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	  _toVisit.clear();
-	  // hand made for to avoid garbage (like an interator)
-	  for (int i = 0; i < firstLevelTilesCount; i++)
-	  {
-		_toVisit.add(_firstLevelTiles.get(i));
-	  }
-//#endif
   
-	  while (!_toVisit.isEmpty())
-	  {
-		_toVisitInNextIteration.clear();
+    if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+    {
+      // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+      // loaded as they will be used as last-chance fallback texture for any tile.
   
-		final int toVisitSize = _toVisit.size();
-		for (int i = 0; i < toVisitSize; i++)
-		{
-		  Tile tile = _toVisit.get(i);
-		  tile.render(rc, _prc, _glState, _statistics, _toVisitInNextIteration);
-		}
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        tile.render(rc, _prc, _glState, _statistics, null); // toVisitInNextIteration
+      }
+    }
+    else
+    {
+      _toVisit.clear();
+      // hand made for to avoid garbage (like an interator)
+      for (int i = 0; i < firstLevelTilesCount; i++) {
+        _toVisit.add( _firstLevelTiles.get(i) );
+      }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-		_toVisit = _toVisitInNextIteration;
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-		_toVisit.clear();
-		// hand made for to avoid garbage (like an interator)
-		final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
-		for (int i = 0; i < toVisitInNextIterationSize; i++)
-		{
-		  _toVisit.add(_toVisitInNextIteration.get(i));
-		}
-//#endif
-	  }
-	}
+      while (!_toVisit.isEmpty())
+      {
+        _toVisitInNextIteration.clear();
   
-	_firstRender = false;
+        final int toVisitSize = _toVisit.size();
+        for (int i = 0; i < toVisitSize; i++)
+        {
+          Tile tile = _toVisit.get(i);
+          tile.render(rc, _prc, _glState, _statistics, _toVisitInNextIteration);
+        }
   
-	if (_showStatistics)
-	{
-	  _statistics.log(rc.getLogger());
-	}
+        _toVisit.clear();
+        // hand made for to avoid garbage (like an interator)
+        final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
+        for (int i = 0; i < toVisitInNextIterationSize; i++) {
+          _toVisit.add( _toVisitInNextIteration.get(i) );
+        }
+      }
+    }
   
-	final Sector previousLastVisibleSector = _lastVisibleSector;
-	_lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
-	if (previousLastVisibleSector != _lastVisibleSector)
-	{
-	  // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
-	  if (_lastVisibleSector != null)
-	  {
-		final int visibleSectorListenersCount = _visibleSectorListeners.size();
-		for (int i = 0; i < visibleSectorListenersCount; i++)
-		{
-		  VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-		  entry.tryToNotifyListener(_lastVisibleSector, rc);
-		}
-	  }
-	}
+    _firstRender = false;
+  
+    if (_showStatistics)
+    {
+      _statistics.log(rc.getLogger());
+    }
+  
+    final Sector previousLastVisibleSector = _lastVisibleSector;
+    _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
+    if (previousLastVisibleSector != _lastVisibleSector)
+    {
+      // ILogger::instance()->logInfo("=> visibleSector: %s", _lastVisibleSector->description().c_str());
+      if (_lastVisibleSector != null)
+      {
+        final int visibleSectorListenersCount = _visibleSectorListeners.size();
+        for (int i = 0; i < visibleSectorListenersCount; i++)
+        {
+          VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
+          entry.tryToNotifyListener(_lastVisibleSector, rc);
+        }
+      }
+    }
   
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-	if (_lastCamera == null)
-	{
-	  return false;
-	}
+    if (_lastCamera == null)
+    {
+      return false;
+    }
   
-	if (touchEvent.getType() == _touchEventTypeOfTerrainTouchListener)
-	{
-	  final Vector2F pixel = touchEvent.getTouch(0).getPos();
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-	  final Vector3D ray = _lastCamera.pixel2Ray(new Vector2F(pixel));
-	  final Vector3D origin = _lastCamera.getCartesianPosition();
+    if (touchEvent.getType() == _touchEventTypeOfTerrainTouchListener)
+    {
+      final Vector2F pixel = touchEvent.getTouch(0).getPos();
+      final Vector3D ray = _lastCamera.pixel2Ray(pixel);
+      final Vector3D origin = _lastCamera.getCartesianPosition();
   
-	  final Planet planet = ec.getPlanet();
+      final Planet planet = ec.getPlanet();
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-	  final Vector3D positionCartesian = planet.closestIntersection(new Vector3D(origin), new Vector3D(ray));
-	  if (positionCartesian.isNan())
-	  {
-		ILogger.instance().logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
-		return false;
-	  }
+      final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
+      if (positionCartesian.isNan())
+      {
+        ILogger.instance().logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
+        return false;
+      }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
-	  final Geodetic3D position = planet.toGeodetic3D(new Vector3D(positionCartesian));
+      final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
-	  final int firstLevelTilesCount = _firstLevelTiles.size();
-	  for (int i = 0; i < firstLevelTilesCount; i++)
-	  {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
-		final Tile tile = _firstLevelTiles.get(i).getDeepestTileContaining(new Geodetic3D(position));
-		if (tile != null)
-		{
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        final Tile tile = _firstLevelTiles.get(i).getDeepestTileContaining(position);
+        if (tile != null)
+        {
   
-		  final Vector2I tileDimension = new Vector2I(256, 256);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector2I normalizedPixel = tile->getNormalizedPixelFromPosition(position.asGeodetic2D(), tileDimension);
-		  final Vector2I normalizedPixel = tile.getNormalizedPixelFromPosition(position.asGeodetic2D(), new Vector2I(tileDimension));
-		  ILogger.instance().logInfo("Touched on %s", tile.description().c_str());
-		  ILogger.instance().logInfo("Touched on position %s", position.description().c_str());
-		  ILogger.instance().logInfo("Touched on pixels %s", normalizedPixel.description().c_str());
-		  ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description().c_str(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
+          final Vector2I tileDimension = new Vector2I(256, 256);
+          final Vector2I normalizedPixel = tile.getNormalizedPixelFromPosition(position.asGeodetic2D(), tileDimension);
+          ILogger.instance().logInfo("Touched on %s", tile.description());
+          ILogger.instance().logInfo("Touched on position %s", position.description());
+          ILogger.instance().logInfo("Touched on pixels %s", normalizedPixel.description());
+          ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
   
-			ILogger.instance().logInfo("Camera cartesian position=%s", _lastCamera.getCartesianPosition().description().c_str());
+            ILogger.instance().logInfo("Camera cartesian position=%s", _lastCamera.getCartesianPosition().description());
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet))
-		  if (_texturizer.onTerrainTouchEvent(ec, new Geodetic3D(position), tile, _layerSet))
-		  {
-			return true;
-		  }
+          if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
+          {
+            return true;
+          }
   
-		  final int terrainTouchListenersSize = _terrainTouchListeners.size();
-		  for (int j = terrainTouchListenersSize-1; j >= 0; j--)
-		  {
-			TerrainTouchListener listener = _terrainTouchListeners.get(j);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (listener->onTerrainTouch(ec, pixel, _lastCamera, position, tile))
-			if (listener.onTerrainTouch(ec, new Vector2F(pixel), _lastCamera, new Geodetic3D(position), tile))
-			{
-			  return true;
-			}
-		  }
+          final int terrainTouchListenersSize = _terrainTouchListeners.size();
+          for (int j = terrainTouchListenersSize-1; j >= 0; j--)
+          {
+            TerrainTouchListener listener = _terrainTouchListeners.get(j);
+            if (listener.onTerrainTouch(ec, pixel, _lastCamera, position, tile))
+            {
+              return true;
+            }
+          }
   
-		  return false;
-		}
-	  }
-	}
+          return false;
+        }
+      }
+    }
   
-	return false;
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -679,195 +622,183 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-	if (_tessellator == null)
-	{
-	  return RenderState.error("Tessellator is null");
-	}
+    if (_tessellator == null)
+    {
+      return RenderState.error("Tessellator is null");
+    }
   
-	if (_texturizer == null)
-	{
-	  return RenderState.error("Texturizer is null");
-	}
+    if (_texturizer == null)
+    {
+      return RenderState.error("Texturizer is null");
+    }
   
-	final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
-	if (layerTilesRenderParameters == null)
-	{
-	  if (_errors.isEmpty())
-	  {
-		if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-		{
-		  return RenderState.busy();
-		}
-	  }
-	  else
-	  {
-		return RenderState.error(_errors);
-	  }
-	}
+    final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
+    if (layerTilesRenderParameters == null)
+    {
+      if (_errors.isEmpty())
+      {
+        if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+        {
+          return RenderState.busy();
+        }
+      }
+      else
+      {
+        return RenderState.error(_errors);
+      }
+    }
   
-	final RenderState layerSetRenderState = _layerSet.getRenderState();
-	if (layerSetRenderState._type != RenderState_Type.RENDER_READY)
-	{
-	  return layerSetRenderState;
-	}
+    final RenderState layerSetRenderState = _layerSet.getRenderState();
+    if (layerSetRenderState._type != RenderState_Type.RENDER_READY)
+    {
+      return layerSetRenderState;
+    }
   
-	if (_elevationDataProvider != null)
-	{
-	  if (!_elevationDataProvider.isReadyToRender(rc))
-	  {
-		return RenderState.busy();
-	  }
-	}
+    if (_elevationDataProvider != null)
+    {
+      if (!_elevationDataProvider.isReadyToRender(rc))
+      {
+        return RenderState.busy();
+      }
+    }
   
-	final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
-	if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
-	{
-	  return texturizerRenderState;
-	}
+    final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
+    if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
+    {
+      return texturizerRenderState;
+    }
   
-	if (_firstLevelTilesJustCreated)
-	{
-	  _firstLevelTilesJustCreated = false;
+    if (_firstLevelTilesJustCreated)
+    {
+      _firstLevelTilesJustCreated = false;
   
-	  final int firstLevelTilesCount = _firstLevelTiles.size();
+      final int firstLevelTilesCount = _firstLevelTiles.size();
   
-	  if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-	  {
-		_statistics.clear();
+      if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+      {
+        _statistics.clear();
   
-		_prc._tileLODTester = _tileLODTester;
-		_prc._tileVisibilityTester = _tileVisibilityTester;
-		_prc._frustumInModelCoordinates = null;
-		_prc._verticalExaggeration = _verticalExaggeration;
-		_prc._layerTilesRenderParameters = layerTilesRenderParameters;
-		_prc._texturizer = _texturizer;
-		_prc._tilesRenderParameters = _tilesRenderParameters;
-		_prc._lastSplitTimer = _lastSplitTimer;
-		_prc._elevationDataProvider = _elevationDataProvider;
-		_prc._tessellator = _tessellator;
-		_prc._layerSet = _layerSet;
-		_prc._tileDownloadPriority = _tileDownloadPriority;
-		_prc._texWidthSquared = -1;
-		_prc._texHeightSquared = -1;
-		_prc._nowInMS = -1;
-		_prc._renderTileMeshes = _renderTileMeshes;
-		_prc._logTilesPetitions = _logTilesPetitions;
+        _prc._tileLODTester = _tileLODTester;
+        _prc._tileVisibilityTester = _tileVisibilityTester;
+        _prc._frustumInModelCoordinates = null;
+        _prc._verticalExaggeration = _verticalExaggeration;
+        _prc._layerTilesRenderParameters = layerTilesRenderParameters;
+        _prc._texturizer = _texturizer;
+        _prc._tilesRenderParameters = _tilesRenderParameters;
+        _prc._lastSplitTimer = _lastSplitTimer;
+        _prc._elevationDataProvider = _elevationDataProvider;
+        _prc._tessellator = _tessellator;
+        _prc._layerSet = _layerSet;
+        _prc._tileDownloadPriority = _tileDownloadPriority;
+        _prc._texWidthSquared = -1;
+        _prc._texHeightSquared = -1;
+        _prc._nowInMS = -1;
+        _prc._renderTileMeshes = _renderTileMeshes;
+        _prc._logTilesPetitions = _logTilesPetitions;
   
-		for (int i = 0; i < firstLevelTilesCount; i++)
-		{
-		  Tile tile = _firstLevelTiles.get(i);
-		  tile.prepareForFullRendering(rc, _prc);
-		}
-	  }
+        for (int i = 0; i < firstLevelTilesCount; i++)
+        {
+          Tile tile = _firstLevelTiles.get(i);
+          tile.prepareForFullRendering(rc, _prc);
+        }
+      }
   
-	  for (int i = 0; i < firstLevelTilesCount; i++)
-	  {
-		Tile tile = _firstLevelTiles.get(i);
-		_texturizer.justCreatedTopTile(rc, tile, _layerSet);
-	  }
-	}
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        _texturizer.justCreatedTopTile(rc, tile, _layerSet);
+      }
+    }
   
-	if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved)
-	{
-	  final int firstLevelTilesCount = _firstLevelTiles.size();
-	  for (int i = 0; i < firstLevelTilesCount; i++)
-	  {
-		Tile tile = _firstLevelTiles.get(i);
-		if (!tile.isTextureSolved())
-		{
-		  return RenderState.busy();
-		}
-	  }
+    if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved)
+    {
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        Tile tile = _firstLevelTiles.get(i);
+        if (!tile.isTextureSolved())
+        {
+          return RenderState.busy();
+        }
+      }
   
-	  _allFirstLevelTilesAreTextureSolved = true;
-	}
+      _allFirstLevelTilesAreTextureSolved = true;
+    }
   
-	return RenderState.ready();
+    return RenderState.ready();
   }
 
   public final void acceptTileVisitor(ITileVisitor tileVisitor, Sector sector, int topLevel, int maxLevel)
   {
-	_tileVisitor = tileVisitor;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: visitTilesTouchesWith(sector, topLevel, maxLevel);
-	visitTilesTouchesWith(new Sector(sector), topLevel, maxLevel);
+    _tileVisitor = tileVisitor;
+    visitTilesTouchesWith(sector, topLevel, maxLevel);
   }
 
   public final void start(G3MRenderContext rc)
   {
-	_firstRender = true;
+    _firstRender = true;
   }
 
   public final void stop(G3MRenderContext rc)
   {
-	_firstRender = false;
+    _firstRender = false;
   }
 
   public final void onPause(G3MContext context)
   {
-	recreateTiles();
+    recreateTiles();
   }
 
   public final void setEnable(boolean enable)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	super.setEnable(enable);
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-	super.setEnable(enable);
-//#endif
+    super.setEnable(enable);
 
-	if (!enable)
-	{
-	  pruneFirstLevelTiles();
-	}
+    if (!enable)
+    {
+      pruneFirstLevelTiles();
+    }
   }
 
   public final void changed()
   {
-	if (!_recreateTilesPending)
-	{
-	  _recreateTilesPending = true;
-	  // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
-	  //   so it has to be executed in the OpenGL thread
-	  if (_context == null)
-	  {
-		ILogger.instance().logError("_context is not initialized");
-	  }
-	  else
-	  {
-		_context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
-	  }
-	}
+    if (!_recreateTilesPending)
+    {
+      _recreateTilesPending = true;
+      // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
+      //   so it has to be executed in the OpenGL thread
+      if (_context == null)
+      {
+        ILogger.instance().logError("_context is not initialized");
+      }
+      else
+      {
+        _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+      }
+    }
   }
 
   public final void recreateTiles()
   {
-	pruneFirstLevelTiles();
-	clearFirstLevelTiles();
+    pruneFirstLevelTiles();
+    clearFirstLevelTiles();
   
-	if (_layerTilesRenderParameters != null)
-		_layerTilesRenderParameters.dispose();
-	_layerTilesRenderParameters = null;
-	_layerTilesRenderParametersDirty = true;
+    _layerTilesRenderParameters = null;
+    _layerTilesRenderParameters = null;
+    _layerTilesRenderParametersDirty = true;
   
-	_firstRender = true;
-	_allFirstLevelTilesAreTextureSolved = false;
-	createFirstLevelTiles(_context);
+    _firstRender = true;
+    _allFirstLevelTilesAreTextureSolved = false;
+    createFirstLevelTiles(_context);
   
-	_recreateTilesPending = false;
+    _recreateTilesPending = false;
   }
 
   /**
    Answer the visible-sector, it can be null if globe was not yet rendered.
    */
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Sector* getVisibleSector() const
   public final Sector getVisibleSector()
   {
-	return _lastVisibleSector;
+    return _lastVisibleSector;
   }
 
   /**
@@ -877,7 +808,7 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
-	_visibleSectorListeners.add(new VisibleSectorListenerEntry(listener, stabilizationInterval));
+    _visibleSectorListeners.add(new VisibleSectorListenerEntry(listener, stabilizationInterval));
   }
 
   /**
@@ -887,7 +818,7 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener)
   {
-	addVisibleSectorListener(listener, TimeInterval.zero());
+    addVisibleSectorListener(listener, TimeInterval.zero());
   }
 
   /**
@@ -897,7 +828,7 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
    */
   public final void setTileDownloadPriority(long tileDownloadPriority)
   {
-	_tileDownloadPriority = tileDownloadPriority;
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   /**
@@ -905,11 +836,9 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
    *
    * @return _tileDownloadPriority: long
    */
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: long getTileDownloadPriority() const
   public final long getTileDownloadPriority()
   {
-	return _tileDownloadPriority;
+    return _tileDownloadPriority;
   }
 
   /**
@@ -917,172 +846,156 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
    */
   public final boolean isPlanetRenderer()
   {
-	return true;
+    return true;
   }
 
   public final SurfaceElevationProvider getSurfaceElevationProvider()
   {
-	return this;
+    return this;
   }
 
   public final PlanetRenderer getPlanetRenderer()
   {
-	return this;
+    return this;
   }
 
   public final void addListener(Angle latitude, Angle longitude, SurfaceElevationListener listener)
   {
-	_elevationListenersTree.add(new Geodetic2D(latitude, longitude), listener);
+    _elevationListenersTree.add(new Geodetic2D(latitude, longitude), listener);
   }
 
   public final void addListener(Geodetic2D position, SurfaceElevationListener listener)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _elevationListenersTree.add(position, listener);
-	_elevationListenersTree.add(new Geodetic2D(position), listener);
+    _elevationListenersTree.add(position, listener);
   }
 
   public final boolean removeListener(SurfaceElevationListener listener)
   {
-	return _elevationListenersTree.remove(listener);
+    return _elevationListenersTree.remove(listener);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void sectorElevationChanged(ElevationData* elevationData) const
   public final void sectorElevationChanged(ElevationData elevationData)
   {
-	if (elevationData != null)
-	{
-	  _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
-	}
+    if (elevationData != null)
+    {
+      _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Sector* getRenderedSector() const
   public final Sector getRenderedSector()
   {
-	return _renderedSector;
+    return _renderedSector;
   }
 
   public final boolean setRenderedSector(Sector sector)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if ((_renderedSector != null && !_renderedSector->isEquals(sector)) || (_renderedSector == null && !sector.isEquals(Sector::fullSphere())))
-	if ((_renderedSector != null && !_renderedSector.isEquals(new Sector(sector))) || (_renderedSector == null && !sector.isEquals(Sector.fullSphere())))
-	{
-	  if (_renderedSector != null)
-		  _renderedSector.dispose();
+    if ((_renderedSector != null && !_renderedSector.isEquals(sector)) || (_renderedSector == null && !sector.isEquals(Sector.fullSphere())))
+    {
+      if (_renderedSector != null)
+         _renderedSector.dispose();
   
-	  if (sector.isEquals(Sector.fullSphere()))
-	  {
-		_renderedSector = null;
-	  }
-	  else
-	  {
-		_renderedSector = new Sector(sector);
-	  }
+      if (sector.isEquals(Sector.fullSphere()))
+      {
+        _renderedSector = null;
+      }
+      else
+      {
+        _renderedSector = new Sector(sector);
+      }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _tessellator->setRenderedSector(sector);
-	  _tessellator.setRenderedSector(new Sector(sector));
+      _tessellator.setRenderedSector(sector);
   
-	  changed();
+      changed();
   
-	  return true;
-	}
-	return false;
+      return true;
+    }
+    return false;
   }
 
   public final void addTerrainTouchListener(TerrainTouchListener listener)
   {
-	if (listener != null)
-	{
-	  _terrainTouchListeners.add(listener);
-	}
+    if (listener != null)
+    {
+      _terrainTouchListeners.add(listener);
+    }
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
   {
-	if (_elevationDataProvider != elevationDataProvider)
-	{
-	  if (_ownsElevationDataProvider)
-	  {
-		if (_elevationDataProvider != null)
-			_elevationDataProvider.dispose();
-	  }
+    if (_elevationDataProvider != elevationDataProvider)
+    {
+      if (_ownsElevationDataProvider)
+      {
+        if (_elevationDataProvider != null)
+           _elevationDataProvider.dispose();
+      }
   
-	  _ownsElevationDataProvider = owned;
-	  _elevationDataProvider = elevationDataProvider;
+      _ownsElevationDataProvider = owned;
+      _elevationDataProvider = elevationDataProvider;
   
-	  if (_elevationDataProvider != null)
-	  {
-		_elevationDataProvider.setChangedListener(this);
-		if (_context != null)
-		{
-		  _elevationDataProvider.initialize(_context); //Initializing EDP in case it wasn't
-		}
-	  }
+      if (_elevationDataProvider != null)
+      {
+        _elevationDataProvider.setChangedListener(this);
+        if (_context != null)
+        {
+          _elevationDataProvider.initialize(_context); //Initializing EDP in case it wasn't
+        }
+      }
   
-	  changed();
-	}
+      changed();
+    }
   }
   public final void setVerticalExaggeration(float verticalExaggeration)
   {
-	if (_verticalExaggeration != verticalExaggeration)
-	{
-	  _verticalExaggeration = verticalExaggeration;
-	  changed();
-	}
+    if (_verticalExaggeration != verticalExaggeration)
+    {
+      _verticalExaggeration = verticalExaggeration;
+      changed();
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: ElevationDataProvider* getElevationDataProvider() const
   public final ElevationDataProvider getElevationDataProvider()
   {
-	return _elevationDataProvider;
+    return _elevationDataProvider;
   }
 
   public final void setRenderTileMeshes(boolean renderTileMeshes)
   {
-	_renderTileMeshes = renderTileMeshes;
+    _renderTileMeshes = renderTileMeshes;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean getRenderTileMeshes() const
   public final boolean getRenderTileMeshes()
   {
-	return _renderTileMeshes;
+    return _renderTileMeshes;
   }
 
-  public final void changedInfo(java.util.ArrayList<const Info> info)
+  public final void changedInfo(java.util.ArrayList<Info> info)
   {
-	if (_changedInfoListener != null)
-	{
-	  _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
-	}
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+    }
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float getVerticalExaggeration() const
   public final float getVerticalExaggeration()
   {
-	return _verticalExaggeration;
+    return _verticalExaggeration;
   }
 
   public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
   {
-	if (_changedInfoListener != null)
-	{
-	  ILogger.instance().logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
-	}
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
+    }
   
-	_rendererIdentifier = rendererIdentifier;
-	_changedInfoListener = changedInfoListener;
+    _rendererIdentifier = rendererIdentifier;
+    _changedInfoListener = changedInfoListener;
   
-	if(_changedInfoListener != null)
-	{
-	  _changedInfoListener.changedRendererInfo(rendererIdentifier, _layerSet.getInfo());
-	}
+    if(_changedInfoListener != null)
+    {
+      _changedInfoListener.changedRendererInfo(rendererIdentifier, _layerSet.getInfo());
+    }
   }
 
 
@@ -1100,12 +1013,10 @@ public class PlanetRenderer extends DefaultRenderer, ChangedListener, ChangedInf
   //  return _info;
   //}
   
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void onTileHasChangedMesh(const Tile *tile) const
   public final void onTileHasChangedMesh(Tile tile)
   {
-	_tileLODTester.onTileHasChangedMesh(tile);
-	_tileVisibilityTester.onTileHasChangedMesh(tile);
+    _tileLODTester.onTileHasChangedMesh(tile);
+    _tileVisibilityTester.onTileHasChangedMesh(tile);
   }
 
 }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  MeshHolder.cpp
 //  G3MiOSSDK
 //
@@ -26,78 +24,61 @@ public class MeshHolder extends Mesh
 
   public MeshHolder(Mesh mesh)
   {
-	  _mesh = mesh;
+     _mesh = mesh;
 
   }
 
   public final void setMesh(Mesh mesh)
   {
-	if (_mesh != mesh)
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	  _mesh = mesh;
-	}
+    if (_mesh != mesh)
+    {
+      if (_mesh != null)
+         _mesh.dispose();
+      _mesh = mesh;
+    }
   }
 
   public void dispose()
   {
-	if (_mesh != null)
-		_mesh.dispose();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
+    if (_mesh != null)
+       _mesh.dispose();
   super.dispose();
-//#endif
 
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getVertexCount() const
   public final int getVertexCount()
   {
-	return _mesh.getVertexCount();
+    return _mesh.getVertexCount();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Vector3D getVertex(int i) const
   public final Vector3D getVertex(int i)
   {
-	return _mesh.getVertex(i);
+    return _mesh.getVertex(i);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: BoundingVolume* getBoundingVolume() const
   public final BoundingVolume getBoundingVolume()
   {
-	return _mesh.getBoundingVolume();
+    return _mesh.getBoundingVolume();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	return _mesh.isTransparent(rc);
+    return _mesh.isTransparent(rc);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const
   public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
-	_mesh.render(rc, parentGLState);
+    _mesh.render(rc, parentGLState);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void showNormals(boolean v) const
   public final void showNormals(boolean v)
   {
-	_mesh.showNormals(v);
+    _mesh.showNormals(v);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* getMesh() const
   public final Mesh getMesh()
   {
-	return _mesh;
+    return _mesh;
   }
 
 }

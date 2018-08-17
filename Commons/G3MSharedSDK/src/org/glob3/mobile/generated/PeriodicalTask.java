@@ -17,45 +17,45 @@ public class PeriodicalTask
 
   private ITimer getTimer()
   {
-	if (_timer == null)
-	{
-	  _timer = IFactory.instance().createTimer();
-	}
-	return _timer;
+    if (_timer == null)
+    {
+      _timer = IFactory.instance().createTimer();
+    }
+    return _timer;
   }
 
   public PeriodicalTask(TimeInterval interval, GTask task)
   {
-	  _intervalMS = interval._milliseconds;
-	  _task = task;
-	  _lastExecutionMS = 0;
-	  _timer = null;
+     _intervalMS = interval._milliseconds;
+     _task = task;
+     _lastExecutionMS = 0;
+     _timer = null;
   }
 
   public void dispose()
   {
-	if (_task != null)
-		_task.dispose();
-	if (_timer != null)
-		_timer.dispose();
+    if (_task != null)
+       _task.dispose();
+    if (_timer != null)
+       _timer.dispose();
   }
 
   public final void resetTimeout()
   {
-	_lastExecutionMS = 0;
+    _lastExecutionMS = 0;
   }
 
   public final void executeIfNecessary(G3MContext context)
   {
-	long now = getTimer().nowInMilliseconds();
+    long now = getTimer().nowInMilliseconds();
 
-	long interval = now - _lastExecutionMS;
+    long interval = now - _lastExecutionMS;
 
-	if (interval >= _intervalMS)
-	{
-	  _task.run(context);
-	  _lastExecutionMS = now;
-	}
+    if (interval >= _intervalMS)
+    {
+      _task.run(context);
+      _lastExecutionMS = now;
+    }
   }
 
 }

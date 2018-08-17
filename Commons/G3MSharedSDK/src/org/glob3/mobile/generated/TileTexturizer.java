@@ -14,27 +14,16 @@ package org.glob3.mobile.generated;//
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTessellator;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TilesRenderParameters;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic3D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerTilesRenderParameters;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class PlanetRenderContext;
 
 

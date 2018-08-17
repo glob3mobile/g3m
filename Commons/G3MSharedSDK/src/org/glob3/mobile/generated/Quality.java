@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  TilesRenderParameters.cpp
 //  G3MiOSSDK
 //
@@ -25,13 +23,13 @@ public enum Quality
   QUALITY_MEDIUM,
   QUALITY_HIGH;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static Quality forValue(int value)
-	{
-		return values()[value];
-	}
+   public static Quality forValue(int value)
+   {
+      return values()[value];
+   }
 }

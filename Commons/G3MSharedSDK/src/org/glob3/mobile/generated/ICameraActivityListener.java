@@ -8,20 +8,10 @@ package org.glob3.mobile.generated;//
 
 
 
-public abstract class ICameraActivityListener
+public interface ICameraActivityListener
 {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-  public void dispose()
-  {
-  }
-//#endif
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void dispose();
-//#endif
+  void dispose();
 
-  public abstract void touchEventHandled();
+  void touchEventHandled();
 
 }

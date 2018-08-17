@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public abstract class NonOverlappingMarksVisibilityListener
+package org.glob3.mobile.generated;public abstract class NonOverlappingMarksVisibilityListener
 {
   public void dispose()
   {

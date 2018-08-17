@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  TileTessellator.cpp
 //  G3MiOSSDK
 //
@@ -15,31 +13,18 @@ package org.glob3.mobile.generated;import java.util.*;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Planet;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector2D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ElevationData;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic2D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Sector;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class PlanetRenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector2S;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector2F;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Angle;
 
 public class TileTessellatorMeshData

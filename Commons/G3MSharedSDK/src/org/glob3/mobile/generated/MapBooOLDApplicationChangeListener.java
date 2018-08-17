@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  MapBooOLDBuilder.cpp
 //  G3MiOSSDK
 //
@@ -18,92 +16,49 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GL;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MWidget;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class PlanetRenderer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStorage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IDownloader;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IThreadUtils;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Planet;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ICameraConstrainer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class CameraRenderer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Renderer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ProtoRenderer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GInitializationTask;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class PeriodicalTask;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Layer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GPUProgramManager;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONBaseObject;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONObject;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONString;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONArray;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TimeInterval;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MapQuestLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class BingMapsLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class CartoDBLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MapBoxLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class WMSLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IWebSocket;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MapBooOLD_Scene;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ErrorRenderer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SceneLighting;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MEventContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Tile;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MarksRenderer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MapBooOLDBuilder;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector2I;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class URLTemplateLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Sector;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IBufferDownloadListener;
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileVisibilityTester;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileLODTester;
 
 

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  JSONNull.cpp
 //  G3MiOSSDK
 //
@@ -26,38 +24,28 @@ public class JSONNull extends JSONBaseObject
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const JSONNull* asNull() const
   public final JSONNull asNull()
   {
-	return this;
+    return this;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
   public final String description()
   {
-	return "null";
+    return "null";
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String toString() const
   public final String toString()
   {
-	return "null";
+    return "null";
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONNull* deepCopy() const
   public final JSONNull deepCopy()
   {
-	return new JSONNull();
+    return new JSONNull();
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void acceptVisitor(JSONVisitor* visitor) const
   public final void acceptVisitor(JSONVisitor visitor)
   {
-	visitor.visitNull();
+    visitor.visitNull();
   }
 
 }

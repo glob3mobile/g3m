@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  MeshShape.cpp
 //  G3MiOSSDK
 //
@@ -22,12 +20,12 @@ public abstract class MeshShape extends AbstractMeshShape
 {
   protected final Mesh createMesh(G3MRenderContext rc)
   {
-	return null;
+    return null;
   }
 
   public MeshShape(Geodetic3D position, AltitudeMode altitudeMode, Mesh mesh)
   {
-	  super(position, altitudeMode, mesh);
+     super(position, altitudeMode, mesh);
 
   }
 

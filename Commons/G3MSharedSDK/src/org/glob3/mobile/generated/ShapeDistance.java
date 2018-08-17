@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  ShapesRenderer.cpp
 //  G3MiOSSDK
 //
@@ -26,7 +24,7 @@ public class ShapeDistance
 
   public ShapeDistance(double distance, Shape shape)
   {
-	  _distance = distance;
-	  _shape = shape;
+     _distance = distance;
+     _shape = shape;
   }
 }

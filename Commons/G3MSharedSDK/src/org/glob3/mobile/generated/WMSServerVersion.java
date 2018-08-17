@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  WMSLayer.cpp
 //  G3MiOSSDK
 //
@@ -21,13 +19,13 @@ public enum WMSServerVersion
   WMS_1_1_0,
   WMS_1_3_0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static WMSServerVersion forValue(int value)
-	{
-		return values()[value];
-	}
+   public static WMSServerVersion forValue(int value)
+   {
+      return values()[value];
+   }
 }

@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  ILogger.cpp
 //  G3MiOSSDK
 //
@@ -25,13 +23,13 @@ public enum LogLevel
   WarningLevel,
   ErrorLevel;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+   public int getValue()
+   {
+      return this.ordinal();
+   }
 
-	public static LogLevel forValue(int value)
-	{
-		return values()[value];
-	}
+   public static LogLevel forValue(int value)
+   {
+      return values()[value];
+   }
 }

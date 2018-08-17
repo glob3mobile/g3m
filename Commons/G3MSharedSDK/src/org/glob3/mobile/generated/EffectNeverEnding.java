@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;public abstract class EffectNeverEnding exten
 
   public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-	return false;
+    return false;
   }
 
 }

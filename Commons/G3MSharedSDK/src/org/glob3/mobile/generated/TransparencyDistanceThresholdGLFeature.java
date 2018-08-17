@@ -1,27 +1,20 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-/////////////////////////
+package org.glob3.mobile.generated;/////////////////////////
 
 
 public class TransparencyDistanceThresholdGLFeature extends GLFeature
 {
-	public void dispose()
-	{
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
-		super.dispose();
-//#endif
-	}
+    public void dispose()
+    {
+        super.dispose();
+    }
 
-	public TransparencyDistanceThresholdGLFeature(float distance)
-	{
-		super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_TRANSPARENCY_DISTANCE_THRESHOLD);
-		_values.addUniformValue(GPUUniformKey.TRANSPARENCY_DISTANCE_THRESLHOLD, new GPUUniformValueFloat(distance), false);
-	}
+    public TransparencyDistanceThresholdGLFeature(float distance)
+    {
+       super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_TRANSPARENCY_DISTANCE_THRESHOLD);
+        _values.addUniformValue(GPUUniformKey.TRANSPARENCY_DISTANCE_THRESLHOLD, new GPUUniformValueFloat(distance), false);
+    }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void applyOnGlobalGLState(GLGlobalState* state) const
-	public final void applyOnGlobalGLState(GLGlobalState state)
-	{
-	}
+    public final void applyOnGlobalGLState(GLGlobalState state)
+    {
+    }
 }

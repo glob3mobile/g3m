@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  Sphere.cpp
 //  G3MiOSSDK
 //
@@ -29,410 +27,344 @@ public class Sphere extends BoundingVolume
 
   public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points)
   {
-	final int size = points.size();
+    final int size = points.size();
   
-	if (size < 2)
-	{
-	  return null;
-	}
+    if (size < 2)
+    {
+      return null;
+    }
   
-	double xmin = points.get(0)._x;
-	double xmax = points.get(0)._x;
-	double ymin = points.get(0)._y;
-	double ymax = points.get(0)._y;
-	double zmin = points.get(0)._z;
-	double zmax = points.get(0)._z;
+    double xmin = points.get(0)._x;
+    double xmax = points.get(0)._x;
+    double ymin = points.get(0)._y;
+    double ymax = points.get(0)._y;
+    double zmin = points.get(0)._z;
+    double zmax = points.get(0)._z;
   
-	for (int i = 1; i < size; i++)
-	{
-	  final Vector3D p = points.get(i);
+    for (int i = 1; i < size; i++)
+    {
+      final Vector3D p = points.get(i);
   
-	  final double x = p._x;
-	  final double y = p._y;
-	  final double z = p._z;
+      final double x = p._x;
+      final double y = p._y;
+      final double z = p._z;
   
-	  if (x < xmin)
-		  xmin = x;
-	  if (x > xmax)
-		  xmax = x;
-	  if (y < ymin)
-		  ymin = y;
-	  if (y > ymax)
-		  ymax = y;
-	  if (z < zmin)
-		  zmin = z;
-	  if (z > zmax)
-		  zmax = z;
-	}
+      if (x < xmin)
+         xmin = x;
+      if (x > xmax)
+         xmax = x;
+      if (y < ymin)
+         ymin = y;
+      if (y > ymax)
+         ymax = y;
+      if (z < zmin)
+         zmin = z;
+      if (z > zmax)
+         zmax = z;
+    }
   
-	final Vector3D center = new Vector3D((xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2);
-	double sqRad = center.squaredDistanceTo(points.get(0));
-	for (int i = 1; i < size; i++)
-	{
-	  final double dt = center.squaredDistanceTo(points.get(i));
-	  if (dt > sqRad)
-	  {
-		sqRad = dt;
-	  }
-	}
+    final Vector3D center = new Vector3D((xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2);
+    double sqRad = center.squaredDistanceTo(points.get(0));
+    for (int i = 1; i < size; i++)
+    {
+      final double dt = center.squaredDistanceTo(points.get(i));
+      if (dt > sqRad)
+      {
+        sqRad = dt;
+      }
+    }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return new Sphere(center, IMathUtils::instance()->sqrt(sqRad));
-	return new Sphere(new Vector3D(center), IMathUtils.instance().sqrt(sqRad));
+    return new Sphere(center, IMathUtils.instance().sqrt(sqRad));
   }
 
-  public final Vector3D _center = new Vector3D();
+  public final Vector3D _center ;
   public final double _radius;
   public final double _radiusSquared;
 
 
   public Sphere(Vector3D center, double radius)
   {
-	  _center = new Vector3D(center);
-	  _radius = radius;
-	  _radiusSquared = radius * radius;
-	  _mesh = null;
+     _center = new Vector3D(center);
+     _radius = radius;
+     _radiusSquared = radius * radius;
+     _mesh = null;
   }
 
   public Sphere(Sphere that)
   {
-	  _center = new Vector3D(that._center);
-	  _radius = that._radius;
-	  _radiusSquared = that._radiusSquared;
-	  _mesh = null;
+     _center = new Vector3D(that._center);
+     _radius = that._radius;
+     _radiusSquared = that._radiusSquared;
+     _mesh = null;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D getCenter() const
   public final Vector3D getCenter()
   {
-	return _center;
+    return _center;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getRadius() const
   public final double getRadius()
   {
-	return _radius;
+    return _radius;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getRadiusSquared() const
   public final double getRadiusSquared()
   {
-	return _radiusSquared;
+    return _radiusSquared;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double projectedArea(const G3MRenderContext* rc) const
   public final double projectedArea(G3MRenderContext rc)
   {
-	return rc.getCurrentCamera().getProjectedSphereArea(this);
+    return rc.getCurrentCamera().getProjectedSphereArea(this);
   }
   //  Vector2I projectedExtent(const G3MRenderContext* rc) const;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const G3MRenderContext* rc, const GLState* parentState, const Color& color) const
   public final void render(G3MRenderContext rc, GLState parentState, Color color)
   {
-	if (_mesh == null)
-	{
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: _mesh = createWireframeMesh(color, (short) 16);
-	  _mesh = createWireframeMesh(new Color(color), (short) 16);
-	}
-	_mesh.render(rc, parentState);
+    if (_mesh == null)
+    {
+      _mesh = createWireframeMesh(color, (short) 16);
+    }
+    _mesh.render(rc, parentState);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean touches(const BoundingVolume* that) const
   public final boolean touches(BoundingVolume that)
   {
-	if (that == null)
-	{
-	  return false;
-	}
-	return that.touchesSphere(this);
+    if (that == null)
+    {
+      return false;
+    }
+    return that.touchesSphere(this);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean touchesBox(const Box* that) const
   public final boolean touchesBox(Box that)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D p = that->closestPoint(_center);
-	final Vector3D p = that.closestPoint(new Vector3D(_center));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const Vector3D v = p.sub(_center);
-	final Vector3D v = p.sub(new Vector3D(_center));
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return v.dot(v) <= (_radius * _radius);
-	return v.dot(new Vector3D(v)) <= (_radius * _radius);
+    final Vector3D p = that.closestPoint(_center);
+    final Vector3D v = p.sub(_center);
+    return v.dot(v) <= (_radius * _radius);
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean touchesFrustum(const Frustum *frustum) const
   public final boolean touchesFrustum(Frustum frustum)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning This implementation could gives false positives
-	// this implementation is not right exact, but it's faster.
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (frustum->getNearPlane().signedDistance(_center) > _radius)
-	if (frustum.getNearPlane().signedDistance(new Vector3D(_center)) > _radius)
-		return false;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (frustum->getFarPlane().signedDistance(_center) > _radius)
-	if (frustum.getFarPlane().signedDistance(new Vector3D(_center)) > _radius)
-		return false;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (frustum->getLeftPlane().signedDistance(_center) > _radius)
-	if (frustum.getLeftPlane().signedDistance(new Vector3D(_center)) > _radius)
-		return false;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (frustum->getRightPlane().signedDistance(_center) > _radius)
-	if (frustum.getRightPlane().signedDistance(new Vector3D(_center)) > _radius)
-		return false;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (frustum->getTopPlane().signedDistance(_center) > _radius)
-	if (frustum.getTopPlane().signedDistance(new Vector3D(_center)) > _radius)
-		return false;
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: if (frustum->getBottomPlane().signedDistance(_center) > _radius)
-	if (frustum.getBottomPlane().signedDistance(new Vector3D(_center)) > _radius)
-		return false;
-	return true;
+    // this implementation is not right exact, but it's faster.
+    if (frustum.getNearPlane().signedDistance(_center) > _radius)
+       return false;
+    if (frustum.getFarPlane().signedDistance(_center) > _radius)
+       return false;
+    if (frustum.getLeftPlane().signedDistance(_center) > _radius)
+       return false;
+    if (frustum.getRightPlane().signedDistance(_center) > _radius)
+       return false;
+    if (frustum.getTopPlane().signedDistance(_center) > _radius)
+       return false;
+    if (frustum.getBottomPlane().signedDistance(_center) > _radius)
+       return false;
+    return true;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean touchesSphere(const Sphere* that) const
   public final boolean touchesSphere(Sphere that)
   {
-	final Vector3D d = _center.sub(that._center);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: const double squaredDist = d.dot(d);
-	final double squaredDist = d.dot(new Vector3D(d));
-	final double radiusSum = _radius + that._radius;
-	return squaredDist <= (radiusSum * radiusSum);
+    final Vector3D d = _center.sub(that._center);
+    final double squaredDist = d.dot(d);
+    final double radiusSum = _radius + that._radius;
+    return squaredDist <= (radiusSum * radiusSum);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: BoundingVolume* mergedWith(const BoundingVolume* that) const
   public final BoundingVolume mergedWith(BoundingVolume that)
   {
-	if (that == null)
-	{
-	  return null;
-	}
-	return that.mergedWithSphere(this);
+    if (that == null)
+    {
+      return null;
+    }
+    return that.mergedWithSphere(this);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: BoundingVolume* mergedWithBox(const Box* that) const
   public final BoundingVolume mergedWithBox(Box that)
   {
-	if (that.fullContainedInSphere(this))
-	{
-	  return new Sphere(this);
-	}
+    if (that.fullContainedInSphere(this))
+    {
+      return new Sphere(this);
+    }
   
-	final Vector3D upper = that.getUpper();
-	final Vector3D lower = that.getLower();
+    final Vector3D upper = that.getUpper();
+    final Vector3D lower = that.getLower();
   
-	double minX = _center._x - _radius;
-	if (lower._x < minX)
-	{
-		minX = lower._x;
-	}
+    double minX = _center._x - _radius;
+    if (lower._x < minX)
+    {
+       minX = lower._x;
+    }
   
-	double maxX = _center._x + _radius;
-	if (upper._x > maxX)
-	{
-		maxX = upper._x;
-	}
+    double maxX = _center._x + _radius;
+    if (upper._x > maxX)
+    {
+       maxX = upper._x;
+    }
   
-	double minY = _center._y - _radius;
-	if (lower._y < minY)
-	{
-		minY = lower._y;
-	}
+    double minY = _center._y - _radius;
+    if (lower._y < minY)
+    {
+       minY = lower._y;
+    }
   
-	double maxY = _center._y + _radius;
-	if (upper._y > maxY)
-	{
-		maxY = upper._y;
-	}
+    double maxY = _center._y + _radius;
+    if (upper._y > maxY)
+    {
+       maxY = upper._y;
+    }
   
-	double minZ = _center._z - _radius;
-	if (lower._z < minZ)
-	{
-		minZ = lower._z;
-	}
+    double minZ = _center._z - _radius;
+    if (lower._z < minZ)
+    {
+       minZ = lower._z;
+    }
   
-	double maxZ = _center._z + _radius;
-	if (upper._z > maxZ)
-	{
-		maxZ = upper._z;
-	}
+    double maxZ = _center._z + _radius;
+    if (upper._z > maxZ)
+    {
+       maxZ = upper._z;
+    }
   
-	return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
+    return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   
-	/* Diego: creo que este test ya no hace falta, porque el coste del método
-	 fullContainedInBox es casi tanto es casi similar a todo lo anterior
-	 if (fullContainedInBox(that)) {
-	 return new Box(*that);
-	 }
-	 if (that->fullContainedInSphere(this)) {
-	 return new Sphere(*this);
-	 }*/
+    /* Diego: creo que este test ya no hace falta, porque el coste del método
+     fullContainedInBox es casi tanto es casi similar a todo lo anterior
+     if (fullContainedInBox(that)) {
+     return new Box(*that);
+     }
+     if (that->fullContainedInSphere(this)) {
+     return new Sphere(*this);
+     }*/
   
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: BoundingVolume* mergedWithSphere(const Sphere* that) const
   public final BoundingVolume mergedWithSphere(Sphere that)
   {
-	final double d = _center.distanceTo(that._center);
+    final double d = _center.distanceTo(that._center);
   
-	if (d + that._radius <= _radius)
-	{
-	  return new Sphere(this);
-	}
-	if (d + _radius <= that._radius)
-	{
-	  return new Sphere(that);
-	}
+    if (d + that._radius <= _radius)
+    {
+      return new Sphere(this);
+    }
+    if (d + _radius <= that._radius)
+    {
+      return new Sphere(that);
+    }
   
-	final double radius = (d + _radius + that._radius) / 2.0;
-	final Vector3D u = _center.sub(that._center).normalized();
-	final Vector3D center = _center.add(u.times(radius - _radius));
+    final double radius = (d + _radius + that._radius) / 2.0;
+    final Vector3D u = _center.sub(that._center).normalized();
+    final Vector3D center = _center.add(u.times(radius - _radius));
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return new Sphere(center, radius);
-	return new Sphere(new Vector3D(center), radius);
+    return new Sphere(center, radius);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean contains(const Vector3D& point) const
   public final boolean contains(Vector3D point)
   {
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return _center.squaredDistanceTo(point) <= _radiusSquared;
-	return _center.squaredDistanceTo(new Vector3D(point)) <= _radiusSquared;
+    return _center.squaredDistanceTo(point) <= _radiusSquared;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean fullContains(const BoundingVolume* that) const
   public final boolean fullContains(BoundingVolume that)
   {
-	return that.fullContainedInSphere(this);
+    return that.fullContainedInSphere(this);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean fullContainedInBox(const Box* that) const
   public final boolean fullContainedInBox(Box that)
   {
-	final Vector3D upper = that.getUpper();
-	final Vector3D lower = that.getLower();
-	if (_center._x + _radius > upper._x)
-		return false;
-	if (_center._x - _radius < lower._x)
-		return false;
-	if (_center._y + _radius > upper._y)
-		return false;
-	if (_center._y - _radius < lower._y)
-		return false;
-	if (_center._z + _radius > upper._z)
-		return false;
-	if (_center._z - _radius < lower._z)
-		return false;
-	return true;
+    final Vector3D upper = that.getUpper();
+    final Vector3D lower = that.getLower();
+    if (_center._x + _radius > upper._x)
+       return false;
+    if (_center._x - _radius < lower._x)
+       return false;
+    if (_center._y + _radius > upper._y)
+       return false;
+    if (_center._y - _radius < lower._y)
+       return false;
+    if (_center._z + _radius > upper._z)
+       return false;
+    if (_center._z - _radius < lower._z)
+       return false;
+    return true;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean fullContainedInSphere(const Sphere* that) const
   public final boolean fullContainedInSphere(Sphere that)
   {
-	final double d = _center.distanceTo(that._center);
-	return (d + _radius <= that._radius);
+    final double d = _center.distanceTo(that._center);
+    return (d + _radius <= that._radius);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Sphere* createSphere() const
   public final Sphere createSphere()
   {
-	return new Sphere(this);
+    return new Sphere(this);
   }
 
   public static Sphere createSphereContainingPoints(java.util.ArrayList<Vector3D> points)
   {
   
-	Vector3D center = Vector3D.getCenter(points);
+    Vector3D center = Vector3D.getCenter(points);
   
-	double d = center.squaredDistanceTo(*points.get(0));
-	for (int i = 1; i < points.size(); i++)
-	{
-	  double di = center.squaredDistanceTo(*points.get(i));
-	  if (di > d)
-	  {
-		d = di;
-	  }
-	}
+    double d = center.squaredDistanceTo(*points.get(0));
+    for (int i = 1; i < points.size(); i++)
+    {
+      double di = center.squaredDistanceTo(*points.get(i));
+      if (di > d)
+      {
+        d = di;
+      }
+    }
   
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: return Sphere(center, IMathUtils::instance()->sqrt(d));
-	return new Sphere(new Vector3D(center), IMathUtils.instance().sqrt(d));
+    return new Sphere(center, IMathUtils.instance().sqrt(d));
   
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ) const
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
   
-	//Sphere is places in the cartesian origin for this math to work
-	originX -= _center._x;
-	originY -= _center._y;
-	originZ -= _center._z;
+    //Sphere is places in the cartesian origin for this math to work
+    originX -= _center._x;
+    originY -= _center._y;
+    originZ -= _center._z;
   
-	java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
-	// By laborious algebraic manipulation....
-	final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
+    // By laborious algebraic manipulation....
+    final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
   
-	final double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+    final double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
   
-	final double c = originX * originX + originY * originY + originZ * originZ - _radiusSquared;
+    final double c = originX * originX + originY * originY + originZ * originZ - _radiusSquared;
   
-	// Solve the quadratic equation: ax^2 + bx + c = 0.
-	// Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
-	// Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-	final double discriminant = b * b - 4 * a * c;
-	if (discriminant < 0.0)
-	{
-	  // no intersections
-	  return intersections;
-	}
-	else if (discriminant == 0.0)
-	{
-	  // one intersection at a tangent point
-	  //return new double[1] { -0.5 * b / a };
-	  intersections.add(-0.5 * b / a);
-	  return intersections;
-	}
+    // Solve the quadratic equation: ax^2 + bx + c = 0.
+    // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+    // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+    final double discriminant = b * b - 4 * a * c;
+    if (discriminant < 0.0)
+    {
+      // no intersections
+      return intersections;
+    }
+    else if (discriminant == 0.0)
+    {
+      // one intersection at a tangent point
+      //return new double[1] { -0.5 * b / a };
+      intersections.add(-0.5 * b / a);
+      return intersections;
+    }
   
-	final double rootDiscriminant = IMathUtils.instance().sqrt(discriminant);
-	final double root1 = (-b + rootDiscriminant) / (2 *a);
-	final double root2 = (-b - rootDiscriminant) / (2 *a);
+    final double rootDiscriminant = IMathUtils.instance().sqrt(discriminant);
+    final double root1 = (-b + rootDiscriminant) / (2 *a);
+    final double root2 = (-b - rootDiscriminant) / (2 *a);
   
-	// Two intersections - return the smallest first.
-	if (root1 < root2)
-	{
-	  intersections.add(root1);
-	  intersections.add(root2);
-	}
-	else
-	{
-	  intersections.add(root2);
-	  intersections.add(root1);
-	}
-	return intersections;
+    // Two intersections - return the smallest first.
+    if (root1 < root2)
+    {
+      intersections.add(root1);
+      intersections.add(root2);
+    }
+    else
+    {
+      intersections.add(root2);
+      intersections.add(root1);
+    }
+    return intersections;
   }
 
 
@@ -441,64 +373,60 @@ public class Sphere extends BoundingVolume
   //  return Vector2I::zero();
   //}
   
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* createWireframeMesh(const Color& color, short resolution) const
   public final Mesh createWireframeMesh(Color color, short resolution)
   {
-	final IMathUtils mu = IMathUtils.instance();
-	final double delta = DefineConstants.PI / (resolution-1);
+    final IMathUtils mu = IMathUtils.instance();
+    final double delta = DefineConstants.PI / (resolution-1);
   
-	// create vertices
-	FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-	for (int i = 0; i<2 *resolution-2; i++)
-	{
-	  final double longitude = -DefineConstants.PI + i *delta;
-	  for (int j = 0; j<resolution; j++)
-	  {
-		final double latitude = -DefineConstants.PI/2 + j *delta;
-		final double h = mu.cos(latitude);
-		final double x = h * mu.cos(longitude);
-		final double y = h * mu.sin(longitude);
-		final double z = mu.sin(latitude);
-//C++ TO JAVA CONVERTER WARNING: The following line was determined to be a copy constructor call - this should be verified and a copy constructor should be created if it does not yet exist:
-//ORIGINAL LINE: vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
-		vertices.add(new Vector3D(x,y,z).times(_radius).add(new Vector3D(_center)));
-	  }
-	}
+    // create vertices
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+    for (int i = 0; i<2 *resolution-2; i++)
+    {
+      final double longitude = -DefineConstants.PI + i *delta;
+      for (int j = 0; j<resolution; j++)
+      {
+        final double latitude = -DefineConstants.PI/2 + j *delta;
+        final double h = mu.cos(latitude);
+        final double x = h * mu.cos(longitude);
+        final double y = h * mu.sin(longitude);
+        final double z = mu.sin(latitude);
+        vertices.add(new Vector3D(x,y,z).times(_radius).add(_center));
+      }
+    }
   
-	// create border indices for vertical lines
-	ShortBufferBuilder indices = new ShortBufferBuilder();
-	for (short i = 0; i<2 *resolution-2; i++)
-	{
-	  for (short j = 0; j<resolution-1; j++)
-	  {
-		indices.add((short)(j+i *resolution));
-		indices.add((short)(j+1+i *resolution));
-	  }
-	}
+    // create border indices for vertical lines
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+    for (short i = 0; i<2 *resolution-2; i++)
+    {
+      for (short j = 0; j<resolution-1; j++)
+      {
+        indices.add((short)(j+i *resolution));
+        indices.add((short)(j+1+i *resolution));
+      }
+    }
   
-	// create border indices for horizontal lines
-	for (short j = 1; j<resolution-1; j++)
-	{
-	  for (short i = 0; i<2 *resolution-3; i++)
-	  {
-		indices.add((short)(j+i *resolution));
-		indices.add((short)(j+(i+1)*resolution));
-	  }
-	}
-	for (short j = 1; j<resolution-1; j++)
-	{
-	  final short i = (short)(2 *resolution-3);
-	  indices.add((short)(j+i *resolution));
-	  indices.add((short)(j));
-	}
+    // create border indices for horizontal lines
+    for (short j = 1; j<resolution-1; j++)
+    {
+      for (short i = 0; i<2 *resolution-3; i++)
+      {
+        indices.add((short)(j+i *resolution));
+        indices.add((short)(j+(i+1)*resolution));
+      }
+    }
+    for (short j = 1; j<resolution-1; j++)
+    {
+      final short i = (short)(2 *resolution-3);
+      indices.add((short)(j+i *resolution));
+      indices.add((short)(j));
+    }
   
-	Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 2, 1, new Color(color), null, 0, true);
+    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 2, 1, new Color(color), null, 0, true);
   
-	if (vertices != null)
-		vertices.dispose();
+    if (vertices != null)
+       vertices.dispose();
   
-	return mesh;
+    return mesh;
   }
 
 }

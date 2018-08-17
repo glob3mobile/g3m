@@ -7,9 +7,7 @@ package org.glob3.mobile.generated;//
 
 
 ///#include "IImage.hpp"
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class URL;
 
 public abstract class IImageDownloadListener

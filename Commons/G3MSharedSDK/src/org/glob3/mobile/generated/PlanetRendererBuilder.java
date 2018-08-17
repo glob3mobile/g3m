@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-//
+package org.glob3.mobile.generated;//
 //  PlanetRendererBuilder.cpp
 //  G3MiOSSDK
 //
@@ -18,29 +16,17 @@ package org.glob3.mobile.generated;import java.util.*;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTessellator;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTexturizer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GEOVectorLayer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileLODTester;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileVisibilityTester;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class VisibleSectorListener;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ElevationDataProvider;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Sector;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ChangedRendererInfoListener;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImageBuilder;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class PlanetRenderer;
 
 
@@ -75,12 +61,12 @@ public class PlanetRendererBuilder
    */
   private TileTessellator getTileTessellator()
   {
-	if (_tileTessellator == null)
-	{
-	  _tileTessellator = createTileTessellator();
-	}
+    if (_tileTessellator == null)
+    {
+      _tileTessellator = createTileTessellator();
+    }
   
-	return _tileTessellator;
+    return _tileTessellator;
   }
 
   /**
@@ -90,12 +76,12 @@ public class PlanetRendererBuilder
    */
   private TileTexturizer getTexturizer()
   {
-	if (_texturizer == null)
-	{
-	  _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackgroundImageBuilder());
-	}
+    if (_texturizer == null)
+    {
+      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackgroundImageBuilder());
+    }
   
-	return _texturizer;
+    return _texturizer;
   }
 
 
@@ -106,12 +92,12 @@ public class PlanetRendererBuilder
    */
   private LayerSet getLayerSet()
   {
-	if (_layerSet == null)
-	{
-	  _layerSet = createLayerSet();
-	}
+    if (_layerSet == null)
+    {
+      _layerSet = createLayerSet();
+    }
   
-	return _layerSet;
+    return _layerSet;
   }
 
   /**
@@ -121,12 +107,12 @@ public class PlanetRendererBuilder
    */
   private TilesRenderParameters getParameters()
   {
-	if (_parameters == null)
-	{
-	  _parameters = createPlanetRendererParameters();
-	}
+    if (_parameters == null)
+    {
+      _parameters = createPlanetRendererParameters();
+    }
   
-	return _parameters;
+    return _parameters;
   }
 
   /**
@@ -136,7 +122,7 @@ public class PlanetRendererBuilder
    */
   private boolean getShowStatistics()
   {
-	return _showStatistics;
+    return _showStatistics;
   }
 
   /**
@@ -146,7 +132,7 @@ public class PlanetRendererBuilder
    */
   private boolean getRenderDebug()
   {
-	return _renderDebug;
+    return _renderDebug;
   }
 
   /**
@@ -156,7 +142,7 @@ public class PlanetRendererBuilder
    */
   private boolean getForceFirstLevelTilesRenderOnStart()
   {
-	return _forceFirstLevelTilesRenderOnStart;
+    return _forceFirstLevelTilesRenderOnStart;
   }
 
   /**
@@ -166,7 +152,7 @@ public class PlanetRendererBuilder
    */
   private boolean getIncrementalTileQuality()
   {
-	return _incrementalTileQuality;
+    return _incrementalTileQuality;
   }
 
   /**
@@ -174,11 +160,11 @@ public class PlanetRendererBuilder
    */
   private java.util.ArrayList<VisibleSectorListener> getVisibleSectorListeners()
   {
-	if (_visibleSectorListeners == null)
-	{
-	  _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListener*>();
-	}
-	return _visibleSectorListeners;
+    if (_visibleSectorListeners == null)
+    {
+      _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListener>();
+    }
+    return _visibleSectorListeners;
   }
 
   /**
@@ -188,11 +174,11 @@ public class PlanetRendererBuilder
    */
   private java.util.ArrayList<Long> getStabilizationMilliSeconds()
   {
-	if (_stabilizationMilliSeconds == null)
-	{
-	  _stabilizationMilliSeconds = new java.util.ArrayList<Long>();
-	}
-	return _stabilizationMilliSeconds;
+    if (_stabilizationMilliSeconds == null)
+    {
+      _stabilizationMilliSeconds = new java.util.ArrayList<Long>();
+    }
+    return _stabilizationMilliSeconds;
   }
 
   /**
@@ -202,57 +188,57 @@ public class PlanetRendererBuilder
    */
   private long getTileDownloadPriority()
   {
-	return _tileDownloadPriority;
+    return _tileDownloadPriority;
   }
 
   private boolean _logTilesPetitions;
 
   private LayerSet createLayerSet()
   {
-	return LayerBuilder.createDefault();
+    return LayerBuilder.createDefault();
   }
   private TilesRenderParameters createPlanetRendererParameters()
   {
-	return new TilesRenderParameters(getRenderDebug(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
+    return new TilesRenderParameters(getRenderDebug(), getForceFirstLevelTilesRenderOnStart(), getIncrementalTileQuality(), getQuality());
   }
   private TileTessellator createTileTessellator()
   {
-	///#warning Testing Terrain Normals
-	return new PlanetTileTessellator(_skirted, getRenderedSector());
+    ///#warning Testing Terrain Normals
+    return new PlanetTileTessellator(_skirted, getRenderedSector());
   }
 
   private ElevationDataProvider getElevationDataProvider()
   {
-	return _elevationDataProvider;
+    return _elevationDataProvider;
   }
   private float getVerticalExaggeration()
   {
-	if (_verticalExaggeration <= 0.0f)
-	{
-	  _verticalExaggeration = 1.0f;
-	}
-	return _verticalExaggeration;
+    if (_verticalExaggeration <= 0.0f)
+    {
+      _verticalExaggeration = 1.0f;
+    }
+    return _verticalExaggeration;
   }
 
   private Sector _renderedSector;
   private Sector getRenderedSector()
   {
-	if (_renderedSector == null)
-	{
-	  return Sector.fullSphere();
-	}
-	return _renderedSector;
+    if (_renderedSector == null)
+    {
+      return Sector.fullSphere();
+    }
+    return _renderedSector;
   }
 
   private boolean _renderTileMeshes;
   private boolean getRenderTileMeshes()
   {
-	return _renderTileMeshes;
+    return _renderTileMeshes;
   }
 
   private boolean getLogTilesPetitions()
   {
-	return _logTilesPetitions;
+    return _logTilesPetitions;
   }
 
   private ChangedRendererInfoListener _changedInfoListener;
@@ -261,312 +247,304 @@ public class PlanetRendererBuilder
 
   private TouchEventType getTouchEventTypeOfTerrainTouchListener()
   {
-	return _touchEventTypeOfTerrainTouchListener;
+    return _touchEventTypeOfTerrainTouchListener;
   }
 
   private IImageBuilder _defaultTileBackgroundImage = null;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IImageBuilder* getDefaultTileBackgroundImageBuilder() const
   private IImageBuilder getDefaultTileBackgroundImageBuilder()
   {
-	if (_defaultTileBackgroundImage == null)
-	{
-	  return new DefaultChessCanvasImageBuilder(256, 256, Color.black(), Color.white(), 4);
-	}
-	return _defaultTileBackgroundImage;
+    if (_defaultTileBackgroundImage == null)
+    {
+      return new DefaultChessCanvasImageBuilder(256, 256, Color.black(), Color.white(), 4);
+    }
+    return _defaultTileBackgroundImage;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TileLODTester* createDefaultTileLODTester() const
   private TileLODTester createDefaultTileLODTester()
   {
-	TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
+    TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
   
-	TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);
   
-	TileLODTester maxLevel = new MaxLevelTileLODTester();
+    TileLODTester maxLevel = new MaxLevelTileLODTester();
   
-	TileLODTester gradual = new GradualSplitsTileLODTester(TimeInterval.fromMilliseconds(10), timed);
+    TileLODTester gradual = new GradualSplitsTileLODTester(TimeInterval.fromMilliseconds(10), timed);
   
-	TileLODTester composite = new OrTileLODTester(maxLevel, gradual);
+    TileLODTester composite = new OrTileLODTester(maxLevel, gradual);
   
-	return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(25), composite);
+    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(25), composite);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: TileVisibilityTester* createDefaultTileVisibilityTester() const
   private TileVisibilityTester createDefaultTileVisibilityTester()
   {
-	return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(1000), new MeshBoundingVolumeTileVisibilityTester());
+    return new TimedCacheTileVisibilityTester(TimeInterval.fromMilliseconds(1000), new MeshBoundingVolumeTileVisibilityTester());
   }
 
-	private boolean _skirted;
+    private boolean _skirted;
 
 
   public PlanetRendererBuilder()
   {
-	  _showStatistics = false;
-	  _renderDebug = false;
-	  _forceFirstLevelTilesRenderOnStart = true;
-	  _incrementalTileQuality = false;
-	  _quality = Quality.QUALITY_LOW;
-	  _parameters = null;
-	  _layerSet = null;
-	  _texturizer = null;
-	  _tileTessellator = null;
-	  _visibleSectorListeners = null;
-	  _stabilizationMilliSeconds = null;
-	  _tileDownloadPriority = DownloadPriority.HIGHER;
-	  _elevationDataProvider = null;
-	  _verticalExaggeration = 0F;
-	  _renderedSector = null;
-	  _renderTileMeshes = true;
-	  _logTilesPetitions = false;
-	  _changedInfoListener = null;
-	  _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
-	  _tileLODTester = null;
-	  _tileVisibilityTester = null;
-	  _skirted = true;
+     _showStatistics = false;
+     _renderDebug = false;
+     _forceFirstLevelTilesRenderOnStart = true;
+     _incrementalTileQuality = false;
+     _quality = Quality.QUALITY_LOW;
+     _parameters = null;
+     _layerSet = null;
+     _texturizer = null;
+     _tileTessellator = null;
+     _visibleSectorListeners = null;
+     _stabilizationMilliSeconds = null;
+     _tileDownloadPriority = DownloadPriority.HIGHER;
+     _elevationDataProvider = null;
+     _verticalExaggeration = 0F;
+     _renderedSector = null;
+     _renderTileMeshes = true;
+     _logTilesPetitions = false;
+     _changedInfoListener = null;
+     _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
+     _tileLODTester = null;
+     _tileVisibilityTester = null;
+     _skirted = true;
   }
   public void dispose()
   {
-	if (_parameters != null)
-		_parameters.dispose();
-	if (_layerSet != null)
-		_layerSet.dispose();
-	if (_texturizer != null)
-		_texturizer.dispose();
+    if (_parameters != null)
+       _parameters.dispose();
+    if (_layerSet != null)
+       _layerSet.dispose();
+    if (_texturizer != null)
+       _texturizer.dispose();
   
-	final int geoVectorLayersSize = _geoVectorLayers.size();
-	for (int i = 0; i < geoVectorLayersSize; i++)
-	{
-	  GEOVectorLayer geoVectorLayer = _geoVectorLayers.get(i);
-	  if (geoVectorLayer != null)
-		  geoVectorLayer.dispose();
-	}
+    final int geoVectorLayersSize = _geoVectorLayers.size();
+    for (int i = 0; i < geoVectorLayersSize; i++)
+    {
+      GEOVectorLayer geoVectorLayer = _geoVectorLayers.get(i);
+      if (geoVectorLayer != null)
+         geoVectorLayer.dispose();
+    }
   
-	if (_tileTessellator != null)
-		_tileTessellator.dispose();
-	if (_elevationDataProvider != null)
-		_elevationDataProvider.dispose();
+    if (_tileTessellator != null)
+       _tileTessellator.dispose();
+    if (_elevationDataProvider != null)
+       _elevationDataProvider.dispose();
   
-	if (_renderedSector != null)
-		_renderedSector.dispose();
+    if (_renderedSector != null)
+       _renderedSector.dispose();
   }
   public final PlanetRenderer create()
   {
   
-	LayerSet layerSet = getLayerSet();
-	final int geoVectorLayersSize = _geoVectorLayers.size();
-	for (int i = 0; i < geoVectorLayersSize; i++)
-	{
-	  GEOVectorLayer geoVectorLayer = _geoVectorLayers.get(i);
-	  layerSet.addLayer(geoVectorLayer);
-	}
+    LayerSet layerSet = getLayerSet();
+    final int geoVectorLayersSize = _geoVectorLayers.size();
+    for (int i = 0; i < geoVectorLayersSize; i++)
+    {
+      GEOVectorLayer geoVectorLayer = _geoVectorLayers.get(i);
+      layerSet.addLayer(geoVectorLayer);
+    }
   
-	PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener(), getTileLODTester(), getTileVisibilityTester());
   
-	for (int i = 0; i < getVisibleSectorListeners().size(); i++)
-	{
-	  planetRenderer.addVisibleSectorListener(getVisibleSectorListeners().get(i), TimeInterval.fromMilliseconds(getStabilizationMilliSeconds().get(i)));
-	}
+    for (int i = 0; i < getVisibleSectorListeners().size(); i++)
+    {
+      planetRenderer.addVisibleSectorListener(getVisibleSectorListeners().get(i), TimeInterval.fromMilliseconds(getStabilizationMilliSeconds().get(i)));
+    }
   
-	_parameters = null;
-	_layerSet = null;
-	_texturizer = null;
-	_tileTessellator = null;
-	_visibleSectorListeners = null;
-	_visibleSectorListeners = null;
-	_stabilizationMilliSeconds = null;
-	_stabilizationMilliSeconds = null;
+    _parameters = null;
+    _layerSet = null;
+    _texturizer = null;
+    _tileTessellator = null;
+    _visibleSectorListeners = null;
+    _visibleSectorListeners = null;
+    _stabilizationMilliSeconds = null;
+    _stabilizationMilliSeconds = null;
   
-	_elevationDataProvider = null;
+    _elevationDataProvider = null;
   
-	if (_renderedSector != null)
-		_renderedSector.dispose();
-	_renderedSector = null;
+    if (_renderedSector != null)
+       _renderedSector.dispose();
+    _renderedSector = null;
   
-	_geoVectorLayers.clear();
+    _geoVectorLayers.clear();
   
-	return planetRenderer;
+    return planetRenderer;
   }
   public final void setTileTessellator(TileTessellator tileTessellator)
   {
-	if (_tileTessellator != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _tileTessellator already initialized");
-	  return;
-	}
-	_tileTessellator = tileTessellator;
+    if (_tileTessellator != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _tileTessellator already initialized");
+      return;
+    }
+    _tileTessellator = tileTessellator;
   }
   public final void setTileTexturizer(TileTexturizer tileTexturizer)
   {
-	if (_texturizer != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _texturizer already initialized");
-	  return;
-	}
-	_texturizer = tileTexturizer;
+    if (_texturizer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _texturizer already initialized");
+      return;
+    }
+    _texturizer = tileTexturizer;
   }
   public final void setLayerSet(LayerSet layerSet)
   {
-	if (_layerSet != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _layerSet already initialized");
-	  return;
-	}
-	_layerSet = layerSet;
+    if (_layerSet != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _layerSet already initialized");
+      return;
+    }
+    _layerSet = layerSet;
   }
   public final void setPlanetRendererParameters(TilesRenderParameters parameters)
   {
-	if (_parameters != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _parameters already initialized");
-	  return;
-	}
-	_parameters = parameters;
+    if (_parameters != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _parameters already initialized");
+      return;
+    }
+    _parameters = parameters;
   }
   public final void setShowStatistics(boolean showStatistics)
   {
-	_showStatistics = showStatistics;
+    _showStatistics = showStatistics;
   }
   public final void setRenderDebug(boolean renderDebug)
   {
-	_renderDebug = renderDebug;
+    _renderDebug = renderDebug;
   }
   public final void setForceFirstLevelTilesRenderOnStart(boolean forceFirstLevelTilesRenderOnStart)
   {
-	_forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
+    _forceFirstLevelTilesRenderOnStart = forceFirstLevelTilesRenderOnStart;
   }
   public final void setIncrementalTileQuality(boolean incrementalTileQuality)
   {
-	_incrementalTileQuality = incrementalTileQuality;
+    _incrementalTileQuality = incrementalTileQuality;
   }
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
-	getVisibleSectorListeners().add(listener);
-	getStabilizationMilliSeconds().add(stabilizationInterval._milliseconds);
+    getVisibleSectorListeners().add(listener);
+    getStabilizationMilliSeconds().add(stabilizationInterval._milliseconds);
   }
   public final void addVisibleSectorListener(VisibleSectorListener listener)
   {
-	addVisibleSectorListener(listener, TimeInterval.zero());
+    addVisibleSectorListener(listener, TimeInterval.zero());
   }
   public final void setTileDownloadPriority(long tileDownloadPriority)
   {
-	_tileDownloadPriority = tileDownloadPriority;
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)
   {
-	if (_elevationDataProvider != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _elevationDataProvider already initialized");
-	  return;
-	}
-	_elevationDataProvider = elevationDataProvider;
+    if (_elevationDataProvider != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _elevationDataProvider already initialized");
+      return;
+    }
+    _elevationDataProvider = elevationDataProvider;
   }
 
   public final void setVerticalExaggeration(float verticalExaggeration)
   {
-	if (_verticalExaggeration > 0.0f)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _verticalExaggeration already initialized");
-	  return;
-	}
-	_verticalExaggeration = verticalExaggeration;
+    if (_verticalExaggeration > 0.0f)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _verticalExaggeration already initialized");
+      return;
+    }
+    _verticalExaggeration = verticalExaggeration;
   }
 
   public final void setRenderedSector(Sector sector)
   {
-	if (_renderedSector != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: _renderedSector already initialized");
-	  return;
-	}
-	_renderedSector = new Sector(sector);
+    if (_renderedSector != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: _renderedSector already initialized");
+      return;
+    }
+    _renderedSector = new Sector(sector);
   }
 
   public final GEOVectorLayer createGEOVectorLayer()
   {
-	GEOVectorLayer geoVectorLayer = new GEOVectorLayer();
-	_geoVectorLayers.add(geoVectorLayer);
-	return geoVectorLayer;
+    GEOVectorLayer geoVectorLayer = new GEOVectorLayer();
+    _geoVectorLayers.add(geoVectorLayer);
+    return geoVectorLayer;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Quality getQuality() const
   public final Quality getQuality()
   {
-	return _quality;
+    return _quality;
   }
   public final void setQuality(Quality quality)
   {
-	_quality = quality;
+    _quality = quality;
   }
 
   public final void setRenderTileMeshes(boolean renderTileMeshes)
   {
-	_renderTileMeshes = renderTileMeshes;
+    _renderTileMeshes = renderTileMeshes;
   }
 
   public final void setLogTilesPetitions(boolean logTilesPetitions)
   {
-	_logTilesPetitions = logTilesPetitions;
+    _logTilesPetitions = logTilesPetitions;
   }
 
   public final ChangedRendererInfoListener getChangedRendererInfoListener()
   {
-	return _changedInfoListener;
+    return _changedInfoListener;
   }
 
   public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener)
   {
-	if (_changedInfoListener != null)
-	{
-	  ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
-	  return;
-	}
-	_changedInfoListener = changedInfoListener;
-	ILogger.instance().logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+      return;
+    }
+    _changedInfoListener = changedInfoListener;
+    ILogger.instance().logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
   }
 
   public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
   {
-	_touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+    _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
   }
 
   public final void setDefaultTileBackgroundImage(IImageBuilder defaultTileBackgroundImage)
   {
-	_defaultTileBackgroundImage = defaultTileBackgroundImage;
+    _defaultTileBackgroundImage = defaultTileBackgroundImage;
   }
 
   public final void setTileLODTester(TileLODTester tlt)
   {
-	_tileLODTester = tlt;
+    _tileLODTester = tlt;
   }
 
   public final TileLODTester getTileLODTester()
   {
-	if (_tileLODTester == null)
-	{
-	  _tileLODTester = createDefaultTileLODTester();
-	}
-	return _tileLODTester;
+    if (_tileLODTester == null)
+    {
+      _tileLODTester = createDefaultTileLODTester();
+    }
+    return _tileLODTester;
   }
 
   public final TileVisibilityTester getTileVisibilityTester()
   {
-	if (_tileVisibilityTester == null)
-	{
-	  _tileVisibilityTester = createDefaultTileVisibilityTester();
-	}
-	return _tileVisibilityTester;
+    if (_tileVisibilityTester == null)
+    {
+      _tileVisibilityTester = createDefaultTileVisibilityTester();
+    }
+    return _tileVisibilityTester;
   }
 
-	public final void setSkirted(boolean v)
-	{
-		_skirted = v;
-	}
+    public final void setSkirted(boolean v)
+    {
+        _skirted = v;
+    }
 
 }

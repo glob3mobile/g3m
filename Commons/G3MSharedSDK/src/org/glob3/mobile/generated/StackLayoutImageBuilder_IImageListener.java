@@ -1,6 +1,4 @@
-package org.glob3.mobile.generated;import java.util.*;
-
-public class StackLayoutImageBuilder_IImageListener implements IImageListener
+package org.glob3.mobile.generated;public class StackLayoutImageBuilder_IImageListener extends IImageListener
 {
   private IImageBuilderListener _listener;
   private boolean _deleteListener;
@@ -9,18 +7,18 @@ public class StackLayoutImageBuilder_IImageListener implements IImageListener
 
   public StackLayoutImageBuilder_IImageListener(String imageName, IImageBuilderListener listener, boolean deleteListener)
   {
-	  _imageName = imageName;
-	  _listener = listener;
-	  _deleteListener = deleteListener;
+     _imageName = imageName;
+     _listener = listener;
+     _deleteListener = deleteListener;
   }
 
   public final void imageCreated(IImage image)
   {
-	_listener.imageCreated(image, _imageName);
-	if (_deleteListener)
-	{
-	  if (_listener != null)
-		  _listener.dispose();
-	}
+    _listener.imageCreated(image, _imageName);
+    if (_deleteListener)
+    {
+      if (_listener != null)
+         _listener.dispose();
+    }
   }
 }
