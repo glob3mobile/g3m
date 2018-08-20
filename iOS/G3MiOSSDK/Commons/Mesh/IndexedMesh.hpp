@@ -54,8 +54,8 @@ public:
     //if lastTriangle < firstTriangle -> All triangles will be tested
     const Vector3D getHitWithRayForTrianglePrimitive(const Vector3D& origin,
                                                      const Vector3D& ray,
-                                                     short firstTriangle=1,
-                                                     short lastTriangle=0) const;
+                                                     short firstTriangle=(short)1,
+                                                     short lastTriangle=(short)0) const;
     
 };
 

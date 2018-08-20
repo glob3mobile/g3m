@@ -108,13 +108,14 @@ public class IndexedMesh extends AbstractMesh
         v3.copyFrom(getVertex(i3));
     }
 
+    //if lastTriangle < firstTriangle -> All triangles will be tested
     public final Vector3D getHitWithRayForTrianglePrimitive(Vector3D origin, Vector3D ray, short firstTriangle)
     {
-       return getHitWithRayForTrianglePrimitive(origin, ray, firstTriangle, -1);
+       return getHitWithRayForTrianglePrimitive(origin, ray, firstTriangle, (short)0);
     }
     public final Vector3D getHitWithRayForTrianglePrimitive(Vector3D origin, Vector3D ray)
     {
-       return getHitWithRayForTrianglePrimitive(origin, ray, -1, -1);
+       return getHitWithRayForTrianglePrimitive(origin, ray, (short)1, (short)0);
     }
     public final Vector3D getHitWithRayForTrianglePrimitive(Vector3D origin, Vector3D ray, short firstTriangle, short lastTriangle)
     {
@@ -123,14 +124,10 @@ public class IndexedMesh extends AbstractMesh
             ILogger.instance().logError("getHitWithRayForTrianglePrimitive(): Primitive not supported");
         }
     
-    
-        if (firstTriangle < 0)
+        if (firstTriangle > lastTriangle)
         {
             firstTriangle = 0;
-        }
-        if (lastTriangle < 0)
-        {
-            lastTriangle = (short)_indices.size() / 3;
+            lastTriangle = (short)(_indices.size() / 3);
         }
     
         MutableVector3D v1 = new MutableVector3D();

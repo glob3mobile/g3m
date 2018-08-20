@@ -1,7 +1,6 @@
 package org.glob3.mobile.generated;final class DefineConstants
 {
    public static final double THRESHOLD = 1e-5;
-   public static final int PROXIMITY_VALUE = 25;
    public static final int N_GLFEATURES_GROUPS = 4;
    public static final int MAX_N_TEXTURES = 4;
    public static final double PI = 3.14159265358979323846264338327950288;

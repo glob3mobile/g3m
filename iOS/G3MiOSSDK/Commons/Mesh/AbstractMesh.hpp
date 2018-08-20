@@ -18,7 +18,12 @@ protected:
     const int               _primitive;
     const bool              _owner;
     const Vector3D                _center;
+#ifdef C_CODE
     const MutableMatrix44D* _translationMatrix;
+#endif
+#ifdef JAVA_CODE
+    protected MutableMatrix44D _translationMatrix;
+#endif
     const IFloatBuffer*           _vertices;
     const Color*            _flatColor;
     const IFloatBuffer*           _colors;

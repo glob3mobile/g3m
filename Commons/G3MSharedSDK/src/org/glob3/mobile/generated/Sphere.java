@@ -295,26 +295,26 @@ public class Sphere extends BoundingVolume
   {
     return new Sphere(this);
   }
-
-  public static Sphere createSphereContainingPoints(java.util.ArrayList<Vector3D> points)
-  {
-  
-    Vector3D center = Vector3D.getCenter(points);
-  
-    double d = center.squaredDistanceTo(*points.get(0));
-    for (int i = 1; i < points.size(); i++)
-    {
-      double di = center.squaredDistanceTo(*points.get(i));
-      if (di > d)
-      {
+  /*
+  static Sphere createSphereContainingPoints(const std::vector<Vector3D*>& points);
+  */
+  /*
+  Sphere Sphere::createSphereContainingPoints(const std::vector<Vector3D*>& points){
+    
+    Vector3D center = Vector3D::getCenter(points);
+    
+    double d = center.squaredDistanceTo(*points[0]);
+    for (size_t i = 1; i < points.size(); i++) {
+      double di =  center.squaredDistanceTo(*points[i]);
+      if (di > d){
         d = di;
       }
     }
-  
-    return new Sphere(center, IMathUtils.instance().sqrt(d));
-  
+    
+    return Sphere(center, IMathUtils::instance()->sqrt(d) );
+    
   }
-
+  */
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
   

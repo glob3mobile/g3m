@@ -29,7 +29,7 @@ public class PointCloudMesh extends DirectMesh
 
     public PointCloudMesh(boolean owner, Vector3D buildingAnchor, Vector3D center, IFloatBuffer vertices, float pointSize, IFloatBuffer colors, boolean depthTest, Color borderColor, VertexColorScheme vertexColorScheme) //Depth test
     {
-       super(GLPrimitive.points(), owner, center, vertices, 1.0, pointSize, null, null, 0.0f, false, null, false, 0, 0, vertexColorScheme, -1.0f);
+       super(GLPrimitive.points(), owner, center, vertices, 1.0f, pointSize, null, null, 0.0f, false, null, false, 0, 0, vertexColorScheme, -1.0f);
        _buildingAnchor = new Vector3D(buildingAnchor);
        _mt1 = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_buildingAnchor.times(-1)));
        _mt2 = new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(_buildingAnchor));

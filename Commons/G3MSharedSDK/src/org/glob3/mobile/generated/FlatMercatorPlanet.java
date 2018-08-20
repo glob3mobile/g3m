@@ -36,6 +36,7 @@ public class FlatMercatorPlanet extends Planet
 
 
     //https://wiki.openstreetmap.org/wiki/Mercator
+   private static final double M_PI = 3.14159265358979323846264338327950288;
 //#define DEG2RAD(a) ((a) / (180 / M_PI))
 //#define RAD2DEG(a) ((a) * (180 / M_PI))
    private static final int EARTH_RADIUS = 6378137;

@@ -386,17 +386,7 @@ package org.glob3.mobile.generated;public class MeshRenderer extends DefaultRend
 
     public final void eraseMesh(Mesh mesh)
     {
-
-        java.util.Iterator<Mesh> it = _meshes.iterator();
-        while(it.hasNext())
-        {
-            if (it.next() == mesh)
-            {
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-                _meshes.erase(it);
-                break;
-            }
-        }
+        _meshes.remove(mesh);
     }
 
 

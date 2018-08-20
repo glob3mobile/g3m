@@ -248,7 +248,7 @@ public:
   std::vector<Mesh*> getMeshes();
     
     void eraseMesh(Mesh* mesh){
-        
+#ifdef C_CODE
         std::vector<Mesh*>::iterator it = _meshes.begin();
         while(it != _meshes.end()){
             if (*it == mesh){
@@ -257,6 +257,10 @@ public:
             }
             it++;
         }
+#endif
+#ifdef JAVA_CODE
+        _meshes.remove(mesh);
+#endif
     }
 
 

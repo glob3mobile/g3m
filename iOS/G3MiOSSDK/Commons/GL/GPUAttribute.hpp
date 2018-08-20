@@ -242,10 +242,10 @@ public:
 
 class GPUAttributeValueVecFloat : public GPUAttributeValue {
 private:
-#if C_CODE
+#ifdef C_CODE
   const IFloatBuffer* _buffer;
 #endif
-#if JAVA_CODE
+#ifdef JAVA_CODE
     private IFloatBuffer _buffer;
 #endif
   const int _timestamp;

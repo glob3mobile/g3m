@@ -95,7 +95,7 @@ const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& or
     
     if (firstTriangle > lastTriangle){
         firstTriangle = 0;
-        lastTriangle = (short)_indices->size() / 3;
+        lastTriangle = (short)(_indices->size() / 3);
     }
     
     MutableVector3D v1,v2,v3, closestP = MutableVector3D::nan();

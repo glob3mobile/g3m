@@ -1261,7 +1261,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private VectorStreamingRenderer _renderer;
     private final URL _serverURL;
     private final String _name;
-    private final VectorSetSymbolizer _symbolizer;
+      private VectorSetSymbolizer _symbolizer;
     private final boolean _deleteSymbolizer;
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;

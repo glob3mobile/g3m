@@ -22,7 +22,7 @@ public abstract class AbstractMesh extends Mesh
     protected final int _primitive;
     protected final boolean _owner;
     protected final Vector3D _center ;
-    protected final MutableMatrix44D _translationMatrix;
+    protected MutableMatrix44D _translationMatrix;
     protected final IFloatBuffer _vertices;
     protected final Color _flatColor;
     protected final IFloatBuffer _colors;
@@ -220,8 +220,7 @@ public abstract class AbstractMesh extends Mesh
         if (_boundingVolume != null)
            _boundingVolume.dispose();
         _boundingVolume = null;
-        if (_translationMatrix != null)
-           _translationMatrix.dispose();
+        _translationMatrix = null;
         _translationMatrix = null;
     
         _glState._release();
