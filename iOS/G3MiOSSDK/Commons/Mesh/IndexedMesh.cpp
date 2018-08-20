@@ -93,11 +93,8 @@ const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& or
         ILogger::instance()->logError("getHitWithRayForTrianglePrimitive(): Primitive not supported");
     }
     
-    
-    if (firstTriangle < 0){
+    if (firstTriangle > lastTriangle){
         firstTriangle = 0;
-    }
-    if (lastTriangle < 0){
         lastTriangle = (short)_indices->size() / 3;
     }
     

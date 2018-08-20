@@ -494,7 +494,12 @@ public:
     private final URL _serverURL;
 #endif
     const std::string          _name;
+#ifdef C_CODE
     const VectorSetSymbolizer* _symbolizer;
+#endif
+#ifdef JAVA_CODE
+      private VectorSetSymbolizer _symbolizer;
+#endif
     const bool                 _deleteSymbolizer;
     const long long            _downloadPriority;
 #ifdef C_CODE

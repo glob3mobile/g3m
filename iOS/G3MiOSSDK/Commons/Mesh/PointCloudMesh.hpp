@@ -38,7 +38,7 @@ public:
                owner,
                center,
                vertices,
-               1.0,
+               1.0f,
                pointSize,
                NULL,
                NULL,

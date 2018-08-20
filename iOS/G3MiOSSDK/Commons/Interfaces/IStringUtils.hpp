@@ -130,6 +130,7 @@ public:
     _endingPos(endingPos){}
   };
   
+    /*
   //Returns the desired string and the position of the last character where endTag was found
   static StringExtractionResult extractSubStringBetween(const std::string& string,
                                               const std::string& startTag,
@@ -147,7 +148,7 @@ public:
     
     return StringExtractionResult(str, pos2 + endTag.length());
   }
-  
+  */
 };
 
 #endif

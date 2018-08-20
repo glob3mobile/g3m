@@ -35,6 +35,7 @@ private:
     
     
     //https://wiki.openstreetmap.org/wiki/Mercator
+#define M_PI        3.14159265358979323846264338327950288
 #define DEG2RAD(a)   ((a) / (180 / M_PI))
 #define RAD2DEG(a)   ((a) * (180 / M_PI))
 #define EARTH_RADIUS 6378137
