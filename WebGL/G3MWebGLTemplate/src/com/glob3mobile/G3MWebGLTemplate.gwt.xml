@@ -6,4 +6,7 @@
 	<inherits name="com.google.gwt.resources.Resources" />
   <source path='client'/>
   <entry-point class="com.glob3mobile.client.G3MWebGLTemplate" />
+  
+     <collapse-all-properties />
+   <add-linker name="sso" />
 </module>
