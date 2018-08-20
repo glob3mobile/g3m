@@ -486,6 +486,7 @@
 		D814B5BA210B43FA007D700B /* CameraOrbitFixedPositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D814B5B8210B4293007D700B /* CameraOrbitFixedPositionEffect.hpp */; };
 		D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */; };
 		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
+		D818BE922129F8CF000C03A5 /* FlatMercatorPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D818BE812126EEC4000C03A5 /* FlatMercatorPlanet.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -801,6 +802,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D818BE922129F8CF000C03A5 /* FlatMercatorPlanet.hpp in CopyFiles */,
 				D814B5BA210B43FA007D700B /* CameraOrbitFixedPositionEffect.hpp in CopyFiles */,
 				D8FF565120F8D718004BB177 /* VertexColorScheme.hpp in CopyFiles */,
 				D8682BC32063F1A5004FACEC /* Ditch.hpp in CopyFiles */,
