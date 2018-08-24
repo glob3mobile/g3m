@@ -40,13 +40,15 @@ public:
 
 class Static2ColorScheme: public VertexColorScheme{
     IFloatBuffer* _valuesInColorRange;
+    ColorRangeGLFeature* _specificFeatureHandler;
 public:
     Static2ColorScheme(IFloatBuffer* valuesInColorRange,
                        const Color& colorRangeAt0,
                        const Color& colorRangeAt1){
-        _feat = new ColorRangeGLFeature(colorRangeAt0,
+        _specificFeatureHandler = new ColorRangeGLFeature(colorRangeAt0,
                                         colorRangeAt1,
                                         valuesInColorRange);
+        _feat = _specificFeatureHandler;
         _valuesInColorRange = valuesInColorRange;
     }
     
@@ -64,6 +66,9 @@ protected:
     mutable IFloatBuffer* _valuesInColorRange;
     mutable IFloatBuffer* _nextValuesInColorRange;
     mutable float _time;
+    
+    virtual void setValues(IFloatBuffer* values,
+                           IFloatBuffer* nextValues) const = 0;
 public:
     
     InterpolatedColorScheme(IFloatBuffer* valuesInColorRange,
@@ -75,7 +80,7 @@ public:
     
     void setColorRangeDynamicValues(IFloatBuffer* values,
                                     IFloatBuffer* nextValues) const{
-        ((DynamicColorRangeGLFeature*)_feat)->setValues(values, nextValues);
+        setValues(values, nextValues);
         _valuesInColorRange = values;
         _nextValuesInColorRange = nextValues;
     }
@@ -90,6 +95,13 @@ public:
 
 
 class Dynamic2ColorScheme: public InterpolatedColorScheme{
+    DynamicColorRangeGLFeature* _specificFeatureHandler;
+protected:
+    void setValues(IFloatBuffer* values,
+                   IFloatBuffer* nextValues) const{
+        _specificFeatureHandler->setValues(values, nextValues);
+    }
+    
 public:
     
     Dynamic2ColorScheme(IFloatBuffer* valuesInColorRange,
@@ -97,20 +109,27 @@ public:
                         const Color& colorRangeAt0,
                         const Color& colorRangeAt1):
     InterpolatedColorScheme(valuesInColorRange, nextValuesInColorRange){
-        _feat = new DynamicColorRangeGLFeature(colorRangeAt0,
+        _specificFeatureHandler = new DynamicColorRangeGLFeature(colorRangeAt0,
                                                colorRangeAt1,
                                                valuesInColorRange,
                                                nextValuesInColorRange,
                                                0.0f);
+        _feat = _specificFeatureHandler;
     }
     virtual void setTime(float time) const{
         _time = time;
-        ((DynamicColorRangeGLFeature*)_feat)->setTime(time);
+        _specificFeatureHandler->setTime(time);
     }
 };
 
 
 class Dynamic3ColorScheme: public InterpolatedColorScheme{
+    DynamicColorRange3GLFeature* _specificFeatureHandler;
+protected:
+    void setValues(IFloatBuffer* values,
+                   IFloatBuffer* nextValues) const{
+        _specificFeatureHandler->setValues(values, nextValues);
+    }
 public:
     Dynamic3ColorScheme(IFloatBuffer* valuesInColorRange,
                         IFloatBuffer* nextValuesInColorRange,
@@ -118,17 +137,18 @@ public:
                         const Color& colorRangeAt0_5,
                         const Color& colorRangeAt1)
     : InterpolatedColorScheme(valuesInColorRange, nextValuesInColorRange){
-        _feat = new DynamicColorRange3GLFeature(colorRangeAt0,
+        _specificFeatureHandler = new DynamicColorRange3GLFeature(colorRangeAt0,
                                                 colorRangeAt0_5,
                                                 colorRangeAt1,
                                                 valuesInColorRange,
                                                 nextValuesInColorRange,
                                                 0.0f);
+        _feat = _specificFeatureHandler;
     }
     
     virtual void setTime(float time) const{
         _time = time;
-        ((DynamicColorRange3GLFeature*)_feat)->setTime(time);
+        _specificFeatureHandler->setTime(time);
     }
 };
 

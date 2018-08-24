@@ -771,6 +771,8 @@ public final class NativeGL_WebGL
 		var id = gl.getAttribLocation(jsoProgram, info.name);
 
 		switch (info.type) {
+		case gl.FLOAT:
+			return @org.glob3.mobile.generated.GPUAttributeVec1Float::new(Ljava/lang/String;I)(info.name, id);
 		case gl.FLOAT_VEC3:
 			return @org.glob3.mobile.generated.GPUAttributeVec3Float::new(Ljava/lang/String;I)(info.name, id);
 		case gl.FLOAT_VEC4:
@@ -778,6 +780,7 @@ public final class NativeGL_WebGL
 		case gl.FLOAT_VEC2:
 			return @org.glob3.mobile.generated.GPUAttributeVec2Float::new(Ljava/lang/String;I)(info.name, id);
 		default:
+			$wnd.alert("OpenGL attribute not recognized" + id);
 			return null;
 			break;
 		}

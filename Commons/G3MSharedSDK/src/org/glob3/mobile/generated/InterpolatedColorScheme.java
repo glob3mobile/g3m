@@ -1,8 +1,10 @@
-package org.glob3.mobile.generated;public class InterpolatedColorScheme extends VertexColorScheme
+package org.glob3.mobile.generated;public abstract class InterpolatedColorScheme extends VertexColorScheme
 {
     protected IFloatBuffer _valuesInColorRange;
     protected IFloatBuffer _nextValuesInColorRange;
     protected float _time;
+
+    protected abstract void setValues(IFloatBuffer values, IFloatBuffer nextValues);
 
     public InterpolatedColorScheme(IFloatBuffer valuesInColorRange, IFloatBuffer nextValuesInColorRange)
     {
@@ -13,7 +15,7 @@ package org.glob3.mobile.generated;public class InterpolatedColorScheme extends 
 
     public final void setColorRangeDynamicValues(IFloatBuffer values, IFloatBuffer nextValues)
     {
-        ((DynamicColorRangeGLFeature)_feat).setValues(values, nextValues);
+        setValues(values, nextValues);
         _valuesInColorRange = values;
         _nextValuesInColorRange = nextValues;
     }
