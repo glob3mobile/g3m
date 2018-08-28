@@ -7,13 +7,6 @@
 	<classpathentry kind="lib" path="libs/java_websocket.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/Users/dgd/Library/Android/sdk/platforms/android-23/android.jar" sourcepath="/Users/dgd/Library/Android/sdk/sources/android-23">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/dgd/Library/Android/sdk/docs/reference"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
-		</accessrules>
-	</classpathentry>
+	<classpathentry kind="lib" path="/Users/mdelacalle/Documents/java_src/android/platforms/android-27/android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
