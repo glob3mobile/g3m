@@ -35,6 +35,7 @@ class GPUProgramState;
 class TextureIDReference;
 class EffectTarget;
 class IImageBuilder;
+class MarksRenderer;
 
 
 class MarkUserData {
@@ -191,6 +192,7 @@ private:
   EffectsScheduler* _effectsScheduler;
   bool _firstRender;
 
+  bool _zoomOutDisappears;
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
@@ -354,6 +356,7 @@ public:
   Vector3D* getCartesianPosition(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
+              MarksRenderer* renderer,
               const MutableVector3D& cameraPosition,
               double cameraHeight,
               const GLState* parentGLState,
@@ -394,6 +397,9 @@ public:
   bool getZoomInAppears() const {
     return _zoomInAppears;
   }
+
+
+  void animatedRemove();
 
 };
 

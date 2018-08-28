@@ -251,8 +251,8 @@ public:
 
   class NodeAllMarksFilter : public MarksFilter {
   private:
-    std::string _nodeClusterToken;
-    std::string _nodeFeatureToken;
+    const std::string _nodeClusterToken;
+    const std::string _nodeFeatureToken;
 
   public:
     NodeAllMarksFilter(const Node* node);
@@ -263,7 +263,7 @@ public:
 
   class NodeClusterMarksFilter : public MarksFilter {
   private:
-    std::string _nodeClusterToken;
+    const std::string _nodeClusterToken;
 
   public:
     NodeClusterMarksFilter(const Node* node);

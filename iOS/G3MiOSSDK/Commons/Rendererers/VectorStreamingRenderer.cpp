@@ -553,9 +553,10 @@ void VectorStreamingRenderer::Node::cancelLoadChildren() {
   }
 }
 
-VectorStreamingRenderer::NodeAllMarksFilter::NodeAllMarksFilter(const Node* node) {
-  _nodeClusterToken = node->getClusterMarkToken();
-  _nodeFeatureToken = node->getFeatureMarkToken();
+VectorStreamingRenderer::NodeAllMarksFilter::NodeAllMarksFilter(const Node* node) :
+_nodeClusterToken( node->getClusterMarkToken() ),
+_nodeFeatureToken( node->getFeatureMarkToken() )
+{
 }
 
 bool VectorStreamingRenderer::NodeAllMarksFilter::test(const Mark* mark) const {
@@ -564,8 +565,9 @@ bool VectorStreamingRenderer::NodeAllMarksFilter::test(const Mark* mark) const {
           (token == _nodeFeatureToken));
 }
 
-VectorStreamingRenderer::NodeClusterMarksFilter::NodeClusterMarksFilter(const Node* node) {
-  _nodeClusterToken = node->getClusterMarkToken();
+VectorStreamingRenderer::NodeClusterMarksFilter::NodeClusterMarksFilter(const Node* node) :
+_nodeClusterToken( node->getClusterMarkToken() )
+{
 }
 
 bool VectorStreamingRenderer::NodeClusterMarksFilter::test(const Mark* mark) const {
@@ -579,19 +581,41 @@ void VectorStreamingRenderer::Node::removeMarks() {
   //                                 getFullName().c_str());
   //  }
 
-  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeAllMarksFilter(this), true );
+//  const size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeAllMarksFilter(this), true );
+//
+//  if (_verbose && removed > 0) {
+//#ifdef C_CODE
+//    ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
+//                                 getFullName().c_str(),
+//                                 removed);
+//#endif
+//#ifdef JAVA_CODE
+//    ILogger.instance().logInfo("\"%s\": Removed %d marks",
+//                               getFullName(),
+//                               removed);
+//#endif
+//  }
 
-  if (_verbose && removed > 0) {
+  const std::vector<Mark*> removed = _vectorSet->getMarksRenderer()->getAllMarks( NodeAllMarksFilter(this) );
+  const size_t removedSize = removed.size();
+  if (removedSize > 0) {
+    if (_verbose) {
 #ifdef C_CODE
-    ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
-                                 getFullName().c_str(),
-                                 removed);
+      ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
+                                   getFullName().c_str(),
+                                   removedSize);
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("\"%s\": Removed %d marks",
-                               getFullName(),
-                               removed);
+      ILogger.instance().logInfo("\"%s\": Removed %d marks",
+                                 getFullName(),
+                                 removedSize);
 #endif
+    }
+
+    for (size_t i = 0; i < removedSize; i++) {
+      Mark* mark = removed[i];
+      mark->animatedRemove();
+    }
   }
 }
 
@@ -647,21 +671,46 @@ void VectorStreamingRenderer::Node::childRendered() {
   if (_clusters != NULL) {
     if (_clusters->size() > 0) {
       if (_clusterMarksCount > 0) {
-        size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeClusterMarksFilter(this), true );
+//        size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeClusterMarksFilter(this), true );
+//
+//        _clusterMarksCount -= removed;
+//
+//        if (_verbose && removed > 0) {
+//#ifdef C_CODE
+//          ILogger::instance()->logInfo("\"%s\": Removed %ld cluster-marks",
+//                                       getFullName().c_str(),
+//                                       removed);
+//#endif
+//#ifdef JAVA_CODE
+//          ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
+//                                     getFullName(),
+//                                     removed);
+//#endif
+//        }
 
-        _clusterMarksCount -= removed;
+        const std::vector<Mark*> removed = _vectorSet->getMarksRenderer()->getAllMarks( NodeClusterMarksFilter(this) );
 
-        if (_verbose && removed > 0) {
+        const size_t removedSize = removed.size();
+        if (removedSize > 0) {
+          _clusterMarksCount -= removedSize;
+
+          if (_verbose) {
 #ifdef C_CODE
-          ILogger::instance()->logInfo("\"%s\": Removed %ld cluster-marks",
-                                       getFullName().c_str(),
-                                       removed);
+            ILogger::instance()->logInfo("\"%s\": Removed %ld cluster-marks",
+                                         getFullName().c_str(),
+                                         removedSize);
 #endif
 #ifdef JAVA_CODE
-          ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
-                                     getFullName(),
-                                     removed);
+            ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
+                                       getFullName(),
+                                       removedSize);
 #endif
+          }
+          for (size_t i = 0; i < removedSize; i++) {
+            Mark* mark = removed[i];
+            mark->animatedRemove();
+          }
+
         }
       }
     }
@@ -1159,6 +1208,7 @@ long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node
 
   mark->setToken( node->getFeatureMarkToken() );
   _renderer->getMarkRenderer()->addMark( mark );
+
   return 1;
 }
 
@@ -1298,3 +1348,4 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
     }
   }
 }
+

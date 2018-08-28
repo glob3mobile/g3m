@@ -27,6 +27,7 @@
 #include "IImageBuilder.hpp"
 #include "G3MRenderContext.hpp"
 #include "Planet.hpp"
+#include "MarksRenderer.hpp"
 
 
 class MarkEffectTarget : public EffectTarget {
@@ -47,7 +48,7 @@ private:
 
 public:
   MarkZoomInEffect(Mark* mark,
-                   const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(400),
+                   const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(500),
                    const float initialSize = 0.01f) :
   EffectWithDuration(timeInterval, false),
   _mark(mark),
@@ -59,7 +60,7 @@ public:
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     const double alpha = getAlpha(when);
-    float s = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
+    const float  s     = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
     _mark->setOnScreenSizeOnProportionToImage(s, s);
   }
 
@@ -70,6 +71,49 @@ public:
 
   void cancel(const TimeInterval& when) {
     _mark->setOnScreenSizeOnProportionToImage(1, 1);
+  }
+
+};
+
+class MarkZoomOutAndRemoveEffect : public EffectWithDuration {
+private:
+  Mark* _mark;
+  MarksRenderer* _renderer;
+  const float _finalSize;
+
+public:
+  MarkZoomOutAndRemoveEffect(Mark* mark,
+                             MarksRenderer* renderer,
+                             const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(300),
+                             const float finalSize = 0.01f) :
+  EffectWithDuration(timeInterval, false),
+  _mark(mark),
+  _renderer(renderer),
+  _finalSize(finalSize)
+  {
+    _mark->setOnScreenSizeOnProportionToImage(1, 1);
+  }
+
+  void doStep(const G3MRenderContext* rc,
+              const TimeInterval& when) {
+    const double alpha = getAlpha(when);
+    const float  s     = 1.0f - (float) (((1.0 - _finalSize) * alpha) + _finalSize);
+    _mark->setOnScreenSizeOnProportionToImage(s, s);
+  }
+
+  void stop(const G3MRenderContext* rc,
+            const TimeInterval& when) {
+    _mark->setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
+    _renderer->removeMark(_mark);
+    _mark = NULL;
+    _renderer = NULL;
+  }
+
+  void cancel(const TimeInterval& when) {
+    _mark->setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
+    _renderer->removeMark(_mark);
+    _mark = NULL;
+    _renderer = NULL;
   }
 
 };
@@ -240,7 +284,8 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_zoomOutDisappears(false)
 {
 
 }
@@ -296,7 +341,8 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_zoomOutDisappears(false)
 {
 
 }
@@ -349,7 +395,8 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_zoomOutDisappears(false)
 {
 
 }
@@ -401,7 +448,8 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_zoomOutDisappears(false)
 {
 
 }
@@ -452,7 +500,8 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_zoomOutDisappears(false)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
@@ -682,6 +731,7 @@ void Mark::createGLState(const Planet* planet,
 }
 
 void Mark::render(const G3MRenderContext* rc,
+                  MarksRenderer* renderer,
                   const MutableVector3D& cameraPosition,
                   double cameraHeight,
                   const GLState* parentGLState,
@@ -760,6 +810,13 @@ void Mark::render(const G3MRenderContext* rc,
           }
         }
 
+        if (_zoomOutDisappears) {
+          _zoomOutDisappears = false;
+          _effectsScheduler = rc->getEffectsScheduler();
+          _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer),
+                                         getEffectTarget());
+        }
+
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
                                 4,
@@ -771,6 +828,10 @@ void Mark::render(const G3MRenderContext* rc,
     }
   }
 
+}
+
+void Mark::animatedRemove() {
+  _zoomOutDisappears = true;
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,

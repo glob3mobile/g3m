@@ -156,6 +156,7 @@ public class Mark implements SurfaceElevationListener
   private EffectsScheduler _effectsScheduler;
   private boolean _firstRender;
 
+  private boolean _zoomOutDisappears;
 
   private EffectTarget _effectTarget;
   private EffectTarget getEffectTarget()
@@ -283,6 +284,7 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
   
   }
 
@@ -364,6 +366,7 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
   
   }
 
@@ -433,6 +436,7 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
   
   }
 
@@ -500,6 +504,7 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
   
   }
 
@@ -567,6 +572,7 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
     if (_imageBuilder.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image builders");
@@ -839,7 +845,7 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
+  public final void render(G3MRenderContext rc, MarksRenderer renderer, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -914,6 +920,13 @@ public class Mark implements SurfaceElevationListener
               _effectsScheduler = rc.getEffectsScheduler();
               _effectsScheduler.startEffect(new MarkZoomInEffect(this), getEffectTarget());
             }
+          }
+  
+          if (_zoomOutDisappears)
+          {
+            _zoomOutDisappears = false;
+            _effectsScheduler = rc.getEffectsScheduler();
+            _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer), getEffectTarget());
           }
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
@@ -1053,6 +1066,12 @@ public class Mark implements SurfaceElevationListener
   public final boolean getZoomInAppears()
   {
     return _zoomInAppears;
+  }
+
+
+  public final void animatedRemove()
+  {
+    _zoomOutDisappears = true;
   }
 
 }

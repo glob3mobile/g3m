@@ -147,7 +147,6 @@ public class MarksRenderer extends DefaultRenderer
        _billboardTexCoords.dispose();
   
     super.dispose();
-  
   }
 
   public void onChangedContext()
@@ -215,7 +214,7 @@ public class MarksRenderer extends DefaultRenderer
         Mark mark = _marks.get(ii);
         if (mark.isReady())
         {
-          mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+          mark.render(rc, this, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
         }
       }
     }
@@ -232,22 +231,22 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeMark(Mark mark)
   {
-  //  int pos = -1;
-  //  const int marksSize = _marks.size();
-  //  for (int i = 0; i < marksSize; i++) {
-  //    if (_marks[i] == mark) {
-  //      pos = i;
-  //      break;
-  //    }
-  //  }
-  //  if (pos != -1) {
-  ///#ifdef C_CODE
-  //    _marks.erase(_marks.begin() + pos);
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //    _marks.remove(pos);
-  ///#endif
-  //  }
+    //  int pos = -1;
+    //  const int marksSize = _marks.size();
+    //  for (int i = 0; i < marksSize; i++) {
+    //    if (_marks[i] == mark) {
+    //      pos = i;
+    //      break;
+    //    }
+    //  }
+    //  if (pos != -1) {
+    ///#ifdef C_CODE
+    //    _marks.erase(_marks.begin() + pos);
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //    _marks.remove(pos);
+    ///#endif
+    //  }
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -414,10 +413,40 @@ public class MarksRenderer extends DefaultRenderer
 
   }
 
-  public final int removeAllMarks(MarksFilter filter, boolean deleteMarks)
+//  size_t removeAllMarks(const MarksFilter& filter,
+//                        bool deleteMarks);
+
+
+  //size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+  //                                     bool deleteMarks) {
+  //  size_t removed = 0;
+  //  std::vector<Mark*> survivingMarks;
+  //
+  //  const size_t marksSize = _marks.size();
+  //  for (size_t i = 0; i < marksSize; i++) {
+  //    Mark* mark = _marks[i];
+  //    if (filter.test(mark)) {
+  //      if (deleteMarks) {
+  //        delete mark;
+  //      }
+  //      removed++;
+  //    }
+  //    else {
+  //      survivingMarks.push_back(mark);
+  //    }
+  //  }
+  //
+  //  if (removed > 0) {
+  //    _marks = survivingMarks;
+  //  }
+  //
+  //  return removed;
+  //}
+  
+  
+  public final java.util.ArrayList<Mark> getAllMarks(MarksFilter filter)
   {
-    int removed = 0;
-    java.util.ArrayList<Mark> newMarks = new java.util.ArrayList<Mark>();
+    java.util.ArrayList<Mark> result = new java.util.ArrayList<Mark>();
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -425,25 +454,11 @@ public class MarksRenderer extends DefaultRenderer
       Mark mark = _marks.get(i);
       if (filter.test(mark))
       {
-        if (deleteMarks)
-        {
-          if (mark != null)
-             mark.dispose();
-        }
-        removed++;
-      }
-      else
-      {
-        newMarks.add(mark);
+        result.add(mark);
       }
     }
   
-    if (removed > 0)
-    {
-      _marks = newMarks;
-    }
-  
-    return removed;
+    return result;
   }
 
 }

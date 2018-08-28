@@ -71,9 +71,7 @@ MarksRenderer::~MarksRenderer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
-};
-
+}
 
 void MarksRenderer::onChangedContext() {
   const size_t marksSize = _marks.size();
@@ -91,22 +89,22 @@ void MarksRenderer::addMark(Mark* mark) {
 }
 
 void MarksRenderer::removeMark(Mark* mark) {
-//  int pos = -1;
-//  const int marksSize = _marks.size();
-//  for (int i = 0; i < marksSize; i++) {
-//    if (_marks[i] == mark) {
-//      pos = i;
-//      break;
-//    }
-//  }
-//  if (pos != -1) {
-//#ifdef C_CODE
-//    _marks.erase(_marks.begin() + pos);
-//#endif
-//#ifdef JAVA_CODE
-//    _marks.remove(pos);
-//#endif
-//  }
+  //  int pos = -1;
+  //  const int marksSize = _marks.size();
+  //  for (int i = 0; i < marksSize; i++) {
+  //    if (_marks[i] == mark) {
+  //      pos = i;
+  //      break;
+  //    }
+  //  }
+  //  if (pos != -1) {
+  //#ifdef C_CODE
+  //    _marks.erase(_marks.begin() + pos);
+  //#endif
+  //#ifdef JAVA_CODE
+  //    _marks.remove(pos);
+  //#endif
+  //  }
 
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
@@ -269,6 +267,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       Mark* mark = _marks[ii];
       if (mark->isReady()) {
         mark->render(rc,
+                     this,
                      cameraPosition,
                      cameraHeight,
                      _glState,
@@ -312,29 +311,43 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                          false);
 }
 
-size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
-                                     bool deleteMarks) {
-  size_t removed = 0;
-  std::vector<Mark*> newMarks;
+//size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+//                                     bool deleteMarks) {
+//  size_t removed = 0;
+//  std::vector<Mark*> survivingMarks;
+//
+//  const size_t marksSize = _marks.size();
+//  for (size_t i = 0; i < marksSize; i++) {
+//    Mark* mark = _marks[i];
+//    if (filter.test(mark)) {
+//      if (deleteMarks) {
+//        delete mark;
+//      }
+//      removed++;
+//    }
+//    else {
+//      survivingMarks.push_back(mark);
+//    }
+//  }
+//
+//  if (removed > 0) {
+//    _marks = survivingMarks;
+//  }
+//
+//  return removed;
+//}
+
+
+const std::vector<Mark*> MarksRenderer::getAllMarks(const MarksFilter& filter) const {
+  std::vector<Mark*> result;
 
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     if (filter.test(mark)) {
-      if (deleteMarks) {
-        delete mark;
-      }
-      removed++;
-    }
-    else {
-      newMarks.push_back(mark);
+      result.push_back( mark );
     }
   }
-  
-  if (removed > 0) {
-    _marks = newMarks;
-  }
-  
-  return removed;
-}
 
+  return result;
+}

@@ -26,6 +26,7 @@ package org.glob3.mobile.generated;
 //class TextureIDReference;
 //class EffectTarget;
 //class IImageBuilder;
+//class MarksRenderer;
 
 
 public class MarkUserData
