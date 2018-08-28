@@ -88,7 +88,8 @@ void MarksRenderer::addMark(Mark* mark) {
   }
 }
 
-void MarksRenderer::removeMark(Mark* mark) {
+void MarksRenderer::removeMark(Mark* mark,
+                               bool deleteMark) {
   //  int pos = -1;
   //  const int marksSize = _marks.size();
   //  for (int i = 0; i < marksSize; i++) {
@@ -115,6 +116,9 @@ void MarksRenderer::removeMark(Mark* mark) {
 #ifdef JAVA_CODE
       _marks.remove(i);
 #endif
+      if (deleteMark) {
+        delete mark;
+      }
       break;
     }
   }
@@ -311,31 +315,41 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                          false);
 }
 
-//size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
-//                                     bool deleteMarks) {
-//  size_t removed = 0;
-//  std::vector<Mark*> survivingMarks;
-//
-//  const size_t marksSize = _marks.size();
-//  for (size_t i = 0; i < marksSize; i++) {
-//    Mark* mark = _marks[i];
-//    if (filter.test(mark)) {
-//      if (deleteMarks) {
-//        delete mark;
-//      }
-//      removed++;
-//    }
-//    else {
-//      survivingMarks.push_back(mark);
-//    }
-//  }
-//
-//  if (removed > 0) {
-//    _marks = survivingMarks;
-//  }
-//
-//  return removed;
-//}
+size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+                                     bool animated,
+                                     bool deleteMarks) {
+  size_t removed = 0;
+  const size_t marksSize = _marks.size();
+
+  if (animated) {
+    for (size_t i = 0; i < marksSize; i++) {
+      Mark* mark = _marks[i];
+      if (filter.test(mark)) {
+        mark->animatedRemove(deleteMarks);
+      }
+    }
+  }
+  else {
+    std::vector<Mark*> survivingMarks;
+    for (size_t i = 0; i < marksSize; i++) {
+      Mark* mark = _marks[i];
+      if (filter.test(mark)) {
+        if (deleteMarks) {
+          delete mark;
+        }
+        removed++;
+      }
+      else {
+        survivingMarks.push_back(mark);
+      }
+    }
+
+    if (removed > 0) {
+      _marks = survivingMarks;
+    }
+  }
+  return removed;
+}
 
 
 const std::vector<Mark*> MarksRenderer::getAllMarks(const MarksFilter& filter) const {

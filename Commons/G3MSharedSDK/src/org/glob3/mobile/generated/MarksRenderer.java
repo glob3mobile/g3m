@@ -231,6 +231,10 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeMark(Mark mark)
   {
+     removeMark(mark, true);
+  }
+  public final void removeMark(Mark mark, boolean deleteMark)
+  {
     //  int pos = -1;
     //  const int marksSize = _marks.size();
     //  for (int i = 0; i < marksSize; i++) {
@@ -254,6 +258,11 @@ public class MarksRenderer extends DefaultRenderer
       if (_marks.get(i) == mark)
       {
         _marks.remove(i);
+        if (deleteMark)
+        {
+          if (mark != null)
+             mark.dispose();
+        }
         break;
       }
     }
@@ -413,37 +422,51 @@ public class MarksRenderer extends DefaultRenderer
 
   }
 
-//  size_t removeAllMarks(const MarksFilter& filter,
-//                        bool deleteMarks);
-
-
-  //size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
-  //                                     bool deleteMarks) {
-  //  size_t removed = 0;
-  //  std::vector<Mark*> survivingMarks;
-  //
-  //  const size_t marksSize = _marks.size();
-  //  for (size_t i = 0; i < marksSize; i++) {
-  //    Mark* mark = _marks[i];
-  //    if (filter.test(mark)) {
-  //      if (deleteMarks) {
-  //        delete mark;
-  //      }
-  //      removed++;
-  //    }
-  //    else {
-  //      survivingMarks.push_back(mark);
-  //    }
-  //  }
-  //
-  //  if (removed > 0) {
-  //    _marks = survivingMarks;
-  //  }
-  //
-  //  return removed;
-  //}
+  public final int removeAllMarks(MarksFilter filter, boolean animated, boolean deleteMarks)
+  {
+    int removed = 0;
+    final int marksSize = _marks.size();
   
+    if (animated)
+    {
+      for (int i = 0; i < marksSize; i++)
+      {
+        Mark mark = _marks.get(i);
+        if (filter.test(mark))
+        {
+          mark.animatedRemove(deleteMarks);
+        }
+      }
+    }
+    else
+    {
+      java.util.ArrayList<Mark> survivingMarks = new java.util.ArrayList<Mark>();
+      for (int i = 0; i < marksSize; i++)
+      {
+        Mark mark = _marks.get(i);
+        if (filter.test(mark))
+        {
+          if (deleteMarks)
+          {
+            if (mark != null)
+               mark.dispose();
+          }
+          removed++;
+        }
+        else
+        {
+          survivingMarks.add(mark);
+        }
+      }
   
+      if (removed > 0)
+      {
+        _marks = survivingMarks;
+      }
+    }
+    return removed;
+  }
+
   public final java.util.ArrayList<Mark> getAllMarks(MarksFilter filter)
   {
     java.util.ArrayList<Mark> result = new java.util.ArrayList<Mark>();

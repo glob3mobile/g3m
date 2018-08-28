@@ -71,7 +71,8 @@ public:
 
   void addMark(Mark* mark);
 
-  void removeMark(Mark* mark);
+  void removeMark(Mark* mark,
+                  bool deleteMark = true);
 
   void removeAllMarks(bool deleteMarks = true);
 
@@ -109,8 +110,9 @@ public:
 
   }
 
-//  size_t removeAllMarks(const MarksFilter& filter,
-//                        bool deleteMarks);
+  size_t removeAllMarks(const MarksFilter& filter,
+                        bool animated,
+                        bool deleteMarks);
 
   const std::vector<Mark*> getAllMarks(const MarksFilter& filter) const;
 

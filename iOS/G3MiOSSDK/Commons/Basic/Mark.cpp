@@ -79,16 +79,19 @@ class MarkZoomOutAndRemoveEffect : public EffectWithDuration {
 private:
   Mark* _mark;
   MarksRenderer* _renderer;
+  const bool  _deleteMarkOnDisappears;
   const float _finalSize;
 
 public:
   MarkZoomOutAndRemoveEffect(Mark* mark,
                              MarksRenderer* renderer,
+                             bool deleteMarkOnDisappears,
                              const TimeInterval& timeInterval = TimeInterval::fromMilliseconds(300),
                              const float finalSize = 0.01f) :
   EffectWithDuration(timeInterval, false),
   _mark(mark),
   _renderer(renderer),
+  _deleteMarkOnDisappears(deleteMarkOnDisappears),
   _finalSize(finalSize)
   {
     _mark->setOnScreenSizeOnProportionToImage(1, 1);
@@ -104,14 +107,14 @@ public:
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) {
     _mark->setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
-    _renderer->removeMark(_mark);
+    _renderer->removeMark(_mark, _deleteMarkOnDisappears);
     _mark = NULL;
     _renderer = NULL;
   }
 
   void cancel(const TimeInterval& when) {
     _mark->setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
-    _renderer->removeMark(_mark);
+    _renderer->removeMark(_mark, _deleteMarkOnDisappears);
     _mark = NULL;
     _renderer = NULL;
   }
@@ -285,7 +288,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_zoomOutDisappears(false)
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false)
 {
 
 }
@@ -342,7 +346,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_zoomOutDisappears(false)
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false)
 {
 
 }
@@ -396,7 +401,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_zoomOutDisappears(false)
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false)
 {
 
 }
@@ -449,7 +455,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_zoomOutDisappears(false)
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false)
 {
 
 }
@@ -501,7 +508,8 @@ _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
-_zoomOutDisappears(false)
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
@@ -813,7 +821,7 @@ void Mark::render(const G3MRenderContext* rc,
         if (_zoomOutDisappears) {
           _zoomOutDisappears = false;
           _effectsScheduler = rc->getEffectsScheduler();
-          _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer),
+          _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
                                          getEffectTarget());
         }
 
@@ -830,8 +838,9 @@ void Mark::render(const G3MRenderContext* rc,
 
 }
 
-void Mark::animatedRemove() {
+void Mark::animatedRemove(bool deleteMark) {
   _zoomOutDisappears = true;
+  _deleteMarkOnDisappears = deleteMark;
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,

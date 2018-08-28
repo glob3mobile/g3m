@@ -193,6 +193,7 @@ private:
   bool _firstRender;
 
   bool _zoomOutDisappears;
+  bool _deleteMarkOnDisappears;
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
@@ -399,7 +400,7 @@ public:
   }
 
 
-  void animatedRemove();
+  void animatedRemove(bool deleteMark);
 
 };
 

@@ -700,37 +700,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //                                 getFullName().c_str());
       //  }
     
-    //  const size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeAllMarksFilter(this), true );
-    //
-    //  if (_verbose && removed > 0) {
-    ///#ifdef C_CODE
-    //    ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
-    //                                 getFullName().c_str(),
-    //                                 removed);
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //    ILogger.instance().logInfo("\"%s\": Removed %d marks",
-    //                               getFullName(),
-    //                               removed);
-    ///#endif
-    //  }
+      final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarksFilter(this), true, true); // deleteMarks -  animated
     
-      final java.util.ArrayList<Mark> removed = _vectorSet.getMarksRenderer().getAllMarks(new NodeAllMarksFilter(this));
-      final int removedSize = removed.size();
-      if (removedSize > 0)
+      if (_verbose && removed > 0)
       {
-        if (_verbose)
-        {
-          ILogger.instance().logInfo("\"%s\": Removed %d marks",
-                                     getFullName(),
-                                     removedSize);
-        }
-    
-        for (int i = 0; i < removedSize; i++)
-        {
-          Mark mark = removed.get(i);
-          mark.animatedRemove();
-        }
+        ILogger.instance().logInfo("\"%s\": Removed %d marks",
+                                   getFullName(),
+                                   removed);
       }
     }
 
@@ -745,43 +721,17 @@ public class VectorStreamingRenderer extends DefaultRenderer
         {
           if (_clusterMarksCount > 0)
           {
-    //        size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks( NodeClusterMarksFilter(this), true );
-    //
-    //        _clusterMarksCount -= removed;
-    //
-    //        if (_verbose && removed > 0) {
-    ///#ifdef C_CODE
-    //          ILogger::instance()->logInfo("\"%s\": Removed %ld cluster-marks",
-    //                                       getFullName().c_str(),
-    //                                       removed);
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //          ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
-    //                                     getFullName(),
-    //                                     removed);
-    ///#endif
-    //        }
+            int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarksFilter(this), true, true); // deleteMarks -  animated
     
-            final java.util.ArrayList<Mark> removed = _vectorSet.getMarksRenderer().getAllMarks(new NodeClusterMarksFilter(this));
+            _clusterMarksCount -= removed;
     
-            final int removedSize = removed.size();
-            if (removedSize > 0)
+            if (_verbose && removed > 0)
             {
-              _clusterMarksCount -= removedSize;
-    
-              if (_verbose)
-              {
-                ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
-                                           getFullName(),
-                                           removedSize);
-              }
-              for (int i = 0; i < removedSize; i++)
-              {
-                Mark mark = removed.get(i);
-                mark.animatedRemove();
-              }
-    
+              ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
+                                         getFullName(),
+                                         removed);
             }
+    
           }
         }
       }

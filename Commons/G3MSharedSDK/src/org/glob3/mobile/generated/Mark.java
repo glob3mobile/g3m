@@ -157,6 +157,7 @@ public class Mark implements SurfaceElevationListener
   private boolean _firstRender;
 
   private boolean _zoomOutDisappears;
+  private boolean _deleteMarkOnDisappears;
 
   private EffectTarget _effectTarget;
   private EffectTarget getEffectTarget()
@@ -285,6 +286,7 @@ public class Mark implements SurfaceElevationListener
      _firstRender = true;
      _effectTarget = null;
      _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
   
   }
 
@@ -367,6 +369,7 @@ public class Mark implements SurfaceElevationListener
      _firstRender = true;
      _effectTarget = null;
      _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
   
   }
 
@@ -437,6 +440,7 @@ public class Mark implements SurfaceElevationListener
      _firstRender = true;
      _effectTarget = null;
      _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
   
   }
 
@@ -505,6 +509,7 @@ public class Mark implements SurfaceElevationListener
      _firstRender = true;
      _effectTarget = null;
      _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
   
   }
 
@@ -573,6 +578,7 @@ public class Mark implements SurfaceElevationListener
      _firstRender = true;
      _effectTarget = null;
      _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
     if (_imageBuilder.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image builders");
@@ -926,7 +932,7 @@ public class Mark implements SurfaceElevationListener
           {
             _zoomOutDisappears = false;
             _effectsScheduler = rc.getEffectsScheduler();
-            _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer), getEffectTarget());
+            _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears), getEffectTarget());
           }
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
@@ -1069,9 +1075,10 @@ public class Mark implements SurfaceElevationListener
   }
 
 
-  public final void animatedRemove()
+  public final void animatedRemove(boolean deleteMark)
   {
     _zoomOutDisappears = true;
+    _deleteMarkOnDisappears = deleteMark;
   }
 
 }
