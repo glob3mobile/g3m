@@ -158,6 +158,7 @@ public class Mark implements SurfaceElevationListener
 
   private boolean _zoomOutDisappears;
   private boolean _deleteMarkOnDisappears;
+  private boolean _zoomOutDisappearsStarted;
 
   private EffectTarget _effectTarget;
   private EffectTarget getEffectTarget()
@@ -168,6 +169,7 @@ public class Mark implements SurfaceElevationListener
     }
     return _effectTarget;
   }
+
 
 
 
@@ -287,6 +289,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
   
   }
 
@@ -370,6 +373,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
   
   }
 
@@ -441,6 +445,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
   
   }
 
@@ -510,6 +515,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
   
   }
 
@@ -579,6 +585,7 @@ public class Mark implements SurfaceElevationListener
      _effectTarget = null;
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
     if (_imageBuilder.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image builders");
@@ -587,10 +594,9 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
-    if (_effectsScheduler != null)
-    {
-      _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
-    }
+  //  if (_effectsScheduler != NULL) {
+  //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+  //  }
     if (_effectTarget != null)
        _effectTarget.dispose();
   
@@ -928,10 +934,17 @@ public class Mark implements SurfaceElevationListener
             }
           }
   
-          if (_zoomOutDisappears)
+          if (_zoomOutDisappears && !_zoomOutDisappearsStarted)
           {
-            _zoomOutDisappears = false;
-            _effectsScheduler = rc.getEffectsScheduler();
+            _zoomOutDisappearsStarted = true;
+            if (_effectsScheduler != null)
+            {
+              _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
+            }
+            else
+            {
+              _effectsScheduler = rc.getEffectsScheduler();
+            }
             _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears), getEffectTarget());
           }
   

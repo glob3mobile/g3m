@@ -107,55 +107,56 @@ public class EffectsScheduler
 
   public final void cancelAllEffects()
   {
-    final TimeInterval now = _timer.now();
+    final int size = _effectsRuns.size();
+    if (size > 0)
+    {
+      final TimeInterval now = _timer.now();
   
-    _effectsToCancel.clear();
-  
-    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-    while (iterator.hasNext()) {
-      final EffectRun effectRun = iterator.next();
-      if (effectRun._started) {
-        _effectsToCancel.add(effectRun);
+      for (int i = 0; i < size; i++)
+      {
+        EffectRun effectRun = _effectsRuns.get(i);
+        if (effectRun != null)
+        {
+          _effectsRuns.set(i, null);
+          if (effectRun._started)
+          {
+            effectRun._effect.cancel(now);
+          }
+          if (effectRun != null)
+             effectRun.dispose();
+        }
       }
-      else {
-        effectRun.dispose();
-      }
-      iterator.remove();
-    }
   
-    final int effectsToCancelSize = _effectsToCancel.size();
-    for (int i = 0; i < effectsToCancelSize; i++) {
-      final EffectRun effectRun = _effectsToCancel.get(i);
-      effectRun._effect.cancel(now);
-      effectRun.dispose();
+      _effectsRuns.clear();
     }
   }
 
   public final void cancelAllEffectsFor(EffectTarget target)
   {
-    final TimeInterval now = _timer.now();
-  
-    _effectsToCancel.clear();
-  
-    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-    while (iterator.hasNext()) {
-      final EffectRun effectRun = iterator.next();
-      if (effectRun._target == target) {
-        if (effectRun._started) {
-          _effectsToCancel.add(effectRun);
-        }
-        else {
-          effectRun.dispose();
-        }
-        iterator.remove();
-      }
+    if (_effectsRuns.isEmpty())
+    {
+      return;
     }
   
-    final int effectsToCancelSize = _effectsToCancel.size();
-    for (int i = 0; i < effectsToCancelSize; i++) {
-      final EffectRun effectRun = _effectsToCancel.get(i);
-      effectRun._effect.cancel(now);
-      effectRun.dispose();
+    final TimeInterval now = _timer.now();
+  
+    java.util.Iterator<EffectRun> it = _effectsRuns.iterator();
+    while (it.hasNext())
+    {
+      EffectRun effectRun = it.next();
+      if (effectRun._target == target)
+      {
+        if (effectRun._started)
+        {
+          effectRun._effect.cancel(now);
+        }
+        it.remove();
+        if (effectRun != null)
+           effectRun.dispose();
+      }
+      else
+      {
+      }
     }
   }
 

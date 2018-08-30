@@ -231,42 +231,15 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeMark(Mark mark)
   {
-     removeMark(mark, true);
-  }
-  public final void removeMark(Mark mark, boolean deleteMark)
-  {
-    //  int pos = -1;
-    //  const int marksSize = _marks.size();
-    //  for (int i = 0; i < marksSize; i++) {
-    //    if (_marks[i] == mark) {
-    //      pos = i;
-    //      break;
-    //    }
-    //  }
-    //  if (pos != -1) {
-    ///#ifdef C_CODE
-    //    _marks.erase(_marks.begin() + pos);
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //    _marks.remove(pos);
-    ///#endif
-    //  }
-  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       if (_marks.get(i) == mark)
       {
         _marks.remove(i);
-        if (deleteMark)
-        {
-          if (mark != null)
-             mark.dispose();
-        }
         break;
       }
     }
-  
   }
 
   public final void removeAllMarks()

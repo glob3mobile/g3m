@@ -618,7 +618,7 @@ public class SceneJSNodeParser
   }
 
 
-  public static SGNode parseFromJSONBaseObject(JSONBaseObject jsonObject, boolean depthTest)
+  public static SGNode parseFromJSONBaseObject(JSONBaseObject jsonObject, boolean depthTest, boolean deleteJSONObject)
   {
     SceneJSParserStatistics statistics = new SceneJSParserStatistics();
   
@@ -626,25 +626,31 @@ public class SceneJSNodeParser
   
     statistics.log();
   
+    if (deleteJSONObject)
+    {
+      if (jsonObject != null)
+         jsonObject.dispose();
+    }
+  
     return result;
   }
 
   public static SGNode parseFromJSON(String json, boolean depthTest)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
-    return parseFromJSONBaseObject(jsonObject, depthTest);
+    return parseFromJSONBaseObject(jsonObject, depthTest, true);
   }
 
   public static SGNode parseFromJSON(IByteBuffer json, boolean depthTest)
   {
     final JSONBaseObject jsonObject = IJSONParser.instance().parse(json);
-    return parseFromJSONBaseObject(jsonObject, depthTest);
+    return parseFromJSONBaseObject(jsonObject, depthTest, true);
   }
 
   public static SGNode parseFromBSON(IByteBuffer bson, boolean depthTest)
   {
     final JSONBaseObject jsonObject = BSONParser.parse(bson);
-    return parseFromJSONBaseObject(jsonObject, depthTest);
+    return parseFromJSONBaseObject(jsonObject, depthTest, true);
   }
 
 }

@@ -97,26 +97,41 @@ public:
     _mark->setOnScreenSizeOnProportionToImage(1, 1);
   }
 
+  ~MarkZoomOutAndRemoveEffect() {
+    if (_deleteMarkOnDisappears) {
+      if (_mark != NULL) {
+        Mark* mark = _mark;
+        _mark = NULL;
+        delete mark;
+      }
+    }
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
-    const double alpha = getAlpha(when);
-    const float  s     = 1.0f - (float) (((1.0 - _finalSize) * alpha) + _finalSize);
-    _mark->setOnScreenSizeOnProportionToImage(s, s);
+    if (_mark != NULL) {
+      const double alpha = getAlpha(when);
+      const float  s     = 1.0f - (float) (((1.0 - _finalSize) * alpha) + _finalSize);
+      _mark->setOnScreenSizeOnProportionToImage(s, s);
+    }
   }
 
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) {
-    _mark->setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
-    _renderer->removeMark(_mark, _deleteMarkOnDisappears);
-    _mark = NULL;
-    _renderer = NULL;
+    if ((_mark != NULL) && (_renderer != NULL)) {
+      _renderer->removeMark(_mark);
+      _renderer = NULL;
+    }
   }
 
   void cancel(const TimeInterval& when) {
-    _mark->setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
-    _renderer->removeMark(_mark, _deleteMarkOnDisappears);
-    _mark = NULL;
-    _renderer = NULL;
+    if ((_mark != NULL) && (_renderer != NULL)) {
+      _renderer->removeMark(_mark);
+      _renderer = NULL;
+    }
   }
 
 };
@@ -289,7 +304,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
-_deleteMarkOnDisappears(false)
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 
 }
@@ -347,7 +363,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
-_deleteMarkOnDisappears(false)
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 
 }
@@ -402,7 +419,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
-_deleteMarkOnDisappears(false)
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 
 }
@@ -456,7 +474,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
-_deleteMarkOnDisappears(false)
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 
 }
@@ -509,7 +528,8 @@ _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
-_deleteMarkOnDisappears(false)
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
@@ -611,9 +631,9 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
-  if (_effectsScheduler != NULL) {
-    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-  }
+//  if (_effectsScheduler != NULL) {
+//    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+//  }
   delete _effectTarget;
 
   delete _labelFontColor;
@@ -818,9 +838,14 @@ void Mark::render(const G3MRenderContext* rc,
           }
         }
 
-        if (_zoomOutDisappears) {
-          _zoomOutDisappears = false;
-          _effectsScheduler = rc->getEffectsScheduler();
+        if (_zoomOutDisappears && !_zoomOutDisappearsStarted) {
+          _zoomOutDisappearsStarted = true;
+          if (_effectsScheduler != NULL) {
+            _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+          }
+          else {
+            _effectsScheduler = rc->getEffectsScheduler();
+          }
           _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
                                          getEffectTarget());
         }

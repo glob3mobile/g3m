@@ -16,7 +16,7 @@ SGMesh* SceneJSMeshParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObj
                                                    const std::string&    uriPrefix,
                                                    bool                  isTransparent,
                                                    bool                  depthTest) {
-  SGNode* node = SceneJSNodeParser::parseFromJSONBaseObject(jsonObject, depthTest);
+  SGNode* node = SceneJSNodeParser::parseFromJSONBaseObject(jsonObject, depthTest, true);
   return (node == NULL) ? NULL : new SGMesh(node, uriPrefix, isTransparent);
 }
 

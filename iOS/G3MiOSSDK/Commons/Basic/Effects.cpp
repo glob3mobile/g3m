@@ -72,105 +72,51 @@ EffectsScheduler::~EffectsScheduler() {
 
 
 void EffectsScheduler::cancelAllEffects() {
-  const TimeInterval now = _timer->now();
-#ifdef C_CODE
-  std::vector<size_t> indicesToRemove;
-
   const size_t size = _effectsRuns.size();
-  for (size_t i = 0; i < size; i++) {
-    EffectRun* effectRun = _effectsRuns[i];
+  if (size > 0) {
+    const TimeInterval now = _timer->now();
 
-    if (effectRun->_started) {
-      effectRun->_effect->cancel(now);
+    for (size_t i = 0; i < size; i++) {
+      EffectRun* effectRun = _effectsRuns[i];
+      if (effectRun != NULL) {
+        _effectsRuns[i] = NULL;
+        if (effectRun->_started) {
+          effectRun->_effect->cancel(now);
+        }
+        delete effectRun;
+      }
     }
-    indicesToRemove.push_back(i);
+
+    _effectsRuns.clear();
   }
-
-  // backward iteration, to remove from bottom to top
-  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-    const size_t indexToRemove = indicesToRemove[i];
-    EffectRun* effectRun = _effectsRuns[indexToRemove];
-    delete effectRun;
-
-    _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
-  }
-#endif
-
-#ifdef JAVA_CODE
-  _effectsToCancel.clear();
-
-  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-  while (iterator.hasNext()) {
-    final EffectRun effectRun = iterator.next();
-    if (effectRun._started) {
-      _effectsToCancel.add(effectRun);
-    }
-    else {
-      effectRun.dispose();
-    }
-    iterator.remove();
-  }
-
-  final int effectsToCancelSize = _effectsToCancel.size();
-  for (int i = 0; i < effectsToCancelSize; i++) {
-    final EffectRun effectRun = _effectsToCancel.get(i);
-    effectRun._effect.cancel(now);
-    effectRun.dispose();
-  }
-#endif
 }
 
 void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
+  if (_effectsRuns.empty()) {
+    return;
+  }
+
   const TimeInterval now = _timer->now();
-#ifdef C_CODE
-  std::vector<size_t> indicesToRemove;
 
-  const size_t size = _effectsRuns.size();
-  for (size_t i = 0; i < size; i++) {
-    EffectRun* effectRun = _effectsRuns[i];
-
+  std::vector<EffectRun*>::iterator it = _effectsRuns.begin();
+  while (it != _effectsRuns.end()) {
+    EffectRun* effectRun = *it;
     if (effectRun->_target == target) {
       if (effectRun->_started) {
         effectRun->_effect->cancel(now);
       }
-      indicesToRemove.push_back(i);
-    }
-  }
-
-  // backward iteration, to remove from bottom to top
-  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-    const size_t indexToRemove = indicesToRemove[i];
-    EffectRun* effectRun = _effectsRuns[indexToRemove];
-    delete effectRun;
-
-    _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
-  }
+#ifdef C_CODE
+      it = _effectsRuns.erase(it);
 #endif
-
 #ifdef JAVA_CODE
-  _effectsToCancel.clear();
-
-  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-  while (iterator.hasNext()) {
-    final EffectRun effectRun = iterator.next();
-    if (effectRun._target == target) {
-      if (effectRun._started) {
-        _effectsToCancel.add(effectRun);
-      }
-      else {
-        effectRun.dispose();
-      }
-      iterator.remove();
+      it.remove();
+#endif
+      delete effectRun;
+    }
+    else {
+      it++;
     }
   }
-
-  final int effectsToCancelSize = _effectsToCancel.size();
-  for (int i = 0; i < effectsToCancelSize; i++) {
-    final EffectRun effectRun = _effectsToCancel.get(i);
-    effectRun._effect.cancel(now);
-    effectRun.dispose();
-  }
-#endif
 }
 
 void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
@@ -183,8 +129,7 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
 
     bool removed = false;
     if (effectRun->_started) {
-      Effect* effect = effectRun->_effect;
-      if (effect->isDone(rc, when)) {
+      if (effectRun->_effect->isDone(rc, when)) {
         it = _effectsRuns.erase(it);
         removed = true;
         effectsToStop.push_back( effectRun );

@@ -24,27 +24,47 @@ public class MarkZoomOutAndRemoveEffect extends EffectWithDuration
     _mark.setOnScreenSizeOnProportionToImage(1, 1);
   }
 
+  public void dispose()
+  {
+    if (_deleteMarkOnDisappears)
+    {
+      if (_mark != null)
+      {
+        Mark mark = _mark;
+        _mark = null;
+        if (mark != null)
+           mark.dispose();
+      }
+    }
+    super.dispose();
+  }
+
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
-    final double alpha = getAlpha(when);
-    final float s = 1.0f - (float)(((1.0 - _finalSize) * alpha) + _finalSize);
-    _mark.setOnScreenSizeOnProportionToImage(s, s);
+    if (_mark != null)
+    {
+      final double alpha = getAlpha(when);
+      final float s = 1.0f - (float)(((1.0 - _finalSize) * alpha) + _finalSize);
+      _mark.setOnScreenSizeOnProportionToImage(s, s);
+    }
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-    _mark.setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
-    _renderer.removeMark(_mark, _deleteMarkOnDisappears);
-    _mark = null;
-    _renderer = null;
+    if ((_mark != null) && (_renderer != null))
+    {
+      _renderer.removeMark(_mark);
+      _renderer = null;
+    }
   }
 
   public final void cancel(TimeInterval when)
   {
-    _mark.setOnScreenSizeOnProportionToImage(_finalSize, _finalSize);
-    _renderer.removeMark(_mark, _deleteMarkOnDisappears);
-    _mark = null;
-    _renderer = null;
+    if ((_mark != null) && (_renderer != null))
+    {
+      _renderer.removeMark(_mark);
+      _renderer = null;
+    }
   }
 
 }

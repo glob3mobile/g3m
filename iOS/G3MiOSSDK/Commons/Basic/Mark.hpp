@@ -194,10 +194,12 @@ private:
 
   bool _zoomOutDisappears;
   bool _deleteMarkOnDisappears;
+  bool _zoomOutDisappearsStarted;
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
 
+  
 public:
 
 

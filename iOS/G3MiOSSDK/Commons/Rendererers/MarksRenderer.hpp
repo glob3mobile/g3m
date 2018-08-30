@@ -71,8 +71,7 @@ public:
 
   void addMark(Mark* mark);
 
-  void removeMark(Mark* mark,
-                  bool deleteMark = true);
+  void removeMark(Mark* mark);
 
   void removeAllMarks(bool deleteMarks = true);
 

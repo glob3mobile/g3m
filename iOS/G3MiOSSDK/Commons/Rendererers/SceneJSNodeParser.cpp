@@ -36,28 +36,33 @@ SceneJSNodeParser::SceneJSNodeParser() {
 SGNode* SceneJSNodeParser::parseFromJSON(const std::string& json,
                                          const bool         depthTest) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
-  return parseFromJSONBaseObject(jsonObject, depthTest);
+  return parseFromJSONBaseObject(jsonObject, depthTest, true);
 }
 
 SGNode* SceneJSNodeParser::parseFromJSON(const IByteBuffer* json,
                                          const bool         depthTest) {
   const JSONBaseObject* jsonObject = IJSONParser::instance()->parse(json);
-  return parseFromJSONBaseObject(jsonObject, depthTest);
+  return parseFromJSONBaseObject(jsonObject, depthTest, true);
 }
 
 SGNode* SceneJSNodeParser::parseFromBSON(const IByteBuffer* bson,
                                          const bool         depthTest) {
   const JSONBaseObject* jsonObject = BSONParser::parse(bson);
-  return parseFromJSONBaseObject(jsonObject, depthTest);
+  return parseFromJSONBaseObject(jsonObject, depthTest, true);
 }
 
 SGNode* SceneJSNodeParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                                   const bool            depthTest) {
+                                                   const bool            depthTest,
+                                                   const bool            deleteJSONObject) {
   SceneJSParserStatistics statistics = SceneJSParserStatistics();
 
   SGNode* result = toNode(jsonObject, statistics, depthTest);
 
   statistics.log();
+
+  if (deleteJSONObject) {
+    delete jsonObject;
+  }
 
   return result;
 }
