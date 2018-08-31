@@ -14,7 +14,7 @@
 class IShortBuffer;
 
 struct HitTestResult{
-public:
+public: 
     MutableVector3D _position = MutableVector3D::nan();
     short _t0=0, _t1=0, _t2=0;
 };
