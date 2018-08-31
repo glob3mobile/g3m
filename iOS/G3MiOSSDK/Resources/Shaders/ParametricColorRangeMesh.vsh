@@ -23,6 +23,5 @@ void main() {
   gl_PointSize = uPointSize;
     colorValue = aColorValue;
     
-    highp float currentValue = mix(aColorValue, aColorValueNext, uTime);
     vertexColor = mix(uColorAt0, uColorAt1, aColorValue);
 }

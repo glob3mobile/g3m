@@ -61,6 +61,33 @@ public:
     }
 };
 
+
+class Static3ColorScheme: public VertexColorScheme{
+    IFloatBuffer* _valuesInColorRange;
+    Color3RangeGLFeature* _specificFeatureHandler;
+public:
+    Static3ColorScheme(IFloatBuffer* valuesInColorRange,
+                       const Color& colorRangeAt0,
+                       const Color& colorRangeAt0_5,
+                       const Color& colorRangeAt1){
+        _specificFeatureHandler = new Color3RangeGLFeature(colorRangeAt0,
+                                                           colorRangeAt0_5,
+                                                          colorRangeAt1,
+                                                          valuesInColorRange);
+        _feat = _specificFeatureHandler;
+        _valuesInColorRange = valuesInColorRange;
+    }
+    
+    void setColorRangeStaticValues(IFloatBuffer* values) const{
+        ((ColorRangeGLFeature*)_feat)->setValues(values);
+    }
+    
+    float getValue(size_t index) const{
+        return _valuesInColorRange->get(index);
+    }
+};
+
+
 class InterpolatedColorScheme: public VertexColorScheme{
 protected:
     mutable IFloatBuffer* _valuesInColorRange;

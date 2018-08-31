@@ -560,7 +560,9 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
             
             for (size_t i = 0; i < _multiPassRenderers.size(); ++i){
                 _gl->clearDepthBuffer();
-                _multiPassRenderers[i]->render(_renderContext, _rootState);
+                if (_multiPassRenderers[i]->isEnable()){
+                    _multiPassRenderers[i]->render(_renderContext, _rootState);
+                }
                 renderOrderedRenderable();
                 _renderContext->clearOrderedRenderables();
             }

@@ -37,7 +37,6 @@ public:
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
 "colorValue = aColorValue;\n" +
-"highp float currentValue = mix(aColorValue, aColorValueNext, uTime);\n" +
 "vertexColor = mix(uColorAt0, uColorAt1, aColorValue);\n" +
 "}\n",
  emptyString +  
@@ -130,6 +129,75 @@ public:
 "gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
 "}\n");
     this->add(sourcesTransformedTexCoorTexturedMesh);
+
+    GPUProgramSources sourcesParametricColor3Mesh_DirectionLight_DistanceTransparency("ParametricColor3Mesh_DirectionLight_DistanceTransparency",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec3 aNormal;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
+"uniform float uPointSize;\n" +
+"uniform vec3 uAmbientLightColor;\n" +
+"uniform vec3 uDiffuseLightColor;\n" +
+"uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
+"varying vec3 lightColor;\n" +
+"varying vec4 VertexColor;\n" +
+"varying highp float alpha;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"uniform highp float uTime; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"uniform lowp vec4 uColorAt0_5;\n" +
+"#define HALF_PI 1.5707963268\n" +
+"#define START_FADING_AT 0.75\n" +
+"void main() {\n" +
+"vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
+"highp float vertexDist = -vertexInModel.z;\n" +
+"highp float d = vertexDist / uTransparencyDistanceThreshold;\n" +
+"if (d < START_FADING_AT){\n" +
+"alpha = 1.0;\n" +
+"} else{\n" +
+"if (d > 1.0){\n" +
+"alpha = 0.0;\n" +
+"} else{\n" +
+"d = (d - START_FADING_AT) / (1.0 - START_FADING_AT);\n" +
+"d = (1.0 + d) * (HALF_PI);\n" +
+"alpha = sin(d);\n" +
+"}\n" +
+"}\n" +
+"vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+"vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+"float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+"lightColor.x = min(lightColor.x, 1.0);\n" +
+"lightColor.y = min(lightColor.y, 1.0);\n" +
+"lightColor.z = min(lightColor.z, 1.0);\n" +
+"if (aColorValue < 0.5){\n" +
+"highp float v = aColorValue * 2.0;\n" +
+"VertexColor = mix(uColorAt0, uColorAt0_5, v);\n" +
+"} else{\n" +
+"highp float v = (aColorValue - 0.5) * 2.0;\n" +
+"VertexColor = mix(uColorAt0_5, uColorAt1, v);\n" +
+"}\n" +
+"}\n",
+ emptyString +  
+"precision highp float;\n" +
+"varying vec4 VertexColor;\n" +
+"varying vec3 lightColor;\n" +
+"varying highp float alpha;\n" +
+"void main() {\n" +
+"if (alpha <= 0.0){\n" +
+"discard;\n" +
+"}\n" +
+"gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.g;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.b;\n" +
+"gl_FragColor.a = VertexColor.a * alpha;\n" +
+"}\n");
+    this->add(sourcesParametricColor3Mesh_DirectionLight_DistanceTransparency);
 
     GPUProgramSources sourcesFlatColorMesh_DirectionLight("FlatColorMesh_DirectionLight",
  emptyString +  
@@ -669,11 +737,13 @@ public:
 "uniform mat4 uModelview;\n" +
 "uniform float uPointSize;\n" +
 "attribute float aColorValue;\n" +
-"varying highp float colorValue;\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"uniform lowp vec4 uColorAt0_5;\n" +
+"varying lowp vec4 vertexColor;\n" +
 "void main() {\n" +
 "gl_Position = uModelview * aPosition;\n" +
 "gl_PointSize = uPointSize;\n" +
-"colorValue = aColorValue;\n" +
 "if (aColorValue < 0.5){\n" +
 "highp float v = aColorValue * 2.0;\n" +
 "vertexColor = mix(uColorAt0, uColorAt0_5, v);\n" +
@@ -1104,6 +1174,67 @@ public:
 "gl_FragColor.a = uFlatColor.a * alpha;\n" +
 "}\n");
     this->add(sourcesFlatColorMesh_DistanceTransparency);
+
+    GPUProgramSources sourcesParametricColorMesh_DirectionLight_DistanceTransparency("ParametricColorMesh_DirectionLight_DistanceTransparency",
+ emptyString +  
+"attribute vec4 aPosition;\n" +
+"attribute vec3 aNormal;\n" +
+"uniform mat4 uModelview;\n" +
+"uniform mat4 uModel;\n" +
+"uniform float uPointSize;\n" +
+"uniform vec3 uAmbientLightColor;\n" +
+"uniform vec3 uDiffuseLightColor;\n" +
+"uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
+"varying vec3 lightColor;\n" +
+"varying vec4 VertexColor;\n" +
+"varying highp float alpha;\n" +
+"uniform highp float uTransparencyDistanceThreshold;\n" +
+"attribute float aColorValue; //Between 0..1\n" +
+"uniform lowp vec4 uColorAt0;\n" +
+"uniform lowp vec4 uColorAt1;\n" +
+"#define HALF_PI 1.5707963268\n" +
+"#define START_FADING_AT 0.75\n" +
+"void main() {\n" +
+"vec3 vertexInModel = (uModel * aPosition).xyz;\n" +
+"highp float vertexDist = -vertexInModel.z;\n" +
+"highp float d = vertexDist / uTransparencyDistanceThreshold;\n" +
+"if (d < START_FADING_AT){\n" +
+"alpha = 1.0;\n" +
+"} else{\n" +
+"if (d > 1.0){\n" +
+"alpha = 0.0;\n" +
+"} else{\n" +
+"d = (d - START_FADING_AT) / (1.0 - START_FADING_AT);\n" +
+"d = (1.0 + d) * (HALF_PI);\n" +
+"alpha = sin(d);\n" +
+"}\n" +
+"}\n" +
+"vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+"vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+"float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+"gl_Position = uModelview * aPosition;\n" +
+"gl_PointSize = uPointSize;\n" +
+"lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+"lightColor.x = min(lightColor.x, 1.0);\n" +
+"lightColor.y = min(lightColor.y, 1.0);\n" +
+"lightColor.z = min(lightColor.z, 1.0);\n" +
+"VertexColor = mix(uColorAt0, uColorAt1, aColorValue);\n" +
+"}\n",
+ emptyString +  
+"precision highp float;\n" +
+"varying vec4 VertexColor;\n" +
+"varying vec3 lightColor;\n" +
+"varying highp float alpha;\n" +
+"void main() {\n" +
+"if (alpha <= 0.0){\n" +
+"discard;\n" +
+"}\n" +
+"gl_FragColor.r = VertexColor.r * lightColor.r;\n" +
+"gl_FragColor.g = VertexColor.g * lightColor.g;\n" +
+"gl_FragColor.b = VertexColor.b * lightColor.b;\n" +
+"gl_FragColor.a = VertexColor.a * alpha;\n" +
+"}\n");
+    this->add(sourcesParametricColorMesh_DirectionLight_DistanceTransparency);
 
   }
 

@@ -75,6 +75,33 @@ void ColorRangeGLFeature::setValues(IFloatBuffer* values){
     _parameterValue->replaceBuffer(values);
 }
 
+Color3RangeGLFeature::Color3RangeGLFeature(const Color& colorAt0,
+                                           const Color& colorAt0_5,
+                                           const Color& colorAt1,
+                                           IFloatBuffer* values):
+GLFeature(NO_GROUP, GLF_COLOR_RANGE),
+_colorAt0(new GPUUniformValueVec4Float(colorAt0)),
+_colorAt0_5(new GPUUniformValueVec4Float(colorAt0_5)),
+_colorAt1(new GPUUniformValueVec4Float(colorAt1)),
+_parameterValue(new GPUAttributeValueVec1Float(values, 1, 0, 0, false))
+{
+    _values->addUniformValue(COLORRANGE_COLOR_AT_0,
+                             _colorAt0,
+                             false);
+    _values->addUniformValue(COLORRANGE_COLOR_AT_0_5,
+                             _colorAt0_5,
+                             false);
+    _values->addUniformValue(COLORRANGE_COLOR_AT_1,
+                             _colorAt1,
+                             false);
+    _values->addAttributeValue(COLORRANGE_VALUE, _parameterValue, false);
+}
+
+
+void Color3RangeGLFeature::setValues(IFloatBuffer* values){
+    _parameterValue->replaceBuffer(values);
+}
+
 DynamicColorRangeGLFeature::DynamicColorRangeGLFeature(const Color& colorAt0,
                                          const Color& colorAt1,
                                          IFloatBuffer* values,

@@ -1095,7 +1095,9 @@ package org.glob3.mobile.generated;public class G3MWidget implements ChangedRend
                 for (int i = 0; i < _multiPassRenderers.size(); ++i)
                 {
                     _gl.clearDepthBuffer();
-                    _multiPassRenderers.get(i).render(_renderContext, _rootState);
+                    if (_multiPassRenderers.get(i).isEnable()){
+                    	_multiPassRenderers.get(i).render(_renderContext, _rootState);
+                    }
                     renderOrderedRenderable();
                     _renderContext.clearOrderedRenderables();
                 }

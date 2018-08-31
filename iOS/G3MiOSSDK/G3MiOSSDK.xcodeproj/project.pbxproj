@@ -1866,6 +1866,10 @@
 		D8378FA41BFB337200E6557E /* DeviceAttitude_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceAttitude_iOS.mm; path = Specific/Derived/DeviceAttitude_iOS.mm; sourceTree = "<group>"; };
 		D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceLocation_iOS.hpp; path = Specific/Derived/DeviceLocation_iOS.hpp; sourceTree = "<group>"; };
 		D8378FA61BFB337200E6557E /* DeviceLocation_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceLocation_iOS.mm; path = Specific/Derived/DeviceLocation_iOS.mm; sourceTree = "<group>"; };
+		D83E0A9D2135AFA300AE00F7 /* ParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh; sourceTree = "<group>"; };
+		D83E0A9E2135AFCA00AE00F7 /* ParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh; sourceTree = "<group>"; };
+		D83E0A9F2135B33800AE00F7 /* ParametricColorMesh_DirectionLight_DistanceTransparency.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColorMesh_DirectionLight_DistanceTransparency.vsh; sourceTree = "<group>"; };
+		D83E0AA02135B35600AE00F7 /* ParametricColorMesh_DirectionLight_DistanceTransparency.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParametricColorMesh_DirectionLight_DistanceTransparency.fsh; sourceTree = "<group>"; };
 		D842D9AD1A727FAF008D55E4 /* NonOverlappingMarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = NonOverlappingMarksRenderer.cpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D842D9AE1A727FAF008D55E4 /* NonOverlappingMarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = NonOverlappingMarksRenderer.hpp; path = Commons/Rendererers/NonOverlappingMarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
@@ -3080,10 +3084,12 @@
 				D8F21BA51CA2C7CF004079FF /* ColorMesh_DirectionLight.fsh */,
 				D809B06920B2B73800BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.fsh */,
 				D89CD2B62112FFDB000DE21B /* DynamicParametricColorMesh_DirectionLight_DistanceTransparency.fsh */,
+				D83E0AA02135B35600AE00F7 /* ParametricColorMesh_DirectionLight_DistanceTransparency.fsh */,
 				D81224BA2114676100207927 /* DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh */,
 				D8F21BA61CA2C7CF004079FF /* ColorMesh_DirectionLight.vsh */,
 				D809B06820B2B73200BCAF9A /* ColorMesh_DirectionLight_DistanceTransparency.vsh */,
 				D89CD2B52112FFA8000DE21B /* DynamicParametricColorMesh_DirectionLight_DistanceTransparency.vsh */,
+				D83E0A9F2135B33800AE00F7 /* ParametricColorMesh_DirectionLight_DistanceTransparency.vsh */,
 				D81224B92114675700207927 /* DynamicParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh */,
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */,
@@ -3102,10 +3108,12 @@
 				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
 				D8DCF5F820A45C0F0015AC66 /* ParametricColorRangeMesh.fsh */,
 				D8CC8D6B20F397C900409CAA /* ParametricColorRange3Mesh.fsh */,
+				D83E0A9E2135AFCA00AE00F7 /* ParametricColor3Mesh_DirectionLight_DistanceTransparency.fsh */,
 				D82A78CC20A5C98D00A9BDAA /* DynamicParametricColorRangeMesh.fsh */,
 				D8CC8D6620F3921100409CAA /* DynamicParametricColorRange3Mesh.fsh */,
 				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
 				D8DCF5F720A45BE10015AC66 /* ParametricColorRangeMesh.vsh */,
+				D83E0A9D2135AFA300AE00F7 /* ParametricColor3Mesh_DirectionLight_DistanceTransparency.vsh */,
 				D8CC8D6A20F397C200409CAA /* ParametricColorRange3Mesh.vsh */,
 				D82A78CB20A5C98400A9BDAA /* DynamicParametricColorRangeMesh.vsh */,
 				D8CC8D6720F3922700409CAA /* DynamicParametricColorRange3Mesh.vsh */,

@@ -13,6 +13,12 @@
 
 class IShortBuffer;
 
+struct HitTestResult{
+public:
+    MutableVector3D _position = MutableVector3D::nan();
+    short _t0=0, _t1=0, _t2=0;
+};
+
 class IndexedMesh : public AbstractMesh {
 private:
     IShortBuffer*       _indices;
@@ -49,10 +55,13 @@ public:
     const void getTrianglePrimitive(short t,
                                     MutableVector3D& v1,
                                     MutableVector3D& v2,
-                                    MutableVector3D& v3) const;
+                                    MutableVector3D& v3,
+                                    short& i1,
+                                    short& i2,
+                                    short& i3) const;
     
     //if lastTriangle < firstTriangle -> All triangles will be tested
-    const Vector3D getHitWithRayForTrianglePrimitive(const Vector3D& origin,
+    const HitTestResult getHitWithRayForTrianglePrimitive(const Vector3D& origin,
                                                      const Vector3D& ray,
                                                      short firstTriangle=(short)1,
                                                      short lastTriangle=(short)0) const;

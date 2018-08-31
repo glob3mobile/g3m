@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -44,9 +45,12 @@ public final class MotionEventProcessor {
 
 
    private Vector2F createPosition(final Event event) {
-      return new Vector2F(//
-               event.getClientX() - _canvasElement.getAbsoluteLeft(), //
-               event.getClientY() - _canvasElement.getAbsoluteTop());
+	  float factor = G3MWidget_WebGL._downScaleFactor;
+	  
+      Vector2F v =   new Vector2F(//
+               (event.getClientX() - _canvasElement.getAbsoluteLeft())/factor, //
+               (event.getClientY() - _canvasElement.getAbsoluteTop())/factor);
+      return v;
    }
 
 
@@ -57,45 +61,56 @@ public final class MotionEventProcessor {
       switch (DOM.eventGetType(event)) {
          case Event.ONTOUCHSTART:
             event.preventDefault();
+            ILogger.instance().logInfo("Touch thing START");
             touchEvent = processTouchStart(event);
             break;
          case Event.ONTOUCHEND:
             event.preventDefault();
+            ILogger.instance().logInfo("Touch thing END");
             touchEvent = processTouchEnd(event);
             break;
          case Event.ONTOUCHMOVE:
             event.preventDefault();
+            ILogger.instance().logInfo("Touch thing MOVE");
             touchEvent = processTouchMove(event);
             break;
          case Event.ONTOUCHCANCEL:
             event.preventDefault();
+            ILogger.instance().logInfo("Touch thing CANCEL");
             touchEvent = processTouchCancel(event);
             break;
 
          case Event.ONMOUSEMOVE:
+        	ILogger.instance().logInfo("Mouse thing MOVE");
             touchEvent = processMouseMove(event);
             break;
          case Event.ONMOUSEDOWN:
+        	ILogger.instance().logInfo("Mouse thing DOWN");
             touchEvent = processMouseDown(event);
             break;
          case Event.ONMOUSEUP:
+        	 ILogger.instance().logInfo("Mouse thing UP");
             touchEvent = processMouseUp(event);
             break;
 
          case Event.ONDBLCLICK:
+        	 ILogger.instance().logInfo("Double clicl");
             touchEvent = processDoubleClick(event);
             break;
 
          case Event.ONCONTEXTMENU:
+        	 ILogger.instance().logInfo("Context");
             event.preventDefault();
             touchEvent = processContextMenu(event);
             break;
 
          case Event.ONMOUSEWHEEL:
+        	ILogger.instance().logInfo("Mouse wheel");
             event.preventDefault();
             break;
 
          default:
+        	 ILogger.instance().logInfo("Something else");
             return;
       }
 
@@ -110,16 +125,23 @@ public final class MotionEventProcessor {
 
    private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
       final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
-
       final int jsTouchesSize = jsTouches.length();
       final ArrayList<Touch> touches = new ArrayList<>(jsTouchesSize);
       for (int i = 0; i < jsTouchesSize; i++) {
          final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
 
-         final Vector2F currentTouchPosition = new Vector2F( //
+         /*final Vector2F currentTouchPosition = new Vector2F( //
                   jsTouch.getRelativeX(_canvasElement), //
                   jsTouch.getRelativeY(_canvasElement) //
-         );
+         );*/
+         float factor = G3MWidget_WebGL._downScaleFactor;
+         
+         final Vector2F currentTouchPosition = new Vector2F( //
+         	jsTouch.getRelativeX(_canvasElement)/factor, //
+         	jsTouch.getRelativeY(_canvasElement)/factor//
+		);
+         
+         ILogger.instance().logInfo("Created position: "+currentTouchPosition._x+"_"+currentTouchPosition._y);
 
          final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
 
@@ -267,8 +289,11 @@ public final class MotionEventProcessor {
    private void processMouseWheel(final int delta,
                                   final int x,
                                   final int y) {
-      final Vector2F beginFirstPosition = new Vector2F(x - 10, y - 10);
-      final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
+	  float factor = G3MWidget_WebGL._downScaleFactor;
+	  int x2 = (int) (x/factor);
+	  int y2 = (int) (y/factor);
+      final Vector2F beginFirstPosition = new Vector2F(x2 - 10, y2 - 10);
+      final Vector2F beginSecondPosition = new Vector2F(x2 + 10, y2 + 10);
 
       final ArrayList<Touch> beginTouches = new ArrayList<>(2);
       beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
@@ -288,7 +313,7 @@ public final class MotionEventProcessor {
                TouchEvent.create(TouchEventType.Up, endTouches) //
       );
 
-      _previousMousePosition = new Vector2F(x, y);
+      _previousMousePosition = new Vector2F(x2, y2);
    }
 
 

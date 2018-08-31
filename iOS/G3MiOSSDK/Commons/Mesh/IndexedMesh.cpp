@@ -72,11 +72,14 @@ void IndexedMesh::rawRender(const G3MRenderContext* rc) const {
 const void IndexedMesh::getTrianglePrimitive(short t,
                                              MutableVector3D& v1,
                                              MutableVector3D& v2,
-                                             MutableVector3D& v3) const{
+                                             MutableVector3D& v3,
+                                             short& i1,
+                                             short& i2,
+                                             short& i3) const{
     t *= 3;
-    short i1 = _indices->get(t);
-    short i2 = _indices->get(t+1);
-    short i3 = _indices->get(t+2);
+    i1 = _indices->get(t);
+    i2 = _indices->get(t+1);
+    i3 = _indices->get(t+2);
     
     v1.copyFrom(getVertex(i1));
     v2.copyFrom(getVertex(i2));
@@ -84,12 +87,12 @@ const void IndexedMesh::getTrianglePrimitive(short t,
 }
 
 
-const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& origin,
+const HitTestResult IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& origin,
                                                  const Vector3D& ray,
                                                               short firstTriangle,
                                                               short lastTriangle) const{
     if (_primitive != GLPrimitive::triangles()
-        || _primitive != GLPrimitive::triangleStrip()){
+        && _primitive != GLPrimitive::triangleStrip()){
         ILogger::instance()->logError("getHitWithRayForTrianglePrimitive(): Primitive not supported");
     }
     
@@ -101,8 +104,10 @@ const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& or
     MutableVector3D v1,v2,v3, closestP = MutableVector3D::nan();
     double minDist = IMathUtils::instance()->maxDouble();
     //Triangle intersection
+    HitTestResult hit;
     for(short t = firstTriangle; t < lastTriangle; ++t){
-        getTrianglePrimitive(t,v1,v2,v3);
+        short i1, i2,i3;
+        getTrianglePrimitive(t,v1,v2,v3, i1,i2,i3);
         
         Vector3D p = Vector3D::rayIntersectsTriangle(origin,
                                                      ray,
@@ -113,10 +118,15 @@ const Vector3D IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& or
         if (!p.isNan()){
             double dist = p.squaredDistanceTo(origin);
             if (dist < minDist){
-                closestP.copyFrom(p);
+                hit._position.copyFrom(p);
+                hit._t0 = i1;
+                hit._t1 = i2;
+                hit._t2 = i3;
                 minDist = dist;
+                
             }
         }
     }
-    return closestP.asVector3D();
+    
+    return hit;
 }

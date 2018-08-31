@@ -213,13 +213,18 @@ public class G3MWidget_WebGL
       super.onBrowserEvent(event);
    }
 
+   public static float _downScaleFactor = 2.0f;
 
    private native void jsAddResizeHandler(JavaScriptObject jsCanvas) /*-{
 		var that = this;
 		$wnd.g3mWidgetResize = function() {
 			if ((jsCanvas.clientWidth != jsCanvas.parentNode.clientWidth)
 					|| (jsCanvas.clientHeight != jsCanvas.parentNode.clientHeight)) {
-				that.@org.glob3.mobile.specific.G3MWidget_WebGL::onSizeChanged(II)(jsCanvas.parentNode.clientWidth, jsCanvas.parentNode.clientHeight);
+						var factor = @org.glob3.mobile.specific.G3MWidget_WebGL::_downScaleFactor;
+						var w = jsCanvas.parentNode.clientWidth/factor;
+						var h = jsCanvas.parentNode.clientHeight/factor;
+						
+				that.@org.glob3.mobile.specific.G3MWidget_WebGL::onSizeChanged(II)(w, h);
 			}
 		};
 
@@ -228,7 +233,7 @@ public class G3MWidget_WebGL
 
 
    private static native float getDevicePixelRatio() /*-{
-		return $wnd.devicePixelRatio || 1;
+		return ($wnd.devicePixelRatio) || 1;
    }-*/;
 
 
@@ -238,17 +243,21 @@ public class G3MWidget_WebGL
       if ((_width != width) || (_height != height)) {
          _width = width;
          _height = height;
-         setPixelSize(_width, _height);
+         setPixelSize((int)(_width*_downScaleFactor), (int)(_height*_downScaleFactor));
 
-         final float devicePixelRatio = getDevicePixelRatio();
-
+         
+         final float devicePixelRatio = getDevicePixelRatio(); //Because a las malas everything gets so better !
+         
          final int logicalWidth = Math.round(_width * devicePixelRatio);
          final int logicalHeight = Math.round(_height * devicePixelRatio);
+         ILogger.instance().logInfo("LogicalSize:"+logicalWidth+"-"+logicalHeight);
+         
          _canvas.setCoordinateSpaceWidth(logicalWidth);
          _canvas.setCoordinateSpaceHeight(logicalHeight);
 
 
          jsOnResizeViewport(logicalWidth, logicalHeight);
+         
          if (_g3mWidget != null) {
             _g3mWidget.onResizeViewportEvent(logicalWidth, logicalHeight);
          }

@@ -144,6 +144,32 @@ public:
 
 //////////////////////////
 
+class Color3RangeGLFeature: public GLFeature {
+private:
+    ~Color3RangeGLFeature() {
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
+    }
+    
+    GPUAttributeValueVec1Float* _parameterValue;
+    GPUUniformValueVec4Float* _colorAt0;
+    GPUUniformValueVec4Float* _colorAt0_5;
+    GPUUniformValueVec4Float* _colorAt1;
+    
+public:
+    Color3RangeGLFeature(const Color& colorAt0,
+                         const Color& colorAt0_5,
+                         const Color& colorAt1,
+                        IFloatBuffer* values);
+    
+    void applyOnGlobalGLState(GLGlobalState* state)  const {}
+    
+    void setValues(IFloatBuffer* values);
+};
+
+//////////////////////////
+
 class DynamicColorRangeGLFeature: public GLFeature {
 private:
     ~DynamicColorRangeGLFeature() {
