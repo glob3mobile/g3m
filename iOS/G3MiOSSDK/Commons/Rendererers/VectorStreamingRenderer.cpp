@@ -814,7 +814,7 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
 VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
   delete _buffer;
   
-  delete _sector;
+  delete _metadata;
   
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodes->size(); i++) {
@@ -868,13 +868,22 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       }
     }
     else {
-      _sector        = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
-      _clustersCount = (long long) jsonObject->getAsNumber("clustersCount", 0);
-      _featuresCount = (long long) jsonObject->getAsNumber("featuresCount", 0);
-      _nodesCount    = (int) jsonObject->getAsNumber("nodesCount")->value();
-      _minNodeDepth  = (int) jsonObject->getAsNumber("minNodeDepth")->value();
-      _maxNodeDepth  = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
-      
+      const Sector*            sector            = GEOJSONUtils::parseSector( jsonObject->getAsArray("sector") );
+      const long long          clustersCount     = (long long) jsonObject->getAsNumber("clustersCount", 0);
+      const long long          featuresCount     = (long long) jsonObject->getAsNumber("featuresCount", 0);
+      const int                nodesCount        = (int) jsonObject->getAsNumber("nodesCount")->value();
+      const int                minNodeDepth      = (int) jsonObject->getAsNumber("minNodeDepth")->value();
+      const int                maxNodeDepth      = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
+      const MagnitudeMetadata* magnitudeMetadata = MagnitudeMetadata::fromJSON( jsonObject->getAsObject("magnitude") );
+
+      _metadata = new Metadata(sector,
+                               clustersCount,
+                               featuresCount,
+                               nodesCount,
+                               minNodeDepth,
+                               maxNodeDepth,
+                               magnitudeMetadata);
+
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
       _rootNodes = new std::vector<Node*>();
       for (size_t i = 0; i < rootNodesJSON->size(); i++) {
@@ -894,15 +903,10 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::onPostExecute(const G3MCo
     _vectorSet->errorParsingMetadata();
   }
   else {
-    _vectorSet->parsedMetadata(_sector,
-                               _clustersCount,
-                               _featuresCount,
-                               _nodesCount,
-                               _minNodeDepth,
-                               _maxNodeDepth,
+    _vectorSet->parsedMetadata(_metadata,
                                _rootNodes);
-    _sector          = NULL; // moved ownership to _vectorSet
-    _rootNodes       = NULL; // moved ownership to _vectorSet
+    _metadata  = NULL; // moved ownership to _vectorSet
+    _rootNodes = NULL; // moved ownership to _vectorSet
   }
 }
 
@@ -940,6 +944,29 @@ void VectorStreamingRenderer::MetadataDownloadListener::onCanceledDownload(const
   // do nothing
 }
 
+const VectorStreamingRenderer::MagnitudeMetadata* VectorStreamingRenderer::MagnitudeMetadata::fromJSON(const JSONObject* jsonObject) {
+  if (jsonObject == NULL) {
+    return NULL;
+  }
+
+  const std::string name    = jsonObject->getAsString("name")->value();
+  const double      min     = jsonObject->getAsNumber("min")->value();
+  const double      max     = jsonObject->getAsNumber("max")->value();
+  const double      average = jsonObject->getAsNumber("average")->value();
+
+  return new MagnitudeMetadata(name,
+                               min,
+                               max,
+                               average);
+}
+
+VectorStreamingRenderer::Metadata::~Metadata() {
+  delete _sector;
+#ifdef C_CODE
+  delete _magnitudeMetadata;
+#endif
+}
+
 void VectorStreamingRenderer::VectorSet::errorDownloadingMetadata() {
   _downloadingMetadata = false;
   _errorDownloadingMetadata = true;
@@ -955,10 +982,10 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
     delete _symbolizer;
   }
   
-  delete _sector;
+  delete _metadata;
   
   if (_rootNodes != NULL) {
-    for (size_t i = 0; i < _rootNodes->size(); i++) {
+    for (size_t i = 0; i < _rootNodesSize; i++) {
       Node* node = _rootNodes->at(i);
       node->unload();
       node->_release();
@@ -967,37 +994,27 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
   }
 }
 
-void VectorStreamingRenderer::VectorSet::parsedMetadata(Sector* sector,
-                                                        long long clustersCount,
-                                                        long long featuresCount,
-                                                        int nodesCount,
-                                                        int minNodeDepth,
-                                                        int maxNodeDepth,
+void VectorStreamingRenderer::VectorSet::parsedMetadata(Metadata* metadata,
                                                         std::vector<Node*>* rootNodes) {
   _downloadingMetadata = false;
-  
-  _sector          = sector;
-  _clustersCount   = clustersCount;
-  _featuresCount   = featuresCount;
-  _nodesCount      = nodesCount;
-  _minNodeDepth    = minNodeDepth;
-  _maxNodeDepth    = maxNodeDepth;
-  _rootNodes       = rootNodes;
-  _rootNodesSize   = _rootNodes->size();
+
+  _metadata      = metadata;
+  _rootNodes     = rootNodes;
+  _rootNodesSize = _rootNodes->size();
   
   if (_verbose) {
     ILogger::instance()->logInfo("\"%s\": Metadata",         _name.c_str());
-    ILogger::instance()->logInfo("   Sector        : %s",    _sector->description().c_str());
+    ILogger::instance()->logInfo("   Sector        : %s",    _metadata->_sector->description().c_str());
 #ifdef C_CODE
-    ILogger::instance()->logInfo("   Clusters Count: %ld",   _clustersCount);
-    ILogger::instance()->logInfo("   Features Count: %ld",   _featuresCount);
+    ILogger::instance()->logInfo("   Clusters Count: %ld",   _metadata->_clustersCount);
+    ILogger::instance()->logInfo("   Features Count: %ld",   _metadata->_featuresCount);
 #endif
 #ifdef JAVA_CODE
-    ILogger.instance().logInfo("   Clusters Count: %d",   _clustersCount);
-    ILogger.instance().logInfo("   Features Count: %d",   _featuresCount);
+    ILogger.instance().logInfo("   Clusters Count: %d",   _metadata._clustersCount);
+    ILogger.instance().logInfo("   Features Count: %d",   _metadata._featuresCount);
 #endif
-    ILogger::instance()->logInfo("   Nodes Count   : %d",    _nodesCount);
-    ILogger::instance()->logInfo("   Depth         : %d/%d", _minNodeDepth, _maxNodeDepth);
+    ILogger::instance()->logInfo("   Nodes Count   : %d",    _metadata->_nodesCount);
+    ILogger::instance()->logInfo("   Depth         : %d/%d", _metadata->_minNodeDepth, _metadata->_maxNodeDepth);
     ILogger::instance()->logInfo("   Root Nodes    : %d",    _rootNodesSize);
   }
   
@@ -1140,9 +1157,10 @@ long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* nod
     for (size_t i = 0; i < clustersCount; i++) {
       const Cluster* cluster = clusters->at(i);
       if (cluster != NULL) {
-        Mark* mark = _symbolizer->createClusterMark(node,
+        Mark* mark = _symbolizer->createClusterMark(_metadata->_magnitudeMetadata,
+                                                    node,
                                                     cluster,
-                                                    _featuresCount);
+                                                    _metadata->_featuresCount);
         if (mark != NULL) {
           mark->setToken( node->getClusterMarkToken() );
           _renderer->getMarkRenderer()->addMark( mark );
@@ -1158,7 +1176,8 @@ long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* nod
 
 long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
                                                                 const GEO2DPointGeometry* geometry) const {
-  Mark* mark = _symbolizer->createFeatureMark(node,
+  Mark* mark = _symbolizer->createFeatureMark(_metadata->_magnitudeMetadata,
+                                              node,
                                               geometry);
   if (mark == NULL) {
     return 0;
@@ -1306,4 +1325,3 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
     }
   }
 }
-

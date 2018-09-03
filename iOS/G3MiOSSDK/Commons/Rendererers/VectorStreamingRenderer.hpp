@@ -48,6 +48,7 @@ public:
   };
 
   class VectorSet;
+  class Metadata;
   class Node;
 
 
@@ -404,12 +405,7 @@ public:
 
     bool         _parsingError;
 
-    Sector*             _sector;
-    long long           _clustersCount;
-    long long           _featuresCount;
-    int                 _nodesCount;
-    int                 _minNodeDepth;
-    int                 _maxNodeDepth;
+    Metadata*           _metadata;
     std::vector<Node*>* _rootNodes;
 
   public:
@@ -420,12 +416,7 @@ public:
     _verbose(verbose),
     _buffer(buffer),
     _parsingError(false),
-    _sector(NULL),
-    _clustersCount(-1),
-    _featuresCount(-1),
-    _nodesCount(-1),
-    _minNodeDepth(-1),
-    _maxNodeDepth(-1),
+    _metadata(NULL),
     _rootNodes(NULL)
     {
     }
@@ -470,19 +461,80 @@ public:
   };
 
 
+  class MagnitudeMetadata {
+  public:
+    static const MagnitudeMetadata* fromJSON(const JSONObject* jsonObject);
+
+    const std::string _name;
+    const double      _min;
+    const double      _max;
+    const double      _average;
+
+    virtual ~MagnitudeMetadata() { }
+
+  private:
+    MagnitudeMetadata(const std::string& name,
+                      const double       min,
+                      const double       max,
+                      const double       average) :
+    _name(name),
+    _min(min),
+    _max(max),
+    _average(average)
+    {
+
+    }
+
+  };
+
+
   class VectorSetSymbolizer {
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                                    const VectorStreamingRenderer::Node* node,
                                     const GEO2DPointGeometry* geometry) const = 0;
 
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                                    const VectorStreamingRenderer::Node* node,
                                     const VectorStreamingRenderer::Cluster* cluster,
-                                    long long featuresCount) const = 0;
+                                    const long long featuresCount) const = 0;
 
   };
 
+
+  class Metadata {
+  public:
+    const Sector*            _sector;
+    const long long          _clustersCount;
+    const long long          _featuresCount;
+    const int                _nodesCount;
+    const int                _minNodeDepth;
+    const int                _maxNodeDepth;
+    const MagnitudeMetadata* _magnitudeMetadata;
+
+    Metadata(const Sector*            sector,
+             const long long          clustersCount,
+             const long long          featuresCount,
+             const int                nodesCount,
+             const int                minNodeDepth,
+             const int                maxNodeDepth,
+             const MagnitudeMetadata* magnitudeMetadata) :
+    _sector(sector),
+    _clustersCount(clustersCount),
+    _featuresCount(featuresCount),
+    _nodesCount(nodesCount),
+    _minNodeDepth(minNodeDepth),
+    _maxNodeDepth(maxNodeDepth),
+    _magnitudeMetadata(magnitudeMetadata)
+    {
+
+    }
+
+    ~Metadata();
+
+  };
 
   class VectorSet {
   private:
@@ -515,12 +567,7 @@ public:
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
 
-    Sector*             _sector;
-    long long           _clustersCount;
-    long long           _featuresCount;
-    int                 _nodesCount;
-    int                 _minNodeDepth;
-    int                 _maxNodeDepth;
+    Metadata*           _metadata;
     std::vector<Node*>* _rootNodes;
     size_t              _rootNodesSize;
 
@@ -559,7 +606,7 @@ public:
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
-    _sector(NULL),
+    _metadata(NULL),
     _rootNodes(NULL),
     _rootNodesSize(0),
     _lastRenderedCount(0)
@@ -596,12 +643,7 @@ public:
 
     void errorDownloadingMetadata();
     void errorParsingMetadata();
-    void parsedMetadata(Sector* sector,
-                        long long clustersCount,
-                        long long featuresCount,
-                        int nodesCount,
-                        int minNodeDepth,
-                        int maxNodeDepth,
+    void parsedMetadata(Metadata* metadata,
                         std::vector<Node*>* rootNodes);
 
     void render(const G3MRenderContext* rc,
