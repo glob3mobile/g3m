@@ -48,6 +48,22 @@ public:
   }
     
     virtual size_t size() const = 0;
+    
+    void mapToRange(float fromMin, float fromMax,
+                    float toMin, float toMax,
+                    bool crop){
+        size_t size = this->size();
+        for (size_t i = 0; i < size; ++i) {
+            float v = get(i);
+            v = (v - fromMin) / (fromMax - fromMin); //0..1
+            if (crop){
+                if (v < 0.0f) v = 0.0f;
+                if (v > 1.0f) v = 1.0f;
+            }
+            v = (v * (toMax - toMin)) + toMin;
+            rawPut(i, v);
+        }
+    }
   
 };
 
