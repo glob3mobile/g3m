@@ -93,10 +93,13 @@ _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
 _polygonOffsetFill(polygonOffsetFill),
 _vertexColorScheme(vertexColorScheme),
-_modelTransform(new ModelTransformGLFeature(Matrix44D::createIdentity())),
+_modelTransform(NULL),
 _transparencyDistanceThreshold(transparencyDistanceThreshold),
 _model(NULL)
 {
+    Matrix44D* id = Matrix44D::createIdentity();
+    _modelTransform = new ModelTransformGLFeature(id);
+    id->_release();
     createGLState();
 }
 
@@ -189,7 +192,10 @@ void AbstractMesh::createGLState() {
     
     if (_transparencyDistanceThreshold > 0.0){
         _glState->addGLFeature(new TransparencyDistanceThresholdGLFeature(_transparencyDistanceThreshold), false);
-        _model = new ModelGLFeature(Matrix44D::createIdentity());
+        Matrix44D* identity = Matrix44D::createIdentity();
+        _model = new ModelGLFeature(identity);
+        identity->_release();
+        identity = NULL;
         _glState->addGLFeature(_model, true);
     }
     
