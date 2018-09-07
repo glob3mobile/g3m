@@ -222,7 +222,6 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-
     if (_progressiveInitialization) {
       if (_initializationTimer == NULL) {
         _initializationTimer = rc->getFactory()->createTimer();

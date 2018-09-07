@@ -180,7 +180,6 @@ public class MarksRenderer extends DefaultRenderer
   
       IFloatBuffer billboardTexCoord = getBillboardTexCoords();
   
-  
       if (_progressiveInitialization)
       {
         if (_initializationTimer == null)
