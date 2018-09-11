@@ -1,10 +1,19 @@
 package org.glob3.mobile.generated;
 //
+//  JSONNumber.cpp
+//  G3MiOSSDK
+//
+//  Created by Oliver Koehler on 03/10/12.
+//
+
+
+//
 //  JSONNumber.hpp
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 03/10/12.
 //
+
 
 
 
@@ -15,6 +24,11 @@ public abstract class JSONNumber extends JSONBaseObject
   public final JSONNumber asNumber()
   {
     return this;
+  }
+
+  public final JSONBoolean asBoolean()
+  {
+    return new JSONBoolean(value() != 0);
   }
 
 }

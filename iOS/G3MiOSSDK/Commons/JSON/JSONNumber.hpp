@@ -10,6 +10,7 @@
 
 #include "JSONBaseObject.hpp"
 
+
 class JSONNumber : public JSONBaseObject {
 public:
   virtual double value() const = 0;
@@ -17,6 +18,8 @@ public:
   const JSONNumber* asNumber() const {
     return this;
   }
+
+  const JSONBoolean* asBoolean() const;
 
 };
 

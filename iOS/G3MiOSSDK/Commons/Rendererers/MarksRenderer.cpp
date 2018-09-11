@@ -137,12 +137,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const int markWidth = (int)mark->getTextureWidth();
+        const float markWidth = mark->getTextureWidth();
         if (markWidth <= 0) {
           continue;
         }
 
-        const int markHeight = (int)mark->getTextureHeight();
+        const float markHeight = mark->getTextureHeight();
         if (markHeight <= 0) {
           continue;
         }
@@ -150,15 +150,15 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
-        const RectangleF markPixelBounds(markPixel._x - ((float) markWidth / 2),
-                                         markPixel._y - ((float) markHeight / 2),
+        const RectangleF markPixelBounds(markPixel._x - (markWidth  / 2),
+                                         markPixel._y - (markHeight / 2),
                                          markWidth,
                                          markHeight);
 
         if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
           const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
           if (sqDistance < minSqDistance) {
-            nearestMark = mark;
+            nearestMark   = mark;
             minSqDistance = sqDistance;
           }
         }
