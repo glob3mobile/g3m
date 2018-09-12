@@ -255,23 +255,23 @@
 
 
     dispatch_async( dispatch_get_main_queue(), ^{
-      [_lock lock];
+      [self->_lock lock];
 
       const bool dataIsValid = data && (statusCode == 200);
       if (!dataIsValid) {
         ILogger::instance()->logError("Error %s, StatusCode=%d, URL=%s\n",
                                       [[error localizedDescription] UTF8String],
                                       statusCode,
-                                      [[_nsURL absoluteString] UTF8String]);
+                                      [[self->_nsURL absoluteString] UTF8String]);
       }
 
-      const size_t listenersCount = [_listeners count];
+      const size_t listenersCount = [self->_listeners count];
 
-      const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
+      const URL url( [[self->_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
 
       if (dataIsValid) {
         for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          ListenerEntry* entry = [self->_listeners objectAtIndex: i];
           Downloader_iOS_Listener* listener = entry.listener;
 
           if (entry.isCanceled) {
@@ -288,15 +288,15 @@
       }
       else {
         for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          ListenerEntry* entry = [self->_listeners objectAtIndex: i];
 
           [entry.listener onErrorURL: url];
         }
       }
       
-      [_listeners removeAllObjects];
+      [self->_listeners removeAllObjects];
       
-      [_lock unlock];
+      [self->_lock unlock];
     });
     
   }

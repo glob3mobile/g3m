@@ -130,6 +130,7 @@ public abstract class IMathUtils
     return (i1 < i2) ? i1 : i2;
   }
 
+
   public final long min(long i1, long i2)
   {
     return (i1 < i2) ? i1 : i2;

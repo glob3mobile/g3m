@@ -284,7 +284,7 @@ private:
     long long _pointsCount;
 
     int _neededLevel;
-    int _neededPoints;
+    size_t _neededPoints;
     int _preloadedLevel;
     int _currentLoadedLevel;
     int _loadingLevel;
