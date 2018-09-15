@@ -14,19 +14,19 @@
 #include "TextureIDReference.hpp"
 
 const IGLTextureID* MultiTextureMapping::getGLTextureID() const {
-  return _glTextureID->getID();
+  return _glTextureID1->getID();
 }
 
 void MultiTextureMapping::releaseGLTextureID() {
 
-  if (_glTextureID != NULL) {
+  if (_glTextureID1 != NULL) {
 #ifdef C_CODE
-    delete _glTextureID;
+    delete _glTextureID1;
 #endif
 #ifdef JAVA_CODE
-    _glTextureID.dispose();
+    _glTextureID1.dispose();
 #endif
-    _glTextureID = NULL;
+    _glTextureID1 = NULL;
   }
   else {
     ILogger::instance()->logError("Releasing invalid Multi texture mapping");
@@ -47,8 +47,8 @@ void MultiTextureMapping::releaseGLTextureID() {
 }
 
 MultiTextureMapping::~MultiTextureMapping() {
-  if (_ownedTexCoords) {
-    delete _texCoords;
+  if (_ownedTexCoords1) {
+    delete _texCoords1;
   }
 
   if (_ownedTexCoords2) {
@@ -67,10 +67,12 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
 
   for (int i = 0; i < tglfs->size(); i++) {
     TextureGLFeature* tglf =  (TextureGLFeature*) tglfs->get(0);
-    if (tglf->getTarget() == 0 && tglf->getTextureID() == _glTextureID->getID()) {
+    if ((tglf->getTarget() == 0) &&
+        (tglf->getTextureID() == _glTextureID1->getID())) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
-      tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+      tglf->setRotation(_rotationInRadians,
+                        _rotationCenterU, _rotationCenterV);
       delete tglfs;
       return; //The TextureGLFeature for target 0 already exists and we do not have to recreate the state
     }
@@ -82,18 +84,18 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
   state.clearGLFeatureGroup(COLOR_GROUP);
 
   // TARGET 0
-  if (_texCoords == NULL) {
+  if (_texCoords1 == NULL) {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
   }
   else {
-    state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
-                                            _texCoords,
+    state.addGLFeature(new TextureGLFeature(_glTextureID1->getID(),
+                                            _texCoords1,
                                             2,
                                             0,
                                             false,
                                             0,
-                                            _transparent,
-                                            _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                            _transparent1,
+                                            _glTextureID1->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             _translationU,
                                             _translationV,
@@ -118,7 +120,7 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent2,
-                                            _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                            _glTextureID1->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             1), //TARGET
                        false);

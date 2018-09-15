@@ -49,6 +49,14 @@ public:
                                                    const double toHeight,
                                                    double alpha);
 
+  static Geodetic3D linearInterpolationFromRadians(const double fromLatitudeRadians,
+                                                   const double fromLongitudeRadians,
+                                                   const double fromHeight,
+                                                   const double toLatitudeRadians,
+                                                   const double toLongitudeRadians,
+                                                   const double toHeight,
+                                                   double alpha);
+
   static Geodetic3D cosineInterpolation(const Geodetic3D& from,
                                         const Geodetic3D& to,
                                         double alpha);

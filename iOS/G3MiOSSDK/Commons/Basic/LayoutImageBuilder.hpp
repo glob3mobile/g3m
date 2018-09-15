@@ -143,13 +143,13 @@ protected:
    */
 
   LayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                     int            margin,
-                     float          borderWidth,
-                     const Color&   borderColor,
-                     int            padding,
-                     const Color&   backgroundColor,
-                     float          cornerRadius,
-                     int            childrenSeparation) :
+                     int                                margin,
+                     float                              borderWidth,
+                     const Color&                       borderColor,
+                     int                                padding,
+                     const Color&                       backgroundColor,
+                     float                              cornerRadius,
+                     int                                childrenSeparation) :
   _children(children),
   _margin(margin),
   _borderWidth(borderWidth),

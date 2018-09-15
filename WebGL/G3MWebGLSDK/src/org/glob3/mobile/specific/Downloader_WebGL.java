@@ -42,8 +42,8 @@ public final class Downloader_WebGL
       _requestIDCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
-      _downloadingHandlers = new HashMap<>();
-      _queuedHandlers = new HashMap<>();
+      _downloadingHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
+      _queuedHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _delayMillis = delayMillis;
 
       if (proxy == null) {

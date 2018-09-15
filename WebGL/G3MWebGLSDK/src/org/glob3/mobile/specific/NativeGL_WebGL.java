@@ -30,7 +30,7 @@ public final class NativeGL_WebGL
 
    private final JavaScriptObject                      _gl;
 
-   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<>();
+   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
 
 
    public NativeGL_WebGL(final JavaScriptObject webGLContext) {

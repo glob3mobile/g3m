@@ -141,7 +141,7 @@ public class Poly2TriTest {
       if (temp.length() == 0) {
          return Double.NaN;
       }
-      return new Double(temp.toString());
+      return Double.valueOf(temp.toString());
    }
 
 

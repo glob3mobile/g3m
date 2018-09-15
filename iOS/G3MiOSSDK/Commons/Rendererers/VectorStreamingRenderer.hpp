@@ -179,7 +179,7 @@ public:
     std::vector<Node*>*    _children;
 
   private:
-    std::vector<Cluster*>* parseClusters(const JSONArray* clustersJson);
+    std::vector<Cluster*>* parseClusters(const JSONBaseObject* jsonBaseObject);
     std::vector<Node*>*    parseChildren(const JSONBaseObject* jsonBaseObject);
 
   public:

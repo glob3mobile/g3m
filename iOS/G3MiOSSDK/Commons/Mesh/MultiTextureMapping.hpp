@@ -18,31 +18,31 @@ class IGLTextureID;
 class MultiTextureMapping : public TransformableTextureMapping {
 private:
 #ifdef C_CODE
-  const TextureIDReference* _glTextureID;
+  const TextureIDReference* _glTextureID1;
   const TextureIDReference* _glTextureID2;
 #endif
 #ifdef JAVA_CODE
-  private TextureIDReference _glTextureID;
+  private TextureIDReference _glTextureID1;
   private TextureIDReference _glTextureID2;
 #endif
 
-  IFloatBuffer* _texCoords;
-  const bool    _ownedTexCoords;
+  IFloatBuffer* _texCoords1;
+  const bool    _ownedTexCoords1;
 
   IFloatBuffer* _texCoords2;
   const bool    _ownedTexCoords2;
 
-  const bool _transparent;
+  const bool _transparent1;
   const bool _transparent2;
 
   void releaseGLTextureID();
 
 public:
 
-  MultiTextureMapping(const TextureIDReference* glTextureID,
-                      IFloatBuffer* texCoords,
-                      bool ownedTexCoords,
-                      bool transparent,
+  MultiTextureMapping(const TextureIDReference* glTextureID1,
+                      IFloatBuffer* texCoords1,
+                      bool ownedTexCoords1,
+                      bool transparent1,
                       const TextureIDReference* glTextureID2,
                       IFloatBuffer* texCoords2,
                       bool ownedTexCoords2,
@@ -50,10 +50,10 @@ public:
   TransformableTextureMapping(0, 0,
                               1, 1,
                               0, 0, 0),
-  _glTextureID(glTextureID),
-  _texCoords(texCoords),
-  _ownedTexCoords(ownedTexCoords),
-  _transparent(transparent),
+  _glTextureID1(glTextureID1),
+  _texCoords1(texCoords1),
+  _ownedTexCoords1(ownedTexCoords1),
+  _transparent1(transparent1),
   _glTextureID2(glTextureID2),
   _texCoords2(texCoords2),
   _ownedTexCoords2(ownedTexCoords2),
@@ -61,10 +61,10 @@ public:
   {
   }
 
-  MultiTextureMapping(const TextureIDReference* glTextureID,
-                      IFloatBuffer* texCoords,
-                      bool ownedTexCoords,
-                      bool transparent,
+  MultiTextureMapping(const TextureIDReference* glTextureID1,
+                      IFloatBuffer* texCoords1,
+                      bool ownedTexCoords1,
+                      bool transparent1,
                       const TextureIDReference* glTextureID2,
                       IFloatBuffer* texCoords2,
                       bool ownedTexCoords2,
@@ -83,10 +83,10 @@ public:
                               rotationAngleInRadians,
                               rotationCenterU,
                               rotationCenterV),
-  _glTextureID(glTextureID),
-  _texCoords(texCoords),
-  _ownedTexCoords(ownedTexCoords),
-  _transparent(transparent),
+  _glTextureID1(glTextureID1),
+  _texCoords1(texCoords1),
+  _ownedTexCoords1(ownedTexCoords1),
+  _transparent1(transparent1),
   _glTextureID2(glTextureID2),
   _texCoords2(texCoords2),
   _ownedTexCoords2(ownedTexCoords2),
@@ -99,7 +99,7 @@ public:
   const IGLTextureID* getGLTextureID() const;
 
   IFloatBuffer* getTexCoords() const {
-    return _texCoords;
+    return _texCoords1;
   }
 
   void modifyGLState(GLState& state) const;

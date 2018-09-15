@@ -20,13 +20,18 @@ package org.glob3.mobile.generated;
 
 public abstract class CanvasImageBuilder extends AbstractImageBuilder
 {
+  private final int _width;
+  private final int _height;
+  private final boolean _retina;
+
   private ICanvas _canvas;
   private int _canvasWidth;
   private int _canvasHeight;
+  private boolean _canvasRetina;
 
   private ICanvas getCanvas(G3MContext context)
   {
-    if ((_canvas == null) || (_canvasWidth != _width) || (_canvasHeight != _height))
+    if ((_canvas == null) || (_canvasWidth != _width) || (_canvasHeight != _height) || (_canvasRetina != _retina))
     {
       if (_canvas != null)
          _canvas.dispose();
@@ -37,6 +42,7 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
       _canvas.initialize(_width, _height);
       _canvasWidth = _width;
       _canvasHeight = _height;
+      _canvasRetina = _retina;
     }
     else
     {
@@ -47,9 +53,6 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
     return _canvas;
   }
 
-  protected final int _width;
-  protected final int _height;
-  protected final boolean _retina;
 
   protected CanvasImageBuilder(int width, int height, boolean retina)
   {
@@ -59,11 +62,16 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
      _canvas = null;
      _canvasWidth = 0;
      _canvasHeight = 0;
+     _canvasRetina = false;
   }
 
-
-  ///#include "IStringUtils.hpp"
+  protected final String getResolutionID(G3MContext context)
+  {
+    final IStringUtils su = context.getStringUtils();
   
+    return (su.toString(_width) + "x" + su.toString(_height) + (_retina ? "@2x" : ""));
+  }
+
   public void dispose()
   {
     if (_canvas != null)

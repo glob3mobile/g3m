@@ -569,11 +569,11 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     //Fixing final latitude
     while (finalLatInDegrees > 90)
     {
-      finalLatInDegrees -= 360;
+      finalLatInDegrees -= 180;
     }
     while (finalLatInDegrees < -90)
     {
-      finalLatInDegrees += 360;
+      finalLatInDegrees += 180;
     }
   
     //Fixing final longitude

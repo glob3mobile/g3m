@@ -15,16 +15,18 @@ class ICanvas;
 
 class CanvasImageBuilder : public AbstractImageBuilder {
 private:
+  const int  _width;
+  const int  _height;
+  const bool _retina;
+
   ICanvas* _canvas;
   int      _canvasWidth;
   int      _canvasHeight;
+  bool     _canvasRetina;
 
   ICanvas* getCanvas(const G3MContext* context);
 
 protected:
-  const int _width;
-  const int _height;
-  const bool _retina;
 
   CanvasImageBuilder(int width,
                      int height,
@@ -34,9 +36,12 @@ protected:
   _retina(retina),
   _canvas(NULL),
   _canvasWidth(0),
-  _canvasHeight(0)
+  _canvasHeight(0),
+  _canvasRetina(false)
   {
   }
+
+  const std::string getResolutionID(const G3MContext* context) const;
 
   virtual ~CanvasImageBuilder();
 

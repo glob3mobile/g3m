@@ -92,8 +92,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
       {
         if (textureID != null)
            textureID.dispose();
-  
-        rc.getLogger().logError("Can't background upload texture to GPU");
+        rc.getLogger().logError("Can't upload background texture to GPU");
         return null;
       }
     }
@@ -314,7 +313,6 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
   /** private, do not call */
   public final void imageCreated(IImage image, String imageName, int imageRole)
   {
-  
     if (imageRole == 0)
     {
       _buildingImage = false;
@@ -329,30 +327,16 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
       _backgroundImage = image;
       _backgroundImageName = imageName;
     }
-  
-    //  delete _imageBuilder;
-    //  _imageBuilder = NULL;
   }
 
   /** private, do not call */
   public final void onImageBuildError(String error, int imageRole)
   {
     _errors.add("HUDQuadWidget: " + error);
-  
-    //  if (imageRole == 0) {
-    //    _buildingImage0 = false;
-    //  }
-    //  else if (imageRole == 1) {
-    //    _buildingBackgroundImage = false;
-    //  }
-  
-    //  delete _imageBuilder;
-    //  _imageBuilder = NULL;
   }
 
   public final void changed()
   {
-  ///#warning Diego at work!
     cleanMesh();
   
     _image = null;

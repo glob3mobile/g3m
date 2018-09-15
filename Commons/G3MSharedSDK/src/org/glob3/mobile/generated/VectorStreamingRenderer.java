@@ -307,18 +307,24 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private GEOObject _features;
     private java.util.ArrayList<Node> _children;
 
-    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONArray clustersJson)
+    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONBaseObject jsonBaseObject)
     {
-      if (clustersJson == null)
+      if (jsonBaseObject == null)
+      {
+        return null;
+      }
+    
+      final JSONArray jsonArray = jsonBaseObject.asArray();
+      if ((jsonArray == null) || (jsonArray.size() == 0))
       {
         return null;
       }
     
       java.util.ArrayList<VectorStreamingRenderer.Cluster> clusters = new java.util.ArrayList<VectorStreamingRenderer.Cluster>();
-      final int clustersCount = clustersJson.size();
+      final int clustersCount = jsonArray.size();
       for (int i = 0; i < clustersCount; i++)
       {
-        final JSONObject clusterJson = clustersJson.getAsObject(i);
+        final JSONObject clusterJson = jsonArray.getAsObject(i);
         final Geodetic2D position = GEOJSONUtils.parseGeodetic2D(clusterJson.getAsArray("position"));
         final long size = (long) clusterJson.getAsNumber("size").value();
     
@@ -335,7 +341,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       final JSONArray jsonArray = jsonBaseObject.asArray();
-      if (jsonArray == null)
+      if ((jsonArray == null) || (jsonArray.size() == 0))
       {
         return null;
       }
@@ -419,7 +425,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         final JSONObject jsonObject = jsonBaseObject.asObject();
     
-        _clusters = parseClusters(jsonObject.get("clusters").asArray());
+        _clusters = parseClusters(jsonObject.get("clusters"));
         _features = GEOJSONParser.parse(jsonObject.get("features").asObject(), _verbose);
         _children = parseChildren(jsonObject.get("children"));
     
@@ -1046,6 +1052,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
              cluster.dispose();
         }
         _clusters = null;
+        _clusters = null;
         _clusterMarksCount = 0;
       }
     
@@ -1165,8 +1172,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         else
         {
           _sector = GEOJSONUtils.parseSector(jsonObject.getAsArray("sector"));
-          _clustersCount = (long) jsonObject.getAsNumber("clustersCount").value();
-          _featuresCount = (long) jsonObject.getAsNumber("featuresCount").value();
+          _clustersCount = (long) jsonObject.getAsNumber("clustersCount", 0);
+          _featuresCount = (long) jsonObject.getAsNumber("featuresCount", 0);
           _nodesCount = (int) jsonObject.getAsNumber("nodesCount").value();
           _minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
           _maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();

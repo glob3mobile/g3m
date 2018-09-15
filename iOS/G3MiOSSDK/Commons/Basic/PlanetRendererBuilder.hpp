@@ -137,7 +137,7 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
-  void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
+  void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener);
   
   void setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage);
   

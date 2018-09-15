@@ -18,24 +18,25 @@ class ICanvas;
 #include "Color.hpp"
 
 class CircleImageBuilder : public CanvasImageBuilder {
-
+  
 private:
   const Color _color;
   const int   _radius;
-
+  
 protected:
   void buildOnCanvas(const G3MContext* context,
                      ICanvas* canvas);
-
+  
   const std::string getImageName(const G3MContext* context) const;
-
+  
 public:
   CircleImageBuilder(const Color& color,
                      int radius);
-
+  
   bool isMutable() const {
     return false;
   }
+  
 };
 
 #endif

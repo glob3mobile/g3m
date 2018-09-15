@@ -184,7 +184,7 @@ MutableVector3D Vector3D::asMutableVector3D() const {
 
 Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const {
   const Vector3D axis = normal.cross(*this);
-  const MutableMatrix44D m = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), axis);
+  const MutableMatrix44D m = MutableMatrix44D::createRotationMatrix(Angle::halfPi(), axis);
   const Vector3D projected = normal.transformedBy(m, 0).normalized();
   return projected.times(this->length());
 }

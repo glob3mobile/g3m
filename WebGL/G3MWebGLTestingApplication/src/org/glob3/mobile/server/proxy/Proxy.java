@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class Proxy
-   extends
-      HttpServlet {
+         extends
+            HttpServlet {
 
    /**
     *
@@ -29,7 +29,7 @@ public class Proxy
    private static final long serialVersionUID = -6020365142488111237L;
 
 
-   //   private static final int  CACHE_DURATION_IN_SECOND = 31536000;
+   // private static final int CACHE_DURATION_IN_SECOND = 31536000;
 
 
    @Override
@@ -53,7 +53,7 @@ public class Proxy
 
 
       reqUrl = URLDecoder.decode(reqUrl, "UTF-8");
-      //      reqUrl = reqUrl.replaceFirst("url=", "");
+      // reqUrl = reqUrl.replaceFirst("url=", "");
       if (reqUrl.toLowerCase().startsWith("url=")) {
          reqUrl = reqUrl.substring("url=".length());
       }
@@ -62,7 +62,7 @@ public class Proxy
          final URL url = new URL(reqUrl);
 
          final Enumeration<String> headerNames = request.getHeaderNames();
-         final Map<String, String> headers = new HashMap<>();
+         final Map<String, String> headers = new HashMap<String, String>();
          while (headerNames.hasMoreElements()) {
             final String headerName = headerNames.nextElement();
             String headerValue = request.getHeader(headerName);
@@ -84,7 +84,7 @@ public class Proxy
 
          HttpURLConnection connection = null;
          try {
-            //Create connection
+            // Create connection
             connection = (HttpURLConnection) url.openConnection();
             connection.setUseCaches(true);
             connection.setDoInput(true);
@@ -95,7 +95,7 @@ public class Proxy
             }
 
             // Set maxAge
-            //            connection.setRequestProperty("Cache-Control", "max-age=" + CACHE_DURATION_IN_SECOND);
+            // connection.setRequestProperty("Cache-Control", "max-age=" + CACHE_DURATION_IN_SECOND);
 
             // Send request
             final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
@@ -118,7 +118,7 @@ public class Proxy
                }
 
 
-               //send output to client
+               // send output to client
                final BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
                final byte[] buffer = new byte[4096];
                int length = 0;
@@ -136,9 +136,9 @@ public class Proxy
                System.out.println("Content type is null");
             }
          }
-         //         catch (final Exception e) {
-         //            e.printStackTrace();
-         //         }
+         // catch (final Exception e) {
+         // e.printStackTrace();
+         // }
          finally {
             if (connection != null) {
                connection.disconnect();

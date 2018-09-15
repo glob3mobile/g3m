@@ -78,7 +78,7 @@ protected:
   const std::string getImageName(const G3MContext* context) const {
     const IStringUtils* su = context->getStringUtils();
 
-    return "_AltimeterCanvasImage_" + su->toString(_width) + "_" + su->toString(_height) + "_" + su->toString(_altitude);
+    return "_AltimeterCanvasImage_" + getResolutionID(context) + "_" + su->toString(_altitude);
   }
 
 
@@ -140,7 +140,7 @@ public:
   }
 
   void run(const G3MContext* context) {
-    _angleInRadians += Angle::fromDegrees(2)._radians;
+    _angleInRadians += Angle::fromDegrees(1)._radians;
     //        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
     double degrees = Angle::fromRadians(_angleInRadians)._degrees;
     while (degrees > 360) {
@@ -188,7 +188,7 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageBuilder,
                                           new HUDRelativePosition(0,
                                                                   HUDRelativePosition::VIEWPORT_WIDTH,
-                                                                  HUDRelativePosition::RIGHT,
+                                                                  HUDRelativePosition::LEFT,
                                                                   10),
                                           new HUDRelativePosition(0.5,
                                                                   HUDRelativePosition::VIEWPORT_HEIGHT,
@@ -241,7 +241,7 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
                                            new HUDRelativePosition(1,
                                                                    HUDRelativePosition::VIEWPORT_WIDTH,
-                                                                   HUDRelativePosition::LEFT,
+                                                                   HUDRelativePosition::RIGHT,
                                                                    10),
                                            new HUDRelativePosition(0.5,
                                                                    HUDRelativePosition::VIEWPORT_HEIGHT,

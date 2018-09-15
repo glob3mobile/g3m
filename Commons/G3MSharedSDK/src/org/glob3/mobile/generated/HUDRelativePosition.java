@@ -31,19 +31,19 @@ public class HUDRelativePosition extends HUDPosition
   
     switch (_align)
     {
-      case LEFT:
-        return position - widgetWidth - _margin;
       case RIGHT:
+        return position - widgetWidth - _margin;
+      case LEFT:
         return position + _margin;
       case CENTER:
-        return position - (widgetWidth / 2) - _margin;
+        return position - (widgetWidth / 2);
   
-      case ABOVE:
-        return position + _margin;
-      case BELOW:
-        return position - widgetHeight - _margin;
+      case TOP:
+        return viewPortHeight - (position + widgetHeight + _margin);
+      case BOTTOM:
+        return viewPortHeight - (position + _margin);
       case MIDDLE:
-        return position - (widgetHeight / 2) - _margin;
+        return position - (widgetHeight / 2);
     }
   
     return position;
