@@ -294,6 +294,10 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
+  
      _iconDownloadListener = null;
      _enabled = true;
      _renderingCondition = null;
@@ -377,6 +381,10 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
+  
      _iconDownloadListener = null;
      _enabled = true;
      _renderingCondition = null;
@@ -448,6 +456,10 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
+  
      _iconDownloadListener = null;
      _enabled = true;
      _renderingCondition = null;
@@ -517,6 +529,10 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
+  
      _iconDownloadListener = null;
      _enabled = true;
      _renderingCondition = null;
@@ -586,6 +602,9 @@ public class Mark implements SurfaceElevationListener
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
+     _zoomOutDisappears = false;
+     _deleteMarkOnDisappears = false;
+     _zoomOutDisappearsStarted = false;
      _iconDownloadListener = null;
      _enabled = true;
      _renderingCondition = null;
@@ -597,6 +616,9 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
+  //  if (_effectsScheduler != NULL) {
+  //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+  //  }
     //Signal listener cleaning is no longer needed
     if (_iconDownloadListener != null)
     {
@@ -1144,4 +1166,9 @@ public class Mark implements SurfaceElevationListener
     _renderingCondition = rc;
   }
 
+    public final void animatedRemove(boolean deleteMark)
+    {
+        _zoomOutDisappears = true;
+        _deleteMarkOnDisappears = deleteMark;
+    }
 }

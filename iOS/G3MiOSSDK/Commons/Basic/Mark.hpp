@@ -37,6 +37,7 @@ class TextureIDReference;
 class EffectTarget;
 class IImageBuilder;
 class IconDownloadListener;
+class MarksRenderer;
 
 
 class MarkUserData {

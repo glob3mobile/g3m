@@ -321,7 +321,10 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
 _enabled(true),
-_renderingCondition(NULL)
+_renderingCondition(NULL),
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 }
 
@@ -379,7 +382,10 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
 _enabled(true),
-_renderingCondition(NULL)
+_renderingCondition(NULL),
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 }
 
@@ -434,7 +440,10 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
 _enabled(true),
-_renderingCondition(NULL)
+_renderingCondition(NULL),
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 }
 
@@ -488,7 +497,10 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
 _enabled(true),
-_renderingCondition(NULL)
+_renderingCondition(NULL),
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
 }
 
@@ -541,7 +553,10 @@ _firstRender(true),
 _effectTarget(NULL),
 _iconDownloadListener(NULL),
 _enabled(true),
-_renderingCondition(NULL)
+_renderingCondition(NULL),
+_zoomOutDisappears(false),
+_deleteMarkOnDisappears(false),
+_zoomOutDisappearsStarted(false)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");
@@ -878,6 +893,19 @@ void Mark::render(const G3MRenderContext* rc,
           }
         }
         
+
+        if (_zoomOutDisappears && !_zoomOutDisappearsStarted) {
+          _zoomOutDisappearsStarted = true;
+          if (_effectsScheduler != NULL) {
+            _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+          }
+          else {
+            _effectsScheduler = rc->getEffectsScheduler();
+          }
+          _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
+                                         getEffectTarget());
+        }
+
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
                                 4,

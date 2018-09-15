@@ -110,9 +110,11 @@ public:
   size_t removeAllMarks(const MarksFilter& filter,
                         bool animated,
                         bool deleteMarks);
-  
-  std::vector<Mark*> getMarks(const MarksFilter* filter) const;
-  
+
+  const std::vector<Mark*> getAllMarks(const MarksFilter& filter) const;
+    
+    std::vector<Mark*> getMarks(const MarksFilter* filter) const;
+
 };
 
 #endif
