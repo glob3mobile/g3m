@@ -27,7 +27,20 @@ enum HUDRelativePositionAnchor {
 
 class HUDRelativePosition : public HUDPosition {
 public:
-  
+  enum Align {
+    LEFT,
+    RIGHT,
+    CENTER,
+    TOP,
+    BOTTOM,
+    MIDDLE
+  };
+
+  enum Anchor {
+    VIEWPORT_WIDTH,
+    VIEWPORT_HEIGHT
+  };
+
 private:
   const float _factor;
   const float _margin;

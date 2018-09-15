@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/G3MSharedSDK">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/sqlite-jdbc-3.7.2.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/commons-io-2.4.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/commons-fileupload-1.3.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/gson-2.2.2.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="bin"/>
+    <classpathentry kind="src" path="src"/>
+    <classpathentry combineaccessrules="false" exported="true" kind="src" path="/G3MSharedSDK">
+        <attributes>
+            <attribute name="org.eclipse.jst.component.dependency" value="../"/>
+        </attributes>
+    </classpathentry>
+    <classpathentry exported="true" kind="lib" path="lib/sqlite-jdbc-3.7.2.jar">
+        <attributes>
+            <attribute name="org.eclipse.jst.component.dependency" value="../"/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="lib" path="lib/commons-io-2.4.jar">
+        <attributes>
+            <attribute name="org.eclipse.jst.component.nondependency" value=""/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="lib" path="lib/commons-fileupload-1.3.jar">
+        <attributes>
+            <attribute name="org.eclipse.jst.component.nondependency" value=""/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="lib" path="lib/gson-2.2.2.jar"/>
+    <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+        <attributes>
+            <attribute name="owner.project.facets" value="java"/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="output" path="bin"/>
 </classpath>
