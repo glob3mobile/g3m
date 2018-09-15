@@ -165,6 +165,13 @@ public:
       shape->initialize(_context);
     }
   }
+    
+    Shape* getShapeAt(size_t i) const{
+        if (_shapes.size() <= i){
+            return NULL;
+        }
+        return _shapes[i];
+    }
 
   void removeShape(Shape* shape);
 

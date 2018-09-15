@@ -21,11 +21,15 @@ class Color;
 class VertexColorScheme{
 protected:
     GLFeature* _feat;
+    const bool _isParametric;
 public:
     
     virtual ~VertexColorScheme(){
         _feat->_release();
     }
+    
+    VertexColorScheme(bool isParametric):
+    _isParametric(isParametric){}
     
     GLFeature* getGLFeature(){
         return _feat;
@@ -35,88 +39,91 @@ public:
     virtual void setColorRangeDynamicValues(IFloatBuffer* values,
                                             IFloatBuffer* nextValues) const{};
     
-    virtual float getValue(size_t index) const{return NANF;}
+    bool isParametric() const{ return _isParametric;}
+    
+    static VertexColorScheme* createDynamicParametric(IFloatBuffer* v0,
+                                                      IFloatBuffer* v1,
+                                                      const std::vector<Color*>& vc);
+    
+    static VertexColorScheme* createStaticParametric(IFloatBuffer* v0,
+                                                     const std::vector<Color*>& vc);
 };
 
-class Static2ColorScheme: public VertexColorScheme{
-    IFloatBuffer* _valuesInColorRange;
+class StaticParametric2ColorScheme: public VertexColorScheme{
     ColorRangeGLFeature* _specificFeatureHandler;
 public:
-    Static2ColorScheme(IFloatBuffer* valuesInColorRange,
-                       const Color& colorRangeAt0,
-                       const Color& colorRangeAt1){
+    StaticParametric2ColorScheme(IFloatBuffer* valuesInColorRange,
+                                 const Color& colorRangeAt0,
+                                 const Color& colorRangeAt1):
+    VertexColorScheme(true)
+    {
         _specificFeatureHandler = new ColorRangeGLFeature(colorRangeAt0,
-                                        colorRangeAt1,
-                                        valuesInColorRange);
+                                                          colorRangeAt1,
+                                                          valuesInColorRange);
         _feat = _specificFeatureHandler;
-        _valuesInColorRange = valuesInColorRange;
     }
     
     void setColorRangeStaticValues(IFloatBuffer* values) const{
         ((ColorRangeGLFeature*)_feat)->setValues(values);
     }
+};
+
+class StaticColorScheme: public VertexColorScheme{
+    ColorGLFeature* _specificFeatureHandler;
+public:
+    StaticColorScheme(IFloatBuffer* vertexColors):
+    VertexColorScheme(false)
+    {
+        _specificFeatureHandler = new ColorGLFeature(vertexColors, // The attribute is a float vector of 4 elements RGBA
+                                                     4,// Our buffer contains elements of 4
+                                                     0,            // Index 0
+                                                     false,        // Not normalized
+                                                     0,            // Stride 0
+                                                     true,
+                                                     GLBlendFactor::srcAlpha(),
+                                                     GLBlendFactor::oneMinusSrcAlpha());
+        _feat = _specificFeatureHandler;
+    }
     
-    float getValue(size_t index) const{
-        return _valuesInColorRange->get(index);
+    void setColorRangeStaticValues(IFloatBuffer* values) const{
+        _specificFeatureHandler->setColors(values);
     }
 };
 
-
 class Static3ColorScheme: public VertexColorScheme{
-    IFloatBuffer* _valuesInColorRange;
     Color3RangeGLFeature* _specificFeatureHandler;
 public:
     Static3ColorScheme(IFloatBuffer* valuesInColorRange,
                        const Color& colorRangeAt0,
                        const Color& colorRangeAt0_5,
-                       const Color& colorRangeAt1){
+                       const Color& colorRangeAt1):
+    VertexColorScheme(true){
         _specificFeatureHandler = new Color3RangeGLFeature(colorRangeAt0,
                                                            colorRangeAt0_5,
-                                                          colorRangeAt1,
-                                                          valuesInColorRange);
+                                                           colorRangeAt1,
+                                                           valuesInColorRange);
         _feat = _specificFeatureHandler;
-        _valuesInColorRange = valuesInColorRange;
     }
     
     void setColorRangeStaticValues(IFloatBuffer* values) const{
         ((ColorRangeGLFeature*)_feat)->setValues(values);
-    }
-    
-    float getValue(size_t index) const{
-        return _valuesInColorRange->get(index);
     }
 };
 
 
 class InterpolatedColorScheme: public VertexColorScheme{
 protected:
-    mutable IFloatBuffer* _valuesInColorRange;
-    mutable IFloatBuffer* _nextValuesInColorRange;
-    mutable float _time;
-    
     virtual void setValues(IFloatBuffer* values,
                            IFloatBuffer* nextValues) const = 0;
 public:
     
     InterpolatedColorScheme(IFloatBuffer* valuesInColorRange,
-                        IFloatBuffer* nextValuesInColorRange){
-        _valuesInColorRange = valuesInColorRange;
-        _nextValuesInColorRange = nextValuesInColorRange;
-        _time = NANF;
-    }
+                            IFloatBuffer* nextValuesInColorRange):
+    VertexColorScheme(true){}
     
     void setColorRangeDynamicValues(IFloatBuffer* values,
                                     IFloatBuffer* nextValues) const{
         setValues(values, nextValues);
-        _valuesInColorRange = values;
-        _nextValuesInColorRange = nextValues;
-    }
-    
-    float getValue(size_t index) const{
-        
-        return IMathUtils::instance()->linearInterpolation(_valuesInColorRange->get(index),
-                                                           _nextValuesInColorRange->get(index),
-                                                    _time);
     }
 };
 
@@ -137,14 +144,13 @@ public:
                         const Color& colorRangeAt1):
     InterpolatedColorScheme(valuesInColorRange, nextValuesInColorRange){
         _specificFeatureHandler = new DynamicColorRangeGLFeature(colorRangeAt0,
-                                               colorRangeAt1,
-                                               valuesInColorRange,
-                                               nextValuesInColorRange,
-                                               0.0f);
+                                                                 colorRangeAt1,
+                                                                 valuesInColorRange,
+                                                                 nextValuesInColorRange,
+                                                                 0.0f);
         _feat = _specificFeatureHandler;
     }
     virtual void setTime(float time) const{
-        _time = time;
         _specificFeatureHandler->setTime(time);
     }
 };
@@ -165,16 +171,15 @@ public:
                         const Color& colorRangeAt1)
     : InterpolatedColorScheme(valuesInColorRange, nextValuesInColorRange){
         _specificFeatureHandler = new DynamicColorRange3GLFeature(colorRangeAt0,
-                                                colorRangeAt0_5,
-                                                colorRangeAt1,
-                                                valuesInColorRange,
-                                                nextValuesInColorRange,
-                                                0.0f);
+                                                                  colorRangeAt0_5,
+                                                                  colorRangeAt1,
+                                                                  valuesInColorRange,
+                                                                  nextValuesInColorRange,
+                                                                  0.0f);
         _feat = _specificFeatureHandler;
     }
     
     virtual void setTime(float time) const{
-        _time = time;
         _specificFeatureHandler->setTime(time);
     }
 };

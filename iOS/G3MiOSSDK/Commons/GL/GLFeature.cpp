@@ -480,12 +480,22 @@ void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   state->bindTexture(_target, _texID);
 }
 
-ColorGLFeature::ColorGLFeature(const IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,
+ColorGLFeature::ColorGLFeature(const IFloatBuffer* colors,
+                               int arrayElementSize,
+                               int index, bool normalized, int stride,
                                bool blend, int sFactor, int dFactor) :
 GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
 {
-  GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
-  _values->addAttributeValue(COLOR, value, false);
+  _value = new GPUAttributeValueVec4Float(colors,
+                                          arrayElementSize,
+                                          index,
+                                          stride,
+                                          normalized);
+  _values->addAttributeValue(COLOR, _value, false);
+}
+
+void ColorGLFeature::setColors(const IFloatBuffer* colors){
+    _value->replaceBuffer(colors);
 }
 
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,

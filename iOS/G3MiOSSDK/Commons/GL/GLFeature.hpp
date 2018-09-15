@@ -600,6 +600,8 @@ private:
     super.dispose();
 #endif
   }
+    
+    GPUAttributeValueVec4Float* _value;
 
 public:
   ColorGLFeature(const IFloatBuffer* colors,
@@ -610,6 +612,8 @@ public:
                  bool blend,
                  int sFactor,
                  int dFactor);
+    
+    void setColors(const IFloatBuffer* colors);
 
   void applyOnGlobalGLState(GLGlobalState* state) const {
     blendingOnGlobalGLState(state);

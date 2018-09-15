@@ -146,6 +146,7 @@ void ShapesRenderer::removeAllShapes(bool deleteShapes) {
 }
 
 
+
 #ifdef C_CODE
 class SortShapeDistanceClass {
 public:

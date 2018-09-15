@@ -41,8 +41,6 @@ public:
     
     void showNormals(bool v) const;
     
-#warning Chano adding stuff
-    
     Mesh * getChildAtIndex(int i);
     
     void setColorTransparency(const std::vector<double>& transparency);

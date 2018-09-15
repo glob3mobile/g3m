@@ -99,9 +99,7 @@ public:
     IFloatBuffer* getColorsFloatBuffer() const{
         return (IFloatBuffer*)_colors;
     }
-    
-#warning Chano adding stuff.
-    
+
     IFloatBuffer* getVerticesFloatBuffer() const{
         return (IFloatBuffer*) _vertices;
     }
