@@ -10,7 +10,7 @@ public class MarkZoomInEffect extends EffectWithDuration
   }
   public MarkZoomInEffect(Mark mark)
   {
-     this(mark, TimeInterval.fromMilliseconds(400), 0.01f);
+     this(mark, TimeInterval.fromMilliseconds(500), 0.01f);
   }
   public MarkZoomInEffect(Mark mark, TimeInterval timeInterval, float initialSize)
   {
@@ -23,7 +23,7 @@ public class MarkZoomInEffect extends EffectWithDuration
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
     final double alpha = getAlpha(when);
-    float s = (float)(((1.0 - _initialSize) * alpha) + _initialSize);
+    final float s = (float)(((1.0 - _initialSize) * alpha) + _initialSize);
     _mark.setOnScreenSizeOnProportionToImage(s, s);
   }
 

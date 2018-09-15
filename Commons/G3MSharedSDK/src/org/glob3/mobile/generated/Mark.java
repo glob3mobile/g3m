@@ -155,6 +155,9 @@ public class Mark implements SurfaceElevationListener
   private EffectsScheduler _effectsScheduler;
   private boolean _firstRender;
 
+  private boolean _zoomOutDisappears;
+  private boolean _deleteMarkOnDisappears;
+  private boolean _zoomOutDisappearsStarted;
 
   private EffectTarget _effectTarget;
   private EffectTarget getEffectTarget()
@@ -173,6 +176,7 @@ public class Mark implements SurfaceElevationListener
 
   private boolean _enabled; //Disables mark rendering
   private RenderingCondition _renderingCondition;
+
 
 
 
@@ -888,7 +892,7 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
+  public final void render(G3MRenderContext rc, MarksRenderer renderer, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
     if (!mustRender(rc))
@@ -969,6 +973,20 @@ public class Mark implements SurfaceElevationListener
               _effectsScheduler = rc.getEffectsScheduler();
               _effectsScheduler.startEffect(new MarkZoomInEffect(this), getEffectTarget());
             }
+          }
+  
+          if (_zoomOutDisappears && !_zoomOutDisappearsStarted)
+          {
+            _zoomOutDisappearsStarted = true;
+            if (_effectsScheduler != null)
+            {
+              _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
+            }
+            else
+            {
+              _effectsScheduler = rc.getEffectsScheduler();
+            }
+            _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears), getEffectTarget());
           }
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());

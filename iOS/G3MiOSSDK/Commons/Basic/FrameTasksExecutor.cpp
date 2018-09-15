@@ -61,23 +61,23 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
 
   // remove canceled tasks
   int canceledCounter = 0;
-  std::list<FrameTask*>::iterator i = _tasks.begin();
-  while (i != _tasks.end()) {
-    FrameTask* task = *i;
+  std::list<FrameTask*>::iterator it = _tasks.begin();
+  while (it != _tasks.end()) {
+    FrameTask* task = *it;
 
     const bool isCanceled = task->isCanceled(rc);
     if (isCanceled) {
       delete task;
 #ifdef C_CODE
-      i = _tasks.erase(i);
+      it = _tasks.erase(it);
 #endif
 #ifdef JAVA_CODE
-      i.remove();
+      it.remove();
 #endif
       canceledCounter++;
     }
     else {
-      i++;
+      it++;
     }
   }
 

@@ -135,6 +135,12 @@ public:
     return (i1 < i2) ? i1 : i2;
   }
 
+#ifdef C_CODE
+  size_t min(size_t i1, size_t i2) const {
+    return (i1 < i2) ? i1 : i2;
+  }
+#endif
+
   long long min(long long i1, long long i2) const {
     return (i1 < i2) ? i1 : i2;
   }

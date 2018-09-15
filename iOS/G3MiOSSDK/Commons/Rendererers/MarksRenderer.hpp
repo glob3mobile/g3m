@@ -108,6 +108,7 @@ public:
   }
 
   size_t removeAllMarks(const MarksFilter& filter,
+                        bool animated,
                         bool deleteMarks);
   
   std::vector<Mark*> getMarks(const MarksFilter* filter) const;

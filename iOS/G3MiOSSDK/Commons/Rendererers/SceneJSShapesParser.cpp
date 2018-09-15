@@ -18,7 +18,7 @@ SGShape* SceneJSShapesParser::parseFromJSONBaseObject(const JSONBaseObject* json
                                                       bool                  depthTest,
                                                       Geodetic3D*           position,
                                                       AltitudeMode          altitudeMode) {
-  SGNode* node = SceneJSNodeParser::parseFromJSONBaseObject(jsonObject, depthTest);
+  SGNode* node = SceneJSNodeParser::parseFromJSONBaseObject(jsonObject, depthTest, true);
   return (node == NULL) ? NULL : new SGShape(node, uriPrefix, isTransparent, position, altitudeMode);
 }
 

@@ -192,6 +192,9 @@ private:
   EffectsScheduler* _effectsScheduler;
   bool _firstRender;
 
+  bool _zoomOutDisappears;
+  bool _deleteMarkOnDisappears;
+  bool _zoomOutDisappearsStarted;
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
@@ -204,6 +207,7 @@ private:
   bool _enabled; //Disables mark rendering
   RenderingCondition* _renderingCondition;
 
+  
 public:
 
 
@@ -372,6 +376,7 @@ public:
   Vector3D* getCartesianPosition(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
+              MarksRenderer* renderer,
               const MutableVector3D& cameraPosition,
               double cameraHeight,
               const GLState* parentGLState,
@@ -421,6 +426,9 @@ public:
     }
     _renderingCondition = rc;
   }
+
+
+  void animatedRemove(bool deleteMark);
 
 };
 

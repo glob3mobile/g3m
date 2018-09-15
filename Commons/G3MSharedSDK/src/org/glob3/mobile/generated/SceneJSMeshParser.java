@@ -31,7 +31,7 @@ public class SceneJSMeshParser
 
   public static SGMesh parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSONBaseObject(jsonObject, depthTest);
+    SGNode node = SceneJSNodeParser.parseFromJSONBaseObject(jsonObject, depthTest, true);
     return (node == null) ? null : new SGMesh(node, uriPrefix, isTransparent);
   }
 

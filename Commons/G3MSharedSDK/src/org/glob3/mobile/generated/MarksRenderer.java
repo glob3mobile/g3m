@@ -146,7 +146,6 @@ public class MarksRenderer extends DefaultRenderer
        _billboardTexCoords.dispose();
   
     super.dispose();
-  
   }
 
   public void onChangedContext()
@@ -178,7 +177,6 @@ public class MarksRenderer extends DefaultRenderer
       GL gl = rc.getGL();
   
       IFloatBuffer billboardTexCoord = getBillboardTexCoords();
-  
   
       if (_progressiveInitialization)
       {
@@ -213,7 +211,7 @@ public class MarksRenderer extends DefaultRenderer
         Mark mark = _marks.get(ii);
         if (mark.isReady())
         {
-          mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+          mark.render(rc, this, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
         }
       }
     }
@@ -230,23 +228,6 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void removeMark(Mark mark)
   {
-  //  int pos = -1;
-  //  const int marksSize = _marks.size();
-  //  for (int i = 0; i < marksSize; i++) {
-  //    if (_marks[i] == mark) {
-  //      pos = i;
-  //      break;
-  //    }
-  //  }
-  //  if (pos != -1) {
-  ///#ifdef C_CODE
-  //    _marks.erase(_marks.begin() + pos);
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //    _marks.remove(pos);
-  ///#endif
-  //  }
-  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
@@ -256,7 +237,6 @@ public class MarksRenderer extends DefaultRenderer
         break;
       }
     }
-  
   }
 
   public final void removeAllMarks()
@@ -307,13 +287,13 @@ public class MarksRenderer extends DefaultRenderer
             continue;
           }
   
-          final int markWidth = (int)mark.getTextureWidth();
+          final float markWidth = mark.getTextureWidth();
           if (markWidth <= 0)
           {
             continue;
           }
   
-          final int markHeight = (int)mark.getTextureHeight();
+          final float markHeight = mark.getTextureHeight();
           if (markHeight <= 0)
           {
             continue;
@@ -323,7 +303,7 @@ public class MarksRenderer extends DefaultRenderer
   
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
-          final RectangleF markPixelBounds = new RectangleF(markPixel._x - ((float) markWidth / 2), markPixel._y - ((float) markHeight / 2), markWidth, markHeight);
+          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (markWidth / 2), markPixel._y - (markHeight / 2), markWidth, markHeight);
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {
@@ -413,10 +393,54 @@ public class MarksRenderer extends DefaultRenderer
 
   }
 
-  public final int removeAllMarks(MarksFilter filter, boolean deleteMarks)
+  public final int removeAllMarks(MarksFilter filter, boolean animated, boolean deleteMarks)
   {
     int removed = 0;
-    java.util.ArrayList<Mark> newMarks = new java.util.ArrayList<Mark>();
+    final int marksSize = _marks.size();
+  
+    if (animated)
+    {
+      for (int i = 0; i < marksSize; i++)
+      {
+        Mark mark = _marks.get(i);
+        if (filter.test(mark))
+        {
+          mark.animatedRemove(deleteMarks);
+        }
+      }
+    }
+    else
+    {
+      java.util.ArrayList<Mark> survivingMarks = new java.util.ArrayList<Mark>();
+      for (int i = 0; i < marksSize; i++)
+      {
+        Mark mark = _marks.get(i);
+        if (filter.test(mark))
+        {
+          if (deleteMarks)
+          {
+            if (mark != null)
+               mark.dispose();
+          }
+          removed++;
+        }
+        else
+        {
+          survivingMarks.add(mark);
+        }
+      }
+  
+      if (removed > 0)
+      {
+        _marks = survivingMarks;
+      }
+    }
+    return removed;
+  }
+
+  public final java.util.ArrayList<Mark> getAllMarks(MarksFilter filter)
+  {
+    java.util.ArrayList<Mark> result = new java.util.ArrayList<Mark>();
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -424,25 +448,11 @@ public class MarksRenderer extends DefaultRenderer
       Mark mark = _marks.get(i);
       if (filter.test(mark))
       {
-        if (deleteMarks)
-        {
-          if (mark != null)
-             mark.dispose();
-        }
-        removed++;
-      }
-      else
-      {
-        newMarks.add(mark);
+        result.add(mark);
       }
     }
   
-    if (removed > 0)
-    {
-      _marks = newMarks;
-    }
-  
-    return removed;
+    return result;
   }
 
   public final java.util.ArrayList<Mark> getMarks(MarksFilter filter)

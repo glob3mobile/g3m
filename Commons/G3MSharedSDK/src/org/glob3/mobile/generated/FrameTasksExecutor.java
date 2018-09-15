@@ -148,17 +148,17 @@ public class FrameTasksExecutor
   
     // remove canceled tasks
     int canceledCounter = 0;
-    java.util.Iterator<FrameTask> i = _tasks.iterator();
-    while (i.hasNext())
+    java.util.Iterator<FrameTask> it = _tasks.iterator();
+    while (it.hasNext())
     {
-      FrameTask task = i.next();
+      FrameTask task = it.next();
   
       final boolean isCanceled = task.isCanceled(rc);
       if (isCanceled)
       {
         if (task != null)
            task.dispose();
-        i.remove();
+        it.remove();
         canceledCounter++;
       }
       else

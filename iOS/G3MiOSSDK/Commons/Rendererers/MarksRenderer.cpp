@@ -71,9 +71,7 @@ MarksRenderer::~MarksRenderer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
-};
-
+}
 
 void MarksRenderer::onChangedContext() {
   const size_t marksSize = _marks.size();
@@ -91,23 +89,6 @@ void MarksRenderer::addMark(Mark* mark) {
 }
 
 void MarksRenderer::removeMark(Mark* mark) {
-//  int pos = -1;
-//  const int marksSize = _marks.size();
-//  for (int i = 0; i < marksSize; i++) {
-//    if (_marks[i] == mark) {
-//      pos = i;
-//      break;
-//    }
-//  }
-//  if (pos != -1) {
-//#ifdef C_CODE
-//    _marks.erase(_marks.begin() + pos);
-//#endif
-//#ifdef JAVA_CODE
-//    _marks.remove(pos);
-//#endif
-//  }
-
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     if (_marks[i] == mark) {
@@ -120,7 +101,6 @@ void MarksRenderer::removeMark(Mark* mark) {
       break;
     }
   }
-
 }
 
 void MarksRenderer::removeAllMarks(bool deleteMarks) {
@@ -158,12 +138,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
           continue;
         }
 
-        const int markWidth = (int)mark->getTextureWidth();
+        const float markWidth = mark->getTextureWidth();
         if (markWidth <= 0) {
           continue;
         }
 
-        const int markHeight = (int)mark->getTextureHeight();
+        const float markHeight = mark->getTextureHeight();
         if (markHeight <= 0) {
           continue;
         }
@@ -172,15 +152,15 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
 
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
-        const RectangleF markPixelBounds(markPixel._x - ((float) markWidth / 2),
-                                         markPixel._y - ((float) markHeight / 2),
+        const RectangleF markPixelBounds(markPixel._x - (markWidth  / 2),
+                                         markPixel._y - (markHeight / 2),
                                          markWidth,
                                          markHeight);
 
         if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y)) {
           const double sqDistance = markPixel.squaredDistanceTo(touchedPixel);
           if (sqDistance < minSqDistance) {
-            nearestMark = mark;
+            nearestMark   = mark;
             minSqDistance = sqDistance;
           }
         }
@@ -243,7 +223,6 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
     IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
 
-
     if (_progressiveInitialization) {
       if (_initializationTimer == NULL) {
         _initializationTimer = rc->getFactory()->createTimer();
@@ -270,6 +249,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       Mark* mark = _marks[ii];
       if (mark->isReady()) {
         mark->render(rc,
+                     this,
                      cameraPosition,
                      cameraHeight,
                      _glState,
@@ -314,28 +294,38 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 }
 
 size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+                                     bool animated,
                                      bool deleteMarks) {
   size_t removed = 0;
-  std::vector<Mark*> newMarks;
-
   const size_t marksSize = _marks.size();
-  for (size_t i = 0; i < marksSize; i++) {
-    Mark* mark = _marks[i];
-    if (filter.test(mark)) {
-      if (deleteMarks) {
-        delete mark;
+
+  if (animated) {
+    for (size_t i = 0; i < marksSize; i++) {
+      Mark* mark = _marks[i];
+      if (filter.test(mark)) {
+        mark->animatedRemove(deleteMarks);
       }
-      removed++;
-    }
-    else {
-      newMarks.push_back(mark);
     }
   }
-  
-  if (removed > 0) {
-    _marks = newMarks;
+  else {
+    std::vector<Mark*> survivingMarks;
+    for (size_t i = 0; i < marksSize; i++) {
+      Mark* mark = _marks[i];
+      if (filter.test(mark)) {
+        if (deleteMarks) {
+          delete mark;
+        }
+        removed++;
+      }
+      else {
+        survivingMarks.push_back(mark);
+      }
+    }
+
+    if (removed > 0) {
+      _marks = survivingMarks;
+    }
   }
-  
   return removed;
 }
 

@@ -683,7 +683,8 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
   return createLabelImageBuilder("[X]");
 }
 
-Mark* MapBoo::MBVectorSymbology::createFeatureMark(const VectorStreamingRenderer::Node* node,
+Mark* MapBoo::MBVectorSymbology::createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                                                   const VectorStreamingRenderer::Node* node,
                                                    const GEO2DPointGeometry* geometry) const {
   const GEOFeature* feature    = geometry->getFeature();
   const JSONObject* properties = feature->getProperties();
@@ -700,9 +701,10 @@ Mark* MapBoo::MBVectorSymbology::createFeatureMark(const VectorStreamingRenderer
                   );
 }
 
-Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer::Node* node,
+Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                                                   const VectorStreamingRenderer::Node* node,
                                                    const VectorStreamingRenderer::Cluster* cluster,
-                                                   long long featuresCount) const {
+                                                   const long long featuresCount) const {
   const Geodetic3D  position(cluster->getPosition()->_latitude,
                              cluster->getPosition()->_longitude,
                              0);
@@ -746,16 +748,20 @@ MapBoo::MBDatasetVectorSetSymbolizer::~MBDatasetVectorSetSymbolizer() {
 #endif
 }
 
-Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const VectorStreamingRenderer::Node* node,
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                                                              const VectorStreamingRenderer::Node* node,
                                                               const GEO2DPointGeometry* geometry) const {
-  return _symbology->createFeatureMark(node,
+  return _symbology->createFeatureMark(magnitudeMetadata,
+                                       node,
                                        geometry);
 }
 
-Mark* MapBoo::MBDatasetVectorSetSymbolizer::createClusterMark(const VectorStreamingRenderer::Node* node,
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                                                              const VectorStreamingRenderer::Node* node,
                                                               const VectorStreamingRenderer::Cluster* cluster,
-                                                              long long featuresCount) const {
-  return _symbology->createClusterMark(node,
+                                                              const long long featuresCount) const {
+  return _symbology->createClusterMark(magnitudeMetadata,
+                                       node,
                                        cluster,
                                        featuresCount);
 }

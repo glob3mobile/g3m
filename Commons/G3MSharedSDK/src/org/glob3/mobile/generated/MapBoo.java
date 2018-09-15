@@ -366,7 +366,7 @@ public class MapBoo
       vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER); // haltOnError -  verbose -  readExpired
     }
 
-    public final Mark createFeatureMark(VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
@@ -375,7 +375,7 @@ public class MapBoo
       return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     }
 
-    public final Mark createClusterMark(VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    public final Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
     {
       final Geodetic3D position = new Geodetic3D(cluster.getPosition()._latitude, cluster.getPosition()._longitude, 0);
     
@@ -466,14 +466,14 @@ public class MapBoo
       super.dispose();
     }
 
-    public final Mark createFeatureMark(VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
-      return _symbology.createFeatureMark(node, geometry);
+      return _symbology.createFeatureMark(magnitudeMetadata, node, geometry);
     }
 
-    public final Mark createClusterMark(VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    public final Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
     {
-      return _symbology.createClusterMark(node, cluster, featuresCount);
+      return _symbology.createClusterMark(magnitudeMetadata, node, cluster, featuresCount);
     }
 
   }

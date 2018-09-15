@@ -75,7 +75,8 @@ private:
 public:
 
   static SGNode* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                         const bool            depthTest);
+                                         const bool            depthTest,
+                                         const bool            deleteJSONObject);
 
   static SGNode* parseFromJSON(const std::string& json,
                                const bool         depthTest);

@@ -34,7 +34,7 @@ public class SceneJSShapesParser
 
   public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSONBaseObject(jsonObject, depthTest);
+    SGNode node = SceneJSNodeParser.parseFromJSONBaseObject(jsonObject, depthTest, true);
     return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, position, altitudeMode);
   }
 
