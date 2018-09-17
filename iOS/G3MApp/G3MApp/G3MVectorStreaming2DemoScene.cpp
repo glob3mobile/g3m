@@ -29,7 +29,8 @@
 
 class G3MVectorStreaming2DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const VectorStreamingRenderer::Node* node,
+  Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                          const VectorStreamingRenderer::Node* node,
                           const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
 
@@ -92,7 +93,8 @@ public:
     return mark;
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::Node* node,
+  Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+                          const VectorStreamingRenderer::Node* node,
                           const VectorStreamingRenderer::Cluster* cluster,
                           long long featuresCount) const {
     const Geodetic3D position(cluster->getPosition()->_latitude,
