@@ -455,4 +455,24 @@ public class MarksRenderer extends DefaultRenderer
     return result;
   }
 
+    public final java.util.ArrayList<Mark> getMarks(MarksFilter filter)
+    {
+    
+        if (filter == null)
+        {
+            return _marks;
+        }
+    
+        java.util.ArrayList<Mark> marks = new java.util.ArrayList<Mark>();
+        for (int i = 0; i < _marks.size(); ++i)
+        {
+            if (filter.test(_marks.get(i)))
+            {
+                marks.add(_marks.get(i));
+            }
+        }
+    
+        return marks;
+    }
+
 }

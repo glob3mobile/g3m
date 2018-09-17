@@ -577,7 +577,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         entry.tryToNotifyListener(_lastVisibleSector, rc);
       }
     }
-    // }
   
   }
 

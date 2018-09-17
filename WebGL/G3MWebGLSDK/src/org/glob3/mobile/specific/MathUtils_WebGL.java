@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_WebGL
-   extends
-      IMathUtils {
+         extends
+            IMathUtils {
 
    private final Random _random = new Random();
 
@@ -437,15 +437,16 @@ public final class MathUtils_WebGL
 
 
    @Override
-<<<<<<< HEAD
+
    public double copySign(final double a,
                           final double b) {
       return Math.copySign(a, b);
-=======
+   }
+
+
+   @Override
    public int parseIntHex(final String hex) {
-      // TODO Auto-generated method stub
-      return 0;
->>>>>>> caceresview
+      return Integer.parseInt(hex, 16);
    }
 
 

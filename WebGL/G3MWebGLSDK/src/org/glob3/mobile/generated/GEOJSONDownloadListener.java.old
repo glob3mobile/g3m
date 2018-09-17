@@ -3,25 +3,25 @@
 package org.glob3.mobile.generated;
 
 //
-//  SceneParserDownloadListener.cpp
-//  G3MiOSSDK
+// SceneParserDownloadListener.cpp
+// G3MiOSSDK
 //
-//  Created by Eduardo de la Montaña on 26/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-//
-//  SceneParserDownloadListener.h
-//  G3MiOSSDK
-//
-//  Created by Eduardo de la Montaña on 26/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+// Created by Eduardo de la Montaña on 26/10/12.
+// Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class MarksRenderer;
+//
+// SceneParserDownloadListener.h
+// G3MiOSSDK
+//
+// Created by Eduardo de la Montaña on 26/10/12.
+// Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+
+// C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+// class MarksRenderer;
 public class GEOJSONDownloadListener
          extends
             IBufferDownloadListener {
@@ -98,8 +98,8 @@ public class GEOJSONDownloadListener
          final Angle latitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(1).value());
          final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).value());
 
-         final Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(), false),
-                  new Geodetic3D(latitude, longitude, 0), null, 10000);
+         final Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(), false), new Geodetic3D(latitude, longitude, 0),
+                  null, 10000);
 
          _marksRenderer.addMark(mark);
       }
@@ -112,7 +112,7 @@ public class GEOJSONDownloadListener
                           final boolean expired) {
       final String String = buffer.getAsString();
       final JSONObject json = IJSONParser.instance().parse(String).asObject();
-      ILogger.instance().logInfo(url.getPath());
+      ILogger.instance().logInfo(url._path);
       parseGEOJSON(json);
    }
 
