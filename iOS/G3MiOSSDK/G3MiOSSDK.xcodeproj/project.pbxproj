@@ -510,6 +510,8 @@
 		D84B45061CD8A8120041CA1F /* PointCloudMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
+		D86FD37A2150EEDE00A4063B /* Cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86FD3782150EED300A4063B /* Cylinder.cpp */; };
+		D86FD37B2150F06E00A4063B /* Cylinder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D86FD3792150EED700A4063B /* Cylinder.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
 		D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */; };
@@ -794,6 +796,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D86FD37B2150F06E00A4063B /* Cylinder.hpp in CopyFiles */,
 				D818BE922129F8CF000C03A5 /* FlatMercatorPlanet.hpp in CopyFiles */,
 				D814B5BA210B43FA007D700B /* CameraOrbitFixedPositionEffect.hpp in CopyFiles */,
 				D8FF565120F8D718004BB177 /* VertexColorScheme.hpp in CopyFiles */,
@@ -1882,6 +1885,8 @@
 		D84B45041CD8A8070041CA1F /* PointCloudMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PointCloudMesh.hpp; path = Commons/Mesh/PointCloudMesh.hpp; sourceTree = "<group>"; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D86FD3782150EED300A4063B /* Cylinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cylinder.cpp; path = Commons/Geometry/Cylinder.cpp; sourceTree = "<group>"; };
+		D86FD3792150EED700A4063B /* Cylinder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Cylinder.hpp; path = Commons/Geometry/Cylinder.hpp; sourceTree = "<group>"; };
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GPUAttribute.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2397,6 +2402,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D86FD3782150EED300A4063B /* Cylinder.cpp */,
+				D86FD3792150EED700A4063B /* Cylinder.hpp */,
 				D818BE812126EEC4000C03A5 /* FlatMercatorPlanet.hpp */,
 				D80FAAD917CB81B600ACD249 /* Extent.hpp */,
 				D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */,
@@ -3410,6 +3417,7 @@
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
 				D8019FF01C11D91800784287 /* TileLODTester.cpp in Sources */,
+				D86FD37A2150EEDE00A4063B /* Cylinder.cpp in Sources */,
 				D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */,
 				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
 				4435E3D41906B8070064A7D7 /* ChildRenderer.cpp in Sources */,

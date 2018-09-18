@@ -251,7 +251,7 @@ bool Sphere::fullContainedInSphere(const Sphere* that) const {
 Sphere* Sphere::createSphere() const {
   return new Sphere(*this);
 }
-/*
+
 Sphere Sphere::createSphereContainingPoints(const std::vector<Vector3D*>& points){
   
   Vector3D center = Vector3D::getCenter(points);
@@ -267,7 +267,7 @@ Sphere Sphere::createSphereContainingPoints(const std::vector<Vector3D*>& points
   return Sphere(center, IMathUtils::instance()->sqrt(d) );
   
 }
-*/
+
 std::vector<double> Sphere::intersectionsDistances(double originX,
                                                    double originY,
                                                    double originZ,

@@ -98,9 +98,9 @@ public:
   bool fullContainedInSphere(const Sphere* that) const;
   
   Sphere* createSphere() const;
-  /*
+  
   static Sphere createSphereContainingPoints(const std::vector<Vector3D*>& points);
-  */
+  
   std::vector<double> intersectionsDistances(double originX,
                                              double originY,
                                              double originZ,
