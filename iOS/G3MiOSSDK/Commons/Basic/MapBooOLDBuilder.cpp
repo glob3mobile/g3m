@@ -1871,12 +1871,14 @@ void MapBooOLDBuilder::changedCurrentScene() {
           _webSocket->send( getApplicationCurrentSceneCommand() );
         }
         else if (_token.length() > 0) {
-          _g3mWidget->getG3MContext()->getDownloader()->requestBuffer(createApplicationCurrentSceneURL(), //
-                                                                      DownloadPriority::HIGHEST, //
-                                                                      TimeInterval::zero(), //
-                                                                      false, // readExpired
-                                                                      new MapBooOLDBuilder_DummyListener(), //
-                                                                      false);
+          if (_g3mWidget != NULL) {
+            _g3mWidget->getG3MContext()->getDownloader()->requestBuffer(createApplicationCurrentSceneURL(), //
+                                                                        DownloadPriority::HIGHEST, //
+                                                                        TimeInterval::zero(), //
+                                                                        false, // readExpired
+                                                                        new MapBooOLDBuilder_DummyListener(), //
+                                                                        false);
+          }
         }
         else {
           ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
