@@ -24,9 +24,9 @@ package org.glob3.mobile.generated;
 
 public abstract class TileLODTester
 {
-
   public void dispose()
   {
+
   }
 
   public abstract boolean meetsRenderCriteria(G3MRenderContext rc, PlanetRenderContext prc, Tile tile);

@@ -17,8 +17,9 @@ class LayerTilesRenderParameters;
 
 class TileLODTester {
 public:
+  virtual ~TileLODTester() {
 
-  virtual ~TileLODTester() { }
+  }
 
   virtual bool meetsRenderCriteria(const G3MRenderContext* rc,
                                    const PlanetRenderContext* prc,
@@ -31,6 +32,5 @@ public:
   virtual void renderStarted() const = 0;
 
 };
-
 
 #endif
