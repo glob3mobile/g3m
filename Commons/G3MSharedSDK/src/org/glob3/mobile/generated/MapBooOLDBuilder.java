@@ -561,7 +561,10 @@ public abstract class MapBooOLDBuilder
           }
           else if (_token.length() > 0)
           {
-            _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_DummyListener(), false); // readExpired
+            if (_g3mWidget != null)
+            {
+              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooOLDBuilder_DummyListener(), false); // readExpired
+            }
           }
           else
           {

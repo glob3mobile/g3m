@@ -52,6 +52,10 @@ private:
 
 
   MutableMatrix44D(bool isValid):
+  _m00(0), _m01(0), _m02(0), _m03(0),
+  _m10(0), _m11(0), _m12(0), _m13(0),
+  _m20(0), _m21(0), _m22(0), _m23(0),
+  _m30(0), _m31(0), _m32(0), _m33(0),
   _isValid(isValid),
   _matrix44D(NULL)
   {
@@ -67,55 +71,23 @@ public:
                    double m01, double m11, double m21, double m31,
                    double m02, double m12, double m22, double m32,
                    double m03, double m13, double m23, double m33):
+  _m00(m00), _m01(m01), _m02(m02), _m03(m03),
+  _m10(m10), _m11(m11), _m12(m12), _m13(m13),
+  _m20(m20), _m21(m21), _m22(m22), _m23(m23),
+  _m30(m30), _m31(m31), _m32(m32), _m33(m33),
   _isValid(true),
   _matrix44D(NULL)
   {
-    _m00  = m00;
-    _m01  = m01;
-    _m02  = m02;
-    _m03  = m03;
-
-    _m10  = m10;
-    _m11  = m11;
-    _m12  = m12;
-    _m13  = m13;
-
-    _m20  = m20;
-    _m21  = m21;
-    _m22  = m22;
-    _m23  = m23;
-
-    _m30  = m30;
-    _m31  = m31;
-    _m32  = m32;
-    _m33  = m33;
-
-    _matrix44D = NULL;
   }
 
   MutableMatrix44D():
+  _m00(0), _m01(0), _m02(0), _m03(0),
+  _m10(0), _m11(0), _m12(0), _m13(0),
+  _m20(0), _m21(0), _m22(0), _m23(0),
+  _m30(0), _m31(0), _m32(0), _m33(0),
   _isValid(true),
   _matrix44D(NULL)
   {
-    _m00 = 0.0;
-    _m01 = 0.0;
-    _m02 = 0.0;
-    _m03 = 0.0;
-
-    _m10 = 0.0;
-    _m11 = 0.0;
-    _m12 = 0.0;
-    _m13 = 0.0;
-
-    _m20 = 0.0;
-    _m21 = 0.0;
-    _m22 = 0.0;
-    _m23 = 0.0;
-
-    _m30 = 0.0;
-    _m31 = 0.0;
-    _m32 = 0.0;
-    _m33 = 0.0;
   }
 
   MutableMatrix44D(const MutableMatrix44D &m);
