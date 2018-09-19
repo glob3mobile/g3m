@@ -10,7 +10,7 @@
 #define __G3MiOSSDK__Vector2F__
 
 #include "IMathUtils.hpp"
-class Vector2I;
+#include "Vector2I.hpp"
 
 class Vector2F {
 private:
@@ -45,6 +45,10 @@ public:
 
   ~Vector2F() {
   }
+    
+    Vector2I asVector2I() const{
+        return Vector2I((int)_x, (int)_y);
+    }
 
   const double squaredDistanceTo(const Vector2I& that) const;
 

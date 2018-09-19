@@ -271,6 +271,11 @@ const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
+const Geodetic2D Camera::pixel2PlanetLatLon(const Vector2I& pixel) const {
+    Vector3D v = _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
+    return _planet->toGeodetic2D(v);
+}
+
 const Vector2F Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0,

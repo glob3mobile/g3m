@@ -123,6 +123,7 @@ public:
   const Vector3D pixel2Ray(const Vector2F& pixel) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
+    const Geodetic2D pixel2PlanetLatLon(const Vector2I& pixel) const;
 
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
