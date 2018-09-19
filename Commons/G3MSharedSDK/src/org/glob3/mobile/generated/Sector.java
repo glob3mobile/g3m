@@ -103,12 +103,14 @@ public class Sector
     return _deltaLatitude._radians == 0 || _deltaLongitude._radians == 0;
   }
 
-  public static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon)
+  public static Sector fromDegrees(double lowerLatitudeDegrees, double lowerLongitudeDegrees, double upperLatitudeDegrees, double upperLongitudeDegrees)
   {
-    final Geodetic2D lower = new Geodetic2D(Angle.fromDegrees(minLat), Angle.fromDegrees(minLon));
-    final Geodetic2D upper = new Geodetic2D(Angle.fromDegrees(maxLat), Angle.fromDegrees(maxLon));
+    return new Sector(Geodetic2D.fromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees), Geodetic2D.fromDegrees(upperLatitudeDegrees, upperLongitudeDegrees));
+  }
 
-    return new Sector(lower, upper);
+  public static Sector fromRadians(double lowerLatitudeRadians, double lowerLongitudeRadians, double upperLatitudeRadians, double upperLongitudeRadians)
+  {
+    return new Sector(Geodetic2D.fromRadians(lowerLatitudeRadians, lowerLongitudeRadians), Geodetic2D.fromRadians(upperLatitudeRadians, upperLongitudeRadians));
   }
 
   public final Vector2D div(Sector that)

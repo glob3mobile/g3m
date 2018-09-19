@@ -59,12 +59,16 @@ public:
     return _deltaLatitude._radians == 0 || _deltaLongitude._radians == 0;
   }
 
-  static Sector fromDegrees(double minLat, double minLon,
-                            double maxLat, double maxLon) {
-    const Geodetic2D lower(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon));
-    const Geodetic2D upper(Angle::fromDegrees(maxLat), Angle::fromDegrees(maxLon));
+  static Sector fromDegrees(double lowerLatitudeDegrees, double lowerLongitudeDegrees,
+                            double upperLatitudeDegrees, double upperLongitudeDegrees) {
+    return Sector(Geodetic2D::fromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees),
+                  Geodetic2D::fromDegrees(upperLatitudeDegrees, upperLongitudeDegrees));
+  }
 
-    return Sector(lower, upper);
+  static Sector fromRadians(double lowerLatitudeRadians, double lowerLongitudeRadians,
+                            double upperLatitudeRadians, double upperLongitudeRadians) {
+    return Sector(Geodetic2D::fromRadians(lowerLatitudeRadians, lowerLongitudeRadians),
+                  Geodetic2D::fromRadians(upperLatitudeRadians, upperLongitudeRadians));
   }
 
   const Vector2D div(const Sector& that) const;
