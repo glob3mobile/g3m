@@ -12,6 +12,7 @@
 #include "Geodetic3D.hpp"
 #include "G3MContext.hpp"
 #include "Vector3D.hpp"
+#include "Condition.hpp"
 
 class MutableMatrix44D;
 
@@ -60,6 +61,8 @@ private:
   
 protected:
   virtual void cleanTransformMatrix();
+    
+    Condition* _renderingCondition;
 
   
 public:
@@ -67,7 +70,8 @@ public:
   MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
 
   Shape(Geodetic3D* position,
-        AltitudeMode altitudeMode) :
+        AltitudeMode altitudeMode,
+        Condition* renderingCondition = NULL) :
   _position( position ),
   _altitudeMode(altitudeMode),
   _heading( new Angle(Angle::zero()) ),
@@ -83,7 +87,8 @@ public:
   _enable(true),
   _surfaceElevation(0),
   _glState(new GLState()),
-  _surfaceElevationProvider(NULL)
+  _surfaceElevationProvider(NULL),
+    _renderingCondition(renderingCondition)
   {
     
   }

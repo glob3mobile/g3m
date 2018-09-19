@@ -30,8 +30,9 @@ public:
             const std::string& uriPrefix,
             bool isTransparent,
             Geodetic3D* position,
-            AltitudeMode altitudeMode) :
-    Shape(position, altitudeMode),
+            AltitudeMode altitudeMode,
+            Condition* renderingCondition = NULL) :
+    Shape(position, altitudeMode, renderingCondition),
     _node(node),
     _uriPrefix(uriPrefix),
     _isTransparent(isTransparent)
@@ -54,7 +55,8 @@ public:
     ~SGShape();
     
     SGShape* clone(Geodetic3D* position,
-                   AltitudeMode altitudeMode) const;
+                   AltitudeMode altitudeMode,
+                   Condition* renderingCondition) const;
     
     SGNode* getNode() const {
         return _node;

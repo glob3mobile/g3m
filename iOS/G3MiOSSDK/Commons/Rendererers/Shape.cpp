@@ -99,6 +99,13 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) const {
 void Shape::render(const G3MRenderContext* rc,
                    GLState* parentGLState,
                    bool renderNotReadyShapes) {
+    
+    if (_renderingCondition != NULL){
+        if (!_renderingCondition->check()){
+            return;
+        }
+    }
+    
   if (renderNotReadyShapes || isReadyToRender(rc)) {
     const size_t pendingEffectsCount = _pendingEffects.size();
     if (pendingEffectsCount > 0) {

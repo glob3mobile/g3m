@@ -40,10 +40,12 @@ std::vector<double> SGShape::intersectionsDistances(const Planet* planet,
 }
 
 SGShape* SGShape::clone(Geodetic3D* position,
-                        AltitudeMode altitudeMode) const{
+                        AltitudeMode altitudeMode,
+                        Condition* renderingCondition) const{
     return new SGShape(_node,
                        _uriPrefix,
                        _isTransparent,
                        position,
-                       altitudeMode);
+                       altitudeMode,
+                       renderingCondition);
 }
