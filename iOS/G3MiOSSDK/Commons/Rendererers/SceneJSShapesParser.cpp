@@ -94,7 +94,7 @@ void SceneJSShapesParser::pvtParse(const JSONBaseObject* json,
   SGNode* node = toNode(json);
 
   if (node != NULL) {
-    _rootShape = new SGShape(node, _uriPrefix, isTransparent, position, altitudeMode);
+    _rootShape = new SGShape(node, true, _uriPrefix, isTransparent, position, altitudeMode);
   }
 
   delete json;

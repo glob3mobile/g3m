@@ -12,7 +12,9 @@
 
 SGShape::~SGShape() {
     _glState->_release();
-    delete _node;
+    if (_ownsNode){
+        delete _node;
+    }
 }
 
 void SGShape::initialize(const G3MContext* context) {
@@ -43,6 +45,7 @@ SGShape* SGShape::clone(Geodetic3D* position,
                         AltitudeMode altitudeMode,
                         Condition* renderingCondition) const{
     return new SGShape(_node,
+                       false,
                        _uriPrefix,
                        _isTransparent,
                        position,

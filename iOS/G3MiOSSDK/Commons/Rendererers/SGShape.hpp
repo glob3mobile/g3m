@@ -24,9 +24,12 @@ private:
     
     GLState* _glState;
     
+    bool _ownsNode;
+    
 public:
     
     SGShape(SGNode* node,
+            bool ownsNode,
             const std::string& uriPrefix,
             bool isTransparent,
             Geodetic3D* position,
@@ -34,6 +37,7 @@ public:
             Condition* renderingCondition = NULL) :
     Shape(position, altitudeMode, renderingCondition),
     _node(node),
+    _ownsNode(ownsNode),
     _uriPrefix(uriPrefix),
     _isTransparent(isTransparent)
     {

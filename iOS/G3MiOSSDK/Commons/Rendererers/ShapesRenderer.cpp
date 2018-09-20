@@ -116,10 +116,10 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
 void ShapesRenderer::removeShape(Shape* shape) {
   int pos = -1;
-  const int shapesSize = _shapes.size();
-  for (int i = 0; i < shapesSize; i++) {
+  const size_t shapesSize = _shapes.size();
+  for (size_t i = 0; i < shapesSize; i++) {
     if (_shapes[i] == shape) {
-      pos = i;
+      pos = (int)i;
       break;
     }
   }
