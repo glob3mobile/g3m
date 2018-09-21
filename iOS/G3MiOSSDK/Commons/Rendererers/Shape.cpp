@@ -49,6 +49,8 @@ Shape::~Shape() {
   delete _roll;
   
   delete _transformMatrix;
+    
+    delete _renderingCondition;
 
   _glState->_release();
 

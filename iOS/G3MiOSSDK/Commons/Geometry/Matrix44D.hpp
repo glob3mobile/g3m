@@ -17,7 +17,11 @@ class Matrix44D: public RCObject {
 private:
     ~Matrix44D();
     
+    static long long _lastID;
+    
 public:
+    
+    const long long _id; //Sequential, incremental ID
     
     //_m23 -> row 2, column 3
     const double _m00;
@@ -46,7 +50,6 @@ public:
               double m01, double m11, double m21, double m31,
               double m02, double m12, double m22, double m32,
               double m03, double m13, double m23, double m33);
-    
     
     Matrix44D* createMultiplication(const Matrix44D &that) const;
     

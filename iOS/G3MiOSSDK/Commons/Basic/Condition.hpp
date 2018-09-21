@@ -11,7 +11,7 @@
 class Condition{
     
 public:
-    ~Condition(){}
+    virtual ~Condition(){}
   
     virtual bool check() = 0;
     
