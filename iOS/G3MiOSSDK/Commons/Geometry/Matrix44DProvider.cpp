@@ -52,10 +52,12 @@ Matrix44D* Matrix44DMultiplicationHolder::getMatrix() const {
         matrices[i] = _providers[i]->getMatrix();
         if (matrices[i] != NULL){
             newSumID += matrices[i]->_id;
+        } else{
+            ILogger::instance()->logWarning("Provider returned NULL matrix.");
         }
     }
     
-    if (newSumID != _sumMatrixIDs){
+    if (newSumID != _sumMatrixIDs || _result == NULL){
         if (_result != NULL){
             _result->_release();
             _result = NULL;
@@ -72,6 +74,9 @@ Matrix44D* Matrix44DMultiplicationHolder::getMatrix() const {
         _result = m.asMatrix44D();
         _result->_retain();
         _sumMatrixIDs = newSumID;
+    }
+    if (_result == NULL){
+        THROW_EXCEPTION("Provider returned NULL matrix.");
     }
     return _result;
 }

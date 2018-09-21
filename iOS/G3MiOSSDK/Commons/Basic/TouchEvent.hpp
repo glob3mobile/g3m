@@ -123,7 +123,7 @@ public:
     return _eventType;
   }
 
-  const Touch* getTouch(int i) const {
+  const Touch* getTouch(size_t i) const {
     return _touchs[i];
   }
 
