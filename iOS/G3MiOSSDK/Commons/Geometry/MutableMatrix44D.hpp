@@ -146,6 +146,9 @@ public:
 #endif
 
   void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
+    
+void copyValueOfMultiplicationWithMatrix44D(const MutableMatrix44D& m1,
+                                                const Matrix44D& m2);
 
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
 
