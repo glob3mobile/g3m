@@ -32,7 +32,7 @@ void G3MRenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable
 #ifdef C_CODE
 bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2) {
-  return ( or1->squaredDistanceFromEye() >= or2->squaredDistanceFromEye() );
+  return ( or1->squaredDistanceFromEye() > or2->squaredDistanceFromEye() );
 }
 #endif
 
