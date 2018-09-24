@@ -37,7 +37,7 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
         ILogger::instance()->logError("Problem at MyDataSortPredicate");
         return false;
     }
-  return ( or1->squaredDistanceFromEye() >= or2->squaredDistanceFromEye() );
+  return ( or1->squaredDistanceFromEye() > or2->squaredDistanceFromEye() );
 }
 #endif
 
@@ -66,8 +66,8 @@ std::vector<OrderedRenderable*>* G3MRenderContext::getSortedOrderedRenderables()
 }
 
 void G3MRenderContext::clearOrderedRenderables(){
-    delete _orderedRenderables;
-    _orderedRenderables = NULL;
+//    delete _orderedRenderables;
+//    _orderedRenderables = NULL;
 }
 
 void G3MRenderContext::clear() {
