@@ -449,7 +449,8 @@ _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
 _firstRender(true),
-_effectTarget(NULL)
+_effectTarget(NULL),
+_textureProportionSetExternally(false)
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");

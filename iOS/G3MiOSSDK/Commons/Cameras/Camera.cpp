@@ -284,6 +284,10 @@ const Vector2F Camera::point2Pixel(const Vector3D& point) const {
   return Vector2F((float) p._x, (float) (_viewPortHeight - p._y) );
 }
 
+bool Camera::pixelOnScreen(Vector2F& pixel) const{
+    return pixel._x > 0.0f && pixel._y > 0.0f && pixel._x <= _viewPortWidth && pixel._y <= _viewPortHeight;
+}
+
 const Vector2F Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0,

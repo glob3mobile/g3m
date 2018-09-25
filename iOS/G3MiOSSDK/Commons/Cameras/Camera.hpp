@@ -362,6 +362,8 @@ public:
   }
   
   double computeZNear() const;
+    
+    bool pixelOnScreen(Vector2F& pixel) const;
 
 
 private:
