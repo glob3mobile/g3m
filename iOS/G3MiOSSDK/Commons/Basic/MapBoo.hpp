@@ -192,14 +192,13 @@ public:
                const VectorStreamingRenderer::VectorSetSymbolizer* symbolizer,
                const bool                                          deleteSymbolizer) const;
 
-    Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,
                             const GEO2DPointGeometry* geometry) const;
 
-    Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,
-                            const VectorStreamingRenderer::Cluster* cluster,
-                            const long long featuresCount) const;
+                            const VectorStreamingRenderer::Cluster* cluster) const;
 
   };
 
@@ -252,14 +251,13 @@ public:
 
     virtual ~MBDatasetVectorSetSymbolizer();
 
-    Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,
                             const GEO2DPointGeometry* geometry) const;
 
-    Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,
-                            const VectorStreamingRenderer::Cluster* cluster,
-                            const long long featuresCount) const;
+                            const VectorStreamingRenderer::Cluster* cluster) const;
 
   };
 

@@ -874,6 +874,8 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       const int                nodesCount        = (int) jsonObject->getAsNumber("nodesCount")->value();
       const int                minNodeDepth      = (int) jsonObject->getAsNumber("minNodeDepth")->value();
       const int                maxNodeDepth      = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
+      const std::string        language          = jsonObject->getAsString("language")->value();
+      const std::string        nameFieldName     = jsonObject->getAsString("nameFieldName")->value();
       const MagnitudeMetadata* magnitudeMetadata = MagnitudeMetadata::fromJSON( jsonObject->getAsObject("magnitude") );
 
       _metadata = new Metadata(sector,
@@ -882,6 +884,8 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
                                nodesCount,
                                minNodeDepth,
                                maxNodeDepth,
+                               language,
+                               nameFieldName,
                                magnitudeMetadata);
 
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
@@ -1157,10 +1161,9 @@ long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* nod
     for (size_t i = 0; i < clustersCount; i++) {
       const Cluster* cluster = clusters->at(i);
       if (cluster != NULL) {
-        Mark* mark = _symbolizer->createClusterMark(_metadata->_magnitudeMetadata,
+        Mark* mark = _symbolizer->createClusterMark(_metadata,
                                                     node,
-                                                    cluster,
-                                                    _metadata->_featuresCount);
+                                                    cluster);
         if (mark != NULL) {
           mark->setToken( node->getClusterMarkToken() );
           _renderer->getMarkRenderer()->addMark( mark );
@@ -1176,7 +1179,7 @@ long long VectorStreamingRenderer::VectorSet::createClusterMarks(const Node* nod
 
 long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
                                                                 const GEO2DPointGeometry* geometry) const {
-  Mark* mark = _symbolizer->createFeatureMark(_metadata->_magnitudeMetadata,
+  Mark* mark = _symbolizer->createFeatureMark(_metadata,
                                               node,
                                               geometry);
   if (mark == NULL) {

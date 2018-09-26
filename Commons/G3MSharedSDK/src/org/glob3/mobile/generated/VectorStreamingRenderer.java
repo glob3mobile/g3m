@@ -1105,8 +1105,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_buffer != null)
          _buffer.dispose();
     
-      if (_metadata != null)
-         _metadata.dispose();
+      _metadata = null;
     
       if (_rootNodes != null)
       {
@@ -1170,9 +1169,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final int nodesCount = (int) jsonObject.getAsNumber("nodesCount").value();
           final int minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
           final int maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
+          final String language = jsonObject.getAsString("language").value();
+          final String nameFieldName = jsonObject.getAsString("nameFieldName").value();
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
-          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, magnitudeMetadata);
+          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, magnitudeMetadata);
     
           final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
           _rootNodes = new java.util.ArrayList<Node>();
@@ -1292,9 +1293,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
+    public abstract Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
 
-    public abstract Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount);
+    public abstract Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster);
 
   }
 
@@ -1307,9 +1308,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final int _nodesCount;
     public final int _minNodeDepth;
     public final int _maxNodeDepth;
+    public final String _language;
+    public final String _nameFieldName;
     public final MagnitudeMetadata _magnitudeMetadata;
 
-    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, MagnitudeMetadata magnitudeMetadata)
+    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, MagnitudeMetadata magnitudeMetadata)
     {
        _sector = sector;
        _clustersCount = clustersCount;
@@ -1317,6 +1320,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _nodesCount = nodesCount;
        _minNodeDepth = minNodeDepth;
        _maxNodeDepth = maxNodeDepth;
+       _language = language;
+       _nameFieldName = nameFieldName;
        _magnitudeMetadata = magnitudeMetadata;
 
     }
@@ -1414,8 +1419,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _symbolizer = null;
       }
     
-      if (_metadata != null)
-         _metadata.dispose();
+      _metadata = null;
     
       if (_rootNodes != null)
       {
@@ -1573,7 +1577,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(_metadata._magnitudeMetadata, node, geometry);
+      Mark mark = _symbolizer.createFeatureMark(_metadata, node, geometry);
       if (mark == null)
       {
         return 0;
@@ -1596,7 +1600,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final Cluster cluster = clusters.get(i);
           if (cluster != null)
           {
-            Mark mark = _symbolizer.createClusterMark(_metadata._magnitudeMetadata, node, cluster, _metadata._featuresCount);
+            Mark mark = _symbolizer.createClusterMark(_metadata, node, cluster);
             if (mark != null)
             {
               mark.setToken(node.getClusterMarkToken());

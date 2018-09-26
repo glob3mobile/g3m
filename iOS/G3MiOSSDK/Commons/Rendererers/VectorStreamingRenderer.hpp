@@ -492,14 +492,13 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
                                     const GEO2DPointGeometry* geometry) const = 0;
 
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
-                                    const VectorStreamingRenderer::Cluster* cluster,
-                                    const long long featuresCount) const = 0;
+                                    const VectorStreamingRenderer::Cluster* cluster) const = 0;
 
   };
 
@@ -512,6 +511,8 @@ public:
     const int                _nodesCount;
     const int                _minNodeDepth;
     const int                _maxNodeDepth;
+    const std::string        _language;
+    const std::string        _nameFieldName;
     const MagnitudeMetadata* _magnitudeMetadata;
 
     Metadata(const Sector*            sector,
@@ -520,6 +521,8 @@ public:
              const int                nodesCount,
              const int                minNodeDepth,
              const int                maxNodeDepth,
+             const std::string&       language,
+             const std::string&       nameFieldName,
              const MagnitudeMetadata* magnitudeMetadata) :
     _sector(sector),
     _clustersCount(clustersCount),
@@ -527,6 +530,8 @@ public:
     _nodesCount(nodesCount),
     _minNodeDepth(minNodeDepth),
     _maxNodeDepth(maxNodeDepth),
+    _language(language),
+    _nameFieldName(nameFieldName),
     _magnitudeMetadata(magnitudeMetadata)
     {
 
