@@ -88,9 +88,9 @@ const void IndexedMesh::getTrianglePrimitive(short t,
 
 
 const HitTestResult IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3D& origin,
-                                                 const Vector3D& ray,
-                                                              short firstTriangle,
-                                                              short lastTriangle) const{
+                                                                   const Vector3D& ray,
+                                                                   short firstTriangle,
+                                                                   short lastTriangle) const{
     if (_primitive != GLPrimitive::triangles()
         && _primitive != GLPrimitive::triangleStrip()){
         ILogger::instance()->logError("getHitWithRayForTrianglePrimitive(): Primitive not supported");
@@ -129,4 +129,38 @@ const HitTestResult IndexedMesh::getHitWithRayForTrianglePrimitive(const Vector3
     }
     
     return hit;
+}
+
+Vector3F IndexedMesh::getExtent(short firstVertex,
+                                short lastVertex) const{
+    
+    if (firstVertex > lastVertex){
+        firstVertex = 0;
+        lastVertex = (short)(_vertices->size() / 3);
+    }
+    
+    float xmin = _vertices->get(0);
+    float xmax = _vertices->get(0);
+    float ymin = _vertices->get(1);
+    float ymax = _vertices->get(1);
+    float zmin = _vertices->get(2);
+    float zmax = _vertices->get(2);
+    
+    for (short i = firstVertex; i < lastVertex+1; ++i) {
+        float x = _vertices->get(i);
+        float y = _vertices->get(i+1);
+        float z = _vertices->get(i+2);
+        
+        
+        if (x < xmin) xmin = x;
+        if (x > xmax) xmax = x;
+        if (y < ymin) ymin = y;
+        if (y > ymax) ymax = y;
+        if (z < zmin) zmin = z;
+        if (z > zmax) zmax = z;
+    }
+    
+    return Vector3F(xmax-xmin,
+                    ymax-ymin,
+                    zmax-zmin);
 }

@@ -10,6 +10,7 @@
 
 #include "AbstractMesh.hpp"
 #include "MutableVector3D.hpp"
+#include "Vector3F.hpp"
 
 class IShortBuffer;
 
@@ -62,9 +63,14 @@ public:
     
     //if lastTriangle < firstTriangle -> All triangles will be tested
     const HitTestResult getHitWithRayForTrianglePrimitive(const Vector3D& origin,
-                                                     const Vector3D& ray,
-                                                     short firstTriangle=(short)1,
-                                                     short lastTriangle=(short)0) const;
+                                                          const Vector3D& ray,
+                                                          short firstTriangle=(short)1,
+                                                          short lastTriangle=(short)0) const;
+    
+    
+    Vector3F getExtent(short firstVertex=(short)1,
+                       short lastVertex=(short)0) const;
+    
     
 };
 
