@@ -1171,9 +1171,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final int maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
           final String language = jsonObject.getAsString("language").value();
           final String nameFieldName = jsonObject.getAsString("nameFieldName").value();
+          final String urlFieldName = jsonObject.getAsString("urlFieldName").value();
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
-          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, magnitudeMetadata);
+          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata);
     
           final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
           _rootNodes = new java.util.ArrayList<Node>();
@@ -1310,9 +1311,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final int _maxNodeDepth;
     public final String _language;
     public final String _nameFieldName;
+    public final String _urlFieldName;
     public final MagnitudeMetadata _magnitudeMetadata;
 
-    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, MagnitudeMetadata magnitudeMetadata)
+    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata)
     {
        _sector = sector;
        _clustersCount = clustersCount;
@@ -1322,6 +1324,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _maxNodeDepth = maxNodeDepth;
        _language = language;
        _nameFieldName = nameFieldName;
+       _urlFieldName = urlFieldName;
        _magnitudeMetadata = magnitudeMetadata;
 
     }

@@ -876,6 +876,7 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
       const int                maxNodeDepth      = (int) jsonObject->getAsNumber("maxNodeDepth")->value();
       const std::string        language          = jsonObject->getAsString("language")->value();
       const std::string        nameFieldName     = jsonObject->getAsString("nameFieldName")->value();
+      const std::string        urlFieldName      = jsonObject->getAsString("urlFieldName")->value();
       const MagnitudeMetadata* magnitudeMetadata = MagnitudeMetadata::fromJSON( jsonObject->getAsObject("magnitude") );
 
       _metadata = new Metadata(sector,
@@ -886,6 +887,7 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
                                maxNodeDepth,
                                language,
                                nameFieldName,
+                               urlFieldName,
                                magnitudeMetadata);
 
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");

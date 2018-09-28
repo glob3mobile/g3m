@@ -513,6 +513,7 @@ public:
     const int                _maxNodeDepth;
     const std::string        _language;
     const std::string        _nameFieldName;
+    const std::string        _urlFieldName;
     const MagnitudeMetadata* _magnitudeMetadata;
 
     Metadata(const Sector*            sector,
@@ -523,6 +524,7 @@ public:
              const int                maxNodeDepth,
              const std::string&       language,
              const std::string&       nameFieldName,
+             const std::string&       urlFieldName,
              const MagnitudeMetadata* magnitudeMetadata) :
     _sector(sector),
     _clustersCount(clustersCount),
@@ -532,6 +534,7 @@ public:
     _maxNodeDepth(maxNodeDepth),
     _language(language),
     _nameFieldName(nameFieldName),
+    _urlFieldName(urlFieldName),
     _magnitudeMetadata(magnitudeMetadata)
     {
 
