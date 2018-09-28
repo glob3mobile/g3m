@@ -602,7 +602,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
       //return (projectedArea > 350000);
-      return (projectedArea > 1500000);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning make this number configurable
+      return (projectedArea > 1500000 * 10);
     }
 
     private boolean _isBeingRendered;

@@ -617,7 +617,8 @@ bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
   
   const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
   //return (projectedArea > 350000);
-  return (projectedArea > 1500000);
+#warning make this number configurable
+  return (projectedArea > 1500000 * 10);
 }
 
 void VectorStreamingRenderer::Node::unload() {
