@@ -139,11 +139,6 @@ public class LabelImageBuilder extends AbstractImageBuilder
     final int height = mu.round(textExtent._y + margin2);
     canvas.initialize(width, height);
   
-    if (!_shadowColor.isFullTransparent())
-    {
-      canvas.setShadow(_shadowColor, _shadowBlur, _shadowOffsetX, _shadowOffsetY);
-    }
-  
     if (!_backgroundColor.isFullTransparent())
     {
       canvas.setFillColor(_backgroundColor);
@@ -155,6 +150,11 @@ public class LabelImageBuilder extends AbstractImageBuilder
       {
         canvas.fillRectangle(0, 0, width, height);
       }
+    }
+  
+    if (!_shadowColor.isFullTransparent())
+    {
+      canvas.setShadow(_shadowColor, _shadowBlur, _shadowOffsetX, _shadowOffsetY);
     }
   
     canvas.setFillColor(_color);

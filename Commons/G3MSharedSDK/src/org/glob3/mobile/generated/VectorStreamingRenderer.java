@@ -580,9 +580,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private IDownloader _downloader;
     private boolean _loadingChildren;
 
-    private boolean isVisible(G3MRenderContext rc, Frustum frustumInModelCoordinates)
+    private boolean isVisible(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates)
     {
-      if ((_nodeSector._deltaLatitude._degrees > 80) || (_nodeSector._deltaLongitude._degrees > 80))
+      if ((_nodeSector._deltaLatitude._degrees >= vectorSet._minSectorSize._degrees) || (_nodeSector._deltaLongitude._degrees >= vectorSet._minSectorSize._degrees))
       {
         return true;
       }
@@ -593,18 +593,15 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _loadedFeatures;
     private boolean _loadingFeatures;
 
-    private boolean isBigEnough(G3MRenderContext rc)
+    private boolean isBigEnough(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet)
     {
-      if ((_nodeSector._deltaLatitude._degrees >= 80) || (_nodeSector._deltaLongitude._degrees >= 80))
+      if ((_nodeSector._deltaLatitude._degrees >= vectorSet._minSectorSize._degrees) || (_nodeSector._deltaLongitude._degrees >= vectorSet._minSectorSize._degrees))
       {
         return true;
       }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
-      //return (projectedArea > 350000);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning make this number configurable
-      return (projectedArea > 1500000 * 10);
+      return (projectedArea >= vectorSet._minProjectedArea);
     }
 
     private boolean _isBeingRendered;
@@ -950,20 +947,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _id + "_C_" + _vectorSet.getName();
     }
 
-    public final long render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
+    public final long render(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
     {
-    
       long renderedCount = 0;
-    
-      // #warning Show Bounding Volume
-      // getBoundingVolume(rc)->render(rc, glState, Color::red());
     
       boolean wasRendered = false;
     
-      final boolean visible = isVisible(rc, frustumInModelCoordinates);
+      final boolean visible = isVisible(rc, vectorSet, frustumInModelCoordinates);
       if (visible)
       {
-        final boolean bigEnough = isBigEnough(rc);
+        final boolean bigEnough = isBigEnough(rc, vectorSet);
         if (bigEnough)
         {
           wasRendered = true;
@@ -988,7 +981,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
               for (int i = 0; i < _childrenSize; i++)
               {
                 Node child = _children.get(i);
-                renderedCount += child.render(rc, frustumInModelCoordinates, cameraTS, glState);
+                renderedCount += child.render(rc, vectorSet, frustumInModelCoordinates, cameraTS, glState);
               }
             }
           }
@@ -1392,8 +1385,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return result;
     }
 
+    public final Angle _minSectorSize ;
+    public final double _minProjectedArea;
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1414,6 +1409,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _rootNodes = null;
        _rootNodesSize = 0;
        _lastRenderedCount = 0;
+       _minSectorSize = new Angle(minSectorSize);
+       _minProjectedArea = minProjectedArea;
 
     }
 
@@ -1565,7 +1562,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _rootNodesSize; i++)
         {
           Node rootNode = _rootNodes.get(i);
-          renderedCount += rootNode.render(rc, frustumInModelCoordinates, cameraTS, glState);
+          renderedCount += rootNode.render(rc, this, frustumInModelCoordinates, cameraTS, glState);
         }
     
         if (_lastRenderedCount != renderedCount)
@@ -1711,9 +1708,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea);
     if (_context != null)
     {
       vectorSet.initialize(_context);

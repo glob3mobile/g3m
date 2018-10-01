@@ -18,6 +18,7 @@
 #include "RCObject.hpp"
 #include "MarksFilter.hpp"
 #include "GAsyncTask.hpp"
+#include "Angle.hpp"
 
 #include <vector>
 #include <string>
@@ -36,7 +37,7 @@ class Camera;
 class Frustum;
 class IDownloader;
 class GEOObject;
-class MarksRenderer;
+class MarksRenderer; 
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -305,12 +306,14 @@ public:
     bool _loadingChildren;
 
     bool isVisible(const G3MRenderContext* rc,
+                   const VectorStreamingRenderer::VectorSet* vectorSet,
                    const Frustum* frustumInModelCoordinates);
 
     bool _loadedFeatures;
     bool _loadingFeatures;
 
-    bool isBigEnough(const G3MRenderContext *rc);
+    bool isBigEnough(const G3MRenderContext *rc,
+                     const VectorStreamingRenderer::VectorSet* vectorSet);
 
     bool _isBeingRendered;
 
@@ -376,6 +379,7 @@ public:
     }
 
     long long render(const G3MRenderContext* rc,
+                     const VectorStreamingRenderer::VectorSet* vectorSet,
                      const Frustum* frustumInModelCoordinates,
                      const long long cameraTS,
                      GLState* glState);
@@ -586,6 +590,8 @@ public:
     const std::string toNodesDirectories(const std::string& nodeID) const;
 
   public:
+    const Angle  _minSectorSize;
+    const double _minProjectedArea;
 
     VectorSet(VectorStreamingRenderer*   renderer,
               const URL&                 serverURL,
@@ -598,7 +604,9 @@ public:
               bool                       readExpired,
               bool                       verbose,
               bool                       haltOnError,
-              const Format               format) :
+              const Format               format,
+              const Angle&               minSectorSize,
+              const double               minProjectedArea) :
     _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
@@ -617,7 +625,9 @@ public:
     _metadata(NULL),
     _rootNodes(NULL),
     _rootNodesSize(0),
-    _lastRenderedCount(0)
+    _lastRenderedCount(0),
+    _minSectorSize(minSectorSize),
+    _minProjectedArea(minProjectedArea)
     {
 
     }
@@ -715,7 +725,9 @@ public:
                     bool                       readExpired,
                     bool                       verbose,
                     bool                       haltOnError,
-                    const Format               format);
+                    const Format               format,
+                    const Angle&               minSectorSize,
+                    const double               minProjectedArea);
   
   void removeAllVectorSets();
   

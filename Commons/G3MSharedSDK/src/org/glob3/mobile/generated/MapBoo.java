@@ -363,7 +363,7 @@ public class MapBoo
         deleteSym = deleteSymbolizer;
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER); // haltOnError -  verbose -  readExpired
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER, Angle.fromDegrees(90), 15000000); // minProjectedArea -  minSectorSize, -  haltOnError -  verbose -  readExpired
     }
 
     public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
@@ -434,7 +434,7 @@ public class MapBoo
     
       final String datasetID = jsonObject.get("datasetID").asString().value();
       final String datasetName = jsonObject.getAsString("datasetName", "");
-    //  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
+      //  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
       final MBSymbology symbology = MBSymbology.fromJSON(handler, datasetID, datasetName, jsonObject.get("symbology"));
     
       return new MBSymbolizedDataset(symbology); // datasetID,

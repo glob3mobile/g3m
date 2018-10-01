@@ -18,20 +18,21 @@ import org.glob3.mobile.generated.JSONString;
 
 
 public class JSONParser_WebGL
-   extends
-      IJSONParser {
+         extends
+            IJSONParser {
+
 
    @Override
    public JSONBaseObject parse(final IByteBuffer buffer,
                                final boolean nullAsObject) {
-      return parse(buffer.getAsString());
+      return parse(buffer.getAsString(), nullAsObject);
    }
 
 
    @Override
    public JSONBaseObject parse(final String string,
                                final boolean nullAsObject) {
-      final com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser.parseLenient(string);
+      final com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser.parseStrict(string);
 
       return convert(value, nullAsObject);
    }
@@ -57,13 +58,13 @@ public class JSONParser_WebGL
          if (doubleValue == intValue) {
             return new JSONInteger(intValue);
          }
-         final float floatValue = (float) doubleValue;
-         if (doubleValue == floatValue) {
-            return new JSONFloat(floatValue);
-         }
          final long longValue = (long) doubleValue;
          if (doubleValue == longValue) {
             return new JSONLong(longValue);
+         }
+         final float floatValue = (float) doubleValue;
+         if (doubleValue == floatValue) {
+            return new JSONFloat(floatValue);
          }
          return new JSONDouble(doubleValue);
       }

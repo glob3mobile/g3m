@@ -600,25 +600,25 @@ void VectorStreamingRenderer::Node::removeMarks() {
 }
 
 bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
+                                              const VectorStreamingRenderer::VectorSet* vectorSet,
                                               const Frustum* frustumInModelCoordinates) {
-  if ((_nodeSector->_deltaLatitude._degrees  > 80) ||
-      (_nodeSector->_deltaLongitude._degrees > 80)) {
+  if ((_nodeSector->_deltaLatitude._degrees  >= vectorSet->_minSectorSize._degrees) ||
+      (_nodeSector->_deltaLongitude._degrees >= vectorSet->_minSectorSize._degrees)) {
     return true;
   }
   
   return getBoundingVolume(rc)->touchesFrustum(frustumInModelCoordinates);
 }
 
-bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc) {
-  if ((_nodeSector->_deltaLatitude._degrees  >= 80) ||
-      (_nodeSector->_deltaLongitude._degrees >= 80)) {
+bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc,
+                                                const VectorStreamingRenderer::VectorSet* vectorSet                                                ) {
+  if ((_nodeSector->_deltaLatitude._degrees  >= vectorSet->_minSectorSize._degrees) ||
+      (_nodeSector->_deltaLongitude._degrees >= vectorSet->_minSectorSize._degrees)) {
     return true;
   }
   
   const double projectedArea = getBoundingVolume(rc)->projectedArea(rc);
-  //return (projectedArea > 350000);
-#warning make this number configurable
-  return (projectedArea > 1500000 * 10);
+  return (projectedArea >= vectorSet->_minProjectedArea);
 }
 
 void VectorStreamingRenderer::Node::unload() {
@@ -696,20 +696,17 @@ void VectorStreamingRenderer::Node::childStopRendered() {
 }
 
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
+                                                const VectorStreamingRenderer::VectorSet* vectorSet,
                                                 const Frustum* frustumInModelCoordinates,
                                                 const long long cameraTS,
                                                 GLState* glState) {
-  
   long long renderedCount = 0;
-  
-  // #warning Show Bounding Volume
-  // getBoundingVolume(rc)->render(rc, glState, Color::red());
-  
+
   bool wasRendered = false;
   
-  const bool visible = isVisible(rc, frustumInModelCoordinates);
+  const bool visible = isVisible(rc, vectorSet, frustumInModelCoordinates);
   if (visible) {
-    const bool bigEnough = isBigEnough(rc);
+    const bool bigEnough = isBigEnough(rc, vectorSet);
     if (bigEnough) {
       wasRendered = true;
       if (_loadedFeatures) {
@@ -728,6 +725,7 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
           for (size_t i = 0; i < _childrenSize; i++) {
             Node* child = _children->at(i);
             renderedCount += child->render(rc,
+                                           vectorSet,
                                            frustumInModelCoordinates,
                                            cameraTS,
                                            glState);
@@ -1136,6 +1134,7 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
     for (size_t i = 0; i < _rootNodesSize; i++) {
       Node* rootNode = _rootNodes->at(i);
       renderedCount += rootNode->render(rc,
+                                        this,
                                         frustumInModelCoordinates,
                                         cameraTS,
                                         glState);
@@ -1281,7 +1280,9 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            bool                       readExpired,
                                            bool                       verbose,
                                            bool                       haltOnError,
-                                           const Format               format) {
+                                           const Format               format,
+                                           const Angle&               minSectorSize,
+                                           const double               minProjectedArea) {
   VectorSet* vectorSet = new VectorSet(this,
                                        serverURL,
                                        name,
@@ -1293,7 +1294,9 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                        readExpired,
                                        verbose,
                                        haltOnError,
-                                       format);
+                                       format,
+                                       minSectorSize,
+                                       minProjectedArea);
   if (_context != NULL) {
     vectorSet->initialize(_context);
   }
@@ -1331,3 +1334,4 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
     }
   }
 }
+
