@@ -28,8 +28,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
 
   private final Color _shadowColor ;
   private final float _shadowBlur;
-  private final float _shadowOffsetX;
-  private final float _shadowOffsetY;
+  private final Vector2F _shadowOffset;
 
   private final Color _backgroundColor ;
   private final float _cornerRadius;
@@ -39,51 +38,47 @@ public class LabelImageBuilder extends AbstractImageBuilder
   private String getImageName()
   {
     final IStringUtils su = IStringUtils.instance();
-    return (_text + "/" + _font.description() + "/" + _margin.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
+    return (_text + "/" + _font.description() + "/" + _margin.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + _shadowOffset.description() + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
   }
 
 
-  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset, Color backgroundColor, float cornerRadius)
   {
-     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, cornerRadius, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffset, backgroundColor, cornerRadius, false);
   }
-  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset, Color backgroundColor)
   {
-     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffset, backgroundColor, 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset)
   {
-     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, Color.transparent(), 0, false);
-  }
-  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX)
-  {
-     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffset, Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur)
   {
-     this(text, font, margin, color, shadowColor, shadowBlur, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, shadowBlur, Vector2F.zero(), Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor)
   {
-     this(text, font, margin, color, shadowColor, 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, shadowColor, 0, Vector2F.zero(), Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color)
   {
-     this(text, font, margin, color, Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, color, Color.transparent(), 0, Vector2F.zero(), Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text, GFont font, Vector2F margin)
   {
-     this(text, font, margin, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, margin, Color.white(), Color.transparent(), 0, Vector2F.zero(), Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text, GFont font)
   {
-     this(text, font, Vector2F.zero(), Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, Vector2F.zero(), Color.white(), Color.transparent(), 0, Vector2F.zero(), Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text)
   {
-     this(text, GFont.sansSerif(), Vector2F.zero(), Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, GFont.sansSerif(), Vector2F.zero(), Color.white(), Color.transparent(), 0, Vector2F.zero(), Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius, boolean isMutable)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset, Color backgroundColor, float cornerRadius, boolean isMutable)
   {
      _text = text;
      _font = font;
@@ -91,8 +86,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
      _color = new Color(color);
      _shadowColor = new Color(shadowColor);
      _shadowBlur = shadowBlur;
-     _shadowOffsetX = shadowOffsetX;
-     _shadowOffsetY = shadowOffsetY;
+     _shadowOffset = shadowOffset;
      _backgroundColor = new Color(backgroundColor);
      _cornerRadius = cornerRadius;
      _isMutable = isMutable;
@@ -115,7 +109,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
     }
     else
     {
-      ILogger.instance().logError("Can't change text on an inmutable LabelImageBuilder");
+      throw new RuntimeException("Can't change text on an inmutable LabelImageBuilder");
     }
   }
 
@@ -154,7 +148,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   
     if (!_shadowColor.isFullTransparent())
     {
-      canvas.setShadow(_shadowColor, _shadowBlur, _shadowOffsetX, _shadowOffsetY);
+      canvas.setShadow(_shadowColor, _shadowBlur, _shadowOffset._x, _shadowOffset._y);
     }
   
     canvas.setFillColor(_color);

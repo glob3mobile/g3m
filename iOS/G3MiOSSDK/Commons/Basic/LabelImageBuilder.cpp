@@ -15,19 +15,19 @@
 #include "IStringUtils.hpp"
 #include "IImageListener.hpp"
 #include "IImageBuilderListener.hpp"
+#include "ErrorHandling.hpp"
 
 
 const std::string LabelImageBuilder::getImageName() const {
   const IStringUtils* su = IStringUtils::instance();
-  return (_text                        + "/" +
-          _font.description()          + "/" +
-          _margin.description()        + "/" +
-          _color.id()                  + "/" +
-          _shadowColor.id()            + "/" +
-          su->toString(_shadowBlur)    + "/" +
-          su->toString(_shadowOffsetX) + "/" +
-          su->toString(_shadowOffsetY) + "/" +
-          _backgroundColor.id()        + "/" +
+  return (_text                       + "/" +
+          _font.description()         + "/" +
+          _margin.description()       + "/" +
+          _color.id()                 + "/" +
+          _shadowColor.id()           + "/" +
+          su->toString(_shadowBlur)   + "/" +
+          _shadowOffset.description() + "/" +
+          _backgroundColor.id()       + "/" +
           su->toString(_cornerRadius));
 }
 
@@ -70,7 +70,7 @@ void LabelImageBuilder::setText(const std::string& text) {
     }
   }
   else {
-    ILogger::instance()->logError("Can't change text on an inmutable LabelImageBuilder");
+    THROW_EXCEPTION("Can't change text on an inmutable LabelImageBuilder");
   }
 }
 
@@ -106,8 +106,8 @@ void LabelImageBuilder::build(const G3MContext* context,
   if (!_shadowColor.isFullTransparent()) {
     canvas->setShadow(_shadowColor,
                       _shadowBlur,
-                      _shadowOffsetX,
-                      _shadowOffsetY);
+                      _shadowOffset._x,
+                      _shadowOffset._y);
   }
 
   canvas->setFillColor(_color);

@@ -657,12 +657,11 @@ IImageBuilder* MapBoo::MBCircleShape::createImageBuilder() const {
 LabelImageBuilder* MapBoo::MBVectorSymbology::createLabelImageBuilder(const std::string& label) const {
   return new LabelImageBuilder(label,
                                GFont::sansSerif(18, true),
-                               Vector2F(2, 2), // margin
-                               Color::WHITE,   // color
-                               Color::BLACK,   // shadowColor
-                               2.0f,           // shadowBlur
-                               0.0f,           // shadowOffsetX
-                               0.0f            // shadowOffsetY
+                               Vector2F(2, 2),  // margin
+                               Color::WHITE,    // color
+                               Color::BLACK,    // shadowColor
+                               2.0f,            // shadowBlur
+                               Vector2F::zero() // shadowOffset
                                );
 }
 
@@ -723,8 +722,7 @@ Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer
                                                                           Color::BLACK,       // color
                                                                           Color::TRANSPARENT, // shadowColor
                                                                           5.0f,               // shadowBlur
-                                                                          0.0f,               // shadowOffsetX
-                                                                          0.0f,               // shadowOffsetY
+                                                                          Vector2F::zero(),   // shadowOffset
                                                                           Color::WHITE,       // backgroundColor
                                                                           4.0f                // cornerRadius
                                                                           )

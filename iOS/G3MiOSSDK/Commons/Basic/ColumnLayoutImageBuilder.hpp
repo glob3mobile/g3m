@@ -21,25 +21,24 @@ protected:
 public:
 
   ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                           int                                margin             = 0,
-                           float                              borderWidth        = 0.0f,
+                           const Vector2F&                    margin             = Vector2F::zero(),
+                           float                              borderWidth        = 0,
                            const Color&                       borderColor        = Color::transparent(),
-                           int                                padding            = 0,
+                           const Vector2F&                    padding            = Vector2F::zero(),
                            const Color&                       backgroundColor    = Color::transparent(),
-                           float                              cornerRadius       = 0.0f,
+                           float                              cornerRadius       = 0,
                            int                                childrenSeparation = 0);
 
-  ColumnLayoutImageBuilder(IImageBuilder* child0,
-                           IImageBuilder* child1,
-                           int            margin             = 0,
-                           float          borderWidth        = 0.0f,
-                           const Color&   borderColor        = Color::transparent(),
-                           int            padding            = 0,
-                           const Color&   backgroundColor    = Color::transparent(),
-                           float          cornerRadius       = 0.0f,
-                           int            childrenSeparation = 0);
+  ColumnLayoutImageBuilder(IImageBuilder*  child0,
+                           IImageBuilder*  child1,
+                           const Vector2F& margin             = Vector2F::zero(),
+                           float           borderWidth        = 0,
+                           const Color&    borderColor        = Color::transparent(),
+                           const Vector2F& padding            = Vector2F::zero(),
+                           const Color&    backgroundColor    = Color::transparent(),
+                           float           cornerRadius       = 0,
+                           int             childrenSeparation = 0);
 
 };
-
 
 #endif

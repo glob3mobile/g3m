@@ -31,8 +31,12 @@ private:
 
   const Color _shadowColor;
   const float _shadowBlur;
-  const float _shadowOffsetX;
-  const float _shadowOffsetY;
+#ifdef C_CODE
+  const Vector2F _shadowOffset;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2F _shadowOffset;
+#endif
 
   const Color _backgroundColor;
   const float _cornerRadius;
@@ -49,8 +53,7 @@ public:
                     const Color&       color           = Color::white(),
                     const Color&       shadowColor     = Color::transparent(),
                     const float        shadowBlur      = 0,
-                    const float        shadowOffsetX   = 0,
-                    const float        shadowOffsetY   = 0,
+                    const Vector2F&    shadowOffset    = Vector2F::zero(),
                     const Color&       backgroundColor = Color::transparent(),
                     const float        cornerRadius    = 0,
                     const bool         isMutable       = false) :
@@ -60,8 +63,7 @@ public:
   _color(color),
   _shadowColor(shadowColor),
   _shadowBlur(shadowBlur),
-  _shadowOffsetX(shadowOffsetX),
-  _shadowOffsetY(shadowOffsetY),
+  _shadowOffset(shadowOffset),
   _backgroundColor(backgroundColor),
   _cornerRadius(cornerRadius),
   _isMutable(isMutable)

@@ -64,12 +64,13 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
     }
     else
     {
+      final Vector2F margin2 = _margin.times(2);
+      final Vector2F padding2 = _padding.times(2);
   
-      final int margin2 = _margin *2;
-      final int padding2 = _padding *2;
+      final IMathUtils mu = context.getMathUtils();
   
-      final int canvasWidth = maxWidth + margin2 + padding2;
-      final int canvasHeight = accumulatedHeight + margin2 + padding2 + ((int)resultsSize-1)*_childrenSeparation;
+      final int canvasWidth = (int) mu.ceil(maxWidth + margin2._x + padding2._x);
+      final int canvasHeight = (int) mu.ceil(accumulatedHeight + margin2._y + padding2._y + ((int)resultsSize-1)*_childrenSeparation);
   
       ICanvas canvas = context.getFactory().createCanvas(false);
       canvas.initialize(canvasWidth, canvasHeight);
@@ -83,11 +84,11 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         canvas.setFillColor(_backgroundColor);
         if (_cornerRadius > 0)
         {
-          canvas.fillRoundedRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2, _cornerRadius);
+          canvas.fillRoundedRectangle(_margin._x, _margin._y, canvasWidth - margin2._x, canvasHeight - margin2._y, _cornerRadius);
         }
         else
         {
-          canvas.fillRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2);
+          canvas.fillRectangle(_margin._x, _margin._y, canvasWidth - margin2._x, canvasHeight - margin2._y);
         }
       }
   
@@ -97,15 +98,15 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         canvas.setLineWidth(_borderWidth);
         if (_cornerRadius > 0)
         {
-          canvas.strokeRoundedRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2, _cornerRadius);
+          canvas.strokeRoundedRectangle(_margin._x, _margin._y, canvasWidth - margin2._x, canvasHeight - margin2._y, _cornerRadius);
         }
         else
         {
-          canvas.strokeRectangle(_margin, _margin, canvasWidth - margin2, canvasHeight - margin2);
+          canvas.strokeRectangle(_margin._x, _margin._y, canvasWidth - margin2._x, canvasHeight - margin2._y);
         }
       }
   
-      float cursorTop = _margin + _padding;
+      float cursorTop = _margin._y + _padding._y;
       for (int i = 0; i < resultsSize; i++)
       {
         ChildResult result = results.get(i);
@@ -133,69 +134,69 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   }
 
 
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius)
   {
      this(children, margin, borderWidth, borderColor, padding, backgroundColor, cornerRadius, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor)
   {
-     this(children, margin, borderWidth, borderColor, padding, backgroundColor, 0.0f, 0);
+     this(children, margin, borderWidth, borderColor, padding, backgroundColor, 0, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor, int padding)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding)
   {
-     this(children, margin, borderWidth, borderColor, padding, Color.transparent(), 0.0f, 0);
+     this(children, margin, borderWidth, borderColor, padding, Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor)
   {
-     this(children, margin, borderWidth, borderColor, 0, Color.transparent(), 0.0f, 0);
+     this(children, margin, borderWidth, borderColor, Vector2F.zero(), Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth)
   {
-     this(children, margin, borderWidth, Color.transparent(), 0, Color.transparent(), 0.0f, 0);
+     this(children, margin, borderWidth, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin)
   {
-     this(children, margin, 0.0f, Color.transparent(), 0, Color.transparent(), 0.0f, 0);
+     this(children, margin, 0, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
   }
   public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children)
   {
-     this(children, 0, 0.0f, Color.transparent(), 0, Color.transparent(), 0.0f, 0);
+     this(children, Vector2F.zero(), 0, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
   {
      super(children, margin, borderWidth, borderColor, padding, backgroundColor, cornerRadius, childrenSeparation);
   
   }
 
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius)
   {
      this(child0, child1, margin, borderWidth, borderColor, padding, backgroundColor, cornerRadius, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor)
   {
-     this(child0, child1, margin, borderWidth, borderColor, padding, backgroundColor, 0.0f, 0);
+     this(child0, child1, margin, borderWidth, borderColor, padding, backgroundColor, 0, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor, int padding)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding)
   {
-     this(child0, child1, margin, borderWidth, borderColor, padding, Color.transparent(), 0.0f, 0);
+     this(child0, child1, margin, borderWidth, borderColor, padding, Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor)
   {
-     this(child0, child1, margin, borderWidth, borderColor, 0, Color.transparent(), 0.0f, 0);
+     this(child0, child1, margin, borderWidth, borderColor, Vector2F.zero(), Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth)
   {
-     this(child0, child1, margin, borderWidth, Color.transparent(), 0, Color.transparent(), 0.0f, 0);
+     this(child0, child1, margin, borderWidth, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin)
   {
-     this(child0, child1, margin, 0.0f, Color.transparent(), 0, Color.transparent(), 0.0f, 0);
+     this(child0, child1, margin, 0, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
   }
   public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1)
   {
-     this(child0, child1, 0, 0.0f, Color.transparent(), 0, Color.transparent(), 0.0f, 0);
+     this(child0, child1, Vector2F.zero(), 0, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
   {
      super(child0, child1, margin, borderWidth, borderColor, padding, backgroundColor, cornerRadius, childrenSeparation);
   
