@@ -21,7 +21,7 @@ const std::string LabelImageBuilder::getImageName() const {
   const IStringUtils* su = IStringUtils::instance();
   return (_text                        + "/" +
           _font.description()          + "/" +
-          su->toString(_margin)        + "/" +
+          _margin.description()        + "/" +
           _color.id()                  + "/" +
           _shadowColor.id()            + "/" +
           su->toString(_shadowBlur)    + "/" +
@@ -86,9 +86,8 @@ void LabelImageBuilder::build(const G3MContext* context,
 
   const IMathUtils* mu = context->getMathUtils();
 
-  const float margin2 = _margin*2;
-  const int width  = mu->round(textExtent._x + margin2);
-  const int height = mu->round(textExtent._y + margin2);
+  const int width  = mu->round(textExtent._x + (_margin._x * 2));
+  const int height = mu->round(textExtent._y + (_margin._y * 2));
   canvas->initialize(width, height);
 
   if (!_backgroundColor.isFullTransparent()) {
@@ -112,7 +111,7 @@ void LabelImageBuilder::build(const G3MContext* context,
   }
 
   canvas->setFillColor(_color);
-  canvas->fillText(_text, _margin, _margin);
+  canvas->fillText(_text, _margin._x, _margin._y);
 
   canvas->createImage(new LabelImageBuilder_ImageListener(listener,
                                                           deleteListener,

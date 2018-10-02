@@ -13,17 +13,20 @@
 
 #include "GFont.hpp"
 #include "Color.hpp"
+#include "Vector2F.hpp"
+
 
 class LabelImageBuilder : public AbstractImageBuilder {
 private:
   std::string _text;
 #ifdef C_CODE
   const GFont _font;
+  const Vector2F _margin;
 #endif
 #ifdef JAVA_CODE
   private final GFont _font;
+  private final Vector2F _margin;
 #endif
-  const float _margin;
   const Color _color;
 
   const Color _shadowColor;
@@ -42,7 +45,7 @@ public:
 
   LabelImageBuilder(const std::string& text,
                     const GFont&       font            = GFont::sansSerif(),
-                    const float        margin          = 0,
+                    const Vector2F&    margin          = Vector2F::zero(),
                     const Color&       color           = Color::white(),
                     const Color&       shadowColor     = Color::transparent(),
                     const float        shadowBlur      = 0,

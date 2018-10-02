@@ -18,11 +18,12 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class LabelImageBuilder extends AbstractImageBuilder
 {
   private String _text;
   private final GFont _font;
-  private final float _margin;
+  private final Vector2F _margin;
   private final Color _color ;
 
   private final Color _shadowColor ;
@@ -38,51 +39,51 @@ public class LabelImageBuilder extends AbstractImageBuilder
   private String getImageName()
   {
     final IStringUtils su = IStringUtils.instance();
-    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
+    return (_text + "/" + _font.description() + "/" + _margin.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
   }
 
 
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
   {
      this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, cornerRadius, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor)
   {
      this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY)
   {
      this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX)
   {
      this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur)
   {
      this(text, font, margin, color, shadowColor, shadowBlur, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor)
   {
      this(text, font, margin, color, shadowColor, 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color)
   {
      this(text, font, margin, color, Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin)
   {
      this(text, font, margin, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text, GFont font)
   {
-     this(text, font, 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, font, Vector2F.zero(), Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
   public LabelImageBuilder(String text)
   {
-     this(text, GFont.sansSerif(), 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
+     this(text, GFont.sansSerif(), Vector2F.zero(), Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0, false);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius, boolean isMutable)
+  public LabelImageBuilder(String text, GFont font, Vector2F margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius, boolean isMutable)
   {
      _text = text;
      _font = font;
@@ -134,9 +135,8 @@ public class LabelImageBuilder extends AbstractImageBuilder
   
     final IMathUtils mu = context.getMathUtils();
   
-    final float margin2 = _margin *2;
-    final int width = mu.round(textExtent._x + margin2);
-    final int height = mu.round(textExtent._y + margin2);
+    final int width = mu.round(textExtent._x + (_margin._x * 2));
+    final int height = mu.round(textExtent._y + (_margin._y * 2));
     canvas.initialize(width, height);
   
     if (!_backgroundColor.isFullTransparent())
@@ -158,7 +158,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
     }
   
     canvas.setFillColor(_color);
-    canvas.fillText(_text, _margin, _margin);
+    canvas.fillText(_text, _margin._x, _margin._y);
   
     canvas.createImage(new LabelImageBuilder_ImageListener(listener, deleteListener, getImageName()), true);
   

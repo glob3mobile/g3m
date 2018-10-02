@@ -657,12 +657,12 @@ IImageBuilder* MapBoo::MBCircleShape::createImageBuilder() const {
 LabelImageBuilder* MapBoo::MBVectorSymbology::createLabelImageBuilder(const std::string& label) const {
   return new LabelImageBuilder(label,
                                GFont::sansSerif(18, true),
-                               2.0f,          // margin
-                               Color::WHITE,  // color
-                               Color::BLACK,  // shadowColor
-                               2.0f,          // shadowBlur
-                               0.0f,          // shadowOffsetX
-                               0.0f           // shadowOffsetY
+                               Vector2F(2, 2), // margin
+                               Color::WHITE,   // color
+                               Color::BLACK,   // shadowColor
+                               2.0f,           // shadowBlur
+                               0.0f,           // shadowOffsetX
+                               0.0f            // shadowOffsetY
                                );
 }
 
@@ -719,7 +719,7 @@ Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer
   Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::WHITE, 32),
                                                     new LabelImageBuilder(label,
                                                                           GFont::sansSerif(labelFontSize, true),
-                                                                          2.0f,               // margin
+                                                                          Vector2F(2, 2),     // margin
                                                                           Color::BLACK,       // color
                                                                           Color::TRANSPARENT, // shadowColor
                                                                           5.0f,               // shadowBlur
