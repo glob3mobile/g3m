@@ -86,8 +86,8 @@ void LabelImageBuilder::build(const G3MContext* context,
 
   const IMathUtils* mu = context->getMathUtils();
 
-  const int width  = mu->round(textExtent._x + (_margin._x * 2));
-  const int height = mu->round(textExtent._y + (_margin._y * 2));
+  const int width  = (int) mu->ceil(textExtent._x + (_margin._x * 2));
+  const int height = (int) mu->ceil(textExtent._y + (_margin._y * 2));
   canvas->initialize(width, height);
 
   if (!_backgroundColor.isFullTransparent()) {

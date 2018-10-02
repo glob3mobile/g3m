@@ -135,8 +135,8 @@ public class LabelImageBuilder extends AbstractImageBuilder
   
     final IMathUtils mu = context.getMathUtils();
   
-    final int width = mu.round(textExtent._x + (_margin._x * 2));
-    final int height = mu.round(textExtent._y + (_margin._y * 2));
+    final int width = (int) mu.ceil(textExtent._x + (_margin._x * 2));
+    final int height = (int) mu.ceil(textExtent._y + (_margin._y * 2));
     canvas.initialize(width, height);
   
     if (!_backgroundColor.isFullTransparent())
