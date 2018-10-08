@@ -15,7 +15,7 @@
 
 DeviceInfo_iOS::DeviceInfo_iOS() {
   UIScreen* mainScreen = [UIScreen mainScreen];
-  _devicePixelRatio = [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1;
+  _devicePixelRatio = (float) ( [mainScreen respondsToSelector:@selector(scale)] ? mainScreen.scale : 1 );
 
 #warning we need more members of iOS device family http://stackoverflow.com/questions/18414032/how-to-identify-a-hw-machine-identifier-reliable
 
