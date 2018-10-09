@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.URL;
 
@@ -57,7 +56,7 @@ public interface Downloader_WebGL_Handler {
    boolean hasListener();
 
 
-   void runWithDownloader(final IDownloader downloader);
+   void runWithDownloader(final Downloader_WebGL downloader);
 
 
    void removeFromDownloaderDownloadingHandlers();

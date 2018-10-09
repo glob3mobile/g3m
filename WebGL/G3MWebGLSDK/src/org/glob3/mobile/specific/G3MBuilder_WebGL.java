@@ -10,8 +10,8 @@ import org.glob3.mobile.generated.IThreadUtils;
 
 
 public class G3MBuilder_WebGL
-   extends
-      IG3MBuilder {
+         extends
+            IG3MBuilder {
 
    private final G3MWidget_WebGL _nativeWidget;
 
@@ -53,7 +53,8 @@ public class G3MBuilder_WebGL
    protected IDownloader createDefaultDownloader() {
       final int maxConcurrentOperationCount = 8;
       final int delayMillis = 10;
-      return new Downloader_WebGL(maxConcurrentOperationCount, delayMillis, "");
+      final boolean verboseErrors = true;
+      return new Downloader_WebGL(maxConcurrentOperationCount, delayMillis, "", verboseErrors);
    }
 
 
