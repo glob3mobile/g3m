@@ -153,7 +153,7 @@ double Angle::smoothDegrees(double previousDegrees,
     return degrees;
   }
 
-  return (delta < 0.0) ? (degrees + 360.0) : (degrees - 360.0);
+  return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
 }
 
 double Angle::smoothRadians(double previousRadians,
