@@ -130,7 +130,7 @@ public class Angle
       return degrees;
     }
   
-    return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
+    return (delta < 0.0) ? (degrees + 360.0) : (degrees - 360.0);
   }
 
   public static double smoothRadians(double previousRadians, double radians)
