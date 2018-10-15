@@ -10,6 +10,13 @@
 #include "IStringBuilder.hpp"
 #include "IMathUtils.hpp"
 
+const Angle Angle::_ZERO          = Angle::fromRadians(0);
+const Angle Angle::_PI            = Angle::fromRadians(PI);      // 180 degrees
+const Angle Angle::_HALF_PI       = Angle::fromRadians(PI / 2);  // 90 degrees
+const Angle Angle::_TWO_PI        = Angle::fromRadians(PI * 2);  // 360 degrees
+const Angle Angle::_MINUS_HALF_PI = Angle::fromRadians(-PI / 2); // -90 degrees
+
+
 Angle Angle::fromDegrees(double degrees) {
   return Angle(degrees,
                TO_RADIANS(degrees));

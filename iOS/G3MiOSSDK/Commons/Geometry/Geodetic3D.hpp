@@ -30,7 +30,7 @@ public:
   bool isNan() const;
 
   static Geodetic3D zero() {
-    return Geodetic3D(Angle::zero(), Angle::zero(), 0);
+    return Geodetic3D(Angle::_ZERO, Angle::_ZERO, 0);
   }
 
   static Geodetic3D fromDegrees(double lat, double lon, double height) {

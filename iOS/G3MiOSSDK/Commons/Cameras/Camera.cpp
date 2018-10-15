@@ -208,7 +208,7 @@ void Camera::setPitch(const Angle& angle) {
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
   const TaitBryanAngles angles = getHeadingPitchRoll();
-  setPitch(Angle::fromDegrees(-90));
+  setPitch(Angle::_MINUS_HALF_PI);
   const MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) {
     applyTransform(dragMatrix);
@@ -396,7 +396,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
   const Vector3D axis            = orientedVector.cross(normal);
   const Vector3D finalVector     = orientedVector.rotateAroundAxis(axis, altitude);
   const Vector3D position        = cartesianCenter.add(finalVector.normalized().times(distance));
-  const Vector3D finalUp         = finalVector.rotateAroundAxis(axis, Angle::fromDegrees(90.0f));
+  const Vector3D finalUp         = finalVector.rotateAroundAxis(axis, Angle::_HALF_PI);
   setCartesianPosition(position.asMutableVector3D());
   setCenter(cartesianCenter.asMutableVector3D());
   setUp(finalUp.asMutableVector3D());

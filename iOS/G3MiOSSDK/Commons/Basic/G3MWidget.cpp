@@ -684,14 +684,14 @@ void G3MWidget::render(int width, int height) {
                                                                                   _mainRenderer->getPlanetRenderer());
 
     _currentCamera->setGeodeticPosition(position);
-    _currentCamera->setHeading(Angle::zero());
-    _currentCamera->setPitch(Angle::fromDegrees(-90));
-    _currentCamera->setRoll(Angle::zero());
+    _currentCamera->setHeading(Angle::_ZERO);
+    _currentCamera->setPitch(Angle::_MINUS_HALF_PI);
+    _currentCamera->setRoll(Angle::_ZERO);
 
     _nextCamera->setGeodeticPosition(position);
-    _nextCamera->setHeading(Angle::zero());
-    _nextCamera->setPitch(Angle::fromDegrees(-90));
-    _nextCamera->setRoll(Angle::zero());
+    _nextCamera->setHeading(Angle::_ZERO);
+    _nextCamera->setPitch(Angle::_MINUS_HALF_PI);
+    _nextCamera->setRoll(Angle::_ZERO);
   }
 
   _timer->start();

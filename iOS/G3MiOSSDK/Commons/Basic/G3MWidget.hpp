@@ -189,12 +189,12 @@ public:
 
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const Angle& heading = Angle::zero(),
-                                 const Angle& pitch   = Angle::fromDegrees(-90));
+                                 const Angle& pitch   = Angle::minusHalfPi());
 
   void setAnimatedCameraPosition(const TimeInterval& interval,
                                  const Geodetic3D& position,
                                  const Angle& heading = Angle::zero(),
-                                 const Angle& pitch   = Angle::fromDegrees(-90),
+                                 const Angle& pitch   = Angle::minusHalfPi(),
                                  const bool linearTiming = false,
                                  const bool linearHeight = false);
 

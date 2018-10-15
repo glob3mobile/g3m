@@ -66,7 +66,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   //Check Agustin Trujillo's document that explains how this algorithm works
 
   if (isVectorParallel(vector)) {
-    return Angle::zero();
+    return Angle::_ZERO;
   }
 
   const IMathUtils* mu = IMathUtils::instance();

@@ -27,7 +27,7 @@ public class Geodetic2D
 
   public static Geodetic2D zero()
   {
-    return new Geodetic2D(Angle.zero(), Angle.zero());
+    return new Geodetic2D(Angle._ZERO, Angle._ZERO);
   }
 
   public static Geodetic2D fromDegrees(double lat, double lon)

@@ -108,9 +108,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
      _position = position;
      _altitudeMode = altitudeMode;
-     _heading = new Angle(Angle.zero());
-     _pitch = new Angle(Angle.zero());
-     _roll = new Angle(Angle.zero());
+     _heading = new Angle(Angle._ZERO);
+     _pitch = new Angle(Angle._ZERO);
+     _roll = new Angle(Angle._ZERO);
      _scaleX = 1;
      _scaleY = 1;
      _scaleZ = 1;

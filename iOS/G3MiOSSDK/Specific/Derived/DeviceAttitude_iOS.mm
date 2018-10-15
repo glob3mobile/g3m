@@ -25,7 +25,7 @@ void DeviceAttitude_iOS::startTrackingDeviceOrientation() const {
   // Attitude that is referenced to true north
   [_mm startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
   
-  _reorientationMatrix.copyValue(MutableMatrix44D::createGeneralRotationMatrix(Angle::halfPi(),
+  _reorientationMatrix.copyValue(MutableMatrix44D::createGeneralRotationMatrix(Angle::_HALF_PI,
                                                                                Vector3D::UP_Z,
                                                                                Vector3D::ZERO));
 }

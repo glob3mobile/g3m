@@ -410,7 +410,7 @@ public class Camera
   public final void setGeodeticPosition(Geodetic3D g3d)
   {
     final TaitBryanAngles angles = getHeadingPitchRoll();
-    setPitch(Angle.fromDegrees(-90));
+    setPitch(Angle._MINUS_HALF_PI);
     final MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
     if (dragMatrix.isValid())
     {
@@ -454,7 +454,7 @@ public class Camera
     final Vector3D axis = orientedVector.cross(normal);
     final Vector3D finalVector = orientedVector.rotateAroundAxis(axis, altitude);
     final Vector3D position = cartesianCenter.add(finalVector.normalized().times(distance));
-    final Vector3D finalUp = finalVector.rotateAroundAxis(axis, Angle.fromDegrees(90.0f));
+    final Vector3D finalUp = finalVector.rotateAroundAxis(axis, Angle._HALF_PI);
     setCartesianPosition(position.asMutableVector3D());
     setCenter(cartesianCenter.asMutableVector3D());
     setUp(finalUp.asMutableVector3D());

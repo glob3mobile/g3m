@@ -77,7 +77,7 @@ void CameraGoToPositionEffect::doStep(const G3MRenderContext* rc,
   const Angle heading = Angle::linearInterpolation(_fromHeading, _toHeading, alpha);
   camera->setHeading(heading);
 
-  const Angle middlePitch = Angle::fromDegrees(-90);
+  const Angle middlePitch = Angle::_MINUS_HALF_PI;
   //    const Angle pitch =  (alpha < 0.5)
   //    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
   //    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);

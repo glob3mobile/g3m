@@ -104,7 +104,7 @@ public class CameraGoToPositionEffect extends EffectWithDuration
     final Angle heading = Angle.linearInterpolation(_fromHeading, _toHeading, alpha);
     camera.setHeading(heading);
   
-    final Angle middlePitch = Angle.fromDegrees(-90);
+    final Angle middlePitch = Angle._MINUS_HALF_PI;
     //    const Angle pitch =  (alpha < 0.5)
     //    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
     //    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
