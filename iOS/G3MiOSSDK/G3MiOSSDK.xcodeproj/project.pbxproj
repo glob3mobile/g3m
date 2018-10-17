@@ -472,6 +472,7 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D8019FF01C11D91800784287 /* TileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8019FEE1C11D91800784287 /* TileLODTester.cpp */; };
 		D8019FF21C11DFCF00784287 /* TileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8019FEF1C11D91800784287 /* TileLODTester.hpp */; };
+		D8021E0B21774FB300944004 /* PerspectiveCameraMatrixProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8021E0921774FB300944004 /* PerspectiveCameraMatrixProvider.cpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
@@ -1812,6 +1813,9 @@
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEE1C11D91800784287 /* TileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TileLODTester.cpp; path = Commons/Rendererers/TileLODTester.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8019FEF1C11D91800784287 /* TileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TileLODTester.hpp; path = Commons/Rendererers/TileLODTester.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8021E0921774FB300944004 /* PerspectiveCameraMatrixProvider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PerspectiveCameraMatrixProvider.cpp; path = Commons/Cameras/PerspectiveCameraMatrixProvider.cpp; sourceTree = "<group>"; };
+		D8021E0A21774FB300944004 /* PerspectiveCameraMatrixProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PerspectiveCameraMatrixProvider.hpp; path = Commons/Cameras/PerspectiveCameraMatrixProvider.hpp; sourceTree = "<group>"; };
+		D8021E0C217753E800944004 /* CameraMatrixProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraMatrixProvider.hpp; path = Commons/Cameras/CameraMatrixProvider.hpp; sourceTree = "<group>"; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -2597,6 +2601,9 @@
 				D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */,
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
 				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
+				D8021E0921774FB300944004 /* PerspectiveCameraMatrixProvider.cpp */,
+				D8021E0A21774FB300944004 /* PerspectiveCameraMatrixProvider.hpp */,
+				D8021E0C217753E800944004 /* CameraMatrixProvider.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
 				FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
@@ -3350,6 +3357,7 @@
 				A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */,
 				A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */,
 				A70F5612161C4F8F00340256 /* JSONNumber.cpp in Sources */,
+				D8021E0B21774FB300944004 /* PerspectiveCameraMatrixProvider.cpp in Sources */,
 				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */,

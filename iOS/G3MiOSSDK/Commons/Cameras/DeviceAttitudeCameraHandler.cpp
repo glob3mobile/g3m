@@ -97,8 +97,29 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
     local.copyValueOfRotationMatrix(_localRM);
     _camRM.copyValueOfMultiplication(_localRM, _attitudeMatrix);
     
+    
     //Applying to Camera CS
     CoordinateSystem finalCS = camCS.applyRotation(_camRM);
+    
+    
+//    Vector3D l = finalCS._x;
+//    Vector3D f = finalCS._y;
+//    Vector3D up = finalCS._z;
+//    printf("FORWARD: %.2f, %.2f, %.2f\n", f._x, f._y, f._z);
+//    printf("UP: %.2f, %.2f, %.2f\n", up._x, up._y, up._z);
+//    printf("LEFT: %.2f, %.2f, %.2f\n", l._x, l._y, l._z);
+    
+//    if (f._z < 0){
+//        nextCamera->setCameraCoordinateSystem(finalCS);
+//    } else{
+//#warning TODO: QUICK FIX - RESEARCH NEED FOR THIS HACK
+//        CoordinateSystem finalCS2(finalCS._x.times(-1),
+//                                  finalCS._y.times(-1),
+//                                  finalCS._z,
+//                                  finalCS._origin);
+//
+//        nextCamera->setCameraCoordinateSystem(finalCS2);
+//    }
     nextCamera->setCameraCoordinateSystem(finalCS);
     
 }
