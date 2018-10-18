@@ -29,7 +29,7 @@
 
 class G3MVectorStreaming1DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+  Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
                           const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
@@ -93,10 +93,9 @@ public:
     return mark;
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+  Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
-                          const VectorStreamingRenderer::Cluster* cluster,
-                          long long featuresCount) const {
+                          const VectorStreamingRenderer::Cluster* cluster) const {
     return NULL;
   }
 
@@ -124,7 +123,9 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          true, // readExpired
                          true, // verbose
                          true, // haltOnError
-                         VectorStreamingRenderer::Format::SERVER
+                         VectorStreamingRenderer::Format::SERVER,
+                         Angle::fromDegrees(90), // minSectorSize,
+                         12500000                // minProjectedArea
                          );
 
 

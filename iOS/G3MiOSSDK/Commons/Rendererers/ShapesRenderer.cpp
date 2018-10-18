@@ -144,6 +144,13 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
+void ShapesRenderer::addShape(Shape* shape) {
+  _shapes.push_back(shape);
+  if (_context != NULL) {
+    shape->initialize(_context);
+  }
+}
+
 void ShapesRenderer::removeShape(Shape* shape) {
   int pos = -1;
   const int shapesSize = _shapes.size();
@@ -164,8 +171,12 @@ void ShapesRenderer::removeShape(Shape* shape) {
 }
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
+  const size_t shapesCount = _shapes.size();
+  if (shapesCount == 0) {
+    return;
+  }
+
   if (deleteShapes) {
-    const size_t shapesCount = _shapes.size();
     for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;

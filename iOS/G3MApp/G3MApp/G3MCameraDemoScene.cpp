@@ -90,6 +90,14 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
+  shapesRenderer->loadJSONSceneJS(URL("file:///intramuros.json"),
+                                  "file:///textures/", // uriPrefix
+                                  false, // isTransparent
+                                  true,  // depthTest
+                                  new Geodetic3D(Angle::fromDegrees(39.473353),
+                                                 Angle::fromDegrees(-6.370689),
+                                                 0),
+                                  ABSOLUTE);
 
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
                                   "file:///",

@@ -10,14 +10,19 @@
 #define __G3MiOSSDK__ShapesRenderer__
 
 #include "DefaultRenderer.hpp"
+
 #include <vector>
+
 #include "URL.hpp"
-#include "Shape.hpp"
+#include "TimeInterval.hpp"
+#include "AltitudeMode.hpp"
 #include "DownloadPriority.hpp"
 #include "MutableVector3D.hpp"
-#include "TimeInterval.hpp"
 
+class Shape;
+class Geodetic3D;
 class Camera;
+class Planet;
 
 
 class ShapeDistance {
@@ -149,12 +154,7 @@ public:
 
   ~ShapesRenderer();
 
-  void addShape(Shape* shape) {
-    _shapes.push_back(shape);
-    if (_context != NULL) {
-      shape->initialize(_context);
-    }
-  }
+  void addShape(Shape* shape);
 
   void removeShape(Shape* shape);
 
