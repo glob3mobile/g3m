@@ -2,15 +2,17 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.URL;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.net.http.SslError;
 import android.util.Log;
 import android.webkit.JsResult;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import org.glob3.mobile.generated.URL;
 
 
 public class Browser_Android {
@@ -54,7 +56,20 @@ public class Browser_Android {
       _webView.setClickable(true);
       _webView.getSettings().setLightTouchEnabled(true);
 
-      _webView.setWebViewClient(new WebViewClient());
+
+      WebViewClient webViewClient = new WebViewClient() {
+         @Override
+         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed(); // Ignore SSL certificate errors
+         }
+
+         @Override
+         public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+         }
+
+      };
+      _webView.setWebViewClient(webViewClient);
 
       _webView.setWebChromeClient(new WebChromeClient() {
          @Override
