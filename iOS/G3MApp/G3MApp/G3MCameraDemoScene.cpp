@@ -91,6 +91,16 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
+//  shapesRenderer->loadJSONSceneJS(URL("file:///nucleoUrbano.json"),
+//                                  "", // uriPrefix
+//                                  false, // isTransparent
+//                                  SceneJSParserParameters(true, // depthTest
+//                                                          true, // generateMipmap
+//                                                          GLTextureParameterValue::repeat(),
+//                                                          GLTextureParameterValue::mirroredRepeat()),
+//                                  Geodetic3D::fromDegrees(39.46693, -6.380488, 0),
+//                                  ABSOLUTE);
+
   shapesRenderer->loadJSONSceneJS(URL("file:///intramuros.json"),
                                   "file:///textures/", // uriPrefix
                                   false, // isTransparent
