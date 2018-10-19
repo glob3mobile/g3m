@@ -2,12 +2,12 @@ package org.glob3.mobile.generated;
 public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
 {
   private ShapesRenderer _shapesRenderer;
-  private final URL _url;
+  private final URL                     _url;
+  private final SceneJSParserParameters _parameters;
   private IByteBuffer _buffer;
   private final String _uriPrefix;
   private final boolean _isTransparent;
-  private final boolean _depthTest;
-  private Geodetic3D _position;
+  private final Geodetic3D _position ;
   private AltitudeMode _altitudeMode;
   private ShapeLoadListener _listener;
   private final boolean _deleteListener;
@@ -15,15 +15,15 @@ public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
 
   private SGShape _sgShape;
 
-  public ShapesRenderer_SceneJSParserAsyncTask(ShapesRenderer shapesRenderer, URL url, IByteBuffer buffer, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
+  public ShapesRenderer_SceneJSParserAsyncTask(ShapesRenderer shapesRenderer, URL url, IByteBuffer buffer, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
   {
      _shapesRenderer = shapesRenderer;
      _url = url;
      _buffer = buffer;
      _uriPrefix = uriPrefix;
      _isTransparent = isTransparent;
-     _depthTest = depthTest;
-     _position = position;
+     _parameters = parameters;
+     _position = new Geodetic3D(position);
      _altitudeMode = altitudeMode;
      _listener = listener;
      _deleteListener = deleteListener;
@@ -35,11 +35,11 @@ public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
   {
     if (_isBSON)
     {
-      _sgShape = SceneJSShapesParser.parseFromBSON(_buffer, _uriPrefix, _isTransparent, _depthTest, _position, _altitudeMode);
+      _sgShape = SceneJSShapesParser.parseFromBSON(_buffer, _uriPrefix, _isTransparent, _parameters, _position, _altitudeMode);
     }
     else
     {
-      _sgShape = SceneJSShapesParser.parseFromJSON(_buffer, _uriPrefix, _isTransparent, _depthTest, _position, _altitudeMode);
+      _sgShape = SceneJSShapesParser.parseFromJSON(_buffer, _uriPrefix, _isTransparent, _parameters, _position, _altitudeMode);
     }
 
     if (_buffer != null)
@@ -64,9 +64,6 @@ public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
     if (_sgShape == null)
     {
       ILogger.instance().logError("Error parsing SceneJS from \"%s\"", _url._path);
-      if (_position != null)
-         _position.dispose();
-      _position = null;
     }
     else
     {

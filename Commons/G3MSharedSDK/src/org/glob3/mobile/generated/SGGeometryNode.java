@@ -34,13 +34,11 @@ public class SGGeometryNode extends SGNode
   private GLState _glState;
   private void createGLState()
   {
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, (float)0.0, (float)0.0, (float)1.0, true, (float)1.0), false); // Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, false, 0, 0, 1, true, 1), false); // pointSize -  needsPointSize -  lineWidth -  polygonOffsetUnits -  polygonOffsetFactor -  polygonOffsetFill -  culledFace -  cullFace -  depthTestEnabled -  stride -  normalized -  index -  arrayElementSize -  buffer
   
     if (_normals != null)
     {
       _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
-  
-  
     }
   
     if (_uv != null)
@@ -48,6 +46,7 @@ public class SGGeometryNode extends SGNode
       _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2F.zero(), Vector2F.zero()), false);
     }
   }
+
 
 
   public SGGeometryNode(String id, String sID, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices, boolean depthTest)

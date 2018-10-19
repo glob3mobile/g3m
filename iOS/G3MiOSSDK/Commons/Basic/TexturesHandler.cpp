@@ -81,31 +81,12 @@ public:
   }
 };
 
-//void TexturesHandler::showHolders(const std::string& message) const {
-//  if (false) {
-//    std::string holdersString = ">>>> " + message + ", Holders=(";
-//    for (int i = 0; i < _textureHolders.size(); i++) {
-//      TextureHolder* holder = _textureHolders[i];
-//
-//      if (i > 0) {
-//        holdersString += ", ";
-//      }
-//      holdersString += holder->description();
-//    }
-//    holdersString += ")";
-//
-//    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
-//  }
-//}
-
 const IGLTextureID* TexturesHandler::getGLTextureIDIfAvailable(const TextureSpec& textureSpec) {
   const size_t _textureHoldersSize = _textureHolders.size();
   for (size_t i = 0; i < _textureHoldersSize; i++) {
     TextureHolder* holder = _textureHolders[i];
     if (holder->hasSpec(textureSpec)) {
       holder->retain();
-
-      //showHolders("getGLTextureIDIfAvailable(): retained " + holder->description());
 
       return holder->_glTextureID;
     }
@@ -118,12 +99,16 @@ const IGLTextureID* TexturesHandler::getGLTextureIDIfAvailable(const TextureSpec
 const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
                                                                  int format,
                                                                  const std::string& name,
-                                                                 bool generateMipmap) {
+                                                                 bool generateMipmap,
+                                                                 int wrapS,
+                                                                 int wrapT) {
 
   const TextureSpec textureSpec(name,
                                 image->getWidth(),
                                 image->getHeight(),
-                                generateMipmap);
+                                generateMipmap,
+                                wrapS,
+                                wrapT);
 
   const IGLTextureID* previousID = getGLTextureIDIfAvailable(textureSpec);
   if (previousID != NULL) {
@@ -133,8 +118,7 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureID = _gl->uploadTexture(image, format, textureSpec.generateMipmap());
-
+  holder->_glTextureID = _gl->uploadTexture(image, format, generateMipmap, wrapS, wrapT);
 
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texID=%s" ,
@@ -143,8 +127,6 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   }
 
   _textureHolders.push_back(holder);
-
-  //showHolders("getGLTextureID(): created holder " + holder->description());
 
   return new TextureIDReference(holder->_glTextureID,
                                 image->isPremultiplied(),
@@ -161,8 +143,6 @@ void TexturesHandler::retainGLTextureID(const IGLTextureID* glTextureID) {
 
     if (holder->_glTextureID->isEquals(glTextureID)) {
       holder->retain();
-
-      //showHolders("retainGLTextureID(): retained holder " + holder->description());
 
       return;
     }
@@ -181,8 +161,6 @@ void TexturesHandler::releaseGLTextureID(const IGLTextureID* glTextureID) {
 
     if (holder->_glTextureID->isEquals(glTextureID)) {
       holder->release();
-
-      //showHolders("releaseGLTextureID(  ): released holder " + holder->description());
 
       if (!holder->isRetained()) {
         _gl->deleteTexture(holder->_glTextureID);

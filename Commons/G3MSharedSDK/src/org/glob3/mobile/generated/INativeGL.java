@@ -138,7 +138,10 @@ public abstract class INativeGL
   public abstract int TextureParameterValue_LinearMipmapNearest();
   public abstract int TextureParameterValue_LinearMipmapLinear();
 
+  /* TextureWrapMode */
+  public abstract int TextureParameterValue_Repeat();
   public abstract int TextureParameterValue_ClampToEdge();
+  public abstract int TextureParameterValue_MirroredRepeat();
 
   public abstract int Alignment_Pack();
   public abstract int Alignment_Unpack();

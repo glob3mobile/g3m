@@ -910,7 +910,7 @@ public class Mark implements SurfaceElevationListener
       {
         if ((_textureID == null) && (_textureImage != null))
         {
-          _textureID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
+          _textureID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
           _textureImage = null;
           _textureImage = null;

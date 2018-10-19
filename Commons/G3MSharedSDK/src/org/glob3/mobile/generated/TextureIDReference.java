@@ -28,7 +28,6 @@ public class TextureIDReference
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TextureIDReference(TextureIDReference that);
 
-
   public TextureIDReference(IGLTextureID id, boolean isPremultiplied, TexturesHandler texHandler)
   {
      _id = id;

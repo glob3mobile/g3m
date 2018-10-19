@@ -11,9 +11,9 @@
 
 #include <string>
 
-class SGMesh;
-class JSONBaseObject;
+class SceneJSParserParameters;
 class IByteBuffer;
+class SGMesh;
 
 
 class SceneJSMeshParser {
@@ -23,25 +23,20 @@ private:
 
 public:
 
-  static SGMesh* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                         const std::string&    uriPrefix,
-                                         bool                  isTransparent,
-                                         bool                  depthTest);
+  static SGMesh* parseFromJSON(const std::string&             json,
+                               const std::string&             uriPrefix,
+                               const bool                     isTransparent,
+                               const SceneJSParserParameters& parameters);
 
-  static SGMesh* parseFromJSON(const std::string& json,
-                               const std::string& uriPrefix,
-                               bool               isTransparent,
-                               bool               depthTest);
+  static SGMesh* parseFromJSON(const IByteBuffer*             json,
+                               const std::string&             uriPrefix,
+                               const bool                     isTransparent,
+                               const SceneJSParserParameters& parameters);
 
-  static SGMesh* parseFromJSON(const IByteBuffer* json,
-                               const std::string& uriPrefix,
-                               bool               isTransparent,
-                               bool               depthTest);
-
-  static SGMesh* parseFromBSON(const IByteBuffer* bson,
-                               const std::string& uriPrefix,
-                               bool               isTransparent,
-                               bool               depthTest);
+  static SGMesh* parseFromBSON(const IByteBuffer*             bson,
+                               const std::string&             uriPrefix,
+                               const bool                     isTransparent,
+                               const SceneJSParserParameters& parameters);
 
 };
 

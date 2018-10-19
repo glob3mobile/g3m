@@ -22,7 +22,6 @@ private:
   TextureIDReference(const TextureIDReference& that);
 
 public:
-
   TextureIDReference(const IGLTextureID* id,
                      bool                isPremultiplied,
                      TexturesHandler*    texHandler) :
@@ -32,7 +31,7 @@ public:
   {
   }
 
-  virtual ~TextureIDReference();
+  ~TextureIDReference();
 
   TextureIDReference* createCopy() const;
 

@@ -25,15 +25,9 @@ package org.glob3.mobile.generated;
 public class SGLayerNode extends SGNode
 {
   private final String _uri;
-
-//  const std::string _applyTo;
-//  const std::string _blendMode;
-//  const bool        _flipY;
-//
-//  const std::string _magFilter;
-//  const std::string _minFilter;
-//  const std::string _wrapS;
-//  const std::string _wrapT;
+  private final int _wrapS;
+  private final int _wrapT;
+  private final boolean _generateMipmap;
 
   private boolean _initialized;
 
@@ -43,8 +37,7 @@ public class SGLayerNode extends SGNode
     {
       if (_downloadedImage != null)
       {
-        final boolean generateMipmap = false;
-        _textureID = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL()._path, generateMipmap);
+        _textureID = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL()._path, _generateMipmap, _wrapS, _wrapT);
   
         _downloadedImage = null;
         _downloadedImage = null;
@@ -79,10 +72,13 @@ public class SGLayerNode extends SGNode
   }
 
 
-  public SGLayerNode(String id, String sID, String uri, String applyTo, String blendMode, boolean flipY, String magFilter, String minFilter, String wrapS, String wrapT)
+  public SGLayerNode(String id, String sID, String uri, int wrapS, int wrapT, boolean generateMipmap)
   {
      super(id, sID);
      _uri = uri;
+     _wrapS = wrapS;
+     _wrapT = wrapT;
+     _generateMipmap = generateMipmap;
      _downloadedImage = null;
      _textureID = null;
      _initialized = false;
@@ -91,6 +87,7 @@ public class SGLayerNode extends SGNode
   public void dispose()
   {
     _textureID.dispose(); //Releasing texture through TextureIDReference class
+    _textureID = null;
     super.dispose();
   }
 

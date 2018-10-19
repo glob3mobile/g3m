@@ -18,6 +18,8 @@
 #include "AltitudeMode.hpp"
 #include "DownloadPriority.hpp"
 #include "MutableVector3D.hpp"
+#include "SceneJSParserParameters.hpp"
+#include "Geodetic3D.hpp"
 
 class Shape;
 class Geodetic3D;
@@ -60,43 +62,44 @@ private:
   class LoadQueueItem {
   public:
 #ifdef C_CODE
-    const URL          _url;
-    const TimeInterval _timeToCache;
+    const URL                     _url;
+    const TimeInterval            _timeToCache;
+    const SceneJSParserParameters _parameters;
 #endif
 #ifdef JAVA_CODE
-    public final URL _url;
-    public final TimeInterval _timeToCache;
+    public final URL                     _url;
+    public final TimeInterval            _timeToCache;
+    public final SceneJSParserParameters _parameters;
 #endif
     const long long    _priority;
     const bool         _readExpired;
     const std::string  _uriPrefix;
     const bool         _isTransparent;
-    const bool         _depthTest;
-    Geodetic3D*        _position;
+    const Geodetic3D   _position;
     const AltitudeMode _altitudeMode;
     ShapeLoadListener* _listener;
     const bool         _deleteListener;
     const bool         _isBSON;
 
-    LoadQueueItem(const URL&          url,
-                  long long           priority,
-                  const TimeInterval& timeToCache,
-                  bool                readExpired,
-                  const std::string&  uriPrefix,
-                  bool                isTransparent,
-                  bool                depthTest,
-                  Geodetic3D*         position,
-                  AltitudeMode        altitudeMode,
-                  ShapeLoadListener*  listener,
-                  bool                deleteListener,
-                  bool                isBSON) :
+    LoadQueueItem(const URL&                     url,
+                  long long                      priority,
+                  const TimeInterval&            timeToCache,
+                  bool                           readExpired,
+                  const std::string&             uriPrefix,
+                  bool                           isTransparent,
+                  const SceneJSParserParameters& parameters,
+                  const Geodetic3D&              position,
+                  AltitudeMode                   altitudeMode,
+                  ShapeLoadListener*             listener,
+                  bool                           deleteListener,
+                  bool                           isBSON) :
     _url(url),
     _priority(priority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
     _uriPrefix(uriPrefix),
     _isTransparent(isTransparent),
-    _depthTest(depthTest),
+    _parameters(parameters),
     _position(position),
     _altitudeMode(altitudeMode),
     _listener(listener),
@@ -135,18 +138,18 @@ private:
 
   MutableVector3D _currentCameraPosition;
 
-  void requestBuffer(const URL&          url,
-                     long long           priority,
-                     const TimeInterval& timeToCache,
-                     bool                readExpired,
-                     const std::string&  uriPrefix,
-                     bool                isTransparent,
-                     bool                depthTest,
-                     Geodetic3D*         position,
-                     AltitudeMode        altitudeMode,
-                     ShapeLoadListener*  listener,
-                     bool                deleteListener,
-                     bool                isBSON);
+  void requestBuffer(const URL&                     url,
+                     long long                      priority,
+                     const TimeInterval&            timeToCache,
+                     bool                           readExpired,
+                     const std::string&             uriPrefix,
+                     bool                           isTransparent,
+                     const SceneJSParserParameters& parameters,
+                     const Geodetic3D&              position,
+                     AltitudeMode                   altitudeMode,
+                     ShapeLoadListener*             listener,
+                     bool                           deleteListener,
+                     bool                           isBSON);
 
 public:
 
@@ -188,66 +191,66 @@ public:
                                                     const Vector3D& origin,
                                                     const Vector3D& direction) const;
 
-  void loadJSONSceneJS(const URL&          url,
-                       long long           priority,
-                       const TimeInterval& timeToCache,
-                       bool                readExpired,
-                       const std::string&  uriPrefix,
-                       bool                isTransparent,
-                       bool                depthTest,
-                       Geodetic3D*         position,
-                       AltitudeMode        altitudeMode,
-                       ShapeLoadListener*  listener=NULL,
-                       bool                deleteListener=true);
+  void loadJSONSceneJS(const URL&                      url,
+                       long long                       priority,
+                       const TimeInterval&             timeToCache,
+                       bool                            readExpired,
+                       const std::string&              uriPrefix,
+                       bool                            isTransparent,
+                       const SceneJSParserParameters& parameters,
+                       const Geodetic3D&              position,
+                       AltitudeMode                    altitudeMode,
+                       ShapeLoadListener*              listener = NULL,
+                       bool                            deleteListener = true);
 
-  void loadJSONSceneJS(const URL&         url,
-                       const std::string& uriPrefix,
-                       bool               isTransparent,
-                       bool               depthTest,
-                       Geodetic3D*        position,
-                       AltitudeMode       altitudeMode,
-                       ShapeLoadListener* listener=NULL,
-                       bool               deleteListener=true) {
+  void loadJSONSceneJS(const URL&                     url,
+                       const std::string&             uriPrefix,
+                       bool                           isTransparent,
+                       const SceneJSParserParameters& parameters,
+                       const Geodetic3D&              position,
+                       AltitudeMode                   altitudeMode,
+                       ShapeLoadListener*             listener = NULL,
+                       bool                           deleteListener = true) {
     loadJSONSceneJS(url,
                     DownloadPriority::MEDIUM,
                     TimeInterval::fromDays(30),
                     true,
                     uriPrefix,
                     isTransparent,
-                    depthTest,
+                    parameters,
                     position,
                     altitudeMode,
                     listener,
                     deleteListener);
   }
 
-  void loadBSONSceneJS(const URL&          url,
-                       long long           priority,
-                       const TimeInterval& timeToCache,
-                       bool                readExpired,
-                       const std::string&  uriPrefix,
-                       bool                isTransparent,
-                       bool                depthTest,
-                       Geodetic3D*         position,
-                       AltitudeMode        altitudeMode,
-                       ShapeLoadListener*  listener=NULL,
-                       bool                deleteListener=true);
+  void loadBSONSceneJS(const URL&                     url,
+                       long long                      priority,
+                       const TimeInterval&            timeToCache,
+                       bool                           readExpired,
+                       const std::string&             uriPrefix,
+                       bool                           isTransparent,
+                       const SceneJSParserParameters& parameters,
+                       const Geodetic3D&              position,
+                       AltitudeMode                   altitudeMode,
+                       ShapeLoadListener*             listener = NULL,
+                       bool                           deleteListener = true);
 
-  void loadBSONSceneJS(const URL&         url,
-                       const std::string& uriPrefix,
-                       bool               isTransparent,
-                       bool               depthTest,
-                       Geodetic3D*        position,
-                       AltitudeMode       altitudeMode,
-                       ShapeLoadListener* listener=NULL,
-                       bool               deleteListener=true) {
+  void loadBSONSceneJS(const URL&                     url,
+                       const std::string&             uriPrefix,
+                       bool                           isTransparent,
+                       const SceneJSParserParameters& parameters,
+                       const Geodetic3D&              position,
+                       AltitudeMode                   altitudeMode,
+                       ShapeLoadListener*             listener = NULL,
+                       bool                           deleteListener = true) {
     loadBSONSceneJS(url,
                     DownloadPriority::MEDIUM,
                     TimeInterval::fromDays(30),
                     true,
                     uriPrefix,
                     isTransparent,
-                    depthTest,
+                    parameters,
                     position,
                     altitudeMode,
                     listener,

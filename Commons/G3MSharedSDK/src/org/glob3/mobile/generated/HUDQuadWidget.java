@@ -76,7 +76,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
   
     TexturesHandler texturesHandler = rc.getTexturesHandler();
   
-    final TextureIDReference textureID = texturesHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
+    final TextureIDReference textureID = texturesHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
     if (textureID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
@@ -86,7 +86,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     TextureIDReference backgroundTextureID = null;
     if (hasBackground)
     {
-      backgroundTextureID = texturesHandler.getTextureIDReference(_backgroundImage, GLFormat.rgba(), _backgroundImageName, false);
+      backgroundTextureID = texturesHandler.getTextureIDReference(_backgroundImage, GLFormat.rgba(), _backgroundImageName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
       if (backgroundTextureID == null)
       {

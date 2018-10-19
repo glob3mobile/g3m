@@ -81,7 +81,9 @@ const TextureIDReference* EllipsoidShape::getTextureID(const G3MRenderContext* r
     _texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                              GLFormat::rgba(),
                                                              _textureURL._path,
-                                                             false);
+                                                             false,
+                                                             GLTextureParameterValue::clampToEdge(),
+                                                             GLTextureParameterValue::clampToEdge());
 
     delete _textureImage;
     _textureImage = NULL;

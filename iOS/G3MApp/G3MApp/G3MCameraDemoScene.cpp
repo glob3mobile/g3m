@@ -16,6 +16,7 @@
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MiOSSDK/GLConstants.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -93,39 +94,49 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   shapesRenderer->loadJSONSceneJS(URL("file:///intramuros.json"),
                                   "file:///textures/", // uriPrefix
                                   false, // isTransparent
-                                  true,  // depthTest
-                                  new Geodetic3D(Angle::fromDegrees(39.473353),
-                                                 Angle::fromDegrees(-6.370689),
-                                                 0),
+                                  SceneJSParserParameters(true, // depthTest
+                                                          true, // generateMipmap
+                                                          GLTextureParameterValue::repeat(),
+                                                          GLTextureParameterValue::mirroredRepeat()),
+                                  Geodetic3D::fromDegrees(39.473353, -6.370689, 0),
                                   ABSOLUTE);
 
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
                                   "file:///",
                                   false, // isTransparent
-                                  true,  // depthTest
-                                  new Geodetic3D(Angle::fromDegreesMinutesSeconds(29, 58, 30.99),
-                                                 Angle::fromDegreesMinutesSeconds(31, 8, 15.84),
-                                                 0),
+                                  SceneJSParserParameters(true,  // depthTest
+                                                          false, // generateMipmap
+                                                          GLTextureParameterValue::clampToEdge(),
+                                                          GLTextureParameterValue::clampToEdge()),
+                                  Geodetic3D(Angle::fromDegreesMinutesSeconds(29, 58, 30.99),
+                                             Angle::fromDegreesMinutesSeconds(31, 8, 15.84),
+                                             0),
                                   RELATIVE_TO_GROUND,
                                   new TheSphynxShapeLoadListener(this));
 
   shapesRenderer->loadBSONSceneJS(URL("file:///eifeltower.bson"),
                                   "file:///eifel/",
                                   true, // isTransparent
-                                  true,  // depthTest
-                                  new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 51, 29.06),
-                                                 Angle::fromDegreesMinutesSeconds(2, 17, 40.48),
-                                                 0), //
+                                  SceneJSParserParameters(true,  // depthTest
+                                                          false, // generateMipmap
+                                                          GLTextureParameterValue::clampToEdge(),
+                                                          GLTextureParameterValue::clampToEdge()),
+                                  Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 51, 29.06),
+                                             Angle::fromDegreesMinutesSeconds(2, 17, 40.48),
+                                             0), //
                                   RELATIVE_TO_GROUND,
                                   new TheEiffelTowerShapeLoadListener(this));
 
   shapesRenderer->loadBSONSceneJS(URL("file:///arcdeTriomphe.bson"),
                                   "file:///arc/",
                                   false, // isTransparent
-                                  true,  // depthTest
-                                  new Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 52, 25.58),
-                                                 Angle::fromDegreesMinutesSeconds(2, 17, 42.12),
-                                                 0),
+                                  SceneJSParserParameters(true,  // depthTest
+                                                          false, // generateMipmap
+                                                          GLTextureParameterValue::clampToEdge(),
+                                                          GLTextureParameterValue::clampToEdge()),
+                                  Geodetic3D(Angle::fromDegreesMinutesSeconds(48, 52, 25.58),
+                                             Angle::fromDegreesMinutesSeconds(2, 17, 42.12),
+                                             0),
                                   RELATIVE_TO_GROUND,
                                   new ArcDeTriompheShapeLoadListener(this));
 }

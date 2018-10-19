@@ -36,8 +36,8 @@ import android.util.Log;
 
 
 public final class NativeGL2_Android
-   extends
-      INativeGL {
+         extends
+            INativeGL {
 
    private Thread _openGLThread = null;
 
@@ -517,8 +517,20 @@ public final class NativeGL2_Android
 
 
    @Override
+   public int TextureParameterValue_Repeat() {
+      return GLES20.GL_REPEAT;
+   }
+
+
+   @Override
    public int TextureParameterValue_ClampToEdge() {
       return GLES20.GL_CLAMP_TO_EDGE;
+   }
+
+
+   @Override
+   public int TextureParameterValue_MirroredRepeat() {
+      return GLES20.GL_MIRRORED_REPEAT;
    }
 
 

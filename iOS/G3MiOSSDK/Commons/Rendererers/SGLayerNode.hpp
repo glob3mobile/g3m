@@ -19,15 +19,9 @@ class URL;
 class SGLayerNode : public SGNode {
 private:
   const std::string _uri;
-
-//  const std::string _applyTo;
-//  const std::string _blendMode;
-//  const bool        _flipY;
-//
-//  const std::string _magFilter;
-//  const std::string _minFilter;
-//  const std::string _wrapS;
-//  const std::string _wrapT;
+  const int _wrapS;
+  const int _wrapT;
+  const bool _generateMipmap;
 
   mutable bool _initialized;
 
@@ -55,15 +49,14 @@ public:
   SGLayerNode(const std::string& id,
               const std::string& sID,
               const std::string& uri,
-              const std::string& applyTo,
-              const std::string& blendMode,
-              bool flipY,
-              const std::string& magFilter,
-              const std::string& minFilter,
-              const std::string& wrapS,
-              const std::string& wrapT) :
+              const int wrapS,
+              const int wrapT,
+              const bool generateMipmap) :
   SGNode(id, sID),
   _uri(uri),
+  _wrapS(wrapS),
+  _wrapT(wrapT),
+  _generateMipmap(generateMipmap),
   _downloadedImage(NULL),
   _textureID(NULL),
   _initialized(false)

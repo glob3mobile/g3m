@@ -9,6 +9,8 @@
 #include "GEOShapeSymbol.hpp"
 
 #include "ShapesRenderer.hpp"
+#include "Shape.hpp"
+
 
 GEOShapeSymbol::~GEOShapeSymbol() {
   delete _shape;

@@ -131,7 +131,9 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
                                                                                     textureName,
-                                                                                    false);
+                                                                                    false,
+                                                                                    GLTextureParameterValue::clampToEdge(),
+                                                                                    GLTextureParameterValue::clampToEdge());
 
   delete _image;
   _image = NULL;
