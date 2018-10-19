@@ -35,8 +35,8 @@ public:
 
   SGMaterialNode(const std::string& id,
                  const std::string& sID,
-                 Color* baseColor,
-                 Color* specularColor,
+                 const Color* baseColor,
+                 const Color* specularColor,
                  double specular,
                  double shine,
                  double alpha,

@@ -12,17 +12,19 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "IImageListener.hpp"
+#include "IMathUtils.hpp"
+
 
 ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                                                   int                                margin,
+                                                   const Vector2F&                    margin,
                                                    float                              borderWidth,
                                                    const Color&                       borderColor,
-                                                   int                                padding,
+                                                   const Vector2F&                    padding,
                                                    const Color&                       backgroundColor,
                                                    float                              cornerRadius,
                                                    int                                childrenSeparation) :
 LayoutImageBuilder(children,
-margin,
+                   margin,
                    borderWidth,
                    borderColor,
                    padding,
@@ -33,15 +35,15 @@ margin,
 
 }
 
-ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder* child0,
-                                                   IImageBuilder* child1,
-                                                   int            margin,
-                                                   float          borderWidth,
-                                                   const Color&   borderColor,
-                                                   int            padding,
-                                                   const Color&   backgroundColor,
-                                                   float          cornerRadius,
-                                                   int            childrenSeparation) :
+ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder*  child0,
+                                                   IImageBuilder*  child1,
+                                                   const Vector2F& margin,
+                                                   float           borderWidth,
+                                                   const Color&    borderColor,
+                                                   const Vector2F& padding,
+                                                   const Color&    backgroundColor,
+                                                   float           cornerRadius,
+                                                   int             childrenSeparation) :
 LayoutImageBuilder(child0,
                    child1,
                    margin,
@@ -119,12 +121,13 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     }
   }
   else {
+    const Vector2F margin2  = _margin.times(2);
+    const Vector2F padding2 = _padding.times(2);
 
-    const int margin2  = _margin*2;
-    const int padding2 = _padding*2;
+    const IMathUtils* mu = context->getMathUtils();
 
-    const int canvasWidth  = maxWidth          + margin2 + padding2;
-    const int canvasHeight = accumulatedHeight + margin2 + padding2 + ((int)resultsSize-1)*_childrenSeparation;
+    const int canvasWidth  = (int) mu->ceil(maxWidth          + margin2._x + padding2._x);
+    const int canvasHeight = (int) mu->ceil(accumulatedHeight + margin2._y + padding2._y + ((int)resultsSize-1)*_childrenSeparation);
 
     ICanvas* canvas = context->getFactory()->createCanvas(false);
     canvas->initialize(canvasWidth, canvasHeight);
@@ -136,17 +139,17 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     if (!_backgroundColor.isFullTransparent()) {
       canvas->setFillColor(_backgroundColor);
       if (_cornerRadius > 0) {
-        canvas->fillRoundedRectangle(_margin,
-                                     _margin,
-                                     canvasWidth  - margin2,
-                                     canvasHeight - margin2,
+        canvas->fillRoundedRectangle(_margin._x,
+                                     _margin._y,
+                                     canvasWidth  - margin2._x,
+                                     canvasHeight - margin2._y,
                                      _cornerRadius);
       }
       else {
-        canvas->fillRectangle(_margin,
-                              _margin,
-                              canvasWidth  - margin2,
-                              canvasHeight - margin2);
+        canvas->fillRectangle(_margin._x,
+                              _margin._y,
+                              canvasWidth  - margin2._x,
+                              canvasHeight - margin2._y);
       }
     }
 
@@ -154,21 +157,21 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
       canvas->setLineColor(_borderColor);
       canvas->setLineWidth(_borderWidth);
       if (_cornerRadius > 0) {
-        canvas->strokeRoundedRectangle(_margin,
-                                       _margin,
-                                       canvasWidth  - margin2,
-                                       canvasHeight - margin2,
+        canvas->strokeRoundedRectangle(_margin._x,
+                                       _margin._y,
+                                       canvasWidth  - margin2._x,
+                                       canvasHeight - margin2._y,
                                        _cornerRadius);
       }
       else {
-        canvas->strokeRectangle(_margin,
-                                _margin,
-                                canvasWidth  - margin2,
-                                canvasHeight - margin2);
+        canvas->strokeRectangle(_margin._x,
+                                _margin._y,
+                                canvasWidth  - margin2._x,
+                                canvasHeight - margin2._y);
       }
     }
 
-    float cursorTop = _margin + _padding;
+    float cursorTop = _margin._y + _padding._y;
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
       const IImage* image = result->_image;

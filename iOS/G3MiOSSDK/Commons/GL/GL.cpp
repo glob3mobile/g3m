@@ -103,7 +103,9 @@ bool GL::isPowerOfTwo(int x) {
 
 const IGLTextureID* GL::uploadTexture(const IImage* image,
                                       int format,
-                                      bool generateMipmap) {
+                                      bool generateMipmap,
+                                      int wrapS,
+                                      int wrapT) {
 
   const IGLTextureID* texID = getGLTextureID();
   if (texID != NULL) {
@@ -132,18 +134,12 @@ const IGLTextureID* GL::uploadTexture(const IImage* image,
                              GLTextureParameter::magFilter(),
                              linear);
 
-    const int clampToEdge = GLTextureParameterValue::clampToEdge();
     _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::wrapS(),
-                             clampToEdge);
+                             wrapS);
     _nativeGL->texParameteri(texture2D,
                              GLTextureParameter::wrapT(),
-                             clampToEdge);
-    
-    if ((image->getWidth() < 0 || image->getWidth() > _nativeGL->getMaxTextureSize()) ||
-        (image->getHeight() < 0 || image->getHeight() > _nativeGL->getMaxTextureSize())){
-      ILogger::instance()->logWarning("Creating GL Texture of Invalid Size");
-    }
+                             wrapT);
 
     _nativeGL->texImage2D(image, format);
 

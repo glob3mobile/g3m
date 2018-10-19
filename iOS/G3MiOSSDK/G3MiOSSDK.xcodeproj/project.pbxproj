@@ -117,11 +117,12 @@
 		CF2412AC191FDBDE00B796FB /* GEO2DCoordinatesData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2412AA191FD87C00B796FB /* GEO2DCoordinatesData.hpp */; };
 		CF2412AF191FE3D100B796FB /* GEO2DCoordinatesArrayData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2412AD191FE3D100B796FB /* GEO2DCoordinatesArrayData.cpp */; };
 		CF2412B0191FE64300B796FB /* GEO2DCoordinatesArrayData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2412AE191FE3D100B796FB /* GEO2DCoordinatesArrayData.hpp */; };
+		CF241FF52179E90D00620B8B /* SceneJSParserParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF241FF32179E90D00620B8B /* SceneJSParserParameters.cpp */; };
+		CF241FF62179EF0600620B8B /* SceneJSParserParameters.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF241FF42179E90D00620B8B /* SceneJSParserParameters.hpp */; };
 		CF26127517F9CBFD003C2006 /* RenderState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2C17F8874E00F50525 /* RenderState.hpp */; };
 		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
 		CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */; };
 		CF28589417A6F508004CFFCA /* Rectangle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* Rectangle.hpp */; };
-		CF28589517A6F508004CFFCA /* SceneJSParserStatistics.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */; };
 		CF290D4D187F149D000BE644 /* SimpleTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF290D4B187F149D000BE644 /* SimpleTextureMapping.cpp */; };
 		CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */; };
 		CF290D51187F1584000BE644 /* SimpleTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF290D4C187F149D000BE644 /* SimpleTextureMapping.hpp */; };
@@ -662,7 +663,6 @@
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71AA047191AACE400834D69 /* ICanvasUtils.cpp */; };
-		E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
 		E780A4FD16D3ADF0000F0395 /* BSONGenerator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4FAAD41695F344009734CA /* BSONGenerator.hpp */; };
@@ -870,6 +870,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D89F7A9A1FA0B4B90052F47E /* RenderingCondition.hpp in CopyFiles */,
+				CF241FF62179EF0600620B8B /* SceneJSParserParameters.hpp in CopyFiles */,
 				D8B2BCEC1E8A9AE200BC08BE /* FrustumPolicyHandler.hpp in CopyFiles */,
 				CFFA5B811E89548500AF294E /* WrapperNearFrustumRenderer.hpp in CopyFiles */,
 				CF7529641E868089003C9605 /* FrustumData.hpp in CopyFiles */,
@@ -1038,7 +1039,6 @@
 				CFAA530617AAFE9E002A9204 /* DecimatedSubviewElevationData.hpp in CopyFiles */,
 				CFAA530717AAFE9E002A9204 /* InterpolatedSubviewElevationData.hpp in CopyFiles */,
 				CF28589417A6F508004CFFCA /* Rectangle.hpp in CopyFiles */,
-				CF28589517A6F508004CFFCA /* SceneJSParserStatistics.hpp in CopyFiles */,
 				CFADEB6E17A42D11001914B2 /* ChangedListener.hpp in CopyFiles */,
 				CFA1FDA517A1AB4400DAEAB2 /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */,
 				CFA1FDA117A196A300DAEAB2 /* GEO2DPolygonData.hpp in CopyFiles */,
@@ -1481,6 +1481,8 @@
 		CF2412AA191FD87C00B796FB /* GEO2DCoordinatesData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DCoordinatesData.hpp; path = Commons/GEO/GEO2DCoordinatesData.hpp; sourceTree = "<group>"; };
 		CF2412AD191FE3D100B796FB /* GEO2DCoordinatesArrayData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DCoordinatesArrayData.cpp; path = Commons/GEO/GEO2DCoordinatesArrayData.cpp; sourceTree = "<group>"; };
 		CF2412AE191FE3D100B796FB /* GEO2DCoordinatesArrayData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DCoordinatesArrayData.hpp; path = Commons/GEO/GEO2DCoordinatesArrayData.hpp; sourceTree = "<group>"; };
+		CF241FF32179E90D00620B8B /* SceneJSParserParameters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSParserParameters.cpp; path = Commons/Rendererers/SceneJSParserParameters.cpp; sourceTree = "<group>"; };
+		CF241FF42179E90D00620B8B /* SceneJSParserParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SceneJSParserParameters.hpp; path = Commons/Rendererers/SceneJSParserParameters.hpp; sourceTree = "<group>"; };
 		CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferElevationData.cpp; path = Commons/Basic/BufferElevationData.cpp; sourceTree = "<group>"; };
 		CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BufferElevationData.hpp; path = Commons/Basic/BufferElevationData.hpp; sourceTree = "<group>"; };
 		CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferElevationData.cpp; path = Commons/Basic/ShortBufferElevationData.cpp; sourceTree = "<group>"; };
@@ -2192,8 +2194,6 @@
 		E70B56E216D3CCCD00C5FFFB /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		E71AA047191AACE400834D69 /* ICanvasUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ICanvasUtils.cpp; path = Commons/Interfaces/ICanvasUtils.cpp; sourceTree = "<group>"; };
 		E71AA048191AACE400834D69 /* ICanvasUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICanvasUtils.hpp; path = Commons/Interfaces/ICanvasUtils.hpp; sourceTree = "<group>"; };
-		E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSParserStatistics.cpp; path = Commons/Rendererers/SceneJSParserStatistics.cpp; sourceTree = "<group>"; };
-		E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSParserStatistics.hpp; path = Commons/Rendererers/SceneJSParserStatistics.hpp; sourceTree = "<group>"; };
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 		E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = IG3MBuilder.cpp; path = Commons/Basic/IG3MBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
@@ -3059,8 +3059,6 @@
 				CF93F40D1E574BA200E97FF1 /* SceneJSMeshParser.hpp */,
 				CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */,
 				CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */,
-				E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */,
-				E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */,
 				CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */,
 				CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */,
 				CF857B39164C7AFC0089F1DE /* SGGeometryNode.cpp */,
@@ -3093,6 +3091,8 @@
 				CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
+				CF241FF32179E90D00620B8B /* SceneJSParserParameters.cpp */,
+				CF241FF42179E90D00620B8B /* SceneJSParserParameters.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -3685,7 +3685,6 @@
 				CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */,
 				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
 				CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */,
-				E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */,
 				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
 				D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */,
 				CFCDFCB51911677800D711FC /* FrameTask.cpp in Sources */,
@@ -3757,6 +3756,7 @@
 				D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */,
 				D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */,
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
+				CF241FF52179E90D00620B8B /* SceneJSParserParameters.cpp in Sources */,
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,

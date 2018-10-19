@@ -11,6 +11,9 @@
 
 class Vector2I;
 
+#include <string>
+
+
 class Vector2F {
 private:
   Vector2F& operator=(const Vector2F& v);
@@ -78,7 +81,9 @@ public:
   }
 
   Vector2F clampLength(float min, float max) const;
-  
+
+  const std::string description() const;
+
 };
 
 #endif

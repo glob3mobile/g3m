@@ -10,6 +10,7 @@
 
 #include "Vector2I.hpp"
 #include "IMathUtils.hpp"
+#include "IStringBuilder.hpp"
 
 
 const double Vector2F::squaredDistanceTo(const Vector2F& that) const {
@@ -51,4 +52,16 @@ bool Vector2F::isNan() const {
 
 double Vector2F::length() const {
   return IMathUtils::instance()->sqrt(squaredLength());
+}
+
+const std::string Vector2F::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("(V2F ");
+  isb->addFloat(_x);
+  isb->addString(", ");
+  isb->addFloat(_y);
+  isb->addString(")");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

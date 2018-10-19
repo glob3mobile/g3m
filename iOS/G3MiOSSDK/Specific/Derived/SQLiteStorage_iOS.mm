@@ -103,9 +103,7 @@ _databaseName(databaseName)
       [_readDB openReadOnly];
     }
 
-    if (false) {
-      showStatistics();
-    }
+    // showStatistics();
   }
 }
 
@@ -345,8 +343,7 @@ void SQLiteStorage_iOS::merge(const std::string &databasePath) {
       rawSave(@"buffer2", name, nsData, TimeInterval::fromSeconds((int)expirationIntervalInSeconds));
     }
     
-    
-    
+        
     [readDB close];
   }
 }

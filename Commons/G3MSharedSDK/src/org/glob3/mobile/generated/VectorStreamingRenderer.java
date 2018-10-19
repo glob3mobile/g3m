@@ -580,9 +580,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private IDownloader _downloader;
     private boolean _loadingChildren;
 
-    private boolean isVisible(G3MRenderContext rc, Frustum frustumInModelCoordinates)
+    private boolean isVisible(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates)
     {
-      if ((_nodeSector._deltaLatitude._degrees > 80) || (_nodeSector._deltaLongitude._degrees > 80))
+      if ((_nodeSector._deltaLatitude._degrees >= vectorSet._minSectorSize._degrees) || (_nodeSector._deltaLongitude._degrees >= vectorSet._minSectorSize._degrees))
       {
         return true;
       }
@@ -593,16 +593,15 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _loadedFeatures;
     private boolean _loadingFeatures;
 
-    private boolean isBigEnough(G3MRenderContext rc)
+    private boolean isBigEnough(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet)
     {
-      if ((_nodeSector._deltaLatitude._degrees >= 80) || (_nodeSector._deltaLongitude._degrees >= 80))
+      if ((_nodeSector._deltaLatitude._degrees >= vectorSet._minSectorSize._degrees) || (_nodeSector._deltaLongitude._degrees >= vectorSet._minSectorSize._degrees))
       {
         return true;
       }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
-      //return (projectedArea > 350000);
-      return (projectedArea > 1500000);
+      return (projectedArea >= vectorSet._minProjectedArea);
     }
 
     private boolean _isBeingRendered;
@@ -948,20 +947,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _id + "_C_" + _vectorSet.getName();
     }
 
-    public final long render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
+    public final long render(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
     {
-    
       long renderedCount = 0;
-    
-      // #warning Show Bounding Volume
-      // getBoundingVolume(rc)->render(rc, glState, Color::red());
     
       boolean wasRendered = false;
     
-      final boolean visible = isVisible(rc, frustumInModelCoordinates);
+      final boolean visible = isVisible(rc, vectorSet, frustumInModelCoordinates);
       if (visible)
       {
-        final boolean bigEnough = isBigEnough(rc);
+        final boolean bigEnough = isBigEnough(rc, vectorSet);
         if (bigEnough)
         {
           wasRendered = true;
@@ -986,7 +981,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
               for (int i = 0; i < _childrenSize; i++)
               {
                 Node child = _children.get(i);
-                renderedCount += child.render(rc, frustumInModelCoordinates, cameraTS, glState);
+                renderedCount += child.render(rc, vectorSet, frustumInModelCoordinates, cameraTS, glState);
               }
             }
           }
@@ -1105,8 +1100,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_buffer != null)
          _buffer.dispose();
     
-      if (_metadata != null)
-         _metadata.dispose();
+      _metadata = null;
     
       if (_rootNodes != null)
       {
@@ -1170,9 +1164,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final int nodesCount = (int) jsonObject.getAsNumber("nodesCount").value();
           final int minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
           final int maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
+          final String language = jsonObject.getAsString("language").value();
+          final String nameFieldName = jsonObject.getAsString("nameFieldName").value();
+          final String urlFieldName = jsonObject.getAsString("urlFieldName").value();
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
-          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, magnitudeMetadata);
+          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata);
     
           final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
           _rootNodes = new java.util.ArrayList<Node>();
@@ -1292,9 +1289,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
+    public abstract Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
 
-    public abstract Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount);
+    public abstract Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster);
 
   }
 
@@ -1307,9 +1304,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final int _nodesCount;
     public final int _minNodeDepth;
     public final int _maxNodeDepth;
+    public final String _language;
+    public final String _nameFieldName;
+    public final String _urlFieldName;
     public final MagnitudeMetadata _magnitudeMetadata;
 
-    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, MagnitudeMetadata magnitudeMetadata)
+    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata)
     {
        _sector = sector;
        _clustersCount = clustersCount;
@@ -1317,6 +1317,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _nodesCount = nodesCount;
        _minNodeDepth = minNodeDepth;
        _maxNodeDepth = maxNodeDepth;
+       _language = language;
+       _nameFieldName = nameFieldName;
+       _urlFieldName = urlFieldName;
        _magnitudeMetadata = magnitudeMetadata;
 
     }
@@ -1382,8 +1385,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return result;
     }
 
+    public final Angle _minSectorSize ;
+    public final double _minProjectedArea;
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1404,6 +1409,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _rootNodes = null;
        _rootNodesSize = 0;
        _lastRenderedCount = 0;
+       _minSectorSize = new Angle(minSectorSize);
+       _minProjectedArea = minProjectedArea;
 
     }
 
@@ -1414,8 +1421,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _symbolizer = null;
       }
     
-      if (_metadata != null)
-         _metadata.dispose();
+      _metadata = null;
     
       if (_rootNodes != null)
       {
@@ -1556,7 +1562,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _rootNodesSize; i++)
         {
           Node rootNode = _rootNodes.get(i);
-          renderedCount += rootNode.render(rc, frustumInModelCoordinates, cameraTS, glState);
+          renderedCount += rootNode.render(rc, this, frustumInModelCoordinates, cameraTS, glState);
         }
     
         if (_lastRenderedCount != renderedCount)
@@ -1573,7 +1579,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(_metadata._magnitudeMetadata, node, geometry);
+      Mark mark = _symbolizer.createFeatureMark(_metadata, node, geometry);
       if (mark == null)
       {
         return 0;
@@ -1596,7 +1602,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final Cluster cluster = clusters.get(i);
           if (cluster != null)
           {
-            Mark mark = _symbolizer.createClusterMark(_metadata._magnitudeMetadata, node, cluster, _metadata._featuresCount);
+            Mark mark = _symbolizer.createClusterMark(_metadata, node, cluster);
             if (mark != null)
             {
               mark.setToken(node.getClusterMarkToken());
@@ -1702,9 +1708,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea);
     if (_context != null)
     {
       vectorSet.initialize(_context);

@@ -18,6 +18,7 @@
 #include "RCObject.hpp"
 #include "MarksFilter.hpp"
 #include "GAsyncTask.hpp"
+#include "Angle.hpp"
 
 #include <vector>
 #include <string>
@@ -36,7 +37,7 @@ class Camera;
 class Frustum;
 class IDownloader;
 class GEOObject;
-class MarksRenderer;
+class MarksRenderer; 
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -305,12 +306,14 @@ public:
     bool _loadingChildren;
 
     bool isVisible(const G3MRenderContext* rc,
+                   const VectorStreamingRenderer::VectorSet* vectorSet,
                    const Frustum* frustumInModelCoordinates);
 
     bool _loadedFeatures;
     bool _loadingFeatures;
 
-    bool isBigEnough(const G3MRenderContext *rc);
+    bool isBigEnough(const G3MRenderContext *rc,
+                     const VectorStreamingRenderer::VectorSet* vectorSet);
 
     bool _isBeingRendered;
 
@@ -376,6 +379,7 @@ public:
     }
 
     long long render(const G3MRenderContext* rc,
+                     const VectorStreamingRenderer::VectorSet* vectorSet,
                      const Frustum* frustumInModelCoordinates,
                      const long long cameraTS,
                      GLState* glState);
@@ -492,14 +496,13 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
                                     const GEO2DPointGeometry* geometry) const = 0;
 
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+    virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
-                                    const VectorStreamingRenderer::Cluster* cluster,
-                                    const long long featuresCount) const = 0;
+                                    const VectorStreamingRenderer::Cluster* cluster) const = 0;
 
   };
 
@@ -512,6 +515,9 @@ public:
     const int                _nodesCount;
     const int                _minNodeDepth;
     const int                _maxNodeDepth;
+    const std::string        _language;
+    const std::string        _nameFieldName;
+    const std::string        _urlFieldName;
     const MagnitudeMetadata* _magnitudeMetadata;
 
     Metadata(const Sector*            sector,
@@ -520,6 +526,9 @@ public:
              const int                nodesCount,
              const int                minNodeDepth,
              const int                maxNodeDepth,
+             const std::string&       language,
+             const std::string&       nameFieldName,
+             const std::string&       urlFieldName,
              const MagnitudeMetadata* magnitudeMetadata) :
     _sector(sector),
     _clustersCount(clustersCount),
@@ -527,6 +536,9 @@ public:
     _nodesCount(nodesCount),
     _minNodeDepth(minNodeDepth),
     _maxNodeDepth(maxNodeDepth),
+    _language(language),
+    _nameFieldName(nameFieldName),
+    _urlFieldName(urlFieldName),
     _magnitudeMetadata(magnitudeMetadata)
     {
 
@@ -578,6 +590,8 @@ public:
     const std::string toNodesDirectories(const std::string& nodeID) const;
 
   public:
+    const Angle  _minSectorSize;
+    const double _minProjectedArea;
 
     VectorSet(VectorStreamingRenderer*   renderer,
               const URL&                 serverURL,
@@ -590,7 +604,9 @@ public:
               bool                       readExpired,
               bool                       verbose,
               bool                       haltOnError,
-              const Format               format) :
+              const Format               format,
+              const Angle&               minSectorSize,
+              const double               minProjectedArea) :
     _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
@@ -609,7 +625,9 @@ public:
     _metadata(NULL),
     _rootNodes(NULL),
     _rootNodesSize(0),
-    _lastRenderedCount(0)
+    _lastRenderedCount(0),
+    _minSectorSize(minSectorSize),
+    _minProjectedArea(minProjectedArea)
     {
 
     }
@@ -707,7 +725,9 @@ public:
                     bool                       readExpired,
                     bool                       verbose,
                     bool                       haltOnError,
-                    const Format               format);
+                    const Format               format,
+                    const Angle&               minSectorSize,
+                    const double               minProjectedArea);
   
   void removeAllVectorSets();
   

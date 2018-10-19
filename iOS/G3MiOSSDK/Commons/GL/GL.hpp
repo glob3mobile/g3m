@@ -100,7 +100,9 @@ public:
 
   const IGLTextureID* uploadTexture(const IImage* image,
                                     int format,
-                                    bool generateMipmap);
+                                    bool generateMipmap,
+                                    int wrapS,
+                                    int wrapT);
 
   void deleteTexture(const IGLTextureID* textureID);
 

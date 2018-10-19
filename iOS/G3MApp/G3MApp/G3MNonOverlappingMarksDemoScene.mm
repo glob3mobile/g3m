@@ -75,10 +75,11 @@ public:
 
         LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,
                                                                 GFont::sansSerif(10),
-                                                                4,
+                                                                Vector2F(4, 4),
                                                                 Color::BLACK,
                                                                 Color::TRANSPARENT,
-                                                                0,0,0,
+                                                                0,
+                                                                Vector2F(0, 0),
                                                                 Color::WHITE,
                                                                 4);
 
@@ -91,13 +92,13 @@ public:
         else {
           ColumnLayoutImageBuilder* columnBuilder = new ColumnLayoutImageBuilder(new DownloaderImageBuilder(URL(thumbnail)),
                                                                                  titleBuilder,
-                                                                                 0,                   // margin
-                                                                                 0,                   // borderWidth,
-                                                                                 Color::TRANSPARENT,  // borderColor
-                                                                                 0,                   // padding
-                                                                                 Color::TRANSPARENT,  // backgroundColor
-                                                                                 0,                   // cornerRadius
-                                                                                 2                    // childrenSeparation
+                                                                                 Vector2F(0, 0),     // margin
+                                                                                 0,                  // borderWidth,
+                                                                                 Color::TRANSPARENT, // borderColor
+                                                                                 Vector2F(0, 0),     // padding
+                                                                                 Color::TRANSPARENT, // backgroundColor
+                                                                                 0,                  // cornerRadius
+                                                                                 2                   // childrenSeparation
                                                                                  );
 
           mark = new NonOverlappingMark(columnBuilder,

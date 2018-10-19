@@ -61,6 +61,7 @@ SGLayerNode::~SGLayerNode() {
 #endif
 #ifdef JAVA_CODE
   _textureID.dispose(); //Releasing texture through TextureIDReference class
+  _textureID = null;
   super.dispose();
 #endif
 }
@@ -106,11 +107,12 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
 const TextureIDReference* SGLayerNode::getTextureID(const G3MRenderContext* rc) {
   if (_textureID == NULL) {
     if (_downloadedImage != NULL) {
-      const bool generateMipmap = false;
       _textureID = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
                                                                    GLFormat::rgba(),
                                                                    getURL()._path,
-                                                                   generateMipmap);
+                                                                   _generateMipmap,
+                                                                   _wrapS,
+                                                                   _wrapT);
 
       delete _downloadedImage;
       _downloadedImage = NULL;

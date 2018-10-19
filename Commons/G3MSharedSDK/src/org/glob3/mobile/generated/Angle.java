@@ -26,6 +26,12 @@ public class Angle
   }
 
 
+  public static final Angle _ZERO = Angle.fromRadians(0);
+  public static final Angle _PI = Angle.fromRadians(DefineConstants.PI);
+  public static final Angle _HALF_PI = Angle.fromRadians(DefineConstants.PI / 2);
+  public static final Angle _TWO_PI = Angle.fromRadians(DefineConstants.PI * 2);
+  public static final Angle _MINUS_HALF_PI = Angle.fromRadians(-DefineConstants.PI / 2);
+
   public final double _degrees;
   public final double _radians;
 
@@ -74,17 +80,22 @@ public class Angle
 
   public static Angle zero()
   {
-    return Angle.fromDegrees(0);
+    return _ZERO;
   }
 
   public static Angle pi()
   {
-    return Angle.fromDegrees(180);
+    return _PI;
   }
 
   public static Angle halfPi()
   {
-    return Angle.fromDegrees(90);
+    return _HALF_PI;
+  }
+
+  public static Angle minusHalfPi()
+  {
+    return _MINUS_HALF_PI;
   }
 
   public static Angle nan()

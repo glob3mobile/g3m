@@ -40,7 +40,7 @@ public class QuadShape extends AbstractMeshShape
       return null;
     }
   
-    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
     _textureImage = null;
     _textureImage = null;

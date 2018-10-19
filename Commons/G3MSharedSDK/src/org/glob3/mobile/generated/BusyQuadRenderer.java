@@ -38,7 +38,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
   {
     TextureIDReference texID = null;
   
-    texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
+    texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
     if (texID == null)
     {

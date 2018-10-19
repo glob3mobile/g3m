@@ -23,6 +23,12 @@ private:
 
 
 public:
+  static const Angle _ZERO;
+  static const Angle _PI;
+  static const Angle _HALF_PI;
+  static const Angle _TWO_PI;
+  static const Angle _MINUS_HALF_PI;
+
   const double _degrees;
   const double _radians;
 
@@ -55,15 +61,19 @@ public:
   }
 
   static Angle zero() {
-    return Angle::fromDegrees(0);
+    return _ZERO;
   }
-
+  
   static Angle pi() {
-    return Angle::fromDegrees(180);
+    return _PI;
   }
 
   static Angle halfPi() {
-    return Angle::fromDegrees(90);
+    return _HALF_PI;
+  }
+
+  static Angle minusHalfPi() {
+    return _MINUS_HALF_PI;
   }
 
   static Angle nan();

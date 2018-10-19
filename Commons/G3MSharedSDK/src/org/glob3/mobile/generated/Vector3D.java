@@ -315,7 +315,7 @@ public class Vector3D
   public final Vector3D projectionInPlane(Vector3D normal)
   {
     final Vector3D axis = normal.cross(this);
-    final MutableMatrix44D m = MutableMatrix44D.createRotationMatrix(Angle.halfPi(), axis);
+    final MutableMatrix44D m = MutableMatrix44D.createRotationMatrix(Angle._HALF_PI, axis);
     final Vector3D projected = normal.transformedBy(m, 0).normalized();
     return projected.times(this.length());
   }

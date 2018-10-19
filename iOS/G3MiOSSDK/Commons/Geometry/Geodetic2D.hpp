@@ -27,8 +27,8 @@ public:
 
   
   static Geodetic2D zero() {
-    return Geodetic2D(Angle::zero(),
-                      Angle::zero());
+    return Geodetic2D(Angle::_ZERO,
+                      Angle::_ZERO);
   }
   
   static Geodetic2D fromDegrees(double lat,

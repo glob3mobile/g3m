@@ -140,7 +140,7 @@ public class Plane
   
     if (isVectorParallel(vector))
     {
-      return Angle.zero();
+      return Angle._ZERO;
     }
   
     final IMathUtils mu = IMathUtils.instance();

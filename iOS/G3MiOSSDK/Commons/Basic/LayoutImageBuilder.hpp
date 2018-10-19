@@ -14,6 +14,7 @@
 #include "Color.hpp"
 #include "IImage.hpp"
 #include "RCObject.hpp"
+#include "Vector2F.hpp"
 #include <vector>
 
 
@@ -123,12 +124,22 @@ protected:
 
   std::vector<IImageBuilder*> _children;
 
-  const int   _margin;
+#ifdef C_CODE
+  const Vector2F _margin;
+#endif
+#ifdef JAVA_CODE
+  protected final Vector2F _margin;
+#endif
 
   const float _borderWidth;
   const Color _borderColor;
 
-  const int   _padding;
+#ifdef C_CODE
+  const Vector2F _padding;
+#endif
+#ifdef JAVA_CODE
+  protected final Vector2F _padding;
+#endif
 
   const Color _backgroundColor;
   const float _cornerRadius;
@@ -143,10 +154,10 @@ protected:
    */
 
   LayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                     int                                margin,
+                     const Vector2F&                    margin,
                      float                              borderWidth,
                      const Color&                       borderColor,
-                     int                                padding,
+                     const Vector2F&                    padding,
                      const Color&                       backgroundColor,
                      float                              cornerRadius,
                      int                                childrenSeparation) :
@@ -161,15 +172,15 @@ protected:
   {
   }
 
-  LayoutImageBuilder(IImageBuilder* child0,
-                     IImageBuilder* child1,
-                     int            margin,
-                     float          borderWidth,
-                     const Color&   borderColor,
-                     int            padding,
-                     const Color&   backgroundColor,
-                     const float    cornerRadius,
-                     int            childrenSeparation) :
+  LayoutImageBuilder(IImageBuilder*  child0,
+                     IImageBuilder*  child1,
+                     const Vector2F& margin,
+                     float           borderWidth,
+                     const Color&    borderColor,
+                     const Vector2F& padding,
+                     const Color&    backgroundColor,
+                     const float     cornerRadius,
+                     int             childrenSeparation) :
   _margin(margin),
   _borderWidth(borderWidth),
   _borderColor(borderColor),

@@ -18,10 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
-//class SGShape;
-//class JSONBaseObject;
+//class SceneJSParserParameters;
 //class Geodetic3D;
 //class IByteBuffer;
+//class SGShape;
 
 
 public class SceneJSShapesParser
@@ -32,28 +32,22 @@ public class SceneJSShapesParser
   }
 
 
-  public static SGShape parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSONBaseObject(jsonObject, depthTest, true);
-    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, position, altitudeMode);
+    SGNode node = SceneJSNodeParser.parseFromJSON(json, parameters);
+    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, new Geodetic3D(position), altitudeMode);
   }
 
-  public static SGShape parseFromJSON(String json, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSON(json, depthTest);
-    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, position, altitudeMode);
+    SGNode node = SceneJSNodeParser.parseFromJSON(json, parameters);
+    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, new Geodetic3D(position), altitudeMode);
   }
 
-  public static SGShape parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSON(json, depthTest);
-    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, position, altitudeMode);
-  }
-
-  public static SGShape parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
-  {
-    SGNode node = SceneJSNodeParser.parseFromBSON(bson, depthTest);
-    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, position, altitudeMode);
+    SGNode node = SceneJSNodeParser.parseFromBSON(bson, parameters);
+    return (node == null) ? null : new SGShape(node, uriPrefix, isTransparent, new Geodetic3D(position), altitudeMode);
   }
 
 }

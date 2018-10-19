@@ -40,7 +40,7 @@ public class Geodetic3D
 
   public static Geodetic3D zero()
   {
-    return new Geodetic3D(Angle.zero(), Angle.zero(), 0);
+    return new Geodetic3D(Angle._ZERO, Angle._ZERO, 0);
   }
 
   public static Geodetic3D fromDegrees(double lat, double lon, double height)

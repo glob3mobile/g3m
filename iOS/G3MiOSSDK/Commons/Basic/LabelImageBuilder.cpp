@@ -15,19 +15,19 @@
 #include "IStringUtils.hpp"
 #include "IImageListener.hpp"
 #include "IImageBuilderListener.hpp"
+#include "ErrorHandling.hpp"
 
 
 const std::string LabelImageBuilder::getImageName() const {
   const IStringUtils* su = IStringUtils::instance();
-  return (_text                        + "/" +
-          _font.description()          + "/" +
-          su->toString(_margin)        + "/" +
-          _color.id()                  + "/" +
-          _shadowColor.id()            + "/" +
-          su->toString(_shadowBlur)    + "/" +
-          su->toString(_shadowOffsetX) + "/" +
-          su->toString(_shadowOffsetY) + "/" +
-          _backgroundColor.id()        + "/" +
+  return (_text                       + "/" +
+          _font.description()         + "/" +
+          _margin.description()       + "/" +
+          _color.id()                 + "/" +
+          _shadowColor.id()           + "/" +
+          su->toString(_shadowBlur)   + "/" +
+          _shadowOffset.description() + "/" +
+          _backgroundColor.id()       + "/" +
           su->toString(_cornerRadius));
 }
 
@@ -70,7 +70,7 @@ void LabelImageBuilder::setText(const std::string& text) {
     }
   }
   else {
-    ILogger::instance()->logError("Can't change text on an inmutable LabelImageBuilder");
+    THROW_EXCEPTION("Can't change text on an inmutable LabelImageBuilder");
   }
 }
 
@@ -86,17 +86,9 @@ void LabelImageBuilder::build(const G3MContext* context,
 
   const IMathUtils* mu = context->getMathUtils();
 
-  const float margin2 = _margin*2;
-  const int width  = mu->round(textExtent._x + margin2);
-  const int height = mu->round(textExtent._y + margin2);
+  const int width  = (int) mu->ceil(textExtent._x + (_margin._x * 2));
+  const int height = (int) mu->ceil(textExtent._y + (_margin._y * 2));
   canvas->initialize(width, height);
-
-  if (!_shadowColor.isFullTransparent()) {
-    canvas->setShadow(_shadowColor,
-                      _shadowBlur,
-                      _shadowOffsetX,
-                      _shadowOffsetY);
-  }
 
   if (!_backgroundColor.isFullTransparent()) {
     canvas->setFillColor(_backgroundColor);
@@ -111,8 +103,15 @@ void LabelImageBuilder::build(const G3MContext* context,
     }
   }
 
+  if (!_shadowColor.isFullTransparent()) {
+    canvas->setShadow(_shadowColor,
+                      _shadowBlur,
+                      _shadowOffset._x,
+                      _shadowOffset._y);
+  }
+
   canvas->setFillColor(_color);
-  canvas->fillText(_text, _margin, _margin);
+  canvas->fillText(_text, _margin._x, _margin._y);
 
   canvas->createImage(new LabelImageBuilder_ImageListener(listener,
                                                           deleteListener,

@@ -3,20 +3,20 @@ public class ShapesRenderer extends DefaultRenderer
 {
   private static class LoadQueueItem
   {
-    public final URL _url;
-    public final TimeInterval _timeToCache;
+    public final URL                     _url;
+    public final TimeInterval            _timeToCache;
+    public final SceneJSParserParameters _parameters;
     public final long _priority;
     public final boolean _readExpired;
     public final String _uriPrefix;
     public final boolean _isTransparent;
-    public final boolean _depthTest;
-    public Geodetic3D _position;
+    public final Geodetic3D _position ;
     public final AltitudeMode _altitudeMode;
     public ShapeLoadListener _listener;
     public final boolean _deleteListener;
     public final boolean _isBSON;
 
-    public LoadQueueItem(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
+    public LoadQueueItem(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
     {
        _url = url;
        _priority = priority;
@@ -24,8 +24,8 @@ public class ShapesRenderer extends DefaultRenderer
        _readExpired = readExpired;
        _uriPrefix = uriPrefix;
        _isTransparent = isTransparent;
-       _depthTest = depthTest;
-       _position = position;
+       _parameters = parameters;
+       _position = new Geodetic3D(position);
        _altitudeMode = altitudeMode;
        _listener = listener;
        _deleteListener = deleteListener;
@@ -80,7 +80,7 @@ public class ShapesRenderer extends DefaultRenderer
     for (int i = 0; i < loadQueueSize; i++)
     {
       LoadQueueItem item = _loadQueue.get(i);
-      requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._uriPrefix, item._isTransparent, item._depthTest, item._position, item._altitudeMode, item._listener, item._deleteListener, item._isBSON);
+      requestBuffer(item._url, item._priority, item._timeToCache, item._readExpired, item._uriPrefix, item._isTransparent, item._parameters, item._position, item._altitudeMode, item._listener, item._deleteListener, item._isBSON);
   
       if (item != null)
          item.dispose();
@@ -103,11 +103,11 @@ public class ShapesRenderer extends DefaultRenderer
 
   private MutableVector3D _currentCameraPosition = new MutableVector3D();
 
-  private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
+  private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
   {
   
     IDownloader downloader = _context.getDownloader();
-    downloader.requestBuffer(url, priority, timeToCache, readExpired, new ShapesRenderer_SceneJSBufferDownloadListener(this, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener, _context.getThreadUtils(), isBSON), true);
+    downloader.requestBuffer(url, priority, timeToCache, readExpired, new ShapesRenderer_SceneJSBufferDownloadListener(this, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener, _context.getThreadUtils(), isBSON), true);
   
   }
 
@@ -174,9 +174,14 @@ public class ShapesRenderer extends DefaultRenderer
   }
   public final void removeAllShapes(boolean deleteShapes)
   {
+    final int shapesCount = _shapes.size();
+    if (shapesCount == 0)
+    {
+      return;
+    }
+  
     if (deleteShapes)
     {
-      final int shapesCount = _shapes.size();
       for (int i = 0; i < shapesCount; i++)
       {
         Shape shape = _shapes.get(i);
@@ -361,70 +366,70 @@ public class ShapesRenderer extends DefaultRenderer
     return shapeDistances;
   }
 
-  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
   {
-     loadJSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, true);
+     loadJSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, true);
   }
-  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     loadJSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, null, true);
+     loadJSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, null, true);
   }
-  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  public final void loadJSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
   {
     if (_context == null)
     {
-      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener, false)); // isBson
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener, false)); // isBson
     }
     else
     {
-      requestBuffer(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener, false); // isBson
+      requestBuffer(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener, false); // isBson
     }
   }
 
-  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
   {
-     loadJSONSceneJS(url, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, true);
+     loadJSONSceneJS(url, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, true);
   }
-  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     loadJSONSceneJS(url, uriPrefix, isTransparent, depthTest, position, altitudeMode, null, true);
+     loadJSONSceneJS(url, uriPrefix, isTransparent, parameters, position, altitudeMode, null, true);
   }
-  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  public final void loadJSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
   {
-    loadJSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener);
+    loadJSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener);
   }
 
-  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
   {
-     loadBSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, true);
+     loadBSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, true);
   }
-  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     loadBSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, null, true);
+     loadBSONSceneJS(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, null, true);
   }
-  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  public final void loadBSONSceneJS(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
   {
     if (_context == null)
     {
-      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener, true)); // isBson
+      _loadQueue.add(new LoadQueueItem(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener, true)); // isBson
     }
     else
     {
-      requestBuffer(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener, true); // isBson
+      requestBuffer(url, priority, timeToCache, readExpired, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener, true); // isBson
     }
   }
 
-  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
+  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener)
   {
-     loadBSONSceneJS(url, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, true);
+     loadBSONSceneJS(url, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, true);
   }
-  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode)
+  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode)
   {
-     loadBSONSceneJS(url, uriPrefix, isTransparent, depthTest, position, altitudeMode, null, true);
+     loadBSONSceneJS(url, uriPrefix, isTransparent, parameters, position, altitudeMode, null, true);
   }
-  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, boolean depthTest, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
+  public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
   {
-    loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, depthTest, position, altitudeMode, listener, deleteListener);
+    loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener);
   }
 
 }

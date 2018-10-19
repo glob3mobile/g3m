@@ -310,7 +310,7 @@ public class MapBoo
     }
     private LabelImageBuilder createLabelImageBuilder(String label)
     {
-      return new LabelImageBuilder(label, GFont.sansSerif(18, true), 2.0f, Color.WHITE, Color.BLACK, 2.0f, 0.0f, 0.0f); // shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+      return new LabelImageBuilder(label, GFont.sansSerif(18, true), new Vector2F(2, 2), Color.WHITE, Color.BLACK, 2.0f, Vector2F.zero()); // shadowOffset -  shadowBlur -  shadowColor -  color -  margin
     }
 
     public void dispose()
@@ -363,10 +363,10 @@ public class MapBoo
         deleteSym = deleteSymbolizer;
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER); // haltOnError -  verbose -  readExpired
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER, Angle.fromDegrees(90), 15000000); // minProjectedArea -  minSectorSize, -  haltOnError -  verbose -  readExpired
     }
 
-    public final Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
@@ -375,7 +375,7 @@ public class MapBoo
       return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     }
 
-    public final Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    public final Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster)
     {
       final Geodetic3D position = new Geodetic3D(cluster.getPosition()._latitude, cluster.getPosition()._longitude, 0);
     
@@ -384,7 +384,7 @@ public class MapBoo
       // float labelFontSize = (float) (14.0 * ((float) cluster->getSize() / featuresCount) + 16.0) ;
       float labelFontSize = 18.0f;
     
-      Mark mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color.WHITE, 32), new LabelImageBuilder(label, GFont.sansSerif(labelFontSize, true), 2.0f, Color.BLACK, Color.TRANSPARENT, 5.0f, 0.0f, 0.0f, Color.WHITE, 4.0f)), position, AltitudeMode.ABSOLUTE, 0); // minDistanceToCamera -  cornerRadius -  backgroundColor -  shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin
+      Mark mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color.WHITE, 32), new LabelImageBuilder(label, GFont.sansSerif(labelFontSize, true), new Vector2F(2, 2), Color.BLACK, Color.TRANSPARENT, 5.0f, Vector2F.zero(), Color.WHITE, 4.0f)), position, AltitudeMode.ABSOLUTE, 0); // minDistanceToCamera -  cornerRadius -  backgroundColor -  shadowOffset -  shadowBlur -  shadowColor -  color -  margin
     
       return mark;
     }
@@ -434,7 +434,7 @@ public class MapBoo
     
       final String datasetID = jsonObject.get("datasetID").asString().value();
       final String datasetName = jsonObject.getAsString("datasetName", "");
-    //  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
+      //  const std::string  datasetAttribution = jsonObject->getAsString("datasetAttribution", "");
       final MBSymbology symbology = MBSymbology.fromJSON(handler, datasetID, datasetName, jsonObject.get("symbology"));
     
       return new MBSymbolizedDataset(symbology); // datasetID,
@@ -466,14 +466,14 @@ public class MapBoo
       super.dispose();
     }
 
-    public final Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
-      return _symbology.createFeatureMark(magnitudeMetadata, node, geometry);
+      return _symbology.createFeatureMark(metadata, node, geometry);
     }
 
-    public final Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount)
+    public final Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster)
     {
-      return _symbology.createClusterMark(magnitudeMetadata, node, cluster, featuresCount);
+      return _symbology.createClusterMark(metadata, node, cluster);
     }
 
   }

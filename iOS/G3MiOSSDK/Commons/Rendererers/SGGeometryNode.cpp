@@ -57,23 +57,26 @@ SGGeometryNode::~SGGeometryNode() {
 }
 
 void SGGeometryNode::createGLState() {
-  _glState->addGLFeature(new GeometryGLFeature(_vertices,    // The attribute is a float vector of 4 elements
-                                               3,            // Our buffer contains elements of 3
-                                               0,            // Index 0
-                                               false,        // Not normalized
-                                               0,            // Stride 0
-                                               _depthTest,   // Depth test
-                                               false, 0,
-                                               false, (float)0.0, (float)0.0,
-                                               (float)1.0,
-                                               true, (float)1.0),
+  _glState->addGLFeature(new GeometryGLFeature(_vertices,  // buffer
+                                               3,          // arrayElementSize
+                                               0,          // index
+                                               false,      // normalized
+                                               0,          // stride
+                                               _depthTest, // depthTestEnabled
+                                               false,      // cullFace
+                                               0,          // culledFace
+                                               false,      // polygonOffsetFill
+                                               0,          // polygonOffsetFactor
+                                               0,          // polygonOffsetUnits
+                                               1,          // lineWidth
+                                               true,       // needsPointSize
+                                               1           // pointSize
+                                               ),
                          false);
 
   if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
                            false);
-
-
   }
 
   if (_uv != NULL) {

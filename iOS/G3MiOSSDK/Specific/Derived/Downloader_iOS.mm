@@ -225,7 +225,8 @@ long long Downloader_iOS::request(const URL &url,
                                   long long priority,
                                   Downloader_iOS_Listener* iosListener) {
 
-  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: url._path] ];
+  NSURL* nsURL = [NSURL URLWithString: [[NSString stringWithCppString: url._path] stringByReplacingOccurrencesOfString:@" "
+                                                                                                            withString:@"+"]];
 
   if (!nsURL) {
     [iosListener onErrorURL:url];

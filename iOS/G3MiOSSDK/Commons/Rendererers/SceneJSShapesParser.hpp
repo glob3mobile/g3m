@@ -13,10 +13,10 @@
 
 #include "AltitudeMode.hpp"
 
-class SGShape;
-class JSONBaseObject;
+class SceneJSParserParameters;
 class Geodetic3D;
 class IByteBuffer;
+class SGShape;
 
 
 class SceneJSShapesParser {
@@ -27,33 +27,26 @@ private:
 
 public:
 
-  static SGShape* parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                          const std::string&    uriPrefix,
-                                          bool                  isTransparent,
-                                          bool                  depthTest,
-                                          Geodetic3D*           position,
-                                          AltitudeMode          altitudeMode);
+  static SGShape* parseFromJSON(const std::string&             json,
+                                const std::string&             uriPrefix,
+                                const bool                     isTransparent,
+                                const SceneJSParserParameters& parameters,
+                                const Geodetic3D&              position,
+                                const AltitudeMode             altitudeMode);
 
-  static SGShape* parseFromJSON(const std::string& json,
-                                const std::string& uriPrefix,
-                                bool               isTransparent,
-                                bool               depthTest,
-                                Geodetic3D*        position,
-                                AltitudeMode       altitudeMode);
+  static SGShape* parseFromJSON(const IByteBuffer*             json,
+                                const std::string&             uriPrefix,
+                                const bool                     isTransparent,
+                                const SceneJSParserParameters& parameters,
+                                const Geodetic3D&              position,
+                                const AltitudeMode             altitudeMode);
 
-  static SGShape* parseFromJSON(const IByteBuffer* json,
-                                const std::string& uriPrefix,
-                                bool               isTransparent,
-                                bool               depthTest,
-                                Geodetic3D*        position,
-                                AltitudeMode       altitudeMode);
-
-  static SGShape* parseFromBSON(const IByteBuffer* bson,
-                                const std::string& uriPrefix,
-                                bool               isTransparent,
-                                bool               depthTest,
-                                Geodetic3D*        position,
-                                AltitudeMode       altitudeMode);
+  static SGShape* parseFromBSON(const IByteBuffer*             bson,
+                                const std::string&             uriPrefix,
+                                const bool                     isTransparent,
+                                const SceneJSParserParameters& parameters,
+                                const Geodetic3D&              position,
+                                const AltitudeMode             altitudeMode);
   
 };
 

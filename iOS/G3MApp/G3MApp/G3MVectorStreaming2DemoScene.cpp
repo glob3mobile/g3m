@@ -29,7 +29,7 @@
 
 class G3MVectorStreaming2DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+  Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
                           const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
@@ -93,10 +93,9 @@ public:
     return mark;
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+  Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
-                          const VectorStreamingRenderer::Cluster* cluster,
-                          long long featuresCount) const {
+                          const VectorStreamingRenderer::Cluster* cluster) const {
     const Geodetic3D position(cluster->getPosition()->_latitude,
                               cluster->getPosition()->_longitude,
                               0);
@@ -107,7 +106,7 @@ public:
     std::string label;
     labelStream >> label;
 
-    const double clusterPercent = (double) cluster->getSize() / featuresCount;
+    const double clusterPercent = (double) cluster->getSize() / metadata->_featuresCount;
 
     const IMathUtils* mu = IMathUtils::instance();
 
@@ -120,12 +119,11 @@ public:
                                                                              radius),
                                                       new LabelImageBuilder(label,
                                                                             GFont::sansSerif(labelFontSize, true),
-                                                                            2.0f,               // margin
+                                                                            Vector2F(2, 2),     // margin
                                                                             Color::BLACK,       // color
                                                                             Color::WHITE,       // shadowColor
                                                                             5.0f,               // shadowBlur
-                                                                            0.0f,               // shadowOffsetX
-                                                                            0.0f,               // shadowOffsetY
+                                                                            Vector2F(0, 0),     // shadowOffset
                                                                             Color::TRANSPARENT, // backgroundColor
                                                                             4.0f                // cornerRadius
                                                                             )
@@ -163,7 +161,9 @@ void G3MVectorStreaming2DemoScene::rawActivate(const G3MContext* context) {
                          true, // readExpired
                          true, // verbose
                          true, // haltOnError
-                         VectorStreamingRenderer::Format::SERVER
+                         VectorStreamingRenderer::Format::SERVER,
+                         Angle::fromDegrees(90), // minSectorSize,
+                         12500000                // minProjectedArea
                          );
 
 //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );

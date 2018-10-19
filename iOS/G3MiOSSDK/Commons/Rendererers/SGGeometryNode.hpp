@@ -28,6 +28,7 @@ private:
   GLState* _glState;
   void createGLState();
 
+  
 public:
 
   SGGeometryNode(const std::string& id,

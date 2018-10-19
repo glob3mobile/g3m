@@ -4,8 +4,8 @@ package org.glob3.mobile.specific;
 
 
 public final class Downloader_WebGL_Handler_WebkitImpl
-   extends
-      Downloader_WebGL_Handler_DefaultImpl {
+         extends
+            Downloader_WebGL_Handler_DefaultImpl {
 
    private static final boolean _isChrome = jsIsChrome();
 
@@ -52,4 +52,5 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 		};
 		xhr.send();
    }-*/;
+
 }
