@@ -1194,6 +1194,21 @@ long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node
   return 1;
 }
 
+long long VectorStreamingRenderer::VectorSet::createFeatureMark(const Node* node,
+                                                                const GEO3DPointGeometry* geometry) const {
+  Mark* mark = _symbolizer->createFeatureMark(_metadata,
+                                              node,
+                                              geometry);
+  if (mark == NULL) {
+    return 0;
+  }
+
+  mark->setToken( node->getFeatureMarkToken() );
+  _renderer->getMarkRenderer()->addMark( mark );
+
+  return 1;
+}
+
 VectorStreamingRenderer::VectorStreamingRenderer(MarksRenderer* markRenderer) :
 _markRenderer(markRenderer),
 _vectorSetsSize(0),

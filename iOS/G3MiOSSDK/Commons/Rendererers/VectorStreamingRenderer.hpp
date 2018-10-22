@@ -32,6 +32,7 @@ class JSONArray;
 class JSONObject;
 class Mark;
 class GEO2DPointGeometry;
+class GEO3DPointGeometry;
 class BoundingVolume;
 class Camera;
 class Frustum;
@@ -500,6 +501,10 @@ public:
                                     const VectorStreamingRenderer::Node* node,
                                     const GEO2DPointGeometry* geometry) const = 0;
 
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                                    const VectorStreamingRenderer::Node* node,
+                                    const GEO3DPointGeometry* geometry) const = 0;
+
     virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
                                     const VectorStreamingRenderer::Cluster* cluster) const = 0;
@@ -671,6 +676,9 @@ public:
 
     long long createFeatureMark(const Node* node,
                                 const GEO2DPointGeometry* geometry) const;
+
+    long long createFeatureMark(const Node* node,
+                                const GEO3DPointGeometry* geometry) const;
 
     long long createClusterMarks(const Node* node,
                                  const std::vector<Cluster*>* clusters) const;

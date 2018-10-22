@@ -93,6 +93,12 @@ public:
     return mark;
   }
 
+  Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                          const VectorStreamingRenderer::Node* node,
+                          const GEO3DPointGeometry* geometry) const {
+    return NULL;
+  }
+
   Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
                           const VectorStreamingRenderer::Cluster* cluster) const {

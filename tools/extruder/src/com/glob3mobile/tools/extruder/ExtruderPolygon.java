@@ -2,22 +2,12 @@
 
 package com.glob3mobile.tools.extruder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic2D;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
-
-import es.igosoftware.euclid.shape.GComplexPolygon2D;
-import es.igosoftware.euclid.shape.IPolygon2D;
-import es.igosoftware.euclid.shape.ISimplePolygon2D;
-import es.igosoftware.euclid.utils.GShapeUtils;
-import es.igosoftware.euclid.vector.GVector2D;
-import es.igosoftware.euclid.vector.IVector2;
-import es.igosoftware.util.GCollections;
-import es.igosoftware.util.IFunction;
 
 
 class ExtruderPolygon {
@@ -104,33 +94,29 @@ class ExtruderPolygon {
    //   }
 
 
-   private static ISimplePolygon2D createPolygon2D(final List<Geodetic2D> coordinates) {
-      final List<IVector2> points = GCollections.collect(coordinates, new IFunction<Geodetic2D, IVector2>() {
-         @Override
-         public IVector2 apply(final Geodetic2D coordinate) {
-            return new GVector2D(coordinate._longitude._degrees, coordinate._latitude._degrees);
-         }
-      });
-      return GShapeUtils.createPolygon2(false, points);
-   }
-
-
-   IPolygon2D asPolygon2D() {
-      final List<Geodetic2D> coordinates = _coordinates;
-      final List<List<Geodetic2D>> holesCoordinatesArray = _holesCoordinatesArray;
-
-      final ISimplePolygon2D hull = createPolygon2D(coordinates);
-      if (holesCoordinatesArray.isEmpty()) {
-         return hull;
-      }
-      final List<ISimplePolygon2D> holes = new ArrayList<>(holesCoordinatesArray.size());
-      for (final List<Geodetic2D> holeCoordinates : holesCoordinatesArray) {
-         final ISimplePolygon2D polygon2D = createPolygon2D(holeCoordinates);
-         if (polygon2D != null) {
-            holes.add(polygon2D);
-         }
-      }
-      return new GComplexPolygon2D(hull, holes);
-   }
+   //   private static ISimplePolygon2D createPolygon2D(final List<Geodetic2D> coordinates) {
+   //      final List<IVector2> points = GCollections.collect(coordinates,
+   //               coordinate -> new GVector2D(coordinate._longitude._degrees, coordinate._latitude._degrees));
+   //      return GShapeUtils.createPolygon2(false, points);
+   //   }
+   //
+   //
+   //   IPolygon2D asPolygon2D() {
+   //      final List<Geodetic2D> coordinates = _coordinates;
+   //      final List<List<Geodetic2D>> holesCoordinatesArray = _holesCoordinatesArray;
+   //
+   //      final ISimplePolygon2D hull = createPolygon2D(coordinates);
+   //      if (holesCoordinatesArray.isEmpty()) {
+   //         return hull;
+   //      }
+   //      final List<ISimplePolygon2D> holes = new ArrayList<>(holesCoordinatesArray.size());
+   //      for (final List<Geodetic2D> holeCoordinates : holesCoordinatesArray) {
+   //         final ISimplePolygon2D polygon2D = createPolygon2D(holeCoordinates);
+   //         if (polygon2D != null) {
+   //            holes.add(polygon2D);
+   //         }
+   //      }
+   //      return new GComplexPolygon2D(hull, holes);
+   //   }
 
 }

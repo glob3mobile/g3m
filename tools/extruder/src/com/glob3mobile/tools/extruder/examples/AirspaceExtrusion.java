@@ -22,6 +22,12 @@ public class AirspaceExtrusion {
                ExtrusionHandler {
 
 
+      private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
+      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f));
+      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f));
+      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f));
+
+
       private static double toMeter(final JSONObject properties,
                                     final String valueKey,
                                     final String unitKey) {
@@ -56,20 +62,18 @@ public class AirspaceExtrusion {
          final JSONObject properties = geoFeature.getProperties();
 
          final String type = properties.getAsString("type", "");
-         final Color color;
          if (type.equalsIgnoreCase("MTMA")) {
-            color = Color.fromRGBA(1, 1, 0, 0.5f);
+            return MATERIAL_1;
          }
          else if (type.equalsIgnoreCase("MCTR")) {
-            color = Color.fromRGBA(0, 1, 1, 0.5f);
+            return MATERIAL_2;
          }
          else if (type.equalsIgnoreCase("TMA")) {
-            color = Color.fromRGBA(1, 0, 1, 0.5f);
+            return MATERIAL_3;
          }
          else {
-            color = Color.fromRGBA(1, 0, 0, 0.5f);
+            return MATERIAL_4;
          }
-         return new G3MeshMaterial(color);
       }
 
 

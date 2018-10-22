@@ -39,10 +39,6 @@ import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
-import poly2Tri.Triangle;
-import poly2Tri.Triangulation;
-import poly2Tri.TriangulationException;
-
 import com.glob3mobile.tools.mesh.G3Mesh;
 import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
@@ -50,6 +46,10 @@ import com.seisw.util.geom.Clip;
 import com.seisw.util.geom.Poly;
 import com.seisw.util.geom.PolyDefault;
 import com.seisw.util.geom.PolySimple;
+
+import poly2Tri.Triangle;
+import poly2Tri.Triangulation;
+import poly2Tri.TriangulationException;
 
 
 public class PolygonExtruder {
@@ -183,9 +183,9 @@ public class PolygonExtruder {
 
    private static List<Geodetic2D> removeLastDuplicatedCoordinate(final List<Geodetic2D> coordinates) {
       final Geodetic2D firstCoordinate = coordinates.get(0);
-      final Geodetic2D lastCoordinate = coordinates.get(coordinates.size() - 1);
-      final List<Geodetic2D> result = firstCoordinate.isEquals(lastCoordinate) ? coordinates.subList(0, coordinates.size() - 1)
-                                                                              : coordinates;
+      final int lastIndex = coordinates.size() - 1;
+      final Geodetic2D lastCoordinate = coordinates.get(lastIndex);
+      final List<Geodetic2D> result = firstCoordinate.isEquals(lastCoordinate) ? coordinates.subList(0, lastIndex) : coordinates;
       Collections.reverse(result);
       return result;
    }
@@ -316,8 +316,10 @@ public class PolygonExtruder {
                                                final GEO2DPolygonData polygonData,
                                                final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler handler) {
-      final List<Geodetic2D> coordinates = removeConsecutiveDuplicatesCoordinates(removeLastDuplicatedCoordinate(polygonData.getCoordinates()));
-      final List<List<Geodetic2D>> holesCoordinates = removeConsecutiveDuplicatesCoordinatesArray(removeLastDuplicatedCoordinates(polygonData.getHolesCoordinatesArray()));
+      final List<Geodetic2D> coordinates = removeConsecutiveDuplicatesCoordinates(
+               removeLastDuplicatedCoordinate(polygonData.getCoordinates()));
+      final List<List<Geodetic2D>> holesCoordinates = removeConsecutiveDuplicatesCoordinatesArray(
+               removeLastDuplicatedCoordinates(polygonData.getHolesCoordinatesArray()));
       processGEO2DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
 
@@ -333,8 +335,8 @@ public class PolygonExtruder {
          processGEO2DMultiPolygonGeometry(geoFeature, (GEO2DMultiPolygonGeometry) geoGeometry, polygons, handler);
       }
       else {
-         //throw new RuntimeException("GEOGeometry " + geoGeometry.getClass() + " not supported");
-         System.out.println("GEOGeometry " + geoGeometry.getClass() + " not supported");
+         //throw new RuntimeException("GEOGeometry " + geoGeometry  + " not supported");
+         System.out.println("GEOGeometry " + geoGeometry + " not supported");
       }
    }
 
@@ -510,7 +512,8 @@ public class PolygonExtruder {
          }
 
          try {
-            final List<Triangle> ceilingTriangles = Triangulation.triangulate(numContures, numVerticesInContures, ceilingVertices);
+            final List<Triangle> ceilingTriangles = Triangulation.triangulate(numContures, numVerticesInContures,
+                     ceilingVertices);
             if (ceilingTriangles == null) {
                System.out.println("Error triangulating polygon #" + _polygonsCounter);
                statistics.countTriangulationError(ErrorType.RETURN_NULL, geoFeature, handler);

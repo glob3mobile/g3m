@@ -16,9 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <vector>
-///#include "RCObject.hpp"
-//class Geodetic2D;
+
 
 public class GEO2DPolygonData extends GEO2DCoordinatesData
 {

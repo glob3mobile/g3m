@@ -1,21 +1,20 @@
 //
-//  GEO2DCoordinatesData.cpp
+//  GEO3DCoordinatesData.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 5/11/14.
-//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 10/22/18.
 //
 
-#include "GEO2DCoordinatesData.hpp"
+#include "GEO3DCoordinatesData.hpp"
 
-#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
 #include "Sector.hpp"
 
-GEO2DCoordinatesData::~GEO2DCoordinatesData() {
+GEO3DCoordinatesData::~GEO3DCoordinatesData() {
 #ifdef C_CODE
   const size_t coordinatesCount = _coordinates->size();
   for (size_t i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = _coordinates->at(i);
+    Geodetic3D* coordinate = _coordinates->at(i);
     delete coordinate;
   }
   delete _coordinates;
@@ -26,13 +25,13 @@ GEO2DCoordinatesData::~GEO2DCoordinatesData() {
 #endif
 }
 
-Sector* GEO2DCoordinatesData::calculateSector() const {
+Sector* GEO3DCoordinatesData::calculateSector() const {
   const size_t size = _coordinates->size();
   if (size == 0) {
     return NULL;
   }
 
-  const Geodetic2D* coordinate0 = _coordinates->at(0);
+  const Geodetic3D* coordinate0 = _coordinates->at(0);
 
   double minLatRad = coordinate0->_latitude._radians;
   double maxLatRad = minLatRad;
@@ -41,7 +40,7 @@ Sector* GEO2DCoordinatesData::calculateSector() const {
   double maxLonRad = minLonRad;
 
   for (size_t i = 1; i < size; i++) {
-    const Geodetic2D* coordinate = _coordinates->at(i);
+    const Geodetic3D* coordinate = _coordinates->at(i);
 
     const double latRad = coordinate->_latitude._radians;
     if (latRad < minLatRad) {
@@ -70,13 +69,13 @@ Sector* GEO2DCoordinatesData::calculateSector() const {
                                 upperLatRadians, upperLonRadians);
 }
 
-const Sector* GEO2DCoordinatesData::getSector() const {
+const Sector* GEO3DCoordinatesData::getSector() const {
   if (_sector == NULL) {
     _sector = calculateSector();
   }
   return _sector;
 }
 
-long long GEO2DCoordinatesData::getCoordinatesCount() const {
+long long GEO3DCoordinatesData::getCoordinatesCount() const {
   return (_coordinates == NULL) ? 0 : _coordinates->size();
 }

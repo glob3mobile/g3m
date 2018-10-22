@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Geodetic2D;
 
-import poly2Tri.Triangle;
-
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
+
+import poly2Tri.Triangle;
 
 
 public class Building {
@@ -45,9 +45,9 @@ public class Building {
    }
 
 
-   private Wall createExteriorWall(final List<Geodetic2D> coordinates,
-                                   final double lowerHeight,
-                                   final double upperHeight) {
+   private static Wall createExteriorWall(final List<Geodetic2D> coordinates,
+                                          final double lowerHeight,
+                                          final double upperHeight) {
       final List<WallQuad> wallQuads = new ArrayList<WallQuad>(coordinates.size());
 
       Geodetic2D previousCoordinate = coordinates.get(coordinates.size() - 1);
@@ -62,18 +62,18 @@ public class Building {
    }
 
 
-   private Wall createInteriorWall(final List<Geodetic2D> coordinates,
-                                   final double lowerHeight,
-                                   final double upperHeight) {
+   private static Wall createInteriorWall(final List<Geodetic2D> coordinates,
+                                          final double lowerHeight,
+                                          final double upperHeight) {
       final ArrayList<Geodetic2D> reversed = new ArrayList<>(coordinates);
       Collections.reverse(reversed);
       return createExteriorWall(reversed, lowerHeight, upperHeight);
    }
 
 
-   private List<Wall> createInteriorWalls(final List<List<Geodetic2D>> holesCoordinatesArray,
-                                          final double lowerHeight,
-                                          final double upperHeight) {
+   private static List<Wall> createInteriorWalls(final List<List<Geodetic2D>> holesCoordinatesArray,
+                                                 final double lowerHeight,
+                                                 final double upperHeight) {
       final List<Wall> result = new ArrayList<>(holesCoordinatesArray.size());
       for (final List<Geodetic2D> holeCoordinates : holesCoordinatesArray) {
          result.add(createInteriorWall(holeCoordinates, lowerHeight, upperHeight));

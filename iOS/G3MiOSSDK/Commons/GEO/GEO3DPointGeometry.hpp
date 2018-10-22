@@ -1,22 +1,21 @@
 //
-//  GEO2DPointGeometry.hpp
+//  GEO3DPointGeometry.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 3/27/13.
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 10/21/18.
 //
-//
 
-#ifndef __G3MiOSSDK__GEO2DPointGeometry__
-#define __G3MiOSSDK__GEO2DPointGeometry__
+#ifndef GEO3DPointGeometry_hpp
+#define GEO3DPointGeometry_hpp
 
-#include "GEO2DGeometry.hpp"
+#include "GEO3DGeometry.hpp"
 
-#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
 
 
-class GEO2DPointGeometry : public GEO2DGeometry {
+class GEO3DPointGeometry : public GEO3DGeometry {
 private:
-  const Geodetic2D _position;
+  const Geodetic3D _position;
 
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
@@ -25,12 +24,12 @@ protected:
 
 public:
 
-  GEO2DPointGeometry(const Geodetic2D& position) :
+  GEO3DPointGeometry(const Geodetic3D& position) :
   _position(position)
   {
   }
 
-  const Geodetic2D getPosition() const {
+  const Geodetic3D getPosition() const {
     return _position;
   }
 
@@ -38,7 +37,7 @@ public:
     return 1;
   }
 
-  GEO2DPointGeometry* deepCopy() const;
+  GEO3DPointGeometry* deepCopy() const;
 
   long long createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
                                const VectorStreamingRenderer::Node*      node) const;

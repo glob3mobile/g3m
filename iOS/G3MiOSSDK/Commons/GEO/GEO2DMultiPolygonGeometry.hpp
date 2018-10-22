@@ -9,13 +9,13 @@
 #ifndef __G3MiOSSDK__GEO2DMultiPolygonGeometry__
 #define __G3MiOSSDK__GEO2DMultiPolygonGeometry__
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 
 #include <vector>
 class GEO2DPolygonData;
 
 
-class GEO2DMultiPolygonGeometry : public GEOGeometry2D {
+class GEO2DMultiPolygonGeometry : public GEO2DGeometry {
 private:
   std::vector<GEO2DPolygonData*>* _polygonsData;
 

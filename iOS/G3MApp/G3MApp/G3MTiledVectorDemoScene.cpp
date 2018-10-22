@@ -76,6 +76,10 @@ public:
     return NULL;
   }
 
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO3DPointGeometry* geometry) const {
+    return NULL;
+  }
+
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
 
@@ -106,6 +110,10 @@ public:
                                                    createPolygonSurfaceRasterStyle(geometry, baseColor)) );
 
     return symbols;
+  }
+
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO3DPolygonGeometry* geometry) const {
+    return NULL;
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {

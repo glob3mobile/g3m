@@ -12,6 +12,7 @@
 #include "IJSONParser.hpp"
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
+#include "JSONNumber.hpp"
 
 #include "GEOFeatureCollection.hpp"
 #include "GEOFeature.hpp"
@@ -19,9 +20,13 @@
 #include "GEO2DLineStringGeometry.hpp"
 #include "GEO2DMultiLineStringGeometry.hpp"
 #include "GEO2DPointGeometry.hpp"
+#include "GEO3DPointGeometry.hpp"
 #include "GEO2DPolygonGeometry.hpp"
+#include "GEO3DPolygonGeometry.hpp"
 #include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
 #include "GEO2DPolygonData.hpp"
+#include "GEO3DPolygonData.hpp"
 #include "GEO2DMultiPolygonGeometry.hpp"
 #include "BSONParser.hpp"
 #include "IStringBuilder.hpp"
@@ -70,13 +75,23 @@ void GEOJSONParser::showStatisticsToLogger() const {
   }
 
   if (_coordinates2DCount > 0) {
-    sb->addString(" Coordinates=");
+    sb->addString(" Coordinates2=");
     sb->addLong(_coordinates2DCount);
   }
 
+  if (_coordinates3DCount > 0) {
+    sb->addString(" Coordinates3=");
+    sb->addLong(_coordinates3DCount);
+  }
+
   if (_points2DCount > 0) {
-    sb->addString(" Points=");
+    sb->addString(" Points2=");
     sb->addLong(_points2DCount);
+  }
+
+  if (_points3DCount > 0) {
+    sb->addString(" Points3=");
+    sb->addLong(_points3DCount);
   }
 
   if (_lineStrings2DCount > 0) {
@@ -95,11 +110,21 @@ void GEOJSONParser::showStatisticsToLogger() const {
   }
 
   if (_polygon2DCount > 0) {
-    sb->addString(" Polygons=");
+    sb->addString(" Polygons2=");
     sb->addLong(_polygon2DCount);
-    if (_lineStringsInMultiLineString2DCount > 0) {
+    if (_holesLineStringsInPolygon2DCount > 0) {
       sb->addString(" (Holes=");
       sb->addLong(_holesLineStringsInPolygon2DCount);
+      sb->addString(")");
+    }
+  }
+
+  if (_polygon3DCount > 0) {
+    sb->addString(" Polygons3=");
+    sb->addLong(_polygon3DCount);
+    if (_holesLineStringsInPolygon3DCount > 0) {
+      sb->addString(" (Holes=");
+      sb->addLong(_holesLineStringsInPolygon3DCount);
       sb->addString(")");
     }
   }
@@ -154,13 +179,43 @@ std::vector<Geodetic2D*>* GEOJSONParser::create2DCoordinates(const JSONArray* js
   for (int i = 0; i < coordinatesCount; i++) {
     const JSONArray* jsCoordinate = jsCoordinates->getAsArray(i);
 
-    const double latitudeDegrees  = jsCoordinate->getAsNumber(1, 0.0);
-    const double longitudeDegrees = jsCoordinate->getAsNumber(0, 0.0);
+    const double latitudeDegrees  = jsCoordinate->getAsNumber(1)->value();
+    const double longitudeDegrees = jsCoordinate->getAsNumber(0)->value();
 
     Geodetic2D* coordinate = new Geodetic2D(Angle::fromDegrees(latitudeDegrees),
                                             Angle::fromDegrees(longitudeDegrees));
     coordinates->push_back( coordinate );
     _coordinates2DCount++;
+  }
+
+  return coordinates;
+}
+
+std::vector<Geodetic3D*>* GEOJSONParser::create3DCoordinates(const JSONArray* jsCoordinates) const {
+  if (jsCoordinates == NULL) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
+    return NULL;
+  }
+
+  const size_t coordinatesCount = jsCoordinates->size();
+  if (coordinatesCount == 0) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is empty");
+    return NULL;
+  }
+
+  std::vector<Geodetic3D*>* coordinates = new std::vector<Geodetic3D*>();
+  for (int i = 0; i < coordinatesCount; i++) {
+    const JSONArray* jsCoordinate = jsCoordinates->getAsArray(i);
+
+    const double latitudeDegrees  = jsCoordinate->getAsNumber(1)->value();
+    const double longitudeDegrees = jsCoordinate->getAsNumber(0)->value();
+    const double height           = jsCoordinate->getAsNumber(0)->value();
+
+    Geodetic3D* coordinate = new Geodetic3D(Angle::fromDegrees(latitudeDegrees),
+                                            Angle::fromDegrees(longitudeDegrees),
+                                            height);
+    coordinates->push_back( coordinate );
+    _coordinates3DCount++;
   }
 
   return coordinates;
@@ -177,52 +232,31 @@ GEOGeometry* GEOJSONParser::createPointGeometry(const JSONObject* jsonObject) co
 
   const size_t dimensions = jsCoordinates->size();
   if (dimensions == 2) {
-    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
-    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
+    const double latitudeDegrees  = jsCoordinates->getAsNumber(1)->value();
+    const double longitudeDegrees = jsCoordinates->getAsNumber(0)->value();
 
     _points2DCount++;
 
-    geo = new GEO2DPointGeometry( Geodetic2D::fromDegrees(latitudeDegrees, longitudeDegrees) );
+    geo = new GEO2DPointGeometry(Geodetic2D::fromDegrees(latitudeDegrees,
+                                                         longitudeDegrees));
   }
-  //  else if (dimensions == 3) {
-  //    const double latitudeDegrees  = jsCoordinates->getAsNumber(1, 0.0);
-  //    const double longitudeDegrees = jsCoordinates->getAsNumber(0, 0.0);
-  //    const double height           = jsCoordinates->getAsNumber(2, 0.0);
-  //  }
+  else if (dimensions == 3) {
+    const double latitudeDegrees  = jsCoordinates->getAsNumber(1)->value();
+    const double longitudeDegrees = jsCoordinates->getAsNumber(0)->value();
+    const double height           = jsCoordinates->getAsNumber(2)->value();
+
+    _points3DCount++;
+
+    geo = new GEO3DPointGeometry(Geodetic3D::fromDegrees(latitudeDegrees,
+                                                         longitudeDegrees,
+                                                         height));
+  }
   else {
     ILogger::instance()->logError("Mandatory \"coordinates\" dimensions not supported %d", dimensions);
   }
 
   return geo;
 }
-
-
-std::vector<Geodetic2D*>* GEOJSONParser::createFlat2DCoordinates(const JSONArray* jsCoordinates) const {
-  if (jsCoordinates == NULL) {
-    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
-    return NULL;
-  }
-
-  const size_t coordinatesCount = jsCoordinates->size();
-  if (coordinatesCount == 0) {
-    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is empty");
-    return NULL;
-  }
-
-  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-  for (int i = 0; i < coordinatesCount; i += 2) {
-    const double longitudeDegrees = jsCoordinates->getAsNumber(i + 0, 0.0);
-    const double latitudeDegrees  = jsCoordinates->getAsNumber(i + 1, 0.0);
-
-    Geodetic2D* coordinate = new Geodetic2D(Angle::fromDegrees(latitudeDegrees),
-                                            Angle::fromDegrees(longitudeDegrees));
-    coordinates->push_back( coordinate );
-    _coordinates2DCount++;
-  }
-
-  return coordinates;
-}
-
 
 GEOGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObject) const {
 
@@ -241,30 +275,23 @@ GEOGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObjec
   GEOGeometry* geo = NULL;
 
   const JSONArray* jsFirstCoordinate = jsCoordinates->getAsArray(0);
-
-  if (jsFirstCoordinate == NULL) {
-    if (jsCoordinates->getAsNumber(0) != NULL) {
-      // assumes flat format: [ lon, lat, lon, lat ... ]
-      std::vector<Geodetic2D*>* coordinates = createFlat2DCoordinates(jsCoordinates);
-      if (coordinates != NULL) {
-        geo = new GEO2DLineStringGeometry(coordinates);
-        _lineStrings2DCount++;
-      }
+  const size_t dimensions = jsFirstCoordinate->size();
+  if (dimensions == 2) {
+    std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
+    if (coordinates != NULL) {
+      geo = new GEO2DLineStringGeometry(coordinates);
+      _lineStrings2DCount++;
     }
   }
+//  else if (dimensions == 3) {
+//    std::vector<Geodetic3D*>* coordinates = create3DCoordinates(jsCoordinates);
+//    if (coordinates != NULL) {
+//      geo = new GEO3DLineStringGeometry(coordinates);
+//      _lineStrings3DCount++;
+//    }
+//  }
   else {
-    const size_t dimensions = jsFirstCoordinate->size();
-    if (dimensions == 2) {
-      std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
-      if (coordinates != NULL) {
-        geo = new GEO2DLineStringGeometry(coordinates);
-        _lineStrings2DCount++;
-      }
-    }
-    else {
-      ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
-      return NULL;
-    }
+    ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
   }
 
   return geo;
@@ -313,9 +340,23 @@ GEOGeometry* GEOJSONParser::createMultiLineStringGeometry(const JSONObject* json
     geo = new GEO2DMultiLineStringGeometry(coordinatesArray);
     _multiLineStrings2DCount++;
   }
+//  else if (dimensions == 3) {
+//    std::vector<std::vector<Geodetic3D*>*>* coordinatesArray = new std::vector<std::vector<Geodetic3D*>*>();
+//
+//    for (int i = 0; i < coordinatesArrayCount; i++) {
+//      const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(i);
+//      std::vector<Geodetic3D*>* coordinates = create3DCoordinates(jsCoordinates);
+//      if (coordinates != NULL) {
+//        coordinatesArray->push_back( coordinates );
+//        _lineStringsInMultiLineString3DCount++;
+//      }
+//    }
+//
+//    geo = new GEO3DMultiLineStringGeometry(coordinatesArray);
+//    _multiLineStrings3DCount++;
+//  }
   else {
     ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
-    return NULL;
   }
 
   return geo;
@@ -341,78 +382,110 @@ GEO2DPolygonData* GEOJSONParser::parsePolygon2DData(const JSONArray* jsCoordinat
   }
 
   const JSONArray* jsFirstCoordinate = jsFirstCoordinates->getAsArray(0);
-  if (jsFirstCoordinate == NULL) {
-    if (jsFirstCoordinates->getAsNumber(0) != NULL) {
-      // assumes flat format: [ lon, lat, lon, lat ... ]
-      const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(0);
-      std::vector<Geodetic2D*>* coordinates = createFlat2DCoordinates(jsCoordinates);
+  const size_t dimensions = jsFirstCoordinate->size();
+  if (dimensions == 2) {
+    const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(0);
+    std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
 
-      std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic2D*>*>();
-      for (int i = 1; i < coordinatesArrayCount; i++) {
-        const JSONArray* jsHoleCoordinates = jsCoordinatesArray->getAsArray(i);
-        std::vector<Geodetic2D*>* holeCoordinates = createFlat2DCoordinates(jsHoleCoordinates);
-        if (holeCoordinates != NULL) {
-          holesCoordinatesArray->push_back( holeCoordinates );
-          _holesLineStringsInPolygon2DCount++;
-        }
+    std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic2D*>*>();
+    for (int i = 1; i < coordinatesArrayCount; i++) {
+      const JSONArray* jsHoleCoordinates = jsCoordinatesArray->getAsArray(i);
+      std::vector<Geodetic2D*>* holeCoordinates = create2DCoordinates(jsHoleCoordinates);
+      if (holeCoordinates != NULL) {
+        holesCoordinatesArray->push_back( holeCoordinates );
+        _holesLineStringsInPolygon2DCount++;
       }
-
-      if (holesCoordinatesArray->size() == 0) {
-        delete holesCoordinatesArray;
-        holesCoordinatesArray = NULL;
-      }
-
-      _polygon2DCount++;
-      return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
     }
-  }
-  else {
-    const size_t dimensions = jsFirstCoordinate->size();
-    if (dimensions == 2) {
-      const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(0);
-      std::vector<Geodetic2D*>* coordinates = create2DCoordinates(jsCoordinates);
 
-      std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic2D*>*>();
-      for (int i = 1; i < coordinatesArrayCount; i++) {
-        const JSONArray* jsHoleCoordinates = jsCoordinatesArray->getAsArray(i);
-        std::vector<Geodetic2D*>* holeCoordinates = create2DCoordinates(jsHoleCoordinates);
-        if (holeCoordinates != NULL) {
-          holesCoordinatesArray->push_back( holeCoordinates );
-          _holesLineStringsInPolygon2DCount++;
-        }
-      }
-
-      if (holesCoordinatesArray->size() == 0) {
-        delete holesCoordinatesArray;
-        holesCoordinatesArray = NULL;
-      }
-
-      _polygon2DCount++;
-      return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
+    if (holesCoordinatesArray->size() == 0) {
+      delete holesCoordinatesArray;
+      holesCoordinatesArray = NULL;
     }
-    ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
+
+    _polygon2DCount++;
+    return new GEO2DPolygonData(coordinates, holesCoordinatesArray);
   }
 
+  ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
+  return NULL;
+}
+
+GEO3DPolygonData* GEOJSONParser::parsePolygon3DData(const JSONArray* jsCoordinatesArray) const {
+  const size_t coordinatesArrayCount = jsCoordinatesArray->size();
+  if (coordinatesArrayCount == 0) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" attribute is empty");
+    return NULL;
+  }
+
+  const JSONArray* jsFirstCoordinates = jsCoordinatesArray->getAsArray(0);
+  if (jsFirstCoordinates == NULL) {
+    ILogger::instance()->logError("Invalid format for first \"coordinates\" element");
+    return NULL;
+  }
+  const size_t firstCoordinatesCount = jsFirstCoordinates->size();
+  if (firstCoordinatesCount == 0) {
+    ILogger::instance()->logError("Invalid format for first \"coordinates\" element");
+    return NULL;
+  }
+
+  const JSONArray* jsFirstCoordinate = jsFirstCoordinates->getAsArray(0);
+  const size_t dimensions = jsFirstCoordinate->size();
+  if (dimensions == 2) {
+    const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(0);
+    std::vector<Geodetic3D*>* coordinates = create3DCoordinates(jsCoordinates);
+
+    std::vector<std::vector<Geodetic3D*>*>* holesCoordinatesArray = new std::vector<std::vector<Geodetic3D*>*>();
+    for (int i = 1; i < coordinatesArrayCount; i++) {
+      const JSONArray* jsHoleCoordinates = jsCoordinatesArray->getAsArray(i);
+      std::vector<Geodetic3D*>* holeCoordinates = create3DCoordinates(jsHoleCoordinates);
+      if (holeCoordinates != NULL) {
+        holesCoordinatesArray->push_back( holeCoordinates );
+        _holesLineStringsInPolygon3DCount++;
+      }
+    }
+
+    if (holesCoordinatesArray->size() == 0) {
+      delete holesCoordinatesArray;
+      holesCoordinatesArray = NULL;
+    }
+
+    _polygon3DCount++;
+    return new GEO3DPolygonData(coordinates, holesCoordinatesArray);
+  }
+
+  ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
   return NULL;
 }
 
 
-GEO2DPolygonData* GEOJSONParser::parsePolygon2DData(const JSONObject* jsonObject) const {
+GEOGeometry* GEOJSONParser::createPolygonGeometry(const JSONObject* jsonObject) const {
   const JSONArray* jsCoordinatesArray = jsonObject->getAsArray("coordinates");
-  if (jsCoordinatesArray == NULL) {
+  if ((jsCoordinatesArray == NULL) ||
+      (jsCoordinatesArray->size() == 0)) {
     ILogger::instance()->logError("Mandatory \"coordinates\" attribute is not present");
     return NULL;
   }
 
-  return parsePolygon2DData(jsCoordinatesArray);
-}
+  const JSONArray* jsOuterRingArray = jsCoordinatesArray->getAsArray(0);
+  if ((jsOuterRingArray == NULL) ||
+      (jsOuterRingArray->size() == 0)) {
+    ILogger::instance()->logError("Mandatory \"coordinates\" first ring is not present");
+    return NULL;
+  }
 
+  const JSONArray* jsFirstCoordinate = jsOuterRingArray->getAsArray(0);
+  const size_t dimensions = jsFirstCoordinate->size();
+  if (dimensions == 2) {
+    GEO2DPolygonData* polygonData = parsePolygon2DData(jsCoordinatesArray);
+    return (polygonData == NULL) ? NULL : new GEO2DPolygonGeometry(polygonData);
+  }
+  else if (dimensions == 3) {
+    GEO3DPolygonData* polygonData = parsePolygon3DData(jsCoordinatesArray);
+    return (polygonData == NULL) ? NULL : new GEO3DPolygonGeometry(polygonData);
+  }
 
-
-GEOGeometry* GEOJSONParser::createPolygonGeometry(const JSONObject* jsonObject) const {
-  GEO2DPolygonData* polygonData = parsePolygon2DData(jsonObject);
-
-  return (polygonData == NULL) ? NULL : new GEO2DPolygonGeometry(polygonData);
+  ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
+  return NULL;
 }
 
 GEOGeometry* GEOJSONParser::createMultiPolygonGeometry(const JSONObject* jsonObject) const {
@@ -450,25 +523,26 @@ GEOGeometry* GEOJSONParser::createGeometry(const JSONObject* jsonObject) const {
   GEOGeometry* geo = NULL;
 
   /*
+   "Point"
+   - TODO --> "MultiPoint"
    "LineString"
    "MultiLineString"
-   "Point"
    "Polygon"
-
    "MultiPolygon"
-
-   "MultiPoint"
-   "GeometryCollection"
+   - TODO --> "GeometryCollection"
    */
 
-  if (type.compare("LineString") == 0) {
+  if (type.compare("Point") == 0) {
+    geo = createPointGeometry(jsonObject);
+  }
+//  else if (type.compare("MultiPoint") == 0) {
+//    geo = createMultiPointPointGeometry(jsonObject);
+//  }
+  else if (type.compare("LineString") == 0) {
     geo = createLineStringGeometry(jsonObject);
   }
   else if (type.compare("MultiLineString") == 0) {
     geo = createMultiLineStringGeometry(jsonObject);
-  }
-  else if (type.compare("Point") == 0) {
-    geo = createPointGeometry(jsonObject);
   }
   else if (type.compare("Polygon") == 0) {
     geo = createPolygonGeometry(jsonObject);

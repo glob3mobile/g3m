@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class GEO2DPolygonData;
 
 
-public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
+public class GEO2DMultiPolygonGeometry extends GEO2DGeometry
 {
   private java.util.ArrayList<GEO2DPolygonData> _polygonsData;
 

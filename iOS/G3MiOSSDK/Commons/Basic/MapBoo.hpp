@@ -196,6 +196,10 @@ public:
                             const VectorStreamingRenderer::Node* node,
                             const GEO2DPointGeometry* geometry) const;
 
+    Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                            const VectorStreamingRenderer::Node* node,
+                            const GEO3DPointGeometry* geometry) const;
+
     Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,
                             const VectorStreamingRenderer::Cluster* cluster) const;
@@ -254,6 +258,10 @@ public:
     Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,
                             const GEO2DPointGeometry* geometry) const;
+
+    Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                            const VectorStreamingRenderer::Node* node,
+                            const GEO3DPointGeometry* geometry) const;
 
     Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                             const VectorStreamingRenderer::Node* node,

@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class GEO2DPolygonData;
 
-public class GEO2DPolygonGeometry extends GEOGeometry2D
+public class GEO2DPolygonGeometry extends GEO2DGeometry
 {
   private final GEO2DPolygonData _polygonData;
 

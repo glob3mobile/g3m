@@ -10,9 +10,7 @@
 #define __G3MiOSSDK__GEO2DPolygonData__
 
 #include "GEO2DCoordinatesData.hpp"
-//#include <vector>
-//#include "RCObject.hpp"
-//class Geodetic2D;
+
 
 class GEO2DPolygonData : public GEO2DCoordinatesData {
 private:
@@ -40,6 +38,5 @@ public:
   bool contains(const Geodetic2D& point) const;
 
 };
-
 
 #endif

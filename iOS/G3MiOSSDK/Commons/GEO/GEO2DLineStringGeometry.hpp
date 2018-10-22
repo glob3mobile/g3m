@@ -9,11 +9,11 @@
 #ifndef __G3MiOSSDK__GEO2DLineStringGeometry__
 #define __G3MiOSSDK__GEO2DLineStringGeometry__
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 class Geodetic2D;
 #include "GEO2DCoordinatesData.hpp"
 
-class GEO2DLineStringGeometry : public GEOGeometry2D {
+class GEO2DLineStringGeometry : public GEO2DGeometry {
 private:
   const GEO2DCoordinatesData* _coordinatesData;
 
