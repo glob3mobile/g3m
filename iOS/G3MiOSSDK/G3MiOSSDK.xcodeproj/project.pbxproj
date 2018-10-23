@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		03262BBF217E157D00BF48FD /* GEO3DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03262BBD217E157D00BF48FD /* GEO3DLineStringGeometry.cpp */; };
+		03D47688217F217C004D783E /* GEO3DMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D47686217F217C004D783E /* GEO3DMultiLineStringGeometry.cpp */; };
+		03D4768B217F36CD004D783E /* GEO3DCoordinatesArrayData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D47689217F36CD004D783E /* GEO3DCoordinatesArrayData.cpp */; };
 		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
 		349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
@@ -1321,6 +1323,10 @@
 /* Begin PBXFileReference section */
 		03262BBD217E157D00BF48FD /* GEO3DLineStringGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GEO3DLineStringGeometry.cpp; path = Commons/GEO/GEO3DLineStringGeometry.cpp; sourceTree = "<group>"; };
 		03262BBE217E157D00BF48FD /* GEO3DLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO3DLineStringGeometry.hpp; path = Commons/GEO/GEO3DLineStringGeometry.hpp; sourceTree = "<group>"; };
+		03D47686217F217C004D783E /* GEO3DMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GEO3DMultiLineStringGeometry.cpp; path = Commons/GEO/GEO3DMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
+		03D47687217F217C004D783E /* GEO3DMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO3DMultiLineStringGeometry.hpp; path = Commons/GEO/GEO3DMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
+		03D47689217F36CD004D783E /* GEO3DCoordinatesArrayData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GEO3DCoordinatesArrayData.cpp; path = Commons/GEO/GEO3DCoordinatesArrayData.cpp; sourceTree = "<group>"; };
+		03D4768A217F36CD004D783E /* GEO3DCoordinatesArrayData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO3DCoordinatesArrayData.hpp; path = Commons/GEO/GEO3DCoordinatesArrayData.hpp; sourceTree = "<group>"; };
 		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
 		349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORectangleRasterSymbol.hpp; path = Commons/GEO/GEORectangleRasterSymbol.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
@@ -2985,6 +2991,8 @@
 				03262BBE217E157D00BF48FD /* GEO3DLineStringGeometry.hpp */,
 				CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */,
 				CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */,
+				03D47686217F217C004D783E /* GEO3DMultiLineStringGeometry.cpp */,
+				03D47687217F217C004D783E /* GEO3DMultiLineStringGeometry.hpp */,
 				CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */,
 				CFA1FDA317A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.hpp */,
 				CF1871B51703534200092888 /* GEO2DPointGeometry.cpp */,
@@ -2995,6 +3003,8 @@
 				CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */,
 				CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */,
 				CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */,
+				03D47689217F36CD004D783E /* GEO3DCoordinatesArrayData.cpp */,
+				03D4768A217F36CD004D783E /* GEO3DCoordinatesArrayData.hpp */,
 				CF5C5DCE217DBDFE00F4E1F5 /* GEO3DCoordinatesData.cpp */,
 				CF5C5DCF217DBDFE00F4E1F5 /* GEO3DCoordinatesData.hpp */,
 				CF954B0C217CDBF30093DAC7 /* GEO3DGeometry.cpp */,
@@ -3587,6 +3597,7 @@
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
+				03D47688217F217C004D783E /* GEO3DMultiLineStringGeometry.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 				CF1B62D319055B7900AB01A9 /* TilesRenderParameters.cpp in Sources */,
 				E745CC7916484A9A00819711 /* IStorage.cpp in Sources */,
@@ -3672,6 +3683,7 @@
 				CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */,
 				CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */,
 				CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */,
+				03D4768B217F36CD004D783E /* GEO3DCoordinatesArrayData.cpp in Sources */,
 				E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */,
 				CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */,
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,

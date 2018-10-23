@@ -20,6 +20,7 @@
 #include "GEO2DLineStringGeometry.hpp"
 #include "GEO3DLineStringGeometry.hpp"
 #include "GEO2DMultiLineStringGeometry.hpp"
+#include "GEO3DMultiLineStringGeometry.hpp"
 #include "GEO2DPointGeometry.hpp"
 #include "GEO3DPointGeometry.hpp"
 #include "GEO2DPolygonGeometry.hpp"

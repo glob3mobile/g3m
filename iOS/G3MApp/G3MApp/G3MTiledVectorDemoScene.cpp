@@ -92,13 +92,6 @@ public:
   }
   
   std::vector<GEORasterSymbol*>* createSymbols(const GEO3DLineStringGeometry* geometry) const {
-//    std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
-//
-//    symbols->push_back( new GEOLineRasterSymbol(geometry->getCoordinates(),
-//                                                createLineRasterStyle(geometry,
-//                                                                      baseColorForGeometry(geometry))) );
-//
-//    return symbols;
     return NULL;
   }
 
@@ -112,6 +105,10 @@ public:
     return symbols;
   }
 
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO3DMultiLineStringGeometry* geometry) const {
+    return NULL;
+  }
+  
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
 
@@ -246,13 +243,13 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
 void G3MTiledVectorDemoScene::rawSelectOption(const std::string& option,
                                               int optionIndex) {
   if (option == "Pinkish") {
-    _tiledVectorLayer->setSymbolizer( new PinkishRasterSymbolizer(), true );
+    _tiledVectorLayer->setSymbolizer( new PinkishRasterSymbolizer(),  true );
   }
   else if (option == "Greenish") {
     _tiledVectorLayer->setSymbolizer( new GreenishRasterSymbolizer(), true );
   }
   else {
-    _tiledVectorLayer->setSymbolizer( new RainbowRasterSymbolizer(), true );
+    _tiledVectorLayer->setSymbolizer( new RainbowRasterSymbolizer(),  true );
   }
 }
 

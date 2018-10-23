@@ -37,6 +37,10 @@ public:
     return Geodetic3D(Angle::fromDegrees(lat), Angle::fromDegrees(lon), height);
   }
 
+  static Geodetic3D fromRadians(double lat, double lon, double height) {
+    return Geodetic3D(Angle::fromRadians(lat), Angle::fromRadians(lon), height);
+  }
+  
   static Geodetic3D linearInterpolation(const Geodetic3D& from,
                                         const Geodetic3D& to,
                                         double alpha);

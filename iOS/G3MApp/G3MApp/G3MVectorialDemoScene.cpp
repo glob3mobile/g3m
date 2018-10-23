@@ -157,6 +157,11 @@ public:
     return NULL;
   }
 
+  
+  std::vector<GEOSymbol*>* createSymbols(const GEO3DMultiLineStringGeometry* geometry) const {
+    return NULL;
+  }
+  
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
     symbols->push_back(new GEOPolygonRasterSymbol(geometry->getPolygonData(),
