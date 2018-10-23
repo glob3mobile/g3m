@@ -34,7 +34,6 @@
 		CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6920C818394F56007409D8 /* restaurant-48x48.png */; };
 		CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */; };
 		CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */; };
-		CF71BB5D217A0D3700E5FD67 /* nucleoUrbano.json in Resources */ = {isa = PBXBuildFile; fileRef = CF71BB5B217A0D3700E5FD67 /* nucleoUrbano.json */; };
 		CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.mm */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */; };
@@ -180,7 +179,6 @@
 		CF6920CA1839679B007409D8 /* G3MSelectOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectOptionViewController.h; sourceTree = "<group>"; };
 		CF6920CB1839679B007409D8 /* G3MSelectOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectOptionViewController.mm; sourceTree = "<group>"; };
 		CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = loudoun_4326_300.bil; sourceTree = "<group>"; };
-		CF71BB5B217A0D3700E5FD67 /* nucleoUrbano.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nucleoUrbano.json; sourceTree = "<group>"; };
 		CF8B1A521837DBFA004D3902 /* G3MDemoModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = G3MDemoModel.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
@@ -518,7 +516,6 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CF71BB5B217A0D3700E5FD67 /* nucleoUrbano.json */,
 				CF3BC0692177967200386FA5 /* intramuros.json */,
 				CF3BC0672177967200386FA5 /* textures */,
 				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
@@ -692,7 +689,6 @@
 				E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */,
 				CFE3B3D9183AD2D40078C796 /* textures-A320 in Resources */,
 				E780A3CF16D29EA5000F0395 /* marker-wikipedia-72x72.png in Resources */,
-				CF71BB5D217A0D3700E5FD67 /* nucleoUrbano.json in Resources */,
 				E780A3D016D29EA5000F0395 /* play.png in Resources */,
 				E780A3D116D29EA5000F0395 /* satellite-on-96x48.png in Resources */,
 				CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */,
