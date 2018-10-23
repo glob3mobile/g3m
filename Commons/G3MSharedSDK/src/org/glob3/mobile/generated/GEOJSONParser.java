@@ -505,7 +505,7 @@ public class GEOJSONParser
   
     final JSONArray jsFirstCoordinate = jsFirstCoordinates.getAsArray(0);
     final int dimensions = jsFirstCoordinate.size();
-    if (dimensions == 2)
+    if (dimensions == 3)
     {
       final JSONArray jsCoordinates = jsCoordinatesArray.getAsArray(0);
       java.util.ArrayList<Geodetic3D> coordinates = create3DCoordinates(jsCoordinates);

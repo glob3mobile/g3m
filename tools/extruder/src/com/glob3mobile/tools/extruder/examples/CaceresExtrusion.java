@@ -97,8 +97,10 @@ public class CaceresExtrusion {
       System.out.println("CaceresExtrusion 0.1");
       System.out.println("--------------------\n");
 
-      final String inputFileName = "nucleo_urbano.geojson";
-      final String outputFileName = "nucleo_urbano_3d.json";
+      //      final String inputFileName = "nucleo_urbano.geojson";
+      //      final String outputFileName = "nucleo_urbano_3d.json";
+      final String inputFileName = "muralla.geojson";
+      final String outputFileName = "muralla_3d.geojson";
 
       PolygonExtruder.process(inputFileName, outputFileName, new CaceresExtrusionHandler());
    }

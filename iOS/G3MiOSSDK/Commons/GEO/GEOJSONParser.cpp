@@ -430,7 +430,7 @@ GEO3DPolygonData* GEOJSONParser::parsePolygon3DData(const JSONArray* jsCoordinat
 
   const JSONArray* jsFirstCoordinate = jsFirstCoordinates->getAsArray(0);
   const size_t dimensions = jsFirstCoordinate->size();
-  if (dimensions == 2) {
+  if (dimensions == 3) {
     const JSONArray* jsCoordinates = jsCoordinatesArray->getAsArray(0);
     std::vector<Geodetic3D*>* coordinates = create3DCoordinates(jsCoordinates);
 
