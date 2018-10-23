@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03262BBF217E157D00BF48FD /* GEO3DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03262BBD217E157D00BF48FD /* GEO3DLineStringGeometry.cpp */; };
 		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
 		349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
@@ -1318,6 +1319,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03262BBD217E157D00BF48FD /* GEO3DLineStringGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GEO3DLineStringGeometry.cpp; path = Commons/GEO/GEO3DLineStringGeometry.cpp; sourceTree = "<group>"; };
+		03262BBE217E157D00BF48FD /* GEO3DLineStringGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO3DLineStringGeometry.hpp; path = Commons/GEO/GEO3DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
 		349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORectangleRasterSymbol.hpp; path = Commons/GEO/GEORectangleRasterSymbol.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
@@ -2978,6 +2981,8 @@
 				CFBD67AC179DBB7F0056A2BD /* GEO2DLineRasterStyle.hpp */,
 				CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */,
 				CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */,
+				03262BBD217E157D00BF48FD /* GEO3DLineStringGeometry.cpp */,
+				03262BBE217E157D00BF48FD /* GEO3DLineStringGeometry.hpp */,
 				CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */,
 				CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */,
 				CFA1FDA217A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp */,
@@ -3433,6 +3438,7 @@
 				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
+				03262BBF217E157D00BF48FD /* GEO3DLineStringGeometry.cpp in Sources */,
 				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
 				CFAB53F51A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp in Sources */,
 				383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */,

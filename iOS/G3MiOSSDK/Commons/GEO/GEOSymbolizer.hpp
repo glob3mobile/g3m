@@ -15,6 +15,7 @@ class GEOSymbol;
 class GEO2DPointGeometry;
 class GEO3DPointGeometry;
 class GEO2DLineStringGeometry;
+class GEO3DLineStringGeometry;
 class GEO2DMultiLineStringGeometry;
 class GEO2DPolygonGeometry;
 class GEO3DPolygonGeometry;
@@ -30,6 +31,8 @@ public:
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO3DPointGeometry* geometry) const = 0;
 
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry*      geometry) const = 0;
+  virtual std::vector<GEOSymbol*>* createSymbols(const GEO3DLineStringGeometry*      geometry) const = 0;
+  
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const = 0;
 
   virtual std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry*      geometry) const = 0;

@@ -68,6 +68,10 @@ public:
     return NULL;
   }
 
+  std::vector<GEOSymbol*>* createSymbols(const GEO3DLineStringGeometry* geometry) const {
+    return NULL;
+  }
+
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
     return NULL;
   }

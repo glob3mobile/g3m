@@ -144,6 +144,15 @@ public:
     return symbols;
   }
 
+  
+  std::vector<GEOSymbol*>* createSymbols(const GEO3DLineStringGeometry* geometry) const {
+//    std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
+//    symbols->push_back(new GEOLineRasterSymbol(geometry->getCoordinates(),
+//                                               createLineRasterStyle(geometry)));
+//    return symbols;
+    return NULL;
+  }
+  
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
     return NULL;
   }

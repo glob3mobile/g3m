@@ -36,8 +36,11 @@ private:
   mutable int _coordinates2DCount;
   mutable int _coordinates3DCount;
   mutable int _lineStrings2DCount;
+  mutable int _lineStrings3DCount;
   mutable int _multiLineStrings2DCount;
+  mutable int _multiLineStrings3DCount;
   mutable int _lineStringsInMultiLineString2DCount;
+  mutable int _lineStringsInMultiLineString3DCount;
   mutable int _featuresCount;
   mutable int _featuresCollectionCount;
   mutable int _polygon2DCount;
@@ -55,7 +58,9 @@ private:
   _coordinates2DCount(0),
   _coordinates3DCount(0),
   _lineStrings2DCount(0),
+  _lineStrings3DCount(0),
   _multiLineStrings2DCount(0),
+  _multiLineStrings3DCount(0),
   _lineStringsInMultiLineString2DCount(0),
   _featuresCount(0),
   _featuresCollectionCount(0),
