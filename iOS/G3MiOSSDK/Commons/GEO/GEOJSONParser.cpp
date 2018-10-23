@@ -18,6 +18,7 @@
 #include "GEOFeature.hpp"
 #include "GEOGeometry.hpp"
 #include "GEO2DLineStringGeometry.hpp"
+#include "GEO3DLineStringGeometry.hpp"
 #include "GEO2DMultiLineStringGeometry.hpp"
 #include "GEO2DPointGeometry.hpp"
 #include "GEO3DPointGeometry.hpp"
@@ -95,6 +96,11 @@ void GEOJSONParser::showStatisticsToLogger() const {
   }
 
   if (_lineStrings2DCount > 0) {
+    sb->addString(" LineStrings=");
+    sb->addLong(_lineStrings2DCount);
+  }
+  
+  if (_lineStrings3DCount > 0) {
     sb->addString(" LineStrings=");
     sb->addLong(_lineStrings2DCount);
   }
@@ -283,13 +289,13 @@ GEOGeometry* GEOJSONParser::createLineStringGeometry(const JSONObject* jsonObjec
       _lineStrings2DCount++;
     }
   }
-//  else if (dimensions == 3) {
-//    std::vector<Geodetic3D*>* coordinates = create3DCoordinates(jsCoordinates);
-//    if (coordinates != NULL) {
-//      geo = new GEO3DLineStringGeometry(coordinates);
-//      _lineStrings3DCount++;
-//    }
-//  }
+  else if (dimensions == 3) {
+    std::vector<Geodetic3D*>* coordinates = create3DCoordinates(jsCoordinates);
+    if (coordinates != NULL) {
+      geo = new GEO3DLineStringGeometry(coordinates);
+      _lineStrings3DCount++;
+    }
+  }
   else {
     ILogger::instance()->logError("Invalid coordinates dimensions=%d", dimensions);
   }
