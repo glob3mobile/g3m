@@ -234,7 +234,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
                           vertices,
                           lineWidth,
                           pointSize,
-                          material->_color, // flatColor
+                          new Color(material->_color), // flatColor
                           colors,
                           depthTest,
                           normals);
@@ -248,7 +248,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
                            true,
                            lineWidth,
                            pointSize,
-                           material->_color, // flatColor
+                           new Color(material->_color), // flatColor
                            colors,
                            depthTest,
                            normals);
