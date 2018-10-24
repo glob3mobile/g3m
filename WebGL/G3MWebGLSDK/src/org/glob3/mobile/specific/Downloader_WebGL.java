@@ -11,6 +11,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
@@ -253,7 +254,7 @@ public final class Downloader_WebGL
 
    @Override
    public String statistics() {
-      final StringBuilder_WebGL sb = new StringBuilder_WebGL();
+      final StringBuilder_WebGL sb = new StringBuilder_WebGL(IStringBuilder.DEFAULT_FLOAT_PRECISION);
 
       sb.addString("Downloader_WebGL(downloading=");
       sb.addInt(_downloadingHandlers.size());

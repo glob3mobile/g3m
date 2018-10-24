@@ -18,24 +18,29 @@ package org.glob3.mobile.generated;
 public abstract class IStringBuilder
 {
 
-  private static IStringBuilder _instance = null;
+  private static IStringBuilder _exemplar = null;
 
 
+  protected abstract IStringBuilder clone(int floatPrecision);
 
-  protected abstract IStringBuilder getNewInstance();
+  public static final int DEFAULT_FLOAT_PRECISION = 20;
 
-  public static void setInstance(IStringBuilder isb)
+  public static void setInstance(IStringBuilder exemplar)
   {
-    if (_instance != null)
+    if (_exemplar != null)
     {
       ILogger.instance().logWarning("IStringBuilder set two times");
     }
-    _instance = isb;
+    _exemplar = exemplar;
   }
 
   public static IStringBuilder newStringBuilder()
   {
-    return _instance.getNewInstance();
+     return newStringBuilder(DEFAULT_FLOAT_PRECISION);
+  }
+  public static IStringBuilder newStringBuilder(int floatPrecision)
+  {
+    return _exemplar.clone(floatPrecision);
   }
 
   public abstract IStringBuilder addDouble(double d);
@@ -47,7 +52,12 @@ public abstract class IStringBuilder
   public abstract IStringBuilder addString(String s);
   public abstract IStringBuilder addBool(boolean b);
 
-  public abstract IStringBuilder clear();
+  public IStringBuilder clear()
+  {
+    return clear(DEFAULT_FLOAT_PRECISION);
+  }
+
+  public abstract IStringBuilder clear(int floatPrecision);
 
   public abstract String getString();
 

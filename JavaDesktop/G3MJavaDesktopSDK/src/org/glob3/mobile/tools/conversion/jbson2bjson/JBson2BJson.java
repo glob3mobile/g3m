@@ -48,7 +48,7 @@ public class JBson2BJson {
 
 
    private static void initialize() {
-      IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+      IStringBuilder.setInstance(new StringBuilder_JavaDesktop(IStringBuilder.DEFAULT_FLOAT_PRECISION));
       if (IMathUtils.instance() == null) {
          IMathUtils.setInstance(new MathUtils_JavaDesktop());
       }
@@ -218,7 +218,8 @@ public class JBson2BJson {
                                      final File fJson) throws IOException {
       if (fJson.exists() && (jbase != null)) {
          try (final FileOutputStream fout = new FileOutputStream(fJson)) {
-            fout.write(JSONGenerator.generate(jbase).getBytes());
+            final int floatPrecision = IStringBuilder.DEFAULT_FLOAT_PRECISION;
+            fout.write(JSONGenerator.generate(jbase, floatPrecision).getBytes());
             fout.flush();
          }
       }
@@ -269,7 +270,7 @@ public class JBson2BJson {
 
       public static boolean checkFileIsJson(final File fJson) {
          return fJson.exists() && fJson.isFile()
-                 && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"));
+                && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"));
 
       }
 

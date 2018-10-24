@@ -41,6 +41,11 @@ public class GEO2DLineStringGeometry extends GEO2DGeometry
     return symbolizer.createSymbols(this);
   }
 
+  protected final Sector calculateSector()
+  {
+    return (_coordinatesData == null) ? null : _coordinatesData.getSector();
+  }
+
 
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)
   {

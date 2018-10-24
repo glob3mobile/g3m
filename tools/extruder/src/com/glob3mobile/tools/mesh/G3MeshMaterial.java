@@ -92,7 +92,7 @@ public class G3MeshMaterial {
    }
 
 
-   public JSONObject toG3MeshJSON() {
+   public JSONObject toJSON() {
       validate();
 
       final JSONObject result = new JSONObject();

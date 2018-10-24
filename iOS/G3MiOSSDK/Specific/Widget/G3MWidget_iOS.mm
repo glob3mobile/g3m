@@ -356,11 +356,11 @@
   return (G3MWidget*) _widgetVP;
 }
 
-- (void)initSingletons {
+- (void) initSingletons {
   ILogger*            logger        = new Logger_iOS(InfoLevel);
   IFactory*           factory       = new Factory_iOS();
   const IStringUtils* stringUtils   = new StringUtils_iOS();
-  IStringBuilder*     stringBuilder = new StringBuilder_iOS();
+  IStringBuilder*     stringBuilder = new StringBuilder_iOS(IStringBuilder::DEFAULT_FLOAT_PRECISION);
   IMathUtils*         mathUtils     = new MathUtils_iOS();
   IJSONParser*        jsonParser    = new JSONParser_iOS();
   ITextUtils*         textUtils     = new TextUtils_iOS();

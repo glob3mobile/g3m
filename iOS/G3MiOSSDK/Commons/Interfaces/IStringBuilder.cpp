@@ -8,15 +8,18 @@
 #include "IStringBuilder.hpp"
 #include "ILogger.hpp"
 
-IStringBuilder* IStringBuilder::_instance = NULL;
+IStringBuilder* IStringBuilder::_exemplar = NULL;
 
-void IStringBuilder::setInstance(IStringBuilder* isb) {
-  if (_instance != NULL) {
+const int IStringBuilder::DEFAULT_FLOAT_PRECISION = 20;
+
+
+void IStringBuilder::setInstance(IStringBuilder* exemplar) {
+  if (_exemplar != NULL) {
     ILogger::instance()->logWarning("IStringBuilder set two times");
   }
-  _instance = isb;
+  _exemplar = exemplar;
 }
 
-IStringBuilder* IStringBuilder::newStringBuilder() {
-  return _instance->getNewInstance();
+IStringBuilder* IStringBuilder::newStringBuilder(const int floatPrecision) {
+  return _exemplar->clone(floatPrecision);
 }

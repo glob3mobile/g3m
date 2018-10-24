@@ -32,6 +32,11 @@ public class GEO3DPolygonGeometry extends GEO3DGeometry
     return symbolizer.createSymbols(this);
   }
 
+  protected final Sector calculateSector()
+  {
+    return (_polygonData == null) ? null : _polygonData.getSector();
+  }
+
   public GEO3DPolygonGeometry(GEO3DPolygonData polygonData)
   {
      _polygonData = polygonData;

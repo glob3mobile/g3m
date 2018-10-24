@@ -53,7 +53,7 @@ GEO2DCoordinatesArrayData::~GEO2DCoordinatesArrayData() {
 #endif
 }
 
-Sector* GEO2DCoordinatesArrayData::calculateSector() const {
+const Sector* GEO2DCoordinatesArrayData::calculateSector() const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const double maxDouble = mu->maxDouble();

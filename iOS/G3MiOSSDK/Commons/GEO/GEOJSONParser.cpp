@@ -215,7 +215,7 @@ std::vector<Geodetic3D*>* GEOJSONParser::create3DCoordinates(const JSONArray* js
 
     const double latitudeDegrees  = jsCoordinate->getAsNumber(1)->value();
     const double longitudeDegrees = jsCoordinate->getAsNumber(0)->value();
-    const double height           = jsCoordinate->getAsNumber(0)->value();
+    const double height           = jsCoordinate->getAsNumber(2)->value();
 
     Geodetic3D* coordinate = new Geodetic3D(Angle::fromDegrees(latitudeDegrees),
                                             Angle::fromDegrees(longitudeDegrees),

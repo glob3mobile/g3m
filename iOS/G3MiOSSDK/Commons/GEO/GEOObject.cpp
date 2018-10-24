@@ -6,3 +6,18 @@
 //
 //
 
+#include "GEOObject.hpp"
+
+#include "Sector.hpp"
+
+
+GEOObject::~GEOObject() {
+  delete _sector;
+}
+
+const Sector* GEOObject::getSector() const {
+  if (_sector == NULL) {
+    _sector = calculateSector();
+  }
+  return _sector;
+}

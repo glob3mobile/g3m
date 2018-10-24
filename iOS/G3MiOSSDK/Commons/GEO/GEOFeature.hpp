@@ -25,6 +25,9 @@ private:
   const GEOGeometry*    _geometry;
   const JSONObject*     _properties;
 
+protected:
+  const Sector* calculateSector() const;
+
 public:
 
   GEOFeature(const JSONBaseObject* id,
