@@ -11,34 +11,28 @@
 
 #include "DefaultRenderer.hpp"
 
-#include "URL.hpp"
-#include "TimeInterval.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "IThreadUtils.hpp"
-#include "RCObject.hpp"
-#include "MarksFilter.hpp"
 #include "GAsyncTask.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "MarksFilter.hpp"
+#include "RCObject.hpp"
+#include "TimeInterval.hpp"
 #include "Angle.hpp"
 
-#include <vector>
-#include <string>
-
-class IThreadUtils;
-class IByteBuffer;
 class Sector;
-class Geodetic2D;
-class JSONBaseObject;
 class JSONArray;
+class Geodetic2D;
 class JSONObject;
-class Mark;
+class IByteBuffer;
+class GEOObject;
+class IThreadUtils;
+class JSONBaseObject;
+class BoundingVolume;
+class IDownloader;
+class Frustum;
 class GEO2DPointGeometry;
 class GEO3DPointGeometry;
-class BoundingVolume;
+class MarksRenderer;
 class Camera;
-class Frustum;
-class IDownloader;
-class GEOObject;
-class MarksRenderer; 
 
 
 class VectorStreamingRenderer : public DefaultRenderer {

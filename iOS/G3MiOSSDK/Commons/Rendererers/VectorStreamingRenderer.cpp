@@ -7,29 +7,32 @@
 //
 
 #include "VectorStreamingRenderer.hpp"
-#include "G3MContext.hpp"
-#include "IDownloader.hpp"
+
+#include "Geodetic2D.hpp"
 #include "IJSONParser.hpp"
-#include "Sector.hpp"
-#include "JSONObject.hpp"
 #include "JSONArray.hpp"
+#include "IThreadUtils.hpp"
+#include "GEOObject.hpp"
+#include "JSONObject.hpp"
 #include "JSONNumber.hpp"
+#include "GEOJSONParser.hpp"
+#include "ErrorHandling.hpp"
+#include "Sector.hpp"
+#include "BoundingVolume.hpp"
+#include "G3MRenderContext.hpp"
+#include "Vector3D.hpp"
+#include "Planet.hpp"
+#include "Sphere.hpp"
+#include "IDownloader.hpp"
+#include "Mark.hpp"
+#include "MarksRenderer.hpp"
 #include "JSONString.hpp"
 #include "Camera.hpp"
-#include "Sphere.hpp"
-#include "GEOJSONParser.hpp"
-#include "GEOObject.hpp"
-#include "Mark.hpp"
-#include "Geodetic2D.hpp"
-#include "MarksRenderer.hpp"
-#include "G3MRenderContext.hpp"
-#include "Planet.hpp"
 
 
 VectorStreamingRenderer::Cluster::~Cluster() {
   delete _position;
 }
-
 
 VectorStreamingRenderer::ChildrenParserAsyncTask::~ChildrenParserAsyncTask() {
   _node->_childrenTask = NULL;
@@ -1349,4 +1352,3 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
     }
   }
 }
-
