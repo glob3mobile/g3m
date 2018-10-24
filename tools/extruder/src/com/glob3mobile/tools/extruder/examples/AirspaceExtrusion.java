@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GEOFeature;
+import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.JSONObject;
 
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
@@ -89,6 +90,16 @@ public class AirspaceExtrusion {
       @Override
       public void processTriangulationError(final GEOFeature geoFeature) {
          System.err.println("Error triangulation " + geoFeature);
+      }
+
+
+      @Override
+      public void onRootGEOObject(final GEOObject geoObject) {
+      }
+
+
+      @Override
+      public void onFinish() {
       }
    }
 

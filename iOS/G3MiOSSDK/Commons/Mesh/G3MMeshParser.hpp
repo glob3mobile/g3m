@@ -9,21 +9,23 @@
 #ifndef __G3MiOSSDK__G3MMeshParser__
 #define __G3MiOSSDK__G3MMeshParser__
 
-#include <vector>
 #include <map>
-class Mesh;
-class JSONObject;
+#include <vector>
+
+class Color;
 class JSONArray;
 class JSONString;
-class G3MMeshMaterial;
-class Color;
 class URL;
+class G3MMeshMaterial;
+class Mesh;
+class Planet;
+class JSONObject;
 class Vector3F;
+class Geodetic3D;
 class IFloatBuffer;
 class IShortBuffer;
-class Planet;
-class Geodetic3D;
 class Vector3D;
+
 
 class G3MMeshParser {
 private:

@@ -5,9 +5,8 @@ package com.glob3mobile.tools.extruder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.Vector3F;
 
 import com.glob3mobile.tools.mesh.G3Mesh;
@@ -26,22 +25,6 @@ public class Building {
    private final boolean        _depthTest;
 
 
-   //   Building(final List<Triangle> ceilingTriangles,
-   //            final double[][] ceilingVertices,
-   //            final ExtruderPolygon extruderPolygon,
-   //            final G3MeshMaterial material,
-   //            final boolean depthTest) {
-   //      _material = material;
-   //      _depthTest = depthTest;
-   //
-   //      _ceilingTriangles = ceilingTriangles;
-   //      _ceilingVertices = ceilingVertices;
-   //
-   //      _exteriorWall = extruderPolygon.createExteriorWall();
-   //      _interiorWalls = extruderPolygon.createInteriorWalls();
-   //   }
-
-
    Building(final List<Triangle> ceilingTriangles,
             final double[][] ceilingVertices,
             final Wall exteriorWall,
@@ -58,18 +41,16 @@ public class Building {
 
 
    public G3Mesh createMesh(final int floatPrecision) {
-      final Vector3F center = getCenter(floatPrecision);
+      final double wallsLowerHeight = getWallsLowerHeight(_exteriorWall, _interiorWalls);
+      final Vector3D center = getCenter(floatPrecision, wallsLowerHeight);
 
       final List<Vector3F> vertices = new ArrayList<>(_ceilingVertices.length);
       for (final double[] vertex : _ceilingVertices) {
          final double x = vertex[0];
          final double y = vertex[1];
-         //         final double z = _upperHeight;
          final double z = vertex[2];
          addVertex(vertices, center, x, y, z);
       }
-      final List<Color> colors = null;
-      final List<Vector2F> texCoords = null;
 
       final List<Short> indices = new ArrayList<>();
       for (final Triangle triangle : _ceilingTriangles) {
@@ -92,8 +73,8 @@ public class Building {
                center, //
                vertices, //
                normals, //
-               colors, //
-               texCoords, //
+               null, // colors
+               null, // texCoords
                indices, //
                _material, //
                _depthTest //
@@ -102,10 +83,30 @@ public class Building {
    }
 
 
-   private Vector3F getCenter(final int floatPrecision) {
+   private static double getWallsLowerHeight(final Wall exteriorWall,
+                                             final List<Wall> interiorWalls) {
+      double result = getWallLowerHeight(exteriorWall);
+      for (final Wall wall : interiorWalls) {
+         result = Math.min(result, getWallLowerHeight(wall));
+      }
+      return result;
+   }
+
+
+   private static double getWallLowerHeight(final Wall wall) {
+      double result = Double.POSITIVE_INFINITY;
+      for (final WallQuad quad : wall._quads) {
+         result = Math.min(result, quad._lowerHeight);
+      }
+      return result;
+   }
+
+
+   private Vector3D getCenter(final int floatPrecision,
+                              final double lowerHeight) {
       double minX = Double.POSITIVE_INFINITY;
       double minY = Double.POSITIVE_INFINITY;
-      double minZ = Double.POSITIVE_INFINITY;
+      double minZ = lowerHeight;
       double maxX = Double.NEGATIVE_INFINITY;
       double maxY = Double.NEGATIVE_INFINITY;
       double maxZ = Double.NEGATIVE_INFINITY;
@@ -134,26 +135,25 @@ public class Building {
          }
       }
 
-      final float centerX = (float) ((maxX + minX) / 2);
-      final float centerY = (float) ((maxY + minY) / 2);
-      //      final float centerZ = (float) ((_lowerHeight + _upperHeight) / 2);
-      final float centerZ = (float) ((maxZ + minZ) / 2);
+      final double centerX = (maxX + minX) / 2;
+      final double centerY = (maxY + minY) / 2;
+      final double centerZ = (maxZ + minZ) / 2;
 
-      final float factor = (float) Math.pow(10, floatPrecision);
+      final double factor = Math.pow(10, floatPrecision);
 
-      return new Vector3F(round(centerX, factor), round(centerY, factor), round(centerZ, factor));
+      return new Vector3D(round(centerX, factor), round(centerY, factor), round(centerZ, factor));
    }
 
 
-   private static float round(final float value,
-                              final float factor) {
-      final int i = Math.round(value * factor);
+   private static double round(final double value,
+                               final double factor) {
+      final long i = Math.round(value * factor);
       return i / factor;
    }
 
 
    private static void addVertex(final List<Vector3F> vertices,
-                                 final Vector3F center,
+                                 final Vector3D center,
                                  final double x,
                                  final double y,
                                  final double z) {
@@ -172,10 +172,10 @@ public class Building {
    }
 
 
-   private void processWall(final List<Vector3F> vertices,
-                            final List<Short> indices,
-                            final Vector3F center,
-                            final Wall wall) {
+   private static void processWall(final List<Vector3F> vertices,
+                                   final List<Short> indices,
+                                   final Vector3D center,
+                                   final Wall wall) {
       for (final WallQuad quad : wall._quads) {
          final Geodetic3D topCorner0 = quad._coordinate0;
          final Geodetic3D topCorner1 = quad._coordinate1;
@@ -187,13 +187,13 @@ public class Building {
          addVertex(vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, lowerHeight);
          addVertex(vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, topCorner1._height);
 
-         indices.add((short) (firstVertexIndex + 0));
-         indices.add((short) (firstVertexIndex + 1));
-         indices.add((short) (firstVertexIndex + 2));
+         indices.add(toShort(firstVertexIndex + 0));
+         indices.add(toShort(firstVertexIndex + 1));
+         indices.add(toShort(firstVertexIndex + 2));
 
-         indices.add((short) (firstVertexIndex + 0));
-         indices.add((short) (firstVertexIndex + 2));
-         indices.add((short) (firstVertexIndex + 3));
+         indices.add(toShort(firstVertexIndex + 0));
+         indices.add(toShort(firstVertexIndex + 2));
+         indices.add(toShort(firstVertexIndex + 3));
       }
    }
 
