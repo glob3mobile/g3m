@@ -31,6 +31,11 @@ public class GEOFeature extends GEOObject
   private final GEOGeometry _geometry;
   private final JSONObject _properties;
 
+  protected final Sector calculateSector()
+  {
+    return (_geometry == null) ? null : _geometry.getSector();
+  }
+
 
   public GEOFeature(JSONBaseObject id, GEOGeometry geometry, JSONObject properties)
   {

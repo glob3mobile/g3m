@@ -26,7 +26,7 @@ import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 public class JSONtoBSON {
 
    public static void main(final String[] args) {
-      IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+      IStringBuilder.setInstance(new StringBuilder_JavaDesktop(IStringBuilder.DEFAULT_FLOAT_PRECISION));
       IMathUtils.setInstance(new MathUtils_JavaDesktop());
       IFactory.setInstance(new Factory_JavaDesktop());
       ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));

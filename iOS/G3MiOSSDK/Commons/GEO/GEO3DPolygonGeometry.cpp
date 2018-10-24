@@ -53,3 +53,7 @@ bool GEO3DPolygonGeometry::contain(const Geodetic3D& point) const {
   }
   return false;
 }
+
+const Sector* GEO3DPolygonGeometry::calculateSector() const {
+  return (_polygonData == NULL) ? NULL : _polygonData->getSector();
+}

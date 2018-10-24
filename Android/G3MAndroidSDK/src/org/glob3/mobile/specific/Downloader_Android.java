@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
@@ -23,10 +24,10 @@ import android.util.Log;
 
 
 public final class Downloader_Android
-   extends
-      IDownloader {
+         extends
+            IDownloader {
 
-   final static String                                   TAG                  = "Downloader_Android";
+   final static String TAG = "Downloader_Android";
 
    private final int                                     _maxConcurrentOperationCount;
    private int                                           _requestIDCounter    = 1;
@@ -39,10 +40,10 @@ public final class Downloader_Android
    private final TimeInterval                            _readTimeout;
    private final Context                                 _appContext;
 
-   private boolean                                       _started             = false;
-   private final Object                                  _startStopMutex      = new Object();
+   private boolean      _started        = false;
+   private final Object _startStopMutex = new Object();
 
-   private G3MContext                                    _context;
+   private G3MContext _context;
 
 
    Downloader_Android(final int maxConcurrentOperationCount,
@@ -321,7 +322,7 @@ public final class Downloader_Android
 
    @Override
    public String statistics() {
-      final StringBuilder_Android sb = new StringBuilder_Android();
+      final StringBuilder_Android sb = new StringBuilder_Android(IStringBuilder.DEFAULT_FLOAT_PRECISION);
 
       sb.addString("Downloader_Android(downloading=");
       sb.addInt(_downloadingHandlers.size());

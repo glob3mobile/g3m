@@ -26,6 +26,7 @@ protected:
 
   static std::vector<GEO2DPolygonData*>* copy(const std::vector<GEO2DPolygonData*>* _polygonsData);
 
+  const Sector* calculateSector() const;
 
 public:
 

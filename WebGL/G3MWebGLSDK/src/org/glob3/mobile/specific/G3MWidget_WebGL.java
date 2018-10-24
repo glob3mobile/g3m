@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class G3MWidget_WebGL
-   extends
-      Composite {
+         extends
+            Composite {
 
 
    static {
@@ -49,7 +49,7 @@ public class G3MWidget_WebGL
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IFactory factory = new Factory_WebGL();
       final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL(IStringBuilder.DEFAULT_FLOAT_PRECISION);
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
       final ITextUtils textUtils = new TextUtils_WebGL();
@@ -266,9 +266,12 @@ public class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame || function(callback, element) {
+			return $wnd.requestAnimationFrame
+					|| $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame
+					|| $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame
+					|| function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -276,7 +279,8 @@ public class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame
+					|| $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -304,7 +308,8 @@ public class G3MWidget_WebGL
 				} catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(event) {
+					jsCanvas.addEventListener("webglcontextlost", function(
+							event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);

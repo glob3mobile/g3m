@@ -97,10 +97,14 @@ public class AirspaceExtrusion {
       System.out.println("AirspaceExtrusion 0.1");
       System.out.println("---------------------\n");
 
-      final String inputFileName = "airspace.geojson";
-      final String outputFileName = "3d_.json";
+      final String name = "airspace";
+      final String inputFileName = name + ".geojson";
+      final String outputFileName = name + "_3d.json";
 
-      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler());
+      final int floatPrecision = 6;
+
+
+      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), floatPrecision);
    }
 
 

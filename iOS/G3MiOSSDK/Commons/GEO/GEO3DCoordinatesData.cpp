@@ -25,7 +25,7 @@ GEO3DCoordinatesData::~GEO3DCoordinatesData() {
 #endif
 }
 
-Sector* GEO3DCoordinatesData::calculateSector() const {
+const Sector* GEO3DCoordinatesData::calculateSector() const {
   const size_t size = _coordinates->size();
   if (size == 0) {
     return NULL;

@@ -2,11 +2,16 @@
 
 package com.glob3mobile.tools.extruder.examples;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.GEO3DPolygonGeometry;
 import org.glob3.mobile.generated.GEOFeature;
-import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOObject;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
 import com.glob3mobile.tools.extruder.Heigths;
@@ -23,73 +28,74 @@ public class CaceresExtrusion {
 
 
       private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
-      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f));
-      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f));
-      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f));
 
-
-      private static double toMeter(final JSONObject properties,
-                                    final String valueKey,
-                                    final String unitKey) {
-         return toMeters(properties.getAsNumber(valueKey, 0), properties.getAsString(unitKey, "FT"));
-      }
-
-
-      private static double toMeters(final double value,
-                                     final String unit) {
-         final double exageration = 1;
-         final double valueInMeters = (value / 3) * exageration;
-         return unit.equalsIgnoreCase("FT") ? valueInMeters : (valueInMeters * 100);
-      }
+      private GEOBitmap _bitmap;
 
 
       @Override
       public boolean extrudes(final GEOFeature geoFeature) {
-         final JSONObject properties = geoFeature.getProperties();
-         final String type = properties.getAsString("type", "");
-         return (!type.equalsIgnoreCase("CTA") && !type.equalsIgnoreCase("FIR"));
+         return true;
       }
 
 
       @Override
       public boolean getDepthTestFor(final GEOFeature geoFeature) {
-         return false;
+         return true;
       }
 
 
       @Override
       public G3MeshMaterial getMaterialFor(final GEOFeature geoFeature) {
-         final JSONObject properties = geoFeature.getProperties();
-
-         final String type = properties.getAsString("type", "");
-         if (type.equalsIgnoreCase("MTMA")) {
-            return MATERIAL_1;
-         }
-         else if (type.equalsIgnoreCase("MCTR")) {
-            return MATERIAL_2;
-         }
-         else if (type.equalsIgnoreCase("TMA")) {
-            return MATERIAL_3;
-         }
-         else {
-            return MATERIAL_4;
-         }
+         return MATERIAL_1;
       }
 
 
       @Override
       public Heigths getHeightsFor(final GEOFeature geoFeature) {
-         final JSONObject properties = geoFeature.getProperties();
-         final double lowerMeters = toMeter(properties, "lowerLimit", "lowerLimit_uom");
-         final double upperMeters = toMeter(properties, "upperLimit", "upperLimit_uom");
-         return new Heigths(lowerMeters, upperMeters);
+         return new Heigths(0, 100);
       }
 
 
       @Override
       public void processTriangulationError(final GEOFeature geoFeature) {
-         System.err.println("Error triangulation " + geoFeature);
+         final GEOGeometry geometry = geoFeature.getGeometry();
+         System.err.println("Error triangulation " + geoFeature + ", geometry:  " + geometry);
+         if (geometry instanceof GEO3DPolygonGeometry) {
+            final GEO3DPolygonGeometry polygon3D = (GEO3DPolygonGeometry) geometry;
+
+            _bitmap.drawPolygon( //
+                     polygon3D.getCoordinates(), //
+                     polygon3D.getHolesCoordinatesArray(), //
+                     new java.awt.Color(1, 0, 0, 0.5f), //
+                     new java.awt.Color(1, 0, 0, 0.9f), //
+                     true, //  drawVertices
+                     new java.awt.Color(1, 1, 0, 0.5f) //
+            );
+         }
       }
+
+
+      @Override
+      public void onRootGEOObject(final GEOObject geoObject) {
+         final Sector sector = geoObject.getSector();
+
+         final int width = 2048;
+         final int height = (int) Math.round((width / sector._deltaLongitude._radians) * sector._deltaLatitude._radians);
+         _bitmap = new GEOBitmap(sector, width, height, java.awt.Color.BLACK);
+      }
+
+
+      @Override
+      public void onFinish() {
+         try {
+            _bitmap.save(new File("debug.png"));
+         }
+         catch (final IOException e) {
+            throw new RuntimeException(e);
+         }
+      }
+
+
    }
 
 
@@ -97,12 +103,14 @@ public class CaceresExtrusion {
       System.out.println("CaceresExtrusion 0.1");
       System.out.println("--------------------\n");
 
-      //      final String inputFileName = "nucleo_urbano.geojson";
-      //      final String outputFileName = "nucleo_urbano_3d.json";
-      final String inputFileName = "muralla.geojson";
-      final String outputFileName = "muralla_3d.geojson";
 
-      PolygonExtruder.process(inputFileName, outputFileName, new CaceresExtrusionHandler());
+      final String name = "casco_historico"; // "nucleo_urbano"; // "muralla";
+      final String inputFileName = name + ".geojson";
+      final String outputFileName = name + "_3d.json";
+
+      final int floatPrecision = 6;
+
+      PolygonExtruder.process(inputFileName, outputFileName, new CaceresExtrusionHandler(), floatPrecision);
    }
 
 

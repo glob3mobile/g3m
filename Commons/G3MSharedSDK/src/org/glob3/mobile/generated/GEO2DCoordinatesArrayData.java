@@ -105,8 +105,7 @@ public class GEO2DCoordinatesArrayData extends RCObject
       }
     }
   
-    if (_sector != null)
-       _sector.dispose();
+    _sector = null;
   
     super.dispose();
   }

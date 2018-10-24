@@ -10,6 +10,8 @@
 
 #include "GEOGeometry.hpp"
 #include "JSONObject.hpp"
+#include "Sector.hpp"
+
 
 GEOFeature::GEOFeature(const JSONBaseObject* id,
                        const GEOGeometry* geometry,
@@ -77,4 +79,8 @@ long long GEOFeature::createFeatureMarks(const VectorStreamingRenderer::VectorSe
     return _geometry->createFeatureMarks(vectorSet, node);
   }
   return 0;
+}
+
+const Sector* GEOFeature::calculateSector() const {
+  return (_geometry == NULL) ? NULL : _geometry->getSector();
 }

@@ -31,6 +31,17 @@ public class GEO3DPointGeometry extends GEO3DGeometry
     return symbolizer.createSymbols(this);
   }
 
+  protected final Sector calculateSector()
+  {
+    final double lowerLatRadians = _position._latitude._radians - 0.0001;
+    final double upperLatRadians = _position._latitude._radians + 0.0001;
+  
+    final double lowerLonRadians = _position._longitude._radians - 0.0001;
+    final double upperLonRadians = _position._longitude._radians + 0.0001;
+  
+    return Sector.newFromRadians(lowerLatRadians, lowerLonRadians, upperLatRadians, upperLonRadians);
+  }
+
 
   public GEO3DPointGeometry(Geodetic3D position)
   {

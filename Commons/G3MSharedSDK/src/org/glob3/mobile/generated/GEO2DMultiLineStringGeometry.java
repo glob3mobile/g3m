@@ -42,6 +42,11 @@ public class GEO2DMultiLineStringGeometry extends GEO2DGeometry
     return symbolizer.createSymbols(this);
   }
 
+  protected final Sector calculateSector()
+  {
+    return (_coordinatesArrayData == null) ? null : _coordinatesArrayData.getSector();
+  }
+
 
   public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {

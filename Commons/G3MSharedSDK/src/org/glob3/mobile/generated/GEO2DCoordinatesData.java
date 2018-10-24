@@ -26,6 +26,7 @@ public class GEO2DCoordinatesData extends RCObject
   private final java.util.ArrayList<Geodetic2D> _coordinates;
 
   private Sector _sector;
+
   private Sector calculateSector()
   {
     final int size = _coordinates.size();
@@ -78,8 +79,7 @@ public class GEO2DCoordinatesData extends RCObject
 
   public void dispose()
   {
-    if (_sector != null)
-       _sector.dispose();
+    _sector = null;
     super.dispose();
   }
 

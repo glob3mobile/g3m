@@ -55,3 +55,6 @@ bool GEO2DPolygonGeometry::contain(const Geodetic2D& point) const {
   return false;
 }
 
+const Sector* GEO2DPolygonGeometry::calculateSector() const {
+  return (_polygonData == NULL) ? NULL : _polygonData->getSector();
+}

@@ -51,3 +51,7 @@ long long GEO2DMultiLineStringGeometry::getCoordinatesCount() const {
 GEO2DMultiLineStringGeometry* GEO2DMultiLineStringGeometry::deepCopy() const {
   return new GEO2DMultiLineStringGeometry(_coordinatesArrayData);
 }
+
+const Sector* GEO2DMultiLineStringGeometry::calculateSector() const {
+  return (_coordinatesArrayData == NULL) ? NULL : _coordinatesArrayData->getSector();
+}
