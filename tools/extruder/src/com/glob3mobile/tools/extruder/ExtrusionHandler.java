@@ -7,6 +7,7 @@ import java.util.List;
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOObject;
 
+import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 
@@ -28,7 +29,12 @@ public interface ExtrusionHandler {
    void processTriangulationError(GEOFeature geoFeature);
 
 
-   void onFinish(List<Building> buildings);
+   void onBuildings(List<Building> buildings);
 
+
+   void onPolygons(List<ExtruderPolygon> polygons);
+
+
+   void onMeshes(G3MeshCollection meshes);
 
 }

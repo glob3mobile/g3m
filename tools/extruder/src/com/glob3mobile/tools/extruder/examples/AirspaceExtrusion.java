@@ -12,9 +12,11 @@ import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Planet;
 
 import com.glob3mobile.tools.extruder.Building;
+import com.glob3mobile.tools.extruder.ExtruderPolygon;
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
 import com.glob3mobile.tools.extruder.Heigths;
 import com.glob3mobile.tools.extruder.PolygonExtruder;
+import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 
@@ -96,7 +98,17 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public void onFinish(final List<Building> buildings) {
+      public void onBuildings(final List<Building> buildings) {
+      }
+
+
+      @Override
+      public void onPolygons(final List<ExtruderPolygon> polygons) {
+      }
+
+
+      @Override
+      public void onMeshes(final G3MeshCollection meshes) {
       }
    }
 

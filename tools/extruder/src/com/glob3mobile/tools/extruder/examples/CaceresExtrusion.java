@@ -17,9 +17,11 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.extruder.Building;
+import com.glob3mobile.tools.extruder.ExtruderPolygon;
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
 import com.glob3mobile.tools.extruder.Heigths;
 import com.glob3mobile.tools.extruder.PolygonExtruder;
+import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 
@@ -84,13 +86,23 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void onFinish(final List<Building> buildings) {
+      public void onBuildings(final List<Building> buildings) {
          try {
             _bitmap.save(new File("debug.png"));
          }
          catch (final IOException e) {
             throw new RuntimeException(e);
          }
+      }
+
+
+      @Override
+      public void onPolygons(final List<ExtruderPolygon> polygons) {
+      }
+
+
+      @Override
+      public void onMeshes(final G3MeshCollection meshes) {
       }
 
 
