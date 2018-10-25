@@ -21,6 +21,7 @@ class GEO3DMultiLineStringGeometry;
 class GEO2DPolygonGeometry;
 class GEO3DPolygonGeometry;
 class GEO2DMultiPolygonGeometry;
+class GEO3DMultiPolygonGeometry;
 
 
 class GEORasterSymbolizer {
@@ -42,7 +43,7 @@ public:
   virtual std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry*         geometry) const = 0;
   virtual std::vector<GEORasterSymbol*>* createSymbols(const GEO3DPolygonGeometry*         geometry) const = 0;
   virtual std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry*    geometry) const = 0;
-  
+  virtual std::vector<GEORasterSymbol*>* createSymbols(const GEO3DMultiPolygonGeometry*    geometry) const = 0;
 };
 
 #endif

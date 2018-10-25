@@ -32,3 +32,7 @@ std::vector<GEORasterSymbol*>* GEO3DLineStringGeometry::createRasterSymbols(cons
 GEO3DLineStringGeometry* GEO3DLineStringGeometry::deepCopy() const {
   return new GEO3DLineStringGeometry(_coordinatesData);
 }
+
+const Sector* GEO3DLineStringGeometry::calculateSector() const {
+  return (_coordinatesData == NULL) ? NULL : _coordinatesData->getSector();
+}

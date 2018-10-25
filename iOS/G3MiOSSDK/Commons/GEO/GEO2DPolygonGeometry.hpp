@@ -24,6 +24,8 @@ protected:
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
 
+  const Sector* calculateSector() const;
+
 public:
   GEO2DPolygonGeometry(const GEO2DPolygonData* polygonData) :
   _polygonData(polygonData)

@@ -109,6 +109,10 @@ public:
     return NULL;
   }
   
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO3DMultiPolygonGeometry* geometry) const {
+    return NULL;
+  }
+  
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
 
@@ -144,6 +148,7 @@ public:
 
     return symbols;
   }
+  
 };
 
 

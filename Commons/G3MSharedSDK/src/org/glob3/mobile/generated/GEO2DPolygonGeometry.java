@@ -34,6 +34,11 @@ public class GEO2DPolygonGeometry extends GEO2DGeometry
     return symbolizer.createSymbols(this);
   }
 
+  protected final Sector calculateSector()
+  {
+    return (_polygonData == null) ? null : _polygonData.getSector();
+  }
+
   public GEO2DPolygonGeometry(GEO2DPolygonData polygonData)
   {
      _polygonData = polygonData;

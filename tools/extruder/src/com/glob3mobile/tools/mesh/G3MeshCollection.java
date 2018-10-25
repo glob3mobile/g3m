@@ -28,7 +28,7 @@ public class G3MeshCollection {
    }
 
 
-   public JSONObject toG3MeshJSON() {
+   public JSONObject toJSON() {
       validateMeshes();
 
       final JSONObject result = new JSONObject();
@@ -41,7 +41,7 @@ public class G3MeshCollection {
    private static JSONArray meshesJSON(final List<G3Mesh> meshes) {
       final JSONArray result = new JSONArray();
       for (final G3Mesh mesh : meshes) {
-         result.add(mesh.toG3MeshJSON());
+         result.add(mesh.toJSON());
       }
       return result;
    }
@@ -51,7 +51,7 @@ public class G3MeshCollection {
       final JSONArray result = new JSONArray();
       final Map<String, G3MeshMaterial> consolidatedMaterials = consolidateMaterials(meshes);
       for (final G3MeshMaterial material : consolidatedMaterials.values()) {
-         result.add(material.toG3MeshJSON());
+         result.add(material.toJSON());
       }
       return result;
    }

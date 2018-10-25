@@ -92,6 +92,9 @@ public:
     return NULL;
   }
 
+  std::vector<GEOSymbol*>* createSymbols(const GEO3DMultiPolygonGeometry* geometry) const {
+    return NULL;
+  }
 };
 
 void G3M3DSymbologyDemoScene::rawSelectOption(const std::string& option,

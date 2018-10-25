@@ -23,6 +23,7 @@ protected:
   
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
   
+  const Sector* calculateSector() const;
 public:
   
   GEO3DMultiLineStringGeometry(std::vector<std::vector<Geodetic3D*>*>* coordinatesArray);

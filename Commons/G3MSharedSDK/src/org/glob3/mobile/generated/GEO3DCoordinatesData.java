@@ -76,8 +76,7 @@ public class GEO3DCoordinatesData extends RCObject
 
   public void dispose()
   {
-    if (_sector != null)
-       _sector.dispose();
+    _sector = null;
     super.dispose();
   }
 

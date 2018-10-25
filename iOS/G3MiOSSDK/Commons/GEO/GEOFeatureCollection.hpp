@@ -25,6 +25,9 @@ private:
 
   static const std::vector<GEOFeature*> copy(const std::vector<GEOFeature*>& features);
 
+protected:
+  const Sector* calculateSector() const;
+
 public:
   GEOFeatureCollection(const std::vector<GEOFeature*>& features) :
   _features(features)

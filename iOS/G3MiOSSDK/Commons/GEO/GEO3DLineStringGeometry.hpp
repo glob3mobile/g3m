@@ -5,6 +5,7 @@
 //  Created by Nico on 22/10/2018.
 //
 
+
 #ifndef __G3MiOSSDK__GEO3DLineStringGeometry__
 #define __G3MiOSSDK__GEO3DLineStringGeometry__
 
@@ -29,6 +30,8 @@ protected:
   
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
   
+  const Sector* calculateSector() const;
+
 public:
   
   GEO3DLineStringGeometry(std::vector<Geodetic3D*>* coordinates)
@@ -47,6 +50,8 @@ public:
   }
   
   GEO3DLineStringGeometry* deepCopy() const;
+  
+
   
 };
 

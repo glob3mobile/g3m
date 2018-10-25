@@ -17,14 +17,15 @@ class JSONGenerator : public JSONVisitor {
 private:
   IStringBuilder* _isb;
 
-  JSONGenerator();
+  JSONGenerator(const int floatPrecision);
 
   const std::string getString();
 
 public:
   virtual ~JSONGenerator();
 
-  static const std::string generate(const JSONBaseObject* value);
+  static const std::string generate(const JSONBaseObject* value,
+                                    const int floatPrecision);
 
   void visitDouble (const JSONDouble*  value);
   void visitFloat  (const JSONFloat*   value);

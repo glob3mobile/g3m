@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated;
 //
+//  GEOObject.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 11/29/12.
+//
+//
+
+//
 //  GEOObject.hpp
 //  G3MiOSSDK
 //
@@ -8,10 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class GEORasterSymbolizer;
 //class ICanvas;
 //class GEORasterProjection;
-//class G3MRenderContext;
 //class GEOSymbolizer;
 //class MeshRenderer;
 //class ShapesRenderer;
@@ -19,11 +27,21 @@ package org.glob3.mobile.generated;
 //class GEOVectorLayer;
 
 
-
 public abstract class GEOObject
 {
+  private Sector _sector;
+
+  protected abstract Sector calculateSector();
+
+  protected GEOObject()
+  {
+     _sector = null;
+
+  }
+
   public void dispose()
   {
+    _sector = null;
   }
 
   public abstract void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel);
@@ -35,5 +53,14 @@ public abstract class GEOObject
   public abstract GEOObject deepCopy();
 
   public abstract long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node);
+
+  public final Sector getSector()
+  {
+    if (_sector == null)
+    {
+      _sector = calculateSector();
+    }
+    return _sector;
+  }
 
 }

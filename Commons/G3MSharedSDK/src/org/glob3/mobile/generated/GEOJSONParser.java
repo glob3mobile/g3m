@@ -588,7 +588,7 @@ public class GEOJSONParser
   
       final double latitudeDegrees = jsCoordinate.getAsNumber(1).value();
       final double longitudeDegrees = jsCoordinate.getAsNumber(0).value();
-      final double height = jsCoordinate.getAsNumber(0).value();
+      final double height = jsCoordinate.getAsNumber(2).value();
   
       Geodetic3D coordinate = new Geodetic3D(Angle.fromDegrees(latitudeDegrees), Angle.fromDegrees(longitudeDegrees), height);
       coordinates.add(coordinate);

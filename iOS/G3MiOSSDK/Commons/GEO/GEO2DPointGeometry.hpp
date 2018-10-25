@@ -23,6 +23,8 @@ protected:
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
 
+  const Sector* calculateSector() const;
+
 public:
 
   GEO2DPointGeometry(const Geodetic2D& position) :

@@ -19,8 +19,13 @@ class GEO3DCoordinatesData : public RCObject {
 private:
   const std::vector<Geodetic3D*>* _coordinates;
 
-  mutable Sector* _sector;
-  Sector* calculateSector() const;
+#ifdef C_CODE
+  mutable const Sector* _sector;
+#endif
+#ifdef JAVA_CODE
+  private Sector _sector;
+#endif
+  const Sector* calculateSector() const;
 
 protected:
   ~GEO3DCoordinatesData();

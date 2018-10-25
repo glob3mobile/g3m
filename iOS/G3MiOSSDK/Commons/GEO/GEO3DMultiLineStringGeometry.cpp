@@ -50,3 +50,7 @@ long long GEO3DMultiLineStringGeometry::getCoordinatesCount() const {
 GEO3DMultiLineStringGeometry* GEO3DMultiLineStringGeometry::deepCopy() const {
   return new GEO3DMultiLineStringGeometry(_coordinatesArrayData);
 }
+
+const Sector* GEO3DMultiLineStringGeometry::calculateSector() const {
+  return (_coordinatesArrayData == NULL) ? NULL : _coordinatesArrayData->getSector();
+}

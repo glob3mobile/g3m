@@ -26,7 +26,7 @@ GEO2DCoordinatesData::~GEO2DCoordinatesData() {
 #endif
 }
 
-Sector* GEO2DCoordinatesData::calculateSector() const {
+const Sector* GEO2DCoordinatesData::calculateSector() const {
   const size_t size = _coordinates->size();
   if (size == 0) {
     return NULL;
