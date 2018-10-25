@@ -42,22 +42,24 @@ public abstract class ExtruderPolygon {
       final Triangulation.Data data = createTriangulationData();
 
       try {
-         final List<Triangle> ceilingTriangles = Triangulation.triangulate(data);
-         if (ceilingTriangles == null) {
-            System.out.println("Error triangulating polygon #" + id);
+         final List<Triangle> roofTriangles = Triangulation.triangulate(data);
+         if (roofTriangles == null) {
+            System.err.println("Error triangulating polygon #" + id);
             statistics.countTriangulationError(PolygonExtruder.ErrorType.RETURN_NULL, _geoFeature, handler);
          }
          else {
-            statistics.countTriangulation(ceilingTriangles.size());
+            statistics.countTriangulation(roofTriangles.size());
 
-            return new Building(_geoFeature, ceilingTriangles, data._vertices, createExteriorWall(), createInteriorWalls(),
-                     _material);
+            final Wall exteriorWall = createExteriorWall();
+            final List<Wall> interiorWalls = createInteriorWalls();
+            return new Building(_geoFeature, roofTriangles, data._vertices, exteriorWall, interiorWalls, _material);
          }
       }
       catch (final NullPointerException e) {
          statistics.countTriangulationError(PolygonExtruder.ErrorType.NULL_POINTER_EXCEPTION, _geoFeature, handler);
       }
       catch (final TriangulationException e) {
+         System.out.println(e.getMessage());
          statistics.countTriangulationError(PolygonExtruder.ErrorType.TRIANGULATION_EXCEPTION, _geoFeature, handler);
       }
 

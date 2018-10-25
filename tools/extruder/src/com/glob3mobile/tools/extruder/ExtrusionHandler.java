@@ -35,6 +35,6 @@ public interface ExtrusionHandler {
    void onPolygons(List<ExtruderPolygon> polygons);
 
 
-   void onMeshes(G3MeshCollection meshes);
+   void onMeshCollection(G3MeshCollection meshes);
 
 }

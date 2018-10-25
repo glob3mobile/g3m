@@ -3,6 +3,7 @@
 package com.glob3mobile.tools.mesh;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,8 @@ public class G3MeshCollection {
    private final List<G3Mesh> _meshes;
 
 
-   public G3MeshCollection() {
-      _meshes = new ArrayList<>();
+   public G3MeshCollection(final List<G3Mesh> meshes) {
+      _meshes = Collections.unmodifiableList(new ArrayList<>(meshes));
    }
 
 
@@ -72,9 +73,9 @@ public class G3MeshCollection {
    }
 
 
-   public void add(final G3Mesh mesh) {
-      _meshes.add(mesh);
-   }
+   //   public void add(final G3Mesh mesh) {
+   //      _meshes.add(mesh);
+   //   }
 
 
 }

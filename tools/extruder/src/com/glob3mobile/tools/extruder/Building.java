@@ -20,23 +20,23 @@ import poly2Tri.Triangle;
 
 public class Building {
 
-   public final GEOFeature      _geoFeature;
-   private final List<Triangle> _ceilingTriangles;
-   private final double[][]     _ceilingVertices;
+   private final GEOFeature     _geoFeature;
+   private final List<Triangle> _roofTriangles;
+   private final double[][]     _roofVertices;
    private final Wall           _exteriorWall;
    private final List<Wall>     _interiorWalls;
    private final G3MeshMaterial _material;
 
 
    Building(final GEOFeature geoFeature,
-            final List<Triangle> ceilingTriangles,
-            final double[][] ceilingVertices,
+            final List<Triangle> roofTriangles,
+            final double[][] roofVertices,
             final Wall exteriorWall,
             final List<Wall> interiorWalls,
             final G3MeshMaterial material) {
       _geoFeature = geoFeature;
-      _ceilingTriangles = ceilingTriangles;
-      _ceilingVertices = ceilingVertices;
+      _roofTriangles = roofTriangles;
+      _roofVertices = roofVertices;
       _exteriorWall = exteriorWall;
       _interiorWalls = interiorWalls;
       _material = material;
@@ -49,8 +49,8 @@ public class Building {
 
       final Vector3D center = getCenter(planet, floatPrecision, wallsLowerHeight);
 
-      final List<Vector3F> vertices = new ArrayList<>(_ceilingVertices.length);
-      for (final double[] vertex : _ceilingVertices) {
+      final List<Vector3F> vertices = new ArrayList<>(_roofVertices.length);
+      for (final double[] vertex : _roofVertices) {
          final double x = vertex[0];
          final double y = vertex[1];
          final double z = vertex[2];
@@ -58,15 +58,19 @@ public class Building {
       }
 
       final List<Short> indices = new ArrayList<>();
-      for (final Triangle triangle : _ceilingTriangles) {
+      for (final Triangle triangle : _roofTriangles) {
          indices.add(toShort(triangle._vertex0));
          indices.add(toShort(triangle._vertex1));
          indices.add(toShort(triangle._vertex2));
       }
 
-      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last ceiling vertex before creating the walls
-
-      processWalls(planet, center, vertices, indices);
+      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last roof vertex before creating the walls
+      {
+         processWall(planet, vertices, indices, center, _exteriorWall);
+         for (final Wall wall : _interiorWalls) {
+            processWall(planet, vertices, indices, center, wall);
+         }
+      }
 
       final List<Vector3F> normals = createNormals(vertices, indices, lastCeilingVertexIndex);
 
@@ -86,17 +90,6 @@ public class Building {
                _material._depthTest //
       );
 
-   }
-
-
-   private void processWalls(final Planet planet,
-                             final Vector3D center,
-                             final List<Vector3F> vertices,
-                             final List<Short> indices) {
-      processWall(planet, vertices, indices, center, _exteriorWall);
-      for (final Wall wall : _interiorWalls) {
-         processWall(planet, vertices, indices, center, wall);
-      }
    }
 
 
@@ -129,7 +122,7 @@ public class Building {
       double maxY = Double.NEGATIVE_INFINITY;
       double maxZ = Double.NEGATIVE_INFINITY;
 
-      for (final double[] vertex : _ceilingVertices) {
+      for (final double[] vertex : _roofVertices) {
          final double x = vertex[0];
          final double y = vertex[1];
          final double z = vertex[2];
@@ -216,8 +209,8 @@ public class Building {
                                    final Vector3D center,
                                    final Wall wall) {
       for (final WallQuad quad : wall._quads) {
-         final Geodetic3D topCorner0 = quad._coordinate0;
-         final Geodetic3D topCorner1 = quad._coordinate1;
+         final Geodetic3D topCorner0 = quad._topCorner0;
+         final Geodetic3D topCorner1 = quad._topCorner1;
          final double lowerHeight = quad._lowerHeight;
 
          final int firstVertexIndex = vertices.size();
@@ -241,14 +234,13 @@ public class Building {
                                                final List<Short> indices,
                                                final int lastCeilingVertexIndex) {
       final int verticesSize = vertices.size();
-      final ArrayList<Vector3F> result = new ArrayList<>(verticesSize);
+      final List<List<Vector3F>> allNormals = new ArrayList<>(verticesSize);
       for (int i = 0; i < verticesSize; i++) {
-         if (i <= lastCeilingVertexIndex) {
-            result.add(new Vector3F(1, 0, 0));
-         }
-         else {
-            result.add(null);
-         }
+         final List<Vector3F> vertexNormal = new ArrayList<>();
+         //         if (i <= lastCeilingVertexIndex) {
+         //            vertexNormal.add(new Vector3F(1, 0, 0));
+         //         }
+         allNormals.add(vertexNormal);
       }
 
       final int indicesSize = indices.size();
@@ -265,28 +257,48 @@ public class Building {
          final Vector3F v20 = vertex2.sub(vertex0);
          final Vector3F normal = v10.cross(v20).normalized();
 
-         if (normal.isNan()) {
-            setNormal(result, index0, Vector3F.zero());
-            setNormal(result, index1, Vector3F.zero());
-            setNormal(result, index2, Vector3F.zero());
-         }
-         else {
-            setNormal(result, index0, normal);
-            setNormal(result, index1, normal);
-            setNormal(result, index2, normal);
-         }
+         addNormal(allNormals, index0, normal);
+         addNormal(allNormals, index1, normal);
+         addNormal(allNormals, index2, normal);
       }
+
+      final List<Vector3F> result = new ArrayList<>(allNormals.size());
+      for (final List<Vector3F> currentNormals : allNormals) {
+         result.add(smoothNormals(currentNormals));
+      }
+      //      for (int i = 0; i < result.size(); i++) {
+      //         final Vector3F currentNormal = result.get(i);
+      //         final boolean notHasNormal = (currentNormal == null) || currentNormal.isZero() || currentNormal.isNan();
+      //         if (notHasNormal) {
+      //            result.set(i, new Vector3F(1, 0, 0));
+      //         }
+      //      }
 
       return result;
    }
 
 
-   private static void setNormal(final ArrayList<Vector3F> normals,
-                                 final short index,
+   private static Vector3F smoothNormals(final List<Vector3F> normals) {
+      if ((normals == null) || normals.isEmpty()) {
+         return new Vector3F(1, 0, 0);
+      }
+      Vector3F acum = Vector3F.zero();
+      for (final Vector3F normal : normals) {
+         acum = acum.add(normal);
+      }
+      return acum.div(normals.size());
+   }
+
+
+   private static void addNormal(final List<List<Vector3F>> allNormals,
+                                 final int index,
                                  final Vector3F normal) {
-      final Vector3F currentNormal = normals.get(index);
-      if ((currentNormal == null) || currentNormal.isZero() || currentNormal.isNan()) {
-         normals.set(index, normal);
+      if ((normal != null) && !normal.isZero() && !normal.isNan()) {
+         final List<Vector3F> currentNormals = allNormals.get(index);
+         currentNormals.add(normal);
+         //         final boolean notHasNormal = (currentNormal == null) || currentNormal.isZero() || currentNormal.isNan();
+         //         final Vector3F updatedNormal = notHasNormal ? normal : currentNormal.add(normal).div(2);
+         //         normals.set(index, updatedNormal);
       }
    }
 

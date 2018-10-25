@@ -6,16 +6,16 @@ import org.glob3.mobile.generated.Geodetic3D;
 
 
 public class WallQuad {
-   public final Geodetic3D _coordinate0;
-   public final Geodetic3D _coordinate1;
+   public final Geodetic3D _topCorner0;
+   public final Geodetic3D _topCorner1;
    public final double     _lowerHeight;
 
 
-   WallQuad(final Geodetic3D coordinate0,
-            final Geodetic3D coordinate1,
+   WallQuad(final Geodetic3D topCorner0,
+            final Geodetic3D topCorner1,
             final double lowerHeight) {
-      _coordinate0 = coordinate0;
-      _coordinate1 = coordinate1;
+      _topCorner0 = topCorner0;
+      _topCorner1 = topCorner1;
       _lowerHeight = lowerHeight;
    }
 

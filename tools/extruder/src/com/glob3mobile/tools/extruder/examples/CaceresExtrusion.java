@@ -87,12 +87,11 @@ public class CaceresExtrusion {
 
       @Override
       public void onBuildings(final List<Building> buildings) {
-         try {
-            _bitmap.save(new File("debug.png"));
-         }
-         catch (final IOException e) {
-            throw new RuntimeException(e);
-         }
+      }
+
+
+      private void save(final String fileName) throws IOException {
+         _bitmap.save(new File(fileName));
       }
 
 
@@ -102,7 +101,7 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void onMeshes(final G3MeshCollection meshes) {
+      public void onMeshCollection(final G3MeshCollection meshes) {
       }
 
 
@@ -115,6 +114,7 @@ public class CaceresExtrusion {
 
 
       final String name = "casco_historico"; // "nucleo_urbano"; // "muralla";
+      // final String name = "muralla";
       final String inputFileName = name + ".geojson";
       final String outputFileName = name + "_3d.json";
 
@@ -122,7 +122,9 @@ public class CaceresExtrusion {
 
       final Planet planet = EllipsoidalPlanet.createEarth();
 
-      PolygonExtruder.process(inputFileName, outputFileName, new CaceresExtrusionHandler(), planet, floatPrecision);
+      final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();
+      PolygonExtruder.process(inputFileName, outputFileName, handler, planet, floatPrecision);
+      handler.save(name + "_debug.png");
    }
 
 

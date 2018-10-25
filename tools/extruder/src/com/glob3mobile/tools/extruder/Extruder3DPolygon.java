@@ -99,31 +99,31 @@ public class Extruder3DPolygon
          }
       }
 
-      final double[][] ceilingVertices = new double[totalVertices][3];
+      final double[][] roofVertices = new double[totalVertices][3];
 
       int verticesCursor = 0;
       for (final Geodetic3D coordinate : _coordinates) {
-         verticesCursor = addVextex(ceilingVertices, verticesCursor, coordinate);
+         verticesCursor = addVextex(roofVertices, verticesCursor, coordinate);
       }
 
       for (int i = 0; i < numHoles; i++) {
          final List<Geodetic3D> holeCoordinates = _holesCoordinatesArray.get(i);
          // Collections.reverse(holeCoordinates);
          for (final Geodetic3D coordinate : holeCoordinates) {
-            verticesCursor = addVextex(ceilingVertices, verticesCursor, coordinate);
+            verticesCursor = addVextex(roofVertices, verticesCursor, coordinate);
          }
       }
 
-      return new Triangulation.Data(numContures, numVerticesInContures, ceilingVertices);
+      return new Triangulation.Data(numContures, numVerticesInContures, roofVertices);
    }
 
 
-   private static int addVextex(final double[][] ceilingVertices,
+   private static int addVextex(final double[][] roofVertices,
                                 final int verticesCursor,
                                 final Geodetic3D coordinate) {
-      ceilingVertices[verticesCursor][0] = coordinate._longitude._degrees;
-      ceilingVertices[verticesCursor][1] = coordinate._latitude._degrees;
-      ceilingVertices[verticesCursor][2] = coordinate._height;
+      roofVertices[verticesCursor][0] = coordinate._longitude._degrees;
+      roofVertices[verticesCursor][1] = coordinate._latitude._degrees;
+      roofVertices[verticesCursor][2] = coordinate._height;
       return verticesCursor + 1;
    }
 

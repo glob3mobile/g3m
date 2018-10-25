@@ -108,7 +108,7 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public void onMeshes(final G3MeshCollection meshes) {
+      public void onMeshCollection(final G3MeshCollection meshes) {
       }
    }
 
