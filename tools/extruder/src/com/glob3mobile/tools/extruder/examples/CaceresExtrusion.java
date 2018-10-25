@@ -4,15 +4,19 @@ package com.glob3mobile.tools.extruder.examples;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.EllipsoidalPlanet;
 import org.glob3.mobile.generated.GEO3DPolygonGeometry;
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOObject;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.tools.utils.GEOBitmap;
 
+import com.glob3mobile.tools.extruder.Building;
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
 import com.glob3mobile.tools.extruder.Heigths;
 import com.glob3mobile.tools.extruder.PolygonExtruder;
@@ -27,19 +31,13 @@ public class CaceresExtrusion {
                ExtrusionHandler {
 
 
-      private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW);
+      private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW, true);
 
       private GEOBitmap _bitmap;
 
 
       @Override
       public boolean extrudes(final GEOFeature geoFeature) {
-         return true;
-      }
-
-
-      @Override
-      public boolean getDepthTestFor(final GEOFeature geoFeature) {
          return true;
       }
 
@@ -86,7 +84,7 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void onFinish() {
+      public void onFinish(final List<Building> buildings) {
          try {
             _bitmap.save(new File("debug.png"));
          }
@@ -108,9 +106,11 @@ public class CaceresExtrusion {
       final String inputFileName = name + ".geojson";
       final String outputFileName = name + "_3d.json";
 
-      final int floatPrecision = 6;
+      final int floatPrecision = 3;
 
-      PolygonExtruder.process(inputFileName, outputFileName, new CaceresExtrusionHandler(), floatPrecision);
+      final Planet planet = EllipsoidalPlanet.createEarth();
+
+      PolygonExtruder.process(inputFileName, outputFileName, new CaceresExtrusionHandler(), planet, floatPrecision);
    }
 
 

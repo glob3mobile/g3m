@@ -26,9 +26,8 @@ public class Extruder3DPolygon
                      final List<Geodetic3D> coordinates,
                      final List<List<Geodetic3D>> holesCoordinatesArray,
                      final double lowerHeight,
-                     final G3MeshMaterial material,
-                     final boolean depthTest) {
-      super(geoFeature, lowerHeight, material, depthTest);
+                     final G3MeshMaterial material) {
+      super(geoFeature, lowerHeight, material);
       _coordinates = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
    }
@@ -104,24 +103,29 @@ public class Extruder3DPolygon
 
       int verticesCursor = 0;
       for (final Geodetic3D coordinate : _coordinates) {
-         ceilingVertices[verticesCursor][0] = coordinate._longitude._degrees;
-         ceilingVertices[verticesCursor][1] = coordinate._latitude._degrees;
-         ceilingVertices[verticesCursor][2] = coordinate._height;
-         verticesCursor++;
+         verticesCursor = addVextex(ceilingVertices, verticesCursor, coordinate);
       }
 
       for (int i = 0; i < numHoles; i++) {
          final List<Geodetic3D> holeCoordinates = _holesCoordinatesArray.get(i);
          // Collections.reverse(holeCoordinates);
-         for (final Geodetic3D holeCoordinate : holeCoordinates) {
-            ceilingVertices[verticesCursor][0] = holeCoordinate._longitude._degrees;
-            ceilingVertices[verticesCursor][1] = holeCoordinate._latitude._degrees;
-            ceilingVertices[verticesCursor][2] = holeCoordinate._height;
-            verticesCursor++;
+         for (final Geodetic3D coordinate : holeCoordinates) {
+            verticesCursor = addVextex(ceilingVertices, verticesCursor, coordinate);
          }
       }
 
       return new Triangulation.Data(numContures, numVerticesInContures, ceilingVertices);
    }
+
+
+   private static int addVextex(final double[][] ceilingVertices,
+                                final int verticesCursor,
+                                final Geodetic3D coordinate) {
+      ceilingVertices[verticesCursor][0] = coordinate._longitude._degrees;
+      ceilingVertices[verticesCursor][1] = coordinate._latitude._degrees;
+      ceilingVertices[verticesCursor][2] = coordinate._height;
+      return verticesCursor + 1;
+   }
+
 
 }

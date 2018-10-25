@@ -29,9 +29,8 @@ public class Extruder2DPolygon
                      final List<List<Geodetic2D>> holesCoordinatesArray,
                      final double lowerHeight,
                      final double upperHeight,
-                     final G3MeshMaterial material,
-                     final boolean depthTest) {
-      super(geoFeature, lowerHeight, material, depthTest);
+                     final G3MeshMaterial material) {
+      super(geoFeature, lowerHeight, material);
       _upperHeight = upperHeight;
       _coordinates = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
@@ -112,24 +111,30 @@ public class Extruder2DPolygon
 
       int verticesCursor = 0;
       for (final Geodetic2D coordinate : _coordinates) {
-         ceilingVertices[verticesCursor][0] = coordinate._longitude._degrees;
-         ceilingVertices[verticesCursor][1] = coordinate._latitude._degrees;
-         ceilingVertices[verticesCursor][2] = _upperHeight;
-         verticesCursor++;
+         verticesCursor = addVextex(ceilingVertices, verticesCursor, coordinate, _upperHeight);
       }
 
       for (int i = 0; i < numHoles; i++) {
          final List<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(i);
          // Collections.reverse(holeCoordinates);
-         for (final Geodetic2D holeCoordinate : holeCoordinates) {
-            ceilingVertices[verticesCursor][0] = holeCoordinate._longitude._degrees;
-            ceilingVertices[verticesCursor][1] = holeCoordinate._latitude._degrees;
-            ceilingVertices[verticesCursor][2] = _upperHeight;
-            verticesCursor++;
+         for (final Geodetic2D coordinate : holeCoordinates) {
+            verticesCursor = addVextex(ceilingVertices, verticesCursor, coordinate, _upperHeight);
          }
       }
 
       return new Triangulation.Data(numContures, numVerticesInContures, ceilingVertices);
    }
+
+
+   private static int addVextex(final double[][] ceilingVertices,
+                                final int verticesCursor,
+                                final Geodetic2D coordinate,
+                                final double height) {
+      ceilingVertices[verticesCursor][0] = coordinate._longitude._degrees;
+      ceilingVertices[verticesCursor][1] = coordinate._latitude._degrees;
+      ceilingVertices[verticesCursor][2] = height;
+      return verticesCursor + 1;
+   }
+
 
 }

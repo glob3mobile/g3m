@@ -3,12 +3,15 @@
 package com.glob3mobile.tools.extruder.examples;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.Planet;
 
+import com.glob3mobile.tools.extruder.Building;
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
 import com.glob3mobile.tools.extruder.Heigths;
 import com.glob3mobile.tools.extruder.PolygonExtruder;
@@ -23,10 +26,10 @@ public class AirspaceExtrusion {
                ExtrusionHandler {
 
 
-      private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
-      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f));
-      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f));
-      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f));
+      private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f), false);
 
 
       private static double toMeter(final JSONObject properties,
@@ -49,12 +52,6 @@ public class AirspaceExtrusion {
          final JSONObject properties = geoFeature.getProperties();
          final String type = properties.getAsString("type", "");
          return (!type.equalsIgnoreCase("CTA") && !type.equalsIgnoreCase("FIR"));
-      }
-
-
-      @Override
-      public boolean getDepthTestFor(final GEOFeature geoFeature) {
-         return false;
       }
 
 
@@ -99,7 +96,7 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public void onFinish() {
+      public void onFinish(final List<Building> buildings) {
       }
    }
 
@@ -114,8 +111,9 @@ public class AirspaceExtrusion {
 
       final int floatPrecision = 6;
 
+      final Planet planet = null; // cartesian
 
-      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), floatPrecision);
+      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), planet, floatPrecision);
    }
 
 

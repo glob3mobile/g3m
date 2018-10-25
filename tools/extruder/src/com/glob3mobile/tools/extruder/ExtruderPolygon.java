@@ -18,17 +18,14 @@ public abstract class ExtruderPolygon {
    private final GEOFeature     _geoFeature;
    protected final double       _lowerHeight;
    private final G3MeshMaterial _material;
-   private final boolean        _depthTest;
 
 
    protected ExtruderPolygon(final GEOFeature geoFeature,
                              final double lowerHeight,
-                             final G3MeshMaterial material,
-                             final boolean depthTest) {
+                             final G3MeshMaterial material) {
       _geoFeature = geoFeature;
       _lowerHeight = lowerHeight;
       _material = material;
-      _depthTest = depthTest;
    }
 
 
@@ -53,8 +50,8 @@ public abstract class ExtruderPolygon {
          else {
             statistics.countTriangulation(ceilingTriangles.size());
 
-            return new Building(ceilingTriangles, data._vertices, createExteriorWall(), createInteriorWalls(), _material,
-                     _depthTest);
+            return new Building(_geoFeature, ceilingTriangles, data._vertices, createExteriorWall(), createInteriorWalls(),
+                     _material);
          }
       }
       catch (final NullPointerException e) {

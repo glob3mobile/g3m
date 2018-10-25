@@ -36,6 +36,7 @@ import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.JSONGenerator;
 import org.glob3.mobile.generated.LogLevel;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.specific.Factory_JavaDesktop;
 import org.glob3.mobile.specific.JSONParser_JavaDesktop;
 import org.glob3.mobile.specific.Logger_JavaDesktop;
@@ -142,19 +143,19 @@ public class PolygonExtruder {
    }
 
 
-   private static void processGEOFeatureCollection(final GEOFeatureCollection geoFeatureCollection,
-                                                   final List<ExtruderPolygon> polygons,
-                                                   final ExtrusionHandler handler) {
+   private static void getPolygonsFromFeatureCollection(final GEOFeatureCollection geoFeatureCollection,
+                                                        final List<ExtruderPolygon> polygons,
+                                                        final ExtrusionHandler handler) {
       final int size = geoFeatureCollection.size();
       for (int i = 0; i < size; i++) {
-         processGEOFeature(geoFeatureCollection.get(i), polygons, handler);
+         getPolygonsFromFeature(geoFeatureCollection.get(i), polygons, handler);
       }
    }
 
 
-   private static void processGEOFeature(final GEOFeature geoFeature,
-                                         final List<ExtruderPolygon> polygons,
-                                         final ExtrusionHandler handler) {
+   private static void getPolygonsFromFeature(final GEOFeature geoFeature,
+                                              final List<ExtruderPolygon> polygons,
+                                              final ExtrusionHandler handler) {
       if (handler.extrudes(geoFeature)) {
          processGEOGeometry(geoFeature, geoFeature.getGeometry(), polygons, handler);
       }
@@ -268,12 +269,11 @@ public class PolygonExtruder {
                                                final ExtrusionHandler handler) {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
-      final boolean depthTest = handler.getDepthTestFor(geoFeature);
 
       final List<FixedPolygon2DData> fixedPolygons = fixPolygon2DData(coordinates, holesCoordinatesArray);
       for (final FixedPolygon2DData fixed : fixedPolygons) {
          polygons.add(new Extruder2DPolygon(geoFeature, fixed._coordinates, fixed._holesCoordinatesArray, heights._lowerHeight,
-                  heights._upperHeight, material, depthTest));
+                  heights._upperHeight, material));
       }
    }
 
@@ -285,12 +285,11 @@ public class PolygonExtruder {
                                                final ExtrusionHandler handler) {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
-      final boolean depthTest = handler.getDepthTestFor(geoFeature);
 
       final List<FixedPolygon3DData> fixedPolygons = fixPolygon3DData(coordinates, holesCoordinatesArray);
       for (final FixedPolygon3DData fixed : fixedPolygons) {
          polygons.add(new Extruder3DPolygon(geoFeature, fixed._coordinates, fixed._holesCoordinatesArray, heights._lowerHeight,
-                  material, depthTest));
+                  material));
       }
    }
 
@@ -545,75 +544,58 @@ public class PolygonExtruder {
    }
 
 
-   private static void process(final String outputFileName,
-                               final GEOObject geoObject,
-                               final ExtrusionHandler handler,
-                               final int floatPrecision) {
+   private static List<Building> getBuildings(final GEOObject geoObject,
+                                              final ExtrusionHandler handler) {
       final List<ExtruderPolygon> polygons = new LinkedList<>();
-      process(geoObject, polygons, handler);
+      getPolygons(geoObject, polygons, handler);
       System.out.println("Found " + polygons.size() + " polygons");
 
       final Statistics statistics = new Statistics();
-      createG3MMeshJSON(outputFileName, polygons, statistics, handler, floatPrecision);
+      final List<Building> buildings = getBuildings(polygons, statistics, handler);
       statistics.printStatistics();
+      return buildings;
    }
 
 
-   private static void createG3MMeshJSON(final String fileName,
-                                         final Collection<ExtruderPolygon> extruderPolygons,
-                                         final Statistics statistics,
-                                         final ExtrusionHandler handler,
-                                         final int floatPrecision) {
-
-      final List<Building> buildings = new ArrayList<>(extruderPolygons.size());
-
+   private static List<Building> getBuildings(final Collection<ExtruderPolygon> extruderPolygons,
+                                              final Statistics statistics,
+                                              final ExtrusionHandler handler) {
+      final List<Building> result = new ArrayList<>(extruderPolygons.size());
       for (final ExtruderPolygon extruderPolygon : extruderPolygons) {
          _polygonsCounter++;
-
          final Building building = extruderPolygon.createBuilding(statistics, handler, _polygonsCounter);
          if (building != null) {
-            buildings.add(building);
+            result.add(building);
          }
       }
-
-      writeG3MMeshJSON(fileName, buildings, floatPrecision);
+      return result;
    }
 
 
    private static void writeG3MMeshJSON(final String fileName,
                                         final List<Building> buildings,
-                                        final int floatPrecision) {
+                                        final Planet planet,
+                                        final int floatPrecision) throws IOException {
       final G3MeshCollection meshCollection = new G3MeshCollection();
       for (final Building building : buildings) {
-         meshCollection.add(building.createMesh(floatPrecision));
+         meshCollection.add(building.createMesh(planet, floatPrecision));
       }
 
       final String sceneJSON = JSONGenerator.generate(meshCollection.toJSON(), floatPrecision);
-
-      // final IByteBuffer bson = BSONGenerator.generate(meshCollection.toG3MeshJSON());
-      // System.out.println("BSON: " + bson.size());
-
-      try {
-         final PrintWriter out = new PrintWriter(fileName);
-
+      try (final PrintWriter out = new PrintWriter(fileName)) {
          out.println(sceneJSON);
-
-         out.close();
-      }
-      catch (final IOException e) {
-         e.printStackTrace();
       }
    }
 
 
-   private static void process(final GEOObject geoObject,
-                               final List<ExtruderPolygon> polygons,
-                               final ExtrusionHandler handler) {
+   private static void getPolygons(final GEOObject geoObject,
+                                   final List<ExtruderPolygon> polygons,
+                                   final ExtrusionHandler handler) {
       if (geoObject instanceof GEOFeatureCollection) {
-         processGEOFeatureCollection((GEOFeatureCollection) geoObject, polygons, handler);
+         getPolygonsFromFeatureCollection((GEOFeatureCollection) geoObject, polygons, handler);
       }
       else if (geoObject instanceof GEOFeature) {
-         processGEOFeature((GEOFeature) geoObject, polygons, handler);
+         getPolygonsFromFeature((GEOFeature) geoObject, polygons, handler);
       }
       else {
          throw new RuntimeException("GEOObject subclass " + geoObject.getClass() + " not supported");
@@ -697,24 +679,35 @@ public class PolygonExtruder {
    }
 
 
-   public static void process(final String inputFileName,
-                              final String outputFileName,
-                              final ExtrusionHandler handler,
-                              final int floatPrecision) throws IOException {
-      logInfo("Starting...");
-      final long now = System.currentTimeMillis();
-
+   private static GEOObject getGEOObject(final String inputFileName) throws IOException {
       logInfo("Reading file...");
       final String json = PolygonExtruder.readFile(inputFileName, Charset.forName("UTF-8"));
 
       logInfo("Parsing...");
-      final GEOObject geoObject = GEOJSONParser.parseJSON(json);
+      return GEOJSONParser.parseJSON(json);
+   }
 
+
+   private static List<Building> getBuildings(final String inputFileName,
+                                              final ExtrusionHandler handler) throws IOException {
+      final GEOObject geoObject = getGEOObject(inputFileName);
       handler.onRootGEOObject(geoObject);
+      return getBuildings(geoObject, handler);
+   }
 
-      process(outputFileName, geoObject, handler, floatPrecision);
 
-      handler.onFinish();
+   public static void process(final String inputFileName,
+                              final String outputFileName,
+                              final ExtrusionHandler handler,
+                              final Planet planet,
+                              final int floatPrecision) throws IOException {
+      logInfo("Starting...");
+      final long now = System.currentTimeMillis();
+
+      final List<Building> buildings = getBuildings(inputFileName, handler);
+      handler.onFinish(buildings);
+
+      writeG3MMeshJSON(outputFileName, buildings, planet, floatPrecision);
 
       final long elapsed = System.currentTimeMillis() - now;
       logInfo("done! (" + elapsed + "ms)");

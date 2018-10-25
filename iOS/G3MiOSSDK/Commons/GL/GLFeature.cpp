@@ -193,8 +193,6 @@ Geometry2DGLFeature::~Geometry2DGLFeature() {
 #endif
 }
 
-
-
 void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                          int arrayElementSize,
                                          int index,

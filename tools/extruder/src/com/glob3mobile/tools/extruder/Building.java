@@ -5,7 +5,10 @@ package com.glob3mobile.tools.extruder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.Vector3F;
 
@@ -17,39 +20,41 @@ import poly2Tri.Triangle;
 
 public class Building {
 
+   public final GEOFeature      _geoFeature;
    private final List<Triangle> _ceilingTriangles;
    private final double[][]     _ceilingVertices;
    private final Wall           _exteriorWall;
    private final List<Wall>     _interiorWalls;
    private final G3MeshMaterial _material;
-   private final boolean        _depthTest;
 
 
-   Building(final List<Triangle> ceilingTriangles,
+   Building(final GEOFeature geoFeature,
+            final List<Triangle> ceilingTriangles,
             final double[][] ceilingVertices,
             final Wall exteriorWall,
             final List<Wall> interiorWalls,
-            final G3MeshMaterial material,
-            final boolean depthTest) {
+            final G3MeshMaterial material) {
+      _geoFeature = geoFeature;
       _ceilingTriangles = ceilingTriangles;
       _ceilingVertices = ceilingVertices;
       _exteriorWall = exteriorWall;
       _interiorWalls = interiorWalls;
       _material = material;
-      _depthTest = depthTest;
    }
 
 
-   public G3Mesh createMesh(final int floatPrecision) {
+   public G3Mesh createMesh(final Planet planet,
+                            final int floatPrecision) {
       final double wallsLowerHeight = getWallsLowerHeight(_exteriorWall, _interiorWalls);
-      final Vector3D center = getCenter(floatPrecision, wallsLowerHeight);
+
+      final Vector3D center = getCenter(planet, floatPrecision, wallsLowerHeight);
 
       final List<Vector3F> vertices = new ArrayList<>(_ceilingVertices.length);
       for (final double[] vertex : _ceilingVertices) {
          final double x = vertex[0];
          final double y = vertex[1];
          final double z = vertex[2];
-         addVertex(vertices, center, x, y, z);
+         addVertex(planet, vertices, center, x, y, z);
       }
 
       final List<Short> indices = new ArrayList<>();
@@ -59,17 +64,18 @@ public class Building {
          indices.add(toShort(triangle._vertex2));
       }
 
-      final int lastCeilingVertexIndex = vertices.size() - 1;
+      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last ceiling vertex before creating the walls
 
-      processWall(vertices, indices, center, _exteriorWall);
-      for (final Wall wall : _interiorWalls) {
-         processWall(vertices, indices, center, wall);
-      }
+      processWalls(planet, center, vertices, indices);
 
       final List<Vector3F> normals = createNormals(vertices, indices, lastCeilingVertexIndex);
 
+      final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
+                                                                    : G3Mesh.VerticesFormat.CARTESIAN;
+
+
       return G3Mesh.createTrianglesMesh( //
-               G3Mesh.VerticesFormat.GEODETIC, //
+               verticesFormat, //
                center, //
                vertices, //
                normals, //
@@ -77,9 +83,20 @@ public class Building {
                null, // texCoords
                indices, //
                _material, //
-               _depthTest //
+               _material._depthTest //
       );
 
+   }
+
+
+   private void processWalls(final Planet planet,
+                             final Vector3D center,
+                             final List<Vector3F> vertices,
+                             final List<Short> indices) {
+      processWall(planet, vertices, indices, center, _exteriorWall);
+      for (final Wall wall : _interiorWalls) {
+         processWall(planet, vertices, indices, center, wall);
+      }
    }
 
 
@@ -102,7 +119,8 @@ public class Building {
    }
 
 
-   private Vector3D getCenter(final int floatPrecision,
+   private Vector3D getCenter(final Planet planet,
+                              final int floatPrecision,
                               final double lowerHeight) {
       double minX = Double.POSITIVE_INFINITY;
       double minY = Double.POSITIVE_INFINITY;
@@ -135,13 +153,21 @@ public class Building {
          }
       }
 
-      final double centerX = (maxX + minX) / 2;
-      final double centerY = (maxY + minY) / 2;
-      final double centerZ = (maxZ + minZ) / 2;
+      final double x = (maxX + minX) / 2;
+      final double y = (maxY + minY) / 2;
+      final double z = (maxZ + minZ) / 2;
+      final Vector3D center = createCenter(planet, x, y, z);
 
       final double factor = Math.pow(10, floatPrecision);
+      return new Vector3D(round(center._x, factor), round(center._y, factor), round(center._z, factor));
+   }
 
-      return new Vector3D(round(centerX, factor), round(centerY, factor), round(centerZ, factor));
+
+   private Vector3D createCenter(final Planet planet,
+                                 final double x,
+                                 final double y,
+                                 final double z) {
+      return (planet == null) ? new Vector3D(x, y, z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), z);
    }
 
 
@@ -152,15 +178,27 @@ public class Building {
    }
 
 
-   private static void addVertex(final List<Vector3F> vertices,
+   private static void addVertex(final Planet planet,
+                                 final List<Vector3F> vertices,
                                  final Vector3D center,
                                  final double x,
                                  final double y,
                                  final double z) {
-      vertices.add(new Vector3F( //
-               (float) (x - center._x), //
-               (float) (y - center._y), //
-               (float) (z - center._z)));
+      final Vector3F vertex;
+      if (planet == null) {
+         vertex = new Vector3F( //
+                  (float) (x - (float) center._x), //
+                  (float) (y - (float) center._y), //
+                  (float) (z - (float) center._z));
+      }
+      else {
+         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), z);
+         vertex = new Vector3F( //
+                  (float) (projected._x - (float) center._x), //
+                  (float) (projected._y - (float) center._y), //
+                  (float) (projected._z - (float) center._z));
+      }
+      vertices.add(vertex);
    }
 
 
@@ -172,7 +210,8 @@ public class Building {
    }
 
 
-   private static void processWall(final List<Vector3F> vertices,
+   private static void processWall(final Planet planet,
+                                   final List<Vector3F> vertices,
                                    final List<Short> indices,
                                    final Vector3D center,
                                    final Wall wall) {
@@ -182,10 +221,10 @@ public class Building {
          final double lowerHeight = quad._lowerHeight;
 
          final int firstVertexIndex = vertices.size();
-         addVertex(vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, topCorner0._height);
-         addVertex(vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, lowerHeight);
-         addVertex(vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, lowerHeight);
-         addVertex(vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, topCorner1._height);
+         addVertex(planet, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, topCorner0._height);
+         addVertex(planet, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, lowerHeight);
+         addVertex(planet, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, lowerHeight);
+         addVertex(planet, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, topCorner1._height);
 
          indices.add(toShort(firstVertexIndex + 0));
          indices.add(toShort(firstVertexIndex + 1));
