@@ -18,7 +18,7 @@ import poly2Tri.TriangulationException;
 public abstract class ExtruderPolygon {
 
    private final GEOFeature     _geoFeature;
-   protected final double       _lowerHeight;
+   private final double         _lowerHeight;
    private final G3MeshMaterial _material;
 
 
@@ -31,10 +31,10 @@ public abstract class ExtruderPolygon {
    }
 
 
-   public abstract Wall createExteriorWall();
+   public abstract Wall createExteriorWall(final double lowerHeight);
 
 
-   public abstract List<Wall> createInteriorWalls();
+   public abstract List<Wall> createInteriorWalls(final double lowerHeight);
 
 
    public Building createBuilding(final PolygonExtruder.Statistics statistics,
@@ -52,8 +52,8 @@ public abstract class ExtruderPolygon {
          else {
             statistics.countTriangulation(roofTriangles.size());
 
-            final Wall exteriorWall = createExteriorWall();
-            final List<Wall> interiorWalls = createInteriorWalls();
+            final Wall exteriorWall = createExteriorWall(_lowerHeight);
+            final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
             return new Building(_geoFeature, toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
                      _material);
          }

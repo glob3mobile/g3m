@@ -76,14 +76,14 @@ public class Extruder2DPolygon
 
 
    @Override
-   public Wall createExteriorWall() {
-      return createExteriorWall(_coordinates, _lowerHeight, _upperHeight);
+   public Wall createExteriorWall(final double lowerHeight) {
+      return createExteriorWall(_coordinates, lowerHeight, _upperHeight);
    }
 
 
    @Override
-   public List<Wall> createInteriorWalls() {
-      return createInteriorWalls(_holesCoordinatesArray, _lowerHeight, _upperHeight);
+   public List<Wall> createInteriorWalls(final double lowerHeight) {
+      return createInteriorWalls(_holesCoordinatesArray, lowerHeight, _upperHeight);
    }
 
 

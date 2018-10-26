@@ -30,7 +30,6 @@ public class Building {
 
 
    Building(final GEOFeature geoFeature,
-            //            final double[][] roofVertices,
             final List<Vector3D> roofVertices,
             final List<Triangle> roofTriangles,
             final Wall exteriorWall,
@@ -82,11 +81,6 @@ public class Building {
       final Angle angleToDown = normal.angleBetween(Vector3D.DOWN_Z);
       final boolean pointsToSkye = !angleToDown.lowerThan(angleToUp);
       return pointsToSkye;
-   }
-
-
-   private static Vector3D toFlatVector3D(final double[] vertex) {
-      return new Vector3D(vertex[0], vertex[1], 0);
    }
 
 
@@ -325,7 +319,7 @@ public class Building {
       for (final Vector3F normal : normals) {
          acum = acum.add(normal);
       }
-      return acum.div(normals.size());
+      return acum.div(normals.size()).normalized();
    }
 
 
@@ -339,12 +333,11 @@ public class Building {
    }
 
 
-   private static void addNormal(final List<List<Vector3F>> allNormals,
+   private static void addNormal(final List<List<Vector3F>> normals,
                                  final int index,
                                  final Vector3F normal) {
       if ((normal != null) && !normal.isZero() && !normal.isNan()) {
-         final List<Vector3F> currentNormals = allNormals.get(index);
-         currentNormals.add(normal);
+         normals.get(index).add(normal);
       }
    }
 

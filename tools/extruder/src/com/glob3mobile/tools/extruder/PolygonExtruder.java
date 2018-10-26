@@ -298,8 +298,8 @@ public class PolygonExtruder {
 
       //final Poly fixedPoly = Clip.intersection(p1, p2);
 
-      //      final Poly union = Clip.union(p1, p2);
-      //      final Poly fixedPoly = Clip.intersection(union, union);
+      // final Poly union = Clip.union(p1, p2);
+      // final Poly fixedPoly = Clip.intersection(union, union);
 
       final Poly fixedPoly = Clip.union(p1, p2);
 
@@ -314,8 +314,8 @@ public class PolygonExtruder {
 
       //final Poly fixedPoly = Clip.intersection(p1, p2);
 
-      //      final Poly union = Clip.union(p1, p2);
-      //      final Poly fixedPoly = Clip.intersection(union, union);
+      // final Poly union = Clip.union(p1, p2);
+      // final Poly fixedPoly = Clip.intersection(union, union);
 
       final Poly fixedPoly = Clip.union(p1, p2);
 
@@ -411,7 +411,7 @@ public class PolygonExtruder {
    private static double sqDistance(final Geodetic3D closest,
                                     final Angle latitude,
                                     final Angle longitude) {
-      final double deltaLat = latitude._radians - closest._latitude._radians;
+      final double deltaLat = (latitude._radians - closest._latitude._radians) * 2;
       final double deltaLon = longitude._radians - closest._longitude._radians;
       return (deltaLat * deltaLat) + (deltaLon * deltaLon);
    }
