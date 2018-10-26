@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.GEOFeature;
+import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Vector3D;
@@ -29,17 +30,62 @@ public class Building {
 
 
    Building(final GEOFeature geoFeature,
-            final List<Triangle> roofTriangles,
             final double[][] roofVertices,
+            final List<Triangle> roofTriangles,
             final Wall exteriorWall,
             final List<Wall> interiorWalls,
             final G3MeshMaterial material) {
       _geoFeature = geoFeature;
-      _roofTriangles = roofTriangles;
       _roofVertices = roofVertices;
+      _roofTriangles = consolidate(roofTriangles, roofVertices);
       _exteriorWall = exteriorWall;
       _interiorWalls = interiorWalls;
       _material = material;
+   }
+
+
+   private static List<Triangle> consolidate(final List<Triangle> triangles,
+                                             final double[][] vertices) {
+      final List<Triangle> result = new ArrayList<>(triangles.size());
+
+      for (final Triangle triangle : triangles) {
+         if (pointsToSky(triangle, vertices)) {
+            result.add(triangle);
+         }
+         else {
+            result.add(triangle.flipped());
+         }
+      }
+
+      return result;
+   }
+
+
+   private static boolean pointsToSky(final Triangle triangle,
+                                      final double[][] vertices) {
+      final Vector3D vertex0 = toVector3D(vertices[triangle._vertex0]);
+      final Vector3D vertex1 = toVector3D(vertices[triangle._vertex1]);
+      final Vector3D vertex2 = toVector3D(vertices[triangle._vertex2]);
+
+      final Vector3D v10 = vertex1.sub(vertex0);
+      final Vector3D v20 = vertex2.sub(vertex0);
+      final Vector3D normal = v10.cross(v20).normalized();
+      if (normal.isEquals(Vector3D.DOWN_Z)) {
+         return false;
+      }
+      if (normal.isEquals(Vector3D.UP_Z)) {
+         return true;
+      }
+
+      final Angle angleToUp = normal.angleBetween(Vector3D.UP_Z);
+      final Angle angleToDown = normal.angleBetween(Vector3D.DOWN_Z);
+      final boolean pointsToSkye = angleToUp.lowerThan(angleToDown);
+      return pointsToSkye;
+   }
+
+
+   private static Vector3D toVector3D(final double[] vertex) {
+      return new Vector3D(vertex[0], vertex[1], 0);
    }
 
 
@@ -64,7 +110,7 @@ public class Building {
          indices.add(toShort(triangle._vertex2));
       }
 
-      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last roof vertex before creating the walls
+      //      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last roof vertex before creating the walls
       {
          processWall(planet, vertices, indices, center, _exteriorWall);
          for (final Wall wall : _interiorWalls) {
@@ -72,7 +118,7 @@ public class Building {
          }
       }
 
-      final List<Vector3F> normals = createNormals(vertices, indices, lastCeilingVertexIndex);
+      final List<Vector3F> normals = createNormals(planet, vertices, indices, _roofVertices);
 
       final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
                                                                     : G3Mesh.VerticesFormat.CARTESIAN;
@@ -230,16 +276,14 @@ public class Building {
    }
 
 
-   private static List<Vector3F> createNormals(final List<Vector3F> vertices,
+   private static List<Vector3F> createNormals(final Planet planet,
+                                               final List<Vector3F> vertices,
                                                final List<Short> indices,
-                                               final int lastCeilingVertexIndex) {
+                                               final double[][] roofVertices) {
       final int verticesSize = vertices.size();
       final List<List<Vector3F>> allNormals = new ArrayList<>(verticesSize);
       for (int i = 0; i < verticesSize; i++) {
          final List<Vector3F> vertexNormal = new ArrayList<>();
-         //         if (i <= lastCeilingVertexIndex) {
-         //            vertexNormal.add(new Vector3F(1, 0, 0));
-         //         }
          allNormals.add(vertexNormal);
       }
 
@@ -263,24 +307,21 @@ public class Building {
       }
 
       final List<Vector3F> result = new ArrayList<>(allNormals.size());
-      for (final List<Vector3F> currentNormals : allNormals) {
-         result.add(smoothNormals(currentNormals));
+      for (int i = 0; i < allNormals.size(); i++) {
+         final List<Vector3F> currentNormals = allNormals.get(i);
+         final double[] originalVertex = i < roofVertices.length ? roofVertices[i] : null;
+         result.add(smoothNormals(planet, originalVertex, currentNormals));
       }
-      //      for (int i = 0; i < result.size(); i++) {
-      //         final Vector3F currentNormal = result.get(i);
-      //         final boolean notHasNormal = (currentNormal == null) || currentNormal.isZero() || currentNormal.isNan();
-      //         if (notHasNormal) {
-      //            result.set(i, new Vector3F(1, 0, 0));
-      //         }
-      //      }
 
       return result;
    }
 
 
-   private static Vector3F smoothNormals(final List<Vector3F> normals) {
+   private static Vector3F smoothNormals(final Planet planet,
+                                         final double[] originalVertex,
+                                         final List<Vector3F> normals) {
       if ((normals == null) || normals.isEmpty()) {
-         return new Vector3F(1, 0, 0);
+         return normalAt(planet, originalVertex);
       }
       Vector3F acum = Vector3F.zero();
       for (final Vector3F normal : normals) {
@@ -290,15 +331,22 @@ public class Building {
    }
 
 
+   private static Vector3F normalAt(final Planet planet,
+                                    final double[] originalVertex) {
+      if ((planet == null) || (originalVertex == null)) {
+         return new Vector3F(0, 0, 1);
+      }
+      final Vector3D normal = planet.geodeticSurfaceNormal(Geodetic2D.fromDegrees(originalVertex[1], originalVertex[0]));
+      return new Vector3F((float) normal._x, (float) normal._y, (float) normal._z);
+   }
+
+
    private static void addNormal(final List<List<Vector3F>> allNormals,
                                  final int index,
                                  final Vector3F normal) {
       if ((normal != null) && !normal.isZero() && !normal.isNan()) {
          final List<Vector3F> currentNormals = allNormals.get(index);
          currentNormals.add(normal);
-         //         final boolean notHasNormal = (currentNormal == null) || currentNormal.isZero() || currentNormal.isNan();
-         //         final Vector3F updatedNormal = notHasNormal ? normal : currentNormal.add(normal).div(2);
-         //         normals.set(index, updatedNormal);
       }
    }
 

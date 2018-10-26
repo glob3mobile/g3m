@@ -68,6 +68,8 @@
 		CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */; };
 		CFE3B3F2183C07C50078C796 /* isosurface-mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */; };
 		CFECA7771B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFECA7751B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp */; };
+		CFEEF623218330E90080AE11 /* cortijos_3d.json in Resources */ = {isa = PBXBuildFile; fileRef = CFEEF620218330E90080AE11 /* cortijos_3d.json */; };
+		CFEEF624218330E90080AE11 /* deportivo_3d.json in Resources */ = {isa = PBXBuildFile; fileRef = CFEEF622218330E90080AE11 /* deportivo_3d.json */; };
 		CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
@@ -231,6 +233,8 @@
 		CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
 		CFECA7751B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MVectorStreaming1DemoScene.cpp; sourceTree = "<group>"; };
 		CFECA7761B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MVectorStreaming1DemoScene.hpp; sourceTree = "<group>"; };
+		CFEEF620218330E90080AE11 /* cortijos_3d.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cortijos_3d.json; sourceTree = "<group>"; };
+		CFEEF622218330E90080AE11 /* deportivo_3d.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = deportivo_3d.json; sourceTree = "<group>"; };
 		CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTiledVectorDemoScene.cpp; sourceTree = "<group>"; };
 		CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTiledVectorDemoScene.hpp; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -523,6 +527,8 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFEEF620218330E90080AE11 /* cortijos_3d.json */,
+				CFEEF622218330E90080AE11 /* deportivo_3d.json */,
 				CF64DA312180AFC600387041 /* casco_historico_3d.json */,
 				CF3BC0692177967200386FA5 /* intramuros.json */,
 				CF3BC0672177967200386FA5 /* textures */,
@@ -656,6 +662,7 @@
 				E7D1B61B16D2436700AF47C1 /* Default.png in Resources */,
 				E7D1B61D16D2436700AF47C1 /* Default@2x.png in Resources */,
 				E7D1B61F16D2436700AF47C1 /* Default-568h@2x.png in Resources */,
+				CFEEF624218330E90080AE11 /* deportivo_3d.json in Resources */,
 				CFE3B3F2183C07C50078C796 /* isosurface-mesh.json in Resources */,
 				CFE3B3EA183ADB2D0078C796 /* texture0.jpg in Resources */,
 				CFE3B3EC183ADB2D0078C796 /* planeDiffuse.png in Resources */,
@@ -667,6 +674,7 @@
 				CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
+				CFEEF623218330E90080AE11 /* cortijos_3d.json in Resources */,
 				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
 				CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */,

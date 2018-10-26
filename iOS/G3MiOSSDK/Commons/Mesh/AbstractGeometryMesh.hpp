@@ -30,11 +30,14 @@ protected:
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
-  
+
   const bool _polygonOffsetFill;
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;
-  
+
+  const bool _cullFace;
+  const int  _culledFace;
+
   mutable BoundingVolume* _extent;
   BoundingVolume* computeBoundingVolume() const;
   
@@ -47,9 +50,11 @@ protected:
                        float           lineWidth,
                        float           pointSize,
                        bool            depthTest,
-                       bool polygonOffsetFill,
-                       float polygonOffsetFactor,
-                       float polygonOffsetUnits);
+                       bool            polygonOffsetFill,
+                       float           polygonOffsetFactor,
+                       float           polygonOffsetUnits,
+                       bool            cullFace,
+                       int             culledFace);
   
   GLState* _glState;
   

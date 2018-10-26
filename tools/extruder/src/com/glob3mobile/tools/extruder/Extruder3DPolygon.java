@@ -90,13 +90,11 @@ public class Extruder3DPolygon
       numVerticesInContures[0] = coordinatesSize;
       int totalVertices = coordinatesSize;
 
-      if (numHoles != 0) {
-         for (int i = 0; i < numHoles; i++) {
-            final List<Geodetic3D> holeCoordinates = _holesCoordinatesArray.get(i);
-            final int holeCoordinatesSize = holeCoordinates.size();
-            numVerticesInContures[1 + i] = holeCoordinatesSize;
-            totalVertices += holeCoordinatesSize;
-         }
+      for (int i = 0; i < numHoles; i++) {
+         final List<Geodetic3D> holeCoordinates = _holesCoordinatesArray.get(i);
+         final int holeCoordinatesSize = holeCoordinates.size();
+         numVerticesInContures[1 + i] = holeCoordinatesSize;
+         totalVertices += holeCoordinatesSize;
       }
 
       final double[][] roofVertices = new double[totalVertices][3];
@@ -107,8 +105,8 @@ public class Extruder3DPolygon
       }
 
       for (int i = 0; i < numHoles; i++) {
-         final List<Geodetic3D> holeCoordinates = _holesCoordinatesArray.get(i);
-         // Collections.reverse(holeCoordinates);
+         final List<Geodetic3D> holeCoordinates = new ArrayList<>(_holesCoordinatesArray.get(i));
+         Collections.reverse(holeCoordinates);
          for (final Geodetic3D coordinate : holeCoordinates) {
             verticesCursor = addVextex(roofVertices, verticesCursor, coordinate);
          }

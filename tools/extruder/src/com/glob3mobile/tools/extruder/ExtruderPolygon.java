@@ -52,7 +52,7 @@ public abstract class ExtruderPolygon {
 
             final Wall exteriorWall = createExteriorWall();
             final List<Wall> interiorWalls = createInteriorWalls();
-            return new Building(_geoFeature, roofTriangles, data._vertices, exteriorWall, interiorWalls, _material);
+            return new Building(_geoFeature, data._vertices, roofTriangles, exteriorWall, interiorWalls, _material);
          }
       }
       catch (final NullPointerException e) {

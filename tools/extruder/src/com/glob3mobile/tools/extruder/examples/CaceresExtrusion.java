@@ -113,8 +113,12 @@ public class CaceresExtrusion {
       System.out.println("--------------------\n");
 
 
-      final String name = "casco_historico"; // "nucleo_urbano"; // "muralla";
-      // final String name = "muralla";
+      final String name = "deportivo";
+      //      final String name = "cortijos";
+      //      final String name = "casco_historico";
+      //      final String name = "nucleo_urbano";
+      //      final String name = "muralla";
+
       final String inputFileName = name + ".geojson";
       final String outputFileName = name + "_3d.json";
 

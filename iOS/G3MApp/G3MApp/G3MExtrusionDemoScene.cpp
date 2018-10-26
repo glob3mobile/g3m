@@ -82,6 +82,8 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
                                                                                  4100) );
 
   context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
+                                          // URL("file:///cortijos_3d.json"),
+                                          // URL("file:///deportivo_3d.json"),
                                           1000000,
                                           TimeInterval::zero(),
                                           false,

@@ -98,13 +98,11 @@ public class Extruder2DPolygon
       numVerticesInContures[0] = coordinatesSize;
       int totalVertices = coordinatesSize;
 
-      if (numHoles != 0) {
-         for (int i = 0; i < numHoles; i++) {
-            final List<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(i);
-            final int holeCoordinatesSize = holeCoordinates.size();
-            numVerticesInContures[1 + i] = holeCoordinatesSize;
-            totalVertices += holeCoordinatesSize;
-         }
+      for (int i = 0; i < numHoles; i++) {
+         final List<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(i);
+         final int holeCoordinatesSize = holeCoordinates.size();
+         numVerticesInContures[1 + i] = holeCoordinatesSize;
+         totalVertices += holeCoordinatesSize;
       }
 
       final double[][] roofVertices = new double[totalVertices][3];
@@ -115,8 +113,8 @@ public class Extruder2DPolygon
       }
 
       for (int i = 0; i < numHoles; i++) {
-         final List<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(i);
-         // Collections.reverse(holeCoordinates);
+         final List<Geodetic2D> holeCoordinates = new ArrayList<>(_holesCoordinatesArray.get(i));
+         Collections.reverse(holeCoordinates);
          for (final Geodetic2D coordinate : holeCoordinates) {
             verticesCursor = addVextex(roofVertices, verticesCursor, coordinate, _upperHeight);
          }

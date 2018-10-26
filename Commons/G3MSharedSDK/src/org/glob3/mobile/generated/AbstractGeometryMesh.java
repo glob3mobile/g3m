@@ -40,6 +40,9 @@ public abstract class AbstractGeometryMesh extends Mesh
   protected final float _polygonOffsetFactor;
   protected final float _polygonOffsetUnits;
 
+  protected final boolean _cullFace;
+  protected final int _culledFace;
+
   protected BoundingVolume _extent;
   protected final BoundingVolume computeBoundingVolume()
   {
@@ -85,7 +88,7 @@ public abstract class AbstractGeometryMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
+  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, boolean cullFace, int culledFace)
   {
      _primitive = primitive;
      _vertices = vertices;
@@ -102,6 +105,8 @@ public abstract class AbstractGeometryMesh extends Mesh
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _polygonOffsetFill = polygonOffsetFill;
+     _cullFace = cullFace;
+     _culledFace = culledFace;
     createGLState();
   }
 
@@ -109,7 +114,7 @@ public abstract class AbstractGeometryMesh extends Mesh
 
   protected final void createGLState()
   {
-    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); //Polygon Offset -  Cull and culled face -  Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, _cullFace, _culledFace, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); //Polygon Offset -  Depth test -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {

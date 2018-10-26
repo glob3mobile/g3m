@@ -271,11 +271,9 @@ public class PolygonExtruder {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
 
-      final List<FixedPolygon2DData> fixedPolygons = fixPolygon2DData(coordinates, holesCoordinatesArray);
-      for (final FixedPolygon2DData fixed : fixedPolygons) {
-         polygons.add(new Extruder2DPolygon(geoFeature, fixed._coordinates, fixed._holesCoordinatesArray, heights._lowerHeight,
-                  heights._upperHeight, material));
-      }
+      final FixedPolygon2DData fixedPolygon = fixPolygon2DData(coordinates, holesCoordinatesArray);
+      polygons.add(new Extruder2DPolygon(geoFeature, fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray,
+               heights._lowerHeight, heights._upperHeight, material));
    }
 
 
@@ -287,51 +285,41 @@ public class PolygonExtruder {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
 
-      final List<FixedPolygon3DData> fixedPolygons = fixPolygon3DData(coordinates, holesCoordinatesArray);
-      for (final FixedPolygon3DData fixed : fixedPolygons) {
-         polygons.add(new Extruder3DPolygon(geoFeature, fixed._coordinates, fixed._holesCoordinatesArray, heights._lowerHeight,
-                  material));
-      }
+      final FixedPolygon3DData fixedPolygon = fixPolygon3DData(coordinates, holesCoordinatesArray);
+      polygons.add(new Extruder3DPolygon(geoFeature, fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray,
+               heights._lowerHeight, material));
    }
 
 
-   private static List<FixedPolygon2DData> fixPolygon2DData(final List<Geodetic2D> coordinates,
-                                                            final List<List<Geodetic2D>> holesCoordinatesArray) {
+   private static FixedPolygon2DData fixPolygon2DData(final List<Geodetic2D> coordinates,
+                                                      final List<List<Geodetic2D>> holesCoordinatesArray) {
       final Poly p1 = polygon2DToPoly(coordinates, holesCoordinatesArray);
       final Poly p2 = polygon2DToPoly(coordinates, holesCoordinatesArray);
+
       //final Poly fixedPoly = Clip.intersection(p1, p2);
+
+      //      final Poly union = Clip.union(p1, p2);
+      //      final Poly fixedPoly = Clip.intersection(union, union);
+
       final Poly fixedPoly = Clip.union(p1, p2);
 
-      final int numInnerPoly = fixedPoly.getNumInnerPoly();
-
-      final List<FixedPolygon2DData> result = new ArrayList<>(numInnerPoly);
-
-      for (int polyIndex = 0; polyIndex < numInnerPoly; polyIndex++) {
-         final Poly poly = fixedPoly.getInnerPoly(polyIndex);
-         result.add(toFixedPolygon2DData(poly));
-      }
-
-      return result;
+      return toFixedPolygon2DData(fixedPoly);
    }
 
 
-   private static List<FixedPolygon3DData> fixPolygon3DData(final List<Geodetic3D> coordinates,
-                                                            final List<List<Geodetic3D>> holesCoordinatesArray) {
+   private static FixedPolygon3DData fixPolygon3DData(final List<Geodetic3D> coordinates,
+                                                      final List<List<Geodetic3D>> holesCoordinatesArray) {
       final Poly p1 = polygon3DToPoly(coordinates, holesCoordinatesArray);
       final Poly p2 = polygon3DToPoly(coordinates, holesCoordinatesArray);
+
       //final Poly fixedPoly = Clip.intersection(p1, p2);
+
+      //      final Poly union = Clip.union(p1, p2);
+      //      final Poly fixedPoly = Clip.intersection(union, union);
+
       final Poly fixedPoly = Clip.union(p1, p2);
 
-      final int numInnerPoly = fixedPoly.getNumInnerPoly();
-
-      final List<FixedPolygon3DData> result = new ArrayList<>(numInnerPoly);
-
-      for (int polyIndex = 0; polyIndex < numInnerPoly; polyIndex++) {
-         final Poly poly = fixedPoly.getInnerPoly(polyIndex);
-         result.add(toFixedPolygon3DData(poly, coordinates, holesCoordinatesArray));
-      }
-
-      return result;
+      return toFixedPolygon3DData(fixedPoly, coordinates, holesCoordinatesArray);
    }
 
 
@@ -352,13 +340,13 @@ public class PolygonExtruder {
    private static FixedPolygon3DData toFixedPolygon3DData(final Poly poly,
                                                           final List<Geodetic3D> coordinates,
                                                           final List<List<Geodetic3D>> holesCoordinatesArray) {
-      final List<Geodetic3D> fixedCoordinates = toGeodetic3DList(poly, coordinates);
+      final List<Geodetic3D> fixedCoordinates = toGeodetic3DList(poly, coordinates, holesCoordinatesArray);
 
       final List<List<Geodetic3D>> fixedHolesCoordinatesArray = new ArrayList<>();
       final int numInnerPoly = poly.getNumInnerPoly();
       for (int polyIndex = 1; polyIndex < numInnerPoly; polyIndex++) {
          final Poly hole = poly.getInnerPoly(polyIndex);
-         fixedHolesCoordinatesArray.add(toGeodetic3DList(hole, holesCoordinatesArray.get(polyIndex - 1)));
+         fixedHolesCoordinatesArray.add(toGeodetic3DList(hole, coordinates, holesCoordinatesArray));
       }
 
       return new FixedPolygon3DData(fixedCoordinates, fixedHolesCoordinatesArray);
@@ -378,13 +366,14 @@ public class PolygonExtruder {
 
 
    private static List<Geodetic3D> toGeodetic3DList(final Poly poly,
-                                                    final List<Geodetic3D> coordinates) {
+                                                    final List<Geodetic3D> coordinates,
+                                                    final List<List<Geodetic3D>> holesCoordinatesArray) {
       final List<Geodetic3D> result = new ArrayList<>();
       final int numPoints = poly.getNumPoints();
       for (int i = 0; i < numPoints; i++) {
          final Angle latitude = Angle.fromRadians(poly.getY(i));
          final Angle longitude = Angle.fromRadians(poly.getX(i));
-         result.add(getGeodetic3D(latitude, longitude, coordinates));
+         result.add(getGeodetic3D(latitude, longitude, coordinates, holesCoordinatesArray));
       }
       return result;
    }
@@ -392,37 +381,30 @@ public class PolygonExtruder {
 
    private static Geodetic3D getGeodetic3D(final Angle latitude,
                                            final Angle longitude,
-                                           final List<Geodetic3D> candidates) {
-
-      Geodetic3D closest = candidates.get(0);
+                                           final List<Geodetic3D> firstCandidates,
+                                           final List<List<Geodetic3D>> candidatesArray) {
+      Geodetic3D closest = firstCandidates.get(0);
       double closestDistance = sqDistance(closest, latitude, longitude);
-      for (int i = 1; i < candidates.size(); i++) {
-         final Geodetic3D candidate = candidates.get(i);
-         final double candidateDistance = sqDistance(candidate, latitude, longitude);
-         if (candidateDistance < closestDistance) {
-            closest = candidate;
-            closestDistance = candidateDistance;
+      {
+         for (int i = 1; i < firstCandidates.size(); i++) {
+            final Geodetic3D candidate = firstCandidates.get(i);
+            final double candidateDistance = sqDistance(candidate, latitude, longitude);
+            if (candidateDistance < closestDistance) {
+               closest = candidate;
+               closestDistance = candidateDistance;
+            }
+         }
+      }
+      for (final List<Geodetic3D> candidates : candidatesArray) {
+         for (final Geodetic3D candidate : candidates) {
+            final double candidateDistance = sqDistance(candidate, latitude, longitude);
+            if (candidateDistance < closestDistance) {
+               closest = candidate;
+               closestDistance = candidateDistance;
+            }
          }
       }
       return closest;
-
-      //      Geodetic3D theOne = null;
-      //      for (final Geodetic3D candidate : candidates) {
-      //         if (candidate._latitude.isEquals(latitude) && candidate._longitude.isEquals(longitude)) {
-      //            if (theOne == null) {
-      //               theOne = candidate;
-      //            }
-      //            else {
-      //               if (theOne._height != candidate._height) {
-      //                  System.err.println("* ambiguous position: " + theOne + "   " + candidate);
-      //               }
-      //            }
-      //         }
-      //      }
-      //      if (theOne == null) {
-      //         throw new RuntimeException("Can't find a position for " + latitude + ", " + longitude);
-      //      }
-      //      return theOne;
    }
 
 
@@ -453,7 +435,6 @@ public class PolygonExtruder {
 
       for (final List<Geodetic2D> holesCoordinates : holesCoordinatesArray) {
          final PolyDefault hole = new PolyDefault(true);
-         //hole.setIsHole(true);
          for (final Geodetic2D coordinate : holesCoordinates) {
             final double x = coordinate._longitude._radians;
             final double y = coordinate._latitude._radians;
@@ -484,7 +465,6 @@ public class PolygonExtruder {
 
       for (final List<Geodetic3D> holesCoordinates : holesCoordinatesArray) {
          final PolyDefault hole = new PolyDefault(true);
-         //hole.setIsHole(true);
          for (final Geodetic3D coordinate : holesCoordinates) {
             final double x = coordinate._longitude._radians;
             final double y = coordinate._latitude._radians;
@@ -539,7 +519,6 @@ public class PolygonExtruder {
          processGEO2DMultiPolygonGeometry(geoFeature, (GEO2DMultiPolygonGeometry) geoGeometry, polygons, handler);
       }
       else {
-         //throw new RuntimeException("GEOGeometry " + geoGeometry  + " not supported");
          System.out.println("GEOGeometry " + geoGeometry + " not supported");
       }
    }
@@ -652,7 +631,7 @@ public class PolygonExtruder {
 
       for (int i = 1; i < coordinatesSize; i++) {
          final Geodetic2D coordinate = coordinates.get(i);
-         if (!coordinate.isEquals(lastCoordinate)) {
+         if (!equals(coordinate, lastCoordinate)) {
             result.add(coordinate);
             lastCoordinate = coordinate;
          }
@@ -677,7 +656,7 @@ public class PolygonExtruder {
 
       for (int i = 1; i < coordinatesSize; i++) {
          final Geodetic3D coordinate = coordinates.get(i);
-         if (!coordinate.isEquals(lastCoordinate)) {
+         if (!equals(coordinate, lastCoordinate)) {
             result.add(coordinate);
             lastCoordinate = coordinate;
          }
@@ -686,6 +665,36 @@ public class PolygonExtruder {
       result.trimToSize();
 
       return result;
+   }
+
+
+   private static boolean equals(final Geodetic2D one,
+                                 final Geodetic2D two) {
+      return equals( //
+               one._latitude, one._longitude, //
+               two._latitude, two._longitude);
+   }
+
+
+   private static boolean equals(final Geodetic3D one,
+                                 final Geodetic3D two) {
+      return equals( //
+               one._latitude, one._longitude, //
+               two._latitude, two._longitude);
+   }
+
+
+   private static boolean equals(final Angle latitude1,
+                                 final Angle longitude1,
+                                 final Angle latitude2,
+                                 final Angle longitude2) {
+      return equals(latitude1, latitude2) && equals(longitude1, longitude2);
+   }
+
+
+   private static boolean equals(final Angle angle1,
+                                 final Angle angle2) {
+      return (angle1._radians == angle2._radians);
    }
 
 
