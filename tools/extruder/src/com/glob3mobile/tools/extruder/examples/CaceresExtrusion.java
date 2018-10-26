@@ -113,9 +113,9 @@ public class CaceresExtrusion {
       System.out.println("--------------------\n");
 
 
-      final String name = "deportivo";
+      //      final String name = "deportivo";
       //      final String name = "cortijos";
-      //      final String name = "casco_historico";
+      final String name = "casco_historico";
       //      final String name = "nucleo_urbano";
       //      final String name = "muralla";
 
@@ -126,6 +126,7 @@ public class CaceresExtrusion {
 
       final Planet planet = EllipsoidalPlanet.createEarth();
 
+      System.out.println(name);
       final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();
       PolygonExtruder.process(inputFileName, outputFileName, handler, planet, floatPrecision);
       handler.save(name + "_debug.png");

@@ -63,9 +63,9 @@ public class Building {
 
    private static boolean pointsToSky(final Triangle triangle,
                                       final double[][] vertices) {
-      final Vector3D vertex0 = toVector3D(vertices[triangle._vertex0]);
-      final Vector3D vertex1 = toVector3D(vertices[triangle._vertex1]);
-      final Vector3D vertex2 = toVector3D(vertices[triangle._vertex2]);
+      final Vector3D vertex0 = toFlatVector3D(vertices[triangle._vertex0]);
+      final Vector3D vertex1 = toFlatVector3D(vertices[triangle._vertex1]);
+      final Vector3D vertex2 = toFlatVector3D(vertices[triangle._vertex2]);
 
       final Vector3D v10 = vertex1.sub(vertex0);
       final Vector3D v20 = vertex2.sub(vertex0);
@@ -79,12 +79,12 @@ public class Building {
 
       final Angle angleToUp = normal.angleBetween(Vector3D.UP_Z);
       final Angle angleToDown = normal.angleBetween(Vector3D.DOWN_Z);
-      final boolean pointsToSkye = angleToUp.lowerThan(angleToDown);
+      final boolean pointsToSkye = !angleToDown.lowerThan(angleToUp);
       return pointsToSkye;
    }
 
 
-   private static Vector3D toVector3D(final double[] vertex) {
+   private static Vector3D toFlatVector3D(final double[] vertex) {
       return new Vector3D(vertex[0], vertex[1], 0);
    }
 
