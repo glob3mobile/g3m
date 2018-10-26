@@ -23,14 +23,15 @@ public class Building {
 
    private final GEOFeature     _geoFeature;
    private final List<Triangle> _roofTriangles;
-   private final double[][]     _roofVertices;
+   private final List<Vector3D> _roofVertices;
    private final Wall           _exteriorWall;
    private final List<Wall>     _interiorWalls;
    private final G3MeshMaterial _material;
 
 
    Building(final GEOFeature geoFeature,
-            final double[][] roofVertices,
+            //            final double[][] roofVertices,
+            final List<Vector3D> roofVertices,
             final List<Triangle> roofTriangles,
             final Wall exteriorWall,
             final List<Wall> interiorWalls,
@@ -45,11 +46,11 @@ public class Building {
 
 
    private static List<Triangle> consolidate(final List<Triangle> triangles,
-                                             final double[][] vertices) {
+                                             final List<Vector3D> roofVertices) {
       final List<Triangle> result = new ArrayList<>(triangles.size());
 
       for (final Triangle triangle : triangles) {
-         if (pointsToSky(triangle, vertices)) {
+         if (pointsToSky(triangle, roofVertices)) {
             result.add(triangle);
          }
          else {
@@ -62,10 +63,10 @@ public class Building {
 
 
    private static boolean pointsToSky(final Triangle triangle,
-                                      final double[][] vertices) {
-      final Vector3D vertex0 = toFlatVector3D(vertices[triangle._vertex0]);
-      final Vector3D vertex1 = toFlatVector3D(vertices[triangle._vertex1]);
-      final Vector3D vertex2 = toFlatVector3D(vertices[triangle._vertex2]);
+                                      final List<Vector3D> vertices) {
+      final Vector3D vertex0 = vertices.get(triangle._vertex0);
+      final Vector3D vertex1 = vertices.get(triangle._vertex1);
+      final Vector3D vertex2 = vertices.get(triangle._vertex2);
 
       final Vector3D v10 = vertex1.sub(vertex0);
       final Vector3D v20 = vertex2.sub(vertex0);
@@ -95,12 +96,9 @@ public class Building {
 
       final Vector3D center = getCenter(planet, floatPrecision, wallsLowerHeight);
 
-      final List<Vector3F> vertices = new ArrayList<>(_roofVertices.length);
-      for (final double[] vertex : _roofVertices) {
-         final double x = vertex[0];
-         final double y = vertex[1];
-         final double z = vertex[2];
-         addVertex(planet, vertices, center, x, y, z);
+      final List<Vector3F> vertices = new ArrayList<>(_roofVertices.size());
+      for (final Vector3D vertex : _roofVertices) {
+         addVertex(planet, vertices, center, vertex._x, vertex._y, vertex._z);
       }
 
       final List<Short> indices = new ArrayList<>();
@@ -168,10 +166,10 @@ public class Building {
       double maxY = Double.NEGATIVE_INFINITY;
       double maxZ = Double.NEGATIVE_INFINITY;
 
-      for (final double[] vertex : _roofVertices) {
-         final double x = vertex[0];
-         final double y = vertex[1];
-         final double z = vertex[2];
+      for (final Vector3D vertex : _roofVertices) {
+         final double x = vertex._x;
+         final double y = vertex._y;
+         final double z = vertex._z;
          if (x < minX) {
             minX = x;
          }
@@ -279,7 +277,7 @@ public class Building {
    private static List<Vector3F> createNormals(final Planet planet,
                                                final List<Vector3F> vertices,
                                                final List<Short> indices,
-                                               final double[][] roofVertices) {
+                                               final List<Vector3D> roofVertices) {
       final int verticesSize = vertices.size();
       final List<List<Vector3F>> allNormals = new ArrayList<>(verticesSize);
       for (int i = 0; i < verticesSize; i++) {
@@ -309,7 +307,7 @@ public class Building {
       final List<Vector3F> result = new ArrayList<>(allNormals.size());
       for (int i = 0; i < allNormals.size(); i++) {
          final List<Vector3F> currentNormals = allNormals.get(i);
-         final double[] originalVertex = i < roofVertices.length ? roofVertices[i] : null;
+         final Vector3D originalVertex = i < roofVertices.size() ? roofVertices.get(i) : null;
          result.add(smoothNormals(planet, originalVertex, currentNormals));
       }
 
@@ -318,7 +316,7 @@ public class Building {
 
 
    private static Vector3F smoothNormals(final Planet planet,
-                                         final double[] originalVertex,
+                                         final Vector3D originalVertex,
                                          final List<Vector3F> normals) {
       if ((normals == null) || normals.isEmpty()) {
          return normalAt(planet, originalVertex);
@@ -332,11 +330,11 @@ public class Building {
 
 
    private static Vector3F normalAt(final Planet planet,
-                                    final double[] originalVertex) {
+                                    final Vector3D originalVertex) {
       if ((planet == null) || (originalVertex == null)) {
          return new Vector3F(0, 0, 1);
       }
-      final Vector3D normal = planet.geodeticSurfaceNormal(Geodetic2D.fromDegrees(originalVertex[1], originalVertex[0]));
+      final Vector3D normal = planet.geodeticSurfaceNormal(Geodetic2D.fromDegrees(originalVertex._y, originalVertex._x));
       return new Vector3F((float) normal._x, (float) normal._y, (float) normal._z);
    }
 

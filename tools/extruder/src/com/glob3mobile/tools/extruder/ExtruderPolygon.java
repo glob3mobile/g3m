@@ -2,9 +2,11 @@
 
 package com.glob3mobile.tools.extruder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.glob3.mobile.generated.GEOFeature;
+import org.glob3.mobile.generated.Vector3D;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
@@ -52,7 +54,8 @@ public abstract class ExtruderPolygon {
 
             final Wall exteriorWall = createExteriorWall();
             final List<Wall> interiorWalls = createInteriorWalls();
-            return new Building(_geoFeature, data._vertices, roofTriangles, exteriorWall, interiorWalls, _material);
+            return new Building(_geoFeature, toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
+                     _material);
          }
       }
       catch (final NullPointerException e) {
@@ -64,6 +67,18 @@ public abstract class ExtruderPolygon {
       }
 
       return null;
+   }
+
+
+   private List<Vector3D> toVector3DList(final double[][] vertices) {
+      final List<Vector3D> result = new ArrayList<>(vertices.length);
+      for (final double[] vertex : vertices) {
+         final double x = vertex[0];
+         final double y = vertex[1];
+         final double z = vertex[2];
+         result.add(new Vector3D(x, y, z));
+      }
+      return result;
    }
 
 
