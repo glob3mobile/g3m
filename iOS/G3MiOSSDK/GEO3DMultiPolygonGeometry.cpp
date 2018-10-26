@@ -91,10 +91,10 @@ const Sector* GEO3DMultiPolygonGeometry::calculateSector() const {
   
   double minLonRad = sector0->_lower._longitude._radians;
   double maxLonRad = sector0->_upper._longitude._radians;;
-  
+
   for (size_t i = 1; i < polygonsDataSize; i++) {
     const Sector* sector = _polygonsData->at(i)->getSector();
-    
+
     const double lowerLatRad = sector->_lower._latitude._radians;
     if (lowerLatRad < minLatRad) {
       minLatRad = lowerLatRad;
@@ -103,7 +103,7 @@ const Sector* GEO3DMultiPolygonGeometry::calculateSector() const {
     if (upperLatRad > maxLatRad) {
       maxLatRad = upperLatRad;
     }
-    
+
     const double lowerLonRad = sector->_lower._longitude._radians;
     if (lowerLonRad < minLonRad) {
       minLonRad = lowerLonRad;
@@ -114,12 +114,13 @@ const Sector* GEO3DMultiPolygonGeometry::calculateSector() const {
     }
   }
 
-//  const double lowerLatRadians = (minLatRad == maxLatRad) ? minLatRad - 0.0001 : minLatRad;
-//  const double upperLatRadians = (minLatRad == maxLatRad) ? maxLatRad + 0.0001 : maxLatRad;
-//
-//  const double lowerLonRadians = (minLonRad == maxLonRad) ? minLonRad - 0.0001 : minLonRad;
-//  const double upperLonRadians = (minLonRad == maxLonRad) ? maxLonRad + 0.0001 : maxLonRad;
+  const double lowerLatRadians = (minLatRad == maxLatRad) ? minLatRad - 0.0001 : minLatRad;
+  const double upperLatRadians = (minLatRad == maxLatRad) ? maxLatRad + 0.0001 : maxLatRad;
+
+  const double lowerLonRadians = (minLonRad == maxLonRad) ? minLonRad - 0.0001 : minLonRad;
+  const double upperLonRadians = (minLonRad == maxLonRad) ? maxLonRad + 0.0001 : maxLonRad;
   
-//  return Sector::newFromRadians(lowerLatRadians, lowerLonRadians,
-//                                upperLatRadians, upperLonRadians);
+  return Sector::newFromRadians(lowerLatRadians, lowerLonRadians,
+                                upperLatRadians, upperLonRadians);
 }
+
