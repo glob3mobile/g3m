@@ -15,6 +15,9 @@
 
 #include "PerspectiveCameraMatrixProvider.hpp"
 
+
+CameraMatrixProvider* Camera::_matrixProvider = new PerspectiveCameraMatrixProvider();
+
 void Camera::initialize(const G3MContext* context) {
     _planet = context->getPlanet();
     // #warning move this to Planet, and remove isFlat() method (DGD)
@@ -96,11 +99,6 @@ void Camera::copyFrom(const Camera &that,
         _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
         
         _forcedZNear = that._forcedZNear;
-        
-        if (_matrixProvider != that._matrixProvider){
-            delete _matrixProvider;
-            _matrixProvider = that._matrixProvider;
-        }
     }
     
 }
@@ -126,8 +124,7 @@ _tanHalfHorizontalFOV(NAND),
 _timestamp(timestamp),
 _viewPortWidth(-1),
 _viewPortHeight(-1),
-_forcedZNear(NAND),
-_matrixProvider(new PerspectiveCameraMatrixProvider())
+_forcedZNear(NAND)
 {
     resizeViewport(0, 0);
     _dirtyFlags.setAllDirty();
@@ -503,6 +500,9 @@ CoordinateSystem Camera::getCameraCoordinateSystem() const {
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
     _timestamp++;
+    
+    _position.copyFrom(rs._origin);
+    
     _center.copyFrom(_position);
     _center.addInPlace(rs._y);
     _up.copyFrom(rs._z);
@@ -531,4 +531,11 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
     const FrustumData frustumData = getFrustumData();
     const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
+}
+
+void Camera::setMatrixProvider(CameraMatrixProvider* camMatrixProvider){
+    if (camMatrixProvider != _matrixProvider){
+        delete _matrixProvider;
+    }
+    _matrixProvider = camMatrixProvider;
 }

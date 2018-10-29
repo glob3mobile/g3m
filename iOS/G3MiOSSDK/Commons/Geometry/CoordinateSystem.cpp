@@ -228,6 +228,15 @@ MutableMatrix44D CoordinateSystem::getRotationMatrix() const{
 }
 
 
+CoordinateSystem::CoordinateSystem(const Matrix44D& matrix):
+_x(Vector3D(matrix._m00, matrix._m10, matrix._m20)),
+_y(Vector3D(matrix._m01, matrix._m11, matrix._m21)),
+_z(Vector3D(matrix._m02, matrix._m12, matrix._m22)),
+_origin(Vector3D(matrix._m03, matrix._m13, matrix._m23))
+{
+}
+
+
 void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
   m.setValue(_x._x, _x._y, _x._z, 0,
              _y._x, _y._y, _y._z, 0,
@@ -238,3 +247,4 @@ void CoordinateSystem::copyValueOfRotationMatrix(MutableMatrix44D& m) const{
 bool CoordinateSystem::isConsistent() const{
   return checkConsistency(_x, _y, _z);
 }
+

@@ -47,7 +47,7 @@ bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
       }
     }
     else {
-      const Geodetic3D center = nextCamera->getGeodeticCenterOfView();
+      const Geodetic3D center = nextCamera->getGeodeticPosition();
       const bool isValidPosition = sector->contains(center._latitude, center._longitude);
 
       if (isValidPosition) {

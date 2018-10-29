@@ -400,6 +400,8 @@ public:
         _isValid = v;
     }
     
+    void multiplyInPlace(const MutableMatrix44D& that);
+    
 };
 
 #endif

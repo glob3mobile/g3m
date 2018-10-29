@@ -376,7 +376,11 @@ public:
     }
     
     
+    static void setMatrixProvider(CameraMatrixProvider* camMatrixProvider);
+    
 private:
+    
+    static CameraMatrixProvider* _matrixProvider;
     
     Camera(const Camera &that);
     
@@ -384,8 +388,6 @@ private:
     
     mutable MutableVector3D _ray0;
     mutable MutableVector3D _ray1;
-    
-    CameraMatrixProvider* _matrixProvider;
     
     //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
     int _viewPortWidth;
@@ -415,6 +417,8 @@ private:
     mutable Frustum*         _frustumInModelCoordinates;
     mutable double           _tanHalfVerticalFOV;
     mutable double           _tanHalfHorizontalFOV;
+
+    double _forcedZNear;
     
     //The Camera Effect Target
     class CameraEffectTarget: public EffectTarget {
@@ -453,7 +457,7 @@ private:
     }
     
     // intersection of view direction with globe in geodetic
-    Geodetic3D*     _getGeodeticCenterOfView() const {
+    Geodetic3D* _getGeodeticCenterOfView() const {
         if (_dirtyFlags._geodeticCenterOfViewDirty) {
             _dirtyFlags._geodeticCenterOfViewDirty = false;
             delete _geodeticCenterOfView;
@@ -491,8 +495,6 @@ private:
         _matrixProvider->updateCamera(*this);
         return _matrixProvider->getModelViewMatrix();
     }
-    
-    double _forcedZNear;
     
 };
 

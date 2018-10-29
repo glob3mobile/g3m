@@ -31,6 +31,8 @@ public:
   
 
   static CoordinateSystem global();
+    
+    CoordinateSystem(const Matrix44D& matrix);
 
   CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin);
 
