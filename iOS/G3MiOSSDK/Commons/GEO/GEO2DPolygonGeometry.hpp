@@ -9,13 +9,13 @@
 #ifndef __G3MiOSSDK__GEO2DPolygonGeometry__
 #define __G3MiOSSDK__GEO2DPolygonGeometry__
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 class Geodetic2D;
 #include <vector>
 
 class GEO2DPolygonData;
 
-class GEO2DPolygonGeometry : public GEOGeometry2D {
+class GEO2DPolygonGeometry : public GEO2DGeometry {
 private:
   const GEO2DPolygonData* _polygonData;
 
@@ -23,6 +23,8 @@ protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
+
+  const Sector* calculateSector() const;
 
 public:
   GEO2DPolygonGeometry(const GEO2DPolygonData* polygonData) :

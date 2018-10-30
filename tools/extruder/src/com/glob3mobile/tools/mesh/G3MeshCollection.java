@@ -3,6 +3,7 @@
 package com.glob3mobile.tools.mesh;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,8 @@ public class G3MeshCollection {
    private final List<G3Mesh> _meshes;
 
 
-   public G3MeshCollection() {
-      _meshes = new ArrayList<>();
+   public G3MeshCollection(final List<G3Mesh> meshes) {
+      _meshes = Collections.unmodifiableList(new ArrayList<>(meshes));
    }
 
 
@@ -28,54 +29,39 @@ public class G3MeshCollection {
    }
 
 
-   //   private static class ConsolidatedMaterial {
-   //      private final G3MeshMaterial _material;
-   //      private final int           _index;
-   //
-   //
-   //      private ConsolidatedMaterial(final G3MeshMaterial material,
-   //                                   final int index) {
-   //         _material = material;
-   //         _index = index;
-   //      }
-   //   }
-   //
-   //   private List<ConsolidatedMaterial> collectMaterials() {
-   //      final List<ConsolidatedMaterial> result = new ArrayList<>();
-   //      
-   //      
-   //      
-   //      return result;
-   //   }
-
-
-   public JSONObject toG3MeshJSON() {
+   public JSONObject toJSON() {
       validateMeshes();
 
-      final Map<String, G3MeshMaterial> consolidatedMaterials = consolidateMaterials();
-
       final JSONObject result = new JSONObject();
-
-      final JSONArray jsonMaterials = new JSONArray();
-      for (final G3MeshMaterial material : consolidatedMaterials.values()) {
-         jsonMaterials.add(material.toG3MeshJSON());
-      }
-      result.put("materials", jsonMaterials);
-
-      final JSONArray jsonMeshes = new JSONArray();
-      for (final G3Mesh mesh : _meshes) {
-         jsonMeshes.add(mesh.toG3MeshJSON());
-      }
-      result.put("meshes", jsonMeshes);
-
+      result.put("materials", materialsJSON(_meshes));
+      result.put("meshes", meshesJSON(_meshes));
       return result;
    }
 
 
-   private Map<String, G3MeshMaterial> consolidateMaterials() {
+   private static JSONArray meshesJSON(final List<G3Mesh> meshes) {
+      final JSONArray result = new JSONArray();
+      for (final G3Mesh mesh : meshes) {
+         result.add(mesh.toJSON());
+      }
+      return result;
+   }
+
+
+   private static JSONArray materialsJSON(final List<G3Mesh> meshes) {
+      final JSONArray result = new JSONArray();
+      final Map<String, G3MeshMaterial> consolidatedMaterials = consolidateMaterials(meshes);
+      for (final G3MeshMaterial material : consolidatedMaterials.values()) {
+         result.add(material.toJSON());
+      }
+      return result;
+   }
+
+
+   private static Map<String, G3MeshMaterial> consolidateMaterials(final List<G3Mesh> meshes) {
       final Map<String, G3MeshMaterial> result = new HashMap<>();
 
-      for (final G3Mesh mesh : _meshes) {
+      for (final G3Mesh mesh : meshes) {
          final G3MeshMaterial material = mesh.getMaterial();
          final String materialID = material.getID();
          if (!result.containsKey(materialID)) {
@@ -87,9 +73,9 @@ public class G3MeshCollection {
    }
 
 
-   public void add(final G3Mesh mesh) {
-      _meshes.add(mesh);
-   }
+   //   public void add(final G3Mesh mesh) {
+   //      _meshes.add(mesh);
+   //   }
 
 
 }

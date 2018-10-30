@@ -11,33 +11,28 @@
 
 #include "DefaultRenderer.hpp"
 
-#include "URL.hpp"
-#include "TimeInterval.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "IThreadUtils.hpp"
-#include "RCObject.hpp"
-#include "MarksFilter.hpp"
 #include "GAsyncTask.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "MarksFilter.hpp"
+#include "RCObject.hpp"
+#include "TimeInterval.hpp"
 #include "Angle.hpp"
 
-#include <vector>
-#include <string>
-
-class IThreadUtils;
-class IByteBuffer;
 class Sector;
-class Geodetic2D;
-class JSONBaseObject;
 class JSONArray;
+class Geodetic2D;
 class JSONObject;
-class Mark;
-class GEO2DPointGeometry;
-class BoundingVolume;
-class Camera;
-class Frustum;
-class IDownloader;
+class IByteBuffer;
 class GEOObject;
-class MarksRenderer; 
+class IThreadUtils;
+class JSONBaseObject;
+class BoundingVolume;
+class IDownloader;
+class Frustum;
+class GEO2DPointGeometry;
+class GEO3DPointGeometry;
+class MarksRenderer;
+class Camera;
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -500,6 +495,10 @@ public:
                                     const VectorStreamingRenderer::Node* node,
                                     const GEO2DPointGeometry* geometry) const = 0;
 
+    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                                    const VectorStreamingRenderer::Node* node,
+                                    const GEO3DPointGeometry* geometry) const = 0;
+
     virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
                                     const VectorStreamingRenderer::Cluster* cluster) const = 0;
@@ -671,6 +670,9 @@ public:
 
     long long createFeatureMark(const Node* node,
                                 const GEO2DPointGeometry* geometry) const;
+
+    long long createFeatureMark(const Node* node,
+                                const GEO3DPointGeometry* geometry) const;
 
     long long createClusterMarks(const Node* node,
                                  const std::vector<Cluster*>* clusters) const;

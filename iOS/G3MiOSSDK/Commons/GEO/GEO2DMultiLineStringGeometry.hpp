@@ -9,11 +9,11 @@
 #ifndef __G3MiOSSDK__GEO2DMultiLineStringGeometry__
 #define __G3MiOSSDK__GEO2DMultiLineStringGeometry__
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 class Geodetic2D;
 class GEO2DCoordinatesArrayData;
 
-class GEO2DMultiLineStringGeometry : public GEOGeometry2D {
+class GEO2DMultiLineStringGeometry : public GEO2DGeometry {
 private:
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
 
@@ -23,6 +23,8 @@ protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
+
+  const Sector* calculateSector() const;
 
 public:
 

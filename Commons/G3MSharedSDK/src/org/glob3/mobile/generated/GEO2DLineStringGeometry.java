@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEO2DLineStringGeometry extends GEOGeometry2D
+public class GEO2DLineStringGeometry extends GEO2DGeometry
 {
   private final GEO2DCoordinatesData _coordinatesData;
 
@@ -39,6 +39,11 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
   protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
+  }
+
+  protected final Sector calculateSector()
+  {
+    return (_coordinatesData == null) ? null : _coordinatesData.getSector();
   }
 
 

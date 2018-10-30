@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //class GEO2DCoordinatesArrayData;
 
-public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
+public class GEO2DMultiLineStringGeometry extends GEO2DGeometry
 {
   private final GEO2DCoordinatesArrayData _coordinatesArrayData;
 
@@ -40,6 +40,11 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
   protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
+  }
+
+  protected final Sector calculateSector()
+  {
+    return (_coordinatesArrayData == null) ? null : _coordinatesArrayData.getSector();
   }
 
 

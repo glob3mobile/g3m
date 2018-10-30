@@ -16,19 +16,21 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Mesh;
-//class JSONObject;
+
+//class Color;
 //class JSONArray;
 //class JSONString;
-//class G3MMeshMaterial;
-//class Color;
 //class URL;
+//class G3MMeshMaterial;
+//class Mesh;
+//class Planet;
+//class JSONObject;
 //class Vector3F;
+//class Geodetic3D;
 //class IFloatBuffer;
 //class IShortBuffer;
-//class Planet;
-//class Geodetic3D;
 //class Vector3D;
+
 
 public class G3MMeshParser
 {
@@ -108,11 +110,10 @@ public class G3MMeshParser
     }
     G3MMeshMaterial material = materials.get(materialID);
   
-    final String primitive = jsonMesh.getAsString("primitive", "Triangles");
+    final int primitive = toGLPrimitive(jsonMesh.getAsString("primitive", "Triangles"));
     final float pointSize = (float) jsonMesh.getAsNumber("pointSize", 1);
     final float lineWidth = (float) jsonMesh.getAsNumber("lineWidth", 1);
     final boolean depthTest = jsonMesh.getAsBoolean("depthTest", true);
-  
     final String verticesFormat = jsonMesh.getAsString("verticesFormat", "Cartesian");
     final boolean isGeodetic = (verticesFormat.equals("Geodetic"));
   
@@ -142,10 +143,6 @@ public class G3MMeshParser
       vertices = parseFloatBuffer(jsonMesh.getAsArray("vertices"));
     }
   
-  //  const Vector3F    center         = parseVector3F(jsonMesh->getAsArray("center"));
-  
-  //  IFloatBuffer* vertices  = parseFloatBuffer( jsonMesh->getAsArray("vertices") );
-  
     IFloatBuffer normals = parseFloatBuffer(jsonMesh.getAsArray("normals"));
     IFloatBuffer colors = parseFloatBuffer(jsonMesh.getAsArray("colors"));
   // #warning TODO texCoords
@@ -156,11 +153,11 @@ public class G3MMeshParser
     Mesh mesh;
     if (indices == null)
     {
-      mesh = new DirectMesh(toGLPrimitive(primitive), true, new Vector3D(centerX, centerY, centerZ), vertices, lineWidth, pointSize, material._color, colors, depthTest, normals); // flatColor -  owner
+      mesh = new DirectMesh(primitive, true, new Vector3D(centerX, centerY, centerZ), vertices, lineWidth, pointSize, new Color(material._color), colors, depthTest, normals); // flatColor -  owner
     }
     else
     {
-      mesh = new IndexedMesh(toGLPrimitive(primitive), new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, material._color, colors, depthTest, normals); // flatColor
+      mesh = new IndexedMesh(primitive, new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, new Color(material._color), colors, depthTest, normals); // flatColor
     }
     return mesh;
   }

@@ -10,12 +10,12 @@ public class Triangulation {
    /**
     * Set this to TRUE to obtain file with _name debugFileName with the log about triangulation
     */
-   public static boolean debug         = false;
+   public static boolean debug = false;
 
    /**
     * If debug == true file with this _name will be created during triangulation.
     */
-   public static String  debugFileName = "polygon_triangulation_log.txt";
+   public static String debugFileName = "polygon_triangulation_log.txt";
 
 
    /**
@@ -25,9 +25,9 @@ public class Triangulation {
     * Example: numContures = 1 (1 OUTER CONTURE, 1 INNER CONTURE) numVerticesInContures = { 3, 3 } // triangle with inner triangle
     * as a hol _vertices = { {0, 0}, {7, 0}, {4, 4}, // outer conture, counter clockwise order {2, 2}, {2, 3}, {3, 3} // inner
     * conture, clockwise order }
-    * 
+    *
     * If error occurs during triangulation, null is returned.
-    * 
+    *
     * @param numContures
     *           _number of contures of polygon (1 OUTER + n INNER)
     * @param numVerticesInContures
@@ -51,4 +51,28 @@ public class Triangulation {
       p.triangulation();
       return p.triangles();
    }
+
+
+   public static class Data {
+      private final int       _numContures;
+      private final int[]     _numVerticesInContures;
+      public final double[][] _vertices;
+
+
+      public Data(final int numContures,
+                  final int[] numVerticesInContures,
+                  final double[][] vertices) {
+         _numContures = numContures;
+         _numVerticesInContures = numVerticesInContures;
+         _vertices = vertices;
+      }
+
+   }
+
+
+   public static List<Triangle> triangulate(final Triangulation.Data data) throws TriangulationException {
+      return triangulate(data._numContures, data._numVerticesInContures, data._vertices);
+   }
+
+
 }

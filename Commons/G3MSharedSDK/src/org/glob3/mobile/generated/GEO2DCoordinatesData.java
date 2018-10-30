@@ -20,11 +20,13 @@ package org.glob3.mobile.generated;
 //class Geodetic2D;
 //class Sector;
 
+
 public class GEO2DCoordinatesData extends RCObject
 {
   private final java.util.ArrayList<Geodetic2D> _coordinates;
 
   private Sector _sector;
+
   private Sector calculateSector()
   {
     final int size = _coordinates.size();
@@ -35,54 +37,49 @@ public class GEO2DCoordinatesData extends RCObject
   
     final Geodetic2D coordinate0 = _coordinates.get(0);
   
-    double minLatInRadians = coordinate0._latitude._radians;
-    double maxLatInRadians = minLatInRadians;
+    double minLatRad = coordinate0._latitude._radians;
+    double maxLatRad = minLatRad;
   
-    double minLonInRadians = coordinate0._longitude._radians;
-    double maxLonInRadians = minLonInRadians;
+    double minLonRad = coordinate0._longitude._radians;
+    double maxLonRad = minLonRad;
   
     for (int i = 1; i < size; i++)
     {
       final Geodetic2D coordinate = _coordinates.get(i);
   
-      final double latInRadians = coordinate._latitude._radians;
-      if (latInRadians < minLatInRadians)
+      final double latRad = coordinate._latitude._radians;
+      if (latRad < minLatRad)
       {
-        minLatInRadians = latInRadians;
+        minLatRad = latRad;
       }
-      if (latInRadians > maxLatInRadians)
+      if (latRad > maxLatRad)
       {
-        maxLatInRadians = latInRadians;
+        maxLatRad = latRad;
       }
   
-      final double lonInRadians = coordinate._longitude._radians;
-      if (lonInRadians < minLonInRadians)
+      final double lonRad = coordinate._longitude._radians;
+      if (lonRad < minLonRad)
       {
-        minLonInRadians = lonInRadians;
+        minLonRad = lonRad;
       }
-      if (lonInRadians > maxLonInRadians)
+      if (lonRad > maxLonRad)
       {
-        maxLonInRadians = lonInRadians;
+        maxLonRad = lonRad;
       }
     }
   
-    Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+    final double lowerLatRadians = (minLatRad == maxLatRad) ? minLatRad - 0.0001 : minLatRad;
+    final double upperLatRadians = (minLatRad == maxLatRad) ? maxLatRad + 0.0001 : maxLatRad;
   
-    //  int __REMOVE_DEBUG_CODE;
-    //  for (int i = 0; i < size; i++) {
-    //    const Geodetic2D* coordinate = coordinates->at(i);
-    //    if (!result->contains(*coordinate)) {
-    //      printf("xxx\n");
-    //    }
-    //  }
+    final double lowerLonRadians = (minLonRad == maxLonRad) ? minLonRad - 0.0001 : minLonRad;
+    final double upperLonRadians = (minLonRad == maxLonRad) ? maxLonRad + 0.0001 : maxLonRad;
   
-    return result;
+    return Sector.newFromRadians(lowerLatRadians, lowerLonRadians, upperLatRadians, upperLonRadians);
   }
 
   public void dispose()
   {
-    if (_sector != null)
-       _sector.dispose();
+    _sector = null;
     super.dispose();
   }
 

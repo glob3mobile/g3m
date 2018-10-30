@@ -38,9 +38,11 @@ AbstractGeometryMesh::AbstractGeometryMesh(const int       primitive,
                                            float           lineWidth,
                                            float           pointSize,
                                            bool            depthTest,
-                                           bool polygonOffsetFill,
-                                           float polygonOffsetFactor,
-                                           float polygonOffsetUnits) :
+                                           bool            polygonOffsetFill,
+                                           float           polygonOffsetFactor,
+                                           float           polygonOffsetUnits,
+                                           bool            cullFace,
+                                           int             culledFace) :
 _primitive(primitive),
 _vertices(vertices),
 _ownsVertices(ownsVertices),
@@ -57,7 +59,9 @@ _depthTest(depthTest),
 _glState(new GLState()),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_polygonOffsetFill(polygonOffsetFill)
+_polygonOffsetFill(polygonOffsetFill),
+_cullFace(cullFace),
+_culledFace(culledFace)
 {
   createGLState();
 }
@@ -123,7 +127,8 @@ void AbstractGeometryMesh::createGLState() {
                                                false,        // Not normalized
                                                0,            // Stride 0
                                                _depthTest,   // Depth test
-                                               false, 0,     // Cull and culled face
+                                               _cullFace,
+                                               _culledFace,
                                                _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits,  //Polygon Offset
                                                _lineWidth,
                                                true, _pointSize),

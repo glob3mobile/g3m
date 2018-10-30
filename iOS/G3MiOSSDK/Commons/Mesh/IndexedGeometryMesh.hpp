@@ -11,6 +11,9 @@
 
 #include "AbstractGeometryMesh.hpp"
 
+#include "GLConstants.hpp"
+
+
 class IShortBuffer;
 
 class IndexedGeometryMesh : public AbstractGeometryMesh {
@@ -27,12 +30,14 @@ public:
                       bool            ownsVertices,
                       IShortBuffer*   indices,
                       bool            ownsIndices,
-                      float           lineWidth = 1,
-                      float           pointSize = 1,
-                      bool            depthTest = true,
-                      bool polygonOffsetFill = false,
-                      float polygonOffsetFactor = 0,
-                      float polygonOffsetUnits = 0);
+                      float           lineWidth           = 1,
+                      float           pointSize           = 1,
+                      bool            depthTest           = true,
+                      bool            polygonOffsetFill   = false,
+                      float           polygonOffsetFactor = 0,
+                      float           polygonOffsetUnits  = 0,
+                      bool            cullFace            = false,
+                      int             culledFace          = GLCullFace::back());
 
   IndexedGeometryMesh(const int       primitive,
                       const Vector3D& center,
@@ -42,12 +47,14 @@ public:
                       bool            ownsNormals,
                       IShortBuffer*   indices,
                       bool            ownsIndices,
-                      float           lineWidth = 1,
-                      float           pointSize = 1,
-                      bool            depthTest = true,
-                      bool polygonOffsetFill = false,
-                      float polygonOffsetFactor = 0,
-                      float polygonOffsetUnits = 0);
+                      float           lineWidth           = 1,
+                      float           pointSize           = 1,
+                      bool            depthTest           = true,
+                      bool            polygonOffsetFill   = false,
+                      float           polygonOffsetFactor = 0,
+                      float           polygonOffsetUnits  = 0,
+                      bool            cullFace            = false,
+                      int             culledFace          = GLCullFace::back());
 
   ~IndexedGeometryMesh();
 

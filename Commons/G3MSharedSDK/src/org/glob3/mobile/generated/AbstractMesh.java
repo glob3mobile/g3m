@@ -37,7 +37,8 @@ public abstract class AbstractMesh extends TransformableMesh
   protected final boolean _polygonOffsetFill;
   protected final float _polygonOffsetFactor;
   protected final float _polygonOffsetUnits;
-
+  protected final boolean _cullFace;
+  protected final int _culledFace;
 
   protected BoundingVolume _boundingVolume;
   protected final BoundingVolume computeBoundingVolume()
@@ -102,7 +103,7 @@ public abstract class AbstractMesh extends TransformableMesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
+  protected AbstractMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, boolean depthTest, IFloatBuffer normals, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, boolean cullFace, int culledFace)
   {
      super(center);
      _primitive = primitive;
@@ -118,6 +119,8 @@ public abstract class AbstractMesh extends TransformableMesh
      _polygonOffsetFactor = polygonOffsetFactor;
      _polygonOffsetUnits = polygonOffsetUnits;
      _polygonOffsetFill = polygonOffsetFill;
+     _cullFace = cullFace;
+     _culledFace = culledFace;
   }
 
   protected abstract void renderMesh(G3MRenderContext rc, GLState glState);
@@ -133,7 +136,7 @@ public abstract class AbstractMesh extends TransformableMesh
   {
     super.initializeGLState(glState);
   
-    glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, false, 0, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); // needsPointSize -  culledFace -  cullFace -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, _cullFace, _culledFace, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); // needsPointSize -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
   
     if (_normals != null)
     {

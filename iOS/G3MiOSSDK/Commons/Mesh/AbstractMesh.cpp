@@ -41,7 +41,9 @@ AbstractMesh::AbstractMesh(const int primitive,
                            const IFloatBuffer* normals,
                            bool polygonOffsetFill,
                            float polygonOffsetFactor,
-                           float polygonOffsetUnits) :
+                           float polygonOffsetUnits,
+                           bool cullFace,
+                           int culledFace) :
 TransformableMesh(center),
 _primitive(primitive),
 _owner(owner),
@@ -55,7 +57,9 @@ _depthTest(depthTest),
 _normals(normals),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
-_polygonOffsetFill(polygonOffsetFill)
+_polygonOffsetFill(polygonOffsetFill),
+_cullFace(cullFace),
+_culledFace(culledFace)
 {
 }
 
@@ -146,8 +150,8 @@ void AbstractMesh::initializeGLState(GLState* glState) const {
                                               false,                // Not normalized
                                               0,                    // Stride 0
                                               _depthTest,
-                                              false,                // cullFace
-                                              0,                    // culledFace
+                                              _cullFace,
+                                              _culledFace,
                                               _polygonOffsetFill,
                                               _polygonOffsetFactor,
                                               _polygonOffsetUnits,

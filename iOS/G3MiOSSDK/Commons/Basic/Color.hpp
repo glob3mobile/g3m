@@ -41,8 +41,16 @@ public:
   _alpha(that._alpha) {
   }
 
-  ~Color() {
+#ifdef C_CODE
+  Color(const Color* that):
+  _red(that->_red),
+  _green(that->_green),
+  _blue(that->_blue),
+  _alpha(that->_alpha) {
+  }
+#endif
 
+  ~Color() {
   }
 
   static Color* parse(const std::string& str);

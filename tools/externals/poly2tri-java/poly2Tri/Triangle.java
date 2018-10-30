@@ -32,4 +32,9 @@ public class Triangle {
    }
 
 
+   public Triangle flipped() {
+      return new Triangle(_vertex0, _vertex2, _vertex1);
+   }
+
+
 }

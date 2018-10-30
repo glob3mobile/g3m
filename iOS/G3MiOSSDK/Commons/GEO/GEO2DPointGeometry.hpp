@@ -9,11 +9,12 @@
 #ifndef __G3MiOSSDK__GEO2DPointGeometry__
 #define __G3MiOSSDK__GEO2DPointGeometry__
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 
 #include "Geodetic2D.hpp"
 
-class GEO2DPointGeometry : public GEOGeometry2D {
+
+class GEO2DPointGeometry : public GEO2DGeometry {
 private:
   const Geodetic2D _position;
 
@@ -21,6 +22,8 @@ protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
+
+  const Sector* calculateSector() const;
 
 public:
 

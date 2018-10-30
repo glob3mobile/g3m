@@ -375,6 +375,15 @@ public class MapBoo
       return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     }
 
+    public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry)
+    {
+      final GEOFeature feature = geometry.getFeature();
+      final JSONObject properties = feature.getProperties();
+      final Geodetic3D position = geometry.getPosition();
+    
+      return new Mark(createImageBuilder(properties), position, AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
+    }
+
     public final Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster)
     {
       final Geodetic3D position = new Geodetic3D(cluster.getPosition()._latitude, cluster.getPosition()._longitude, 0);
@@ -467,6 +476,11 @@ public class MapBoo
     }
 
     public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    {
+      return _symbology.createFeatureMark(metadata, node, geometry);
+    }
+
+    public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry)
     {
       return _symbology.createFeatureMark(metadata, node, geometry);
     }

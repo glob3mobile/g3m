@@ -65,10 +65,22 @@ public:
                   Geodetic2D::fromDegrees(upperLatitudeDegrees, upperLongitudeDegrees));
   }
 
+  static Sector* newFromDegrees(double lowerLatitudeDegrees, double lowerLongitudeDegrees,
+                                double upperLatitudeDegrees, double upperLongitudeDegrees) {
+    return new Sector(Geodetic2D::fromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees),
+                      Geodetic2D::fromDegrees(upperLatitudeDegrees, upperLongitudeDegrees));
+  }
+
   static Sector fromRadians(double lowerLatitudeRadians, double lowerLongitudeRadians,
                             double upperLatitudeRadians, double upperLongitudeRadians) {
     return Sector(Geodetic2D::fromRadians(lowerLatitudeRadians, lowerLongitudeRadians),
                   Geodetic2D::fromRadians(upperLatitudeRadians, upperLongitudeRadians));
+  }
+
+  static Sector* newFromRadians(double lowerLatitudeRadians, double lowerLongitudeRadians,
+                                double upperLatitudeRadians, double upperLongitudeRadians) {
+    return new Sector(Geodetic2D::fromRadians(lowerLatitudeRadians, lowerLongitudeRadians),
+                      Geodetic2D::fromRadians(upperLatitudeRadians, upperLongitudeRadians));
   }
 
   const Vector2D div(const Sector& that) const;

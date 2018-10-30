@@ -26,7 +26,7 @@ GEO2DCoordinatesData::~GEO2DCoordinatesData() {
 #endif
 }
 
-Sector* GEO2DCoordinatesData::calculateSector() const {
+const Sector* GEO2DCoordinatesData::calculateSector() const {
   const size_t size = _coordinates->size();
   if (size == 0) {
     return NULL;
@@ -34,44 +34,40 @@ Sector* GEO2DCoordinatesData::calculateSector() const {
 
   const Geodetic2D* coordinate0 = _coordinates->at(0);
 
-  double minLatInRadians = coordinate0->_latitude._radians;
-  double maxLatInRadians = minLatInRadians;
+  double minLatRad = coordinate0->_latitude._radians;
+  double maxLatRad = minLatRad;
 
-  double minLonInRadians = coordinate0->_longitude._radians;
-  double maxLonInRadians = minLonInRadians;
+  double minLonRad = coordinate0->_longitude._radians;
+  double maxLonRad = minLonRad;
 
   for (size_t i = 1; i < size; i++) {
     const Geodetic2D* coordinate = _coordinates->at(i);
 
-    const double latInRadians = coordinate->_latitude._radians;
-    if (latInRadians < minLatInRadians) {
-      minLatInRadians = latInRadians;
+    const double latRad = coordinate->_latitude._radians;
+    if (latRad < minLatRad) {
+      minLatRad = latRad;
     }
-    if (latInRadians > maxLatInRadians) {
-      maxLatInRadians = latInRadians;
+    if (latRad > maxLatRad) {
+      maxLatRad = latRad;
     }
 
-    const double lonInRadians = coordinate->_longitude._radians;
-    if (lonInRadians < minLonInRadians) {
-      minLonInRadians = lonInRadians;
+    const double lonRad = coordinate->_longitude._radians;
+    if (lonRad < minLonRad) {
+      minLonRad = lonRad;
     }
-    if (lonInRadians > maxLonInRadians) {
-      maxLonInRadians = lonInRadians;
+    if (lonRad > maxLonRad) {
+      maxLonRad = lonRad;
     }
   }
 
-  Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
-                              Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+  const double lowerLatRadians = (minLatRad == maxLatRad) ? minLatRad - 0.0001 : minLatRad;
+  const double upperLatRadians = (minLatRad == maxLatRad) ? maxLatRad + 0.0001 : maxLatRad;
 
-  //  int __REMOVE_DEBUG_CODE;
-  //  for (int i = 0; i < size; i++) {
-  //    const Geodetic2D* coordinate = coordinates->at(i);
-  //    if (!result->contains(*coordinate)) {
-  //      printf("xxx\n");
-  //    }
-  //  }
-  
-  return result;
+  const double lowerLonRadians = (minLonRad == maxLonRad) ? minLonRad - 0.0001 : minLonRad;
+  const double upperLonRadians = (minLonRad == maxLonRad) ? maxLonRad + 0.0001 : maxLonRad;
+
+  return Sector::newFromRadians(lowerLatRadians, lowerLonRadians,
+                                upperLatRadians, upperLonRadians);
 }
 
 const Sector* GEO2DCoordinatesData::getSector() const {
@@ -84,4 +80,3 @@ const Sector* GEO2DCoordinatesData::getSector() const {
 long long GEO2DCoordinatesData::getCoordinatesCount() const {
   return (_coordinates == NULL) ? 0 : _coordinates->size();
 }
-

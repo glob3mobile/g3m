@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEO2DPointGeometry extends GEOGeometry2D
+
+public class GEO2DPointGeometry extends GEO2DGeometry
 {
   private final Geodetic2D _position ;
 
@@ -30,6 +31,17 @@ public class GEO2DPointGeometry extends GEOGeometry2D
   protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
+  }
+
+  protected final Sector calculateSector()
+  {
+    final double lowerLatRadians = _position._latitude._radians - 0.0001;
+    final double upperLatRadians = _position._latitude._radians + 0.0001;
+  
+    final double lowerLonRadians = _position._longitude._radians - 0.0001;
+    final double upperLonRadians = _position._longitude._radians + 0.0001;
+  
+    return Sector.newFromRadians(lowerLatRadians, lowerLonRadians, upperLatRadians, upperLonRadians);
   }
 
 

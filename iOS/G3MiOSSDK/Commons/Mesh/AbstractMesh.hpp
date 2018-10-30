@@ -32,7 +32,8 @@ protected:
   const bool          _polygonOffsetFill;
   const float         _polygonOffsetFactor;
   const float         _polygonOffsetUnits;
-
+  const bool          _cullFace;
+  const int           _culledFace;
 
   mutable BoundingVolume* _boundingVolume;
   BoundingVolume* computeBoundingVolume() const;
@@ -49,7 +50,9 @@ protected:
                const IFloatBuffer* normals,
                bool polygonOffsetFill,
                float polygonOffsetFactor,
-               float polygonOffsetUnits);
+               float polygonOffsetUnits,
+               bool cullFace,
+               int culledFace);
 
   virtual void renderMesh(const G3MRenderContext* rc,
                           GLState* glState) const = 0;

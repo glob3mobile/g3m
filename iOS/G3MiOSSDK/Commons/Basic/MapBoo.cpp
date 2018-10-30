@@ -21,6 +21,7 @@
 #include "MarksRenderer.hpp"
 #include "GEOFeature.hpp"
 #include "GEO2DPointGeometry.hpp"
+#include "GEO3DPointGeometry.hpp"
 #include "Mark.hpp"
 #include "IStringBuilder.hpp"
 #include "LabelImageBuilder.hpp"
@@ -703,6 +704,24 @@ Mark* MapBoo::MBVectorSymbology::createFeatureMark(const VectorStreamingRenderer
                   );
 }
 
+Mark* MapBoo::MBVectorSymbology::createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                                                   const VectorStreamingRenderer::Node* node,
+                                                   const GEO3DPointGeometry* geometry) const {
+  const GEOFeature* feature    = geometry->getFeature();
+  const JSONObject* properties = feature->getProperties();
+  const Geodetic3D  position   = geometry->getPosition();
+
+  return new Mark(createImageBuilder(properties),
+                  position,
+                  ABSOLUTE,
+                  0,                                    // minDistanceToCamera
+                  NULL,                                 // userData
+                  true,                                 // autoDeleteUserData
+                  createMarkTouchListener(properties),
+                  true                                  // autoDeleteListener
+                  );
+}
+
 Mark* MapBoo::MBVectorSymbology::createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                                                    const VectorStreamingRenderer::Node* node,
                                                    const VectorStreamingRenderer::Cluster* cluster) const {
@@ -751,6 +770,14 @@ MapBoo::MBDatasetVectorSetSymbolizer::~MBDatasetVectorSetSymbolizer() {
 Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
                                                               const VectorStreamingRenderer::Node* node,
                                                               const GEO2DPointGeometry* geometry) const {
+  return _symbology->createFeatureMark(metadata,
+                                       node,
+                                       geometry);
+}
+
+Mark* MapBoo::MBDatasetVectorSetSymbolizer::createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
+                                                              const VectorStreamingRenderer::Node* node,
+                                                              const GEO3DPointGeometry* geometry) const {
   return _symbology->createFeatureMark(metadata,
                                        node,
                                        geometry);

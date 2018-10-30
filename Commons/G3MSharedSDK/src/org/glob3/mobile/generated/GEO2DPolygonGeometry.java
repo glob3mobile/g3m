@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class GEO2DPolygonData;
 
-public class GEO2DPolygonGeometry extends GEOGeometry2D
+public class GEO2DPolygonGeometry extends GEO2DGeometry
 {
   private final GEO2DPolygonData _polygonData;
 
@@ -32,6 +32,11 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
   protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
+  }
+
+  protected final Sector calculateSector()
+  {
+    return (_polygonData == null) ? null : _polygonData.getSector();
   }
 
   public GEO2DPolygonGeometry(GEO2DPolygonData polygonData)
