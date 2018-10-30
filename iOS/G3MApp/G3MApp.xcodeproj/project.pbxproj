@@ -14,8 +14,6 @@
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
 		CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */; };
-		CF3BC06A2177967200386FA5 /* textures in Resources */ = {isa = PBXBuildFile; fileRef = CF3BC0672177967200386FA5 /* textures */; };
-		CF3BC06B2177967200386FA5 /* intramuros.json in Resources */ = {isa = PBXBuildFile; fileRef = CF3BC0692177967200386FA5 /* intramuros.json */; };
 		CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */; };
 		CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */; };
 		CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */; };
@@ -24,7 +22,6 @@
 		CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */; };
 		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
 		CF64DA302180AC0E00387041 /* G3MExtrusionDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */; };
-		CF64DA322180AFC600387041 /* casco_historico_3d.json in Resources */ = {isa = PBXBuildFile; fileRef = CF64DA312180AFC600387041 /* casco_historico_3d.json */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
@@ -68,8 +65,6 @@
 		CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */; };
 		CFE3B3F2183C07C50078C796 /* isosurface-mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */; };
 		CFECA7771B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFECA7751B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp */; };
-		CFEEF623218330E90080AE11 /* cortijos_3d.json in Resources */ = {isa = PBXBuildFile; fileRef = CFEEF620218330E90080AE11 /* cortijos_3d.json */; };
-		CFEEF624218330E90080AE11 /* deportivo_3d.json in Resources */ = {isa = PBXBuildFile; fileRef = CFEEF622218330E90080AE11 /* deportivo_3d.json */; };
 		CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
@@ -155,8 +150,6 @@
 		CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioDEMDemoScene.hpp; sourceTree = "<group>"; };
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
 		CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPhone.storyboard"; sourceTree = "<group>"; };
-		CF3BC0672177967200386FA5 /* textures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textures; sourceTree = "<group>"; };
-		CF3BC0692177967200386FA5 /* intramuros.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = intramuros.json; sourceTree = "<group>"; };
 		CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
@@ -169,7 +162,6 @@
 		CF483ECC1A2E62C400B70D7E /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
 		CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MExtrusionDemoScene.cpp; sourceTree = "<group>"; };
 		CF64DA2F2180AC0E00387041 /* G3MExtrusionDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MExtrusionDemoScene.hpp; sourceTree = "<group>"; };
-		CF64DA312180AFC600387041 /* casco_historico_3d.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = casco_historico_3d.json; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
 		CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MRasterLayersDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -233,8 +225,6 @@
 		CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
 		CFECA7751B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MVectorStreaming1DemoScene.cpp; sourceTree = "<group>"; };
 		CFECA7761B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MVectorStreaming1DemoScene.hpp; sourceTree = "<group>"; };
-		CFEEF620218330E90080AE11 /* cortijos_3d.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cortijos_3d.json; sourceTree = "<group>"; };
-		CFEEF622218330E90080AE11 /* deportivo_3d.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = deportivo_3d.json; sourceTree = "<group>"; };
 		CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTiledVectorDemoScene.cpp; sourceTree = "<group>"; };
 		CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTiledVectorDemoScene.hpp; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -527,11 +517,6 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CFEEF620218330E90080AE11 /* cortijos_3d.json */,
-				CFEEF622218330E90080AE11 /* deportivo_3d.json */,
-				CF64DA312180AFC600387041 /* casco_historico_3d.json */,
-				CF3BC0692177967200386FA5 /* intramuros.json */,
-				CF3BC0672177967200386FA5 /* textures */,
 				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
 				D871790F1AE501B100A9A14F /* pin.png */,
 				D871790D1AE500B500A9A14F /* radar-sprite.png */,
@@ -657,24 +642,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */,
-				CF64DA322180AFC600387041 /* casco_historico_3d.json in Resources */,
 				E7D1B61316D2436700AF47C1 /* InfoPlist.strings in Resources */,
 				E7D1B61B16D2436700AF47C1 /* Default.png in Resources */,
 				E7D1B61D16D2436700AF47C1 /* Default@2x.png in Resources */,
 				E7D1B61F16D2436700AF47C1 /* Default-568h@2x.png in Resources */,
-				CFEEF624218330E90080AE11 /* deportivo_3d.json in Resources */,
 				CFE3B3F2183C07C50078C796 /* isosurface-mesh.json in Resources */,
 				CFE3B3EA183ADB2D0078C796 /* texture0.jpg in Resources */,
 				CFE3B3EC183ADB2D0078C796 /* planeDiffuse.png in Resources */,
 				CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */,
 				E7D1B63C16D2462B00AF47C1 /* Default-Landscape.png in Resources */,
 				CFE3B3D7183AD2CB0078C796 /* A320.bson in Resources */,
-				CF3BC06B2177967200386FA5 /* intramuros.json in Resources */,
 				D87179101AE501B100A9A14F /* pin.png in Resources */,
 				CF483EC91A2E62A100B70D7E /* CompassHeadings.png in Resources */,
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
-				CFEEF623218330E90080AE11 /* cortijos_3d.json in Resources */,
 				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
 				CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */,
@@ -716,7 +697,6 @@
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
-				CF3BC06A2177967200386FA5 /* textures in Resources */,
 				CF6920C918394F56007409D8 /* restaurant-48x48.png in Resources */,
 				E780A3DD16D29FAA000F0395 /* A321-House.png in Resources */,
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
