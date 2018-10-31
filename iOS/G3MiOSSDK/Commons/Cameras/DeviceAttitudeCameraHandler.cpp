@@ -42,6 +42,9 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
     IDeviceAttitude* devAtt = IDeviceAttitude::instance();
     Camera* nextCamera = rc->getNextCamera();
     
+    
+    Geodetic3D* position;
+    
     //Updating location
     if (_updateLocation) {
         
@@ -58,17 +61,22 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
                 
                 //Changing current location
                 if (_locationModifier == NULL) {
-                    setPositionOnNextCamera(nextCamera, g);
+//                    setPositionOnNextCamera(nextCamera, g);
+                    position = new Geodetic3D(g);
                 } else{
                     Geodetic3D g2 = _locationModifier->modify(g);
                     if (!g2.isNan()){
-                        setPositionOnNextCamera(nextCamera, g2);
+//                        setPositionOnNextCamera(nextCamera, g2);
+                        position = new Geodetic3D(g2);
                     }
                 }
             }
         }
-        
+    } else{
+        position = new Geodetic3D(nextCamera->getGeodeticPosition());
     }
+    
+    
     
     if (devAtt == NULL) {
         THROW_EXCEPTION("IDeviceAttitude not initilized");
@@ -120,6 +128,9 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
 //
 //        nextCamera->setCameraCoordinateSystem(finalCS2);
 //    }
-    nextCamera->setCameraCoordinateSystem(finalCS);
+    if (position != NULL){
+        nextCamera->setCameraCoordinateSystem(finalCS.changeOrigin(rc->getPlanet()->toCartesian(*position)));
+        delete position;
+    }
     
 }
