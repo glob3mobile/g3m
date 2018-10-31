@@ -525,19 +525,25 @@ public class PolygonExtruder {
 
 
    private static List<Building> getBuildings(final List<ExtruderPolygon> polygons,
-                                              final ExtrusionHandler handler) {
+                                              final ExtrusionHandler handler,
+                                              final boolean verbose) {
       final Statistics statistics = new Statistics();
       final List<Building> buildings = getBuildings(polygons, statistics, handler);
-      statistics.printStatistics();
+      if (verbose) {
+         statistics.printStatistics();
+      }
       return buildings;
    }
 
 
    private static List<ExtruderPolygon> getPolygons(final GEOObject geoObject,
-                                                    final ExtrusionHandler handler) {
+                                                    final ExtrusionHandler handler,
+                                                    final boolean verbose) {
       final List<ExtruderPolygon> polygons = new LinkedList<>();
       getPolygons(geoObject, polygons, handler);
-      System.out.println("Found " + polygons.size() + " polygons");
+      if (verbose) {
+         System.out.println("Found " + polygons.size() + " polygons");
+      }
       return polygons;
    }
 
@@ -724,30 +730,45 @@ public class PolygonExtruder {
    }
 
 
-   private static GEOObject getGEOObject(final String inputFileName) throws IOException {
+   private static GEOObject getGEOObject(final String inputFileName,
+                                         final boolean verbose) throws IOException {
       final String json = PolygonExtruder.readFile(inputFileName, Charset.forName("UTF-8"));
-      return GEOJSONParser.parseJSON(json);
+      return GEOJSONParser.parseJSON(json, verbose);
    }
 
 
-   private static List<Building> getBuildings(final String inputFileName,
-                                              final ExtrusionHandler handler) throws IOException {
-      logInfo("Starting buiding...");
+   public static List<Building> getBuildings(final String inputFileName,
+                                             final ExtrusionHandler handler,
+                                             final boolean verbose) throws IOException {
+      if (verbose) {
+         logInfo("Building...");
+      }
       final long now = System.currentTimeMillis();
 
-      final GEOObject geoObject = getGEOObject(inputFileName);
-      handler.onRootGEOObject(geoObject);
+      final List<ExtruderPolygon> polygons = getPolygons(inputFileName, handler, verbose);
 
-      final List<ExtruderPolygon> polygons = getPolygons(geoObject, handler);
-      handler.onPolygons(polygons);
-
-      final List<Building> buildings = getBuildings(polygons, handler);
+      final List<Building> buildings = getBuildings(polygons, handler, verbose);
       handler.onBuildings(buildings);
 
       final long elapsed = System.currentTimeMillis() - now;
-      logInfo("done! (" + elapsed + "ms)");
+      if (verbose) {
+         logInfo("done! (" + elapsed + "ms)");
+      }
 
       return buildings;
+   }
+
+
+   public static List<ExtruderPolygon> getPolygons(final String inputFileName,
+                                                   final ExtrusionHandler handler,
+                                                   final boolean verbose) throws IOException {
+      final GEOObject geoObject = getGEOObject(inputFileName, verbose);
+      handler.onRootGEOObject(geoObject);
+
+      final List<ExtruderPolygon> polygons = getPolygons(geoObject, handler, verbose);
+      handler.onPolygons(polygons);
+
+      return polygons;
    }
 
 
@@ -755,8 +776,9 @@ public class PolygonExtruder {
                               final String outputFileName,
                               final ExtrusionHandler handler,
                               final Planet planet,
-                              final int floatPrecision) throws IOException {
-      final List<Building> buildings = getBuildings(inputFileName, handler);
+                              final int floatPrecision,
+                              final boolean verbose) throws IOException {
+      final List<Building> buildings = getBuildings(inputFileName, handler, verbose);
       final G3MeshCollection meshCollection = getMeshCollection(planet, floatPrecision, buildings);
       handler.onMeshCollection(meshCollection);
       writeMeshCollectionJSON(outputFileName, meshCollection, floatPrecision);

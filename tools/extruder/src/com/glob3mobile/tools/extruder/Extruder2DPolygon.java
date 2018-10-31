@@ -2,6 +2,7 @@
 
 package com.glob3mobile.tools.extruder;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
@@ -132,6 +134,55 @@ public class Extruder2DPolygon
       roofVertices[verticesCursor][1] = coordinate._latitude._degrees;
       roofVertices[verticesCursor][2] = height;
       return verticesCursor + 1;
+   }
+
+
+   //   @Override
+   //   protected Geodetic2D createPosition() {
+   //      Geodetic2D centroid = Geodetic2D.fromDegrees(0, 0);
+   //
+   //      final int imax = _coordinates.size() - 1;
+   //
+   //      double area = 0;
+   //      for (int i = 0; i < imax; ++i) {
+   //         final Geodetic2D currentPoint = _coordinates.get(i);
+   //         final Geodetic2D nextPoint = _coordinates.get(i + 1);
+   //
+   //         final double term = (currentPoint._longitude._radians * nextPoint._latitude._radians)
+   //                             - (nextPoint._longitude._radians * currentPoint._latitude._radians);
+   //         area += term;
+   //         centroid = centroid.add(currentPoint.add(nextPoint).times(term));
+   //      }
+   //
+   //      final double term = (_coordinates.get(imax)._longitude._radians * _coordinates.get(0)._latitude._radians)
+   //                          - (_coordinates.get(0)._longitude._radians * _coordinates.get(imax)._latitude._radians);
+   //      area += term;
+   //      centroid = centroid.add(_coordinates.get(imax).add(_coordinates.get(0)).times(term));
+   //
+   //      area /= 2.0;
+   //      centroid = centroid.div(6 * area);
+   //
+   //      return centroid;
+   //   }
+
+
+   @Override
+   protected Geodetic2D calculateAverage() {
+      double totalLatRad = 0;
+      double totalLonRad = 0;
+      for (final Geodetic2D coordinate : _coordinates) {
+         totalLatRad += coordinate._latitude._radians;
+         totalLonRad += coordinate._longitude._radians;
+      }
+      return Geodetic2D.fromRadians(totalLatRad / _coordinates.size(), totalLonRad / _coordinates.size());
+   }
+
+
+   @Override
+   public void drawOn(final GEOBitmap bitmap,
+                      final Color fillColor,
+                      final Color borderColor) {
+      bitmap.drawPolygon(_coordinates, _holesCoordinatesArray, fillColor, borderColor, false, null);
    }
 
 

@@ -2,11 +2,14 @@
 
 package com.glob3mobile.tools.extruder;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.glob3.mobile.generated.GEOFeature;
+import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Vector3D;
+import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
@@ -20,6 +23,7 @@ public abstract class ExtruderPolygon {
    private final GEOFeature     _geoFeature;
    private final double         _lowerHeight;
    private final G3MeshMaterial _material;
+   private Geodetic2D           _average;
 
 
    protected ExtruderPolygon(final GEOFeature geoFeature,
@@ -28,6 +32,15 @@ public abstract class ExtruderPolygon {
       _geoFeature = geoFeature;
       _lowerHeight = lowerHeight;
       _material = material;
+
+   }
+
+
+   public Geodetic2D getAverage() {
+      if (_average == null) {
+         _average = calculateAverage();
+      }
+      return _average;
    }
 
 
@@ -54,7 +67,7 @@ public abstract class ExtruderPolygon {
 
             final Wall exteriorWall = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
-            return new Building(_geoFeature, toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
+            return new Building(this, getAverage(), toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
                      _material);
          }
       }
@@ -83,5 +96,13 @@ public abstract class ExtruderPolygon {
 
 
    protected abstract Triangulation.Data createTriangulationData();
+
+
+   protected abstract Geodetic2D calculateAverage();
+
+
+   public abstract void drawOn(final GEOBitmap bitmap,
+                               final Color fillColor,
+                               final Color borderColor);
 
 }

@@ -112,7 +112,6 @@ public class CaceresExtrusion {
       System.out.println("CaceresExtrusion 0.1");
       System.out.println("--------------------\n");
 
-
       //      final String name = "deportivo";
       //      final String name = "cortijos";
       final String name = "casco_historico";
@@ -128,7 +127,7 @@ public class CaceresExtrusion {
 
       System.out.println(name);
       final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();
-      PolygonExtruder.process(inputFileName, outputFileName, handler, planet, floatPrecision);
+      PolygonExtruder.process(inputFileName, outputFileName, handler, planet, floatPrecision, true);
       handler.save(name + "_debug.png");
    }
 
