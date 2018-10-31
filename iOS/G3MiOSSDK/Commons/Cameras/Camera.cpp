@@ -507,6 +507,11 @@ void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
     _center.addInPlace(rs._y);
     _up.copyFrom(rs._z);
     _dirtyFlags.setAllDirty();
+    
+    delete _geodeticPosition;
+    _geodeticPosition = new Geodetic3D(_planet->toGeodetic3D(_position.asVector3D()));
+    delete _geodeticCenterOfView;
+    _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(_center.asVector3D()));
 }
 
 TaitBryanAngles Camera::getHeadingPitchRoll() const {
