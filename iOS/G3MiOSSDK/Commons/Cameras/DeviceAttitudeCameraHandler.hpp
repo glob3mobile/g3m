@@ -52,7 +52,9 @@ public:
   
   ~DeviceAttitudeCameraHandler();
   
-  void render(const G3MRenderContext* rc, CameraContext *cameraContext);
+    void extracted(Geodetic3D *&position);
+    
+    void render(const G3MRenderContext* rc, CameraContext *cameraContext);
   
   virtual bool onTouchEvent(const G3MEventContext *eventContext,
                             const TouchEvent* touchEvent,

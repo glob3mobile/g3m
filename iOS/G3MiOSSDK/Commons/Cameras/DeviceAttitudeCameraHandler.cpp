@@ -40,10 +40,17 @@ void DeviceAttitudeCameraHandler::setPositionOnNextCamera(Camera* nextCamera, Ge
 void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext) {
     
     IDeviceAttitude* devAtt = IDeviceAttitude::instance();
+    if (devAtt == NULL) {
+        THROW_EXCEPTION("IDeviceAttitude not initilized");
+    }
+    
+    if (!devAtt->isTracking()) {
+        devAtt->startTrackingDeviceOrientation();
+    }
+    
     Camera* nextCamera = rc->getNextCamera();
-    
-    
-    Geodetic3D* position;
+
+    Geodetic3D* position = NULL;
     
     //Updating location
     if (_updateLocation) {
@@ -58,15 +65,12 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
         if (isTracking) {
             Geodetic3D g = loc->getLocation();
             if (!g.isNan()) {
-                
                 //Changing current location
                 if (_locationModifier == NULL) {
-//                    setPositionOnNextCamera(nextCamera, g);
                     position = new Geodetic3D(g);
                 } else{
                     Geodetic3D g2 = _locationModifier->modify(g);
                     if (!g2.isNan()){
-//                        setPositionOnNextCamera(nextCamera, g2);
                         position = new Geodetic3D(g2);
                     }
                 }
@@ -76,19 +80,10 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
         position = new Geodetic3D(nextCamera->getGeodeticPosition());
     }
     
-    
-    
-    if (devAtt == NULL) {
-        THROW_EXCEPTION("IDeviceAttitude not initilized");
-    }
-    
-    if (!devAtt->isTracking()) {
-        devAtt->startTrackingDeviceOrientation();
-    }
-    
     //Getting Global Rotation
     IDeviceAttitude::instance()->copyValueOfRotationMatrix(_attitudeMatrix);
-    if (!_attitudeMatrix.isValid()) {
+    if (!_attitudeMatrix.isValid() || position == NULL) {
+        delete position;
         return;
     }
     
@@ -105,32 +100,9 @@ void DeviceAttitudeCameraHandler::render(const G3MRenderContext* rc, CameraConte
     local.copyValueOfRotationMatrix(_localRM);
     _camRM.copyValueOfMultiplication(_localRM, _attitudeMatrix);
     
-    
     //Applying to Camera CS
     CoordinateSystem finalCS = camCS.applyRotation(_camRM);
-    
-    
-//    Vector3D l = finalCS._x;
-//    Vector3D f = finalCS._y;
-//    Vector3D up = finalCS._z;
-//    printf("FORWARD: %.2f, %.2f, %.2f\n", f._x, f._y, f._z);
-//    printf("UP: %.2f, %.2f, %.2f\n", up._x, up._y, up._z);
-//    printf("LEFT: %.2f, %.2f, %.2f\n", l._x, l._y, l._z);
-    
-//    if (f._z < 0){
-//        nextCamera->setCameraCoordinateSystem(finalCS);
-//    } else{
-//#warning TODO: QUICK FIX - RESEARCH NEED FOR THIS HACK
-//        CoordinateSystem finalCS2(finalCS._x.times(-1),
-//                                  finalCS._y.times(-1),
-//                                  finalCS._z,
-//                                  finalCS._origin);
-//
-//        nextCamera->setCameraCoordinateSystem(finalCS2);
-//    }
-    if (position != NULL){
-        nextCamera->setCameraCoordinateSystem(finalCS.changeOrigin(rc->getPlanet()->toCartesian(*position)));
-        delete position;
-    }
-    
+
+    nextCamera->setCameraCoordinateSystem(finalCS.changeOrigin(rc->getPlanet()->toCartesian(*position)));
+    delete position;
 }
