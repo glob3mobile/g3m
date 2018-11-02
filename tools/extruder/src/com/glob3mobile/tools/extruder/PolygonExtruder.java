@@ -209,26 +209,26 @@ public class PolygonExtruder {
    }
 
 
-   private static List<List<Geodetic2D>> removeLastDuplicated2DCoordinates(final List<ArrayList<Geodetic2D>> holesCoordinatesArray) {
+   private static List<List<Geodetic2D>> removeLastDuplicated2DCoordinates(final List<? extends List<Geodetic2D>> holesCoordinatesArray) {
       if (holesCoordinatesArray == null) {
          return Collections.emptyList();
       }
 
       final List<List<Geodetic2D>> result = new ArrayList<>(holesCoordinatesArray.size());
-      for (final ArrayList<Geodetic2D> coordinates : holesCoordinatesArray) {
+      for (final List<Geodetic2D> coordinates : holesCoordinatesArray) {
          result.add(removeLastDuplicated2DCoordinate(coordinates));
       }
       return result;
    }
 
 
-   private static List<List<Geodetic3D>> removeLastDuplicated3DCoordinates(final List<ArrayList<Geodetic3D>> holesCoordinatesArray) {
+   private static List<List<Geodetic3D>> removeLastDuplicated3DCoordinates(final List<? extends List<Geodetic3D>> holesCoordinatesArray) {
       if (holesCoordinatesArray == null) {
          return Collections.emptyList();
       }
 
       final List<List<Geodetic3D>> result = new ArrayList<>(holesCoordinatesArray.size());
-      for (final ArrayList<Geodetic3D> coordinates : holesCoordinatesArray) {
+      for (final List<Geodetic3D> coordinates : holesCoordinatesArray) {
          result.add(removeLastDuplicated3DCoordinate(coordinates));
       }
       return result;
@@ -481,11 +481,16 @@ public class PolygonExtruder {
                                                final GEO2DPolygonData data,
                                                final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler handler) {
-      final List<Geodetic2D> coordinates = removeConsecutiveDuplicates2DCoordinates(
-               removeLastDuplicated2DCoordinate(data.getCoordinates()));
+      //      final List<Geodetic2D> coordinates = removeConsecutiveDuplicates2DCoordinates(
+      //               removeLastDuplicated2DCoordinate(data.getCoordinates()));
+      //
+      //      final List<List<Geodetic2D>> holesCoordinates = removeConsecutiveDuplicates2DCoordinatesArray(
+      //               removeLastDuplicated2DCoordinates(data.getHolesCoordinatesArray()));
+      final List<Geodetic2D> coordinates = sort2DCoordinates(
+               removeConsecutiveDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(data.getCoordinates())));
 
-      final List<List<Geodetic2D>> holesCoordinates = removeConsecutiveDuplicates2DCoordinatesArray(
-               removeLastDuplicated2DCoordinates(data.getHolesCoordinatesArray()));
+      final List<List<Geodetic2D>> holesCoordinates = sort2DCoordinatesArray(
+               removeConsecutiveDuplicates2DCoordinatesArray(removeLastDuplicated2DCoordinates(data.getHolesCoordinatesArray())));
 
       processGEO2DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
@@ -495,14 +500,170 @@ public class PolygonExtruder {
                                                final GEO3DPolygonData data,
                                                final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler handler) {
-      final List<Geodetic3D> coordinates = removeConsecutiveDuplicates3DCoordinates(
-               removeLastDuplicated3DCoordinate(data.getCoordinates()));
+      final List<Geodetic3D> coordinates = sort3DCoordinates(
+               removeConsecutiveDuplicates3DCoordinates(removeLastDuplicated3DCoordinate(data.getCoordinates())));
 
-      final List<List<Geodetic3D>> holesCoordinates = removeConsecutiveDuplicates3DCoordinatesArray(
-               removeLastDuplicated3DCoordinates(data.getHolesCoordinatesArray()));
+      final List<List<Geodetic3D>> holesCoordinates = sort3DCoordinatesArray(
+               removeConsecutiveDuplicates3DCoordinatesArray(removeLastDuplicated3DCoordinates(data.getHolesCoordinatesArray())));
 
       processGEO3DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
+
+
+   private static List<List<Geodetic2D>> sort2DCoordinatesArray(final List<? extends List<Geodetic2D>> coordinatesArray) {
+      if (coordinatesArray == null) {
+         return null;
+      }
+
+      final List<List<Geodetic2D>> result = new ArrayList<>(coordinatesArray.size());
+      for (final List<Geodetic2D> coordinates : coordinatesArray) {
+         result.add(sort2DCoordinates(coordinates));
+      }
+      return result;
+   }
+
+
+   private static List<List<Geodetic3D>> sort3DCoordinatesArray(final List<? extends List<Geodetic3D>> coordinatesArray) {
+      if (coordinatesArray == null) {
+         return null;
+      }
+
+      final List<List<Geodetic3D>> result = new ArrayList<>(coordinatesArray.size());
+      for (final List<Geodetic3D> coordinates : coordinatesArray) {
+         result.add(sort3DCoordinates(coordinates));
+      }
+      return result;
+   }
+
+
+   private static List<Geodetic2D> sort2DCoordinates(final List<Geodetic2D> coordinates) {
+      final List<Geodetic2D> result = new ArrayList<>(coordinates);
+      //      sortClockwise(get2DCenter(coordinates), coordinates);
+      return result;
+   }
+
+
+   private static List<Geodetic3D> sort3DCoordinates(final List<Geodetic3D> coordinates) {
+      final List<Geodetic3D> result = new ArrayList<>(coordinates);
+      //      sortClockwise(get3DCenter(coordinates), coordinates);
+      return result;
+   }
+
+
+   //   private static Geodetic2D get2DCenter(final List<Geodetic2D> coordinates) {
+   //      double totalLatRad = 0;
+   //      double totalLonRad = 0;
+   //      for (final Geodetic2D coordinate : coordinates) {
+   //         totalLatRad += coordinate._latitude._radians;
+   //         totalLonRad += coordinate._longitude._radians;
+   //      }
+   //
+   //      final int coordinatesSize = coordinates.size();
+   //      return new Geodetic2D( //
+   //               Angle.fromRadians(totalLatRad / coordinatesSize), //
+   //               Angle.fromRadians(totalLonRad / coordinatesSize));
+   //   }
+   //
+   //
+   //   private static Geodetic3D get3DCenter(final List<Geodetic3D> coordinates) {
+   //      double totalLatRad = 0;
+   //      double totalLonRad = 0;
+   //      double totalHeight = 0;
+   //      for (final Geodetic3D coordinate : coordinates) {
+   //         totalLatRad += coordinate._latitude._radians;
+   //         totalLonRad += coordinate._longitude._radians;
+   //         totalHeight += coordinate._height;
+   //      }
+   //
+   //      final int coordinatesSize = coordinates.size();
+   //      return new Geodetic3D( //
+   //               Angle.fromRadians(totalLatRad / coordinatesSize), //
+   //               Angle.fromRadians(totalLonRad / coordinatesSize), //
+   //               totalHeight / coordinatesSize);
+   //   }
+
+
+   //   private static void sortClockwise(final Geodetic3D center,
+   //                                     final List<Geodetic3D> coordinates) {
+   //      //      final Vector3D centerV = toVector3D(center);
+   //      //
+   //      //      try {
+   //      //         Collections.sort(coordinates, new Comparator<>() {
+   //      //            @Override
+   //      //            public int compare(final Geodetic3D p1,
+   //      //                               final Geodetic3D p2) {
+   //      //               final Vector3D p1V = toVector3D(p1);
+   //      //               final Vector3D p2V = toVector3D(p2);
+   //      //               final double angle = getSignedAngle(centerV, p1V, p2V);
+   //      //
+   //      //               if (angle < 0) {
+   //      //                  return -1;
+   //      //               }
+   //      //               else if (angle > 0) {
+   //      //                  return 1;
+   //      //               }
+   //      //               else {
+   //      //                  return 0;
+   //      //               }
+   //      //            }
+   //      //         });
+   //      //      }
+   //      //      catch (final java.lang.IllegalArgumentException e) {
+   //      //         System.err.println(e);
+   //      //      }
+   //   }
+
+
+   //   private static Vector3D toVector3D(final Geodetic2D geodetic) {
+   //      return new Vector3D(geodetic._longitude._degrees, geodetic._latitude._degrees, 0);
+   //   }
+   //
+   //
+   //   private static Vector3D toVector3D(final Geodetic3D geodetic) {
+   //      return new Vector3D(geodetic._longitude._degrees, geodetic._latitude._degrees, geodetic._height);
+   //   }
+
+
+   //   private static void sortClockwise(final Geodetic2D center,
+   //                                     final List<Geodetic2D> coordinates) {
+   //      //      final Vector3D centerV = toVector3D(center);
+   //      //
+   //      //      try {
+   //      //         Collections.sort(coordinates, new Comparator<>() {
+   //      //            @Override
+   //      //            public int compare(final Geodetic2D p1,
+   //      //                               final Geodetic2D p2) {
+   //      //               final Vector3D p1V = toVector3D(p1);
+   //      //               final Vector3D p2V = toVector3D(p2);
+   //      //               final double angle = getSignedAngle(centerV, p1V, p2V);
+   //      //
+   //      //               if (angle < 0) {
+   //      //                  return -1;
+   //      //               }
+   //      //               else if (angle > 0) {
+   //      //                  return 1;
+   //      //               }
+   //      //               else {
+   //      //                  return 0;
+   //      //               }
+   //      //            }
+   //      //         });
+   //      //      }
+   //      //      catch (final java.lang.IllegalArgumentException e) {
+   //      //         System.err.println(e);
+   //      //      }
+   //   }
+
+
+   //   private static double getSignedAngle(final Vector3D normal,
+   //                                        final Vector3D v1,
+   //                                        final Vector3D v2) {
+   //      final Vector3D tempCross = v1.cross(v2);
+   //
+   //      final double angle = Math.atan2(tempCross.length(), v1.dot(v2));
+   //
+   //      return tempCross.dot(normal) < 0 ? -angle : angle;
+   //   }
 
 
    private static void processGEOGeometry(final GEOFeature geoFeature,
