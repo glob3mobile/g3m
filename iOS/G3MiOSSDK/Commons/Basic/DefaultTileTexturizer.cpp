@@ -168,7 +168,7 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   const IImage* _backgroundTileImage;
   const std::string _backgroundTileImageName;
-
+  const bool _verboseErrors;
 
 
   static const TextureIDReference* getTopLevelTextureIDForTile(Tile* tile) {
@@ -253,7 +253,8 @@ public:
                          bool                              logTilesPetitions,
                          FrameTasksExecutor*               frameTasksExecutor,
                          const IImage*                     backgroundTileImage,
-                         const std::string&                backgroundTileImageName) :
+                         const std::string&                backgroundTileImageName,
+                         const bool                        verboseErrors) :
   _tileImageProvider(tileImageProvider),
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
@@ -265,7 +266,8 @@ public:
   _logTilesPetitions(logTilesPetitions),
   _frameTasksExecutor(frameTasksExecutor),
   _backgroundTileImage(backgroundTileImage),
-  _backgroundTileImageName(backgroundTileImageName)
+  _backgroundTileImageName(backgroundTileImageName),
+  _verboseErrors(verboseErrors)
   {
     _tileImageProvider->_retain();
 
@@ -375,7 +377,9 @@ public:
 
   void imageCreationError(const std::string& error) {
     // TODO: #warning propagate the error to the texturizer and change the render state if is necessary
-    ILogger::instance()->logError("%s", error.c_str());
+    if (_verboseErrors) {
+      ILogger::instance()->logError("%s", error.c_str());
+    }
   }
 
   void imageCreationCanceled() {
@@ -586,9 +590,11 @@ public:
   }
 };
 
-DefaultTileTexturizer::DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder) :
+DefaultTileTexturizer::DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder,
+                                             const bool verboseErrors) :
 _defaultBackgroundImageBuilder(defaultBackgroundImageBuilder),
-_defaultBackgroundImageLoaded(false)
+_defaultBackgroundImageLoaded(false),
+_verboseErrors(verboseErrors)
 {
   ILogger::instance()->logInfo("Create texturizer...");
 
@@ -687,7 +693,8 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext*    rc,
                                          prc->_logTilesPetitions,
                                          rc->getFrameTasksExecutor(),
                                          _defaultBackgroundImage,
-                                         _defaultBackgroundImageName);
+                                         _defaultBackgroundImageName,
+                                         _verboseErrors);
     builderHolder = new DTT_TileTextureBuilderHolder(builder);
     tile->setTexturizerData(builderHolder);
   }

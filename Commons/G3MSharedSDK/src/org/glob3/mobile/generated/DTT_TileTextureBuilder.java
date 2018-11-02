@@ -13,7 +13,7 @@ public class DTT_TileTextureBuilder extends RCObject
   private FrameTasksExecutor _frameTasksExecutor;
   private final IImage _backgroundTileImage;
   private final String _backgroundTileImageName;
-
+  private final boolean _verboseErrors;
 
 
   private static TextureIDReference getTopLevelTextureIDForTile(Tile tile)
@@ -65,7 +65,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileTextureDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName)
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileTextureDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName, boolean verboseErrors)
   {
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
@@ -79,6 +79,7 @@ public class DTT_TileTextureBuilder extends RCObject
      _frameTasksExecutor = frameTasksExecutor;
      _backgroundTileImage = backgroundTileImage;
      _backgroundTileImageName = backgroundTileImageName;
+     _verboseErrors = verboseErrors;
     _tileImageProvider._retain();
 
     _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, true, false, true, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge()); // generateMipmap -  transparent, -  ownedTexCoords,
@@ -175,7 +176,10 @@ public class DTT_TileTextureBuilder extends RCObject
   public final void imageCreationError(String error)
   {
     // TODO: #warning propagate the error to the texturizer and change the render state if is necessary
-    ILogger.instance().logError("%s", error);
+    if (_verboseErrors)
+    {
+      ILogger.instance().logError("%s", error);
+    }
   }
 
   public final void imageCreationCanceled()

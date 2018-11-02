@@ -30,6 +30,8 @@ private:
 #endif
   std::string _defaultBackgroundImageName;
 
+  const bool _verboseErrors;
+
   LeveledTexturedMesh* getMesh(Tile* tile) const;
 
 public:
@@ -37,7 +39,8 @@ public:
   std::vector<std::string> _errors;
 
 
-  DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder);
+  DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder,
+                        const bool verboseErrors);
 
   virtual ~DefaultTileTexturizer() {
 #ifdef JAVA_CODE

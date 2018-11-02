@@ -49,7 +49,8 @@ public abstract class MapBooOLDBuilder
   
     final float verticalExaggeration = 1F;
   
-    TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
+  
+    TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")), true); // verboseErrors
   
     final boolean renderDebug = false;
     final boolean incrementalTileQuality = false;
