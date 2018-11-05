@@ -543,6 +543,7 @@
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
 		D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7B1725444800FFA541 /* MeshShape.cpp */; };
+		D8A118622190BD66002ACA7E /* PerspectiveCameraMatrixProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8021E0A21774FB300944004 /* PerspectiveCameraMatrixProvider.hpp */; };
 		D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
@@ -798,6 +799,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8A118622190BD66002ACA7E /* PerspectiveCameraMatrixProvider.hpp in CopyFiles */,
 				D86FD38221525C3D00A4063B /* Condition.hpp in CopyFiles */,
 				D86FD37B2150F06E00A4063B /* Cylinder.hpp in CopyFiles */,
 				D818BE922129F8CF000C03A5 /* FlatMercatorPlanet.hpp in CopyFiles */,
