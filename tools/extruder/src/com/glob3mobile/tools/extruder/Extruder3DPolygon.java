@@ -30,9 +30,20 @@ public class Extruder3DPolygon
                      final List<List<Geodetic3D>> holesCoordinatesArray,
                      final double lowerHeight,
                      final G3MeshMaterial material) {
-      super(geoFeature, lowerHeight, material);
+      super(geoFeature, lowerHeight, material, minHeight(coordinates));
       _coordinates = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
+   }
+
+
+   private static double minHeight(final List<Geodetic3D> coordinates) {
+      double result = Double.POSITIVE_INFINITY;
+      for (final Geodetic3D coordinate : coordinates) {
+         if (coordinate._height < result) {
+            result = coordinate._height;
+         }
+      }
+      return result;
    }
 
 

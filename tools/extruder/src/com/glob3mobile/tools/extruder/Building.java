@@ -50,6 +50,49 @@ public class Building {
    }
 
 
+   private double calculateSize(final double minHeight) {
+      double area = 0;
+      double maxHeight = 0;
+      //double sumHeight = 0;
+      for (final Triangle triangle : _roofTriangles) {
+         final Vector3D v0 = _roofVertices.get(triangle._vertex0);
+         final Vector3D v1 = _roofVertices.get(triangle._vertex1);
+         final Vector3D v2 = _roofVertices.get(triangle._vertex2);
+         area += triangleArea(v0, v1, v2);
+
+         maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
+
+         //sumHeight += v0._z;
+         //sumHeight += v1._z;
+         //sumHeight += v2._z;
+      }
+      //      return area * maxHeight;
+      //      final double averageHeight = sumHeight / (_roofTriangles.size() * 3);
+
+      final double height = (maxHeight - minHeight) + 1; //  minimum 1 meters
+      return area * height;
+   }
+
+
+   private static double max(final double v,
+                             final double... d) {
+      double max = v;
+      for (final double e : d) {
+         if (e > max) {
+            max = e;
+         }
+      }
+      return max;
+   }
+
+
+   private double triangleArea(final Vector3D v0,
+                               final Vector3D v1,
+                               final Vector3D v2) {
+      return (v1.sub(v0).cross(v2.sub(v0))).length() / 2;
+   }
+
+
    public ExtruderPolygon getExtruderPolygon() {
       return _extruderPolygon;
    }
@@ -358,7 +401,7 @@ public class Building {
    }
 
 
-   public Map<String, Object> createFeatureProperties() {
+   public Map<String, Object> createFeatureProperties(final double minHeight) {
       final Map<String, Object> result = new LinkedHashMap<>(5);
 
       result.put("roof_vertices", verticesToJSON(_roofVertices));
@@ -367,7 +410,9 @@ public class Building {
       result.put("exterior_wall", wallToJSON(_exteriorWall));
       result.put("interior_walls", wallsToJSON(_interiorWalls));
 
-      result.put("_material", materialToJSON(_material));
+      result.put("material", materialToJSON(_material));
+
+      result.put("size", calculateSize(minHeight));
 
       return result;
    }

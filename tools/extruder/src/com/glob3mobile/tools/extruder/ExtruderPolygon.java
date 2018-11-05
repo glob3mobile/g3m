@@ -24,15 +24,17 @@ public abstract class ExtruderPolygon {
    private final double         _lowerHeight;
    private final G3MeshMaterial _material;
    private Geodetic2D           _average;
+   private final double         _minHeight;
 
 
    protected ExtruderPolygon(final GEOFeature geoFeature,
                              final double lowerHeight,
-                             final G3MeshMaterial material) {
+                             final G3MeshMaterial material,
+                             final double minHeight) {
       _geoFeature = geoFeature;
       _lowerHeight = lowerHeight;
       _material = material;
-
+      _minHeight = minHeight;
    }
 
 
@@ -41,6 +43,11 @@ public abstract class ExtruderPolygon {
          _average = calculateAverage();
       }
       return _average;
+   }
+
+
+   public double getMinHeight() {
+      return _minHeight;
    }
 
 

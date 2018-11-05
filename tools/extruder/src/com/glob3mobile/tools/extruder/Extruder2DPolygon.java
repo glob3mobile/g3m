@@ -32,7 +32,7 @@ public class Extruder2DPolygon
                      final double lowerHeight,
                      final double upperHeight,
                      final G3MeshMaterial material) {
-      super(geoFeature, lowerHeight, material);
+      super(geoFeature, lowerHeight, material, lowerHeight);
       _upperHeight = upperHeight;
       _coordinates = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
