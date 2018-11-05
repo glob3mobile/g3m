@@ -34,7 +34,6 @@ public class GEOShapeSymbol extends GEOSymbol
        _shape.dispose();
   
     super.dispose();
-  
   }
 
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)

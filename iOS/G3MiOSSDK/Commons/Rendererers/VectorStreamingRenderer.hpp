@@ -292,7 +292,6 @@ public:
     const bool _verbose;
 
     std::vector<Cluster*>* _clusters;
-    GEOObject*             _features;
 
     BoundingVolume* _boundingVolume;
     BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
@@ -376,7 +375,6 @@ public:
     long long render(const G3MRenderContext* rc,
                      const VectorStreamingRenderer::VectorSet* vectorSet,
                      const Frustum* frustumInModelCoordinates,
-                     const long long cameraTS,
                      GLState* glState);
 
     void errorDownloadingFeatures() {
@@ -665,7 +663,6 @@ public:
 
     void render(const G3MRenderContext* rc,
                 const Frustum* frustumInModelCoordinates,
-                const long long cameraTS,
                 GLState* glState);
 
     long long createFeatureMark(const Node* node,

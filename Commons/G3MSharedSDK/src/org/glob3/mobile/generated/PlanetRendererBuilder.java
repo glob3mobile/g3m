@@ -69,7 +69,6 @@ public class PlanetRendererBuilder
     {
       _tileTessellator = createTileTessellator();
     }
-  
     return _tileTessellator;
   }
 
@@ -82,9 +81,8 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackgroundImageBuilder(), _verboseTileTexturizerErrors);
+      _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageBuilder(), getVerboseTileTexturizerErrors());
     }
-  
     return _texturizer;
   }
 
@@ -100,7 +98,6 @@ public class PlanetRendererBuilder
     {
       _layerSet = createLayerSet();
     }
-  
     return _layerSet;
   }
 
@@ -115,7 +112,6 @@ public class PlanetRendererBuilder
     {
       _parameters = createPlanetRendererParameters();
     }
-  
     return _parameters;
   }
 

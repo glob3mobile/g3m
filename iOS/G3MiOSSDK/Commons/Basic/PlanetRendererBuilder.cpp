@@ -83,10 +83,9 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
  * @return _tileTessellator: TileTessellator*
  */
 TileTessellator* PlanetRendererBuilder::getTileTessellator() const {
-  if (!_tileTessellator) {
+  if (_tileTessellator == NULL) {
     _tileTessellator = createTileTessellator();
   }
-
   return _tileTessellator;
 }
 
@@ -96,11 +95,10 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() const {
  * @return _texturizer: TileTexturizer*
  */
 TileTexturizer* PlanetRendererBuilder::getTexturizer() const {
-  if (!_texturizer) {
-    _texturizer = new DefaultTileTexturizer(PlanetRendererBuilder::getDefaultTileBackgroundImageBuilder(),
-                                            _verboseTileTexturizerErrors);
+  if (_texturizer == NULL) {
+    _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageBuilder(),
+                                            getVerboseTileTexturizerErrors());
   }
-
   return _texturizer;
 }
 
@@ -110,10 +108,9 @@ TileTexturizer* PlanetRendererBuilder::getTexturizer() const {
  * @return _layerSet: LayerSet*
  */
 LayerSet* PlanetRendererBuilder::getLayerSet() const {
-  if (!_layerSet) {
+  if (_layerSet == NULL) {
     _layerSet = createLayerSet();
   }
-
   return _layerSet;
 }
 
@@ -123,10 +120,9 @@ LayerSet* PlanetRendererBuilder::getLayerSet() const {
  * @return _parameters: TilesRenderParameters*
  */
 TilesRenderParameters* PlanetRendererBuilder::getParameters() const {
-  if (!_parameters) {
+  if (_parameters == NULL) {
     _parameters = createPlanetRendererParameters();
   }
-
   return _parameters;
 }
 
@@ -178,7 +174,7 @@ void PlanetRendererBuilder::setQuality(Quality quality) {
  * Returns the array of visibleSectorListeners.
  */
 std::vector<VisibleSectorListener*>* PlanetRendererBuilder::getVisibleSectorListeners() const {
-  if (!_visibleSectorListeners) {
+  if (_visibleSectorListeners == NULL) {
     _visibleSectorListeners = new std::vector<VisibleSectorListener*>;
   }
   return _visibleSectorListeners;
@@ -190,7 +186,7 @@ std::vector<VisibleSectorListener*>* PlanetRendererBuilder::getVisibleSectorList
  * @return _stabilizationMilliSeconds: std::vector<long long>
  */
 std::vector<long long>* PlanetRendererBuilder::getStabilizationMilliSeconds() const {
-  if (!_stabilizationMilliSeconds) {
+  if (_stabilizationMilliSeconds == NULL) {
     _stabilizationMilliSeconds = new std::vector<long long>;
   }
   return _stabilizationMilliSeconds;

@@ -554,7 +554,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final boolean _verbose;
 
     private java.util.ArrayList<Cluster> _clusters;
-    private GEOObject _features;
 
     private BoundingVolume _boundingVolume;
     private BoundingVolume getBoundingVolume(G3MRenderContext rc)
@@ -621,10 +620,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       _loadedFeatures = false;
       _loadingFeatures = false;
-    
-      if (_features != null)
-         _features.dispose();
-      _features = null;
     
       if (_clusters != null)
       {
@@ -702,7 +697,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarksFilter(this), true, true); // deleteMarks -  animated
     
-      if (_verbose && removed > 0)
+      if (_verbose && (removed > 0))
       {
         ILogger.instance().logInfo("\"%s\": Removed %d marks",
                                    getFullName(),
@@ -745,10 +740,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
           if (_clusterMarksCount <= 0)
           {
             createClusterMarks();
-            //Checking to ensure no children marks are drawn.
-            if (_children != null && _children.size() > 0)
+            // Checking to ensure no children marks are drawn.
+            if ((_children != null) && (_children.size() > 0))
             {
-              for (int i = 0; i<_children.size(); i++)
+              for (int i = 0; i < _children.size(); i++)
               {
                 Node child = _children.get(i);
                 if (child._featureMarksCount > 0)
@@ -835,9 +830,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       unload();
     
-      if (_features != null)
-         _features.dispose();
-    
       if (_clusters != null)
       {
         for (int i = 0; i < _clusters.size(); i++)
@@ -878,7 +870,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _loadedFeatures = false;
        _loadingFeatures = false;
        _children = children;
-       _childrenSize = children == null ? 0 : children.size();
+       _childrenSize = (children == null) ? 0 : children.size();
        _loadingChildren = false;
        _isBeingRendered = false;
        _boundingVolume = null;
@@ -886,7 +878,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _childrenRequestID = -1;
        _downloader = null;
        _clusters = null;
-       _features = null;
        _clusterMarksCount = 0;
        _featureMarksCount = 0;
        _childrenTask = null;
@@ -900,20 +891,20 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_loadingFeatures)
       {
-        cancelLoadFeatures();
         _loadingFeatures = false;
+        cancelLoadFeatures();
       }
     
       if (_loadingChildren)
       {
-        _loadingChildren = true;
+        _loadingChildren = false;
         cancelLoadChildren();
       }
     
       if (_loadedFeatures)
       {
-        unloadFeatures();
         _loadedFeatures = false;
+        unloadFeatures();
       }
     
       unloadChildren();
@@ -946,7 +937,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _id + "_C_" + _vectorSet.getName();
     }
 
-    public final long render(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
+    public final long render(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates, GLState glState)
     {
       long renderedCount = 0;
     
@@ -980,7 +971,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
               for (int i = 0; i < _childrenSize; i++)
               {
                 Node child = _children.get(i);
-                renderedCount += child.render(rc, vectorSet, frustumInModelCoordinates, cameraTS, glState);
+                renderedCount += child.render(rc, vectorSet, frustumInModelCoordinates, glState);
               }
             }
           }
@@ -1020,14 +1011,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       parsedChildren(children);
     
-      if (_features != null)
-         _features.dispose();
       _featureMarksCount = 0;
     
       if (features != null)
       {
-        _features = features;
-        _featureMarksCount = _features.createFeatureMarks(_vectorSet, this);
+        _featureMarksCount = features.createFeatureMarks(_vectorSet, this);
+        if (features != null)
+           features.dispose();
     
         if (_verbose && (_featureMarksCount > 0))
         {
@@ -1035,9 +1025,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
                                      getFullName(),
                                      _featureMarksCount);
         }
-        if (_features != null)
-           _features.dispose();
-        _features = null;
       }
     
       if (_clusters != null)
@@ -1555,7 +1542,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
     }
 
-    public final void render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
+    public final void render(G3MRenderContext rc, Frustum frustumInModelCoordinates, GLState glState)
     {
       if (_rootNodesSize > 0)
       {
@@ -1563,7 +1550,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _rootNodesSize; i++)
         {
           Node rootNode = _rootNodes.get(i);
-          renderedCount += rootNode.render(rc, this, frustumInModelCoordinates, cameraTS, glState);
+          renderedCount += rootNode.render(rc, this, frustumInModelCoordinates, glState);
         }
     
         if (_lastRenderedCount != renderedCount)
@@ -1696,15 +1683,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       final Camera camera = rc.getCurrentCamera();
       final Frustum frustumInModelCoordinates = camera.getFrustumInModelCoordinates();
   
-      final long cameraTS = camera.getTimestamp();
-  
       updateGLState(camera);
       _glState.setParent(glState);
   
       for (int i = 0; i < _vectorSetsSize; i++)
       {
         VectorSet vectorSector = _vectorSets.get(i);
-        vectorSector.render(rc, frustumInModelCoordinates, cameraTS, _glState);
+        vectorSector.render(rc, frustumInModelCoordinates, _glState);
       }
     }
   }

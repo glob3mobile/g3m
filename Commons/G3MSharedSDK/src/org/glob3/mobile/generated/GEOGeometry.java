@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class GEOSymbol;
 //class GEOFeature;
 
+
 public abstract class GEOGeometry extends GEOObject
 {
   private GEOFeature _feature;
@@ -34,7 +35,7 @@ public abstract class GEOGeometry extends GEOObject
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
   }
 
   public final void setFeature(GEOFeature feature)

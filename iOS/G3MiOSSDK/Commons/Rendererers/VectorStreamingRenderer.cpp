@@ -164,8 +164,8 @@ std::vector<VectorStreamingRenderer::Cluster*>* VectorStreamingRenderer::Feature
   const size_t clustersCount = jsonArray->size();
   for (size_t i = 0; i < clustersCount; i++) {
     const JSONObject* clusterJson = jsonArray->getAsObject(i);
-    const Geodetic2D* position = GEOJSONUtils::parseGeodetic2D( clusterJson->getAsArray("position") );
-    const long long   size     = (long long) clusterJson->getAsNumber("size")->value();
+    const Geodetic2D* position    = GEOJSONUtils::parseGeodetic2D( clusterJson->getAsArray("position") );
+    const long long   size        = (long long) clusterJson->getAsNumber("size")->value();
     
     clusters->push_back( new Cluster(position, size) );
   }
@@ -278,7 +278,7 @@ _verbose(verbose),
 _loadedFeatures(false),
 _loadingFeatures(false),
 _children(children),
-_childrenSize(children == NULL ? 0 : children->size()),
+_childrenSize((children == NULL) ? 0 : children->size()),
 _loadingChildren(false),
 _isBeingRendered(false),
 _boundingVolume(NULL),
@@ -286,7 +286,6 @@ _featuresRequestID(-1),
 _childrenRequestID(-1),
 _downloader(NULL),
 _clusters(NULL),
-_features(NULL),
 _clusterMarksCount(0),
 _featureMarksCount(0),
 _childrenTask(NULL),
@@ -334,9 +333,7 @@ void VectorStreamingRenderer::Node::setParent(Node* parent) {
 
 VectorStreamingRenderer::Node::~Node() {
   unload();
-  
-  delete _features;
-  
+
   if (_clusters != NULL) {
     for (size_t i = 0; i < _clusters->size(); i++) {
       Cluster* cluster = _clusters->at(i);
@@ -370,13 +367,12 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
   
   parsedChildren(children);
   
-  delete _features;
   _featureMarksCount = 0;
   
   if (features != NULL) {
-    _features = features;
-    _featureMarksCount = _features->createFeatureMarks(_vectorSet, this);
-    
+    _featureMarksCount = features->createFeatureMarks(_vectorSet, this);
+    delete features;
+
     if (_verbose && (_featureMarksCount > 0)) {
 #ifdef C_CODE
       ILogger::instance()->logInfo("\"%s\": Created %ld feature-marks",
@@ -389,8 +385,6 @@ void VectorStreamingRenderer::Node::parsedFeatures(std::vector<Cluster*>* cluste
                                  _featureMarksCount);
 #endif
     }
-    delete _features;
-    _features = NULL;
   }
   
   if (_clusters != NULL) {
@@ -480,10 +474,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
 void VectorStreamingRenderer::Node::unloadFeatures() {
   _loadedFeatures  = false;
   _loadingFeatures = false;
-  
-  delete _features;
-  _features = NULL;
-  
+
   if (_clusters != NULL) {
     for (size_t i = 0; i < _clusters->size(); i++) {
       Cluster* cluster = _clusters->at(i);
@@ -588,7 +579,7 @@ void VectorStreamingRenderer::Node::removeMarks() {
                                                                         true, /* animated */
                                                                         true  /* deleteMarks */);
   
-  if (_verbose && removed > 0) {
+  if (_verbose && (removed > 0)) {
 #ifdef C_CODE
     ILogger::instance()->logInfo("\"%s\": Removed %ld marks",
                                  getFullName().c_str(),
@@ -614,7 +605,7 @@ bool VectorStreamingRenderer::Node::isVisible(const G3MRenderContext* rc,
 }
 
 bool VectorStreamingRenderer::Node::isBigEnough(const G3MRenderContext *rc,
-                                                const VectorStreamingRenderer::VectorSet* vectorSet                                                ) {
+                                                const VectorStreamingRenderer::VectorSet* vectorSet) {
   if ((_nodeSector->_deltaLatitude._degrees  >= vectorSet->_minSectorSize._degrees) ||
       (_nodeSector->_deltaLongitude._degrees >= vectorSet->_minSectorSize._degrees)) {
     return true;
@@ -628,18 +619,18 @@ void VectorStreamingRenderer::Node::unload() {
   cancelTasks();
   
   if (_loadingFeatures) {
-    cancelLoadFeatures();
     _loadingFeatures = false;
+    cancelLoadFeatures();
   }
   
   if (_loadingChildren) {
-    _loadingChildren = true;
+    _loadingChildren = false;
     cancelLoadChildren();
   }
   
   if (_loadedFeatures) {
-    unloadFeatures();
     _loadedFeatures = false;
+    unloadFeatures();
   }
   
   unloadChildren();
@@ -684,10 +675,10 @@ void VectorStreamingRenderer::Node::childStopRendered() {
     if (_clusters->size() > 0) {
       if (_clusterMarksCount <= 0) {
         createClusterMarks();
-        //Checking to ensure no children marks are drawn.
-        if (_children != NULL && _children->size() > 0) {
-          for (int i=0; i<_children->size(); i++) {
-            Node *child = _children->at(i);
+        // Checking to ensure no children marks are drawn.
+        if ((_children != NULL) && (_children->size() > 0)) {
+          for (int i = 0; i < _children->size(); i++) {
+            Node* child = _children->at(i);
             if (child->_featureMarksCount > 0) {
               child->unload();
             }
@@ -701,7 +692,6 @@ void VectorStreamingRenderer::Node::childStopRendered() {
 long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
                                                 const VectorStreamingRenderer::VectorSet* vectorSet,
                                                 const Frustum* frustumInModelCoordinates,
-                                                const long long cameraTS,
                                                 GLState* glState) {
   long long renderedCount = 0;
 
@@ -730,7 +720,6 @@ long long VectorStreamingRenderer::Node::render(const G3MRenderContext* rc,
             renderedCount += child->render(rc,
                                            vectorSet,
                                            frustumInModelCoordinates,
-                                           cameraTS,
                                            glState);
           }
         }
@@ -1130,7 +1119,6 @@ RenderState VectorStreamingRenderer::VectorSet::getRenderState(const G3MRenderCo
 
 void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
                                                 const Frustum* frustumInModelCoordinates,
-                                                const long long cameraTS,
                                                 GLState* glState) {
   if (_rootNodesSize > 0) {
     long long renderedCount = 0;
@@ -1139,7 +1127,6 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
       renderedCount += rootNode->render(rc,
                                         this,
                                         frustumInModelCoordinates,
-                                        cameraTS,
                                         glState);
     }
     
@@ -1337,9 +1324,7 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
   if (_vectorSetsSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
     const Frustum* frustumInModelCoordinates = camera->getFrustumInModelCoordinates();
-    
-    const long long cameraTS = camera->getTimestamp();
-    
+        
     updateGLState(camera);
     _glState->setParent(glState);
     
@@ -1347,7 +1332,6 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
       VectorSet* vectorSector = _vectorSets[i];
       vectorSector->render(rc,
                            frustumInModelCoordinates,
-                           cameraTS,
                            _glState);
     }
   }

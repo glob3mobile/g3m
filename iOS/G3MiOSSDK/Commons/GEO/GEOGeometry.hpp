@@ -15,6 +15,7 @@
 class GEOSymbol;
 class GEOFeature;
 
+
 class GEOGeometry : public GEOObject {
 private:
   mutable GEOFeature* _feature;
@@ -31,7 +32,7 @@ public:
 
   virtual ~GEOGeometry() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
   }
 

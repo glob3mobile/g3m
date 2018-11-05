@@ -27,11 +27,10 @@ public:
                            const GEOLine2DStyle& style,
                            double deltaHeight = 0.0);
 
-  virtual ~GEOMultiLine2DMeshSymbol() {
+  ~GEOMultiLine2DMeshSymbol() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   Mesh* createMesh(const G3MRenderContext* rc) const;
