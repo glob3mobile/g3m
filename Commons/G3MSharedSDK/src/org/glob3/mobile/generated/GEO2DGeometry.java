@@ -53,8 +53,6 @@ public abstract class GEO2DGeometry extends GEOGeometry
     }
   }
 
-  public abstract GEO2DGeometry deepCopy();
-
   public boolean contain(Geodetic2D point)
   {
     return false;

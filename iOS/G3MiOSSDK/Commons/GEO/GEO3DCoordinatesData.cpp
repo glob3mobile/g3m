@@ -75,7 +75,3 @@ const Sector* GEO3DCoordinatesData::getSector() const {
   }
   return _sector;
 }
-
-long long GEO3DCoordinatesData::getCoordinatesCount() const {
-  return (_coordinates == NULL) ? 0 : _coordinates->size();
-}

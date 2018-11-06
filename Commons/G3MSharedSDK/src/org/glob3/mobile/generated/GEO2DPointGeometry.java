@@ -33,17 +33,6 @@ public class GEO2DPointGeometry extends GEO2DGeometry
     return symbolizer.createSymbols(this);
   }
 
-  protected final Sector calculateSector()
-  {
-    final double lowerLatRadians = _position._latitude._radians - 0.0001;
-    final double upperLatRadians = _position._latitude._radians + 0.0001;
-  
-    final double lowerLonRadians = _position._longitude._radians - 0.0001;
-    final double upperLonRadians = _position._longitude._radians + 0.0001;
-  
-    return Sector.newFromRadians(lowerLatRadians, lowerLonRadians, upperLatRadians, upperLonRadians);
-  }
-
 
   public GEO2DPointGeometry(Geodetic2D position)
   {
@@ -55,19 +44,9 @@ public class GEO2DPointGeometry extends GEO2DGeometry
     return _position;
   }
 
-  public final long getCoordinatesCount()
+  public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
-    return 1;
-  }
-
-  public final GEO2DPointGeometry deepCopy()
-  {
-    return new GEO2DPointGeometry(_position);
-  }
-
-  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
-  {
-    return vectorSet.createFeatureMark(node, this);
+    return vectorSet.symbolizeGeometry(node, this);
   }
 
 }

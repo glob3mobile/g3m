@@ -52,8 +52,6 @@ public:
   const Geodetic2D* get(size_t index) const {
     return _coordinates->at(index);
   }
-
-  virtual long long getCoordinatesCount() const;
   
 };
 

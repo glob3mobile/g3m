@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.EllipsoidalPlanet;
-import org.glob3.mobile.generated.GEO3DPolygonGeometry;
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOObject;
@@ -60,18 +59,18 @@ public class CaceresExtrusion {
       public void processTriangulationError(final GEOFeature geoFeature) {
          final GEOGeometry geometry = geoFeature.getGeometry();
          System.err.println("Error triangulation " + geoFeature + ", geometry:  " + geometry);
-         if (geometry instanceof GEO3DPolygonGeometry) {
-            final GEO3DPolygonGeometry polygon3D = (GEO3DPolygonGeometry) geometry;
-
-            _bitmap.drawPolygon( //
-                     polygon3D.getCoordinates(), //
-                     polygon3D.getHolesCoordinatesArray(), //
-                     new java.awt.Color(1, 0, 0, 0.5f), //
-                     new java.awt.Color(1, 0, 0, 0.9f), //
-                     true, //  drawVertices
-                     new java.awt.Color(1, 1, 0, 0.5f) //
-            );
-         }
+         // if (geometry instanceof GEO3DPolygonGeometry) {
+         //    final GEO3DPolygonGeometry polygon3D = (GEO3DPolygonGeometry) geometry;
+         //
+         //    _bitmap.drawPolygon( //
+         //             polygon3D.getCoordinates(), //
+         //             polygon3D.getHolesCoordinatesArray(), //
+         //             new java.awt.Color(1, 0, 0, 0.5f), //
+         //             new java.awt.Color(1, 0, 0, 0.9f), //
+         //             true, //  drawVertices
+         //             new java.awt.Color(1, 1, 0, 0.5f) //
+         //    );
+         // }
       }
 
 
@@ -112,11 +111,11 @@ public class CaceresExtrusion {
       System.out.println("CaceresExtrusion 0.1");
       System.out.println("--------------------\n");
 
-      //      final String name = "deportivo";
-      //      final String name = "cortijos";
+      // final String name = "deportivo";
+      // final String name = "cortijos";
       final String name = "casco_historico";
-      //      final String name = "nucleo_urbano";
-      //      final String name = "muralla";
+      // final String name = "nucleo_urbano";
+      // final String name = "muralla";
 
       final String inputFileName = name + ".geojson";
       final String outputFileName = name + "_3d.json";

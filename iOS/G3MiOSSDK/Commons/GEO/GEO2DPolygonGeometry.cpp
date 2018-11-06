@@ -37,24 +37,9 @@ std::vector<GEORasterSymbol*>* GEO2DPolygonGeometry::createRasterSymbols(const G
   return symbolizer->createSymbols(this);
 }
 
-long long GEO2DPolygonGeometry::getCoordinatesCount() const {
-  return (_polygonData == NULL) ? 0 : _polygonData->getCoordinatesCount();
-}
-
-GEO2DPolygonGeometry* GEO2DPolygonGeometry::deepCopy() const {
-  if (_polygonData != NULL) {
-    _polygonData->_retain();
-  }
-  return new GEO2DPolygonGeometry(_polygonData);
-}
-
 bool GEO2DPolygonGeometry::contain(const Geodetic2D& point) const {
   if (_polygonData) {
     return _polygonData->contains(point);
   }
   return false;
-}
-
-const Sector* GEO2DPolygonGeometry::calculateSector() const {
-  return (_polygonData == NULL) ? NULL : _polygonData->getSector();
 }

@@ -29,38 +29,18 @@ package org.glob3.mobile.generated;
 
 public abstract class GEOObject
 {
-  private Sector _sector;
-
-  protected abstract Sector calculateSector();
-
   protected GEOObject()
   {
-     _sector = null;
-
   }
 
   public void dispose()
   {
-    _sector = null;
   }
 
   public abstract void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel);
 
   public abstract void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer);
 
-  public abstract long getCoordinatesCount();
-
-  public abstract GEOObject deepCopy();
-
-  public abstract long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node);
-
-  public final Sector getSector()
-  {
-    if (_sector == null)
-    {
-      _sector = calculateSector();
-    }
-    return _sector;
-  }
+  public abstract int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node);
 
 }

@@ -31,17 +31,6 @@ public class GEO3DPointGeometry extends GEO3DGeometry
     return symbolizer.createSymbols(this);
   }
 
-  protected final Sector calculateSector()
-  {
-    final double lowerLatRadians = _position._latitude._radians - 0.0001;
-    final double upperLatRadians = _position._latitude._radians + 0.0001;
-  
-    final double lowerLonRadians = _position._longitude._radians - 0.0001;
-    final double upperLonRadians = _position._longitude._radians + 0.0001;
-  
-    return Sector.newFromRadians(lowerLatRadians, lowerLonRadians, upperLatRadians, upperLonRadians);
-  }
-
 
   public GEO3DPointGeometry(Geodetic3D position)
   {
@@ -53,19 +42,9 @@ public class GEO3DPointGeometry extends GEO3DGeometry
     return _position;
   }
 
-  public final long getCoordinatesCount()
+  public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
-    return 1;
-  }
-
-  public final GEO3DPointGeometry deepCopy()
-  {
-    return new GEO3DPointGeometry(_position);
-  }
-
-  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
-  {
-    return vectorSet.createFeatureMark(node, this);
+    return vectorSet.symbolizeGeometry(node, this);
   }
 
 }

@@ -9,6 +9,7 @@
 #define G3MiOSSDK_Mesh
 
 #include <stddef.h>
+#include <string>
 
 class Vector3D;
 class BoundingVolume;
@@ -29,10 +30,20 @@ private:
 
   MeshUserData* _userData;
 
+  std::string _token = "";
+
 protected:
   Mesh();
 
 public:
+  void setToken(const std::string& token) {
+    _token = token;
+  }
+
+  const std::string getToken() const {
+    return _token;
+  }
+
   void setEnable(bool enable);
 
   bool isEnable() const;

@@ -2,6 +2,8 @@
 
 package com.glob3mobile.tools.mesh;
 
+import java.text.DecimalFormat;
+
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONObject;
@@ -47,7 +49,7 @@ public class G3MeshMaterial {
       if (textureURL == null) {
          return "";
       }
-      return "(U/" + textureURL._path + ")";
+      return textureURL._path;
    }
 
 
@@ -55,7 +57,17 @@ public class G3MeshMaterial {
       if (color == null) {
          return "";
       }
-      return "(C/" + color._red + "/" + color._green + "/" + color._blue + "/" + color._alpha + ")";
+      final String alpha = (color._alpha == 1) ? "" : "/" + toString(color._alpha);
+
+      return toString(color._red) + "/" + toString(color._green) + "/" + toString(color._blue) + alpha;
+   }
+
+
+   private static final DecimalFormat df = new DecimalFormat("#.##");
+
+
+   private static String toString(final float f) {
+      return df.format(f);
    }
 
 

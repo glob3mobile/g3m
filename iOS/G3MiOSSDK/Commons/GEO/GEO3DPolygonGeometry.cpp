@@ -11,6 +11,7 @@
 #include "GEO3DPolygonData.hpp"
 #include "GEORasterSymbolizer.hpp"
 
+
 const std::vector<Geodetic3D*>* GEO3DPolygonGeometry::getCoordinates() const {
   return _polygonData->getCoordinates();
 }
@@ -36,24 +37,9 @@ std::vector<GEORasterSymbol*>* GEO3DPolygonGeometry::createRasterSymbols(const G
   return symbolizer->createSymbols(this);
 }
 
-long long GEO3DPolygonGeometry::getCoordinatesCount() const {
-  return (_polygonData == NULL) ? 0 : _polygonData->getCoordinatesCount();
-}
-
-GEO3DPolygonGeometry* GEO3DPolygonGeometry::deepCopy() const {
-  if (_polygonData != NULL) {
-    _polygonData->_retain();
-  }
-  return new GEO3DPolygonGeometry(_polygonData);
-}
-
 bool GEO3DPolygonGeometry::contain(const Geodetic3D& point) const {
-  if (_polygonData) {
+  if (_polygonData != NULL) {
     return _polygonData->contains(point);
   }
   return false;
-}
-
-const Sector* GEO3DPolygonGeometry::calculateSector() const {
-  return (_polygonData == NULL) ? NULL : _polygonData->getSector();
 }

@@ -69,7 +69,6 @@ private:
 #ifdef JAVA_CODE
     private GEORasterSymbolizer _symbolizer;
 #endif
-    const std::string _tileID;
     const Sector      _tileSector;
     const bool        _tileIsMercator;
     const int         _tileLevel;
@@ -85,7 +84,6 @@ private:
                             const int                  imageWidth,
                             const int                  imageHeight,
                             const GEORasterSymbolizer* symbolizer,
-                            const std::string&         tileID,
                             const Sector&              tileSector,
                             const bool                 tileIsMercator,
                             const int                  tileLevel) :
@@ -97,7 +95,6 @@ private:
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
     _symbolizer(symbolizer),
-    _tileID(tileID),
     _tileSector(tileSector),
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),

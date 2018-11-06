@@ -51,8 +51,6 @@ public abstract class GEO3DGeometry extends GEOGeometry
     }
   }
 
-  public abstract GEO3DGeometry deepCopy();
-
   public boolean contain(Geodetic3D point)
   {
     return false;

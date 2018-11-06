@@ -195,11 +195,21 @@ public class G3Mesh {
       final JSONObject result = new JSONObject();
 
       result.put("material", _material.getID());
-      result.put("primitive", _primitive._name);
-      result.put("pointSize", _pointSize);
-      result.put("lineWidth", _lineWidth);
-      result.put("depthTest", _depthTest);
-      result.put("verticesFormat", _verticesFormat._name);
+      if (_primitive != G3Mesh.Primitive.TRIANGLES) {
+         result.put("primitive", _primitive._name);
+      }
+      if (_pointSize != 1) {
+         result.put("pointSize", _pointSize);
+      }
+      if (_lineWidth != 1) {
+         result.put("lineWidth", _lineWidth);
+      }
+      if (!_depthTest) {
+         result.put("depthTest", _depthTest);
+      }
+      if (_verticesFormat != G3Mesh.VerticesFormat.CARTESIAN) {
+         result.put("verticesFormat", _verticesFormat._name);
+      }
       if (!_center.isZero()) {
          result.put("center", toJSON(_center));
       }

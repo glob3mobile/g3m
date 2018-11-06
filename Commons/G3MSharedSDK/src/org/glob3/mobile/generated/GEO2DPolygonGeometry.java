@@ -34,11 +34,6 @@ public class GEO2DPolygonGeometry extends GEO2DGeometry
     return symbolizer.createSymbols(this);
   }
 
-  protected final Sector calculateSector()
-  {
-    return (_polygonData == null) ? null : _polygonData.getSector();
-  }
-
   public GEO2DPolygonGeometry(GEO2DPolygonData polygonData)
   {
      _polygonData = polygonData;
@@ -66,20 +61,6 @@ public class GEO2DPolygonGeometry extends GEO2DGeometry
   public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getHolesCoordinatesArray()
   {
     return _polygonData.getHolesCoordinatesArray();
-  }
-
-  public final long getCoordinatesCount()
-  {
-    return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
-  }
-
-  public final GEO2DPolygonGeometry deepCopy()
-  {
-    if (_polygonData != null)
-    {
-      _polygonData._retain();
-    }
-    return new GEO2DPolygonGeometry(_polygonData);
   }
 
   public final boolean contain(Geodetic2D point)

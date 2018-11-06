@@ -33,6 +33,10 @@ package org.glob3.mobile.generated;
 //class GEO3DPointGeometry;
 //class MarksRenderer;
 //class Camera;
+//class GEOMeshes;
+//class Planet;
+//class Mesh;
+//class MeshRenderer;
 
 
 public class VectorStreamingRenderer extends DefaultRenderer
@@ -308,14 +312,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private GEOObject _features;
     private java.util.ArrayList<Node> _children;
 
-    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONBaseObject jsonBaseObject)
+    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONArray jsonArray)
     {
-      if (jsonBaseObject == null)
-      {
-        return null;
-      }
-    
-      final JSONArray jsonArray = jsonBaseObject.asArray();
       if ((jsonArray == null) || (jsonArray.size() == 0))
       {
         return null;
@@ -334,14 +332,38 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       return clusters;
     }
-    private java.util.ArrayList<VectorStreamingRenderer.Node> parseChildren(JSONBaseObject jsonBaseObject)
+    private GEOObject parseFeatures(JSONObject jsonObject, Planet planet)
     {
-      if (jsonBaseObject == null)
+      if (jsonObject == null)
       {
         return null;
       }
     
-      final JSONArray jsonArray = jsonBaseObject.asArray();
+      final String type = jsonObject.getAsString("type", "");
+      if (type.equals("MeshCollection"))
+      {
+        return parseMeshes(jsonObject.getAsObject("meshes"), planet);
+      }
+    
+      return GEOJSONParser.parse(jsonObject, _verbose);
+    }
+    private GEOMeshes parseMeshes(JSONObject jsonObject, Planet planet)
+    {
+      if (jsonObject == null)
+      {
+        return null;
+      }
+    
+      java.util.ArrayList<Mesh> meshes = G3MMeshParser.parse(jsonObject, planet);
+      if (meshes.isEmpty())
+      {
+        return null;
+      }
+    
+      return new GEOMeshes(meshes);
+    }
+    private java.util.ArrayList<VectorStreamingRenderer.Node> parseChildren(JSONArray jsonArray)
+    {
       if ((jsonArray == null) || (jsonArray.size() == 0))
       {
         return null;
@@ -426,9 +448,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         final JSONObject jsonObject = jsonBaseObject.asObject();
     
-        _clusters = parseClusters(jsonObject.get("clusters"));
-        _features = GEOJSONParser.parse(jsonObject.get("features").asObject(), _verbose);
-        _children = parseChildren(jsonObject.get("children"));
+        _clusters = parseClusters(jsonObject.getAsArray("clusters"));
+        _features = parseFeatures(jsonObject.getAsObject("features"), context.getPlanet());
+        _children = parseChildren(jsonObject.getAsArray("children"));
     
         if (jsonBaseObject != null)
            jsonBaseObject.dispose();
@@ -500,38 +522,57 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public static class NodeAllMarksFilter extends MarksFilter
+  public static class NodeAllMarkFilter extends MarkFilter
   {
-    private final String _nodeClusterToken;
-    private final String _nodeFeatureToken;
+    private final String _clusterToken;
+    private final String _featureToken;
 
-    public NodeAllMarksFilter(Node node)
+    public NodeAllMarkFilter(Node node)
     {
-       _nodeClusterToken = node.getClusterMarkToken();
-       _nodeFeatureToken = node.getFeatureMarkToken();
+       _clusterToken = node.getClusterToken();
+       _featureToken = node.getFeatureToken();
     }
 
     public final boolean test(Mark mark)
     {
       final String token = mark.getToken();
-      return ((_nodeClusterToken.equals(token)) || (_nodeFeatureToken.equals(token)));
+      return ((_clusterToken.equals(token)) || (_featureToken.equals(token)));
     }
 
   }
 
-  public static class NodeClusterMarksFilter extends MarksFilter
-  {
-    private final String _nodeClusterToken;
 
-    public NodeClusterMarksFilter(Node node)
+  public static class NodeAllMeshFilter extends MeshFilter
+  {
+    private final String _featureToken;
+
+    public NodeAllMeshFilter(Node node)
     {
-       _nodeClusterToken = node.getClusterMarkToken();
+       _featureToken = node.getFeatureToken();
+    }
+
+    public final boolean test(Mesh mesh)
+    {
+      final String token = mesh.getToken();
+      return (_featureToken.equals(token));
+    }
+
+  }
+
+
+  public static class NodeClusterMarkFilter extends MarkFilter
+  {
+    private final String _clusterToken;
+
+    public NodeClusterMarkFilter(Node node)
+    {
+       _clusterToken = node.getClusterToken();
     }
 
     public final boolean test(Mark mark)
     {
       final String token = mark.getToken();
-      return (_nodeClusterToken.equals(token));
+      return (_clusterToken.equals(token));
     }
 
   }
@@ -688,25 +729,22 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
 
 
-    private void removeMarks()
+    private void removeFeaturesSymbols()
     {
-      //  if (_verbose) {
-      //    ILogger::instance()->logInfo("\"%s\": Removing marks",
-      //                                 getFullName().c_str());
-      //  }
+      int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarkFilter(this), true, true); // deleteMarks -  animated
     
-      final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarksFilter(this), true, true); // deleteMarks -  animated
+      removed += _vectorSet.getMeshRenderer().removeAllMeshes(new NodeAllMeshFilter(this), true); // deleteMeshes
     
       if (_verbose && (removed > 0))
       {
-        ILogger.instance().logInfo("\"%s\": Removed %d marks",
+        ILogger.instance().logInfo("\"%s\": Removed %d features symbols",
                                    getFullName(),
                                    removed);
       }
     }
 
-    private long _clusterMarksCount;
-    private long _featureMarksCount;
+    private int _featureSymbolsCount;
+    private int _clusterSymbolsCount;
 
     private void childRendered()
     {
@@ -714,13 +752,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         if (_clusters.size() > 0)
         {
-          if (_clusterMarksCount > 0)
+          if (_clusterSymbolsCount > 0)
           {
-            int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarksFilter(this), true, true); // deleteMarks -  animated
+            final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
     
-            _clusterMarksCount -= removed;
+            _clusterSymbolsCount -= removed;
     
-            if (_verbose && removed > 0)
+            if (_verbose && (removed > 0))
             {
               ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
                                          getFullName(),
@@ -737,7 +775,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         if (_clusters.size() > 0)
         {
-          if (_clusterMarksCount <= 0)
+          if (_clusterSymbolsCount <= 0)
           {
             createClusterMarks();
             // Checking to ensure no children marks are drawn.
@@ -746,7 +784,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
               for (int i = 0; i < _children.size(); i++)
               {
                 Node child = _children.get(i);
-                if (child._featureMarksCount > 0)
+                if (child._featureSymbolsCount > 0)
                 {
                   child.unload();
                 }
@@ -759,13 +797,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void createClusterMarks()
     {
-      _clusterMarksCount = _vectorSet.createClusterMarks(this, _clusters);
+      _clusterSymbolsCount = _vectorSet.symbolizeClusters(this, _clusters);
     
-      if (_verbose && (_clusterMarksCount > 0))
+      if (_verbose && (_clusterSymbolsCount > 0))
       {
-        ILogger.instance().logInfo("\"%s\": Created %d cluster-marks",
+        ILogger.instance().logInfo("\"%s\": Created %d cluster-symbols",
                                    getFullName(),
-                                   _clusterMarksCount);
+                                   _clusterSymbolsCount);
       }
     }
 
@@ -878,8 +916,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _childrenRequestID = -1;
        _downloader = null;
        _clusters = null;
-       _clusterMarksCount = 0;
-       _featureMarksCount = 0;
+       _clusterSymbolsCount = 0;
+       _featureSymbolsCount = 0;
        _childrenTask = null;
        _featuresTask = null;
       setChildren(children);
@@ -914,7 +952,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _parent.childStopRendered();
       }
     
-      removeMarks();
+      removeFeaturesSymbols();
     }
 
     public final VectorSet getVectorSet()
@@ -927,12 +965,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _vectorSet.getName() + "/" + _id;
     }
 
-    public final String getFeatureMarkToken()
+    public final String getFeatureToken()
     {
       return _id + "_F_" + _vectorSet.getName();
     }
 
-    public final String getClusterMarkToken()
+    public final String getClusterToken()
     {
       return _id + "_C_" + _vectorSet.getName();
     }
@@ -952,7 +990,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           wasRendered = true;
           if (_loadedFeatures)
           {
-            renderedCount += _featureMarksCount + _clusterMarksCount;
+            renderedCount += _featureSymbolsCount + _clusterSymbolsCount;
             if (_parent != null)
             {
               _parent.childRendered();
@@ -1011,19 +1049,19 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       parsedChildren(children);
     
-      _featureMarksCount = 0;
+      _featureSymbolsCount = 0;
     
       if (features != null)
       {
-        _featureMarksCount = features.createFeatureMarks(_vectorSet, this);
+        _featureSymbolsCount = features.symbolize(_vectorSet, this);
         if (features != null)
            features.dispose();
     
-        if (_verbose && (_featureMarksCount > 0))
+        if (_verbose && (_featureSymbolsCount > 0))
         {
-          ILogger.instance().logInfo("\"%s\": Created %d feature-marks",
+          ILogger.instance().logInfo("\"%s\": Created %d feature-symbols",
                                      getFullName(),
-                                     _featureMarksCount);
+                                     _featureSymbolsCount);
         }
       }
     
@@ -1037,7 +1075,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _clusters = null;
         _clusters = null;
-        _clusterMarksCount = 0;
+        _clusterSymbolsCount = 0;
       }
     
       if (clusters != null)
@@ -1275,12 +1313,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
+    public abstract Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
 
-    public abstract Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry);
+    public abstract Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry);
 
     public abstract Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster);
-
   }
 
 
@@ -1565,37 +1602,43 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
+    public final int symbolizeGeometry(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(_metadata, node, geometry);
-      if (mark == null)
+      int count = 0;
+    
       {
-        return 0;
+        Mark mark = _symbolizer.createGeometryMark(_metadata, node, geometry);
+        if (mark != null)
+        {
+          count++;
+          mark.setToken(node.getFeatureToken());
+          getMarksRenderer().addMark(mark);
+        }
       }
     
-      mark.setToken(node.getFeatureMarkToken());
-      _renderer.getMarkRenderer().addMark(mark);
-    
-      return 1;
+      return count;
     }
 
-    public final long createFeatureMark(Node node, GEO3DPointGeometry geometry)
+    public final int symbolizeGeometry(Node node, GEO3DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(_metadata, node, geometry);
-      if (mark == null)
+      int count = 0;
+    
       {
-        return 0;
+        Mark mark = _symbolizer.createGeometryMark(_metadata, node, geometry);
+        if (mark != null)
+        {
+          count++;
+          mark.setToken(node.getFeatureToken());
+          getMarksRenderer().addMark(mark);
+        }
       }
     
-      mark.setToken(node.getFeatureMarkToken());
-      _renderer.getMarkRenderer().addMark(mark);
-    
-      return 1;
+      return count;
     }
 
-    public final long createClusterMarks(Node node, java.util.ArrayList<Cluster> clusters)
+    public final int symbolizeClusters(Node node, java.util.ArrayList<Cluster> clusters)
     {
-      long counter = 0;
+      int counter = 0;
       if (clusters != null)
       {
         final int clustersCount = clusters.size();
@@ -1607,8 +1650,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
             Mark mark = _symbolizer.createClusterMark(_metadata, node, cluster);
             if (mark != null)
             {
-              mark.setToken(node.getClusterMarkToken());
-              _renderer.getMarkRenderer().addMark(mark);
+              mark.setToken(node.getClusterToken());
+              _renderer.getMarksRenderer().addMark(mark);
               counter++;
             }
           }
@@ -1618,9 +1661,32 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return counter;
     }
 
+    public final int symbolizeMeshes(Node node, java.util.ArrayList<Mesh> meshes)
+    {
+      int count = 0;
+    
+      for (int i = 0; i < meshes.size(); i++)
+      {
+        Mesh mesh = meshes.get(i);
+        if (mesh != null)
+        {
+          count++;
+          mesh.setToken(node.getFeatureToken());
+          getMeshRenderer().addMesh(mesh);
+        }
+      }
+    
+      return count;
+    }
+
     public final MarksRenderer getMarksRenderer()
     {
-      return _renderer.getMarkRenderer();
+      return _renderer.getMarksRenderer();
+    }
+
+    public final MeshRenderer getMeshRenderer()
+    {
+      return _renderer.getMeshRenderer();
     }
 
   }
@@ -1628,7 +1694,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
 
 
-  private MarksRenderer _markRenderer;
+  private MarksRenderer _marksRenderer;
+  private MeshRenderer _meshRenderer;
 
   private int _vectorSetsSize;
   private java.util.ArrayList<VectorSet> _vectorSets = new java.util.ArrayList<VectorSet>();
@@ -1650,9 +1717,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public VectorStreamingRenderer(MarksRenderer markRenderer)
+  public VectorStreamingRenderer(MarksRenderer marksRenderer, MeshRenderer meshRenderer)
   {
-     _markRenderer = markRenderer;
+     _marksRenderer = marksRenderer;
+     _meshRenderer = meshRenderer;
      _vectorSetsSize = 0;
      _glState = new GLState();
   }
@@ -1671,9 +1739,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     super.dispose();
   }
 
-  public final MarksRenderer getMarkRenderer()
+  public final MarksRenderer getMarksRenderer()
   {
-    return _markRenderer;
+    return _marksRenderer;
+  }
+
+  public final MeshRenderer getMeshRenderer()
+  {
+    return _meshRenderer;
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -1771,9 +1844,5 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final MarksRenderer getMarksRenderer()
-  {
-    return _markRenderer;
-  }
 
 }

@@ -20,6 +20,7 @@
 class Mesh;
 class Color;
 class Camera;
+class MeshFilter;
 
 
 class MeshLoadListener {
@@ -233,8 +234,10 @@ public:
                  listener,
                  deleteListener);
   }
-  
-  
+
+  size_t removeAllMeshes(const MeshFilter& filter,
+                         bool deleteMeshes);
+
 };
 
 #endif

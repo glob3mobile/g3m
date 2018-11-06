@@ -43,8 +43,6 @@ public:
 
   const Sector* getSector() const;
 
-  long long getCoordinatesCount() const;
-
 };
 
 #endif
