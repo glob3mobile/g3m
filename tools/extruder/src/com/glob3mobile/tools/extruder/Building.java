@@ -3,13 +3,11 @@
 package com.glob3mobile.tools.extruder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Planet;
@@ -145,17 +143,36 @@ public class Building {
 
    public G3Mesh createMesh(final Planet planet,
                             final int floatPrecision) {
-      final double wallsLowerHeight = getWallsLowerHeight(_exteriorWall, _interiorWalls);
+      return createMesh( //
+               _roofVertices, //
+               _roofTriangles, //
+               _exteriorWall, //
+               _interiorWalls, //
+               _material, //
+               planet, //
+               floatPrecision);
+   }
 
-      final Vector3D center = getCenter(planet, floatPrecision, wallsLowerHeight);
 
-      final List<Vector3F> vertices = new ArrayList<>(_roofVertices.size());
-      for (final Vector3D vertex : _roofVertices) {
+   public static G3Mesh createMesh(final List<Vector3D> roofVertices,
+                                   final List<Triangle> roofTriangles,
+                                   final Wall exteriorWall,
+                                   final List<Wall> interiorWalls,
+                                   final G3MeshMaterial material,
+                                   final Planet planet,
+                                   final int floatPrecision) {
+
+      final double wallsLowerHeight = getWallsLowerHeight(exteriorWall, interiorWalls);
+
+      final Vector3D center = getCenter(roofVertices, planet, floatPrecision, wallsLowerHeight);
+
+      final List<Vector3F> vertices = new ArrayList<>(roofVertices.size());
+      for (final Vector3D vertex : roofVertices) {
          addVertex(planet, vertices, center, vertex._x, vertex._y, vertex._z);
       }
 
       final List<Short> indices = new ArrayList<>();
-      for (final Triangle triangle : _roofTriangles) {
+      for (final Triangle triangle : roofTriangles) {
          indices.add(toShort(triangle._vertex0));
          indices.add(toShort(triangle._vertex1));
          indices.add(toShort(triangle._vertex2));
@@ -163,13 +180,13 @@ public class Building {
 
       //      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last roof vertex before creating the walls
       {
-         processWall(planet, vertices, indices, center, _exteriorWall);
-         for (final Wall wall : _interiorWalls) {
+         processWall(planet, vertices, indices, center, exteriorWall);
+         for (final Wall wall : interiorWalls) {
             processWall(planet, vertices, indices, center, wall);
          }
       }
 
-      final List<Vector3F> normals = createNormals(planet, vertices, indices, _roofVertices);
+      final List<Vector3F> normals = createNormals(planet, vertices, indices, roofVertices);
 
       final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
                                                                     : G3Mesh.VerticesFormat.CARTESIAN;
@@ -183,8 +200,8 @@ public class Building {
                null, // colors
                null, // texCoords
                indices, //
-               _material, //
-               _material._depthTest //
+               material, //
+               material._depthTest //
       );
 
    }
@@ -209,9 +226,10 @@ public class Building {
    }
 
 
-   private Vector3D getCenter(final Planet planet,
-                              final int floatPrecision,
-                              final double lowerHeight) {
+   private static Vector3D getCenter(final List<Vector3D> roofVertices,
+                                     final Planet planet,
+                                     final int floatPrecision,
+                                     final double lowerHeight) {
       double minX = Double.POSITIVE_INFINITY;
       double minY = Double.POSITIVE_INFINITY;
       double minZ = lowerHeight;
@@ -219,7 +237,7 @@ public class Building {
       double maxY = Double.NEGATIVE_INFINITY;
       double maxZ = Double.NEGATIVE_INFINITY;
 
-      for (final Vector3D vertex : _roofVertices) {
+      for (final Vector3D vertex : roofVertices) {
          final double x = vertex._x;
          final double y = vertex._y;
          final double z = vertex._z;
@@ -253,10 +271,10 @@ public class Building {
    }
 
 
-   private Vector3D createCenter(final Planet planet,
-                                 final double x,
-                                 final double y,
-                                 final double z) {
+   private static Vector3D createCenter(final Planet planet,
+                                        final double x,
+                                        final double y,
+                                        final double z) {
       return (planet == null) ? new Vector3D(x, y, z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), z);
    }
 
@@ -402,95 +420,19 @@ public class Building {
 
 
    public Map<String, Object> createFeatureProperties(final double minHeight) {
-      final Map<String, Object> result = new LinkedHashMap<>(5);
+      final Map<String, Object> result = new LinkedHashMap<>();
 
-      result.put("roof_vertices", verticesToJSON(_roofVertices));
-      result.put("roof_triangles", trianglesToJSON(_roofTriangles));
+      result.put("roof_vertices", ExtruderJSON.verticesToJSON(_roofVertices));
+      result.put("roof_triangles", ExtruderJSON.trianglesToJSON(_roofTriangles));
 
-      result.put("exterior_wall", wallToJSON(_exteriorWall));
-      result.put("interior_walls", wallsToJSON(_interiorWalls));
+      result.put("exterior_wall", ExtruderJSON.wallToJSON(_exteriorWall));
+      result.put("interior_walls", ExtruderJSON.wallsToJSON(_interiorWalls));
 
-      result.put("material", materialToJSON(_material));
+      result.put("material", ExtruderJSON.materialToJSON(_material));
 
       result.put("size", calculateSize(minHeight));
 
       return result;
-   }
-
-
-   private static List<Double> verticesToJSON(final List<Vector3D> vertices) {
-      final List<Double> result = new ArrayList<>(vertices.size() * 3);
-      for (final Vector3D vertex : vertices) {
-         result.add(vertex._x);
-         result.add(vertex._y);
-         result.add(vertex._z);
-      }
-      return result;
-   }
-
-
-   private List<Integer> trianglesToJSON(final List<Triangle> triangles) {
-      final List<Integer> result = new ArrayList<>(triangles.size() * 3);
-      for (final Triangle triangle : triangles) {
-         result.add(triangle._vertex0);
-         result.add(triangle._vertex1);
-         result.add(triangle._vertex2);
-      }
-      return result;
-   }
-
-
-   private List<Map<String, Object>> wallToJSON(final Wall wall) {
-      final List<WallQuad> quads = wall._quads;
-
-      final List<Map<String, Object>> result = new ArrayList<>(quads.size());
-      for (final WallQuad quad : quads) {
-         result.add(wallQuadToJSON(quad));
-      }
-      return result;
-   }
-
-
-   private Map<String, Object> wallQuadToJSON(final WallQuad quad) {
-      final Map<String, Object> result = new LinkedHashMap<>(3);
-
-      result.put("top_corner_0", geodetic3DToJSON(quad._topCorner0));
-      result.put("top_corner_1", geodetic3DToJSON(quad._topCorner1));
-
-      result.put("lower_height", quad._lowerHeight);
-
-      return result;
-   }
-
-
-   private List<Double> geodetic3DToJSON(final Geodetic3D position) {
-      return Arrays.asList( //
-               position._latitude._degrees, //
-               position._longitude._degrees, //
-               position._height);
-   }
-
-
-   private List<List<Map<String, Object>>> wallsToJSON(final List<Wall> walls) {
-      final List<List<Map<String, Object>>> result = new ArrayList<>(walls.size());
-      for (final Wall wall : walls) {
-         result.add(wallToJSON(wall));
-      }
-      return result;
-   }
-
-
-   private Map<String, Object> materialToJSON(final G3MeshMaterial material) {
-      final Map<String, Object> result = new LinkedHashMap<>(1);
-      result.put("color", colorToJSON(material._color));
-      result.put("depth_test", material._depthTest);
-
-      return result;
-   }
-
-
-   private List<Float> colorToJSON(final Color color) {
-      return Arrays.asList(color._red, color._green, color._blue, color._alpha);
    }
 
 

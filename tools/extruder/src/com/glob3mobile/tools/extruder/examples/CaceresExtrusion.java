@@ -2,7 +2,6 @@
 
 package com.glob3mobile.tools.extruder.examples;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,8 +11,6 @@ import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.extruder.Building;
 import com.glob3mobile.tools.extruder.ExtruderPolygon;
@@ -34,7 +31,7 @@ public class CaceresExtrusion {
 
       private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW, true);
 
-      private GEOBitmap _bitmap;
+      //      private GEOBitmap _bitmap;
 
 
       @Override
@@ -76,11 +73,11 @@ public class CaceresExtrusion {
 
       @Override
       public void onRootGEOObject(final GEOObject geoObject) {
-         final Sector sector = geoObject.getSector();
-
-         final int width = 2048;
-         final int height = (int) Math.round((width / sector._deltaLongitude._radians) * sector._deltaLatitude._radians);
-         _bitmap = new GEOBitmap(sector, width, height, java.awt.Color.BLACK);
+         //         final Sector sector = geoObject.getSector();
+         //
+         //         final int width = 2048;
+         //         final int height = (int) Math.round((width / sector._deltaLongitude._radians) * sector._deltaLatitude._radians);
+         //         _bitmap = new GEOBitmap(sector, width, height, java.awt.Color.BLACK);
       }
 
 
@@ -89,8 +86,8 @@ public class CaceresExtrusion {
       }
 
 
-      private void save(final String fileName) throws IOException {
-         _bitmap.save(new File(fileName));
+      private void save(final String fileName) {
+         //         _bitmap.save(new File(fileName));
       }
 
 
@@ -120,9 +117,8 @@ public class CaceresExtrusion {
       final String inputFileName = name + ".geojson";
       final String outputFileName = name + "_3d.json";
 
-      final int floatPrecision = 3;
-
       final Planet planet = EllipsoidalPlanet.createEarth();
+      final int floatPrecision = 3;
 
       System.out.println(name);
       final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();

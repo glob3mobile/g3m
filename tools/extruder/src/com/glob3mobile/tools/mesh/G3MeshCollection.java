@@ -8,9 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONObject;
-
 
 public class G3MeshCollection {
 
@@ -29,18 +26,18 @@ public class G3MeshCollection {
    }
 
 
-   public JSONObject toJSON() {
+   public Map<String, Object> toJSON() {
       validateMeshes();
 
-      final JSONObject result = new JSONObject();
+      final Map<String, Object> result = new HashMap<>();
       result.put("materials", materialsJSON(_meshes));
       result.put("meshes", meshesJSON(_meshes));
       return result;
    }
 
 
-   private static JSONArray meshesJSON(final List<G3Mesh> meshes) {
-      final JSONArray result = new JSONArray();
+   private static List<Map<String, Object>> meshesJSON(final List<G3Mesh> meshes) {
+      final List<Map<String, Object>> result = new ArrayList<>();
       for (final G3Mesh mesh : meshes) {
          result.add(mesh.toJSON());
       }
@@ -48,8 +45,8 @@ public class G3MeshCollection {
    }
 
 
-   private static JSONArray materialsJSON(final List<G3Mesh> meshes) {
-      final JSONArray result = new JSONArray();
+   private static List<Map<String, Object>> materialsJSON(final List<G3Mesh> meshes) {
+      final List<Map<String, Object>> result = new ArrayList<>();
       final Map<String, G3MeshMaterial> consolidatedMaterials = consolidateMaterials(meshes);
       for (final G3MeshMaterial material : consolidatedMaterials.values()) {
          result.add(material.toJSON());
@@ -71,11 +68,6 @@ public class G3MeshCollection {
 
       return result;
    }
-
-
-   //   public void add(final G3Mesh mesh) {
-   //      _meshes.add(mesh);
-   //   }
 
 
 }

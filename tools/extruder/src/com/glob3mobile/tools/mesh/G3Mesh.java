@@ -2,12 +2,12 @@
 
 package com.glob3mobile.tools.mesh;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.Vector3F;
@@ -138,8 +138,8 @@ public class G3Mesh {
    }
 
 
-   private static JSONBaseObject toColorJSON(final List<Color> colors) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toColorJSON(final List<Color> colors) {
+      final List<Float> result = new ArrayList<>();
       for (final Color color : colors) {
          result.add(color._red);
          result.add(color._green);
@@ -150,8 +150,8 @@ public class G3Mesh {
    }
 
 
-   private static JSONArray toJSON(final Vector3D point) {
-      final JSONArray result = new JSONArray();
+   private static List<Double> toJSON(final Vector3D point) {
+      final List<Double> result = new ArrayList<>();
       result.add(point._x);
       result.add(point._y);
       result.add(point._z);
@@ -159,8 +159,8 @@ public class G3Mesh {
    }
 
 
-   private static JSONArray toVector3FJSON(final List<Vector3F> vertices) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toVector3FJSON(final List<Vector3F> vertices) {
+      final List<Float> result = new ArrayList<>();
       for (final Vector3F vertex : vertices) {
          result.add(vertex._x);
          result.add(vertex._y);
@@ -170,8 +170,8 @@ public class G3Mesh {
    }
 
 
-   private static JSONArray toVector2FJSON(final List<Vector2F> texCoords) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toVector2FJSON(final List<Vector2F> texCoords) {
+      final List<Float> result = new ArrayList<>();
       for (final Vector2F vertex : texCoords) {
          result.add(vertex._x);
          result.add(vertex._y);
@@ -180,8 +180,8 @@ public class G3Mesh {
    }
 
 
-   private static JSONArray toShortJSON(final List<Short> indices) {
-      final JSONArray result = new JSONArray();
+   private static List<Short> toShortJSON(final List<Short> indices) {
+      final List<Short> result = new ArrayList<>();
       for (final short index : indices) {
          result.add(index);
       }
@@ -189,10 +189,10 @@ public class G3Mesh {
    }
 
 
-   public JSONObject toJSON() {
+   public Map<String, Object> toJSON() {
       validate();
 
-      final JSONObject result = new JSONObject();
+      final Map<String, Object> result = new HashMap<>();
 
       result.put("material", _material.getID());
       if (_primitive != G3Mesh.Primitive.TRIANGLES) {

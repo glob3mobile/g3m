@@ -3,10 +3,12 @@
 package com.glob3mobile.tools.mesh;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.URL;
 
 
@@ -57,9 +59,9 @@ public class G3MeshMaterial {
       if (color == null) {
          return "";
       }
-      final String alpha = (color._alpha == 1) ? "" : "/" + toString(color._alpha);
+      final String alpha = (color._alpha == 1) ? "" : "_" + toString(color._alpha);
 
-      return toString(color._red) + "/" + toString(color._green) + "/" + toString(color._blue) + alpha;
+      return toString(color._red) + "_" + toString(color._green) + "_" + toString(color._blue) + alpha;
    }
 
 
@@ -108,10 +110,10 @@ public class G3MeshMaterial {
    }
 
 
-   public JSONObject toJSON() {
+   public Map<String, Object> toJSON() {
       validate();
 
-      final JSONObject result = new JSONObject();
+      final Map<String, Object> result = new HashMap<>();
 
       result.put("id", getID());
       if (_color != null) {
@@ -125,8 +127,8 @@ public class G3MeshMaterial {
    }
 
 
-   private static JSONArray toJSON(final Color color) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toJSON(final Color color) {
+      final List<Float> result = new ArrayList<>();
       result.add(color._red);
       result.add(color._green);
       result.add(color._blue);

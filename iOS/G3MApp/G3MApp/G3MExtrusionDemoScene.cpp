@@ -21,6 +21,7 @@
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/G3MContext.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
+#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,
@@ -81,13 +82,28 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
                                                                                  -6.37246061136657449,
                                                                                  4100) );
 
-  context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
-                                          // URL("file:///cortijos_3d.json"),
-                                          // URL("file:///deportivo_3d.json"),
-                                          1000000,
-                                          TimeInterval::zero(),
-                                          false,
-                                          new G3MeshBufferDownloadListener(context->getPlanet(),
-                                                                           getModel()->getMeshRenderer()),
-                                          true);
+//  context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
+//                                          1000000,
+//                                          TimeInterval::zero(),
+//                                          false,
+//                                          new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                           getModel()->getMeshRenderer()),
+//                                          true);
+
+  VectorStreamingRenderer* renderer = getModel()->getVectorStreamingRenderer();
+  renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
+                         "3dstreaming",            // name
+                         "",                       // properties
+                         NULL,                     // symbolizer
+                         true,                     // deleteSymbolizer
+                         DownloadPriority::HIGHER,
+                         TimeInterval::zero(),
+                         true,                     // readExpired
+                         true,                     // verbose
+                         false,                    // haltOnError
+                         VectorStreamingRenderer::Format::PLAIN_FILES,
+                         Angle::fromDegrees(90),   // minSectorSize
+                         12500000 / 500            // minProjectedArea
+                         );
+
 }

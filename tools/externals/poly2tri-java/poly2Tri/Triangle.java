@@ -9,9 +9,9 @@ public class Triangle {
    public final int _vertex2;
 
 
-   Triangle(final int vertex0,
-            final int vertex1,
-            final int vertex2) {
+   public Triangle(final int vertex0,
+                   final int vertex1,
+                   final int vertex2) {
       _vertex0 = vertex0;
       _vertex1 = vertex1;
       _vertex2 = vertex2;
