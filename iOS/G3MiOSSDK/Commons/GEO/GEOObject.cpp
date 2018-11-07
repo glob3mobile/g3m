@@ -8,16 +8,9 @@
 
 #include "GEOObject.hpp"
 
-#include "Sector.hpp"
 
-
-GEOObject::~GEOObject() {
-  delete _sector;
+GEOObject::GEOObject() {
 }
 
-const Sector* GEOObject::getSector() const {
-  if (_sector == NULL) {
-    _sector = calculateSector();
-  }
-  return _sector;
+GEOObject::~GEOObject() {
 }

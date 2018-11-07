@@ -94,7 +94,7 @@ void G3MDemoBuilder::build() {
   NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(10);
   builder->addRenderer(nonOverlappingMarksRenderer);
 
-  VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer);
+  VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer, meshRenderer);
   builder->addRenderer(vectorStreamingRenderer);
 
   //Uncomment to see render debug mesh on top of tiles

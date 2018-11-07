@@ -51,6 +51,8 @@ public class PlanetRendererBuilder
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _tileTextureDownloadPriority;
 
+  private boolean _verboseTileTexturizerErrors;
+
   private ElevationDataProvider _elevationDataProvider;
   private DEMProvider _demProvider;
   private float _verticalExaggeration;
@@ -67,7 +69,6 @@ public class PlanetRendererBuilder
     {
       _tileTessellator = createTileTessellator();
     }
-  
     return _tileTessellator;
   }
 
@@ -80,9 +81,8 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackgroundImageBuilder());
+      _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageBuilder(), getVerboseTileTexturizerErrors());
     }
-  
     return _texturizer;
   }
 
@@ -98,7 +98,6 @@ public class PlanetRendererBuilder
     {
       _layerSet = createLayerSet();
     }
-  
     return _layerSet;
   }
 
@@ -113,7 +112,6 @@ public class PlanetRendererBuilder
     {
       _parameters = createPlanetRendererParameters();
     }
-  
     return _parameters;
   }
 
@@ -126,6 +124,11 @@ public class PlanetRendererBuilder
   {
     return _showStatistics;
   }
+  private boolean getVerboseTileTexturizerErrors()
+  {
+    return _verboseTileTexturizerErrors;
+  }
+
 
   /**
    * Returns the renderDebug flag.
@@ -304,6 +307,7 @@ public class PlanetRendererBuilder
      _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
      _tileLODTester = null;
      _tileVisibilityTester = null;
+     _verboseTileTexturizerErrors = true;
   }
   public void dispose()
   {
@@ -407,6 +411,10 @@ public class PlanetRendererBuilder
   public final void setShowStatistics(boolean showStatistics)
   {
     _showStatistics = showStatistics;
+  }
+  public final void setVerboseTileTexturizerErrors(boolean verboseTileTexturizerErrors)
+  {
+    _verboseTileTexturizerErrors = verboseTileTexturizerErrors;
   }
   public final void setRenderDebug(boolean renderDebug)
   {

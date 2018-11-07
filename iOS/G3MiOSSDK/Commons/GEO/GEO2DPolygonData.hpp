@@ -33,8 +33,6 @@ public:
     return _holesCoordinatesArray;
   }
 
-  long long getCoordinatesCount() const;
-
   bool contains(const Geodetic2D& point) const;
 
 };

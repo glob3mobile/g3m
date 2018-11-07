@@ -17,34 +17,26 @@
 class GEO2DPointGeometry : public GEO2DGeometry {
 private:
   const Geodetic2D _position;
-
+  
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
-
+  
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
-
-  const Sector* calculateSector() const;
-
+    
 public:
-
+  
   GEO2DPointGeometry(const Geodetic2D& position) :
   _position(position)
   {
   }
-
+  
   const Geodetic2D getPosition() const {
     return _position;
   }
-
-  long long getCoordinatesCount() const {
-    return 1;
-  }
-
-  GEO2DPointGeometry* deepCopy() const;
-
-  long long createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                               const VectorStreamingRenderer::Node*      node) const;
-
+    
+  int symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
+                const VectorStreamingRenderer::Node*      node) const;
+  
 };
 
 #endif

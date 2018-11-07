@@ -12,12 +12,11 @@ import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Sector;
 
 
@@ -103,8 +102,8 @@ public class GEOBitmap {
    }
 
 
-   public void drawPolygon(final ArrayList<Geodetic3D> outerRing,
-                           final ArrayList<ArrayList<Geodetic3D>> holesRings,
+   public void drawPolygon(final List<Geodetic2D> outerRing,
+                           final List<? extends List<Geodetic2D>> holesRings,
                            final Color fillColor,
                            final Color borderColor,
                            final boolean drawVertices,
@@ -118,13 +117,13 @@ public class GEOBitmap {
       _g.draw(shape);
 
       if (drawVertices) {
-         for (final Geodetic3D position : outerRing) {
-            drawPoint(position.asGeodetic2D(), 2, 2, verticesColor);
+         for (final Geodetic2D position : outerRing) {
+            drawPoint(position, 2, 2, verticesColor);
          }
          if (holesRings != null) {
-            for (final ArrayList<Geodetic3D> holeRing : holesRings) {
-               for (final Geodetic3D position : holeRing) {
-                  drawPoint(position.asGeodetic2D(), 2, 2, verticesColor);
+            for (final List<Geodetic2D> holeRing : holesRings) {
+               for (final Geodetic2D position : holeRing) {
+                  drawPoint(position, 2, 2, verticesColor);
                }
             }
          }
@@ -132,15 +131,15 @@ public class GEOBitmap {
    }
 
 
-   private Shape createShape(final ArrayList<Geodetic3D> outerRing,
-                             final ArrayList<ArrayList<Geodetic3D>> holesRings) {
+   private Shape createShape(final List<Geodetic2D> outerRing,
+                             final List<? extends List<Geodetic2D>> holesRings) {
       final Polygon outer = createPolygon(outerRing);
       if ((holesRings == null) || holesRings.isEmpty()) {
          return outer;
       }
 
       final Area a = new Area(outer);
-      for (final ArrayList<Geodetic3D> holeRing : holesRings) {
+      for (final List<Geodetic2D> holeRing : holesRings) {
          final Area hole = new Area(createPolygon(holeRing));
          a.subtract(hole);
       }
@@ -149,9 +148,9 @@ public class GEOBitmap {
    }
 
 
-   private Polygon createPolygon(final ArrayList<Geodetic3D> positions) {
+   private Polygon createPolygon(final List<Geodetic2D> positions) {
       final Polygon p = new Polygon();
-      for (final Geodetic3D position : positions) {
+      for (final Geodetic2D position : positions) {
          final int x = Math.round((float) (_sector.getUCoordinate(position._longitude) * _width));
          final int y = Math.round((float) (_sector.getVCoordinate(position._latitude) * _height));
          p.addPoint(x, y);

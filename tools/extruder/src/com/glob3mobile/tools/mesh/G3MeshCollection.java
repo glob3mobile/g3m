@@ -5,11 +5,9 @@ package com.glob3mobile.tools.mesh;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONObject;
 
 
 public class G3MeshCollection {
@@ -22,25 +20,16 @@ public class G3MeshCollection {
    }
 
 
-   private void validateMeshes() {
-      for (final G3Mesh mesh : _meshes) {
-         mesh.validate();
-      }
-   }
-
-
-   public JSONObject toJSON() {
-      validateMeshes();
-
-      final JSONObject result = new JSONObject();
+   public Map<String, Object> toJSON() {
+      final Map<String, Object> result = new LinkedHashMap<>();
       result.put("materials", materialsJSON(_meshes));
       result.put("meshes", meshesJSON(_meshes));
       return result;
    }
 
 
-   private static JSONArray meshesJSON(final List<G3Mesh> meshes) {
-      final JSONArray result = new JSONArray();
+   private static List<Map<String, Object>> meshesJSON(final List<G3Mesh> meshes) {
+      final List<Map<String, Object>> result = new ArrayList<>();
       for (final G3Mesh mesh : meshes) {
          result.add(mesh.toJSON());
       }
@@ -48,8 +37,8 @@ public class G3MeshCollection {
    }
 
 
-   private static JSONArray materialsJSON(final List<G3Mesh> meshes) {
-      final JSONArray result = new JSONArray();
+   private static List<Map<String, Object>> materialsJSON(final List<G3Mesh> meshes) {
+      final List<Map<String, Object>> result = new ArrayList<>();
       final Map<String, G3MeshMaterial> consolidatedMaterials = consolidateMaterials(meshes);
       for (final G3MeshMaterial material : consolidatedMaterials.values()) {
          result.add(material.toJSON());
@@ -73,9 +62,25 @@ public class G3MeshCollection {
    }
 
 
-   //   public void add(final G3Mesh mesh) {
-   //      _meshes.add(mesh);
-   //   }
+   public G3MeshCollection optimize() {
+      final Map<String, List<G3Mesh>> meshesByMaterials = new HashMap<>();
+      for (final G3Mesh mesh : _meshes) {
+         final String materialID = mesh.getMaterial().getID();
+         List<G3Mesh> group = meshesByMaterials.get(materialID);
+         if (group == null) {
+            group = new ArrayList<>();
+            meshesByMaterials.put(materialID, group);
+         }
+         group.add(mesh);
+      }
+
+      final List<G3Mesh> meshes = new ArrayList<>();
+      for (final List<G3Mesh> group : meshesByMaterials.values()) {
+         final List<G3Mesh> consolidated = G3Mesh.consolidate(group);
+         meshes.addAll(consolidated);
+      }
+      return new G3MeshCollection(meshes);
+   }
 
 
 }

@@ -23,15 +23,6 @@ public class GEO2DMultiLineStringGeometry extends GEO2DGeometry
 {
   private final GEO2DCoordinatesArrayData _coordinatesArrayData;
 
-  private GEO2DMultiLineStringGeometry(GEO2DCoordinatesArrayData coordinatesArrayData)
-  {
-     _coordinatesArrayData = coordinatesArrayData;
-    if (_coordinatesArrayData != null)
-    {
-      _coordinatesArrayData._retain();
-    }
-  }
-
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
@@ -40,11 +31,6 @@ public class GEO2DMultiLineStringGeometry extends GEO2DGeometry
   protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
-  }
-
-  protected final Sector calculateSector()
-  {
-    return (_coordinatesArrayData == null) ? null : _coordinatesArrayData.getSector();
   }
 
 
@@ -66,16 +52,6 @@ public class GEO2DMultiLineStringGeometry extends GEO2DGeometry
   public final GEO2DCoordinatesArrayData getCoordinatesArray()
   {
     return _coordinatesArrayData;
-  }
-
-  public final long getCoordinatesCount()
-  {
-    return (_coordinatesArrayData == null) ? 0 : _coordinatesArrayData.getCoordinatesCount();
-  }
-
-  public final GEO2DMultiLineStringGeometry deepCopy()
-  {
-    return new GEO2DMultiLineStringGeometry(_coordinatesArrayData);
   }
 
 }

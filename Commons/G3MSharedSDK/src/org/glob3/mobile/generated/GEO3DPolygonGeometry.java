@@ -32,11 +32,6 @@ public class GEO3DPolygonGeometry extends GEO3DGeometry
     return symbolizer.createSymbols(this);
   }
 
-  protected final Sector calculateSector()
-  {
-    return (_polygonData == null) ? null : _polygonData.getSector();
-  }
-
   public GEO3DPolygonGeometry(GEO3DPolygonData polygonData)
   {
      _polygonData = polygonData;
@@ -64,20 +59,6 @@ public class GEO3DPolygonGeometry extends GEO3DGeometry
   public final java.util.ArrayList<java.util.ArrayList<Geodetic3D>> getHolesCoordinatesArray()
   {
     return _polygonData.getHolesCoordinatesArray();
-  }
-
-  public final long getCoordinatesCount()
-  {
-    return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
-  }
-
-  public final GEO3DPolygonGeometry deepCopy()
-  {
-    if (_polygonData != null)
-    {
-      _polygonData._retain();
-    }
-    return new GEO3DPolygonGeometry(_polygonData);
   }
 
   public final boolean contain(Geodetic3D point)

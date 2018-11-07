@@ -2,9 +2,13 @@
 
 package com.glob3mobile.tools.mesh;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.URL;
 
 
@@ -24,22 +28,36 @@ public class G3MeshMaterial {
 
    public G3MeshMaterial(final Color color,
                          final boolean depthTest) {
-      _color = color;
-      _textureURL = null;
-      _depthTest = depthTest;
+      this(color, null, depthTest);
    }
 
 
    public G3MeshMaterial(final URL textureURL,
                          final boolean depthTest) {
-      _color = null;
-      _textureURL = textureURL;
-      _depthTest = depthTest;
+      this(null, textureURL, depthTest);
    }
 
 
-   String getID() {
-      return getID(_color) + getID(_textureURL);
+   private G3MeshMaterial(final Color color,
+                          final URL textureURL,
+                          final boolean depthTest) {
+      _color = color;
+      _textureURL = textureURL;
+      _depthTest = depthTest;
+
+      validate();
+   }
+
+
+   private void validate() {
+      if ((_color == null) && ((_textureURL == null) || _textureURL.isNull())) {
+         throw new RuntimeException("Material with no color neither texture");
+      }
+   }
+
+
+   public String getID() {
+      return getID(_color) + getID(_textureURL) + (_depthTest ? "T" : "F");
    }
 
 
@@ -47,7 +65,7 @@ public class G3MeshMaterial {
       if (textureURL == null) {
          return "";
       }
-      return "(U/" + textureURL._path + ")";
+      return textureURL._path;
    }
 
 
@@ -55,7 +73,17 @@ public class G3MeshMaterial {
       if (color == null) {
          return "";
       }
-      return "(C/" + color._red + "/" + color._green + "/" + color._blue + "/" + color._alpha + ")";
+      final String alpha = (color._alpha == 1) ? "" : "_" + toString(color._alpha);
+
+      return toString(color._red) + "_" + toString(color._green) + "_" + toString(color._blue) + alpha;
+   }
+
+
+   private static final DecimalFormat df = new DecimalFormat("#.##");
+
+
+   private static String toString(final float f) {
+      return df.format(f);
    }
 
 
@@ -89,17 +117,8 @@ public class G3MeshMaterial {
    }
 
 
-   void validate() {
-      if ((_color == null) && ((_textureURL == null) || _textureURL.isNull())) {
-         throw new RuntimeException("Material with no color neither texture");
-      }
-   }
-
-
-   public JSONObject toJSON() {
-      validate();
-
-      final JSONObject result = new JSONObject();
+   public Map<String, Object> toJSON() {
+      final Map<String, Object> result = new LinkedHashMap<>();
 
       result.put("id", getID());
       if (_color != null) {
@@ -113,8 +132,8 @@ public class G3MeshMaterial {
    }
 
 
-   private static JSONArray toJSON(final Color color) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toJSON(final Color color) {
+      final List<Float> result = new ArrayList<>();
       result.add(color._red);
       result.add(color._green);
       result.add(color._blue);

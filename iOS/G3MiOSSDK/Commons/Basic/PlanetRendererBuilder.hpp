@@ -32,66 +32,70 @@ class PlanetRenderer;
 class PlanetRendererBuilder {
 
 private:
-  TileTessellator* _tileTessellator;
-  TileTexturizer* _texturizer;
-  std::vector<GEOVectorLayer*> _geoVectorLayers;
-  TileLODTester* _tileLODTester;
-  TileVisibilityTester* _tileVisibilityTester;
+  mutable TileTessellator* _tileTessellator;
+  mutable TileTexturizer* _texturizer;
+  mutable std::vector<GEOVectorLayer*> _geoVectorLayers;
+  mutable TileLODTester* _tileLODTester;
+  mutable TileVisibilityTester* _tileVisibilityTester;
 
-  LayerSet* _layerSet;
-  TilesRenderParameters* _parameters;
+  mutable LayerSet* _layerSet;
+  mutable TilesRenderParameters* _parameters;
   bool _showStatistics;
   bool _renderDebug;
   bool _incrementalTileQuality;
   Quality _quality;
-  std::vector<VisibleSectorListener*>* _visibleSectorListeners;
-  std::vector<long long>* _stabilizationMilliSeconds;
+  mutable std::vector<VisibleSectorListener*>* _visibleSectorListeners;
+  mutable std::vector<long long>* _stabilizationMilliSeconds;
   long long _tileTextureDownloadPriority;
 
-  ElevationDataProvider*    _elevationDataProvider;
+  bool _verboseTileTexturizerErrors;
+
+  ElevationDataProvider* _elevationDataProvider;
   DEMProvider* _demProvider;
-  float _verticalExaggeration;
+  mutable float _verticalExaggeration;
 
-  TileTessellator* getTileTessellator();
-  TileTexturizer* getTexturizer();
+  TileTessellator* getTileTessellator() const;
+  TileTexturizer* getTexturizer() const;
 
-  LayerSet* getLayerSet();
-  TilesRenderParameters* getParameters();
-  bool getShowStatistics();
-  bool getRenderDebug();
-  bool getIncrementalTileQuality();
-  std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
-  std::vector<long long>* getStabilizationMilliSeconds();
-  long long getTileTextureDownloadPriority();
+  LayerSet* getLayerSet() const;
+  TilesRenderParameters* getParameters() const;
+  bool getShowStatistics() const;
+  bool getVerboseTileTexturizerErrors() const;
+
+  bool getRenderDebug() const;
+  bool getIncrementalTileQuality() const;
+  std::vector<VisibleSectorListener*>* getVisibleSectorListeners() const;
+  std::vector<long long>* getStabilizationMilliSeconds() const;
+  long long getTileTextureDownloadPriority() const;
 
   bool _logTilesPetitions;
 
-  LayerSet* createLayerSet();
-  TilesRenderParameters* createPlanetRendererParameters();
-  TileTessellator* createTileTessellator();
+  LayerSet* createLayerSet() const;
+  TilesRenderParameters* createPlanetRendererParameters() const;
+  TileTessellator* createTileTessellator() const;
 
-  ElevationDataProvider*    getElevationDataProvider();
-  DEMProvider* getDEMProvider();
+  ElevationDataProvider*    getElevationDataProvider() const;
+  DEMProvider* getDEMProvider() const;
 
-  float getVerticalExaggeration();
+  float getVerticalExaggeration() const;
 
   Sector* _renderedSector;
-  Sector getRenderedSector();
+  Sector getRenderedSector() const;
 
   bool _renderTileMeshes;
-  bool getRenderTileMeshes();
+  bool getRenderTileMeshes() const;
 
-  bool getLogTilesPetitions();
+  bool getLogTilesPetitions() const;
 
   ChangedRendererInfoListener* _changedInfoListener;
   
   TouchEventType _touchEventTypeOfTerrainTouchListener;
   
-  TouchEventType getTouchEventTypeOfTerrainTouchListener();
+  TouchEventType getTouchEventTypeOfTerrainTouchListener() const;
   
-  IImageBuilder* _defaultTileBackgroundImage = NULL;
+  mutable IImageBuilder* _defaultTileBackgroundImage = NULL;
   
-  IImageBuilder* getDefaultTileBackgroundImageBuilder();
+  IImageBuilder* getDefaultTileBackgroundImageBuilder() const;
   
   TileLODTester* createDefaultTileLODTester() const;
 
@@ -107,6 +111,7 @@ public:
   void setLayerSet(LayerSet* layerSet);
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
+  void setVerboseTileTexturizerErrors(const bool verboseTileTexturizerErrors);
   void setRenderDebug(const bool renderDebug);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
@@ -124,7 +129,7 @@ public:
 
   void setRenderedSector(const Sector& sector);
 
-  GEOVectorLayer* createGEOVectorLayer();
+  GEOVectorLayer* createGEOVectorLayer() const;
 
   Quality getQuality() const;
   void setQuality(Quality quality);
@@ -133,7 +138,7 @@ public:
 
   void setLogTilesPetitions(bool logTilesPetitions);
   
-  ChangedRendererInfoListener* getChangedRendererInfoListener();
+  ChangedRendererInfoListener* getChangedRendererInfoListener() const;
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
@@ -143,9 +148,9 @@ public:
   
   void setTileLODTester(TileLODTester* tlt);
   
-  TileLODTester* getTileLODTester();
+  TileLODTester* getTileLODTester() const;
 
-  TileVisibilityTester* getTileVisibilityTester();
+  TileVisibilityTester* getTileVisibilityTester() const;
 
 };
 

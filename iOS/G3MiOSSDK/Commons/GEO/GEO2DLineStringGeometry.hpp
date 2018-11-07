@@ -17,20 +17,10 @@ class GEO2DLineStringGeometry : public GEO2DGeometry {
 private:
   const GEO2DCoordinatesData* _coordinatesData;
 
-  GEO2DLineStringGeometry(const GEO2DCoordinatesData* coordinatesData) :
-  _coordinatesData(coordinatesData)
-  {
-    if (_coordinatesData != NULL) {
-      _coordinatesData->_retain();
-    }
-  }
-
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
-
-  const Sector* calculateSector() const;
 
 public:
 
@@ -44,12 +34,6 @@ public:
   const GEO2DCoordinatesData* getCoordinates() const {
     return _coordinatesData;
   }
-
-  long long getCoordinatesCount() const {
-    return _coordinatesData->size();
-  }
-
-  GEO2DLineStringGeometry* deepCopy() const;
 
 };
 

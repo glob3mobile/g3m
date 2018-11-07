@@ -59,6 +59,7 @@ private:
 public:
   static std::vector<Mesh*> parse(const JSONObject* jsonObject,
                                   const Planet* planet);
+
 };
 
 #endif

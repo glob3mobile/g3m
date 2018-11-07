@@ -42,13 +42,6 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::cancel() {
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObject(const GEOObject* geoObject) {
-  const long long coordinatesCount = geoObject->getCoordinatesCount();
-  if (coordinatesCount > 5000) {
-    ILogger::instance()->logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d",
-                                    _tileID.c_str(),
-                                    coordinatesCount);
-  }
-
   const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
                                                                   _tileIsMercator,
                                                                   _imageWidth,
@@ -233,7 +226,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
                                               _imageWidth,
                                               _imageHeight,
                                               symbolizer,
-                                              _tileID,
                                               _tileSector,
                                               _tileIsMercator,
                                               _tileLevel);
@@ -292,7 +284,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(const U
                                               _imageWidth,
                                               _imageHeight,
                                               symbolizer,
-                                              _tileID,
                                               _tileSector,
                                               _tileIsMercator,
                                               _tileLevel);

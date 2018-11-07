@@ -125,7 +125,7 @@ public class AirspaceExtrusion {
 
       final Planet planet = null; // cartesian
 
-      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), planet, floatPrecision);
+      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), planet, floatPrecision, true);
    }
 
 

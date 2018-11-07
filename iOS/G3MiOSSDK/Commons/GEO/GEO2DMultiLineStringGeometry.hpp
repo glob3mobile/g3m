@@ -17,14 +17,10 @@ class GEO2DMultiLineStringGeometry : public GEO2DGeometry {
 private:
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
 
-  GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData);
-
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
-
-  const Sector* calculateSector() const;
 
 public:
 
@@ -35,10 +31,6 @@ public:
   const GEO2DCoordinatesArrayData* getCoordinatesArray() const {
     return _coordinatesArrayData;
   }
-
-  long long getCoordinatesCount() const;
-
-  GEO2DMultiLineStringGeometry* deepCopy() const;
 
 };
 

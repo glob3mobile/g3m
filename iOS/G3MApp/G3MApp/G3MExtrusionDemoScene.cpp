@@ -21,6 +21,12 @@
 #include <G3MiOSSDK/URL.hpp>
 #include <G3MiOSSDK/G3MContext.hpp>
 #include <G3MiOSSDK/IDownloader.hpp>
+#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
+#include <G3MiOSSDK/LayerTilesRenderParameters.hpp>
+#include <G3MiOSSDK/URLTemplateLayer.hpp>
+#include <G3MiOSSDK/BingMapsLayer.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,
@@ -72,22 +78,84 @@ public:
 
 
 void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
-  LayerSet* layerSet = getModel()->getLayerSet();
+  G3MDemoModel* model = getModel();
+  G3MWidget* g3mWidget = model->getG3MWidget();
 
-  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-  layerSet->addLayer(osmLayer);
+  LayerSet* layerSet = model->getLayerSet();
 
-  getModel()->getG3MWidget()->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
-                                                                                 -6.37246061136657449,
-                                                                                 4100) );
+//  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+//  layerSet->addLayer(osmLayer);
 
-  context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
-                                          // URL("file:///cortijos_3d.json"),
-                                          // URL("file:///deportivo_3d.json"),
-                                          1000000,
-                                          TimeInterval::zero(),
-                                          false,
-                                          new G3MeshBufferDownloadListener(context->getPlanet(),
-                                                                           getModel()->getMeshRenderer()),
-                                          true);
+  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
+                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                                         TimeInterval::fromDays(30));
+  layerSet->addLayer(bingMapsAerialLayer);
+
+
+//  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
+//                                                                                          1, // topSectorSplitsByLatitude
+//                                                                                          2, // topSectorSplitsByLongitude
+//                                                                                          1, // firstLevel
+//                                                                                          13 // maxLevel
+//                                                                                          );
+//  URLTemplateLayer* layer = new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", // urlTemplate
+//                                                 Sector::FULL_SPHERE,
+//                                                 false,                      // isTransparent
+//                                                 TimeInterval::fromDays(30), // timeToCache
+//                                                 true, // readExpired
+//                                                 NULL, // condition
+//                                                 parameters);
+//  layerSet->addLayer(layer);
+
+
+  const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
+                                               39.5082433963135529, -6.1796950996431388);
+
+//  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
+//                                                                -6.37246061136657449,
+//                                                                4100) );
+
+  g3mWidget->setAnimatedCameraPosition( Geodetic3D(demSector._center,
+                                                   4100) );
+
+  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+  planetRenderer->setVerticalExaggeration(1);
+
+  //  g3mWidget->setBackgroundColor( Color::fromRGBA255(185, 221, 209, 255).muchDarker() );
+
+  g3mWidget->setRenderedSector(demSector.shrinkedByPercent(0.1f));
+
+  const double deltaHeight = 0;
+  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///ccmdt.bil"),
+                                                                                    demSector,
+                                                                                    Vector2I(1481, 780),
+                                                                                    deltaHeight);
+  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+
+
+    context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
+                                            1000000,
+                                            TimeInterval::zero(),
+                                            false,
+                                            new G3MeshBufferDownloadListener(context->getPlanet(),
+                                                                             model->getMeshRenderer()),
+                                            true);
+
+  VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
+  renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
+                         "3dstreaming",            // name
+                         "",                       // properties
+                         NULL,                     // symbolizer
+                         true,                     // deleteSymbolizer
+                         DownloadPriority::HIGHER,
+                         TimeInterval::zero(),
+                         true,                     // readExpired
+                         true,                     // verbose
+                         false,                    // haltOnError
+                         VectorStreamingRenderer::Format::PLAIN_FILES,
+                         Angle::fromDegrees(90),   // minSectorSize
+                         //12500000 / 500000          // minProjectedArea
+                         50000
+                         );
+
 }

@@ -3,10 +3,11 @@
 package com.glob3mobile.tools.extruder;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Planet;
@@ -21,26 +22,82 @@ import poly2Tri.Triangle;
 
 public class Building {
 
-   private final GEOFeature     _geoFeature;
-   private final List<Triangle> _roofTriangles;
-   private final List<Vector3D> _roofVertices;
-   private final Wall           _exteriorWall;
-   private final List<Wall>     _interiorWalls;
-   private final G3MeshMaterial _material;
+   private final ExtruderPolygon _extruderPolygon;
+   private final Geodetic2D      _position;
+   private final List<Vector3D>  _roofVertices;
+   private final List<Triangle>  _roofTriangles;
+   private final Wall            _exteriorWall;
+   private final List<Wall>      _interiorWalls;
+   private final G3MeshMaterial  _material;
 
 
-   Building(final GEOFeature geoFeature,
+   Building(final ExtruderPolygon extruderPolygon,
+            final Geodetic2D position,
             final List<Vector3D> roofVertices,
             final List<Triangle> roofTriangles,
             final Wall exteriorWall,
             final List<Wall> interiorWalls,
             final G3MeshMaterial material) {
-      _geoFeature = geoFeature;
+      _extruderPolygon = extruderPolygon;
+      _position = position;
       _roofVertices = roofVertices;
       _roofTriangles = consolidate(roofTriangles, roofVertices);
       _exteriorWall = exteriorWall;
       _interiorWalls = interiorWalls;
       _material = material;
+   }
+
+
+   private double calculateSize(final double minHeight) {
+      double area = 0;
+      double maxHeight = 0;
+      //double sumHeight = 0;
+      for (final Triangle triangle : _roofTriangles) {
+         final Vector3D v0 = _roofVertices.get(triangle._vertex0);
+         final Vector3D v1 = _roofVertices.get(triangle._vertex1);
+         final Vector3D v2 = _roofVertices.get(triangle._vertex2);
+         area += triangleArea(v0, v1, v2);
+
+         maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
+
+         //sumHeight += v0._z;
+         //sumHeight += v1._z;
+         //sumHeight += v2._z;
+      }
+      //      return area * maxHeight;
+      //      final double averageHeight = sumHeight / (_roofTriangles.size() * 3);
+
+      final double height = (maxHeight - minHeight) + 1; //  minimum 1 meters
+      return area * height;
+   }
+
+
+   private static double max(final double v,
+                             final double... d) {
+      double max = v;
+      for (final double e : d) {
+         if (e > max) {
+            max = e;
+         }
+      }
+      return max;
+   }
+
+
+   private double triangleArea(final Vector3D v0,
+                               final Vector3D v1,
+                               final Vector3D v2) {
+      return (v1.sub(v0).cross(v2.sub(v0))).length() / 2;
+   }
+
+
+   public ExtruderPolygon getExtruderPolygon() {
+      return _extruderPolygon;
+   }
+
+
+   public Geodetic2D getPosition() {
+      return _position;
    }
 
 
@@ -86,17 +143,36 @@ public class Building {
 
    public G3Mesh createMesh(final Planet planet,
                             final int floatPrecision) {
-      final double wallsLowerHeight = getWallsLowerHeight(_exteriorWall, _interiorWalls);
+      return createMesh( //
+               _roofVertices, //
+               _roofTriangles, //
+               _exteriorWall, //
+               _interiorWalls, //
+               _material, //
+               planet, //
+               floatPrecision);
+   }
 
-      final Vector3D center = getCenter(planet, floatPrecision, wallsLowerHeight);
 
-      final List<Vector3F> vertices = new ArrayList<>(_roofVertices.size());
-      for (final Vector3D vertex : _roofVertices) {
+   public static G3Mesh createMesh(final List<Vector3D> roofVertices,
+                                   final List<Triangle> roofTriangles,
+                                   final Wall exteriorWall,
+                                   final List<Wall> interiorWalls,
+                                   final G3MeshMaterial material,
+                                   final Planet planet,
+                                   final int floatPrecision) {
+
+      final double wallsLowerHeight = getWallsLowerHeight(exteriorWall, interiorWalls);
+
+      final Vector3D center = getCenter(roofVertices, planet, floatPrecision, wallsLowerHeight);
+
+      final List<Vector3F> vertices = new ArrayList<>(roofVertices.size());
+      for (final Vector3D vertex : roofVertices) {
          addVertex(planet, vertices, center, vertex._x, vertex._y, vertex._z);
       }
 
       final List<Short> indices = new ArrayList<>();
-      for (final Triangle triangle : _roofTriangles) {
+      for (final Triangle triangle : roofTriangles) {
          indices.add(toShort(triangle._vertex0));
          indices.add(toShort(triangle._vertex1));
          indices.add(toShort(triangle._vertex2));
@@ -104,17 +180,16 @@ public class Building {
 
       //      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last roof vertex before creating the walls
       {
-         processWall(planet, vertices, indices, center, _exteriorWall);
-         for (final Wall wall : _interiorWalls) {
+         processWall(planet, vertices, indices, center, exteriorWall);
+         for (final Wall wall : interiorWalls) {
             processWall(planet, vertices, indices, center, wall);
          }
       }
 
-      final List<Vector3F> normals = createNormals(planet, vertices, indices, _roofVertices);
+      final List<Vector3F> normals = createNormals(planet, vertices, indices, roofVertices);
 
       final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
                                                                     : G3Mesh.VerticesFormat.CARTESIAN;
-
 
       return G3Mesh.createTrianglesMesh( //
                verticesFormat, //
@@ -124,8 +199,7 @@ public class Building {
                null, // colors
                null, // texCoords
                indices, //
-               _material, //
-               _material._depthTest //
+               material //
       );
 
    }
@@ -150,9 +224,10 @@ public class Building {
    }
 
 
-   private Vector3D getCenter(final Planet planet,
-                              final int floatPrecision,
-                              final double lowerHeight) {
+   private static Vector3D getCenter(final List<Vector3D> roofVertices,
+                                     final Planet planet,
+                                     final int floatPrecision,
+                                     final double lowerHeight) {
       double minX = Double.POSITIVE_INFINITY;
       double minY = Double.POSITIVE_INFINITY;
       double minZ = lowerHeight;
@@ -160,7 +235,7 @@ public class Building {
       double maxY = Double.NEGATIVE_INFINITY;
       double maxZ = Double.NEGATIVE_INFINITY;
 
-      for (final Vector3D vertex : _roofVertices) {
+      for (final Vector3D vertex : roofVertices) {
          final double x = vertex._x;
          final double y = vertex._y;
          final double z = vertex._z;
@@ -194,10 +269,10 @@ public class Building {
    }
 
 
-   private Vector3D createCenter(final Planet planet,
-                                 final double x,
-                                 final double y,
-                                 final double z) {
+   private static Vector3D createCenter(final Planet planet,
+                                        final double x,
+                                        final double y,
+                                        final double z) {
       return (planet == null) ? new Vector3D(x, y, z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), z);
    }
 
@@ -234,7 +309,7 @@ public class Building {
 
 
    private static short toShort(final int index) {
-      if ((index >= Short.MIN_VALUE) || (index <= Short.MAX_VALUE)) {
+      if ((index >= 0) && (index <= Short.MAX_VALUE)) {
          return (short) index;
       }
       throw new RuntimeException("Invalid range for index #" + index);
@@ -339,6 +414,23 @@ public class Building {
       if ((normal != null) && !normal.isZero() && !normal.isNan()) {
          normals.get(index).add(normal);
       }
+   }
+
+
+   public Map<String, Object> createFeatureProperties(final double minHeight) {
+      final Map<String, Object> result = new LinkedHashMap<>();
+
+      result.put("roof_vertices", ExtruderJSON.verticesToJSON(_roofVertices));
+      result.put("roof_triangles", ExtruderJSON.trianglesToJSON(_roofTriangles));
+
+      result.put("exterior_wall", ExtruderJSON.wallToJSON(_exteriorWall));
+      result.put("interior_walls", ExtruderJSON.wallsToJSON(_interiorWalls));
+
+      result.put("material", ExtruderJSON.materialToJSON(_material));
+
+      result.put("size", calculateSize(minHeight));
+
+      return result;
    }
 
 

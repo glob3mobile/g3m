@@ -24,8 +24,6 @@ protected:
 
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
 
-  const Sector* calculateSector() const;
-
 public:
   GEO2DPolygonGeometry(const GEO2DPolygonData* polygonData) :
   _polygonData(polygonData)
@@ -41,10 +39,6 @@ public:
   const std::vector<Geodetic2D*>* getCoordinates() const;
 
   const std::vector<std::vector<Geodetic2D*>*>* getHolesCoordinatesArray() const;
-
-  long long getCoordinatesCount() const;
-
-  GEO2DPolygonGeometry* deepCopy() const;
 
   bool contain(const Geodetic2D& point) const;
 

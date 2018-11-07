@@ -31,8 +31,6 @@ public:
                  const GEORasterProjection* projection,
                  int tileLevel) const;
 
-  virtual GEO3DGeometry* deepCopy() const = 0;
-
   virtual bool contain(const Geodetic3D& point) const;
 
 };

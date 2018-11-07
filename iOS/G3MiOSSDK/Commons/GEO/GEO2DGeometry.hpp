@@ -31,8 +31,6 @@ public:
                  ICanvas* canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
-
-  virtual GEO2DGeometry* deepCopy() const = 0;
   
   virtual bool contain(const Geodetic2D& point) const;
 
