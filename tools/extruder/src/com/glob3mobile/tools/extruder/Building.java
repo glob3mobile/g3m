@@ -191,7 +191,6 @@ public class Building {
       final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
                                                                     : G3Mesh.VerticesFormat.CARTESIAN;
 
-
       return G3Mesh.createTrianglesMesh( //
                verticesFormat, //
                center, //
@@ -200,8 +199,7 @@ public class Building {
                null, // colors
                null, // texCoords
                indices, //
-               material, //
-               material._depthTest //
+               material //
       );
 
    }
@@ -311,7 +309,7 @@ public class Building {
 
 
    private static short toShort(final int index) {
-      if ((index >= Short.MIN_VALUE) || (index <= Short.MAX_VALUE)) {
+      if ((index >= 0) && (index <= Short.MAX_VALUE)) {
          return (short) index;
       }
       throw new RuntimeException("Invalid range for index #" + index);

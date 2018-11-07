@@ -4,7 +4,7 @@ package com.glob3mobile.tools.mesh;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,22 +28,36 @@ public class G3MeshMaterial {
 
    public G3MeshMaterial(final Color color,
                          final boolean depthTest) {
-      _color = color;
-      _textureURL = null;
-      _depthTest = depthTest;
+      this(color, null, depthTest);
    }
 
 
    public G3MeshMaterial(final URL textureURL,
                          final boolean depthTest) {
-      _color = null;
-      _textureURL = textureURL;
-      _depthTest = depthTest;
+      this(null, textureURL, depthTest);
    }
 
 
-   String getID() {
-      return getID(_color) + getID(_textureURL);
+   private G3MeshMaterial(final Color color,
+                          final URL textureURL,
+                          final boolean depthTest) {
+      _color = color;
+      _textureURL = textureURL;
+      _depthTest = depthTest;
+
+      validate();
+   }
+
+
+   private void validate() {
+      if ((_color == null) && ((_textureURL == null) || _textureURL.isNull())) {
+         throw new RuntimeException("Material with no color neither texture");
+      }
+   }
+
+
+   public String getID() {
+      return getID(_color) + getID(_textureURL) + (_depthTest ? "T" : "F");
    }
 
 
@@ -103,17 +117,8 @@ public class G3MeshMaterial {
    }
 
 
-   void validate() {
-      if ((_color == null) && ((_textureURL == null) || _textureURL.isNull())) {
-         throw new RuntimeException("Material with no color neither texture");
-      }
-   }
-
-
    public Map<String, Object> toJSON() {
-      validate();
-
-      final Map<String, Object> result = new HashMap<>();
+      final Map<String, Object> result = new LinkedHashMap<>();
 
       result.put("id", getID());
       if (_color != null) {

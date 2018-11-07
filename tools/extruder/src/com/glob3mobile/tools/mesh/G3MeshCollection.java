@@ -5,6 +5,7 @@ package com.glob3mobile.tools.mesh;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,17 +20,8 @@ public class G3MeshCollection {
    }
 
 
-   private void validateMeshes() {
-      for (final G3Mesh mesh : _meshes) {
-         mesh.validate();
-      }
-   }
-
-
    public Map<String, Object> toJSON() {
-      validateMeshes();
-
-      final Map<String, Object> result = new HashMap<>();
+      final Map<String, Object> result = new LinkedHashMap<>();
       result.put("materials", materialsJSON(_meshes));
       result.put("meshes", meshesJSON(_meshes));
       return result;
@@ -67,6 +59,27 @@ public class G3MeshCollection {
       }
 
       return result;
+   }
+
+
+   public G3MeshCollection optimize() {
+      final Map<String, List<G3Mesh>> meshesByMaterials = new HashMap<>();
+      for (final G3Mesh mesh : _meshes) {
+         final String materialID = mesh.getMaterial().getID();
+         List<G3Mesh> group = meshesByMaterials.get(materialID);
+         if (group == null) {
+            group = new ArrayList<>();
+            meshesByMaterials.put(materialID, group);
+         }
+         group.add(mesh);
+      }
+
+      final List<G3Mesh> meshes = new ArrayList<>();
+      for (final List<G3Mesh> group : meshesByMaterials.values()) {
+         final List<G3Mesh> consolidated = G3Mesh.consolidate(group);
+         meshes.addAll(consolidated);
+      }
+      return new G3MeshCollection(meshes);
    }
 
 

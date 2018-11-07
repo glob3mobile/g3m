@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
@@ -29,27 +30,27 @@ import android.util.Log;
 
 public final class Downloader_Android_Handler {
 
-   private static final int                                  DEFAULT_BUFFER_SIZE = 32 * 1024;
+   private static final int DEFAULT_BUFFER_SIZE = 32 * 1024;
 
-   private static final BitmapFactory.Options                _bitmapFactoryOptions;
+   private static final BitmapFactory.Options _bitmapFactoryOptions;
    static {
       _bitmapFactoryOptions = new BitmapFactory.Options();
       _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
    }
 
 
-   private final static String                               TAG                 = "Downloader_Android_Handler";
+   private final static String TAG = "Downloader_Android_Handler";
 
-   private long                                              _priority;
-   private final URL                                         _g3mURL;
-   private java.net.URL                                      _javaURL;
-   private final ArrayList<Downloader_Android_ListenerEntry> _listeners          = new ArrayList<Downloader_Android_ListenerEntry>();
+   private long                                         _priority;
+   private final URL                                    _g3mURL;
+   private java.net.URL                                 _javaURL;
+   private final List<Downloader_Android_ListenerEntry> _listeners = new ArrayList<Downloader_Android_ListenerEntry>();
 
-   private boolean                                           _hasImageListeners;
+   private boolean _hasImageListeners;
 
 
-   private final TimeInterval                                _connectTimeout;
-   private final TimeInterval                                _readTimeout;
+   private final TimeInterval _connectTimeout;
+   private final TimeInterval _readTimeout;
 
 
    Downloader_Android_Handler(final URL url,
@@ -244,8 +245,8 @@ public final class Downloader_Android_Handler {
 
             final File file = new File(filePath);
             final InputStream fileIS = file.exists() //
-                                                    ? new FileInputStream(file) //
-                                                    : downloader.getAppContext().getAssets().open(filePath);
+                                                     ? new FileInputStream(file) //
+                                                     : downloader.getAppContext().getAssets().open(filePath);
 
             data = getData(fileIS, -1);
             if (data != null) {
@@ -329,8 +330,8 @@ public final class Downloader_Android_Handler {
    }
 
    private class ProcessResponseGTask
-      extends
-         GTask {
+            extends
+               GTask {
 
       private final int    _statusCode;
       private final byte[] _data;
