@@ -272,16 +272,32 @@ public class G3Mesh {
          }
       }
 
-      if ((_normals != null) && (_normals.size() != verticesSize)) {
-         throw new RuntimeException("Normals doesn't match vertices size (" + verticesSize + ")");
+      if (_normals != null) {
+         if (_normals.size() != verticesSize) {
+            throw new RuntimeException("Normals doesn't match vertices size (" + verticesSize + ")");
+         }
+         for (final Vector3F normal : _normals) {
+            if (normal.isNan()) {
+               throw new RuntimeException("Invalid normal: " + normal);
+            }
+         }
       }
 
-      if ((_colors != null) && (_colors.size() != verticesSize)) {
-         throw new RuntimeException("Colors doesn't match vertices size (" + verticesSize + ")");
+      if (_colors != null) {
+         if (_colors.size() != verticesSize) {
+            throw new RuntimeException("Colors doesn't match vertices size (" + verticesSize + ")");
+         }
       }
 
-      if ((_texCoords != null) && (_texCoords.size() != verticesSize)) {
-         throw new RuntimeException("TexCoords doesn't match vertices size (" + verticesSize + ")");
+      if (_texCoords != null) {
+         if (_texCoords.size() != verticesSize) {
+            throw new RuntimeException("TexCoords doesn't match vertices size (" + verticesSize + ")");
+         }
+         for (final Vector2F texCoord : _texCoords) {
+            if (texCoord.isNan()) {
+               throw new RuntimeException("Invalid texCoord: " + texCoord);
+            }
+         }
       }
 
       if (_indices != null) {

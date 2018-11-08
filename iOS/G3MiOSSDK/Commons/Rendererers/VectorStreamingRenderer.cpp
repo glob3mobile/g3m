@@ -283,6 +283,8 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCanceledDownload(c
 VectorStreamingRenderer::Node::Node(const VectorSet*                vectorSet,
                                     const std::string&              id,
                                     const Sector*                   nodeSector,
+                                    const double                    minHeight,
+                                    const double                    maxHeight,
                                     const int                       clustersCount,
                                     const int                       featuresCount,
                                     const std::vector<std::string>& childrenIDs,
@@ -292,6 +294,8 @@ _parent(NULL),
 _vectorSet(vectorSet),
 _id(id),
 _nodeSector(nodeSector),
+_minHeight(minHeight),
+_maxHeight(maxHeight),
 _clustersCount(clustersCount),
 _featuresCount(featuresCount),
 _childrenIDs(childrenIDs),
@@ -447,23 +451,33 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     const Planet* planet = rc->getPlanet();
     
 #ifdef C_CODE
-    const Vector3D c[5] = {
-      planet->toCartesian( _nodeSector->getNE()     ),
-      planet->toCartesian( _nodeSector->getNW()     ),
-      planet->toCartesian( _nodeSector->getSE()     ),
-      planet->toCartesian( _nodeSector->getSW()     ),
-      planet->toCartesian( _nodeSector->getCenter() )
+    const Vector3D c[10] = {
+      planet->toCartesian( _nodeSector->getNE()    , _minHeight ),
+      planet->toCartesian( _nodeSector->getNE()    , _maxHeight ),
+      planet->toCartesian( _nodeSector->getNW()    , _minHeight ),
+      planet->toCartesian( _nodeSector->getNW()    , _maxHeight ),
+      planet->toCartesian( _nodeSector->getSE()    , _minHeight ),
+      planet->toCartesian( _nodeSector->getSE()    , _maxHeight ),
+      planet->toCartesian( _nodeSector->getSW()    , _minHeight ),
+      planet->toCartesian( _nodeSector->getSW()    , _maxHeight ),
+      planet->toCartesian( _nodeSector->getCenter(), _minHeight ),
+      planet->toCartesian( _nodeSector->getCenter(), _maxHeight )
     };
     
-    std::vector<Vector3D> points(c, c+5);
+    std::vector<Vector3D> points(c, c+10);
 #endif
 #ifdef JAVA_CODE
-    java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-    points.add( planet.toCartesian( _nodeSector.getNE()     ) );
-    points.add( planet.toCartesian( _nodeSector.getNW()     ) );
-    points.add( planet.toCartesian( _nodeSector.getSE()     ) );
-    points.add( planet.toCartesian( _nodeSector.getSW()     ) );
-    points.add( planet.toCartesian( _nodeSector.getCenter() ) );
+    java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);
+    points.add( planet.toCartesian( _nodeSector.getNE()    , _minHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getNE()    , _maxHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getNW()    , _minHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getNW()    , _maxHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getSE()    , _minHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getSE()    , _maxHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getSW()    , _minHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getSW()    , _maxHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getCenter(), _minHeight ) );
+    points.add( planet.toCartesian( _nodeSector.getCenter(), _maxHeight ) );
 #endif
     
     _boundingVolume = Sphere::enclosingSphere(points);
@@ -482,8 +496,9 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   //  }
   
   _downloader = rc->getDownloader();
+  const long long depthPriority = 10000 - getDepth();
   _featuresRequestID = _downloader->requestBuffer(_vectorSet->getNodeFeaturesURL(_id),
-                                                  _vectorSet->getDownloadPriority() + _featuresCount + _clustersCount,
+                                                  _vectorSet->getDownloadPriority() + depthPriority + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
                                                   new NodeFeaturesDownloadListener(this,
@@ -528,8 +543,9 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
   //  }
   
   _downloader = rc->getDownloader();
+  const long long depthPriority = 10000 - getDepth();
   _childrenRequestID = _downloader->requestBuffer(_vectorSet->getNodeChildrenURL(_id, _childrenIDs),
-                                                  _vectorSet->getDownloadPriority(),
+                                                  _vectorSet->getDownloadPriority() + depthPriority,
                                                   _vectorSet->getTimeToCache(),
                                                   _vectorSet->getReadExpired(),
                                                   new NodeChildrenDownloadListener(this,
@@ -793,6 +809,8 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                                                                                 const bool        verbose) {
   const std::string id            = json->getAsString("id")->value();
   const Sector*     nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+  const double      minHeight     = json->getAsNumber("minHeight", 0);
+  const double      maxHeight     = json->getAsNumber("maxHeight", 0);
   const int         clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
   const int         featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
   
@@ -823,6 +841,8 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
   return new Node(vectorSet,
                   id,
                   nodeSector,
+                  minHeight,
+                  maxHeight,
                   clustersCount,
                   featuresCount,
                   childrenIDs,

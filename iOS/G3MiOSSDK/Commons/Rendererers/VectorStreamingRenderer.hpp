@@ -299,6 +299,8 @@ public:
     Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
+    const double                   _minHeight;
+    const double                   _maxHeight;
     const int                      _clustersCount;
     const int                      _featuresCount;
 #ifdef C_CODE
@@ -360,6 +362,10 @@ public:
 
     void setChildren(std::vector<Node*>* children);
 
+    int getDepth() const {
+      return (_parent == NULL) ? 1 : (_parent->getDepth() + 1);
+    }
+
   protected:
     ~Node();
 
@@ -370,6 +376,8 @@ public:
     Node(const VectorSet*                vectorSet,
          const std::string&              id,
          const Sector*                   nodeSector,
+         const double                    minHeight,
+         const double                    maxHeight,
          const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,

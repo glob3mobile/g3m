@@ -126,7 +126,8 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   //  g3mWidget->setBackgroundColor( Color::fromRGBA255(185, 221, 209, 255).muchDarker() );
 
-  g3mWidget->setRenderedSector(demSector.shrinkedByPercent(0.1f));
+  Sector renderedSector = demSector.shrinkedByPercent(0.1f);
+  g3mWidget->setRenderedSector(renderedSector);
 
   const double deltaHeight = 0;
   ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///ccmdt.bil"),

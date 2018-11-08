@@ -389,7 +389,11 @@ public class Building {
       for (int i = 0; i < allNormals.size(); i++) {
          final List<Vector3F> currentNormals = allNormals.get(i);
          final Vector3D originalVertex = i < roofVertices.size() ? roofVertices.get(i) : null;
-         result.add(smoothNormals(planet, originalVertex, currentNormals));
+         final Vector3F smoothedNormal = smoothNormals(planet, originalVertex, currentNormals);
+         if (smoothedNormal.isNan()) {
+            throw new RuntimeException();
+         }
+         result.add(smoothedNormal);
       }
 
       return result;
@@ -405,6 +409,9 @@ public class Building {
       Vector3F acum = Vector3F.zero();
       for (final Vector3F normal : normals) {
          acum = acum.add(normal);
+      }
+      if (acum.isZero()) {
+         return normals.get(0);
       }
       return acum.div(normals.size()).normalized();
    }
@@ -442,7 +449,22 @@ public class Building {
 
       result.put("size", calculateSize(minHeight));
 
+      result.put("min_height", minHeight);
+      result.put("max_height", calculateMaxHeight());
+
       return result;
+   }
+
+
+   private double calculateMaxHeight() {
+      double max = _roofVertices.get(0)._z;
+      for (int i = 1; i < _roofVertices.size(); i++) {
+         final Vector3D vertex = _roofVertices.get(i);
+         if (vertex._z > max) {
+            max = vertex._z;
+         }
+      }
+      return max;
    }
 
 
