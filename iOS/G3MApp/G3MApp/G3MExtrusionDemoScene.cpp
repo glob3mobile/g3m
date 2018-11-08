@@ -111,12 +111,15 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
                                                39.5082433963135529, -6.1796950996431388);
 
-//  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
-//                                                                -6.37246061136657449,
-//                                                                4100) );
+  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
+                                                                -6.37246061136657449,
+                                                                4100) );
+//  g3mWidget->setCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
+//                                                        -6.37246061136657449,
+//                                                        4100) );
 
-  g3mWidget->setAnimatedCameraPosition( Geodetic3D(demSector._center,
-                                                   4100) );
+//  g3mWidget->setAnimatedCameraPosition( Geodetic3D(demSector._center,
+//                                                   4100) );
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);

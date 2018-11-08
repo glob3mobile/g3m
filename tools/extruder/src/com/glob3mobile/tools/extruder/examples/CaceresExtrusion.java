@@ -2,6 +2,7 @@
 
 package com.glob3mobile.tools.extruder.examples;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.extruder.Building;
 import com.glob3mobile.tools.extruder.ExtruderPolygon;
@@ -31,7 +33,7 @@ public class CaceresExtrusion {
 
       private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW, true);
 
-      //      private GEOBitmap _bitmap;
+      private GEOBitmap _bitmap;
 
 
       @Override
@@ -86,8 +88,10 @@ public class CaceresExtrusion {
       }
 
 
-      private void save(final String fileName) {
-         //         _bitmap.save(new File(fileName));
+      private void save(final String fileName) throws IOException {
+         if (_bitmap != null) {
+            _bitmap.save(new File(fileName));
+         }
       }
 
 
@@ -118,11 +122,12 @@ public class CaceresExtrusion {
       final String outputFileName = name + "_3d.json";
 
       final Planet planet = EllipsoidalPlanet.createEarth();
+      final float verticalExaggeration = 1;
       final int floatPrecision = 3;
 
       System.out.println(name);
       final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();
-      PolygonExtruder.process(inputFileName, outputFileName, handler, planet, floatPrecision, true);
+      PolygonExtruder.process(inputFileName, outputFileName, handler, planet, verticalExaggeration, floatPrecision, true);
       handler.save(name + "_debug.png");
    }
 

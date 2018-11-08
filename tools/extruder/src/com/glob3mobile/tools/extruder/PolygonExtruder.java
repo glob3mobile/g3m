@@ -34,7 +34,6 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.JSONGenerator;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.specific.Factory_JavaDesktop;
@@ -43,6 +42,7 @@ import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
+import com.glob3mobile.json.JSONUtils;
 import com.glob3mobile.tools.mesh.G3Mesh;
 import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
@@ -730,7 +730,9 @@ public class PolygonExtruder {
       logInfo("Saving meshes...");
       final long now = System.currentTimeMillis();
 
-      final String json = JSONGenerator.generate(meshes.toJSON(), floatPrecision);
+      // final String json = JSONGenerator.generate(meshes.toJSON(), floatPrecision);
+      final String json = JSONUtils.toJSON(meshes.toJSON(), floatPrecision);
+
       try (final PrintWriter out = new PrintWriter(fileName)) {
          out.println(json);
       }
@@ -741,12 +743,13 @@ public class PolygonExtruder {
 
 
    private static G3MeshCollection getMeshCollection(final Planet planet,
+                                                     final float verticalExaggeration,
                                                      final int floatPrecision,
                                                      final List<Building> buildings) {
       logInfo("Starting meshing...");
       final long now = System.currentTimeMillis();
 
-      final List<G3Mesh> meshes = getMeshes(planet, floatPrecision, buildings);
+      final List<G3Mesh> meshes = getMeshes(planet, verticalExaggeration, floatPrecision, buildings);
       final G3MeshCollection result = new G3MeshCollection(meshes);
 
       final long elapsed = System.currentTimeMillis() - now;
@@ -757,11 +760,12 @@ public class PolygonExtruder {
 
 
    private static List<G3Mesh> getMeshes(final Planet planet,
+                                         final float verticalExaggeration,
                                          final int floatPrecision,
                                          final List<Building> buildings) {
       final List<G3Mesh> result = new ArrayList<>(buildings.size());
       for (final Building building : buildings) {
-         final G3Mesh mesh = building.createMesh(planet, floatPrecision);
+         final G3Mesh mesh = building.createMesh(planet, verticalExaggeration, floatPrecision);
          if (mesh != null) {
             result.add(mesh);
          }
@@ -937,10 +941,11 @@ public class PolygonExtruder {
                               final String outputFileName,
                               final ExtrusionHandler handler,
                               final Planet planet,
+                              final float verticalExaggeration,
                               final int floatPrecision,
                               final boolean verbose) throws IOException {
       final List<Building> buildings = getBuildings(inputFileName, handler, verbose);
-      final G3MeshCollection meshCollection = getMeshCollection(planet, floatPrecision, buildings);
+      final G3MeshCollection meshCollection = getMeshCollection(planet, verticalExaggeration, floatPrecision, buildings);
       handler.onMeshCollection(meshCollection);
       writeMeshCollectionJSON(outputFileName, meshCollection, floatPrecision);
    }
