@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GEOSymbolizer;
 
-public abstract class GEOFeature extends GEOObject
+public class GEOFeature extends GEOObject
 {
   private final JSONBaseObject _id;
   private final GEOGeometry _geometry;
@@ -84,5 +84,16 @@ public abstract class GEOFeature extends GEOObject
   {
     return (_geometry == null) ? 0 : _geometry.symbolize(vectorSet, node);
   }
+
+  public final long getCoordinatesCount()
+  {
+    return (_geometry == null) ? 0 : _geometry.getCoordinatesCount();
+  }
+
+  public final GEOFeature deepCopy()
+  {
+    return new GEOFeature((_id == null) ? null : _id.deepCopy(), (_geometry == null) ? null : _geometry.deepCopy(), (_properties == null) ? null : _properties.deepCopy());
+  }
+
 
 }

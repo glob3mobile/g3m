@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GEO3DPointGeometry extends GEO3DGeometry
+public class GEO3DPointGeometry extends GEO3DGeometry
 {
   private final Geodetic3D _position ;
 
@@ -45,6 +45,16 @@ public abstract class GEO3DPointGeometry extends GEO3DGeometry
   public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
     return vectorSet.symbolizeGeometry(node, this);
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return 1;
+  }
+
+  public final GEO3DPointGeometry deepCopy()
+  {
+    return new GEO3DPointGeometry(_position);
   }
 
 }
