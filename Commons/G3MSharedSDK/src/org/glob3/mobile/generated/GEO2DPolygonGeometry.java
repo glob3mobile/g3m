@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class GEO2DPolygonData;
 
-public abstract class GEO2DPolygonGeometry extends GEO2DGeometry
+public class GEO2DPolygonGeometry extends GEO2DGeometry
 {
   private final GEO2DPolygonData _polygonData;
 
@@ -70,6 +70,20 @@ public abstract class GEO2DPolygonGeometry extends GEO2DGeometry
       return _polygonData.contains(point);
     }
     return false;
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
+  }
+
+  public final GEO2DPolygonGeometry deepCopy()
+  {
+    if (_polygonData != null)
+    {
+      _polygonData._retain();
+    }
+    return new GEO2DPolygonGeometry(_polygonData);
   }
 
 }
