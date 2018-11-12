@@ -170,8 +170,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
                          false,                    // haltOnError
                          VectorStreamingRenderer::Format::PLAIN_FILES,
                          Angle::fromDegrees(90),   // minSectorSize
-                         //12500000 / 500000          // minProjectedArea
-                         100000
+                         100000                    // minProjectedArea
                          );
 
 }

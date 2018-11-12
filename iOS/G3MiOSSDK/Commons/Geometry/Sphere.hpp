@@ -27,7 +27,8 @@ private:
   
   
 public:
-  static Sphere* enclosingSphere(const std::vector<Vector3D>& points);
+  static Sphere* enclosingSphere(const std::vector<Vector3D>& points,
+                                 const double radiusDelta);
   
   const Vector3D _center;
   const double   _radius;

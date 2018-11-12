@@ -480,7 +480,7 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     points.add( planet.toCartesian( _nodeSector.getCenter(), _maxHeight ) );
 #endif
     
-    _boundingSphere = Sphere::enclosingSphere(points);
+    _boundingSphere = Sphere::enclosingSphere(points, 0.1);
 
     if (_parent) {
       _parent->updateBoundingSphereWith(_boundingSphere);
@@ -496,9 +496,9 @@ void VectorStreamingRenderer::Node::updateBoundingSphereWith(Sphere* childSphere
   }
 
   Sphere* old = _boundingSphere;
-  _boundingSphere = _boundingSphere->mergedWithSphere(childSphere, 0.001);
+  _boundingSphere = _boundingSphere->mergedWithSphere(childSphere, 0.1);
 //  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
-//    _boundingSphere = old->mergedWithSphere(childSphere, 0.001);
+//    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
 //    childSphere->fullContainedInSphere(_boundingSphere);
 //    THROW_EXCEPTION("Ohh my gosh!");
 //  }

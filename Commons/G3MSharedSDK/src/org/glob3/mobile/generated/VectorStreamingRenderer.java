@@ -621,7 +621,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         points.add( planet.toCartesian( _nodeSector.getCenter(), _minHeight ) );
         points.add( planet.toCartesian( _nodeSector.getCenter(), _maxHeight ) );
     
-        _boundingSphere = Sphere.enclosingSphere(points);
+        _boundingSphere = Sphere.enclosingSphere(points, 0.1);
     
         if (_parent != null)
         {
@@ -895,9 +895,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       Sphere old = _boundingSphere;
-      _boundingSphere = _boundingSphere.mergedWithSphere(childSphere, 0.001);
+      _boundingSphere = _boundingSphere.mergedWithSphere(childSphere, 0.1);
     //  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
-    //    _boundingSphere = old->mergedWithSphere(childSphere, 0.001);
+    //    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
     //    childSphere->fullContainedInSphere(_boundingSphere);
     //    THROW_EXCEPTION("Ohh my gosh!");
     //  }

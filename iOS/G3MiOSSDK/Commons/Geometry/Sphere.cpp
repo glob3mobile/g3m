@@ -17,47 +17,50 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
 
-Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points) {
+Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points,
+                                const double radiusDelta) {
   const size_t size = points.size();
 
   if (size < 2) {
     return NULL;
   }
 
-  double xmin = points[0]._x;
-  double xmax = points[0]._x;
-  double ymin = points[0]._y;
-  double ymax = points[0]._y;
-  double zmin = points[0]._z;
-  double zmax = points[0]._z;
+  const Vector3D p0 = points[0];
+  double xMin = p0._x;
+  double xMax = p0._x;
+  double yMin = p0._y;
+  double yMax = p0._y;
+  double zMin = p0._z;
+  double zMax = p0._z;
 
   for (size_t i = 1; i < size; i++) {
-    const Vector3D p = points[i];
+    const Vector3D pi = points[i];
+    const double x = pi._x;
+    const double y = pi._y;
+    const double z = pi._z;
 
-    const double x = p._x;
-    const double y = p._y;
-    const double z = p._z;
-
-    if (x < xmin) xmin = x;
-    if (x > xmax) xmax = x;
-    if (y < ymin) ymin = y;
-    if (y > ymax) ymax = y;
-    if (z < zmin) zmin = z;
-    if (z > zmax) zmax = z;
+    if (x < xMin) { xMin = x; }
+    if (x > xMax) { xMax = x; }
+    if (y < yMin) { yMin = y; }
+    if (y > yMax) { yMax = y; }
+    if (z < zMin) { zMin = z; }
+    if (z > zMax) { zMax = z; }
   }
 
-  const Vector3D center = Vector3D((xmin + xmax) / 2,
-                                   (ymin + ymax) / 2,
-                                   (zmin + zmax) / 2);
-  double sqRad = center.squaredDistanceTo(points[0]);
+  const Vector3D center = Vector3D(xMin/2 + xMax/2,
+                                   yMin/2 + yMax/2,
+                                   zMin/2 + zMax/2);
+  double squaredRadius = center.squaredDistanceTo(p0);
   for (size_t i = 1; i < size; i++) {
-    const double dt = center.squaredDistanceTo(points[i]);
-    if (dt > sqRad) {
-      sqRad = dt;
+    const Vector3D pi = points[i];
+    const double squaredRadiusI = center.squaredDistanceTo(pi);
+    if (squaredRadiusI > squaredRadius) {
+      squaredRadius = squaredRadiusI;
     }
   }
 
-  return new Sphere(center, IMathUtils::instance()->sqrt(sqRad));
+  const double radius = IMathUtils::instance()->sqrt(squaredRadius) + radiusDelta;
+  return new Sphere(center, radius);
 }
 
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
@@ -269,7 +272,7 @@ bool Sphere::fullContainedInSphere(const Sphere* that) const {
     //      return true;
     //    }
     const double distance    = _center.distanceTo(that->_center);
-    const double deltaRadius = IMathUtils::instance()->abs(that->_radius - _radius);
+    const double deltaRadius = that->_radius - _radius;
     if (deltaRadius >= distance) {
       return true;
     }

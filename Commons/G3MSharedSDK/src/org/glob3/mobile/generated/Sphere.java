@@ -89,7 +89,7 @@ public class Sphere extends BoundingVolume
   }
 
 
-  public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points)
+  public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points, double radiusDelta)
   {
     final int size = points.size();
   
@@ -98,47 +98,61 @@ public class Sphere extends BoundingVolume
       return null;
     }
   
-    double xmin = points.get(0)._x;
-    double xmax = points.get(0)._x;
-    double ymin = points.get(0)._y;
-    double ymax = points.get(0)._y;
-    double zmin = points.get(0)._z;
-    double zmax = points.get(0)._z;
+    final Vector3D p0 = points.get(0);
+    double xMin = p0._x;
+    double xMax = p0._x;
+    double yMin = p0._y;
+    double yMax = p0._y;
+    double zMin = p0._z;
+    double zMax = p0._z;
   
     for (int i = 1; i < size; i++)
     {
-      final Vector3D p = points.get(i);
+      final Vector3D pi = points.get(i);
+      final double x = pi._x;
+      final double y = pi._y;
+      final double z = pi._z;
   
-      final double x = p._x;
-      final double y = p._y;
-      final double z = p._z;
-  
-      if (x < xmin)
-         xmin = x;
-      if (x > xmax)
-         xmax = x;
-      if (y < ymin)
-         ymin = y;
-      if (y > ymax)
-         ymax = y;
-      if (z < zmin)
-         zmin = z;
-      if (z > zmax)
-         zmax = z;
-    }
-  
-    final Vector3D center = new Vector3D((xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2);
-    double sqRad = center.squaredDistanceTo(points.get(0));
-    for (int i = 1; i < size; i++)
-    {
-      final double dt = center.squaredDistanceTo(points.get(i));
-      if (dt > sqRad)
+      if (x < xMin)
       {
-        sqRad = dt;
+         xMin = x;
+      }
+      if (x > xMax)
+      {
+         xMax = x;
+      }
+      if (y < yMin)
+      {
+         yMin = y;
+      }
+      if (y > yMax)
+      {
+         yMax = y;
+      }
+      if (z < zMin)
+      {
+         zMin = z;
+      }
+      if (z > zMax)
+      {
+         zMax = z;
       }
     }
   
-    return new Sphere(center, IMathUtils.instance().sqrt(sqRad));
+    final Vector3D center = new Vector3D(xMin/2 + xMax/2, yMin/2 + yMax/2, zMin/2 + zMax/2);
+    double squaredRadius = center.squaredDistanceTo(p0);
+    for (int i = 1; i < size; i++)
+    {
+      final Vector3D pi = points.get(i);
+      final double squaredRadiusI = center.squaredDistanceTo(pi);
+      if (squaredRadiusI > squaredRadius)
+      {
+        squaredRadius = squaredRadiusI;
+      }
+    }
+  
+    final double radius = IMathUtils.instance().sqrt(squaredRadius) + radiusDelta;
+    return new Sphere(center, radius);
   }
 
   public final Vector3D _center ;
@@ -379,7 +393,7 @@ public class Sphere extends BoundingVolume
       //      return true;
       //    }
       final double distance = _center.distanceTo(that._center);
-      final double deltaRadius = IMathUtils.instance().abs(that._radius - _radius);
+      final double deltaRadius = that._radius - _radius;
       if (deltaRadius >= distance)
       {
         return true;
