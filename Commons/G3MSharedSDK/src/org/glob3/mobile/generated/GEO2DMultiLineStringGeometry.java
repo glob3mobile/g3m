@@ -55,4 +55,9 @@ public abstract class GEO2DMultiLineStringGeometry extends GEO2DGeometry
     return _coordinatesArrayData;
   }
 
+public final long getCoordinatesCount()
+{
+  return (_coordinatesArrayData == null) ? 0 : _coordinatesArrayData.getCoordinatesCount();
+}
+
 }
