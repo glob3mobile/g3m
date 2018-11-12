@@ -24,9 +24,21 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 //class GEOSymbolizer;
 
-public abstract class GEOFeatureCollection extends GEOObject
+public class GEOFeatureCollection extends GEOObject
 {
   private java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
+
+  private static java.util.ArrayList<GEOFeature> copy(java.util.ArrayList<GEOFeature> features)
+  {
+    java.util.ArrayList<GEOFeature> result = new java.util.ArrayList<GEOFeature>();
+    final int size = features.size();
+    for (int i = 0; i < size; i++)
+    {
+      GEOFeature feature = features.get(i);
+      result.add((feature == null) ? null : feature.deepCopy());
+    }
+    return result;
+  }
 
   public GEOFeatureCollection(java.util.ArrayList<GEOFeature> features)
   {
@@ -78,6 +90,23 @@ public abstract class GEOFeatureCollection extends GEOObject
         feature.rasterize(symbolizer, canvas, projection, tileLevel);
       }
     }
+  }
+
+  public final long getCoordinatesCount()
+  {
+    long result = 0;
+    final int featuresCount = _features.size();
+    for (int i = 0; i < featuresCount; i++)
+    {
+      GEOFeature feature = _features.get(i);
+      result += feature.getCoordinatesCount();
+    }
+    return result;
+  }
+
+  public final GEOFeatureCollection deepCopy()
+  {
+    return new GEOFeatureCollection(copy(_features));
   }
 
   public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
