@@ -113,4 +113,10 @@ public class GEO2DCoordinatesData extends RCObject
     return _coordinates.get(index);
   }
 
+  public long getCoordinatesCount()
+  {
+    return (_coordinates == null) ? 0 : _coordinates.size();
+  }
+
+
 }

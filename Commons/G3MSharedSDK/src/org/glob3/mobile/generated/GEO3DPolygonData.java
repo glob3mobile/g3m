@@ -86,6 +86,21 @@ public class GEO3DPolygonData extends GEO3DCoordinatesData
     return _holesCoordinatesArray;
   }
 
+  public final long getCoordinatesCount()
+  {
+    long result = GEO3DCoordinatesData.getCoordinatesCount();
+    if (_holesCoordinatesArray != null)
+    {
+      final int holesCoordinatesArraySize = _holesCoordinatesArray.size();
+      for (int j = 0; j < holesCoordinatesArraySize; j++)
+      {
+        final java.util.ArrayList<Geodetic3D> holeCoordinates = _holesCoordinatesArray.get(j);
+        result += holeCoordinates.size();
+      }
+    }
+    return result;
+  }
+
   public final boolean contains(Geodetic3D point)
   {
     if (getSector().contains(point._latitude, point._longitude))
