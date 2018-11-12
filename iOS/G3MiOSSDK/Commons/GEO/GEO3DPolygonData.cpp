@@ -35,6 +35,18 @@ GEO3DPolygonData::~GEO3DPolygonData() {
 #endif
 }
 
+long long GEO3DPolygonData::getCoordinatesCount() const {
+  long long result = GEO3DCoordinatesData::getCoordinatesCount();
+  if (_holesCoordinatesArray != NULL) {
+    const size_t holesCoordinatesArraySize = _holesCoordinatesArray->size();
+    for (size_t j = 0; j < holesCoordinatesArraySize; j++) {
+      const std::vector<Geodetic3D*>* holeCoordinates = _holesCoordinatesArray->at(j);
+      result += holeCoordinates->size();
+    }
+  }
+  return result;
+}
+
 bool GEO3DPolygonData::contains(const std::vector<Geodetic3D*>* coordinates, const Geodetic3D& point) const {
   int sidesCrossedMovingRight = 0;
   const size_t coordinatesCount = coordinates->size();

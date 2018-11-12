@@ -36,6 +36,19 @@ GEO2DPolygonData::~GEO2DPolygonData() {
 #endif
 }
 
+long long GEO2DPolygonData::getCoordinatesCount() const {
+  long long result = GEO2DCoordinatesData::getCoordinatesCount();
+  if (_holesCoordinatesArray != NULL) {
+    const size_t holesCoordinatesArraySize = _holesCoordinatesArray->size();
+    for (size_t j = 0; j < holesCoordinatesArraySize; j++) {
+      const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
+      result += holeCoordinates->size();
+    }
+  }
+  return result;
+}
+
+
 bool GEO2DPolygonData::contains(const std::vector<Geodetic2D*>* coordinates, const Geodetic2D& point) const {
   int sidesCrossedMovingRight = 0;
   const size_t coordinatesCount = coordinates->size();

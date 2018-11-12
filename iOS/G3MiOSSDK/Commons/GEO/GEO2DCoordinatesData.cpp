@@ -76,3 +76,8 @@ const Sector* GEO2DCoordinatesData::getSector() const {
   }
   return _sector;
 }
+
+
+long long GEO2DCoordinatesData::getCoordinatesCount() const {
+  return (_coordinates == NULL) ? 0 : _coordinates->size();
+}
