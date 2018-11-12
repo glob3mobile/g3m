@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEO2DPointGeometry extends GEO2DGeometry
+public abstract class GEO2DPointGeometry extends GEO2DGeometry
 {
   private final Geodetic2D _position ;
 

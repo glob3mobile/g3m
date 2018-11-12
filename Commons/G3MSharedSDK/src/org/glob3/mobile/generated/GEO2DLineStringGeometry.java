@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEO2DLineStringGeometry extends GEO2DGeometry
+public abstract class GEO2DLineStringGeometry extends GEO2DGeometry
 {
   private final GEO2DCoordinatesData _coordinatesData;
 

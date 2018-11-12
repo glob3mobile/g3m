@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 //class GEOSymbolizer;
 
-public class GEOFeatureCollection extends GEOObject
+public abstract class GEOFeatureCollection extends GEOObject
 {
   private java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
 

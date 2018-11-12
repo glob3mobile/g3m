@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEO3DPointGeometry extends GEO3DGeometry
+public abstract class GEO3DPointGeometry extends GEO3DGeometry
 {
   private final Geodetic3D _position ;
 

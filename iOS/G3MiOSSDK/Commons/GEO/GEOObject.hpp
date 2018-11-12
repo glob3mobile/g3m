@@ -27,6 +27,9 @@ protected:
   
 public:
   virtual ~GEOObject();
+
+  virtual GEOObject* deepCopy() const = 0;
+  virtual long long getCoordinatesCount() const = 0;
   
   virtual void rasterize(const GEORasterSymbolizer* symbolizer,
                          ICanvas* canvas,

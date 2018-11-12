@@ -37,6 +37,9 @@ public abstract class GEOObject
   {
   }
 
+  public abstract GEOObject deepCopy();
+  public abstract long getCoordinatesCount();
+
   public abstract void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel);
 
   public abstract void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer);

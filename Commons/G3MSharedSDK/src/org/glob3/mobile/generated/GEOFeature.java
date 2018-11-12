@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class GLGlobalState;
 //class GEOSymbolizer;
 
-public class GEOFeature extends GEOObject
+public abstract class GEOFeature extends GEOObject
 {
   private final JSONBaseObject _id;
   private final GEOGeometry _geometry;

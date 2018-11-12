@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class GEO3DPolygonData;
 
-public class GEO3DPolygonGeometry extends GEO3DGeometry
+public abstract class GEO3DPolygonGeometry extends GEO3DGeometry
 {
   private final GEO3DPolygonData _polygonData;
 

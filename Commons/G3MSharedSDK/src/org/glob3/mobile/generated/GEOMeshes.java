@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 //class Mesh;
 
 
-public class GEOMeshes extends GEOObject
+public abstract class GEOMeshes extends GEOObject
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
