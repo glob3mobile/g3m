@@ -36,6 +36,8 @@ public:
 #endif
   }
   
+  virtual GEOGeometry* deepCopy() const = 0;
+  
   void setFeature(GEOFeature* feature) const;
   
   const GEOFeature* getFeature() const {

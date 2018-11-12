@@ -65,3 +65,13 @@ int GEOFeature::symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
                           const VectorStreamingRenderer::Node*      node) const {
   return (_geometry == NULL) ? 0 : _geometry->symbolize(vectorSet, node);
 }
+
+long long GEOFeature::getCoordinatesCount() const {
+  return (_geometry == NULL) ? 0 : _geometry->getCoordinatesCount();
+}
+
+GEOFeature* GEOFeature::deepCopy() const {
+  return new GEOFeature((_id         == NULL) ? NULL : _id->deepCopy(),
+                        (_geometry   == NULL) ? NULL : _geometry->deepCopy(),
+                        (_properties == NULL) ? NULL : _properties->deepCopy());
+}
