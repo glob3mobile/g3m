@@ -204,29 +204,46 @@ BoundingVolume* Sphere::mergedWithBox(const Box* that) const {
 
 }
 
+Sphere* Sphere::mergedWithSphere(const Sphere* that) const {
+  return mergedWithSphere(that, 0.000001);
+}
 
-BoundingVolume* Sphere::mergedWithSphere(const Sphere* that) const {
-  const double d = _center.distanceTo(that->_center);
+Sphere* Sphere::mergedWithSphere(const Sphere* that,
+                                 const double radiusDelta) const {
+  // from Real-Time Collision Detection - Christer Ericson
+  //   page 268
+  const IMathUtils* mu = IMathUtils::instance();
 
-  if (d + that->_radius <= _radius) {
-    return new Sphere(*this);
+  const Sphere* s0 = this;
+  const Sphere* s1 = that;
+
+  // Compute the squared distance between the sphere centers
+  const Vector3D d = s1->_center.sub( s0->_center );
+  const double dist2 = d.dot(d);
+
+  if (mu->squared(s1->_radius - s0->_radius) >= dist2) {
+    // The sphere with the larger radius encloses the other;
+    // just set s to be the larger of the two spheres
+    if (s1->_radius >= s0->_radius) {
+      return new Sphere(*s1);
+    }
+    return new Sphere(*s0);
   }
-  if (d + _radius <= that->_radius)  {
-    return new Sphere(*that);
-  }
 
-  const double radius = (d + _radius + that->_radius) / 2.0;
-  const Vector3D u = _center.sub(that->_center).normalized();
-  const Vector3D center = _center.add( u.times( radius - _radius ) );
+  // Spheres partially overlapping or disjoint
+  const double dist = mu->sqrt(dist2);
+
+  const double   radius = (dist/2 + s0->_radius/2 + s1->_radius/2) + radiusDelta;
+  const Vector3D center = ((dist > 0)
+                           ? s0->_center.add( d.times( (radius - s0->_radius) / dist ) )
+                           : s0->_center);
 
   return new Sphere(center, radius);
 }
 
-
 bool Sphere::contains(const Vector3D& point) const {
   return _center.squaredDistanceTo(point) <= _radiusSquared;
 }
-
 
 bool Sphere::fullContainedInBox(const Box* that) const {
   const Vector3D upper = that->getUpper();
@@ -242,8 +259,23 @@ bool Sphere::fullContainedInBox(const Box* that) const {
 
 
 bool Sphere::fullContainedInSphere(const Sphere* that) const {
-  const double d = _center.distanceTo(that->_center);
-  return (d + _radius <= that->_radius);
+  //  const double d = _center.distanceTo(that->_center);
+  //  return (d + _radius <= that->_radius);
+
+  if (_radius <= that->_radius) {
+    //    const double squaredDistance    = _center.squaredDistanceTo(that->_center);
+    //    const double squaredDeltaRadius = IMathUtils::instance()->squared(that->_radius - _radius);
+    //    if (squaredDeltaRadius >= squaredDistance) {
+    //      return true;
+    //    }
+    const double distance    = _center.distanceTo(that->_center);
+    const double deltaRadius = IMathUtils::instance()->abs(that->_radius - _radius);
+    if (deltaRadius >= distance) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 Sphere* Sphere::createSphere() const {

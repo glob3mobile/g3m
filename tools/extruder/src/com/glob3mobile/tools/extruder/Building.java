@@ -24,6 +24,7 @@ public class Building {
 
    private final ExtruderPolygon _extruderPolygon;
    private final Geodetic2D      _position;
+   private final double          _minHeight;
    private final List<Vector3D>  _roofVertices;
    private final List<Triangle>  _roofTriangles;
    private final Wall            _exteriorWall;
@@ -33,6 +34,7 @@ public class Building {
 
    Building(final ExtruderPolygon extruderPolygon,
             final Geodetic2D position,
+            final double minHeight,
             final List<Vector3D> roofVertices,
             final List<Triangle> roofTriangles,
             final Wall exteriorWall,
@@ -40,6 +42,7 @@ public class Building {
             final G3MeshMaterial material) {
       _extruderPolygon = extruderPolygon;
       _position = position;
+      _minHeight = minHeight;
       _roofVertices = roofVertices;
       _roofTriangles = consolidate(roofTriangles, roofVertices);
       _exteriorWall = exteriorWall;
@@ -436,7 +439,7 @@ public class Building {
    }
 
 
-   public Map<String, Object> createFeatureProperties(final double minHeight) {
+   public Map<String, Object> createFeatureProperties() {
       final Map<String, Object> result = new LinkedHashMap<>();
 
       result.put("roof_vertices", ExtruderJSON.verticesToJSON(_roofVertices));
@@ -447,9 +450,9 @@ public class Building {
 
       result.put("material", ExtruderJSON.materialToJSON(_material));
 
-      result.put("size", calculateSize(minHeight));
+      result.put("size", calculateSize(_minHeight));
 
-      result.put("min_height", minHeight);
+      result.put("min_height", _minHeight);
       result.put("max_height", calculateMaxHeight());
 
       return result;

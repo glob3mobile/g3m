@@ -204,10 +204,10 @@ public abstract class ElevationData
 
   public abstract boolean hasNoData();
 
-  public final double getElevationAt(Angle latitude2, Angle longitude2)
+  public final double getElevationAt(Angle latitude, Angle longitude)
   {
   
-    final Vector2D uv = _sector.getUVCoordinates(latitude2, longitude2);
+    final Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
     final double u = uv._x;
     final double v = uv._y;
   

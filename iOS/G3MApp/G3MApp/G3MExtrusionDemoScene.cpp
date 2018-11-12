@@ -83,8 +83,8 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   LayerSet* layerSet = model->getLayerSet();
 
-//  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-//  layerSet->addLayer(osmLayer);
+  //  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+  //  layerSet->addLayer(osmLayer);
 
   BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
                                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
@@ -92,34 +92,46 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   layerSet->addLayer(bingMapsAerialLayer);
 
 
-//  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
-//                                                                                          1, // topSectorSplitsByLatitude
-//                                                                                          2, // topSectorSplitsByLongitude
-//                                                                                          1, // firstLevel
-//                                                                                          13 // maxLevel
-//                                                                                          );
-//  URLTemplateLayer* layer = new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", // urlTemplate
-//                                                 Sector::FULL_SPHERE,
-//                                                 false,                      // isTransparent
-//                                                 TimeInterval::fromDays(30), // timeToCache
-//                                                 true, // readExpired
-//                                                 NULL, // condition
-//                                                 parameters);
-//  layerSet->addLayer(layer);
+  //  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
+  //                                                                                       1, // topSectorSplitsByLatitude
+  //                                                                                       2, // topSectorSplitsByLongitude
+  //                                                                                       1, // firstLevel
+  //                                                                                       13 // maxLevel
+  //                                                                                       );
+  //  URLTemplateLayer* layer = new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", // urlTemplate
+  //                                              Sector::FULL_SPHERE,
+  //                                              false,                      // isTransparent
+  //                                              TimeInterval::fromDays(30), // timeToCache
+  //                                              true, // readExpired
+  //                                              NULL, // condition
+  //                                              parameters);
+  //  layerSet->addLayer(layer);
 
 
   const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
                                                39.5082433963135529, -6.1796950996431388);
 
-  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
-                                                                -6.37246061136657449,
-                                                                4100) );
-//  g3mWidget->setCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
-//                                                        -6.37246061136657449,
-//                                                        4100) );
+  //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
+  //                                                             -6.37246061136657449,
+  //                                                             4100) );
 
-//  g3mWidget->setAnimatedCameraPosition( Geodetic3D(demSector._center,
-//                                                   4100) );
+  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(39.460438280508554953,
+                                                               -6.3478641137059907962,
+                                                               720),
+                                       Angle::fromDegrees(60), // heading
+                                       Angle::fromDegrees(-15) // pitch
+                                       );
+
+  //  Camera position=(lat=39.460438280508554953d, lon=-6.3478641137059907962d, height=721.03182836661108013)
+  //                heading=60.977841
+  //  pitch=-15.509722
+
+  //  g3mWidget->setCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
+  //                                                     -6.37246061136657449,
+  //                                                     4100) );
+
+  //  g3mWidget->setAnimatedCameraPosition( Geodetic3D(demSector._center,
+  //                                                4100) );
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);
@@ -137,13 +149,13 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-    context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
-                                            1000000,
-                                            TimeInterval::zero(),
-                                            false,
-                                            new G3MeshBufferDownloadListener(context->getPlanet(),
-                                                                             model->getMeshRenderer()),
-                                            true);
+  // context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
+  //                                         1000000,
+  //                                         TimeInterval::zero(),
+  //                                         false,
+  //                                         new G3MeshBufferDownloadListener(context->getPlanet(),
+  //                                                                          model->getMeshRenderer()),
+  //                                         true);
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
@@ -159,7 +171,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
                          VectorStreamingRenderer::Format::PLAIN_FILES,
                          Angle::fromDegrees(90),   // minSectorSize
                          //12500000 / 500000          // minProjectedArea
-                         50000
+                         100000
                          );
 
 }

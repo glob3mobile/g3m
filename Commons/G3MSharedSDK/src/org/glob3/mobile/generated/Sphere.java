@@ -300,22 +300,40 @@ public class Sphere extends BoundingVolume
      }*/
   
   }
-  public final BoundingVolume mergedWithSphere(Sphere that)
+
+  public final Sphere mergedWithSphere(Sphere that)
   {
-    final double d = _center.distanceTo(that._center);
+    return mergedWithSphere(that, 0.000001);
+  }
+  public final Sphere mergedWithSphere(Sphere that, double radiusDelta)
+  {
+    // from Real-Time Collision Detection - Christer Ericson
+    //   page 268
+    final IMathUtils mu = IMathUtils.instance();
   
-    if (d + that._radius <= _radius)
+    final Sphere s0 = this;
+    final Sphere s1 = that;
+  
+    // Compute the squared distance between the sphere centers
+    final Vector3D d = s1._center.sub(s0._center);
+    final double dist2 = d.dot(d);
+  
+    if (mu.squared(s1._radius - s0._radius) >= dist2)
     {
-      return new Sphere(this);
-    }
-    if (d + _radius <= that._radius)
-    {
-      return new Sphere(that);
+      // The sphere with the larger radius encloses the other;
+      // just set s to be the larger of the two spheres
+      if (s1._radius >= s0._radius)
+      {
+        return new Sphere(s1);
+      }
+      return new Sphere(s0);
     }
   
-    final double radius = (d + _radius + that._radius) / 2.0;
-    final Vector3D u = _center.sub(that._center).normalized();
-    final Vector3D center = _center.add(u.times(radius - _radius));
+    // Spheres partially overlapping or disjoint
+    final double dist = mu.sqrt(dist2);
+  
+    final double radius = (dist/2 + s0._radius/2 + s1._radius/2) + radiusDelta;
+    final Vector3D center = ((dist > 0) ? s0._center.add(d.times((radius - s0._radius) / dist)) : s0._center);
   
     return new Sphere(center, radius);
   }
@@ -350,8 +368,25 @@ public class Sphere extends BoundingVolume
   }
   public final boolean fullContainedInSphere(Sphere that)
   {
-    final double d = _center.distanceTo(that._center);
-    return (d + _radius <= that._radius);
+    //  const double d = _center.distanceTo(that->_center);
+    //  return (d + _radius <= that->_radius);
+  
+    if (_radius <= that._radius)
+    {
+      //    const double squaredDistance    = _center.squaredDistanceTo(that->_center);
+      //    const double squaredDeltaRadius = IMathUtils::instance()->squared(that->_radius - _radius);
+      //    if (squaredDeltaRadius >= squaredDistance) {
+      //      return true;
+      //    }
+      final double distance = _center.distanceTo(that._center);
+      final double deltaRadius = IMathUtils.instance().abs(that._radius - _radius);
+      if (deltaRadius >= distance)
+      {
+        return true;
+      }
+    }
+  
+    return false;
   }
 
   public final Sphere createSphere()

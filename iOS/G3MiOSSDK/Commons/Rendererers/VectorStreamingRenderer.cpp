@@ -306,7 +306,7 @@ _children(children),
 _childrenSize((children == NULL) ? 0 : children->size()),
 _loadingChildren(false),
 _isBeingRendered(false),
-_boundingVolume(NULL),
+_boundingSphere(NULL),
 _featuresRequestID(-1),
 _childrenRequestID(-1),
 _downloader(NULL),
@@ -325,7 +325,7 @@ void VectorStreamingRenderer::Node::setChildren(std::vector<Node*>* children) {
   if ((children == NULL) && (_children != NULL)) {
     return;
   }
-  
+
   if (children != _children) {
     if (_children != NULL) {
       for (size_t i = 0; i < _childrenSize; i++) {
@@ -368,7 +368,7 @@ VectorStreamingRenderer::Node::~Node() {
   }
   
   delete _nodeSector;
-  delete _boundingVolume;
+  delete _boundingSphere;
   
   if (_parent != NULL) {
     _parent->_release();
@@ -447,7 +447,7 @@ void VectorStreamingRenderer::Node::createClusterMarks() {
 
 
 BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRenderContext *rc) {
-  if (_boundingVolume == NULL) {
+  if (_boundingSphere == NULL) {
     const Planet* planet = rc->getPlanet();
     
 #ifdef C_CODE
@@ -480,13 +480,33 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     points.add( planet.toCartesian( _nodeSector.getCenter(), _maxHeight ) );
 #endif
     
-    _boundingVolume = Sphere::enclosingSphere(points);
+    _boundingSphere = Sphere::enclosingSphere(points);
+
+    if (_parent) {
+      _parent->updateBoundingSphereWith(_boundingSphere);
+    }
   }
-  
-  return _boundingVolume;
+
+  return _boundingSphere;
 }
 
+void VectorStreamingRenderer::Node::updateBoundingSphereWith(Sphere* childSphere) {
+  if ( childSphere->fullContainedInSphere(_boundingSphere) ) {
+    return;
+  }
 
+  Sphere* old = _boundingSphere;
+  _boundingSphere = _boundingSphere->mergedWithSphere(childSphere, 0.001);
+//  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
+//    _boundingSphere = old->mergedWithSphere(childSphere, 0.001);
+//    childSphere->fullContainedInSphere(_boundingSphere);
+//    THROW_EXCEPTION("Ohh my gosh!");
+//  }
+  delete old;
+  if (_parent) {
+    _parent->updateBoundingSphereWith(_boundingSphere);
+  }
+}
 
 void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   //  if (_verbose) {
@@ -809,7 +829,8 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                                                                                 const bool        verbose) {
   const std::string id            = json->getAsString("id")->value();
   const Sector*     nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-  const double      minHeight     = json->getAsNumber("minHeight", 0);
+//  const double      minHeight     = json->getAsNumber("minHeight", 0);
+  const double      minHeight     = 0;
   const double      maxHeight     = json->getAsNumber("maxHeight", 0);
   const int         clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
   const int         featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
