@@ -74,8 +74,8 @@ public abstract class ExtruderPolygon {
 
             final Wall exteriorWall = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
-            return new Building(this, getAverage(), toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
-                     _material);
+            return new Building(this, getAverage(), _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall,
+                     interiorWalls, _material);
          }
       }
       catch (final NullPointerException e) {

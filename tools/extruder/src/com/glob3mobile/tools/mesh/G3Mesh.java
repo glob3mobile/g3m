@@ -73,12 +73,12 @@ public class G3Mesh {
    }
 
 
-   public static List<G3Mesh> consolidate(final List<G3Mesh> meshes) {
-      if ((meshes == null) || meshes.isEmpty()) {
+   public static List<G3Mesh> consolidate(final List<G3Mesh> oldMeshes) {
+      if ((oldMeshes == null) || oldMeshes.isEmpty()) {
          return Collections.emptyList();
       }
 
-      final G3Mesh first = meshes.get(0);
+      final G3Mesh first = oldMeshes.get(0);
 
       if (first._primitive != G3Mesh.Primitive.TRIANGLES) {
          throw new RuntimeException("Primitive not supported: " + first._primitive);
@@ -92,100 +92,93 @@ public class G3Mesh {
       final List<Vector2F> newTexCoords = new ArrayList<>();
       final List<Short> newIndices = new ArrayList<>();
 
-      double sumX = 0;
-      double sumY = 0;
-      double sumZ = 0;
 
-      for (final G3Mesh mesh : meshes) {
-         if (!mesh.isHomomorphic(first)) {
+      for (final G3Mesh oldMesh : oldMeshes) {
+         if (!oldMesh.isHomomorphic(first)) {
             throw new RuntimeException("Inconsistency");
          }
 
-         int indicesOffset = newVertices.size();
-
-         final boolean fitsMesh = fits(mesh, indicesOffset);
+         final boolean fitsMesh = fits(oldMesh, newVertices.size());
          if (!fitsMesh) {
-            final int newVerticesSize = newVertices.size();
-            if (newVerticesSize > 0) {
-               final Vector3D center = new Vector3D(sumX / newVerticesSize, sumY / newVerticesSize, sumZ / newVerticesSize);
-               final G3Mesh newMesh = new G3Mesh( //
-                        first._primitive, //
-                        first._pointSize, //
-                        first._lineWidth, //
-                        first._verticesFormat, //
-                        center, //
-                        convert(center, newVertices), //
-                        newNormals.isEmpty() ? null : newNormals, //
-                        newColors.isEmpty() ? null : newColors, //
-                        newTexCoords.isEmpty() ? null : newTexCoords, //
-                        newIndices, //
-                        first._material);
-               newMeshes.add(newMesh);
-            }
-
-            sumX = 0;
-            sumY = 0;
-            sumZ = 0;
-            newVertices.clear();
-            newNormals.clear();
-            newColors.clear();
-            newTexCoords.clear();
-            newIndices.clear();
-            indicesOffset = 0;
+            createMesh(first, newMeshes, newVertices, newNormals, newColors, newTexCoords, newIndices);
          }
+         final int indicesOffset = newVertices.size();
 
-         final Vector3D center = mesh._center;
-         final List<Vector3F> vertices = mesh._vertices;
-         for (int i = 0; i < vertices.size(); i++) {
-            final Vector3F vertex = vertices.get(i);
-            final double x = center._x + vertex._x;
-            final double y = center._y + vertex._y;
-            final double z = center._z + vertex._z;
-
-            sumX += x;
-            sumY += y;
-            sumZ += z;
-
+         final Vector3D oldCenter = oldMesh._center;
+         final List<Vector3F> oldVertices = oldMesh._vertices;
+         for (int i = 0; i < oldVertices.size(); i++) {
+            final Vector3F oldVertex = oldVertices.get(i);
+            final double x = oldCenter._x + oldVertex._x;
+            final double y = oldCenter._y + oldVertex._y;
+            final double z = oldCenter._z + oldVertex._z;
             newVertices.add(new Vector3D(x, y, z));
          }
 
-         if (mesh._normals != null) {
-            newNormals.addAll(mesh._normals);
+         if (oldMesh._normals != null) {
+            newNormals.addAll(oldMesh._normals);
          }
-         if (mesh._colors != null) {
-            newColors.addAll(mesh._colors);
+         if (oldMesh._colors != null) {
+            newColors.addAll(oldMesh._colors);
          }
-         if (mesh._texCoords != null) {
-            newTexCoords.addAll(mesh._texCoords);
+         if (oldMesh._texCoords != null) {
+            newTexCoords.addAll(oldMesh._texCoords);
          }
 
-         for (final short index : mesh._indices) {
+         for (final short index : oldMesh._indices) {
             newIndices.add(toShort(indicesOffset + index));
          }
-
       }
 
-
-      final int newVerticesSize = newVertices.size();
-      if (newVerticesSize > 0) {
-         final Vector3D center = new Vector3D(sumX / newVerticesSize, sumY / newVerticesSize, sumZ / newVerticesSize);
-         final G3Mesh newMesh = new G3Mesh( //
-                  first._primitive, //
-                  first._pointSize, //
-                  first._lineWidth, //
-                  first._verticesFormat, //
-                  center, //
-                  convert(center, newVertices), //
-                  newNormals.isEmpty() ? null : newNormals, //
-                  newColors.isEmpty() ? null : newColors, //
-                  newTexCoords.isEmpty() ? null : newTexCoords, //
-                  newIndices, //
-                  first._material);
-         newMeshes.add(newMesh);
-      }
-
+      createMesh(first, newMeshes, newVertices, newNormals, newColors, newTexCoords, newIndices);
 
       return newMeshes;
+   }
+
+
+   private static void createMesh(final G3Mesh first,
+                                  final List<G3Mesh> newMeshes,
+                                  final List<Vector3D> newVertices,
+                                  final List<Vector3F> newNormals,
+                                  final List<Color> newColors,
+                                  final List<Vector2F> newTexCoords,
+                                  final List<Short> newIndices) {
+      if (newVertices.isEmpty()) {
+         return;
+      }
+
+      final Vector3D newCenter = calculateCenter(newVertices);
+      final G3Mesh newMesh = new G3Mesh( //
+               first._primitive, //
+               first._pointSize, //
+               first._lineWidth, //
+               first._verticesFormat, //
+               newCenter, //
+               substractCenter(newCenter, newVertices), //
+               newNormals.isEmpty() ? null : new ArrayList<>(newNormals), //
+               newColors.isEmpty() ? null : new ArrayList<>(newColors), //
+               newTexCoords.isEmpty() ? null : new ArrayList<>(newTexCoords), //
+               new ArrayList<>(newIndices), //
+               first._material);
+      newMeshes.add(newMesh);
+
+      newVertices.clear();
+      newNormals.clear();
+      newColors.clear();
+      newTexCoords.clear();
+      newIndices.clear();
+   }
+
+
+   private static Vector3D calculateCenter(final List<Vector3D> vertices) {
+      double sumX = 0;
+      double sumY = 0;
+      double sumZ = 0;
+      for (final Vector3D newVextex : vertices) {
+         sumX += newVextex._x;
+         sumY += newVextex._y;
+         sumZ += newVextex._z;
+      }
+      return new Vector3D(sumX, sumY, sumZ).div(vertices.size());
    }
 
 
@@ -201,8 +194,8 @@ public class G3Mesh {
    }
 
 
-   private static List<Vector3F> convert(final Vector3D center,
-                                         final List<Vector3D> verticesD) {
+   private static List<Vector3F> substractCenter(final Vector3D center,
+                                                 final List<Vector3D> verticesD) {
       final List<Vector3F> result = new ArrayList<>(verticesD.size());
       for (final Vector3D vertexD : verticesD) {
          final Vector3F vertexF = new Vector3F( //
@@ -212,7 +205,6 @@ public class G3Mesh {
          result.add(vertexF);
       }
       return result;
-
    }
 
 
@@ -280,16 +272,32 @@ public class G3Mesh {
          }
       }
 
-      if ((_normals != null) && (_normals.size() != verticesSize)) {
-         throw new RuntimeException("Normals doesn't match vertices size (" + verticesSize + ")");
+      if (_normals != null) {
+         if (_normals.size() != verticesSize) {
+            throw new RuntimeException("Normals doesn't match vertices size (" + verticesSize + ")");
+         }
+         for (final Vector3F normal : _normals) {
+            if (normal.isNan()) {
+               throw new RuntimeException("Invalid normal: " + normal);
+            }
+         }
       }
 
-      if ((_colors != null) && (_colors.size() != verticesSize)) {
-         throw new RuntimeException("Colors doesn't match vertices size (" + verticesSize + ")");
+      if (_colors != null) {
+         if (_colors.size() != verticesSize) {
+            throw new RuntimeException("Colors doesn't match vertices size (" + verticesSize + ")");
+         }
       }
 
-      if ((_texCoords != null) && (_texCoords.size() != verticesSize)) {
-         throw new RuntimeException("TexCoords doesn't match vertices size (" + verticesSize + ")");
+      if (_texCoords != null) {
+         if (_texCoords.size() != verticesSize) {
+            throw new RuntimeException("TexCoords doesn't match vertices size (" + verticesSize + ")");
+         }
+         for (final Vector2F texCoord : _texCoords) {
+            if (texCoord.isNan()) {
+               throw new RuntimeException("Invalid texCoord: " + texCoord);
+            }
+         }
       }
 
       if (_indices != null) {

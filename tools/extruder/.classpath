@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="libs/gpcj-2.2.0-full.jar" sourcepath="libs/gpcj-2.2.0-src.zip"/>
 	<classpathentry kind="lib" path="libs/euclid.jar"/>
 	<classpathentry kind="lib" path="libs/igolibs.jar"/>
+	<classpathentry kind="src" path="/vectorial-streaming"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

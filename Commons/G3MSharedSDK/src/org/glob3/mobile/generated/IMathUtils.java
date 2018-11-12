@@ -295,4 +295,14 @@ public abstract class IMathUtils
 
   public abstract double copySign(double a, double b);
 
+  public final double squared(double d)
+  {
+    return d *d;
+  }
+
+  public final float squared(float f)
+  {
+    return f *f;
+  }
+
 }

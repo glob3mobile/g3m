@@ -28,6 +28,7 @@ class GEOObject;
 class IThreadUtils;
 class JSONBaseObject;
 class BoundingVolume;
+class Sphere;
 class IDownloader;
 class Frustum;
 class GEO2DPointGeometry;
@@ -299,6 +300,8 @@ public:
     Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
+    const double                   _minHeight;
+    const double                   _maxHeight;
     const int                      _clustersCount;
     const int                      _featuresCount;
 #ifdef C_CODE
@@ -315,7 +318,7 @@ public:
 
     std::vector<Cluster*>* _clusters;
 
-    BoundingVolume* _boundingVolume;
+    Sphere* _boundingSphere;
     BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
 
     IDownloader* _downloader;
@@ -360,6 +363,12 @@ public:
 
     void setChildren(std::vector<Node*>* children);
 
+    int getDepth() const {
+      return (_parent == NULL) ? 1 : (_parent->getDepth() + 1);
+    }
+
+    void updateBoundingSphereWith(Sphere* childSphere);
+
   protected:
     ~Node();
 
@@ -370,6 +379,8 @@ public:
     Node(const VectorSet*                vectorSet,
          const std::string&              id,
          const Sector*                   nodeSector,
+         const double                    minHeight,
+         const double                    maxHeight,
          const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,

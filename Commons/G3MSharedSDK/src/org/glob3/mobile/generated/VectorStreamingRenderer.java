@@ -27,6 +27,7 @@ package org.glob3.mobile.generated;
 //class IThreadUtils;
 //class JSONBaseObject;
 //class BoundingVolume;
+//class Sphere;
 //class IDownloader;
 //class Frustum;
 //class GEO2DPointGeometry;
@@ -92,6 +93,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final String id = json.getAsString("id").value();
       final Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
+    //  const double      minHeight     = json->getAsNumber("minHeight", 0);
+      final double minHeight = 0;
+      final double maxHeight = json.getAsNumber("maxHeight", 0);
       final int clustersCount = (int) json.getAsNumber("clustersCount", 0.0);
       final int featuresCount = (int) json.getAsNumber("featuresCount", 0.0);
     
@@ -123,7 +127,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
       }
     
-      return new Node(vectorSet, id, nodeSector, clustersCount, featuresCount, childrenIDs, children, verbose);
+      return new Node(vectorSet, id, nodeSector, minHeight, maxHeight, clustersCount, featuresCount, childrenIDs, children, verbose);
     }
 
   }
@@ -585,6 +589,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private Node _parent;
     private final String _id;
     private final Sector _nodeSector;
+    private final double _minHeight;
+    private final double _maxHeight;
     private final int _clustersCount;
     private final int _featuresCount;
     private final java.util.ArrayList<String> _childrenIDs;
@@ -596,24 +602,34 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private java.util.ArrayList<Cluster> _clusters;
 
-    private BoundingVolume _boundingVolume;
+    private Sphere _boundingSphere;
     private BoundingVolume getBoundingVolume(G3MRenderContext rc)
     {
-      if (_boundingVolume == null)
+      if (_boundingSphere == null)
       {
         final Planet planet = rc.getPlanet();
     
-        java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-        points.add( planet.toCartesian( _nodeSector.getNE()     ) );
-        points.add( planet.toCartesian( _nodeSector.getNW()     ) );
-        points.add( planet.toCartesian( _nodeSector.getSE()     ) );
-        points.add( planet.toCartesian( _nodeSector.getSW()     ) );
-        points.add( planet.toCartesian( _nodeSector.getCenter() ) );
+        java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);
+        points.add( planet.toCartesian( _nodeSector.getNE()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getNE()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getNW()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getNW()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSE()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSE()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSW()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSW()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getCenter(), _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getCenter(), _maxHeight ) );
     
-        _boundingVolume = Sphere.enclosingSphere(points);
+        _boundingSphere = Sphere.enclosingSphere(points, 0.1);
+    
+        if (_parent != null)
+        {
+          _parent.updateBoundingSphereWith(_boundingSphere);
+        }
       }
     
-      return _boundingVolume;
+      return _boundingSphere;
     }
 
     private IDownloader _downloader;
@@ -655,7 +671,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      final long depthPriority = 10000 - getDepth();
+      _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + depthPriority + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
     {
@@ -701,7 +718,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      final long depthPriority = 10000 - getDepth();
+      _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority() + depthPriority, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
     {
@@ -864,6 +882,33 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
+    private int getDepth()
+    {
+      return (_parent == null) ? 1 : (_parent.getDepth() + 1);
+    }
+
+    private void updateBoundingSphereWith(Sphere childSphere)
+    {
+      if (childSphere.fullContainedInSphere(_boundingSphere))
+      {
+        return;
+      }
+    
+      Sphere old = _boundingSphere;
+      _boundingSphere = _boundingSphere.mergedWithSphere(childSphere, 0.1);
+    //  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
+    //    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
+    //    childSphere->fullContainedInSphere(_boundingSphere);
+    //    THROW_EXCEPTION("Ohh my gosh!");
+    //  }
+      if (old != null)
+         old.dispose();
+      if (_parent != null)
+      {
+        _parent.updateBoundingSphereWith(_boundingSphere);
+      }
+    }
+
     public void dispose()
     {
       unload();
@@ -881,8 +926,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_nodeSector != null)
          _nodeSector.dispose();
-      if (_boundingVolume != null)
-         _boundingVolume.dispose();
+      if (_boundingSphere != null)
+         _boundingSphere.dispose();
     
       if (_parent != null)
       {
@@ -895,12 +940,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public ChildrenParserAsyncTask _childrenTask;
     public FeaturesParserAsyncTask _featuresTask;
 
-    public Node(VectorSet vectorSet, String id, Sector nodeSector, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, java.util.ArrayList<Node> children, boolean verbose)
+    public Node(VectorSet vectorSet, String id, Sector nodeSector, double minHeight, double maxHeight, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, java.util.ArrayList<Node> children, boolean verbose)
     {
        _parent = null;
        _vectorSet = vectorSet;
        _id = id;
        _nodeSector = nodeSector;
+       _minHeight = minHeight;
+       _maxHeight = maxHeight;
        _clustersCount = clustersCount;
        _featuresCount = featuresCount;
        _childrenIDs = childrenIDs;
@@ -911,7 +958,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _childrenSize = (children == null) ? 0 : children.size();
        _loadingChildren = false;
        _isBeingRendered = false;
-       _boundingVolume = null;
+       _boundingSphere = null;
        _featuresRequestID = -1;
        _childrenRequestID = -1;
        _downloader = null;
