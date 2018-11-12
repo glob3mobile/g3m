@@ -216,12 +216,12 @@ Sphere* Sphere::mergedWithSphere(const Sphere* that,
 
   const Sphere* s0 = this;
   const Sphere* s1 = that;
-
+  
   // Compute the squared distance between the sphere centers
   const Vector3D d = s1->_center.sub( s0->_center );
-  const double dist2 = d.dot(d);
-
-  if (mu->squared(s1->_radius - s0->_radius) >= dist2) {
+  const double distSquared = d.dot(d);
+  
+  if (mu->squared(s1->_radius - s0->_radius) >= distSquared) {
     // The sphere with the larger radius encloses the other;
     // just set s to be the larger of the two spheres
     if (s1->_radius >= s0->_radius) {
@@ -231,7 +231,7 @@ Sphere* Sphere::mergedWithSphere(const Sphere* that,
   }
 
   // Spheres partially overlapping or disjoint
-  const double dist = mu->sqrt(dist2);
+  const double dist = mu->sqrt(distSquared);
 
   const double   radius = (dist/2 + s0->_radius/2 + s1->_radius/2) + radiusDelta;
   const Vector3D center = ((dist > 0)

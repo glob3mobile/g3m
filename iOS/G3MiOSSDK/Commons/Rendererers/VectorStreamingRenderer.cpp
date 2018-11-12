@@ -497,11 +497,11 @@ void VectorStreamingRenderer::Node::updateBoundingSphereWith(Sphere* childSphere
 
   Sphere* old = _boundingSphere;
   _boundingSphere = _boundingSphere->mergedWithSphere(childSphere, 0.001);
-//  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
-//    _boundingSphere = old->mergedWithSphere(childSphere, 0.001);
-//    childSphere->fullContainedInSphere(_boundingSphere);
-//    THROW_EXCEPTION("Ohh my gosh!");
-//  }
+  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
+    _boundingSphere = old->mergedWithSphere(childSphere, 0.001);
+    childSphere->fullContainedInSphere(_boundingSphere);
+    THROW_EXCEPTION("Ohh my gosh!");
+  }
   delete old;
   if (_parent) {
     _parent->updateBoundingSphereWith(_boundingSphere);
