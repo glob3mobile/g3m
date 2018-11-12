@@ -23,7 +23,7 @@ public:
 
   virtual ~GEO2DGeometry() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
   }
 
@@ -33,6 +33,8 @@ public:
                  int tileLevel) const;
   
   virtual bool contain(const Geodetic2D& point) const;
+
+  virtual GEO2DGeometry* deepCopy() const = 0;
 
 };
 
