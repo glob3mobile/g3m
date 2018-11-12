@@ -51,6 +51,8 @@ public:
     return _coordinates->at(index);
   }
 
+  virtual long long getCoordinatesCount() const;
+
 };
 
 #endif
