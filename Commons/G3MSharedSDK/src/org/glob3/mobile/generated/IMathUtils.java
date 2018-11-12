@@ -297,12 +297,12 @@ public abstract class IMathUtils
 
   public final double squared(double d)
   {
-    return d *d;
+    return (d * d);
   }
 
   public final float squared(float f)
   {
-    return f *f;
+    return (f * f);
   }
 
 }

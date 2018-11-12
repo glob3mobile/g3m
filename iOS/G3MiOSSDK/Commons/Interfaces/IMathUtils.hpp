@@ -282,11 +282,11 @@ public:
   virtual double copySign(double a, double b) const = 0;
 
   double squared(double d) const {
-    return d*d;
+    return (d * d);
   }
 
   float squared(float f) const {
-    return f*f;
+    return (f * f);
   }
 
 };
