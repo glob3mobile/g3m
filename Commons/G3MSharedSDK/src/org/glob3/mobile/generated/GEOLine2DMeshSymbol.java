@@ -46,7 +46,6 @@ public class GEOLine2DMeshSymbol extends GEOMeshSymbol
   public void dispose()
   {
   super.dispose();
-
   }
 
   public final Mesh createMesh(G3MRenderContext rc)

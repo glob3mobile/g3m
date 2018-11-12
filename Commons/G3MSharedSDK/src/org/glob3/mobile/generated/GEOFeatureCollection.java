@@ -28,18 +28,6 @@ public class GEOFeatureCollection extends GEOObject
 {
   private java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
 
-  private static java.util.ArrayList<GEOFeature> copy(java.util.ArrayList<GEOFeature> features)
-  {
-    java.util.ArrayList<GEOFeature> result = new java.util.ArrayList<GEOFeature>();
-    final int size = features.size();
-    for (int i = 0; i < size; i++)
-    {
-      GEOFeature feature = features.get(i);
-      result.add((feature == null) ? null : feature.deepCopy());
-    }
-    return result;
-  }
-
   public GEOFeatureCollection(java.util.ArrayList<GEOFeature> features)
   {
      _features = features;
@@ -92,33 +80,16 @@ public class GEOFeatureCollection extends GEOObject
     }
   }
 
-  public final long getCoordinatesCount()
+  public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
-    long result = 0;
-    final int featuresCount = _features.size();
-    for (int i = 0; i < featuresCount; i++)
-    {
-      GEOFeature feature = _features.get(i);
-      result += feature.getCoordinatesCount();
-    }
-    return result;
-  }
-
-  public final GEOFeatureCollection deepCopy()
-  {
-    return new GEOFeatureCollection(copy(_features));
-  }
-
-  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
-  {
-    long result = 0;
+    int result = 0;
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
       if (feature != null)
       {
-        result += feature.createFeatureMarks(vectorSet, node);
+        result += feature.symbolize(vectorSet, node);
       }
     }
     return result;

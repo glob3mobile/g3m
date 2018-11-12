@@ -4,23 +4,38 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IStringBuilder;
 
+import android.icu.text.DecimalFormat;
+
 
 public final class StringBuilder_Android
-   extends
-      IStringBuilder {
+         extends
+            IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
+   private final DecimalFormat _df      = new DecimalFormat("0");
+
+
+   public StringBuilder_Android(final int floatPrecision) {
+      _df.setMaximumFractionDigits(floatPrecision);
+   }
 
 
    @Override
-   protected IStringBuilder getNewInstance() {
-      return new StringBuilder_Android();
+   protected IStringBuilder clone(final int floatPrecision) {
+      return new StringBuilder_Android(floatPrecision);
    }
 
 
    @Override
    public IStringBuilder addDouble(final double d) {
-      _builder.append(d);
+      _builder.append(_df.format(d));
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addFloat(final float f) {
+      _builder.append(_df.format(f));
       return this;
    }
 
@@ -46,13 +61,6 @@ public final class StringBuilder_Android
 
 
    @Override
-   public IStringBuilder addFloat(final float f) {
-      _builder.append(f);
-      return this;
-   }
-
-
-   @Override
    public IStringBuilder addInt(final int i) {
       _builder.append(i);
       return this;
@@ -67,7 +75,8 @@ public final class StringBuilder_Android
 
 
    @Override
-   public IStringBuilder clear() {
+   public IStringBuilder clear(final int floatPrecision) {
+      _df.setMaximumFractionDigits(floatPrecision);
       _builder.setLength(0);
       return this;
    }

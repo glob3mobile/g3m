@@ -23,9 +23,9 @@ public class JSONGenerator extends JSONVisitor
 {
   private IStringBuilder _isb;
 
-  private JSONGenerator()
+  private JSONGenerator(int floatPrecision)
   {
-    _isb = IStringBuilder.newStringBuilder();
+    _isb = IStringBuilder.newStringBuilder(floatPrecision);
   }
 
   private String getString()
@@ -41,9 +41,9 @@ public class JSONGenerator extends JSONVisitor
     super.dispose();
   }
 
-  public static String generate(JSONBaseObject value)
+  public static String generate(JSONBaseObject value, int floatPrecision)
   {
-    JSONGenerator generator = new JSONGenerator();
+    JSONGenerator generator = new JSONGenerator(floatPrecision);
     value.acceptVisitor(generator);
   
     final String result = generator.getString();

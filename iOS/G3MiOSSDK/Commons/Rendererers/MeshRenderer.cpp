@@ -28,6 +28,7 @@
 #include "BoundingVolume.hpp"
 #include "Geodetic3D.hpp"
 #include "GLState.hpp"
+#include "MeshFilter.hpp"
 
 
 MeshRenderer::MeshRenderer(bool visibilityCulling):
@@ -744,4 +745,30 @@ void MeshRenderer::disableAll() {
 
 void MeshRenderer::addMesh(Mesh* mesh) {
   _meshes.push_back(mesh);
+}
+
+size_t MeshRenderer::removeAllMeshes(const MeshFilter& filter,
+                                     bool deleteMeshes) {
+  size_t removed = 0;
+  const size_t meshesSize = _meshes.size();
+
+  std::vector<Mesh*> surviving;
+  for (size_t i = 0; i < meshesSize; i++) {
+    Mesh* mesh = _meshes[i];
+    if (filter.test(mesh)) {
+      if (deleteMeshes) {
+        delete mesh;
+      }
+      removed++;
+    }
+    else {
+      surviving.push_back(mesh);
+    }
+  }
+
+  if (removed > 0) {
+    _meshes = surviving;
+  }
+
+  return removed;
 }

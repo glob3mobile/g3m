@@ -60,19 +60,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final int _imageHeight;
 
     private GEORasterSymbolizer _symbolizer;
-    private final String _tileID;
     private final Sector _tileSector ;
     private final boolean _tileIsMercator;
     private final int _tileLevel;
 
     private void rasterizeGEOObject(GEOObject geoObject)
     {
-      final long coordinatesCount = geoObject.getCoordinatesCount();
-      if (coordinatesCount > 5000)
-      {
-        ILogger.instance().logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d", _tileID, coordinatesCount);
-      }
-    
       final GEORasterProjection projection = new GEORasterProjection(_tileSector, _tileIsMercator, _imageWidth, _imageHeight);
       geoObject.rasterize(_symbolizer, _canvas, projection, _tileLevel);
     
@@ -81,7 +74,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     }
 
 
-    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObjectHolder geoObjectHolder, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileID, Sector tileSector, boolean tileIsMercator, int tileLevel) // GEOObjectHolder, never both -  buffer or
+    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObjectHolder geoObjectHolder, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, Sector tileSector, boolean tileIsMercator, int tileLevel) // GEOObjectHolder, never both -  buffer or
     {
        _imageAssembler = imageAssembler;
        _url = url;
@@ -91,7 +84,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _imageWidth = imageWidth;
        _imageHeight = imageHeight;
        _symbolizer = symbolizer;
-       _tileID = tileID;
        _tileSector = new Sector(tileSector);
        _tileIsMercator = tileIsMercator;
        _tileLevel = tileLevel;
@@ -363,7 +355,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         final GEORasterSymbolizer symbolizer = layer.symbolizerCopy();
     
-        _rasterizer = new GEOJSONBufferRasterizer(this, requestData._url, null, geoObjectHolder, _imageWidth, _imageHeight, symbolizer, _tileID, _tileSector, _tileIsMercator, _tileLevel); // buffer,
+        _rasterizer = new GEOJSONBufferRasterizer(this, requestData._url, null, geoObjectHolder, _imageWidth, _imageHeight, symbolizer, _tileSector, _tileIsMercator, _tileLevel); // buffer,
         _threadUtils.invokeAsyncTask(_rasterizer, true);
       }
     
@@ -402,7 +394,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         final GEORasterSymbolizer symbolizer = _symbolizer;
         _symbolizer = null; // moves ownership of _symbolizer to GEOJSONBufferRasterizer
     
-        _rasterizer = new GEOJSONBufferRasterizer(this, url, buffer, null, _imageWidth, _imageHeight, symbolizer, _tileID, _tileSector, _tileIsMercator, _tileLevel); // geoObject
+        _rasterizer = new GEOJSONBufferRasterizer(this, url, buffer, null, _imageWidth, _imageHeight, symbolizer, _tileSector, _tileIsMercator, _tileLevel); // geoObject
         _threadUtils.invokeAsyncTask(_rasterizer, true);
       }
     }

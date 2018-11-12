@@ -16,7 +16,7 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 class ITimer;
-class MarksFilter;
+class MarkFilter;
 
 
 class MarksRenderer : public DefaultRenderer {
@@ -107,13 +107,13 @@ public:
 
   }
 
-  size_t removeAllMarks(const MarksFilter& filter,
+  size_t removeAllMarks(const MarkFilter& filter,
                         bool animated,
                         bool deleteMarks);
 
-  const std::vector<Mark*> getAllMarks(const MarksFilter& filter) const;
+  const std::vector<Mark*> getAllMarks(const MarkFilter& filter) const;
     
-    std::vector<Mark*> getMarks(const MarksFilter* filter) const;
+  std::vector<Mark*> getMarks(const MarkFilter* filter) const;
 
 };
 

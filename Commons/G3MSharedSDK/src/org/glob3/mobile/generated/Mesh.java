@@ -34,10 +34,22 @@ public abstract class Mesh
 
   private MeshUserData _userData;
 
+  private String _token = "";
+
   protected Mesh()
   {
      _enable = true;
      _userData = null;
+  }
+
+  public final void setToken(String token)
+  {
+    _token = token;
+  }
+
+  public final String getToken()
+  {
+    return _token;
   }
 
   public final void setEnable(boolean enable)

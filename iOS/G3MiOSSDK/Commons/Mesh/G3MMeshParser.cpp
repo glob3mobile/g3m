@@ -185,13 +185,12 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
   }
   G3MMeshMaterial* material = materials[materialID];
 
-  const std::string primitive      = jsonMesh->getAsString("primitive", "Triangles");
+  const int         primitive      = toGLPrimitive( jsonMesh->getAsString("primitive", "Triangles") );
   const float       pointSize      = (float) jsonMesh->getAsNumber("pointSize", 1);
   const float       lineWidth      = (float) jsonMesh->getAsNumber("lineWidth", 1);
   const bool        depthTest      = jsonMesh->getAsBoolean("depthTest", true);
-
   const std::string verticesFormat = jsonMesh->getAsString("verticesFormat", "Cartesian");
-  const bool isGeodetic = (verticesFormat == "Geodetic");
+  const bool        isGeodetic     = (verticesFormat == "Geodetic");
 
   double centerX;
   double centerY;
@@ -219,10 +218,6 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
 
     vertices  = parseFloatBuffer( jsonMesh->getAsArray("vertices") );
   }
-  
-//  const Vector3F    center         = parseVector3F(jsonMesh->getAsArray("center"));
-
-//  IFloatBuffer* vertices  = parseFloatBuffer( jsonMesh->getAsArray("vertices") );
 
   IFloatBuffer* normals   = parseFloatBuffer( jsonMesh->getAsArray("normals")  );
   IFloatBuffer* colors    = parseFloatBuffer( jsonMesh->getAsArray("colors")   );
@@ -233,19 +228,19 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
 
   Mesh* mesh;
   if (indices == NULL) {
-    mesh = new DirectMesh(toGLPrimitive(primitive),
+    mesh = new DirectMesh(primitive,
                           true, // owner
                           Vector3D(centerX, centerY, centerZ),
                           vertices,
                           lineWidth,
                           pointSize,
-                          material->_color, // flatColor
+                          new Color(material->_color), // flatColor
                           colors,
                           depthTest,
                           normals);
   }
   else {
-    mesh = new IndexedMesh(toGLPrimitive(primitive),
+    mesh = new IndexedMesh(primitive,
                            Vector3D(centerX, centerY, centerZ),
                            vertices,
                            true,
@@ -253,7 +248,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
                            true,
                            lineWidth,
                            pointSize,
-                           material->_color, // flatColor
+                           new Color(material->_color), // flatColor
                            colors,
                            depthTest,
                            normals);

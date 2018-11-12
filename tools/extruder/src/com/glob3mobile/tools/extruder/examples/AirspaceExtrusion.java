@@ -3,14 +3,20 @@
 package com.glob3mobile.tools.extruder.examples;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GEOFeature;
+import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.Planet;
 
+import com.glob3mobile.tools.extruder.Building;
+import com.glob3mobile.tools.extruder.ExtruderPolygon;
 import com.glob3mobile.tools.extruder.ExtrusionHandler;
 import com.glob3mobile.tools.extruder.Heigths;
 import com.glob3mobile.tools.extruder.PolygonExtruder;
+import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 
@@ -20,6 +26,12 @@ public class AirspaceExtrusion {
    private static class AirspaceExtrusionHandler
             implements
                ExtrusionHandler {
+
+
+      private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f), false);
 
 
       private static double toMeter(final JSONObject properties,
@@ -46,30 +58,22 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public boolean getDepthTestFor(final GEOFeature geoFeature) {
-         return false;
-      }
-
-
-      @Override
       public G3MeshMaterial getMaterialFor(final GEOFeature geoFeature) {
          final JSONObject properties = geoFeature.getProperties();
 
          final String type = properties.getAsString("type", "");
-         final Color color;
          if (type.equalsIgnoreCase("MTMA")) {
-            color = Color.fromRGBA(1, 1, 0, 0.5f);
+            return MATERIAL_1;
          }
          else if (type.equalsIgnoreCase("MCTR")) {
-            color = Color.fromRGBA(0, 1, 1, 0.5f);
+            return MATERIAL_2;
          }
          else if (type.equalsIgnoreCase("TMA")) {
-            color = Color.fromRGBA(1, 0, 1, 0.5f);
+            return MATERIAL_3;
          }
          else {
-            color = Color.fromRGBA(1, 0, 0, 0.5f);
+            return MATERIAL_4;
          }
-         return new G3MeshMaterial(color);
       }
 
 
@@ -86,6 +90,26 @@ public class AirspaceExtrusion {
       public void processTriangulationError(final GEOFeature geoFeature) {
          System.err.println("Error triangulation " + geoFeature);
       }
+
+
+      @Override
+      public void onRootGEOObject(final GEOObject geoObject) {
+      }
+
+
+      @Override
+      public void onBuildings(final List<Building> buildings) {
+      }
+
+
+      @Override
+      public void onPolygons(final List<ExtruderPolygon> polygons) {
+      }
+
+
+      @Override
+      public void onMeshCollection(final G3MeshCollection meshes) {
+      }
    }
 
 
@@ -93,10 +117,17 @@ public class AirspaceExtrusion {
       System.out.println("AirspaceExtrusion 0.1");
       System.out.println("---------------------\n");
 
-      final String inputFileName = "airspace.geojson";
-      final String outputFileName = "3d_.json";
+      final String name = "airspace";
+      final String inputFileName = name + ".geojson";
+      final String outputFileName = name + "_3d.json";
 
-      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler());
+      final int floatPrecision = 6;
+
+      final Planet planet = null; // cartesian
+      final float verticalExaggeration = 1;
+
+      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), planet, verticalExaggeration,
+               floatPrecision, true);
    }
 
 

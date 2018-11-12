@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated;
 //
-//  MarksFilter.cpp
+//  MarkFilter.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 9/27/16.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MarksFilter.hpp
+//  MarkFilter.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 9/27/16.
@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 //class Mark;
 
 
-public abstract class MarksFilter
+public abstract class MarkFilter
 {
   public void dispose()
   {

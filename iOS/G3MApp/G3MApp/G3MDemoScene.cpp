@@ -27,7 +27,6 @@ void G3MDemoScene::activateOptions(const G3MContext* context) {
   }
 }
 
-
 int G3MDemoScene::getOptionIndex(const std::string& option) const {
   const int optionsSize = _options.size();
   for (int i = 0; i < optionsSize; i++) {

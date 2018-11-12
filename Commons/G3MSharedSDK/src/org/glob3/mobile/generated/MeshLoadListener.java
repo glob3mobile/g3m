@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class Mesh;
 //class Color;
 //class Camera;
+//class MeshFilter;
 
 
 public interface MeshLoadListener

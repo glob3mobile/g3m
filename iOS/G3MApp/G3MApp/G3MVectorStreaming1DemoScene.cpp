@@ -29,9 +29,9 @@
 
 class G3MVectorStreaming1DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
-                          const VectorStreamingRenderer::Node* node,
-                          const GEO2DPointGeometry* geometry) const {
+  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+                           const VectorStreamingRenderer::Node* node,
+                           const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
@@ -93,6 +93,12 @@ public:
     return mark;
   }
 
+  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+                           const VectorStreamingRenderer::Node* node,
+                           const GEO3DPointGeometry* geometry) const {
+    return NULL;
+  }
+
   Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
                           const VectorStreamingRenderer::Cluster* cluster) const {
@@ -129,6 +135,6 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          );
 
 
-//  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
+  //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
 
 }

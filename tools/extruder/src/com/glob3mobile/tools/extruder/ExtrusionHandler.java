@@ -2,32 +2,39 @@
 
 package com.glob3mobile.tools.extruder;
 
-import org.glob3.mobile.generated.GEOFeature;
+import java.util.List;
 
+import org.glob3.mobile.generated.GEOFeature;
+import org.glob3.mobile.generated.GEOObject;
+
+import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 
 public interface ExtrusionHandler {
-   /**
-    * @param geoFeature
-    * @return if the geoFeature's geometry has to be extruded or not
-    */
-   public boolean extrudes(GEOFeature geoFeature);
 
 
-   /**
-    * @param geoFeature
-    * @return if the extrusion mesh generated for the given geoFeature need to depthTest (in OpenGL meaning) while rendering
-    */
-   public boolean getDepthTestFor(GEOFeature geoFeature);
+   void onRootGEOObject(GEOObject geoObject);
 
 
-   public G3MeshMaterial getMaterialFor(GEOFeature geoFeature);
+   boolean extrudes(GEOFeature geoFeature);
 
 
-   public Heigths getHeightsFor(GEOFeature geoFeature);
+   G3MeshMaterial getMaterialFor(GEOFeature geoFeature);
 
 
-   public void processTriangulationError(GEOFeature geoFeature);
+   Heigths getHeightsFor(GEOFeature geoFeature);
+
+
+   void processTriangulationError(GEOFeature geoFeature);
+
+
+   void onBuildings(List<Building> buildings);
+
+
+   void onPolygons(List<ExtruderPolygon> polygons);
+
+
+   void onMeshCollection(G3MeshCollection meshes);
 
 }

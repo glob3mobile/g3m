@@ -39,8 +39,8 @@ public class MapBoo
     private final boolean _verbose;
 
     private MBLayer(String type, String url, boolean verbose)
-//            const std::string& attribution,
-//    _attribution(attribution),
+            //            const std::string& attribution,
+    //    _attribution(attribution),
     {
        _type = type;
        _url = url;
@@ -366,13 +366,22 @@ public class MapBoo
       vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER, Angle.fromDegrees(90), 15000000); // minProjectedArea -  minSectorSize, -  haltOnError -  verbose -  readExpired
     }
 
-    public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    public final Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
       final GEOFeature feature = geometry.getFeature();
       final JSONObject properties = feature.getProperties();
       final Geodetic2D position = geometry.getPosition();
     
       return new Mark(createImageBuilder(properties), new Geodetic3D(position, 0), AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
+    }
+
+    public final Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry)
+    {
+      final GEOFeature feature = geometry.getFeature();
+      final JSONObject properties = feature.getProperties();
+      final Geodetic3D position = geometry.getPosition();
+    
+      return new Mark(createImageBuilder(properties), position, AltitudeMode.ABSOLUTE, 0, null, true, createMarkTouchListener(properties), true); // autoDeleteListener -  autoDeleteUserData -  userData -  minDistanceToCamera
     }
 
     public final Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster)
@@ -394,17 +403,17 @@ public class MapBoo
 
   public static class MBSymbolizedDataset
   {
-//    const std::string  _datasetID;
-//    const std::string  _datasetName;
-//    const std::string  _datasetAttribution;
+    //    const std::string  _datasetID;
+    //    const std::string  _datasetName;
+    //    const std::string  _datasetAttribution;
     private final MBSymbology _symbology;
 
     private MBSymbolizedDataset(MBSymbology symbology) // const std::string& datasetID,
                         // const std::string& datasetName,
                         // const std::string& datasetAttribution,
-//    _datasetID(datasetID),
-//    _datasetName(datasetName),
-//    _datasetAttribution(datasetAttribution),
+    //    _datasetID(datasetID),
+    //    _datasetName(datasetName),
+    //    _datasetAttribution(datasetAttribution),
     {
        _symbology = symbology;
 
@@ -466,9 +475,14 @@ public class MapBoo
       super.dispose();
     }
 
-    public final Mark createFeatureMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
+    public final Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)
     {
-      return _symbology.createFeatureMark(metadata, node, geometry);
+      return _symbology.createGeometryMark(metadata, node, geometry);
+    }
+
+    public final Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry)
+    {
+      return _symbology.createGeometryMark(metadata, node, geometry);
     }
 
     public final Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster)
@@ -485,7 +499,7 @@ public class MapBoo
     private final String _name;
     private java.util.ArrayList<MapBoo.MBLayer> _layers = new java.util.ArrayList<MapBoo.MBLayer>();
     private java.util.ArrayList<MapBoo.MBSymbolizedDataset> _symbolizedDatasets = new java.util.ArrayList<MapBoo.MBSymbolizedDataset>();
-//    const int                                 _timestamp;
+    //    const int                                 _timestamp;
     private final boolean _verbose;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -969,7 +983,7 @@ public class MapBoo
 
   private LayerSet _layerSet;
   private VectorStreamingRenderer _vectorStreamingRenderer;
-  private MarksRenderer _markRenderer;
+  private MarksRenderer _marksRenderer;
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
 
@@ -1026,10 +1040,10 @@ public class MapBoo
   
     _builder.getPlanetRendererBuilder().setLayerSet(_layerSet);
   
-    _markRenderer = new MarksRenderer(false, true, true); // progressiveInitialization -  renderInReverse -  readyWhenMarksReady
-    _builder.addRenderer(_markRenderer);
+    _marksRenderer = new MarksRenderer(false, true, true); // progressiveInitialization -  renderInReverse -  readyWhenMarksReady
+    _builder.addRenderer(_marksRenderer);
   
-    _vectorStreamingRenderer = new VectorStreamingRenderer(_markRenderer);
+    _vectorStreamingRenderer = new VectorStreamingRenderer(_marksRenderer, null);
     _builder.addRenderer(_vectorStreamingRenderer);
   
     _downloader = _builder.getDownloader();

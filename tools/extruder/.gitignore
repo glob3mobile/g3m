@@ -1,1 +1,4 @@
 bin
+*.geojson
+*_debug.png
+*_3d.json

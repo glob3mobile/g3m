@@ -31,6 +31,8 @@ public class DefaultTileTexturizer extends TileTexturizer
   private IImage _defaultBackgroundImage;
   private String _defaultBackgroundImageName;
 
+  private final boolean _verboseErrors;
+
   private LeveledTexturedMesh getMesh(Tile tile)
   {
     DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
@@ -41,10 +43,11 @@ public class DefaultTileTexturizer extends TileTexturizer
   public java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
 
-  public DefaultTileTexturizer(IImageBuilder defaultBackgroundImageBuilder)
+  public DefaultTileTexturizer(IImageBuilder defaultBackgroundImageBuilder, boolean verboseErrors)
   {
      _defaultBackgroundImageBuilder = defaultBackgroundImageBuilder;
      _defaultBackgroundImageLoaded = false;
+     _verboseErrors = verboseErrors;
     ILogger.instance().logInfo("Create texturizer...");
   
   }
@@ -99,7 +102,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       final long tileTextureDownloadPriority = prc.getTileTextureDownloadPriority(tile._level);
   
-      builder = new DTT_TileTextureBuilder(rc, prc._layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, prc._tessellator, tileTextureDownloadPriority, prc._logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackgroundImage, _defaultBackgroundImageName);
+      builder = new DTT_TileTextureBuilder(rc, prc._layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, prc._tessellator, tileTextureDownloadPriority, prc._logTilesPetitions, rc.getFrameTasksExecutor(), _defaultBackgroundImage, _defaultBackgroundImageName, _verboseErrors);
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }

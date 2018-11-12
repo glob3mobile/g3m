@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class GEO2DPolygonData;
 
 
-public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
+public class GEO2DMultiPolygonGeometry extends GEO2DGeometry
 {
   private java.util.ArrayList<GEO2DPolygonData> _polygonsData;
 
@@ -33,27 +33,6 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
   {
     return symbolizer.createSymbols(this);
   }
-
-  protected static java.util.ArrayList<GEO2DPolygonData> copy(java.util.ArrayList<GEO2DPolygonData> polygonsData)
-  {
-    if (polygonsData == null)
-    {
-      return null;
-    }
-    java.util.ArrayList<GEO2DPolygonData> result = new java.util.ArrayList<GEO2DPolygonData>();
-    final int size = polygonsData.size();
-    for (int i = 0; i < size; i++)
-    {
-      GEO2DPolygonData each = polygonsData.get(i);
-      if (each != null)
-      {
-        each._retain();
-      }
-      result.add(each);
-    }
-    return result;
-  }
-
 
 
   public GEO2DMultiPolygonGeometry(java.util.ArrayList<GEO2DPolygonData> polygonsData)
@@ -83,16 +62,6 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
   public final java.util.ArrayList<GEO2DPolygonData> getPolygonsData()
   {
     return _polygonsData;
-  }
-
-  public final long getCoordinatesCount()
-  {
-    return (_polygonsData == null) ? 0 : _polygonsData.size();
-  }
-
-  public final GEO2DMultiPolygonGeometry deepCopy()
-  {
-    return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
   }
 
   public final boolean contain(Geodetic2D point)

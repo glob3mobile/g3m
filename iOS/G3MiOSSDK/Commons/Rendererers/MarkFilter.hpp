@@ -1,26 +1,24 @@
 //
-//  MarksFilter.hpp
+//  MarkFilter.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 9/27/16.
 //
 //
 
-#ifndef MarksFilter_hpp
-#define MarksFilter_hpp
+#ifndef MarkFilter_hpp
+#define MarkFilter_hpp
 
 class Mark;
 
 
-class MarksFilter {
+class MarkFilter {
 public:
-  virtual ~MarksFilter() {
+  virtual ~MarkFilter() {
   }
 
   virtual bool test(const Mark* mark) const = 0;
 
 };
-
-
 
 #endif 

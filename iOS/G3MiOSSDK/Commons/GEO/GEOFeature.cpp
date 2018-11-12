@@ -11,6 +11,7 @@
 #include "GEOGeometry.hpp"
 #include "JSONObject.hpp"
 
+
 GEOFeature::GEOFeature(const JSONBaseObject* id,
                        const GEOGeometry* geometry,
                        const JSONObject* properties) :
@@ -37,8 +38,7 @@ void GEOFeature::symbolize(const G3MRenderContext* rc,
                            MeshRenderer*           meshRenderer,
                            ShapesRenderer*         shapesRenderer,
                            MarksRenderer*          marksRenderer,
-                           GEOVectorLayer*         geoVectorLayer
-                           ) const {
+                           GEOVectorLayer*         geoVectorLayer) const {
   if (_geometry != NULL) {
     _geometry->symbolize(rc,
                          symbolizer,
@@ -61,20 +61,7 @@ void GEOFeature::rasterize(const GEORasterSymbolizer* symbolizer,
   }
 }
 
-long long GEOFeature::getCoordinatesCount() const {
-  return (_geometry == NULL) ? 0 : _geometry->getCoordinatesCount();
-}
-
-GEOFeature* GEOFeature::deepCopy() const {
-  return new GEOFeature((_id         == NULL) ? NULL : _id->deepCopy(),
-                        (_geometry   == NULL) ? NULL : _geometry->deepCopy(),
-                        (_properties == NULL) ? NULL : _properties->deepCopy());
-}
-
-long long GEOFeature::createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                                         const VectorStreamingRenderer::Node*      node) const {
-  if (_geometry != NULL) {
-    return _geometry->createFeatureMarks(vectorSet, node);
-  }
-  return 0;
+int GEOFeature::symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
+                          const VectorStreamingRenderer::Node*      node) const {
+  return (_geometry == NULL) ? 0 : _geometry->symbolize(vectorSet, node);
 }

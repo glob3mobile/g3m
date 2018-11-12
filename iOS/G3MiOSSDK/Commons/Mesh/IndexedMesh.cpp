@@ -27,7 +27,9 @@ IndexedMesh::IndexedMesh(const int primitive,
                          IFloatBuffer* normals,
                          bool polygonOffsetFill,
                          float polygonOffsetFactor,
-                         float polygonOffsetUnits) :
+                         float polygonOffsetUnits,
+                         bool cullFace,
+                         int  culledFace) :
 AbstractMesh(primitive,
              ownsVertices,
              center,
@@ -40,7 +42,9 @@ AbstractMesh(primitive,
              normals,
              polygonOffsetFill,
              polygonOffsetFactor,
-             polygonOffsetUnits),
+             polygonOffsetUnits,
+             cullFace,
+             culledFace),
 _indices(indices),
 _ownsIndices(ownsIndices)
 {

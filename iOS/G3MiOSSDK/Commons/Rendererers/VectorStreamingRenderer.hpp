@@ -11,33 +11,34 @@
 
 #include "DefaultRenderer.hpp"
 
-#include "URL.hpp"
-#include "TimeInterval.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "IThreadUtils.hpp"
-#include "RCObject.hpp"
-#include "MarksFilter.hpp"
 #include "GAsyncTask.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "MarkFilter.hpp"
+#include "MeshFilter.hpp"
+#include "RCObject.hpp"
+#include "TimeInterval.hpp"
 #include "Angle.hpp"
 
-#include <vector>
-#include <string>
-
-class IThreadUtils;
-class IByteBuffer;
 class Sector;
-class Geodetic2D;
-class JSONBaseObject;
 class JSONArray;
+class Geodetic2D;
 class JSONObject;
-class Mark;
-class GEO2DPointGeometry;
-class BoundingVolume;
-class Camera;
-class Frustum;
-class IDownloader;
+class IByteBuffer;
 class GEOObject;
-class MarksRenderer; 
+class IThreadUtils;
+class JSONBaseObject;
+class BoundingVolume;
+class Sphere;
+class IDownloader;
+class Frustum;
+class GEO2DPointGeometry;
+class GEO3DPointGeometry;
+class MarksRenderer;
+class Camera;
+class GEOMeshes;
+class Planet;
+class Mesh;
+class MeshRenderer;
 
 
 class VectorStreamingRenderer : public DefaultRenderer {
@@ -181,8 +182,12 @@ public:
     std::vector<Node*>*    _children;
 
   private:
-    std::vector<Cluster*>* parseClusters(const JSONBaseObject* jsonBaseObject);
-    std::vector<Node*>*    parseChildren(const JSONBaseObject* jsonBaseObject);
+    std::vector<Cluster*>* parseClusters(const JSONArray* jsonArray);
+    GEOObject*             parseFeatures(const JSONObject* jsonObject,
+                                         const Planet* planet);
+    GEOMeshes*             parseMeshes(const JSONObject* jsonObject,
+                                       const Planet* planet);
+    std::vector<Node*>*    parseChildren(const JSONArray* jsonArray);
 
   public:
     FeaturesParserAsyncTask(Node*        node,
@@ -251,24 +256,37 @@ public:
   };
 
 
-  class NodeAllMarksFilter : public MarksFilter {
+  class NodeAllMarkFilter : public MarkFilter {
   private:
-    const std::string _nodeClusterToken;
-    const std::string _nodeFeatureToken;
+    const std::string _clusterToken;
+    const std::string _featureToken;
 
   public:
-    NodeAllMarksFilter(const Node* node);
+    NodeAllMarkFilter(const Node* node);
 
     bool test(const Mark* mark) const;
 
   };
 
-  class NodeClusterMarksFilter : public MarksFilter {
+
+  class NodeAllMeshFilter : public MeshFilter {
   private:
-    const std::string _nodeClusterToken;
+    const std::string _featureToken;
 
   public:
-    NodeClusterMarksFilter(const Node* node);
+    NodeAllMeshFilter(const Node* node);
+
+    bool test(const Mesh* mesh) const;
+
+  };
+
+
+  class NodeClusterMarkFilter : public MarkFilter {
+  private:
+    const std::string _clusterToken;
+
+  public:
+    NodeClusterMarkFilter(const Node* node);
 
     bool test(const Mark* mark) const;
 
@@ -282,6 +300,8 @@ public:
     Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
+    const double                   _minHeight;
+    const double                   _maxHeight;
     const int                      _clustersCount;
     const int                      _featuresCount;
 #ifdef C_CODE
@@ -297,9 +317,8 @@ public:
     const bool _verbose;
 
     std::vector<Cluster*>* _clusters;
-    GEOObject*             _features;
 
-    BoundingVolume* _boundingVolume;
+    Sphere* _boundingSphere;
     BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
 
     IDownloader* _downloader;
@@ -328,10 +347,10 @@ public:
     void cancelLoadChildren();
 
 
-    void removeMarks();
+    void removeFeaturesSymbols();
 
-    long long _clusterMarksCount;
-    long long _featureMarksCount;
+    int _featureSymbolsCount;
+    int _clusterSymbolsCount;
 
     void childRendered();
     void childStopRendered();
@@ -344,6 +363,12 @@ public:
 
     void setChildren(std::vector<Node*>* children);
 
+    int getDepth() const {
+      return (_parent == NULL) ? 1 : (_parent->getDepth() + 1);
+    }
+
+    void updateBoundingSphereWith(Sphere* childSphere);
+
   protected:
     ~Node();
 
@@ -354,6 +379,8 @@ public:
     Node(const VectorSet*                vectorSet,
          const std::string&              id,
          const Sector*                   nodeSector,
+         const double                    minHeight,
+         const double                    maxHeight,
          const int                       clustersCount,
          const int                       featuresCount,
          const std::vector<std::string>& childrenIDs,
@@ -370,18 +397,17 @@ public:
       return _vectorSet->getName() + "/" + _id;
     }
 
-    const std::string getFeatureMarkToken() const {
+    const std::string getFeatureToken() const {
       return _id + "_F_" + _vectorSet->getName() ;
     }
 
-    const std::string getClusterMarkToken() const {
+    const std::string getClusterToken() const {
       return _id + "_C_" + _vectorSet->getName() ;
     }
 
     long long render(const G3MRenderContext* rc,
                      const VectorStreamingRenderer::VectorSet* vectorSet,
                      const Frustum* frustumInModelCoordinates,
-                     const long long cameraTS,
                      GLState* glState);
 
     void errorDownloadingFeatures() {
@@ -496,14 +522,17 @@ public:
   public:
     virtual ~VectorSetSymbolizer() { }
 
-    virtual Mark* createFeatureMark(const VectorStreamingRenderer::Metadata* metadata,
-                                    const VectorStreamingRenderer::Node* node,
-                                    const GEO2DPointGeometry* geometry) const = 0;
+    virtual Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+                                     const VectorStreamingRenderer::Node* node,
+                                     const GEO2DPointGeometry* geometry) const = 0;
+
+    virtual Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+                                     const VectorStreamingRenderer::Node* node,
+                                     const GEO3DPointGeometry* geometry) const = 0;
 
     virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
                                     const VectorStreamingRenderer::Cluster* cluster) const = 0;
-
   };
 
 
@@ -666,17 +695,26 @@ public:
 
     void render(const G3MRenderContext* rc,
                 const Frustum* frustumInModelCoordinates,
-                const long long cameraTS,
                 GLState* glState);
 
-    long long createFeatureMark(const Node* node,
-                                const GEO2DPointGeometry* geometry) const;
+    int symbolizeGeometry(const Node* node,
+                          const GEO2DPointGeometry* geometry) const;
+    
+    int symbolizeGeometry(const Node* node,
+                          const GEO3DPointGeometry* geometry) const;
+    
+    int symbolizeClusters(const Node* node,
+                          const std::vector<Cluster*>* clusters) const;
 
-    long long createClusterMarks(const Node* node,
-                                 const std::vector<Cluster*>* clusters) const;
+    int symbolizeMeshes(const Node* node,
+                        const std::vector<Mesh*>& meshes) const;
 
     MarksRenderer* getMarksRenderer() const {
-      return _renderer->getMarkRenderer();
+      return _renderer->getMarksRenderer();
+    }
+
+    MeshRenderer* getMeshRenderer() const {
+      return _renderer->getMeshRenderer();
     }
 
   };
@@ -685,7 +723,8 @@ public:
 
 
 private:
-  MarksRenderer* _markRenderer;
+  MarksRenderer* _marksRenderer;
+  MeshRenderer*  _meshRenderer;
 
   size_t                  _vectorSetsSize;
   std::vector<VectorSet*> _vectorSets;
@@ -697,12 +736,17 @@ private:
 
 public:
 
-  VectorStreamingRenderer(MarksRenderer* markRenderer);
+  VectorStreamingRenderer(MarksRenderer* marksRenderer,
+                          MeshRenderer*  meshRenderer);
 
   ~VectorStreamingRenderer();
 
-  MarksRenderer* getMarkRenderer() const {
-    return _markRenderer;
+  MarksRenderer* getMarksRenderer() const {
+    return _marksRenderer;
+  }
+
+  MeshRenderer* getMeshRenderer() const {
+    return _meshRenderer;
   }
 
   void render(const G3MRenderContext* rc,
@@ -733,10 +777,7 @@ public:
   
   RenderState getRenderState(const G3MRenderContext* rc);
   
-  MarksRenderer* getMarksRenderer() const {
-    return _markRenderer;
-  }
-  
+
 };
 
 #endif

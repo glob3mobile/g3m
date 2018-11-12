@@ -10,6 +10,8 @@
 
 #include "AbstractMesh.hpp"
 
+#include "GLConstants.hpp"
+
 class IShortBuffer;
 
 class IndexedMesh : public AbstractMesh {
@@ -28,15 +30,17 @@ public:
               bool ownsVertices,
               IShortBuffer* indices,
               bool ownsIndices,
-              float lineWidth,
-              float pointSize = 1,
-              const Color* flatColor = NULL,
-              IFloatBuffer* colors = NULL,
-              bool depthTest = true,
-              IFloatBuffer* normals = NULL,
-              bool polygonOffsetFill = false,
+              float lineWidth           = 1,
+              float pointSize           = 1,
+              const Color* flatColor    = NULL,
+              IFloatBuffer* colors      = NULL,
+              bool depthTest            = true,
+              IFloatBuffer* normals     = NULL,
+              bool polygonOffsetFill    = false,
               float polygonOffsetFactor = 0,
-              float polygonOffsetUnits = 0);
+              float polygonOffsetUnits  = 0,
+              bool cullFace             = false,
+              int  culledFace           = GLCullFace::back());
 
   ~IndexedMesh();
 

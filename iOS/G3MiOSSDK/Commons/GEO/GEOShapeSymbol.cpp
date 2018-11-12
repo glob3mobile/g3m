@@ -18,7 +18,6 @@ GEOShapeSymbol::~GEOShapeSymbol() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 

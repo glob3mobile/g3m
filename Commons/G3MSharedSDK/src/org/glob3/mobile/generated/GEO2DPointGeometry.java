@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class GEO2DPointGeometry extends GEOGeometry2D
+
+public class GEO2DPointGeometry extends GEO2DGeometry
 {
   private final Geodetic2D _position ;
 
@@ -43,19 +44,9 @@ public class GEO2DPointGeometry extends GEOGeometry2D
     return _position;
   }
 
-  public final long getCoordinatesCount()
+  public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
-    return 1;
-  }
-
-  public final GEO2DPointGeometry deepCopy()
-  {
-    return new GEO2DPointGeometry(_position);
-  }
-
-  public final long createFeatureMarks(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
-  {
-    return vectorSet.createFeatureMark(node, this);
+    return vectorSet.symbolizeGeometry(node, this);
   }
 
 }

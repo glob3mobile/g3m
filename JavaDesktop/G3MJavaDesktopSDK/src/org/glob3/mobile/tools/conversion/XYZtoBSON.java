@@ -37,7 +37,7 @@ public class XYZtoBSON {
    public static void main(final String[] args) {
       try {
 
-         IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+         IStringBuilder.setInstance(new StringBuilder_JavaDesktop(IStringBuilder.DEFAULT_FLOAT_PRECISION));
          IMathUtils.setInstance(new MathUtils_JavaDesktop());
          IFactory.setInstance(new Factory_JavaDesktop());
          ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));

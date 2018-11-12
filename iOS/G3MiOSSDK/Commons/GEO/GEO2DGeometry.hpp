@@ -1,13 +1,13 @@
 //
-//  GEOGeometry2D.hpp
+//  GEO2DGeometry.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/9/13.
 //
 //
 
-#ifndef __G3MiOSSDK__GEOGeometry2D__
-#define __G3MiOSSDK__GEOGeometry2D__
+#ifndef __G3MiOSSDK__GEO2DGeometry__
+#define __G3MiOSSDK__GEO2DGeometry__
 
 class Geodetic2D;
 
@@ -15,14 +15,13 @@ class Geodetic2D;
 
 class GEORasterSymbol;
 
-class GEOGeometry2D : public GEOGeometry  {
-protected:
+class GEO2DGeometry : public GEOGeometry  {
 protected:
   virtual std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const = 0;
 
 public:
 
-  virtual ~GEOGeometry2D() {
+  virtual ~GEO2DGeometry() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -32,11 +31,8 @@ public:
                  ICanvas* canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
-
-  virtual GEOGeometry2D* deepCopy() const = 0;
   
   virtual bool contain(const Geodetic2D& point) const;
-
 
 };
 

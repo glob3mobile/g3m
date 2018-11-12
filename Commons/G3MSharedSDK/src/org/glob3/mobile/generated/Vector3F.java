@@ -71,6 +71,10 @@ public class Vector3F
     return new Vector3F((float)(_x / d), (float)(_y / d), (float)(_z / d));
   }
 
+  public final Vector3F add(Vector3F that)
+  {
+    return new Vector3F(_x + that._x, _y + that._y, _z + that._z);
+  }
 
   public final Vector3F sub(Vector3F that)
   {
@@ -80,6 +84,11 @@ public class Vector3F
   public final Vector3F cross(Vector3F that)
   {
     return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
+  }
+
+  public final Vector3F div(float v)
+  {
+    return new Vector3F(_x / v, _y / v, _z / v);
   }
 
   public final boolean isZero()

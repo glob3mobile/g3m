@@ -365,5 +365,36 @@ public class MeshRenderer extends DefaultRenderer
     loadBSONMesh(url, color, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, listener, deleteListener);
   }
 
+  public final int removeAllMeshes(MeshFilter filter, boolean deleteMeshes)
+  {
+    int removed = 0;
+    final int meshesSize = _meshes.size();
+  
+    java.util.ArrayList<Mesh> surviving = new java.util.ArrayList<Mesh>();
+    for (int i = 0; i < meshesSize; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      if (filter.test(mesh))
+      {
+        if (deleteMeshes)
+        {
+          if (mesh != null)
+             mesh.dispose();
+        }
+        removed++;
+      }
+      else
+      {
+        surviving.add(mesh);
+      }
+    }
+  
+    if (removed > 0)
+    {
+      _meshes = surviving;
+    }
+  
+    return removed;
+  }
 
 }

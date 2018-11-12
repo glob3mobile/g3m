@@ -9,16 +9,14 @@
 #ifndef __G3MiOSSDK__GEO2DMultiLineStringGeometry__
 #define __G3MiOSSDK__GEO2DMultiLineStringGeometry__
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 class Geodetic2D;
 class GEO2DCoordinatesArrayData;
 
-class GEO2DMultiLineStringGeometry : public GEOGeometry2D {
+class GEO2DMultiLineStringGeometry : public GEO2DGeometry {
 private:
 
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
-
-  GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData);
 
 protected:
 
@@ -35,10 +33,6 @@ public:
   const GEO2DCoordinatesArrayData* getCoordinatesArray() const {
     return _coordinatesArrayData;
   }
-
-  long long getCoordinatesCount() const;
-
-  GEO2DMultiLineStringGeometry* deepCopy() const;
 
 };
 

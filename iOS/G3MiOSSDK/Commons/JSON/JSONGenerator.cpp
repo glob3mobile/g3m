@@ -17,8 +17,9 @@
 #include "JSONInteger.hpp"
 #include "JSONLong.hpp"
 
-const std::string JSONGenerator::generate(const JSONBaseObject* value) {
-  JSONGenerator* generator = new JSONGenerator();
+const std::string JSONGenerator::generate(const JSONBaseObject* value,
+                                          const int floatPrecision) {
+  JSONGenerator* generator = new JSONGenerator(floatPrecision);
   value->acceptVisitor(generator);
 
   const std::string result = generator->getString();
@@ -27,8 +28,8 @@ const std::string JSONGenerator::generate(const JSONBaseObject* value) {
   return result;
 }
 
-JSONGenerator::JSONGenerator() {
-  _isb = IStringBuilder::newStringBuilder();
+JSONGenerator::JSONGenerator(const int floatPrecision) {
+  _isb = IStringBuilder::newStringBuilder(floatPrecision);
 }
 
 JSONGenerator::~JSONGenerator() {

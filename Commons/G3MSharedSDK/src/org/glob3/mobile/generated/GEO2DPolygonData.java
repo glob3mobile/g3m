@@ -16,9 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <vector>
-///#include "RCObject.hpp"
-//class Geodetic2D;
+
 
 public class GEO2DPolygonData extends GEO2DCoordinatesData
 {
@@ -88,21 +86,6 @@ public class GEO2DPolygonData extends GEO2DCoordinatesData
   public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getHolesCoordinatesArray()
   {
     return _holesCoordinatesArray;
-  }
-
-  public final long getCoordinatesCount()
-  {
-    long result = super.getCoordinatesCount();
-    if (_holesCoordinatesArray != null)
-    {
-      final int holesCoordinatesArraySize = _holesCoordinatesArray.size();
-      for (int j = 0; j < holesCoordinatesArraySize; j++)
-      {
-        final java.util.ArrayList<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(j);
-        result += holeCoordinates.size();
-      }
-    }
-    return result;
   }
 
   public final boolean contains(Geodetic2D point)

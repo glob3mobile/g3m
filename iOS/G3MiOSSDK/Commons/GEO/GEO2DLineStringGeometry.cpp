@@ -12,6 +12,7 @@
 #include "GEOSymbolizer.hpp"
 #include "GEORasterSymbolizer.hpp"
 
+
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
   if (_coordinatesData != NULL) {
     _coordinatesData->_release();
@@ -28,8 +29,4 @@ std::vector<GEOSymbol*>* GEO2DLineStringGeometry::createSymbols(const GEOSymboli
 
 std::vector<GEORasterSymbol*>* GEO2DLineStringGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
-}
-
-GEO2DLineStringGeometry* GEO2DLineStringGeometry::deepCopy() const {
-  return new GEO2DLineStringGeometry(_coordinatesData);
 }

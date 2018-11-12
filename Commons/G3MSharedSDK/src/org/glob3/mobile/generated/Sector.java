@@ -107,7 +107,17 @@ public class Sector
     return new Sector(Geodetic2D.fromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees), Geodetic2D.fromDegrees(upperLatitudeDegrees, upperLongitudeDegrees));
   }
 
+  public static Sector newFromDegrees(double lowerLatitudeDegrees, double lowerLongitudeDegrees, double upperLatitudeDegrees, double upperLongitudeDegrees)
+  {
+    return new Sector(Geodetic2D.fromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees), Geodetic2D.fromDegrees(upperLatitudeDegrees, upperLongitudeDegrees));
+  }
+
   public static Sector fromRadians(double lowerLatitudeRadians, double lowerLongitudeRadians, double upperLatitudeRadians, double upperLongitudeRadians)
+  {
+    return new Sector(Geodetic2D.fromRadians(lowerLatitudeRadians, lowerLongitudeRadians), Geodetic2D.fromRadians(upperLatitudeRadians, upperLongitudeRadians));
+  }
+
+  public static Sector newFromRadians(double lowerLatitudeRadians, double lowerLongitudeRadians, double upperLatitudeRadians, double upperLongitudeRadians)
   {
     return new Sector(Geodetic2D.fromRadians(lowerLatitudeRadians, lowerLongitudeRadians), Geodetic2D.fromRadians(upperLatitudeRadians, upperLongitudeRadians));
   }
