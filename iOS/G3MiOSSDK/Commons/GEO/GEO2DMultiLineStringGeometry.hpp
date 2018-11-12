@@ -34,7 +34,7 @@ public:
     return _coordinatesArrayData;
   }
   
-long long getCoordinatesCount() const;
+  long long getCoordinatesCount() const;
   
 };
 
