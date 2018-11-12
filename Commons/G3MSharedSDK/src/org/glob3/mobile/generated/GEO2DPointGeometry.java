@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GEO2DPointGeometry extends GEO2DGeometry
+public class GEO2DPointGeometry extends GEO2DGeometry
 {
   private final Geodetic2D _position ;
 
@@ -47,6 +47,16 @@ public abstract class GEO2DPointGeometry extends GEO2DGeometry
   public final int symbolize(VectorStreamingRenderer.VectorSet vectorSet, VectorStreamingRenderer.Node node)
   {
     return vectorSet.symbolizeGeometry(node, this);
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return 1;
+  }
+
+  public final GEO2DPointGeometry deepCopy()
+  {
+    return new GEO2DPointGeometry(_position);
   }
 
 }

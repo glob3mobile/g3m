@@ -24,3 +24,7 @@ int GEO2DPointGeometry::symbolize(const VectorStreamingRenderer::VectorSet* vect
                                   const VectorStreamingRenderer::Node*      node) const {
   return vectorSet->symbolizeGeometry(node, this);
 }
+
+GEO2DPointGeometry* GEO2DPointGeometry::deepCopy() const {
+  return new GEO2DPointGeometry(_position);
+}

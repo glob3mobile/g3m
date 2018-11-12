@@ -17,6 +17,15 @@ class GEO2DLineStringGeometry : public GEO2DGeometry {
 private:
   const GEO2DCoordinatesData* _coordinatesData;
 
+  GEO2DLineStringGeometry(const GEO2DCoordinatesData* coordinatesData) :
+  _coordinatesData(coordinatesData)
+  {
+    if (_coordinatesData != NULL) {
+      _coordinatesData->_retain();
+    }
+  }
+
+
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
@@ -29,12 +38,17 @@ public:
     _coordinatesData = (coordinates == NULL) ? NULL : new GEO2DCoordinatesData(coordinates);
   }
 
-    
   ~GEO2DLineStringGeometry();
 
   const GEO2DCoordinatesData* getCoordinates() const {
     return _coordinatesData;
   }
+
+  long long getCoordinatesCount() const {
+    return _coordinatesData->size();
+  }
+
+  GEO2DLineStringGeometry* deepCopy() const;
 
 };
 

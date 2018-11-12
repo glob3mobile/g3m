@@ -18,9 +18,19 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public abstract class GEO2DLineStringGeometry extends GEO2DGeometry
+public class GEO2DLineStringGeometry extends GEO2DGeometry
 {
   private final GEO2DCoordinatesData _coordinatesData;
+
+  private GEO2DLineStringGeometry(GEO2DCoordinatesData coordinatesData)
+  {
+     _coordinatesData = coordinatesData;
+    if (_coordinatesData != null)
+    {
+      _coordinatesData._retain();
+    }
+  }
+
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
@@ -38,7 +48,6 @@ public abstract class GEO2DLineStringGeometry extends GEO2DGeometry
     _coordinatesData = (coordinates == null) ? null : new GEO2DCoordinatesData(coordinates);
   }
 
-
   public void dispose()
   {
     if (_coordinatesData != null)
@@ -52,6 +61,16 @@ public abstract class GEO2DLineStringGeometry extends GEO2DGeometry
   public final GEO2DCoordinatesData getCoordinates()
   {
     return _coordinatesData;
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return _coordinatesData.size();
+  }
+
+  public final GEO2DLineStringGeometry deepCopy()
+  {
+    return new GEO2DLineStringGeometry(_coordinatesData);
   }
 
 }

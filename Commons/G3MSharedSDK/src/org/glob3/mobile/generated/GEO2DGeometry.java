@@ -28,7 +28,7 @@ public abstract class GEO2DGeometry extends GEOGeometry
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
   }
 
   public final void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel)
@@ -57,5 +57,7 @@ public abstract class GEO2DGeometry extends GEOGeometry
   {
     return false;
   }
+
+  public abstract GEO2DGeometry deepCopy();
 
 }
