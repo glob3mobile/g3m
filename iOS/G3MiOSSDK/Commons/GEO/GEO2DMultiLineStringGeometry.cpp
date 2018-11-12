@@ -13,6 +13,13 @@
 #include "GEORasterSymbolizer.hpp"
 #include "GEO2DCoordinatesArrayData.hpp"
 
+GEO2DMultiLineStringGeometry::GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData) :
+_coordinatesArrayData(coordinatesArrayData)
+{
+  if (_coordinatesArrayData != NULL) {
+    _coordinatesArrayData->_retain();
+  }
+}
 
 GEO2DMultiLineStringGeometry::GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray)
 {
