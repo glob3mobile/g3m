@@ -56,6 +56,11 @@ public:
   int symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
                 const VectorStreamingRenderer::Node*      node) const;
   
+  long long getCoordinatesCount() const;
+  
+  GEOFeature* deepCopy() const;
+
+  
 };
 
 #endif
