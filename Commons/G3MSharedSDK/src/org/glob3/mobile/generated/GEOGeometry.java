@@ -38,6 +38,8 @@ public abstract class GEOGeometry extends GEOObject
     super.dispose();
   }
 
+  public abstract GEOGeometry deepCopy();
+
   public final void setFeature(GEOFeature feature)
   {
     if (_feature != null)
