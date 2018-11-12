@@ -42,6 +42,10 @@ public:
 
   bool contain(const Geodetic2D& point) const;
 
+  long long getCoordinatesCount() const;
+
+  GEO2DPolygonGeometry* deepCopy() const;
+
 };
 
 #endif
