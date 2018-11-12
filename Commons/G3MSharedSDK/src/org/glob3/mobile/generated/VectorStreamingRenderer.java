@@ -625,7 +625,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
         if (_parent != null)
         {
-          _parent.updateBoundingSphereWith(_boundingSphere);
+          _parent.updateBoundingSphereWith(rc, _boundingSphere);
         }
       }
     
@@ -887,9 +887,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return (_parent == null) ? 1 : (_parent.getDepth() + 1);
     }
 
-    private void updateBoundingSphereWith(Sphere childSphere)
+    private void updateBoundingSphereWith(G3MRenderContext rc, Sphere childSphere)
     {
-      if (childSphere.fullContainedInSphere(_boundingSphere))
+      getBoundingVolume(rc); // force _boundingSphere creation
+      if ((_boundingSphere == null) || childSphere.fullContainedInSphere(_boundingSphere))
       {
         return;
       }
@@ -905,7 +906,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
          old.dispose();
       if (_parent != null)
       {
-        _parent.updateBoundingSphereWith(_boundingSphere);
+        _parent.updateBoundingSphereWith(rc, _boundingSphere);
       }
     }
 
