@@ -22,6 +22,8 @@ class GEOSymbolizer;
 class GEOFeatureCollection : public GEOObject {
 private:
   std::vector<GEOFeature*> _features;
+  
+  static const std::vector<GEOFeature*> copy(const std::vector<GEOFeature*>& features);
       
 public:
   GEOFeatureCollection(const std::vector<GEOFeature*>& features) :
@@ -50,7 +52,11 @@ public:
                  ICanvas* canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
-      
+  
+  long long getCoordinatesCount() const;
+
+  GEOFeatureCollection* deepCopy() const;
+  
   int symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
                 const VectorStreamingRenderer::Node*      node) const;
   
