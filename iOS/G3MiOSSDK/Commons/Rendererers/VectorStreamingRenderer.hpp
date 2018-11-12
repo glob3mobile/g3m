@@ -367,7 +367,8 @@ public:
       return (_parent == NULL) ? 1 : (_parent->getDepth() + 1);
     }
 
-    void updateBoundingSphereWith(Sphere* childSphere);
+    void updateBoundingSphereWith(const G3MRenderContext *rc,
+                                  Sphere* childSphere);
 
   protected:
     ~Node();
