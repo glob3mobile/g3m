@@ -38,6 +38,12 @@ public:
   int symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
                 const VectorStreamingRenderer::Node*      node) const;
 
+  GEOMeshes* deepCopy() const;
+
+  long long getCoordinatesCount() const {
+    return 0;
+  }
+
 };
 
 #endif

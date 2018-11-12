@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 //class Mesh;
 
 
-public abstract class GEOMeshes extends GEOObject
+public class GEOMeshes extends GEOObject
 {
   private java.util.ArrayList<Mesh> _meshes = new java.util.ArrayList<Mesh>();
 
@@ -52,6 +52,16 @@ public abstract class GEOMeshes extends GEOObject
     final int result = vectorSet.symbolizeMeshes(node, _meshes);
     _meshes.clear(); // moved meshes ownership to vectorSet
     return result;
+  }
+
+  public final GEOMeshes deepCopy()
+  {
+    throw new RuntimeException("Not supported");
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return 0;
   }
 
 }

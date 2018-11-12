@@ -21,7 +21,7 @@ protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
   
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
-    
+
 public:
   
   GEO3DPointGeometry(const Geodetic3D& position) :
@@ -35,7 +35,13 @@ public:
   
   int symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
                 const VectorStreamingRenderer::Node*      node) const;
-  
+
+  long long getCoordinatesCount() const {
+    return 1;
+  }
+
+  GEO3DPointGeometry* deepCopy() const;
+
 };
 
 #endif

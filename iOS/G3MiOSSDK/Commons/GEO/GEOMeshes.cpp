@@ -8,6 +8,7 @@
 #include "GEOMeshes.hpp"
 
 #include "Mesh.hpp"
+#include "ErrorHandling.hpp"
 
 
 GEOMeshes::GEOMeshes(const std::vector<Mesh*>& meshes) :
@@ -43,4 +44,8 @@ int GEOMeshes::symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
   const int result = vectorSet->symbolizeMeshes(node, _meshes);
   _meshes.clear(); // moved meshes ownership to vectorSet
   return result;
+}
+
+GEOMeshes* GEOMeshes::deepCopy() const {
+  THROW_EXCEPTION("Not supported");
 }

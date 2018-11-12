@@ -23,3 +23,7 @@ int GEO3DPointGeometry::symbolize(const VectorStreamingRenderer::VectorSet* vect
                                   const VectorStreamingRenderer::Node*      node) const {
   return vectorSet->symbolizeGeometry(node, this);
 }
+
+GEO3DPointGeometry* GEO3DPointGeometry::deepCopy() const {
+  return new GEO3DPointGeometry(_position);
+}
