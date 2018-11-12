@@ -2,9 +2,11 @@
 
 package com.glob3mobile.tools.extruder;
 
+
 public class Heigths {
-   final double _lowerHeight;
-   final double _upperHeight;
+
+   public final double _lowerHeight;
+   public final double _upperHeight;
 
 
    public Heigths(final double lowerHeight,
@@ -12,5 +14,6 @@ public class Heigths {
       _lowerHeight = lowerHeight;
       _upperHeight = upperHeight;
    }
+
 
 }
