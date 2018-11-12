@@ -88,7 +88,7 @@ public class GEO3DPolygonData extends GEO3DCoordinatesData
 
   public final long getCoordinatesCount()
   {
-    long result = GEO3DCoordinatesData.getCoordinatesCount();
+    long result = super.getCoordinatesCount();
     if (_holesCoordinatesArray != null)
     {
       final int holesCoordinatesArraySize = _holesCoordinatesArray.size();
