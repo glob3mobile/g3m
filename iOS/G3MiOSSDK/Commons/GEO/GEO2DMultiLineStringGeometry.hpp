@@ -33,7 +33,9 @@ public:
   const GEO2DCoordinatesArrayData* getCoordinatesArray() const {
     return _coordinatesArrayData;
   }
-
+  
+long long getCoordinatesCount() const;
+  
 };
 
 #endif
