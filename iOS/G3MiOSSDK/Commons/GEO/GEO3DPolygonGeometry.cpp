@@ -43,3 +43,14 @@ bool GEO3DPolygonGeometry::contain(const Geodetic3D& point) const {
   }
   return false;
 }
+
+long long GEO3DPolygonGeometry::getCoordinatesCount() const {
+  return (_polygonData == NULL) ? 0 : _polygonData->getCoordinatesCount();
+}
+
+GEO3DPolygonGeometry* GEO3DPolygonGeometry::deepCopy() const {
+  if (_polygonData != NULL) {
+    _polygonData->_retain();
+  }
+  return new GEO3DPolygonGeometry(_polygonData);
+}

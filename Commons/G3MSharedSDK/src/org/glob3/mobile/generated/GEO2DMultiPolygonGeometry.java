@@ -20,9 +20,29 @@ package org.glob3.mobile.generated;
 //class GEO2DPolygonData;
 
 
-public abstract class GEO2DMultiPolygonGeometry extends GEO2DGeometry
+public class GEO2DMultiPolygonGeometry extends GEO2DGeometry
 {
   private java.util.ArrayList<GEO2DPolygonData> _polygonsData;
+
+  private static java.util.ArrayList<GEO2DPolygonData> copy(java.util.ArrayList<GEO2DPolygonData> polygonsData)
+  {
+    if (polygonsData == null)
+    {
+      return null;
+    }
+    java.util.ArrayList<GEO2DPolygonData> result = new java.util.ArrayList<GEO2DPolygonData>();
+    final int size = polygonsData.size();
+    for (int i = 0; i < size; i++)
+    {
+      GEO2DPolygonData each = polygonsData.get(i);
+      if (each != null)
+      {
+        each._retain();
+      }
+      result.add(each);
+    }
+    return result;
+  }
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
@@ -82,4 +102,15 @@ public abstract class GEO2DMultiPolygonGeometry extends GEO2DGeometry
   
     return false;
   }
+
+  public final long getCoordinatesCount()
+  {
+    return (_polygonsData == null) ? 0 : _polygonsData.size();
+  }
+
+  public final GEO2DMultiPolygonGeometry deepCopy()
+  {
+    return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
+  }
+
 }

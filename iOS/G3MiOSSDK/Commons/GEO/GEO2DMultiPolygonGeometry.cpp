@@ -52,3 +52,23 @@ bool GEO2DMultiPolygonGeometry::contain(const Geodetic2D& point) const {
 
   return false;
 }
+
+std::vector<GEO2DPolygonData*>* GEO2DMultiPolygonGeometry::copy(const std::vector<GEO2DPolygonData*>* polygonsData) {
+  if (polygonsData == NULL) {
+    return NULL;
+  }
+  std::vector<GEO2DPolygonData*>* result = new std::vector<GEO2DPolygonData*>();
+  const size_t size = polygonsData->size();
+  for (size_t i = 0; i < size; i++) {
+    GEO2DPolygonData* each = polygonsData->at(i);
+    if (each != NULL) {
+      each->_retain();
+    }
+    result->push_back(each);
+  }
+  return result;
+}
+
+GEO2DMultiPolygonGeometry* GEO2DMultiPolygonGeometry::deepCopy() const {
+  return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
+}

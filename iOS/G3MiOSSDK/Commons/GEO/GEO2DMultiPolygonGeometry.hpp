@@ -19,6 +19,8 @@ class GEO2DMultiPolygonGeometry : public GEO2DGeometry {
 private:
   std::vector<GEO2DPolygonData*>* _polygonsData;
 
+  static std::vector<GEO2DPolygonData*>* copy(const std::vector<GEO2DPolygonData*>* _polygonsData);
+
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
@@ -38,6 +40,13 @@ public:
   }
   
   bool contain(const Geodetic2D& point) const;
+
+  long long getCoordinatesCount() const {
+    return (_polygonsData == NULL) ? 0 : _polygonsData->size();
+  }
+
+  GEO2DMultiPolygonGeometry* deepCopy() const;
+
 };
 
 #endif

@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class GEO3DPolygonData;
 
-public abstract class GEO3DPolygonGeometry extends GEO3DGeometry
+public class GEO3DPolygonGeometry extends GEO3DGeometry
 {
   private final GEO3DPolygonData _polygonData;
 
@@ -68,6 +68,20 @@ public abstract class GEO3DPolygonGeometry extends GEO3DGeometry
       return _polygonData.contains(point);
     }
     return false;
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
+  }
+
+  public final GEO3DPolygonGeometry deepCopy()
+  {
+    if (_polygonData != null)
+    {
+      _polygonData._retain();
+    }
+    return new GEO3DPolygonGeometry(_polygonData);
   }
 
 }
