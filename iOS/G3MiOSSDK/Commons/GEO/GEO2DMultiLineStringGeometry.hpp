@@ -15,26 +15,31 @@ class GEO2DCoordinatesArrayData;
 
 class GEO2DMultiLineStringGeometry : public GEO2DGeometry {
 private:
-
+  
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
-
+  
+  GEO2DMultiLineStringGeometry(const GEO2DCoordinatesArrayData* coordinatesArrayData);
+  
 protected:
-
+  
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
-
+  
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
-
+  
 public:
-
+  
   GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
-
+  
   ~GEO2DMultiLineStringGeometry();
-
+  
   const GEO2DCoordinatesArrayData* getCoordinatesArray() const {
     return _coordinatesArrayData;
   }
   
-long long getCoordinatesCount() const;
+  long long getCoordinatesCount() const;
+  
+  GEO2DMultiLineStringGeometry* deepCopy() const;
+
   
 };
 
