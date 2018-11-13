@@ -483,15 +483,17 @@ BoundingVolume* VectorStreamingRenderer::Node::getBoundingVolume(const G3MRender
     _boundingSphere = Sphere::enclosingSphere(points, 0.1);
 
     if (_parent) {
-      _parent->updateBoundingSphereWith(_boundingSphere);
+      _parent->updateBoundingSphereWith(rc, _boundingSphere);
     }
   }
 
   return _boundingSphere;
 }
 
-void VectorStreamingRenderer::Node::updateBoundingSphereWith(Sphere* childSphere) {
-  if ( childSphere->fullContainedInSphere(_boundingSphere) ) {
+void VectorStreamingRenderer::Node::updateBoundingSphereWith(const G3MRenderContext *rc,
+                                                             Sphere* childSphere) {
+  getBoundingVolume(rc); // force _boundingSphere creation
+  if ((_boundingSphere == NULL) || childSphere->fullContainedInSphere(_boundingSphere) ) {
     return;
   }
 
@@ -504,7 +506,7 @@ void VectorStreamingRenderer::Node::updateBoundingSphereWith(Sphere* childSphere
 //  }
   delete old;
   if (_parent) {
-    _parent->updateBoundingSphereWith(_boundingSphere);
+    _parent->updateBoundingSphereWith(rc, _boundingSphere);
   }
 }
 
