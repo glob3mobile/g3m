@@ -317,6 +317,7 @@ _childrenTask(NULL),
 _featuresTask(NULL)
 {
   setChildren(children);
+  _vectorSet->_retain();
 }
 
 void VectorStreamingRenderer::Node::setChildren(std::vector<Node*>* children) {
@@ -373,7 +374,9 @@ VectorStreamingRenderer::Node::~Node() {
   if (_parent != NULL) {
     _parent->_release();
   }
-  
+
+  _vectorSet->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -499,11 +502,6 @@ void VectorStreamingRenderer::Node::updateBoundingSphereWith(const G3MRenderCont
 
   Sphere* old = _boundingSphere;
   _boundingSphere = _boundingSphere->mergedWithSphere(childSphere, 0.1);
-//  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
-//    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
-//    childSphere->fullContainedInSphere(_boundingSphere);
-//    THROW_EXCEPTION("Ohh my gosh!");
-//  }
   delete old;
   if (_parent) {
     _parent->updateBoundingSphereWith(rc, _boundingSphere);
@@ -638,13 +636,15 @@ bool VectorStreamingRenderer::NodeClusterMarkFilter::test(const Mark* mark) cons
 }
 
 void VectorStreamingRenderer::Node::removeFeaturesSymbols() {
-  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeAllMarkFilter(this),
-                                                                  true, /* animated */
-                                                                  true  /* deleteMarks */);
+  size_t removed = 0;
+
+  removed += _vectorSet->getMarksRenderer()->removeAllMarks(NodeAllMarkFilter(this),
+                                                            true, /* animated */
+                                                            true  /* deleteMarks */);
 
   removed += _vectorSet->getMeshRenderer()->removeAllMeshes(NodeAllMeshFilter(this),
                                                             true /* deleteMeshes */);
-  
+
   if (_verbose && (removed > 0)) {
 #ifdef C_CODE
     ILogger::instance()->logInfo("\"%s\": Removed %ld features symbols",
@@ -706,16 +706,18 @@ void VectorStreamingRenderer::Node::unload() {
   }
   
   removeFeaturesSymbols();
+
 }
 
 void VectorStreamingRenderer::Node::childRendered() {
   if (_clusters != NULL) {
     if (_clusters->size() > 0) {
       if (_clusterSymbolsCount > 0) {
-        const size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeClusterMarkFilter(this),
-                                                                              true, /* animated */
-                                                                              true  /* deleteMarks */);
-        
+        size_t removed = 0;
+        removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeClusterMarkFilter(this),
+                                                                 true, /* animated */
+                                                                 true  /* deleteMarks */);
+
         _clusterSymbolsCount -= removed;
         
         if (_verbose && (removed > 0)) {
@@ -831,7 +833,7 @@ VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(
                                                                                 const bool        verbose) {
   const std::string id            = json->getAsString("id")->value();
   const Sector*     nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-//  const double      minHeight     = json->getAsNumber("minHeight", 0);
+  //  const double      minHeight     = json->getAsNumber("minHeight", 0);
   const double      minHeight     = 0;
   const double      maxHeight     = json->getAsNumber("maxHeight", 0);
   const int         clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
@@ -885,7 +887,9 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
     }
     delete _rootNodes;
   }
-  
+
+  _vectorSet->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -1046,12 +1050,6 @@ void VectorStreamingRenderer::VectorSet::errorParsingMetadata() {
 }
 
 VectorStreamingRenderer::VectorSet::~VectorSet() {
-  if (_deleteSymbolizer) {
-    delete _symbolizer;
-  }
-  
-  delete _metadata;
-  
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodesSize; i++) {
       Node* node = _rootNodes->at(i);
@@ -1060,6 +1058,12 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
     }
     delete _rootNodes;
   }
+
+  if (_deleteSymbolizer) {
+    delete _symbolizer;
+  }
+
+  delete _metadata;
 }
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Metadata* metadata,
@@ -1303,7 +1307,7 @@ _glState(new GLState())
 VectorStreamingRenderer::~VectorStreamingRenderer() {
   for (size_t i = 0; i < _vectorSetsSize; i++) {
     VectorSet* vectorSet = _vectorSets[i];
-    delete vectorSet;
+    vectorSet->_release();
   }
   
   _glState->_release();
@@ -1316,7 +1320,7 @@ VectorStreamingRenderer::~VectorStreamingRenderer() {
 void VectorStreamingRenderer::removeAllVectorSets() {
   for (size_t i = 0; i < _vectorSetsSize; i++) {
     VectorSet* vectorSet = _vectorSets[i];
-    delete vectorSet;
+    vectorSet->_release();
   }
   _vectorSets.clear();
   _vectorSetsSize = 0;
