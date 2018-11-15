@@ -17,8 +17,13 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#import "IBufferDownloadListener.hpp"
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#import "Mark.hpp"
 
-//class MarksRenderer;
+//class JSONObject;
+
 
 public class PanoMarkUserData extends MarkUserData
 {

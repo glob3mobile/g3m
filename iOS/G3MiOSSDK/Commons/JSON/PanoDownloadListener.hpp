@@ -9,13 +9,10 @@
 #ifndef G3MiOSSDK_PanoDownloadListener_hpp
 #define G3MiOSSDK_PanoDownloadListener_hpp
 
-#include "IBufferDownloadListener.hpp"
-#include "ILogger.hpp"
-#include "JSONObject.hpp"
-#include "MarkTouchListener.hpp"
-#include "Mark.hpp"
+#import "IBufferDownloadListener.hpp"
+#import "Mark.hpp"
 
-class MarksRenderer;
+class JSONObject;
 
 
 class PanoMarkUserData : public MarkUserData {

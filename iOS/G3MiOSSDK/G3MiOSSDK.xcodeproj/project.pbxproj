@@ -231,6 +231,8 @@
 		CF5C5DD3217DC0B400F4E1F5 /* GEO3DPolygonData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C5DD1217DC0B400F4E1F5 /* GEO3DPolygonData.cpp */; };
 		CF5C5DD6217DC29B00F4E1F5 /* GEO3DPolygonGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5C5DD4217DC29B00F4E1F5 /* GEO3DPolygonGeometry.cpp */; };
 		CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */; };
+		CF5E9492219DE6D90094E00A /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5E9490219DE6D90094E00A /* PanoDownloadListener.cpp */; };
+		CF5E9493219DE86D0094E00A /* PanoDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF5E9491219DE6D90094E00A /* PanoDownloadListener.hpp */; };
 		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
 		CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF60500117724C5C00EB48A6 /* JSONNull.cpp */; };
@@ -863,8 +865,6 @@
 		E780A5C816D3AEDA000F0395 /* G3MWidget_iOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; };
 		E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7B9964C16A94EC400753FC3 /* LayerBuilder.cpp */; };
 		E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */; };
-		E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E86A5B891672118F0098449B /* PanoDownloadListener.cpp */; };
-		E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */; };
 		FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */; };
 		FB0BB677177B62D30034CC52 /* CameraZoomAndRotateHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */; };
 		FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2B1B2517F880B5006307EC /* Quadric.cpp */; };
@@ -883,6 +883,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF5E9493219DE86D0094E00A /* PanoDownloadListener.hpp in CopyFiles */,
 				D89F7A9A1FA0B4B90052F47E /* RenderingCondition.hpp in CopyFiles */,
 				CF993E8E2191E4F300755979 /* GEO3DCoordinatesData.hpp in CopyFiles */,
 				CF993E8F2191E4F300755979 /* GEO3DPolygonData.hpp in CopyFiles */,
@@ -936,7 +937,6 @@
 				CF8CED3B1DA6C4420058748E /* BILDownloader.hpp in CopyFiles */,
 				CFE737B81D9AED8D009FFB78 /* MarkFilter.hpp in CopyFiles */,
 				CF6FA7CA1D7D785400A4320A /* Trail.hpp in CopyFiles */,
-				E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */,
 				CF236E281CB3EF50002D4D77 /* ViewMode.hpp in CopyFiles */,
 				D847C7651C9889D600118600 /* Vector2S.hpp in CopyFiles */,
 				CFE50D251C6669160002EFD5 /* GradualSplitsTileLODTester.hpp in CopyFiles */,
@@ -1636,6 +1636,8 @@
 		CF5C5DD4217DC29B00F4E1F5 /* GEO3DPolygonGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GEO3DPolygonGeometry.cpp; path = Commons/GEO/GEO3DPolygonGeometry.cpp; sourceTree = "<group>"; };
 		CF5C5DD5217DC29B00F4E1F5 /* GEO3DPolygonGeometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GEO3DPolygonGeometry.hpp; path = Commons/GEO/GEO3DPolygonGeometry.hpp; sourceTree = "<group>"; };
 		CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BalloonCanvasElement.cpp; path = Commons/Basic/BalloonCanvasElement.cpp; sourceTree = "<group>"; };
+		CF5E9490219DE6D90094E00A /* PanoDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanoDownloadListener.cpp; sourceTree = "<group>"; };
+		CF5E9491219DE6D90094E00A /* PanoDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PanoDownloadListener.hpp; sourceTree = "<group>"; };
 		CF5EA5D2163DDC7900D8F797 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shape.cpp; path = Commons/Rendererers/Shape.cpp; sourceTree = "<group>"; };
 		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
 		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
@@ -2236,8 +2238,6 @@
 		E7B9964D16A94EC400753FC3 /* LayerBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerBuilder.hpp; path = Commons/Basic/LayerBuilder.hpp; sourceTree = "<group>"; };
 		E7EC944316C4F43300B32D9F /* DownloadPriority.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DownloadPriority.cpp; path = Commons/Basic/DownloadPriority.cpp; sourceTree = "<group>"; };
 		E7EC944416C4F43300B32D9F /* DownloadPriority.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DownloadPriority.hpp; path = Commons/Basic/DownloadPriority.hpp; sourceTree = "<group>"; };
-		E86A5B891672118F0098449B /* PanoDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanoDownloadListener.cpp; sourceTree = "<group>"; };
-		E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PanoDownloadListener.hpp; sourceTree = "<group>"; };
 		E87424B0169F4B9400C8A227 /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarkTouchListener.hpp; path = Commons/Rendererers/MarkTouchListener.hpp; sourceTree = "<group>"; };
 		FB0BB674177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraZoomAndRotateHandler.cpp; path = Commons/Cameras/CameraZoomAndRotateHandler.cpp; sourceTree = "<group>"; };
 		FB0BB675177B60E10034CC52 /* CameraZoomAndRotateHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraZoomAndRotateHandler.hpp; path = Commons/Cameras/CameraZoomAndRotateHandler.hpp; sourceTree = "<group>"; };
@@ -2739,8 +2739,6 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				E86A5B891672118F0098449B /* PanoDownloadListener.cpp */,
-				E86A5B8A1672118F0098449B /* PanoDownloadListener.hpp */,
 				CF4FAAD31695F344009734CA /* BSONGenerator.cpp */,
 				CF4FAAD41695F344009734CA /* BSONGenerator.hpp */,
 				CF7EDA081694914A002C760A /* BSONParser.cpp */,
@@ -2763,6 +2761,8 @@
 				CF6B5F6416C194D200C590C1 /* JSONInteger.hpp */,
 				CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */,
 				CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */,
+				CF60500117724C5C00EB48A6 /* JSONNull.cpp */,
+				CF60500217724C5C00EB48A6 /* JSONNull.hpp */,
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
 				A7EE00191619D01900C77604 /* JSONObject.cpp */,
@@ -2770,8 +2770,8 @@
 				CFE3DBAA164AFDB000910037 /* JSONString.cpp */,
 				A70F5617161C94A100340256 /* JSONString.hpp */,
 				CF4FAAC71695D010009734CA /* JSONVisitor.hpp */,
-				CF60500117724C5C00EB48A6 /* JSONNull.cpp */,
-				CF60500217724C5C00EB48A6 /* JSONNull.hpp */,
+				CF5E9490219DE6D90094E00A /* PanoDownloadListener.cpp */,
+				CF5E9491219DE6D90094E00A /* PanoDownloadListener.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -3660,7 +3660,6 @@
 				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
 				CF9227D51E31154300B79A87 /* MutableQuaternionF.cpp in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
-				E86A5B8B167211900098449B /* PanoDownloadListener.cpp in Sources */,
 				CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */,
 				CF5934531DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp in Sources */,
 				CF9FDBC91DB3B6F5009D972A /* FloatBufferDEMGrid.cpp in Sources */,
@@ -3852,6 +3851,7 @@
 				D8378FA71BFB337200E6557E /* DeviceAttitude_iOS.mm in Sources */,
 				D89F7A991FA0B4060052F47E /* RenderingCondition.cpp in Sources */,
 				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
+				CF5E9492219DE6D90094E00A /* PanoDownloadListener.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,

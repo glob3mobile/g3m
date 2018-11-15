@@ -10,16 +10,11 @@
 
 #include "PanoDownloadListener.hpp"
 
-#include "MarksRenderer.hpp"
-#include "Mark.hpp"
-#include "ILogger.hpp"
-#include "IStringBuilder.hpp"
-#include "IStringUtils.hpp"
-#include "IJSONParser.hpp"
-#include "JSONObject.hpp"
-#include "JSONArray.hpp"
-#include "JSONString.hpp"
-#include "JSONNumber.hpp"
+#import "IJSONParser.hpp"
+#import "JSONNumber.hpp"
+#import "JSONString.hpp"
+#import "MarksRenderer.hpp"
+#import "JSONObject.hpp"
 
 
 PanoDownloadListener::PanoDownloadListener(MarksRenderer* panoMarksRenderer,
@@ -39,7 +34,6 @@ void PanoDownloadListener::onDownload(const URL& url,
   IJSONParser::instance()->deleteJSONData(json);
   delete buffer;
 }
-
 
 void PanoDownloadListener::parseMETADATA(const std::string& url,
                                          const JSONObject* json){
