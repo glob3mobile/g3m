@@ -125,9 +125,10 @@ public class AirspaceExtrusion {
 
       final Planet planet = null; // cartesian
       final float verticalExaggeration = 1;
+      final double deltaHeight = 0;
 
       PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), planet, verticalExaggeration,
-               floatPrecision, true);
+               deltaHeight, floatPrecision, true);
    }
 
 

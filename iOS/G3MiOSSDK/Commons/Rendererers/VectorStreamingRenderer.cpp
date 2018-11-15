@@ -516,7 +516,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   //  }
   
   _downloader = rc->getDownloader();
-  const long long depthPriority = 10000 - getDepth();
+  const long long depthPriority = 100 * getDepth();
   _featuresRequestID = _downloader->requestBuffer(_vectorSet->getNodeFeaturesURL(_id),
                                                   _vectorSet->getDownloadPriority() + depthPriority + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
@@ -563,7 +563,7 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
   //  }
   
   _downloader = rc->getDownloader();
-  const long long depthPriority = 10000 - getDepth();
+  const long long depthPriority = 100 * getDepth();
   _childrenRequestID = _downloader->requestBuffer(_vectorSet->getNodeChildrenURL(_id, _childrenIDs),
                                                   _vectorSet->getDownloadPriority() + depthPriority,
                                                   _vectorSet->getTimeToCache(),
@@ -831,13 +831,17 @@ Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArr
 VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json,
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
-  const std::string id            = json->getAsString("id")->value();
-  const Sector*     nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-  //  const double      minHeight     = json->getAsNumber("minHeight", 0);
-  const double      minHeight     = 0;
-  const double      maxHeight     = json->getAsNumber("maxHeight", 0);
-  const int         clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
-  const int         featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
+  const std::string id         = json->getAsString("id")->value();
+  const Sector*     nodeSector = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+
+  const double vectorSetMinHeight = vectorSet->_minHeight;
+  const double minHeight = ISNAN(vectorSetMinHeight) ? json->getAsNumber("minHeight", 0) : vectorSetMinHeight;
+
+  const double vectorSetMaxHeight = vectorSet->_maxHeight;
+  const double maxHeight = ISNAN(vectorSetMaxHeight) ? json->getAsNumber("maxHeight", 0) : vectorSetMaxHeight;
+
+  const int clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
+  const int featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
   
   std::vector<std::string> childrenIDs;
   std::vector<Node*>*      children = NULL;
@@ -1385,7 +1389,9 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            bool                       haltOnError,
                                            const Format               format,
                                            const Angle&               minSectorSize,
-                                           const double               minProjectedArea) {
+                                           const double               minProjectedArea,
+                                           const double               minHeight,
+                                           const double               maxHeight) {
   VectorSet* vectorSet = new VectorSet(this,
                                        serverURL,
                                        name,
@@ -1399,7 +1405,9 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                        haltOnError,
                                        format,
                                        minSectorSize,
-                                       minProjectedArea);
+                                       minProjectedArea,
+                                       minHeight,
+                                       maxHeight);
   if (_context != NULL) {
     vectorSet->initialize(_context);
   }

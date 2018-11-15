@@ -93,9 +93,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final String id = json.getAsString("id").value();
       final Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
-      //  const double      minHeight     = json->getAsNumber("minHeight", 0);
-      final double minHeight = 0;
-      final double maxHeight = json.getAsNumber("maxHeight", 0);
+    
+      final double vectorSetMinHeight = vectorSet._minHeight;
+      final double minHeight = (vectorSetMinHeight != vectorSetMinHeight) ? json.getAsNumber("minHeight", 0) : vectorSetMinHeight;
+    
+      final double vectorSetMaxHeight = vectorSet._maxHeight;
+      final double maxHeight = (vectorSetMaxHeight != vectorSetMaxHeight) ? json.getAsNumber("maxHeight", 0) : vectorSetMaxHeight;
+    
       final int clustersCount = (int) json.getAsNumber("clustersCount", 0.0);
       final int featuresCount = (int) json.getAsNumber("featuresCount", 0.0);
     
@@ -672,7 +676,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      final long depthPriority = 10000 - getDepth();
+      final long depthPriority = 100 * getDepth();
       _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + depthPriority + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
@@ -719,7 +723,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      final long depthPriority = 10000 - getDepth();
+      final long depthPriority = 100 * getDepth();
       _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority() + depthPriority, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
@@ -1493,8 +1497,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final Angle _minSectorSize ;
     public final double _minProjectedArea;
+    public final double _minHeight;
+    public final double _maxHeight;
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea, double minHeight, double maxHeight)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1517,6 +1523,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _lastRenderedCount = 0;
        _minSectorSize = new Angle(minSectorSize);
        _minProjectedArea = minProjectedArea;
+       _minHeight = minHeight;
+       _maxHeight = maxHeight;
 
     }
 
@@ -1840,9 +1848,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea, double minHeight, double maxHeight)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea, minHeight, maxHeight);
     if (_context != null)
     {
       vectorSet.initialize(_context);

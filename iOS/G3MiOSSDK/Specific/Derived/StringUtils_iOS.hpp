@@ -73,6 +73,8 @@ public:
                          const std::string& searchString,
                          const std::string& replaceString) const;
 
+  std::string capitalize(const std::string& string) const;
+
 };
 
 #endif

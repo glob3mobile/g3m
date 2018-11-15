@@ -632,6 +632,8 @@ public:
   public:
     const Angle  _minSectorSize;
     const double _minProjectedArea;
+    const double _minHeight;
+    const double _maxHeight;
     
     VectorSet(VectorStreamingRenderer*   renderer,
               const URL&                 serverURL,
@@ -646,7 +648,9 @@ public:
               bool                       haltOnError,
               const Format               format,
               const Angle&               minSectorSize,
-              const double               minProjectedArea) :
+              const double               minProjectedArea,
+              const double               minHeight,
+              const double               maxHeight) :
     _renderer(renderer),
     _serverURL(serverURL),
     _name(name),
@@ -667,7 +671,9 @@ public:
     _rootNodesSize(0),
     _lastRenderedCount(0),
     _minSectorSize(minSectorSize),
-    _minProjectedArea(minProjectedArea)
+    _minProjectedArea(minProjectedArea),
+    _minHeight(minHeight),
+    _maxHeight(maxHeight)
     {
       
     }
@@ -780,7 +786,9 @@ public:
                     bool                       haltOnError,
                     const Format               format,
                     const Angle&               minSectorSize,
-                    const double               minProjectedArea);
+                    const double               minProjectedArea,
+                    const double               minHeight,
+                    const double               maxHeight);
   
   void removeAllVectorSets();
   
