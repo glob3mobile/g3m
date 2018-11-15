@@ -15,9 +15,12 @@
 #include "MarkTouchListener.hpp"
 #include "Mark.hpp"
 
+class MarksRenderer;
+
+
 class PanoMarkUserData : public MarkUserData {
+private:
   const std::string _name;
-  
 #ifdef C_CODE
   const URL* _url;
 #endif
@@ -26,54 +29,64 @@ class PanoMarkUserData : public MarkUserData {
 #endif
   
 public:
-  
-  PanoMarkUserData(const std::string name, const URL* url):
+  PanoMarkUserData(const std::string& name,
+                   const URL* url):
   _name(name),
-  _url(url){};
-  
+  _url(url) {
+  }
+
+  ~PanoMarkUserData() {
+    delete _url;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
   const std::string getName(){
     return _name;
   }
   
-  const URL* getUrl(){
+  const URL* getUrl() {
     return _url;
   }
   
-  ~PanoMarkUserData() {
-    delete _url;
-  }
 };
 
-class MarksRenderer;
+
 class PanoDownloadListener : public IBufferDownloadListener {
-    
-    static const std::string NAME;
-    static const std::string POSITION;
-    static const std::string LAT;
-    static const std::string LON;
-    
-    MarksRenderer* _panoMarksRenderer;
-    std::string _urlIcon;
-  
-public:
-    PanoDownloadListener(MarksRenderer* _panoMarksRenderer, std::string urlIcon);
-    
-    void onDownload(const URL& url,
-                    IByteBuffer* buffer,
-                    bool expired);
-    
-    void onError(const URL& url){
-        ILogger::instance()->logError("The requested pano could not be found! ->"+url.description());
-    }
-    
-    void onCancel(const URL& url){}
-    void onCanceledDownload(const URL& url,
-                            IByteBuffer* data,
-                            bool expired) {}
-    
-    ~PanoDownloadListener(){}
 private:
-    void parseMETADATA(std::string url, const JSONObject* jsonCustomData);
+  MarksRenderer* _panoMarksRenderer;
+  const std::string _urlIcon;
+
+  void parseMETADATA(const std::string& url,
+                     const JSONObject* json);
+
+public:
+  PanoDownloadListener(MarksRenderer* panoMarksRenderer,
+                       const std::string& urlIcon);
+
+  ~PanoDownloadListener() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired);
+
+  void onError(const URL& url){
+    ILogger::instance()->logError("The requested pano could not be found! ->"+url.description());
+  }
+
+  void onCancel(const URL& url) {
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* data,
+                          bool expired) {
+  }
+
 };
 
 #endif
