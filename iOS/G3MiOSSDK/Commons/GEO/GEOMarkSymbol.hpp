@@ -24,7 +24,7 @@ public:
 
   }
 
-  virtual ~GEOMarkSymbol();
+  ~GEOMarkSymbol();
 
   bool symbolize(const G3MRenderContext* rc,
                  const GEOSymbolizer*    symbolizer,

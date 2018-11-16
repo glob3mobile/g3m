@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated;
 //
-//  GEOGeometry2D.cpp
+//  GEO2DGeometry.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/9/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GEOGeometry2D.hpp
+//  GEO2DGeometry.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/9/13.
@@ -21,14 +21,14 @@ package org.glob3.mobile.generated;
 
 //class GEORasterSymbol;
 
-public abstract class GEOGeometry2D extends GEOGeometry
+public abstract class GEO2DGeometry extends GEOGeometry
 {
   protected abstract java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer);
 
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
   }
 
   public final void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel)
@@ -53,12 +53,11 @@ public abstract class GEOGeometry2D extends GEOGeometry
     }
   }
 
-  public abstract GEOGeometry2D deepCopy();
-
   public boolean contain(Geodetic2D point)
   {
     return false;
   }
 
+  public abstract GEO2DGeometry deepCopy();
 
 }

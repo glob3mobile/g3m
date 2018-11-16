@@ -1,16 +1,16 @@
 //
-//  GEOGeometry2D.cpp
+//  GEO2DGeometry.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/9/13.
 //
 //
 
-#include "GEOGeometry2D.hpp"
+#include "GEO2DGeometry.hpp"
 
 #include "GEORasterSymbol.hpp"
 
-void GEOGeometry2D::rasterize(const GEORasterSymbolizer* symbolizer,
+void GEO2DGeometry::rasterize(const GEORasterSymbolizer* symbolizer,
                               ICanvas* canvas,
                               const GEORasterProjection* projection,
                               int tileLevel) const {
@@ -31,7 +31,7 @@ void GEOGeometry2D::rasterize(const GEORasterSymbolizer* symbolizer,
 }
 
 
-bool GEOGeometry2D::contain(const Geodetic2D& point) const {
+bool GEO2DGeometry::contain(const Geodetic2D& point) const {
   return false;
 }
 

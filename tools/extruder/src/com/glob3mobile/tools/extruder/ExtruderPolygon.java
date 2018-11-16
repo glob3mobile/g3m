@@ -2,135 +2,114 @@
 
 package com.glob3mobile.tools.extruder;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Vector3D;
+import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
-import es.igosoftware.euclid.shape.GComplexPolygon2D;
-import es.igosoftware.euclid.shape.IPolygon2D;
-import es.igosoftware.euclid.shape.ISimplePolygon2D;
-import es.igosoftware.euclid.utils.GShapeUtils;
-import es.igosoftware.euclid.vector.GVector2D;
-import es.igosoftware.euclid.vector.IVector2;
-import es.igosoftware.util.GCollections;
-import es.igosoftware.util.IFunction;
+import poly2Tri.Triangle;
+import poly2Tri.Triangulation;
+import poly2Tri.TriangulationException;
 
 
-class ExtruderPolygon {
-   final GEOFeature             _geoFeature;
-   final List<Geodetic2D>       _coordinates;
-   final List<List<Geodetic2D>> _holesCoordinatesArray;
-   final double                 _lowerHeight;
-   final double                 _upperHeight;
-   final G3MeshMaterial         _material;
-   final boolean                _depthTest;
+public abstract class ExtruderPolygon {
+
+   private final GEOFeature     _geoFeature;
+   private final double         _lowerHeight;
+   private final G3MeshMaterial _material;
+   private Geodetic2D           _average;
+   private final double         _minHeight;
 
 
-   //private final Sector         _sector;
-
-
-   ExtruderPolygon(final GEOFeature geoFeature,
-                   final List<Geodetic2D> coordinates,
-                   final List<List<Geodetic2D>> holesCoordinatesArray,
-                   final double lowerHeight,
-                   final double upperHeight,
-                   final G3MeshMaterial material,
-                   final boolean depthTest) {
+   protected ExtruderPolygon(final GEOFeature geoFeature,
+                             final double lowerHeight,
+                             final G3MeshMaterial material,
+                             final double minHeight) {
       _geoFeature = geoFeature;
-      _coordinates = coordinates;
-      _holesCoordinatesArray = holesCoordinatesArray;
       _lowerHeight = lowerHeight;
-      _upperHeight = upperHeight;
       _material = material;
-      _depthTest = depthTest;
-      //_sector =  calculateSector(coordinates, holesCoordinatesArray);
+      _minHeight = minHeight;
    }
 
 
-   //   private static Sector calculateSector(final List<Geodetic2D> coordinates,
-   //                                         final List<List<Geodetic2D>> holesCoordinatesArray) {
-   //
-   //      double minLat = Double.MAX_VALUE;
-   //      double maxLat = -Double.MAX_VALUE;
-   //      double minLon = Double.MAX_VALUE;
-   //      double maxLon = -Double.MAX_VALUE;
-   //
-   //      for (final Geodetic2D coordinate : coordinates) {
-   //         final double lat = coordinate._latitude._degrees;
-   //         if (lat < minLat) {
-   //            minLat = lat;
-   //         }
-   //         if (lat > maxLat) {
-   //            maxLat = lat;
-   //         }
-   //
-   //         final double lon = coordinate._longitude._degrees;
-   //         if (lon < minLon) {
-   //            minLon = lon;
-   //         }
-   //         if (lon > maxLon) {
-   //            maxLon = lon;
-   //         }
-   //      }
-   //
-   //
-   //      for (final List<Geodetic2D> holesCoordinates : holesCoordinatesArray) {
-   //         for (final Geodetic2D coordinate : holesCoordinates) {
-   //            final double lat = coordinate._latitude._degrees;
-   //            if (lat < minLat) {
-   //               minLat = lat;
-   //            }
-   //            if (lat > maxLat) {
-   //               maxLat = lat;
-   //            }
-   //
-   //            final double lon = coordinate._longitude._degrees;
-   //            if (lon < minLon) {
-   //               minLon = lon;
-   //            }
-   //            if (lon > maxLon) {
-   //               maxLon = lon;
-   //            }
-   //         }
-   //      }
-   //
-   //      final Geodetic2D lower = Geodetic2D.fromDegrees(minLat, minLon);
-   //      final Geodetic2D upper = Geodetic2D.fromDegrees(maxLat, maxLon);
-   //      return new Sector(lower, upper);
-   //   }
-
-
-   private static ISimplePolygon2D createPolygon2D(final List<Geodetic2D> coordinates) {
-      final List<IVector2> points = GCollections.collect(coordinates, new IFunction<Geodetic2D, IVector2>() {
-         @Override
-         public IVector2 apply(final Geodetic2D coordinate) {
-            return new GVector2D(coordinate._longitude._degrees, coordinate._latitude._degrees);
-         }
-      });
-      return GShapeUtils.createPolygon2(false, points);
-   }
-
-
-   IPolygon2D asPolygon2D() {
-      final List<Geodetic2D> coordinates = _coordinates;
-      final List<List<Geodetic2D>> holesCoordinatesArray = _holesCoordinatesArray;
-
-      final ISimplePolygon2D hull = createPolygon2D(coordinates);
-      if (holesCoordinatesArray.isEmpty()) {
-         return hull;
+   public Geodetic2D getAverage() {
+      if (_average == null) {
+         _average = calculateAverage();
       }
-      final List<ISimplePolygon2D> holes = new ArrayList<>(holesCoordinatesArray.size());
-      for (final List<Geodetic2D> holeCoordinates : holesCoordinatesArray) {
-         final ISimplePolygon2D polygon2D = createPolygon2D(holeCoordinates);
-         if (polygon2D != null) {
-            holes.add(polygon2D);
+      return _average;
+   }
+
+
+   public double getMinHeight() {
+      return _minHeight;
+   }
+
+
+   public abstract Wall createExteriorWall(final double lowerHeight);
+
+
+   public abstract List<Wall> createInteriorWalls(final double lowerHeight);
+
+
+   public Building createBuilding(final PolygonExtruder.Statistics statistics,
+                                  final ExtrusionHandler handler,
+                                  final int id) {
+
+      final Triangulation.Data data = createTriangulationData();
+
+      try {
+         final List<Triangle> roofTriangles = Triangulation.triangulate(data);
+         if (roofTriangles == null) {
+            System.err.println("Error triangulating polygon #" + id);
+            statistics.countTriangulationError(PolygonExtruder.ErrorType.RETURN_NULL, _geoFeature, handler);
+         }
+         else {
+            statistics.countTriangulation(roofTriangles.size());
+
+            final Wall exteriorWall = createExteriorWall(_lowerHeight);
+            final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
+            return new Building(this, getAverage(), _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall,
+                     interiorWalls, _material);
          }
       }
-      return new GComplexPolygon2D(hull, holes);
+      catch (final NullPointerException e) {
+         statistics.countTriangulationError(PolygonExtruder.ErrorType.NULL_POINTER_EXCEPTION, _geoFeature, handler);
+      }
+      catch (final TriangulationException e) {
+         System.out.println(e.getMessage());
+         statistics.countTriangulationError(PolygonExtruder.ErrorType.TRIANGULATION_EXCEPTION, _geoFeature, handler);
+      }
+
+      return null;
    }
+
+
+   private List<Vector3D> toVector3DList(final double[][] vertices) {
+      final List<Vector3D> result = new ArrayList<>(vertices.length);
+      for (final double[] vertex : vertices) {
+         final double x = vertex[0];
+         final double y = vertex[1];
+         final double z = vertex[2];
+         result.add(new Vector3D(x, y, z));
+      }
+      return result;
+   }
+
+
+   protected abstract Triangulation.Data createTriangulationData();
+
+
+   protected abstract Geodetic2D calculateAverage();
+
+
+   public abstract void drawOn(final GEOBitmap bitmap,
+                               final Color fillColor,
+                               final Color borderColor);
 
 }

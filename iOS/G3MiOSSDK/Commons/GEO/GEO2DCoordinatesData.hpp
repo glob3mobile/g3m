@@ -9,18 +9,25 @@
 #ifndef __G3MiOSSDK__GEO2DCoordinatesData__
 #define __G3MiOSSDK__GEO2DCoordinatesData__
 
-
 #include "RCObject.hpp"
 #include <vector>
+
 class Geodetic2D;
 class Sector;
+
 
 class GEO2DCoordinatesData : public RCObject {
 private:
   const std::vector<Geodetic2D*>* _coordinates;
 
-  mutable Sector* _sector;
-  Sector* calculateSector() const;
+#ifdef C_CODE
+  mutable const Sector* _sector;
+#endif
+#ifdef JAVA_CODE
+  private Sector _sector;
+#endif
+
+  const Sector* calculateSector() const;
 
 protected:
   ~GEO2DCoordinatesData();
@@ -38,17 +45,18 @@ public:
 
   const Sector* getSector() const;
 
-  size_t size() const {
+  const size_t size() const {
     return (_coordinates == NULL) ? 0 : _coordinates->size();
   }
 
   const Geodetic2D* get(size_t index) const {
     return _coordinates->at(index);
   }
-
+  
   virtual long long getCoordinatesCount() const;
+
   
 };
 
-
 #endif
+

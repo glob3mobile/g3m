@@ -11,6 +11,8 @@
 
 #include "AbstractMesh.hpp"
 
+#include "GLConstants.hpp"
+
 
 class DirectMesh : public AbstractMesh {
 private:
@@ -27,13 +29,15 @@ public:
              const IFloatBuffer* vertices,
              float lineWidth,
              float pointSize,
-             const Color* flatColor = NULL,
-             const IFloatBuffer* colors = NULL,
-             bool depthTest = true,
+             const Color* flatColor      = NULL,
+             const IFloatBuffer* colors  = NULL,
+             bool depthTest              = true,
              const IFloatBuffer* normals = NULL,
-             bool polygonOffsetFill = false,
-             float polygonOffsetFactor = 0,
-             float polygonOffsetUnits = 0);
+             bool polygonOffsetFill      = false,
+             float polygonOffsetFactor   = 0,
+             float polygonOffsetUnits    = 0,
+             bool cullFace               = false,
+             int  culledFace             = GLCullFace::back());
 
   ~DirectMesh() {
 #ifdef JAVA_CODE

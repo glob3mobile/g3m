@@ -17,11 +17,11 @@ GEOFeatureCollection::~GEOFeatureCollection() {
     GEOFeature* feature = _features[i];
     delete feature;
   }
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
+  
 }
 
 void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
@@ -58,7 +58,6 @@ void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
   }
 }
 
-
 long long GEOFeatureCollection::getCoordinatesCount() const {
   long long result = 0;
   const size_t featuresCount = _features.size();
@@ -83,14 +82,15 @@ GEOFeatureCollection* GEOFeatureCollection::deepCopy() const {
   return new GEOFeatureCollection( copy(_features) );
 }
 
-long long GEOFeatureCollection::createFeatureMarks(const VectorStreamingRenderer::VectorSet* vectorSet,
-                                                   const VectorStreamingRenderer::Node*      node) const {
-  long long result = 0;
+
+int GEOFeatureCollection::symbolize(const VectorStreamingRenderer::VectorSet* vectorSet,
+                                    const VectorStreamingRenderer::Node*      node) const {
+  int result = 0;
   const size_t featuresCount = _features.size();
   for (size_t i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
     if (feature != NULL) {
-      result += feature->createFeatureMarks(vectorSet, node);
+      result += feature->symbolize(vectorSet, node);
     }
   }
   return result;

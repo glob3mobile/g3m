@@ -203,12 +203,11 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
 
   LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
                                                           GFont::monospaced(38), // font
-                                                          6,                     // margin
+                                                          Vector2F(6, 6),        // margin
                                                           Color::YELLOW,         // color
                                                           Color::BLACK,          // shadowColor
                                                           3,                     // shadowBlur
-                                                          1,                     // shadowOffsetX
-                                                          -1,                    // shadowOffsetY
+                                                          Vector2F(1, -1),       // shadowOffset
                                                           Color::RED,            // backgroundColor
                                                           4,                     // cornerRadius
                                                           true                   // mutable

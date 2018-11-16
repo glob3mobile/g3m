@@ -18,14 +18,14 @@ private:
 
 protected:
 
-  IStringBuilder* getNewInstance() const {
-    return new StringBuilder_iOS();
+  IStringBuilder* clone(const int floatPrecision) const {
+    return new StringBuilder_iOS(floatPrecision);
   }
 
 public:
 
-  StringBuilder_iOS() {
-    _oss.precision(20);
+  StringBuilder_iOS(const int floatPrecision) {
+    _oss.precision(floatPrecision);
   }
 
   IStringBuilder* addBool(bool b) {
@@ -62,8 +62,9 @@ public:
     return _oss.str();
   }
 
-  IStringBuilder* clear() {
+  IStringBuilder* clear(const int floatPrecision) {
     _oss.str(std::string());
+    _oss.precision(floatPrecision);
     return this;
   }
 

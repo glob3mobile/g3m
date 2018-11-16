@@ -123,7 +123,9 @@ void MarkWidget::prepareWidget(const IImage* image,
   const TextureIDReference* textureID = _texHandler->getTextureIDReference(_image,
                                                                            GLFormat::rgba(),
                                                                            imageName,
-                                                                           false);
+                                                                           false,
+                                                                           GLTextureParameterValue::clampToEdge(),
+                                                                           GLTextureParameterValue::clampToEdge());
 
   // #warning TODO: share unit texCoords
   if (_textureMapping != NULL) {

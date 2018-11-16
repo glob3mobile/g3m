@@ -18,7 +18,6 @@ GEOMarkSymbol::~GEOMarkSymbol() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 bool GEOMarkSymbol::symbolize(const G3MRenderContext* rc,

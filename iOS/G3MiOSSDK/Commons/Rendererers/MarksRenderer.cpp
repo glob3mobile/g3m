@@ -19,7 +19,7 @@
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
 #include "G3MEventContext.hpp"
-#include "MarksFilter.hpp"
+#include "MarkFilter.hpp"
 #include "G3MRenderContext.hpp"
 
 
@@ -293,7 +293,7 @@ void MarksRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                          false);
 }
 
-size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
+size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
                                      bool animated,
                                      bool deleteMarks) {
   size_t removed = 0;
@@ -330,7 +330,7 @@ size_t MarksRenderer::removeAllMarks(const MarksFilter& filter,
 }
 
 
-const std::vector<Mark*> MarksRenderer::getAllMarks(const MarksFilter& filter) const {
+const std::vector<Mark*> MarksRenderer::getAllMarks(const MarkFilter& filter) const {
   std::vector<Mark*> result;
 
   const size_t marksSize = _marks.size();
@@ -344,8 +344,7 @@ const std::vector<Mark*> MarksRenderer::getAllMarks(const MarksFilter& filter) c
   return result;
 }
 
-std::vector<Mark*> MarksRenderer::getMarks(const MarksFilter* filter) const {
-    
+std::vector<Mark*> MarksRenderer::getMarks(const MarkFilter* filter) const {
     if (filter == NULL){
         return _marks;
     }
@@ -359,4 +358,3 @@ std::vector<Mark*> MarksRenderer::getMarks(const MarksFilter* filter) const {
     
     return marks;
 }
-

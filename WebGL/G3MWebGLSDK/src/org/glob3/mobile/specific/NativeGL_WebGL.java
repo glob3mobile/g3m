@@ -20,15 +20,15 @@ import com.google.gwt.core.client.JsArrayInteger;
 
 
 public final class NativeGL_WebGL
-   extends
-      INativeGL {
+         extends
+            INativeGL {
    /*
    Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
    work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex
    attrib 0 array enabled, by using bindAttribLocation to bind some always-used attribute to location 0.
     */
 
-   private final JavaScriptObject                      _gl;
+   private final JavaScriptObject _gl;
 
    private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
 
@@ -43,8 +43,8 @@ public final class NativeGL_WebGL
                                 final float x,
                                 final float y) /*-{
 		var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
-				.uniform2f(locId, x, y);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform2f(locId, x,
+				y);
    }-*/;
 
 
@@ -71,8 +71,8 @@ public final class NativeGL_WebGL
                                 final float v2,
                                 final float v3) /*-{
 		var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId, v0,
-				v1, v2, v3);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId,
+				v0, v1, v2, v3);
    }-*/;
 
 
@@ -83,8 +83,8 @@ public final class NativeGL_WebGL
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 		var buffer = matrix.@org.glob3.mobile.generated.Matrix44D::getColumnMajorFloatBuffer()();
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(id,
-				transpose, value);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
+				id, transpose, value);
    }-*/;
 
 
@@ -119,8 +119,8 @@ public final class NativeGL_WebGL
    @Override
    public native void polygonOffset(final float factor,
                                     final float units) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(factor,
-				units);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(
+				factor, units);
    }-*/;
 
 
@@ -255,8 +255,8 @@ public final class NativeGL_WebGL
    public native void texParameteri(final int target,
                                     final int par,
                                     final int v) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(target,
-				par, v);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(
+				target, par, v);
    }-*/;
 
 
@@ -476,8 +476,20 @@ public final class NativeGL_WebGL
 
 
    @Override
+   public native int TextureParameterValue_Repeat() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.REPEAT;
+   }-*/;
+
+
+   @Override
    public native int TextureParameterValue_ClampToEdge() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.CLAMP_TO_EDGE;
+   }-*/;
+
+
+   @Override
+   public native int TextureParameterValue_MirroredRepeat() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.MIRRORED_REPEAT;
    }-*/;
 
 
@@ -810,7 +822,8 @@ public final class NativeGL_WebGL
 
    @Override
    public native void depthMask(final boolean depthMask) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.depthMask(depthMask);
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.depthMask(depthMask);
    }-*/;
 
 

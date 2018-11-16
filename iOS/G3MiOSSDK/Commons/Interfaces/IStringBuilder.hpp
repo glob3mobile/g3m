@@ -11,18 +11,20 @@
 #include <string>
 
 class IStringBuilder {
+private:
 
-  static IStringBuilder* _instance;
-
+  static IStringBuilder* _exemplar;
 
 protected:
 
-  virtual IStringBuilder* getNewInstance() const = 0;
+  virtual IStringBuilder* clone(const int floatPrecision) const = 0;
 
 public:
-  static void setInstance(IStringBuilder* isb);
+  static const int DEFAULT_FLOAT_PRECISION;
 
-  static IStringBuilder* newStringBuilder();
+  static void setInstance(IStringBuilder* exemplar);
+
+  static IStringBuilder* newStringBuilder(const int floatPrecision = DEFAULT_FLOAT_PRECISION);
 
   virtual IStringBuilder* addDouble(double d) = 0;
   virtual IStringBuilder* addFloat(float f) = 0;
@@ -33,7 +35,11 @@ public:
   virtual IStringBuilder* addString(const std::string& s) = 0;
   virtual IStringBuilder* addBool(bool b) = 0;
 
-  virtual IStringBuilder* clear() = 0;
+  virtual IStringBuilder* clear() {
+    return clear(DEFAULT_FLOAT_PRECISION);
+  }
+
+  virtual IStringBuilder* clear(const int floatPrecision) = 0;
 
   virtual const std::string getString() const = 0;
 

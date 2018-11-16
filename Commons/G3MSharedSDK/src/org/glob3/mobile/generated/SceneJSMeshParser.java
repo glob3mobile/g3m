@@ -17,9 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
-//class SGMesh;
-//class JSONBaseObject;
+//class SceneJSParserParameters;
 //class IByteBuffer;
+//class SGMesh;
 
 
 public class SceneJSMeshParser
@@ -29,27 +29,21 @@ public class SceneJSMeshParser
   }
 
 
-  public static SGMesh parseFromJSONBaseObject(JSONBaseObject jsonObject, String uriPrefix, boolean isTransparent, boolean depthTest)
+  public static SGMesh parseFromJSON(String json, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSONBaseObject(jsonObject, depthTest, true);
+    SGNode node = SceneJSNodeParser.parseFromJSON(json, parameters);
     return (node == null) ? null : new SGMesh(node, uriPrefix, isTransparent);
   }
 
-  public static SGMesh parseFromJSON(String json, String uriPrefix, boolean isTransparent, boolean depthTest)
+  public static SGMesh parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSON(json, depthTest);
+    SGNode node = SceneJSNodeParser.parseFromJSON(json, parameters);
     return (node == null) ? null : new SGMesh(node, uriPrefix, isTransparent);
   }
 
-  public static SGMesh parseFromJSON(IByteBuffer json, String uriPrefix, boolean isTransparent, boolean depthTest)
+  public static SGMesh parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters)
   {
-    SGNode node = SceneJSNodeParser.parseFromJSON(json, depthTest);
-    return (node == null) ? null : new SGMesh(node, uriPrefix, isTransparent);
-  }
-
-  public static SGMesh parseFromBSON(IByteBuffer bson, String uriPrefix, boolean isTransparent, boolean depthTest)
-  {
-    SGNode node = SceneJSNodeParser.parseFromBSON(bson, depthTest);
+    SGNode node = SceneJSNodeParser.parseFromBSON(bson, parameters);
     return (node == null) ? null : new SGMesh(node, uriPrefix, isTransparent);
   }
 

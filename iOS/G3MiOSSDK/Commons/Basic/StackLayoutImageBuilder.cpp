@@ -15,13 +15,14 @@
 
 StackLayoutImageBuilder::StackLayoutImageBuilder(const std::vector<IImageBuilder*>& children) :
 LayoutImageBuilder(children,
-                   0,
-                   0,
-                   Color::TRANSPARENT,
-                   0,
-                   Color::TRANSPARENT,
-                   0,
-                   0)
+                   Vector2F::zero(),   // margin
+                   0,                  // borderWidth
+                   Color::TRANSPARENT, // borderColor
+                   Vector2F::zero(),   // padding
+                   Color::TRANSPARENT, // backgroundColor
+                   0,                  // cornerRadius
+                   0                   // childrenSeparation
+                   )
 {
 
 }
@@ -30,13 +31,14 @@ StackLayoutImageBuilder::StackLayoutImageBuilder(IImageBuilder* child0,
                                                  IImageBuilder* child1) :
 LayoutImageBuilder(child0,
                    child1,
-                   0,
-                   0,
-                   Color::TRANSPARENT,
-                   0,
-                   Color::TRANSPARENT,
-                   0,
-                   0)
+                   Vector2F::zero(),   // margin
+                   0,                  // borderWidth
+                   Color::TRANSPARENT, // borderColor
+                   Vector2F::zero(),   // padding
+                   Color::TRANSPARENT, // backgroundColor
+                   0,                  // cornerRadius
+                   0                   // childrenSeparation
+                   )
 {
 
 }

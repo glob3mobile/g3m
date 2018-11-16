@@ -376,9 +376,9 @@ public:
   int TextureParameterValue_LinearMipmapNearest()  const { return GL_LINEAR_MIPMAP_NEAREST;  }
   int TextureParameterValue_LinearMipmapLinear()   const { return GL_LINEAR_MIPMAP_LINEAR;   }
 
-  int TextureParameterValue_ClampToEdge() const {
-    return GL_CLAMP_TO_EDGE;
-  }
+  int TextureParameterValue_Repeat()         const { return GL_REPEAT;          }
+  int TextureParameterValue_ClampToEdge()    const { return GL_CLAMP_TO_EDGE;   }
+  int TextureParameterValue_MirroredRepeat() const { return GL_MIRRORED_REPEAT; }
 
   int Alignment_Pack() const {
     return GL_PACK_ALIGNMENT;

@@ -3,21 +3,15 @@
 package com.glob3mobile.tools.mesh;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.Vector3F;
-
-import poly2Tri.Triangle;
-
-import com.glob3mobile.tools.extruder.Building;
-import com.glob3mobile.tools.extruder.Wall;
-import com.glob3mobile.tools.extruder.WallQuad;
 
 
 public class G3Mesh {
@@ -32,7 +26,7 @@ public class G3Mesh {
       LINE_LOOP("LineLoop"),
       POINTS("Points");
 
-      private String _name;
+      private final String _name;
 
 
       private Primitive(final String name) {
@@ -45,7 +39,7 @@ public class G3Mesh {
       CARTESIAN("Cartesian"),
       GEODETIC("Geodetic");
 
-      private String _name;
+      private final String _name;
 
 
       private VerticesFormat(final String name) {
@@ -54,274 +48,275 @@ public class G3Mesh {
    }
 
 
-   private final G3MeshMaterial        _material;
-   private final G3Mesh.Primitive      _primitive;
-   private final float                 _pointSize;
-   private final float                 _lineWidth;
-   private final boolean               _depthTest;
-   private final G3Mesh.VerticesFormat _verticesFormat;
-   private Vector3F                    _center;
-   private final List<Vector3F>        _vertices;
-   private final List<Vector3F>        _normals;
-   private final List<Color>           _colors;
-   private final List<Vector2F>        _texCoords;
-   private final List<Short>           _indices;
+   public static G3Mesh createTrianglesMesh(final VerticesFormat verticesFormat,
+                                            final Vector3D center,
+                                            final List<Vector3F> vertices,
+                                            final List<Vector3F> normals,
+                                            final List<Color> colors,
+                                            final List<Vector2F> texCoords,
+                                            final List<Short> indices,
+                                            final G3MeshMaterial material) {
+      return new G3Mesh( //
+               Primitive.TRIANGLES, //
+               1, // pointSize
+               1, // lineWidth
+               verticesFormat, //
+               center, //
+               vertices, //
+               normals, //
+               colors, //
+               texCoords, //
+               indices, //
+               material //
+      );
 
-
-   public G3Mesh(final G3MeshMaterial material,
-                 final G3Mesh.Primitive primitive,
-                 final float pointSize,
-                 final float lineWidth,
-                 final boolean depthTest,
-                 final G3Mesh.VerticesFormat verticesFormat,
-                 final Vector3F center,
-                 final boolean hasNormals,
-                 final boolean hasColors,
-                 final boolean hasTexCoords,
-                 final boolean hasIndices) {
-      _material = material;
-      _primitive = primitive;
-      _pointSize = pointSize;
-      _lineWidth = lineWidth;
-      _depthTest = depthTest;
-      _verticesFormat = verticesFormat;
-      _center = center;
-      _vertices = new ArrayList<>();
-      _normals = hasNormals ? new ArrayList<Vector3F>() : null;
-      _colors = hasColors ? new ArrayList<Color>() : null;
-      _texCoords = hasTexCoords ? new ArrayList<Vector2F>() : null;
-      _indices = hasIndices ? new ArrayList<Short>() : null;
    }
 
 
-   public G3Mesh(final Building building) {
-      _material = building._material;
-      _primitive = G3Mesh.Primitive.TRIANGLES;
-      _pointSize = 1;
-      _lineWidth = 1;
-      _depthTest = building._depthTest;
-      _verticesFormat = G3Mesh.VerticesFormat.GEODETIC;
+   public static List<G3Mesh> consolidate(final List<G3Mesh> oldMeshes) {
+      if ((oldMeshes == null) || oldMeshes.isEmpty()) {
+         return Collections.emptyList();
+      }
+
+      final G3Mesh first = oldMeshes.get(0);
+
+      if (first._primitive != G3Mesh.Primitive.TRIANGLES) {
+         throw new RuntimeException("Primitive not supported: " + first._primitive);
+      }
+
+      final List<G3Mesh> newMeshes = new ArrayList<>();
+
+      final List<Vector3D> newVertices = new ArrayList<>();
+      final List<Vector3F> newNormals = new ArrayList<>();
+      final List<Color> newColors = new ArrayList<>();
+      final List<Vector2F> newTexCoords = new ArrayList<>();
+      final List<Short> newIndices = new ArrayList<>();
 
 
-      double minX = Double.MAX_VALUE;
-      double minY = Double.MAX_VALUE;
-      double maxX = -Double.MAX_VALUE;
-      double maxY = -Double.MAX_VALUE;
+      for (final G3Mesh oldMesh : oldMeshes) {
+         if (!oldMesh.isHomomorphic(first)) {
+            throw new RuntimeException("Inconsistency");
+         }
 
-      for (final double[] vertex : building._ceilingVertices) {
-         final double x = vertex[0];
-         final double y = vertex[1];
-         if (x < minX) {
-            minX = x;
+         final boolean fitsMesh = fits(oldMesh, newVertices.size());
+         if (!fitsMesh) {
+            createMesh(first, newMeshes, newVertices, newNormals, newColors, newTexCoords, newIndices);
          }
-         if (x > maxX) {
-            maxX = x;
+         final int indicesOffset = newVertices.size();
+
+         final Vector3D oldCenter = oldMesh._center;
+         final List<Vector3F> oldVertices = oldMesh._vertices;
+         for (int i = 0; i < oldVertices.size(); i++) {
+            final Vector3F oldVertex = oldVertices.get(i);
+            final double x = oldCenter._x + oldVertex._x;
+            final double y = oldCenter._y + oldVertex._y;
+            final double z = oldCenter._z + oldVertex._z;
+            newVertices.add(new Vector3D(x, y, z));
          }
-         if (y < minY) {
-            minY = y;
+
+         if (oldMesh._normals != null) {
+            newNormals.addAll(oldMesh._normals);
          }
-         if (y > maxY) {
-            maxY = y;
+         if (oldMesh._colors != null) {
+            newColors.addAll(oldMesh._colors);
+         }
+         if (oldMesh._texCoords != null) {
+            newTexCoords.addAll(oldMesh._texCoords);
+         }
+
+         for (final short index : oldMesh._indices) {
+            newIndices.add(toShort(indicesOffset + index));
          }
       }
 
-      final float centerX = (float) ((maxX + minX) / 2);
-      final float centerY = (float) ((maxY + minY) / 2);
-      final float centerZ = (float) ((building._lowerHeight + building._upperHeight) / 2);
-      _center = new Vector3F(centerX, centerY, centerZ);
-      _vertices = new ArrayList<>(building._ceilingVertices.length);
-      //      _normals = new ArrayList<>(building._ceilingVertices.length);
-      for (final double[] vertex : building._ceilingVertices) {
-         final double x = vertex[0];
-         final double y = vertex[1];
-         final double z = building._upperHeight;
-         addVertex(centerX, centerY, centerZ, x, y, z);
+      createMesh(first, newMeshes, newVertices, newNormals, newColors, newTexCoords, newIndices);
 
-         //         _normals.add(new Vector3F(1, 0, 0));
-      }
-      _colors = null;
-      _texCoords = null;
-
-      _indices = new ArrayList<>();
-      for (final Triangle triangle : building._ceilingTriangles) {
-         _indices.add(toShort(triangle._vertex0));
-         _indices.add(toShort(triangle._vertex1));
-         _indices.add(toShort(triangle._vertex2));
-      }
-
-      final int lastCeilingVertexIndex = _vertices.size() - 1;
-
-      processWall(centerX, centerY, centerZ, building._exteriorWall);
-      for (final Wall wall : building._interiorWalls) {
-         processWall(centerX, centerY, centerZ, wall);
-      }
-
-      _normals = initializeNormals(lastCeilingVertexIndex);
+      return newMeshes;
    }
 
 
-   private List<Vector3F> initializeNormals(final int lastCeilingVertexIndex) {
-      final int verticesSize = _vertices.size();
-      final ArrayList<Vector3F> result = new ArrayList<>(verticesSize);
-      for (int i = 0; i < verticesSize; i++) {
-         if (i <= lastCeilingVertexIndex) {
-            result.add(new Vector3F(1, 0, 0));
-         }
-         else {
-            result.add(null);
-         }
+   private static void createMesh(final G3Mesh first,
+                                  final List<G3Mesh> newMeshes,
+                                  final List<Vector3D> newVertices,
+                                  final List<Vector3F> newNormals,
+                                  final List<Color> newColors,
+                                  final List<Vector2F> newTexCoords,
+                                  final List<Short> newIndices) {
+      if (newVertices.isEmpty()) {
+         return;
       }
 
-      final int indicesSize = _indices.size();
-      for (int i = 0; i < indicesSize; i += 3) {
-         final short index0 = _indices.get(i + 0);
-         final short index1 = _indices.get(i + 1);
-         final short index2 = _indices.get(i + 2);
+      final Vector3D newCenter = calculateCenter(newVertices);
+      final G3Mesh newMesh = new G3Mesh( //
+               first._primitive, //
+               first._pointSize, //
+               first._lineWidth, //
+               first._verticesFormat, //
+               newCenter, //
+               substractCenter(newCenter, newVertices), //
+               newNormals.isEmpty() ? null : new ArrayList<>(newNormals), //
+               newColors.isEmpty() ? null : new ArrayList<>(newColors), //
+               newTexCoords.isEmpty() ? null : new ArrayList<>(newTexCoords), //
+               new ArrayList<>(newIndices), //
+               first._material);
+      newMeshes.add(newMesh);
 
-         final Vector3F vertex0 = _vertices.get(index0);
-         final Vector3F vertex1 = _vertices.get(index1);
-         final Vector3F vertex2 = _vertices.get(index2);
+      newVertices.clear();
+      newNormals.clear();
+      newColors.clear();
+      newTexCoords.clear();
+      newIndices.clear();
+   }
 
-         final Vector3F v10 = vertex1.sub(vertex0);
-         final Vector3F v20 = vertex2.sub(vertex0);
-         final Vector3F normal = v10.cross(v20).normalized();
 
-         if (normal.isNan()) {
-            setNormal(result, index0, Vector3F.zero());
-            setNormal(result, index1, Vector3F.zero());
-            setNormal(result, index2, Vector3F.zero());
-         }
-         else {
-            setNormal(result, index0, normal);
-            setNormal(result, index1, normal);
-            setNormal(result, index2, normal);
+   private static Vector3D calculateCenter(final List<Vector3D> vertices) {
+      double sumX = 0;
+      double sumY = 0;
+      double sumZ = 0;
+      for (final Vector3D newVextex : vertices) {
+         sumX += newVextex._x;
+         sumY += newVextex._y;
+         sumZ += newVextex._z;
+      }
+      return new Vector3D(sumX, sumY, sumZ).div(vertices.size());
+   }
+
+
+   private static boolean fits(final G3Mesh mesh,
+                               final int indicesOffset) {
+      for (final short index : mesh._indices) {
+         final int newIndex = indicesOffset + index;
+         if (newIndex > Short.MAX_VALUE) {
+            return false;
          }
       }
+      return true;
+   }
 
+
+   private static List<Vector3F> substractCenter(final Vector3D center,
+                                                 final List<Vector3D> verticesD) {
+      final List<Vector3F> result = new ArrayList<>(verticesD.size());
+      for (final Vector3D vertexD : verticesD) {
+         final Vector3F vertexF = new Vector3F( //
+                  (float) (vertexD._x - (float) center._x), //
+                  (float) (vertexD._y - (float) center._y), //
+                  (float) (vertexD._z - (float) center._z));
+         result.add(vertexF);
+      }
       return result;
    }
 
 
-   private void setNormal(final ArrayList<Vector3F> normals,
-                          final short index,
-                          final Vector3F normal) {
-      final Vector3F currentNormal = normals.get(index);
-      if ((currentNormal == null) || currentNormal.isZero() || currentNormal.isNan()) {
-         normals.set(index, normal);
-      }
-   }
-
-
-   private void processWall(final float centerX,
-                            final float centerY,
-                            final float centerZ,
-                            final Wall wall) {
-      for (final WallQuad quad : wall._quads) {
-         final Geodetic2D coordinate0 = quad._coordinate0;
-         final Geodetic2D coordinate1 = quad._coordinate1;
-         final double lowerHeight = quad._lowerHeight;
-         final double upperHeight = quad._upperHeight;
-
-         final int firstVertexIndex = _vertices.size();
-         addVertex(centerX, centerY, centerZ, coordinate0, upperHeight);
-         addVertex(centerX, centerY, centerZ, coordinate0, lowerHeight);
-         addVertex(centerX, centerY, centerZ, coordinate1, lowerHeight);
-         addVertex(centerX, centerY, centerZ, coordinate1, upperHeight);
-
-         _indices.add((short) (firstVertexIndex + 0));
-         _indices.add((short) (firstVertexIndex + 1));
-         _indices.add((short) (firstVertexIndex + 2));
-
-         _indices.add((short) (firstVertexIndex + 0));
-         _indices.add((short) (firstVertexIndex + 2));
-         _indices.add((short) (firstVertexIndex + 3));
-      }
-   }
-
-
-   private void addVertex(final float centerX,
-                          final float centerY,
-                          final float centerZ,
-                          final Geodetic2D coordinate,
-                          final double height) {
-      addVertex(centerX, centerY, centerZ, coordinate._longitude._degrees, coordinate._latitude._degrees, height);
-   }
-
-
-   private void addVertex(final float centerX,
-                          final float centerY,
-                          final float centerZ,
-                          final double x,
-                          final double y,
-                          final double z) {
-      _vertices.add(new Vector3F( //
-               (float) (x - centerX), //
-               (float) (y - centerY), //
-               (float) (z - centerZ)));
-   }
-
-
    private static short toShort(final int index) {
-      if ((index >= Short.MIN_VALUE) || (index <= Short.MAX_VALUE)) {
+      if ((index >= 0) && (index <= Short.MAX_VALUE)) {
          return (short) index;
       }
       throw new RuntimeException("Invalid range for index #" + index);
    }
 
 
-   void validate() {
+   private final G3Mesh.Primitive      _primitive;
+   private final float                 _pointSize;
+   private final float                 _lineWidth;
+   private final G3Mesh.VerticesFormat _verticesFormat;
+   private final Vector3D              _center;
+   private final List<Vector3F>        _vertices;
+   private final List<Vector3F>        _normals;
+   private final List<Color>           _colors;
+   private final List<Vector2F>        _texCoords;
+   private final List<Short>           _indices;
+   private final G3MeshMaterial        _material;
+
+
+   private G3Mesh(final Primitive primitive,
+                  final float pointSize,
+                  final float lineWidth,
+                  final VerticesFormat verticesFormat,
+                  final Vector3D center,
+                  final List<Vector3F> vertices,
+                  final List<Vector3F> normals,
+                  final List<Color> colors,
+                  final List<Vector2F> texCoords,
+                  final List<Short> indices,
+                  final G3MeshMaterial material) {
+      _primitive = primitive;
+      _pointSize = pointSize;
+      _lineWidth = lineWidth;
+      _verticesFormat = verticesFormat;
+      _center = center;
+      _vertices = vertices;
+      _normals = normals;
+      _colors = colors;
+      _texCoords = texCoords;
+      _indices = indices;
+      _material = material;
+
+      validate();
+   }
+
+
+   private void validate() {
       final int verticesSize = _vertices.size();
-      if ((_normals != null) && (_normals.size() != verticesSize)) {
-         throw new RuntimeException("Normals doesn't match vertices size");
-      }
-      if ((_colors != null) && (_colors.size() != verticesSize)) {
-         throw new RuntimeException("Colors doesn't match vertices size");
-      }
-      if ((_texCoords != null) && (_texCoords.size() != verticesSize)) {
-         throw new RuntimeException("TexCoords doesn't match vertices size");
-      }
-      if (_indices != null) {
-         for (final short index : _indices) {
-            if ((index < 0) || (index >= verticesSize)) {
-               throw new RuntimeException("Invalid index " + index);
+
+      if (_primitive == Primitive.TRIANGLES) {
+         if (_indices == null) {
+            if ((verticesSize % 3) != 0) {
+               throw new RuntimeException("TRIANGLES: vertices count is not multiple of 3 (" + verticesSize + ")");
+            }
+         }
+         else {
+            if ((_indices.size() % 3) != 0) {
+               throw new RuntimeException("TRIANGLES: indices count is not multiple of 3 (" + _indices.size() + ")");
             }
          }
       }
 
-      _material.validate();
-   }
-
-
-   public void addVertex(final Vector3F vertice) {
-      if (_center == null) {
-         _center = vertice;
+      if (_normals != null) {
+         if (_normals.size() != verticesSize) {
+            throw new RuntimeException("Normals doesn't match vertices size (" + verticesSize + ")");
+         }
+         for (final Vector3F normal : _normals) {
+            if (normal.isNan()) {
+               throw new RuntimeException("Invalid normal: " + normal);
+            }
+         }
       }
-      _vertices.add(vertice.sub(_center));
+
+      if (_colors != null) {
+         if (_colors.size() != verticesSize) {
+            throw new RuntimeException("Colors doesn't match vertices size (" + verticesSize + ")");
+         }
+      }
+
+      if (_texCoords != null) {
+         if (_texCoords.size() != verticesSize) {
+            throw new RuntimeException("TexCoords doesn't match vertices size (" + verticesSize + ")");
+         }
+         for (final Vector2F texCoord : _texCoords) {
+            if (texCoord.isNan()) {
+               throw new RuntimeException("Invalid texCoord: " + texCoord);
+            }
+         }
+      }
+
+      if (_indices != null) {
+         for (final short index : _indices) {
+            if ((index < 0) || (index >= verticesSize)) {
+               throw new RuntimeException("Invalid index " + index + " (" + verticesSize + ")");
+            }
+         }
+      }
    }
 
 
-   public void addNormal(final Vector3F normal) {
-      _normals.add(normal.normalized());
+   public G3MeshMaterial getMaterial() {
+      return _material;
    }
 
 
-   public void addColor(final Color color) {
-      _colors.add(color);
-   }
-
-
-   public void addTexCoord(final Vector2F texCoord) {
-      _texCoords.add(texCoord);
-   }
-
-
-   public void addIndex(final short index) {
-      _indices.add(index);
-   }
-
-
-   private JSONBaseObject toColorJSON(final List<Color> colors) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toColorJSON(final List<Color> colors) {
+      final List<Float> result = new ArrayList<>();
       for (final Color color : colors) {
          result.add(color._red);
          result.add(color._green);
@@ -332,8 +327,8 @@ public class G3Mesh {
    }
 
 
-   private JSONArray toJSON(final Vector3F point) {
-      final JSONArray result = new JSONArray();
+   private static List<Double> toJSON(final Vector3D point) {
+      final List<Double> result = new ArrayList<>();
       result.add(point._x);
       result.add(point._y);
       result.add(point._z);
@@ -341,8 +336,8 @@ public class G3Mesh {
    }
 
 
-   private JSONArray toVector3FJSON(final List<Vector3F> vertices) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toVector3FJSON(final List<Vector3F> vertices) {
+      final List<Float> result = new ArrayList<>();
       for (final Vector3F vertex : vertices) {
          result.add(vertex._x);
          result.add(vertex._y);
@@ -352,8 +347,8 @@ public class G3Mesh {
    }
 
 
-   private JSONArray toVector2FJSON(final List<Vector2F> texCoords) {
-      final JSONArray result = new JSONArray();
+   private static List<Float> toVector2FJSON(final List<Vector2F> texCoords) {
+      final List<Float> result = new ArrayList<>();
       for (final Vector2F vertex : texCoords) {
          result.add(vertex._x);
          result.add(vertex._y);
@@ -362,8 +357,8 @@ public class G3Mesh {
    }
 
 
-   private JSONArray toShortJSON(final List<Short> indices) {
-      final JSONArray result = new JSONArray();
+   private static List<Short> toShortJSON(final List<Short> indices) {
+      final List<Short> result = new ArrayList<>();
       for (final short index : indices) {
          result.add(index);
       }
@@ -371,24 +366,27 @@ public class G3Mesh {
    }
 
 
-   public JSONObject toG3MeshJSON() {
-      validate();
-
-      final JSONObject result = new JSONObject();
+   public Map<String, Object> toJSON() {
+      final Map<String, Object> result = new LinkedHashMap<>();
 
       result.put("material", _material.getID());
-      result.put("primitive", _primitive._name);
+      if (_primitive != G3Mesh.Primitive.TRIANGLES) {
+         result.put("primitive", _primitive._name);
+      }
       if (_pointSize != 1) {
          result.put("pointSize", _pointSize);
       }
       if (_lineWidth != 1) {
          result.put("lineWidth", _lineWidth);
       }
-      if (_depthTest != true) {
-         result.put("depthTest", _depthTest);
+      final boolean depthTest = _material._depthTest;
+      if (!depthTest) {
+         result.put("depthTest", depthTest);
       }
-      result.put("verticesFormat", _verticesFormat._name);
-      if (!_center.isZero()) {
+      if (_verticesFormat != G3Mesh.VerticesFormat.CARTESIAN) {
+         result.put("verticesFormat", _verticesFormat._name);
+      }
+      if ((_center != null) && !_center.isZero()) {
          result.put("center", toJSON(_center));
       }
       result.put("vertices", toVector3FJSON(_vertices));
@@ -409,8 +407,62 @@ public class G3Mesh {
    }
 
 
-   public G3MeshMaterial getMaterial() {
-      return _material;
+   public boolean isHomomorphic(final G3Mesh that) {
+      if (this == that) {
+         return true;
+      }
+
+      if (that == null) {
+         return false;
+      }
+
+      if (_primitive != that._primitive) {
+         return false;
+      }
+
+      if (Float.floatToIntBits(_pointSize) != Float.floatToIntBits(that._pointSize)) {
+         return false;
+      }
+
+      if (Float.floatToIntBits(_lineWidth) != Float.floatToIntBits(that._lineWidth)) {
+         return false;
+      }
+
+      if (_verticesFormat != that._verticesFormat) {
+         return false;
+      }
+
+      if (_material == null) {
+         if (that._material != null) {
+            return false;
+         }
+      }
+      else if (!_material.getID().equals(that._material.getID())) {
+         return false;
+      }
+
+      if ((_normals != null) && (that._normals == null)) {
+         return false;
+      }
+      if ((_normals == null) && (that._normals != null)) {
+         return false;
+      }
+
+      if ((_colors != null) && (that._colors == null)) {
+         return false;
+      }
+      if ((_colors == null) && (that._colors != null)) {
+         return false;
+      }
+
+      if ((_texCoords != null) && (that._texCoords == null)) {
+         return false;
+      }
+      if ((_texCoords == null) && (that._texCoords != null)) {
+         return false;
+      }
+
+      return true;
    }
 
 

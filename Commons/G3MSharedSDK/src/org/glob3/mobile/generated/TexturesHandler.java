@@ -5,26 +5,7 @@ public class TexturesHandler
 
   private final GL _gl;
   private final boolean _verbose;
-  //void showHolders(const std::string& message) const;
 
-
-  //void TexturesHandler::showHolders(const std::string& message) const {
-  //  if (false) {
-  //    std::string holdersString = ">>>> " + message + ", Holders=(";
-  //    for (int i = 0; i < _textureHolders.size(); i++) {
-  //      TextureHolder* holder = _textureHolders[i];
-  //
-  //      if (i > 0) {
-  //        holdersString += ", ";
-  //      }
-  //      holdersString += holder->description();
-  //    }
-  //    holdersString += ")";
-  //
-  //    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
-  //  }
-  //}
-  
   private IGLTextureID getGLTextureIDIfAvailable(TextureSpec textureSpec)
   {
     final int _textureHoldersSize = _textureHolders.size();
@@ -34,8 +15,6 @@ public class TexturesHandler
       if (holder.hasSpec(textureSpec))
       {
         holder.retain();
-  
-        //showHolders("getGLTextureIDIfAvailable(): retained " + holder->description());
   
         return holder._glTextureID;
       }
@@ -59,10 +38,10 @@ public class TexturesHandler
     }
   }
 
-  public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap)
+  public final TextureIDReference getTextureIDReference(IImage image, int format, String name, boolean generateMipmap, int wrapS, int wrapT)
   {
   
-    final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap);
+    final TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), generateMipmap, wrapS, wrapT);
   
     final IGLTextureID previousID = getGLTextureIDIfAvailable(textureSpec);
     if (previousID != null)
@@ -71,8 +50,7 @@ public class TexturesHandler
     }
   
     TextureHolder holder = new TextureHolder(textureSpec);
-    holder._glTextureID = _gl.uploadTexture(image, format, textureSpec.generateMipmap());
-  
+    holder._glTextureID = _gl.uploadTexture(image, format, generateMipmap, wrapS, wrapT);
   
     if (_verbose)
     {
@@ -80,8 +58,6 @@ public class TexturesHandler
     }
   
     _textureHolders.add(holder);
-  
-    //showHolders("getGLTextureID(): created holder " + holder->description());
   
     return new TextureIDReference(holder._glTextureID, image.isPremultiplied(), this);
   }
@@ -102,8 +78,6 @@ public class TexturesHandler
       if (holder._glTextureID.isEquals(glTextureID))
       {
         holder.release();
-  
-        //showHolders("releaseGLTextureID(  ): released holder " + holder->description());
   
         if (!holder.isRetained())
         {
@@ -133,8 +107,6 @@ public class TexturesHandler
       if (holder._glTextureID.isEquals(glTextureID))
       {
         holder.retain();
-  
-        //showHolders("retainGLTextureID(): retained holder " + holder->description());
   
         return;
       }

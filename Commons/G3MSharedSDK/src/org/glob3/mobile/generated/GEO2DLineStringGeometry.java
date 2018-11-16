@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEO2DLineStringGeometry extends GEOGeometry2D
+public class GEO2DLineStringGeometry extends GEO2DGeometry
 {
   private final GEO2DCoordinatesData _coordinatesData;
 
@@ -30,6 +30,7 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
       _coordinatesData._retain();
     }
   }
+
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
   {
@@ -46,7 +47,6 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
   {
     _coordinatesData = (coordinates == null) ? null : new GEO2DCoordinatesData(coordinates);
   }
-
 
   public void dispose()
   {

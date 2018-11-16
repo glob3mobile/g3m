@@ -62,6 +62,11 @@ public:
                     (float) (_z / d));
   }
 
+  Vector3F add(const Vector3F& that) const {
+    return Vector3F(_x + that._x,
+                    _y + that._y,
+                    _z + that._z);
+  }
 
   Vector3F sub(const Vector3F& that) const {
     return Vector3F(_x - that._x,
@@ -73,6 +78,12 @@ public:
     return Vector3F(_y * that._z - _z * that._y,
                     _z * that._x - _x * that._z,
                     _x * that._y - _y * that._x);
+  }
+
+  Vector3F div(const float v) const {
+    return Vector3F(_x / v,
+                    _y / v,
+                    _z / v);
   }
 
   bool isZero() const {

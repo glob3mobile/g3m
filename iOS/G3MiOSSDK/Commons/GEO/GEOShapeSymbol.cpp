@@ -9,6 +9,8 @@
 #include "GEOShapeSymbol.hpp"
 
 #include "ShapesRenderer.hpp"
+#include "Shape.hpp"
+
 
 GEOShapeSymbol::~GEOShapeSymbol() {
   delete _shape;
@@ -16,7 +18,6 @@ GEOShapeSymbol::~GEOShapeSymbol() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 

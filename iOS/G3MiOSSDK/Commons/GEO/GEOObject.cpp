@@ -6,3 +6,11 @@
 //
 //
 
+#include "GEOObject.hpp"
+
+
+GEOObject::GEOObject() {
+}
+
+GEOObject::~GEOObject() {
+}

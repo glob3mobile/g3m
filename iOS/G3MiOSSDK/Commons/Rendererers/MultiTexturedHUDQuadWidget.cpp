@@ -24,6 +24,7 @@
 #include "GLConstants.hpp"
 #include "TimeInterval.hpp"
 #include "IImage.hpp"
+#include "GLConstants.hpp"
 
 
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
@@ -77,7 +78,9 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* texID1 = rc->getTexturesHandler()->getTextureIDReference(_image1,
                                                                                      GLFormat::rgba(),
                                                                                      _imageURL1._path,
-                                                                                     false);
+                                                                                     false,
+                                                                                     GLTextureParameterValue::clampToEdge(),
+                                                                                     GLTextureParameterValue::clampToEdge());
 
   if (texID1 == NULL) {
     rc->getLogger()->logError("Can't upload texture #1 to GPU");
@@ -87,7 +90,9 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* texID2 = rc->getTexturesHandler()->getTextureIDReference(_image2,
                                                                                      GLFormat::rgba(),
                                                                                      _imageURL2._path,
-                                                                                     false);
+                                                                                     false,
+                                                                                     GLTextureParameterValue::clampToEdge(),
+                                                                                     GLTextureParameterValue::clampToEdge());
 
   if (texID2 == NULL) {
     rc->getLogger()->logError("Can't upload texture #2 to GPU");

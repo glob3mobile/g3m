@@ -48,6 +48,7 @@ long long GEO2DPolygonData::getCoordinatesCount() const {
   return result;
 }
 
+
 bool GEO2DPolygonData::contains(const std::vector<Geodetic2D*>* coordinates, const Geodetic2D& point) const {
   int sidesCrossedMovingRight = 0;
   const size_t coordinatesCount = coordinates->size();

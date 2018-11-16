@@ -144,6 +144,13 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
+void ShapesRenderer::addShape(Shape* shape) {
+  _shapes.push_back(shape);
+  if (_context != NULL) {
+    shape->initialize(_context);
+  }
+}
+
 void ShapesRenderer::removeShape(Shape* shape) {
   int pos = -1;
   const int shapesSize = _shapes.size();
@@ -164,8 +171,12 @@ void ShapesRenderer::removeShape(Shape* shape) {
 }
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
+  const size_t shapesCount = _shapes.size();
+  if (shapesCount == 0) {
+    return;
+  }
+
   if (deleteShapes) {
-    const size_t shapesCount = _shapes.size();
     for (size_t i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
       delete shape;
@@ -265,7 +276,7 @@ void ShapesRenderer::drainLoadQueue() {
                   item->_readExpired,
                   item->_uriPrefix,
                   item->_isTransparent,
-                  item->_depthTest,
+                  item->_parameters,
                   item->_position,
                   item->_altitudeMode,
                   item->_listener,
@@ -307,17 +318,17 @@ void ShapesRenderer::onLostContext() {
 
 
 
-void ShapesRenderer::loadJSONSceneJS(const URL&          url,
-                                     long long           priority,
-                                     const TimeInterval& timeToCache,
-                                     bool                readExpired,
-                                     const std::string&  uriPrefix,
-                                     bool                isTransparent,
-                                     bool                depthTest,
-                                     Geodetic3D*         position,
-                                     AltitudeMode        altitudeMode,
-                                     ShapeLoadListener*  listener,
-                                     bool                deleteListener) {
+void ShapesRenderer::loadJSONSceneJS(const URL&                     url,
+                                     long long                      priority,
+                                     const TimeInterval&            timeToCache,
+                                     bool                           readExpired,
+                                     const std::string&             uriPrefix,
+                                     bool                           isTransparent,
+                                     const SceneJSParserParameters& parameters,
+                                     const Geodetic3D&              position,
+                                     AltitudeMode                   altitudeMode,
+                                     ShapeLoadListener*             listener,
+                                     bool                           deleteListener) {
   if (_context == NULL) {
     _loadQueue.push_back(new LoadQueueItem(url,
                                            priority,
@@ -325,7 +336,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                                            readExpired,
                                            uriPrefix,
                                            isTransparent,
-                                           depthTest,
+                                           parameters,
                                            position,
                                            altitudeMode,
                                            listener,
@@ -339,7 +350,7 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
                   readExpired,
                   uriPrefix,
                   isTransparent,
-                  depthTest,
+                  parameters,
                   position,
                   altitudeMode,
                   listener,
@@ -349,17 +360,17 @@ void ShapesRenderer::loadJSONSceneJS(const URL&          url,
 }
 
 
-void ShapesRenderer::loadBSONSceneJS(const URL&          url,
-                                     long long           priority,
-                                     const TimeInterval& timeToCache,
-                                     bool                readExpired,
-                                     const std::string&  uriPrefix,
-                                     bool                isTransparent,
-                                     bool                depthTest,
-                                     Geodetic3D*         position,
-                                     AltitudeMode        altitudeMode,
-                                     ShapeLoadListener*  listener,
-                                     bool                deleteListener) {
+void ShapesRenderer::loadBSONSceneJS(const URL&                     url,
+                                     long long                      priority,
+                                     const TimeInterval&            timeToCache,
+                                     bool                           readExpired,
+                                     const std::string&             uriPrefix,
+                                     bool                           isTransparent,
+                                     const SceneJSParserParameters& parameters,
+                                     const Geodetic3D&              position,
+                                     AltitudeMode                   altitudeMode,
+                                     ShapeLoadListener*             listener,
+                                     bool                           deleteListener) {
   if (_context == NULL) {
     _loadQueue.push_back(new LoadQueueItem(url,
                                            priority,
@@ -367,7 +378,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                                            readExpired,
                                            uriPrefix,
                                            isTransparent,
-                                           depthTest,
+                                           parameters,
                                            position,
                                            altitudeMode,
                                            listener,
@@ -381,7 +392,7 @@ void ShapesRenderer::loadBSONSceneJS(const URL&          url,
                   readExpired,
                   uriPrefix,
                   isTransparent,
-                  depthTest,
+                  parameters,
                   position,
                   altitudeMode,
                   listener,
@@ -394,16 +405,17 @@ class ShapesRenderer_SceneJSParserAsyncTask : public GAsyncTask {
 private:
   ShapesRenderer*    _shapesRenderer;
 #ifdef C_CODE
-  const URL          _url;
+  const URL                     _url;
+  const SceneJSParserParameters _parameters;
 #endif
 #ifdef JAVA_CODE
-  private final URL _url;
+  private final URL                     _url;
+  private final SceneJSParserParameters _parameters;
 #endif
   IByteBuffer*       _buffer;
   const std::string  _uriPrefix;
   const bool         _isTransparent;
-  const bool         _depthTest;
-  Geodetic3D*        _position;
+  const Geodetic3D   _position;
   AltitudeMode       _altitudeMode;
   ShapeLoadListener* _listener;
   const bool         _deleteListener;
@@ -412,23 +424,23 @@ private:
   SGShape* _sgShape;
 
 public:
-  ShapesRenderer_SceneJSParserAsyncTask(ShapesRenderer*    shapesRenderer,
-                                        const URL&         url,
-                                        IByteBuffer*       buffer,
-                                        const std::string& uriPrefix,
-                                        bool               isTransparent,
-                                        bool               depthTest,
-                                        Geodetic3D*        position,
-                                        AltitudeMode       altitudeMode,
-                                        ShapeLoadListener* listener,
-                                        bool               deleteListener,
-                                        bool               isBSON) :
+  ShapesRenderer_SceneJSParserAsyncTask(ShapesRenderer*                shapesRenderer,
+                                        const URL&                     url,
+                                        IByteBuffer*                   buffer,
+                                        const std::string&             uriPrefix,
+                                        bool                           isTransparent,
+                                        const SceneJSParserParameters& parameters,
+                                        const Geodetic3D&              position,
+                                        AltitudeMode                   altitudeMode,
+                                        ShapeLoadListener*             listener,
+                                        bool                           deleteListener,
+                                        bool                           isBSON) :
   _shapesRenderer(shapesRenderer),
   _url(url),
   _buffer(buffer),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent),
-  _depthTest(depthTest),
+  _parameters(parameters),
   _position(position),
   _altitudeMode(altitudeMode),
   _listener(listener),
@@ -443,7 +455,7 @@ public:
       _sgShape = SceneJSShapesParser::parseFromBSON(_buffer,
                                                     _uriPrefix,
                                                     _isTransparent,
-                                                    _depthTest,
+                                                    _parameters,
                                                     _position,
                                                     _altitudeMode);
     }
@@ -451,7 +463,7 @@ public:
       _sgShape = SceneJSShapesParser::parseFromJSON(_buffer,
                                                     _uriPrefix,
                                                     _isTransparent,
-                                                    _depthTest,
+                                                    _parameters,
                                                     _position,
                                                     _altitudeMode);
     }
@@ -473,8 +485,6 @@ public:
   void onPostExecute(const G3MContext* context) {
     if (_sgShape == NULL) {
       ILogger::instance()->logError("Error parsing SceneJS from \"%s\"", _url._path.c_str());
-      delete _position;
-      _position = NULL;
     }
     else {
       if (_listener != NULL) {
@@ -496,33 +506,38 @@ public:
 
 class ShapesRenderer_SceneJSBufferDownloadListener : public IBufferDownloadListener {
 private:
-  ShapesRenderer*     _shapesRenderer;
-  const std::string   _uriPrefix;
-  const bool          _isTransparent;
-  const bool          _depthTest;
-  Geodetic3D*         _position;
-  AltitudeMode        _altitudeMode;
-  ShapeLoadListener*  _listener;
-  bool                _deleteListener;
-  const IThreadUtils* _threadUtils;
-  bool                _isBSON;
+  ShapesRenderer*               _shapesRenderer;
+  const std::string             _uriPrefix;
+  const bool                    _isTransparent;
+#ifdef C_CODE
+  const SceneJSParserParameters _parameters;
+#endif
+#ifdef JAVA_CODE
+  private final SceneJSParserParameters _parameters;
+#endif
+  const Geodetic3D              _position;
+  AltitudeMode                  _altitudeMode;
+  ShapeLoadListener*            _listener;
+  bool                          _deleteListener;
+  const IThreadUtils*           _threadUtils;
+  bool                          _isBSON;
 
 public:
 
-  ShapesRenderer_SceneJSBufferDownloadListener(ShapesRenderer*     shapesRenderer,
-                                               const std::string&  uriPrefix,
-                                               bool                isTransparent,
-                                               bool                depthTest,
-                                               Geodetic3D*         position,
-                                               AltitudeMode        altitudeMode,
-                                               ShapeLoadListener*  listener,
-                                               bool                deleteListener,
-                                               const IThreadUtils* threadUtils,
-                                               bool                isBSON) :
+  ShapesRenderer_SceneJSBufferDownloadListener(ShapesRenderer*                shapesRenderer,
+                                               const std::string&             uriPrefix,
+                                               bool                           isTransparent,
+                                               const SceneJSParserParameters& parameters,
+                                               const Geodetic3D&              position,
+                                               AltitudeMode                   altitudeMode,
+                                               ShapeLoadListener*             listener,
+                                               bool                           deleteListener,
+                                               const IThreadUtils*            threadUtils,
+                                               bool                           isBSON) :
   _shapesRenderer(shapesRenderer),
   _uriPrefix(uriPrefix),
   _isTransparent(isTransparent),
-  _depthTest(depthTest),
+  _parameters(parameters),
   _position(position),
   _altitudeMode(altitudeMode),
   _listener(listener),
@@ -544,7 +559,7 @@ public:
                                                                             buffer,
                                                                             _uriPrefix,
                                                                             _isTransparent,
-                                                                            _depthTest,
+                                                                            _parameters,
                                                                             _position,
                                                                             _altitudeMode,
                                                                             _listener,
@@ -560,8 +575,6 @@ public:
     if (_deleteListener) {
       delete _listener;
     }
-
-    delete _position;
   }
 
   void onCancel(const URL& url) {
@@ -570,8 +583,6 @@ public:
     if (_deleteListener) {
       delete _listener;
     }
-
-    delete _position;
   }
 
   void onCanceledDownload(const URL& url,
@@ -581,18 +592,18 @@ public:
   }
 };
 
-void ShapesRenderer::requestBuffer(const URL&          url,
-                                   long long           priority,
-                                   const TimeInterval& timeToCache,
-                                   bool                readExpired,
-                                   const std::string&  uriPrefix,
-                                   bool                isTransparent,
-                                   bool                depthTest,
-                                   Geodetic3D*         position,
-                                   AltitudeMode        altitudeMode,
-                                   ShapeLoadListener*  listener,
-                                   bool                deleteListener,
-                                   bool                isBSON) {
+void ShapesRenderer::requestBuffer(const URL&                     url,
+                                   long long                      priority,
+                                   const TimeInterval&            timeToCache,
+                                   bool                           readExpired,
+                                   const std::string&             uriPrefix,
+                                   bool                           isTransparent,
+                                   const SceneJSParserParameters& parameters,
+                                   const Geodetic3D&              position,
+                                   AltitudeMode                   altitudeMode,
+                                   ShapeLoadListener*             listener,
+                                   bool                           deleteListener,
+                                   bool                           isBSON) {
 
   IDownloader* downloader = _context->getDownloader();
   downloader->requestBuffer(url,
@@ -602,7 +613,7 @@ void ShapesRenderer::requestBuffer(const URL&          url,
                             new ShapesRenderer_SceneJSBufferDownloadListener(this,
                                                                              uriPrefix,
                                                                              isTransparent,
-                                                                             depthTest,
+                                                                             parameters,
                                                                              position,
                                                                              altitudeMode,
                                                                              listener,

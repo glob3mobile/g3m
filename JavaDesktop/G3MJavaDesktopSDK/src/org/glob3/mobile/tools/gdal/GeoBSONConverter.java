@@ -25,7 +25,7 @@ import org.glob3.mobile.tools.utils.FileUtils;
 public class GeoBSONConverter {
 
 
-   private final ILogger           _logger;
+   private final ILogger _logger;
 
 
    private static GeoBSONConverter _geoBsonConverter = null;
@@ -53,7 +53,7 @@ public class GeoBSONConverter {
 
 
    static private void initialize() {
-      IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
+      IStringBuilder.setInstance(new StringBuilder_JavaDesktop(IStringBuilder.DEFAULT_FLOAT_PRECISION));
       if (IMathUtils.instance() == null) {
          IMathUtils.setInstance(new MathUtils_JavaDesktop());
       }
@@ -68,7 +68,8 @@ public class GeoBSONConverter {
 
    public void convert(final File inputFile,
                        final File outputDir,
-                       final String outputFileName) throws GDALException, JBson2BJsonException, CommandLineException, IOException {
+                       final String outputFileName) throws GDALException, JBson2BJsonException, CommandLineException,
+                                                    IOException {
       convert(inputFile, outputDir, outputFileName, true);
    }
 

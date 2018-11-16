@@ -29,9 +29,9 @@
 
 class G3MVectorStreaming1DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createFeatureMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
-                          const VectorStreamingRenderer::Node* node,
-                          const GEO2DPointGeometry* geometry) const {
+  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+                           const VectorStreamingRenderer::Node* node,
+                           const GEO2DPointGeometry* geometry) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
@@ -93,10 +93,15 @@ public:
     return mark;
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::MagnitudeMetadata* magnitudeMetadata,
+  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+                           const VectorStreamingRenderer::Node* node,
+                           const GEO3DPointGeometry* geometry) const {
+    return NULL;
+  }
+
+  Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
-                          const VectorStreamingRenderer::Cluster* cluster,
-                          long long featuresCount) const {
+                          const VectorStreamingRenderer::Cluster* cluster) const {
     return NULL;
   }
 
@@ -124,10 +129,12 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          true, // readExpired
                          true, // verbose
                          true, // haltOnError
-                         VectorStreamingRenderer::Format::SERVER
+                         VectorStreamingRenderer::Format::SERVER,
+                         Angle::fromDegrees(90), // minSectorSize,
+                         12500000                // minProjectedArea
                          );
 
 
-//  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
+  //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );
 
 }

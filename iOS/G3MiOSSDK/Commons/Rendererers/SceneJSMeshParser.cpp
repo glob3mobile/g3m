@@ -12,34 +12,26 @@
 #include "SGMesh.hpp"
 
 
-SGMesh* SceneJSMeshParser::parseFromJSONBaseObject(const JSONBaseObject* jsonObject,
-                                                   const std::string&    uriPrefix,
-                                                   bool                  isTransparent,
-                                                   bool                  depthTest) {
-  SGNode* node = SceneJSNodeParser::parseFromJSONBaseObject(jsonObject, depthTest, true);
+SGMesh* SceneJSMeshParser::parseFromJSON(const std::string&             json,
+                                         const std::string&             uriPrefix,
+                                         const bool                     isTransparent,
+                                         const SceneJSParserParameters& parameters) {
+  SGNode* node = SceneJSNodeParser::parseFromJSON(json, parameters);
   return (node == NULL) ? NULL : new SGMesh(node, uriPrefix, isTransparent);
 }
 
-SGMesh* SceneJSMeshParser::parseFromJSON(const std::string& json,
-                                         const std::string& uriPrefix,
-                                         bool               isTransparent,
-                                         bool               depthTest) {
-  SGNode* node = SceneJSNodeParser::parseFromJSON(json, depthTest);
+SGMesh* SceneJSMeshParser::parseFromJSON(const IByteBuffer*             json,
+                                         const std::string&             uriPrefix,
+                                         const bool                     isTransparent,
+                                         const SceneJSParserParameters& parameters) {
+  SGNode* node = SceneJSNodeParser::parseFromJSON(json, parameters);
   return (node == NULL) ? NULL : new SGMesh(node, uriPrefix, isTransparent);
 }
 
-SGMesh* SceneJSMeshParser::parseFromJSON(const IByteBuffer* json,
-                                         const std::string& uriPrefix,
-                                         bool               isTransparent,
-                                         bool               depthTest) {
-  SGNode* node = SceneJSNodeParser::parseFromJSON(json, depthTest);
-  return (node == NULL) ? NULL : new SGMesh(node, uriPrefix, isTransparent);
-}
-
-SGMesh* SceneJSMeshParser::parseFromBSON(const IByteBuffer* bson,
-                                         const std::string& uriPrefix,
-                                         bool               isTransparent,
-                                         bool               depthTest) {
-  SGNode* node = SceneJSNodeParser::parseFromBSON(bson, depthTest);
+SGMesh* SceneJSMeshParser::parseFromBSON(const IByteBuffer*             bson,
+                                         const std::string&             uriPrefix,
+                                         const bool                     isTransparent,
+                                         const SceneJSParserParameters& parameters) {
+  SGNode* node = SceneJSNodeParser::parseFromBSON(bson, parameters);
   return (node == NULL) ? NULL : new SGMesh(node, uriPrefix, isTransparent);
 }

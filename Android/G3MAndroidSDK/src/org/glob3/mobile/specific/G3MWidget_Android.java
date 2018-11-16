@@ -36,13 +36,13 @@ import android.view.MotionEvent;
 
 
 public final class G3MWidget_Android
-   extends
-      GLSurfaceView
-   implements
-      OnGestureListener {
+         extends
+            GLSurfaceView
+         implements
+            OnGestureListener {
 
-   private G3MWidget                  _g3mWidget;
-   private final ES2Renderer          _es2renderer;
+   private G3MWidget         _g3mWidget;
+   private final ES2Renderer _es2renderer;
 
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final GestureDetector      _gestureDetector;
@@ -154,14 +154,15 @@ public final class G3MWidget_Android
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory factory = new Factory_Android(getContext());
       final IStringUtils stringUtils = new StringUtils_Android();
-      final IStringBuilder stringBuilder = new StringBuilder_Android();
+      final IStringBuilder stringBuilder = new StringBuilder_Android(IStringBuilder.DEFAULT_FLOAT_PRECISION);
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
       final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
       final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.0f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude,
+               devLoc);
    }
 
 

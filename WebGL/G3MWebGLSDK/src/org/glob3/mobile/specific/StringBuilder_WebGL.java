@@ -4,23 +4,53 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IStringBuilder;
 
+import com.google.gwt.i18n.client.NumberFormat;
+
 
 public final class StringBuilder_WebGL
-   extends
-      IStringBuilder {
+         extends
+            IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
+   private NumberFormat        _nf;
+
+
+   public StringBuilder_WebGL(final int floatPrecision) {
+      createFormatter(floatPrecision);
+   }
+
+
+   private void createFormatter(final int floatPrecision) {
+      _nf = NumberFormat.getFormat(createPattern(floatPrecision));
+   }
+
+
+   private static String createPattern(final int floatPrecision) {
+      final StringBuilder numberPattern = new StringBuilder((floatPrecision <= 0) ? "" : ".");
+      for (int i = 0; i < floatPrecision; i++) {
+         numberPattern.append('0');
+      }
+      final String pattern = numberPattern.toString();
+      return pattern;
+   }
 
 
    @Override
-   protected IStringBuilder getNewInstance() {
-      return new StringBuilder_WebGL();
+   protected IStringBuilder clone(final int floatPrecision) {
+      return new StringBuilder_WebGL(floatPrecision);
    }
 
 
    @Override
    public IStringBuilder addDouble(final double d) {
-      _builder.append(d);
+      _builder.append(_nf.format(d));
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addFloat(final float f) {
+      _builder.append(_nf.format(f));
       return this;
    }
 
@@ -46,13 +76,6 @@ public final class StringBuilder_WebGL
 
 
    @Override
-   public IStringBuilder addFloat(final float f) {
-      _builder.append(f);
-      return this;
-   }
-
-
-   @Override
    public IStringBuilder addInt(final int i) {
       _builder.append(i);
       return this;
@@ -67,15 +90,16 @@ public final class StringBuilder_WebGL
 
 
    @Override
-   public IStringBuilder clear() {
-      _builder.setLength(0);
-      return this;
+   public boolean contentEqualsTo(final String that) {
+      return getString().equals(that);
    }
 
 
    @Override
-   public boolean contentEqualsTo(final String that) {
-      return getString().equals(that);
+   public IStringBuilder clear(final int floatPrecision) {
+      createFormatter(floatPrecision);
+      _builder.setLength(0);
+      return this;
    }
 
 

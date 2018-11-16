@@ -215,7 +215,7 @@
     Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
     __block NSData* data = nil;
     __block NSInteger statusCode;
-    __block NSError *error = nil;
+    __block NSError* error = nil;
 
     if (_url->isFileProtocol()) {
       const IStringUtils* su = IStringUtils::instance();
@@ -237,11 +237,12 @@
       statusCode = (data) ? 200 : 404;
     }
     else {
-      NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
-                                               cachePolicy: NSURLRequestReturnCacheDataElseLoad
-                                           timeoutInterval: 60.0];
+      NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: _nsURL
+                                                             cachePolicy: NSURLRequestReturnCacheDataElseLoad
+                                                         timeoutInterval: 60.0];
+      [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
-      NSURLResponse *urlResponse = nil;
+      NSURLResponse* urlResponse = nil;
 
       data = [NSURLConnection sendSynchronousRequest: request
                                    returningResponse: &urlResponse

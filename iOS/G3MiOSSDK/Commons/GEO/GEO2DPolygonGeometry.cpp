@@ -37,6 +37,13 @@ std::vector<GEORasterSymbol*>* GEO2DPolygonGeometry::createRasterSymbols(const G
   return symbolizer->createSymbols(this);
 }
 
+bool GEO2DPolygonGeometry::contain(const Geodetic2D& point) const {
+  if (_polygonData) {
+    return _polygonData->contains(point);
+  }
+  return false;
+}
+
 long long GEO2DPolygonGeometry::getCoordinatesCount() const {
   return (_polygonData == NULL) ? 0 : _polygonData->getCoordinatesCount();
 }
@@ -47,11 +54,3 @@ GEO2DPolygonGeometry* GEO2DPolygonGeometry::deepCopy() const {
   }
   return new GEO2DPolygonGeometry(_polygonData);
 }
-
-bool GEO2DPolygonGeometry::contain(const Geodetic2D& point) const {
-  if (_polygonData) {
-    return _polygonData->contains(point);
-  }
-  return false;
-}
-

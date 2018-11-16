@@ -19,8 +19,13 @@ class GEO2DCoordinatesArrayData : public RCObject {
 private:
   std::vector<const GEO2DCoordinatesData*>* _coordinatesArray;
 
-  mutable Sector* _sector;
-  Sector* calculateSector() const;
+#ifdef C_CODE
+  mutable const Sector* _sector;
+#endif
+#ifdef JAVA_CODE
+  private Sector _sector;
+#endif
+  const Sector* calculateSector() const;
 
 protected:
   ~GEO2DCoordinatesArrayData();

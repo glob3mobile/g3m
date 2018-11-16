@@ -143,14 +143,14 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
       final Geodetic3D position = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer());
   
       _currentCamera.setGeodeticPosition(position);
-      _currentCamera.setHeading(Angle.zero());
-      _currentCamera.setPitch(Angle.fromDegrees(-90));
-      _currentCamera.setRoll(Angle.zero());
+      _currentCamera.setHeading(Angle._ZERO);
+      _currentCamera.setPitch(Angle._MINUS_HALF_PI);
+      _currentCamera.setRoll(Angle._ZERO);
   
       _nextCamera.setGeodeticPosition(position);
-      _nextCamera.setHeading(Angle.zero());
-      _nextCamera.setPitch(Angle.fromDegrees(-90));
-      _nextCamera.setRoll(Angle.zero());
+      _nextCamera.setHeading(Angle._ZERO);
+      _nextCamera.setPitch(Angle._MINUS_HALF_PI);
+      _nextCamera.setRoll(Angle._ZERO);
     }
   
     _timer.start();
@@ -511,11 +511,11 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
 
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
   {
-     setAnimatedCameraPosition(position, heading, Angle.fromDegrees(-90));
+     setAnimatedCameraPosition(position, heading, Angle.minusHalfPi());
   }
   public final void setAnimatedCameraPosition(Geodetic3D position)
   {
-     setAnimatedCameraPosition(position, Angle.zero(), Angle.fromDegrees(-90));
+     setAnimatedCameraPosition(position, Angle.zero(), Angle.minusHalfPi());
   }
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading, Angle pitch)
   {
@@ -532,11 +532,11 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
   {
-     setAnimatedCameraPosition(interval, position, heading, Angle.fromDegrees(-90), false, false);
+     setAnimatedCameraPosition(interval, position, heading, Angle.minusHalfPi(), false, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
   {
-     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.fromDegrees(-90), false, false);
+     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.minusHalfPi(), false, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch, boolean linearTiming, boolean linearHeight)
   {

@@ -86,9 +86,9 @@ public class Color
      _alpha = that._alpha;
   }
 
+
   public void dispose()
   {
-
   }
 
   public static Color parse(String str)

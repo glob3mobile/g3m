@@ -28,8 +28,7 @@ public:
                          MeshRenderer*           meshRenderer,
                          ShapesRenderer*         shapesRenderer,
                          MarksRenderer*          marksRenderer,
-                         GEOVectorLayer*         geoVectorLayer
-                         ) const = 0 ;
+                         GEOVectorLayer*         geoVectorLayer) const = 0 ;
 
 };
 

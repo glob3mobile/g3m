@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class GEO2DPolygonData;
 
-public class GEO2DPolygonGeometry extends GEOGeometry2D
+public class GEO2DPolygonGeometry extends GEO2DGeometry
 {
   private final GEO2DPolygonData _polygonData;
 
@@ -63,6 +63,15 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
     return _polygonData.getHolesCoordinatesArray();
   }
 
+  public final boolean contain(Geodetic2D point)
+  {
+    if (_polygonData != null)
+    {
+      return _polygonData.contains(point);
+    }
+    return false;
+  }
+
   public final long getCoordinatesCount()
   {
     return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
@@ -75,15 +84,6 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
       _polygonData._retain();
     }
     return new GEO2DPolygonGeometry(_polygonData);
-  }
-
-  public final boolean contain(Geodetic2D point)
-  {
-    if (_polygonData != null)
-    {
-      return _polygonData.contains(point);
-    }
-    return false;
   }
 
 }

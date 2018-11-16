@@ -504,7 +504,9 @@ PlanetRenderer* MapBooOLDBuilder::createPlanetRenderer() {
 
   const float verticalExaggeration = 1;
 
-  TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
+
+  TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")),
+                                                         true /* verboseErrors */);
 
   const bool renderDebug = false;
   const bool incrementalTileQuality = false;

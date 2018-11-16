@@ -148,8 +148,8 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
     //Pitch -90
     const Vector3D wpp = wppp; //No Roll
 
-    Angle pitch = Angle::fromDegrees(-90);
-    Angle roll = Angle::zero();
+    Angle pitch = Angle::_MINUS_HALF_PI;
+    Angle roll = Angle::_ZERO;
     Angle heading = v.signedAngleBetween(wpp, w);
 
     return TaitBryanAngles(heading,
@@ -161,9 +161,9 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
     //Pitch 90
     const Vector3D wpp = wppp; //No Roll
 
-    Angle pitch = Angle::halfPi();
-    Angle roll = Angle::zero();
-    Angle heading = v.signedAngleBetween(wpp, w).sub(Angle::pi());
+    Angle pitch = Angle::_HALF_PI;
+    Angle roll  = Angle::_ZERO;
+    Angle heading = v.signedAngleBetween(wpp, w).sub(Angle::_PI);
 
     return TaitBryanAngles(heading,
                            pitch,

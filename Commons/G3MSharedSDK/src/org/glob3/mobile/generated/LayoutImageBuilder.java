@@ -140,12 +140,12 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
 
   protected java.util.ArrayList<IImageBuilder> _children = new java.util.ArrayList<IImageBuilder>();
 
-  protected final int _margin;
+  protected final Vector2F _margin;
 
   protected final float _borderWidth;
   protected final Color _borderColor ;
 
-  protected final int _padding;
+  protected final Vector2F _padding;
 
   protected final Color _backgroundColor ;
   protected final float _cornerRadius;
@@ -159,7 +159,7 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
    |       content
    */
 
-  protected LayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  protected LayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
   {
      _children = children;
      _margin = margin;
@@ -171,7 +171,7 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
      _childrenSeparation = childrenSeparation;
   }
 
-  protected LayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, int margin, float borderWidth, Color borderColor, int padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  protected LayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
   {
      _margin = margin;
      _borderWidth = borderWidth;

@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 //class Vector2I;
 
+
+
 public class Vector2F
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -123,6 +125,20 @@ public class Vector2F
       return times(max / length);
     }
     return this;
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(V2F ");
+    isb.addFloat(_x);
+    isb.addString(", ");
+    isb.addFloat(_y);
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 }

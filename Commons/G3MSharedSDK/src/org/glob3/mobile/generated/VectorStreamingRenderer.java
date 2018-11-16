@@ -18,22 +18,26 @@ package org.glob3.mobile.generated;
 
 
 
-
-//class IThreadUtils;
-//class IByteBuffer;
 //class Sector;
-//class Geodetic2D;
-//class JSONBaseObject;
 //class JSONArray;
+//class Geodetic2D;
 //class JSONObject;
-//class Mark;
-//class GEO2DPointGeometry;
-//class BoundingVolume;
-//class Camera;
-//class Frustum;
-//class IDownloader;
+//class IByteBuffer;
 //class GEOObject;
+//class IThreadUtils;
+//class JSONBaseObject;
+//class BoundingVolume;
+//class Sphere;
+//class IDownloader;
+//class Frustum;
+//class GEO2DPointGeometry;
+//class GEO3DPointGeometry;
 //class MarksRenderer;
+//class Camera;
+//class GEOMeshes;
+//class Planet;
+//class Mesh;
+//class MeshRenderer;
 
 
 public class VectorStreamingRenderer extends DefaultRenderer
@@ -89,6 +93,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final String id = json.getAsString("id").value();
       final Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
+    //  const double      minHeight     = json->getAsNumber("minHeight", 0);
+      final double minHeight = 0;
+      final double maxHeight = json.getAsNumber("maxHeight", 0);
       final int clustersCount = (int) json.getAsNumber("clustersCount", 0.0);
       final int featuresCount = (int) json.getAsNumber("featuresCount", 0.0);
     
@@ -120,7 +127,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
       }
     
-      return new Node(vectorSet, id, nodeSector, clustersCount, featuresCount, childrenIDs, children, verbose);
+      return new Node(vectorSet, id, nodeSector, minHeight, maxHeight, clustersCount, featuresCount, childrenIDs, children, verbose);
     }
 
   }
@@ -309,14 +316,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private GEOObject _features;
     private java.util.ArrayList<Node> _children;
 
-    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONBaseObject jsonBaseObject)
+    private java.util.ArrayList<VectorStreamingRenderer.Cluster> parseClusters(JSONArray jsonArray)
     {
-      if (jsonBaseObject == null)
-      {
-        return null;
-      }
-    
-      final JSONArray jsonArray = jsonBaseObject.asArray();
       if ((jsonArray == null) || (jsonArray.size() == 0))
       {
         return null;
@@ -335,14 +336,38 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       return clusters;
     }
-    private java.util.ArrayList<VectorStreamingRenderer.Node> parseChildren(JSONBaseObject jsonBaseObject)
+    private GEOObject parseFeatures(JSONObject jsonObject, Planet planet)
     {
-      if (jsonBaseObject == null)
+      if (jsonObject == null)
       {
         return null;
       }
     
-      final JSONArray jsonArray = jsonBaseObject.asArray();
+      final String type = jsonObject.getAsString("type", "");
+      if (type.equals("MeshCollection"))
+      {
+        return parseMeshes(jsonObject.getAsObject("meshes"), planet);
+      }
+    
+      return GEOJSONParser.parse(jsonObject, _verbose);
+    }
+    private GEOMeshes parseMeshes(JSONObject jsonObject, Planet planet)
+    {
+      if (jsonObject == null)
+      {
+        return null;
+      }
+    
+      java.util.ArrayList<Mesh> meshes = G3MMeshParser.parse(jsonObject, planet);
+      if (meshes.isEmpty())
+      {
+        return null;
+      }
+    
+      return new GEOMeshes(meshes);
+    }
+    private java.util.ArrayList<VectorStreamingRenderer.Node> parseChildren(JSONArray jsonArray)
+    {
       if ((jsonArray == null) || (jsonArray.size() == 0))
       {
         return null;
@@ -427,9 +452,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         final JSONObject jsonObject = jsonBaseObject.asObject();
     
-        _clusters = parseClusters(jsonObject.get("clusters"));
-        _features = GEOJSONParser.parse(jsonObject.get("features").asObject(), _verbose);
-        _children = parseChildren(jsonObject.get("children"));
+        _clusters = parseClusters(jsonObject.getAsArray("clusters"));
+        _features = parseFeatures(jsonObject.getAsObject("features"), context.getPlanet());
+        _children = parseChildren(jsonObject.getAsArray("children"));
     
         if (jsonBaseObject != null)
            jsonBaseObject.dispose();
@@ -501,38 +526,57 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public static class NodeAllMarksFilter extends MarksFilter
+  public static class NodeAllMarkFilter extends MarkFilter
   {
-    private final String _nodeClusterToken;
-    private final String _nodeFeatureToken;
+    private final String _clusterToken;
+    private final String _featureToken;
 
-    public NodeAllMarksFilter(Node node)
+    public NodeAllMarkFilter(Node node)
     {
-       _nodeClusterToken = node.getClusterMarkToken();
-       _nodeFeatureToken = node.getFeatureMarkToken();
+       _clusterToken = node.getClusterToken();
+       _featureToken = node.getFeatureToken();
     }
 
     public final boolean test(Mark mark)
     {
       final String token = mark.getToken();
-      return ((_nodeClusterToken.equals(token)) || (_nodeFeatureToken.equals(token)));
+      return ((_clusterToken.equals(token)) || (_featureToken.equals(token)));
     }
 
   }
 
-  public static class NodeClusterMarksFilter extends MarksFilter
-  {
-    private final String _nodeClusterToken;
 
-    public NodeClusterMarksFilter(Node node)
+  public static class NodeAllMeshFilter extends MeshFilter
+  {
+    private final String _featureToken;
+
+    public NodeAllMeshFilter(Node node)
     {
-       _nodeClusterToken = node.getClusterMarkToken();
+       _featureToken = node.getFeatureToken();
+    }
+
+    public final boolean test(Mesh mesh)
+    {
+      final String token = mesh.getToken();
+      return (_featureToken.equals(token));
+    }
+
+  }
+
+
+  public static class NodeClusterMarkFilter extends MarkFilter
+  {
+    private final String _clusterToken;
+
+    public NodeClusterMarkFilter(Node node)
+    {
+       _clusterToken = node.getClusterToken();
     }
 
     public final boolean test(Mark mark)
     {
       final String token = mark.getToken();
-      return (_nodeClusterToken.equals(token));
+      return (_clusterToken.equals(token));
     }
 
   }
@@ -545,6 +589,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private Node _parent;
     private final String _id;
     private final Sector _nodeSector;
+    private final double _minHeight;
+    private final double _maxHeight;
     private final int _clustersCount;
     private final int _featuresCount;
     private final java.util.ArrayList<String> _childrenIDs;
@@ -555,34 +601,43 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final boolean _verbose;
 
     private java.util.ArrayList<Cluster> _clusters;
-    private GEOObject _features;
 
-    private BoundingVolume _boundingVolume;
+    private Sphere _boundingSphere;
     private BoundingVolume getBoundingVolume(G3MRenderContext rc)
     {
-      if (_boundingVolume == null)
+      if (_boundingSphere == null)
       {
         final Planet planet = rc.getPlanet();
     
-        java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(5);
-        points.add( planet.toCartesian( _nodeSector.getNE()     ) );
-        points.add( planet.toCartesian( _nodeSector.getNW()     ) );
-        points.add( planet.toCartesian( _nodeSector.getSE()     ) );
-        points.add( planet.toCartesian( _nodeSector.getSW()     ) );
-        points.add( planet.toCartesian( _nodeSector.getCenter() ) );
+        java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);
+        points.add( planet.toCartesian( _nodeSector.getNE()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getNE()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getNW()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getNW()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSE()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSE()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSW()    , _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getSW()    , _maxHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getCenter(), _minHeight ) );
+        points.add( planet.toCartesian( _nodeSector.getCenter(), _maxHeight ) );
     
-        _boundingVolume = Sphere.enclosingSphere(points);
+        _boundingSphere = Sphere.enclosingSphere(points, 0.1);
+    
+        if (_parent != null)
+        {
+          _parent.updateBoundingSphereWith(rc, _boundingSphere);
+        }
       }
     
-      return _boundingVolume;
+      return _boundingSphere;
     }
 
     private IDownloader _downloader;
     private boolean _loadingChildren;
 
-    private boolean isVisible(G3MRenderContext rc, Frustum frustumInModelCoordinates)
+    private boolean isVisible(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates)
     {
-      if ((_nodeSector._deltaLatitude._degrees > 80) || (_nodeSector._deltaLongitude._degrees > 80))
+      if ((_nodeSector._deltaLatitude._degrees >= vectorSet._minSectorSize._degrees) || (_nodeSector._deltaLongitude._degrees >= vectorSet._minSectorSize._degrees))
       {
         return true;
       }
@@ -593,16 +648,15 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private boolean _loadedFeatures;
     private boolean _loadingFeatures;
 
-    private boolean isBigEnough(G3MRenderContext rc)
+    private boolean isBigEnough(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet)
     {
-      if ((_nodeSector._deltaLatitude._degrees >= 80) || (_nodeSector._deltaLongitude._degrees >= 80))
+      if ((_nodeSector._deltaLatitude._degrees >= vectorSet._minSectorSize._degrees) || (_nodeSector._deltaLongitude._degrees >= vectorSet._minSectorSize._degrees))
       {
         return true;
       }
     
       final double projectedArea = getBoundingVolume(rc).projectedArea(rc);
-      //return (projectedArea > 350000);
-      return (projectedArea > 1500000);
+      return (projectedArea >= vectorSet._minProjectedArea);
     }
 
     private boolean _isBeingRendered;
@@ -617,16 +671,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      final long depthPriority = 10000 - getDepth();
+      _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + depthPriority + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
     {
       _loadedFeatures = false;
       _loadingFeatures = false;
-    
-      if (_features != null)
-         _features.dispose();
-      _features = null;
     
       if (_clusters != null)
       {
@@ -667,7 +718,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority(), _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
+      final long depthPriority = 10000 - getDepth();
+      _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority() + depthPriority, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
     {
@@ -695,25 +747,22 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
 
 
-    private void removeMarks()
+    private void removeFeaturesSymbols()
     {
-      //  if (_verbose) {
-      //    ILogger::instance()->logInfo("\"%s\": Removing marks",
-      //                                 getFullName().c_str());
-      //  }
+      int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarkFilter(this), true, true); // deleteMarks -  animated
     
-      final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarksFilter(this), true, true); // deleteMarks -  animated
+      removed += _vectorSet.getMeshRenderer().removeAllMeshes(new NodeAllMeshFilter(this), true); // deleteMeshes
     
-      if (_verbose && removed > 0)
+      if (_verbose && (removed > 0))
       {
-        ILogger.instance().logInfo("\"%s\": Removed %d marks",
+        ILogger.instance().logInfo("\"%s\": Removed %d features symbols",
                                    getFullName(),
                                    removed);
       }
     }
 
-    private long _clusterMarksCount;
-    private long _featureMarksCount;
+    private int _featureSymbolsCount;
+    private int _clusterSymbolsCount;
 
     private void childRendered()
     {
@@ -721,13 +770,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         if (_clusters.size() > 0)
         {
-          if (_clusterMarksCount > 0)
+          if (_clusterSymbolsCount > 0)
           {
-            int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarksFilter(this), true, true); // deleteMarks -  animated
+            final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
     
-            _clusterMarksCount -= removed;
+            _clusterSymbolsCount -= removed;
     
-            if (_verbose && removed > 0)
+            if (_verbose && (removed > 0))
             {
               ILogger.instance().logInfo("\"%s\": Removed %d cluster-marks",
                                          getFullName(),
@@ -744,16 +793,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         if (_clusters.size() > 0)
         {
-          if (_clusterMarksCount <= 0)
+          if (_clusterSymbolsCount <= 0)
           {
             createClusterMarks();
-            //Checking to ensure no children marks are drawn.
-            if (_children != null && _children.size() > 0)
+            // Checking to ensure no children marks are drawn.
+            if ((_children != null) && (_children.size() > 0))
             {
-              for (int i = 0; i<_children.size(); i++)
+              for (int i = 0; i < _children.size(); i++)
               {
                 Node child = _children.get(i);
-                if (child._featureMarksCount > 0)
+                if (child._featureSymbolsCount > 0)
                 {
                   child.unload();
                 }
@@ -766,13 +815,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void createClusterMarks()
     {
-      _clusterMarksCount = _vectorSet.createClusterMarks(this, _clusters);
+      _clusterSymbolsCount = _vectorSet.symbolizeClusters(this, _clusters);
     
-      if (_verbose && (_clusterMarksCount > 0))
+      if (_verbose && (_clusterSymbolsCount > 0))
       {
-        ILogger.instance().logInfo("\"%s\": Created %d cluster-marks",
+        ILogger.instance().logInfo("\"%s\": Created %d cluster-symbols",
                                    getFullName(),
-                                   _clusterMarksCount);
+                                   _clusterSymbolsCount);
       }
     }
 
@@ -833,12 +882,37 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
+    private int getDepth()
+    {
+      return (_parent == null) ? 1 : (_parent.getDepth() + 1);
+    }
+
+    private void updateBoundingSphereWith(G3MRenderContext rc, Sphere childSphere)
+    {
+      getBoundingVolume(rc); // force _boundingSphere creation
+      if ((_boundingSphere == null) || childSphere.fullContainedInSphere(_boundingSphere))
+      {
+        return;
+      }
+    
+      Sphere old = _boundingSphere;
+      _boundingSphere = _boundingSphere.mergedWithSphere(childSphere, 0.1);
+    //  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
+    //    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
+    //    childSphere->fullContainedInSphere(_boundingSphere);
+    //    THROW_EXCEPTION("Ohh my gosh!");
+    //  }
+      if (old != null)
+         old.dispose();
+      if (_parent != null)
+      {
+        _parent.updateBoundingSphereWith(rc, _boundingSphere);
+      }
+    }
+
     public void dispose()
     {
       unload();
-    
-      if (_features != null)
-         _features.dispose();
     
       if (_clusters != null)
       {
@@ -853,8 +927,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_nodeSector != null)
          _nodeSector.dispose();
-      if (_boundingVolume != null)
-         _boundingVolume.dispose();
+      if (_boundingSphere != null)
+         _boundingSphere.dispose();
     
       if (_parent != null)
       {
@@ -867,12 +941,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public ChildrenParserAsyncTask _childrenTask;
     public FeaturesParserAsyncTask _featuresTask;
 
-    public Node(VectorSet vectorSet, String id, Sector nodeSector, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, java.util.ArrayList<Node> children, boolean verbose)
+    public Node(VectorSet vectorSet, String id, Sector nodeSector, double minHeight, double maxHeight, int clustersCount, int featuresCount, java.util.ArrayList<String> childrenIDs, java.util.ArrayList<Node> children, boolean verbose)
     {
        _parent = null;
        _vectorSet = vectorSet;
        _id = id;
        _nodeSector = nodeSector;
+       _minHeight = minHeight;
+       _maxHeight = maxHeight;
        _clustersCount = clustersCount;
        _featuresCount = featuresCount;
        _childrenIDs = childrenIDs;
@@ -880,17 +956,16 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _loadedFeatures = false;
        _loadingFeatures = false;
        _children = children;
-       _childrenSize = children == null ? 0 : children.size();
+       _childrenSize = (children == null) ? 0 : children.size();
        _loadingChildren = false;
        _isBeingRendered = false;
-       _boundingVolume = null;
+       _boundingSphere = null;
        _featuresRequestID = -1;
        _childrenRequestID = -1;
        _downloader = null;
        _clusters = null;
-       _features = null;
-       _clusterMarksCount = 0;
-       _featureMarksCount = 0;
+       _clusterSymbolsCount = 0;
+       _featureSymbolsCount = 0;
        _childrenTask = null;
        _featuresTask = null;
       setChildren(children);
@@ -902,20 +977,20 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       if (_loadingFeatures)
       {
-        cancelLoadFeatures();
         _loadingFeatures = false;
+        cancelLoadFeatures();
       }
     
       if (_loadingChildren)
       {
-        _loadingChildren = true;
+        _loadingChildren = false;
         cancelLoadChildren();
       }
     
       if (_loadedFeatures)
       {
-        unloadFeatures();
         _loadedFeatures = false;
+        unloadFeatures();
       }
     
       unloadChildren();
@@ -925,7 +1000,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _parent.childStopRendered();
       }
     
-      removeMarks();
+      removeFeaturesSymbols();
     }
 
     public final VectorSet getVectorSet()
@@ -938,36 +1013,32 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return _vectorSet.getName() + "/" + _id;
     }
 
-    public final String getFeatureMarkToken()
+    public final String getFeatureToken()
     {
       return _id + "_F_" + _vectorSet.getName();
     }
 
-    public final String getClusterMarkToken()
+    public final String getClusterToken()
     {
       return _id + "_C_" + _vectorSet.getName();
     }
 
-    public final long render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
+    public final long render(G3MRenderContext rc, VectorStreamingRenderer.VectorSet vectorSet, Frustum frustumInModelCoordinates, GLState glState)
     {
-    
       long renderedCount = 0;
-    
-      // #warning Show Bounding Volume
-      // getBoundingVolume(rc)->render(rc, glState, Color::red());
     
       boolean wasRendered = false;
     
-      final boolean visible = isVisible(rc, frustumInModelCoordinates);
+      final boolean visible = isVisible(rc, vectorSet, frustumInModelCoordinates);
       if (visible)
       {
-        final boolean bigEnough = isBigEnough(rc);
+        final boolean bigEnough = isBigEnough(rc, vectorSet);
         if (bigEnough)
         {
           wasRendered = true;
           if (_loadedFeatures)
           {
-            renderedCount += _featureMarksCount + _clusterMarksCount;
+            renderedCount += _featureSymbolsCount + _clusterSymbolsCount;
             if (_parent != null)
             {
               _parent.childRendered();
@@ -986,7 +1057,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
               for (int i = 0; i < _childrenSize; i++)
               {
                 Node child = _children.get(i);
-                renderedCount += child.render(rc, frustumInModelCoordinates, cameraTS, glState);
+                renderedCount += child.render(rc, vectorSet, frustumInModelCoordinates, glState);
               }
             }
           }
@@ -1026,24 +1097,20 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       parsedChildren(children);
     
-      if (_features != null)
-         _features.dispose();
-      _featureMarksCount = 0;
+      _featureSymbolsCount = 0;
     
       if (features != null)
       {
-        _features = features;
-        _featureMarksCount = _features.createFeatureMarks(_vectorSet, this);
+        _featureSymbolsCount = features.symbolize(_vectorSet, this);
+        if (features != null)
+           features.dispose();
     
-        if (_verbose && (_featureMarksCount > 0))
+        if (_verbose && (_featureSymbolsCount > 0))
         {
-          ILogger.instance().logInfo("\"%s\": Created %d feature-marks",
+          ILogger.instance().logInfo("\"%s\": Created %d feature-symbols",
                                      getFullName(),
-                                     _featureMarksCount);
+                                     _featureSymbolsCount);
         }
-        if (_features != null)
-           _features.dispose();
-        _features = null;
       }
     
       if (_clusters != null)
@@ -1056,7 +1123,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _clusters = null;
         _clusters = null;
-        _clusterMarksCount = 0;
+        _clusterSymbolsCount = 0;
       }
     
       if (clusters != null)
@@ -1105,8 +1172,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_buffer != null)
          _buffer.dispose();
     
-      if (_metadata != null)
-         _metadata.dispose();
+      _metadata = null;
     
       if (_rootNodes != null)
       {
@@ -1170,9 +1236,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final int nodesCount = (int) jsonObject.getAsNumber("nodesCount").value();
           final int minNodeDepth = (int) jsonObject.getAsNumber("minNodeDepth").value();
           final int maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
+          final String language = jsonObject.getAsString("language").value();
+          final String nameFieldName = jsonObject.getAsString("nameFieldName").value();
+          final String urlFieldName = jsonObject.getAsString("urlFieldName").value();
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
-          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, magnitudeMetadata);
+          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata);
     
           final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
           _rootNodes = new java.util.ArrayList<Node>();
@@ -1292,10 +1361,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
     }
 
-    public abstract Mark createFeatureMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
+    public abstract Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
 
-    public abstract Mark createClusterMark(VectorStreamingRenderer.MagnitudeMetadata magnitudeMetadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, long featuresCount);
+    public abstract Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry);
 
+    public abstract Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster);
   }
 
 
@@ -1307,9 +1377,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final int _nodesCount;
     public final int _minNodeDepth;
     public final int _maxNodeDepth;
+    public final String _language;
+    public final String _nameFieldName;
+    public final String _urlFieldName;
     public final MagnitudeMetadata _magnitudeMetadata;
 
-    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, MagnitudeMetadata magnitudeMetadata)
+    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata)
     {
        _sector = sector;
        _clustersCount = clustersCount;
@@ -1317,6 +1390,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _nodesCount = nodesCount;
        _minNodeDepth = minNodeDepth;
        _maxNodeDepth = maxNodeDepth;
+       _language = language;
+       _nameFieldName = nameFieldName;
+       _urlFieldName = urlFieldName;
        _magnitudeMetadata = magnitudeMetadata;
 
     }
@@ -1382,8 +1458,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return result;
     }
 
+    public final Angle _minSectorSize ;
+    public final double _minProjectedArea;
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1404,6 +1482,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _rootNodes = null;
        _rootNodesSize = 0;
        _lastRenderedCount = 0;
+       _minSectorSize = new Angle(minSectorSize);
+       _minProjectedArea = minProjectedArea;
 
     }
 
@@ -1414,8 +1494,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _symbolizer = null;
       }
     
-      if (_metadata != null)
-         _metadata.dispose();
+      _metadata = null;
     
       if (_rootNodes != null)
       {
@@ -1548,7 +1627,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
     }
 
-    public final void render(G3MRenderContext rc, Frustum frustumInModelCoordinates, long cameraTS, GLState glState)
+    public final void render(G3MRenderContext rc, Frustum frustumInModelCoordinates, GLState glState)
     {
       if (_rootNodesSize > 0)
       {
@@ -1556,7 +1635,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
         for (int i = 0; i < _rootNodesSize; i++)
         {
           Node rootNode = _rootNodes.get(i);
-          renderedCount += rootNode.render(rc, frustumInModelCoordinates, cameraTS, glState);
+          renderedCount += rootNode.render(rc, this, frustumInModelCoordinates, glState);
         }
     
         if (_lastRenderedCount != renderedCount)
@@ -1571,23 +1650,43 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final long createFeatureMark(Node node, GEO2DPointGeometry geometry)
+    public final int symbolizeGeometry(Node node, GEO2DPointGeometry geometry)
     {
-      Mark mark = _symbolizer.createFeatureMark(_metadata._magnitudeMetadata, node, geometry);
-      if (mark == null)
+      int count = 0;
+    
       {
-        return 0;
+        Mark mark = _symbolizer.createGeometryMark(_metadata, node, geometry);
+        if (mark != null)
+        {
+          count++;
+          mark.setToken(node.getFeatureToken());
+          getMarksRenderer().addMark(mark);
+        }
       }
     
-      mark.setToken(node.getFeatureMarkToken());
-      _renderer.getMarkRenderer().addMark(mark);
-    
-      return 1;
+      return count;
     }
 
-    public final long createClusterMarks(Node node, java.util.ArrayList<Cluster> clusters)
+    public final int symbolizeGeometry(Node node, GEO3DPointGeometry geometry)
     {
-      long counter = 0;
+      int count = 0;
+    
+      {
+        Mark mark = _symbolizer.createGeometryMark(_metadata, node, geometry);
+        if (mark != null)
+        {
+          count++;
+          mark.setToken(node.getFeatureToken());
+          getMarksRenderer().addMark(mark);
+        }
+      }
+    
+      return count;
+    }
+
+    public final int symbolizeClusters(Node node, java.util.ArrayList<Cluster> clusters)
+    {
+      int counter = 0;
       if (clusters != null)
       {
         final int clustersCount = clusters.size();
@@ -1596,11 +1695,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final Cluster cluster = clusters.get(i);
           if (cluster != null)
           {
-            Mark mark = _symbolizer.createClusterMark(_metadata._magnitudeMetadata, node, cluster, _metadata._featuresCount);
+            Mark mark = _symbolizer.createClusterMark(_metadata, node, cluster);
             if (mark != null)
             {
-              mark.setToken(node.getClusterMarkToken());
-              _renderer.getMarkRenderer().addMark(mark);
+              mark.setToken(node.getClusterToken());
+              _renderer.getMarksRenderer().addMark(mark);
               counter++;
             }
           }
@@ -1610,9 +1709,32 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return counter;
     }
 
+    public final int symbolizeMeshes(Node node, java.util.ArrayList<Mesh> meshes)
+    {
+      int count = 0;
+    
+      for (int i = 0; i < meshes.size(); i++)
+      {
+        Mesh mesh = meshes.get(i);
+        if (mesh != null)
+        {
+          count++;
+          mesh.setToken(node.getFeatureToken());
+          getMeshRenderer().addMesh(mesh);
+        }
+      }
+    
+      return count;
+    }
+
     public final MarksRenderer getMarksRenderer()
     {
-      return _renderer.getMarkRenderer();
+      return _renderer.getMarksRenderer();
+    }
+
+    public final MeshRenderer getMeshRenderer()
+    {
+      return _renderer.getMeshRenderer();
     }
 
   }
@@ -1620,7 +1742,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
 
 
-  private MarksRenderer _markRenderer;
+  private MarksRenderer _marksRenderer;
+  private MeshRenderer _meshRenderer;
 
   private int _vectorSetsSize;
   private java.util.ArrayList<VectorSet> _vectorSets = new java.util.ArrayList<VectorSet>();
@@ -1642,9 +1765,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
-  public VectorStreamingRenderer(MarksRenderer markRenderer)
+  public VectorStreamingRenderer(MarksRenderer marksRenderer, MeshRenderer meshRenderer)
   {
-     _markRenderer = markRenderer;
+     _marksRenderer = marksRenderer;
+     _meshRenderer = meshRenderer;
      _vectorSetsSize = 0;
      _glState = new GLState();
   }
@@ -1663,9 +1787,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
     super.dispose();
   }
 
-  public final MarksRenderer getMarkRenderer()
+  public final MarksRenderer getMarksRenderer()
   {
-    return _markRenderer;
+    return _marksRenderer;
+  }
+
+  public final MeshRenderer getMeshRenderer()
+  {
+    return _meshRenderer;
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -1675,15 +1804,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
       final Camera camera = rc.getCurrentCamera();
       final Frustum frustumInModelCoordinates = camera.getFrustumInModelCoordinates();
   
-      final long cameraTS = camera.getTimestamp();
-  
       updateGLState(camera);
       _glState.setParent(glState);
   
       for (int i = 0; i < _vectorSetsSize; i++)
       {
         VectorSet vectorSector = _vectorSets.get(i);
-        vectorSector.render(rc, frustumInModelCoordinates, cameraTS, _glState);
+        vectorSector.render(rc, frustumInModelCoordinates, _glState);
       }
     }
   }
@@ -1702,9 +1829,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea);
     if (_context != null)
     {
       vectorSet.initialize(_context);
@@ -1765,9 +1892,5 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final MarksRenderer getMarksRenderer()
-  {
-    return _markRenderer;
-  }
 
 }

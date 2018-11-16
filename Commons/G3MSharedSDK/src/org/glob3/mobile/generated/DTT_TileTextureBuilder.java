@@ -13,7 +13,7 @@ public class DTT_TileTextureBuilder extends RCObject
   private FrameTasksExecutor _frameTasksExecutor;
   private final IImage _backgroundTileImage;
   private final String _backgroundTileImageName;
-  private final boolean _generateMipmap;
+  private final boolean _verboseErrors;
 
 
   private static TextureIDReference getTopLevelTextureIDForTile(Tile tile)
@@ -23,7 +23,7 @@ public class DTT_TileTextureBuilder extends RCObject
     return (mesh == null) ? null : mesh.getTopLevelTextureID();
   }
 
-  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2S tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backgroundTileImage, String backgroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap)
+  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2S tileMeshResolution, TileTessellator tessellator, TexturesHandler texturesHandler, IImage backgroundTileImage, String backgroundTileImageName, boolean ownedTexCoords, boolean transparent, boolean generateMipmap, int wrapS, int wrapT)
   {
     java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 
@@ -54,7 +54,7 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!fallbackSolved && backgroundTileImage != null)
     {
       LazyTextureMapping mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution, tile, tile, tessellator), true, false);
-      final TextureIDReference glTextureID = texturesHandler.getTextureIDReference(backgroundTileImage, GLFormat.rgba(), backgroundTileImageName, generateMipmap);
+      final TextureIDReference glTextureID = texturesHandler.getTextureIDReference(backgroundTileImage, GLFormat.rgba(), backgroundTileImageName, generateMipmap, wrapS, wrapT);
       mapping.setGLTextureID(glTextureID); //Mandatory to active mapping
 
       mappings.add(mapping);
@@ -65,8 +65,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileTextureDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName)
-
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileTextureDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backgroundTileImage, String backgroundTileImageName, boolean verboseErrors)
   {
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
@@ -80,10 +79,10 @@ public class DTT_TileTextureBuilder extends RCObject
      _frameTasksExecutor = frameTasksExecutor;
      _backgroundTileImage = backgroundTileImage;
      _backgroundTileImageName = backgroundTileImageName;
-     _generateMipmap = true;
+     _verboseErrors = verboseErrors;
     _tileImageProvider._retain();
 
-    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, true, false, _generateMipmap); // transparent, -  ownedTexCoords,
+    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator, _texturesHandler, backgroundTileImage, backgroundTileImageName, true, false, true, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge()); // generateMipmap -  transparent, -  ownedTexCoords,
   }
 
   public final LeveledTexturedMesh getTexturedMesh()
@@ -139,7 +138,7 @@ public class DTT_TileTextureBuilder extends RCObject
   public final boolean uploadTexture(IImage image, String imageID)
   {
 
-    final TextureIDReference glTextureID = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageID, _generateMipmap);
+    final TextureIDReference glTextureID = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageID, true, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge()); // wrapT -  wrapS -  generateMipmap
     if (glTextureID == null)
     {
       return false;
@@ -177,7 +176,10 @@ public class DTT_TileTextureBuilder extends RCObject
   public final void imageCreationError(String error)
   {
     // TODO: #warning propagate the error to the texturizer and change the render state if is necessary
-    ILogger.instance().logError("%s", error);
+    if (_verboseErrors)
+    {
+      ILogger.instance().logError("%s", error);
+    }
   }
 
   public final void imageCreationCanceled()

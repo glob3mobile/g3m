@@ -133,6 +133,10 @@ public:
     return result;
   }
 
+  std::vector<GEOSymbol*>* createSymbols(const GEO3DPointGeometry* geometry) const {
+    return NULL;
+  }
+
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
     symbols->push_back(new GEOLineRasterSymbol(geometry->getCoordinates(),
@@ -150,6 +154,10 @@ public:
                                                   createPolygonLineRasterStyle(geometry),
                                                   createPolygonSurfaceRasterStyle(geometry)));
     return symbols;
+  }
+
+  std::vector<GEOSymbol*>* createSymbols(const GEO3DPolygonGeometry* geometry) const {
+    return NULL;
   }
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {

@@ -12,6 +12,7 @@
 #include "GEO2DPolygonData.hpp"
 #include "GEORasterSymbolizer.hpp"
 
+
 GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
   if (_polygonsData != NULL) {
     const size_t polygonsDataSize = _polygonsData->size();
@@ -29,13 +30,27 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
 #endif
 }
 
-
 std::vector<GEOSymbol*>* GEO2DMultiPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }
 
 std::vector<GEORasterSymbol*>* GEO2DMultiPolygonGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
+}
+
+bool GEO2DMultiPolygonGeometry::contain(const Geodetic2D& point) const {
+  if (_polygonsData == NULL) {
+    return false;
+  }
+  const size_t polygonsDataSize = _polygonsData->size();
+  for (size_t i = 0; i < polygonsDataSize; i++) {
+    GEO2DPolygonData* polygonData = _polygonsData->at(i);
+    if (polygonData->contains(point)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 std::vector<GEO2DPolygonData*>* GEO2DMultiPolygonGeometry::copy(const std::vector<GEO2DPolygonData*>* polygonsData) {
@@ -54,22 +69,6 @@ std::vector<GEO2DPolygonData*>* GEO2DMultiPolygonGeometry::copy(const std::vecto
   return result;
 }
 
-
 GEO2DMultiPolygonGeometry* GEO2DMultiPolygonGeometry::deepCopy() const {
   return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
-}
-
-bool GEO2DMultiPolygonGeometry::contain(const Geodetic2D& point) const {
-  if (_polygonsData == NULL) {
-    return false;
-  }
-  const size_t polygonsDataSize = _polygonsData->size();
-  for (size_t i = 0; i < polygonsDataSize; i++) {
-    GEO2DPolygonData* polygonData = _polygonsData->at(i);
-    if (polygonData->contains(point)) {
-      return true;
-    }
-  }
-
-  return false;
 }

@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class MarkTouchListener;
 //class IFloatBuffer;
 //class ITimer;
-//class MarksFilter;
+//class MarkFilter;
 
 
 public class MarksRenderer extends DefaultRenderer
@@ -393,7 +393,7 @@ public class MarksRenderer extends DefaultRenderer
 
   }
 
-  public final int removeAllMarks(MarksFilter filter, boolean animated, boolean deleteMarks)
+  public final int removeAllMarks(MarkFilter filter, boolean animated, boolean deleteMarks)
   {
     int removed = 0;
     final int marksSize = _marks.size();
@@ -438,7 +438,7 @@ public class MarksRenderer extends DefaultRenderer
     return removed;
   }
 
-  public final java.util.ArrayList<Mark> getAllMarks(MarksFilter filter)
+  public final java.util.ArrayList<Mark> getAllMarks(MarkFilter filter)
   {
     java.util.ArrayList<Mark> result = new java.util.ArrayList<Mark>();
   
@@ -455,24 +455,23 @@ public class MarksRenderer extends DefaultRenderer
     return result;
   }
 
-    public final java.util.ArrayList<Mark> getMarks(MarksFilter filter)
-    {
-    
-        if (filter == null)
-        {
-            return _marks;
-        }
-    
-        java.util.ArrayList<Mark> marks = new java.util.ArrayList<Mark>();
-        for (int i = 0; i < _marks.size(); ++i)
-        {
-            if (filter.test(_marks.get(i)))
-            {
-                marks.add(_marks.get(i));
-            }
-        }
-    
-        return marks;
-    }
+  public final java.util.ArrayList<Mark> getMarks(MarkFilter filter)
+  {
+      if (filter == null)
+      {
+          return _marks;
+      }
+  
+      java.util.ArrayList<Mark> marks = new java.util.ArrayList<Mark>();
+      for (int i = 0; i < _marks.size(); ++i)
+      {
+          if (filter.test(_marks.get(i)))
+          {
+              marks.add(_marks.get(i));
+          }
+      }
+  
+      return marks;
+  }
 
 }

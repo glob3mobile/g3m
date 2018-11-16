@@ -20,21 +20,11 @@ package org.glob3.mobile.generated;
 //class GEO2DPolygonData;
 
 
-public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
+public class GEO2DMultiPolygonGeometry extends GEO2DGeometry
 {
   private java.util.ArrayList<GEO2DPolygonData> _polygonsData;
 
-  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
-  {
-    return symbolizer.createSymbols(this);
-  }
-
-  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
-  {
-    return symbolizer.createSymbols(this);
-  }
-
-  protected static java.util.ArrayList<GEO2DPolygonData> copy(java.util.ArrayList<GEO2DPolygonData> polygonsData)
+  private static java.util.ArrayList<GEO2DPolygonData> copy(java.util.ArrayList<GEO2DPolygonData> polygonsData)
   {
     if (polygonsData == null)
     {
@@ -54,6 +44,15 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return result;
   }
 
+  protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
+
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
 
 
   public GEO2DMultiPolygonGeometry(java.util.ArrayList<GEO2DPolygonData> polygonsData)
@@ -85,16 +84,6 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return _polygonsData;
   }
 
-  public final long getCoordinatesCount()
-  {
-    return (_polygonsData == null) ? 0 : _polygonsData.size();
-  }
-
-  public final GEO2DMultiPolygonGeometry deepCopy()
-  {
-    return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
-  }
-
   public final boolean contain(Geodetic2D point)
   {
     if (_polygonsData == null)
@@ -113,4 +102,15 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
   
     return false;
   }
+
+  public final long getCoordinatesCount()
+  {
+    return (_polygonsData == null) ? 0 : _polygonsData.size();
+  }
+
+  public final GEO2DMultiPolygonGeometry deepCopy()
+  {
+    return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
+  }
+
 }
