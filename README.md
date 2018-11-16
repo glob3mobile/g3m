@@ -1,8 +1,8 @@
 g3m
 ===
 
-###The multiplatform advanced visualization framework
-###G3M is a **framework** developed and designed to: 
+### The multiplatform advanced visualization framework
+### G3M is a **framework** developed and designed to: 
 
  + Develop **mobile maps** apps in 2D, 2,5D and 3D
  + Work with **real time** data
@@ -15,12 +15,8 @@ g3m
  + Real time, push management
 
 
-###Augmented reality and google glasses
-[Augmented reality on google glass](http://glasses.mobilemaptools.com)
-
+### Augmented reality and google glasses
 <a href="https://www.youtube.com/watch?feature=player_detailpage&v=6K2UF8O6JPg" frameborder="0" allowfullscreen>AR Google Glass</a>
-
-
 Videos
 ======
 
