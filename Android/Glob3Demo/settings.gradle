@@ -1,0 +1,6 @@
+include ':app', ':g3m'
+
+include ':G3MSharedSDK'
+project(':G3MSharedSDK').projectDir = new File(settingsDir, '../../../g3m/Commons/G3MSharedSDK')
+include ':G3MAndroidSDK'
+project(':G3MAndroidSDK').projectDir = new File(settingsDir, '../../Android/G3MAndroidSDK')
