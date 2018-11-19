@@ -284,7 +284,7 @@ public abstract class MapBooOLDBuilder
   {
   
     final String mapLayer = jsonLayer.getAsString("layerName", "");
-    final URL mapServerURL = new URL(jsonLayer.getAsString("server", ""), false);
+    final URL mapServerURL = new URL(jsonLayer.getAsString("server", ""));
     final String versionStr = jsonLayer.getAsString("version", "");
     WMSServerVersion mapServerVersion = WMSServerVersion.WMS_1_1_0;
     if (versionStr.compareTo("WMS_1_3_0") == 0)
@@ -293,7 +293,7 @@ public abstract class MapBooOLDBuilder
     }
     final String queryLayer = jsonLayer.getAsString("queryLayer", "");
     final String style = jsonLayer.getAsString("style", "");
-    final URL queryServerURL = new URL("", false);
+    final URL queryServerURL = new URL("");
     final WMSServerVersion queryServerVersion = mapServerVersion;
     final Sector sector = parseSector(jsonLayer, "validSector");
     String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
@@ -952,7 +952,7 @@ public abstract class MapBooOLDBuilder
     if (isb != null)
        isb.dispose();
   
-    return new URL(path, false);
+    return new URL(path);
   }
 
   private URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
@@ -1015,7 +1015,7 @@ public abstract class MapBooOLDBuilder
     if (isb != null)
        isb.dispose();
   
-    return new URL(path, false);
+    return new URL(path);
   
   }
   protected MapBooOLDBuilder(URL serverURL, URL tubesURL, String applicationID, MapBooOLD_ViewType viewType, MapBooOLDApplicationChangeListener applicationListener, boolean enableNotifications, String token)
@@ -1171,7 +1171,7 @@ public abstract class MapBooOLDBuilder
     if (isb != null)
        isb.dispose();
   
-    return new URL(path, false);
+    return new URL(path);
   }
 
   protected final Sector parseSector(JSONObject jsonObject, String paramName)
@@ -1378,7 +1378,7 @@ public abstract class MapBooOLDBuilder
       view = "runtime";
     }
   
-    return new URL(tubesPath + "/application/" + _applicationID + "/" + view, false);
+    return new URL(tubesPath + "/application/" + _applicationID + "/" + view);
   }
 
   /** Private to MapbooBuilder, don't call it */

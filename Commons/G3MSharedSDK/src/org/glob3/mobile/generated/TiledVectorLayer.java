@@ -96,7 +96,7 @@ public class TiledVectorLayer extends VectorLayer
     path = _su.replaceAll(path, "{west}", _su.toString(west));
     path = _su.replaceAll(path, "{east}", _su.toString(east));
   
-    return new URL(path, false);
+    return new URL(path);
   }
 
   protected final String getLayerType()

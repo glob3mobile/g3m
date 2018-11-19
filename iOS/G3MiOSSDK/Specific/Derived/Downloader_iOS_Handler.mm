@@ -268,7 +268,7 @@
 
       const size_t listenersCount = [self->_listeners count];
 
-      const URL url( [[self->_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
+      const URL url( [[self->_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
 
       if (dataIsValid) {
         for (int i = 0; i < listenersCount; i++) {

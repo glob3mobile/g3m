@@ -66,7 +66,7 @@ public:
             float height,
             bool withNormals) :
   AbstractMeshShape(position, altitudeMode),
-  _textureURL(URL("", false)),
+  _textureURL(URL("")),
   _width(width),
   _height(height),
   _textureRequested(true),
@@ -85,7 +85,7 @@ public:
             Color* color,
             bool withNormals) :
   AbstractMeshShape(position, altitudeMode),
-  _textureURL(URL("", false)),
+  _textureURL(URL("")),
   _width(width),
   _height(height),
   _textureRequested(false),

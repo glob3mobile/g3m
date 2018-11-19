@@ -141,7 +141,7 @@ const URL HereLayer::createURL(const Tile* tile) const {
   
   delete isb;
   
-  return URL(path, false);
+  return URL(path);
 }
 
 const std::string HereLayer::description() const {

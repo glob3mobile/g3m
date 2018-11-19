@@ -286,7 +286,7 @@ public class WMSLayer extends RasterLayer
       req += _extraParameter;
     }
   
-    return new URL(req, false);
+    return new URL(req);
   }
 
 
@@ -626,7 +626,7 @@ public class WMSLayer extends RasterLayer
     if (isb != null)
        isb.dispose();
   
-     return new URL(req, false);
+     return new URL(req);
   }
 
   public final void setExtraParameter(String extraParameter)

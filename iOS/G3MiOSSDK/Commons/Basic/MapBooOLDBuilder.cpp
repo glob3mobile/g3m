@@ -684,7 +684,7 @@ WMSLayer* MapBooOLDBuilder::parseWMSLayer(const JSONObject* jsonLayer,
                                           const bool transparent) const {
 
   const std::string mapLayer = jsonLayer->getAsString("layerName", "");
-  const URL mapServerURL = URL(jsonLayer->getAsString("server", ""), false);
+  const URL mapServerURL = URL(jsonLayer->getAsString("server", ""));
   const std::string versionStr = jsonLayer->getAsString("version", "");
   WMSServerVersion mapServerVersion = WMS_1_1_0;
   if (versionStr.compare("WMS_1_3_0") == 0) {
@@ -692,7 +692,7 @@ WMSLayer* MapBooOLDBuilder::parseWMSLayer(const JSONObject* jsonLayer,
   }
   const std::string queryLayer = jsonLayer->getAsString("queryLayer", "");
   const std::string style = jsonLayer->getAsString("style", "");
-  const URL queryServerURL = URL("", false);
+  const URL queryServerURL = URL("");
   const WMSServerVersion queryServerVersion = mapServerVersion;
   const Sector sector = parseSector(jsonLayer, "validSector");
   std::string imageFormat = jsonLayer->getAsString("imageFormat", "image/png");
@@ -1399,7 +1399,7 @@ const URL MapBooOLDBuilder::createApplicationTubeURL() const {
     view = "runtime";
   }
 
-  return URL(tubesPath + "/application/" + _applicationID + "/" + view, false);
+  return URL(tubesPath + "/application/" + _applicationID + "/" + view);
 }
 
 
@@ -1559,7 +1559,7 @@ const URL MapBooOLDBuilder::createApplicationPollURL() const {
   const std::string path = isb->getString();
   delete isb;
 
-  return URL(path, false);
+  return URL(path);
 }
 
 void MapBooOLDBuilder::openApplicationTube(const G3MContext* context) {
@@ -1913,7 +1913,7 @@ const URL MapBooOLDBuilder::createApplicationCurrentSceneURL() const {
   const std::string path = isb->getString();
   delete isb;
 
-  return URL(path, false);
+  return URL(path);
 }
 
 void MapBooOLDBuilder::updateVisibleScene(const bool cameraPositionChanged) {
@@ -2157,7 +2157,7 @@ const URL MapBooOLDBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   const std::string path = isb->getString();
   delete isb;
 
-  return URL(path, false);
+  return URL(path);
 
 }
 

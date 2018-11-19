@@ -147,7 +147,7 @@ public class URLTemplateLayer extends RasterLayer
     path = _su.replaceAll(path, "{west}", _su.toString(west));
     path = _su.replaceAll(path, "{east}", _su.toString(east));
   
-    return new URL(path, false);
+    return new URL(path);
   }
 
   public static URLTemplateLayer newMercator(String urlTemplate, Sector dataSector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)

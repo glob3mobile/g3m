@@ -104,12 +104,8 @@ public:
   ~URL() {
   }
 
-//  const std::string getPath() const {
-//    return _path;
-//  }
-
   static URL nullURL() {
-    return URL("__NULL__", false);
+    return URL("__NULL__");
   }
 
   bool isNull() const {
@@ -169,6 +165,5 @@ public:
 #endif
   
 };
-
 
 #endif

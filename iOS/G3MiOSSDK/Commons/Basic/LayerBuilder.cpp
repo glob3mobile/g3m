@@ -22,7 +22,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   LayerSet* layerSet = new LayerSet();
 
   WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      URL("http://www.nasa.network.com/wms?", false),
+                                      URL("http://www.nasa.network.com/wms?"),
                                       WMS_1_1_0,
                                       Sector::FULL_SPHERE,
                                       "image/jpeg",
@@ -35,7 +35,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   layerSet->addLayer(blueMarble);
 
   WMSLayer* i3Landsat = new WMSLayer("esat",
-                                     URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                     URL("http://data.worldwind.arc.nasa.gov/wms?"),
                                      WMS_1_1_0,
                                      Sector::FULL_SPHERE,
                                      "image/jpeg",
@@ -48,7 +48,7 @@ LayerSet* LayerBuilder::createDefaultSatelliteImagery() {
   layerSet->addLayer(i3Landsat);
 
   WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
                                 WMS_1_1_0,
                                 Sector::FULL_SPHERE,
                                 "image/jpeg",
@@ -79,7 +79,7 @@ std::vector<std::string> LayerBuilder::getDefaultLayersNames() {
 
 WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
   WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
                                 WMS_1_1_0,
                                 Sector::FULL_SPHERE,
                                 "image/jpeg",
@@ -96,7 +96,7 @@ WMSLayer* LayerBuilder::createBingLayer(bool enabled) {
 
 WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
   WMSLayer* osm = new WMSLayer("osm_auto:all",
-                               URL("http://129.206.228.72/cached/osm", false),
+                               URL("http://129.206.228.72/cached/osm"),
                                WMS_1_1_0,
                                // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                Sector::FULL_SPHERE,
@@ -114,7 +114,7 @@ WMSLayer* LayerBuilder::createOSMLayer(bool enabled) {
 
 WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
   WMSLayer *pnoa = new WMSLayer("PNOA",
-                                URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                URL("http://www.idee.es/wms/PNOA/PNOA"),
                                 WMS_1_1_0,
                                 Sector::fromDegrees(21, -18, 45, 6),
                                 "image/png",
@@ -131,7 +131,7 @@ WMSLayer* LayerBuilder::createPNOALayer(bool enabled) {
 
 WMSLayer* LayerBuilder::createBlueMarbleLayer(bool enabled) {
   WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      URL("http://www.nasa.network.com/wms?", false),
+                                      URL("http://www.nasa.network.com/wms?"),
                                       WMS_1_1_0,
                                       Sector::FULL_SPHERE,
                                       "image/jpeg",
@@ -148,7 +148,7 @@ WMSLayer* LayerBuilder::createBlueMarbleLayer(bool enabled) {
 
 WMSLayer* LayerBuilder::createI3LandSatLayer(bool enabled) {
   WMSLayer* i3Landsat = new WMSLayer("esat",
-                                     URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                     URL("http://data.worldwind.arc.nasa.gov/wms?"),
                                      WMS_1_1_0,
                                      Sector::FULL_SPHERE,
                                      "image/jpeg",
@@ -165,7 +165,7 @@ WMSLayer* LayerBuilder::createI3LandSatLayer(bool enabled) {
 
 WMSLayer* LayerBuilder::createPoliticalLayer(bool enabled) {
   WMSLayer* political = new WMSLayer("topp:cia",
-                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
+                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?"),
                                      WMS_1_1_0,
                                      Sector::FULL_SPHERE,
                                      "image/png",

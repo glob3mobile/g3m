@@ -259,7 +259,7 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
 
 void BingMapsLayer::initialize(const G3MContext* context) {
   _metadataErrors.clear();
-  const URL url("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + _imagerySet + "?key=" + _key, false);
+  const URL url("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + _imagerySet + "?key=" + _key);
 
   context->getDownloader()->requestBuffer(url,
                                           DownloadPriority::HIGHEST,
@@ -322,7 +322,7 @@ const URL BingMapsLayer::createURL(const Tile* tile) const {
   path = su->replaceAll(path, "{quadkey}",   quadkey);
   path = su->replaceAll(path, "{culture}",   _culture);
 
-  return URL(path, false);
+  return URL(path);
 }
 
 const std::string BingMapsLayer::description() const {

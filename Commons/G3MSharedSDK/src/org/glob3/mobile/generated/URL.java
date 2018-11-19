@@ -97,13 +97,9 @@ public class URL
   {
   }
 
-//  const std::string getPath() const {
-//    return _path;
-//  }
-
   public static URL nullURL()
   {
-    return new URL("__NULL__", false);
+    return new URL("__NULL__");
   }
 
   public final boolean isNull()
