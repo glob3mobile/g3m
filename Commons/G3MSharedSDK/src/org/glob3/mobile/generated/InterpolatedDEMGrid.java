@@ -103,4 +103,16 @@ public class InterpolatedDEMGrid extends DecoratorDEMGrid
     return getElevationAt(_grid, u, v);
   }
 
+  public final double getElevation(Angle latitude, Angle longitude)
+  {
+    // const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+    // const double u = uv._x;
+    // const double v = 1.0 - uv._y;
+  
+    final double u = _sector.getUCoordinate(longitude);
+    final double v = 1.0 - _sector.getVCoordinate(latitude);
+  
+    return getElevationAt(this, u, v);
+  }
+
 }

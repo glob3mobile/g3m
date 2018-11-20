@@ -317,6 +317,7 @@ _childrenTask(NULL),
 _featuresTask(NULL)
 {
   setChildren(children);
+  _vectorSet->_retain();
 }
 
 void VectorStreamingRenderer::Node::setChildren(std::vector<Node*>* children) {
@@ -373,7 +374,9 @@ VectorStreamingRenderer::Node::~Node() {
   if (_parent != NULL) {
     _parent->_release();
   }
-  
+
+  _vectorSet->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -499,11 +502,6 @@ void VectorStreamingRenderer::Node::updateBoundingSphereWith(const G3MRenderCont
 
   Sphere* old = _boundingSphere;
   _boundingSphere = _boundingSphere->mergedWithSphere(childSphere, 0.1);
-//  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
-//    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
-//    childSphere->fullContainedInSphere(_boundingSphere);
-//    THROW_EXCEPTION("Ohh my gosh!");
-//  }
   delete old;
   if (_parent) {
     _parent->updateBoundingSphereWith(rc, _boundingSphere);
@@ -518,7 +516,7 @@ void VectorStreamingRenderer::Node::loadFeatures(const G3MRenderContext* rc) {
   //  }
   
   _downloader = rc->getDownloader();
-  const long long depthPriority = 10000 - getDepth();
+  const long long depthPriority = 100 * getDepth();
   _featuresRequestID = _downloader->requestBuffer(_vectorSet->getNodeFeaturesURL(_id),
                                                   _vectorSet->getDownloadPriority() + depthPriority + _featuresCount + _clustersCount,
                                                   _vectorSet->getTimeToCache(),
@@ -565,7 +563,7 @@ void VectorStreamingRenderer::Node::loadChildren(const G3MRenderContext* rc) {
   //  }
   
   _downloader = rc->getDownloader();
-  const long long depthPriority = 10000 - getDepth();
+  const long long depthPriority = 100 * getDepth();
   _childrenRequestID = _downloader->requestBuffer(_vectorSet->getNodeChildrenURL(_id, _childrenIDs),
                                                   _vectorSet->getDownloadPriority() + depthPriority,
                                                   _vectorSet->getTimeToCache(),
@@ -638,13 +636,15 @@ bool VectorStreamingRenderer::NodeClusterMarkFilter::test(const Mark* mark) cons
 }
 
 void VectorStreamingRenderer::Node::removeFeaturesSymbols() {
-  size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeAllMarkFilter(this),
-                                                                  true, /* animated */
-                                                                  true  /* deleteMarks */);
+  size_t removed = 0;
+
+  removed += _vectorSet->getMarksRenderer()->removeAllMarks(NodeAllMarkFilter(this),
+                                                            true, /* animated */
+                                                            true  /* deleteMarks */);
 
   removed += _vectorSet->getMeshRenderer()->removeAllMeshes(NodeAllMeshFilter(this),
                                                             true /* deleteMeshes */);
-  
+
   if (_verbose && (removed > 0)) {
 #ifdef C_CODE
     ILogger::instance()->logInfo("\"%s\": Removed %ld features symbols",
@@ -706,16 +706,18 @@ void VectorStreamingRenderer::Node::unload() {
   }
   
   removeFeaturesSymbols();
+
 }
 
 void VectorStreamingRenderer::Node::childRendered() {
   if (_clusters != NULL) {
     if (_clusters->size() > 0) {
       if (_clusterSymbolsCount > 0) {
-        const size_t removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeClusterMarkFilter(this),
-                                                                              true, /* animated */
-                                                                              true  /* deleteMarks */);
-        
+        size_t removed = 0;
+        removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeClusterMarkFilter(this),
+                                                                 true, /* animated */
+                                                                 true  /* deleteMarks */);
+
         _clusterSymbolsCount -= removed;
         
         if (_verbose && (removed > 0)) {
@@ -829,13 +831,17 @@ Geodetic2D* VectorStreamingRenderer::GEOJSONUtils::parseGeodetic2D(const JSONArr
 VectorStreamingRenderer::Node* VectorStreamingRenderer::GEOJSONUtils::parseNode(const JSONObject* json,
                                                                                 const VectorSet*  vectorSet,
                                                                                 const bool        verbose) {
-  const std::string id            = json->getAsString("id")->value();
-  const Sector*     nodeSector    = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
-//  const double      minHeight     = json->getAsNumber("minHeight", 0);
-  const double      minHeight     = 0;
-  const double      maxHeight     = json->getAsNumber("maxHeight", 0);
-  const int         clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
-  const int         featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
+  const std::string id         = json->getAsString("id")->value();
+  const Sector*     nodeSector = GEOJSONUtils::parseSector( json->getAsArray("nodeSector") );
+
+  const double vectorSetMinHeight = vectorSet->_minHeight;
+  const double minHeight = ISNAN(vectorSetMinHeight) ? json->getAsNumber("minHeight", 0) : vectorSetMinHeight;
+
+  const double vectorSetMaxHeight = vectorSet->_maxHeight;
+  const double maxHeight = ISNAN(vectorSetMaxHeight) ? json->getAsNumber("maxHeight", 0) : vectorSetMaxHeight;
+
+  const int clustersCount = (int) json->getAsNumber("clustersCount", 0.0);
+  const int featuresCount = (int) json->getAsNumber("featuresCount", 0.0);
   
   std::vector<std::string> childrenIDs;
   std::vector<Node*>*      children = NULL;
@@ -885,7 +891,9 @@ VectorStreamingRenderer::MetadataParserAsyncTask::~MetadataParserAsyncTask() {
     }
     delete _rootNodes;
   }
-  
+
+  _vectorSet->_release();
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -1046,12 +1054,6 @@ void VectorStreamingRenderer::VectorSet::errorParsingMetadata() {
 }
 
 VectorStreamingRenderer::VectorSet::~VectorSet() {
-  if (_deleteSymbolizer) {
-    delete _symbolizer;
-  }
-  
-  delete _metadata;
-  
   if (_rootNodes != NULL) {
     for (size_t i = 0; i < _rootNodesSize; i++) {
       Node* node = _rootNodes->at(i);
@@ -1060,6 +1062,12 @@ VectorStreamingRenderer::VectorSet::~VectorSet() {
     }
     delete _rootNodes;
   }
+
+  if (_deleteSymbolizer) {
+    delete _symbolizer;
+  }
+
+  delete _metadata;
 }
 
 void VectorStreamingRenderer::VectorSet::parsedMetadata(Metadata* metadata,
@@ -1303,7 +1311,7 @@ _glState(new GLState())
 VectorStreamingRenderer::~VectorStreamingRenderer() {
   for (size_t i = 0; i < _vectorSetsSize; i++) {
     VectorSet* vectorSet = _vectorSets[i];
-    delete vectorSet;
+    vectorSet->_release();
   }
   
   _glState->_release();
@@ -1316,7 +1324,7 @@ VectorStreamingRenderer::~VectorStreamingRenderer() {
 void VectorStreamingRenderer::removeAllVectorSets() {
   for (size_t i = 0; i < _vectorSetsSize; i++) {
     VectorSet* vectorSet = _vectorSets[i];
-    delete vectorSet;
+    vectorSet->_release();
   }
   _vectorSets.clear();
   _vectorSetsSize = 0;
@@ -1381,7 +1389,9 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                            bool                       haltOnError,
                                            const Format               format,
                                            const Angle&               minSectorSize,
-                                           const double               minProjectedArea) {
+                                           const double               minProjectedArea,
+                                           const double               minHeight,
+                                           const double               maxHeight) {
   VectorSet* vectorSet = new VectorSet(this,
                                        serverURL,
                                        name,
@@ -1395,7 +1405,9 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
                                        haltOnError,
                                        format,
                                        minSectorSize,
-                                       minProjectedArea);
+                                       minProjectedArea,
+                                       minHeight,
+                                       maxHeight);
   if (_context != NULL) {
     vectorSet->initialize(_context);
   }

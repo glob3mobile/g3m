@@ -53,24 +53,27 @@ public class Building {
 
    private double calculateSize(final double minHeight) {
       double area = 0;
-      double maxHeight = 0;
+      double maxHeight = Double.NEGATIVE_INFINITY;
       //double sumHeight = 0;
       for (final Triangle triangle : _roofTriangles) {
          final Vector3D v0 = _roofVertices.get(triangle._vertex0);
          final Vector3D v1 = _roofVertices.get(triangle._vertex1);
          final Vector3D v2 = _roofVertices.get(triangle._vertex2);
-         area += triangleArea(v0, v1, v2);
+         area += Math.abs(triangleArea(v0, v1, v2));
 
          maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
-
-         //sumHeight += v0._z;
-         //sumHeight += v1._z;
-         //sumHeight += v2._z;
       }
-      //      return area * maxHeight;
-      //      final double averageHeight = sumHeight / (_roofTriangles.size() * 3);
 
-      final double height = (maxHeight - minHeight) + 1; //  minimum 1 meters
+      if (maxHeight == Double.NEGATIVE_INFINITY) {
+         throw new RuntimeException("Oops!");
+      }
+
+      if (minHeight > maxHeight) {
+         throw new RuntimeException("Oops!");
+      }
+
+
+      final double height = Math.max((maxHeight - minHeight) + 1, 1);
       return area * height;
    }
 
@@ -146,6 +149,7 @@ public class Building {
 
    public G3Mesh createMesh(final Planet planet,
                             final float verticalExaggeration,
+                            final double deltaHeight,
                             final int floatPrecision) {
       return createMesh( //
                _roofVertices, //
@@ -155,7 +159,7 @@ public class Building {
                _material, //
                planet, //
                verticalExaggeration, //
-               floatPrecision);
+               deltaHeight, floatPrecision);
    }
 
 
@@ -166,15 +170,17 @@ public class Building {
                                    final G3MeshMaterial material,
                                    final Planet planet,
                                    final float verticalExaggeration,
+                                   final double deltaHeight,
                                    final int floatPrecision) {
 
       final double wallsLowerHeight = getWallsLowerHeight(exteriorWall, interiorWalls);
 
-      final Vector3D center = getCenter(roofVertices, planet, verticalExaggeration, floatPrecision, wallsLowerHeight);
+      final Vector3D center = getCenter(roofVertices, planet, verticalExaggeration, deltaHeight, floatPrecision,
+               wallsLowerHeight);
 
       final List<Vector3F> vertices = new ArrayList<>(roofVertices.size());
       for (final Vector3D vertex : roofVertices) {
-         addVertex(planet, verticalExaggeration, vertices, center, vertex._x, vertex._y, vertex._z);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, vertex._x, vertex._y, vertex._z);
       }
 
       final List<Short> indices = new ArrayList<>();
@@ -186,9 +192,9 @@ public class Building {
 
       //      final int lastCeilingVertexIndex = vertices.size() - 1; // get the indes of the last roof vertex before creating the walls
       {
-         processWall(planet, verticalExaggeration, vertices, indices, center, exteriorWall);
+         processWall(planet, verticalExaggeration, deltaHeight, vertices, indices, center, exteriorWall);
          for (final Wall wall : interiorWalls) {
-            processWall(planet, verticalExaggeration, vertices, indices, center, wall);
+            processWall(planet, verticalExaggeration, deltaHeight, vertices, indices, center, wall);
          }
       }
 
@@ -233,6 +239,7 @@ public class Building {
    private static Vector3D getCenter(final List<Vector3D> roofVertices,
                                      final Planet planet,
                                      final float verticalExaggeration,
+                                     final double deltaHeight,
                                      final int floatPrecision,
                                      final double lowerHeight) {
       double minX = Double.POSITIVE_INFINITY;
@@ -269,7 +276,7 @@ public class Building {
       final double x = (maxX + minX) / 2;
       final double y = (maxY + minY) / 2;
       final double z = (maxZ + minZ) / 2;
-      final Vector3D center = createCenter(planet, verticalExaggeration, x, y, z);
+      final Vector3D center = createCenter(planet, verticalExaggeration, deltaHeight, x, y, z);
 
       final double factor = Math.pow(10, floatPrecision);
       return new Vector3D(round(center._x, factor), round(center._y, factor), round(center._z, factor));
@@ -278,11 +285,12 @@ public class Building {
 
    private static Vector3D createCenter(final Planet planet,
                                         final float verticalExaggeration,
+                                        final double deltaHeight,
                                         final double x,
                                         final double y,
                                         final double z) {
-      return (planet == null) ? new Vector3D(x, y, z)
-                              : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), z * verticalExaggeration);
+      return (planet == null) ? new Vector3D(x, y, z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x),
+               (z * verticalExaggeration) + deltaHeight);
    }
 
 
@@ -295,6 +303,7 @@ public class Building {
 
    private static void addVertex(final Planet planet,
                                  final float verticalExaggeration,
+                                 final double deltaHeight,
                                  final List<Vector3F> vertices,
                                  final Vector3D center,
                                  final double x,
@@ -305,10 +314,11 @@ public class Building {
          vertex = new Vector3F( //
                   (float) (x - (float) center._x), //
                   (float) (y - (float) center._y), //
-                  (float) (z - (float) center._z));
+                  (float) ((z + deltaHeight) - (float) center._z));
       }
       else {
-         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), z * verticalExaggeration);
+         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x),
+                  (z * verticalExaggeration) + deltaHeight);
          vertex = new Vector3F( //
                   (float) (projected._x - (float) center._x), //
                   (float) (projected._y - (float) center._y), //
@@ -328,6 +338,7 @@ public class Building {
 
    private static void processWall(final Planet planet,
                                    final float verticalExaggeration,
+                                   final double deltaHeight,
                                    final List<Vector3F> vertices,
                                    final List<Short> indices,
                                    final Vector3D center,
@@ -338,14 +349,14 @@ public class Building {
          final double lowerHeight = quad._lowerHeight;
 
          final int firstVertexIndex = vertices.size();
-         addVertex(planet, verticalExaggeration, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees,
-                  topCorner0._height);
-         addVertex(planet, verticalExaggeration, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees,
-                  lowerHeight);
-         addVertex(planet, verticalExaggeration, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees,
-                  lowerHeight);
-         addVertex(planet, verticalExaggeration, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees,
-                  topCorner1._height);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees,
+                  topCorner0._latitude._degrees, topCorner0._height);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees,
+                  topCorner0._latitude._degrees, lowerHeight);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees,
+                  topCorner1._latitude._degrees, lowerHeight);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees,
+                  topCorner1._latitude._degrees, topCorner1._height);
 
          indices.add(toShort(firstVertexIndex + 0));
          indices.add(toShort(firstVertexIndex + 1));
@@ -439,7 +450,7 @@ public class Building {
    }
 
 
-   public Map<String, Object> createFeatureProperties() {
+   public Map<String, Object> createFeatureProperties(final float priority) {
       final Map<String, Object> result = new LinkedHashMap<>();
 
       result.put("roof_vertices", ExtruderJSON.verticesToJSON(_roofVertices));
@@ -454,6 +465,10 @@ public class Building {
 
       result.put("min_height", _minHeight);
       result.put("max_height", calculateMaxHeight());
+
+      if (!Float.isNaN(priority)) {
+         result.put("priority", priority);
+      }
 
       return result;
    }

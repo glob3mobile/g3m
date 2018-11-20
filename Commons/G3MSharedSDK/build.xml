@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="G3MSharedSDK">
+    <property environment="env"/>
+    <property name="AaeroG3mCacheCreator.location" value="../../../AG3/android/AeroG3MCacheCreator"/>
+    <property name="AeroG3mShared.location" value="../../../AG3/java/AeroG3mShared"/>
+    <property name="FR24AirportDemo.location" value="../../../../workspaces/workspace-jul-2015/FR24AirportDemo"/>
+    <property name="G3MAndroidSDK.location" value="../../Android/G3MAndroidSDK"/>
+    <property name="G3MJavaDesktopSDK.location" value="../../JavaDesktop/G3MJavaDesktopSDK"/>
+    <property name="G3MWebGLDemo.location" value="../../WebGL/G3MWebGLDemo"/>
+    <property name="G3MWebGLSDK.location" value="../../WebGL/G3MWebGLSDK"/>
+    <property name="HotelNearMeAndroid.location" value="../../../../DESTINIA-Repo/glob3/HotelNearMe/Android/HotelNearMe"/>
+    <property name="HotelNearMeShared.location" value="../../../../DESTINIA-Repo/glob3/HotelNearMe/Android/shared/HotelNearMeShared"/>
+    <property name="PythagorasSharedSDK.location" value="../../../pythagoras/java/PythagorasSharedSDK"/>
+    <property name="PythagorasWebGLApplication.location" value="../../../pythagoras/webgl/PythagorasWebGLApplication"/>
+    <property name="RealTimeAirplanesDemoShared.location" value="../../../RealTimeAirPlanes/Shared/RealTimePlanesDemoShared"/>
+    <property name="RealTimeAirplanesDemoWebGL.location" value="../../../RealTimeAirPlanes/WebGL/RealTimeAirplanesWebGLDemo"/>
+    <property name="TGPSSharedSDK.location" value="../../../TornadoGPS/java/TGPSSharedSDK"/>
+    <property name="gwt-311.location" value="../../../311/gwt-311"/>
+    <property name="gwt-mapboo.location" value="../../../311/gwt-mapboo"/>
+    <property name="ECLIPSE_HOME" value="../../../../../../../../Applications/Eclipse.app/Contents/Eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="G3MSharedSDK.classpath">
+        <pathelement location="bin"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="G3MSharedSDK.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="build.xml" dir="${AaeroG3mCacheCreator.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${AaeroG3mCacheCreator.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${AeroG3mShared.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${AeroG3mShared.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${FR24AirportDemo.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${FR24AirportDemo.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${G3MAndroidSDK.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${G3MAndroidSDK.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${G3MJavaDesktopSDK.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${G3MJavaDesktopSDK.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${G3MWebGLDemo.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${G3MWebGLDemo.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${G3MWebGLSDK.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${G3MWebGLSDK.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${HotelNearMeAndroid.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${HotelNearMeAndroid.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${HotelNearMeShared.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${HotelNearMeShared.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${PythagorasSharedSDK.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${PythagorasSharedSDK.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${PythagorasWebGLApplication.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${PythagorasWebGLApplication.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${RealTimeAirplanesDemoShared.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${RealTimeAirplanesDemoShared.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${RealTimeAirplanesDemoWebGL.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${RealTimeAirplanesDemoWebGL.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${TGPSSharedSDK.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TGPSSharedSDK.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${gwt-311.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${gwt-311.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${gwt-mapboo.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${gwt-mapboo.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+</project>

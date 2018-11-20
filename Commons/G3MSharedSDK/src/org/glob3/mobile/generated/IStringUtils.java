@@ -107,4 +107,6 @@ public abstract class IStringUtils
 
   public abstract double parseDouble(String str);
 
+  public abstract String capitalize(String String);
+
 }
