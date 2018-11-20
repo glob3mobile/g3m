@@ -587,7 +587,9 @@ void MapBoo::MBVectorSymbology::apply(const URL&                                
                                         false,  // haltOnError
                                         VectorStreamingRenderer::Format::SERVER,
                                         Angle::fromDegrees(90),     // minSectorSize,
-                                        15000000                    // minProjectedArea
+                                        15000000,                   // minProjectedArea
+                                        0, //minHeight,
+                                        0  //maxHeight
                                         );
 }
 

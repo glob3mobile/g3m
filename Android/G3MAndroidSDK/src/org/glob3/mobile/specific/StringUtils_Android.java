@@ -9,10 +9,12 @@ import java.util.Locale;
 
 import org.glob3.mobile.generated.IStringUtils;
 
+import android.annotation.SuppressLint;
+
 
 public final class StringUtils_Android
-   extends
-      IStringUtils {
+         extends
+            IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -177,6 +179,17 @@ public final class StringUtils_Android
                             final String searchString,
                             final String replaceString) {
       return originalString.replace(searchString, replaceString);
+   }
+
+
+   @SuppressLint("DefaultLocale")
+   @Override
+   public String capitalize(final String string) {
+      if (string.length() == 0) {
+         return string;
+      }
+
+      return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
    }
 
 

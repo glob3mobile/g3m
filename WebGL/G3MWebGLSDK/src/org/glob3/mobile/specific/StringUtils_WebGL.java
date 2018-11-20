@@ -9,8 +9,8 @@ import org.glob3.mobile.generated.IStringUtils;
 
 
 public final class StringUtils_WebGL
-   extends
-      IStringUtils {
+         extends
+            IStringUtils {
 
    @Override
    public String createString(final byte[] data,
@@ -180,5 +180,14 @@ public final class StringUtils_WebGL
       return originalString.replace(searchString, replaceString);
    }
 
+
+   @Override
+   public String capitalize(final String string) {
+      if (string.isEmpty()) {
+         return string;
+      }
+
+      return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
+   }
 
 }

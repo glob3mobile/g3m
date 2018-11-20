@@ -37,6 +37,9 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
 
   const short minValue = IMathUtils::instance()->minInt16();
 
+  long long heightsCount = 0;
+  double sumHeight = 0;
+
   short* shortBuffer = new short[size];
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
@@ -44,10 +47,14 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
     if ((height == -9999) || (height == minValue)) {
       height = ShortBufferElevationData::NO_DATA_VALUE;
     }
-
+    else {
+      heightsCount++;
+      sumHeight += height;
+    }
     shortBuffer[i] = height;
   }
 
+  ILogger::instance()->logInfo("average height=%f", (sumHeight / heightsCount));
   return new ShortBufferElevationData(sector,
                                       extent,
                                       shortBuffer,
@@ -74,6 +81,9 @@ ShortBufferDEMGrid* BILParser::parseBIL16(const Sector&      sector,
 
   const short minValue = IMathUtils::instance()->minInt16();
 
+  long long heightsCount = 0;
+  double sumHeight = 0;
+
   short* shortBuffer = new short[size];
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
@@ -81,10 +91,15 @@ ShortBufferDEMGrid* BILParser::parseBIL16(const Sector&      sector,
     if ((height == -9999) || (height == minValue)) {
       height = noDataValue;
     }
+    else {
+      heightsCount++;
+      sumHeight += height;
+    }
 
     shortBuffer[i] = height;
   }
 
+  ILogger::instance()->logInfo("average height=%f", (sumHeight / heightsCount));
   return new ShortBufferDEMGrid(WGS84Projetion::instance(),
                                 sector,
                                 extent,

@@ -93,9 +93,13 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       final String id = json.getAsString("id").value();
       final Sector nodeSector = GEOJSONUtils.parseSector(json.getAsArray("nodeSector"));
-    //  const double      minHeight     = json->getAsNumber("minHeight", 0);
-      final double minHeight = 0;
-      final double maxHeight = json.getAsNumber("maxHeight", 0);
+    
+      final double vectorSetMinHeight = vectorSet._minHeight;
+      final double minHeight = (vectorSetMinHeight != vectorSetMinHeight) ? json.getAsNumber("minHeight", 0) : vectorSetMinHeight;
+    
+      final double vectorSetMaxHeight = vectorSet._maxHeight;
+      final double maxHeight = (vectorSetMaxHeight != vectorSetMaxHeight) ? json.getAsNumber("maxHeight", 0) : vectorSetMaxHeight;
+    
       final int clustersCount = (int) json.getAsNumber("clustersCount", 0.0);
       final int featuresCount = (int) json.getAsNumber("featuresCount", 0.0);
     
@@ -593,6 +597,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     private final double _maxHeight;
     private final int _clustersCount;
     private final int _featuresCount;
+
     private final java.util.ArrayList<String> _childrenIDs;
 
     private java.util.ArrayList<Node> _children;
@@ -671,7 +676,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      final long depthPriority = 10000 - getDepth();
+      final long depthPriority = 100 * getDepth();
       _featuresRequestID = _downloader.requestBuffer(_vectorSet.getNodeFeaturesURL(_id), _vectorSet.getDownloadPriority() + depthPriority + _featuresCount + _clustersCount, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeFeaturesDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadFeatures()
@@ -718,7 +723,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       //  }
     
       _downloader = rc.getDownloader();
-      final long depthPriority = 10000 - getDepth();
+      final long depthPriority = 100 * getDepth();
       _childrenRequestID = _downloader.requestBuffer(_vectorSet.getNodeChildrenURL(_id, _childrenIDs), _vectorSet.getDownloadPriority() + depthPriority, _vectorSet.getTimeToCache(), _vectorSet.getReadExpired(), new NodeChildrenDownloadListener(this, rc.getThreadUtils(), _verbose), true);
     }
     private void unloadChildren()
@@ -749,7 +754,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     private void removeFeaturesSymbols()
     {
-      int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarkFilter(this), true, true); // deleteMarks -  animated
+      int removed = 0;
+    
+      removed += _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarkFilter(this), true, true); // deleteMarks -  animated
     
       removed += _vectorSet.getMeshRenderer().removeAllMeshes(new NodeAllMeshFilter(this), true); // deleteMeshes
     
@@ -772,7 +779,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         {
           if (_clusterSymbolsCount > 0)
           {
-            final int removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
+            int removed = 0;
+            removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
     
             _clusterSymbolsCount -= removed;
     
@@ -897,11 +905,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
     
       Sphere old = _boundingSphere;
       _boundingSphere = _boundingSphere.mergedWithSphere(childSphere, 0.1);
-    //  if ( !childSphere->fullContainedInSphere(_boundingSphere) ) {
-    //    _boundingSphere = old->mergedWithSphere(childSphere, 0.1);
-    //    childSphere->fullContainedInSphere(_boundingSphere);
-    //    THROW_EXCEPTION("Ohh my gosh!");
-    //  }
       if (old != null)
          old.dispose();
       if (_parent != null)
@@ -934,6 +937,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       {
         _parent._release();
       }
+    
+      _vectorSet._release();
     
       super.dispose();
     }
@@ -969,6 +974,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _childrenTask = null;
        _featuresTask = null;
       setChildren(children);
+      _vectorSet._retain();
     }
 
     public final void unload()
@@ -1001,6 +1007,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     
       removeFeaturesSymbols();
+    
     }
 
     public final VectorSet getVectorSet()
@@ -1165,6 +1172,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _parsingError = false;
        _metadata = null;
        _rootNodes = null;
+      _vectorSet._retain();
     }
 
     public void dispose()
@@ -1183,6 +1191,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         }
         _rootNodes = null;
       }
+    
+      _vectorSet._release();
     
       super.dispose();
     }
@@ -1285,6 +1295,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _vectorSet = vectorSet;
        _threadUtils = threadUtils;
        _verbose = verbose;
+      _vectorSet._retain();
+    }
+
+    public void dispose()
+    {
+      _vectorSet._release();
     }
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
@@ -1405,7 +1421,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
   }
 
-  public static class VectorSet
+  public static class VectorSet extends RCObject
   {
     private VectorStreamingRenderer _renderer;
     private final URL _serverURL;
@@ -1458,10 +1474,33 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return result;
     }
 
+    public void dispose()
+    {
+      if (_rootNodes != null)
+      {
+        for (int i = 0; i < _rootNodesSize; i++)
+        {
+          Node node = _rootNodes.get(i);
+          node.unload();
+          node._release();
+        }
+        _rootNodes = null;
+      }
+    
+      if (_deleteSymbolizer)
+      {
+        _symbolizer = null;
+      }
+    
+      _metadata = null;
+    }
+
     public final Angle _minSectorSize ;
     public final double _minProjectedArea;
+    public final double _minHeight;
+    public final double _maxHeight;
 
-    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
+    public VectorSet(VectorStreamingRenderer renderer, URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea, double minHeight, double maxHeight)
     {
        _renderer = renderer;
        _serverURL = serverURL;
@@ -1484,28 +1523,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _lastRenderedCount = 0;
        _minSectorSize = new Angle(minSectorSize);
        _minProjectedArea = minProjectedArea;
+       _minHeight = minHeight;
+       _maxHeight = maxHeight;
 
-    }
-
-    public void dispose()
-    {
-      if (_deleteSymbolizer)
-      {
-        _symbolizer = null;
-      }
-    
-      _metadata = null;
-    
-      if (_rootNodes != null)
-      {
-        for (int i = 0; i < _rootNodesSize; i++)
-        {
-          Node node = _rootNodes.get(i);
-          node.unload();
-          node._release();
-        }
-        _rootNodes = null;
-      }
     }
 
     public final URL getNodeFeaturesURL(String nodeID)
@@ -1778,8 +1798,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     for (int i = 0; i < _vectorSetsSize; i++)
     {
       VectorSet vectorSet = _vectorSets.get(i);
-      if (vectorSet != null)
-         vectorSet.dispose();
+      vectorSet._release();
     }
   
     _glState._release();
@@ -1829,9 +1848,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
     }
   }
 
-  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea)
+  public final void addVectorSet(URL serverURL, String name, String properties, VectorSetSymbolizer symbolizer, boolean deleteSymbolizer, long downloadPriority, TimeInterval timeToCache, boolean readExpired, boolean verbose, boolean haltOnError, Format format, Angle minSectorSize, double minProjectedArea, double minHeight, double maxHeight)
   {
-    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea);
+    VectorSet vectorSet = new VectorSet(this, serverURL, name, properties, symbolizer, deleteSymbolizer, downloadPriority, timeToCache, readExpired, verbose, haltOnError, format, minSectorSize, minProjectedArea, minHeight, maxHeight);
     if (_context != null)
     {
       vectorSet.initialize(_context);
@@ -1845,8 +1864,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     for (int i = 0; i < _vectorSetsSize; i++)
     {
       VectorSet vectorSet = _vectorSets.get(i);
-      if (vectorSet != null)
-         vectorSet.dispose();
+      vectorSet._release();
     }
     _vectorSets.clear();
     _vectorSetsSize = 0;
