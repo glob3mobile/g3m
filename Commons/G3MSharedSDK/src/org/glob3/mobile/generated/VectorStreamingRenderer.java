@@ -788,8 +788,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
           if (_clusterSymbolsCount > 0)
           {
             int removed = 0;
-            removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
-    
+            MarksRenderer marksRenderer = _vectorSet.getMarksRenderer();
+            if (marksRenderer != null)
+            {
+              removed = marksRenderer.removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
+            }
             _clusterSymbolsCount -= removed;
     
             if (_verbose && (removed > 0))
