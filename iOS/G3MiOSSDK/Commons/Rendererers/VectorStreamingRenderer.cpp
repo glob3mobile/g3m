@@ -644,7 +644,7 @@ void VectorStreamingRenderer::Node::removeFeaturesSymbols() {
                                              true, /* animated */
                                              true  /* deleteMarks */);
   }
-  
+
   MeshRenderer* meshRenderer = _vectorSet->getMeshRenderer();
   if (meshRenderer != NULL) {
     removed += meshRenderer->removeAllMeshes(NodeAllMeshFilter(this),
@@ -720,10 +720,12 @@ void VectorStreamingRenderer::Node::childRendered() {
     if (_clusters->size() > 0) {
       if (_clusterSymbolsCount > 0) {
         size_t removed = 0;
-        removed = _vectorSet->getMarksRenderer()->removeAllMarks(NodeClusterMarkFilter(this),
-                                                                 true, /* animated */
-                                                                 true  /* deleteMarks */);
-
+        MarksRenderer* marksRenderer = _vectorSet->getMarksRenderer();
+        if (marksRenderer != NULL) {
+          removed = marksRenderer->removeAllMarks(NodeClusterMarkFilter(this),
+                                                  true, /* animated */
+                                                  true  /* deleteMarks */);
+        }
         _clusterSymbolsCount -= removed;
         
         if (_verbose && (removed > 0)) {
