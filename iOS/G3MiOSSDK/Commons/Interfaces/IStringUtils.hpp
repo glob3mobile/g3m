@@ -115,7 +115,7 @@ public:
   virtual std::string toString(float value) const = 0;
 
   virtual double parseDouble(const std::string& str) const = 0;
-  
+
 };
 
 #endif

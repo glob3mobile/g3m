@@ -137,7 +137,7 @@ public class BingMapsLayer extends RasterLayer
     path = su.replaceAll(path, "{quadkey}", quadkey);
     path = su.replaceAll(path, "{culture}", _culture);
   
-    return new URL(path, false);
+    return new URL(path);
   }
 
   public static String getQuadKey(Tile tile)
@@ -230,7 +230,7 @@ public class BingMapsLayer extends RasterLayer
   public final void initialize(G3MContext context)
   {
     _metadataErrors.clear();
-    final URL url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + _imagerySet + "?key=" + _key, false);
+    final URL url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + _imagerySet + "?key=" + _key);
   
     context.getDownloader().requestBuffer(url, DownloadPriority.HIGHEST, TimeInterval.fromDays(1), true, new BingMapsLayer_MetadataBufferDownloadListener(this), true);
   }

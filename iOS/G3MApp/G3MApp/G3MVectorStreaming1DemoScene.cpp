@@ -131,7 +131,9 @@ void G3MVectorStreaming1DemoScene::rawActivate(const G3MContext* context) {
                          true, // haltOnError
                          VectorStreamingRenderer::Format::SERVER,
                          Angle::fromDegrees(90), // minSectorSize,
-                         12500000                // minProjectedArea
+                         12500000,               // minProjectedArea
+                         0, //minHeight,
+                         0  //maxHeight
                          );
 
 

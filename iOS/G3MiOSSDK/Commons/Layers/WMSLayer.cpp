@@ -380,7 +380,7 @@ const URL WMSLayer::createURL(const Tile* tile) const {
     req += _extraParameter;
   }
 
-  return URL(req, false);
+  return URL(req);
 }
 
 URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
@@ -508,7 +508,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   req += isb->getString();
   delete isb;
 
-	return URL(req, false);
+	return URL(req);
 }
 
 const std::string WMSLayer::description() const {

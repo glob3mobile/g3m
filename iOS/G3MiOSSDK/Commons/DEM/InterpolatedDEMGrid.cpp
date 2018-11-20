@@ -10,6 +10,7 @@
 
 #include "Vector2S.hpp"
 #include "IMathUtils.hpp"
+#include "Vector2D.hpp"
 
 
 double InterpolatedDEMGrid::linearInterpolation(double from,
@@ -101,4 +102,18 @@ double InterpolatedDEMGrid::getElevationAt(const DEMGrid* grid,
   const double valueSE = grid->getElevation(nextX, nextY);
   const double valueSW = grid->getElevation(    x, nextY);
   return bilinearInterpolation(valueSW, valueSE, valueNE, valueNW, alphaX, alphaY);
+}
+
+double InterpolatedDEMGrid::getElevation(const Angle& latitude,
+                                         const Angle& longitude) const {
+  // const Vector2D uv = _sector.getUVCoordinates(latitude, longitude);
+  // const double u = uv._x;
+  // const double v = 1.0 - uv._y;
+
+  const double u = _sector.getUCoordinate(longitude);
+  const double v = 1.0 - _sector.getVCoordinate(latitude);
+
+  return getElevationAt(this,
+                        u,
+                        v);
 }

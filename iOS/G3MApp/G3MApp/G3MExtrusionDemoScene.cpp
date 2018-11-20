@@ -27,6 +27,7 @@
 #include <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
+#include <G3MiOSSDK/IMathUtils.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,
@@ -117,7 +118,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(39.460438280508554953,
                                                                -6.3478641137059907962,
-                                                               720),
+                                                               720 - 400),
                                        Angle::fromDegrees(60), // heading
                                        Angle::fromDegrees(-15) // pitch
                                        );
@@ -141,7 +142,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   Sector renderedSector = demSector.shrinkedByPercent(0.1f);
   g3mWidget->setRenderedSector(renderedSector);
 
-  const double deltaHeight = 0;
+  const double deltaHeight = -400;
   ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///ccmdt.bil"),
                                                                                     demSector,
                                                                                     Vector2I(1481, 780),
@@ -159,7 +160,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
-                         "3dstreaming",            // name
+                         "3dstreaming2",            // name
                          "",                       // properties
                          NULL,                     // symbolizer
                          true,                     // deleteSymbolizer
@@ -170,7 +171,9 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
                          false,                    // haltOnError
                          VectorStreamingRenderer::Format::PLAIN_FILES,
                          Angle::fromDegrees(90),   // minSectorSize
-                         100000                    // minProjectedArea
+                         100000,                   // minProjectedArea
+                         deltaHeight,              // minHeight
+                         NAND                      // maxHeight
                          );
 
 }

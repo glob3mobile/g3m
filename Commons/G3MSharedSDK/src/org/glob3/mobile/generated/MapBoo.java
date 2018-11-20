@@ -363,7 +363,7 @@ public class MapBoo
         deleteSym = deleteSymbolizer;
       }
     
-      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER, Angle.fromDegrees(90), 15000000); // minProjectedArea -  minSectorSize, -  haltOnError -  verbose -  readExpired
+      vectorStreamingRenderer.addVectorSet(new URL(serverURL, "/public/v1/VectorialStreaming/"), _datasetID, properties, sym, deleteSym, DownloadPriority.MEDIUM, TimeInterval.zero(), true, true, false, VectorStreamingRenderer.Format.SERVER, Angle.fromDegrees(90), 15000000, 0, 0); //maxHeight - minHeight, -  minProjectedArea -  minSectorSize, -  haltOnError -  verbose -  readExpired
     }
 
     public final Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry)

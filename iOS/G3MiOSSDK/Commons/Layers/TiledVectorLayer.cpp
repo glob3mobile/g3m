@@ -186,7 +186,7 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
   path = _su->replaceAll(path, "{west}",           _su->toString( west                              ) );
   path = _su->replaceAll(path, "{east}",           _su->toString( east                              ) );
 
-  return URL(path, false);
+  return URL(path);
 }
 
 const GEORasterSymbolizer*  TiledVectorLayer::symbolizerCopy() const {

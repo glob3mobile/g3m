@@ -744,12 +744,13 @@ public class PolygonExtruder {
 
    private static G3MeshCollection getMeshCollection(final Planet planet,
                                                      final float verticalExaggeration,
+                                                     final double deltaHeight,
                                                      final int floatPrecision,
                                                      final List<Building> buildings) {
       logInfo("Starting meshing...");
       final long now = System.currentTimeMillis();
 
-      final List<G3Mesh> meshes = getMeshes(planet, verticalExaggeration, floatPrecision, buildings);
+      final List<G3Mesh> meshes = getMeshes(planet, verticalExaggeration, deltaHeight, floatPrecision, buildings);
       final G3MeshCollection result = new G3MeshCollection(meshes);
 
       final long elapsed = System.currentTimeMillis() - now;
@@ -761,11 +762,12 @@ public class PolygonExtruder {
 
    private static List<G3Mesh> getMeshes(final Planet planet,
                                          final float verticalExaggeration,
+                                         final double deltaHeight,
                                          final int floatPrecision,
                                          final List<Building> buildings) {
       final List<G3Mesh> result = new ArrayList<>(buildings.size());
       for (final Building building : buildings) {
-         final G3Mesh mesh = building.createMesh(planet, verticalExaggeration, floatPrecision);
+         final G3Mesh mesh = building.createMesh(planet, verticalExaggeration, deltaHeight, floatPrecision);
          if (mesh != null) {
             result.add(mesh);
          }
@@ -942,10 +944,12 @@ public class PolygonExtruder {
                               final ExtrusionHandler handler,
                               final Planet planet,
                               final float verticalExaggeration,
+                              final double deltaHeight,
                               final int floatPrecision,
                               final boolean verbose) throws IOException {
       final List<Building> buildings = getBuildings(inputFileName, handler, verbose);
-      final G3MeshCollection meshCollection = getMeshCollection(planet, verticalExaggeration, floatPrecision, buildings);
+      final G3MeshCollection meshCollection = getMeshCollection(planet, verticalExaggeration, deltaHeight, floatPrecision,
+               buildings);
       handler.onMeshCollection(meshCollection);
       writeMeshCollectionJSON(outputFileName, meshCollection, floatPrecision);
    }

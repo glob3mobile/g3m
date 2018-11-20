@@ -39,7 +39,10 @@ public:
                                      const Vector2S& extent);
 
   double getElevation(int x, int y) const;
-  
+
+  double getElevation(const Angle& latitude,
+                      const Angle& longitude) const;
+
 };
 
 #endif

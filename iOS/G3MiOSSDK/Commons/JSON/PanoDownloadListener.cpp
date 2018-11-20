@@ -41,12 +41,12 @@ void PanoDownloadListener::parseMETADATA(const std::string& url,
   const Angle latitude  = Angle::fromDegrees(json->getAsObject("position")->getAsNumber("lat")->value());
   const Angle longitude = Angle::fromDegrees(json->getAsObject("position")->getAsNumber("lon")->value());
   
-  Mark* mark = new Mark(URL(_urlIcon,false),
+  Mark* mark = new Mark(URL(_urlIcon),
                         Geodetic3D(latitude, longitude, 0),
                         RELATIVE_TO_GROUND,
                         0,
                         new PanoMarkUserData(json->getAsString("name")->value(),
-                                             new URL(url, false)),
+                                             new URL(url)),
                         true);
   
   mark->setOnScreenSizeOnProportionToImage(2.0f, 2.0f);

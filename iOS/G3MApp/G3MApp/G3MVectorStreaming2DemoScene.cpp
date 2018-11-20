@@ -169,7 +169,9 @@ void G3MVectorStreaming2DemoScene::rawActivate(const G3MContext* context) {
                          true, // haltOnError
                          VectorStreamingRenderer::Format::SERVER,
                          Angle::fromDegrees(90), // minSectorSize,
-                         12500000                // minProjectedArea
+                         12500000,               // minProjectedArea
+                         0, //minHeight,
+                         0  //maxHeight
                          );
 
   //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(46.612016780685230799, 7.8587244849714883443, 5410460) );

@@ -140,7 +140,7 @@ public class MercatorTiledLayer extends RasterLayer
     if (isb != null)
        isb.dispose();
   
-    return new URL(path, false);
+    return new URL(path);
   }
 
 

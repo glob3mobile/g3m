@@ -97,7 +97,7 @@ const URL GoogleMapsLayer::createURL(const Tile* tile) const {
   const std::string path = isb->getString();
   
   delete isb;
-  return URL(path, false);
+  return URL(path);
 }
 
 const std::string GoogleMapsLayer::description() const {

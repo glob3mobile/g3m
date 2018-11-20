@@ -88,7 +88,7 @@ URL SGLayerNode::getURL() const {
   const std::string path = isb->getString();
   delete isb;
 
-  return URL(path, false);
+  return URL(path);
 }
 
 void SGLayerNode::requestImage(const G3MRenderContext* rc) {

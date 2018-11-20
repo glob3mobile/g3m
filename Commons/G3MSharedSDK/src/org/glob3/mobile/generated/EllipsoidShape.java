@@ -266,7 +266,7 @@ public class EllipsoidShape extends AbstractMeshShape
   {
      super(position, altitudeMode);
      _ellipsoid = new Ellipsoid(Vector3D.ZERO, radius);
-     _textureURL = new URL(new URL("", false));
+     _textureURL = new URL(new URL(""));
      _resolution = resolution < 3 ? 3 : resolution;
      _borderWidth = borderWidth;
      _texturedInside = texturedInside;

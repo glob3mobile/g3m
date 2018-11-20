@@ -49,6 +49,9 @@ public class BILParser
   
     final short minValue = IMathUtils.instance().minInt16();
   
+    long heightsCount = 0;
+    double sumHeight = 0;
+  
     short[] shortBuffer = new short[size];
     for (int i = 0; i < size; i++)
     {
@@ -58,10 +61,15 @@ public class BILParser
       {
         height = ShortBufferElevationData.NO_DATA_VALUE;
       }
-  
+      else
+      {
+        heightsCount++;
+        sumHeight += height;
+      }
       shortBuffer[i] = height;
     }
   
+    ILogger.instance().logInfo("average height=%f", (sumHeight / heightsCount));
     return new ShortBufferElevationData(sector, extent, shortBuffer, size, deltaHeight);
   }
 
@@ -84,6 +92,9 @@ public class BILParser
   
     final short minValue = IMathUtils.instance().minInt16();
   
+    long heightsCount = 0;
+    double sumHeight = 0;
+  
     short[] shortBuffer = new short[size];
     for (int i = 0; i < size; i++)
     {
@@ -93,10 +104,16 @@ public class BILParser
       {
         height = noDataValue;
       }
+      else
+      {
+        heightsCount++;
+        sumHeight += height;
+      }
   
       shortBuffer[i] = height;
     }
   
+    ILogger.instance().logInfo("average height=%f", (sumHeight / heightsCount));
     return new ShortBufferDEMGrid(WGS84Projetion.instance(), sector, extent, shortBuffer, size, deltaHeight, noDataValue);
   }
 
