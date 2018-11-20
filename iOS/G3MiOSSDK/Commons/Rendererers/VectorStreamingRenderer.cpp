@@ -638,12 +638,18 @@ bool VectorStreamingRenderer::NodeClusterMarkFilter::test(const Mark* mark) cons
 void VectorStreamingRenderer::Node::removeFeaturesSymbols() {
   size_t removed = 0;
 
-  removed += _vectorSet->getMarksRenderer()->removeAllMarks(NodeAllMarkFilter(this),
-                                                            true, /* animated */
-                                                            true  /* deleteMarks */);
+  MarksRenderer* marksRenderer = _vectorSet->getMarksRenderer();
+  if (marksRenderer != NULL) {
+    removed += marksRenderer->removeAllMarks(NodeAllMarkFilter(this),
+                                             true, /* animated */
+                                             true  /* deleteMarks */);
+  }
 
-  removed += _vectorSet->getMeshRenderer()->removeAllMeshes(NodeAllMeshFilter(this),
-                                                            true /* deleteMeshes */);
+  MeshRenderer* meshRenderer = _vectorSet->getMeshRenderer();
+  if (meshRenderer != NULL) {
+    removed += meshRenderer->removeAllMeshes(NodeAllMeshFilter(this),
+                                             true /* deleteMeshes */);
+  }
 
   if (_verbose && (removed > 0)) {
 #ifdef C_CODE
