@@ -756,9 +756,17 @@ public class VectorStreamingRenderer extends DefaultRenderer
     {
       int removed = 0;
     
-      removed += _vectorSet.getMarksRenderer().removeAllMarks(new NodeAllMarkFilter(this), true, true); // deleteMarks -  animated
+      MarksRenderer marksRenderer = _vectorSet.getMarksRenderer();
+      if (marksRenderer != null)
+      {
+        removed += marksRenderer.removeAllMarks(new NodeAllMarkFilter(this), true, true); // deleteMarks -  animated
+      }
     
-      removed += _vectorSet.getMeshRenderer().removeAllMeshes(new NodeAllMeshFilter(this), true); // deleteMeshes
+      MeshRenderer meshRenderer = _vectorSet.getMeshRenderer();
+      if (meshRenderer != null)
+      {
+        removed += meshRenderer.removeAllMeshes(new NodeAllMeshFilter(this), true); // deleteMeshes
+      }
     
       if (_verbose && (removed > 0))
       {
@@ -780,8 +788,11 @@ public class VectorStreamingRenderer extends DefaultRenderer
           if (_clusterSymbolsCount > 0)
           {
             int removed = 0;
-            removed = _vectorSet.getMarksRenderer().removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
-    
+            MarksRenderer marksRenderer = _vectorSet.getMarksRenderer();
+            if (marksRenderer != null)
+            {
+              removed = marksRenderer.removeAllMarks(new NodeClusterMarkFilter(this), true, true); // deleteMarks -  animated
+            }
             _clusterSymbolsCount -= removed;
     
             if (_verbose && (removed > 0))
