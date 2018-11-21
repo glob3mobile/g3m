@@ -109,8 +109,13 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   //  layerSet->addLayer(layer);
 
 
-  const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
-                                               39.5082433963135529, -6.1796950996431388);
+
+
+  const Sector demSector = Sector::fromDegrees(39.1061661306491501, -6.8652429810672828,
+                                               39.6803752050700638, -6.0079354792574549);
+
+//  const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
+//                                               39.5082433963135529, -6.1796950996431388);
 
   //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
   //                                                             -6.37246061136657449,
@@ -143,9 +148,10 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setRenderedSector(renderedSector);
 
   const double deltaHeight = -400;
-  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///ccmdt.bil"),
+  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///MDT_CC_250.bil"),
                                                                                     demSector,
-                                                                                    Vector2I(1481, 780),
+                                                                                    //Vector2I(1481, 780),
+                                                                                    Vector2I(1605, 1075),
                                                                                     deltaHeight);
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
@@ -160,7 +166,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
-                         "3dstreaming2",            // name
+                         "3dstreaming2",           // name
                          "",                       // properties
                          NULL,                     // symbolizer
                          true,                     // deleteSymbolizer

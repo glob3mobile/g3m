@@ -57,14 +57,14 @@ public:
   class GEOJSONUtils {
   private:
     GEOJSONUtils() {}
-    
+
   public:
     static Sector*     parseSector(const JSONArray* json);
     static Geodetic2D* parseGeodetic2D(const JSONArray* json);
     static Node*       parseNode(const JSONObject* json,
                                  const VectorSet*  vectorSet,
                                  const bool        verbose);
-    
+
   };
   
   
@@ -121,7 +121,7 @@ public:
     void cancel() {
       _isCanceled = true;
     }
-    
+
     void runInBackground(const G3MContext* context);
     
     void onPostExecute(const G3MContext* context);
@@ -187,7 +187,8 @@ public:
                                          const Planet* planet);
     GEOMeshes*             parseMeshes(const JSONObject* jsonObject,
                                        const Planet* planet);
-    std::vector<Node*>*    parseChildren(const JSONArray* jsonArray);
+    std::vector<Node*>*    parseChildren(const JSONArray* jsonArray,
+                                         const VectorSet* vectorSet);
     
   public:
     FeaturesParserAsyncTask(Node*        node,
@@ -209,7 +210,7 @@ public:
     void cancel() {
       _isCanceled = true;
     }
-    
+
     void runInBackground(const G3MContext* context);
     
     void onPostExecute(const G3MContext* context);
@@ -296,7 +297,12 @@ public:
   
   class Node : public RCObject {
   private:
-    const VectorSet*               _vectorSet;
+#ifdef C_CODE
+    const VectorSet*               _vectorSetOrNULL;
+#else
+    VectorSet*                     _vectorSetOrNULL;
+#endif
+    const std::string              _vectorSetName;
     Node*                          _parent;
     const std::string              _id;
     const Sector*                  _nodeSector;
@@ -320,7 +326,8 @@ public:
     std::vector<Cluster*>* _clusters;
     
     Sphere* _boundingSphere;
-    BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
+    BoundingVolume* getBoundingVolume(const G3MRenderContext *rc,
+                                      const VectorStreamingRenderer::VectorSet* vectorSet);
     
     IDownloader* _downloader;
     bool _loadingChildren;
@@ -369,6 +376,7 @@ public:
     }
     
     void updateBoundingSphereWith(const G3MRenderContext *rc,
+                                  const VectorStreamingRenderer::VectorSet* vectorSet,
                                   Sphere* childSphere);
     
   protected:
@@ -391,20 +399,20 @@ public:
 
     void unload();
     
-    const VectorSet* getVectorSet() const {
-      return _vectorSet;
+    const VectorSet* getVectorSetOrNULL() const {
+      return _vectorSetOrNULL;
     }
-    
+
     const std::string getFullName() const {
-      return _vectorSet->getName() + "/" + _id;
+      return _vectorSetName + "/" + _id;
     }
-    
+
     const std::string getFeatureToken() const {
-      return _id + "_F_" + _vectorSet->getName() ;
+      return _id + "_F_" + _vectorSetName;
     }
     
     const std::string getClusterToken() const {
-      return _id + "_C_" + _vectorSet->getName() ;
+      return _id + "_C_" + _vectorSetName;
     }
     
     long long render(const G3MRenderContext* rc,
@@ -425,7 +433,9 @@ public:
     }
     
     void parsedChildren(std::vector<Node*>* children);
-    
+
+    void cancel();
+
   };
   
   
@@ -732,6 +742,8 @@ public:
       return _renderer->getMeshRenderer();
     }
 
+    void cancel();
+
   };
   
   
@@ -793,8 +805,7 @@ public:
   void removeAllVectorSets();
   
   RenderState getRenderState(const G3MRenderContext* rc);
-  
-  
+
 };
 
 #endif
