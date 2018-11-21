@@ -1534,11 +1534,6 @@ void VectorStreamingRenderer::render(const G3MRenderContext* rc,
 }
 
 void VectorStreamingRenderer::Node::cancel() {
-  if (_vectorSetOrNULL != NULL) {
-    _vectorSetOrNULL->_release();
-    _vectorSetOrNULL = NULL;
-  }
-
   cancelTasks();
 
   if (_children != NULL) {
@@ -1546,6 +1541,13 @@ void VectorStreamingRenderer::Node::cancel() {
       Node* child = _children->at(i);
       child->cancel();
     }
+  }
+
+  removeFeaturesSymbols();
+
+  if (_vectorSetOrNULL != NULL) {
+    _vectorSetOrNULL->_release();
+    _vectorSetOrNULL = NULL;
   }
 }
 
