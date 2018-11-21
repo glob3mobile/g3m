@@ -36,6 +36,7 @@
 		CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */; };
 		CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A521837DBFA004D3902 /* G3MDemoModel.mm */; };
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
+		CFAE623D21A54EEB005DB4C2 /* MDT_CC_250.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */; };
 		CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */; };
 		CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */; };
 		CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CF1AA779830013EDE1 /* CoreMotion.framework */; };
@@ -184,6 +185,7 @@
 		CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoModel.hpp; sourceTree = "<group>"; };
 		CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoListener.cpp; sourceTree = "<group>"; };
 		CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoListener.hpp; sourceTree = "<group>"; };
+		CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MDT_CC_250.bil; sourceTree = "<group>"; };
 		CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MAugmentedRealityDemoScene.mm; sourceTree = "<group>"; };
 		CFB136CA1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAugmentedRealityDemoScene.hpp; sourceTree = "<group>"; };
 		CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -519,34 +521,35 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CF5DB6CF21935C1600E0613E /* ccmdt.bil */,
+				CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */,
+				E780A3D316D29FAA000F0395 /* 3DModels */,
+				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
+				CF37F5F0183D26500050CAEF /* 0576.bil */,
+				CFE3B3D6183AD2CB0078C796 /* A320.bson */,
+				CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */,
+				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
+				CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */,
 				CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */,
+				CF6920C018394DB6007409D8 /* buildings_monaco.geojson */,
+				CF5DB6CF21935C1600E0613E /* ccmdt.bil */,
+				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
+				CF483EC81A2E62A100B70D7E /* CompassHeadings.png */,
+				CFE3B3DF183ADAAB0078C796 /* eifeltower.bson */,
+				CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */,
+				CFF9D20B1A7C5048005429A6 /* g3m-mark.png */,
+				E7D1B7FC16D27C4300AF47C1 /* Images */,
+				CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */,
+				CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */,
 				D871790F1AE501B100A9A14F /* pin.png */,
 				D871790D1AE500B500A9A14F /* radar-sprite.png */,
-				CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */,
-				CFF9D20B1A7C5048005429A6 /* g3m-mark.png */,
-				CFF9D2091A7C5014005429A6 /* anchorWidget.png */,
-				CF483ECC1A2E62C400B70D7E /* widget-background.png */,
-				CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */,
-				CF483EC81A2E62A100B70D7E /* CompassHeadings.png */,
-				CF6E184B19D35ADD002B456A /* loudoun_4326_300.bil */,
-				CF37F5F0183D26500050CAEF /* 0576.bil */,
-				CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */,
-				CFE3B3E1183ADAB80078C796 /* arcdeTriomphe.bson */,
-				CFE3B3DF183ADAAB0078C796 /* eifeltower.bson */,
-				CFE3B3DD183ADAA00078C796 /* sphinx.bson */,
-				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
-				E780A3D316D29FAA000F0395 /* 3DModels */,
-				CFE3B3D6183AD2CB0078C796 /* A320.bson */,
-				CF6920C018394DB6007409D8 /* buildings_monaco.geojson */,
-				CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */,
-				E7D1B7FC16D27C4300AF47C1 /* Images */,
 				CF6920C818394F56007409D8 /* restaurant-48x48.png */,
 				CF6920C618394E44007409D8 /* restaurant-96x96.png */,
 				CF6920C118394DB6007409D8 /* restaurants_monaco.geojson */,
 				CF6920C218394DB6007409D8 /* roads_monaco.geojson */,
+				CFE3B3DD183ADAA00078C796 /* sphinx.bson */,
 				CFE3B3D8183AD2D40078C796 /* textures-A320 */,
 				CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */,
+				CF483ECC1A2E62C400B70D7E /* widget-background.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 				CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */,
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
+				CFAE623D21A54EEB005DB4C2 /* MDT_CC_250.bil in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
 				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
