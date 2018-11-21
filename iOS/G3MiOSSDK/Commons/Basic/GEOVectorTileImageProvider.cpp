@@ -182,7 +182,7 @@ void GEOVectorTileImageProvider::rasterizerDeleted(const std::string& tileID) {
 
 void GEOVectorTileImageProvider::layerDeleted(const GEOVectorLayer* layer) {
   if (layer != _layer) {
-    THROW_EXCEPTION("Logic error");
+    ILogger::instance()->logError("Logic error layerDeleted()");
   }
   _layer = NULL;
 }

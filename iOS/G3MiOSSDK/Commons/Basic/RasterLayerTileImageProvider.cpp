@@ -155,7 +155,7 @@ void RasterLayerTileImageProvider::requestFinish(const std::string& tileID) {
 
 void RasterLayerTileImageProvider::layerDeleted(const RasterLayer* layer) {
   if (layer != _layer) {
-    THROW_EXCEPTION("Logic error");
+    ILogger::instance()->logError("Logic error layerDeleted()");
   }
   _layer = NULL;
 }

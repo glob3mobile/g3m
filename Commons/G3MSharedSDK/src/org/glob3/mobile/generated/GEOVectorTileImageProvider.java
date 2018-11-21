@@ -219,7 +219,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   {
     if (layer != _layer)
     {
-      throw new RuntimeException("Logic error");
+      ILogger.instance().logError("Logic error layerDeleted()");
     }
     _layer = null;
   }
