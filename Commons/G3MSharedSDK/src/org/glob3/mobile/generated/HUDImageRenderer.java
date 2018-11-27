@@ -244,11 +244,17 @@ public class HUDImageRenderer extends DefaultRenderer
     _creatingMesh = false;
   
     if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
+    {
+      if (_mesh != null)
+         _mesh.dispose();
+      _mesh = null;
+    }
   
-    _image = null;
-    _image = null;
+    if (_image != null)
+    {
+      _image = null;
+      _image = null;
+    }
   }
 
   public final void stop(G3MRenderContext rc)

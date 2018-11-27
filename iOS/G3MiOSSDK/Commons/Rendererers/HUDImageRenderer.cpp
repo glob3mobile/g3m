@@ -88,11 +88,15 @@ void HUDImageRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 void HUDImageRenderer::recreateImage() {
   _creatingMesh = false;
 
-  delete _mesh;
-  _mesh = NULL;
+  if (_mesh != NULL) {
+    delete _mesh;
+    _mesh = NULL;
+  }
 
-  delete _image;
-  _image = NULL;
+  if (_image != NULL) {
+    delete _image;
+    _image = NULL;
+  }
 }
 
 void HUDImageRenderer::setImage(const IImage* image) {

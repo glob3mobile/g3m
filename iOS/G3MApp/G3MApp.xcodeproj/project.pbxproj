@@ -47,6 +47,7 @@
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */; };
 		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
+		CFD884D321AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD884D121AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp */; };
 		CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */; };
 		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };
 		CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */; };
@@ -202,6 +203,8 @@
 		CFC664C91BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MVectorStreaming2DemoScene.hpp; sourceTree = "<group>"; };
 		CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
 		CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
+		CFD884D121AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MSoccerMatchDemoScene.cpp; sourceTree = "<group>"; };
+		CFD884D221AAF98F004379AF /* G3MSoccerMatchDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MSoccerMatchDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MMarksDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MMarksDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DSymbologyDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -384,6 +387,8 @@
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */,
 				CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */,
+				CFD884D121AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp */,
+				CFD884D221AAF98F004379AF /* G3MSoccerMatchDemoScene.hpp */,
 				D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */,
 				D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */,
 				CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */,
@@ -749,6 +754,7 @@
 				CFECA7771B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp in Sources */,
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */,
 				CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */,
+				CFD884D321AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
 				D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */,
 				CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */,
