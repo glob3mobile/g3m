@@ -22,6 +22,7 @@
 #include <G3MiOSSDK/JSONArray.hpp>
 #include <G3MiOSSDK/IJSONParser.hpp>
 #include <G3MiOSSDK/JSONNumber.hpp>
+#include <G3MiOSSDK/JSONString.hpp>
 #include <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #include <G3MiOSSDK/FloatBufferBuilderFromColor.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
@@ -86,31 +87,39 @@ public:
     FloatBufferBuilderFromColor colors;
     const size_t ballPositionsCount = ballPositionsJSONArray->size();
 
-    const Color fromColor   = Color::RED;
-    const Color middleColor = Color::GREEN;
-    const Color toColor     = Color::BLUE;
+//    const Color fromColor   = Color::RED;
+//    const Color middleColor = Color::GREEN;
+//    const Color toColor     = Color::BLUE;
+    const Color fromColor   = Color::YELLOW;
+    const Color middleColor = Color::ORANGE;
+    const Color toColor     = Color::RED;
 
     for (size_t i = 0; i < ballPositionsCount; i++) {
       const JSONArray* ballPositionJSONArray = ballPositionsJSONArray->getAsArray(i);
-      const double x = ballPositionJSONArray->getAsNumber(0)->value();
-      const double y = ballPositionJSONArray->getAsNumber(1)->value();
-      const double z = ballPositionJSONArray->getAsNumber(2)->value();
-      const double speed = ballPositionJSONArray->getAsNumber(3)->value();
-      vertices->add(x, y, z);
+      const double      x      = ballPositionJSONArray->getAsNumber(0)->value();
+      const double      y      = ballPositionJSONArray->getAsNumber(1)->value();
+      const double      z      = ballPositionJSONArray->getAsNumber(2)->value();
+      const double      speed  = ballPositionJSONArray->getAsNumber(3)->value();
+      const std::string team   = ballPositionJSONArray->getAsString(4)->value();
+      const std::string status = ballPositionJSONArray->getAsString(5)->value();
 
-      const double a = (z - minZ) / deltaZ;
-      // const double a = (speed - minSpeed) / deltaSpeed;
-//      colors.add(a, a, a, 1);
-      const Color interpolatedColor = Color::interpolateColor(fromColor,
-                                                              middleColor,
-                                                              toColor,
-                                                              a);
-      colors.add(interpolatedColor);
+      if (status == "A") {
+        vertices->add(x, y, z);
+
+        const double a = (z - minZ) / deltaZ;
+        // const double a = (speed - minSpeed) / deltaSpeed;
+        //      colors.add(a, a, a, 1);
+        const Color interpolatedColor = Color::interpolateColor(fromColor,
+                                                                middleColor,
+                                                                toColor,
+                                                                a);
+        colors.add(interpolatedColor);
+      }
     }
 
 
     const float lineWidth = 2;
-    const float pointSize = 4;
+    const float pointSize = 8;
 
     _mesh1 = new DirectMesh(GLPrimitive::points(),
                             true,
@@ -123,16 +132,16 @@ public:
                             true // depthTest
                             );
 
-    _mesh2 = new DirectMesh(GLPrimitive::lineStrip(),
-                            true,
-                            vertices->getCenter(),
-                            vertices->create(),
-                            lineWidth,
-                            pointSize,
-                            NULL, // flatColor
-                            colors.create(),
-                            true // depthTest
-                            );
+//    _mesh2 = new DirectMesh(GLPrimitive::lineStrip(),
+//                            true,
+//                            vertices->getCenter(),
+//                            vertices->create(),
+//                            lineWidth,
+//                            pointSize,
+//                            NULL, // flatColor
+//                            colors.create(),
+//                            true // depthTest
+//                            );
 
     delete vertices;
 
@@ -227,27 +236,28 @@ void G3MSoccerMatchDemoScene::rawActivate(const G3MContext* context) {
 
 
   IDownloader* downloader = context->getDownloader();
-  downloader->requestBuffer(URL("file:///869491_points.json"),
-                            //URL("file:///870147_points.json"),
+  downloader->requestBuffer(//URL("file:///869491_points.json"),
+                            URL("file:///870147_points.json"),
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,
                             new G3MSoccerMatchDemoScene_BufferDownloadListener(this,
                                                                                context->getThreadUtils()),
                             true);
-
 }
 
 void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  model->getShapesRenderer()->addShape(new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.475803, 0)),
-                                                     AltitudeMode::ABSOLUTE,
-                                                     mesh));
+  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.475803, 0)),
+                                       AltitudeMode::ABSOLUTE,
+                                       mesh);
+  meshShape->setHeading(Angle::fromDegrees(21));
+  model->getShapesRenderer()->addShape(meshShape);
 
   g3mWidget->setForceBusyRenderer(false);
 
-  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(8),
-                                       Geodetic3D::fromDegrees(43.181706, -2.475803, 700 /* 5000 */));
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
+                                       Geodetic3D::fromDegrees(43.181706, -2.475803, 400));
 }

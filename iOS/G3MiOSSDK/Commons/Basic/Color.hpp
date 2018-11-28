@@ -55,7 +55,6 @@ public:
 
   static Color* parse(const std::string& str);
 
-
   static Color fromRGBA255(const int red,
                            const int green,
                            const int blue,
@@ -90,8 +89,6 @@ public:
                                 const Color& to,
                                 float d);
 
-
-
   static const Color TRANSPARENT;
   static const Color BLACK;
   static const Color GRAY;
@@ -102,9 +99,9 @@ public:
   static const Color CYAN;
   static const Color MAGENTA;
   static const Color RED;
+  static const Color ORANGE;
   static const Color GREEN;
   static const Color BLUE;
-
 
   static Color transparent() {
     return TRANSPARENT;
@@ -144,6 +141,10 @@ public:
 
   static Color red() {
     return RED;
+  }
+
+  static Color orange() {
+    return ORANGE;
   }
 
   static Color green() {
