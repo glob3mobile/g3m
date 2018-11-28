@@ -27,6 +27,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/MeshShape.hpp>
+#include <G3MiOSSDK/Color.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -37,7 +38,8 @@ private:
   const URL                _url;
   IByteBuffer*             _buffer;
 
-  Mesh* _mesh;
+  Mesh* _mesh1;
+  Mesh* _mesh2;
 
   static double normalize(double value,
                           double max,
@@ -53,13 +55,15 @@ public:
   _scene(scene),
   _url(url),
   _buffer(buffer),
-  _mesh(NULL)
+  _mesh1(NULL),
+  _mesh2(NULL)
   {
   }
 
   ~G3MSoccerMatchDemoScene_ParserAsyncTask() {
     delete _buffer;
-    delete _mesh;
+    delete _mesh1;
+    delete _mesh2;
   }
 
   void parse(const JSONObject* jsonObject) {
@@ -68,9 +72,12 @@ public:
 
     const JSONObject* ballMetadataJSONObject = ballJSONObject->getAsObject("metadata");
 
-    const double minZ = ballMetadataJSONObject->getAsArray("min")->getAsNumber(3)->value();
-    const double maxZ = ballMetadataJSONObject->getAsArray("max")->getAsNumber(3)->value();
+    const double minZ = ballMetadataJSONObject->getAsArray("min")->getAsNumber(2)->value();
+    const double maxZ = ballMetadataJSONObject->getAsArray("max")->getAsNumber(2)->value();
     const double deltaZ = maxZ - minZ;
+//    const double minSpeed = ballMetadataJSONObject->getAsArray("min")->getAsNumber(3)->value();
+//    const double maxSpeed = ballMetadataJSONObject->getAsArray("max")->getAsNumber(3)->value() / 8;
+//    const double deltaSpeed = maxSpeed - minSpeed;
 
     const JSONArray* ballPositionsJSONArray = ballJSONObject->getAsArray("positions");
 
@@ -79,29 +86,53 @@ public:
     FloatBufferBuilderFromColor colors;
     const size_t ballPositionsCount = ballPositionsJSONArray->size();
 
+    const Color fromColor   = Color::RED;
+    const Color middleColor = Color::GREEN;
+    const Color toColor     = Color::BLUE;
+
     for (size_t i = 0; i < ballPositionsCount; i++) {
       const JSONArray* ballPositionJSONArray = ballPositionsJSONArray->getAsArray(i);
       const double x = ballPositionJSONArray->getAsNumber(0)->value();
       const double y = ballPositionJSONArray->getAsNumber(1)->value();
       const double z = ballPositionJSONArray->getAsNumber(2)->value();
+      const double speed = ballPositionJSONArray->getAsNumber(3)->value();
       vertices->add(x, y, z);
 
       const double a = (z - minZ) / deltaZ;
-      colors.add(a, a, a, 1);
+      // const double a = (speed - minSpeed) / deltaSpeed;
+//      colors.add(a, a, a, 1);
+      const Color interpolatedColor = Color::interpolateColor(fromColor,
+                                                              middleColor,
+                                                              toColor,
+                                                              a);
+      colors.add(interpolatedColor);
     }
 
-    const float lineWidth = 1;
+
+    const float lineWidth = 2;
     const float pointSize = 4;
 
-    _mesh = new DirectMesh(GLPrimitive::points(),
-                           true,
-                           vertices->getCenter(),
-                           vertices->create(),
-                           lineWidth,
-                           pointSize,
-                           NULL, // flatColor
-                           colors.create(),
-                           true);
+    _mesh1 = new DirectMesh(GLPrimitive::points(),
+                            true,
+                            vertices->getCenter(),
+                            vertices->create(),
+                            lineWidth,
+                            pointSize,
+                            NULL, // flatColor
+                            colors.create(),
+                            true // depthTest
+                            );
+
+    _mesh2 = new DirectMesh(GLPrimitive::lineStrip(),
+                            true,
+                            vertices->getCenter(),
+                            vertices->create(),
+                            lineWidth,
+                            pointSize,
+                            NULL, // flatColor
+                            colors.create(),
+                            true // depthTest
+                            );
 
     delete vertices;
 
@@ -126,12 +157,18 @@ public:
   }
 
   void onPostExecute(const G3MContext* context) {
-    if (_mesh == NULL) {
+    if (_mesh1 == NULL && _mesh2 == NULL) {
       ILogger::instance()->logError("Can't parse \"%s\" (2)", _url._path.c_str());
     }
     else {
-      _scene->setMesh(_mesh);
-      _mesh = NULL;
+      if (_mesh1) {
+        _scene->setMesh(_mesh1);
+        _mesh1 = NULL;
+      }
+      if (_mesh2) {
+        _scene->setMesh(_mesh2);
+        _mesh2 = NULL;
+      }
     }
   }
 };
@@ -190,7 +227,8 @@ void G3MSoccerMatchDemoScene::rawActivate(const G3MContext* context) {
 
 
   IDownloader* downloader = context->getDownloader();
-  downloader->requestBuffer(URL("file:///869491-rawdata.dat.gz_points.json"),
+  downloader->requestBuffer(URL("file:///869491_points.json"),
+                            //URL("file:///870147_points.json"),
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,
@@ -210,6 +248,6 @@ void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
 
   g3mWidget->setForceBusyRenderer(false);
 
-  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                       Geodetic3D::fromDegrees(43.181706, -2.475803, 5000));
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(8),
+                                       Geodetic3D::fromDegrees(43.181706, -2.475803, 700 /* 5000 */));
 }

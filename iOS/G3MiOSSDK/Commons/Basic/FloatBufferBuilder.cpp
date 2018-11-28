@@ -13,6 +13,17 @@
 #include "Vector2D.hpp"
 #include "Vector3D.hpp"
 
+
+FloatBufferBuilder::FloatBufferBuilder() {
+}
+
+FloatBufferBuilder::~FloatBufferBuilder() {
+}
+
+const size_t FloatBufferBuilder::size() const {
+  return _values.size();
+}
+
 IFloatBuffer* FloatBufferBuilder::create() const {
 #ifdef C_CODE
   const size_t size = _values.size();
@@ -40,7 +51,7 @@ Vector2D FloatBufferBuilder::getVector2D(int i) const {
 Vector3D FloatBufferBuilder::getVector3D(int i) const {
   const int i3 = i * 3;
 #ifdef C_CODE
-  return Vector3D(_values[i3], _values[i3 + 1], _values[i3+2]);
+  return Vector3D(_values[i3], _values[i3 + 1], _values[i3 + 2]);
 #endif
 #ifdef JAVA_CODE
   return new Vector3D(_values.get(i3), _values.get(i3 + 1), _values.get(i3 + 2));

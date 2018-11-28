@@ -135,7 +135,7 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
                                                                                     textureName,
-                                                                                    false,
+                                                                                    false, // generateMipmap
                                                                                     GLTextureParameterValue::clampToEdge(),
                                                                                     GLTextureParameterValue::clampToEdge());
 
@@ -153,8 +153,8 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   if (rc->getViewMode() == STEREO) {
     viewPortWidth /= 2;
   }
-  const double halfWidth  = viewPortWidth               / 2.0;
-  const double halfHeight = camera->getViewPortHeight() / 2.0;
+  const float halfWidth  = viewPortWidth               / 2.0f;
+  const float halfHeight = camera->getViewPortHeight() / 2.0f;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices->add(-halfWidth,  halfHeight, 0);

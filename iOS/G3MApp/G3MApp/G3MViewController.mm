@@ -25,12 +25,7 @@
 
 @implementation G3MViewController
 
-@synthesize g3mWidget        = _g3mWidget;
-@synthesize demoSelector     = _demoSelector;
-@synthesize secondaryToolbar = _secondaryToolbar;
-@synthesize optionSelector   = _optionSelector;
-
-- (BOOL)prefersStatusBarHidden {
+- (BOOL) prefersStatusBarHidden {
   return YES;
 }
 
@@ -81,7 +76,7 @@ public:
 
   [self.optionSelector setTitle: [NSString stringWithCppString: scene->getOptionSelectorDefaultTitle()]
                        forState: UIControlStateNormal];
-  self.secondaryToolbar.hidden = (scene->getOptionsCount() == 0);
+  self.optionSelector.hidden = (scene->getOptionsCount() == 0);
 }
 
 -(void) onChangedOption:(const std::string&) option
@@ -131,7 +126,6 @@ public:
 {
   self.g3mWidget        = nil;
   self.demoSelector     = nil;
-  self.secondaryToolbar = nil;
   self.optionSelector   = nil;
 
   [super viewDidUnload];
@@ -151,12 +145,6 @@ public:
   else {
     return YES;
   }
-}
-
-- (void)didReceiveMemoryWarning
-{
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
 }
 
 - (void)viewWillAppear:(BOOL)animated {

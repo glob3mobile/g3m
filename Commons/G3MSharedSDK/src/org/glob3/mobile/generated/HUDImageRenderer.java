@@ -126,7 +126,7 @@ public class HUDImageRenderer extends DefaultRenderer
     final IStringUtils su = IStringUtils.instance();
     final String textureName = "HUDImageRenderer" + su.toString(_instanceID) + "/" + su.toString(_changeCounter++);
   
-    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge()); // generateMipmap
   
     _image = null;
     _image = null;
@@ -144,8 +144,8 @@ public class HUDImageRenderer extends DefaultRenderer
     {
       viewPortWidth /= 2;
     }
-    final double halfWidth = viewPortWidth / 2.0;
-    final double halfHeight = camera.getViewPortHeight() / 2.0;
+    final float halfWidth = viewPortWidth / 2.0f;
+    final float halfHeight = camera.getViewPortHeight() / 2.0f;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(-halfWidth, halfHeight, 0);
