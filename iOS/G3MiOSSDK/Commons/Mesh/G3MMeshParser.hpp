@@ -38,9 +38,6 @@ private:
                                         const JSONArray* jsonMeshes,
                                         const Planet* planet);
 
-  static Mesh* parseMesh(std::map<std::string, G3MMeshMaterial*>& materials,
-                         const JSONObject* jsonMesh,
-                         const Planet* planet);
 
   static const Vector3F parseVector3F(const JSONArray* jsonArray);
 
@@ -59,6 +56,13 @@ private:
 public:
   static std::vector<Mesh*> parse(const JSONObject* jsonObject,
                                   const Planet* planet);
+
+  static Mesh* parseMesh(std::map<std::string, G3MMeshMaterial*>& materials,
+                         const JSONObject* jsonMesh,
+                         const Planet* planet);
+
+  static Mesh* parseMesh(const JSONObject* jsonMesh,
+                         const Planet* planet);
 
 };
 

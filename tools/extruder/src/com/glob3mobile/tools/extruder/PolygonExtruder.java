@@ -34,6 +34,7 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
+import org.glob3.mobile.generated.JSONGenerator;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.specific.Factory_JavaDesktop;
@@ -42,7 +43,6 @@ import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
-import com.glob3mobile.json.JSONUtils;
 import com.glob3mobile.tools.mesh.G3Mesh;
 import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
@@ -270,10 +270,11 @@ public class PolygonExtruder {
                                                final ExtrusionHandler handler) {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
+      final boolean depthTest = handler.getDepthTestFor(geoFeature);
 
       final FixedPolygon2DData fixedPolygon = fixPolygon2DData(coordinates, holesCoordinatesArray);
       polygons.add(new Extruder2DPolygon(geoFeature, fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray,
-               heights._lowerHeight, heights._upperHeight, material));
+               heights._lowerHeight, heights._upperHeight, material, depthTest));
    }
 
 
@@ -284,10 +285,11 @@ public class PolygonExtruder {
                                                final ExtrusionHandler handler) {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
+      final boolean depthTest = handler.getDepthTestFor(geoFeature);
 
       final FixedPolygon3DData fixedPolygon = fixPolygon3DData(coordinates, holesCoordinatesArray);
       polygons.add(new Extruder3DPolygon(geoFeature, fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray,
-               heights._lowerHeight, material));
+               heights._lowerHeight, material, depthTest));
    }
 
 
@@ -730,8 +732,8 @@ public class PolygonExtruder {
       logInfo("Saving meshes...");
       final long now = System.currentTimeMillis();
 
-      // final String json = JSONGenerator.generate(meshes.toJSON(), floatPrecision);
-      final String json = JSONUtils.toJSON(meshes.toJSON(), floatPrecision);
+      final String json = JSONGenerator.generate(meshes.toJSON(), floatPrecision);
+      //final String json = JSONUtils.toJSON(meshes.toJSON(), floatPrecision);
 
       try (final PrintWriter out = new PrintWriter(fileName)) {
          out.println(json);

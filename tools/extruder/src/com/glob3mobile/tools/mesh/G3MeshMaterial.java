@@ -13,7 +13,7 @@ import org.glob3.mobile.generated.URL;
 
 
 public class G3MeshMaterial {
-   private static final G3MeshMaterial DEFAULT_MATERIAL = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 1), true);
+   private static final G3MeshMaterial DEFAULT_MATERIAL = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 1));
 
 
    public static G3MeshMaterial defaultMaterial() {
@@ -21,29 +21,24 @@ public class G3MeshMaterial {
    }
 
 
-   public final Color   _color;
-   public final URL     _textureURL;
-   public final boolean _depthTest;
+   public final Color _color;
+   public final URL   _textureURL;
+
+
+   public G3MeshMaterial(final Color color) {
+      this(color, null);
+   }
+
+
+   public G3MeshMaterial(final URL textureURL) {
+      this(null, textureURL);
+   }
 
 
    public G3MeshMaterial(final Color color,
-                         final boolean depthTest) {
-      this(color, null, depthTest);
-   }
-
-
-   public G3MeshMaterial(final URL textureURL,
-                         final boolean depthTest) {
-      this(null, textureURL, depthTest);
-   }
-
-
-   private G3MeshMaterial(final Color color,
-                          final URL textureURL,
-                          final boolean depthTest) {
+                         final URL textureURL) {
       _color = color;
       _textureURL = textureURL;
-      _depthTest = depthTest;
 
       validate();
    }
@@ -57,7 +52,7 @@ public class G3MeshMaterial {
 
 
    public String getID() {
-      return getID(_color) + getID(_textureURL) + (_depthTest ? "T" : "F");
+      return getID(_color) + getID(_textureURL);
    }
 
 

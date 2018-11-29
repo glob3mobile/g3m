@@ -1274,12 +1274,6 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void cancel()
     {
-      if (_vectorSetOrNULL != null)
-      {
-        _vectorSetOrNULL._release();
-        _vectorSetOrNULL = null;
-      }
-    
       cancelTasks();
     
       if (_children != null)
@@ -1289,6 +1283,14 @@ public class VectorStreamingRenderer extends DefaultRenderer
           Node child = _children.get(i);
           child.cancel();
         }
+      }
+    
+      removeFeaturesSymbols();
+    
+      if (_vectorSetOrNULL != null)
+      {
+        _vectorSetOrNULL._release();
+        _vectorSetOrNULL = null;
       }
     }
 

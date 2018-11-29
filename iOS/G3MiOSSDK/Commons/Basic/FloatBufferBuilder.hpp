@@ -21,11 +21,6 @@ private:
   FloatBufferBuilder(const FloatBufferBuilder& that);
 
 protected:
-  enum CenterStrategy{
-    NO_CENTER,FIRST_VERTEX,GIVEN_CENTER
-  };
-
-
 #ifdef C_CODE
   std::vector<float> _values;
 #endif
@@ -37,8 +32,6 @@ protected:
 
     public FloatArrayList() {
       this(1024);
-      //      _array = IFactory.instance().getThreadLocalFloatArray();
-      //      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -67,7 +60,6 @@ protected:
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
-        //IFactory.instance().setThreadLocalFloatArray(_array);
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
@@ -83,19 +75,14 @@ protected:
   protected final FloatArrayList _values = new FloatArrayList();
 #endif
 
-  FloatBufferBuilder() {
-
-  }
+  FloatBufferBuilder();
 
 public:
   IFloatBuffer* create() const;
 
-  virtual ~FloatBufferBuilder() {
-  }
+  virtual ~FloatBufferBuilder();
 
-  size_t size() const {
-    return _values.size();
-  }
+  const size_t size() const;
 
   Vector2D getVector2D(int i) const;
   

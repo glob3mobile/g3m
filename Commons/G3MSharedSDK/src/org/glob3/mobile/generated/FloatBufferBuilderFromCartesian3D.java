@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 {
   private final CenterStrategy _centerStrategy;
@@ -67,7 +68,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
         setCenter(x, y, z);
       }
     }
-
+  
     if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back((float) x);
@@ -91,7 +92,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
         setCenter(x, y, z);
       }
     }
-
+  
     if (_centerStrategy == CenterStrategy.NO_CENTER)
     {
       _values.push_back(x);

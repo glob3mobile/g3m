@@ -27,24 +27,6 @@ public class FloatBufferBuilder
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  FloatBufferBuilder(FloatBufferBuilder that);
 
-  protected enum CenterStrategy
-  {
-    NO_CENTER,
-    FIRST_VERTEX,
-    GIVEN_CENTER;
-
-     public int getValue()
-     {
-        return this.ordinal();
-     }
-
-     public static CenterStrategy forValue(int value)
-     {
-        return values()[value];
-     }
-  }
-
-
 
   public final class FloatArrayList {
     private float[] _array;
@@ -52,8 +34,6 @@ public class FloatBufferBuilder
 
     public FloatArrayList() {
       this(1024);
-      //      _array = IFactory.instance().getThreadLocalFloatArray();
-      //      _size = 0;
     }
 
     public FloatArrayList(final int initialCapacity) {
@@ -82,7 +62,6 @@ public class FloatBufferBuilder
         final int newcap = ((_array.length * 3) >> 1) + 1;
         final float[] olddata = _array;
         _array = new float[newcap < mincap ? mincap : newcap];
-        //IFactory.instance().setThreadLocalFloatArray(_array);
         System.arraycopy(olddata, 0, _array, 0, _size);
       }
     }
@@ -99,12 +78,10 @@ public class FloatBufferBuilder
 
   protected FloatBufferBuilder()
   {
-
   }
 
   public final IFloatBuffer create()
   {
-    //return IFactory.instance().createFloatBuffer( _values.toArray() );
     return IFactory.instance().createFloatBuffer( _values._array, _values._size );
   }
 
@@ -119,14 +96,14 @@ public class FloatBufferBuilder
 
   public final Vector2D getVector2D(int i)
   {
-    int pos = i * 2;
-    return new Vector2D(_values.get(pos), _values.get(pos + 1));
+    final int i2 = i * 2;
+    return new Vector2D(_values.get(i2), _values.get(i2 + 1));
   }
 
   public final Vector3D getVector3D(int i)
   {
-    int pos = i * 3;
-    return new Vector3D(_values.get(pos), _values.get(pos + 1), _values.get(pos + 2));
+    final int i3 = i * 3;
+    return new Vector3D(_values.get(i3), _values.get(i3 + 1), _values.get(i3 + 2));
   }
 
 }

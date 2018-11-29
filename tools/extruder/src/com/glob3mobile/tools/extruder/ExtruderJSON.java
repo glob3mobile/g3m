@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector3D;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
@@ -162,9 +163,13 @@ public class ExtruderJSON {
 
 
    public static Map<String, Object> materialToJSON(final G3MeshMaterial material) {
-      final Map<String, Object> result = new LinkedHashMap<>(1);
-      result.put("color", colorToJSON(material._color));
-      result.put("depth_test", material._depthTest);
+      final Map<String, Object> result = new LinkedHashMap<>(2);
+      if (material._color != null) {
+         result.put("color", colorToJSON(material._color));
+      }
+      if (material._textureURL != null) {
+         result.put("texture_url", material._textureURL._path);
+      }
       return result;
    }
 
@@ -174,8 +179,13 @@ public class ExtruderJSON {
                                                final String name) {
       final Map<String, Object> json = (Map<String, Object>) properties.get(name);
       final Color color = jsonToColor((List<Float>) json.get("color"));
-      final boolean depthTest = (Boolean) json.get("depth_test");
-      return new G3MeshMaterial(color, depthTest);
+      final URL textureURL = jsonToURL((String) json.get("texture_url"));
+      return new G3MeshMaterial(color, textureURL);
+   }
+
+
+   private static URL jsonToURL(final String path) {
+      return (path == null) ? null : new URL(path);
    }
 
 

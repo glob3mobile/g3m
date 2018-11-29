@@ -10,6 +10,8 @@
 
 #include "FloatBufferBuilder.hpp"
 
+#include "CenterStrategy.hpp"
+
 
 class FloatBufferBuilderFromCartesian3D : public FloatBufferBuilder {
 private:
@@ -18,11 +20,7 @@ private:
   float _cy;
   float _cz;
 
-  void setCenter(double x, double y, double z) {
-    _cx = (float) x;
-    _cy = (float) y;
-    _cz = (float) z;
-  }
+  void setCenter(double x, double y, double z);
 
   FloatBufferBuilderFromCartesian3D(CenterStrategy centerStrategy,
                                     const Vector3D& center);
@@ -37,67 +35,9 @@ public:
 
   void add(const Vector3D& vector);
 
-  void add(double x, double y, double z) {
-    if (_centerStrategy ==
-#ifdef C_CODE
-        FIRST_VERTEX
-#else
-        CenterStrategy.FIRST_VERTEX
-#endif
-        ) {
-      if (_values.size() == 0) {
-        setCenter(x, y, z);
-      }
-    }
+  void add(double x, double y, double z);
 
-    if (_centerStrategy ==
-#ifdef C_CODE
-        NO_CENTER
-#else
-        CenterStrategy.NO_CENTER
-#endif
-        ) {
-      _values.push_back( (float) x );
-      _values.push_back( (float) y );
-      _values.push_back( (float) z );
-    }
-    else {
-      _values.push_back( (float) (x - _cx) );
-      _values.push_back( (float) (y - _cy) );
-      _values.push_back( (float) (z - _cz) );
-    }
-  }
-
-  void add(float x, float y, float z) {
-    if (_centerStrategy ==
-#ifdef C_CODE
-        FIRST_VERTEX
-#else
-        CenterStrategy.FIRST_VERTEX
-#endif
-        ) {
-      if (_values.size() == 0) {
-        setCenter(x, y, z);
-      }
-    }
-
-    if (_centerStrategy ==
-#ifdef C_CODE
-        NO_CENTER
-#else
-        CenterStrategy.NO_CENTER
-#endif
-        ) {
-      _values.push_back( x );
-      _values.push_back( y );
-      _values.push_back( z );
-    }
-    else {
-      _values.push_back( x - _cx );
-      _values.push_back( y - _cy );
-      _values.push_back( z - _cz );
-    }
-  }
+  void add(float x, float y, float z);
 
   Vector3D getCenter();
   
