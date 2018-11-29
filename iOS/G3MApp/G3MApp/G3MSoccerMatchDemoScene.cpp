@@ -165,7 +165,8 @@ public:
     }
     else {
       const JSONObject* object = jsonBaseObject->asObject();
-      parseMesh(object);
+      //parseMesh(object);
+      parsePoints(object);
       delete jsonBaseObject;
     }
 
@@ -243,9 +244,9 @@ void G3MSoccerMatchDemoScene::rawActivate(const G3MContext* context) {
 
   IDownloader* downloader = context->getDownloader();
   downloader->requestBuffer(//URL("file:///869491_points.json"),
-                            //URL("file:///870147_points.json"),
+                            URL("file:///870147_points.json"),
                             //URL("file:///869491_ball_heatmap_full.json"),
-                            URL("file:///870147_ball_heatmap_full.json"),
+                            //URL("file:///870147_ball_heatmap_full.json"),
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,
@@ -258,7 +259,8 @@ void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.475803, 0)),
+    //-2.475803
+  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.47590, 0)),
                                        AltitudeMode::ABSOLUTE,
                                        mesh);
   meshShape->setHeading(Angle::fromDegrees(21));
