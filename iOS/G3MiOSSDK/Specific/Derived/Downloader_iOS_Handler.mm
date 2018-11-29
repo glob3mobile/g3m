@@ -70,6 +70,8 @@
 {
   self = [super init];
   if (self) {
+    _lock = [[NSLock alloc] init];
+
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;

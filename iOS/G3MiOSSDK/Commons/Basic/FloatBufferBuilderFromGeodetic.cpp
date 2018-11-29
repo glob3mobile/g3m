@@ -5,11 +5,20 @@
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
 
-#include "EllipsoidalPlanet.hpp"
+#include "Planet.hpp"
 #include "Geodetic3D.hpp"
 #include "Geodetic2D.hpp"
 #include "Vector3D.hpp"
 
+
+FloatBufferBuilderFromGeodetic::FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
+                                                               const Planet* planet,
+                                                               const Vector3D& center):
+_planet(planet),
+_centerStrategy(centerStrategy)
+{
+  setCenter( center );
+}
 
 void FloatBufferBuilderFromGeodetic::setCenter(const Vector3D& center) {
   _cx = (float) center._x;
@@ -22,25 +31,13 @@ void FloatBufferBuilderFromGeodetic::add(const Angle& latitude,
                                          const double height) {
   const Vector3D vector = _planet->toCartesian(latitude, longitude, height);
 
-  if (_centerStrategy ==
-#ifdef C_CODE
-      FIRST_VERTEX
-#else
-      CenterStrategy.FIRST_VERTEX
-#endif
-      ) {
+  if (_centerStrategy == FIRST_VERTEX) {
     if (_values.size() == 0) {
       setCenter(vector);
     }
   }
 
-  if (_centerStrategy ==
-#ifdef C_CODE
-      NO_CENTER
-#else
-      CenterStrategy.NO_CENTER
-#endif
-      ) {
+  if (_centerStrategy == NO_CENTER) {
     _values.push_back( (float) vector._x );
     _values.push_back( (float) vector._y );
     _values.push_back( (float) vector._z );
@@ -70,24 +67,27 @@ _centerStrategy(centerStrategy)
   setCenter( _planet->toCartesian(center) );
 }
 
+FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithGivenCenter(const Planet* planet,
+                                                                                       const Vector3D& center) {
+  return new FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+}
+
+FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithGivenCenter(const Planet* planet,
+                                                                                       const Geodetic2D& center) {
+  return new FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+}
+
+FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithGivenCenter(const Planet* planet,
+                                                                                       const Geodetic3D& center) {
+  return new FloatBufferBuilderFromGeodetic(GIVEN_CENTER, planet, center);
+}
+
 FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithoutCenter(const Planet* planet) {
-  return new FloatBufferBuilderFromGeodetic(
-#ifdef C_CODE
-                                            NO_CENTER,
-#else
-                                            CenterStrategy.NO_CENTER,
-#endif
-                                            planet, Vector3D::ZERO);
+  return new FloatBufferBuilderFromGeodetic(NO_CENTER, planet, Vector3D::ZERO);
 }
 
 FloatBufferBuilderFromGeodetic* FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(const Planet* planet) {
-  return new FloatBufferBuilderFromGeodetic(
-#ifdef C_CODE
-                                            FIRST_VERTEX,
-#else
-                                            CenterStrategy.FIRST_VERTEX,
-#endif
-                                            planet, Vector3D::ZERO);
+  return new FloatBufferBuilderFromGeodetic(FIRST_VERTEX, planet, Vector3D::ZERO);
 }
 
 void FloatBufferBuilderFromGeodetic::add(const Geodetic3D& position) {

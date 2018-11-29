@@ -95,72 +95,6 @@ public class G3MMeshParser
     return result;
   }
 
-  private static Mesh parseMesh(java.util.HashMap<String, G3MMeshMaterial> materials, JSONObject jsonMesh, Planet planet)
-  {
-    if (jsonMesh == null)
-    {
-      return null;
-    }
-  
-    final String materialID = jsonMesh.getAsString("material", "");
-    if ( ! materials.containsKey(materialID))
-    {
-      ILogger.instance().logError("Can't find material \"%s\"", materialID);
-      return null;
-    }
-    G3MMeshMaterial material = materials.get(materialID);
-  
-    final int primitive = toGLPrimitive(jsonMesh.getAsString("primitive", "Triangles"));
-    final float pointSize = (float) jsonMesh.getAsNumber("pointSize", 1);
-    final float lineWidth = (float) jsonMesh.getAsNumber("lineWidth", 1);
-    final boolean depthTest = jsonMesh.getAsBoolean("depthTest", true);
-    final String verticesFormat = jsonMesh.getAsString("verticesFormat", "Cartesian");
-    final boolean isGeodetic = (verticesFormat.equals("Geodetic"));
-  
-    double centerX;
-    double centerY;
-    double centerZ;
-    IFloatBuffer vertices;
-    if (isGeodetic)
-    {
-      final Geodetic3D geodeticCenter = parseGeodetic3D(jsonMesh.getAsArray("center"));
-  
-      final Vector3D cartesian = planet.toCartesian(geodeticCenter);
-  
-      centerX = cartesian._x;
-      centerY = cartesian._y;
-      centerZ = cartesian._z;
-  
-      vertices = parseGeodeticFloatBuffer(jsonMesh.getAsArray("vertices"), geodeticCenter, new Vector3D(centerX, centerY, centerZ), planet);
-    }
-    else
-    {
-      final Vector3F center = parseVector3F(jsonMesh.getAsArray("center"));
-      centerX = center._x;
-      centerY = center._y;
-      centerZ = center._z;
-  
-      vertices = parseFloatBuffer(jsonMesh.getAsArray("vertices"));
-    }
-  
-    IFloatBuffer normals = parseFloatBuffer(jsonMesh.getAsArray("normals"));
-    IFloatBuffer colors = parseFloatBuffer(jsonMesh.getAsArray("colors"));
-  // #warning TODO texCoords
-    //IFloatBuffer* texCoords = parseFloatBuffer( jsonMesh->getAsArray("texCoords") );
-  
-    IShortBuffer indices = parseShortBuffer(jsonMesh.getAsArray("indices"));
-  
-    Mesh mesh;
-    if (indices == null)
-    {
-      mesh = new DirectMesh(primitive, true, new Vector3D(centerX, centerY, centerZ), vertices, lineWidth, pointSize, new Color(material._color), colors, depthTest, normals); // flatColor -  owner
-    }
-    else
-    {
-      mesh = new IndexedMesh(primitive, new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, new Color(material._color), colors, depthTest, normals); // flatColor
-    }
-    return mesh;
-  }
 
   private static Vector3F parseVector3F(JSONArray jsonArray)
   {
@@ -300,6 +234,80 @@ public class G3MMeshParser
     }
   
     return meshes;
+  }
+
+  public static Mesh parseMesh(java.util.HashMap<String, G3MMeshMaterial> materials, JSONObject jsonMesh, Planet planet)
+  {
+    if (jsonMesh == null)
+    {
+      return null;
+    }
+  
+    final String materialID = jsonMesh.getAsString("material", "<missing>");
+    G3MMeshMaterial material = materials.get(materialID);
+    if (material == null)
+    {
+      ILogger.instance().logError("Can't find material \"%s\"", materialID);
+    }
+  
+    final int primitive = toGLPrimitive(jsonMesh.getAsString("primitive", "Triangles"));
+    final float pointSize = (float) jsonMesh.getAsNumber("pointSize", 1);
+    final float lineWidth = (float) jsonMesh.getAsNumber("lineWidth", 1);
+    final boolean depthTest = jsonMesh.getAsBoolean("depthTest", true);
+    final String verticesFormat = jsonMesh.getAsString("verticesFormat", "Cartesian");
+    final boolean isGeodetic = (verticesFormat.equals("Geodetic"));
+  
+    double centerX;
+    double centerY;
+    double centerZ;
+    IFloatBuffer vertices;
+    if (isGeodetic)
+    {
+      final Geodetic3D geodeticCenter = parseGeodetic3D(jsonMesh.getAsArray("center"));
+  
+      final Vector3D cartesian = planet.toCartesian(geodeticCenter);
+  
+      centerX = cartesian._x;
+      centerY = cartesian._y;
+      centerZ = cartesian._z;
+  
+      vertices = parseGeodeticFloatBuffer(jsonMesh.getAsArray("vertices"), geodeticCenter, new Vector3D(centerX, centerY, centerZ), planet);
+    }
+    else
+    {
+      final Vector3F center = parseVector3F(jsonMesh.getAsArray("center"));
+      centerX = center._x;
+      centerY = center._y;
+      centerZ = center._z;
+  
+      vertices = parseFloatBuffer(jsonMesh.getAsArray("vertices"));
+    }
+  
+    IFloatBuffer normals = parseFloatBuffer(jsonMesh.getAsArray("normals"));
+    IFloatBuffer colors = parseFloatBuffer(jsonMesh.getAsArray("colors"));
+  // #warning TODO texCoords
+    //IFloatBuffer* texCoords = parseFloatBuffer( jsonMesh->getAsArray("texCoords") );
+  
+    IShortBuffer indices = parseShortBuffer(jsonMesh.getAsArray("indices"));
+  
+    final Color flatColor = (material == null) ? null : new Color(material._color);
+  
+    Mesh mesh;
+    if (indices == null)
+    {
+      mesh = new DirectMesh(primitive, true, new Vector3D(centerX, centerY, centerZ), vertices, lineWidth, pointSize, flatColor, colors, depthTest, normals); // owner
+    }
+    else
+    {
+      mesh = new IndexedMesh(primitive, new Vector3D(centerX, centerY, centerZ), vertices, true, indices, true, lineWidth, pointSize, flatColor, colors, depthTest, normals);
+    }
+    return mesh;
+  }
+
+  public static Mesh parseMesh(JSONObject jsonMesh, Planet planet)
+  {
+    java.util.HashMap<String, G3MMeshMaterial> materials = new java.util.HashMap<String, G3MMeshMaterial>();
+    return parseMesh(materials, jsonMesh, planet);
   }
 
 }

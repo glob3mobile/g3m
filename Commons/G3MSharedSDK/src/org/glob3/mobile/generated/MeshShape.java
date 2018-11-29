@@ -31,7 +31,7 @@ public class MeshShape extends AbstractMeshShape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
-    throw new RuntimeException("Not implemented!");
+    return new java.util.ArrayList<Double>();
   }
 
 }

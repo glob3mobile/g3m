@@ -55,7 +55,8 @@ public class G3Mesh {
                                             final List<Color> colors,
                                             final List<Vector2F> texCoords,
                                             final List<Short> indices,
-                                            final G3MeshMaterial material) {
+                                            final G3MeshMaterial material,
+                                            final boolean depthTest) {
       return new G3Mesh( //
                Primitive.TRIANGLES, //
                1, // pointSize
@@ -67,7 +68,35 @@ public class G3Mesh {
                colors, //
                texCoords, //
                indices, //
-               material //
+               material, //
+               depthTest //
+      );
+
+   }
+
+
+   public static G3Mesh createTriangleStripMesh(final VerticesFormat verticesFormat,
+                                                final Vector3D center,
+                                                final List<Vector3F> vertices,
+                                                final List<Vector3F> normals,
+                                                final List<Color> colors,
+                                                final List<Vector2F> texCoords,
+                                                final List<Short> indices,
+                                                final G3MeshMaterial material,
+                                                final boolean depthTest) {
+      return new G3Mesh( //
+               Primitive.TRIANGLE_STRIP, //
+               1, // pointSize
+               1, // lineWidth
+               verticesFormat, //
+               center, //
+               vertices, //
+               normals, //
+               colors, //
+               texCoords, //
+               indices, //
+               material, //
+               depthTest //
       );
 
    }
@@ -158,7 +187,8 @@ public class G3Mesh {
                newColors.isEmpty() ? null : new ArrayList<>(newColors), //
                newTexCoords.isEmpty() ? null : new ArrayList<>(newTexCoords), //
                new ArrayList<>(newIndices), //
-               first._material);
+               first._material, //
+               first._depthTest);
       newMeshes.add(newMesh);
 
       newVertices.clear();
@@ -227,6 +257,7 @@ public class G3Mesh {
    private final List<Vector2F>        _texCoords;
    private final List<Short>           _indices;
    private final G3MeshMaterial        _material;
+   private final boolean               _depthTest;
 
 
    private G3Mesh(final Primitive primitive,
@@ -239,7 +270,8 @@ public class G3Mesh {
                   final List<Color> colors,
                   final List<Vector2F> texCoords,
                   final List<Short> indices,
-                  final G3MeshMaterial material) {
+                  final G3MeshMaterial material,
+                  final boolean depthTest) {
       _primitive = primitive;
       _pointSize = pointSize;
       _lineWidth = lineWidth;
@@ -251,7 +283,7 @@ public class G3Mesh {
       _texCoords = texCoords;
       _indices = indices;
       _material = material;
-
+      _depthTest = depthTest;
       validate();
    }
 
@@ -369,7 +401,9 @@ public class G3Mesh {
    public Map<String, Object> toJSON() {
       final Map<String, Object> result = new LinkedHashMap<>();
 
-      result.put("material", _material.getID());
+      if (_material != null) {
+         result.put("material", _material.getID());
+      }
       if (_primitive != G3Mesh.Primitive.TRIANGLES) {
          result.put("primitive", _primitive._name);
       }
@@ -379,9 +413,8 @@ public class G3Mesh {
       if (_lineWidth != 1) {
          result.put("lineWidth", _lineWidth);
       }
-      final boolean depthTest = _material._depthTest;
-      if (!depthTest) {
-         result.put("depthTest", depthTest);
+      if (!_depthTest) {
+         result.put("depthTest", _depthTest);
       }
       if (_verticesFormat != G3Mesh.VerticesFormat.CARTESIAN) {
          result.put("verticesFormat", _verticesFormat._name);

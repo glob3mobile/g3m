@@ -165,7 +165,6 @@ public class Color
     return Color.newFromRGBA(r, g, b, a);
   }
 
-
   public static Color fromRGBA255(int red, int green, int blue, int alpha)
   {
     return new Color(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
@@ -247,8 +246,6 @@ public class Color
     return middle.mixedWith(to, (d - 0.5f) * 2);
   }
 
-
-
   public static final Color TRANSPARENT = Color.fromRGBA(0, 0, 0, 0);
   public static final Color BLACK = Color.fromRGBA(0, 0, 0, 1);
   public static final Color GRAY = Color.fromRGBA(0.5f, 0.5f, 0.5f, 1);
@@ -259,9 +256,9 @@ public class Color
   public static final Color CYAN = Color.fromRGBA(0, 1, 1, 1);
   public static final Color MAGENTA = Color.fromRGBA(1, 0, 1, 1);
   public static final Color RED = Color.fromRGBA(1, 0, 0, 1);
+  public static final Color ORANGE = Color.fromRGBA(1, 0.5f, 0, 1);
   public static final Color GREEN = Color.fromRGBA(0, 1, 0, 1);
   public static final Color BLUE = Color.fromRGBA(0, 0, 1, 1);
-
 
   public static Color transparent()
   {
@@ -311,6 +308,11 @@ public class Color
   public static Color red()
   {
     return RED;
+  }
+
+  public static Color orange()
+  {
+    return ORANGE;
   }
 
   public static Color green()

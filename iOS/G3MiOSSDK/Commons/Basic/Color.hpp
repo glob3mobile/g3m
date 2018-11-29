@@ -34,7 +34,7 @@ private:
 
   }
     
-  static bool isValidHex(const std::string &hex) {      
+  static bool isValidHex(const std::string& hex) {
       if (hex[0] == '#') {
           if (hex.length() != 7) {
               return false;
@@ -56,20 +56,24 @@ private:
       return true;
   }
   
-  static Color* hexToRGB(std::string hex) {
+  static Color hexToRGB(const std::string& hex) {
       if (!isValidHex(hex)) {
           ILogger::instance()->logError("The value received is not avalid hex string!");
       }
       
       if (hex[0] == '#') {
-          hex.erase(0,1);
+        return hexToRGB(hex.substr(1));
       }
       
-      std::string R = hex.substr(0, 2);
-      std::string G = hex.substr(2, 2);
-      std::string B = hex.substr(4, 2);
-      
-      return new Color((float)IMathUtils::instance()->parseIntHex(R)/255,(float)IMathUtils::instance()->parseIntHex(G)/255,(float)IMathUtils::instance()->parseIntHex(B)/255,1);
+      const std::string r = hex.substr(0, 2);
+      const std::string g = hex.substr(2, 2);
+      const std::string b = hex.substr(4, 2);
+
+    const IMathUtils* mu = IMathUtils::instance();
+    return Color::fromRGBA255(mu->parseIntHex(r),
+                              mu->parseIntHex(g),
+                              mu->parseIntHex(b),
+                              255);
   }
 
 public:
@@ -99,7 +103,6 @@ public:
 
   static Color* parse(const std::string& str);
 
-
   static Color fromRGBA255(const int red,
                            const int green,
                            const int blue,
@@ -124,7 +127,7 @@ public:
     return new Color(red, green, blue, alpha);
   }
     
-  static Color* newFromHEX(const std::string hex){
+  static Color fromHEX(const std::string hex){
       return hexToRGB(hex);
   }
 
@@ -138,8 +141,6 @@ public:
                                 const Color& to,
                                 float d);
 
-
-
   static const Color TRANSPARENT;
   static const Color BLACK;
   static const Color GRAY;
@@ -150,9 +151,9 @@ public:
   static const Color CYAN;
   static const Color MAGENTA;
   static const Color RED;
+  static const Color ORANGE;
   static const Color GREEN;
   static const Color BLUE;
-
 
   static Color transparent() {
     return TRANSPARENT;
@@ -192,6 +193,10 @@ public:
 
   static Color red() {
     return RED;
+  }
+
+  static Color orange() {
+    return ORANGE;
   }
 
   static Color green() {

@@ -23,6 +23,7 @@ public abstract class ExtruderPolygon {
    private final GEOFeature     _geoFeature;
    private final double         _lowerHeight;
    private final G3MeshMaterial _material;
+   private final boolean        _depthTest;
    private Geodetic2D           _average;
    private final double         _minHeight;
 
@@ -30,10 +31,12 @@ public abstract class ExtruderPolygon {
    protected ExtruderPolygon(final GEOFeature geoFeature,
                              final double lowerHeight,
                              final G3MeshMaterial material,
+                             final boolean depthTest,
                              final double minHeight) {
       _geoFeature = geoFeature;
       _lowerHeight = lowerHeight;
       _material = material;
+      _depthTest = depthTest;
       _minHeight = minHeight;
    }
 
@@ -75,7 +78,7 @@ public abstract class ExtruderPolygon {
             final Wall exteriorWall = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
             return new Building(this, getAverage(), _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall,
-                     interiorWalls, _material);
+                     interiorWalls, _material, _depthTest);
          }
       }
       catch (final NullPointerException e) {

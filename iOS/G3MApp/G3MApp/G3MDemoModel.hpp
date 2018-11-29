@@ -34,7 +34,6 @@ private:
 
   G3MDemoListener* _listener;
 
-
   LayerSet*                    _layerSet;
   MeshRenderer*                _meshRenderer;
   ShapesRenderer*              _shapesRenderer;

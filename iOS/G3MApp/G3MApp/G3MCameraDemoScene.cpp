@@ -101,16 +101,6 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
 //                                  Geodetic3D::fromDegrees(39.46693, -6.380488, 0),
 //                                  ABSOLUTE);
 
-  shapesRenderer->loadJSONSceneJS(URL("file:///intramuros.json"),
-                                  "file:///textures/", // uriPrefix
-                                  false, // isTransparent
-                                  SceneJSParserParameters(true, // depthTest
-                                                          true, // generateMipmap
-                                                          GLTextureParameterValue::repeat(),
-                                                          GLTextureParameterValue::mirroredRepeat()),
-                                  Geodetic3D::fromDegrees(39.473353, -6.370689, 0),
-                                  ABSOLUTE);
-
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
                                   "file:///",
                                   false, // isTransparent

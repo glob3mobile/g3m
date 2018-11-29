@@ -23,6 +23,7 @@ const Color Color::YELLOW      = Color::fromRGBA(1, 1, 0, 1);
 const Color Color::CYAN        = Color::fromRGBA(0, 1, 1, 1);
 const Color Color::MAGENTA     = Color::fromRGBA(1, 0, 1, 1);
 const Color Color::RED         = Color::fromRGBA(1, 0, 0, 1);
+const Color Color::ORANGE      = Color::fromRGBA(1, 0.5f, 0, 1);
 const Color Color::GREEN       = Color::fromRGBA(0, 1, 0, 1);
 const Color Color::BLUE        = Color::fromRGBA(0, 0, 1, 1);
 

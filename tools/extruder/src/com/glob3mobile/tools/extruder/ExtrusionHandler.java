@@ -23,6 +23,9 @@ public interface ExtrusionHandler {
    G3MeshMaterial getMaterialFor(GEOFeature geoFeature);
 
 
+   boolean getDepthTestFor(GEOFeature geoFeature);
+
+
    Heigths getHeightsFor(GEOFeature geoFeature);
 
 
@@ -36,5 +39,6 @@ public interface ExtrusionHandler {
 
 
    void onMeshCollection(G3MeshCollection meshes);
+
 
 }

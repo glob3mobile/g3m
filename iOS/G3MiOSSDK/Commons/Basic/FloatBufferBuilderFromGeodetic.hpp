@@ -9,6 +9,7 @@
 #define G3MiOSSDK_FloatBufferBuilderFromGeodetic
 
 #include "FloatBufferBuilder.hpp"
+#include "CenterStrategy.hpp"
 
 class Planet;
 class Geodetic2D;
@@ -18,7 +19,6 @@ class Angle;
 
 class FloatBufferBuilderFromGeodetic : public FloatBufferBuilder {
 private:
-
   FloatBufferBuilderFromGeodetic(const FloatBufferBuilderFromGeodetic& that);
 
   const CenterStrategy _centerStrategy;
@@ -32,12 +32,7 @@ private:
 
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
                                  const Planet* planet,
-                                 const Vector3D& center):
-  _planet(planet),
-  _centerStrategy(centerStrategy)
-  {
-    setCenter( center );
-  }
+                                 const Vector3D& center);
 
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
                                  const Planet* planet,
@@ -54,37 +49,13 @@ public:
   static FloatBufferBuilderFromGeodetic* builderWithFirstVertexAsCenter(const Planet* planet);
 
   static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
-                                                                const Vector3D& center) {
-    return new FloatBufferBuilderFromGeodetic(
-#ifdef C_CODE
-                                              GIVEN_CENTER,
-#else
-                                              CenterStrategy.GIVEN_CENTER,
-#endif
-                                              planet, center);
-  }
+                                                                const Vector3D& center);
 
   static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
-                                                                const Geodetic2D& center) {
-    return new FloatBufferBuilderFromGeodetic(
-#ifdef C_CODE
-                                              GIVEN_CENTER,
-#else
-                                              CenterStrategy.GIVEN_CENTER,
-#endif
-                                              planet, center);
-  }
+                                                                const Geodetic2D& center);
 
   static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
-                                                                const Geodetic3D& center) {
-    return new FloatBufferBuilderFromGeodetic(
-#ifdef C_CODE
-                                              GIVEN_CENTER,
-#else
-                                              CenterStrategy.GIVEN_CENTER,
-#endif
-                                              planet, center);
-  }
+                                                                const Geodetic3D& center);
 
   void add(const Angle& latitude,
            const Angle& longitude,

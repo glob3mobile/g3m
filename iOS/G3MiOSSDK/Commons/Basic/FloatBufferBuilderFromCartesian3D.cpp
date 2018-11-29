@@ -18,39 +18,66 @@ _centerStrategy(centerStrategy)
   setCenter(center._x, center._y, center._z);
 }
 
+void FloatBufferBuilderFromCartesian3D::setCenter(double x, double y, double z) {
+  _cx = (float) x;
+  _cy = (float) y;
+  _cz = (float) z;
+}
+
 Vector3D FloatBufferBuilderFromCartesian3D::getCenter() {
   return Vector3D(_cx, _cy, _cz);
 }
 
 FloatBufferBuilderFromCartesian3D* FloatBufferBuilderFromCartesian3D::builderWithoutCenter() {
-#ifdef C_CODE
   return new FloatBufferBuilderFromCartesian3D(NO_CENTER, Vector3D::ZERO);
-#endif
-#ifdef JAVA_CODE
-  return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.ZERO);
-#endif
 }
 
 FloatBufferBuilderFromCartesian3D* FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter() {
-#ifdef C_CODE
   return new FloatBufferBuilderFromCartesian3D(FIRST_VERTEX, Vector3D::ZERO);
-#endif
-#ifdef JAVA_CODE
-  return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.ZERO);
-#endif
 }
 
 FloatBufferBuilderFromCartesian3D* FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(const Vector3D& center) {
-#ifdef C_CODE
   return new FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
-#endif
-#ifdef JAVA_CODE
-  return new FloatBufferBuilderFromCartesian3D(CenterStrategy.GIVEN_CENTER, center);
-#endif
 }
 
 void FloatBufferBuilderFromCartesian3D::add(const Vector3D& vector) {
-  add(vector._x,
-      vector._y,
-      vector._z);
+  add(vector._x, vector._y, vector._z);
+}
+
+void FloatBufferBuilderFromCartesian3D::add(double x, double y, double z) {
+  if (_centerStrategy == FIRST_VERTEX) {
+    if (_values.size() == 0) {
+      setCenter(x, y, z);
+    }
+  }
+
+  if (_centerStrategy == NO_CENTER) {
+    _values.push_back( (float) x );
+    _values.push_back( (float) y );
+    _values.push_back( (float) z );
+  }
+  else {
+    _values.push_back( (float) (x - _cx) );
+    _values.push_back( (float) (y - _cy) );
+    _values.push_back( (float) (z - _cz) );
+  }
+}
+
+void FloatBufferBuilderFromCartesian3D::add(float x, float y, float z) {
+  if (_centerStrategy == FIRST_VERTEX) {
+    if (_values.size() == 0) {
+      setCenter(x, y, z);
+    }
+  }
+
+  if (_centerStrategy == NO_CENTER) {
+    _values.push_back( x );
+    _values.push_back( y );
+    _values.push_back( z );
+  }
+  else {
+    _values.push_back( x - _cx );
+    _values.push_back( y - _cy );
+    _values.push_back( z - _cz );
+  }
 }
