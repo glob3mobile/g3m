@@ -51,8 +51,8 @@ std::map<std::string, G3MMeshMaterial*> G3MMeshParser::parseMaterials(const JSON
     for (size_t i = 0; i < materialsSize; i++) {
       const JSONObject* jsonMaterial = jsonMaterials->getAsObject(i);
 
-      const std::string id = jsonMaterial->getAsString("id")->value();
-      const JSONArray* jsonColor = jsonMaterial->getAsArray("color");
+      const std::string id             = jsonMaterial->getAsString("id")->value();
+      const JSONArray*  jsonColor      = jsonMaterial->getAsArray("color");
       const JSONString* jsonTextureURL = jsonMaterial->getAsString("textureURL");
 
       result[id] = new G3MMeshMaterial(id,
@@ -171,6 +171,12 @@ int G3MMeshParser::toGLPrimitive(const std::string& primitive) {
   }
 }
 
+Mesh* G3MMeshParser::parseMesh(const JSONObject* jsonMesh,
+                               const Planet* planet) {
+  std::map<std::string, G3MMeshMaterial*> materials;
+  return parseMesh(materials, jsonMesh, planet);
+}
+
 Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& materials,
                                const JSONObject* jsonMesh,
                                const Planet* planet) {
@@ -178,12 +184,11 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
     return NULL;
   }
 
-  const std::string materialID = jsonMesh->getAsString("material", "");
-  if (materials.find(materialID) == materials.end()) {
-    ILogger::instance()->logError("Can't find material \"%s\"", materialID.c_str());
-    return NULL;
-  }
+  const std::string materialID = jsonMesh->getAsString("material", "<missing>");
   G3MMeshMaterial* material = materials[materialID];
+  if (material == NULL) {
+    ILogger::instance()->logError("Can't find material \"%s\"", materialID.c_str());
+  }
 
   const int         primitive      = toGLPrimitive( jsonMesh->getAsString("primitive", "Triangles") );
   const float       pointSize      = (float) jsonMesh->getAsNumber("pointSize", 1);
@@ -226,6 +231,8 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
 
   IShortBuffer* indices   = parseShortBuffer( jsonMesh->getAsArray("indices") );
 
+  const Color* flatColor = (material == NULL) ? NULL : new Color(material->_color);
+
   Mesh* mesh;
   if (indices == NULL) {
     mesh = new DirectMesh(primitive,
@@ -234,7 +241,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
                           vertices,
                           lineWidth,
                           pointSize,
-                          new Color(material->_color), // flatColor
+                          flatColor,
                           colors,
                           depthTest,
                           normals);
@@ -248,7 +255,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
                            true,
                            lineWidth,
                            pointSize,
-                           new Color(material->_color), // flatColor
+                           flatColor,
                            colors,
                            depthTest,
                            normals);

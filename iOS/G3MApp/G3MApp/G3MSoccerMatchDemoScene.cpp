@@ -29,6 +29,7 @@
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/MeshShape.hpp>
 #include <G3MiOSSDK/Color.hpp>
+#include <G3MiOSSDK/G3MMeshParser.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -65,6 +66,11 @@ public:
     delete _buffer;
     delete _mesh1;
     delete _mesh2;
+  }
+
+  void parseMesh(const JSONObject* jsonObject) {
+    Mesh* mesh = G3MMeshParser::parseMesh(jsonObject, NULL);
+    _mesh1 = mesh;
   }
 
   void parse(const JSONObject* jsonObject) {
@@ -151,6 +157,8 @@ public:
     const JSONBaseObject* jsonBaseObject = context->getJSONParser()->instance()->parse(_buffer,
                                                                                        false // nullAsObject
                                                                                        );
+    delete _buffer;
+    _buffer = NULL;
 
     if (jsonBaseObject == NULL) {
       ILogger::instance()->logError("Can't parse \"%s\" (1)", _url._path.c_str());
@@ -161,8 +169,6 @@ public:
       delete jsonBaseObject;
     }
 
-    delete _buffer;
-    _buffer = NULL;
   }
 
   void onPostExecute(const G3MContext* context) {
@@ -236,8 +242,9 @@ void G3MSoccerMatchDemoScene::rawActivate(const G3MContext* context) {
 
 
   IDownloader* downloader = context->getDownloader();
-  downloader->requestBuffer(//URL("file:///869491_points.json"),
-                            URL("file:///870147_points.json"),
+  downloader->requestBuffer(URL("file:///869491_points.json"),
+                            //URL("file:///870147_points.json"),
+                            //URL("file:///869491_ball_heatmap_full.json"),
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,

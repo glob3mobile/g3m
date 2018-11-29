@@ -28,10 +28,10 @@ public class AirspaceExtrusion {
                ExtrusionHandler {
 
 
-      private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f), false);
-      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f), false);
-      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f), false);
-      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f), false);
+      private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
+      private static final G3MeshMaterial MATERIAL_2 = new G3MeshMaterial(Color.fromRGBA(0, 1, 1, 0.5f));
+      private static final G3MeshMaterial MATERIAL_3 = new G3MeshMaterial(Color.fromRGBA(1, 0, 1, 0.5f));
+      private static final G3MeshMaterial MATERIAL_4 = new G3MeshMaterial(Color.fromRGBA(1, 0, 0, 0.5f));
 
 
       private static double toMeter(final JSONObject properties,
@@ -74,6 +74,12 @@ public class AirspaceExtrusion {
          else {
             return MATERIAL_4;
          }
+      }
+
+
+      @Override
+      public boolean getDepthTestFor(final GEOFeature geoFeature) {
+         return false;
       }
 
 

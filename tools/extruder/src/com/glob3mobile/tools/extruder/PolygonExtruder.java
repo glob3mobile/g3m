@@ -270,10 +270,11 @@ public class PolygonExtruder {
                                                final ExtrusionHandler handler) {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
+      final boolean depthTest = handler.getDepthTestFor(geoFeature);
 
       final FixedPolygon2DData fixedPolygon = fixPolygon2DData(coordinates, holesCoordinatesArray);
       polygons.add(new Extruder2DPolygon(geoFeature, fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray,
-               heights._lowerHeight, heights._upperHeight, material));
+               heights._lowerHeight, heights._upperHeight, material, depthTest));
    }
 
 
@@ -284,10 +285,11 @@ public class PolygonExtruder {
                                                final ExtrusionHandler handler) {
       final Heigths heights = handler.getHeightsFor(geoFeature);
       final G3MeshMaterial material = handler.getMaterialFor(geoFeature);
+      final boolean depthTest = handler.getDepthTestFor(geoFeature);
 
       final FixedPolygon3DData fixedPolygon = fixPolygon3DData(coordinates, holesCoordinatesArray);
       polygons.add(new Extruder3DPolygon(geoFeature, fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray,
-               heights._lowerHeight, material));
+               heights._lowerHeight, material, depthTest));
    }
 
 
