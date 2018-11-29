@@ -73,6 +73,31 @@ public class G3Mesh {
    }
 
 
+   public static G3Mesh createTriangleStripMesh(final VerticesFormat verticesFormat,
+                                                final Vector3D center,
+                                                final List<Vector3F> vertices,
+                                                final List<Vector3F> normals,
+                                                final List<Color> colors,
+                                                final List<Vector2F> texCoords,
+                                                final List<Short> indices,
+                                                final G3MeshMaterial material) {
+      return new G3Mesh( //
+               Primitive.TRIANGLE_STRIP, //
+               1, // pointSize
+               1, // lineWidth
+               verticesFormat, //
+               center, //
+               vertices, //
+               normals, //
+               colors, //
+               texCoords, //
+               indices, //
+               material //
+      );
+
+   }
+
+
    public static List<G3Mesh> consolidate(final List<G3Mesh> oldMeshes) {
       if ((oldMeshes == null) || oldMeshes.isEmpty()) {
          return Collections.emptyList();
@@ -369,7 +394,9 @@ public class G3Mesh {
    public Map<String, Object> toJSON() {
       final Map<String, Object> result = new LinkedHashMap<>();
 
-      result.put("material", _material.getID());
+      if (_material != null) {
+         result.put("material", _material.getID());
+      }
       if (_primitive != G3Mesh.Primitive.TRIANGLES) {
          result.put("primitive", _primitive._name);
       }
@@ -379,9 +406,11 @@ public class G3Mesh {
       if (_lineWidth != 1) {
          result.put("lineWidth", _lineWidth);
       }
-      final boolean depthTest = _material._depthTest;
-      if (!depthTest) {
-         result.put("depthTest", depthTest);
+      if (_material != null) {
+         final boolean depthTest = _material._depthTest;
+         if (!depthTest) {
+            result.put("depthTest", depthTest);
+         }
       }
       if (_verticesFormat != G3Mesh.VerticesFormat.CARTESIAN) {
          result.put("verticesFormat", _verticesFormat._name);
