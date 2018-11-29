@@ -63,14 +63,15 @@ public class Color
 
       if (hex.charAt(0) == '#')
       {
-          hex = hex.substring(0, 0) + hex.substring(0 + 1);
+        return hexToRGB(hex.substring(1));
       }
 
-      String R = hex.substring(0, 2);
-      String G = hex.substring(2, 4);
-      String B = hex.substring(4, 6);
+      final String r = hex.substring(0, 2);
+      final String g = hex.substring(2, 4);
+      final String b = hex.substring(4, 6);
 
-      return new Color((float)IMathUtils.instance().parseIntHex(R)/255, (float)IMathUtils.instance().parseIntHex(G)/255, (float)IMathUtils.instance().parseIntHex(B)/255, 1);
+    final IMathUtils mu = IMathUtils.instance();
+    return Color.fromRGBA255(mu.parseIntHex(r), mu.parseIntHex(g), mu.parseIntHex(b), 255);
   }
 
   public final float _red;
@@ -180,7 +181,7 @@ public class Color
     return new Color(red, green, blue, alpha);
   }
 
-  public static Color newFromHEX(String hex)
+  public static Color fromHEX(String hex)
   {
       return hexToRGB(hex);
   }
