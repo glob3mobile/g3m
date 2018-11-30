@@ -34,7 +34,6 @@ import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.JSONGenerator;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.specific.Factory_JavaDesktop;
@@ -43,6 +42,7 @@ import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
+import com.glob3mobile.json.JSONUtils;
 import com.glob3mobile.tools.mesh.G3Mesh;
 import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
@@ -732,8 +732,8 @@ public class PolygonExtruder {
       logInfo("Saving meshes...");
       final long now = System.currentTimeMillis();
 
-      final String json = JSONGenerator.generate(meshes.toJSON(), floatPrecision);
-      //final String json = JSONUtils.toJSON(meshes.toJSON(), floatPrecision);
+      //final String json = JSONGenerator.generate(meshes.toJSON(), floatPrecision);
+      final String json = JSONUtils.toJSON(meshes.toJSON(), floatPrecision);
 
       try (final PrintWriter out = new PrintWriter(fileName)) {
          out.println(json);
