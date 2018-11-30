@@ -2,10 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.IThreadUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -13,17 +9,21 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.IThreadUtils;
+
 
 public final class ThreadUtils_Android
-   extends
-      IThreadUtils {
+         extends
+            IThreadUtils {
 
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
-   private boolean                  _running             = true;
+   private boolean                  _running = true;
 
-   private final List<Runnable>     _backgroundQueue     = new ArrayList<Runnable>();
-   private final List<Runnable>     _rendererThreadQueue = new ArrayList<Runnable>();
+   private final List<Runnable> _backgroundQueue     = new ArrayList<Runnable>();
+   private final List<Runnable> _rendererThreadQueue = new ArrayList<Runnable>();
 
 
    public ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
@@ -53,7 +53,7 @@ public final class ThreadUtils_Android
       final Runnable runnable = new Runnable() {
          @Override
          public void run() {
-            task.run(_context);
+            task.run(getContext());
             if (autoDelete) {
                task.dispose();
             }
@@ -75,7 +75,7 @@ public final class ThreadUtils_Android
       final Runnable runnable = new Runnable() {
          @Override
          public void run() {
-            task.run(_context);
+            task.run(getContext());
             if (autoDelete) {
                task.dispose();
             }
