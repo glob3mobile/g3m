@@ -10,18 +10,20 @@
 #define __G3MiOSSDK__GEORenderer__
 
 #include "DefaultRenderer.hpp"
-#include "DownloadPriority.hpp"
-#include "URL.hpp"
-#include "TimeInterval.hpp"
+
 #include <vector>
 
-class GEOObject;
+#include "URL.hpp"
+#include "TimeInterval.hpp"
+
 class GEOSymbolizer;
-class MeshRenderer;
-class MarksRenderer;
-class ShapesRenderer;
-class GEOVectorLayer;
 class GEORenderer_ObjectSymbolizerPair;
+class MeshRenderer;
+class ShapesRenderer;
+class MarksRenderer;
+class GEOVectorLayer;
+class GEOObject;
+
 
 class GEORenderer : public DefaultRenderer {
 private:
@@ -61,19 +63,18 @@ private:
     }
   };
 
+
   void drainLoadQueue();
   
   void cleanLoadQueue();
 
-
   std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
   const GEOSymbolizer* _defaultSymbolizer;
-
-  MeshRenderer*   _meshRenderer;
-  ShapesRenderer* _shapesRenderer;
-  MarksRenderer*  _marksRenderer;
-  GEOVectorLayer*  _geoVectorLayer;
+  MeshRenderer*        _meshRenderer;
+  ShapesRenderer*      _shapesRenderer;
+  MarksRenderer*       _marksRenderer;
+  GEOVectorLayer*      _geoVectorLayer;
 
   std::vector<LoadQueueItem*> _loadQueue;
 
@@ -101,16 +102,7 @@ public:
               MeshRenderer*        meshRenderer,
               ShapesRenderer*      shapesRenderer,
               MarksRenderer*       marksRenderer,
-              GEOVectorLayer*      geoVectorLayer
-              ) :
-  _defaultSymbolizer(defaultSymbolizer),
-  _meshRenderer(meshRenderer),
-  _shapesRenderer(shapesRenderer),
-  _marksRenderer(marksRenderer),
-  _geoVectorLayer(geoVectorLayer)
-  {
-    initialize(NULL);
-  }
+              GEOVectorLayer*      geoVectorLayer);
 
   virtual ~GEORenderer();
 
@@ -153,22 +145,10 @@ public:
   void setGEOVectorLayer(GEOVectorLayer* geoVectorLayer,
                          bool deletePrevious);
 
-  void loadJSON(const URL& url) {
-    loadJSON(url,
-             NULL,
-             DownloadPriority::MEDIUM,
-             TimeInterval::fromDays(30),
-             true);
-  }
+  void loadJSON(const URL& url);
 
   void loadJSON(const URL& url,
-                GEOSymbolizer* symbolizer) {
-    loadJSON(url,
-             symbolizer,
-             DownloadPriority::MEDIUM,
-             TimeInterval::fromDays(30),
-             true);
-  }
+                GEOSymbolizer* symbolizer);
 
   void loadJSON(const URL& url,
                 GEOSymbolizer* symbolizer,
@@ -176,22 +156,10 @@ public:
                 const TimeInterval& timeToCache,
                 bool readExpired);
 
-  void loadBSON(const URL& url) {
-    loadBSON(url,
-             NULL,
-             DownloadPriority::MEDIUM,
-             TimeInterval::fromDays(30),
-             true);
-  }
+  void loadBSON(const URL& url);
 
   void loadBSON(const URL& url,
-                GEOSymbolizer* symbolizer) {
-    loadBSON(url,
-             symbolizer,
-             DownloadPriority::MEDIUM,
-             TimeInterval::fromDays(30),
-             true);
-  }
+                GEOSymbolizer* symbolizer);
 
   void loadBSON(const URL& url,
                 GEOSymbolizer* symbolizer,

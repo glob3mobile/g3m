@@ -105,6 +105,8 @@ public class G3MWidget_WebGL
       sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
 
       exportJSFunctions();
+
+      onSizeChanged(1, 1);
    }
 
 

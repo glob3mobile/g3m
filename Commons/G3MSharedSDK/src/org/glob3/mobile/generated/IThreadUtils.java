@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class G3MContext;
 //class GTask;
 //class GAsyncTask;

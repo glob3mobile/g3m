@@ -10,13 +10,11 @@
 
 #include "GEOObject.hpp"
 #include "GEOSymbolizer.hpp"
-#include "ILogger.hpp"
-#include "G3MContext.hpp"
-#include "Camera.hpp"
-#include "IDownloader.hpp"
-#include "IBufferDownloadListener.hpp"
 #include "GEOJSONParser.hpp"
 #include "IThreadUtils.hpp"
+#include "G3MContext.hpp"
+#include "IDownloader.hpp"
+#include "DownloadPriority.hpp"
 #include "MeshRenderer.hpp"
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
@@ -126,17 +124,13 @@ public:
 
   ~GEORenderer_GEOObjectParserAsyncTask() {
     delete _buffer;
-//    delete _geoObject;
+    //    delete _geoObject;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
   void runInBackground(const G3MContext* context) {
-//    ILogger::instance()->logInfo("Parsing GEOObject buffer from \"%s\" (%db)",
-//                                 _url._path.c_str(),
-//                                 _buffer->size());
-
     if (_isBSON) {
       _geoObject = GEOJSONParser::parseBSON(_buffer);
     }
@@ -153,7 +147,6 @@ public:
       ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url._path.c_str());
     }
     else {
-//      ILogger::instance()->logInfo("Adding GEOObject to _geoRenderer");
       _geoRenderer->addGEOObject(_geoObject, _symbolizer);
       _geoObject = NULL;
     }
@@ -210,13 +203,27 @@ public:
   }
 };
 
+GEORenderer::GEORenderer(const GEOSymbolizer* defaultSymbolizer,
+                         MeshRenderer*        meshRenderer,
+                         ShapesRenderer*      shapesRenderer,
+                         MarksRenderer*       marksRenderer,
+                         GEOVectorLayer*      geoVectorLayer
+                         ) :
+_defaultSymbolizer(defaultSymbolizer),
+_meshRenderer(meshRenderer),
+_shapesRenderer(shapesRenderer),
+_marksRenderer(marksRenderer),
+_geoVectorLayer(geoVectorLayer)
+{
+  //  initialize(NULL);
+}
+
 void GEORenderer::requestBuffer(const URL& url,
                                 GEOSymbolizer* symbolizer,
                                 long long priority,
                                 const TimeInterval& timeToCache,
                                 bool readExpired,
                                 bool isBSON) {
-//  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url._path.c_str());
   IDownloader* downloader = _context->getDownloader();
   downloader->requestBuffer(url,
                             priority,
@@ -265,6 +272,40 @@ void GEORenderer::onLostContext() {
   if (_context == NULL) {
     cleanLoadQueue();
   }
+}
+
+void GEORenderer::loadJSON(const URL& url) {
+  loadJSON(url,
+           NULL,
+           DownloadPriority::MEDIUM,
+           TimeInterval::fromDays(30),
+           true);
+}
+
+void GEORenderer::loadJSON(const URL& url,
+                           GEOSymbolizer* symbolizer) {
+  loadJSON(url,
+           symbolizer,
+           DownloadPriority::MEDIUM,
+           TimeInterval::fromDays(30),
+           true);
+}
+
+void GEORenderer::loadBSON(const URL& url) {
+  loadBSON(url,
+           NULL,
+           DownloadPriority::MEDIUM,
+           TimeInterval::fromDays(30),
+           true);
+}
+
+void GEORenderer::loadBSON(const URL& url,
+                           GEOSymbolizer* symbolizer) {
+  loadBSON(url,
+           symbolizer,
+           DownloadPriority::MEDIUM,
+           TimeInterval::fromDays(30),
+           true);
 }
 
 void GEORenderer::loadJSON(const URL& url,

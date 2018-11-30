@@ -17,13 +17,16 @@ package org.glob3.mobile.generated;
 
 
 
-//class GEOObject;
+
+
 //class GEOSymbolizer;
-//class MeshRenderer;
-//class MarksRenderer;
-//class ShapesRenderer;
-//class GEOVectorLayer;
 //class GEORenderer_ObjectSymbolizerPair;
+//class MeshRenderer;
+//class ShapesRenderer;
+//class MarksRenderer;
+//class GEOVectorLayer;
+//class GEOObject;
+
 
 public class GEORenderer extends DefaultRenderer
 {
@@ -53,6 +56,7 @@ public class GEORenderer extends DefaultRenderer
     }
   }
 
+
   private void drainLoadQueue()
   {
     final int loadQueueSize = _loadQueue.size();
@@ -80,11 +84,9 @@ public class GEORenderer extends DefaultRenderer
     _loadQueue.clear();
   }
 
-
   private java.util.ArrayList<GEORenderer_ObjectSymbolizerPair> _children = new java.util.ArrayList<GEORenderer_ObjectSymbolizerPair>();
 
   private final GEOSymbolizer _defaultSymbolizer;
-
   private MeshRenderer _meshRenderer;
   private ShapesRenderer _shapesRenderer;
   private MarksRenderer _marksRenderer;
@@ -94,7 +96,6 @@ public class GEORenderer extends DefaultRenderer
 
   private void requestBuffer(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired, boolean isBSON)
   {
-  //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url._path.c_str());
     IDownloader downloader = _context.getDownloader();
     downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), isBSON), true);
   }
@@ -118,7 +119,7 @@ public class GEORenderer extends DefaultRenderer
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
      _geoVectorLayer = geoVectorLayer;
-    initialize(null);
+    //  initialize(NULL);
   }
 
   public void dispose()
