@@ -165,7 +165,8 @@ public:
     }
     else {
       const JSONObject* object = jsonBaseObject->asObject();
-      parsePoints(object);
+      parseMesh(object);
+      //parsePoints(object);
       delete jsonBaseObject;
     }
 
@@ -258,7 +259,8 @@ void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.475803, 0)),
+    //-2.475803
+  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.47590, 0)),
                                        AltitudeMode::ABSOLUTE,
                                        mesh);
   meshShape->setHeading(Angle::fromDegrees(21));
@@ -269,3 +271,4 @@ void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
                                        Geodetic3D::fromDegrees(43.181706, -2.475803, 400));
 }
+
