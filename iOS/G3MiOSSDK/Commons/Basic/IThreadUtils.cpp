@@ -11,12 +11,19 @@
 #include "GTask.hpp"
 #include "G3MContext.hpp"
 #include "GAsyncTask.hpp"
+#include "ErrorHandling.hpp"
 
 
 void IThreadUtils::initialize(const G3MContext* context) {
   _context = context;
 }
 
+const G3MContext* IThreadUtils::getContext() const {
+  if (_context == NULL) {
+    THROW_EXCEPTION("IThreadUtils is not initialized");
+  }
+  return _context;
+}
 
 class IThreadUtils_RendererTask : public GTask {
 private:

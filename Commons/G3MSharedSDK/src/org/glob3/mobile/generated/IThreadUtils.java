@@ -24,7 +24,16 @@ package org.glob3.mobile.generated;
 
 public abstract class IThreadUtils
 {
-  protected G3MContext _context;
+  private G3MContext _context;
+
+  protected final G3MContext getContext()
+  {
+    if (_context == null)
+    {
+      throw new RuntimeException("IThreadUtils is not initialized");
+    }
+    return _context;
+  }
 
   public IThreadUtils()
   {

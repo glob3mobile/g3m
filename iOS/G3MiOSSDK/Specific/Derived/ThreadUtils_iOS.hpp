@@ -51,7 +51,7 @@ public:
                               bool autoDelete) const {
     dispatch_async(dispatch_get_main_queue(),
                    ^{
-                     task->run(_context);
+                     task->run(getContext());
                      if (autoDelete) {
                        delete task;
                      }
@@ -62,7 +62,7 @@ public:
                           bool autoDelete) const {
     [ _backgroundQueue addOperationWithBlock:
      ^{
-        task->run(_context);
+        task->run(getContext());
         if (autoDelete) {
           delete task;
         }
