@@ -26,6 +26,13 @@ public abstract class IThreadUtils
 {
   private G3MContext _context;
 
+  protected abstract void justInitialized();
+
+  protected final boolean isInitialized()
+  {
+    return (_context != null);
+  }
+
   protected final G3MContext getContext()
   {
     if (_context == null)
@@ -46,9 +53,18 @@ public abstract class IThreadUtils
 
   public abstract void onDestroy(G3MContext context);
 
-  public void initialize(G3MContext context)
+  public final void initialize(G3MContext context)
   {
+    if (context == null)
+    {
+      throw new RuntimeException("context can't be NULL");
+    }
+    if (_context != null)
+    {
+      throw new RuntimeException("IThreadUtils already initialized");
+    }
     _context = context;
+    justInitialized();
   }
 
   public void dispose()

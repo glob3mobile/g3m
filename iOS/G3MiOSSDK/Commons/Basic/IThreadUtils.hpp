@@ -9,8 +9,6 @@
 #ifndef __G3MiOSSDK__IThreadUtils__
 #define __G3MiOSSDK__IThreadUtils__
 
-#include <stdlib.h>
-
 class G3MContext;
 class GTask;
 class GAsyncTask;
@@ -26,13 +24,14 @@ private:
 #endif
 
 protected:
+  virtual void justInitialized() = 0;
+
+  const bool isInitialized() const;
+
   const G3MContext* getContext() const;
 
 public:
-  IThreadUtils() :
-  _context(NULL)
-  {
-  }
+  IThreadUtils();
 
   virtual void onResume(const G3MContext* context) = 0;
 
@@ -40,7 +39,7 @@ public:
 
   virtual void onDestroy(const G3MContext* context) = 0;
 
-  virtual void initialize(const G3MContext* context);
+  void initialize(const G3MContext* context);
 
   virtual ~IThreadUtils() {
   }

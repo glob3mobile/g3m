@@ -68,4 +68,10 @@ public final class ThreadUtils_WebGL
    public void onDestroy(final G3MContext context) {
    }
 
+
+   @Override
+   protected void justInitialized() {
+
+   }
+
 }

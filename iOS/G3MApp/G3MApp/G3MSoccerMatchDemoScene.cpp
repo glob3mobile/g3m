@@ -244,9 +244,9 @@ void G3MSoccerMatchDemoScene::rawActivate(const G3MContext* context) {
 
   IDownloader* downloader = context->getDownloader();
   downloader->requestBuffer(//URL("file:///869491_points.json"),
-                            URL("file:///870147_points.json"),
+                            //URL("file:///870147_points.json"),
                             //URL("file:///869491_ball_heatmap_full.json"),
-                            //URL("file:///870147_ball_heatmap_full.json"),
+                            URL("file:///870147_ball_heatmap_full.json"),
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,

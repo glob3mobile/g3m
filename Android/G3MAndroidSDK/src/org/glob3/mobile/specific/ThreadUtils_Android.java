@@ -18,6 +18,7 @@ public final class ThreadUtils_Android
          extends
             IThreadUtils {
 
+
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
    private boolean                  _running = true;
@@ -60,7 +61,7 @@ public final class ThreadUtils_Android
          }
       };
 
-      if (_running) {
+      if (isRunning()) {
          _widgetAndroid.queueEvent(runnable);
       }
       else {
@@ -82,7 +83,7 @@ public final class ThreadUtils_Android
          }
       };
 
-      if (_running) {
+      if (isRunning()) {
          _backgroundExecutor.execute(runnable);
       }
       else {
@@ -95,8 +96,20 @@ public final class ThreadUtils_Android
    public synchronized void onResume(final G3MContext context) {
       if (!_running) {
          _running = true;
+         tryToDrainQueues();
+      }
+   }
+
+
+   private void tryToDrainQueues() {
+      if (isRunning()) {
          drainQueues();
       }
+   }
+
+
+   private boolean isRunning() {
+      return _running && isInitialized();
    }
 
 
@@ -122,6 +135,12 @@ public final class ThreadUtils_Android
    @Override
    public void onDestroy(final G3MContext context) {
       onPause(context);
+   }
+
+
+   @Override
+   protected void justInitialized() {
+      tryToDrainQueues();
    }
 
 
