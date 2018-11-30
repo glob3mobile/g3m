@@ -21,7 +21,7 @@ public final class ThreadUtils_Android
 
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
-   private boolean                  _running = true;
+   private boolean                  _paused = false;
 
    private final List<Runnable> _backgroundQueue     = new ArrayList<Runnable>();
    private final List<Runnable> _rendererThreadQueue = new ArrayList<Runnable>();
@@ -94,8 +94,8 @@ public final class ThreadUtils_Android
 
    @Override
    public synchronized void onResume(final G3MContext context) {
-      if (!_running) {
-         _running = true;
+      if (_paused) {
+         _paused = false;
          tryToDrainQueues();
       }
    }
@@ -109,7 +109,7 @@ public final class ThreadUtils_Android
 
 
    private boolean isRunning() {
-      return _running && isInitialized();
+      return !_paused && isInitialized();
    }
 
 
@@ -128,7 +128,7 @@ public final class ThreadUtils_Android
 
    @Override
    public synchronized void onPause(final G3MContext context) {
-      _running = false;
+      _paused = true;
    }
 
 
