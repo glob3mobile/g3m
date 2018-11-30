@@ -43,12 +43,6 @@ private:
   Mesh* _mesh1;
   Mesh* _mesh2;
 
-  static double normalize(double value,
-                          double max,
-                          double min) {
-    return ((value - min) / (max - min));
-  }
-
 
 public:
   G3MSoccerMatchDemoScene_ParserAsyncTask(G3MSoccerMatchDemoScene* scene,
@@ -82,9 +76,9 @@ public:
     const double minZ = ballMetadataJSONObject->getAsArray("min")->getAsNumber(2)->value();
     const double maxZ = ballMetadataJSONObject->getAsArray("max")->getAsNumber(2)->value();
     const double deltaZ = maxZ - minZ;
-//    const double minSpeed = ballMetadataJSONObject->getAsArray("min")->getAsNumber(3)->value();
-//    const double maxSpeed = ballMetadataJSONObject->getAsArray("max")->getAsNumber(3)->value() / 8;
-//    const double deltaSpeed = maxSpeed - minSpeed;
+    // const double minSpeed = ballMetadataJSONObject->getAsArray("min")->getAsNumber(3)->value();
+    // const double maxSpeed = ballMetadataJSONObject->getAsArray("max")->getAsNumber(3)->value() / 8;
+    // const double deltaSpeed = maxSpeed - minSpeed;
 
     const JSONArray* ballPositionsJSONArray = ballJSONObject->getAsArray("positions");
 
@@ -93,9 +87,6 @@ public:
     FloatBufferBuilderFromColor colors;
     const size_t ballPositionsCount = ballPositionsJSONArray->size();
 
-//    const Color fromColor   = Color::RED;
-//    const Color middleColor = Color::GREEN;
-//    const Color toColor     = Color::BLUE;
     const Color fromColor   = Color::YELLOW;
     const Color middleColor = Color::ORANGE;
     const Color toColor     = Color::RED;
@@ -105,7 +96,7 @@ public:
       const double      x      = ballPositionJSONArray->getAsNumber(0)->value();
       const double      y      = ballPositionJSONArray->getAsNumber(1)->value();
       const double      z      = ballPositionJSONArray->getAsNumber(2)->value();
-      const double      speed  = ballPositionJSONArray->getAsNumber(3)->value();
+      // const double      speed  = ballPositionJSONArray->getAsNumber(3)->value();
       const std::string team   = ballPositionJSONArray->getAsString(4)->value();
       const std::string status = ballPositionJSONArray->getAsString(5)->value();
 
@@ -114,7 +105,7 @@ public:
 
         const double a = (z - minZ) / deltaZ;
         // const double a = (speed - minSpeed) / deltaSpeed;
-        //      colors.add(a, a, a, 1);
+        // colors.add(a, a, a, 1);
         const Color interpolatedColor = Color::interpolateColor(fromColor,
                                                                 middleColor,
                                                                 toColor,
@@ -138,16 +129,16 @@ public:
                             true // depthTest
                             );
 
-//    _mesh2 = new DirectMesh(GLPrimitive::lineStrip(),
-//                            true,
-//                            vertices->getCenter(),
-//                            vertices->create(),
-//                            lineWidth,
-//                            pointSize,
-//                            NULL, // flatColor
-//                            colors.create(),
-//                            true // depthTest
-//                            );
+    //    _mesh2 = new DirectMesh(GLPrimitive::lineStrip(),
+    //                            true,
+    //                            vertices->getCenter(),
+    //                            vertices->create(),
+    //                            lineWidth,
+    //                            pointSize,
+    //                            NULL, // flatColor
+    //                            colors.create(),
+    //                            true // depthTest
+    //                            );
 
     delete vertices;
 
@@ -259,8 +250,7 @@ void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-    //-2.475803
-  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.47590, 0)),
+  MeshShape* meshShape = new MeshShape(new Geodetic3D(Geodetic3D::fromDegrees(43.181706, -2.4759, 0)),
                                        AltitudeMode::ABSOLUTE,
                                        mesh);
   meshShape->setHeading(Angle::fromDegrees(21));
@@ -269,5 +259,5 @@ void G3MSoccerMatchDemoScene::setMesh(Mesh* mesh) {
   g3mWidget->setForceBusyRenderer(false);
 
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
-                                       Geodetic3D::fromDegrees(43.181706, -2.475803, 400));
+                                       Geodetic3D::fromDegrees(43.181706, -2.4759, 400));
 }

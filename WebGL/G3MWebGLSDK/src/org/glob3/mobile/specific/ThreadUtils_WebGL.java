@@ -10,8 +10,8 @@ import com.google.gwt.user.client.Timer;
 
 
 public final class ThreadUtils_WebGL
-   extends
-      IThreadUtils {
+         extends
+            IThreadUtils {
 
    private final int _delayMillis;
 
@@ -26,7 +26,7 @@ public final class ThreadUtils_WebGL
       final Timer timer = new Timer() {
          @Override
          public void run() {
-            task.run(_context);
+            task.run(getContext());
             if (autoDelete) {
                task.dispose();
             }
@@ -40,7 +40,7 @@ public final class ThreadUtils_WebGL
    public void invokeInRendererThread(final GTask task,
                                       final boolean autoDelete) {
       //invokeTask(task, autoDelete);
-      task.run(_context);
+      task.run(getContext());
       if (autoDelete) {
          task.dispose();
       }
@@ -66,6 +66,12 @@ public final class ThreadUtils_WebGL
 
    @Override
    public void onDestroy(final G3MContext context) {
+   }
+
+
+   @Override
+   protected void justInitialized() {
+
    }
 
 }
