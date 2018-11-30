@@ -9,7 +9,7 @@
 #include "LayoutUtils.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
-#include "EllipsoidalPlanet.hpp"
+#include "Planet.hpp"
 #include "IMathUtils.hpp"
 #include "Geodetic2D.hpp"
 

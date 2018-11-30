@@ -131,7 +131,7 @@ public:
                              pointSize,
                              NULL, // flatColor
                              colors.create(),
-                             false);
+                             true);
 
       delete vertices;
 
@@ -173,7 +173,6 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-
     _threadUtils->invokeAsyncTask(new G3MPointCloudDemoScene_ParserAsyncTask(_scene, _planet, url, buffer),
                                   true);
   }

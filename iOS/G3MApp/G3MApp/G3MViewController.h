@@ -14,14 +14,12 @@
 class G3MDemoModel;
 class G3MDemoScene;
 
-//@interface G3MViewController : UIViewController <UIAlertViewDelegate> {
 @interface G3MViewController : GAITrackedViewController <UIAlertViewDelegate> {
   G3MDemoModel* _demoModel;
 }
 
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;
 @property (weak, nonatomic)   IBOutlet UIButton*      demoSelector;
-@property (weak, nonatomic)   IBOutlet UIView*        secondaryToolbar;
 @property (weak, nonatomic)   IBOutlet UIButton*      optionSelector;
 
 -(void) onChangedScene:(const G3MDemoScene*) scene;

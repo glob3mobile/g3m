@@ -29,8 +29,9 @@ public class Extruder3DPolygon
                      final List<Geodetic3D> coordinates,
                      final List<List<Geodetic3D>> holesCoordinatesArray,
                      final double lowerHeight,
-                     final G3MeshMaterial material) {
-      super(geoFeature, lowerHeight, material, minHeight(coordinates));
+                     final G3MeshMaterial material,
+                     final boolean depthTest) {
+      super(geoFeature, lowerHeight, material, depthTest, minHeight(coordinates));
       _coordinates = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
    }

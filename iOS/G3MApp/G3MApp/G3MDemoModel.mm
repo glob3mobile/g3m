@@ -46,6 +46,7 @@
 #include "G3MStereoDemoScene.hpp"
 #include "G3M3DLandDemoScene.hpp"
 #include "G3MExtrusionDemoScene.hpp"
+#include "G3MSoccerMatchDemoScene.hpp"
 
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
@@ -94,6 +95,7 @@ _context(NULL)
   _scenes.push_back( new G3MStereoDemoScene(this) );
   _scenes.push_back( new G3M3DLandDemoScene(this) );
   _scenes.push_back( new G3MExtrusionDemoScene(this) );
+  _scenes.push_back( new G3MSoccerMatchDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

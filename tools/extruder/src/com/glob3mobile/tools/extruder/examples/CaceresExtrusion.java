@@ -31,7 +31,7 @@ public class CaceresExtrusion {
                ExtrusionHandler {
 
 
-      private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW, true);
+      private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW);
 
       private GEOBitmap _bitmap;
 
@@ -102,6 +102,12 @@ public class CaceresExtrusion {
 
       @Override
       public void onMeshCollection(final G3MeshCollection meshes) {
+      }
+
+
+      @Override
+      public boolean getDepthTestFor(final GEOFeature geoFeature) {
+         return true;
       }
 
 

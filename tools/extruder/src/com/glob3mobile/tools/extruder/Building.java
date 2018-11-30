@@ -30,6 +30,7 @@ public class Building {
    private final Wall            _exteriorWall;
    private final List<Wall>      _interiorWalls;
    private final G3MeshMaterial  _material;
+   private final boolean         _depthTest;
 
 
    Building(final ExtruderPolygon extruderPolygon,
@@ -39,7 +40,8 @@ public class Building {
             final List<Triangle> roofTriangles,
             final Wall exteriorWall,
             final List<Wall> interiorWalls,
-            final G3MeshMaterial material) {
+            final G3MeshMaterial material,
+            final boolean depthTest) {
       _extruderPolygon = extruderPolygon;
       _position = position;
       _minHeight = minHeight;
@@ -48,6 +50,7 @@ public class Building {
       _exteriorWall = exteriorWall;
       _interiorWalls = interiorWalls;
       _material = material;
+      _depthTest = depthTest;
    }
 
 
@@ -157,9 +160,11 @@ public class Building {
                _exteriorWall, //
                _interiorWalls, //
                _material, //
+               _depthTest, //
                planet, //
                verticalExaggeration, //
-               deltaHeight, floatPrecision);
+               deltaHeight, //
+               floatPrecision);
    }
 
 
@@ -168,6 +173,7 @@ public class Building {
                                    final Wall exteriorWall,
                                    final List<Wall> interiorWalls,
                                    final G3MeshMaterial material,
+                                   final boolean depthTest,
                                    final Planet planet,
                                    final float verticalExaggeration,
                                    final double deltaHeight,
@@ -211,7 +217,8 @@ public class Building {
                null, // colors
                null, // texCoords
                indices, //
-               material //
+               material, //
+               depthTest //
       );
 
    }
@@ -460,6 +467,7 @@ public class Building {
       result.put("interior_walls", ExtruderJSON.wallsToJSON(_interiorWalls));
 
       result.put("material", ExtruderJSON.materialToJSON(_material));
+      result.put("depth_test", _depthTest);
 
       result.put("size", calculateSize(_minHeight));
 

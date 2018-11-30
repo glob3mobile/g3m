@@ -63,14 +63,15 @@ public class Color
 
       if (hex.charAt(0) == '#')
       {
-          hex = hex.substring(0, 0) + hex.substring(0 + 1);
+        return hexToRGB(hex.substring(1));
       }
 
-      String R = hex.substring(0, 2);
-      String G = hex.substring(2, 4);
-      String B = hex.substring(4, 6);
+      final String r = hex.substring(0, 2);
+      final String g = hex.substring(2, 4);
+      final String b = hex.substring(4, 6);
 
-      return new Color((float)IMathUtils.instance().parseIntHex(R)/255, (float)IMathUtils.instance().parseIntHex(G)/255, (float)IMathUtils.instance().parseIntHex(B)/255, 1);
+    final IMathUtils mu = IMathUtils.instance();
+    return Color.fromRGBA255(mu.parseIntHex(r), mu.parseIntHex(g), mu.parseIntHex(b), 255);
   }
 
   public final float _red;
@@ -165,7 +166,6 @@ public class Color
     return Color.newFromRGBA(r, g, b, a);
   }
 
-
   public static Color fromRGBA255(int red, int green, int blue, int alpha)
   {
     return new Color(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
@@ -181,7 +181,7 @@ public class Color
     return new Color(red, green, blue, alpha);
   }
 
-  public static Color newFromHEX(String hex)
+  public static Color fromHEX(String hex)
   {
       return hexToRGB(hex);
   }
@@ -247,8 +247,6 @@ public class Color
     return middle.mixedWith(to, (d - 0.5f) * 2);
   }
 
-
-
   public static final Color TRANSPARENT = Color.fromRGBA(0, 0, 0, 0);
   public static final Color BLACK = Color.fromRGBA(0, 0, 0, 1);
   public static final Color GRAY = Color.fromRGBA(0.5f, 0.5f, 0.5f, 1);
@@ -259,9 +257,9 @@ public class Color
   public static final Color CYAN = Color.fromRGBA(0, 1, 1, 1);
   public static final Color MAGENTA = Color.fromRGBA(1, 0, 1, 1);
   public static final Color RED = Color.fromRGBA(1, 0, 0, 1);
+  public static final Color ORANGE = Color.fromRGBA(1, 0.5f, 0, 1);
   public static final Color GREEN = Color.fromRGBA(0, 1, 0, 1);
   public static final Color BLUE = Color.fromRGBA(0, 0, 1, 1);
-
 
   public static Color transparent()
   {
@@ -311,6 +309,11 @@ public class Color
   public static Color red()
   {
     return RED;
+  }
+
+  public static Color orange()
+  {
+    return ORANGE;
   }
 
   public static Color green()
