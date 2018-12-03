@@ -106,7 +106,7 @@ public class G3MWidget_WebGL
 
       exportJSFunctions();
 
-      onSizeChanged(1, 1);
+      //      onSizeChanged(1, 1);
    }
 
 
