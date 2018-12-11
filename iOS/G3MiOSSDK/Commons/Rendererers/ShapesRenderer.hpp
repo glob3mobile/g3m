@@ -191,17 +191,17 @@ public:
                                                     const Vector3D& origin,
                                                     const Vector3D& direction) const;
 
-  void loadJSONSceneJS(const URL&                      url,
-                       long long                       priority,
-                       const TimeInterval&             timeToCache,
-                       bool                            readExpired,
-                       const std::string&              uriPrefix,
-                       bool                            isTransparent,
+  void loadJSONSceneJS(const URL&                     url,
+                       long long                      priority,
+                       const TimeInterval&            timeToCache,
+                       bool                           readExpired,
+                       const std::string&             uriPrefix,
+                       bool                           isTransparent,
                        const SceneJSParserParameters& parameters,
                        const Geodetic3D&              position,
-                       AltitudeMode                    altitudeMode,
-                       ShapeLoadListener*              listener = NULL,
-                       bool                            deleteListener = true);
+                       AltitudeMode                   altitudeMode,
+                       ShapeLoadListener*             listener = NULL,
+                       bool                           deleteListener = true);
 
   void loadJSONSceneJS(const URL&                     url,
                        const std::string&             uriPrefix,
