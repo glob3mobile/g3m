@@ -6,13 +6,9 @@ package org.glob3.mobile.tools.utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Shape;
-import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -102,61 +98,61 @@ public class GEOBitmap {
    }
 
 
-   public void drawPolygon(final List<Geodetic2D> outerRing,
-                           final List<? extends List<Geodetic2D>> holesRings,
-                           final Color fillColor,
-                           final Color borderColor,
-                           final boolean drawVertices,
-                           final Color verticesColor) {
-      final Shape shape = createShape(outerRing, holesRings);
-
-      _g.setColor(fillColor);
-      _g.fill(shape);
-
-      _g.setColor(borderColor);
-      _g.draw(shape);
-
-      if (drawVertices) {
-         for (final Geodetic2D position : outerRing) {
-            drawPoint(position, 2, 2, verticesColor);
-         }
-         if (holesRings != null) {
-            for (final List<Geodetic2D> holeRing : holesRings) {
-               for (final Geodetic2D position : holeRing) {
-                  drawPoint(position, 2, 2, verticesColor);
-               }
-            }
-         }
-      }
-   }
-
-
-   private Shape createShape(final List<Geodetic2D> outerRing,
-                             final List<? extends List<Geodetic2D>> holesRings) {
-      final Polygon outer = createPolygon(outerRing);
-      if ((holesRings == null) || holesRings.isEmpty()) {
-         return outer;
-      }
-
-      final Area a = new Area(outer);
-      for (final List<Geodetic2D> holeRing : holesRings) {
-         final Area hole = new Area(createPolygon(holeRing));
-         a.subtract(hole);
-      }
-
-      return a;
-   }
-
-
-   private Polygon createPolygon(final List<Geodetic2D> positions) {
-      final Polygon p = new Polygon();
-      for (final Geodetic2D position : positions) {
-         final int x = Math.round((float) (_sector.getUCoordinate(position._longitude) * _width));
-         final int y = Math.round((float) (_sector.getVCoordinate(position._latitude) * _height));
-         p.addPoint(x, y);
-      }
-      return p;
-   }
+   //   public void drawPolygon(final List<Geodetic2D> outerRing,
+   //                           final List<? extends List<Geodetic2D>> holesRings,
+   //                           final Color fillColor,
+   //                           final Color borderColor,
+   //                           final boolean drawVertices,
+   //                           final Color verticesColor) {
+   //      final Shape shape = createShape(outerRing, holesRings);
+   //
+   //      _g.setColor(fillColor);
+   //      _g.fill(shape);
+   //
+   //      _g.setColor(borderColor);
+   //      _g.draw(shape);
+   //
+   //      if (drawVertices) {
+   //         for (final Geodetic2D position : outerRing) {
+   //            drawPoint(position, 2, 2, verticesColor);
+   //         }
+   //         if (holesRings != null) {
+   //            for (final List<Geodetic2D> holeRing : holesRings) {
+   //               for (final Geodetic2D position : holeRing) {
+   //                  drawPoint(position, 2, 2, verticesColor);
+   //               }
+   //            }
+   //         }
+   //      }
+   //   }
+   //
+   //
+   //   private Shape createShape(final List<Geodetic2D> outerRing,
+   //                             final List<? extends List<Geodetic2D>> holesRings) {
+   //      final Polygon outer = createPolygon(outerRing);
+   //      if ((holesRings == null) || holesRings.isEmpty()) {
+   //         return outer;
+   //      }
+   //
+   //      final Area a = new Area(outer);
+   //      for (final List<Geodetic2D> holeRing : holesRings) {
+   //         final Area hole = new Area(createPolygon(holeRing));
+   //         a.subtract(hole);
+   //      }
+   //
+   //      return a;
+   //   }
+   //
+   //
+   //   private Polygon createPolygon(final List<Geodetic2D> positions) {
+   //      final Polygon p = new Polygon();
+   //      for (final Geodetic2D position : positions) {
+   //         final int x = Math.round((float) (_sector.getUCoordinate(position._longitude) * _width));
+   //         final int y = Math.round((float) (_sector.getVCoordinate(position._latitude) * _height));
+   //         p.addPoint(x, y);
+   //      }
+   //      return p;
+   //   }
 
 
 }

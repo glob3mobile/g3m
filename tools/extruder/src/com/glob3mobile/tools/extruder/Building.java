@@ -20,20 +20,20 @@ import com.glob3mobile.tools.mesh.G3MeshMaterial;
 import poly2Tri.Triangle;
 
 
-public class Building {
+public class Building<T> {
 
-   private final ExtruderPolygon _extruderPolygon;
-   private final Geodetic2D      _position;
-   private final double          _minHeight;
-   private final List<Vector3D>  _roofVertices;
-   private final List<Triangle>  _roofTriangles;
-   private final Wall            _exteriorWall;
-   private final List<Wall>      _interiorWalls;
-   private final G3MeshMaterial  _material;
-   private final boolean         _depthTest;
+   private final ExtruderPolygon<T> _extruderPolygon;
+   private final Geodetic2D         _position;
+   private final double             _minHeight;
+   private final List<Vector3D>     _roofVertices;
+   private final List<Triangle>     _roofTriangles;
+   private final Wall               _exteriorWall;
+   private final List<Wall>         _interiorWalls;
+   private final G3MeshMaterial     _material;
+   private final boolean            _depthTest;
 
 
-   Building(final ExtruderPolygon extruderPolygon,
+   Building(final ExtruderPolygon<T> extruderPolygon,
             final Geodetic2D position,
             final double minHeight,
             final List<Vector3D> roofVertices,
@@ -491,6 +491,16 @@ public class Building {
          }
       }
       return max;
+   }
+
+
+   public List<Geodetic2D> getOuterRing() {
+      return _extruderPolygon.getOuterRing();
+   }
+
+
+   public List<? extends List<Geodetic2D>> getHolesRings() {
+      return _extruderPolygon.getHolesRings();
    }
 
 

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GEOFeature;
-import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.Planet;
 
@@ -25,7 +24,7 @@ public class AirspaceExtrusion {
 
    private static class AirspaceExtrusionHandler
             implements
-               ExtrusionHandler {
+               ExtrusionHandler<GEOFeature> {
 
 
       private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
@@ -99,17 +98,12 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public void onRootGEOObject(final GEOObject geoObject) {
+      public void onBuildings(final List<Building<GEOFeature>> buildings) {
       }
 
 
       @Override
-      public void onBuildings(final List<Building> buildings) {
-      }
-
-
-      @Override
-      public void onPolygons(final List<ExtruderPolygon> polygons) {
+      public void onPolygons(final List<ExtruderPolygon<GEOFeature>> polygons) {
       }
 
 

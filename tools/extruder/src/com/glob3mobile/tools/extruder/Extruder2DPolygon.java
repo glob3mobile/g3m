@@ -2,41 +2,74 @@
 
 package com.glob3mobile.tools.extruder;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 import poly2Tri.Triangulation;
 
 
-public class Extruder2DPolygon
+public class Extruder2DPolygon<T>
          extends
-            ExtruderPolygon {
+            ExtruderPolygon<T> {
+
+
+   public static <T> Extruder2DPolygon<T> create(final ExtrusionHandler<T> handler,
+                                                 final T source,
+                                                 final List<Geodetic2D> coordinates,
+                                                 final List<List<Geodetic2D>> holesCoordinatesArray) {
+
+
+      final Heigths heights = handler.getHeightsFor(source);
+      final G3MeshMaterial material = handler.getMaterialFor(source);
+      final boolean depthTest = handler.getDepthTestFor(source);
+
+      return create(source, coordinates, holesCoordinatesArray, heights._lowerHeight, heights._upperHeight, material, depthTest);
+   }
+
+
+   public static <T> Extruder2DPolygon<T> create(final T source,
+                                                 final List<Geodetic2D> coordinates,
+                                                 final List<List<Geodetic2D>> holesCoordinatesArray,
+                                                 final double lowerHeight,
+                                                 final double upperHeight,
+                                                 final G3MeshMaterial material,
+                                                 final boolean depthTest) {
+      final PolygonExtruder.FixedPolygon2DData polygonData = PolygonExtruder.fixPolygon2DData(coordinates, holesCoordinatesArray);
+
+      return new Extruder2DPolygon<>( //
+               source, //
+               polygonData._coordinates, //
+               polygonData._holesCoordinatesArray, //
+               lowerHeight, //
+               upperHeight, //
+               material, //
+               depthTest //
+      );
+   }
+
 
    private final double                 _upperHeight;
    private final List<Geodetic2D>       _coordinates;
    private final List<List<Geodetic2D>> _holesCoordinatesArray;
 
 
-   Extruder2DPolygon(final GEOFeature geoFeature,
+   Extruder2DPolygon(final T source,
                      final List<Geodetic2D> coordinates,
                      final List<List<Geodetic2D>> holesCoordinatesArray,
                      final double lowerHeight,
                      final double upperHeight,
                      final G3MeshMaterial material,
                      final boolean depthTest) {
-      super(geoFeature, lowerHeight, material, depthTest, lowerHeight);
+      super(source, lowerHeight, material, depthTest, lowerHeight);
       _upperHeight = upperHeight;
       _coordinates = coordinates;
-      _holesCoordinatesArray = holesCoordinatesArray;
+      _holesCoordinatesArray = (holesCoordinatesArray == null) ? Collections.emptyList() : holesCoordinatesArray;
    }
 
 
@@ -180,10 +213,14 @@ public class Extruder2DPolygon
 
 
    @Override
-   public void drawOn(final GEOBitmap bitmap,
-                      final Color fillColor,
-                      final Color borderColor) {
-      bitmap.drawPolygon(_coordinates, _holesCoordinatesArray, fillColor, borderColor, false, null);
+   public List<Geodetic2D> getOuterRing() {
+      return _coordinates;
+   }
+
+
+   @Override
+   public List<List<Geodetic2D>> getHolesRings() {
+      return _holesCoordinatesArray;
    }
 
 

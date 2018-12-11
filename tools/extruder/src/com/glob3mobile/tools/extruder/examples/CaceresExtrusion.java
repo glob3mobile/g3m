@@ -10,7 +10,6 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.EllipsoidalPlanet;
 import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.tools.utils.GEOBitmap;
 
@@ -28,7 +27,7 @@ public class CaceresExtrusion {
 
    private static class CaceresExtrusionHandler
             implements
-               ExtrusionHandler {
+               ExtrusionHandler<GEOFeature> {
 
 
       private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW);
@@ -74,17 +73,7 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void onRootGEOObject(final GEOObject geoObject) {
-         //         final Sector sector = geoObject.getSector();
-         //
-         //         final int width = 2048;
-         //         final int height = (int) Math.round((width / sector._deltaLongitude._radians) * sector._deltaLatitude._radians);
-         //         _bitmap = new GEOBitmap(sector, width, height, java.awt.Color.BLACK);
-      }
-
-
-      @Override
-      public void onBuildings(final List<Building> buildings) {
+      public void onBuildings(final List<Building<GEOFeature>> buildings) {
       }
 
 
@@ -96,7 +85,7 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void onPolygons(final List<ExtruderPolygon> polygons) {
+      public void onPolygons(final List<ExtruderPolygon<GEOFeature>> polygons) {
       }
 
 

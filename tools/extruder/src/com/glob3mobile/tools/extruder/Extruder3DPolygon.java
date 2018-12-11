@@ -2,36 +2,33 @@
 
 package com.glob3mobile.tools.extruder;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.glob3.mobile.generated.GEOFeature;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.tools.utils.GEOBitmap;
 
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 import poly2Tri.Triangulation;
 
 
-public class Extruder3DPolygon
+public class Extruder3DPolygon<T>
          extends
-            ExtruderPolygon {
+            ExtruderPolygon<T> {
 
    private final List<Geodetic3D>       _coordinates;
    private final List<List<Geodetic3D>> _holesCoordinatesArray;
 
 
-   Extruder3DPolygon(final GEOFeature geoFeature,
+   Extruder3DPolygon(final T source,
                      final List<Geodetic3D> coordinates,
                      final List<List<Geodetic3D>> holesCoordinatesArray,
                      final double lowerHeight,
                      final G3MeshMaterial material,
                      final boolean depthTest) {
-      super(geoFeature, lowerHeight, material, depthTest, minHeight(coordinates));
+      super(source, lowerHeight, material, depthTest, minHeight(coordinates));
       _coordinates = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
    }
@@ -181,16 +178,6 @@ public class Extruder3DPolygon
    }
 
 
-   @Override
-   public void drawOn(final GEOBitmap bitmap,
-                      final Color fillColor,
-                      final Color borderColor) {
-      final List<Geodetic2D> coordinates = to2D(_coordinates);
-      final List<? extends List<Geodetic2D>> holesCoordinatesArray = to2DList(_holesCoordinatesArray);
-      bitmap.drawPolygon(coordinates, holesCoordinatesArray, fillColor, borderColor, false, null);
-   }
-
-
    private static List<Geodetic2D> to2D(final List<Geodetic3D> coordinates) {
       final List<Geodetic2D> result = new ArrayList<>(coordinates.size());
       for (final Geodetic3D coordinate : coordinates) {
@@ -206,6 +193,18 @@ public class Extruder3DPolygon
          result.add(to2D(coordinates));
       }
       return result;
+   }
+
+
+   @Override
+   public List<Geodetic2D> getOuterRing() {
+      return to2D(_coordinates);
+   }
+
+
+   @Override
+   public List<List<Geodetic2D>> getHolesRings() {
+      return to2DList(_holesCoordinatesArray);
    }
 
 
