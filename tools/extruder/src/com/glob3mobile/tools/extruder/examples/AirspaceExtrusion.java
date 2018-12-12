@@ -92,7 +92,8 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public void processTriangulationError(final GEOFeature geoFeature) {
+      public void processTriangulationError(final GEOFeature geoFeature,
+                                            final PolygonExtruder.ErrorType errorType) {
          System.err.println("Error triangulation " + geoFeature);
       }
 

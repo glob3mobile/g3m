@@ -60,7 +60,7 @@ public abstract class ExtruderPolygon<T> {
 
    public Building<T> createBuilding(final PolygonExtruder.Statistics<T> statistics,
                                      final ExtrusionHandler<T> handler,
-                                     final int id) {
+                                     final long id) {
 
       final Triangulation.Data data = createTriangulationData();
 

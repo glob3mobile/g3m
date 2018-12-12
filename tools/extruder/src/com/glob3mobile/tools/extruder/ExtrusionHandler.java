@@ -23,7 +23,8 @@ public interface ExtrusionHandler<T> {
    Heigths getHeightsFor(T source);
 
 
-   void processTriangulationError(T source);
+   void processTriangulationError(T source,
+                                  PolygonExtruder.ErrorType errorType);
 
 
    void onBuildings(List<Building<T>> buildings);

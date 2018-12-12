@@ -54,7 +54,8 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void processTriangulationError(final GEOFeature geoFeature) {
+      public void processTriangulationError(final GEOFeature geoFeature,
+                                            final PolygonExtruder.ErrorType errorType) {
          final GEOGeometry geometry = geoFeature.getGeometry();
          System.err.println("Error triangulation " + geoFeature + ", geometry:  " + geometry);
          // if (geometry instanceof GEO3DPolygonGeometry) {

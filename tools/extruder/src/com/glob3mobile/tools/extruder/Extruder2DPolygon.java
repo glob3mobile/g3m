@@ -23,13 +23,18 @@ public class Extruder2DPolygon<T>
                                                  final T source,
                                                  final List<Geodetic2D> coordinates,
                                                  final List<List<Geodetic2D>> holesCoordinatesArray) {
-
-
       final Heigths heights = handler.getHeightsFor(source);
       final G3MeshMaterial material = handler.getMaterialFor(source);
       final boolean depthTest = handler.getDepthTestFor(source);
 
-      return create(source, coordinates, holesCoordinatesArray, heights._lowerHeight, heights._upperHeight, material, depthTest);
+      return create( //
+               source, //
+               coordinates, //
+               holesCoordinatesArray, //
+               heights._lowerHeight, //
+               heights._upperHeight, //
+               material, //
+               depthTest);
    }
 
 
@@ -40,17 +45,16 @@ public class Extruder2DPolygon<T>
                                                  final double upperHeight,
                                                  final G3MeshMaterial material,
                                                  final boolean depthTest) {
-      final PolygonExtruder.FixedPolygon2DData polygonData = PolygonExtruder.fixPolygon2DData(coordinates, holesCoordinatesArray);
-
-      return new Extruder2DPolygon<>( //
-               source, //
-               polygonData._coordinates, //
-               polygonData._holesCoordinatesArray, //
-               lowerHeight, //
-               upperHeight, //
-               material, //
-               depthTest //
-      );
+      final PolygonData<Geodetic2D> data = PolygonData.fixPolygon2DData(coordinates, holesCoordinatesArray);
+      return (data == null) ? null //
+                            : new Extruder2DPolygon<>( //
+                                     source, //
+                                     data._coordinates, //
+                                     data._holesCoordinatesArray, //
+                                     lowerHeight, //
+                                     upperHeight, //
+                                     material, //
+                                     depthTest);
    }
 
 
