@@ -47,9 +47,9 @@ public abstract class ExtruderPolygon<T> {
    }
 
 
-   public double getMinHeight() {
-      return _minHeight;
-   }
+   //   public double getMinHeight() {
+   //      return _minHeight;
+   //   }
 
 
    public abstract Wall createExteriorWall(final double lowerHeight);
@@ -75,7 +75,7 @@ public abstract class ExtruderPolygon<T> {
 
             final Wall exteriorWall = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
-            return new Building<T>(this, getAverage(), _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall,
+            return new Building<>(this, getAverage(), _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall,
                      interiorWalls, _material, _depthTest);
          }
       }

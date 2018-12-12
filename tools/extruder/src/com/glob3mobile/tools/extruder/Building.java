@@ -29,7 +29,7 @@ public class Building<T> {
    private final List<Triangle>     _roofTriangles;
    private final Wall               _exteriorWall;
    private final List<Wall>         _interiorWalls;
-   private final G3MeshMaterial     _material;
+   public final G3MeshMaterial      _material;
    private final boolean            _depthTest;
 
 
@@ -72,7 +72,7 @@ public class Building<T> {
       }
 
       if (minHeight > maxHeight) {
-         throw new RuntimeException("Oops!");
+         throw new RuntimeException("Oops! " + minHeight + "/" + maxHeight);
       }
 
 

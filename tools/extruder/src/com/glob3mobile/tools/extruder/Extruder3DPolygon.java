@@ -30,7 +30,7 @@ public class Extruder3DPolygon<T>
                      final boolean depthTest) {
       super(source, lowerHeight, material, depthTest, minHeight(coordinates));
       _coordinates = coordinates;
-      _holesCoordinatesArray = holesCoordinatesArray;
+      _holesCoordinatesArray = (holesCoordinatesArray == null) ? Collections.emptyList() : holesCoordinatesArray;
    }
 
 
