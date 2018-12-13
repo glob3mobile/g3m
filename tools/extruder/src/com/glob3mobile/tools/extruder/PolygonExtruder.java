@@ -506,7 +506,8 @@ public class PolygonExtruder<T> {
    }
 
 
-   private static <T> G3MeshCollection getMeshCollection(final Planet planet,
+   private static <T> G3MeshCollection getMeshCollection(final boolean createNormals,
+                                                         final Planet planet,
                                                          final float verticalExaggeration,
                                                          final double deltaHeight,
                                                          final int floatPrecision,
@@ -514,7 +515,7 @@ public class PolygonExtruder<T> {
       logInfo("Starting meshing...");
       final long now = System.currentTimeMillis();
 
-      final List<G3Mesh> meshes = getMeshes(planet, verticalExaggeration, deltaHeight, floatPrecision, buildings);
+      final List<G3Mesh> meshes = getMeshes(createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision, buildings);
       final G3MeshCollection result = new G3MeshCollection(meshes);
 
       final long elapsed = System.currentTimeMillis() - now;
@@ -524,14 +525,15 @@ public class PolygonExtruder<T> {
    }
 
 
-   private static <T> List<G3Mesh> getMeshes(final Planet planet,
+   private static <T> List<G3Mesh> getMeshes(final boolean createNormals,
+                                             final Planet planet,
                                              final float verticalExaggeration,
                                              final double deltaHeight,
                                              final int floatPrecision,
                                              final List<Building<T>> buildings) {
       final List<G3Mesh> result = new ArrayList<>(buildings.size());
       for (final Building<T> building : buildings) {
-         final G3Mesh mesh = building.createMesh(planet, verticalExaggeration, deltaHeight, floatPrecision);
+         final G3Mesh mesh = building.createMesh(createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision);
          if (mesh != null) {
             result.add(mesh);
          }
@@ -705,14 +707,15 @@ public class PolygonExtruder<T> {
    public static void process(final String inputFileName,
                               final String outputFileName,
                               final ExtrusionHandler<GEOFeature> handler,
+                              final boolean createNormals,
                               final Planet planet,
                               final float verticalExaggeration,
                               final double deltaHeight,
                               final int floatPrecision,
                               final boolean verbose) throws IOException {
       final List<Building<GEOFeature>> buildings = getBuildings(inputFileName, handler, verbose);
-      final G3MeshCollection meshCollection = getMeshCollection(planet, verticalExaggeration, deltaHeight, floatPrecision,
-               buildings);
+      final G3MeshCollection meshCollection = getMeshCollection(createNormals, planet, verticalExaggeration, deltaHeight,
+               floatPrecision, buildings);
       handler.onMeshCollection(meshCollection);
       writeMeshCollectionJSON(outputFileName, meshCollection, floatPrecision);
    }

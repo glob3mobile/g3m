@@ -121,11 +121,12 @@ public class CaceresExtrusion {
       final float verticalExaggeration = 1;
       final double deltaHeight = 0;
       final int floatPrecision = 3;
+      final boolean createNormals = true;
 
       System.out.println(name);
       final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();
-      PolygonExtruder.process(inputFileName, outputFileName, handler, planet, verticalExaggeration, deltaHeight, floatPrecision,
-               true);
+      PolygonExtruder.process(inputFileName, outputFileName, handler, createNormals, planet, verticalExaggeration, deltaHeight,
+               floatPrecision, true);
       handler.save(name + "_debug.png");
    }
 
