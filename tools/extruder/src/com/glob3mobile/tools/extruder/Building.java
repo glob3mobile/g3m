@@ -150,7 +150,8 @@ public class Building<T> {
    }
 
 
-   public G3Mesh createMesh(final Planet planet,
+   public G3Mesh createMesh(final boolean createNormals,
+                            final Planet planet,
                             final float verticalExaggeration,
                             final double deltaHeight,
                             final int floatPrecision) {
@@ -160,6 +161,7 @@ public class Building<T> {
                _exteriorWall, //
                _interiorWalls, //
                _material, //
+               createNormals, //
                _depthTest, //
                planet, //
                verticalExaggeration, //
@@ -173,6 +175,7 @@ public class Building<T> {
                                    final Wall exteriorWall,
                                    final List<Wall> interiorWalls,
                                    final G3MeshMaterial material,
+                                   final boolean createNormals,
                                    final boolean depthTest,
                                    final Planet planet,
                                    final float verticalExaggeration,
@@ -204,7 +207,7 @@ public class Building<T> {
          }
       }
 
-      final List<Vector3F> normals = createNormals(planet, vertices, indices, roofVertices);
+      final List<Vector3F> normals = createNormals ? createNormals(planet, vertices, indices, roofVertices) : null;
 
       final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
                                                                     : G3Mesh.VerticesFormat.CARTESIAN;

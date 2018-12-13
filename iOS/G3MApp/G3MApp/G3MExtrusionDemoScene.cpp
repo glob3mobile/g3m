@@ -28,6 +28,7 @@
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/IMathUtils.hpp>
+#include <G3MiOSSDK/OSMLayer.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,
@@ -80,18 +81,21 @@ public:
 
 void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model = getModel();
-  G3MWidget* g3mWidget = model->getG3MWidget();
+//  G3MWidget* g3mWidget = model->getG3MWidget();
 
   LayerSet* layerSet = model->getLayerSet();
 
   //  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
   //  layerSet->addLayer(osmLayer);
 
-  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
+  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                                          TimeInterval::fromDays(30));
   layerSet->addLayer(bingMapsAerialLayer);
+//#error diego;
 
+//  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+//  layerSet->addLayer(osmLayer);
 
   //  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
   //                                                                                       1, // topSectorSplitsByLatitude
@@ -111,22 +115,22 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
 
 
-  const Sector demSector = Sector::fromDegrees(39.1061661306491501, -6.8652429810672828,
-                                               39.6803752050700638, -6.0079354792574549);
+//  const Sector demSector = Sector::fromDegrees(39.1061661306491501, -6.8652429810672828,
+//                                               39.6803752050700638, -6.0079354792574549);
+//
+////  const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
+////                                               39.5082433963135529, -6.1796950996431388);
+//
+//  //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
+//  //                                                             -6.37246061136657449,
+//  //                                                             4100) );
 
-//  const Sector demSector = Sector::fromDegrees(39.3249577152747989, -6.5277029119743890,
-//                                               39.5082433963135529, -6.1796950996431388);
-
-  //  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.473307996475860193,
-  //                                                             -6.37246061136657449,
-  //                                                             4100) );
-
-  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(39.460438280508554953,
-                                                               -6.3478641137059907962,
-                                                               720 - 400),
-                                       Angle::fromDegrees(60), // heading
-                                       Angle::fromDegrees(-15) // pitch
-                                       );
+//  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(39.460438280508554953,
+//                                                               -6.3478641137059907962,
+//                                                               720 - 400),
+//                                       Angle::fromDegrees(60), // heading
+//                                       Angle::fromDegrees(-15) // pitch
+//                                       );
 
   //  Camera position=(lat=39.460438280508554953d, lon=-6.3478641137059907962d, height=721.03182836661108013)
   //                heading=60.977841
@@ -139,21 +143,21 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   //  g3mWidget->setAnimatedCameraPosition( Geodetic3D(demSector._center,
   //                                                4100) );
 
-  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
-  planetRenderer->setVerticalExaggeration(1);
+//  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+//  planetRenderer->setVerticalExaggeration(1);
 
   //  g3mWidget->setBackgroundColor( Color::fromRGBA255(185, 221, 209, 255).muchDarker() );
 
-  Sector renderedSector = demSector.shrinkedByPercent(0.1f);
-  g3mWidget->setRenderedSector(renderedSector);
+//  Sector renderedSector = demSector.shrinkedByPercent(0.1f);
+//  g3mWidget->setRenderedSector(renderedSector);
 
-  const double deltaHeight = -400;
-  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///MDT_CC_250.bil"),
-                                                                                    demSector,
-                                                                                    //Vector2I(1481, 780),
-                                                                                    Vector2I(1605, 1075),
-                                                                                    deltaHeight);
-  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+//  const double deltaHeight = -400;
+//  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///MDT_CC_250.bil"),
+//                                                                                    demSector,
+//                                                                                    //Vector2I(1481, 780),
+//                                                                                    Vector2I(1605, 1075),
+//                                                                                    deltaHeight);
+//  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
   // context->getDownloader()->requestBuffer(URL("file:///casco_historico_3d.json"),
@@ -164,10 +168,13 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   //                                                                          model->getMeshRenderer()),
   //                                         true);
 
+  const double deltaHeight = 0;
+
+  // http://brownietech.ddns.net/test/comunidad_de_madrid/metadata.json
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
-                         "cc3d-buildings",         // name
-                         //"test",                   // name
+                         //"cc3d-buildings",         // name
+                         "test/comunidad_de_madrid", // name
                          "",                       // properties
                          NULL,                     // symbolizer
                          true,                     // deleteSymbolizer
