@@ -39,7 +39,9 @@ public:
     Mesh* createMesh(const Color& color,
                      const int nSegments,
                      bool depthTest,
-                     const Planet *planet);
+                     const Planet *planet,
+                     Color* borderColor = NULL,
+                     bool addNormals = true);
     
 private:
     

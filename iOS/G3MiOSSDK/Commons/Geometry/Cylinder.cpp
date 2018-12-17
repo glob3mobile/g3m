@@ -24,7 +24,9 @@
 Mesh* Cylinder::createMesh(const Color& color,
                            const int nSegments,
                            bool depthTest,
-                           const Planet *planet){
+                           const Planet *planet,
+                           Color* borderColor,
+                           bool addNormals){
     
     Vector3D cylinderAxis = _end.sub(_start);
     Vector3D r = cylinderAxis._z == 0? Vector3D(0.0,0.0,1.0) : Vector3D(1.0, 1.0, (-cylinderAxis._x -cylinderAxis._y) / cylinderAxis._z);
@@ -36,11 +38,11 @@ Mesh* Cylinder::createMesh(const Color& color,
     Angle stepAngle = Angle::fromDegrees(totalAngle / nSegments);
     
     MutableMatrix44D startTransf = MutableMatrix44D::createGeneralRotationMatrix(
-                                                                       stepAngle,
-                                                                       cylinderAxis,
-                                                                       _start);
+                                                                                 stepAngle,
+                                                                                 cylinderAxis,
+                                                                                 _start);
     MutableMatrix44D endTransf = MutableMatrix44D::createGeneralRotationMatrix(stepAngle,
-                                                                  cylinderAxis, _end);
+                                                                               cylinderAxis, _end);
     
     FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
     FloatBufferBuilderFromCartesian3D* fbbC1 = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
@@ -58,12 +60,12 @@ Mesh* Cylinder::createMesh(const Color& color,
     
     MutableVector3D currentPointAtStart(pointAtStart);
     currentPointAtStart = currentPointAtStart.transformedBy(
-    MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(_startAngle),
-                                                  cylinderAxis, _start), 1.0);
+                                                            MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(_startAngle),
+                                                                                                          cylinderAxis, _start), 1.0);
     
     MutableVector3D currentPointAtEnd(pointAtEnd);
     currentPointAtEnd = currentPointAtEnd.transformedBy(
-    MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(_startAngle), cylinderAxis, _end), 1.0);
+                                                        MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(_startAngle), cylinderAxis, _end), 1.0);
     
     std::vector<Vector3D *> vs;
     
@@ -126,12 +128,60 @@ Mesh* Cylinder::createMesh(const Color& color,
                                       colors.create(),//NULL,
                                       1.0f,
                                       depthTest, //depth_test
-                                      normals->create(),
+                                      addNormals? normals->create() : NULL,
                                       false,
                                       0,
                                       0);
     
     createSphere(vs);
+    
+    
+    if (borderColor != NULL){
+        
+        ShortBufferBuilder indB1;
+        for (int i = 0; i < nSegments*2; i+=2){
+            indB1.add((short)i);
+        }
+        indB1.add((short)0);
+        
+        IndexedMesh* b1 = new IndexedMesh(GLPrimitive::lineStrip(),
+                                          fbb->getCenter(),
+                                          vertices,
+                                          false,
+                                          indB1.create(),
+                                          true,
+                                          4.0,
+                                          1.0,
+                                          borderColor,
+                                          NULL,
+                                          1.0f,
+                                          true);
+        ShortBufferBuilder indB2;
+        for (int i = 1; i < nSegments*2; i+=2){
+            indB2.add((short)i);
+        }
+        indB2.add((short)1);
+        
+        IndexedMesh* b2 = new IndexedMesh(GLPrimitive::lineStrip(),
+                                          fbb->getCenter(),
+                                          vertices,
+                                          false,
+                                          indB2.create(),
+                                          true,
+                                          4.0,
+                                          1.0,
+                                          new Color(*borderColor),
+                                          NULL,
+                                          1.0f,
+                                          true);
+        
+        CompositeMesh* cm = new CompositeMesh();
+        cm->addMesh(b1);
+        cm->addMesh(b2);
+        cm->addMesh(im);
+        return cm;
+    }
+    
     
     
     delete normals;
