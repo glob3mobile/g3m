@@ -38,8 +38,8 @@ public class PolygonData<T> {
 
    public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> rawCoordinates,
                                                           final List<List<Geodetic2D>> rawHolesCoordinatesArray) {
-      final List<Geodetic2D> coordinates = PolygonExtruder.cleanupCoordinates(rawCoordinates);
-      final List<List<Geodetic2D>> holesCoordinatesArray = PolygonExtruder.cleanupCoordinatesArray(rawHolesCoordinatesArray);
+      final List<Geodetic2D> coordinates = PolygonExtruder.cleanup2DCoordinates(rawCoordinates);
+      final List<List<Geodetic2D>> holesCoordinatesArray = PolygonExtruder.cleanup2DCoordinatesArray(rawHolesCoordinatesArray);
 
       if (coordinates.size() < 3) {
          return null;
@@ -54,8 +54,11 @@ public class PolygonData<T> {
    }
 
 
-   public static PolygonData<Geodetic3D> fixPolygon3DData(final List<Geodetic3D> coordinates,
-                                                          final List<List<Geodetic3D>> holesCoordinatesArray) {
+   public static PolygonData<Geodetic3D> fixPolygon3DData(final List<Geodetic3D> rawCoordinates,
+                                                          final List<List<Geodetic3D>> rawHolesCoordinatesArray) {
+      final List<Geodetic3D> coordinates = PolygonExtruder.cleanup3DCoordinates(rawCoordinates);
+      final List<List<Geodetic3D>> holesCoordinatesArray = PolygonExtruder.cleanup3DCoordinatesArray(rawHolesCoordinatesArray);
+
       if (coordinates.size() < 3) {
          return null;
       }

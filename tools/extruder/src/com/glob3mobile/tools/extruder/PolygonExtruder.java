@@ -245,29 +245,29 @@ public class PolygonExtruder<T> {
                                                final GEO2DPolygonData data,
                                                final List<ExtruderPolygon<GEOFeature>> polygons,
                                                final ExtrusionHandler<GEOFeature> handler) {
-      //      final List<Geodetic2D> coordinates = removeConsecutiveDuplicates2DCoordinates(
-      //               removeLastDuplicated2DCoordinate(data.getCoordinates()));
-      //
-      //      final List<List<Geodetic2D>> holesCoordinates = removeConsecutiveDuplicates2DCoordinatesArray(
-      //               removeLastDuplicated2DCoordinates(data.getHolesCoordinatesArray()));
-      final List<Geodetic2D> coordinates = sort2DCoordinates(
-               removeConsecutiveDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(data.getCoordinates())));
-
-      final List<List<Geodetic2D>> holesCoordinates = sort2DCoordinatesArray(
-               removeConsecutiveDuplicates2DCoordinatesArray(removeLastDuplicated2DCoordinates(data.getHolesCoordinatesArray())));
-
+      final List<Geodetic2D> coordinates = cleanup2DCoordinates(data.getCoordinates());
+      final List<List<Geodetic2D>> holesCoordinates = cleanup2DCoordinatesArray(data.getHolesCoordinatesArray());
       processGEO2DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
 
 
-   public static List<List<Geodetic2D>> cleanupCoordinatesArray(final List<List<Geodetic2D>> coordinatesArray) {
-      return sort2DCoordinatesArray(
-               removeConsecutiveDuplicates2DCoordinatesArray(removeLastDuplicated2DCoordinates(coordinatesArray)));
+   public static List<Geodetic2D> cleanup2DCoordinates(final List<Geodetic2D> coordinates) {
+      return sort2DCoordinates(removeDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(coordinates)));
    }
 
 
-   public static List<Geodetic2D> cleanupCoordinates(final List<Geodetic2D> coordinates) {
-      return sort2DCoordinates(removeConsecutiveDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(coordinates)));
+   public static List<List<Geodetic2D>> cleanup2DCoordinatesArray(final List<? extends List<Geodetic2D>> coordinatesArray) {
+      return sort2DCoordinatesArray(removeDuplicates2DCoordinatesArray(removeLastDuplicated2DCoordinates(coordinatesArray)));
+   }
+
+
+   public static List<Geodetic3D> cleanup3DCoordinates(final List<Geodetic3D> coordinates) {
+      return sort3DCoordinates(removeDuplicates3DCoordinates(removeLastDuplicated3DCoordinate(coordinates)));
+   }
+
+
+   public static List<List<Geodetic3D>> cleanup3DCoordinatesArray(final List<? extends List<Geodetic3D>> coordinatesArray) {
+      return sort3DCoordinatesArray(removeDuplicates3DCoordinatesArray(removeLastDuplicated3DCoordinates(coordinatesArray)));
    }
 
 
@@ -275,12 +275,8 @@ public class PolygonExtruder<T> {
                                                final GEO3DPolygonData data,
                                                final List<ExtruderPolygon<GEOFeature>> polygons,
                                                final ExtrusionHandler<GEOFeature> handler) {
-      final List<Geodetic3D> coordinates = sort3DCoordinates(
-               removeConsecutiveDuplicates3DCoordinates(removeLastDuplicated3DCoordinate(data.getCoordinates())));
-
-      final List<List<Geodetic3D>> holesCoordinates = sort3DCoordinatesArray(
-               removeConsecutiveDuplicates3DCoordinatesArray(removeLastDuplicated3DCoordinates(data.getHolesCoordinatesArray())));
-
+      final List<Geodetic3D> coordinates = cleanup3DCoordinates(data.getCoordinates());
+      final List<List<Geodetic3D>> holesCoordinates = cleanup3DCoordinatesArray(data.getHolesCoordinatesArray());
       processGEO3DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
 
@@ -568,7 +564,7 @@ public class PolygonExtruder<T> {
    }
 
 
-   private static List<Geodetic2D> removeConsecutiveDuplicates2DCoordinates(final List<Geodetic2D> coordinates) {
+   private static List<Geodetic2D> removeDuplicates2DCoordinates(final List<Geodetic2D> coordinates) {
       if ((coordinates == null) || coordinates.isEmpty()) {
          return Collections.emptyList();
       }
@@ -593,7 +589,7 @@ public class PolygonExtruder<T> {
    }
 
 
-   private static List<Geodetic3D> removeConsecutiveDuplicates3DCoordinates(final List<Geodetic3D> coordinates) {
+   private static List<Geodetic3D> removeDuplicates3DCoordinates(final List<Geodetic3D> coordinates) {
       if ((coordinates == null) || coordinates.isEmpty()) {
          return Collections.emptyList();
       }
@@ -648,27 +644,27 @@ public class PolygonExtruder<T> {
    }
 
 
-   private static List<List<Geodetic2D>> removeConsecutiveDuplicates2DCoordinatesArray(final List<List<Geodetic2D>> coordinatesArray) {
+   private static List<List<Geodetic2D>> removeDuplicates2DCoordinatesArray(final List<List<Geodetic2D>> coordinatesArray) {
       if ((coordinatesArray == null) || coordinatesArray.isEmpty()) {
          return Collections.emptyList();
       }
 
       final List<List<Geodetic2D>> result = new ArrayList<>(coordinatesArray.size());
       for (final List<Geodetic2D> coordinates : coordinatesArray) {
-         result.add(removeConsecutiveDuplicates2DCoordinates(coordinates));
+         result.add(removeDuplicates2DCoordinates(coordinates));
       }
       return result;
    }
 
 
-   private static List<List<Geodetic3D>> removeConsecutiveDuplicates3DCoordinatesArray(final List<List<Geodetic3D>> coordinatesArray) {
+   private static List<List<Geodetic3D>> removeDuplicates3DCoordinatesArray(final List<List<Geodetic3D>> coordinatesArray) {
       if ((coordinatesArray == null) || coordinatesArray.isEmpty()) {
          return Collections.emptyList();
       }
 
       final List<List<Geodetic3D>> result = new ArrayList<>(coordinatesArray.size());
       for (final List<Geodetic3D> coordinates : coordinatesArray) {
-         result.add(removeConsecutiveDuplicates3DCoordinates(coordinates));
+         result.add(removeDuplicates3DCoordinates(coordinates));
       }
       return result;
    }
