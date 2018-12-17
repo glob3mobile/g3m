@@ -43,14 +43,15 @@ public class PolygonData<T> {
       }
 
       final Poly p1 = polygon2DToPoly(coordinates, holesCoordinatesArray);
-      final Poly p2 = polygon2DToPoly(coordinates, holesCoordinatesArray);
+      //      final Poly p2 = polygon2DToPoly(coordinates, holesCoordinatesArray);
 
       //final Poly fixedPoly = Clip.intersection(p1, p2);
 
       // final Poly union = Clip.union(p1, p2);
       // final Poly fixedPoly = Clip.intersection(union, union);
 
-      final Poly fixedPoly = Clip.union(p1, p2);
+      //      final Poly fixedPoly = Clip.union(p1, p2);
+      final Poly fixedPoly = Clip.union(p1, p1);
 
       return toFixedPolygon2DData(fixedPoly);
    }
