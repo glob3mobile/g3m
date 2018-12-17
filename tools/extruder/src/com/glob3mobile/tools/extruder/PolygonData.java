@@ -36,22 +36,19 @@ public class PolygonData<T> {
    }
 
 
-   public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> coordinates,
-                                                          final List<List<Geodetic2D>> holesCoordinatesArray) {
+   public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> rawCoordinates,
+                                                          final List<List<Geodetic2D>> rawHolesCoordinatesArray) {
+      final List<Geodetic2D> coordinates = PolygonExtruder.cleanupCoordinates(rawCoordinates);
+      final List<List<Geodetic2D>> holesCoordinatesArray = PolygonExtruder.cleanupCoordinatesArray(rawHolesCoordinatesArray);
+
       if (coordinates.size() < 3) {
          return null;
       }
 
       final Poly p1 = polygon2DToPoly(coordinates, holesCoordinatesArray);
-      //      final Poly p2 = polygon2DToPoly(coordinates, holesCoordinatesArray);
+      final Poly p2 = polygon2DToPoly(coordinates, holesCoordinatesArray);
 
-      //final Poly fixedPoly = Clip.intersection(p1, p2);
-
-      // final Poly union = Clip.union(p1, p2);
-      // final Poly fixedPoly = Clip.intersection(union, union);
-
-      //      final Poly fixedPoly = Clip.union(p1, p2);
-      final Poly fixedPoly = Clip.union(p1, p1);
+      final Poly fixedPoly = Clip.union(p1, p2);
 
       return toFixedPolygon2DData(fixedPoly);
    }
@@ -66,11 +63,6 @@ public class PolygonData<T> {
       final Poly p1 = polygon3DToPoly(coordinates, holesCoordinatesArray);
       final Poly p2 = polygon3DToPoly(coordinates, holesCoordinatesArray);
 
-      //final Poly fixedPoly = Clip.intersection(p1, p2);
-
-      // final Poly union = Clip.union(p1, p2);
-      // final Poly fixedPoly = Clip.intersection(union, union);
-
       final Poly fixedPoly = Clip.union(p1, p2);
 
       return toFixedPolygon3DData(fixedPoly, coordinates, holesCoordinatesArray);
@@ -79,31 +71,58 @@ public class PolygonData<T> {
 
    private static Poly polygon2DToPoly(final List<Geodetic2D> coordinates,
                                        final List<List<Geodetic2D>> holesCoordinatesArray) {
-      final PolySimple outer = new PolySimple();
-      for (final Geodetic2D coordinate : coordinates) {
-         final double x = coordinate._longitude._radians;
-         final double y = coordinate._latitude._radians;
-         outer.add(x, y);
-      }
+      final Poly outer = createPoly(coordinates);
 
       if ((holesCoordinatesArray == null) || holesCoordinatesArray.isEmpty()) {
          return outer;
       }
 
-      final PolyDefault complex = new PolyDefault(false);
-      complex.add(outer);
+      Poly result = outer;
 
       for (final List<Geodetic2D> holesCoordinates : holesCoordinatesArray) {
-         final PolyDefault hole = new PolyDefault(true);
-         for (final Geodetic2D coordinate : holesCoordinates) {
-            final double x = coordinate._longitude._radians;
-            final double y = coordinate._latitude._radians;
-            hole.add(x, y);
-         }
-         complex.add(hole);
+         final Poly hole = createPoly(reversed(holesCoordinates));
+         result = Clip.xor(result, hole);
       }
 
-      return complex;
+      return result;
+
+      //      final PolyDefault complex = new PolyDefault(false);
+      //      complex.add(outer);
+      //
+      //      for (final List<Geodetic2D> holesCoordinates : holesCoordinatesArray) {
+      //         final PolyDefault hole = new PolyDefault(true);
+      //         for (final Geodetic2D coordinate : holesCoordinates) {
+      //            final double x = coordinate._longitude._radians;
+      //            final double y = coordinate._latitude._radians;
+      //            hole.add(x, y);
+      //         }
+      //         complex.add(hole);
+      //      }
+      //
+      //      return complex;
+   }
+
+
+   private static <T> List<T> reversed(final List<T> list) {
+      final int size = list.size();
+      final List<T> result = new ArrayList<>(size);
+      for (int i = size - 1; i >= 0; i--) {
+         result.add(list.get(i));
+      }
+      return result;
+   }
+
+
+   private static Poly createPoly(final List<Geodetic2D> coordinates) {
+      final PolySimple poly1 = new PolySimple();
+      final PolySimple poly2 = new PolySimple();
+      for (final Geodetic2D coordinate : coordinates) {
+         final double x = coordinate._longitude._radians;
+         final double y = coordinate._latitude._radians;
+         poly1.add(x, y);
+         poly2.add(x, y);
+      }
+      return Clip.union(poly1, poly2);
    }
 
 

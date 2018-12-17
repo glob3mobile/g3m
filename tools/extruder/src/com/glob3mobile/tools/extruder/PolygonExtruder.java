@@ -260,6 +260,17 @@ public class PolygonExtruder<T> {
    }
 
 
+   public static List<List<Geodetic2D>> cleanupCoordinatesArray(final List<List<Geodetic2D>> coordinatesArray) {
+      return sort2DCoordinatesArray(
+               removeConsecutiveDuplicates2DCoordinatesArray(removeLastDuplicated2DCoordinates(coordinatesArray)));
+   }
+
+
+   public static List<Geodetic2D> cleanupCoordinates(final List<Geodetic2D> coordinates) {
+      return sort2DCoordinates(removeConsecutiveDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(coordinates)));
+   }
+
+
    private static void processGEO3DPolygonData(final GEOFeature geoFeature,
                                                final GEO3DPolygonData data,
                                                final List<ExtruderPolygon<GEOFeature>> polygons,
