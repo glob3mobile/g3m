@@ -19,25 +19,6 @@ public class Extruder2DPolygon<T>
             ExtruderPolygon<T> {
 
 
-   public static <T> Extruder2DPolygon<T> create(final ExtrusionHandler<T> handler,
-                                                 final T source,
-                                                 final List<Geodetic2D> coordinates,
-                                                 final List<List<Geodetic2D>> holesCoordinatesArray) {
-      final Heigths heights = handler.getHeightsFor(source);
-      final G3MeshMaterial material = handler.getMaterialFor(source);
-      final boolean depthTest = handler.getDepthTestFor(source);
-
-      return create( //
-               source, //
-               coordinates, //
-               holesCoordinatesArray, //
-               heights._lowerHeight, //
-               heights._upperHeight, //
-               material, //
-               depthTest);
-   }
-
-
    public static <T> Extruder2DPolygon<T> create(final T source,
                                                  final List<Geodetic2D> coordinates,
                                                  final List<List<Geodetic2D>> holesCoordinatesArray,
