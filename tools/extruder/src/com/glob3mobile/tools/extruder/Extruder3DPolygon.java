@@ -92,7 +92,7 @@ public class Extruder3DPolygon<T>
 
 
    @Override
-   protected Triangulation.Data createTriangulationData() {
+   protected Triangulation.Data createRoofTriangulationData() {
       final int numHoles = _holesCoordinatesArray.size();
 
       final int numContures = 1 + numHoles;
@@ -122,6 +122,26 @@ public class Extruder3DPolygon<T>
          for (final Geodetic3D coordinate : holeCoordinates) {
             verticesCursor = addVextex(roofVertices, verticesCursor, coordinate);
          }
+      }
+
+      return new Triangulation.Data(numContures, numVerticesInContures, roofVertices);
+   }
+
+
+   @Override
+   protected Triangulation.Data createRoofSansHolesTriangulationData() {
+      final int numContures = 1;
+      final int[] numVerticesInContures = new int[numContures];
+
+      final int coordinatesSize = _coordinates.size();
+      numVerticesInContures[0] = coordinatesSize;
+      final int totalVertices = coordinatesSize;
+
+      final double[][] roofVertices = new double[totalVertices][3];
+
+      int verticesCursor = 0;
+      for (final Geodetic3D coordinate : _coordinates) {
+         verticesCursor = addVextex(roofVertices, verticesCursor, coordinate);
       }
 
       return new Triangulation.Data(numContures, numVerticesInContures, roofVertices);

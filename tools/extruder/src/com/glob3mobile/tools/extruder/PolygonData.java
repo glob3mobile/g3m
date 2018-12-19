@@ -83,7 +83,7 @@ public class PolygonData<T> {
       Poly result = outer;
 
       for (final List<Geodetic2D> holesCoordinates : holesCoordinatesArray) {
-         final Poly hole = createPoly(reversed(holesCoordinates));
+         final Poly hole = createPoly(holesCoordinates);
          result = Clip.xor(result, hole);
       }
 
@@ -106,15 +106,15 @@ public class PolygonData<T> {
    }
 
 
-   private static <T> List<T> reversed(final List<T> list) {
-      final int size = list.size();
-      final List<T> result = new ArrayList<>(size);
-      for (int i = size - 1; i >= 0; i--) {
-         result.add(list.get(i));
-      }
-      return result;
-   }
-
+   //   private static <T> List<T> reversed(final List<T> list) {
+   //      final int size = list.size();
+   //      final List<T> result = new ArrayList<>(size);
+   //      for (int i = size - 1; i >= 0; i--) {
+   //         result.add(list.get(i));
+   //      }
+   //      return result;
+   //   }
+   //
 
    private static Poly createPoly(final List<Geodetic2D> coordinates) {
       final PolySimple poly1 = new PolySimple();

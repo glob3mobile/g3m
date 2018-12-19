@@ -24,6 +24,7 @@ public class Building<T> {
 
    private final ExtruderPolygon<T> _extruderPolygon;
    private final Geodetic2D         _position;
+   private final double             _roofArea;
    private final double             _minHeight;
    private final List<Vector3D>     _roofVertices;
    private final List<Triangle>     _roofTriangles;
@@ -35,6 +36,7 @@ public class Building<T> {
 
    Building(final ExtruderPolygon<T> extruderPolygon,
             final Geodetic2D position,
+            final double roofArea,
             final double minHeight,
             final List<Vector3D> roofVertices,
             final List<Triangle> roofTriangles,
@@ -44,6 +46,7 @@ public class Building<T> {
             final boolean depthTest) {
       _extruderPolygon = extruderPolygon;
       _position = position;
+      _roofArea = roofArea;
       _minHeight = minHeight;
       _roofVertices = roofVertices;
       _roofTriangles = consolidate(roofTriangles, roofVertices);
@@ -55,29 +58,75 @@ public class Building<T> {
 
 
    private double calculateSize(final double minHeight) {
-      double area = 0;
-      double maxHeight = Double.NEGATIVE_INFINITY;
-      //double sumHeight = 0;
-      for (final Triangle triangle : _roofTriangles) {
-         final Vector3D v0 = _roofVertices.get(triangle._vertex0);
-         final Vector3D v1 = _roofVertices.get(triangle._vertex1);
-         final Vector3D v2 = _roofVertices.get(triangle._vertex2);
-         area += Math.abs(triangleArea(v0, v1, v2));
+      if ((_roofArea != 0) && !Double.isNaN(_roofArea)) {
+         double maxHeight = Double.NEGATIVE_INFINITY;
+         for (final Triangle triangle : _roofTriangles) {
+            final Vector3D v0 = _roofVertices.get(triangle._vertex0);
+            final Vector3D v1 = _roofVertices.get(triangle._vertex1);
+            final Vector3D v2 = _roofVertices.get(triangle._vertex2);
+            maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
+         }
 
-         maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
+         final double height = Math.max((maxHeight - minHeight) + 1, 1);
+         return (_roofArea * height) * 100_000_000;
       }
 
-      if (maxHeight == Double.NEGATIVE_INFINITY) {
-         throw new RuntimeException("Oops!");
-      }
+      throw new RuntimeException("Logic error: _roofArea: " + _roofArea);
 
-      if (minHeight > maxHeight) {
-         throw new RuntimeException("Oops! " + minHeight + "/" + maxHeight);
-      }
-
-
-      final double height = Math.max((maxHeight - minHeight) + 1, 1);
-      return area * height;
+      //      //      double area = 0;
+      //      //      double maxHeight = Double.NEGATIVE_INFINITY;
+      //      //      //double sumHeight = 0;
+      //      //      for (final Triangle triangle : _roofTriangles) {
+      //      //         final Vector3D v0 = _roofVertices.get(triangle._vertex0);
+      //      //         final Vector3D v1 = _roofVertices.get(triangle._vertex1);
+      //      //         final Vector3D v2 = _roofVertices.get(triangle._vertex2);
+      //      //         area += Math.abs(triangleArea(v0, v1, v2));
+      //      //
+      //      //         maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
+      //      //      }
+      //      //
+      //      //      if (maxHeight == Double.NEGATIVE_INFINITY) {
+      //      //         throw new RuntimeException("Oops!");
+      //      //      }
+      //      //
+      //      //      if (minHeight > maxHeight) {
+      //      //         throw new RuntimeException("Oops! " + minHeight + "/" + maxHeight);
+      //      //      }
+      //      //
+      //      //      final double height = Math.max((maxHeight - minHeight) + 1, 1);
+      //      //      return (area * height) * 100_000_000;
+      //
+      //      double maxX = Double.NEGATIVE_INFINITY;
+      //      double maxY = Double.NEGATIVE_INFINITY;
+      //      double maxHeight = Double.NEGATIVE_INFINITY;
+      //      double minX = Double.POSITIVE_INFINITY;
+      //      double minY = Double.POSITIVE_INFINITY;
+      //      for (final Triangle triangle : _roofTriangles) {
+      //         final Vector3D v0 = _roofVertices.get(triangle._vertex0);
+      //         final Vector3D v1 = _roofVertices.get(triangle._vertex1);
+      //         final Vector3D v2 = _roofVertices.get(triangle._vertex2);
+      //         //area += Math.abs(triangleArea(v0, v1, v2));
+      //
+      //         maxX = max(maxX, v0._x, v1._x, v2._x);
+      //         maxY = max(maxY, v0._y, v1._y, v2._y);
+      //         maxHeight = max(maxHeight, v0._z, v1._z, v2._z);
+      //
+      //         minX = min(minX, v0._x, v1._x, v2._x);
+      //         minY = min(minY, v0._y, v1._y, v2._y);
+      //
+      //      }
+      //
+      //      if (maxHeight == Double.NEGATIVE_INFINITY) {
+      //         throw new RuntimeException("Oops!");
+      //      }
+      //
+      //      if (minHeight > maxHeight) {
+      //         throw new RuntimeException("Oops! " + minHeight + "/" + maxHeight);
+      //      }
+      //
+      //      final double area = (maxX - minX) * (maxY - minY);
+      //      final double height = Math.max((maxHeight - minHeight) + 1, 1);
+      //      return (area * height) * 100_000_000;
    }
 
 
@@ -93,11 +142,23 @@ public class Building<T> {
    }
 
 
-   private double triangleArea(final Vector3D v0,
-                               final Vector3D v1,
-                               final Vector3D v2) {
-      return (v1.sub(v0).cross(v2.sub(v0))).length() / 2;
-   }
+   //   private static double min(final double v,
+   //                             final double... d) {
+   //      double min = v;
+   //      for (final double e : d) {
+   //         if (e < min) {
+   //            min = e;
+   //         }
+   //      }
+   //      return min;
+   //   }
+
+
+   //   private double triangleArea(final Vector3D v0,
+   //                               final Vector3D v1,
+   //                               final Vector3D v2) {
+   //      return (v1.sub(v0).cross(v2.sub(v0))).length() / 2;
+   //   }
 
 
    public ExtruderPolygon getExtruderPolygon() {
@@ -184,8 +245,7 @@ public class Building<T> {
 
       final double wallsLowerHeight = getWallsLowerHeight(exteriorWall, interiorWalls);
 
-      final Vector3D center = getCenter(roofVertices, planet, verticalExaggeration, deltaHeight, floatPrecision,
-               wallsLowerHeight);
+      final Vector3D center = getCenter(roofVertices, planet, verticalExaggeration, deltaHeight, floatPrecision, wallsLowerHeight);
 
       final List<Vector3F> vertices = new ArrayList<>(roofVertices.size());
       for (final Vector3D vertex : roofVertices) {
@@ -299,8 +359,8 @@ public class Building<T> {
                                         final double x,
                                         final double y,
                                         final double z) {
-      return (planet == null) ? new Vector3D(x, y, z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x),
-               (z * verticalExaggeration) + deltaHeight);
+      return (planet == null) ? new Vector3D(x, y,
+               z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), (z * verticalExaggeration) + deltaHeight);
    }
 
 
@@ -327,8 +387,8 @@ public class Building<T> {
                   (float) ((z + deltaHeight) - (float) center._z));
       }
       else {
-         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x),
-                  (z * verticalExaggeration) + deltaHeight);
+         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), (z * verticalExaggeration)
+                                                                                                   + deltaHeight);
          vertex = new Vector3F( //
                   (float) (projected._x - (float) center._x), //
                   (float) (projected._y - (float) center._y), //
@@ -359,14 +419,10 @@ public class Building<T> {
          final double lowerHeight = quad._lowerHeight;
 
          final int firstVertexIndex = vertices.size();
-         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees,
-                  topCorner0._latitude._degrees, topCorner0._height);
-         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees,
-                  topCorner0._latitude._degrees, lowerHeight);
-         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees,
-                  topCorner1._latitude._degrees, lowerHeight);
-         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees,
-                  topCorner1._latitude._degrees, topCorner1._height);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, topCorner0._height);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, lowerHeight);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, lowerHeight);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, topCorner1._height);
 
          indices.add(toShort(firstVertexIndex + 0));
          indices.add(toShort(firstVertexIndex + 1));
@@ -472,7 +528,8 @@ public class Building<T> {
       result.put("material", ExtruderJSON.materialToJSON(_material));
       result.put("depth_test", _depthTest);
 
-      result.put("size", calculateSize(_minHeight));
+      final double size = calculateSize(_minHeight);
+      result.put("size", size);
 
       result.put("min_height", _minHeight);
       result.put("max_height", calculateMaxHeight());

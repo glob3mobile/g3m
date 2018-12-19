@@ -252,6 +252,9 @@ public class PolygonExtruder<T> {
 
 
    public static List<Geodetic2D> cleanup2DCoordinates(final List<Geodetic2D> coordinates) {
+      if ((coordinates == null) || coordinates.isEmpty()) {
+         return coordinates;
+      }
       return sort2DCoordinates(removeDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(coordinates)));
    }
 
@@ -262,6 +265,9 @@ public class PolygonExtruder<T> {
 
 
    public static List<Geodetic3D> cleanup3DCoordinates(final List<Geodetic3D> coordinates) {
+      if ((coordinates == null) || coordinates.isEmpty()) {
+         return coordinates;
+      }
       return sort3DCoordinates(removeDuplicates3DCoordinates(removeLastDuplicated3DCoordinate(coordinates)));
    }
 

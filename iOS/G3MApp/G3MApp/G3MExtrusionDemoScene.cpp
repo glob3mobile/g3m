@@ -81,7 +81,7 @@ public:
 
 void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model = getModel();
-//  G3MWidget* g3mWidget = model->getG3MWidget();
+  G3MWidget* g3mWidget = model->getG3MWidget();
 
   LayerSet* layerSet = model->getLayerSet();
 
@@ -167,6 +167,13 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   //                                         new G3MeshBufferDownloadListener(context->getPlanet(),
   //                                                                          model->getMeshRenderer()),
   //                                         true);
+
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.425734544513382218,
+                                                                 -3.6642964068438992342,
+                                                                 606),
+                                         Angle::fromDegrees(-4.3), // heading
+                                         Angle::fromDegrees(-41)   // pitch
+                                         );
 
   const double deltaHeight = 0;
 
