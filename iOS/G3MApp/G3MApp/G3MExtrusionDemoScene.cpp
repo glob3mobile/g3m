@@ -181,7 +181,8 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
   renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
                          //"cc3d-buildings",         // name
-                         "test/comunidad_de_madrid", // name
+//                         "test/comunidad_de_madrid", // name
+                         "test/spain",             // name
                          "",                       // properties
                          NULL,                     // symbolizer
                          true,                     // deleteSymbolizer
