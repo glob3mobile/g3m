@@ -517,7 +517,8 @@ public class Building<T> {
 
 
    public Map<String, Object> createFeatureProperties(final float priority) {
-      final Map<String, Object> result = new LinkedHashMap<>();
+      final int capacity = Float.isNaN(priority) ? 9 : 10;
+      final Map<String, Object> result = new LinkedHashMap<>(capacity);
 
       result.put("roof_vertices", ExtruderJSON.verticesToJSON(_roofVertices));
       result.put("roof_triangles", ExtruderJSON.trianglesToJSON(_roofTriangles));
