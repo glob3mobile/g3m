@@ -168,12 +168,12 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   //                                                                          model->getMeshRenderer()),
   //                                         true);
 
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.425734544513382218,
-                                                                 -3.6642964068438992342,
-                                                                 606),
-                                         Angle::fromDegrees(-4.3), // heading
-                                         Angle::fromDegrees(-41)   // pitch
-                                         );
+//    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.425734544513382218,
+//                                                                 -3.6642964068438992342,
+//                                                                 606),
+//                                         Angle::fromDegrees(-4.3), // heading
+//                                         Angle::fromDegrees(-41)   // pitch
+//                                         );
 
   const double deltaHeight = 0;
 

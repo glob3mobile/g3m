@@ -24,7 +24,7 @@ protected:
 
 public:
   G3MSoccerMatchDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Soccer Match", "", -1)
+  G3MDemoScene(model, "ESTADIO 3D", "", -1)
   {
   }
 
