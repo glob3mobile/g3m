@@ -13,6 +13,7 @@
 #include "IMathUtils.hpp"
 #include "Geodetic3D.hpp"
 #include "TimeInterval.hpp"
+#include "ILogger.hpp"
 
 
 const Planet* SphericalPlanet::createEarth() {

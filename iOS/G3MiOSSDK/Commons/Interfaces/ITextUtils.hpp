@@ -9,12 +9,13 @@
 #ifndef __G3MiOSSDK__ITextUtils__
 #define __G3MiOSSDK__ITextUtils__
 
-#include "ILogger.hpp"
+#include <string>
 class IImage;
 class Color;
 class IImageListener;
 
 #include "LabelPosition.h"
+
 
 class ITextUtils {
 private:
@@ -23,7 +24,7 @@ private:
 public:
   static void setInstance(ITextUtils* factory) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("ITextUtils instance already set!");
+      //ILogger::instance()->logWarning("ITextUtils instance already set!");
       delete _instance;
     }
     _instance = factory;

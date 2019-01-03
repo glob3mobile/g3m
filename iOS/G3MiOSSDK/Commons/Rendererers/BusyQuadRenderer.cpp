@@ -24,7 +24,7 @@
 #include "G3MEventContext.hpp"
 #include "DirectMesh.hpp"
 #include "G3MRenderContext.hpp"
-
+#include "ILogger.hpp"
 
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {

@@ -29,6 +29,7 @@
 #include "PlanetRenderContext.hpp"
 #include "TilesRenderParameters.hpp"
 #include "G3MRenderContext.hpp"
+#include "ILogger.hpp"
 
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {

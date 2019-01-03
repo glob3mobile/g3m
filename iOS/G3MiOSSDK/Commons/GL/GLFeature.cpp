@@ -10,6 +10,7 @@
 
 #include "Camera.hpp"
 #include "Vector2F.hpp"
+#include "ILogger.hpp"
 
 
 ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,

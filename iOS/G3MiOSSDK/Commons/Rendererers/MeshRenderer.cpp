@@ -29,6 +29,7 @@
 #include "Geodetic3D.hpp"
 #include "GLState.hpp"
 #include "MeshFilter.hpp"
+#include "ILogger.hpp"
 
 
 MeshRenderer::MeshRenderer(bool visibilityCulling):

@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "ILogger.hpp"
 
 
 public abstract class Matrix44DProvider extends RCObject

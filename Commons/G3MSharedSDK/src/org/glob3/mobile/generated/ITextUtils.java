@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class IImageListener;
 
 
+
 public abstract class ITextUtils
 {
   private static ITextUtils _instance = null;
@@ -29,7 +30,7 @@ public abstract class ITextUtils
   {
     if (_instance != null)
     {
-      ILogger.instance().logWarning("ITextUtils instance already set!");
+      //ILogger::instance()->logWarning("ITextUtils instance already set!");
       if (_instance != null)
          _instance.dispose();
     }

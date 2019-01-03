@@ -11,6 +11,7 @@
 #include "GEORasterProjection.hpp"
 #include "GEO2DPolygonData.hpp"
 #include "GEOVectorLayer.hpp"
+#include "ILogger.hpp"
 
 bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizer*    symbolizer,

@@ -10,9 +10,10 @@
 #define __G3MiOSSDK__FloatBuffer_iOS__
 
 #include "IFloatBuffer.hpp"
-//#include "ILogger.hpp"
 #include "ErrorHandling.hpp"
+
 #include <OpenGLES/ES2/gl.h>
+
 
 class FloatBuffer_iOS : public IFloatBuffer {
 private:

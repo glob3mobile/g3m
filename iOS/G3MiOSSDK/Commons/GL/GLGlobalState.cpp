@@ -14,8 +14,47 @@
 #include "GPUProgram.hpp"
 #include "INativeGL.hpp"
 #include "GL.hpp"
+#include "ILogger.hpp"
+
 
 bool GLGlobalState::_initializationAvailable = false;
+
+GLGlobalState::GLGlobalState() :
+_depthTest(false),
+_blend(false),
+_cullFace(false),
+_culledFace(GLCullFace::back()),
+_lineWidth(1),
+_polygonOffsetFactor(0),
+_polygonOffsetUnits(0),
+_polygonOffsetFill(false),
+_blendDFactor(GLBlendFactor::zero()),
+_blendSFactor(GLBlendFactor::one()),
+_pixelStoreIAlignmentUnpack(-1),
+_clearColorR(0.0),
+_clearColorG(0.0),
+_clearColorB(0.0),
+_clearColorA(0.0)
+{
+  if (!_initializationAvailable) {
+    ILogger::instance()->logError("GLGlobalState creation before it is available.");
+  }
+
+  for (int i = 0; i < MAX_N_TEXTURES; i++) {
+    _boundTextureID[i] = NULL;
+  }
+}
+
+
+void GLGlobalState::bindTexture(const int target,
+                                const IGLTextureID* textureID) {
+  if (target > MAX_N_TEXTURES) {
+    ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
+    return;
+  }
+
+  _boundTextureID[target] = textureID;
+}
 
 
 void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {

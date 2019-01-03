@@ -16,6 +16,8 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "Tile.hpp"
 #include "ErrorHandling.hpp"
+#include "ILogger.hpp"
+
 
 RasterLayer::~RasterLayer() {
   delete _parameters;

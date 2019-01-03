@@ -42,7 +42,7 @@ public abstract class IMathUtils
   {
     if (_instance != null)
     {
-      ILogger.instance().logWarning("IMathUtils instance already set!");
+      //ILogger::instance()->logWarning("IMathUtils instance already set!");
       if (_instance != null)
          _instance.dispose();
     }

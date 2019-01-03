@@ -15,6 +15,7 @@
 #include "Camera.hpp"
 #include "CameraContext.hpp"
 #include "RenderState.hpp"
+#include "ILogger.hpp"
 
 
 RenderState CameraZoomAndRotateHandler::getRenderState(const G3MRenderContext* rc) {

@@ -10,7 +10,7 @@
 
 #include "JSONBaseObject.hpp"
 #include "IByteBuffer.hpp"
-#include "ILogger.hpp"
+
 
 class IJSONParser {
 private:
@@ -20,7 +20,7 @@ public:
 
   static void setInstance(IJSONParser* parser) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("IJSONParser instance already set!");
+      //ILogger::instance()->logWarning("IJSONParser instance already set!");
       delete _instance;
     }
     _instance = parser;

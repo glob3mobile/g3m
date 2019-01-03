@@ -29,6 +29,7 @@
 #include "JSONBoolean.hpp"
 #include "IStringBuilder.hpp"
 #include "SceneJSParserParameters.hpp"
+#include "ILogger.hpp"
 
 
 const std::string SceneJSNodeParser::Statistics::asLogString() const {

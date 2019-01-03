@@ -24,7 +24,7 @@ public abstract class IDeviceAttitude
   {
     if (_instance != null)
     {
-      ILogger.instance().logWarning("ILooger instance already set!");
+      //ILogger::instance()->logWarning("ILooger instance already set!");
       if (_instance != null)
          _instance.dispose();
     }

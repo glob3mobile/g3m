@@ -13,6 +13,7 @@
 #include "IStringBuilder.hpp"
 #include "Sector.hpp"
 #include "Vector2D.hpp"
+#include "ILogger.hpp"
 
 
 RectangleF::RectangleF(float x, float y,

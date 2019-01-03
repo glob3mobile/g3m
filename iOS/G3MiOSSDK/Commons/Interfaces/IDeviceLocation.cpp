@@ -8,13 +8,12 @@
 
 #include "IDeviceLocation.hpp"
 
-#include "ILogger.hpp"
 
 IDeviceLocation* IDeviceLocation::_instance = NULL;
 
 void IDeviceLocation::setInstance(IDeviceLocation* loc) {
   if (_instance != NULL) {
-    ILogger::instance()->logWarning("IDeviceLocation instance already set!");
+//    ILogger::instance()->logWarning("IDeviceLocation instance already set!");
     delete _instance;
   }
   _instance = loc;

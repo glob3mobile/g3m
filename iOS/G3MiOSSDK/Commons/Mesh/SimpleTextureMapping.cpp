@@ -15,6 +15,8 @@
 #include "GPUProgram.hpp"
 #include "GLState.hpp"
 #include "TextureIDReference.hpp"
+#include "ILogger.hpp"
+
 
 const IGLTextureID* SimpleTextureMapping::getGLTextureID() const {
   return _glTextureID->getID();

@@ -12,6 +12,7 @@
 #include "CompositeElevationData.hpp"
 #include "SubviewElevationData.hpp"
 #include "IMathUtils.hpp"
+#include "ILogger.hpp"
 
 
 void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvider* edp) {

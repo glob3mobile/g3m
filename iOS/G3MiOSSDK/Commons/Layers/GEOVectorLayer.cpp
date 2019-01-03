@@ -14,6 +14,7 @@
 #include "LayerCondition.hpp"
 #include "Tile.hpp"
 #include "TileImageContribution.hpp"
+#include "ILogger.hpp"
 
 
 GEOVectorLayer::GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,

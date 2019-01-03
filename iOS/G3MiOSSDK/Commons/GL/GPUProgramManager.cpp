@@ -9,6 +9,8 @@
 #include "GPUProgramManager.hpp"
 
 #include "GLState.hpp"
+#include "ILogger.hpp"
+
 
 GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE

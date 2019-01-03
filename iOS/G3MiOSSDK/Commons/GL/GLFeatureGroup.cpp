@@ -8,6 +8,8 @@
 
 #include "GLFeatureGroup.hpp"
 #include "GLFeature.hpp"
+#include "ILogger.hpp"
+
 
 GLFeatureGroupName GLFeatureGroup::getGroupName(int i) {
   switch (i) {

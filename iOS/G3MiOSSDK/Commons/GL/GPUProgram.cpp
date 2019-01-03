@@ -12,6 +12,8 @@
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
+#include "ILogger.hpp"
+
 
 GPUProgram* GPUProgram::createProgram(GL* gl,
                                       const std::string& name,

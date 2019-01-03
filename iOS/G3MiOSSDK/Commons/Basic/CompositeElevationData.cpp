@@ -10,6 +10,7 @@
 #include "Vector3D.hpp"
 #include "IStringBuilder.hpp"
 #include "IMathUtils.hpp"
+#include "ILogger.hpp"
 
 
 double CompositeElevationData::getElevationAt(int x,

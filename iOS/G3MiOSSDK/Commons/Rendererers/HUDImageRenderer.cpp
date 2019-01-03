@@ -29,6 +29,8 @@
 #include "G3MRenderContext.hpp"
 #include "GLFeature.hpp"
 #include "GLState.hpp"
+#include "ILogger.hpp"
+
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 

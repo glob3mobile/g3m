@@ -17,6 +17,7 @@
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
 #include "FloatBufferDEMGrid.hpp"
+#include "ILogger.hpp"
 
 
 int MapzenDEMProvider::_instanceCounter = 0;

@@ -36,6 +36,7 @@
 #include "Vector2F.hpp"
 #include "IMathUtils.hpp"
 #include "Vector2D.hpp"
+#include "ILogger.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):

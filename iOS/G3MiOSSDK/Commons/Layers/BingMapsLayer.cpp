@@ -25,6 +25,7 @@
 #include "RenderState.hpp"
 #include "Info.hpp"
 #include "IMathUtils.hpp"
+#include "ILogger.hpp"
 
 
 BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,

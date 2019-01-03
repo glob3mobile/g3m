@@ -32,7 +32,7 @@ public abstract class IDeviceLocation
   {
     if (_instance != null)
     {
-      ILogger.instance().logWarning("IDeviceLocation instance already set!");
+  //    ILogger::instance()->logWarning("IDeviceLocation instance already set!");
       if (_instance != null)
          _instance.dispose();
     }

@@ -6,7 +6,6 @@ package org.glob3.mobile.generated;
 //  Created by Oliver Koehler on 02/10/12.
 //
 
-///#include "ILogger.hpp"
 //
 //  JSONBaseObject.hpp
 //  G3MiOSSDK

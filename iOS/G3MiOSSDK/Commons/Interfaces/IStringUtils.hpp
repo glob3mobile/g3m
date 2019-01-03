@@ -12,7 +12,6 @@
 #include <vector>
 #include <string>
 
-#include "ILogger.hpp"
 
 class IStringUtils {
 private:
@@ -25,7 +24,7 @@ private:
 public:
   static void setInstance(const IStringUtils* instance) {
     if (_instance != NULL) {
-      ILogger::instance()->logWarning("IStringUtils instance already set!");
+      //ILogger::instance()->logWarning("IStringUtils instance already set!");
       delete _instance;
     }
     _instance = instance;

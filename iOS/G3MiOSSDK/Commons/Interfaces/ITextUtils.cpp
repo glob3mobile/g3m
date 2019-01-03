@@ -9,6 +9,7 @@
 #include "ITextUtils.hpp"
 
 #include "Color.hpp"
+#include "ILogger.hpp"
 
 
 ITextUtils* ITextUtils::_instance = NULL;

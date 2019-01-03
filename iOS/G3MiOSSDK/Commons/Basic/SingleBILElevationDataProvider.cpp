@@ -15,6 +15,7 @@
 #include "BILParser.hpp"
 #include "InterpolatedSubviewElevationData.hpp"
 #include "ShortBufferElevationData.hpp"
+#include "ILogger.hpp"
 
 
 SingleBILElevationDataProvider::SingleBILElevationDataProvider(const URL& bilUrl,

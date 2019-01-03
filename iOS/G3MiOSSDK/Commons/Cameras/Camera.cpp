@@ -25,6 +25,7 @@
 #include "FrustumPolicy.hpp"
 #include "FrustumData.hpp"
 #include "ErrorHandling.hpp"
+#include "ILogger.hpp"
 
 
 void Camera::initialize(const G3MContext* context) {

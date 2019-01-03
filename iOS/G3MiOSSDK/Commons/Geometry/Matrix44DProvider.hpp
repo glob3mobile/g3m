@@ -11,7 +11,6 @@
 
 #include "RCObject.hpp"
 #include "Matrix44D.hpp"
-//#include "ILogger.hpp"
 #include "ErrorHandling.hpp"
 
 #include <vector>

@@ -16,6 +16,7 @@
 #include "ShortBufferDEMGrid.hpp"
 #include "IMathUtils.hpp"
 #include "WGS84Projetion.hpp"
+#include "ILogger.hpp"
 
 
 ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,

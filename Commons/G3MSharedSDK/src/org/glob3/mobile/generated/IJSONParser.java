@@ -15,6 +15,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class IJSONParser
 {
   private static IJSONParser _instance = null;
@@ -24,7 +25,7 @@ public abstract class IJSONParser
   {
     if (_instance != null)
     {
-      ILogger.instance().logWarning("IJSONParser instance already set!");
+      //ILogger::instance()->logWarning("IJSONParser instance already set!");
       if (_instance != null)
          _instance.dispose();
     }

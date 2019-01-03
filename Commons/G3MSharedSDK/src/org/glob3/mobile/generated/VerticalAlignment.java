@@ -17,10 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "ILogger.hpp"
+
 //class ICanvas;
 //class GFont;
 //class Vector2F;
+
 
 public enum VerticalAlignment
 {

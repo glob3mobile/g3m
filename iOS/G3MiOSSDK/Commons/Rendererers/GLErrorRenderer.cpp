@@ -9,6 +9,7 @@
 
 #include "G3MRenderContext.hpp"
 #include "GL.hpp"
+#include "ILogger.hpp"
 
 
 void GLErrorRenderer::render(const G3MRenderContext* rc,

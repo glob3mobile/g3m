@@ -85,17 +85,15 @@ public class GLGlobalState
      _clearColorG = 0.0F;
      _clearColorB = 0.0F;
      _clearColorA = 0.0F;
-
     if (!_initializationAvailable)
     {
       ILogger.instance().logError("GLGlobalState creation before it is available.");
     }
-
+  
     for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
     {
       _boundTextureID[i] = null;
     }
-
   }
 
   public static GLGlobalState newDefault()
@@ -197,7 +195,7 @@ public class GLGlobalState
       ILogger.instance().logError("WRONG TARGET FOR TEXTURE");
       return;
     }
-
+  
     _boundTextureID[target] = textureID;
   }
 

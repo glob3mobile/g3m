@@ -19,6 +19,8 @@
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
 #include "ErrorHandling.hpp"
+#include "ILogger.hpp"
+
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRasterizer() {
   if (_imageAssembler != NULL) {

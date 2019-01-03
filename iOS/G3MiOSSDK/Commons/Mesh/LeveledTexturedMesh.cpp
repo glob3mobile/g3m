@@ -15,6 +15,8 @@
 #include "GPUProgramManager.hpp"
 #include "Camera.hpp"
 #include "GLState.hpp"
+#include "ILogger.hpp"
+
 
 void LazyTextureMapping::modifyGLState(GLState& state) const {
   if (!_initialized) {

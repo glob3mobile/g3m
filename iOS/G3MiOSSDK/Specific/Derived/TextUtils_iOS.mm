@@ -8,7 +8,7 @@
 
 #include "TextUtils_iOS.hpp"
 
-
+#include "ILogger.hpp"
 #include "Image_iOS.hpp"
 #include "Color.hpp"
 #include "IImageListener.hpp"

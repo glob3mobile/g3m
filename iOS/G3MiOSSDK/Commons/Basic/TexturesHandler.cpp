@@ -13,6 +13,8 @@
 #include "IStringBuilder.hpp"
 #include "GL.hpp"
 #include "TextureIDReference.hpp"
+#include "ILogger.hpp"
+
 
 const std::string TextureSpec::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

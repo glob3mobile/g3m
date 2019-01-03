@@ -34,6 +34,7 @@
 #include "RectangleF.hpp"
 #include "IDeviceInfo.hpp"
 #include "G3MRenderContext.hpp"
+#include "ILogger.hpp"
 
 
 MarkWidget::MarkWidget(IImageBuilder* imageBuilder):

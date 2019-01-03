@@ -18,6 +18,7 @@
 #include "BilinearInterpolator.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2D.hpp"
+#include "ILogger.hpp"
 
 
 ElevationData::ElevationData(const Sector& sector,

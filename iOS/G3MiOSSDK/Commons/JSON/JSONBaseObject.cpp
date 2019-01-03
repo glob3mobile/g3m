@@ -5,8 +5,8 @@
 //  Created by Oliver Koehler on 02/10/12.
 //
 
-//#include "ILogger.hpp"
 #include "JSONBaseObject.hpp"
+
 
 const JSONObject* JSONBaseObject::asObject()  const {
   //ILogger::instance()->logError("The requested Object is not of type JSONObject!");

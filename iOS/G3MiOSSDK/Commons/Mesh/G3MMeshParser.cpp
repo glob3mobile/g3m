@@ -23,6 +23,7 @@
 #include "Planet.hpp"
 #include "Geodetic3D.hpp"
 #include "GLConstants.hpp"
+#include "ILogger.hpp"
 
 
 Color* G3MMeshParser::parseColor(const JSONArray* jsonColor) {

@@ -12,11 +12,12 @@
 #include <vector>
 #include <string>
 
-//#include "ILogger.hpp"
 #include "Color.hpp"
+
 class ICanvas;
 class GFont;
 class Vector2F;
+
 
 enum VerticalAlignment {
   Top,

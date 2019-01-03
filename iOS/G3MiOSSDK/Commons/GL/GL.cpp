@@ -11,6 +11,7 @@
 
 #include "GLState.hpp"
 #include "IShortBuffer.hpp"
+#include "ILogger.hpp"
 
 
 void GL::clearScreen(const Color& color) {

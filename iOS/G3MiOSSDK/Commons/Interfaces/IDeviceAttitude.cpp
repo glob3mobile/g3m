@@ -8,7 +8,6 @@
 
 #include "IDeviceAttitude.hpp"
 
-#include "ILogger.hpp"
 
 IDeviceAttitude* IDeviceAttitude::_instance;
 
@@ -23,7 +22,7 @@ _camCSLR(NULL) {
 
 void IDeviceAttitude::setInstance(IDeviceAttitude* deviceAttitude) {
   if (_instance != NULL) {
-    ILogger::instance()->logWarning("ILooger instance already set!");
+    //ILogger::instance()->logWarning("ILooger instance already set!");
     delete _instance;
   }
   _instance = deviceAttitude;

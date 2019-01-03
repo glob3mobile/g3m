@@ -15,7 +15,7 @@
 #include "Geodetic3D.hpp"
 #include "IMathUtils.hpp"
 #include "TimeInterval.hpp"
-
+#include "ILogger.hpp"
 
 
 Vector3D EllipsoidalPlanet::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {

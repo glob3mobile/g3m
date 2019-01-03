@@ -25,6 +25,7 @@
 #include "TimeInterval.hpp"
 #include "IImage.hpp"
 #include "GLConstants.hpp"
+#include "ILogger.hpp"
 
 
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {

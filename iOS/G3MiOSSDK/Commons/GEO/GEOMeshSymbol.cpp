@@ -16,6 +16,7 @@
 #include "Color.hpp"
 #include "Geodetic2D.hpp"
 #include "MeshRenderer.hpp"
+#include "ILogger.hpp"
 
 
 Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinates,

@@ -19,6 +19,7 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "GEOVectorLayer.hpp"
+#include "ILogger.hpp"
 
 
 class GEORenderer_ObjectSymbolizerPair {

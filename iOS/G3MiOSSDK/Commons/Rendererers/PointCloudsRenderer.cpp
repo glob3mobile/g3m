@@ -22,6 +22,7 @@
 #include "IDeviceInfo.hpp"
 #include "G3MRenderContext.hpp"
 #include "ITimer.hpp"
+#include "ILogger.hpp"
 
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
@@ -860,7 +861,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
     }
 
     if (neededLevel != _neededLevel) {
-//      ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
+      //ILogger::instance()->logInfo("Needed Level changed for %s from=%d to=%d, needed points=%d, projectedArea=%f",
 //                                   _id.c_str(),
 //                                   _neededLevel,
 //                                   neededLevel,

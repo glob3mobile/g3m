@@ -46,7 +46,7 @@ public abstract class IFactory
   {
     if (_instance != null)
     {
-      ILogger.instance().logWarning("IFactory instance already set!");
+  //    ILogger::instance()->logWarning("IFactory instance already set!");
       if (_instance != null)
          _instance.dispose();
     }

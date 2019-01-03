@@ -6,6 +6,7 @@
 #include "GLState.hpp"
 
 #include "GPUProgramManager.hpp"
+#include "ILogger.hpp"
 
 
 GLState::GLState():

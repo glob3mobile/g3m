@@ -12,6 +12,7 @@
 #include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
 #include "Angle.hpp"
+#include "ILogger.hpp"
 
 const Color Color::TRANSPARENT = Color::fromRGBA(0, 0, 0, 0);
 const Color Color::BLACK       = Color::fromRGBA(0, 0, 0, 1);

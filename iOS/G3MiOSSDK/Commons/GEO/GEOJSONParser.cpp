@@ -13,7 +13,6 @@
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
-
 #include "GEOFeatureCollection.hpp"
 #include "GEOFeature.hpp"
 #include "GEOGeometry.hpp"
@@ -30,6 +29,7 @@
 #include "GEO2DMultiPolygonGeometry.hpp"
 #include "BSONParser.hpp"
 #include "IStringBuilder.hpp"
+#include "ILogger.hpp"
 
 
 GEOObject* GEOJSONParser::parseJSON(const IByteBuffer* json,
