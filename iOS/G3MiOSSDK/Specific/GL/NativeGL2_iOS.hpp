@@ -20,6 +20,9 @@
 #include "GPUProgram.hpp"
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
+#include "GPUAttributeVec2Float.hpp"
+#include "GPUAttributeVec3Float.hpp"
+#include "GPUAttributeVec4Float.hpp"
 
 
 class NativeGL2_iOS: public INativeGL {
@@ -517,12 +520,12 @@ public:
     
     //NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
     switch (type) {
+      case GL_FLOAT_VEC2:
+        return new GPUAttributeVec2Float(name, id);
       case GL_FLOAT_VEC3:
         return new GPUAttributeVec3Float(name, id);
       case GL_FLOAT_VEC4:
         return new GPUAttributeVec4Float(name, id);
-      case GL_FLOAT_VEC2:
-        return new GPUAttributeVec2Float(name, id);
       default:
         return NULL;
         break;

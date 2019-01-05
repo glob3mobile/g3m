@@ -1,27 +1,36 @@
 package org.glob3.mobile.generated;
+//
+//  GPUAttribute.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 16/05/13.
+//
+//
+
+//
+//  GPUAttribute.hpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 27/03/13.
+//
+//
+
+
+
+//class GPUAttributeValue;
+//class GL;
+
+
 public class GPUAttribute extends GPUVariable
 {
-
   private boolean _dirty;
   private GPUAttributeValue _value;
-
   private boolean _enabled;
-
 
   public final int _id;
   public final int _type;
   public final int _size;
   public final GPUAttributeKey _key;
-
-  public void dispose()
-  {
-    if (_value != null)
-    {
-      _value._release();
-    }
-
-    super.dispose();
-  }
 
   public GPUAttribute(String name, int id, int type, int size)
   {
@@ -33,22 +42,28 @@ public class GPUAttribute extends GPUVariable
      _size = size;
      _enabled = false;
      _key = getAttributeKey(name);
+  
   }
 
-  //  const std::string getName() const { return _name;}
-  //  const int getID() const { return _id;}
-  //  int getType() const { return _type;}
-  //  int getSize() const { return _size;}
+  public void dispose()
+  {
+    if (_value != null)
+    {
+      _value._release();
+    }
+  
+    super.dispose();
+  }
+
   public final boolean wasSet()
   {
-     return _value != null;
+    return _value != null;
   }
+
   public final boolean isEnabled()
   {
-     return _enabled;
+    return _enabled;
   }
-  //  GPUAttributeKey getKey() const { return _key;}
-
 
   public final int getIndex()
   {
@@ -64,15 +79,14 @@ public class GPUAttribute extends GPUVariable
     }
     _enabled = false;
     _dirty = false;
-
+  
     gl.disableVertexAttribArray(_id);
   }
 
-  public final void set(GPUAttributeValue v)
+  public final void put(GPUAttributeValue v)
   {
     if (v != _value)
     {
-
       if (v._enabled && _type != v._type) //type checking
       {
         ILogger.instance().logError("Attempting to set attribute " + _name + "with invalid value type.");
@@ -81,18 +95,16 @@ public class GPUAttribute extends GPUVariable
       if (_value == null || !_value.isEquals(v))
       {
         _dirty = true;
-
+  
         if (_value != null)
         {
           _value._release();
         }
         _value = v;
         _value._retain();
-
       }
     }
   }
-
 
   public void applyChanges(GL gl)
   {
@@ -124,9 +136,10 @@ public class GPUAttribute extends GPUVariable
             _enabled = false;
           }
         }
-
+  
         _dirty = false;
       }
     }
   }
+
 }

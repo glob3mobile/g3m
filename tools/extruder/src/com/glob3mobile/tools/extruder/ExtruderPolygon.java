@@ -16,10 +16,8 @@ import poly2Tri.Triangulation.Data;
 import poly2Tri.TriangulationException;
 
 
-public abstract class ExtruderPolygon<T> {
+public abstract class ExtruderPolygon {
 
-
-   private final T              _source;
    private final double         _lowerHeight;
    private final G3MeshMaterial _material;
    private final boolean        _depthTest;
@@ -27,12 +25,10 @@ public abstract class ExtruderPolygon<T> {
    private final double         _minHeight;
 
 
-   protected ExtruderPolygon(final T source,
-                             final double lowerHeight,
+   protected ExtruderPolygon(final double lowerHeight,
                              final G3MeshMaterial material,
                              final boolean depthTest,
                              final double minHeight) {
-      _source = source;
       _lowerHeight = lowerHeight;
       _material = material;
       _depthTest = depthTest;
@@ -59,9 +55,8 @@ public abstract class ExtruderPolygon<T> {
    public abstract List<Wall> createInteriorWalls(final double lowerHeight);
 
 
-   public Building<T> createBuilding(final PolygonExtruder.Statistics<T> statistics,
-                                     final ExtrusionHandler<T> handler,
-                                     final long id) {
+   public Building createBuilding(final PolygonExtruder.Statistics statistics,
+                                  final long id) {
 
       final Triangulation.Data data = createRoofTriangulationData();
 
@@ -69,7 +64,7 @@ public abstract class ExtruderPolygon<T> {
          final List<Triangle> roofTriangles = Triangulation.triangulate(data);
          if (roofTriangles == null) {
             System.err.println("Error triangulating polygon #" + id);
-            statistics.countTriangulationError(PolygonExtruder.ErrorType.RETURN_NULL, _source, handler);
+            statistics.countTriangulationError(PolygonExtruder.ErrorType.RETURN_NULL);
          }
          else {
             statistics.countTriangulation(roofTriangles.size());
@@ -80,16 +75,16 @@ public abstract class ExtruderPolygon<T> {
 
             final Wall exteriorWall = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
-            return new Building<>(this, getAverage(), roofArea, _minHeight, toVector3DList(data._vertices), roofTriangles,
+            return new Building(this, getAverage(), roofArea, _minHeight, toVector3DList(data._vertices), roofTriangles,
                      exteriorWall, interiorWalls, _material, _depthTest);
          }
       }
       catch (final NullPointerException e) {
-         statistics.countTriangulationError(PolygonExtruder.ErrorType.NULL_POINTER_EXCEPTION, _source, handler);
+         statistics.countTriangulationError(PolygonExtruder.ErrorType.NULL_POINTER_EXCEPTION);
       }
       catch (final TriangulationException e) {
          System.out.println(e.getMessage());
-         statistics.countTriangulationError(PolygonExtruder.ErrorType.TRIANGULATION_EXCEPTION, _source, handler);
+         statistics.countTriangulationError(PolygonExtruder.ErrorType.TRIANGULATION_EXCEPTION);
       }
 
       return null;

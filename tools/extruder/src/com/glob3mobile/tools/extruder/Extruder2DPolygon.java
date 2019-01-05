@@ -14,22 +14,20 @@ import com.glob3mobile.tools.mesh.G3MeshMaterial;
 import poly2Tri.Triangulation;
 
 
-public class Extruder2DPolygon<T>
+public class Extruder2DPolygon
          extends
-            ExtruderPolygon<T> {
+            ExtruderPolygon {
 
 
-   public static <T> Extruder2DPolygon<T> create(final T source,
-                                                 final List<Geodetic2D> coordinates,
-                                                 final List<List<Geodetic2D>> holesCoordinatesArray,
-                                                 final double lowerHeight,
-                                                 final double upperHeight,
-                                                 final G3MeshMaterial material,
-                                                 final boolean depthTest) {
+   public static Extruder2DPolygon create(final List<Geodetic2D> coordinates,
+                                          final List<List<Geodetic2D>> holesCoordinatesArray,
+                                          final double lowerHeight,
+                                          final double upperHeight,
+                                          final G3MeshMaterial material,
+                                          final boolean depthTest) {
       final PolygonData<Geodetic2D> data = PolygonData.fixPolygon2DData(coordinates, holesCoordinatesArray);
       return (data == null) ? null //
-                            : new Extruder2DPolygon<>( //
-                                     source, //
+                            : new Extruder2DPolygon( //
                                      data._coordinates, //
                                      data._holesCoordinatesArray, //
                                      lowerHeight, //
@@ -44,14 +42,13 @@ public class Extruder2DPolygon<T>
    private final List<List<Geodetic2D>> _holesCoordinatesArray;
 
 
-   Extruder2DPolygon(final T source,
-                     final List<Geodetic2D> coordinates,
+   Extruder2DPolygon(final List<Geodetic2D> coordinates,
                      final List<List<Geodetic2D>> holesCoordinatesArray,
                      final double lowerHeight,
                      final double upperHeight,
                      final G3MeshMaterial material,
                      final boolean depthTest) {
-      super(source, lowerHeight, material, depthTest, lowerHeight);
+      super(lowerHeight, material, depthTest, lowerHeight);
       _upperHeight = upperHeight;
       _coordinates = coordinates;
       _holesCoordinatesArray = (holesCoordinatesArray == null) ? Collections.emptyList() : holesCoordinatesArray;

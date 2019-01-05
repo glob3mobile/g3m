@@ -13,6 +13,8 @@
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
 #include "ViewMode.hpp"
+#include "GPUUniform.hpp"
+
 
 class Camera;
 
@@ -35,6 +37,7 @@ enum GLFeatureID {
   GLF_BLENDING_MODE,
   GLF_CAMERA_POSITION
 };
+
 
 class GLFeature: public RCObject {
 protected:
@@ -68,6 +71,7 @@ public:
 
 };
 
+
 class BillboardGLFeature: public GLFeature {
 private:
   ~BillboardGLFeature() {
@@ -97,6 +101,7 @@ public:
   }
 };
 
+
 class ViewportExtentGLFeature: public GLFeature {
 private:
   ~ViewportExtentGLFeature() {
@@ -121,7 +126,6 @@ public:
 };
 
 
-
 class CameraPositionGLFeature: public GLFeature {
 private:
   ~CameraPositionGLFeature() {
@@ -144,8 +148,6 @@ public:
 
   void update(const Camera* cam);
 };
-
-
 
 
 class GeometryGLFeature: public GLFeature {
@@ -185,8 +187,6 @@ public:
 };
 
 
-
-
 class Geometry2DGLFeature: public GLFeature {
 private:
   //Position + cull + depth + polygonoffset + linewidth
@@ -217,7 +217,6 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const ;
 
 };
-
 
 
 class GLCameraGroupFeature: public GLFeature {
@@ -263,6 +262,7 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
 
+
 class ModelViewGLFeature: public GLCameraGroupFeature {
 private:
   ~ModelViewGLFeature() {
@@ -279,6 +279,7 @@ public:
 
   ModelViewGLFeature(const Camera* camera);
 };
+
 
 class ModelGLFeature: public GLCameraGroupFeature {
 private:
@@ -297,6 +298,7 @@ public:
   ModelGLFeature(const Camera* camera);
 };
 
+
 class ProjectionGLFeature: public GLCameraGroupFeature {
 private:
   ~ProjectionGLFeature() {
@@ -313,6 +315,7 @@ public:
 
   ProjectionGLFeature(const Camera* camera);
 };
+
 
 class ModelTransformGLFeature: public GLCameraGroupFeature {
 private:
@@ -350,6 +353,7 @@ public:
   }
 };
 
+
 class GLColorGroupFeature: public PriorityGLFeature {
 private:
   const bool _blend;
@@ -386,6 +390,7 @@ public:
     }
   }
 };
+
 
 class TextureGLFeature: public GLColorGroupFeature {
 private:
@@ -470,6 +475,7 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
+
 class ColorGLFeature: public GLColorGroupFeature {
 private:
   ~ColorGLFeature() {
@@ -493,6 +499,7 @@ public:
   }
 };
 
+
 class FlatColorGLFeature: public GLColorGroupFeature {
 private:
   ~FlatColorGLFeature() {
@@ -510,6 +517,7 @@ public:
     blendingOnGlobalGLState(state);
   }
 };
+
 
 class TextureIDGLFeature: public PriorityGLFeature {
 private:
@@ -531,6 +539,7 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
+
 class BlendingModeGLFeature: public GLColorGroupFeature {
 private:
   ~BlendingModeGLFeature() {
@@ -543,6 +552,7 @@ public:
   BlendingModeGLFeature(bool blend, int sFactor, int dFactor);
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
+
 
 class TextureCoordsGLFeature: public PriorityGLFeature {
 private:
@@ -565,6 +575,7 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
+
 class DirectionLightGLFeature: public GLFeature {
 private:
   GPUUniformValueVec3FloatMutable* _lightDirectionUniformValue;
@@ -585,6 +596,7 @@ public:
   void setLightDirection(const Vector3D& lightDir);
 };
 
+
 class VertexNormalGLFeature: public GLFeature {
 private:
   ~VertexNormalGLFeature() {
@@ -602,6 +614,5 @@ public:
   
   void applyOnGlobalGLState(GLGlobalState* state) const {}
 };
-
 
 #endif

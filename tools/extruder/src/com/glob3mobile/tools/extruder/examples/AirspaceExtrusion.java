@@ -24,7 +24,7 @@ public class AirspaceExtrusion {
 
    private static class AirspaceExtrusionHandler
             implements
-               ExtrusionHandler<GEOFeature> {
+               ExtrusionHandler<GEOFeature, Void> {
 
 
       private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
@@ -48,16 +48,18 @@ public class AirspaceExtrusion {
       }
 
 
-      @Override
-      public boolean extrudes(final GEOFeature geoFeature) {
-         final JSONObject properties = geoFeature.getProperties();
-         final String type = properties.getAsString("type", "");
-         return (!type.equalsIgnoreCase("CTA") && !type.equalsIgnoreCase("FIR"));
-      }
+      //      @Override
+      //      public boolean extrudes(final GEOFeature geoFeature,
+      //                              final Void v) {
+      //         final JSONObject properties = geoFeature.getProperties();
+      //         final String type = properties.getAsString("type", "");
+      //         return (!type.equalsIgnoreCase("CTA") && !type.equalsIgnoreCase("FIR"));
+      //      }
 
 
       @Override
-      public G3MeshMaterial getMaterialFor(final GEOFeature geoFeature) {
+      public G3MeshMaterial getMaterialFor(final GEOFeature geoFeature,
+                                           final Void v) {
          final JSONObject properties = geoFeature.getProperties();
 
          final String type = properties.getAsString("type", "");
@@ -77,13 +79,15 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public boolean getDepthTestFor(final GEOFeature geoFeature) {
+      public boolean getDepthTestFor(final GEOFeature geoFeature,
+                                     final Void v) {
          return false;
       }
 
 
       @Override
-      public Heigths getHeightsFor(final GEOFeature geoFeature) {
+      public Heigths getHeightsFor(final GEOFeature geoFeature,
+                                   final Void v) {
          final JSONObject properties = geoFeature.getProperties();
          final double lowerMeters = toMeter(properties, "lowerLimit", "lowerLimit_uom");
          final double upperMeters = toMeter(properties, "upperLimit", "upperLimit_uom");
@@ -92,19 +96,12 @@ public class AirspaceExtrusion {
 
 
       @Override
-      public void processTriangulationError(final GEOFeature geoFeature,
-                                            final PolygonExtruder.ErrorType errorType) {
-         System.err.println("Error triangulation " + geoFeature);
+      public void onBuildings(final List<Building> buildings) {
       }
 
 
       @Override
-      public void onBuildings(final List<Building<GEOFeature>> buildings) {
-      }
-
-
-      @Override
-      public void onPolygons(final List<ExtruderPolygon<GEOFeature>> polygons) {
+      public void onPolygons(final List<ExtruderPolygon> polygons) {
       }
 
 
@@ -130,8 +127,7 @@ public class AirspaceExtrusion {
       final boolean createNormals = true;
 
 
-      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), createNormals, planet,
-               verticalExaggeration, deltaHeight, floatPrecision, true);
+      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision, true);
    }
 
 

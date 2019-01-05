@@ -120,7 +120,10 @@ private:
                                       const SceneJSParserParameters& parameters);
 
   static const Color* parseColor(const JSONObject* jsColor,
-                                 const Color*      defaultColor);
+                                 const float defaultRed,
+                                 const float defaultGreen,
+                                 const float defaultBlue,
+                                 const float defaultAlpha);
 
   static void parseChildren(const JSONObject*              jsonObject,
                             SGNode*                        node,

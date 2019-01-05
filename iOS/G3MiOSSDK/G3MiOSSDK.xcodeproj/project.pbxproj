@@ -330,6 +330,8 @@
 		CF857B3F164C80DB0089F1DE /* SGTranslateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B3D164C80DB0089F1DE /* SGTranslateNode.cpp */; };
 		CF8649021921616B001D643A /* ICanvasUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E71AA048191AACE400834D69 /* ICanvasUtils.hpp */; };
 		CF8649031921616B001D643A /* ChildRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4435E3D31906B8070064A7D7 /* ChildRenderer.hpp */; };
+		CF87E4C721DFCC1C00D91403 /* GPUAttributeValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF87E4C521DFCC1C00D91403 /* GPUAttributeValue.cpp */; };
+		CF87E4C821DFCE0800D91403 /* GPUAttributeValue.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF87E4C621DFCC1C00D91403 /* GPUAttributeValue.hpp */; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
 		CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */; };
@@ -361,6 +363,32 @@
 		CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */; };
 		CF9227D51E31154300B79A87 /* MutableQuaternionF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9227D31E31154300B79A87 /* MutableQuaternionF.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
+		CF92DE4E21DFD09000EE5B15 /* GPUAttributeValueVecFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE4C21DFD09000EE5B15 /* GPUAttributeValueVecFloat.cpp */; };
+		CF92DE5121DFD20800EE5B15 /* GPUAttributeValueVec1Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE4F21DFD20800EE5B15 /* GPUAttributeValueVec1Float.cpp */; };
+		CF92DE5421DFD2CB00EE5B15 /* GPUAttributeVec1Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE5221DFD2CB00EE5B15 /* GPUAttributeVec1Float.cpp */; };
+		CF92DE5721DFD34C00EE5B15 /* GPUAttributeValueVec2Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE5521DFD34C00EE5B15 /* GPUAttributeValueVec2Float.cpp */; };
+		CF92DE5A21DFD3C000EE5B15 /* GPUAttributeVec2Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE5821DFD3C000EE5B15 /* GPUAttributeVec2Float.cpp */; };
+		CF92DE5D21DFD45300EE5B15 /* GPUAttributeValueVec3Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE5B21DFD45300EE5B15 /* GPUAttributeValueVec3Float.cpp */; };
+		CF92DE6021DFD4D600EE5B15 /* GPUAttributeVec3Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE5E21DFD4D600EE5B15 /* GPUAttributeVec3Float.cpp */; };
+		CF92DE6321DFD52300EE5B15 /* GPUAttributeValueVec4Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE6121DFD52300EE5B15 /* GPUAttributeValueVec4Float.cpp */; };
+		CF92DE6621DFD58100EE5B15 /* GPUAttributeVec4Float.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE6421DFD58100EE5B15 /* GPUAttributeVec4Float.cpp */; };
+		CF92DE6921DFD87E00EE5B15 /* ShaderType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE6721DFD87E00EE5B15 /* ShaderType.cpp */; };
+		CF92DE6C21DFDAFE00EE5B15 /* GPUUniformKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE6A21DFDAFE00EE5B15 /* GPUUniformKey.cpp */; };
+		CF92DE6F21DFDB1F00EE5B15 /* GPUVariableType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE6D21DFDB1F00EE5B15 /* GPUVariableType.cpp */; };
+		CF92DE7221DFDB3800EE5B15 /* GPUAttributeKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92DE7021DFDB3800EE5B15 /* GPUAttributeKey.cpp */; };
+		CF92DE7321DFDDF900EE5B15 /* GPUAttributeKey.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE7121DFDB3800EE5B15 /* GPUAttributeKey.hpp */; };
+		CF92DE7421DFDDF900EE5B15 /* GPUAttributeValueVec1Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE5021DFD20800EE5B15 /* GPUAttributeValueVec1Float.hpp */; };
+		CF92DE7521DFDDF900EE5B15 /* GPUAttributeValueVec2Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE5621DFD34C00EE5B15 /* GPUAttributeValueVec2Float.hpp */; };
+		CF92DE7621DFDDF900EE5B15 /* GPUAttributeValueVec3Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE5C21DFD45300EE5B15 /* GPUAttributeValueVec3Float.hpp */; };
+		CF92DE7721DFDDF900EE5B15 /* GPUAttributeValueVec4Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE6221DFD52300EE5B15 /* GPUAttributeValueVec4Float.hpp */; };
+		CF92DE7821DFDDF900EE5B15 /* GPUAttributeValueVecFloat.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE4D21DFD09000EE5B15 /* GPUAttributeValueVecFloat.hpp */; };
+		CF92DE7921DFDDF900EE5B15 /* GPUAttributeVec1Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE5321DFD2CB00EE5B15 /* GPUAttributeVec1Float.hpp */; };
+		CF92DE7A21DFDDF900EE5B15 /* GPUAttributeVec2Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE5921DFD3C000EE5B15 /* GPUAttributeVec2Float.hpp */; };
+		CF92DE7B21DFDDF900EE5B15 /* GPUAttributeVec3Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE5F21DFD4D600EE5B15 /* GPUAttributeVec3Float.hpp */; };
+		CF92DE7C21DFDDF900EE5B15 /* GPUAttributeVec4Float.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE6521DFD58100EE5B15 /* GPUAttributeVec4Float.hpp */; };
+		CF92DE7D21DFDDF900EE5B15 /* GPUUniformKey.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE6B21DFDAFE00EE5B15 /* GPUUniformKey.hpp */; };
+		CF92DE7E21DFDDF900EE5B15 /* GPUVariableType.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE6E21DFDB1F00EE5B15 /* GPUVariableType.hpp */; };
+		CF92DE7F21DFDDF900EE5B15 /* ShaderType.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF92DE6821DFD87E00EE5B15 /* ShaderType.hpp */; };
 		CF92FCF11E3B913400A439D3 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */; };
 		CF93F40A1E5736A100E97FF1 /* SceneJSNodeParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */; };
 		CF93F40B1E5743BB00E97FF1 /* SceneJSNodeParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF93F4091E5736A100E97FF1 /* SceneJSNodeParser.hpp */; };
@@ -880,6 +908,20 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF92DE7321DFDDF900EE5B15 /* GPUAttributeKey.hpp in CopyFiles */,
+				CF92DE7421DFDDF900EE5B15 /* GPUAttributeValueVec1Float.hpp in CopyFiles */,
+				CF92DE7521DFDDF900EE5B15 /* GPUAttributeValueVec2Float.hpp in CopyFiles */,
+				CF92DE7621DFDDF900EE5B15 /* GPUAttributeValueVec3Float.hpp in CopyFiles */,
+				CF92DE7721DFDDF900EE5B15 /* GPUAttributeValueVec4Float.hpp in CopyFiles */,
+				CF92DE7821DFDDF900EE5B15 /* GPUAttributeValueVecFloat.hpp in CopyFiles */,
+				CF92DE7921DFDDF900EE5B15 /* GPUAttributeVec1Float.hpp in CopyFiles */,
+				CF92DE7A21DFDDF900EE5B15 /* GPUAttributeVec2Float.hpp in CopyFiles */,
+				CF92DE7B21DFDDF900EE5B15 /* GPUAttributeVec3Float.hpp in CopyFiles */,
+				CF92DE7C21DFDDF900EE5B15 /* GPUAttributeVec4Float.hpp in CopyFiles */,
+				CF92DE7D21DFDDF900EE5B15 /* GPUUniformKey.hpp in CopyFiles */,
+				CF92DE7E21DFDDF900EE5B15 /* GPUVariableType.hpp in CopyFiles */,
+				CF92DE7F21DFDDF900EE5B15 /* ShaderType.hpp in CopyFiles */,
+				CF87E4C821DFCE0800D91403 /* GPUAttributeValue.hpp in CopyFiles */,
 				CFB238DC21ADA600008DD0AF /* CenterStrategy.hpp in CopyFiles */,
 				CF993E8E2191E4F300755979 /* GEO3DCoordinatesData.hpp in CopyFiles */,
 				CF993E8F2191E4F300755979 /* GEO3DPolygonData.hpp in CopyFiles */,
@@ -1755,6 +1797,8 @@
 		CF857B3A164C7AFC0089F1DE /* SGGeometryNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGGeometryNode.hpp; path = Commons/Rendererers/SGGeometryNode.hpp; sourceTree = "<group>"; };
 		CF857B3D164C80DB0089F1DE /* SGTranslateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGTranslateNode.cpp; path = Commons/Rendererers/SGTranslateNode.cpp; sourceTree = "<group>"; };
 		CF857B3E164C80DB0089F1DE /* SGTranslateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGTranslateNode.hpp; path = Commons/Rendererers/SGTranslateNode.hpp; sourceTree = "<group>"; };
+		CF87E4C521DFCC1C00D91403 /* GPUAttributeValue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValue.cpp; sourceTree = "<group>"; };
+		CF87E4C621DFCC1C00D91403 /* GPUAttributeValue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValue.hpp; sourceTree = "<group>"; };
 		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
 		CF883B811590984900AEE39C /* TexturesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TexturesHandler.cpp; path = Commons/Basic/TexturesHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF883BCA1594B9A500AEE39C /* Sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Sector.cpp; path = Commons/Geometry/Sector.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1792,6 +1836,32 @@
 		CF9227D41E31154300B79A87 /* MutableQuaternionF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableQuaternionF.hpp; path = Commons/Geometry/MutableQuaternionF.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ShortBufferBuilder.cpp; path = Commons/Basic/ShortBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF92DE4C21DFD09000EE5B15 /* GPUAttributeValueVecFloat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValueVecFloat.cpp; sourceTree = "<group>"; };
+		CF92DE4D21DFD09000EE5B15 /* GPUAttributeValueVecFloat.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVecFloat.hpp; sourceTree = "<group>"; };
+		CF92DE4F21DFD20800EE5B15 /* GPUAttributeValueVec1Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValueVec1Float.cpp; sourceTree = "<group>"; };
+		CF92DE5021DFD20800EE5B15 /* GPUAttributeValueVec1Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVec1Float.hpp; sourceTree = "<group>"; };
+		CF92DE5221DFD2CB00EE5B15 /* GPUAttributeVec1Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeVec1Float.cpp; sourceTree = "<group>"; };
+		CF92DE5321DFD2CB00EE5B15 /* GPUAttributeVec1Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeVec1Float.hpp; sourceTree = "<group>"; };
+		CF92DE5521DFD34C00EE5B15 /* GPUAttributeValueVec2Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValueVec2Float.cpp; sourceTree = "<group>"; };
+		CF92DE5621DFD34C00EE5B15 /* GPUAttributeValueVec2Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVec2Float.hpp; sourceTree = "<group>"; };
+		CF92DE5821DFD3C000EE5B15 /* GPUAttributeVec2Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeVec2Float.cpp; sourceTree = "<group>"; };
+		CF92DE5921DFD3C000EE5B15 /* GPUAttributeVec2Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeVec2Float.hpp; sourceTree = "<group>"; };
+		CF92DE5B21DFD45300EE5B15 /* GPUAttributeValueVec3Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValueVec3Float.cpp; sourceTree = "<group>"; };
+		CF92DE5C21DFD45300EE5B15 /* GPUAttributeValueVec3Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVec3Float.hpp; sourceTree = "<group>"; };
+		CF92DE5E21DFD4D600EE5B15 /* GPUAttributeVec3Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeVec3Float.cpp; sourceTree = "<group>"; };
+		CF92DE5F21DFD4D600EE5B15 /* GPUAttributeVec3Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeVec3Float.hpp; sourceTree = "<group>"; };
+		CF92DE6121DFD52300EE5B15 /* GPUAttributeValueVec4Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValueVec4Float.cpp; sourceTree = "<group>"; };
+		CF92DE6221DFD52300EE5B15 /* GPUAttributeValueVec4Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVec4Float.hpp; sourceTree = "<group>"; };
+		CF92DE6421DFD58100EE5B15 /* GPUAttributeVec4Float.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeVec4Float.cpp; sourceTree = "<group>"; };
+		CF92DE6521DFD58100EE5B15 /* GPUAttributeVec4Float.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeVec4Float.hpp; sourceTree = "<group>"; };
+		CF92DE6721DFD87E00EE5B15 /* ShaderType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderType.cpp; sourceTree = "<group>"; };
+		CF92DE6821DFD87E00EE5B15 /* ShaderType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShaderType.hpp; sourceTree = "<group>"; };
+		CF92DE6A21DFDAFE00EE5B15 /* GPUUniformKey.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUUniformKey.cpp; sourceTree = "<group>"; };
+		CF92DE6B21DFDAFE00EE5B15 /* GPUUniformKey.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUUniformKey.hpp; sourceTree = "<group>"; };
+		CF92DE6D21DFDB1F00EE5B15 /* GPUVariableType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUVariableType.cpp; sourceTree = "<group>"; };
+		CF92DE6E21DFDB1F00EE5B15 /* GPUVariableType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUVariableType.hpp; sourceTree = "<group>"; };
+		CF92DE7021DFDB3800EE5B15 /* GPUAttributeKey.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeKey.cpp; sourceTree = "<group>"; };
+		CF92DE7121DFDB3800EE5B15 /* GPUAttributeKey.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeKey.hpp; sourceTree = "<group>"; };
 		CF92FCEF1E3B913400A439D3 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = Commons/Geometry/Quaternion.cpp; sourceTree = "<group>"; };
 		CF92FCF01E3B913400A439D3 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Commons/Geometry/Quaternion.hpp; sourceTree = "<group>"; };
 		CF93F4081E5736A100E97FF1 /* SceneJSNodeParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSNodeParser.cpp; path = Commons/Rendererers/SceneJSNodeParser.cpp; sourceTree = "<group>"; };
@@ -3190,32 +3260,60 @@
 		D892FBCD15C930E600E69254 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */,
-				D8B8CE86178D636000EE1B97 /* GLFeature.cpp */,
-				D8B8CE87178D636000EE1B97 /* GLFeature.hpp */,
-				D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */,
 				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
 				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81D2071160748EA009A8BA6 /* GLConstants.cpp */,
 				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
-				D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */,
-				D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */,
-				D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */,
-				D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */,
-				D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */,
-				D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */,
-				D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */,
-				D87BF6DB170F0628004D467D /* GPUUniform.hpp */,
-				D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */,
-				D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */,
-				D80A286F1746572E0058CEC3 /* GLState.cpp */,
-				D80A28701746572E0058CEC3 /* GLState.hpp */,
-				D8D894EB17731870007E41A5 /* GPUVariable.cpp */,
-				D8D894EC17731870007E41A5 /* GPUVariable.hpp */,
+				D8B8CE86178D636000EE1B97 /* GLFeature.cpp */,
+				D8B8CE87178D636000EE1B97 /* GLFeature.hpp */,
 				D8B8CE89178D63C400EE1B97 /* GLFeatureGroup.cpp */,
 				D8B8CE8A178D63C400EE1B97 /* GLFeatureGroup.hpp */,
+				D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */,
+				D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */,
+				D80A286F1746572E0058CEC3 /* GLState.cpp */,
+				D80A28701746572E0058CEC3 /* GLState.hpp */,
+				D8A76ECC1744F02400E0FFE8 /* GPUAttribute.cpp */,
+				D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */,
+				CF92DE7021DFDB3800EE5B15 /* GPUAttributeKey.cpp */,
+				CF92DE7121DFDB3800EE5B15 /* GPUAttributeKey.hpp */,
+				CF87E4C521DFCC1C00D91403 /* GPUAttributeValue.cpp */,
+				CF87E4C621DFCC1C00D91403 /* GPUAttributeValue.hpp */,
+				CF92DE4F21DFD20800EE5B15 /* GPUAttributeValueVec1Float.cpp */,
+				CF92DE5021DFD20800EE5B15 /* GPUAttributeValueVec1Float.hpp */,
+				CF92DE5521DFD34C00EE5B15 /* GPUAttributeValueVec2Float.cpp */,
+				CF92DE5621DFD34C00EE5B15 /* GPUAttributeValueVec2Float.hpp */,
+				CF92DE5B21DFD45300EE5B15 /* GPUAttributeValueVec3Float.cpp */,
+				CF92DE5C21DFD45300EE5B15 /* GPUAttributeValueVec3Float.hpp */,
+				CF92DE6121DFD52300EE5B15 /* GPUAttributeValueVec4Float.cpp */,
+				CF92DE6221DFD52300EE5B15 /* GPUAttributeValueVec4Float.hpp */,
+				CF92DE4C21DFD09000EE5B15 /* GPUAttributeValueVecFloat.cpp */,
+				CF92DE4D21DFD09000EE5B15 /* GPUAttributeValueVecFloat.hpp */,
+				CF92DE5221DFD2CB00EE5B15 /* GPUAttributeVec1Float.cpp */,
+				CF92DE5321DFD2CB00EE5B15 /* GPUAttributeVec1Float.hpp */,
+				CF92DE5821DFD3C000EE5B15 /* GPUAttributeVec2Float.cpp */,
+				CF92DE5921DFD3C000EE5B15 /* GPUAttributeVec2Float.hpp */,
+				CF92DE5E21DFD4D600EE5B15 /* GPUAttributeVec3Float.cpp */,
+				CF92DE5F21DFD4D600EE5B15 /* GPUAttributeVec3Float.hpp */,
+				CF92DE6421DFD58100EE5B15 /* GPUAttributeVec4Float.cpp */,
+				CF92DE6521DFD58100EE5B15 /* GPUAttributeVec4Float.hpp */,
+				D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */,
+				D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */,
+				D80E59B0170B12CD00E7C799 /* GPUProgramFactory.cpp */,
+				D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */,
+				D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */,
+				D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */,
+				D8A76ECE1744F0C900E0FFE8 /* GPUUniform.cpp */,
+				D87BF6DB170F0628004D467D /* GPUUniform.hpp */,
+				CF92DE6A21DFDAFE00EE5B15 /* GPUUniformKey.cpp */,
+				CF92DE6B21DFDAFE00EE5B15 /* GPUUniformKey.hpp */,
+				D8D894EB17731870007E41A5 /* GPUVariable.cpp */,
+				D8D894EC17731870007E41A5 /* GPUVariable.hpp */,
+				CF92DE6D21DFDB1F00EE5B15 /* GPUVariableType.cpp */,
+				CF92DE6E21DFDB1F00EE5B15 /* GPUVariableType.hpp */,
 				D8B8CE8C178D645F00EE1B97 /* GPUVariableValueSet.cpp */,
 				D8B8CE8D178D645F00EE1B97 /* GPUVariableValueSet.hpp */,
+				CF92DE6721DFD87E00EE5B15 /* ShaderType.cpp */,
+				CF92DE6821DFD87E00EE5B15 /* ShaderType.hpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -3459,6 +3557,7 @@
 				CFF99FF81DB929D0008E4F14 /* DEMSubscription.cpp in Sources */,
 				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
+				CF92DE6C21DFDAFE00EE5B15 /* GPUUniformKey.cpp in Sources */,
 				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
 				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
 				CFAB53F51A8BCDFF00DD0099 /* ColumnLayoutImageBuilder.cpp in Sources */,
@@ -3562,6 +3661,7 @@
 				CF31578E1DD0921400133123 /* RectangleF.cpp in Sources */,
 				CF71F4FA1DDF34A40055C4D7 /* DecimatedDEMGrid.cpp in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
+				CF92DE7221DFDB3800EE5B15 /* GPUAttributeKey.cpp in Sources */,
 				CF66EB811DB5252900EFF718 /* MapzenTerrariumParser.cpp in Sources */,
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
@@ -3582,6 +3682,7 @@
 				CF9B45FF1DB7B648009ABF32 /* PyramidDEMProvider.cpp in Sources */,
 				CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */,
 				A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */,
+				CF92DE5421DFD2CB00EE5B15 /* GPUAttributeVec1Float.cpp in Sources */,
 				CF67D9D71C5BC37C00873661 /* G3MRenderContext.cpp in Sources */,
 				D8B2BCEB1E8A9A5C00BC08BE /* FrustumPolicyHandler.cpp in Sources */,
 				A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */,
@@ -3616,6 +3717,7 @@
 				D818277F1E854FAC00034382 /* NearFrustumRenderer.cpp in Sources */,
 				CFE11EC71DD0B90900355A89 /* AltitudeMode.cpp in Sources */,
 				CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */,
+				CF92DE5721DFD34C00EE5B15 /* GPUAttributeValueVec2Float.cpp in Sources */,
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 				4435E3DC19072F140064A7D7 /* ProtoRenderer.cpp in Sources */,
@@ -3654,6 +3756,7 @@
 				CF5934531DD364D0002957D4 /* FloatBufferBuilderFromColor.cpp in Sources */,
 				CF9FDBC91DB3B6F5009D972A /* FloatBufferDEMGrid.cpp in Sources */,
 				CF93F4161E5756F900E97FF1 /* TransformableMesh.cpp in Sources */,
+				CF92DE6621DFD58100EE5B15 /* GPUAttributeVec4Float.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,
 				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
 				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
@@ -3676,6 +3779,7 @@
 				CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */,
 				CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */,
 				CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */,
+				CF92DE5121DFD20800EE5B15 /* GPUAttributeValueVec1Float.cpp in Sources */,
 				CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */,
 				CF290D4D187F149D000BE644 /* SimpleTextureMapping.cpp in Sources */,
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
@@ -3684,6 +3788,7 @@
 				CF74A8811DDA010B000767A3 /* Projection.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
 				CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */,
+				CF92DE5A21DFD3C000EE5B15 /* GPUAttributeVec2Float.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
@@ -3694,6 +3799,7 @@
 				CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */,
 				CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */,
 				CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */,
+				CF92DE5D21DFD45300EE5B15 /* GPUAttributeValueVec3Float.cpp in Sources */,
 				CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */,
 				CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */,
 				E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */,
@@ -3742,6 +3848,7 @@
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
+				CF87E4C721DFCC1C00D91403 /* GPUAttributeValue.cpp in Sources */,
 				CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */,
@@ -3769,6 +3876,7 @@
 				CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */,
 				D8D154211C7329AE00E54742 /* Vector2S.cpp in Sources */,
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
+				CF92DE6F21DFDB1F00EE5B15 /* GPUVariableType.cpp in Sources */,
 				D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */,
 				D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */,
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,
@@ -3813,6 +3921,7 @@
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
 				CF47E0F51901D66F00410BB5 /* CanvasTileImageProvider.cpp in Sources */,
+				CF92DE6321DFD52300EE5B15 /* GPUAttributeValueVec4Float.cpp in Sources */,
 				D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */,
 				E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */,
 				CF6CCE3619254B3500AA3ED7 /* ChessboardLayer.cpp in Sources */,
@@ -3828,12 +3937,14 @@
 				CFCBA3BE1906F3C200FD2A2F /* RasterLayer.cpp in Sources */,
 				CF5C1199178C7E33000ED715 /* GEO2DGeometry.cpp in Sources */,
 				CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */,
+				CF92DE6021DFD4D600EE5B15 /* GPUAttributeVec3Float.cpp in Sources */,
 				44EE3CDF19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp in Sources */,
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
 				CF2DF7D6178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp in Sources */,
 				CF8CED371DA6C26A0058748E /* BILDownloader.cpp in Sources */,
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF792A071C51620800FDE7C9 /* TileData.cpp in Sources */,
+				CF92DE6921DFD87E00EE5B15 /* ShaderType.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
@@ -3844,6 +3955,7 @@
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,
 				CF954B0B217CDB080093DAC7 /* GEO3DPointGeometry.cpp in Sources */,
+				CF92DE4E21DFD09000EE5B15 /* GPUAttributeValueVecFloat.cpp in Sources */,
 				CF547B4A196C45C9002DBBDD /* GEOVectorLayer.cpp in Sources */,
 				CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */,
 				CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */,

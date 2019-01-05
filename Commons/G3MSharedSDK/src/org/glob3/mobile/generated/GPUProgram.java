@@ -1,4 +1,38 @@
 package org.glob3.mobile.generated;
+//
+//  GPUProgram.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 27/03/13.
+//
+//
+
+//
+//  GPUProgram.hpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 27/03/13.
+//
+//
+
+
+
+//class GPUUniform;
+//class GPUAttribute;
+//class GL;
+//class GPUUniformBool;
+//class GPUUniformVec2Float;
+//class GPUUniformVec4Float;
+//class GPUUniformFloat;
+//class GPUUniformMatrix4Float;
+//class GPUAttributeVec1Float;
+//class GPUAttributeVec2Float;
+//class GPUAttributeVec3Float;
+//class GPUAttributeVec4Float;
+//class GPUUniformValue;
+//class GPUAttributeValue;
+
+
 public class GPUProgram
 {
   private int _programID;
@@ -494,7 +528,7 @@ public class GPUProgram
       ILogger.instance().logError("Attribute [key=%d] not found in program %s", key, _name);
       return;
     }
-    a.set(v);
+    a.put(v);
   }
 
   public final void addReference()

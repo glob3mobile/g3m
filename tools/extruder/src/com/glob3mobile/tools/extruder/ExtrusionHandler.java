@@ -8,29 +8,28 @@ import com.glob3mobile.tools.mesh.G3MeshCollection;
 import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 
-public interface ExtrusionHandler<T> {
+public interface ExtrusionHandler<T1, T2> {
+
+   //   boolean extrudes(T1 source1,
+   //                    T2 source2);
 
 
-   boolean extrudes(T source);
+   G3MeshMaterial getMaterialFor(T1 source1,
+                                 T2 source2);
 
 
-   G3MeshMaterial getMaterialFor(T source);
+   boolean getDepthTestFor(T1 source1,
+                           T2 source2);
 
 
-   boolean getDepthTestFor(T source);
+   Heigths getHeightsFor(T1 source1,
+                         T2 source2);
 
 
-   Heigths getHeightsFor(T source);
+   void onBuildings(List<Building> buildings);
 
 
-   void processTriangulationError(T source,
-                                  PolygonExtruder.ErrorType errorType);
-
-
-   void onBuildings(List<Building<T>> buildings);
-
-
-   void onPolygons(List<ExtruderPolygon<T>> polygons);
+   void onPolygons(List<ExtruderPolygon> polygons);
 
 
    void onMeshCollection(G3MeshCollection meshes);

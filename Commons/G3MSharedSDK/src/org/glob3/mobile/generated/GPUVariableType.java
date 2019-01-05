@@ -1,20 +1,17 @@
 package org.glob3.mobile.generated;
 //
-//  GPUVariable.cpp
+//  GPUVariableType.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 20/06/13.
-//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
 //
 
 //
-//  GPUVariable.hpp
+//  GPUVariableType.hpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 20/06/13.
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
 //
-//
-
 
 
 public enum GPUVariableType

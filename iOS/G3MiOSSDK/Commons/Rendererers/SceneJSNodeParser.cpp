@@ -215,9 +215,9 @@ SGMaterialNode* SceneJSNodeParser::createMaterialNode(const JSONObject*         
   const std::string sID = jsonObject->getAsString("sid", "");
   
   const Color* baseColor     = parseColor(jsonObject->getAsObject("baseColor"),
-                                          Color::newFromRGBA(0, 0, 0, 1));
+                                          0, 0, 0, 1);
   const Color* specularColor = parseColor(jsonObject->getAsObject("specularColor"),
-                                          Color::newFromRGBA(0, 0, 0, 1));
+                                          0, 0, 0, 1);
   
   const double shine    = jsonObject->getAsNumber("shine", 10);
   const double specular = jsonObject->getAsNumber("specular", 1);
@@ -238,15 +238,21 @@ SGMaterialNode* SceneJSNodeParser::createMaterialNode(const JSONObject*         
 }
 
 const Color* SceneJSNodeParser::parseColor(const JSONObject* jsColor,
-                                           const Color* defaultColor) {
+                                           const float defaultRed,
+                                           const float defaultGreen,
+                                           const float defaultBlue,
+                                           const float defaultAlpha) {
   if (jsColor == NULL) {
-    return defaultColor;
+    return Color::newFromRGBA(defaultRed,
+                              defaultGreen,
+                              defaultBlue,
+                              defaultAlpha);
   }
   
-  const float r = (float) jsColor->getAsNumber("r", 0.0);
-  const float g = (float) jsColor->getAsNumber("g", 0.0);
-  const float b = (float) jsColor->getAsNumber("b", 0.0);
-  const float a = (float) jsColor->getAsNumber("a", 1.0);
+  const float r = (float) jsColor->getAsNumber("r", defaultRed);
+  const float g = (float) jsColor->getAsNumber("g", defaultGreen);
+  const float b = (float) jsColor->getAsNumber("b", defaultBlue);
+  const float a = (float) jsColor->getAsNumber("a", defaultAlpha);
   
   return Color::newFromRGBA(r, g, b, a);
 }

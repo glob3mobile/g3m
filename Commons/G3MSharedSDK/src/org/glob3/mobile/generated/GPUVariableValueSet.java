@@ -16,11 +16,17 @@ package org.glob3.mobile.generated;
 //
 
 
+//class GPUUniformValue;
+//class GPUAttributeValue;
+//class GPUProgram;
+
+
 
 public class GPUVariableValueSet
 {
   private GPUUniformValue[] _uniformValues = new GPUUniformValue[32];
   private GPUAttributeValue[] _attributeValues = new GPUAttributeValue[32];
+
   private int _highestUniformKey;
   private int _highestAttributeKey;
 
@@ -70,21 +76,21 @@ public class GPUVariableValueSet
   public final boolean containsUniform(GPUUniformKey key)
   {
     final int index = key.getValue();
-
+  
     return _uniformValues[index] != null;
   }
 
   public final boolean containsAttribute(GPUAttributeKey key)
   {
     final int index = key.getValue();
-
+  
     return _attributeValues[index] != null;
   }
 
   public final void addUniformValue(GPUUniformKey key, GPUUniformValue v, boolean mustRetain)
   {
     final int index = key.getValue();
-
+  
     _uniformValues[index] = v;
     if (mustRetain)
     {
@@ -99,13 +105,13 @@ public class GPUVariableValueSet
   public final void removeUniformValue(GPUUniformKey key)
   {
     final int index = key.getValue();
-
+  
     if (_uniformValues[index] != null)
     {
       _uniformValues[index]._release();
       _uniformValues[index] = null;
     }
-
+  
     for (int i = 0; i < 32; i++)
     {
       if (_uniformValues[i] != null)

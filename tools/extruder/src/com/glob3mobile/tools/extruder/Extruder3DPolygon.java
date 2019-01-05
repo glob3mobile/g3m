@@ -14,21 +14,20 @@ import com.glob3mobile.tools.mesh.G3MeshMaterial;
 import poly2Tri.Triangulation;
 
 
-public class Extruder3DPolygon<T>
+public class Extruder3DPolygon
          extends
-            ExtruderPolygon<T> {
+            ExtruderPolygon {
 
    private final List<Geodetic3D>       _coordinates;
    private final List<List<Geodetic3D>> _holesCoordinatesArray;
 
 
-   Extruder3DPolygon(final T source,
-                     final List<Geodetic3D> coordinates,
+   Extruder3DPolygon(final List<Geodetic3D> coordinates,
                      final List<List<Geodetic3D>> holesCoordinatesArray,
                      final double lowerHeight,
                      final G3MeshMaterial material,
                      final boolean depthTest) {
-      super(source, lowerHeight, material, depthTest, minHeight(coordinates));
+      super(lowerHeight, material, depthTest, minHeight(coordinates));
       _coordinates = coordinates;
       _holesCoordinatesArray = (holesCoordinatesArray == null) ? Collections.emptyList() : holesCoordinatesArray;
    }

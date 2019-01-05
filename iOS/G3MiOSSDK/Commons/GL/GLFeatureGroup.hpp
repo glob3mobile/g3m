@@ -9,9 +9,10 @@
 #ifndef __G3MiOSSDK__GLFeatureGroup__
 #define __G3MiOSSDK__GLFeatureGroup__
 
-#include "GPUVariableValueSet.hpp"
-
 class GLFeature;
+class GPUVariableValueSet;
+class GLGlobalState;
+
 
 enum GLFeatureGroupName {
   UNRECOGNIZED_GROUP = -1,
@@ -20,6 +21,7 @@ enum GLFeatureGroupName {
   COLOR_GROUP = 2,
   LIGHTING_GROUP = 3
 };
+
 
 class GLFeatureSet {
 protected:
@@ -37,25 +39,11 @@ protected:
 
 public:
 
-  GLFeatureSet():_nFeatures(0) {
-    for (int i = 0; i < MAX_CONCURRENT_FEATURES_PER_GROUP; i++) {
-      _features[i] = NULL;
-    }
-  }
+  GLFeatureSet();
 
   virtual ~GLFeatureSet();
 
-#ifdef C_CODE
-  GLFeature* get(int i) const
-#else
-  GLFeature* get(int i) const
-#endif
-  {
-    if (_nFeatures < i) {
-      return NULL;
-    }
-    return _features[i];
-  }
+  GLFeature* get(int i) const;
 
   void add(GLFeature* f);
 

@@ -8,23 +8,20 @@
 #ifndef G3MiOSSDK_INativeGL
 #define G3MiOSSDK_INativeGL
 
-class IFloatBuffer;
-//class IIntBuffer;
-class IShortBuffer;
-class IImage;
-class IGLUniformID;
-class IGLTextureID;
-class Matrix44D;
-
 #include <vector>
-#include <string>
-
-#include "GPUProgram.hpp"
 
 class GPUProgram;
-
+class IGLUniformID;
+class Matrix44D;
+class IFloatBuffer;
+class IShortBuffer;
+class IGLTextureID;
+class IImage;
 class GPUUniform;
 class GPUAttribute;
+
+#include "ShaderType.hpp"
+
 
 class INativeGL {
 public:

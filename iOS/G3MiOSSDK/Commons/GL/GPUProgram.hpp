@@ -10,12 +10,10 @@
 #define __G3MiOSSDK__GPUProgram__
 
 #include <string>
-#include <map>
-#include <list>
 
-class GPUAttribute;
 class GPUUniform;
-
+class GPUAttribute;
+class GL;
 class GPUUniformBool;
 class GPUUniformVec2Float;
 class GPUUniformVec4Float;
@@ -27,16 +25,9 @@ class GPUAttributeVec3Float;
 class GPUAttributeVec4Float;
 class GPUUniformValue;
 class GPUAttributeValue;
-class IFloatBuffer;
-class GL;
-class GPUProgramManager;
 
-enum ShaderType {
-  VERTEX_SHADER,
-  FRAGMENT_SHADER
-};
 
-class GPUProgram{
+class GPUProgram {
   int _programID;
 
   GPUUniform* _uniforms[32];
@@ -87,12 +78,12 @@ public:
                                    const std::string& vertexSource,
                                    const std::string& fragmentSource);
 
-  const std::string getName() const { return _name;}
+  const std::string getName() const { return _name; }
   
-  int getProgramID() const { return _programID;}
+  int getProgramID() const { return _programID; }
   
-  int getGPUAttributesNumber() const { return _nAttributes;}
-  int getGPUUniformsNumber() const { return _nUniforms;}
+  int getGPUAttributesNumber() const { return _nAttributes; }
+  int getGPUUniformsNumber() const { return _nUniforms; }
   
   GPUUniform* getGPUUniform(const std::string& name) const;
   GPUAttribute* getGPUAttribute(const std::string& name) const;
@@ -119,15 +110,15 @@ public:
   GPUAttribute* getGPUAttribute(int key) const;
   GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;
 
-  int getAttributesCode() const { return _attributesCode;}
-  int getUniformsCode() const { return _uniformsCode;}
+  int getAttributesCode() const { return _attributesCode; }
+  int getUniformsCode() const { return _uniformsCode; }
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
 
-  void addReference() { ++_nReferences;}
-  void removeReference() { --_nReferences;}
-  int getNReferences() const { return _nReferences;}
+  void addReference() { ++_nReferences; }
+  void removeReference() { --_nReferences; }
+  int getNReferences() const { return _nReferences; }
 
 };
 

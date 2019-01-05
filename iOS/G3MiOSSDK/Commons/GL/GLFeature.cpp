@@ -11,6 +11,9 @@
 #include "Camera.hpp"
 #include "Vector2F.hpp"
 #include "ILogger.hpp"
+#include "GPUAttributeValueVec2Float.hpp"
+#include "GPUAttributeValueVec3Float.hpp"
+#include "GPUAttributeValueVec4Float.hpp"
 
 
 ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,

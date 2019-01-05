@@ -1,4 +1,23 @@
 package org.glob3.mobile.generated;
+//
+//  GPUAttributeValueVecFloat.cpp
+//  G3MiOSSDK
+//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
+//
+
+//
+//  GPUAttributeValueVecFloat.hpp
+//  G3MiOSSDK
+//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
+//
+
+
+
+//class IFloatBuffer;
+
+
 public class GPUAttributeValueVecFloat extends GPUAttributeValue
 {
   private final IFloatBuffer _buffer;
@@ -16,6 +35,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
      _buffer = buffer;
      _timestamp = buffer.timestamp();
      _id = buffer.getID();
+  
   }
 
   public final void setAttribute(GL gl, int id)
@@ -25,26 +45,25 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
       //TODO: Change vertexAttribPointer
       ILogger.instance().logError("INDEX NO 0");
     }
-
+  
     gl.vertexAttribPointer(id, _arrayElementSize, _normalized, _stride, _buffer);
   }
 
   public final boolean isEquals(GPUAttributeValue v)
   {
-
+  
     if (!v._enabled)
     {
       return false; //Is a disabled value
     }
     GPUAttributeValueVecFloat vecV = (GPUAttributeValueVecFloat)v;
     boolean equal = ((_id == vecV._buffer.getID()) && (_timestamp == vecV._timestamp) && (_type == v._type) && (_attributeSize == v._attributeSize) && (_stride == v._stride) && (_normalized == v._normalized));
-
+  
     return equal;
   }
 
   public final String description()
   {
-
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("Attribute Value Float.");
     isb.addString(" ArrayElementSize:");
@@ -57,7 +76,7 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
     isb.addInt(_stride);
     isb.addString(" Normalized:");
     isb.addBool(_normalized);
-
+  
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();

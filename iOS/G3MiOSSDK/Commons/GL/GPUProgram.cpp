@@ -13,6 +13,10 @@
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
 #include "ILogger.hpp"
+#include "GPUAttributeVec1Float.hpp"
+#include "GPUAttributeVec2Float.hpp"
+#include "GPUAttributeVec3Float.hpp"
+#include "GPUAttributeVec4Float.hpp"
 
 
 GPUProgram* GPUProgram::createProgram(GL* gl,
@@ -407,5 +411,5 @@ void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v) {
     ILogger::instance()->logError("Attribute [key=%d] not found in program %s", key, _name.c_str());
     return;
   }
-  a->set(v);
+  a->put(v);
 }

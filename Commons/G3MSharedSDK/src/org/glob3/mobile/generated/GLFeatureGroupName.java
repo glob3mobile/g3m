@@ -16,8 +16,10 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class GLFeature;
+//class GPUVariableValueSet;
+//class GLGlobalState;
+
 
 public enum GLFeatureGroupName
 {

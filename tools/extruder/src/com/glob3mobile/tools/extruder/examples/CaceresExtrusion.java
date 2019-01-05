@@ -9,7 +9,6 @@ import java.util.List;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.EllipsoidalPlanet;
 import org.glob3.mobile.generated.GEOFeature;
-import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.tools.utils.GEOBitmap;
 
@@ -27,7 +26,7 @@ public class CaceresExtrusion {
 
    private static class CaceresExtrusionHandler
             implements
-               ExtrusionHandler<GEOFeature> {
+               ExtrusionHandler<GEOFeature, Void> {
 
 
       private static final G3MeshMaterial MATERIAL = new G3MeshMaterial(Color.YELLOW);
@@ -36,45 +35,21 @@ public class CaceresExtrusion {
 
 
       @Override
-      public boolean extrudes(final GEOFeature geoFeature) {
-         return true;
-      }
-
-
-      @Override
-      public G3MeshMaterial getMaterialFor(final GEOFeature geoFeature) {
+      public G3MeshMaterial getMaterialFor(final GEOFeature geoFeature,
+                                           final Void v) {
          return MATERIAL;
       }
 
 
       @Override
-      public Heigths getHeightsFor(final GEOFeature geoFeature) {
+      public Heigths getHeightsFor(final GEOFeature geoFeature,
+                                   final Void v) {
          return new Heigths(0, 100);
       }
 
 
       @Override
-      public void processTriangulationError(final GEOFeature geoFeature,
-                                            final PolygonExtruder.ErrorType errorType) {
-         final GEOGeometry geometry = geoFeature.getGeometry();
-         System.err.println("Error triangulation " + geoFeature + ", geometry:  " + geometry);
-         // if (geometry instanceof GEO3DPolygonGeometry) {
-         //    final GEO3DPolygonGeometry polygon3D = (GEO3DPolygonGeometry) geometry;
-         //
-         //    _bitmap.drawPolygon( //
-         //             polygon3D.getCoordinates(), //
-         //             polygon3D.getHolesCoordinatesArray(), //
-         //             new java.awt.Color(1, 0, 0, 0.5f), //
-         //             new java.awt.Color(1, 0, 0, 0.9f), //
-         //             true, //  drawVertices
-         //             new java.awt.Color(1, 1, 0, 0.5f) //
-         //    );
-         // }
-      }
-
-
-      @Override
-      public void onBuildings(final List<Building<GEOFeature>> buildings) {
+      public void onBuildings(final List<Building> buildings) {
       }
 
 
@@ -86,7 +61,7 @@ public class CaceresExtrusion {
 
 
       @Override
-      public void onPolygons(final List<ExtruderPolygon<GEOFeature>> polygons) {
+      public void onPolygons(final List<ExtruderPolygon> polygons) {
       }
 
 
@@ -96,7 +71,8 @@ public class CaceresExtrusion {
 
 
       @Override
-      public boolean getDepthTestFor(final GEOFeature geoFeature) {
+      public boolean getDepthTestFor(final GEOFeature geoFeature,
+                                     final Void v) {
          return true;
       }
 
@@ -125,8 +101,7 @@ public class CaceresExtrusion {
 
       System.out.println(name);
       final CaceresExtrusionHandler handler = new CaceresExtrusionHandler();
-      PolygonExtruder.process(inputFileName, outputFileName, handler, createNormals, planet, verticalExaggeration, deltaHeight,
-               floatPrecision, true);
+      PolygonExtruder.process(inputFileName, outputFileName, handler, createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision, true);
       handler.save(name + "_debug.png");
    }
 

@@ -1,4 +1,24 @@
 package org.glob3.mobile.generated;
+//
+//  GPUVariable.cpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 20/06/13.
+//
+//
+
+//
+//  GPUVariable.hpp
+//  G3MiOSSDK
+//
+//  Created by Jose Miguel SN on 20/06/13.
+//
+//
+
+
+
+
+
 public class GPUVariable
 {
 
@@ -226,6 +246,5 @@ public class GPUVariable
      _name = name;
      _variableType = type;
   }
-
 
 }

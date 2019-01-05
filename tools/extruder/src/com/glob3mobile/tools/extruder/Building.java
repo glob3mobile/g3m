@@ -20,21 +20,21 @@ import com.glob3mobile.tools.mesh.G3MeshMaterial;
 import poly2Tri.Triangle;
 
 
-public class Building<T> {
+public class Building {
 
-   private final ExtruderPolygon<T> _extruderPolygon;
-   private final Geodetic2D         _position;
-   private final double             _roofArea;
-   private final double             _minHeight;
-   private final List<Vector3D>     _roofVertices;
-   private final List<Triangle>     _roofTriangles;
-   private final Wall               _exteriorWall;
-   private final List<Wall>         _interiorWalls;
-   public final G3MeshMaterial      _material;
-   private final boolean            _depthTest;
+   private final ExtruderPolygon _extruderPolygon;
+   private final Geodetic2D      _position;
+   private final double          _roofArea;
+   private final double          _minHeight;
+   private final List<Vector3D>  _roofVertices;
+   private final List<Triangle>  _roofTriangles;
+   private final Wall            _exteriorWall;
+   private final List<Wall>      _interiorWalls;
+   public final G3MeshMaterial   _material;
+   private final boolean         _depthTest;
 
 
-   Building(final ExtruderPolygon<T> extruderPolygon,
+   Building(final ExtruderPolygon extruderPolygon,
             final Geodetic2D position,
             final double roofArea,
             final double minHeight,

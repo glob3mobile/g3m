@@ -230,8 +230,8 @@ public class SceneJSNodeParser
     final String id = jsonObject.getAsString("id", "");
     final String sID = jsonObject.getAsString("sid", "");
   
-    final Color baseColor = parseColor(jsonObject.getAsObject("baseColor"), Color.newFromRGBA(0, 0, 0, 1));
-    final Color specularColor = parseColor(jsonObject.getAsObject("specularColor"), Color.newFromRGBA(0, 0, 0, 1));
+    final Color baseColor = parseColor(jsonObject.getAsObject("baseColor"), 0, 0, 0, 1);
+    final Color specularColor = parseColor(jsonObject.getAsObject("specularColor"), 0, 0, 0, 1);
   
     final double shine = jsonObject.getAsNumber("shine", 10);
     final double specular = jsonObject.getAsNumber("specular", 1);
@@ -433,17 +433,17 @@ public class SceneJSNodeParser
     return node;
   }
 
-  private static Color parseColor(JSONObject jsColor, Color defaultColor)
+  private static Color parseColor(JSONObject jsColor, float defaultRed, float defaultGreen, float defaultBlue, float defaultAlpha)
   {
     if (jsColor == null)
     {
-      return defaultColor;
+      return Color.newFromRGBA(defaultRed, defaultGreen, defaultBlue, defaultAlpha);
     }
   
-    final float r = (float) jsColor.getAsNumber("r", 0.0);
-    final float g = (float) jsColor.getAsNumber("g", 0.0);
-    final float b = (float) jsColor.getAsNumber("b", 0.0);
-    final float a = (float) jsColor.getAsNumber("a", 1.0);
+    final float r = (float) jsColor.getAsNumber("r", defaultRed);
+    final float g = (float) jsColor.getAsNumber("g", defaultGreen);
+    final float b = (float) jsColor.getAsNumber("b", defaultBlue);
+    final float a = (float) jsColor.getAsNumber("a", defaultAlpha);
   
     return Color.newFromRGBA(r, g, b, a);
   }

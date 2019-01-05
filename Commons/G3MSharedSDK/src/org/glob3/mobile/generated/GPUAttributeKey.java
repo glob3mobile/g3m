@@ -1,4 +1,19 @@
 package org.glob3.mobile.generated;
+//
+//  GPUAttributeKey.cpp
+//  G3MiOSSDK
+//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
+//
+
+//
+//  GPUAttributeKey.hpp
+//  G3MiOSSDK
+//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
+//
+
+
 public enum GPUAttributeKey
 {
   UNRECOGNIZED_ATTRIBUTE(-1),
