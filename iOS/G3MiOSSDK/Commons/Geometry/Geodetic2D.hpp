@@ -87,6 +87,19 @@ public:
   }
 
 
+  static double haversine(const Geodetic2D& from,
+                          const Geodetic2D& to) {
+    return haversine(from._latitude,
+                     from._longitude,
+                     to._latitude,
+                     to._longitude);
+  }
+
+  static double haversine(const Angle& fromLatitude,
+                          const Angle& fromLongitude,
+                          const Angle& toLatitude,
+                          const Angle& toLongitude);
+
   Geodetic2D(const Angle& latitude,
              const Angle& longitude) :
   _latitude(latitude),

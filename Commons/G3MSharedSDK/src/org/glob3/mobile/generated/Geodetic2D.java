@@ -71,13 +71,6 @@ public class Geodetic2D
     final double x = Math.cos(fromLatitude._radians) * Math.sin(toLatitude._radians) - Math.sin(fromLatitude._radians) * toLatCos * Math.cos(deltaLonRad);
     final double radians = mu.atan2(y, x);
     return radians;
-  
-    //  const double pi2 = PI*2;
-    //  return mu->mod(radians + pi2, pi2);
-  
-    //  const double r1 = mu->mod(radians, pi2);
-    //  const double r2 = mu->mod(radians + pi2, pi2);
-    //  return (mu->abs(r1) < mu->abs(r2)) ? r1 : r2;
   }
 
   public static double bearingInDegrees(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
@@ -94,6 +87,27 @@ public class Geodetic2D
     return bearing(from._latitude, from._longitude, to._latitude, to._longitude);
   }
 
+
+  public static double haversine(Geodetic2D from, Geodetic2D to)
+  {
+    return haversine(from._latitude, from._longitude, to._latitude, to._longitude);
+  }
+
+  public static double haversine(Angle fromLatitude, Angle fromLongitude, Angle toLatitude, Angle toLongitude)
+  {
+    // https://rosettacode.org/wiki/Haversine_formula
+  
+    final double EARTH_RADIUS_METERS = 6371000;
+  
+    final double deltaLanRad = toLatitude._radians - fromLatitude._radians;
+    final double deltaLonRad = toLongitude._radians - fromLongitude._radians;
+  
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final double a = mu.pow(Math.sin(deltaLanRad / 2.0), 2.0) + mu.pow(Math.sin(deltaLonRad / 2.0), 2.0) * Math.cos(fromLatitude._radians) * Math.cos(toLatitude._radians);
+    final double c = 2.0 * mu.asin(mu.sqrt(a));
+    return EARTH_RADIUS_METERS * c;
+  }
 
   public Geodetic2D(Angle latitude, Angle longitude)
   {
