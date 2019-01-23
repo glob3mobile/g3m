@@ -1071,3 +1071,7 @@ void G3MWidget::setViewMode(ViewMode viewMode) {
 void G3MWidget::addFrameTask(FrameTask* frameTask){
     _frameTasksExecutor->addPreRenderTask(frameTask);
 }
+
+void G3MWidget::clearWidget() const{
+    _gl->clearScreen(*_backgroundColor);
+}

@@ -262,6 +262,8 @@ public:
     
     void addFrameTask(FrameTask* frameTask);
     
+    void clearWidget() const;
+    
 private:
     IStorage*                _storage;
     IDownloader*             _downloader;
