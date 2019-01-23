@@ -466,6 +466,7 @@ _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
+_textureProportionSetExternally(false),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
 _initialized(false),
@@ -520,6 +521,7 @@ _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
+_textureProportionSetExternally(false),
 _textureHeightProportion(1.0),
 _textureWidthProportion(1.0),
 _initialized(false),
@@ -619,7 +621,7 @@ void Mark::onTextureDownload(const IImage* image) {
     _textureHeight = _textureImage->getHeight();
 
     if (_textureProportionSetExternally) {
-      _textureWidth *= _textureWidthProportion;
+      _textureWidth  *= _textureWidthProportion;
       _textureHeight *= _textureHeightProportion;
     }
   }

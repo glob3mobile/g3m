@@ -506,6 +506,7 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
+     _textureProportionSetExternally = false;
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
      _initialized = false;
@@ -576,6 +577,7 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
+     _textureProportionSetExternally = false;
      _textureHeightProportion = 1.0F;
      _textureWidthProportion = 1.0F;
      _initialized = false;
