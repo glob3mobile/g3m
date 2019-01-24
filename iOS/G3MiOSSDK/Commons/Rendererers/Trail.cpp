@@ -31,9 +31,11 @@ const int Trail::SEGMENT_ALPHA_STATUS_FULL_VISIBLE  = 4;
 
 Trail::Segment::Segment(const Color& color,
                         float ribbonWidth,
+                        bool depthTest,
                         double visibleAlpha) :
 _color(color),
 _ribbonWidth(ribbonWidth),
+_depthTest(depthTest),
 _visibleAlpha(visibleAlpha),
 _alphaStatus(Trail::SEGMENT_ALPHA_STATUS_UNKNOWN),
 _minAlpha( IMathUtils::instance()->maxDouble() ),
@@ -304,7 +306,7 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                      1,
                                      new Color(_color),
                                      NULL,  // colors
-                                     true   // depthTest
+                                     _depthTest
                                      );
 
   delete vertices;
@@ -359,11 +361,13 @@ void Trail::Segment::setVisibleAlpha(double visibleAlpha) {
 
 Trail::Trail(const Color& color,
              float ribbonWidth,
+             bool depthTest,
              double deltaHeight,
              int maxPositionsPerSegment):
 _visible(true),
 _color(color),
 _ribbonWidth(ribbonWidth),
+_depthTest(depthTest),
 _deltaHeight(deltaHeight),
 _maxPositionsPerSegment(maxPositionsPerSegment),
 _alpha(1.0)
@@ -417,14 +421,14 @@ void Trail::addPosition(const Angle& latitude,
 
   const size_t segmentsSize = _segments.size();
   if (segmentsSize == 0) {
-    currentSegment = new Segment(_color, _ribbonWidth, _alpha);
+    currentSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
     _segments.push_back(currentSegment);
   }
   else {
     currentSegment = _segments[segmentsSize - 1];
 
     if (currentSegment->getSize() >= _maxPositionsPerSegment) {
-      Segment* newSegment = new Segment(_color, _ribbonWidth, _alpha);
+      Segment* newSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
       _segments.push_back(newSegment);
 
       currentSegment->setNextSegmentFirstPosition(latitude,

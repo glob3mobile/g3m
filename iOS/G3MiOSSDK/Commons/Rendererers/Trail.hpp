@@ -89,6 +89,7 @@ private:
   private:
     const Color _color;
     const float _ribbonWidth;
+    const bool  _depthTest;
     double _minAlpha;
     double _maxAlpha;
     double _visibleAlpha;
@@ -120,6 +121,7 @@ private:
   public:
     Segment(const Color& color,
             float ribbonWidth,
+            bool depthTest,
             double visibleAlpha);
 
     ~Segment();
@@ -159,6 +161,7 @@ private:
 
   const Color  _color;
   const float  _ribbonWidth;
+  const bool   _depthTest;
   const double _deltaHeight;
   const int    _maxPositionsPerSegment;
 
@@ -169,6 +172,7 @@ private:
 public:
   Trail(const Color& color,
         float ribbonWidth,
+        bool depthTest,
         double deltaHeight = 0.0,
         int maxPositionsPerSegment = 32);
 

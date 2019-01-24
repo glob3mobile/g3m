@@ -98,6 +98,7 @@ public class Trail
   {
     private final Color _color ;
     private final float _ribbonWidth;
+    private final boolean _depthTest;
     private double _minAlpha;
     private double _maxAlpha;
     private double _visibleAlpha;
@@ -163,7 +164,7 @@ public class Trail
       if (bearings != null)
          bearings.dispose();
     
-      Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, true); // depthTest -  colors
+      Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, _depthTest); // colors
     
       if (vertices != null)
          vertices.dispose();
@@ -273,10 +274,11 @@ public class Trail
       return geoMatrix.multiply(rotationMatrix);
     }
 
-    public Segment(Color color, float ribbonWidth, double visibleAlpha)
+    public Segment(Color color, float ribbonWidth, boolean depthTest, double visibleAlpha)
     {
        _color = new Color(color);
        _ribbonWidth = ribbonWidth;
+       _depthTest = depthTest;
        _visibleAlpha = visibleAlpha;
        _alphaStatus = Trail.SEGMENT_ALPHA_STATUS_UNKNOWN;
        _minAlpha = IMathUtils.instance().maxDouble();
@@ -399,6 +401,7 @@ public class Trail
 
   private final Color _color ;
   private final float _ribbonWidth;
+  private final boolean _depthTest;
   private final double _deltaHeight;
   private final int _maxPositionsPerSegment;
 
@@ -406,19 +409,20 @@ public class Trail
 
   private java.util.ArrayList<Segment> _segments = new java.util.ArrayList<Segment>();
 
-  public Trail(Color color, float ribbonWidth, double deltaHeight)
+  public Trail(Color color, float ribbonWidth, boolean depthTest, double deltaHeight)
   {
-     this(color, ribbonWidth, deltaHeight, 32);
+     this(color, ribbonWidth, depthTest, deltaHeight, 32);
   }
-  public Trail(Color color, float ribbonWidth)
+  public Trail(Color color, float ribbonWidth, boolean depthTest)
   {
-     this(color, ribbonWidth, 0.0, 32);
+     this(color, ribbonWidth, depthTest, 0.0, 32);
   }
-  public Trail(Color color, float ribbonWidth, double deltaHeight, int maxPositionsPerSegment)
+  public Trail(Color color, float ribbonWidth, boolean depthTest, double deltaHeight, int maxPositionsPerSegment)
   {
      _visible = true;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
+     _depthTest = depthTest;
      _deltaHeight = deltaHeight;
      _maxPositionsPerSegment = maxPositionsPerSegment;
      _alpha = 1.0;
@@ -469,7 +473,7 @@ public class Trail
     final int segmentsSize = _segments.size();
     if (segmentsSize == 0)
     {
-      currentSegment = new Segment(_color, _ribbonWidth, _alpha);
+      currentSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
       _segments.add(currentSegment);
     }
     else
@@ -478,7 +482,7 @@ public class Trail
   
       if (currentSegment.getSize() >= _maxPositionsPerSegment)
       {
-        Segment newSegment = new Segment(_color, _ribbonWidth, _alpha);
+        Segment newSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
         _segments.add(newSegment);
   
         currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha, heading);
