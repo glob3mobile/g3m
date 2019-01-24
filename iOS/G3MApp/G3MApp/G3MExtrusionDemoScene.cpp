@@ -85,10 +85,10 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   LayerSet* layerSet = model->getLayerSet();
 
-  //  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-  //  layerSet->addLayer(osmLayer);
+//    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+//    layerSet->addLayer(osmLayer);
 
-  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::AerialWithLabels(),
+  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
                                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                                          TimeInterval::fromDays(30));
   layerSet->addLayer(bingMapsAerialLayer);
@@ -178,16 +178,22 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   const double deltaHeight = 0;
 
   // http://brownietech.ddns.net/test/comunidad_de_madrid/metadata.json
+
+//  https://lhind.velimo.tv/bustrack/district-of-columbia/
+
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
-  renderer->addVectorSet(URL("http://brownietech.ddns.net/"),
+  renderer->addVectorSet(//URL("http://brownietech.ddns.net/"),
+                         URL("https://lhind.velimo.tv/bustrack/"),
                          //"cc3d-buildings",         // name
 //                         "test/comunidad_de_madrid", // name
-                         "test/spain",             // name
+//                         "test/spain",             // name
+//                         "test/district-of-columbia", // name
+                         "district-of-columbia",   // name
                          "",                       // properties
                          NULL,                     // symbolizer
                          true,                     // deleteSymbolizer
                          DownloadPriority::HIGHER,
-                         TimeInterval::zero(),
+                         TimeInterval::fromDays(30),
                          true,                     // readExpired
                          true,                     // verbose
                          false,                    // haltOnError
