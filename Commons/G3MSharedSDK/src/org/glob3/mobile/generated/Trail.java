@@ -99,6 +99,10 @@ public class Trail
     private final Color _color ;
     private final float _ribbonWidth;
     private final boolean _depthTest;
+    private final boolean _polygonOffsetFill;
+    private final float _polygonOffsetFactor;
+    private final float _polygonOffsetUnits;
+
     private double _minAlpha;
     private double _maxAlpha;
     private double _visibleAlpha;
@@ -164,7 +168,7 @@ public class Trail
       if (bearings != null)
          bearings.dispose();
     
-      Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, _depthTest); // colors
+      Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, _depthTest, null, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, false, GLCullFace.back()); // culledFace -  cullFace -  polygonOffsetUnits -  polygonOffsetFactor -  polygonOffsetFill -  normals -  depthTest -  colors -  flatColor -  pointSize -  lineWidth -  vertices -  center -  owner -  primitive
     
       if (vertices != null)
          vertices.dispose();
@@ -274,11 +278,14 @@ public class Trail
       return geoMatrix.multiply(rotationMatrix);
     }
 
-    public Segment(Color color, float ribbonWidth, boolean depthTest, double visibleAlpha)
+    public Segment(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double visibleAlpha)
     {
        _color = new Color(color);
        _ribbonWidth = ribbonWidth;
        _depthTest = depthTest;
+       _polygonOffsetFill = polygonOffsetFill;
+       _polygonOffsetFactor = polygonOffsetFactor;
+       _polygonOffsetUnits = polygonOffsetUnits;
        _visibleAlpha = visibleAlpha;
        _alphaStatus = Trail.SEGMENT_ALPHA_STATUS_UNKNOWN;
        _minAlpha = IMathUtils.instance().maxDouble();
@@ -402,6 +409,9 @@ public class Trail
   private final Color _color ;
   private final float _ribbonWidth;
   private final boolean _depthTest;
+  private final boolean _polygonOffsetFill;
+  private final float _polygonOffsetFactor;
+  private final float _polygonOffsetUnits;
   private final double _deltaHeight;
   private final int _maxPositionsPerSegment;
 
@@ -409,20 +419,23 @@ public class Trail
 
   private java.util.ArrayList<Segment> _segments = new java.util.ArrayList<Segment>();
 
-  public Trail(Color color, float ribbonWidth, boolean depthTest, double deltaHeight)
+  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight)
   {
-     this(color, ribbonWidth, depthTest, deltaHeight, 32);
+     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, deltaHeight, 32);
   }
-  public Trail(Color color, float ribbonWidth, boolean depthTest)
+  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
-     this(color, ribbonWidth, depthTest, 0.0, 32);
+     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, 0.0, 32);
   }
-  public Trail(Color color, float ribbonWidth, boolean depthTest, double deltaHeight, int maxPositionsPerSegment)
+  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment)
   {
      _visible = true;
      _color = new Color(color);
      _ribbonWidth = ribbonWidth;
      _depthTest = depthTest;
+     _polygonOffsetFill = polygonOffsetFill;
+     _polygonOffsetFactor = polygonOffsetFactor;
+     _polygonOffsetUnits = polygonOffsetUnits;
      _deltaHeight = deltaHeight;
      _maxPositionsPerSegment = maxPositionsPerSegment;
      _alpha = 1.0;
@@ -473,7 +486,7 @@ public class Trail
     final int segmentsSize = _segments.size();
     if (segmentsSize == 0)
     {
-      currentSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
+      currentSegment = new Segment(_color, _ribbonWidth, _depthTest, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _alpha);
       _segments.add(currentSegment);
     }
     else
@@ -482,7 +495,7 @@ public class Trail
   
       if (currentSegment.getSize() >= _maxPositionsPerSegment)
       {
-        Segment newSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
+        Segment newSegment = new Segment(_color, _ribbonWidth, _depthTest, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _alpha);
         _segments.add(newSegment);
   
         currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha, heading);

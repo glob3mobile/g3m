@@ -90,6 +90,10 @@ private:
     const Color _color;
     const float _ribbonWidth;
     const bool  _depthTest;
+    const bool  _polygonOffsetFill;
+    const float _polygonOffsetFactor;
+    const float _polygonOffsetUnits;
+
     double _minAlpha;
     double _maxAlpha;
     double _visibleAlpha;
@@ -120,9 +124,12 @@ private:
 
   public:
     Segment(const Color& color,
-            float ribbonWidth,
-            bool depthTest,
-            double visibleAlpha);
+            const float  ribbonWidth,
+            const bool   depthTest,
+            const bool   polygonOffsetFill,
+            const float  polygonOffsetFactor,
+            const float  polygonOffsetUnits,
+            const double visibleAlpha);
 
     ~Segment();
 
@@ -162,6 +169,9 @@ private:
   const Color  _color;
   const float  _ribbonWidth;
   const bool   _depthTest;
+  const bool   _polygonOffsetFill;
+  const float  _polygonOffsetFactor;
+  const float  _polygonOffsetUnits;
   const double _deltaHeight;
   const int    _maxPositionsPerSegment;
 
@@ -171,10 +181,13 @@ private:
 
 public:
   Trail(const Color& color,
-        float ribbonWidth,
-        bool depthTest,
-        double deltaHeight = 0.0,
-        int maxPositionsPerSegment = 32);
+        const float  ribbonWidth,
+        const bool   depthTest,
+        const bool   polygonOffsetFill,
+        const float  polygonOffsetFactor,
+        const float  polygonOffsetUnits,
+        const double deltaHeight            = 0.0,
+        const int    maxPositionsPerSegment = 32);
 
   ~Trail();
 

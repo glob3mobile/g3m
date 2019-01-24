@@ -30,12 +30,18 @@ const int Trail::SEGMENT_ALPHA_STATUS_HALF          = 3;
 const int Trail::SEGMENT_ALPHA_STATUS_FULL_VISIBLE  = 4;
 
 Trail::Segment::Segment(const Color& color,
-                        float ribbonWidth,
-                        bool depthTest,
-                        double visibleAlpha) :
+                        const float  ribbonWidth,
+                        const bool   depthTest,
+                        const bool   polygonOffsetFill,
+                        const float  polygonOffsetFactor,
+                        const float  polygonOffsetUnits,
+                        const double visibleAlpha) :
 _color(color),
 _ribbonWidth(ribbonWidth),
 _depthTest(depthTest),
+_polygonOffsetFill(polygonOffsetFill),
+_polygonOffsetFactor(polygonOffsetFactor),
+_polygonOffsetUnits(polygonOffsetUnits),
 _visibleAlpha(visibleAlpha),
 _alphaStatus(Trail::SEGMENT_ALPHA_STATUS_UNKNOWN),
 _minAlpha( IMathUtils::instance()->maxDouble() ),
@@ -298,15 +304,21 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
   delete bearings;
 
-  Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),
-                                     true,
-                                     vertices->getCenter(),
-                                     vertices->create(),
-                                     1,
-                                     1,
-                                     new Color(_color),
-                                     NULL,  // colors
-                                     _depthTest
+  Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),  // primitive
+                                     true,                          // owner
+                                     vertices->getCenter(),         // center
+                                     vertices->create(),            // vertices
+                                     1,                             // lineWidth
+                                     1,                             // pointSize
+                                     new Color(_color),             // flatColor
+                                     NULL,                          // colors
+                                     _depthTest,                    // depthTest
+                                     NULL,                          // normals
+                                     _polygonOffsetFill,            // polygonOffsetFill
+                                     _polygonOffsetFactor,          // polygonOffsetFactor
+                                     _polygonOffsetUnits,           // polygonOffsetUnits
+                                     false,                         // cullFace
+                                     GLCullFace::back()             // culledFace
                                      );
 
   delete vertices;
@@ -360,14 +372,20 @@ void Trail::Segment::setVisibleAlpha(double visibleAlpha) {
 
 
 Trail::Trail(const Color& color,
-             float ribbonWidth,
-             bool depthTest,
-             double deltaHeight,
-             int maxPositionsPerSegment):
+             const float  ribbonWidth,
+             const bool   depthTest,
+             const bool   polygonOffsetFill,
+             const float  polygonOffsetFactor,
+             const float  polygonOffsetUnits,
+             const double deltaHeight,
+             const int    maxPositionsPerSegment) :
 _visible(true),
 _color(color),
 _ribbonWidth(ribbonWidth),
 _depthTest(depthTest),
+_polygonOffsetFill(polygonOffsetFill),
+_polygonOffsetFactor(polygonOffsetFactor),
+_polygonOffsetUnits(polygonOffsetUnits),
 _deltaHeight(deltaHeight),
 _maxPositionsPerSegment(maxPositionsPerSegment),
 _alpha(1.0)
@@ -421,14 +439,26 @@ void Trail::addPosition(const Angle& latitude,
 
   const size_t segmentsSize = _segments.size();
   if (segmentsSize == 0) {
-    currentSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
+    currentSegment = new Segment(_color,
+                                 _ribbonWidth,
+                                 _depthTest,
+                                 _polygonOffsetFill,
+                                 _polygonOffsetFactor,
+                                 _polygonOffsetUnits,
+                                 _alpha);
     _segments.push_back(currentSegment);
   }
   else {
     currentSegment = _segments[segmentsSize - 1];
 
     if (currentSegment->getSize() >= _maxPositionsPerSegment) {
-      Segment* newSegment = new Segment(_color, _ribbonWidth, _depthTest, _alpha);
+      Segment* newSegment = new Segment(_color,
+                                        _ribbonWidth,
+                                        _depthTest,
+                                        _polygonOffsetFill,
+                                        _polygonOffsetFactor,
+                                        _polygonOffsetUnits,
+                                        _alpha);
       _segments.push_back(newSegment);
 
       currentSegment->setNextSegmentFirstPosition(latitude,
