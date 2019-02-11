@@ -57,6 +57,26 @@ LayoutImageBuilder(child0,
 
 }
 
+ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder*  child0,
+                                                   const Vector2F& margin,
+                                                   float           borderWidth,
+                                                   const Color&    borderColor,
+                                                   const Vector2F& padding,
+                                                   const Color&    backgroundColor,
+                                                   float           cornerRadius,
+                                                   int             childrenSeparation) :
+LayoutImageBuilder(child0,
+                   margin,
+                   borderWidth,
+                   borderColor,
+                   padding,
+                   backgroundColor,
+                   cornerRadius,
+                   childrenSeparation)
+{
+
+}
+
 class ColumnLayoutImageBuilder_IImageListener : public IImageListener {
 private:
   IImageBuilderListener* _listener;

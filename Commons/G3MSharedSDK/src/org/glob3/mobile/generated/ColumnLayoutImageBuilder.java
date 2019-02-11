@@ -202,4 +202,38 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   
   }
 
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius)
+  {
+     this(child0, margin, borderWidth, borderColor, padding, backgroundColor, cornerRadius, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor)
+  {
+     this(child0, margin, borderWidth, borderColor, padding, backgroundColor, 0, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding)
+  {
+     this(child0, margin, borderWidth, borderColor, padding, Color.transparent(), 0, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor)
+  {
+     this(child0, margin, borderWidth, borderColor, Vector2F.zero(), Color.transparent(), 0, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth)
+  {
+     this(child0, margin, borderWidth, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin)
+  {
+     this(child0, margin, 0, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0)
+  {
+     this(child0, Vector2F.zero(), 0, Color.transparent(), Vector2F.zero(), Color.transparent(), 0, 0);
+  }
+  public ColumnLayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  {
+     super(child0, margin, borderWidth, borderColor, padding, backgroundColor, cornerRadius, childrenSeparation);
+  
+  }
+
 }

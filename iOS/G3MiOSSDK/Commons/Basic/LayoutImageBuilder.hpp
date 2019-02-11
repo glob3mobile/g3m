@@ -193,6 +193,25 @@ protected:
     _children.push_back(child1);
   }
 
+  LayoutImageBuilder(IImageBuilder*  child0,
+                     const Vector2F& margin,
+                     float           borderWidth,
+                     const Color&    borderColor,
+                     const Vector2F& padding,
+                     const Color&    backgroundColor,
+                     const float     cornerRadius,
+                     int             childrenSeparation) :
+  _margin(margin),
+  _borderWidth(borderWidth),
+  _borderColor(borderColor),
+  _padding(padding),
+  _backgroundColor(backgroundColor),
+  _cornerRadius(cornerRadius),
+  _childrenSeparation(childrenSeparation)
+  {
+    _children.push_back(child0);
+  }
+
   virtual void doLayout(const G3MContext* context,
                         IImageBuilderListener* listener,
                         bool deleteListener,

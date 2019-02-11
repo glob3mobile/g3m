@@ -184,6 +184,18 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
     _children.add(child1);
   }
 
+  protected LayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  {
+     _margin = margin;
+     _borderWidth = borderWidth;
+     _borderColor = new Color(borderColor);
+     _padding = padding;
+     _backgroundColor = new Color(backgroundColor);
+     _cornerRadius = cornerRadius;
+     _childrenSeparation = childrenSeparation;
+    _children.add(child0);
+  }
+
   protected abstract void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results);
 
   public void dispose()

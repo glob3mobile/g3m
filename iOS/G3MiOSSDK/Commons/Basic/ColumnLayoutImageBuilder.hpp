@@ -39,6 +39,15 @@ public:
                            float           cornerRadius       = 0,
                            int             childrenSeparation = 0);
 
+  ColumnLayoutImageBuilder(IImageBuilder*  child0,
+                           const Vector2F& margin             = Vector2F::zero(),
+                           float           borderWidth        = 0,
+                           const Color&    borderColor        = Color::transparent(),
+                           const Vector2F& padding            = Vector2F::zero(),
+                           const Color&    backgroundColor    = Color::transparent(),
+                           float           cornerRadius       = 0,
+                           int             childrenSeparation = 0);
+
 };
 
 #endif
