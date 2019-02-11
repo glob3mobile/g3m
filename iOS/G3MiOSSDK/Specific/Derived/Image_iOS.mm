@@ -77,7 +77,7 @@ void Image_iOS::getPixel(int x, int y,
   const NSUInteger bytesPerRow   = (NSUInteger) (bytesPerPixel * width);
 
   const NSUInteger byteIndex = (NSUInteger) ((bytesPerRow * (height-1-y)) + x * bytesPerPixel);
-  pixel._red   = _rawData[byteIndex];
+  pixel._red   = _rawData[byteIndex + 0];
   pixel._green = _rawData[byteIndex + 1];
   pixel._blue  = _rawData[byteIndex + 2];
   pixel._alpha = _rawData[byteIndex + 3];
