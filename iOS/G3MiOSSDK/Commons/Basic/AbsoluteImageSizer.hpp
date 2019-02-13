@@ -14,15 +14,17 @@
 class AbsoluteImageSizer : public ImageSizer {
 private:
   const int _size;
-
+  
 public:
-
+  
   AbsoluteImageSizer(int size);
-
-  virtual ~AbsoluteImageSizer();
-
+  
+  ~AbsoluteImageSizer();
+  
   int calculate();
-
+  
+  AbsoluteImageSizer* copy() const;
+  
 };
 
 #endif

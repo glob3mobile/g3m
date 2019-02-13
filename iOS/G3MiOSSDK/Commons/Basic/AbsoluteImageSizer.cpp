@@ -11,7 +11,7 @@
 AbsoluteImageSizer::AbsoluteImageSizer(int size) :
 _size(size)
 {
-
+  
 }
 
 AbsoluteImageSizer::~AbsoluteImageSizer() {
@@ -22,4 +22,8 @@ AbsoluteImageSizer::~AbsoluteImageSizer() {
 
 int AbsoluteImageSizer::calculate() {
   return _size;
+}
+
+AbsoluteImageSizer* AbsoluteImageSizer::copy() const {
+  return new AbsoluteImageSizer(_size);
 }

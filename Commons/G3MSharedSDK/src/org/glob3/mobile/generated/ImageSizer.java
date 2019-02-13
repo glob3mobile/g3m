@@ -18,12 +18,13 @@ package org.glob3.mobile.generated;
 public abstract class ImageSizer
 {
 
-
   public void dispose()
   {
 
   }
 
   public abstract int calculate();
+
+  public abstract ImageSizer copy();
 
 }

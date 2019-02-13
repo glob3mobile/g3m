@@ -37,4 +37,9 @@ public class AbsoluteImageSizer extends ImageSizer
     return _size;
   }
 
+  public final AbsoluteImageSizer copy()
+  {
+    return new AbsoluteImageSizer(_size);
+  }
+
 }
