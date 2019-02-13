@@ -10,15 +10,16 @@
 
 
 class ImageSizer {
-
 public:
-
+  
   virtual ~ImageSizer() {
     
   }
-
+  
   virtual int calculate() = 0;
-
+  
+  virtual ImageSizer* copy() const = 0;
+  
 };
 
 #endif

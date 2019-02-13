@@ -2462,6 +2462,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				CF1775152211C30C004AB467 /* AbsoluteImageSizer.cpp */,
+				CF1775162211C30C004AB467 /* AbsoluteImageSizer.hpp */,
 				CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */,
 				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
 				CF5DB0661AFD52B6001FFE58 /* BalloonCanvasElement.cpp */,
@@ -2577,6 +2579,8 @@
 				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
 				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
+				CF1775122211C29A004AB467 /* ImageSizer.cpp */,
+				CF1775132211C29A004AB467 /* ImageSizer.hpp */,
 				44E3C42919B53B4100857275 /* Info.cpp */,
 				44E3C42A19B53B4100857275 /* Info.hpp */,
 				4435E3CB19052B860064A7D7 /* InfoDisplay.cpp */,
@@ -2626,10 +2630,6 @@
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
 				CF17750E2211B968004AB467 /* ResizerImageBuilder.cpp */,
 				CF17750F2211B968004AB467 /* ResizerImageBuilder.hpp */,
-				CF1775122211C29A004AB467 /* ImageSizer.cpp */,
-				CF1775132211C29A004AB467 /* ImageSizer.hpp */,
-				CF1775152211C30C004AB467 /* AbsoluteImageSizer.cpp */,
-				CF1775162211C30C004AB467 /* AbsoluteImageSizer.hpp */,
 				D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */,
 				D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */,
 				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
