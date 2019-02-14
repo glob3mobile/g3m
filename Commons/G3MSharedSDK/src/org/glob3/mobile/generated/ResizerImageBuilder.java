@@ -101,18 +101,8 @@ public class ResizerImageBuilder extends AbstractImageBuilder
       final float ratioWidth = (float) resultWidth / sourceWidth;
       final float ratioHeight = (float) resultHeight / sourceHeight;
   
-      float destWidth;
-      float destHeight;
-      if (ratioHeight > ratioWidth)
-      {
-        destWidth = resultWidth;
-        destHeight = sourceHeight * ratioWidth;
-      }
-      else
-      {
-        destWidth = sourceWidth * ratioHeight;
-        destHeight = resultHeight;
-      }
+      final float destWidth = (ratioHeight > ratioWidth) ? resultWidth : (sourceWidth * ratioHeight);
+      final float destHeight = (ratioHeight > ratioWidth) ? (sourceHeight * ratioWidth) : resultHeight;
   
       final float destLeft = (resultWidth - destWidth) / 2.0f;
       final float destTop = (resultHeight - destHeight) / 2.0f;
