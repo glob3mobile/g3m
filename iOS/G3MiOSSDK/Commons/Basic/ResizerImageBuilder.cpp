@@ -178,18 +178,10 @@ void ResizerImageBuilder::imageCreated(const IImage*      image,
     const float ratioWidth  = (float) resultWidth  / sourceWidth;
     const float ratioHeight = (float) resultHeight / sourceHeight;
 
-    float destWidth;
-    float destHeight;
-    if (ratioHeight > ratioWidth) {
-      destWidth  = resultWidth;
-      destHeight = sourceHeight * ratioWidth;
-    }
-    else {
-      destWidth  = sourceWidth * ratioHeight;
-      destHeight = resultHeight;
-    }
+    const float destWidth  = (ratioHeight > ratioWidth) ? resultWidth                 : (sourceWidth * ratioHeight);
+    const float destHeight = (ratioHeight > ratioWidth) ? (sourceHeight * ratioWidth) : resultHeight;
 
-    const float destLeft = (resultWidth  - destWidth) / 2.0f;
+    const float destLeft = (resultWidth  - destWidth ) / 2.0f;
     const float destTop  = (resultHeight - destHeight) / 2.0f;
 
     canvas->drawImage(image,
@@ -202,6 +194,8 @@ void ResizerImageBuilder::imageCreated(const IImage*      image,
                         true);
 
     delete canvas;
+
+    delete image;
   }
 
 }
