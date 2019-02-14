@@ -123,6 +123,9 @@ public class ResizerImageBuilder extends AbstractImageBuilder
   
       if (canvas != null)
          canvas.dispose();
+  
+      if (image != null)
+         image.dispose();
     }
   
   }

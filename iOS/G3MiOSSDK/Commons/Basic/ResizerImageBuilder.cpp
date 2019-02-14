@@ -202,6 +202,8 @@ void ResizerImageBuilder::imageCreated(const IImage*      image,
                         true);
 
     delete canvas;
+
+    delete image;
   }
 
 }
