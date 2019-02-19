@@ -125,14 +125,11 @@ public:
                                                                              radius),
                                                       new LabelImageBuilder(label,
                                                                             GFont::sansSerif(labelFontSize, true),
-                                                                            Vector2F(2, 2),     // margin
                                                                             Color::BLACK,       // color
                                                                             Color::WHITE,       // shadowColor
                                                                             5.0f,               // shadowBlur
                                                                             Vector2F(0, 0),     // shadowOffset
-                                                                            Color::TRANSPARENT, // backgroundColor
-                                                                            4.0f                // cornerRadius
-                                                                            )
+                                                                            NULL)
                                                       ),
                           position,
                           ABSOLUTE,

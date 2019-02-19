@@ -73,7 +73,6 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
       final float contentHeight = maxHeight;
   
       ICanvas canvas = context.getFactory().createCanvas(false);
-  //    canvas->initialize(canvasWidth, canvasHeight);
       final Vector2F contentPos = _background.initializeCanvas(canvas, contentWidth, contentHeight);
   
       for (int i = 0; i < resultsSize; i++)

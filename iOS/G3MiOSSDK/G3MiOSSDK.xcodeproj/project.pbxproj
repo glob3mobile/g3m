@@ -309,8 +309,6 @@
 		CF7529651E868089003C9605 /* Ray.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF45E1851E85519C00C36699 /* Ray.hpp */; };
 		CF75396A1C5C04EF006CE697 /* OrTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */; };
 		CF75396B1C5C0501006CE697 /* OrTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */; };
-		CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */; };
-		CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
 		CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */; };
 		CF75C39916EA3B4500F7EE9F /* MercatorTiledLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */; };
@@ -508,10 +506,6 @@
 		CFC35E6A1DAFBC2300929BE6 /* DEMProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC35E651DAFBA6000929BE6 /* DEMProvider.hpp */; };
 		CFC35E6B1DAFBC2300929BE6 /* MapzenDEMProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC35E681DAFBBF200929BE6 /* MapzenDEMProvider.hpp */; };
 		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
-		CFC3F8FA17510DA800986630 /* MapBooOLDBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3F8F817510DA700986630 /* MapBooOLDBuilder.cpp */; };
-		CFC3F8FB17510F7100986630 /* MapBooOLDBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC3F8F917510DA700986630 /* MapBooOLDBuilder.hpp */; };
-		CFC3F8FE175110FE00986630 /* MapBooOLDBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC3F8FC175110FE00986630 /* MapBooOLDBuilder_iOS.mm */; };
-		CFC3F8FF1751114800986630 /* MapBooOLDBuilder_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC3F8FD175110FE00986630 /* MapBooOLDBuilder_iOS.hpp */; };
 		CFC54E0F1669766C00E1CD15 /* GEORenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */; };
 		CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */; };
 		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
@@ -1020,7 +1014,6 @@
 				D84251EC1C29715900273D3A /* DeviceAttitudeCameraHandler.hpp in CopyFiles */,
 				CF1751D21BA61808006286C6 /* StackLayoutImageBuilder.hpp in CopyFiles */,
 				CF3623411B97AFD900824932 /* CircleImageBuilder.hpp in CopyFiles */,
-				CF75A9FD1B87E2B10033DA25 /* MapBoo.hpp in CopyFiles */,
 				CFECA77C1B6ABA0100A0A44E /* VectorStreamingRenderer.hpp in CopyFiles */,
 				CF55133D1A8E6AC200097906 /* StaticImageBuilder.hpp in CopyFiles */,
 				CFAB53F61A8BCE5800DD0099 /* LayoutImageBuilder.hpp in CopyFiles */,
@@ -1162,8 +1155,6 @@
 				CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */,
 				44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */,
 				CF2D85E31753B4F200F4BEC9 /* CartoDBLayer.hpp in CopyFiles */,
-				CFC3F8FF1751114800986630 /* MapBooOLDBuilder_iOS.hpp in CopyFiles */,
-				CFC3F8FB17510F7100986630 /* MapBooOLDBuilder.hpp in CopyFiles */,
 				441C28BE1733DA3D007DC83F /* ShapeFullPositionEffect.hpp in CopyFiles */,
 				CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */,
 				CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */,
@@ -1786,8 +1777,6 @@
 		CF7529621E867FF0003C9605 /* FrustumData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrustumData.hpp; path = Commons/Geometry/FrustumData.hpp; sourceTree = "<group>"; };
 		CF7539681C5C04EF006CE697 /* OrTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrTileLODTester.cpp; path = Commons/Rendererers/OrTileLODTester.cpp; sourceTree = "<group>"; };
 		CF7539691C5C04EF006CE697 /* OrTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrTileLODTester.hpp; path = Commons/Rendererers/OrTileLODTester.hpp; sourceTree = "<group>"; };
-		CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapBoo.cpp; path = Commons/Basic/MapBoo.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MapBoo.hpp; path = Commons/Basic/MapBoo.hpp; sourceTree = "<group>"; };
 		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = HereLayer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = HereLayer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF75C39716EA3B4500F7EE9F /* MercatorTiledLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = MercatorTiledLayer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2013,10 +2002,6 @@
 		CFC35E681DAFBBF200929BE6 /* MapzenDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MapzenDEMProvider.hpp; path = Commons/DEM/MapzenDEMProvider.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
-		CFC3F8F817510DA700986630 /* MapBooOLDBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MapBooOLDBuilder.cpp; path = Commons/Basic/MapBooOLDBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFC3F8F917510DA700986630 /* MapBooOLDBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MapBooOLDBuilder.hpp; path = Commons/Basic/MapBooOLDBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFC3F8FC175110FE00986630 /* MapBooOLDBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = MapBooOLDBuilder_iOS.mm; path = Specific/Derived/MapBooOLDBuilder_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		CFC3F8FD175110FE00986630 /* MapBooOLDBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MapBooOLDBuilder_iOS.hpp; path = Specific/Derived/MapBooOLDBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC54E0D1669766B00E1CD15 /* GEORenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GEORenderer.cpp; path = Commons/GEO/GEORenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFC54E0E1669766B00E1CD15 /* GEORenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORenderer.hpp; path = Commons/GEO/GEORenderer.hpp; sourceTree = "<group>"; };
 		CFCAEC4716BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeOrbitCameraEffect.cpp; path = Commons/Rendererers/ShapeOrbitCameraEffect.cpp; sourceTree = "<group>"; };
@@ -2411,8 +2396,6 @@
 				CFA1899915F8D7CA0048BF46 /* FloatBuffer_iOS.hpp */,
 				E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */,
 				E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */,
-				CFC3F8FD175110FE00986630 /* MapBooOLDBuilder_iOS.hpp */,
-				CFC3F8FC175110FE00986630 /* MapBooOLDBuilder_iOS.mm */,
 				D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */,
 				D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */,
 				CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */,
@@ -2620,10 +2603,6 @@
 				CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */,
 				CFAB53F01A8BCD9B00DD0099 /* LayoutImageBuilder.cpp */,
 				CFAB53F11A8BCD9B00DD0099 /* LayoutImageBuilder.hpp */,
-				CF75A9FA1B87E2750033DA25 /* MapBoo.cpp */,
-				CF75A9FB1B87E2750033DA25 /* MapBoo.hpp */,
-				CFC3F8F817510DA700986630 /* MapBooOLDBuilder.cpp */,
-				CFC3F8F917510DA700986630 /* MapBooOLDBuilder.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
 				CF0C3967157F987200646A2F /* Mark.hpp */,
 				CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */,
@@ -3896,7 +3875,6 @@
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
 				CF87E4C721DFCC1C00D91403 /* GPUAttributeValue.cpp in Sources */,
-				CF75A9FC1B87E2750033DA25 /* MapBoo.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				CF5DB0671AFD52B6001FFE58 /* BalloonCanvasElement.cpp in Sources */,
 				CF9EDC641978357D00F7351E /* GEOVectorTileImageProvider.cpp in Sources */,
@@ -3939,8 +3917,6 @@
 				D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */,
 				CF6FE3ED1899812800C05775 /* G3MMeshParser.cpp in Sources */,
 				CF67D9D11C5BC29000873661 /* G3MContext.cpp in Sources */,
-				CFC3F8FA17510DA800986630 /* MapBooOLDBuilder.cpp in Sources */,
-				CFC3F8FE175110FE00986630 /* MapBooOLDBuilder_iOS.mm in Sources */,
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
 				CF59344F1DD362F6002957D4 /* FloatBufferBuilderFromCartesian2D.cpp in Sources */,
 				CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */,
