@@ -11,9 +11,13 @@
 
 #include "AbstractImageBuilder.hpp"
 
+#include <string>
+
 #include "GFont.hpp"
 #include "Color.hpp"
 #include "Vector2F.hpp"
+
+class ImageBackground;
 
 
 class LabelImageBuilder : public AbstractImageBuilder {
@@ -21,14 +25,12 @@ private:
   std::string _text;
 #ifdef C_CODE
   const GFont _font;
-  const Vector2F _margin;
 #endif
 #ifdef JAVA_CODE
   private final GFont _font;
-  private final Vector2F _margin;
 #endif
   const Color _color;
-
+  
   const Color _shadowColor;
   const float _shadowBlur;
 #ifdef C_CODE
@@ -37,56 +39,36 @@ private:
 #ifdef JAVA_CODE
   private final Vector2F _shadowOffset;
 #endif
-
-  const Color _backgroundColor;
-  const float _cornerRadius;
-
+  
+  const ImageBackground* _background;
+  
   const bool  _isMutable;
-
+  
   const std::string getImageName() const;
-
+  
 public:
-
-  LabelImageBuilder(const std::string& text,
-                    const GFont&       font            = GFont::sansSerif(),
-                    const Vector2F&    margin          = Vector2F::zero(),
-                    const Color&       color           = Color::white(),
-                    const Color&       shadowColor     = Color::transparent(),
-                    const float        shadowBlur      = 0,
-                    const Vector2F&    shadowOffset    = Vector2F::zero(),
-                    const Color&       backgroundColor = Color::transparent(),
-                    const float        cornerRadius    = 0,
-                    const bool         isMutable       = false) :
-  _text(text),
-  _font(font),
-  _margin(margin),
-  _color(color),
-  _shadowColor(shadowColor),
-  _shadowBlur(shadowBlur),
-  _shadowOffset(shadowOffset),
-  _backgroundColor(backgroundColor),
-  _cornerRadius(cornerRadius),
-  _isMutable(isMutable)
-  {
-  }
-
+  
+  LabelImageBuilder(const std::string&     text,
+                    const GFont&           font         = GFont::sansSerif(),
+                    const Color&           color        = Color::white(),
+                    const Color&           shadowColor  = Color::transparent(),
+                    const float            shadowBlur   = 0,
+                    const Vector2F&        shadowOffset = Vector2F::zero(),
+                    const ImageBackground* background   = NULL,
+                    const bool             isMutable    = false);
+  
   bool isMutable() const {
     return _isMutable;
   }
-
+  
   void setText(const std::string& text);
-
-  ~LabelImageBuilder() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-  }
-
+  
+  ~LabelImageBuilder();
+  
   void build(const G3MContext* context,
              IImageBuilderListener* listener,
              bool deleteListener);
-
-
+  
 };
 
 #endif

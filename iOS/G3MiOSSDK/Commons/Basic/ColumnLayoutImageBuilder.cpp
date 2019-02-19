@@ -13,66 +13,37 @@
 #include "ICanvas.hpp"
 #include "IImageListener.hpp"
 #include "IMathUtils.hpp"
+#include "ImageBackground.hpp"
 
 
 ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                                                   const Vector2F&                    margin,
-                                                   float                              borderWidth,
-                                                   const Color&                       borderColor,
-                                                   const Vector2F&                    padding,
-                                                   const Color&                       backgroundColor,
-                                                   float                              cornerRadius,
-                                                   int                                childrenSeparation) :
+                                                   const ImageBackground*             background,
+                                                   const int                          childrenSeparation) :
 LayoutImageBuilder(children,
-                   margin,
-                   borderWidth,
-                   borderColor,
-                   padding,
-                   backgroundColor,
-                   cornerRadius,
-                   childrenSeparation)
+                   background),
+_childrenSeparation(childrenSeparation)
 {
 
 }
 
-ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder*  child0,
-                                                   IImageBuilder*  child1,
-                                                   const Vector2F& margin,
-                                                   float           borderWidth,
-                                                   const Color&    borderColor,
-                                                   const Vector2F& padding,
-                                                   const Color&    backgroundColor,
-                                                   float           cornerRadius,
-                                                   int             childrenSeparation) :
+ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder*         child0,
+                                                   IImageBuilder*         child1,
+                                                   const ImageBackground* background,
+                                                   const int              childrenSeparation) :
 LayoutImageBuilder(child0,
                    child1,
-                   margin,
-                   borderWidth,
-                   borderColor,
-                   padding,
-                   backgroundColor,
-                   cornerRadius,
-                   childrenSeparation)
+                   background),
+_childrenSeparation(childrenSeparation)
 {
 
 }
 
-ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder*  child0,
-                                                   const Vector2F& margin,
-                                                   float           borderWidth,
-                                                   const Color&    borderColor,
-                                                   const Vector2F& padding,
-                                                   const Color&    backgroundColor,
-                                                   float           cornerRadius,
-                                                   int             childrenSeparation) :
+ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(IImageBuilder*         child0,
+                                                   const ImageBackground* background,
+                                                   const int              childrenSeparation) :
 LayoutImageBuilder(child0,
-                   margin,
-                   borderWidth,
-                   borderColor,
-                   padding,
-                   backgroundColor,
-                   cornerRadius,
-                   childrenSeparation)
+                   background),
+_childrenSeparation(childrenSeparation)
 {
 
 }
@@ -132,6 +103,8 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     }
   }
 
+  imageName += _background->description();
+
   if (anyError) {
     if (listener != NULL) {
       listener->onError(error);
@@ -141,66 +114,39 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     }
   }
   else {
-    const Vector2F margin2  = _margin.times(2);
-    const Vector2F padding2 = _padding.times(2);
+    const float contentWidth  = maxWidth;
+    const float contentHeight = accumulatedHeight + ((resultsSize - 1) * _childrenSeparation);
 
-    const IMathUtils* mu = context->getMathUtils();
+//    const Vector2I canvasSize = _background->getCanvasSize(contentWidth,
+//                                                           contentHeight);
+//
+//    ICanvas* canvas = context->getFactory()->createCanvas(false);
+//    canvas->initialize(canvasSize._x, canvasSize._y);
+//
+//    _background->drawOn(canvas, canvasSize);
 
-    const int canvasWidth  = (int) mu->ceil(maxWidth          + margin2._x + padding2._x);
-    const int canvasHeight = (int) mu->ceil(accumulatedHeight + margin2._y + padding2._y + ((int)resultsSize-1)*_childrenSeparation);
+//    const Vector2I canvasSize = _background->getCanvasSize(contentWidth,
+//                                                           contentHeight);
 
     ICanvas* canvas = context->getFactory()->createCanvas(false);
-    canvas->initialize(canvasWidth, canvasHeight);
+//    canvas->initialize(canvasSize._x, canvasSize._y);
 
-    //#warning remove debug code
-    //    canvas->setFillColor(Color::red());
-    //    canvas->fillRectangle(0, 0, width, height);
 
-    if (!_backgroundColor.isFullTransparent()) {
-      canvas->setFillColor(_backgroundColor);
-      if (_cornerRadius > 0) {
-        canvas->fillRoundedRectangle(_margin._x,
-                                     _margin._y,
-                                     canvasWidth  - margin2._x,
-                                     canvasHeight - margin2._y,
-                                     _cornerRadius);
-      }
-      else {
-        canvas->fillRectangle(_margin._x,
-                              _margin._y,
-                              canvasWidth  - margin2._x,
-                              canvasHeight - margin2._y);
-      }
-    }
+//    const Vector2F contentPos = _background->getContentPosition();
 
-    if (_borderWidth > 0 && !_borderColor.isFullTransparent()) {
-      canvas->setLineColor(_borderColor);
-      canvas->setLineWidth(_borderWidth);
-      if (_cornerRadius > 0) {
-        canvas->strokeRoundedRectangle(_margin._x,
-                                       _margin._y,
-                                       canvasWidth  - margin2._x,
-                                       canvasHeight - margin2._y,
-                                       _cornerRadius);
-      }
-      else {
-        canvas->strokeRectangle(_margin._x,
-                                _margin._y,
-                                canvasWidth  - margin2._x,
-                                canvasHeight - margin2._y);
-      }
-    }
+    const Vector2F contentPos = _background->initializeCanvas(canvas,
+                                                              contentWidth,
+                                                              contentHeight);
 
-    float cursorTop = _margin._y + _padding._y;
+    float cursorTop = contentPos._y;
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
       const IImage* image = result->_image;
       const int imageWidth  = image->getWidth();
       const int imageHeight = image->getHeight();
 
-      const float left = ((float) (canvasWidth - imageWidth) / 2.0f);
+      const float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
       canvas->drawImage(image, left, cursorTop);
-      //canvas->strokeRectangle(left, cursorTop, imageWidth, imageHeight);
       cursorTop += imageHeight + _childrenSeparation;
     }
 

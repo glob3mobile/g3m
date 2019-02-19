@@ -26,6 +26,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PeriodicalTask.hpp>
 #include <G3MiOSSDK/IMathUtils.hpp>
+#include <G3MiOSSDK/BoxImageBackground.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -200,18 +201,19 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                           );
   hudRenderer->addWidget(test);
 
-
-  LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
-                                                          GFont::monospaced(38), // font
-                                                          Vector2F(6, 6),        // margin
-                                                          Color::YELLOW,         // color
-                                                          Color::BLACK,          // shadowColor
-                                                          3,                     // shadowBlur
-                                                          Vector2F(1, -1),       // shadowOffset
-                                                          Color::RED,            // backgroundColor
-                                                          4,                     // cornerRadius
-                                                          true                   // mutable
-                                                          );
+  LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               /* text         */
+                                                          GFont::monospaced(38), /* font         */
+                                                          Color::YELLOW,         /* color        */
+                                                          Color::BLACK,          /* shadowColor  */
+                                                          3,                     /* shadowBlur   */
+                                                          Vector2F(1, -1),       /* shadowOffset */
+                                                          new BoxImageBackground(Vector2F::zero(),   /* margin          */
+                                                                                 0,                  /* borderWidth     */
+                                                                                 Color::TRANSPARENT, /* borderColor     */
+                                                                                 Vector2F(6, 6),     /* padding         */
+                                                                                 Color::RED,         /* backgroundColor */
+                                                                                 4                   /* cornerRadius    */),
+                                                          true /* mutable */);
 
   HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
                                            new HUDAbsolutePosition(10),

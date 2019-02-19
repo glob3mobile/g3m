@@ -1324,7 +1324,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
       if (_buffer != null)
          _buffer.dispose();
     
-      _metadata = null;
+      if (_metadata != null)
+         _metadata.dispose();
     
       if (_rootNodes != null)
       {
@@ -1637,7 +1638,8 @@ public class VectorStreamingRenderer extends DefaultRenderer
         _symbolizer = null;
       }
     
-      _metadata = null;
+      if (_metadata != null)
+         _metadata.dispose();
     }
 
     public final Angle _minSectorSize ;

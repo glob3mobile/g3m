@@ -20,6 +20,7 @@
 #include <G3MiOSSDK/IJSONParser.hpp>
 #include <G3MiOSSDK/JSONArray.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
+#include <G3MiOSSDK/BoxImageBackground.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -73,15 +74,19 @@ public:
         const std::string urlS      = article->getAsString("url", "");
         const std::string thumbnail = article->getAsString("thumbnail", "");
 
-        LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,
-                                                                GFont::sansSerif(10),
-                                                                Vector2F(4, 4),
-                                                                Color::BLACK,
-                                                                Color::TRANSPARENT,
-                                                                0,
-                                                                Vector2F(0, 0),
-                                                                Color::WHITE,
-                                                                4);
+        LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,                /* text         */
+                                                                GFont::sansSerif(10), /* font         */
+                                                                Color::BLACK,         /* color        */
+                                                                Color::TRANSPARENT,   /* shadowColor  */
+                                                                0,                    /* shadowBlur   */
+                                                                Vector2F(0, 0),       /* shadowOffset */
+                                                                new BoxImageBackground(Vector2F::zero(),   /* margin          */
+                                                                                       0,                  /* borderWidth     */
+                                                                                       Color::TRANSPARENT, /* borderColor     */
+                                                                                       Vector2F(4, 4),     /* padding         */
+                                                                                       Color::WHITE,       /* backgroundColor */
+                                                                                       4                   /* cornerRadius    */)
+                                                                );
 
         NonOverlappingMark* mark;
         if (thumbnail == "") {
@@ -92,14 +97,8 @@ public:
         else {
           ColumnLayoutImageBuilder* columnBuilder = new ColumnLayoutImageBuilder(new DownloaderImageBuilder(URL(thumbnail)),
                                                                                  titleBuilder,
-                                                                                 Vector2F(0, 0),     // margin
-                                                                                 0,                  // borderWidth,
-                                                                                 Color::TRANSPARENT, // borderColor
-                                                                                 Vector2F(0, 0),     // padding
-                                                                                 Color::TRANSPARENT, // backgroundColor
-                                                                                 0,                  // cornerRadius
-                                                                                 2                   // childrenSeparation
-                                                                                 );
+                                                                                 NULL,
+                                                                                 2 /* childrenSeparation */);
 
           mark = new NonOverlappingMark(columnBuilder,
                                         new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
