@@ -9,13 +9,14 @@
 #ifndef __G3MiOSSDK__LayoutImageBuilder__
 #define __G3MiOSSDK__LayoutImageBuilder__
 
+#include <vector>
+
 #include "AbstractImageBuilder.hpp"
 #include "IImageBuilderListener.hpp"
-#include "Color.hpp"
 #include "IImage.hpp"
 #include "RCObject.hpp"
-#include "Vector2F.hpp"
-#include <vector>
+
+class ImageBackground;
 
 
 class LayoutImageBuilder : public AbstractImageBuilder {
@@ -69,7 +70,7 @@ protected:
     std::vector<ChildResult*> _childrenResult;
 
     ChildrenResult(LayoutImageBuilder* layoutImageBuilder,
-                   size_t childrenSize,
+                   const size_t childrenSize,
                    const G3MContext* context,
                    IImageBuilderListener* listener,
                    bool deleteListener) :
@@ -86,10 +87,10 @@ protected:
 
     void childImageCreated(const IImage*      image,
                            const std::string& imageName,
-                           size_t             childIndex);
+                           const size_t       childIndex);
 
-    void childError(const  std::string& error,
-                    size_t childIndex);
+    void childError(const std::string& error,
+                    const size_t childIndex);
   };
 
 
@@ -124,27 +125,7 @@ protected:
 
   std::vector<IImageBuilder*> _children;
 
-#ifdef C_CODE
-  const Vector2F _margin;
-#endif
-#ifdef JAVA_CODE
-  protected final Vector2F _margin;
-#endif
-
-  const float _borderWidth;
-  const Color _borderColor;
-
-#ifdef C_CODE
-  const Vector2F _padding;
-#endif
-#ifdef JAVA_CODE
-  protected final Vector2F _padding;
-#endif
-
-  const Color _backgroundColor;
-  const float _cornerRadius;
-
-  const int _childrenSeparation;
+  const ImageBackground* _background;
 
   /*
    | margin
@@ -153,64 +134,16 @@ protected:
    |       content
    */
 
+
   LayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                     const Vector2F&                    margin,
-                     float                              borderWidth,
-                     const Color&                       borderColor,
-                     const Vector2F&                    padding,
-                     const Color&                       backgroundColor,
-                     float                              cornerRadius,
-                     int                                childrenSeparation) :
-  _children(children),
-  _margin(margin),
-  _borderWidth(borderWidth),
-  _borderColor(borderColor),
-  _padding(padding),
-  _backgroundColor(backgroundColor),
-  _cornerRadius(cornerRadius),
-  _childrenSeparation(childrenSeparation)
-  {
-  }
+                     const ImageBackground*             background);
 
-  LayoutImageBuilder(IImageBuilder*  child0,
-                     IImageBuilder*  child1,
-                     const Vector2F& margin,
-                     float           borderWidth,
-                     const Color&    borderColor,
-                     const Vector2F& padding,
-                     const Color&    backgroundColor,
-                     const float     cornerRadius,
-                     int             childrenSeparation) :
-  _margin(margin),
-  _borderWidth(borderWidth),
-  _borderColor(borderColor),
-  _padding(padding),
-  _backgroundColor(backgroundColor),
-  _cornerRadius(cornerRadius),
-  _childrenSeparation(childrenSeparation)
-  {
-    _children.push_back(child0);
-    _children.push_back(child1);
-  }
+  LayoutImageBuilder(IImageBuilder*         child0,
+                     IImageBuilder*         child1,
+                     const ImageBackground* background);
 
-  LayoutImageBuilder(IImageBuilder*  child0,
-                     const Vector2F& margin,
-                     float           borderWidth,
-                     const Color&    borderColor,
-                     const Vector2F& padding,
-                     const Color&    backgroundColor,
-                     const float     cornerRadius,
-                     int             childrenSeparation) :
-  _margin(margin),
-  _borderWidth(borderWidth),
-  _borderColor(borderColor),
-  _padding(padding),
-  _backgroundColor(backgroundColor),
-  _cornerRadius(cornerRadius),
-  _childrenSeparation(childrenSeparation)
-  {
-    _children.push_back(child0);
-  }
+  LayoutImageBuilder(IImageBuilder*         child0,
+                     const ImageBackground* background);
 
   virtual void doLayout(const G3MContext* context,
                         IImageBuilderListener* listener,

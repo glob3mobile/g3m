@@ -39,6 +39,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
   {
     final IStringUtils su = IStringUtils.instance();
     return (_text + "/" + _font.description() + "/" + _margin.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + _shadowOffset.description() + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
+  //          _background->description()  + "/" +
   }
 
 

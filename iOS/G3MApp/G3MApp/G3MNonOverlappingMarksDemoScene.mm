@@ -20,6 +20,7 @@
 #include <G3MiOSSDK/IJSONParser.hpp>
 #include <G3MiOSSDK/JSONArray.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
+#include <G3MiOSSDK/NullImageBackground.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -92,14 +93,8 @@ public:
         else {
           ColumnLayoutImageBuilder* columnBuilder = new ColumnLayoutImageBuilder(new DownloaderImageBuilder(URL(thumbnail)),
                                                                                  titleBuilder,
-                                                                                 Vector2F(0, 0),     // margin
-                                                                                 0,                  // borderWidth,
-                                                                                 Color::TRANSPARENT, // borderColor
-                                                                                 Vector2F(0, 0),     // padding
-                                                                                 Color::TRANSPARENT, // backgroundColor
-                                                                                 0,                  // cornerRadius
-                                                                                 2                   // childrenSeparation
-                                                                                 );
+                                                                                 new NullImageBackground(),
+                                                                                 2 /* childrenSeparation */);
 
           mark = new NonOverlappingMark(columnBuilder,
                                         new DownloaderImageBuilder(URL("file:///anchorWidget.png")),

@@ -295,7 +295,7 @@ public class MapBoo
       {
         if (hasShape)
         {
-          return new ColumnLayoutImageBuilder(createLabelImageBuilder(createMarkLabel(properties)), _shape.createImageBuilder());
+          return new ColumnLayoutImageBuilder(createLabelImageBuilder(createMarkLabel(properties)), _shape.createImageBuilder(), new NullImageBackground(), 0); // childrenSeparation
         }
     
         return createLabelImageBuilder(createMarkLabel(properties));

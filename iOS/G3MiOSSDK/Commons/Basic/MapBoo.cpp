@@ -30,6 +30,7 @@
 #include "StackLayoutImageBuilder.hpp"
 #include "LayerSet.hpp"
 #include "DownloadPriority.hpp"
+#include "NullImageBackground.hpp"
 
 
 MapBoo::MapBoo(IG3MBuilder* builder,
@@ -674,7 +675,9 @@ IImageBuilder* MapBoo::MBVectorSymbology::createImageBuilder(const JSONObject* p
   if (hasLabeling) {
     if (hasShape) {
       return new ColumnLayoutImageBuilder(createLabelImageBuilder(createMarkLabel(properties)),
-                                          _shape->createImageBuilder());
+                                          _shape->createImageBuilder(),
+                                          new NullImageBackground(),
+                                          0 /* childrenSeparation */ );
     }
     
     return createLabelImageBuilder(createMarkLabel(properties));

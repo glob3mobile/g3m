@@ -53,6 +53,8 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
       }
     }
   
+    imageName += _background.description();
+  
     if (anyError)
     {
       if (listener != null)
@@ -67,15 +69,12 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
     }
     else
     {
-      final int canvasWidth = maxWidth;
-      final int canvasHeight = maxHeight;
+      final float contentWidth = maxWidth;
+      final float contentHeight = maxHeight;
   
       ICanvas canvas = context.getFactory().createCanvas(false);
-      canvas.initialize(canvasWidth, canvasHeight);
-  
-      ///#warning remove debug code
-      //    canvas->setFillColor(Color::red());
-      //    canvas->fillRectangle(0, 0, width, height);
+  //    canvas->initialize(canvasWidth, canvasHeight);
+      final Vector2F contentPos = _background.initializeCanvas(canvas, contentWidth, contentHeight);
   
       for (int i = 0; i < resultsSize; i++)
       {
@@ -84,8 +83,8 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
   
-        final float top = ((float)(canvasHeight - imageHeight) / 2.0f);
-        final float left = ((float)(canvasWidth - imageWidth) / 2.0f);
+        final float top = contentPos._y + ((contentWidth - imageHeight) / 2.0f);
+        final float left = contentPos._x + ((contentHeight - imageWidth) / 2.0f);
         canvas.drawImage(image, left, top);
       }
   
@@ -105,13 +104,21 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
 
   public StackLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children)
   {
-     super(children, Vector2F.zero(), 0, Color.TRANSPARENT, Vector2F.zero(), Color.TRANSPARENT, 0, 0);
+     this(children, null);
+  }
+  public StackLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, ImageBackground background)
+  {
+     super(children, background);
   
   }
 
   public StackLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1)
   {
-     super(child0, child1, Vector2F.zero(), 0, Color.TRANSPARENT, Vector2F.zero(), Color.TRANSPARENT, 0, 0);
+     this(child0, child1, null);
+  }
+  public StackLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, ImageBackground background)
+  {
+     super(child0, child1, background);
   
   }
 

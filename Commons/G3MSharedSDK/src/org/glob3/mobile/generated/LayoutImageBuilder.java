@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class ImageBackground;
+
+
 public abstract class LayoutImageBuilder extends AbstractImageBuilder
 {
 
@@ -140,17 +143,7 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
 
   protected java.util.ArrayList<IImageBuilder> _children = new java.util.ArrayList<IImageBuilder>();
 
-  protected final Vector2F _margin;
-
-  protected final float _borderWidth;
-  protected final Color _borderColor ;
-
-  protected final Vector2F _padding;
-
-  protected final Color _backgroundColor ;
-  protected final float _cornerRadius;
-
-  protected final int _childrenSeparation;
+  protected final ImageBackground _background;
 
   /*
    | margin
@@ -159,40 +152,23 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
    |       content
    */
 
-  protected LayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+
+  protected LayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, ImageBackground background)
   {
      _children = children;
-     _margin = margin;
-     _borderWidth = borderWidth;
-     _borderColor = new Color(borderColor);
-     _padding = padding;
-     _backgroundColor = new Color(backgroundColor);
-     _cornerRadius = cornerRadius;
-     _childrenSeparation = childrenSeparation;
+     _background = (background == null) ? new NullImageBackground() : background;
   }
 
-  protected LayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  protected LayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, ImageBackground background)
   {
-     _margin = margin;
-     _borderWidth = borderWidth;
-     _borderColor = new Color(borderColor);
-     _padding = padding;
-     _backgroundColor = new Color(backgroundColor);
-     _cornerRadius = cornerRadius;
-     _childrenSeparation = childrenSeparation;
+     _background = (background == null) ? new NullImageBackground() : background;
     _children.add(child0);
     _children.add(child1);
   }
 
-  protected LayoutImageBuilder(IImageBuilder child0, Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius, int childrenSeparation)
+  protected LayoutImageBuilder(IImageBuilder child0, ImageBackground background)
   {
-     _margin = margin;
-     _borderWidth = borderWidth;
-     _borderColor = new Color(borderColor);
-     _padding = padding;
-     _backgroundColor = new Color(backgroundColor);
-     _cornerRadius = cornerRadius;
-     _childrenSeparation = childrenSeparation;
+     _background = (background == null) ? new NullImageBackground() : background;
     _children.add(child0);
   }
 
@@ -207,6 +183,9 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
       if (child != null)
          child.dispose();
     }
+  
+    if (_background != null)
+       _background.dispose();
   }
 
   public final boolean isMutable()

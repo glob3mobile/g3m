@@ -22,6 +22,7 @@ const std::string LabelImageBuilder::getImageName() const {
   const IStringUtils* su = IStringUtils::instance();
   return (_text                       + "/" +
           _font.description()         + "/" +
+//          _background->description()  + "/" +
           _margin.description()       + "/" +
           _color.id()                 + "/" +
           _shadowColor.id()           + "/" +

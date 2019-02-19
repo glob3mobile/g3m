@@ -191,6 +191,12 @@
 		CF44A0731DDE139600E5B270 /* SubsetDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF44A0711DDE139600E5B270 /* SubsetDEMGrid.cpp */; };
 		CF44A0741DDE18FF00E5B270 /* DecoratorDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF44A06F1DDE0B0000E5B270 /* DecoratorDEMGrid.hpp */; };
 		CF44A0751DDE18FF00E5B270 /* SubsetDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */; };
+		CF45597A221C01A500DFFDD2 /* BoxImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF455978221C01A500DFFDD2 /* BoxImageBackground.cpp */; };
+		CF45597D221C22C800DFFDD2 /* ImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45597B221C22C800DFFDD2 /* ImageBackground.cpp */; };
+		CF455980221C286C00DFFDD2 /* NullImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45597E221C286C00DFFDD2 /* NullImageBackground.cpp */; };
+		CF455981221C2AE400DFFDD2 /* BoxImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF455979221C01A500DFFDD2 /* BoxImageBackground.hpp */; };
+		CF455982221C2AE400DFFDD2 /* NullImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF45597F221C286C00DFFDD2 /* NullImageBackground.hpp */; };
+		CF455983221C2AE400DFFDD2 /* ImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF45597C221C22C800DFFDD2 /* ImageBackground.hpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
 		CF45E1861E85519C00C36699 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E1841E85519C00C36699 /* Ray.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
@@ -914,6 +920,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF455981221C2AE400DFFDD2 /* BoxImageBackground.hpp in CopyFiles */,
+				CF455982221C2AE400DFFDD2 /* NullImageBackground.hpp in CopyFiles */,
+				CF455983221C2AE400DFFDD2 /* ImageBackground.hpp in CopyFiles */,
 				CF1775182211C40B004AB467 /* ImageSizer.hpp in CopyFiles */,
 				CF1775192211C40B004AB467 /* AbsoluteImageSizer.hpp in CopyFiles */,
 				CF1775112211B993004AB467 /* ResizerImageBuilder.hpp in CopyFiles */,
@@ -1628,6 +1637,12 @@
 		CF44A06F1DDE0B0000E5B270 /* DecoratorDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DecoratorDEMGrid.hpp; path = Commons/DEM/DecoratorDEMGrid.hpp; sourceTree = "<group>"; };
 		CF44A0711DDE139600E5B270 /* SubsetDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SubsetDEMGrid.cpp; path = Commons/DEM/SubsetDEMGrid.cpp; sourceTree = "<group>"; };
 		CF44A0721DDE139600E5B270 /* SubsetDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SubsetDEMGrid.hpp; path = Commons/DEM/SubsetDEMGrid.hpp; sourceTree = "<group>"; };
+		CF455978221C01A500DFFDD2 /* BoxImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BoxImageBackground.cpp; path = Commons/Basic/BoxImageBackground.cpp; sourceTree = "<group>"; };
+		CF455979221C01A500DFFDD2 /* BoxImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BoxImageBackground.hpp; path = Commons/Basic/BoxImageBackground.hpp; sourceTree = "<group>"; };
+		CF45597B221C22C800DFFDD2 /* ImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImageBackground.cpp; path = Commons/Basic/ImageBackground.cpp; sourceTree = "<group>"; };
+		CF45597C221C22C800DFFDD2 /* ImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ImageBackground.hpp; path = Commons/Basic/ImageBackground.hpp; sourceTree = "<group>"; };
+		CF45597E221C286C00DFFDD2 /* NullImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NullImageBackground.cpp; path = Commons/Basic/NullImageBackground.cpp; sourceTree = "<group>"; };
+		CF45597F221C286C00DFFDD2 /* NullImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NullImageBackground.hpp; path = Commons/Basic/NullImageBackground.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* AbstractMeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = AbstractMeshShape.cpp; path = Commons/Rendererers/AbstractMeshShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF45E1841E85519C00C36699 /* Ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ray.cpp; path = Commons/Geometry/Ray.cpp; sourceTree = "<group>"; };
@@ -2471,6 +2486,8 @@
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
 				CF35A20516D3D44E00D795D8 /* BILParser.cpp */,
 				CF35A20616D3D44E00D795D8 /* BILParser.hpp */,
+				CF455978221C01A500DFFDD2 /* BoxImageBackground.cpp */,
+				CF455979221C01A500DFFDD2 /* BoxImageBackground.hpp */,
 				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
 				CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */,
 				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
@@ -2579,6 +2596,8 @@
 				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
 				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
+				CF45597B221C22C800DFFDD2 /* ImageBackground.cpp */,
+				CF45597C221C22C800DFFDD2 /* ImageBackground.hpp */,
 				CF1775122211C29A004AB467 /* ImageSizer.cpp */,
 				CF1775132211C29A004AB467 /* ImageSizer.hpp */,
 				44E3C42919B53B4100857275 /* Info.cpp */,
@@ -2611,6 +2630,8 @@
 				CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */,
 				CFBBF0FE1DB4CC4E00BF289E /* MutableColor255.cpp */,
 				CFBBF0FF1DB4CC4E00BF289E /* MutableColor255.hpp */,
+				CF45597E221C286C00DFFDD2 /* NullImageBackground.cpp */,
+				CF45597F221C286C00DFFDD2 /* NullImageBackground.hpp */,
 				CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */,
 				CF9592AD1652E28500CB7AC8 /* OrderedRenderable.hpp */,
 				D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */,
@@ -3402,11 +3423,11 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
 				D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */,
 				D8EEF3B61577924D003FEB5E /* Products */,
+				E70B56DF16D3CCCD00C5FFFB /* Resources */,
 				383BD3771577EDA20012AC53 /* Specific */,
 			);
 			sourceTree = "<group>";
@@ -3575,6 +3596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */,
+				CF455980221C286C00DFFDD2 /* NullImageBackground.cpp in Sources */,
 				CFF99FF81DB929D0008E4F14 /* DEMSubscription.cpp in Sources */,
 				CF67D9C31C5A90BB00873661 /* TileVisibilityTester.cpp in Sources */,
 				383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */,
@@ -3857,6 +3879,7 @@
 				CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */,
 				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
 				CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */,
+				CF45597D221C22C800DFFDD2 /* ImageBackground.cpp in Sources */,
 				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
 				D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */,
 				CFCDFCB51911677800D711FC /* FrameTask.cpp in Sources */,
@@ -3864,6 +3887,7 @@
 				FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */,
 				CF8AE0061702049F00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,
+				CF45597A221C01A500DFFDD2 /* BoxImageBackground.cpp in Sources */,
 				CF8AE0081702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp in Sources */,
 				CF0421D619F9986D00F5D33F /* MutableVector2F.cpp in Sources */,
 				CF49512D1E46316B00D10A70 /* MutableAngle.cpp in Sources */,

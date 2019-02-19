@@ -11,7 +11,11 @@
 
 #include "LayoutImageBuilder.hpp"
 
+
 class ColumnLayoutImageBuilder : public LayoutImageBuilder {
+private:
+  const int _childrenSeparation;
+
 protected:
   void doLayout(const G3MContext* context,
                 IImageBuilderListener* listener,
@@ -21,32 +25,17 @@ protected:
 public:
 
   ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
-                           const Vector2F&                    margin             = Vector2F::zero(),
-                           float                              borderWidth        = 0,
-                           const Color&                       borderColor        = Color::transparent(),
-                           const Vector2F&                    padding            = Vector2F::zero(),
-                           const Color&                       backgroundColor    = Color::transparent(),
-                           float                              cornerRadius       = 0,
-                           int                                childrenSeparation = 0);
+                           const ImageBackground*             background         = NULL,
+                           const int                          childrenSeparation = 0);
 
-  ColumnLayoutImageBuilder(IImageBuilder*  child0,
-                           IImageBuilder*  child1,
-                           const Vector2F& margin             = Vector2F::zero(),
-                           float           borderWidth        = 0,
-                           const Color&    borderColor        = Color::transparent(),
-                           const Vector2F& padding            = Vector2F::zero(),
-                           const Color&    backgroundColor    = Color::transparent(),
-                           float           cornerRadius       = 0,
-                           int             childrenSeparation = 0);
+  ColumnLayoutImageBuilder(IImageBuilder*         child0,
+                           IImageBuilder*         child1,
+                           const ImageBackground* background         = NULL,
+                           const int              childrenSeparation = 0);
 
-  ColumnLayoutImageBuilder(IImageBuilder*  child0,
-                           const Vector2F& margin             = Vector2F::zero(),
-                           float           borderWidth        = 0,
-                           const Color&    borderColor        = Color::transparent(),
-                           const Vector2F& padding            = Vector2F::zero(),
-                           const Color&    backgroundColor    = Color::transparent(),
-                           float           cornerRadius       = 0,
-                           int             childrenSeparation = 0);
+  ColumnLayoutImageBuilder(IImageBuilder*         child0,
+                           const ImageBackground* background         = NULL,
+                           const int              childrenSeparation = 0);
 
 };
 

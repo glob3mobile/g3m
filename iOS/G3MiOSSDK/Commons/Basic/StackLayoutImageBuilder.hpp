@@ -20,10 +20,12 @@ protected:
 
 public:
 
-  StackLayoutImageBuilder(const std::vector<IImageBuilder*>& children);
+  StackLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
+                          const ImageBackground*             background = NULL);
 
-  StackLayoutImageBuilder(IImageBuilder* child0,
-                          IImageBuilder* child1);
+  StackLayoutImageBuilder(IImageBuilder*         child0,
+                          IImageBuilder*         child1,
+                          const ImageBackground* background = NULL);
 
 };
 
