@@ -31,11 +31,11 @@ public class GFont
 
   private GFont(String name, float size, boolean bold, boolean italic)
   {
-     _name = name;
+     _name = IStringUtils.instance().toLowerCase(name);
      _size = size;
      _bold = bold;
      _italic = italic;
-
+  
   }
 
 
@@ -106,15 +106,15 @@ public class GFont
 
   public final boolean isSerif()
   {
-    return (_name.compareTo(GFont.SERIF) == 0);
+    return (_name.equals(GFont.SERIF));
   }
   public final boolean isSansSerif()
   {
-    return (_name.compareTo(GFont.SANS_SERIF) == 0);
+    return (_name.equals(GFont.SANS_SERIF));
   }
   public final boolean isMonospaced()
   {
-    return (_name.compareTo(GFont.MONOSPACED) == 0);
+    return (_name.equals(GFont.MONOSPACED));
   }
 
   public final float getSize()

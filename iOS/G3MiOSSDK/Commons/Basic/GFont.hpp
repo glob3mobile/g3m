@@ -26,14 +26,7 @@ private:
   GFont(const std::string& name,
         const float        size,
         const bool         bold,
-        const bool         italic) :
-  _name(name),
-  _size(size),
-  _bold(bold),
-  _italic(italic)
-  {
-
-  }
+        const bool         italic);
   
 
 public:

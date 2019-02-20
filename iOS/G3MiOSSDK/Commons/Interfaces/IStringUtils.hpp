@@ -50,6 +50,7 @@ public:
 
   virtual std::string toUpperCase(const std::string& string) const = 0;
 
+  virtual std::string toLowerCase(const std::string& string) const = 0;
 
   virtual int indexOf(const std::string& string,
                       const std::string& search) const = 0;

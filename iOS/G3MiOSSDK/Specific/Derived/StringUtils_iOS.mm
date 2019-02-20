@@ -118,6 +118,13 @@ std::string StringUtils_iOS::toUpperCase(const std::string& string) const {
   return result;
 }
 
+std::string StringUtils_iOS::toLowerCase(const std::string& string) const {
+  std::string result = string;
+  std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+
+  return result;
+}
+
 long long StringUtils_iOS::parseHexInt(const std::string& str) const {
   long long result;
   std::stringstream ss;

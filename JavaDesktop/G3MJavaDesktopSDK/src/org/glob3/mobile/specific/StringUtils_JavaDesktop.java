@@ -93,6 +93,12 @@ public final class StringUtils_JavaDesktop
 
 
    @Override
+   public String toLowerCase(final String string) {
+      return string.toLowerCase(Locale.ENGLISH);
+   }
+
+
+   @Override
    public long parseHexInt(final String str) {
       return Long.parseLong(str, 16);
    }

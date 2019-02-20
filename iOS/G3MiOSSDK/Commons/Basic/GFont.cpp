@@ -9,22 +9,35 @@
 #include "GFont.hpp"
 
 #include "IStringBuilder.hpp"
+#include "IStringUtils.hpp"
 
 const std::string GFont::SERIF      = "serif";
 const std::string GFont::SANS_SERIF = "sans-serif";
 const std::string GFont::MONOSPACED = "monospaced";
 
 
+GFont::GFont(const std::string& name,
+             const float        size,
+             const bool         bold,
+             const bool         italic) :
+_name( IStringUtils::instance()->toLowerCase( name ) ),
+_size(size),
+_bold(bold),
+_italic(italic)
+{
+
+}
+
 bool GFont::isSerif() const {
-  return ( _name.compare(GFont::SERIF) == 0 );
+  return (_name == GFont::SERIF);
 }
 
 bool GFont::isSansSerif() const {
-  return ( _name.compare(GFont::SANS_SERIF) == 0 );
+  return (_name == GFont::SANS_SERIF);
 }
 
 bool GFont::isMonospaced() const {
-  return ( _name.compare(GFont::MONOSPACED) == 0 );
+  return (_name == GFont::MONOSPACED);
 }
 
 const std::string GFont::description() const {
