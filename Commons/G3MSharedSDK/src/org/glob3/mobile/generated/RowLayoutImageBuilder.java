@@ -1,24 +1,22 @@
 package org.glob3.mobile.generated;
 //
-//  ColumnLayoutImageBuilder.cpp
+//  RowLayoutImageBuilder.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 2/11/15.
-//
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 2/20/19.
 //
 
 //
-//  ColumnLayoutImageBuilder.hpp
+//  RowLayoutImageBuilder.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 2/11/15.
+//  Created by DIEGO RAMIRO GOMEZ-DECK on 2/20/19.
 //
-//
 
 
 
 
-public class ColumnLayoutImageBuilder extends LayoutImageBuilder
+public class RowLayoutImageBuilder extends LayoutImageBuilder
 {
   private final int _childrenSeparation;
 
@@ -26,10 +24,10 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   {
     boolean anyError = false;
     String error = "";
-    String imageName = "Col";
+    String imageName = "Row";
   
-    int maxWidth = 0;
-    int accumulatedHeight = 0;
+    int maxHeight = 0;
+    int accumulatedWidth = 0;
   
     final int resultsSize = results.size();
     for (int i = 0; i < resultsSize; i++)
@@ -44,10 +42,10 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
       }
       else
       {
-        accumulatedHeight += image.getHeight();
-        if (image.getWidth() > maxWidth)
+        accumulatedWidth += image.getWidth();
+        if (image.getHeight() > maxHeight)
         {
-          maxWidth = image.getWidth();
+          maxHeight = image.getHeight();
         }
         imageName += result._imageName + "/";
       }
@@ -69,14 +67,14 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
     }
     else
     {
-      final float contentWidth = maxWidth;
-      final float contentHeight = accumulatedHeight + ((resultsSize - 1) * _childrenSeparation);
+      final float contentWidth = accumulatedWidth + ((resultsSize - 1) * _childrenSeparation);
+      final float contentHeight = maxHeight;
   
       ICanvas canvas = context.getFactory().createCanvas(false);
   
       final Vector2F contentPos = _background.initializeCanvas(canvas, contentWidth, contentHeight);
   
-      float cursorTop = contentPos._y;
+      float cursorLeft = contentPos._x;
       for (int i = 0; i < resultsSize; i++)
       {
         ChildResult result = results.get(i);
@@ -84,12 +82,12 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
   
-        final float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
-        canvas.drawImage(image, left, cursorTop);
-        cursorTop += imageHeight + _childrenSeparation;
+        final float top = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
+        canvas.drawImage(image, cursorLeft, top);
+        cursorLeft += imageWidth + _childrenSeparation;
       }
   
-      canvas.createImage(new ColumnLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
+      canvas.createImage(new RowLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
       if (canvas != null)
          canvas.dispose();
     }
@@ -103,45 +101,45 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
   }
 
 
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, ImageBackground background)
+  public RowLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, ImageBackground background)
   {
      this(children, background, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children)
+  public RowLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children)
   {
      this(children, null, 0);
   }
-  public ColumnLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, ImageBackground background, int childrenSeparation)
+  public RowLayoutImageBuilder(java.util.ArrayList<IImageBuilder> children, ImageBackground background, int childrenSeparation)
   {
      super(children, background);
      _childrenSeparation = childrenSeparation;
   
   }
 
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, ImageBackground background)
+  public RowLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, ImageBackground background)
   {
      this(child0, child1, background, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1)
+  public RowLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1)
   {
      this(child0, child1, null, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, ImageBackground background, int childrenSeparation)
+  public RowLayoutImageBuilder(IImageBuilder child0, IImageBuilder child1, ImageBackground background, int childrenSeparation)
   {
      super(child0, child1, background);
      _childrenSeparation = childrenSeparation;
   
   }
 
-  public ColumnLayoutImageBuilder(IImageBuilder child0, ImageBackground background)
+  public RowLayoutImageBuilder(IImageBuilder child0, ImageBackground background)
   {
      this(child0, background, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0)
+  public RowLayoutImageBuilder(IImageBuilder child0)
   {
      this(child0, null, 0);
   }
-  public ColumnLayoutImageBuilder(IImageBuilder child0, ImageBackground background, int childrenSeparation)
+  public RowLayoutImageBuilder(IImageBuilder child0, ImageBackground background, int childrenSeparation)
   {
      super(child0, background);
      _childrenSeparation = childrenSeparation;

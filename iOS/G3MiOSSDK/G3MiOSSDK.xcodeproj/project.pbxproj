@@ -331,6 +331,8 @@
 		CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA0316948302002C760A /* ByteBufferIterator.cpp */; };
 		CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7EDA081694914A002C760A /* BSONParser.cpp */; };
 		CF7FF503184CE434003A7E76 /* ErrorHandling.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FF502184CE3FE003A7E76 /* ErrorHandling.hpp */; };
+		CF82E10A221DC9EC00DBC5E3 /* RowLayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF82E108221DC9EC00DBC5E3 /* RowLayoutImageBuilder.cpp */; };
+		CF82E10B221DDD1700DBC5E3 /* RowLayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF82E109221DC9EC00DBC5E3 /* RowLayoutImageBuilder.hpp */; };
 		CF83D50617049AB9009A39A5 /* GEOMarkSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */; };
 		CF83D50717049AE3009A39A5 /* GEOMarkSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */; };
 		CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */; };
@@ -914,6 +916,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF82E10B221DDD1700DBC5E3 /* RowLayoutImageBuilder.hpp in CopyFiles */,
 				CF455981221C2AE400DFFDD2 /* BoxImageBackground.hpp in CopyFiles */,
 				CF455982221C2AE400DFFDD2 /* NullImageBackground.hpp in CopyFiles */,
 				CF455983221C2AE400DFFDD2 /* ImageBackground.hpp in CopyFiles */,
@@ -1804,6 +1807,8 @@
 		CF7EDA081694914A002C760A /* BSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSONParser.cpp; sourceTree = "<group>"; };
 		CF7EDA091694914A002C760A /* BSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BSONParser.hpp; sourceTree = "<group>"; };
 		CF7FF502184CE3FE003A7E76 /* ErrorHandling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ErrorHandling.hpp; path = Commons/Basic/ErrorHandling.hpp; sourceTree = "<group>"; };
+		CF82E108221DC9EC00DBC5E3 /* RowLayoutImageBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RowLayoutImageBuilder.cpp; path = Commons/Basic/RowLayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CF82E109221DC9EC00DBC5E3 /* RowLayoutImageBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RowLayoutImageBuilder.hpp; path = Commons/Basic/RowLayoutImageBuilder.hpp; sourceTree = "<group>"; };
 		CF83D50417049AB9009A39A5 /* GEOMarkSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMarkSymbol.cpp; path = Commons/GEO/GEOMarkSymbol.cpp; sourceTree = "<group>"; };
 		CF83D50517049AB9009A39A5 /* GEOMarkSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMarkSymbol.hpp; path = Commons/GEO/GEOMarkSymbol.hpp; sourceTree = "<group>"; };
 		CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGRotateNode.cpp; path = Commons/Rendererers/SGRotateNode.cpp; sourceTree = "<group>"; };
@@ -2630,6 +2635,8 @@
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
 				CF17750E2211B968004AB467 /* ResizerImageBuilder.cpp */,
 				CF17750F2211B968004AB467 /* ResizerImageBuilder.hpp */,
+				CF82E108221DC9EC00DBC5E3 /* RowLayoutImageBuilder.cpp */,
+				CF82E109221DC9EC00DBC5E3 /* RowLayoutImageBuilder.hpp */,
 				D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */,
 				D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */,
 				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
@@ -3848,6 +3855,7 @@
 				CF67D9CB1C5AB44500873661 /* TimedCacheTileVisibilityTester.cpp in Sources */,
 				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
 				CF5934511DD363F0002957D4 /* FloatBufferBuilderFromCartesian3D.cpp in Sources */,
+				CF82E10A221DC9EC00DBC5E3 /* RowLayoutImageBuilder.cpp in Sources */,
 				CFE50D241C66650C0002EFD5 /* GradualSplitsTileLODTester.cpp in Sources */,
 				CFD15C4416E78C7D004DC360 /* OSMLayer.cpp in Sources */,
 				CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */,

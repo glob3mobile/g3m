@@ -8,12 +8,11 @@
 
 #include "ColumnLayoutImageBuilder.hpp"
 
+#include "IImageListener.hpp"
+#include "ImageBackground.hpp"
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
-#include "IImageListener.hpp"
-#include "IMathUtils.hpp"
-#include "ImageBackground.hpp"
 
 
 ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
@@ -117,22 +116,7 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
     const float contentWidth  = maxWidth;
     const float contentHeight = accumulatedHeight + ((resultsSize - 1) * _childrenSeparation);
 
-//    const Vector2I canvasSize = _background->getCanvasSize(contentWidth,
-//                                                           contentHeight);
-//
-//    ICanvas* canvas = context->getFactory()->createCanvas(false);
-//    canvas->initialize(canvasSize._x, canvasSize._y);
-//
-//    _background->drawOn(canvas, canvasSize);
-
-//    const Vector2I canvasSize = _background->getCanvasSize(contentWidth,
-//                                                           contentHeight);
-
     ICanvas* canvas = context->getFactory()->createCanvas(false);
-//    canvas->initialize(canvasSize._x, canvasSize._y);
-
-
-//    const Vector2F contentPos = _background->getContentPosition();
 
     const Vector2F contentPos = _background->initializeCanvas(canvas,
                                                               contentWidth,
