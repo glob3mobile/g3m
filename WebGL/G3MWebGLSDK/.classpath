@@ -8,22 +8,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/gwt-user.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/doc/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/gwt-codeserver.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/doc/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/gwt-dev.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/doc/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/validation-api-1.0.0.GA-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/validation-api-1.0.0.GA.jar" sourcepath="/Users/mdelacalle/Documents/java_src/java-stuff/gwt-2.8.2/validation-api-1.0.0.GA-sources.jar"/>
+	<classpathentry kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
