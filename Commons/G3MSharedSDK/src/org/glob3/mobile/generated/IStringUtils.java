@@ -52,6 +52,7 @@ public abstract class IStringUtils
 
   public abstract String toUpperCase(String String);
 
+  public abstract String toLowerCase(String String);
 
   public abstract int indexOf(String String, String search);
 

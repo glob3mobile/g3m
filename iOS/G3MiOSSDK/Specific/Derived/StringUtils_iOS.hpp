@@ -49,6 +49,8 @@ public:
 
   std::string toUpperCase(const std::string& string) const;
 
+  std::string toLowerCase(const std::string& string) const;
+
   long long parseHexInt(const std::string& str) const;
 
   int indexOfFirstNonBlank(const std::string& string,
