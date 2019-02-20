@@ -77,6 +77,10 @@ public:
     return _italic;
   }
 
+  GFont copyWithSize(float size) const {
+    return GFont(_name, size, _bold, _italic);
+  }
+
   const std::string description() const;
 #ifdef JAVA_CODE
   @Override

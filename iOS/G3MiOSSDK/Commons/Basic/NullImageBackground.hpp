@@ -20,6 +20,8 @@ public:
 
   const std::string description() const;
 
+  NullImageBackground* copy() const;
+
 };
 
 #endif

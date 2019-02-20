@@ -42,4 +42,6 @@ public abstract class ImageBackground
 
   public abstract String description();
 
+  public abstract ImageBackground copy();
+
 }

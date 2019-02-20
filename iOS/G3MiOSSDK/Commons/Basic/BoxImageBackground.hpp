@@ -71,6 +71,8 @@ public:
 
   const std::string description() const;
 
+  BoxImageBackground* copy() const;
+
 };
 
 #endif

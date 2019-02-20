@@ -132,6 +132,11 @@ public class GFont
     return _italic;
   }
 
+  public final GFont copyWithSize(float size)
+  {
+    return new GFont(_name, size, _bold, _italic);
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

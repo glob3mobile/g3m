@@ -33,4 +33,9 @@ public class NullImageBackground extends ImageBackground
     return "NULL";
   }
 
+  public final NullImageBackground copy()
+  {
+    return new NullImageBackground();
+  }
+
 }

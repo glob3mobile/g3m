@@ -25,3 +25,7 @@ const Vector2F NullImageBackground::initializeCanvas(ICanvas* canvas,
 const std::string NullImageBackground::description() const {
   return "NULL";
 }
+
+NullImageBackground* NullImageBackground::copy() const {
+  return new NullImageBackground();
+}

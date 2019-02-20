@@ -74,9 +74,9 @@ public class BoxImageBackground extends ImageBackground
     final float boxWidth = canvasWidth - ((_margin._x + _borderWidth) * 2);
     final float boxHeight = canvasHeight - ((_margin._y + _borderWidth) * 2);
   
-  ///#warning remove debug code
-  //  canvas->setFillColor(Color::red());
-  //  canvas->fillRectangle(0, 0, canvasWidth, canvasHeight);
+    ///#warning remove debug code
+    //  canvas->setFillColor(Color::red());
+    //  canvas->fillRectangle(0, 0, canvasWidth, canvasHeight);
   
   
     if (!_backgroundColor.isFullTransparent())
@@ -114,6 +114,11 @@ public class BoxImageBackground extends ImageBackground
   {
     final IStringUtils su = IStringUtils.instance();
     return (_margin.description() + "/" + su.toString(_borderWidth) + "/" + _borderColor.id() + "/" + _padding.description() + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
+  }
+
+  public final BoxImageBackground copy()
+  {
+    return new BoxImageBackground(_margin, _borderWidth, _borderColor, _padding, _backgroundColor, _cornerRadius);
   }
 
 }

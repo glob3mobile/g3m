@@ -36,6 +36,8 @@ public:
 
   virtual const std::string description() const = 0;
 
+  virtual ImageBackground* copy() const = 0;
+
 };
 
 #endif

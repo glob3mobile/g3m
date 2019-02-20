@@ -43,9 +43,9 @@ const Vector2F BoxImageBackground::initializeCanvas(ICanvas* canvas,
   const float boxWidth  = canvasWidth  - ((_margin._x + _borderWidth) * 2);
   const float boxHeight = canvasHeight - ((_margin._y + _borderWidth) * 2);
 
-//#warning remove debug code
-//  canvas->setFillColor(Color::red());
-//  canvas->fillRectangle(0, 0, canvasWidth, canvasHeight);
+  //#warning remove debug code
+  //  canvas->setFillColor(Color::red());
+  //  canvas->fillRectangle(0, 0, canvasWidth, canvasHeight);
 
 
   if (!_backgroundColor.isFullTransparent()) {
@@ -88,4 +88,13 @@ const std::string BoxImageBackground::description() const {
           _padding.description()     + "/" +
           _backgroundColor.id()      + "/" +
           su->toString(_cornerRadius));
+}
+
+BoxImageBackground* BoxImageBackground::copy() const {
+  return new BoxImageBackground(_margin,
+                                _borderWidth,
+                                _borderColor,
+                                _padding,
+                                _backgroundColor,
+                                _cornerRadius);
 }
