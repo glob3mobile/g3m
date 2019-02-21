@@ -86,8 +86,7 @@ public class FrameImageBackground extends ImageBackground
   public final String description()
   {
     final IStringUtils su = IStringUtils.instance();
-    final String description = "Frame";
-    return (description + "/" + su.toString(_topFrameHeight) + "/" + su.toString(_bottomFrameHeight) + "/" + su.toString(_leftFrameWidth) + "/" + su.toString(_rightFrameWidth) + "/" + _color.id());
+    return ("Frame/" + su.toString(_topFrameHeight) + "/" + su.toString(_bottomFrameHeight) + "/" + su.toString(_leftFrameWidth) + "/" + su.toString(_rightFrameWidth) + "/" + _color.id());
   }
 
   public final FrameImageBackground copy()

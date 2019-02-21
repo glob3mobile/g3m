@@ -113,8 +113,7 @@ public class BoxImageBackground extends ImageBackground
   public final String description()
   {
     final IStringUtils su = IStringUtils.instance();
-    final String description = "Box";
-    return (description + "/" + _margin.description() + "/" + su.toString(_borderWidth) + "/" + _borderColor.id() + "/" + _padding.description() + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
+    return ("Box/" + _margin.description() + "/" + su.toString(_borderWidth) + "/" + _borderColor.id() + "/" + _padding.description() + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
   }
 
   public final BoxImageBackground copy()
