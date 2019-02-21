@@ -19,9 +19,10 @@ package org.glob3.mobile.generated;
 
 public class RampColorizer
 {
-  private final java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
+  private java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
+
   private final int _colorsLength;
-  private final java.util.ArrayList<Float> _steps = new java.util.ArrayList<Float>();
+  private java.util.ArrayList<Float> _steps = new java.util.ArrayList<Float>();
 
   private static java.util.ArrayList<Float> createDefaultSteps(int length)
   {
@@ -47,18 +48,15 @@ public class RampColorizer
     {
       throw new RuntimeException("Steps size is not equal as colors size.");
     }
-    //size steps = size colors
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  RampColorizer(java.util.ArrayList<Color> colors);
 
-  public static RampColorizer initializeRampColorizer(java.util.ArrayList<Color> colors, java.util.ArrayList<Float> steps)
+  public static RampColorizer createRampColorizer(java.util.ArrayList<Color> colors, java.util.ArrayList<Float> steps)
   {
     return new RampColorizer(colors, steps);
   }
 
-  public static RampColorizer initializeRampColorizer(java.util.ArrayList<Color> colors)
+  public static RampColorizer createRampColorizer(java.util.ArrayList<Color> colors)
   {
     return new RampColorizer(colors, createDefaultSteps(colors.size()));
   }

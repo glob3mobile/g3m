@@ -39,15 +39,15 @@ public class BoxImageBackground extends ImageBackground
 //  BoxImageBackground(BoxImageBackground that);
 
 
-  protected final Vector2F _margin;
+  public final Vector2F _margin;
 
-  public final float _borderWidth;
-  public final Color _borderColor ;
+  private final float _borderWidth;
+  private final Color _borderColor ;
 
-  protected final Vector2F _padding;
+  public final Vector2F _padding;
 
-  public final Color _backgroundColor ;
-  public final float _cornerRadius;
+  private final Color _backgroundColor ;
+  private final float _cornerRadius;
 
 
   public BoxImageBackground(Vector2F margin, float borderWidth, Color borderColor, Vector2F padding, Color backgroundColor, float cornerRadius)
