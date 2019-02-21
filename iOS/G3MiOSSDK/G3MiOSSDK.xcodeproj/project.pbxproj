@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5C2221ECE1300600902 /* RampColorizer.cpp */; };
 		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
 		349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
@@ -1387,6 +1388,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0344C5C2221ECE1300600902 /* RampColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RampColorizer.cpp; path = Commons/Basic/RampColorizer.cpp; sourceTree = "<group>"; };
+		0344C5C3221ECE1300600902 /* RampColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RampColorizer.hpp; path = Commons/Basic/RampColorizer.hpp; sourceTree = "<group>"; };
 		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
 		349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORectangleRasterSymbol.hpp; path = Commons/GEO/GEORectangleRasterSymbol.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
@@ -2476,6 +2479,8 @@
 				CF35A20616D3D44E00D795D8 /* BILParser.hpp */,
 				CF455978221C01A500DFFDD2 /* BoxImageBackground.cpp */,
 				CF455979221C01A500DFFDD2 /* BoxImageBackground.hpp */,
+				0344C5C2221ECE1300600902 /* RampColorizer.cpp */,
+				0344C5C3221ECE1300600902 /* RampColorizer.hpp */,
 				CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */,
 				CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */,
 				CF4FAAC11695C66F009734CA /* ByteBufferBuilder.cpp */,
@@ -3976,6 +3981,7 @@
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF792A071C51620800FDE7C9 /* TileData.cpp in Sources */,
 				CF92DE6921DFD87E00EE5B15 /* ShaderType.cpp in Sources */,
+				0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
