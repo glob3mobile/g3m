@@ -11,12 +11,12 @@
 #include "Color.hpp"
 
 
-RampColorizer RampColorizer::initializeRampColorizer(const std::vector<Color>& colors,
+RampColorizer RampColorizer::createRampColorizer(const std::vector<Color>& colors,
                                                      const std::vector<float>& steps) {
   return RampColorizer(colors, steps);
 }
 
-RampColorizer RampColorizer::initializeRampColorizer(const std::vector<Color>& colors) {
+RampColorizer RampColorizer::createRampColorizer(const std::vector<Color>& colors) {
   return RampColorizer(colors, createDefaultSteps(colors.size()));
 }
 
@@ -28,12 +28,11 @@ _colorsLength(_colors.size()),
 _steps(steps)
 {
   if(colors.empty()) {
-    THROW_EXCEPTION("Colors is empty.")
+    THROW_EXCEPTION("Colors is empty.");
   }
   if(steps.size() != colors.size()) {
-    THROW_EXCEPTION("Steps size is not equal as colors size.")
+    THROW_EXCEPTION("Steps size is not equal as colors size.");
   }
-  //size steps = size colors
 }
 
 

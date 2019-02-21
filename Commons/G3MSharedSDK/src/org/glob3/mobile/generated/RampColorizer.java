@@ -41,11 +41,11 @@ public class RampColorizer
      _steps = steps;
     if(colors.isEmpty())
     {
-      throw new RuntimeException("Colors is empty.")
+      throw new RuntimeException("Colors is empty.");
     }
     if(steps.size() != colors.size())
     {
-      throw new RuntimeException("Steps size is not equal as colors size.")
+      throw new RuntimeException("Steps size is not equal as colors size.");
     }
     //size steps = size colors
   }
