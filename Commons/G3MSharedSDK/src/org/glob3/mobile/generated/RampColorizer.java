@@ -103,6 +103,8 @@ public class RampColorizer
     return _colors.get(baseColorIndex - 1).mixedWith((_colors.get(baseColorIndex)), localAlpha);
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  public void dispose()
+  public void dispose()
+  {
+  
+  }
 }

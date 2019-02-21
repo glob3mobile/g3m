@@ -79,3 +79,7 @@ const Color RampColorizer::getColor(const float alpha) const {
   
   return _colors[baseColorIndex - 1].mixedWith((_colors[baseColorIndex]), localAlpha);
 }
+
+RampColorizer::~RampColorizer() {
+  
+}
