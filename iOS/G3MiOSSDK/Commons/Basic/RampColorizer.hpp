@@ -9,30 +9,33 @@
 #define RampColorizer_hpp
 
 #include <stdio.h>
+#include <vector>
 #include "Color.hpp"
 
-#endif /* RampColorizer_hpp */
+
 
 class RampColorizer {
 private:
   const std::vector<Color>   _colors;
-  const int                  _colorsLength;
+  const size_t               _colorsLength;
   const std::vector<float>   _steps;
   
-  std::vector<float> RampColorizer::createDefaultSteps(int length);
+  static const std::vector<float> createDefaultSteps(size_t length);
   
-  Color RampColorizer::getColor(const float alpha);
+  RampColorizer(const std::vector<Color>& colors,
+                const std::vector<float>& steps);
   
+  RampColorizer(const std::vector<Color>& colors);
 public:
-  RampColorizer::RampColorizer(const std::vector<Color> colors,
-                               const int                colorsLength,
-                               const std::vector<float> steps);
   
+  static RampColorizer initializeRampColorizer(const std::vector<Color>& colors,
+                                               const std::vector<float>& steps);
   
-  RampColorizer::RampColorizer(const std::vector<Color> colors,
-                               const std::vector<float> steps);
+  static RampColorizer initializeRampColorizer(const std::vector<Color>& colors);
   
-  RampColorizer::RampColorizer(const std::vector<Color> colors);
+  const Color getColor(const float alpha) const;
   
-  
-  }
+  ~RampColorizer();
+};
+
+#endif /* RampColorizer_hpp */

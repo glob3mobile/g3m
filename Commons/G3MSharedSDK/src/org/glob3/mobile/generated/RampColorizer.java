@@ -16,16 +16,17 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class RampColorizer
 {
   private final java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
   private final int _colorsLength;
   private final java.util.ArrayList<Float> _steps = new java.util.ArrayList<Float>();
 
-  private java.util.ArrayList<Float> createDefaultSteps(int length)
+  private static java.util.ArrayList<Float> createDefaultSteps(int length)
   {
     java.util.ArrayList<Float> result = new java.util.ArrayList<Float>();
-    float step = 1 / (length - 1);
+    final float step = 1.0f / (length - 1);
     for (int i = 0; i < length; i++)
     {
       result.add(step * i);
@@ -33,7 +34,36 @@ public class RampColorizer
     return result;
   }
 
-  private Color getColor(float alpha)
+  private RampColorizer(java.util.ArrayList<Color> colors, java.util.ArrayList<Float> steps)
+  {
+     _colors = colors;
+     _colorsLength = _colors.size();
+     _steps = steps;
+    if(colors.isEmpty())
+    {
+      throw new RuntimeException("Colors is empty.")
+    }
+    if(steps.size() != colors.size())
+    {
+      throw new RuntimeException("Steps size is not equal as colors size.")
+    }
+    //size steps = size colors
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  RampColorizer(java.util.ArrayList<Color> colors);
+
+  public static RampColorizer initializeRampColorizer(java.util.ArrayList<Color> colors, java.util.ArrayList<Float> steps)
+  {
+    return new RampColorizer(colors, steps);
+  }
+
+  public static RampColorizer initializeRampColorizer(java.util.ArrayList<Color> colors)
+  {
+    return new RampColorizer(colors, createDefaultSteps(colors.size()));
+  }
+
+  public final Color getColor(float alpha)
   {
     if (_colorsLength == 1)
     {
@@ -70,33 +100,9 @@ public class RampColorizer
   
     final float localAlpha = 1 - (deltaStep * (_colorsLength - 1));
   
-    return _colors.get(baseColorIndex - 1).mixedWith(_colors.get(baseColorIndex), localAlpha);
+    return _colors.get(baseColorIndex - 1).mixedWith((_colors.get(baseColorIndex)), localAlpha);
   }
 
-  public RampColorizer(java.util.ArrayList<Color> colors, int colorsLength, java.util.ArrayList<Float> steps)
-  {
-     _colors = colors;
-     _colorsLength = colorsLength;
-     _steps = steps;
-  
-  }
-
-
-  public RampColorizer(java.util.ArrayList<Color> colors, java.util.ArrayList<Float> steps)
-  {
-     _colors = colors;
-     _colorsLength = _colors.size();
-     _steps = steps;
-  
-  }
-
-  public RampColorizer(java.util.ArrayList<Color> colors)
-  {
-     _colors = colors;
-     _colorsLength = colors.size();
-     _steps = createDefaultSteps(colors.size());
-  
-  }
-
-
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  public void dispose()
+}

@@ -5,69 +5,65 @@
 //  Created by Nico on 21/02/2019.
 //
 
+#include "ErrorHandling.hpp"
 #include <vector>
-#include <iostream>
 #include "RampColorizer.hpp"
 #include "Color.hpp"
 
 
-RampColorizer::RampColorizer(const std::vector<Color> colors,
-                             const int                colorsLength,
-                             const std::vector<float> steps) :
-_colors(colors),
-_colorsLength(colorsLength),
-_steps(steps)
-{
-  
+RampColorizer RampColorizer::initializeRampColorizer(const std::vector<Color>& colors,
+                                                     const std::vector<float>& steps) {
+  return RampColorizer(colors, steps);
+}
+
+RampColorizer RampColorizer::initializeRampColorizer(const std::vector<Color>& colors) {
+  return RampColorizer(colors, createDefaultSteps(colors.size()));
 }
 
 
-RampColorizer::RampColorizer(const std::vector<Color> colors) :
-_colors(colors),
-_colorsLength(colors.size()),
-_steps(createDefaultSteps(colors.size()))
-{
-  
-}
-
-
-RampColorizer::RampColorizer(const std::vector<Color> colors,
-                             const std::vector<float> steps) :
+RampColorizer::RampColorizer(const std::vector<Color>& colors,
+                             const std::vector<float>& steps) :
 _colors(colors),
 _colorsLength(_colors.size()),
 _steps(steps)
 {
-  
+  if(colors.empty()) {
+    THROW_EXCEPTION("Colors is empty.")
+  }
+  if(steps.size() != colors.size()) {
+    THROW_EXCEPTION("Steps size is not equal as colors size.")
+  }
+  //size steps = size colors
 }
 
 
-std::vector<float> RampColorizer::createDefaultSteps(int length) {
+const std::vector<float> RampColorizer::createDefaultSteps(size_t length) {
   std::vector<float> result;
-  float step = 1 / (length - 1);
-  for (int i = 0; i < length; i++) {
+  const float step = 1.0f / (length - 1);
+  for (size_t i = 0; i < length; i++) {
     result.push_back(step * i);
   }
   return result;
 }
 
 
-Color RampColorizer::getColor(const float alpha) {
+const Color RampColorizer::getColor(const float alpha) const {
   if (_colorsLength == 1) {
-    return _colors.at(0);
+    return _colors[0];
   }
   
   if (alpha <= 0) {
-    return _colors.at(0);
+    return _colors[0];
   }
   if (alpha >= 1) {
-    return _colors.at(_colorsLength - 1);
+    return _colors[_colorsLength - 1];
   }
   
   int baseColorIndex = -1;
   float baseStep = 0;
   
   for (int i = _steps.size() - 1; i >= 0; i--) {
-    const  float step = _steps.at(i);
+    const  float step = _steps[i];
     if (alpha <= step) {
       baseStep = step;
       baseColorIndex = i;
@@ -76,10 +72,10 @@ Color RampColorizer::getColor(const float alpha) {
   const float deltaStep = baseStep - alpha;
   
   if (deltaStep <= 0.0001) {
-    return _colors.at(baseColorIndex);
+    return _colors[baseColorIndex];
   }
   
   const float localAlpha = 1 - (deltaStep * (_colorsLength - 1));
   
-  return _colors.at(baseColorIndex - 1).mixedWith(_colors.at(baseColorIndex), localAlpha);
+  return _colors[baseColorIndex - 1].mixedWith((_colors[baseColorIndex]), localAlpha);
 }
