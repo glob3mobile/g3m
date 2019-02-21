@@ -35,12 +35,11 @@ private:
   BoxImageBackground(const BoxImageBackground& that);
 
 
-public:
 #ifdef C_CODE
   const Vector2F _margin;
 #endif
 #ifdef JAVA_CODE
-  protected final Vector2F _margin;
+  public final Vector2F _margin;
 #endif
 
   const float _borderWidth;
@@ -50,13 +49,14 @@ public:
   const Vector2F _padding;
 #endif
 #ifdef JAVA_CODE
-  protected final Vector2F _padding;
+  public final Vector2F _padding;
 #endif
 
   const Color _backgroundColor;
   const float _cornerRadius;
 
 
+public:
   BoxImageBackground(const Vector2F& margin,
                      const float     borderWidth,
                      const Color&    borderColor,

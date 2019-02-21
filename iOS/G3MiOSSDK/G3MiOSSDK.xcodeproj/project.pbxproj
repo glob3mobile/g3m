@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5C2221ECE1300600902 /* RampColorizer.cpp */; };
+		0344C5C5221EE9D400600902 /* RampColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5C3221ECE1300600902 /* RampColorizer.hpp */; };
 		0344C5C0221EB25D00600902 /* FrameImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */; };
 		0344C5C1221ECCB600600902 /* FrameImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */; };
 		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
@@ -918,6 +920,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				0344C5C5221EE9D400600902 /* RampColorizer.hpp in CopyFiles */,
 				0344C5C1221ECCB600600902 /* FrameImageBackground.hpp in CopyFiles */,
 				CF82E10B221DDD1700DBC5E3 /* RowLayoutImageBuilder.hpp in CopyFiles */,
 				CF455981221C2AE400DFFDD2 /* BoxImageBackground.hpp in CopyFiles */,
@@ -1390,6 +1393,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0344C5C2221ECE1300600902 /* RampColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RampColorizer.cpp; path = Commons/Basic/RampColorizer.cpp; sourceTree = "<group>"; };
+		0344C5C3221ECE1300600902 /* RampColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RampColorizer.hpp; path = Commons/Basic/RampColorizer.hpp; sourceTree = "<group>"; };
 		0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FrameImageBackground.cpp; path = Commons/Basic/FrameImageBackground.cpp; sourceTree = "<group>"; };
 		0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FrameImageBackground.hpp; path = Commons/Basic/FrameImageBackground.hpp; sourceTree = "<group>"; };
 		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
@@ -2634,6 +2639,8 @@
 				CF74A8801DDA010B000767A3 /* Projection.hpp */,
 				CF2DF7D0178DEA8900FF5FF0 /* QuadTree.cpp */,
 				CF2DF7D1178DEA8900FF5FF0 /* QuadTree.hpp */,
+				0344C5C2221ECE1300600902 /* RampColorizer.cpp */,
+				0344C5C3221ECE1300600902 /* RampColorizer.hpp */,
 				CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */,
 				CFCBA3C1190706C900FD2A2F /* RasterLayerTileImageProvider.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
@@ -3983,6 +3990,7 @@
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF792A071C51620800FDE7C9 /* TileData.cpp in Sources */,
 				CF92DE6921DFD87E00EE5B15 /* ShaderType.cpp in Sources */,
+				0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFAB53F21A8BCD9B00DD0099 /* LayoutImageBuilder.cpp in Sources */,
