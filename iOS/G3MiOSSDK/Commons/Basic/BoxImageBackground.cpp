@@ -82,7 +82,9 @@ const Vector2F BoxImageBackground::initializeCanvas(ICanvas* canvas,
 
 const std::string BoxImageBackground::description() const {
   const IStringUtils* su = IStringUtils::instance();
-  return (_margin.description()      + "/" +
+  const std::string description = "Box";
+  return (description                + "/" +
+          _margin.description()      + "/" +
           su->toString(_borderWidth) + "/" +
           _borderColor.id()          + "/" +
           _padding.description()     + "/" +
