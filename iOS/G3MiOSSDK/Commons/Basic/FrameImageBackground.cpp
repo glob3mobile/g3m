@@ -80,8 +80,7 @@ const Vector2F FrameImageBackground::initializeCanvas(ICanvas* canvas,
 
 const std::string FrameImageBackground::description() const {
   const IStringUtils* su = IStringUtils::instance();
-  const std::string description = "Frame";
-  return (description                      + "/" +
+  return ("Frame/"                               +
           su->toString(_topFrameHeight)    + "/" +
           su->toString(_bottomFrameHeight) + "/" +
           su->toString(_leftFrameWidth)    + "/" +
