@@ -12,14 +12,13 @@
 
 
 RampColorizer RampColorizer::createRampColorizer(const std::vector<Color>& colors,
-                                                     const std::vector<float>& steps) {
+                                                 const std::vector<float>& steps) {
   return RampColorizer(colors, steps);
 }
 
 RampColorizer RampColorizer::createRampColorizer(const std::vector<Color>& colors) {
   return RampColorizer(colors, createDefaultSteps(colors.size()));
 }
-
 
 RampColorizer::RampColorizer(const std::vector<Color>& colors,
                              const std::vector<float>& steps) :
@@ -35,8 +34,7 @@ _steps(steps)
   }
 }
 
-
-const std::vector<float> RampColorizer::createDefaultSteps(size_t length) {
+const std::vector<float> RampColorizer::createDefaultSteps(const size_t length) {
   std::vector<float> result;
   const float step = 1.0f / (length - 1);
   for (size_t i = 0; i < length; i++) {
@@ -44,7 +42,6 @@ const std::vector<float> RampColorizer::createDefaultSteps(size_t length) {
   }
   return result;
 }
-
 
 const Color RampColorizer::getColor(const float alpha) const {
   if (_colorsLength == 1) {

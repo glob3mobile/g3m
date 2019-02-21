@@ -15,12 +15,9 @@ package org.glob3.mobile.generated;
 
 
 
-
-
 public class RampColorizer
 {
   private java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
-
   private final int _colorsLength;
   private java.util.ArrayList<Float> _steps = new java.util.ArrayList<Float>();
 
@@ -105,4 +102,5 @@ public class RampColorizer
   {
   
   }
+
 }

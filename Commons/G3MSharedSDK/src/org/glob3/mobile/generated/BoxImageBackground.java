@@ -38,14 +38,10 @@ public class BoxImageBackground extends ImageBackground
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  BoxImageBackground(BoxImageBackground that);
 
-
-  public final Vector2F _margin;
-
+  private final Vector2F _margin;
   private final float _borderWidth;
   private final Color _borderColor ;
-
-  public final Vector2F _padding;
-
+  private final Vector2F _padding;
   private final Color _backgroundColor ;
   private final float _cornerRadius;
 
