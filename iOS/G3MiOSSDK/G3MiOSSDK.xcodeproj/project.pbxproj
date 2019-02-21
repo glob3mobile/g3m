@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5C2221ECE1300600902 /* RampColorizer.cpp */; };
 		0344C5C5221EE9D400600902 /* RampColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5C3221ECE1300600902 /* RampColorizer.hpp */; };
+		0344C5C0221EB25D00600902 /* FrameImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */; };
+		0344C5C1221ECCB600600902 /* FrameImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */; };
 		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
 		349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
@@ -919,6 +921,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				0344C5C5221EE9D400600902 /* RampColorizer.hpp in CopyFiles */,
+				0344C5C1221ECCB600600902 /* FrameImageBackground.hpp in CopyFiles */,
 				CF82E10B221DDD1700DBC5E3 /* RowLayoutImageBuilder.hpp in CopyFiles */,
 				CF455981221C2AE400DFFDD2 /* BoxImageBackground.hpp in CopyFiles */,
 				CF455982221C2AE400DFFDD2 /* NullImageBackground.hpp in CopyFiles */,
@@ -1392,6 +1395,8 @@
 /* Begin PBXFileReference section */
 		0344C5C2221ECE1300600902 /* RampColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RampColorizer.cpp; path = Commons/Basic/RampColorizer.cpp; sourceTree = "<group>"; };
 		0344C5C3221ECE1300600902 /* RampColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RampColorizer.hpp; path = Commons/Basic/RampColorizer.hpp; sourceTree = "<group>"; };
+		0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FrameImageBackground.cpp; path = Commons/Basic/FrameImageBackground.cpp; sourceTree = "<group>"; };
+		0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FrameImageBackground.hpp; path = Commons/Basic/FrameImageBackground.hpp; sourceTree = "<group>"; };
 		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
 		349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORectangleRasterSymbol.hpp; path = Commons/GEO/GEORectangleRasterSymbol.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
@@ -2552,6 +2557,8 @@
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
 				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
+				0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */,
+				0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */,
 				CFCDFCB31911677800D711FC /* FrameTask.cpp */,
 				CFCDFCB41911677800D711FC /* FrameTask.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
@@ -4008,6 +4015,7 @@
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,
 				D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */,
+				0344C5C0221EB25D00600902 /* FrameImageBackground.cpp in Sources */,
 				CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */,
 				D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */,
 				CFECA77B1B6AB9B200A0A44E /* VectorStreamingRenderer.cpp in Sources */,
