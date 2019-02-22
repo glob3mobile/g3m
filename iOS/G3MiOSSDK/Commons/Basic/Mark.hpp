@@ -103,7 +103,7 @@ private:
    * The URL to get the image file.
    * Useless if the mark does not have icon.
    */
-  URL               _iconURL;
+  const URL         _iconURL;
   /**
    * The point where the mark will be geo-located.
    */

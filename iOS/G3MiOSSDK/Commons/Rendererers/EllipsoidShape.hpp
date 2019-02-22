@@ -38,7 +38,7 @@ private:
 //  private final Quadric _quadric;
 #endif
 
-  URL _textureURL;
+  const URL _textureURL;
 
   /*const double _radiusX;
   const double _radiusY;

@@ -20,9 +20,9 @@ class TextureIDReference;
 
 class QuadShape : public AbstractMeshShape {
 private:
-  URL _textureURL;
-  const float _width;
-  const float _height;
+  const URL    _textureURL;
+  const float  _width;
+  const float  _height;
   const Color* _color;
 
   bool _textureRequested;

@@ -34,7 +34,7 @@ public class EllipsoidShape extends AbstractMeshShape
   private Ellipsoid _ellipsoid;
 //  private final Quadric _quadric;
 
-  private URL _textureURL = new URL();
+  private final URL _textureURL;
 
   /*const double _radiusX;
   const double _radiusY;

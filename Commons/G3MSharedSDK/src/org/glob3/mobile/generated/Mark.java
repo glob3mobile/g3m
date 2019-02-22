@@ -47,7 +47,7 @@ public class Mark implements SurfaceElevationListener
    * The URL to get the image file.
    * Useless if the mark does not have icon.
    */
-  private URL _iconURL = new URL();
+  private final URL _iconURL;
   /**
    * The point where the mark will be geo-located.
    */

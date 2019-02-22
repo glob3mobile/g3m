@@ -63,7 +63,7 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
      super(minTileLevel, maxTileLevel);
      _position = new Geodetic2D(position);
      _label = label;
-     _font = font;
+     _font = new GFont(font);
      _color = new Color(color);
      _sector = null;
   }
