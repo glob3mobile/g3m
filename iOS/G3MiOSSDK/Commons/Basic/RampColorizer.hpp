@@ -11,6 +11,7 @@
 #include <vector>
 #include "Color.hpp"
 
+
 class RampColorizer {
 private:
 #ifdef C_CODE
@@ -18,7 +19,7 @@ private:
 #else
   std::vector<Color> _colors;
 #endif
-  const size_t               _colorsLength;
+  const size_t _colorsLength;
 #ifdef C_CODE
   const std::vector<float> _steps;
 #else
@@ -26,21 +27,21 @@ private:
 #endif
   
   static const std::vector<float> createDefaultSteps(const size_t length);
-  
+
   RampColorizer(const std::vector<Color>& colors,
                 const std::vector<float>& steps);
-  
+
 public:
-  
-  static RampColorizer createRampColorizer(const std::vector<Color>& colors,
-                                           const std::vector<float>& steps);
-  
-  static RampColorizer createRampColorizer(const std::vector<Color>& colors);
-  
-  const Color getColor(const float alpha) const;
-  
+
+  static const RampColorizer* createRampColorizer(const std::vector<Color>& colors,
+                                                  const std::vector<float>& steps);
+
+  static const RampColorizer* createRampColorizer(const std::vector<Color>& colors);
+
   ~RampColorizer();
-  
+
+  const Color getColor(const float alpha) const;
+
 };
 
 #endif

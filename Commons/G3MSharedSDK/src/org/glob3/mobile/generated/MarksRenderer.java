@@ -265,7 +265,6 @@ public class MarksRenderer extends DefaultRenderer
     boolean handled = false;
     if (touchEvent.getType() == TouchEventType.DownUp)
     {
-  
       if (_lastCamera != null)
       {
         final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();

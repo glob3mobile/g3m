@@ -15,6 +15,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class RampColorizer
 {
   private java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
@@ -37,11 +38,11 @@ public class RampColorizer
      _colors = colors;
      _colorsLength = _colors.size();
      _steps = steps;
-    if(colors.isEmpty())
+    if (colors.isEmpty())
     {
       throw new RuntimeException("Colors is empty.");
     }
-    if(steps.size() != colors.size())
+    if (steps.size() != colors.size())
     {
       throw new RuntimeException("Steps size is not equal as colors size.");
     }
@@ -56,6 +57,11 @@ public class RampColorizer
   public static RampColorizer createRampColorizer(java.util.ArrayList<Color> colors)
   {
     return new RampColorizer(colors, createDefaultSteps(colors.size()));
+  }
+
+  public void dispose()
+  {
+  
   }
 
   public final Color getColor(float alpha)
@@ -96,11 +102,6 @@ public class RampColorizer
     final float localAlpha = 1 - (deltaStep * (_colorsLength - 1));
   
     return _colors.get(baseColorIndex - 1).mixedWith((_colors.get(baseColorIndex)), localAlpha);
-  }
-
-  public void dispose()
-  {
-  
   }
 
 }

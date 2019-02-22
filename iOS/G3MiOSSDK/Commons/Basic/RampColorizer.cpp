@@ -11,13 +11,13 @@
 #include "Color.hpp"
 
 
-RampColorizer RampColorizer::createRampColorizer(const std::vector<Color>& colors,
-                                                 const std::vector<float>& steps) {
-  return RampColorizer(colors, steps);
+const RampColorizer* RampColorizer::createRampColorizer(const std::vector<Color>& colors,
+                                                        const std::vector<float>& steps) {
+  return new RampColorizer(colors, steps);
 }
 
-RampColorizer RampColorizer::createRampColorizer(const std::vector<Color>& colors) {
-  return RampColorizer(colors, createDefaultSteps(colors.size()));
+const RampColorizer* RampColorizer::createRampColorizer(const std::vector<Color>& colors) {
+  return new RampColorizer(colors, createDefaultSteps(colors.size()));
 }
 
 RampColorizer::RampColorizer(const std::vector<Color>& colors,
@@ -26,12 +26,16 @@ _colors(colors),
 _colorsLength(_colors.size()),
 _steps(steps)
 {
-  if(colors.empty()) {
+  if (colors.empty()) {
     THROW_EXCEPTION("Colors is empty.");
   }
-  if(steps.size() != colors.size()) {
+  if (steps.size() != colors.size()) {
     THROW_EXCEPTION("Steps size is not equal as colors size.");
   }
+}
+
+RampColorizer::~RampColorizer() {
+
 }
 
 const std::vector<float> RampColorizer::createDefaultSteps(const size_t length) {
@@ -76,6 +80,3 @@ const Color RampColorizer::getColor(const float alpha) const {
   return _colors[baseColorIndex - 1].mixedWith((_colors[baseColorIndex]), localAlpha);
 }
 
-RampColorizer::~RampColorizer() {
-  
-}
