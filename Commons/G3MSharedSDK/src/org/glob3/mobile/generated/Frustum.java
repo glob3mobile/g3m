@@ -185,14 +185,14 @@ public class Frustum
      _topPlane = that._topPlane;
      _nearPlane = that._nearPlane;
      _farPlane = that._farPlane;
-     _ltn = new Vector3D(that._ltn);
-     _rtn = new Vector3D(that._rtn);
-     _lbn = new Vector3D(that._lbn);
-     _rbn = new Vector3D(that._rbn);
-     _ltf = new Vector3D(that._ltf);
-     _rtf = new Vector3D(that._rtf);
-     _lbf = new Vector3D(that._lbf);
-     _rbf = new Vector3D(that._rbf);
+     _ltn = that._ltn;
+     _rtn = that._rtn;
+     _lbn = that._lbn;
+     _rbn = that._rbn;
+     _ltf = that._ltf;
+     _rtf = that._rtf;
+     _lbf = that._lbf;
+     _rbf = that._rbf;
      _boundingVolume = null;
 
   }

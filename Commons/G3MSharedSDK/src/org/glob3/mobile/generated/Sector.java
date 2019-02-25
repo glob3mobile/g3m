@@ -85,7 +85,7 @@ public class Sector
     else
     {
       final Vector3D normalizedCartesianCenter = sector._normalizedCartesianCenter;
-      _normalizedCartesianCenter = new Vector3D(normalizedCartesianCenter);
+      _normalizedCartesianCenter = normalizedCartesianCenter;
     }
   
     //    if (_deltaLatitude._degrees == 0) {

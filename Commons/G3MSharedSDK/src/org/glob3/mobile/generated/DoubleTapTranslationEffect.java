@@ -13,7 +13,7 @@ public class DoubleTapTranslationEffect extends EffectWithDuration
   public DoubleTapTranslationEffect(TimeInterval duration, Vector3D translation, double distance, boolean linearTiming)
   {
      super(duration, linearTiming);
-     _translation = new Vector3D(translation);
+     _translation = translation;
      _distance = distance;
   }
 

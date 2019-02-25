@@ -13,7 +13,7 @@ public class DoubleTapRotationEffect extends EffectWithDuration
   public DoubleTapRotationEffect(TimeInterval duration, Vector3D axis, Angle angle, double distance, boolean linearTiming)
   {
      super(duration, linearTiming);
-     _axis = new Vector3D(axis);
+     _axis = axis;
      _angle = new Angle(angle);
      _distance = distance;
   }

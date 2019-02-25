@@ -96,7 +96,7 @@ public abstract class AbstractGeometryMesh extends Mesh
      _normals = normals;
      _ownsNormals = ownsNormals;
      _extent = null;
-     _center = new Vector3D(center);
+     _center = center;
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
      _lineWidth = lineWidth;
      _pointSize = pointSize;

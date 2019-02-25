@@ -7,7 +7,7 @@ public class SingleTranslationEffect extends EffectWithForce
   public SingleTranslationEffect(Vector3D desp)
   {
      super(1, 0.92);
-     _direction = new Vector3D(desp);
+     _direction = desp;
   }
 
   public final void start(G3MRenderContext rc, TimeInterval when)

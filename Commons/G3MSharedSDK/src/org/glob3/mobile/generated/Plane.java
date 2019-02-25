@@ -57,7 +57,7 @@ public class Plane
 
   public Plane(Plane that)
   {
-     _normal = new Vector3D(that._normal);
+     _normal = that._normal;
      _d = that._d;
      _normalF = that._normalF;
      _dF = that._dF;

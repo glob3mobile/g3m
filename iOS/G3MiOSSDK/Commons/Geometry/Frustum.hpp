@@ -34,9 +34,16 @@ private:
 #endif
 
   // the eight vertices of the frustum, i.e: ltn = left,top,near
-  const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
+  const Vector3D _ltn;
+  const Vector3D _rtn;
+  const Vector3D _lbn;
+  const Vector3D _rbn;
+  const Vector3D _ltf;
+  const Vector3D _rtf;
+  const Vector3D _lbf;
+  const Vector3D _rbf;
 
-  mutable BoundingVolume*   _boundingVolume;
+  mutable BoundingVolume* _boundingVolume;
 
   Frustum(const Frustum *that,
           const MutableMatrix44D& matrix,

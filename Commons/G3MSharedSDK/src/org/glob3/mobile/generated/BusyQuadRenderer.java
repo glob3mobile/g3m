@@ -93,7 +93,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
      _image = image;
      _backgroundColor = backgroundColor;
      _animated = animated;
-     _size = new Vector2D(size);
+     _size = size;
      _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
      _glState = new GLState();
     createGLState();

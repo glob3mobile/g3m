@@ -28,7 +28,7 @@ public class RotateWithAxisEffect extends EffectWithForce
   public RotateWithAxisEffect(Vector3D axis, Angle angle)
   {
      super(1, 0.975);
-     _axis = new Vector3D(axis);
+     _axis = axis;
      _degrees = angle._degrees;
   }
 

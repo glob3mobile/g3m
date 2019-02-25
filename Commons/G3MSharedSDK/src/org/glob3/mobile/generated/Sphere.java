@@ -162,7 +162,7 @@ public class Sphere extends BoundingVolume
 
   public Sphere(Vector3D center, double radius)
   {
-     _center = new Vector3D(center);
+     _center = center;
      _radius = radius;
      _radiusSquared = radius * radius;
      _mesh = null;
@@ -170,7 +170,7 @@ public class Sphere extends BoundingVolume
 
   public Sphere(Sphere that)
   {
-     _center = new Vector3D(that._center);
+     _center = that._center;
      _radius = that._radius;
      _radiusSquared = that._radiusSquared;
      _mesh = null;

@@ -31,8 +31,8 @@ public class Ellipsoid
 
   public Ellipsoid(Vector3D center, Vector3D radii)
   {
-     _center = new Vector3D(center);
-     _radii = new Vector3D(radii);
+     _center = center;
+     _radii = radii;
      _radiiSquared = new Vector3D(new Vector3D(radii._x * radii._x, radii._y * radii._y, radii._z * radii._z));
      _radiiToTheFourth = new Vector3D(new Vector3D(_radiiSquared._x * _radiiSquared._x, _radiiSquared._y * _radiiSquared._y, _radiiSquared._z * _radiiSquared._z));
      _oneOverRadiiSquared = new Vector3D(new Vector3D(1.0 / (radii._x * radii._x), 1.0 / (radii._y * radii._y), 1.0 / (radii._z * radii._z)));

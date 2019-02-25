@@ -343,5 +343,10 @@ const std::string Box::description() const {
 }
 
 Box* Box::copy() const {
+#ifdef C_CODE
   return new Box(*this);
+#endif
+#ifdef JAVA_CODE
+  return this;
+#endif
 }

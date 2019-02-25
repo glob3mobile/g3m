@@ -45,7 +45,7 @@ public class FlatPlanet extends Planet
 
   public FlatPlanet(Vector2D size)
   {
-     _size = new Vector2D(size);
+     _size = size;
      _radii = new Vector3D(size._x, size._y, 0);
   }
 

@@ -25,12 +25,16 @@ private:
   mutable Mesh* _mesh;
   Mesh* createMesh(const Color& color) const;
 
+#ifdef C_CODE
   explicit Box(const Box& that) :
   _lower(that._lower),
   _upper(that._upper),
   _mesh(NULL)
   {
   }
+#else
+  Box(const Box& that);
+#endif
 
 
 public:
@@ -86,7 +90,12 @@ public:
 
   BoundingVolume* mergedWith(const BoundingVolume* that) const {
     if (that == NULL) {
+#ifdef C_CODE
       return new Box(*this);
+#endif
+#ifdef JAVA_CODE
+      return this;
+#endif
     }
     return that->mergedWithBox(this);
   }

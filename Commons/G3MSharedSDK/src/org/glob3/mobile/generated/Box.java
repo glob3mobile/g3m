@@ -52,12 +52,8 @@ public class Box extends BoundingVolume
     return mesh;
   }
 
-  private Box(Box that)
-  {
-     _lower = new Vector3D(that._lower);
-     _upper = new Vector3D(that._upper);
-     _mesh = null;
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Box(Box that);
 
 
   public final Vector3D _lower ;
@@ -68,8 +64,8 @@ public class Box extends BoundingVolume
 
   public Box(Vector3D lower, Vector3D upper)
   {
-     _lower = new Vector3D(lower);
-     _upper = new Vector3D(upper);
+     _lower = lower;
+     _upper = upper;
      _mesh = null;
   }
 
@@ -333,7 +329,7 @@ public class Box extends BoundingVolume
   {
     if (that == null)
     {
-      return new Box(this);
+      return this;
     }
     return that.mergedWithBox(this);
   }
@@ -437,7 +433,7 @@ public class Box extends BoundingVolume
 
   public final Box copy()
   {
-    return new Box(this);
+    return this;
   }
 
 }

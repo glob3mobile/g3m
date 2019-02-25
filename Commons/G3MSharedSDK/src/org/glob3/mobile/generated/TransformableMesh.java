@@ -59,7 +59,7 @@ public abstract class TransformableMesh extends Mesh
 
   protected TransformableMesh(Vector3D center)
   {
-     _center = new Vector3D(center);
+     _center = center;
      _glState = null;
      _transformMatrix = null;
      _userTransformMatrix = MutableMatrix44D.newIdentity();

@@ -61,10 +61,10 @@ public class CoordinateSystem
 
   public CoordinateSystem(CoordinateSystem that)
   {
-     _x = new Vector3D(that._x);
-     _y = new Vector3D(that._y);
-     _z = new Vector3D(that._z);
-     _origin = new Vector3D(that._origin);
+     _x = that._x;
+     _y = that._y;
+     _z = that._z;
+     _origin = that._origin;
   }
 
   public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
@@ -72,7 +72,7 @@ public class CoordinateSystem
      _x = new Vector3D(x.normalized());
      _y = new Vector3D(y.normalized());
      _z = new Vector3D(z.normalized());
-     _origin = new Vector3D(origin);
+     _origin = origin;
     if (!checkConsistency(x, y, z))
     {
       throw new RuntimeException("Inconsistent CoordinateSystem created.");
